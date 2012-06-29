@@ -74,9 +74,18 @@ class add_default_behavior =
       DoChildren
   end
 
-let add_default_behavior f =
-  let vis = new add_default_behavior in Visitor.visitFramacFile vis f;
-  Globals.Functions.iter (fun kf -> ignore (Annotations.funspec kf))
+let add_default_behavior () =
+  let treat_one_function kf =
+    let bhvs = Annotations.behaviors kf in
+    if not 
+      (List.exists (fun bhv -> bhv.b_name = Cil.default_behavior_name) bhvs)
+    then begin
+      Annotations.add_behaviors Common.jessie_emitter kf [Cil.mk_behavior()];
+      (* ensures that default behavior will be correctly populated *)
+      ignore (Annotations.behaviors kf)
+    end
+  in
+  Globals.Functions.iter treat_one_function
 
 (*****************************************************************************)
 (* Rename entities to avoid conflicts with Jessie predefined names.          *)
@@ -559,14 +568,13 @@ object
   inherit Visitor.frama_c_inplace
   val mutable my_globals = []
   method vstmt_aux s =
-    match Annotations.code_annot 
-      ~filter:(fun a -> Logic_utils.is_contract 
-                 (Annotations.code_annotation_of_rooted a)) 
-      s 
-    with
+    let filter = Ast_info.lift_annot_func Logic_utils.is_contract in
+    match Annotations.code_annot ~filter s with
       | [ annot ] ->
-          (match (Annotations.code_annotation_of_rooted annot).annot_content with
-            | AStmtSpec
+          (match 
+              (Annotations.code_annotation_of_rooted annot).annot_content
+           with
+             | AStmtSpec
                 (_,({ spec_behavior =
                     [ { b_name = "Frama_C_implicit_init" }]} as spec))
               ->
@@ -591,15 +599,17 @@ object
                 my_globals <- 
                   GVarDecl(Cil.empty_funspec(),f,loc) :: my_globals;
                 Globals.Functions.replace_by_declaration spec f loc;
+                let kf = Globals.Functions.get f in
+                Annotations.register_funspec ~emitter:Common.jessie_emitter kf;
                 let my_instr = Call(None,Cil.evar ~loc f,actuals,loc) in
                 s.skind <- Instr my_instr;
                 SkipChildren
             | _ -> DoChildren)
       | _ -> DoChildren
 
-  method vglob_aux g =
+  method vglob_aux _ =
     let add_specialized g = let s = my_globals in my_globals <- []; s @ g in
-    ChangeDoChildrenPost([g],add_specialized)
+    DoChildrenPost add_specialized
 end
 
 let specialize_memset file = 
@@ -1446,11 +1456,8 @@ object(self)
 	let off = !Db.Properties.Interp.force_exp_to_term off in
 	let app = within_bounds ~strict:false v off in
 	let cur_stmt = the self#current_stmt in
-        let cur_kf = the self#current_kf in
-	Annotations.add_assert
-	  cur_kf cur_stmt
-	  [ Jessie_options.Analysis.self ]
-	  app
+        let kf = the self#current_kf in
+	Annotations.add_assert Common.jessie_emitter ~kf cur_stmt app
     end;
     DoChildren
 
@@ -1467,17 +1474,11 @@ object(self)
 		  let off = !Db.Properties.Interp.force_exp_to_term off in
 		  let rel1 = within_bounds ~strict:true v off in
 		  let supst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
-                  let curr_kf = the self#current_kf in
-		  Annotations.add_assert
-		    curr_kf supst
-		    [ Jessie_options.Analysis.self ]
-		    rel1;
+                  let kf = the self#current_kf in
+		  Annotations.add_assert Common.jessie_emitter ~kf supst rel1;
 		  let rel2 = reach_upper_bound ~loose:false v off in
 		  let eqst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
-		  Annotations.add_assert
-		    curr_kf eqst
-		    [ Jessie_options.Analysis.self ]
-		    rel2;
+		  Annotations.add_assert Common.jessie_emitter ~kf eqst rel2;
 
 		  (* Rather add skip statement as blocks may be empty *)
 		  if neg then
@@ -1509,18 +1510,12 @@ object(self)
 		    Logic_const.pred_of_id_pred
 		      { rel with ip_name = [ name_of_hint_assertion ] }
 		  in
-                  let curr_kf = the self#current_kf in
-		  Annotations.add_assert
-		    curr_kf s
-		    [ Jessie_options.Analysis.self ]
-		    prel;
+                  let kf = the self#current_kf in
+		  Annotations.add_assert Common.jessie_emitter ~kf s prel;
 		  (* If setting a character to zero in a buffer, this should
 		     be the new length of a string *)
 		  let rel = reach_upper_bound ~loose:true v off in
-		  Annotations.add_assert
-		    curr_kf s
-		    [ Jessie_options.Analysis.self ]
-		    rel
+		  Annotations.add_assert Common.jessie_emitter ~kf s rel
 	  else ();
 	  s
       | Instr(Set((Var v1,NoOffset),e,_loc)) ->
@@ -1560,7 +1555,7 @@ object(self)
   method vexpr e = 
     match e.enode with
     | BinOp((Shiftlt | Shiftrt as op),e1,e2,_ty) ->
-        let curr_kf = the self#current_kf in
+        let kf = the self#current_kf in
 	let cur_stmt = the self#current_stmt in
 	let is_left_shift = match op with Shiftlt -> true | _ -> false in
 	let ty1 = typeOf e1 in
@@ -1583,10 +1578,7 @@ object(self)
 		let check =
                   !Db.Properties.Interp.force_exp_to_predicate check
 		in
-		Annotations.add_assert
-		  curr_kf cur_stmt
-		  [ Jessie_options.Analysis.self ]
-		  check
+		Annotations.add_assert Common.jessie_emitter ~kf cur_stmt check
 	  end
 	else ();
 	(* Check that shift has not too big a right operand. *)
@@ -1600,10 +1592,7 @@ object(self)
 	      let check =
 		!Db.Properties.Interp.force_exp_to_predicate check
 	      in
-	      Annotations.add_assert
-		curr_kf cur_stmt
-		[ Jessie_options.Analysis.self ]
-		check
+	      Annotations.add_assert Common.jessie_emitter ~kf cur_stmt check
 	end;
 	(* Check that signed left shift has a positive left operand *)
 	if is_left_shift && isSignedInteger ty1 then
@@ -1616,10 +1605,7 @@ object(self)
 		let check =
 		  !Db.Properties.Interp.force_exp_to_predicate check
 		in
-		Annotations.add_assert
-		  curr_kf cur_stmt
-		  [ Jessie_options.Analysis.self ]
-		  check
+		Annotations.add_assert Common.jessie_emitter ~kf cur_stmt check
 	  end
 	else ();
 	(* Check that signed left shift has not a left operand that is bigger
@@ -1639,10 +1625,7 @@ object(self)
 		let check =
 		  !Db.Properties.Interp.force_exp_to_predicate check
 		in
-		Annotations.add_assert
-		  curr_kf cur_stmt
-		  [ Jessie_options.Analysis.self ]
-		  check
+		Annotations.add_assert Common.jessie_emitter ~kf cur_stmt check
 	    | _ ->
 		let max_int = constant_expr max_int in
 		let max_left =
@@ -1654,10 +1637,7 @@ object(self)
 		let check =
 		  !Db.Properties.Interp.force_exp_to_predicate check
 		in
-		Annotations.add_assert
-		  curr_kf cur_stmt
-		  [ Jessie_options.Analysis.self ]
-		  check
+		Annotations.add_assert Common.jessie_emitter ~kf cur_stmt check
 	  end
 	else ();
 	DoChildren
@@ -1714,38 +1694,37 @@ class rewritePreOld : Visitor.frama_c_visitor =
 object(self)
   inherit Visitor.frama_c_inplace
   val mutable rep_lab = Logic_const.pre_label
-  method vbehavior b =
-    rep_lab <- Logic_const.here_label;
-    let requires = 
-      Visitor.visitFramacPredicates 
-        (self:>Visitor.frama_c_visitor) b.b_requires 
-    in
-    let assumes =
-      Visitor.visitFramacPredicates 
-        (self:>Visitor.frama_c_visitor) b.b_assumes
-    in
-    rep_lab <- Logic_const.old_label;
-    let assigns =
-      Visitor.visitFramacAssigns 
-        (self:>Visitor.frama_c_visitor) b.b_assigns
-    in
-    let ensures = 
-      Cil.mapNoCopy 
-        (fun (k,p as e) -> 
-          let p' = 
-            Visitor.visitFramacIdPredicate 
-              (self:>Visitor.frama_c_visitor) p
-          in
-          if p != p' then (k,p') else e)
-        b.b_post_cond
-    in
-    b.b_requires <- requires;
-    b.b_assumes <- assumes;
-    b.b_assigns <- assigns;
-    b.b_post_cond <- ensures;
-    rep_lab <- Logic_const.pre_label;
-    SkipChildren
-                           
+    method vbehavior b =
+      rep_lab <- Logic_const.here_label;
+      let requires = 
+        Visitor.visitFramacPredicates 
+          (self:>Visitor.frama_c_visitor) b.b_requires 
+      in
+      let assumes =
+        Visitor.visitFramacPredicates 
+          (self:>Visitor.frama_c_visitor) b.b_assumes
+      in
+      rep_lab <- Logic_const.old_label;
+      let assigns =
+        Visitor.visitFramacAssigns 
+          (self:>Visitor.frama_c_visitor) b.b_assigns
+      in
+      let post_cond = 
+        Cil.mapNoCopy 
+          (fun (k,p as e) -> 
+            let p' = 
+              Visitor.visitFramacIdPredicate 
+                (self:>Visitor.frama_c_visitor) p
+            in
+            if p != p' then (k,p') else e)
+          b.b_post_cond
+      in
+      rep_lab <- Logic_const.pre_label;
+      let name = b.b_name in
+      let b = Cil.mk_behavior
+        ~name ~requires ~assumes ~assigns ~post_cond () in
+      ChangeTo b
+
   method vlogic_label l =
     if Cil_datatype.Logic_label.equal l Logic_const.pre_label
        && self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
@@ -1803,7 +1782,7 @@ let rewrite file =
      it does not already exist.
    *)
   Jessie_options.debug "Adding default behavior to all functions";
-  add_default_behavior file;
+  add_default_behavior ();
   if checking then check_types file;
   (* Rename entities to avoid conflicts with Jessie predefined names.
      Should be performed before any call to [Cil.cvar_to_lvar] destroys

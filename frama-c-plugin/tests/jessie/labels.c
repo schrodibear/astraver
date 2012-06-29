@@ -1,3 +1,4 @@
+void free(void*);
 
 //@ predicate val{P,Q}(int *x) = \at(\valid(x),P);
 

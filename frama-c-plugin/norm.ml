@@ -270,7 +270,7 @@ object(self)
   method vglob_aux g = match g with
     | GVar(v,_init,_loc) ->
         (* Make sure variable declaration is treated before definition *)
-        ignore (visitFramacVarDecl (self:>frama_c_visitor) v);
+        ignore (Cil.visitCilVarDecl (self:>Cil.cilVisitor) v);
         if Cil_datatype.Varinfo.Set.mem v !allocvarset then
           (* Allocate memory for new reference variable *)
           let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
@@ -303,8 +303,8 @@ object(self)
 
   method vfunc f =
     (* First change type of local array variables *)
-    List.iter (ignore $ visitFramacVarDecl (self:>frama_c_visitor)) f.slocals;
-    List.iter (ignore $ visitFramacVarDecl (self:>frama_c_visitor)) f.sformals;
+    List.iter (ignore $ Cil.visitCilVarDecl (self:>Cil.cilVisitor)) f.slocals;
+    List.iter (ignore $ Cil.visitCilVarDecl (self:>Cil.cilVisitor)) f.sformals;
     (* Then allocate/deallocate memory for those that need it *)
     List.iter (fun v ->
       if Cil_datatype.Varinfo.Set.mem v !allocvarset then
@@ -322,8 +322,8 @@ object(self)
   method vlval lv =
     ChangeDoChildrenPost (preaction_lval lv, postaction_lval)
 
-  method vterm_lval =
-    do_on_term_lval (Some preaction_lval, Some postaction_lval)
+  method vterm_lval lv =
+    do_on_term_lval (Some preaction_lval, Some postaction_lval) lv
 
   method vexpr e =
     ChangeDoChildrenPost (preaction_expr e, fun x -> x)
@@ -685,7 +685,7 @@ object(self)
       in
       let rt = 
         if isStructOrUnionType rt then
-          mkTRef rt "Norm.vgloab_aux(2)" 
+          mkTRef rt "Norm.vglob_aux(2)" 
         else rt 
       in
       fvi.vtype <- TFun(rt,params,isva,a)
@@ -740,9 +740,6 @@ object(self)
     DoChildren
 
   method vbehavior b =
-    let kf = Extlib.the self#current_kf in
-    let ki = self#current_kinstr in
-    let old = Property.ip_all_of_behavior kf ki b in
     let lval loc lv = expand lv (typeOfLval lv) loc in
     let term t = match t.term_node with
       | TLval tlv ->
@@ -791,13 +788,22 @@ object(self)
       in
       List.map (fun z -> z, froms) zl
     in
-    (match b.b_assigns with
-        WritesAny -> ()
-      | Writes l ->
-        b.b_assigns <- Writes (List.flatten (List.map assign l)));
-    let props = Property.ip_all_of_behavior kf ki b in
-    Property_status.merge ~old props;
-    DoChildren
+    let assigns =
+      (match b.b_assigns with
+          WritesAny -> WritesAny
+        | Writes l -> Writes (List.flatten (List.map assign l)))
+    in
+    let new_bhv =
+      Cil.mk_behavior
+        ~name:b.b_name
+        ~requires:b.b_requires
+        ~assumes:b.b_assumes
+        ~post_cond:b.b_post_cond
+        ~assigns:assigns
+        ~allocation:(Some b.b_allocation)
+        ()
+    in
+    ChangeDoChildrenPost(new_bhv,fun x -> x)
 
   method vstmt_aux s = match s.skind with
     | Return(Some e,loc) ->
@@ -1011,8 +1017,8 @@ object(self)
 
   method vfunc f =
     (* First change type of local structure variables *)
-    List.iter (ignore $ visitFramacVarDecl (self:>frama_c_visitor)) f.slocals;
-    List.iter (ignore $ visitFramacVarDecl (self:>frama_c_visitor)) f.sformals;
+    List.iter (ignore $ Cil.visitCilVarDecl (self:>Cil.cilVisitor)) f.slocals;
+    List.iter (ignore $ Cil.visitCilVarDecl (self:>Cil.cilVisitor)) f.sformals;
     (* Then allocate/deallocate memory for those that need it *)
     List.iter (fun v ->
       if Cil_datatype.Varinfo.Set.mem v !varset then
@@ -1286,9 +1292,9 @@ object
     ) f.slocals;
     DoChildren
 
-  method vspec funspec =
+  method vspec _ =
     in_funspec := true;
-    ChangeDoChildrenPost (funspec, fun x -> in_funspec := false; x)
+    DoChildrenPost (fun x -> in_funspec := false; x)
 
   method vlogic_var_use v =
     if !in_funspec then
@@ -1536,7 +1542,7 @@ object(self)
         Cil_datatype.Typ.Set.add wrapper_type !auto_type_wrappers;
       (* Treat newly constructed type *)
       let store_current_global = !currentGlobal in
-      ignore (visitFramacGlobal (self:>frama_c_visitor) wrapper_def);
+      ignore (Cil.visitCilGlobal (self:>Cil.cilVisitor) wrapper_def);
       currentGlobal := store_current_global;
       (* Return the wrapper type *)
       wrapper_type
@@ -1653,7 +1659,7 @@ object(self)
   method vglob_aux =
     let retype_return v =
       let retyp = getReturnType v.vtype in
-      let newtyp = visitFramacType (self:>frama_c_visitor) retyp in
+      let newtyp = Cil.visitCilType (self:>Cil.cilVisitor) retyp in
       if newtyp != retyp then setReturnTypeVI v newtyp
     in
     function
@@ -1678,8 +1684,8 @@ object(self)
   method vlval lv =
     ChangeDoChildrenPost (lv, self#postaction_lval)
 
-  method vterm_lval =
-    do_on_term_lval (None,Some self#postaction_lval)
+  method vterm_lval t =
+    do_on_term_lval (None,Some self#postaction_lval) t
 
 end
 

@@ -54,7 +54,6 @@ invariant valid_tab :
 unit f(int32 x)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : true);
 ;
 

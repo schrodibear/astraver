@@ -94,7 +94,6 @@ behavior default:
 int32 min_int(int32 x_1, int32 y_1)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_24 : (((\result == \at(x_1,Old)) &&
                      (\at(x_1,Old) <= \at(y_1,Old))) ||
                     ((\result == \at(y_1,Old)) &&
@@ -104,7 +103,6 @@ behavior default:
 int32 max_int(int32 x, int32 y)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_25 : (((\result == \at(x,Old)) && (\at(x,Old) >= \at(y,Old))) ||
                     ((\result == \at(y,Old)) && (\at(y,Old) >= \at(x,Old)))));
 ;

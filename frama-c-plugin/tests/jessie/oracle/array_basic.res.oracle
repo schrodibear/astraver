@@ -52,7 +52,6 @@ unit Frama_C_bzero(unsigned_charP[..] dest, uint32 n)
                     (C_4 : (\offset_max(dest) >= (n - 1)))));
 behavior default:
   assigns (dest + [0..(n - 1)]).unsigned_charM;
-  allocates \nothing;
   ensures (C_1 : (\forall integer i;
                    (((0 <= i) && (i < \at(n,Old))) ==>
                      ((\at(dest,Old) + i).unsigned_charM == 0))));
@@ -140,7 +139,6 @@ behavior default:
       ( 
         behavior Frama_C_implicit_init:
           assigns (la3 + [0..(3 - 1)]).intM;
-          allocates \nothing;
           ensures (C_33 : ((C_34 : ((la3 + 0).intM == 0)) &&
                             ((C_36 : ((la3 + 1).intM == 0)) &&
                               (C_37 : (\forall integer __i;
@@ -1235,12 +1233,12 @@ why --project [...] why/array_basic.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/array_basic_po25.why">
-      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "88" begin = "14" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "87" begin = "14" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_basic_po26.why">
-      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "88" begin = "14" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "87" begin = "14" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1299,12 +1297,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_basic_po15.why">
-      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "143" begin = "18" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "141" begin = "18" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_basic_po16.why">
-      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "143" begin = "18" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "141" begin = "18" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

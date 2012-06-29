@@ -688,26 +688,27 @@ parameter f_requires :
                                  select(__anonstruct_S_1_b_vect_1, vect)),
                           (2)))
                          and (JC_<somenum>:
-                             (forall i:int.
-                              (forall j:int.
-                               ((le_int((0), i)
-                                and (le_int(i, (2))
-                                    and (le_int((0), j) and le_int(j, (2))))) ->
+                             (forall i_1:int.
+                              (forall j_0:int.
+                               ((le_int((0), i_1)
+                                and (le_int(i_1, (2))
+                                    and (le_int((0), j_0)
+                                        and le_int(j_0, (2))))) ->
                                 ((shift(select(__anonstruct_S_1_a_vect_1,
                                         vect),
-                                  i) <> shift(select(__anonstruct_S_1_b_vect_1,
-                                              vect),
-                                        j))
+                                  i_1) <> shift(select(__anonstruct_S_1_b_vect_1,
+                                                vect),
+                                          j_0))
                                 and ((shift(select(__anonstruct_S_1_a_vect_1,
                                             vect),
-                                      i) <> shift(select(__anonstruct_S_1_Sum_vect_1,
-                                                  vect),
-                                            j))
+                                      i_1) <> shift(select(__anonstruct_S_1_Sum_vect_1,
+                                                    vect),
+                                              j_0))
                                     and (shift(select(__anonstruct_S_1_b_vect_1,
                                                vect),
-                                         i) <> shift(select(__anonstruct_S_1_Sum_vect_1,
-                                                     vect),
-                                               j))))))))))))))
+                                         i_1) <> shift(select(__anonstruct_S_1_Sum_vect_1,
+                                                       vect),
+                                                 j_0))))))))))))))
     and (JC_<somenum>: valid_vect(__anonstruct_S_1_vect_1_alloc_table))))}
   unit
   reads __anonstruct_S_1_Sum_vect_1,__anonstruct_S_1_a_vect_1,__anonstruct_S_1_b_vect_1,__anonstruct_S_1_vect_1_alloc_table,unsigned_charP_unsigned_charM_vect_1,unsigned_charP_vect_1_alloc_table
@@ -793,31 +794,32 @@ let f_ensures_default =
                                  select(__anonstruct_S_1_b_vect_1, vect)),
                           (2)))
                          and (JC_<somenum>:
-                             (forall i:int.
-                              (forall j:int.
-                               ((le_int((0), i)
-                                and (le_int(i, (2))
-                                    and (le_int((0), j) and le_int(j, (2))))) ->
+                             (forall i_1:int.
+                              (forall j_0:int.
+                               ((le_int((0), i_1)
+                                and (le_int(i_1, (2))
+                                    and (le_int((0), j_0)
+                                        and le_int(j_0, (2))))) ->
                                 ((shift(select(__anonstruct_S_1_a_vect_1,
                                         vect),
-                                  i) <> shift(select(__anonstruct_S_1_b_vect_1,
-                                              vect),
-                                        j))
+                                  i_1) <> shift(select(__anonstruct_S_1_b_vect_1,
+                                                vect),
+                                          j_0))
                                 and ((shift(select(__anonstruct_S_1_a_vect_1,
                                             vect),
-                                      i) <> shift(select(__anonstruct_S_1_Sum_vect_1,
-                                                  vect),
-                                            j))
+                                      i_1) <> shift(select(__anonstruct_S_1_Sum_vect_1,
+                                                    vect),
+                                              j_0))
                                     and (shift(select(__anonstruct_S_1_b_vect_1,
                                                vect),
-                                         i) <> shift(select(__anonstruct_S_1_Sum_vect_1,
-                                                     vect),
-                                               j))))))))))))))
+                                         i_1) <> shift(select(__anonstruct_S_1_Sum_vect_1,
+                                                       vect),
+                                                 j_0))))))))))))))
     and (JC_<somenum>: valid_vect(__anonstruct_S_1_vect_1_alloc_table)))) }
   (init:
   try
    begin
-     (let i_0 = ref (any_uint8 void) in
+     (let i = ref (any_uint8 void) in
      begin
        (let jessie_<somenum> =
        (assert { true };
@@ -890,13 +892,13 @@ let f_ensures_default =
       try
        (C_21:
        begin
-         (let jessie_<somenum> = (i_0 := (safe_uint8_of_integer_ (0))) in void);
+         (let jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
         (loop_2:
         while true do
         { invariant
             (((JC_<somenum>:
               (forall m_2:int.
-               ((le_int((0), m_2) and lt_int(m_2, integer_of_uint8(i_0))) ->
+               ((le_int((0), m_2) and lt_int(m_2, integer_of_uint8(i))) ->
                 (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
                                   shift(select(__anonstruct_S_1_Sum_vect_1,
                                         vect),
@@ -911,7 +913,7 @@ let f_ensures_default =
                                                             m_2))))))))
              and ((JC_<somenum>:
                   (forall m_1:int.
-                   ((le_int(integer_of_uint8(i_0), m_1) and lt_int(m_1, (3))) ->
+                   ((le_int(integer_of_uint8(i), m_1) and lt_int(m_1, (3))) ->
                     (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
                                       shift(select(__anonstruct_S_1_Sum_vect_1,
                                             vect),
@@ -939,8 +941,8 @@ let f_ensures_default =
                                                              vect),
                                                        m_0))))))))
                      and (JC_<somenum>:
-                         ((JC_<somenum>: le_int((0), integer_of_uint8(i_0)))
-                         and (JC_<somenum>: le_int(integer_of_uint8(i_0), (3))))))))
+                         ((JC_<somenum>: le_int((0), integer_of_uint8(i)))
+                         and (JC_<somenum>: le_int(integer_of_uint8(i), (3))))))))
             and (JC_<somenum>:
                 not_assigns(unsigned_charP_vect_1_alloc_table@init,
                 unsigned_charP_unsigned_charM_vect_1@init,
@@ -963,7 +965,7 @@ let f_ensures_default =
              begin
                (if ((lt_int_ (integer_of_int32 (C_29:
                                                (safe_int32_of_integer_ 
-                                                (integer_of_uint8 !i_0))))) (3))
+                                                (integer_of_uint8 !i))))) (3))
                then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> =
               (C_40:
@@ -978,7 +980,7 @@ let f_ensures_default =
                                                                     ((shift 
                                                                     (C_33:
                                                                     ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect))) 
-                                                                    (integer_of_uint8 !i_0))))))))) 
+                                                                    (integer_of_uint8 !i))))))))) 
                                        (integer_of_int32 (C_32:
                                                          (safe_int32_of_integer_ 
                                                           (integer_of_uint8 
@@ -986,21 +988,21 @@ let f_ensures_default =
                                                            ((safe_acc_ !unsigned_charP_unsigned_charM_vect_1) 
                                                             ((shift (C_30:
                                                                     ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect))) 
-                                                             (integer_of_uint8 !i_0)))))))))))) in
+                                                             (integer_of_uint8 !i)))))))))))) in
               (let jessie_<somenum> =
               (C_38: ((safe_acc_ !__anonstruct_S_1_Sum_vect_1) vect)) in
-              (let jessie_<somenum> = (integer_of_uint8 !i_0) in
+              (let jessie_<somenum> = (integer_of_uint8 !i) in
               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
               begin
                 (((safe_upd_ unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>);
                jessie_<somenum> end))))) in void);
-              (i_0 := (C_43:
-                      (safe_uint8_of_integer_ (C_42:
-                                              ((add_int (integer_of_int32 
-                                                         (C_41:
-                                                         (safe_int32_of_integer_ 
-                                                          (integer_of_uint8 !i_0))))) (1))))));
-              !i_0 end) in void); (raise (Loop_continue_exc void)) end with
+              (i := (C_43:
+                    (safe_uint8_of_integer_ (C_42:
+                                            ((add_int (integer_of_int32 
+                                                       (C_41:
+                                                       (safe_int32_of_integer_ 
+                                                        (integer_of_uint8 !i))))) (1))))));
+              !i end) in void); (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end) with
        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
@@ -1061,31 +1063,32 @@ let f_safety =
                                  select(__anonstruct_S_1_b_vect_1, vect)),
                           (2)))
                          and (JC_<somenum>:
-                             (forall i:int.
-                              (forall j:int.
-                               ((le_int((0), i)
-                                and (le_int(i, (2))
-                                    and (le_int((0), j) and le_int(j, (2))))) ->
+                             (forall i_1:int.
+                              (forall j_0:int.
+                               ((le_int((0), i_1)
+                                and (le_int(i_1, (2))
+                                    and (le_int((0), j_0)
+                                        and le_int(j_0, (2))))) ->
                                 ((shift(select(__anonstruct_S_1_a_vect_1,
                                         vect),
-                                  i) <> shift(select(__anonstruct_S_1_b_vect_1,
-                                              vect),
-                                        j))
+                                  i_1) <> shift(select(__anonstruct_S_1_b_vect_1,
+                                                vect),
+                                          j_0))
                                 and ((shift(select(__anonstruct_S_1_a_vect_1,
                                             vect),
-                                      i) <> shift(select(__anonstruct_S_1_Sum_vect_1,
-                                                  vect),
-                                            j))
+                                      i_1) <> shift(select(__anonstruct_S_1_Sum_vect_1,
+                                                    vect),
+                                              j_0))
                                     and (shift(select(__anonstruct_S_1_b_vect_1,
                                                vect),
-                                         i) <> shift(select(__anonstruct_S_1_Sum_vect_1,
-                                                     vect),
-                                               j))))))))))))))
+                                         i_1) <> shift(select(__anonstruct_S_1_Sum_vect_1,
+                                                       vect),
+                                                 j_0))))))))))))))
     and (JC_<somenum>: valid_vect(__anonstruct_S_1_vect_1_alloc_table)))) }
   (init:
   try
    begin
-     (let i_0 = ref (any_uint8 void) in
+     (let i = ref (any_uint8 void) in
      begin
        (let jessie_<somenum> =
        (let jessie_<somenum> =
@@ -1162,17 +1165,17 @@ let f_safety =
       try
        (C_21:
        begin
-         (let jessie_<somenum> = (i_0 := (safe_uint8_of_integer_ (0))) in void);
+         (let jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
         (loop_1:
         while true do
         { invariant (JC_<somenum>: true)
-          variant (JC_<somenum> : sub_int((3), integer_of_uint8(i_0))) }
+          variant (JC_<somenum> : sub_int((3), integer_of_uint8(i))) }
          begin
            [ { } unit
-             reads __anonstruct_S_1_Sum_vect_1,__anonstruct_S_1_a_vect_1,__anonstruct_S_1_b_vect_1,i_0,unsigned_charP_unsigned_charM_vect_1
+             reads __anonstruct_S_1_Sum_vect_1,__anonstruct_S_1_a_vect_1,__anonstruct_S_1_b_vect_1,i,unsigned_charP_unsigned_charM_vect_1
              { ((JC_<somenum>:
                 (forall m_2:int.
-                 ((le_int((0), m_2) and lt_int(m_2, integer_of_uint8(i_0))) ->
+                 ((le_int((0), m_2) and lt_int(m_2, integer_of_uint8(i))) ->
                   (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
                                     shift(select(__anonstruct_S_1_Sum_vect_1,
                                           vect),
@@ -1187,8 +1190,7 @@ let f_safety =
                                                               m_2))))))))
                and ((JC_<somenum>:
                     (forall m_1:int.
-                     ((le_int(integer_of_uint8(i_0), m_1)
-                      and lt_int(m_1, (3))) ->
+                     ((le_int(integer_of_uint8(i), m_1) and lt_int(m_1, (3))) ->
                       (integer_of_uint8(select(unsigned_charP_unsigned_charM_vect_1,
                                         shift(select(__anonstruct_S_1_Sum_vect_1,
                                               vect),
@@ -1216,8 +1218,8 @@ let f_safety =
                                                                vect),
                                                          m_0))))))))
                        and (JC_<somenum>:
-                           ((JC_<somenum>: le_int((0), integer_of_uint8(i_0)))
-                           and (JC_<somenum>: le_int(integer_of_uint8(i_0), (3)))))))) } ];
+                           ((JC_<somenum>: le_int((0), integer_of_uint8(i)))
+                           and (JC_<somenum>: le_int(integer_of_uint8(i), (3)))))))) } ];
           try
            begin
              (let jessie_<somenum> =
@@ -1225,7 +1227,7 @@ let f_safety =
              begin
                (if ((lt_int_ (integer_of_int32 (C_29:
                                                (JC_<somenum>:
-                                               (int32_of_integer_ (integer_of_uint8 !i_0)))))) (3))
+                                               (int32_of_integer_ (integer_of_uint8 !i)))))) (3))
                then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> =
               (C_40:
@@ -1242,7 +1244,7 @@ let f_safety =
                                                                ((((offset_acc_ !unsigned_charP_vect_1_alloc_table) !unsigned_charP_unsigned_charM_vect_1) 
                                                                  (C_33:
                                                                  ((safe_acc_ !__anonstruct_S_1_a_vect_1) vect))) 
-                                                                (integer_of_uint8 !i_0)))))))))) 
+                                                                (integer_of_uint8 !i)))))))))) 
                                   (integer_of_int32 (C_32:
                                                     (JC_<somenum>:
                                                     (int32_of_integer_ 
@@ -1252,24 +1254,23 @@ let f_safety =
                                                       ((((offset_acc_ !unsigned_charP_vect_1_alloc_table) !unsigned_charP_unsigned_charM_vect_1) 
                                                         (C_30:
                                                         ((safe_acc_ !__anonstruct_S_1_b_vect_1) vect))) 
-                                                       (integer_of_uint8 !i_0)))))))))))))) in
+                                                       (integer_of_uint8 !i)))))))))))))) in
               (let jessie_<somenum> =
               (C_38: ((safe_acc_ !__anonstruct_S_1_Sum_vect_1) vect)) in
-              (let jessie_<somenum> = (integer_of_uint8 !i_0) in
+              (let jessie_<somenum> = (integer_of_uint8 !i) in
               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
               begin
                 (JC_<somenum>:
                 (((((offset_upd_ !unsigned_charP_vect_1_alloc_table) unsigned_charP_unsigned_charM_vect_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
                jessie_<somenum> end))))) in void);
-              (i_0 := (C_43:
-                      (JC_<somenum>:
-                      (uint8_of_integer_ (C_42:
-                                         ((add_int (integer_of_int32 
-                                                    (C_41:
-                                                    (JC_<somenum>:
-                                                    (int32_of_integer_ 
-                                                     (integer_of_uint8 !i_0)))))) (1)))))));
-              !i_0 end) in void); (raise (Loop_continue_exc void)) end with
+              (i := (C_43:
+                    (JC_<somenum>:
+                    (uint8_of_integer_ (C_42:
+                                       ((add_int (integer_of_int32 (C_41:
+                                                                   (JC_<somenum>:
+                                                                   (int32_of_integer_ 
+                                                                    (integer_of_uint8 !i)))))) (1)))))));
+              !i end) in void); (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end) with
        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
@@ -1284,7 +1285,7 @@ why --project [...] why/sum3.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/sum3_po1.why">
-      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "80" begin = "8" end = "458"/>
+      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "81" begin = "8" end = "458"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/sum3_po2.why">
@@ -1308,7 +1309,7 @@ why --project [...] why/sum3.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/sum3_po7.why">
-      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "100" begin = "9" end = "1808"/>
+      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "101" begin = "9" end = "1808"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/sum3_po8.why">
@@ -1328,7 +1329,7 @@ why --project [...] why/sum3.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/sum3_po12.why">
-      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "100" begin = "9" end = "1808"/>
+      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "101" begin = "9" end = "1808"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/sum3_po13.why">
@@ -1402,12 +1403,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/sum3_po27.why">
-      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "127" begin = "27" end = "297"/>
+      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "128" begin = "27" end = "297"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/sum3_po28.why">
-      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "127" begin = "27" end = "297"/>
+      <location file = "PPCHOME/tests/jessie/sum3.jessie/sum3.jc" line = "128" begin = "27" end = "297"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

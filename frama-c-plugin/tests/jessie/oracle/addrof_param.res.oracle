@@ -64,11 +64,11 @@ behavior default:
 }
 
 int32 fi(int32 v_i)
-behavior default:
-  ensures (C_15 : true);
 behavior zero:
   assumes (v_i == 0);
-  ensures (C_16 : (\result == 0));
+  ensures (C_15 : (\result == 0));
+behavior default:
+  ensures (C_16 : true);
 {  
    (var intP[0] i);
    
@@ -102,12 +102,12 @@ behavior default:
 }
 
 int32 fp(int32 i_0, intP[..] v_p)
-behavior default:
-  ensures (C_48 : true);
 behavior zero:
   assumes ((i_0 == 0) &&
             ((\offset_min(v_p) <= 0) && (\offset_max(v_p) >= 0)));
-  ensures (C_49 : (\result == 0));
+  ensures (C_48 : (\result == 0));
+behavior default:
+  ensures (C_49 : true);
 {  
    (var int_xP[0] p);
    

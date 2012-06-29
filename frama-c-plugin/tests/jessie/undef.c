@@ -617,7 +617,7 @@ multiple_update_safe (int *x, int *y)
 
 extern int foo (int, int);
 extern int bar (void);
-extern int bax (void);
+extern int baz (void);
 
 /* precondition:
      read set of bar and write set of baz do not overlap &&

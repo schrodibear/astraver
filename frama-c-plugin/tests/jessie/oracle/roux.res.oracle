@@ -1,7 +1,7 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only roux.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD roux.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code nor implicit assigns clause for function assert, generating default assigns from the prototype
+[kernel] warning: Neither code nor specification for function assert, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir roux.jessie
 [jessie] File roux.jessie/roux.jc written.
 [jessie] File roux.jessie/roux.cloc written.
@@ -637,17 +637,17 @@ why --project [...] why/roux.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/roux_po4.why">
-      <location file = "PPCHOME/tests/jessie/roux.c" line = "20" begin = "9" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/roux.c" line = "22" begin = "9" end = "15"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/roux_po5.why">
-      <location file = "PPCHOME/tests/jessie/roux.c" line = "9" begin = "12" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/roux.c" line = "11" begin = "12" end = "19"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/roux_po6.why">
-      <location file = "PPCHOME/tests/jessie/roux.c" line = "13" begin = "5" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/roux.c" line = "15" begin = "5" end = "6"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
@@ -676,7 +676,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/roux_po1.why">
-      <location file = "PPCHOME/tests/jessie/roux.c" line = "6" begin = "5" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/roux.c" line = "8" begin = "5" end = "6"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

@@ -35,7 +35,7 @@ TODO:
 /*@ requires 0 <= n <= NMAX;
   @ ensures \abs(\result - n*0.1) <= n * C;
   @*/
-float f(int n)
+float f_single(int n)
 {
   float t = 0.0f;
   int i;

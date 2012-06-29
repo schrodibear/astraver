@@ -22,6 +22,7 @@ Fixed in Why 2.22
 typedef double fp;
 #define FP_ESPILON DBL_EPSILON
 
+double fmod(double x, double y);
 
 /*@ axiomatic int_matrices {
 

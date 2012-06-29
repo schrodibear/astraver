@@ -49,7 +49,6 @@ type Str = [Str]
 Str[..] create()
 behavior default:
   assigns \nothing;
-  allocates \result;
   ensures (C_1 : (((C_3 : (\offset_min(\result) <= 0)) &&
                     (C_4 : (\offset_max(\result) >= 0))) &&
                    (C_5 : \fresh(\result))));

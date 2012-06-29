@@ -72,17 +72,7 @@ behavior default:
   ensures (C_31 : true);
 behavior normalized:
   assumes (((z :> real) - (x1 :> real)) >= 0x1p-53);
-  ensures (C_32 : (let real k =
-                  (((\at(z,Old) :> real) - (\at(x1,Old) :> real)) /
-                    ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
-                  in (let real exact_result_0 =
-                     ((\at(y1,Old) :> real) +
-                       (k * ((\at(y2,Old) :> real) - (\at(y1,Old) :> real))))
-                     in (\real_abs(((\result :> real) - exact_result_0)) <=
-                          0x1p-1))));
-behavior denormalized:
-  assumes (((z :> real) - (x1 :> real)) < 0x1p-53);
-  ensures (C_33 : (let real k_0 =
+  ensures (C_32 : (let real k_0 =
                   (((\at(z,Old) :> real) - (\at(x1,Old) :> real)) /
                     ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
                   in (let real exact_result_1 =
@@ -90,6 +80,16 @@ behavior denormalized:
                        (k_0 *
                          ((\at(y2,Old) :> real) - (\at(y1,Old) :> real))))
                      in (\real_abs(((\result :> real) - exact_result_1)) <=
+                          0x1p-1))));
+behavior denormalized:
+  assumes (((z :> real) - (x1 :> real)) < 0x1p-53);
+  ensures (C_33 : (let real k =
+                  (((\at(z,Old) :> real) - (\at(x1,Old) :> real)) /
+                    ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
+                  in (let real exact_result_0 =
+                     ((\at(y1,Old) :> real) +
+                       (k * ((\at(y2,Old) :> real) - (\at(y1,Old) :> real))))
+                     in (\real_abs(((\result :> real) - exact_result_0)) <=
                           0x1p-1))));
 {  
    (var double b);
@@ -550,24 +550,25 @@ parameter interp_lin :
       { } double
       { ((lt_real(sub_real(double_value(z_0), double_value(x1)), 0x1p-53) ->
           (JC_<somenum>:
-          (let k_0 =
+          (let k =
                 div_real(sub_real(double_value(z_0), double_value(x1)),
                 sub_real(double_value(x2), double_value(x1))) in
-           (let exact_result_1 =
+           (let exact_result_0 =
                  add_real(double_value(y1),
-                 mul_real(k_0, sub_real(double_value(y2), double_value(y1)))) in
-            le_real(abs_real(sub_real(double_value(result), exact_result_1)),
+                 mul_real(k, sub_real(double_value(y2), double_value(y1)))) in
+            le_real(abs_real(sub_real(double_value(result), exact_result_0)),
             0x1p-1)))))
         and (ge_real(sub_real(double_value(z_0), double_value(x1)), 0x1p-53) ->
              (JC_<somenum>:
-             (let k =
+             (let k_0 =
                    div_real(sub_real(double_value(z_0), double_value(x1)),
                    sub_real(double_value(x2), double_value(x1))) in
-              (let exact_result_0 =
+              (let exact_result_1 =
                     add_real(double_value(y1),
-                    mul_real(k, sub_real(double_value(y2), double_value(y1)))) in
+                    mul_real(k_0,
+                    sub_real(double_value(y2), double_value(y1)))) in
                le_real(abs_real(sub_real(double_value(result),
-                                exact_result_0)),
+                                exact_result_1)),
                0x1p-1)))))) }
 
 parameter interp_lin_requires :
@@ -594,24 +595,25 @@ parameter interp_lin_requires :
       double
       { ((lt_real(sub_real(double_value(z_0), double_value(x1)), 0x1p-53) ->
           (JC_<somenum>:
-          (let k_0 =
+          (let k =
                 div_real(sub_real(double_value(z_0), double_value(x1)),
                 sub_real(double_value(x2), double_value(x1))) in
-           (let exact_result_1 =
+           (let exact_result_0 =
                  add_real(double_value(y1),
-                 mul_real(k_0, sub_real(double_value(y2), double_value(y1)))) in
-            le_real(abs_real(sub_real(double_value(result), exact_result_1)),
+                 mul_real(k, sub_real(double_value(y2), double_value(y1)))) in
+            le_real(abs_real(sub_real(double_value(result), exact_result_0)),
             0x1p-1)))))
         and (ge_real(sub_real(double_value(z_0), double_value(x1)), 0x1p-53) ->
              (JC_<somenum>:
-             (let k =
+             (let k_0 =
                    div_real(sub_real(double_value(z_0), double_value(x1)),
                    sub_real(double_value(x2), double_value(x1))) in
-              (let exact_result_0 =
+              (let exact_result_1 =
                     add_real(double_value(y1),
-                    mul_real(k, sub_real(double_value(y2), double_value(y1)))) in
+                    mul_real(k_0,
+                    sub_real(double_value(y2), double_value(y1)))) in
                le_real(abs_real(sub_real(double_value(result),
-                                exact_result_0)),
+                                exact_result_1)),
                0x1p-1)))))) }
 
 parameter safe_int8_of_integer_ :
@@ -846,13 +848,13 @@ let interp_lin_ensures_denormalized =
       void); void; (return := !r); (raise Return) end)))))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    (let k_0 =
+    (let k =
           div_real(sub_real(double_value(z_0), double_value(x1)),
           sub_real(double_value(x2), double_value(x1))) in
-     (let exact_result_1 =
+     (let exact_result_0 =
            add_real(double_value(y1),
-           mul_real(k_0, sub_real(double_value(y2), double_value(y1)))) in
-      le_real(abs_real(sub_real(double_value(result), exact_result_1)),
+           mul_real(k, sub_real(double_value(y2), double_value(y1)))) in
+      le_real(abs_real(sub_real(double_value(result), exact_result_0)),
       0x1p-1)))) }
 
 let interp_lin_ensures_normalized =
@@ -963,13 +965,13 @@ let interp_lin_ensures_normalized =
        !r end) in void); void; (return := !r); (raise Return) end))))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
-    (let k =
+    (let k_0 =
           div_real(sub_real(double_value(z_0), double_value(x1)),
           sub_real(double_value(x2), double_value(x1))) in
-     (let exact_result_0 =
+     (let exact_result_1 =
            add_real(double_value(y1),
-           mul_real(k, sub_real(double_value(y2), double_value(y1)))) in
-      le_real(abs_real(sub_real(double_value(result), exact_result_0)),
+           mul_real(k_0, sub_real(double_value(y2), double_value(y1)))) in
+      le_real(abs_real(sub_real(double_value(result), exact_result_1)),
       0x1p-1)))) }
 
 let interp_lin_safety =

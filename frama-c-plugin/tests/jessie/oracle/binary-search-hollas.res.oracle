@@ -60,33 +60,34 @@ behavior default:
   assigns \nothing;
   ensures (C_33 : true);
 behavior success:
-  assumes (\exists integer res;
-            (((0 <= res) && (res <= (a_length - 1))) &&
-              ((a + res).intM == val)));
+  assumes (\exists integer res_0;
+            (((0 <= res_0) && (res_0 <= (a_length - 1))) &&
+              ((a + res_0).intM == val)));
   ensures (C_34 : ((C_35 : (\result >= 0)) &&
                     (C_36 : ((\at(a,Old) + \result).intM == \at(val,Old)))));
 behavior failure:
-  assumes (! (\exists integer res_0;
-               (((0 <= res_0) && (res_0 <= (a_length - 1))) &&
-                 ((a + res_0).intM == val))));
+  assumes (! (\exists integer res;
+               (((0 <= res) && (res <= (a_length - 1))) &&
+                 ((a + res).intM == val))));
   ensures (C_37 : (\result == (- 1)));
 {  
-   (check (disjoint_behaviors : (! ((\exists integer res;
-                                      (((0 <= res) &&
-                                         (res <= (a_length - 1))) &&
-                                        ((a + res).intM == val))) &&
-                                     (! (\exists integer res_0;
-                                          (((0 <= res_0) &&
-                                             (res_0 <= (a_length - 1))) &&
-                                            ((a + res_0).intM == val))))))));
-   
-   (check (complete_behaviors : ((! (\exists integer res_0;
+   (check (disjoint_behaviors : (! ((\exists integer res_0;
                                       (((0 <= res_0) &&
                                          (res_0 <= (a_length - 1))) &&
-                                        ((a + res_0).intM == val)))) ||
-                                  (\exists integer res;
-                                    (((0 <= res) && (res <= (a_length - 1))) &&
-                                      ((a + res).intM == val))))));
+                                        ((a + res_0).intM == val))) &&
+                                     (! (\exists integer res;
+                                          (((0 <= res) &&
+                                             (res <= (a_length - 1))) &&
+                                            ((a + res).intM == val))))))));
+   
+   (check (complete_behaviors : ((! (\exists integer res;
+                                      (((0 <= res) &&
+                                         (res <= (a_length - 1))) &&
+                                        ((a + res).intM == val)))) ||
+                                  (\exists integer res_0;
+                                    (((0 <= res_0) &&
+                                       (res_0 <= (a_length - 1))) &&
+                                      ((a + res_0).intM == val))))));
    
    (var int32 low);
    
@@ -572,17 +573,17 @@ parameter binary_search :
     intP_a_2_alloc_table:intP alloc_table ->
      intP_intM_a_2:(intP, int32) memory ->
       { } int32
-      { (((not (exists res_0:int.
-                (le_int((0), res_0)
-                and (le_int(res_0, sub_int(integer_of_int32(a_length), (1)))
+      { (((not (exists res:int.
+                (le_int((0), res)
+                and (le_int(res, sub_int(integer_of_int32(a_length), (1)))
                     and (integer_of_int32(select(intP_intM_a_2,
-                                          shift(a_0, res_0))) = integer_of_int32(val)))))) ->
+                                          shift(a_0, res))) = integer_of_int32(val)))))) ->
           (JC_<somenum>: (integer_of_int32(result) = neg_int((1)))))
-        and ((exists res:int.
-              (le_int((0), res)
-              and (le_int(res, sub_int(integer_of_int32(a_length), (1)))
+        and ((exists res_0:int.
+              (le_int((0), res_0)
+              and (le_int(res_0, sub_int(integer_of_int32(a_length), (1)))
                   and (integer_of_int32(select(intP_intM_a_2,
-                                        shift(a_0, res))) = integer_of_int32(val))))) ->
+                                        shift(a_0, res_0))) = integer_of_int32(val))))) ->
              (JC_<somenum>:
              ((JC_<somenum>: ge_int(integer_of_int32(result), (0)))
              and (JC_<somenum>:
@@ -606,17 +607,17 @@ parameter binary_search_requires :
                     Sorted(a_0, (0),
                     sub_int(integer_of_int32(a_length), (1)), intP_intM_a_2))))))}
       int32
-      { (((not (exists res_0:int.
-                (le_int((0), res_0)
-                and (le_int(res_0, sub_int(integer_of_int32(a_length), (1)))
+      { (((not (exists res:int.
+                (le_int((0), res)
+                and (le_int(res, sub_int(integer_of_int32(a_length), (1)))
                     and (integer_of_int32(select(intP_intM_a_2,
-                                          shift(a_0, res_0))) = integer_of_int32(val)))))) ->
+                                          shift(a_0, res))) = integer_of_int32(val)))))) ->
           (JC_<somenum>: (integer_of_int32(result) = neg_int((1)))))
-        and ((exists res:int.
-              (le_int((0), res)
-              and (le_int(res, sub_int(integer_of_int32(a_length), (1)))
+        and ((exists res_0:int.
+              (le_int((0), res_0)
+              and (le_int(res_0, sub_int(integer_of_int32(a_length), (1)))
                   and (integer_of_int32(select(intP_intM_a_2,
-                                        shift(a_0, res))) = integer_of_int32(val))))) ->
+                                        shift(a_0, res_0))) = integer_of_int32(val))))) ->
              (JC_<somenum>:
              ((JC_<somenum>: ge_int(integer_of_int32(result), (0)))
              and (JC_<somenum>:
@@ -665,30 +666,31 @@ let binary_search_ensures_default =
    begin
      (check
      { (JC_<somenum>:
-       (not ((exists res_1:int.
-              (le_int((0), res_1)
-              and (le_int(res_1, sub_int(integer_of_int32(a_length), (1)))
+       (not ((exists res_0_0:int.
+              (le_int((0), res_0_0)
+              and (le_int(res_0_0, sub_int(integer_of_int32(a_length), (1)))
                   and (integer_of_int32(select(intP_intM_a_2,
-                                        shift(a_0, res_1))) = integer_of_int32(val)))))
-            and (not (exists res_0_0:int.
-                      (le_int((0), res_0_0)
-                      and (le_int(res_0_0,
+                                        shift(a_0, res_0_0))) = integer_of_int32(val)))))
+            and (not (exists res_1:int.
+                      (le_int((0), res_1)
+                      and (le_int(res_1,
                            sub_int(integer_of_int32(a_length), (1)))
                           and (integer_of_int32(select(intP_intM_a_2,
-                                                shift(a_0, res_0_0))) = 
+                                                shift(a_0, res_1))) = 
                               integer_of_int32(val))))))))) }; void);
     (check
     { (JC_<somenum>:
-      ((not (exists res_0_1:int.
-             (le_int((0), res_0_1)
-             and (le_int(res_0_1, sub_int(integer_of_int32(a_length), (1)))
+      ((not (exists res_2:int.
+             (le_int((0), res_2)
+             and (le_int(res_2, sub_int(integer_of_int32(a_length), (1)))
                  and (integer_of_int32(select(intP_intM_a_2,
-                                       shift(a_0, res_0_1))) = integer_of_int32(val))))))
-      or (exists res_2:int.
-          (le_int((0), res_2)
-          and (le_int(res_2, sub_int(integer_of_int32(a_length), (1)))
-              and (integer_of_int32(select(intP_intM_a_2, shift(a_0, res_2))) = 
-                  integer_of_int32(val))))))) }; void);
+                                       shift(a_0, res_2))) = integer_of_int32(val))))))
+      or (exists res_0_1:int.
+          (le_int((0), res_0_1)
+          and (le_int(res_0_1, sub_int(integer_of_int32(a_length), (1)))
+              and (integer_of_int32(select(intP_intM_a_2,
+                                    shift(a_0, res_0_1))) = integer_of_int32(val))))))) };
+    void);
     (let low = ref (any_int32 void) in
     (let mid = ref (any_int32 void) in
     (let high = ref (any_int32 void) in
@@ -802,10 +804,10 @@ let binary_search_ensures_default =
 
 let binary_search_ensures_failure =
  fun (val : int32) (a_0 : intP pointer) (a_length : int32) (intP_a_2_alloc_table : intP alloc_table) (intP_intM_a_2 : (intP, int32) memory) ->
-  { ((not (exists res_0:int.
-           (le_int((0), res_0)
-           and (le_int(res_0, sub_int(integer_of_int32(a_length), (1)))
-               and (integer_of_int32(select(intP_intM_a_2, shift(a_0, res_0))) = 
+  { ((not (exists res:int.
+           (le_int((0), res)
+           and (le_int(res, sub_int(integer_of_int32(a_length), (1)))
+               and (integer_of_int32(select(intP_intM_a_2, shift(a_0, res))) = 
                    integer_of_int32(val))))))
     and (JC_<somenum>:
         ((JC_<somenum>: le_int(offset_min(intP_a_2_alloc_table, a_0), (0)))
@@ -938,10 +940,10 @@ let binary_search_ensures_failure =
 
 let binary_search_ensures_success =
  fun (val : int32) (a_0 : intP pointer) (a_length : int32) (intP_a_2_alloc_table : intP alloc_table) (intP_intM_a_2 : (intP, int32) memory) ->
-  { ((exists res:int.
-      (le_int((0), res)
-      and (le_int(res, sub_int(integer_of_int32(a_length), (1)))
-          and (integer_of_int32(select(intP_intM_a_2, shift(a_0, res))) = 
+  { ((exists res_0:int.
+      (le_int((0), res_0)
+      and (le_int(res_0, sub_int(integer_of_int32(a_length), (1)))
+          and (integer_of_int32(select(intP_intM_a_2, shift(a_0, res_0))) = 
               integer_of_int32(val)))))
     and (JC_<somenum>:
         ((JC_<somenum>: le_int(offset_min(intP_a_2_alloc_table, a_0), (0)))
@@ -1224,7 +1226,7 @@ why --project [...] why/binary-search-hollas.why
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/binary-search-hollas_po2.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.jessie/binary-search-hollas.jc" line = "77" begin = "10" end = "460"/>
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.jessie/binary-search-hollas.jc" line = "77" begin = "10" end = "499"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/binary-search-hollas_po3.why">

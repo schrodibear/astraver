@@ -86,7 +86,6 @@ behavior default:
   __ConsignerPanne_cpt,
   __TT0_cpt,
   __TT1_cpt;
-  allocates \nothing;
   ensures (C_1 : ((C_2 : (\at(__ConsignerPanne_cpt,Old) <=
                            __ConsignerPanne_cpt)) &&
                    (C_3 : (__ConsignerPanne_cpt <=
@@ -1161,22 +1160,22 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/phase12_po5.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "137" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "136" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po6.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "137" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "136" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po7.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "148" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "147" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po8.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "148" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "147" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

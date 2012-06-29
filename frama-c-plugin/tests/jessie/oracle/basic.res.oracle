@@ -58,16 +58,16 @@ behavior default:
 }
 
 int32 max(int32 x, int32 y)
-behavior default:
-  ensures (C_5 : true);
 behavior result_ge_x:
-  ensures (C_6 : (\result >= \at(x,Old)));
+  ensures (C_5 : (\result >= \at(x,Old)));
 behavior result_ge_y:
-  ensures (C_7 : (\result >= \at(y,Old)));
+  ensures (C_6 : (\result >= \at(y,Old)));
 behavior result_is_lub:
-  ensures (C_8 : (\forall int32 z;
+  ensures (C_7 : (\forall int32 z;
                    (((z >= \at(x,Old)) && (z >= \at(y,Old))) ==>
                      (z >= \result))));
+behavior default:
+  ensures (C_8 : true);
 {  
    (var int32 tmp);
    

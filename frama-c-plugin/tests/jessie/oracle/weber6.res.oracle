@@ -54,17 +54,17 @@ int32 equal_int_array(intP[..] first1, intP[..] last1, intP[..] first2)
 behavior default:
   ensures (C_15 : true);
 behavior equal:
-  ensures (C_16 : (\forall integer i_3;
-                    (((0 <= i_3) &&
-                       (i_3 < (\at(last1,Old) - \at(first1,Old)))) ==>
-                      ((\at(first1,Old) + i_3).intM ==
-                        (\at(first2,Old) + i_3).intM))));
-behavior not_equal:
-  ensures (C_17 : (\exists integer i_4;
+  ensures (C_16 : (\forall integer i_4;
                     (((0 <= i_4) &&
                        (i_4 < (\at(last1,Old) - \at(first1,Old)))) ==>
-                      ((\at(first1,Old) + i_4).intM !=
+                      ((\at(first1,Old) + i_4).intM ==
                         (\at(first2,Old) + i_4).intM))));
+behavior not_equal:
+  ensures (C_17 : (\exists integer i_3;
+                    (((0 <= i_3) &&
+                       (i_3 < (\at(last1,Old) - \at(first1,Old)))) ==>
+                      ((\at(first1,Old) + i_3).intM !=
+                        (\at(first2,Old) + i_3).intM))));
 {  
    (var intP[..] a);
    
@@ -511,18 +511,18 @@ parameter equal_int_array :
        intP_intM_first1_1:(intP, int32) memory ->
         { } int32
         { ((JC_<somenum>:
-           (exists i_4:int.
-            ((le_int((0), i_4) and lt_int(i_4, sub_pointer(last1, first1))) ->
-             (integer_of_int32(select(intP_intM_first1_1, shift(first1, i_4))) <> 
-             integer_of_int32(select(intP_intM_first2_3, shift(first2, i_4)))))))
+           (exists i_3:int.
+            ((le_int((0), i_3) and lt_int(i_3, sub_pointer(last1, first1))) ->
+             (integer_of_int32(select(intP_intM_first1_1, shift(first1, i_3))) <> 
+             integer_of_int32(select(intP_intM_first2_3, shift(first2, i_3)))))))
           and (JC_<somenum>:
-              (forall i_3:int.
-               ((le_int((0), i_3)
-                and lt_int(i_3, sub_pointer(last1, first1))) ->
+              (forall i_4:int.
+               ((le_int((0), i_4)
+                and lt_int(i_4, sub_pointer(last1, first1))) ->
                 (integer_of_int32(select(intP_intM_first1_1,
-                                  shift(first1, i_3))) = integer_of_int32(
+                                  shift(first1, i_4))) = integer_of_int32(
                                                          select(intP_intM_first2_3,
-                                                         shift(first2, i_3)))))))) }
+                                                         shift(first2, i_4)))))))) }
 
 parameter equal_int_array_requires :
  first1:intP pointer ->
@@ -548,18 +548,18 @@ parameter equal_int_array_requires :
                           sub_int(sub_pointer(last1, first1), (1)))))))))}
         int32
         { ((JC_<somenum>:
-           (exists i_4:int.
-            ((le_int((0), i_4) and lt_int(i_4, sub_pointer(last1, first1))) ->
-             (integer_of_int32(select(intP_intM_first1_1, shift(first1, i_4))) <> 
-             integer_of_int32(select(intP_intM_first2_3, shift(first2, i_4)))))))
+           (exists i_3:int.
+            ((le_int((0), i_3) and lt_int(i_3, sub_pointer(last1, first1))) ->
+             (integer_of_int32(select(intP_intM_first1_1, shift(first1, i_3))) <> 
+             integer_of_int32(select(intP_intM_first2_3, shift(first2, i_3)))))))
           and (JC_<somenum>:
-              (forall i_3:int.
-               ((le_int((0), i_3)
-                and lt_int(i_3, sub_pointer(last1, first1))) ->
+              (forall i_4:int.
+               ((le_int((0), i_4)
+                and lt_int(i_4, sub_pointer(last1, first1))) ->
                 (integer_of_int32(select(intP_intM_first1_1,
-                                  shift(first1, i_3))) = integer_of_int32(
+                                  shift(first1, i_4))) = integer_of_int32(
                                                          select(intP_intM_first2_3,
-                                                         shift(first2, i_3)))))))) }
+                                                         shift(first2, i_4)))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -740,10 +740,10 @@ let equal_int_array_ensures_equal =
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end))))
   { (JC_<somenum>:
-    (forall i_3:int.
-     ((le_int((0), i_3) and lt_int(i_3, sub_pointer(last1, first1))) ->
-      (integer_of_int32(select(intP_intM_first1_1, shift(first1, i_3))) = 
-      integer_of_int32(select(intP_intM_first2_3, shift(first2, i_3))))))) }
+    (forall i_4:int.
+     ((le_int((0), i_4) and lt_int(i_4, sub_pointer(last1, first1))) ->
+      (integer_of_int32(select(intP_intM_first1_1, shift(first1, i_4))) = 
+      integer_of_int32(select(intP_intM_first2_3, shift(first2, i_4))))))) }
 
 let equal_int_array_ensures_not_equal =
  fun (first1 : intP pointer) (last1 : intP pointer) (first2 : intP pointer) (intP_first1_1_alloc_table : intP alloc_table) (intP_first2_3_alloc_table : intP alloc_table) (intP_intM_first1_1 : (intP, int32) memory) (intP_intM_first2_3 : (intP, int32) memory) ->
@@ -827,10 +827,10 @@ let equal_int_array_ensures_not_equal =
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end))))
   { (JC_<somenum>:
-    (exists i_4:int.
-     ((le_int((0), i_4) and lt_int(i_4, sub_pointer(last1, first1))) ->
-      (integer_of_int32(select(intP_intM_first1_1, shift(first1, i_4))) <> 
-      integer_of_int32(select(intP_intM_first2_3, shift(first2, i_4))))))) }
+    (exists i_3:int.
+     ((le_int((0), i_3) and lt_int(i_3, sub_pointer(last1, first1))) ->
+      (integer_of_int32(select(intP_intM_first1_1, shift(first1, i_3))) <> 
+      integer_of_int32(select(intP_intM_first2_3, shift(first2, i_3))))))) }
 
 let equal_int_array_safety =
  fun (first1 : intP pointer) (last1 : intP pointer) (first2 : intP pointer) (intP_first1_1_alloc_table : intP alloc_table) (intP_first2_3_alloc_table : intP alloc_table) (intP_intM_first1_1 : (intP, int32) memory) (intP_intM_first2_3 : (intP, int32) memory) ->

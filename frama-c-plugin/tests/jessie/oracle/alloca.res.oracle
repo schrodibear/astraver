@@ -52,7 +52,6 @@ unit Frama_C_bzero(unsigned_charP[..] dest, uint32 n)
                     (C_4 : (\offset_max(dest) >= (n - 1)))));
 behavior default:
   assigns (dest + [0..(n - 1)]).unsigned_charM;
-  allocates \nothing;
   ensures (C_1 : (\forall integer i;
                    (((0 <= i) && (i < \at(n,Old))) ==>
                      ((\at(dest,Old) + i).unsigned_charM == 0))));
@@ -161,7 +160,6 @@ behavior default:
       ( 
         behavior Frama_C_implicit_init:
           assigns (u_0 + [0..(5 - 1)]).intM;
-          allocates \nothing;
           ensures (C_66 : ((C_67 : ((u_0 + 0).intM == 0)) &&
                             ((C_69 : ((u_0 + 1).intM == 0)) &&
                               ((C_71 : ((u_0 + 2).intM == (t_2 + 2).intM)) &&

@@ -75,6 +75,36 @@ let treat_jessie_no_prolog () =
   Kernel.CppExtraArgs.add ("-D JESSIE_NO_PROLOG")
 *)
 
+let steal_globals () =
+  let vis = object
+    inherit Visitor.frama_c_inplace
+    method vglob_aux g =
+      match g with
+        | GAnnot (a,_) ->
+            Annotations.remove_global (Annotations.emitter_of_global a) a;
+            Annotations.unsafe_add_global Common.jessie_emitter a;
+            (* SkipChildren is not good, as Annotations.remove_global has
+               removed it from AST: we have to re-insert it...
+            *)
+            ChangeTo [g]
+        | _ -> SkipChildren
+  end 
+  in
+  Visitor.visitFramacFile vis (FCAst.get())
+
+let steal_annots () =
+  let emitter=Common.jessie_emitter in
+  let l = 
+    Annotations.fold_all_code_annot 
+      (fun stmt e ca acc ->
+        Annotations.remove_code_annot e stmt ca;
+        (stmt,ca)::acc)
+      []
+  in
+  List.iter (fun (stmt,ca) -> Annotations.add_code_annot emitter stmt ca) l;
+  steal_globals ();
+  Globals.Functions.iter (Annotations.register_funspec ~emitter ~force:true)
+
 let apply_if_dir_exist name f =
   try
     let d = Unix.opendir name in
@@ -93,14 +123,12 @@ let run () =
   Jessie_options.feedback "Starting Jessie translation";
   (* Work in our own project, initialized by a copy of the main one. *)
   let prj =
-    File.create_project_from_visitor "jessie"
+    File.create_project_from_visitor "jessie" 
       (fun prj -> new Visitor.frama_c_copy prj)
   in
   FCProject.copy ~selection:(Plugin.get_selection ()) prj;
   FCProject.set_current prj;
-
   let file = FCAst.get () in
-
   try
     if file.globals = [] then
       Jessie_options.abort "Nothing to process. There was probably an error before.";
@@ -111,8 +139,13 @@ let run () =
      *)
     ignore (Common.malloc_function ());
     ignore (Common.free_function ());
-
+    Jessie_options.debug  "After malloc and free";
+    if checking then check_types file;
+    steal_annots ();
+    Jessie_options.debug "After steal_annots";
+    if checking then check_types file;
     (* Rewrite ranges in logic annotations by comprehesion *)
+    Jessie_options.debug "from range to comprehension";
     !Db.Properties.Interp.from_range_to_comprehension
       (Cil.inplace_visit ()) (FCProject.current ()) file;
     if checking then check_types file;

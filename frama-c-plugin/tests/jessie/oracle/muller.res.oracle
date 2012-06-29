@@ -1,7 +1,7 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only muller.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD muller.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code nor implicit assigns clause for function calloc, generating default assigns from the prototype
+[kernel] warning: Neither code nor specification for function calloc, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir muller.jessie
 [jessie] File muller.jessie/muller.jc written.
 [jessie] File muller.jessie/muller.cloc written.
@@ -51,7 +51,6 @@ type voidP = [voidP]
 charP[..] calloc(uint32 unnamed, uint32 unnamed_0)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : true);
 ;
 
@@ -1206,12 +1205,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po39.why">
-      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "149" begin = "27" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "148" begin = "27" end = "290"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po40.why">
-      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "149" begin = "27" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "148" begin = "27" end = "290"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

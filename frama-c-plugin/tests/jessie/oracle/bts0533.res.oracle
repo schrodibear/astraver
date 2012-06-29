@@ -50,10 +50,10 @@ type voidP = [voidP]
 uint32 bsearch(int32 key, intP[..] array, uint32 n_1)
   requires (C_50 : ((C_51 : (\offset_min(array) <= 0)) &&
                      (C_52 : (\offset_max(array) >= (n_1 - 1)))));
-  requires (C_49 : (\forall integer i_3;
+  requires (C_49 : (\forall integer i_5;
                      (\forall integer j_0;
-                       (((0 <= i_3) && ((i_3 < j_0) && (j_0 < n_1))) ==>
-                         ((array + i_3).intM < (array + j_0).intM)))));
+                       (((0 <= i_5) && ((i_5 < j_0) && (j_0 < n_1))) ==>
+                         ((array + i_5).intM < (array + j_0).intM)))));
 behavior default:
   ensures (C_46 : true);
 behavior found:
@@ -61,8 +61,8 @@ behavior found:
             (((0 <= i_4) && (i_4 < n_1)) && ((array + i_4).intM == key)));
   ensures (C_47 : ((\at(array,Old) + \result).intM == \at(key,Old)));
 behavior notfound:
-  assumes (\forall integer i_5;
-            (((0 <= i_5) && (i_5 < n_1)) ==> ((array + i_5).intM != key)));
+  assumes (\forall integer i_3;
+            (((0 <= i_3) && (i_3 < n_1)) ==> ((array + i_3).intM != key)));
   ensures (C_48 : (\result == 4294967295UL));
 {  
    (var uint32 left);
@@ -618,9 +618,9 @@ parameter bsearch :
     intP_array_1_alloc_table:intP alloc_table ->
      intP_intM_array_1:(intP, int32) memory ->
       { } uint32
-      { (((forall i_5:int.
-           ((le_int((0), i_5) and lt_int(i_5, integer_of_uint32(n_1))) ->
-            (integer_of_int32(select(intP_intM_array_1, shift(array_0, i_5))) <> 
+      { (((forall i_3:int.
+           ((le_int((0), i_3) and lt_int(i_3, integer_of_uint32(n_1))) ->
+            (integer_of_int32(select(intP_intM_array_1, shift(array_0, i_3))) <> 
             integer_of_int32(key)))) ->
           (JC_<somenum>: (integer_of_uint32(result) = (4294967295))))
         and ((exists i_4:int.
@@ -645,19 +645,19 @@ parameter bsearch_requires :
              ge_int(offset_max(intP_array_1_alloc_table, array_0),
              sub_int(integer_of_uint32(n_1), (1))))
             and (JC_<somenum>:
-                (forall i_3:int.
+                (forall i_5:int.
                  (forall j_0:int.
-                  ((le_int((0), i_3)
-                   and (lt_int(i_3, j_0)
+                  ((le_int((0), i_5)
+                   and (lt_int(i_5, j_0)
                        and lt_int(j_0, integer_of_uint32(n_1)))) ->
                    lt_int(integer_of_int32(select(intP_intM_array_1,
-                                           shift(array_0, i_3))),
+                                           shift(array_0, i_5))),
                    integer_of_int32(select(intP_intM_array_1,
                                     shift(array_0, j_0)))))))))))}
       uint32
-      { (((forall i_5:int.
-           ((le_int((0), i_5) and lt_int(i_5, integer_of_uint32(n_1))) ->
-            (integer_of_int32(select(intP_intM_array_1, shift(array_0, i_5))) <> 
+      { (((forall i_3:int.
+           ((le_int((0), i_3) and lt_int(i_3, integer_of_uint32(n_1))) ->
+            (integer_of_int32(select(intP_intM_array_1, shift(array_0, i_3))) <> 
             integer_of_int32(key)))) ->
           (JC_<somenum>: (integer_of_uint32(result) = (4294967295))))
         and ((exists i_4:int.
@@ -714,12 +714,12 @@ let bsearch_ensures_default =
          ge_int(offset_max(intP_array_1_alloc_table, array_0),
          sub_int(integer_of_uint32(n_1), (1))))
         and (JC_<somenum>:
-            (forall i_3:int.
+            (forall i_5:int.
              (forall j_0:int.
-              ((le_int((0), i_3)
-               and (lt_int(i_3, j_0) and lt_int(j_0, integer_of_uint32(n_1)))) ->
+              ((le_int((0), i_5)
+               and (lt_int(i_5, j_0) and lt_int(j_0, integer_of_uint32(n_1)))) ->
                lt_int(integer_of_int32(select(intP_intM_array_1,
-                                       shift(array_0, i_3))),
+                                       shift(array_0, i_5))),
                integer_of_int32(select(intP_intM_array_1,
                                 shift(array_0, j_0))))))))))) }
   (init:
@@ -893,13 +893,13 @@ let bsearch_ensures_found =
              ge_int(offset_max(intP_array_1_alloc_table, array_0),
              sub_int(integer_of_uint32(n_1), (1))))
             and (JC_<somenum>:
-                (forall i_3:int.
+                (forall i_5:int.
                  (forall j_0:int.
-                  ((le_int((0), i_3)
-                   and (lt_int(i_3, j_0)
+                  ((le_int((0), i_5)
+                   and (lt_int(i_5, j_0)
                        and lt_int(j_0, integer_of_uint32(n_1)))) ->
                    lt_int(integer_of_int32(select(intP_intM_array_1,
-                                           shift(array_0, i_3))),
+                                           shift(array_0, i_5))),
                    integer_of_int32(select(intP_intM_array_1,
                                     shift(array_0, j_0)))))))))))) }
   (init:
@@ -1065,9 +1065,9 @@ let bsearch_ensures_found =
 
 let bsearch_ensures_notfound =
  fun (key : int32) (array_0 : intP pointer) (n_1 : uint32) (intP_array_1_alloc_table : intP alloc_table) (intP_intM_array_1 : (intP, int32) memory) ->
-  { ((forall i_5:int.
-      ((le_int((0), i_5) and lt_int(i_5, integer_of_uint32(n_1))) ->
-       (integer_of_int32(select(intP_intM_array_1, shift(array_0, i_5))) <> 
+  { ((forall i_3:int.
+      ((le_int((0), i_3) and lt_int(i_3, integer_of_uint32(n_1))) ->
+       (integer_of_int32(select(intP_intM_array_1, shift(array_0, i_3))) <> 
        integer_of_int32(key))))
     and (JC_<somenum>:
         ((JC_<somenum>: le_int(offset_min(intP_array_1_alloc_table, array_0), (0)))
@@ -1075,13 +1075,13 @@ let bsearch_ensures_notfound =
              ge_int(offset_max(intP_array_1_alloc_table, array_0),
              sub_int(integer_of_uint32(n_1), (1))))
             and (JC_<somenum>:
-                (forall i_3:int.
+                (forall i_5:int.
                  (forall j_0:int.
-                  ((le_int((0), i_3)
-                   and (lt_int(i_3, j_0)
+                  ((le_int((0), i_5)
+                   and (lt_int(i_5, j_0)
                        and lt_int(j_0, integer_of_uint32(n_1)))) ->
                    lt_int(integer_of_int32(select(intP_intM_array_1,
-                                           shift(array_0, i_3))),
+                                           shift(array_0, i_5))),
                    integer_of_int32(select(intP_intM_array_1,
                                     shift(array_0, j_0)))))))))))) }
   (init:
@@ -1251,12 +1251,12 @@ let bsearch_safety =
          ge_int(offset_max(intP_array_1_alloc_table, array_0),
          sub_int(integer_of_uint32(n_1), (1))))
         and (JC_<somenum>:
-            (forall i_3:int.
+            (forall i_5:int.
              (forall j_0:int.
-              ((le_int((0), i_3)
-               and (lt_int(i_3, j_0) and lt_int(j_0, integer_of_uint32(n_1)))) ->
+              ((le_int((0), i_5)
+               and (lt_int(i_5, j_0) and lt_int(j_0, integer_of_uint32(n_1)))) ->
                lt_int(integer_of_int32(select(intP_intM_array_1,
-                                       shift(array_0, i_3))),
+                                       shift(array_0, i_5))),
                integer_of_int32(select(intP_intM_array_1,
                                 shift(array_0, j_0))))))))))) }
   (init:

@@ -88,6 +88,6 @@ void main(void)
 	hist[t].speed = speed;
 	hist[t].emState = emState;
 	hist[t].emButton = emButton;
-    }
+  }
 }
 

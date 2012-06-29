@@ -210,9 +210,6 @@ behavior default:
       
       loop 
       behavior default:
-        
-        assigns (heap + [..]).intM;
-      behavior default:
         invariant (C_5 : ((((C_8 : (0 <= i)) && (C_9 : (i <= size))) &&
                             (C_10 : ((i == size) ==>
                                       (is_heap(tree_of_array{Here}((heap + 0),
@@ -226,6 +223,9 @@ behavior default:
                                                     (heap + 0), 0, (size + 1))) ==
                                          add_bag((heap + i).intM,
                                                  \at(model{Pre}(),Pre))))))));
+      behavior default:
+        
+        assigns (heap + [..]).intM;
       variant (C_4 : i);
       while (true)
       {  
@@ -290,10 +290,10 @@ behavior default:
          
          loop 
          behavior default:
+           invariant (C_42 : ((C_43 : (0 <= i_0)) && (C_44 : (i_0 <= size))));
+         behavior default:
            
            assigns (heap + [..]).intM;
-         behavior default:
-           invariant (C_42 : ((C_43 : (0 <= i_0)) && (C_44 : (i_0 <= size))));
          variant (C_41 : (size - i_0));
          while (true)
          {  

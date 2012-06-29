@@ -57,14 +57,12 @@ int32 Frama_C_entropy_source;
 int32 Frama_C_interval(int32 min_0, int32 max_0)
 behavior default:
   assigns Frama_C_entropy_source;
-  allocates \nothing;
   ensures (C_1 : true);
 ;
 
 float Frama_C_float_interval(float min, float max)
 behavior default:
   assigns Frama_C_entropy_source;
-  allocates \nothing;
   ensures (C_2 : true);
 ;
 
@@ -127,11 +125,11 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_14 : (1 <= (2147483647 >>> V8))));
+         (assert for default: (C_14 : (V8 >= 0)));
          
          (assert for default: (C_13 : (V8 < 32)));
          
-         (assert for default: (C_12 : (V8 >= 0)));
+         (assert for default: (C_12 : (1 <= (2147483647 >>> V8))));
          (C_17 : (V7 = (C_16 : ((C_15 : (1 << V8)) :> int32))))
       };
       
@@ -1569,11 +1567,11 @@ let F5_ensures_default =
        (let jessie_<somenum> =
        (C_17:
        begin
-         (assert
-         { (JC_<somenum>: le_int((1), asr((2147483647), integer_of_int32(V8)))) };
-         void);
+         (assert { (JC_<somenum>: ge_int(integer_of_int32(V8), (0))) }; void);
         (assert { (JC_<somenum>: lt_int(integer_of_int32(V8), (32))) }; void);
-        (assert { (JC_<somenum>: ge_int(integer_of_int32(V8), (0))) }; void);
+        (assert
+        { (JC_<somenum>: le_int((1), asr((2147483647), integer_of_int32(V8)))) };
+        void);
         (V7 := (C_16:
                (safe_int32_of_integer_ (C_15:
                                        ((lsl (1)) (integer_of_int32 V8))))));
@@ -1598,10 +1596,10 @@ let F5_safety =
        (let jessie_<somenum> =
        (C_17:
        begin
-         [ { } unit
-           { (JC_<somenum>: le_int((1), asr((2147483647), integer_of_int32(V8)))) } ];
+         [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(V8), (0))) } ];
         [ { } unit { (JC_<somenum>: lt_int(integer_of_int32(V8), (32))) } ];
-        [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(V8), (0))) } ];
+        [ { } unit
+          { (JC_<somenum>: le_int((1), asr((2147483647), integer_of_int32(V8)))) } ];
         (V7 := (C_16:
                (JC_<somenum>:
                (int32_of_integer_ (C_15: ((lsl (1)) (integer_of_int32 V8)))))));
@@ -2968,52 +2966,52 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po193.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "437" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "435" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po194.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "437" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "435" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po195.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "437" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "435" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po196.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "437" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "435" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po197.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "437" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "435" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po198.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "447" begin = "27" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "445" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po199.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "447" begin = "27" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "445" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po200.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "447" begin = "27" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "445" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po201.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "447" begin = "27" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "445" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po202.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "447" begin = "27" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "445" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3469,7 +3467,7 @@ text = "ArithOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po59.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "252" begin = "42" end = "59"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "250" begin = "42" end = "59"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -3484,7 +3482,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po62.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "254" begin = "42" end = "59"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "252" begin = "42" end = "59"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -3724,12 +3722,12 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po110.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "290" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "288" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/renamed1_po111.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "290" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "288" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

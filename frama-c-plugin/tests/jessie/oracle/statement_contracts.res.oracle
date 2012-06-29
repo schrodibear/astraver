@@ -40,9 +40,9 @@ tag voidP = {
 type voidP = [voidP]
 
 unit f()
-behavior default:
-  ensures (C_6 : true);
 behavior b:
+  ensures (C_6 : true);
+behavior default:
   ensures (C_7 : true);
 {  
    (var int32 x);

@@ -34,14 +34,14 @@ type voidP = [voidP]
 
 integer f91(integer n_1)
   decreases (C_12 : (101 - n_1));
-behavior default:
-  ensures (C_9 : true);
 behavior less_than_101:
   assumes (n_1 <= 100);
-  ensures (C_10 : (\result == 91));
+  ensures (C_9 : (\result == 91));
 behavior greater_than_100:
   assumes (n_1 >= 101);
-  ensures (C_11 : (\result == (\at(n_1,Old) - 10)));
+  ensures (C_10 : (\result == (\at(n_1,Old) - 10)));
+behavior default:
+  ensures (C_11 : true);
 {  
    (var integer tmp);
    

@@ -47,7 +47,6 @@ double sqrt_init(double x_0)
                     (C_4 : ((x_0 :> real) <= 2))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : (\real_abs(((\result :> real) -
                               invsqrt((\at(x_0,Old) :> real)))) <=
                    (0x1p-6 * \real_abs(invsqrt((\at(x_0,Old) :> real))))));

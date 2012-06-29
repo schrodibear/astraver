@@ -61,9 +61,9 @@ behavior default:
 }
 
 unit g()
-behavior default:
-  ensures (C_39 : true);
 behavior values:
+  ensures (C_39 : true);
+behavior default:
   ensures (C_40 : true);
 {  
    (var intP[0] x_1);
@@ -124,9 +124,9 @@ behavior default:
 }
 
 unit k()
-behavior default:
-  ensures (C_81 : true);
 behavior values:
+  ensures (C_81 : true);
+behavior default:
   ensures (C_82 : true);
 {  
    (var intP[0] x_2);

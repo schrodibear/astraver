@@ -415,7 +415,6 @@ integer memcmp(charP[..] s1, charP[..] s2, integer n_2)
                       (C_8 : (\offset_max(s2) >= (n_2 - 1))))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : (\result ==
                    memcmp{Here}(\at(s1,Old), \at(s2,Old), \at(n_2,Old))));
 ;
@@ -425,7 +424,6 @@ charP[..] memchr(charP[..] s, integer c_0, integer n_1)
                      (C_16 : (\offset_max(s) >= (n_1 - 1)))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_9 : ((C_10 : (\result == \at(s,Old))) &&
                    (C_11 : (\base_block(\result) == \base_block(\at(s,Old))))));
 behavior found:
@@ -443,7 +441,6 @@ charP[..] memcpy(charP[..] dest_1, charP[..] src, integer n_3)
                        (C_28 : (\offset_max(src) >= (n_3 - 1))))));
 behavior default:
   assigns (dest_1 + [0..(n_3 - 1)]).charM;
-  allocates \nothing;
   ensures (C_17 : (((C_19 : (memcmp{Here}(\at(dest_1,Old), \at(src,Old),
                                           \at(n_3,Old)) ==
                               0)) &&
@@ -459,7 +456,6 @@ charP[..] memmove(charP[..] dest_2, charP[..] src_0, integer n_4)
                        (C_40 : (\offset_max(src_0) >= (n_4 - 1))))));
 behavior default:
   assigns (dest_2 + [0..(n_4 - 1)]).charM;
-  allocates \nothing;
   ensures (C_29 : (((C_31 : (memcmp{Here}(\at(dest_2,Old), \at(src_0,Old),
                                           \at(n_4,Old)) ==
                               0)) &&
@@ -473,7 +469,6 @@ charP[..] memset(charP[..] s_0, integer c_1, integer n_5)
                      (C_48 : (\offset_max(s_0) >= (n_5 - 1)))));
 behavior default:
   assigns (s_0 + [0..(n_5 - 1)]).charM;
-  allocates \nothing;
   ensures (C_41 : (((C_43 : (memset{Here}(\at(s_0,Old), \at(c_1,Old),
                                           \at(n_5,Old)) ==
                               true)) &&
@@ -486,7 +481,6 @@ integer strlen(charP[..] s_4)
   requires (C_50 : valid_string{Here}(s_4));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_49 : (\result == strlen{Here}(\at(s_4,Old))));
 ;
 
@@ -495,7 +489,6 @@ integer strcmp(charP[..] s1_0, charP[..] s2_0)
                      (C_54 : valid_string{Here}(s2_0))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_51 : (\result == strcmp{Here}(\at(s1_0,Old), \at(s2_0,Old))));
 ;
 
@@ -504,7 +497,6 @@ integer strncmp(charP[..] s1_2, charP[..] s2_2, integer n_7)
                      (C_58 : valid_string{Here}(s2_2))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_55 : (\result ==
                     strncmp{Here}(\at(s1_2,Old), \at(s2_2,Old), \at(n_7,Old))));
 ;
@@ -514,7 +506,6 @@ integer strcoll(charP[..] s1_1, charP[..] s2_1)
                      (C_62 : valid_string{Here}(s2_1))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_59 : true);
 ;
 
@@ -522,7 +513,6 @@ charP[..] strchr(charP[..] s_1, integer c_2)
   requires (C_70 : valid_string{Here}(s_1));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_63 : true);
 behavior found:
   assumes (strchr{Here}(s_1, c_2) == true);
@@ -539,7 +529,6 @@ charP[..] strrchr(charP[..] s_7, integer c_3)
   requires (C_78 : valid_string{Here}(s_7));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_71 : true);
 behavior found:
   assumes (strchr{Here}(s_7, c_3) == true);
@@ -557,7 +546,6 @@ integer strcspn(charP[..] s_2, charP[..] reject)
                      (C_84 : valid_string{Here}(reject))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_79 : ((C_80 : (0 <= \result)) &&
                     (C_81 : (\result <= strlen{Here}(\at(s_2,Old))))));
 ;
@@ -567,7 +555,6 @@ integer strspn(charP[..] s_8, charP[..] accept_0)
                      (C_90 : valid_string{Here}(accept_0))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_85 : ((C_86 : (0 <= \result)) &&
                     (C_87 : (\result <= strlen{Here}(\at(s_8,Old))))));
 ;
@@ -577,7 +564,6 @@ charP[..] strpbrk(charP[..] s_6, charP[..] accept)
                      (C_94 : valid_string{Here}(accept))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_91 : ((\result == null) ||
                     (\base_block(\result) == \base_block(\at(s_6,Old)))));
 ;
@@ -587,7 +573,6 @@ charP[..] strstr(charP[..] haystack, charP[..] needle)
                      (C_98 : valid_string{Here}(needle))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_95 : ((\result == null) ||
                     ((\base_block(\result) == \base_block(\at(haystack,Old))) &&
                       (memcmp{Here}(\result, \at(needle,Old),
@@ -600,14 +585,12 @@ charP[..] strtok(charP[..] s_9, charP[..] delim)
                       (C_102 : valid_string{Here}(delim))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_99 : true);
 ;
 
 charP[..] strerror(integer errnum)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_103 : valid_string{Here}(\result));
 ;
 
@@ -617,7 +600,6 @@ charP[..] strcpy(charP[..] dest_4, charP[..] src_2)
                       (C_113 : valid_string{Here}(src_2))));
 behavior default:
   assigns (dest_4 + [0..strlen{Old}(src_2)]).charM;
-  allocates \nothing;
   ensures (C_104 : (((C_106 : (strcmp{Here}(\at(dest_4,Old), \at(src_2,Old)) ==
                                 0)) &&
                       (C_107 : (\result == \at(dest_4,Old)))) &&
@@ -631,7 +613,6 @@ charP[..] strncpy(charP[..] dest_6, charP[..] src_4, integer n_8)
                       (C_123 : valid_string{Here}(src_4))));
 behavior default:
   assigns (dest_6 + [0..(n_8 - 1)]).charM;
-  allocates \nothing;
   ensures (C_114 : (\result == \at(dest_6,Old)));
 behavior complete:
   assumes (strlen{Here}(src_4) < n_8);
@@ -657,7 +638,6 @@ charP[..] strcat(charP[..] dest_3, charP[..] src_1)
                       (C_135 : valid_string{Here}(src_1))));
 behavior default:
   assigns (dest_3 + [0..(strlen{Old}(dest_3) + strlen{Old}(src_1))]).charM;
-  allocates \nothing;
   ensures (C_124 : (((C_126 : (strlen{Here}(\at(dest_3,Old)) ==
                                 \at((strlen{Old}(dest_3) +
                                       strlen{Old}(src_1)),Old))) &&
@@ -673,7 +653,6 @@ charP[..] strncat(charP[..] dest_5, charP[..] src_3, integer n_6)
                       (C_147 : valid_string{Here}(src_3))));
 behavior default:
   assigns (dest_5 + [0..((strlen{Old}(dest_5) + n_6) - 1)]).charM;
-  allocates \nothing;
   ensures (C_136 : ((C_137 : (\result == \at(dest_5,Old))) &&
                      (C_138 : (\base_block(\result) ==
                                 \base_block(\at(dest_5,Old))))));
@@ -695,7 +674,6 @@ integer strxfrm(charP[..] dest_7, charP[..] src_5, integer n_10)
                       (C_153 : valid_string{Here}(src_5))));
 behavior default:
   assigns (dest_7 + [0..(n_10 - 1)]).charM;
-  allocates \nothing;
   ensures (C_148 : true);
 ;
 
@@ -703,7 +681,6 @@ charP[..] strdup(charP[..] s_3)
   requires (C_159 : valid_string{Here}(s_3));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_154 : (((C_156 : (\offset_min(\result) <= 0)) &&
                       (C_157 : (\offset_max(\result) >=
                                  strlen{Here}(\at(s_3,Old))))) &&
@@ -714,7 +691,6 @@ charP[..] strndup(charP[..] s_5, integer n_9)
   requires (C_169 : valid_string{Here}(s_5));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_160 : (((((C_164 : (\offset_min(\result) <= 0)) &&
                         (C_165 : (\offset_max(\result) >=
                                    minimum(strlen{Here}(\at(s_5,Old)),
@@ -747,10 +723,10 @@ behavior default:
       
       loop 
       behavior default:
+        invariant (C_171 : ((C_172 : (0 <= i)) && (C_173 : (i <= 12))));
+      behavior default:
         
         assigns (a + [..]).intM;
-      behavior default:
-        invariant (C_171 : ((C_172 : (0 <= i)) && (C_173 : (i <= 12))));
       while (true)
       {  
          {  (if (i < 12) then () else 
@@ -778,10 +754,10 @@ behavior default:
       
       loop 
       behavior default:
+        invariant (C_180 : ((C_181 : (0 <= i_0)) && (C_182 : (i_0 <= 12))));
+      behavior default:
         
         assigns (c + [..]).char_xM;
-      behavior default:
-        invariant (C_180 : ((C_181 : (0 <= i_0)) && (C_182 : (i_0 <= 12))));
       while (true)
       {  
          {  (if (i_0 < 12) then () else 
@@ -4748,32 +4724,32 @@ why --project [...] why/bts0041-bis.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0041-bis_po54.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "802" begin = "15" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "778" begin = "15" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po55.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "802" begin = "15" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "778" begin = "15" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po56.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "802" begin = "15" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "778" begin = "15" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po57.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "803" begin = "15" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "779" begin = "15" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po58.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "803" begin = "15" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "779" begin = "15" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po59.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "803" begin = "15" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "779" begin = "15" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4799,11 +4775,11 @@ text = "UserCall"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po38.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "820" begin = "6" end = "408"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "796" begin = "6" end = "408"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po39.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "820" begin = "6" end = "408"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "796" begin = "6" end = "408"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po40.why">
@@ -4811,11 +4787,11 @@ text = "UserCall"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po41.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "820" begin = "6" end = "408"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "796" begin = "6" end = "408"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po42.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "820" begin = "6" end = "408"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "796" begin = "6" end = "408"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po43.why">
@@ -4825,12 +4801,12 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0041-bis_po44.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "831" begin = "25" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "807" begin = "25" end = "63"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po45.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "831" begin = "25" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "807" begin = "25" end = "63"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -4872,11 +4848,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po23.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "742" begin = "6" end = "427"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "718" begin = "6" end = "427"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "742" begin = "6" end = "427"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "718" begin = "6" end = "427"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po25.why">
@@ -4888,11 +4864,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po27.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "742" begin = "6" end = "427"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "718" begin = "6" end = "427"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po28.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "742" begin = "6" end = "427"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "718" begin = "6" end = "427"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po29.why">
@@ -4902,12 +4878,12 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0041-bis_po30.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "753" begin = "25" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "729" begin = "25" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po31.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "753" begin = "25" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "729" begin = "25" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -4945,11 +4921,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "773" begin = "6" end = "538"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "749" begin = "6" end = "538"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "773" begin = "6" end = "538"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "749" begin = "6" end = "538"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po5.why">
@@ -4961,11 +4937,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "773" begin = "6" end = "538"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "749" begin = "6" end = "538"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "773" begin = "6" end = "538"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "749" begin = "6" end = "538"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po9.why">
@@ -4995,12 +4971,12 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po14.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "784" begin = "25" end = "152"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "760" begin = "25" end = "152"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po15.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "784" begin = "25" end = "152"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "760" begin = "25" end = "152"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

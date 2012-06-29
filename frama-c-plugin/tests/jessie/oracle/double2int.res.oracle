@@ -52,22 +52,22 @@ behavior default:
 }
 
 int32 double2int(double f)
-behavior default:
-  ensures (C_10 : true);
 behavior small:
   assumes ((f :> real) <= (- 65536.0));
-  ensures (C_11 : (\result == (- 65536)));
+  ensures (C_10 : (\result == (- 65536)));
 behavior big:
   assumes ((f :> real) >= 65535.0);
-  ensures (C_12 : (\result == 65535));
+  ensures (C_11 : (\result == 65535));
 behavior negative_fits:
   assumes (((- 65536.0) < (f :> real)) && ((f :> real) < 0.0));
-  ensures (C_13 : ((C_14 : ((\at(f,Old) :> real) <= \result)) &&
-                    (C_15 : (\result < ((\at(f,Old) :> real) + 1)))));
+  ensures (C_12 : ((C_13 : ((\at(f,Old) :> real) <= \result)) &&
+                    (C_14 : (\result < ((\at(f,Old) :> real) + 1)))));
 behavior positive_fits:
   assumes ((0.0 <= (f :> real)) && ((f :> real) < 65535.0));
-  ensures (C_16 : ((C_17 : (((\at(f,Old) :> real) - 1) < \result)) &&
-                    (C_18 : (\result <= (\at(f,Old) :> real)))));
+  ensures (C_15 : ((C_16 : (((\at(f,Old) :> real) - 1) < \result)) &&
+                    (C_17 : (\result <= (\at(f,Old) :> real)))));
+behavior default:
+  ensures (C_18 : true);
 {  
    (var int32 i);
    

@@ -1,5 +1,7 @@
 int *p;
 
+void assert(int);
+
 /*@ requires \valid(q);
   @ assigns *q;
   @*/

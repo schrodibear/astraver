@@ -149,9 +149,9 @@ behavior default:
   ensures (C_68 : true);
 behavior small_data:
   assumes (NbOct < 4);
-  ensures (C_69 : (\forall integer k_4;
-                    (((0 <= k_4) && (k_4 <= (\at(NbOct,Old) - 1))) ==>
-                      ((\at(Adresse,Old) + k_4).charM == \at(ValOct,Old)))));
+  ensures (C_69 : (\forall integer k_7;
+                    (((0 <= k_7) && (k_7 <= (\at(NbOct,Old) - 1))) ==>
+                      ((\at(Adresse,Old) + k_7).charM == \at(ValOct,Old)))));
 behavior misaligned_data:
   assumes ((NbOct >= 4) && (addr_mod4 != 0));
   ensures (C_70 : ((C_71 : (\forall integer k_5;
@@ -168,10 +168,10 @@ behavior misaligned_data:
                                   \at(ValOct,Old)))))));
 behavior aligned_data:
   assumes ((NbOct >= 4) && (addr_mod4 == 0));
-  ensures (C_73 : (\forall integer k_7;
-                    ((((4 * (\at(NbOct,Old) / 4)) <= k_7) &&
-                       (k_7 <= (\at(NbOct,Old) - 1))) ==>
-                      ((\at(Adresse,Old) + k_7).charM == \at(ValOct,Old)))));
+  ensures (C_73 : (\forall integer k_4;
+                    ((((4 * (\at(NbOct,Old) / 4)) <= k_4) &&
+                       (k_4 <= (\at(NbOct,Old) - 1))) ==>
+                      ((\at(Adresse,Old) + k_4).charM == \at(ValOct,Old)))));
 {  
    (var unsigned_charP[..] s);
    

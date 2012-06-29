@@ -491,7 +491,7 @@ let main_ensures_default =
       (let jessie_<somenum> =
       begin
         [ { } unit { (JC_<somenum>: gt_int(integer_of_int32(x_0_0), (0))) } ];
-       (assert { true }; ((C_8: begin   (y_0 := x_0_0); !y_0 end))
+       (assert { true }; ((C_7: begin   (y_0 := x_0_0); !y_0 end))
        {{ (JC_<somenum>: (integer_of_int32(y_0) = integer_of_int32(x_0_0))) }}) end in
       void); (assert { (JC_<somenum>: gt_int(integer_of_int32(y_0), (0))) }; void);
       void; (raise Return) end)); (raise Return) end with Return -> void end)

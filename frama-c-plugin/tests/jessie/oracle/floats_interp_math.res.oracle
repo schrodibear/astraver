@@ -68,11 +68,11 @@ behavior small:
   assumes (((Y + 0).doubleM == (Y + 1).doubleM) &&
             ((((V + 0).doubleM == (V + n_1).doubleM) &&
                ((V + n_1).doubleM == 0.0)) &&
-              ((\forall integer k_0;
-                 (((1 <= k_0) && (k_0 <= (n_1 - 1))) ==>
-                   ((V + k_0).doubleM ==
-                     (((Y + (k_0 + 1)).doubleM - (Y + k_0).doubleM) /
-                       ((X + (k_0 + 1)).doubleM - (X + k_0).doubleM))))) &&
+              ((\forall integer k_2;
+                 (((1 <= k_2) && (k_2 <= (n_1 - 1))) ==>
+                   ((V + k_2).doubleM ==
+                     (((Y + (k_2 + 1)).doubleM - (Y + k_2).doubleM) /
+                       ((X + (k_2 + 1)).doubleM - (X + k_2).doubleM))))) &&
                 (x < (X + 0).doubleM))));
   ensures (C_39 : (\result == (\at(Y,Old) + 0).doubleM));
 behavior big:
@@ -90,11 +90,11 @@ behavior inter:
   assumes (((Y + 0).doubleM == (Y + 1).doubleM) &&
             ((((V + 0).doubleM == (V + n_1).doubleM) &&
                ((V + n_1).doubleM == 0.0)) &&
-              ((\forall integer k_2;
-                 (((1 <= k_2) && (k_2 <= (n_1 - 1))) ==>
-                   ((V + k_2).doubleM ==
-                     (((Y + (k_2 + 1)).doubleM - (Y + k_2).doubleM) /
-                       ((X + (k_2 + 1)).doubleM - (X + k_2).doubleM))))) &&
+              ((\forall integer k_0;
+                 (((1 <= k_0) && (k_0 <= (n_1 - 1))) ==>
+                   ((V + k_0).doubleM ==
+                     (((Y + (k_0 + 1)).doubleM - (Y + k_0).doubleM) /
+                       ((X + (k_0 + 1)).doubleM - (X + k_0).doubleM))))) &&
                 (((X + 0).doubleM <= x) && (x < (X + n_1).doubleM)))));
   ensures (C_41 : (((C_43 : (1 <= i_f)) &&
                      (C_44 : (i_f <= (\at(n_1,Old) - 1)))) &&
@@ -468,18 +468,18 @@ parameter InterPolate :
                                                                    integer_of_int32(n_1))))
                     and ((select(doubleP_doubleM_V_3,
                           shift(V, integer_of_int32(n_1))) = 0.0)
-                        and ((forall k_2:int.
-                              ((le_int((1), k_2)
-                               and le_int(k_2,
+                        and ((forall k_0:int.
+                              ((le_int((1), k_0)
+                               and le_int(k_0,
                                    sub_int(integer_of_int32(n_1), (1)))) ->
-                               (select(doubleP_doubleM_V_3, shift(V, k_2)) = 
+                               (select(doubleP_doubleM_V_3, shift(V, k_0)) = 
                                div_real(sub_real(select(doubleP_doubleM_Y_2,
-                                                 shift(Y, add_int(k_2, (1)))),
+                                                 shift(Y, add_int(k_0, (1)))),
                                         select(doubleP_doubleM_Y_2,
-                                        shift(Y, k_2))),
+                                        shift(Y, k_0))),
                                sub_real(select(doubleP_doubleM_X_1,
-                                        shift(X, add_int(k_2, (1)))),
-                               select(doubleP_doubleM_X_1, shift(X, k_2)))))))
+                                        shift(X, add_int(k_0, (1)))),
+                               select(doubleP_doubleM_X_1, shift(X, k_0)))))))
                             and (le_real(select(doubleP_doubleM_X_1,
                                          shift(X, (0))),
                                  x_0)
@@ -549,25 +549,25 @@ parameter InterPolate :
                             shift(V, integer_of_int32(n_1))))
                            and ((select(doubleP_doubleM_V_3,
                                  shift(V, integer_of_int32(n_1))) = 0.0)
-                               and ((forall k_0:int.
-                                     ((le_int((1), k_0)
-                                      and le_int(k_0,
+                               and ((forall k_2:int.
+                                     ((le_int((1), k_2)
+                                      and le_int(k_2,
                                           sub_int(integer_of_int32(n_1), (1)))) ->
                                       (select(doubleP_doubleM_V_3,
-                                       shift(V, k_0)) = div_real(sub_real(
+                                       shift(V, k_2)) = div_real(sub_real(
                                                                  select(doubleP_doubleM_Y_2,
                                                                  shift(Y,
-                                                                 add_int(k_0,
+                                                                 add_int(k_2,
                                                                  (1)))),
                                                                  select(doubleP_doubleM_Y_2,
                                                                  shift(Y,
-                                                                 k_0))),
+                                                                 k_2))),
                                                         sub_real(select(doubleP_doubleM_X_1,
                                                                  shift(X,
-                                                                 add_int(k_0,
+                                                                 add_int(k_2,
                                                                  (1)))),
                                                         select(doubleP_doubleM_X_1,
-                                                        shift(X, k_0)))))))
+                                                        shift(X, k_2)))))))
                                    and lt_real(x_0,
                                        select(doubleP_doubleM_X_1,
                                        shift(X, (0)))))))) ->
@@ -635,18 +635,18 @@ parameter InterPolate_requires :
                                                                    integer_of_int32(n_1))))
                     and ((select(doubleP_doubleM_V_3,
                           shift(V, integer_of_int32(n_1))) = 0.0)
-                        and ((forall k_2:int.
-                              ((le_int((1), k_2)
-                               and le_int(k_2,
+                        and ((forall k_0:int.
+                              ((le_int((1), k_0)
+                               and le_int(k_0,
                                    sub_int(integer_of_int32(n_1), (1)))) ->
-                               (select(doubleP_doubleM_V_3, shift(V, k_2)) = 
+                               (select(doubleP_doubleM_V_3, shift(V, k_0)) = 
                                div_real(sub_real(select(doubleP_doubleM_Y_2,
-                                                 shift(Y, add_int(k_2, (1)))),
+                                                 shift(Y, add_int(k_0, (1)))),
                                         select(doubleP_doubleM_Y_2,
-                                        shift(Y, k_2))),
+                                        shift(Y, k_0))),
                                sub_real(select(doubleP_doubleM_X_1,
-                                        shift(X, add_int(k_2, (1)))),
-                               select(doubleP_doubleM_X_1, shift(X, k_2)))))))
+                                        shift(X, add_int(k_0, (1)))),
+                               select(doubleP_doubleM_X_1, shift(X, k_0)))))))
                             and (le_real(select(doubleP_doubleM_X_1,
                                          shift(X, (0))),
                                  x_0)
@@ -716,25 +716,25 @@ parameter InterPolate_requires :
                             shift(V, integer_of_int32(n_1))))
                            and ((select(doubleP_doubleM_V_3,
                                  shift(V, integer_of_int32(n_1))) = 0.0)
-                               and ((forall k_0:int.
-                                     ((le_int((1), k_0)
-                                      and le_int(k_0,
+                               and ((forall k_2:int.
+                                     ((le_int((1), k_2)
+                                      and le_int(k_2,
                                           sub_int(integer_of_int32(n_1), (1)))) ->
                                       (select(doubleP_doubleM_V_3,
-                                       shift(V, k_0)) = div_real(sub_real(
+                                       shift(V, k_2)) = div_real(sub_real(
                                                                  select(doubleP_doubleM_Y_2,
                                                                  shift(Y,
-                                                                 add_int(k_0,
+                                                                 add_int(k_2,
                                                                  (1)))),
                                                                  select(doubleP_doubleM_Y_2,
                                                                  shift(Y,
-                                                                 k_0))),
+                                                                 k_2))),
                                                         sub_real(select(doubleP_doubleM_X_1,
                                                                  shift(X,
-                                                                 add_int(k_0,
+                                                                 add_int(k_2,
                                                                  (1)))),
                                                         select(doubleP_doubleM_X_1,
-                                                        shift(X, k_0)))))))
+                                                        shift(X, k_2)))))))
                                    and lt_real(x_0,
                                        select(doubleP_doubleM_X_1,
                                        shift(X, (0)))))))) ->
@@ -1191,26 +1191,26 @@ let InterPolate_ensures_inter =
                                                         shift(V,
                                                         integer_of_int32(n_1))))
          and ((select(doubleP_doubleM_V_3, shift(V, integer_of_int32(n_1))) = 0.0)
-             and ((forall k_2:int.
-                   ((le_int((1), k_2)
-                    and le_int(k_2, sub_int(integer_of_int32(n_1), (1)))) ->
-                    (select(doubleP_doubleM_V_3, shift(V, k_2)) = div_real(
+             and ((forall k_0:int.
+                   ((le_int((1), k_0)
+                    and le_int(k_0, sub_int(integer_of_int32(n_1), (1)))) ->
+                    (select(doubleP_doubleM_V_3, shift(V, k_0)) = div_real(
                                                                   sub_real(
                                                                   select(doubleP_doubleM_Y_2,
                                                                   shift(Y,
-                                                                  add_int(k_2,
+                                                                  add_int(k_0,
                                                                   (1)))),
                                                                   select(doubleP_doubleM_Y_2,
                                                                   shift(Y,
-                                                                  k_2))),
+                                                                  k_0))),
                                                                   sub_real(
                                                                   select(doubleP_doubleM_X_1,
                                                                   shift(X,
-                                                                  add_int(k_2,
+                                                                  add_int(k_0,
                                                                   (1)))),
                                                                   select(doubleP_doubleM_X_1,
                                                                   shift(X,
-                                                                  k_2)))))))
+                                                                  k_0)))))))
                  and (le_real(select(doubleP_doubleM_X_1, shift(X, (0))),
                       x_0)
                      and lt_real(x_0,
@@ -1372,26 +1372,26 @@ let InterPolate_ensures_small =
                                                         shift(V,
                                                         integer_of_int32(n_1))))
          and ((select(doubleP_doubleM_V_3, shift(V, integer_of_int32(n_1))) = 0.0)
-             and ((forall k_0:int.
-                   ((le_int((1), k_0)
-                    and le_int(k_0, sub_int(integer_of_int32(n_1), (1)))) ->
-                    (select(doubleP_doubleM_V_3, shift(V, k_0)) = div_real(
+             and ((forall k_2:int.
+                   ((le_int((1), k_2)
+                    and le_int(k_2, sub_int(integer_of_int32(n_1), (1)))) ->
+                    (select(doubleP_doubleM_V_3, shift(V, k_2)) = div_real(
                                                                   sub_real(
                                                                   select(doubleP_doubleM_Y_2,
                                                                   shift(Y,
-                                                                  add_int(k_0,
+                                                                  add_int(k_2,
                                                                   (1)))),
                                                                   select(doubleP_doubleM_Y_2,
                                                                   shift(Y,
-                                                                  k_0))),
+                                                                  k_2))),
                                                                   sub_real(
                                                                   select(doubleP_doubleM_X_1,
                                                                   shift(X,
-                                                                  add_int(k_0,
+                                                                  add_int(k_2,
                                                                   (1)))),
                                                                   select(doubleP_doubleM_X_1,
                                                                   shift(X,
-                                                                  k_0)))))))
+                                                                  k_2)))))))
                  and lt_real(x_0, select(doubleP_doubleM_X_1, shift(X, (0))))))))
     and (JC_<somenum>:
         ((JC_<somenum>: le_int((3), integer_of_int32(n_1)))

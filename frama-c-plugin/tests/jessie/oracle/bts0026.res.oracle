@@ -33,13 +33,13 @@ tag voidP = {
 type voidP = [voidP]
 
 integer f1(integer n_1)
-behavior default:
-  ensures (C_3 : true);
 behavior b1:
   assumes (n_1 > 0);
-  ensures (C_4 : true);
+  ensures (C_3 : true);
 behavior b2:
   assumes (n_1 <= 0);
+  ensures (C_4 : true);
+behavior default:
   ensures (C_5 : true);
 {  
    (check (disjoint_behaviors : (! ((n_1 > 0) && (n_1 <= 0)))));

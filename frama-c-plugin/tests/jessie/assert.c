@@ -2,6 +2,8 @@
 //#pragma AnnotationPolicy(WeakPre)
 //#pragma AbstractDomain(Box)
 
+void assert(int);
+
 int f(int i) {
   assert (i > 0);
   return i;

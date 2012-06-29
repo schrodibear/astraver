@@ -3,10 +3,9 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_S
 undef.c:544:[kernel] warning: Body of function missing_return_wrong falls-through. Adding a return statement
 undef.c:552:[kernel] warning: Body of function missing_return_unsafe falls-through. Adding a return statement
 [jessie] Starting Jessie translation
-[kernel] warning: No code nor implicit assigns clause for function bar, generating default assigns from the prototype
-[kernel] warning: No code nor implicit assigns clause for function baz, generating default assigns from the prototype
-[kernel] warning: No code nor implicit assigns clause for function foo, generating default assigns from the prototype
-undef.c:628:[jessie] warning: skipping all arguments of implicit prototype baz
+[kernel] warning: Neither code nor specification for function bar, generating default assigns from the prototype
+[kernel] warning: Neither code nor specification for function baz, generating default assigns from the prototype
+[kernel] warning: Neither code nor specification for function foo, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir undef.jessie
 [jessie] File undef.jessie/undef.jc written.
 [jessie] File undef.jessie/undef.cloc written.
@@ -575,11 +574,11 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_59 : (x_22 <= 0)));
+         (assert for default: (C_59 : (32 < 32)));
          
          (assert for default: (C_58 : (x_22 >= 0)));
          
-         (assert for default: (C_57 : (32 < 32)));
+         (assert for default: (C_57 : (x_22 <= 0)));
          (C_62 : (__retres_10 = (C_61 : ((C_60 : (x_22 * 4294967296)) :> int32))))
       };
       
@@ -595,11 +594,11 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_66 : (x_23 <= (2147483647 >>> -1))));
+         (assert for default: (C_66 : (-1 >= 0)));
          
          (assert for default: (C_65 : (x_23 >= 0)));
          
-         (assert for default: (C_64 : (-1 >= 0)));
+         (assert for default: (C_64 : (x_23 <= (2147483647 >>> -1))));
          (C_69 : (__retres_11 = (C_68 : ((C_67 : (x_23 << -1)) :> int32))))
       };
       
@@ -627,13 +626,13 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_76 : (x_21 <= (2147483647 >>> y_12))));
+         (assert for default: (C_76 : (y_12 >= 0)));
          
-         (assert for default: (C_75 : (x_21 >= 0)));
+         (assert for default: (C_75 : (y_12 < 32)));
          
-         (assert for default: (C_74 : (y_12 < 32)));
+         (assert for default: (C_74 : (x_21 >= 0)));
          
-         (assert for default: (C_73 : (y_12 >= 0)));
+         (assert for default: (C_73 : (x_21 <= (2147483647 >>> y_12))));
          (C_79 : (__retres_13 = (C_78 : ((C_77 : (x_21 << y_12)) :> int32))))
       };
       
@@ -654,12 +653,12 @@ behavior default:
                                         (goto _LOR) else 
                                         {  
                                            (assert for default: (C_82 : 
-                                                                (y_11 <
-                                                                  32)));
-                                           
-                                           (assert for default: (C_81 : 
                                                                 (y_11 >=
                                                                   0)));
+                                           
+                                           (assert for default: (C_81 : 
+                                                                (y_11 <
+                                                                  32)));
                                            (if (x_20 >
                                                  (C_91 : ((C_90 : (2147483647 >>>
                                                                     y_11)) :> int32))) then 
@@ -667,18 +666,18 @@ behavior default:
                                            {  
                                               {  
                                                  (assert for default: 
-                                                 (C_86 : (x_20 <=
+                                                 (C_86 : (y_11 >= 0)));
+                                                 
+                                                 (assert for default: 
+                                                 (C_85 : (y_11 < 32)));
+                                                 
+                                                 (assert for default: 
+                                                 (C_84 : (x_20 >= 0)));
+                                                 
+                                                 (assert for default: 
+                                                 (C_83 : (x_20 <=
                                                            (2147483647 >>>
                                                              y_11))));
-                                                 
-                                                 (assert for default: 
-                                                 (C_85 : (x_20 >= 0)));
-                                                 
-                                                 (assert for default: 
-                                                 (C_84 : (y_11 < 32)));
-                                                 
-                                                 (assert for default: 
-                                                 (C_83 : (y_11 >= 0)));
                                                  (C_89 : (__retres_14 = 
                                                  (C_88 : ((C_87 : (x_20 <<
                                                                     y_11)) :> int32))))
@@ -795,9 +794,9 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_125 : (y_20 < 32)));
+         (assert for default: (C_125 : (y_20 >= 0)));
          
-         (assert for default: (C_124 : (y_20 >= 0)));
+         (assert for default: (C_124 : (y_20 < 32)));
          (C_128 : (__retres_20 = (C_127 : ((C_126 : (x_29 >>> y_20)) :> int32))))
       };
       
@@ -817,9 +816,9 @@ behavior default:
                        (goto _LOR) else 
                        {  
                           {  
-                             (assert for default: (C_131 : (y_19 < 32)));
+                             (assert for default: (C_131 : (y_19 >= 0)));
                              
-                             (assert for default: (C_130 : (y_19 >= 0)));
+                             (assert for default: (C_130 : (y_19 < 32)));
                              (C_134 : (__retres_21 = (C_133 : ((C_132 : 
                                                                (x_28 >>>
                                                                  y_19)) :> int32))))
@@ -1428,21 +1427,18 @@ behavior default:
 int32 foo(int32 unnamed, int32 unnamed_0)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_343 : true);
 ;
 
 int32 bar()
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_344 : true);
 ;
 
 int32 baz()
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_345 : true);
 ;
 
@@ -6326,9 +6322,9 @@ let shift_left_signed_safe_ensures_default =
              then (raise (Goto__LOR_exc void))
              else
               begin
-                (assert { (JC_<somenum>: lt_int(integer_of_int32(y_11), (32))) };
+                (assert { (JC_<somenum>: ge_int(integer_of_int32(y_11), (0))) };
                 void);
-               (assert { (JC_<somenum>: ge_int(integer_of_int32(y_11), (0))) };
+               (assert { (JC_<somenum>: lt_int(integer_of_int32(y_11), (32))) };
                void);
                (if ((gt_int_ (integer_of_int32 x_20)) (integer_of_int32 
                                                        (C_91:
@@ -6343,15 +6339,15 @@ let shift_left_signed_safe_ensures_default =
                   (C_89:
                   begin
                     (assert
-                    { (JC_<somenum>:
-                      le_int(integer_of_int32(x_20),
-                      asr((2147483647), integer_of_int32(y_11)))) }; void);
+                    { (JC_<somenum>: ge_int(integer_of_int32(y_11), (0))) }; void);
+                   (assert
+                   { (JC_<somenum>: lt_int(integer_of_int32(y_11), (32))) }; void);
                    (assert { (JC_<somenum>: ge_int(integer_of_int32(x_20), (0))) };
                    void);
                    (assert
-                   { (JC_<somenum>: lt_int(integer_of_int32(y_11), (32))) }; void);
-                   (assert { (JC_<somenum>: ge_int(integer_of_int32(y_11), (0))) };
-                   void);
+                   { (JC_<somenum>:
+                     le_int(integer_of_int32(x_20),
+                     asr((2147483647), integer_of_int32(y_11)))) }; void);
                    (__retres_14 := (C_88:
                                    (safe_int32_of_integer_ (C_87:
                                                            ((lsl (integer_of_int32 x_20)) 
@@ -6398,8 +6394,8 @@ let shift_left_signed_safe_safety =
              then (raise (Goto__LOR_exc void))
              else
               begin
-                [ { } unit { (JC_<somenum>: lt_int(integer_of_int32(y_11), (32))) } ];
-               [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(y_11), (0))) } ];
+                [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(y_11), (0))) } ];
+               [ { } unit { (JC_<somenum>: lt_int(integer_of_int32(y_11), (32))) } ];
                (if ((gt_int_ (integer_of_int32 x_20)) (integer_of_int32 
                                                        (C_91:
                                                        (JC_<somenum>:
@@ -6414,15 +6410,15 @@ let shift_left_signed_safe_safety =
                   (C_89:
                   begin
                     [ { } unit
-                      { (JC_<somenum>:
-                        le_int(integer_of_int32(x_20),
-                        asr((2147483647), integer_of_int32(y_11)))) } ];
-                   [ { } unit
-                     { (JC_<somenum>: ge_int(integer_of_int32(x_20), (0))) } ];
+                      { (JC_<somenum>: ge_int(integer_of_int32(y_11), (0))) } ];
                    [ { } unit
                      { (JC_<somenum>: lt_int(integer_of_int32(y_11), (32))) } ];
                    [ { } unit
-                     { (JC_<somenum>: ge_int(integer_of_int32(y_11), (0))) } ];
+                     { (JC_<somenum>: ge_int(integer_of_int32(x_20), (0))) } ];
+                   [ { } unit
+                     { (JC_<somenum>:
+                       le_int(integer_of_int32(x_20),
+                       asr((2147483647), integer_of_int32(y_11)))) } ];
                    (__retres_14 := (C_88:
                                    (JC_<somenum>:
                                    (int32_of_integer_ (C_87:
@@ -6461,13 +6457,13 @@ let shift_left_signed_unsafe_ensures_default =
        (let jessie_<somenum> =
        (C_79:
        begin
-         (assert
-         { (JC_<somenum>:
-           le_int(integer_of_int32(x_21),
-           asr((2147483647), integer_of_int32(y_12)))) }; void);
-        (assert { (JC_<somenum>: ge_int(integer_of_int32(x_21), (0))) }; void);
+         (assert { (JC_<somenum>: ge_int(integer_of_int32(y_12), (0))) }; void);
         (assert { (JC_<somenum>: lt_int(integer_of_int32(y_12), (32))) }; void);
-        (assert { (JC_<somenum>: ge_int(integer_of_int32(y_12), (0))) }; void);
+        (assert { (JC_<somenum>: ge_int(integer_of_int32(x_21), (0))) }; void);
+        (assert
+        { (JC_<somenum>:
+          le_int(integer_of_int32(x_21),
+          asr((2147483647), integer_of_int32(y_12)))) }; void);
         (__retres_13 := (C_78:
                         (safe_int32_of_integer_ (C_77:
                                                 ((lsl (integer_of_int32 x_21)) 
@@ -6489,13 +6485,13 @@ let shift_left_signed_unsafe_safety =
        (let jessie_<somenum> =
        (C_79:
        begin
-         [ { } unit
-           { (JC_<somenum>:
-             le_int(integer_of_int32(x_21),
-             asr((2147483647), integer_of_int32(y_12)))) } ];
-        [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(x_21), (0))) } ];
+         [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(y_12), (0))) } ];
         [ { } unit { (JC_<somenum>: lt_int(integer_of_int32(y_12), (32))) } ];
-        [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(y_12), (0))) } ];
+        [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(x_21), (0))) } ];
+        [ { } unit
+          { (JC_<somenum>:
+            le_int(integer_of_int32(x_21),
+            asr((2147483647), integer_of_int32(y_12)))) } ];
         (__retres_13 := (C_78:
                         (JC_<somenum>:
                         (int32_of_integer_ (C_77:
@@ -6521,9 +6517,9 @@ let shift_left_signed_wrong_1_ensures_default =
        (let jessie_<somenum> =
        (C_62:
        begin
-         (assert { (JC_<somenum>: le_int(integer_of_int32(x_22), (0))) }; void);
+         (assert { (JC_<somenum>: lt_int((32), (32))) }; void);
         (assert { (JC_<somenum>: ge_int(integer_of_int32(x_22), (0))) }; void);
-        (assert { (JC_<somenum>: lt_int((32), (32))) }; void);
+        (assert { (JC_<somenum>: le_int(integer_of_int32(x_22), (0))) }; void);
         (__retres_10 := (C_61:
                         (safe_int32_of_integer_ (C_60:
                                                 ((mul_int (integer_of_int32 x_22)) (4294967296))))));
@@ -6544,9 +6540,9 @@ let shift_left_signed_wrong_1_safety =
        (let jessie_<somenum> =
        (C_62:
        begin
-         [ { } unit { (JC_<somenum>: le_int(integer_of_int32(x_22), (0))) } ];
+         [ { } unit { (JC_<somenum>: lt_int((32), (32))) } ];
         [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(x_22), (0))) } ];
-        [ { } unit { (JC_<somenum>: lt_int((32), (32))) } ];
+        [ { } unit { (JC_<somenum>: le_int(integer_of_int32(x_22), (0))) } ];
         (__retres_10 := (C_61:
                         (JC_<somenum>:
                         (int32_of_integer_ (C_60:
@@ -6571,12 +6567,12 @@ let shift_left_signed_wrong_2_ensures_default =
        (let jessie_<somenum> =
        (C_69:
        begin
-         (assert
-         { (JC_<somenum>:
-           le_int(integer_of_int32(x_23), asr((2147483647), neg_int((1))))) };
-         void);
+         (assert { (JC_<somenum>: ge_int(neg_int((1)), (0))) }; void);
         (assert { (JC_<somenum>: ge_int(integer_of_int32(x_23), (0))) }; void);
-        (assert { (JC_<somenum>: ge_int(neg_int((1)), (0))) }; void);
+        (assert
+        { (JC_<somenum>:
+          le_int(integer_of_int32(x_23), asr((2147483647), neg_int((1))))) };
+        void);
         (__retres_11 := (C_68:
                         (safe_int32_of_integer_ (C_67:
                                                 ((lsl (integer_of_int32 x_23)) 
@@ -6598,11 +6594,11 @@ let shift_left_signed_wrong_2_safety =
        (let jessie_<somenum> =
        (C_69:
        begin
-         [ { } unit
-           { (JC_<somenum>:
-             le_int(integer_of_int32(x_23), asr((2147483647), neg_int((1))))) } ];
+         [ { } unit { (JC_<somenum>: ge_int(neg_int((1)), (0))) } ];
         [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(x_23), (0))) } ];
-        [ { } unit { (JC_<somenum>: ge_int(neg_int((1)), (0))) } ];
+        [ { } unit
+          { (JC_<somenum>:
+            le_int(integer_of_int32(x_23), asr((2147483647), neg_int((1))))) } ];
         (__retres_11 := (C_68:
                         (JC_<somenum>:
                         (int32_of_integer_ (C_67:
@@ -6844,9 +6840,9 @@ let shift_right_signed_safe_ensures_default =
                (let jessie_<somenum> =
                (C_134:
                begin
-                 (assert { (JC_<somenum>: lt_int(integer_of_int32(y_19), (32))) };
+                 (assert { (JC_<somenum>: ge_int(integer_of_int32(y_19), (0))) };
                  void);
-                (assert { (JC_<somenum>: ge_int(integer_of_int32(y_19), (0))) };
+                (assert { (JC_<somenum>: lt_int(integer_of_int32(y_19), (32))) };
                 void);
                 (__retres_21 := (C_133:
                                 (safe_int32_of_integer_ (C_132:
@@ -6894,9 +6890,8 @@ let shift_right_signed_safe_safety =
                (let jessie_<somenum> =
                (C_134:
                begin
-                 [ { } unit
-                   { (JC_<somenum>: lt_int(integer_of_int32(y_19), (32))) } ];
-                [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(y_19), (0))) } ];
+                 [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(y_19), (0))) } ];
+                [ { } unit { (JC_<somenum>: lt_int(integer_of_int32(y_19), (32))) } ];
                 (__retres_21 := (C_133:
                                 (JC_<somenum>:
                                 (int32_of_integer_ (C_132:
@@ -6935,8 +6930,8 @@ let shift_right_signed_unsafe_ensures_default =
        (let jessie_<somenum> =
        (C_128:
        begin
-         (assert { (JC_<somenum>: lt_int(integer_of_int32(y_20), (32))) }; void);
-        (assert { (JC_<somenum>: ge_int(integer_of_int32(y_20), (0))) }; void);
+         (assert { (JC_<somenum>: ge_int(integer_of_int32(y_20), (0))) }; void);
+        (assert { (JC_<somenum>: lt_int(integer_of_int32(y_20), (32))) }; void);
         (__retres_20 := (C_127:
                         (safe_int32_of_integer_ (C_126:
                                                 ((asr (integer_of_int32 x_29)) 
@@ -6958,8 +6953,8 @@ let shift_right_signed_unsafe_safety =
        (let jessie_<somenum> =
        (C_128:
        begin
-         [ { } unit { (JC_<somenum>: lt_int(integer_of_int32(y_20), (32))) } ];
-        [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(y_20), (0))) } ];
+         [ { } unit { (JC_<somenum>: ge_int(integer_of_int32(y_20), (0))) } ];
+        [ { } unit { (JC_<somenum>: lt_int(integer_of_int32(y_20), (32))) } ];
         (__retres_20 := (C_127:
                         (JC_<somenum>:
                         (int32_of_integer_ (C_126:
@@ -8670,12 +8665,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po54.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1495" begin = "16" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1492" begin = "16" end = "57"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po55.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1495" begin = "16" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1492" begin = "16" end = "57"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8753,7 +8748,7 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/undef_po42.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "544" begin = "0" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "546" begin = "0" end = "1"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -8762,7 +8757,7 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/undef_po39.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "552" begin = "6" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "554" begin = "0" end = "1"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -8919,12 +8914,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po16.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1481" begin = "16" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1478" begin = "16" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po17.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1481" begin = "16" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1478" begin = "16" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

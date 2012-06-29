@@ -1995,9 +1995,8 @@ let rec statement s =
 *)
 
   let assert_before, contract =
-    List.fold_left (code_annot pos)
-      ([],None)
-      (Annotations.get_filter (fun _ -> true) s)
+    Annotations.fold_code_annot
+      (fun _ ca acc -> code_annot pos acc ca) s ([],None)
   in
   let snode = match s.skind with
     | Instr i -> instruction i
@@ -2072,44 +2071,34 @@ let rec statement s =
         JCPEswitch(expr e,case_list)
 
     | Loop (_,bl,_pos,_continue_stmt,_break_stmt) ->
-	let loop_annot =
-	  Annotations.get_filter Logic_utils.is_loop_annot s
-	in
-	let loop_annot =
-	  lift_annot_list_func (List.map (fun x -> x.annot_content)) loop_annot
-	in
+	let treat_loop_annot _ annot (beh,var as acc) =
+          let annot = Annotations.code_annotation_of_rooted annot in
+	  match annot.annot_content with
+	    | AVariant(v,rel) ->
+		begin
+		  match var with
+		    | None ->
+			begin
+			  match rel with
+			    | Some r ->
+				(beh, Some (locate (term v),
+					    Some (new identifier r)) )
+			    | None ->
+				(beh,Some (locate (term v) ,None ))
+			end
+		    | Some _ -> assert false (* At most one variant *)
+		end
+	    | AInvariant(ids,true,inv) ->
+		((ids,[locate (pred inv)],WritesAny)::beh,var)
+	    | AAssigns(ids,assign) ->
+		((ids,[],assign)::beh,var)
+	    | APragma _ -> (* ignored *) acc
+            | AAllocation _ -> (* Ignored *) acc
+            (* No loop annotation. *)
+	    | AAssert _ | AStmtSpec _ | AInvariant _ -> acc
+        in
         let behs,variant =
-	  List.fold_right (* to keep the same order *)
-	    (fun annot (beh,var) ->
-	       match annot with
-		 | AVariant(v,rel) ->
-		     begin
-		       match var with
-			 | None ->
-			     begin
-			       match rel with
-				 | Some r ->
-				     (beh, Some (locate (term v),
-						 Some (new identifier r)) )
-				 | None ->
-				     (beh,Some (locate (term v) ,None ))
-			     end
-			 | Some _ -> assert false (* At most one variant *)
-		     end
-(*
-		 | ALoopBehavior(ids,invs,assigns) ->
-		     ((ids,List.map (fun p -> locate (pred p)) invs,
-		       assigns)::beh,var)
-*)
-		 | AInvariant(ids,true,inv) ->
-		     ((ids,[locate (pred inv)],WritesAny)::beh,var)
-		 | AAssigns(ids,assign) ->
-		     ((ids,[],assign)::beh,var)
-		 | APragma _ -> (* ignored *) (beh,var)
-                 | AAllocation _ -> (* Ignored *) (beh, var)
-		 | AAssert _ | AStmtSpec _ | AInvariant _ -> assert false
-		     (* should not occur in loop annot *))
-	    loop_annot ([],None)
+	  Annotations.fold_code_annot treat_loop_annot s ([],None)
 	in
         (* Locate the beginning of the loop, to serve as location for generated
          * invariants and variants.
@@ -2592,7 +2581,7 @@ let global vardefs g =
           let kf = Globals.Functions.get v in
           Jessie_options.debug 
             "Getting spec of %s" (Kernel_function.get_name kf);
-          let funspec = Kernel_function.get_spec kf in
+          let funspec = Annotations.funspec kf in
           Jessie_options.debug "OK";
           let params = Globals.Functions.get_params kf in
           let formal v = true, ctype v.vtype, unique_name_if_empty v.vname in
@@ -2625,7 +2614,7 @@ let global vardefs g =
           let formals = List.map formal f.sformals in
           let id = mkidentifier f.svar.vname f.svar.vdecl in
           let funspec =
-            Kernel_function.get_spec (Globals.Functions.get f.svar)
+            Annotations.funspec (Globals.Functions.get f.svar)
           in
           begin try
             let local v =

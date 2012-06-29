@@ -41,7 +41,6 @@ type voidP = [voidP]
 double sqrt(double x)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : ((\result :> real) ==
                    ((\real_sqrt((\at(x,Old) :> real)) :> double) :> real)));
 ;

@@ -50,14 +50,12 @@ intP[0] s;
 unit f1(intP[..] p)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : true);
 ;
 
 unit f2(intP[..] p_0)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_2 : true);
 ;
 

@@ -405,7 +405,6 @@ int32 memcmp(charP[..] s1, charP[..] s2, uint32 n_2)
                       (C_8 : (\offset_max(s2) >= (n_2 - 1))))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : (\result ==
                    memcmp{Here}(\at(s1,Old), \at(s2,Old), \at(n_2,Old))));
 ;
@@ -415,7 +414,6 @@ charP[..] memchr(charP[..] s, int32 c, uint32 n_1)
                      (C_16 : (\offset_max(s) >= (n_1 - 1)))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_9 : ((C_10 : (\result == \at(s,Old))) &&
                    (C_11 : (\base_block(\result) == \base_block(\at(s,Old))))));
 behavior found:
@@ -433,7 +431,6 @@ charP[..] memcpy(charP[..] dest_1, charP[..] src, uint32 n_3)
                        (C_28 : (\offset_max(src) >= (n_3 - 1))))));
 behavior default:
   assigns (dest_1 + [0..(n_3 - 1)]).charM;
-  allocates \nothing;
   ensures (C_17 : (((C_19 : (memcmp{Here}(\at(dest_1,Old), \at(src,Old),
                                           \at(n_3,Old)) ==
                               0)) &&
@@ -449,7 +446,6 @@ charP[..] memmove(charP[..] dest_2, charP[..] src_0, uint32 n_4)
                        (C_40 : (\offset_max(src_0) >= (n_4 - 1))))));
 behavior default:
   assigns (dest_2 + [0..(n_4 - 1)]).charM;
-  allocates \nothing;
   ensures (C_29 : (((C_31 : (memcmp{Here}(\at(dest_2,Old), \at(src_0,Old),
                                           \at(n_4,Old)) ==
                               0)) &&
@@ -463,7 +459,6 @@ charP[..] memset(charP[..] s_0, int32 c_0, uint32 n_5)
                      (C_48 : (\offset_max(s_0) >= (n_5 - 1)))));
 behavior default:
   assigns (s_0 + [0..(n_5 - 1)]).charM;
-  allocates \nothing;
   ensures (C_41 : (((C_43 : (memset{Here}(\at(s_0,Old), \at(c_0,Old),
                                           \at(n_5,Old)) ==
                               true)) &&
@@ -477,7 +472,6 @@ int32 strcmp(charP[..] s1_0, charP[..] s2_0)
                      (C_52 : valid_string{Here}(s2_0))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_49 : (\result == strcmp{Here}(\at(s1_0,Old), \at(s2_0,Old))));
 ;
 
@@ -486,7 +480,6 @@ int32 strncmp(charP[..] s1_2, charP[..] s2_2, uint32 n_7)
                      (C_56 : valid_string{Here}(s2_2))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_53 : (\result ==
                     strncmp{Here}(\at(s1_2,Old), \at(s2_2,Old), \at(n_7,Old))));
 ;
@@ -496,7 +489,6 @@ int32 strcoll(charP[..] s1_1, charP[..] s2_1)
                      (C_60 : valid_string{Here}(s2_1))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_57 : true);
 ;
 
@@ -504,7 +496,6 @@ charP[..] strchr(charP[..] s_1, int32 c_1)
   requires (C_68 : valid_string{Here}(s_1));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_61 : true);
 behavior found:
   assumes (strchr{Here}(s_1, c_1) == true);
@@ -521,7 +512,6 @@ charP[..] strrchr(charP[..] s_6, int32 c_2)
   requires (C_76 : valid_string{Here}(s_6));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_69 : true);
 behavior found:
   assumes (strchr{Here}(s_6, c_2) == true);
@@ -539,7 +529,6 @@ uint32 strcspn(charP[..] s_2, charP[..] reject)
                      (C_82 : valid_string{Here}(reject))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_77 : ((C_78 : (0 <= \result)) &&
                     (C_79 : (\result <= strlen{Here}(\at(s_2,Old))))));
 ;
@@ -549,7 +538,6 @@ uint32 strspn(charP[..] s_7, charP[..] accept_0)
                      (C_88 : valid_string{Here}(accept_0))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_83 : ((C_84 : (0 <= \result)) &&
                     (C_85 : (\result <= strlen{Here}(\at(s_7,Old))))));
 ;
@@ -559,7 +547,6 @@ charP[..] strpbrk(charP[..] s_5, charP[..] accept)
                      (C_92 : valid_string{Here}(accept))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_89 : ((\result == null) ||
                     (\base_block(\result) == \base_block(\at(s_5,Old)))));
 ;
@@ -569,7 +556,6 @@ charP[..] strstr(charP[..] haystack, charP[..] needle)
                      (C_96 : valid_string{Here}(needle))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_93 : ((\result == null) ||
                     ((\base_block(\result) == \base_block(\at(haystack,Old))) &&
                       (memcmp{Here}(\result, \at(needle,Old),
@@ -582,14 +568,12 @@ charP[..] strtok(charP[..] s_8, charP[..] delim)
                      (C_100 : valid_string{Here}(delim))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_97 : true);
 ;
 
 charP[..] strerror(int32 errnum)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_101 : valid_string{Here}(\result));
 ;
 
@@ -599,7 +583,6 @@ charP[..] strcpy(charP[..] dest_4, charP[..] src_2)
                       (C_111 : valid_string{Here}(src_2))));
 behavior default:
   assigns (dest_4 + [0..strlen{Old}(src_2)]).charM;
-  allocates \nothing;
   ensures (C_102 : (((C_104 : (strcmp{Here}(\at(dest_4,Old), \at(src_2,Old)) ==
                                 0)) &&
                       (C_105 : (\result == \at(dest_4,Old)))) &&
@@ -613,7 +596,6 @@ charP[..] strncpy(charP[..] dest_6, charP[..] src_4, uint32 n_8)
                       (C_121 : valid_string{Here}(src_4))));
 behavior default:
   assigns (dest_6 + [0..(n_8 - 1)]).charM;
-  allocates \nothing;
   ensures (C_112 : (\result == \at(dest_6,Old)));
 behavior complete:
   assumes (strlen{Here}(src_4) < n_8);
@@ -639,7 +621,6 @@ charP[..] strcat(charP[..] dest_3, charP[..] src_1)
                       (C_133 : valid_string{Here}(src_1))));
 behavior default:
   assigns (dest_3 + [0..(strlen{Old}(dest_3) + strlen{Old}(src_1))]).charM;
-  allocates \nothing;
   ensures (C_122 : (((C_124 : (strlen{Here}(\at(dest_3,Old)) ==
                                 \at((strlen{Old}(dest_3) +
                                       strlen{Old}(src_1)),Old))) &&
@@ -655,7 +636,6 @@ charP[..] strncat(charP[..] dest_5, charP[..] src_3, uint32 n_6)
                       (C_145 : valid_string{Here}(src_3))));
 behavior default:
   assigns (dest_5 + [0..((strlen{Old}(dest_5) + n_6) - 1)]).charM;
-  allocates \nothing;
   ensures (C_134 : ((C_135 : (\result == \at(dest_5,Old))) &&
                      (C_136 : (\base_block(\result) ==
                                 \base_block(\at(dest_5,Old))))));
@@ -677,7 +657,6 @@ uint32 strxfrm(charP[..] dest_7, charP[..] src_5, uint32 n_10)
                       (C_151 : valid_string{Here}(src_5))));
 behavior default:
   assigns (dest_7 + [0..(n_10 - 1)]).charM;
-  allocates \nothing;
   ensures (C_146 : true);
 ;
 
@@ -685,7 +664,6 @@ charP[..] strdup(charP[..] s_3)
   requires (C_157 : valid_string{Here}(s_3));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_152 : (((C_154 : (\offset_min(\result) <= 0)) &&
                       (C_155 : (\offset_max(\result) >=
                                  strlen{Here}(\at(s_3,Old))))) &&
@@ -696,7 +674,6 @@ charP[..] strndup(charP[..] s_4, uint32 n_9)
   requires (C_167 : valid_string{Here}(s_4));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_158 : (((((C_162 : (\offset_min(\result) <= 0)) &&
                         (C_163 : (\offset_max(\result) >=
                                    minimum(strlen{Here}(\at(s_4,Old)),

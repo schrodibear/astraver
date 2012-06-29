@@ -43,11 +43,11 @@ type voidP = [voidP]
 int32 x;
 
 unit f(int32 z)
-behavior default:
-  ensures (C_9 : true);
 behavior one:
   assumes (x == 1);
-  ensures (C_10 : (x == 10));
+  ensures (C_9 : (x == 10));
+behavior default:
+  ensures (C_10 : true);
 {  
    {  (if (z != 0) then 
       {  

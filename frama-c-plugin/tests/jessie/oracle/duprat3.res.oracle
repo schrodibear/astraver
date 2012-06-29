@@ -46,14 +46,14 @@ predicate pcond2(integer p_0) =
 (p_0 < 10)
 
 int32 ftest2(int32 x, int32 y)
-behavior default:
-  ensures (C_4 : true);
 behavior ok:
   assumes (pcond1(x) && pcond2(y));
-  ensures (C_5 : (\result == 1));
+  ensures (C_4 : (\result == 1));
 behavior ko:
   assumes ((! pcond1(x)) || (! pcond2(y)));
-  ensures (C_6 : (\result == 0));
+  ensures (C_5 : (\result == 0));
+behavior default:
+  ensures (C_6 : true);
 {  
    (var int32 tmp);
    

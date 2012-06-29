@@ -40,6 +40,14 @@ open Visitor
 (* Utility functions *)
 open Format
 
+let jessie_emitter =
+  Emitter.create
+    "jessie"
+    [ Emitter.Funspec; Emitter.Code_annot ]
+    ~correctness:
+    [Jessie_options.Behavior.parameter; Jessie_options.InferAnnot.parameter]
+    ~tuning:[]
+
 let constant_expr ?(loc=Cil_datatype.Location.unknown) e = 
   Ast_info.constant_expr ~loc e
 
@@ -942,6 +950,7 @@ let check_types file =
   (* check types *)
   let visitor = new checkTypes in
   visitFramacFile visitor file;
+  Jessie_options.debug ~level:2 "%a@." !Ast_printer.d_file file
   (* check general consistency *)
 (*   Cil.visitCilFile (new File.check_file :> Cil.cilVisitor) file *)
 
@@ -1189,7 +1198,10 @@ let malloc_function () =
       b_post_cond = [];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
-    Globals.Functions.replace_by_declaration spec f Cil_datatype.Location.unknown;
+    Globals.Functions.replace_by_declaration
+      spec f Cil_datatype.Location.unknown;
+    let kf = Globals.Functions.get f in
+    Annotations.register_funspec ~emitter:jessie_emitter kf;
     f
 
 let free_function () =
@@ -1222,7 +1234,10 @@ let free_function () =
     } 
     in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
-    Globals.Functions.replace_by_declaration spec f Cil_datatype.Location.unknown;
+    Globals.Functions.replace_by_declaration
+      spec f Cil_datatype.Location.unknown;
+    let kf = Globals.Functions.get f in
+    Annotations.register_funspec ~emitter:jessie_emitter kf;
     f
 
 let mkalloc v ty loc =

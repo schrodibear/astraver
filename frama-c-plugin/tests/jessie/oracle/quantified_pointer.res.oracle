@@ -74,7 +74,6 @@ unit f(_Node[..] x)
   requires (C_2 : is_in_list{Here}(x, 0));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : true);
 ;
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs quantified_pointer.jessie/quantified_pointer.cloc quantified_pointer.jessie/quantified_pointer.jc

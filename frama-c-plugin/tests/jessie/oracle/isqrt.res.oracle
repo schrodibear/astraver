@@ -438,11 +438,11 @@ behavior default:
       (if (x1 > 3) then (C_27 : (s = (C_26 : ((C_25 : (s + 1)) :> int32)))) else ());
       
       {  
-         (assert for default: (C_30 : (1 <= (2147483647 >>> s))));
+         (assert for default: (C_30 : (s >= 0)));
          
          (assert for default: (C_29 : (s < 32)));
          
-         (assert for default: (C_28 : (s >= 0)));
+         (assert for default: (C_28 : (1 <= (2147483647 >>> s))));
          (C_33 : (g0 = (C_32 : ((C_31 : (1 << s)) :> int32))))
       };
       
@@ -2038,11 +2038,11 @@ let isqrt_ensures_default =
           (let jessie_<somenum> =
           (C_33:
           begin
-            (assert
-            { (JC_<somenum>: le_int((1), asr((2147483647), integer_of_int32(s_33)))) };
-            void);
+            (assert { (JC_<somenum>: ge_int(integer_of_int32(s_33), (0))) }; void);
            (assert { (JC_<somenum>: lt_int(integer_of_int32(s_33), (32))) }; void);
-           (assert { (JC_<somenum>: ge_int(integer_of_int32(s_33), (0))) }; void);
+           (assert
+           { (JC_<somenum>: le_int((1), asr((2147483647), integer_of_int32(s_33)))) };
+           void);
            (g0 := (C_32:
                   (safe_int32_of_integer_ (C_31:
                                           ((lsl (1)) (integer_of_int32 !s_33))))));
@@ -2219,12 +2219,12 @@ let isqrt_safety =
           (C_33:
           begin
             [ { } unit reads s_33
-              { (JC_<somenum>:
-                le_int((1), asr((2147483647), integer_of_int32(s_33)))) } ];
+              { (JC_<somenum>: ge_int(integer_of_int32(s_33), (0))) } ];
            [ { } unit reads s_33
              { (JC_<somenum>: lt_int(integer_of_int32(s_33), (32))) } ];
            [ { } unit reads s_33
-             { (JC_<somenum>: ge_int(integer_of_int32(s_33), (0))) } ];
+             { (JC_<somenum>:
+               le_int((1), asr((2147483647), integer_of_int32(s_33)))) } ];
            (g0 := (C_32:
                   (JC_<somenum>:
                   (int32_of_integer_ (C_31:
