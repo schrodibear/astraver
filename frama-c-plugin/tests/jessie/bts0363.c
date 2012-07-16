@@ -332,7 +332,7 @@ PRIVATE void pick_proc()
    * The lowest queue contains IDLE, which is always ready.
    */
 
-  /*@ loop pragma UNROLL_LOOP 17; */
+  /*@ loop pragma UNROLL 17; */
   for (q=0; q < NR_SCHED_QUEUES; q++) {
       if ( (rp = rdy_head[q]) != NIL_PROC) {
           next_ptr = rp;        /* run process 'rp' next */
