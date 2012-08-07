@@ -60,26 +60,26 @@ let reset_uenv () = Jc_type_var.reset uenv
 let print_uenv () = Format.printf "%a" Jc_type_var.print uenv
 let add_poly_args poly_args = List.map (fun e -> Jc_type_var.add_type_var uenv e) poly_args
 
+let logic_type_table = StringHashtblIter.create 97
 
-let logic_type_table = Hashtbl.create 97
+let exceptions_table = StringHashtblIter.create 97
 
-let exceptions_table = Hashtbl.create 97
+let enum_types_table = StringHashtblIter.create 97
 
-let enum_types_table = Hashtbl.create 97
+let structs_table = StringHashtblIter.create 97
 
-let structs_table = Hashtbl.create 97
-let roots_table = Hashtbl.create 97
+let roots_table = StringHashtblIter.create 97
 
 let mutable_fields_table = Hashtbl.create 97 (* structure name (string) -> field info *)
 let committed_fields_table = Hashtbl.create 97 (* structure name (string) -> field info *)
 
-let logic_functions_table = Hashtbl.create 97
+let logic_functions_table = IntHashtblIter.create 97
 let logic_functions_env = Hashtbl.create 97
 let logic_constants_table = Hashtbl.create 97
 let logic_constants_env = Hashtbl.create 97
-let functions_table = Hashtbl.create 97
+let functions_table = IntHashtblIter.create 97
 let functions_env = Hashtbl.create 97
-let variables_table = Hashtbl.create 97
+let variables_table = IntHashtblIter.create 97
 let variables_env = Hashtbl.create 97
 
 (* Store the generated user predicates *)
@@ -136,7 +136,7 @@ type axiomatic_data =
       mutable axiomatics_decls : axiomatic_decl list;
     }
 
-let axiomatics_table = (Hashtbl.create 17 : (string, axiomatic_data) Hashtbl.t)
+let axiomatics_table = StringHashtblIter.create 17
 
 let field_tag_counter = ref 0
 
@@ -158,7 +158,7 @@ let create_mutable_field st =
 
 let find_struct_info loc id =
   try
-    let st,_ = Hashtbl.find structs_table id in st
+    let st,_ = StringHashtblIter.find structs_table id in st
   with Not_found ->
     typing_error loc "undeclared structure %s" id
 
@@ -417,11 +417,11 @@ let rec type_type t =
     | JCPTpointer (id, _, a, b) ->
         (* first we try the most precise type (the tag) *)
         begin try
-          let st, _ = Hashtbl.find structs_table id in
+          let st, _ = StringHashtblIter.find structs_table id in
           JCTpointer(JCtag(st, []), a, b)
         with Not_found ->
           try
-            let vi = Hashtbl.find roots_table id in
+            let vi = StringHashtblIter.find roots_table id in
             JCTpointer(JCroot vi, a, b)
           with Not_found ->
             typing_error t#pos "unknown type or tag: %s" id
@@ -432,7 +432,7 @@ let rec type_type t =
         with Not_found ->
           try
             let l = List.map type_type l in
-            let _,lp = Hashtbl.find logic_type_table id in
+            let _,lp = StringHashtblIter.find logic_type_table id in
             let len_l = List.length l in
             let len_lp = List.length lp in
             if not (len_l = len_lp) then
@@ -440,7 +440,7 @@ let rec type_type t =
             JCTlogic (id,l)
           with Not_found ->
             try
-              let (ri (* ,_,_,_ *)) = Hashtbl.find enum_types_table id in
+              let ri = StringHashtblIter.find enum_types_table id in
               JCTenum ri
             with Not_found ->
               typing_error t#pos "unknown type %s" id
@@ -1619,7 +1619,7 @@ let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, alloca
       | Some id ->
           try
             let ei =
-              Hashtbl.find exceptions_table id#name
+              StringHashtblIter.find exceptions_table id#name
             in
             let tei = match ei.jc_exception_info_type with
               | Some tei -> tei
@@ -2311,7 +2311,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         let tcatches = List.map begin function (id, v, cbody) ->
 	  if id#name = Jc_norm.return_label#name then set_return_label ();
           let ei = try
-            Hashtbl.find exceptions_table id#name
+            StringHashtblIter.find exceptions_table id#name
           with Not_found ->
             typing_error id#pos "undeclared exception: %s" id#name
           in
@@ -2326,7 +2326,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         JCEtry(tbody, tcatches, tfinally)
     | JCNEthrow(id, e1o) ->
         let ei = try
-          Hashtbl.find exceptions_table id#name
+          StringHashtblIter.find exceptions_table id#name
         with Not_found ->
           typing_error id#pos "undeclared exception %s" id#name
         in
@@ -2557,8 +2557,8 @@ let field st root ((rep,abs), t, id, bitsize) =
   } in
   fi
 
-let lemmas_table = Hashtbl.create 17
-let global_invariants_table = Hashtbl.create 17
+let lemmas_table = StringHashtblIter.create 17
+let global_invariants_table = IntHashtblIter.create 17
 
 (*let add_typedecl d (id, parent) =
   let root,par =
@@ -2970,7 +2970,7 @@ let create_pragma_gen_frame_sub frame_or_sub loc id logic =
                            (term label1 params1) (term label2 params2))
     end in
   let def = JCAssertion def in
-  Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, def);
+  IntHashtblIter.add logic_functions_table pi.jc_logic_info_tag (pi, def);
   Hashtbl.add pragma_gen_frame pi.jc_logic_info_tag
     (pi,info,params1,params2,frame_or_sub)
 
@@ -3049,7 +3049,7 @@ let create_pragma_gen_sep_logic_aux loc kind id li =
         let t = new term ~pos:loc ~typ:var.jc_var_info_type (JCTvar var) in
         new assertion (make_rel_bin_op loc `Beq t t) in
   let def = JCAssertion (make_and_list (List.map to_def params)) in
-  Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, def);
+  IntHashtblIter.add logic_functions_table pi.jc_logic_info_tag (pi, def);
   Hashtbl.add pragma_gen_sep pi.jc_logic_info_tag
     (kind,params)
 
@@ -3088,7 +3088,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	      typing_error loc "not allowed inside axiomatic specification";
             let e = Option_misc.map (expr []) init in
             let vi = get_vardecl id in
-            Hashtbl.add variables_table vi.jc_var_info_tag (vi, e);
+            IntHashtblIter.add variables_table vi.jc_var_info_tag (vi, e);
 	    acc
 	  end
 	else
@@ -3118,7 +3118,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	      (unit_expr $ expr (("\\result",vi)::param_env)) body
 	    in
 	    fi.jc_fun_info_has_return_label <- get_return_label ();
-            Hashtbl.add functions_table fi.jc_fun_info_tag (fi,loc,s,b);
+            IntHashtblIter.add functions_table fi.jc_fun_info_tag (fi,loc,s,b);
 	    acc
 	  end
 	else
@@ -3130,7 +3130,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	      typing_error loc "not allowed inside axiomatic specification";
 	    begin
 	      try
-	        let _ = Hashtbl.find enum_types_table id in
+	        let _ = StringHashtblIter.find enum_types_table id in
 	        typing_error d#pos "duplicate range type `%s'" id
 	      with Not_found ->
                 let ri =
@@ -3139,17 +3139,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 		    jc_enum_info_max = max;
                   }
                 in
-	        (*
-                  let to_int = make_logic_fun ("integer_of_"^id) integer_type in
-                  let to_int_ = make_fun_info ("integer_of_"^id) integer_type in
-                  let of_int = make_fun_info (id^"_of_integer") (JCTenum ri) in
-	        *)
-                Hashtbl.add enum_types_table id (ri (*,to_int,to_int_,of_int*));
-	        (*
-                  Hashtbl.add enum_conversion_logic_functions_table to_int id;
-                  Hashtbl.add enum_conversion_functions_table to_int_ id;
-                  Hashtbl.add enum_conversion_functions_table of_int id
-	        *)
+                StringHashtblIter.add enum_types_table id ri;
 	        acc
 	    end
 	  end
@@ -3161,7 +3151,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	    Jc_options.lprintf "Typing tag %s@." id;
 	    if in_axiomatic then
 	      typing_error loc "not allowed inside axiomatic specification";
-            let struct_info, _ = Hashtbl.find structs_table id in
+            let struct_info, _ = StringHashtblIter.find structs_table id in
             (* declare invariants as logical functions *)
             let invariants =
               List.fold_left
@@ -3179,14 +3169,15 @@ of an invariant policy";
                    pi.jc_logic_info_labels <- [LabelHere];
                    eprintf "generating logic fun %s with one default label@."
                      pi.jc_logic_info_name;
-                   Hashtbl.replace logic_functions_table
+                   IntHashtblIter.replace logic_functions_table
                      pi.jc_logic_info_tag (pi, JCAssertion p);
                    Hashtbl.replace logic_functions_env id#name pi;
                    (pi, p) :: acc)
                 []
                 inv
             in
-            Hashtbl.replace structs_table id (struct_info, invariants);
+            StringHashtblIter.replace
+              structs_table id (struct_info, invariants);
 	    acc
 	  end
 	else
@@ -3221,11 +3212,11 @@ of an invariant policy";
 	    Jc_options.lprintf "Typing logic type declaration %s@." id;
             begin
               try
-                let _ = Hashtbl.find logic_type_table id in
+                let _ = StringHashtblIter.find logic_type_table id in
                 typing_error d#pos "duplicate logic type `%s'" id
               with Not_found ->
                 let l = List.map Jc_type_var.type_var_from_string l in
-                Hashtbl.add logic_type_table id (id,l);
+                StringHashtblIter.add logic_type_table id (id,l);
 	        acc
             end
 	  end
@@ -3247,7 +3238,8 @@ of an invariant policy";
 	      (ABaxiom(d#pos,id,labels,te))::acc
 	    else
 	      begin
-	        Hashtbl.add lemmas_table id (d#pos,is_axiom,poly_args,labels,te);
+	        StringHashtblIter.add
+                  lemmas_table id (d#pos,is_axiom,poly_args,labels,te);
 	        acc
 	      end
 	  end
@@ -3260,10 +3252,11 @@ of an invariant policy";
 	      typing_error loc "not allowed inside axiomatic specification";
             let a = assertion [] e in
             let li = make_pred id in
+            let idx = li.jc_logic_info_tag in
             if !Jc_common_options.inv_sem = InvArguments then
-              Hashtbl.replace logic_functions_table
-                li.jc_logic_info_tag (li, JCAssertion a);
-            Hashtbl.add global_invariants_table li a;
+              IntHashtblIter.replace logic_functions_table
+                idx (li, JCAssertion a);
+            IntHashtblIter.add global_invariants_table idx (li, a);
 	    acc
 	  end
 	else
@@ -3274,7 +3267,7 @@ of an invariant policy";
 	    if in_axiomatic then
 	      typing_error loc "not allowed inside axiomatic specification";
             let tt = Option_misc.map type_type tyopt in
-            Hashtbl.add exceptions_table id (exception_info tt id);
+            StringHashtblIter.add exceptions_table id (exception_info tt id);
 	    acc
 	  end
 	else
@@ -3334,7 +3327,8 @@ of an invariant policy";
 			        l)
             in
 	    update_axiomatic axiomatic pi;
-            Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p);
+            IntHashtblIter.add
+              logic_functions_table pi.jc_logic_info_tag (pi, p);
 	    acc
 	  end
 	else
@@ -3380,7 +3374,8 @@ of an invariant policy";
                     "only predicates can be inductively defined"
             in
 	    update_axiomatic axiomatic pi;
-            Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, t);
+            IntHashtblIter.add
+              logic_functions_table pi.jc_logic_info_tag (pi, t);
 	    acc
 	  end
 	else
@@ -3432,7 +3427,7 @@ of an invariant policy";
 	if not only_types then
 	  begin
 	    check_consistency id data;
-	    Hashtbl.add axiomatics_table id data
+	    StringHashtblIter.add axiomatics_table id data
 	  end;
 	acc
 
@@ -3449,7 +3444,7 @@ let declare_struct_info d = match d#node with
         jc_struct_info_hroot = si;
         jc_struct_info_root = None;
       } in
-      Hashtbl.add structs_table id (si, []);
+      StringHashtblIter.add structs_table id (si, []);
       (* declare the "mutable" field (if needed) *)
       if parent = None && !Jc_common_options.inv_sem = InvOwnership then
         create_mutable_field si
@@ -3480,14 +3475,14 @@ let declare_variable d = match d#node with
 
 let compute_struct_info_parent d = match d#node with
   | JCDtag(id, _, Some(parent, _), _, _) ->
-      let si, _ = Hashtbl.find structs_table id in
+      let si, _ = StringHashtblIter.find structs_table id in
       let psi = find_struct_info d#pos parent in
       si.jc_struct_info_parent <- Some(psi, [])
   | _ -> ()
 
 let fixpoint_struct_info_roots () =
   let modified = ref false in
-  Hashtbl.iter
+  StringHashtblIter.iter
     (fun _ (si, _) ->
        match si.jc_struct_info_parent with
          | Some(psi, _) ->
@@ -3518,13 +3513,13 @@ let type_variant d = match d#node with
 	  );
 	jc_root_info_union_size_in_bytes = 0;
       } in
-      Hashtbl.add roots_table id vi;
+      StringHashtblIter.add roots_table id vi;
       (* tags *)
       let roots = List.map
         (fun tag ->
            (* find the structure *)
            let st, _ = try
-             Hashtbl.find structs_table tag#name
+             StringHashtblIter.find structs_table tag#name
            with Not_found ->
              typing_error tag#pos
                "undefined tag: %s" tag#name
@@ -3557,11 +3552,11 @@ let type_variant d = match d#node with
 
 let declare_tag_fields d = match d#node with
   | JCDtag(id, _, _, fields, _inv) ->
-      let struct_info, _ = Hashtbl.find structs_table id in
+      let struct_info, _ = StringHashtblIter.find structs_table id in
       let root = struct_info.jc_struct_info_hroot in
       let fields = List.map (field struct_info root) fields in
       struct_info.jc_struct_info_fields <- fields;
-      Hashtbl.replace structs_table id (struct_info, [])
+      StringHashtblIter.replace structs_table id (struct_info, [])
   | _ -> ()
 
 let check_struct d = match d#node with
@@ -3608,7 +3603,7 @@ let type_file ast =
 
 let print_file fmt () =
   let functions =
-    Hashtbl.fold
+    IntHashtblIter.fold
       (fun _ (finfo,_,fspec,slist) f ->
          Jc_output.JCfun_def
            (finfo.jc_fun_info_result.jc_var_info_type,finfo.jc_fun_info_name,
@@ -3617,7 +3612,7 @@ let print_file fmt () =
       ) functions_table []
   in
   let logic_functions =
-    Hashtbl.fold
+    IntHashtblIter.fold
       (fun _ (linfo,tora) f ->
          Jc_output.JClogic_fun_def
            (linfo.jc_logic_info_result_type,linfo.jc_logic_info_name,
@@ -3636,14 +3631,13 @@ let print_file fmt () =
       ) logic_constants_table []
   in *)
   let logic_types =
-    Hashtbl.fold
-      (fun _ (s,l) f ->
-        Jc_output.JClogic_type_def (s,l)
-        :: f
-      ) logic_type_table []
+    StringHashtblIter.fold
+      (fun _ (s,l) f -> Jc_output.JClogic_type_def (s,l) :: f)
+      logic_type_table
+      []
   in
   let variables =
-    Hashtbl.fold
+    IntHashtblIter.fold
       (fun _ (vinfo,vinit) f ->
          Jc_output.JCvar_def
            (vinfo.jc_var_info_type,vinfo.jc_var_info_name,vinit)
@@ -3651,7 +3645,7 @@ let print_file fmt () =
       ) variables_table []
   in
   let structs =
-    Hashtbl.fold
+    StringHashtblIter.fold
       (fun name (sinfo,_) f ->
          let super = match sinfo.jc_struct_info_parent with
            | None -> None
@@ -3663,7 +3657,7 @@ let print_file fmt () =
       ) structs_table []
   in
   let variants =
-    Hashtbl.fold
+    StringHashtblIter.fold
       (fun name vinfo f ->
         let tags =
           List.map (fun sinfo -> sinfo.jc_struct_info_name)
@@ -3674,7 +3668,7 @@ let print_file fmt () =
       ) roots_table []
   in
   let enums =
-    Hashtbl.fold
+    StringHashtblIter.fold
       (fun name rinfo f ->
          Jc_output.JCenum_type_def
            (name,rinfo.jc_enum_info_min,rinfo.jc_enum_info_max)
@@ -3682,21 +3676,21 @@ let print_file fmt () =
       ) enum_types_table []
   in
   let axioms =
-    Hashtbl.fold
+    StringHashtblIter.fold
       (fun name (_loc,is_axiom,poly_args,labels, a) f ->
          Jc_output.JClemma_def (name,is_axiom, poly_args, labels,a)
          :: f
       ) lemmas_table []
   in
   let global_invariants =
-    Hashtbl.fold
-      (fun li a f ->
-         Jc_output.JCglobinv_def (li.jc_logic_info_name,a)
-         :: f
-      ) global_invariants_table []
+    IntHashtblIter.fold
+      (fun _ (li, a) f ->
+         Jc_output.JCglobinv_def (li.jc_logic_info_name,a) :: f)
+      global_invariants_table
+      []
   in
   let exceptions =
-    Hashtbl.fold
+    StringHashtblIter.fold
       (fun name ei f ->
          Jc_output.JCexception_def (name,ei)
          :: f

@@ -190,12 +190,13 @@ struct
   let getAllSymbols  f  =
     (** symbols the result **)
     let symbolsSet  = ref StringSet.empty  in 
-    let rec collect formula  = 
-      let rec collectIntoAList  l = match l with 
+    let rec collect formula  =
+      (* VP: unused function *)
+      (* let rec collectIntoAList  l = match l with 
 	  [] -> () 
 	|  p :: r -> 
 	     collect p ;
-	     collectIntoAList r in 
+	     collectIntoAList r in *)
       match formula with 
 	| Papp (id, [a; b], _) when is_eq id || is_neq id || id == t_zwf_zero->
 	    symbolsSet  := StringSet.union (functionalSymbolsCollect a) 

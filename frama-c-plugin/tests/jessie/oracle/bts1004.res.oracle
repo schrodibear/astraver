@@ -26,9 +26,9 @@ axiomatic Padding {
   
 }
 
-type uint32 = 0..4294967295
-
 type uint8 = 0..255
+
+type uint32 = 0..4294967295
 
 type int8 = -128..127
 

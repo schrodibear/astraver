@@ -36,6 +36,7 @@ open Jc_env
 open Jc_region
 open Jc_ast
 open Jc_fenv
+open Jc_pervasives
 
 open Format
 
@@ -54,8 +55,8 @@ let compute_regions logic_components components =
     Jc_options.lprintf "Computation of regions@.";
     (* Preserve order between following calls *)
     Array.iter Jc_separation.logic_component logic_components;
-    Hashtbl.iter Jc_separation.axiom Jc_typing.lemmas_table;
-    Hashtbl.iter
+    StringHashtblIter.iter Jc_separation.axiom Jc_typing.lemmas_table;
+    StringHashtblIter.iter
       (fun _id data ->
 	 List.iter
 	   (function Jc_typing.ABaxiom(pos,id,labs,a) ->
@@ -110,9 +111,9 @@ let main () =
 
     (* phase 4: computation of call graph *)
     Jc_options.lprintf "Computation of call graph@.";
-    Hashtbl.iter (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
+    IntHashtblIter.iter (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
       Jc_typing.logic_functions_table;
-    Hashtbl.iter
+    IntHashtblIter.iter
       (fun _ (f,_loc,s,b) ->
 	 Option_misc.iter (Jc_callgraph.compute_calls f s) b
       ) Jc_typing.functions_table;
@@ -144,7 +145,7 @@ let main () =
 	  begin
 	    (* interprocedural analysis over the call graph +
 	       intraprocedural analysis of each function called *)
-	    Hashtbl.iter
+	    IntHashtblIter.iter
 	      (fun _ (fi, loc, fs, sl) ->
 		 if fi.jc_fun_info_name = Jc_options.main then
 		   Jc_ai.main_function (fi, loc, fs, sl)
@@ -152,7 +153,7 @@ let main () =
 	  end
 	else
 	  (* intraprocedural inference of annotations otherwise *)
-	  Hashtbl.iter
+	  IntHashtblIter.iter
 	    (fun _ (f, loc, s, b) -> Jc_ai.code_function (f, loc, s, b))
 	    Jc_typing.functions_table;
       end;
@@ -160,10 +161,10 @@ let main () =
     (* phase 6: add invariants *)
     Jc_options.lprintf "Adding invariants@.";
     let vil =
-      Hashtbl.fold (fun _tag (vi, _eo) acc -> vi :: acc)
+      IntHashtblIter.fold (fun _tag (vi, _eo) acc -> vi :: acc)
 	Jc_typing.variables_table []
     in
-    Hashtbl.iter
+    IntHashtblIter.iter
       (fun _tag (f,loc,s,b) -> Jc_invariants.code_function (f, loc, s, b) vil)
       Jc_typing.functions_table;
 
@@ -185,7 +186,8 @@ let main () =
     begin match !Jc_options.inv_sem with
       | InvOwnership ->
 	  Jc_options.lprintf "Adding structure invariants@.";
-	  Hashtbl.iter (fun _name (_,invs) -> Jc_invariants.check invs)
+	  StringHashtblIter.iter
+            (fun _name (_,invs) -> Jc_invariants.check invs)
 	    Jc_typing.structs_table
       | InvNone
       | InvArguments -> ()
@@ -207,32 +209,34 @@ let main () =
     (* production phase 1.1: translate logic types *)
     Jc_options.lprintf "Translate logic types@.";
     push_decls
-      (Hashtbl.fold (fun _ id acc -> Jc_interp.tr_logic_type id acc)
+      (StringHashtblIter.fold 
+         (fun _ id acc -> Jc_interp.tr_logic_type id acc)
 	 Jc_typing.logic_type_table);
 
     (* production phase 1.2: translate coding types *)
     Jc_options.lprintf "Translate structures@.";
     push_decls
-      (Hashtbl.fold (fun _ (st, _) acc -> Jc_interp.tr_struct st acc)
+      (StringHashtblIter.fold (fun _ (st, _) acc -> Jc_interp.tr_struct st acc)
 	 Jc_typing.structs_table);
 
     Jc_options.lprintf "Translate variants@.";
     push_decls
-      (Hashtbl.fold (fun _ -> Jc_interp.tr_root) Jc_typing.roots_table);
+      (StringHashtblIter.fold
+         (fun _ -> Jc_interp.tr_root) Jc_typing.roots_table);
 
     (* production phase 2: generation of Why variables *)
 
     (* production phase 2.1: translate coding variables *)
     Jc_options.lprintf "Translate variables@.";
     push_decls
-      (Hashtbl.fold (fun _ (v,e) acc -> Jc_interp.tr_variable v e acc)
+      (IntHashtblIter.fold (fun _ (v,e) acc -> Jc_interp.tr_variable v e acc)
 	 Jc_typing.variables_table);
 
     (* production phase 2.2: translate memories *)
     Jc_options.lprintf "Translate memories@.";
     let regions =
       fold_decls
-	(Hashtbl.fold
+	(StringHashtblIter.fold
 	   (fun _ (fi,r) (acc,regions) ->
 	      let r = Region.representative r in
 	      let acc =
@@ -248,7 +252,7 @@ let main () =
     Jc_options.lprintf "Translate allocation tables@.";
     let regions =
       fold_decls
-	(Hashtbl.fold
+	(StringHashtblIter.fold
 	   (fun _ (a,r) (acc,regions) ->
 	      let r = Region.representative r in
 	      let acc =
@@ -264,7 +268,7 @@ let main () =
     Jc_options.lprintf "Translate tag tables@.";
     let _ =
       fold_decls
-	(Hashtbl.fold
+	(StringHashtblIter.fold
 	   (fun _ (a,r) (acc,regions) ->
 	      let r = Region.representative r in
 	      let acc =
@@ -279,18 +283,19 @@ let main () =
     (* production phase 3: generation of Why exceptions *)
     Jc_options.lprintf "Translate exceptions@.";
     push_decls
-      (Hashtbl.fold (fun _ ei acc -> Jc_interp.tr_exception ei acc)
+      (StringHashtblIter.fold (fun _ ei acc -> Jc_interp.tr_exception ei acc)
 	 Jc_typing.exceptions_table);
 
-    (* production phase 1.3: translate enumerated types *)
+    (* production phase 3.1: translate enumerated types *)
     (* Yannick: why here and not together with translation of types? *)
     Jc_options.lprintf "Translate enumerated types@.";
     push_decls
-      (Hashtbl.fold
+      (StringHashtblIter.fold
 	 (fun _ ri acc -> Jc_interp.tr_enum_type ri acc)
 	 Jc_typing.enum_types_table);
     let enumlist =
-      Hashtbl.fold (fun _ ri acc -> ri::acc) Jc_typing.enum_types_table []
+      StringHashtblIter.fold
+        (fun _ ri acc -> ri::acc) Jc_typing.enum_types_table []
     in
     let rec treat_enum_pairs pairs acc =
       match pairs with
@@ -309,7 +314,7 @@ let main () =
     (* production phase 4.1: generation of Why logic functions *)
     Jc_options.lprintf "Translate logic functions@.";
     push_decls
-      (Hashtbl.fold
+      (IntHashtblIter.fold
 	 (fun _ (li, p) acc ->
 	    Jc_options.lprintf "Logic function %s@." li.jc_logic_info_name;
 	    Jc_frame.tr_logic_fun li p acc)
@@ -318,17 +323,18 @@ let main () =
     (* production phase 4.2: generation of axiomatic logic decls*)
     Jc_options.lprintf "Translate axiomatic declarations@.";
     push_decls
-      (Hashtbl.fold
+      (StringHashtblIter.fold
 	 (fun a data acc ->
 	    Jc_options.lprintf "Axiomatic %s@." a;
-	    List.fold_left Jc_interp.tr_axiomatic_decl acc data.Jc_typing.axiomatics_decls)
+	    List.fold_left Jc_interp.tr_axiomatic_decl acc 
+              data.Jc_typing.axiomatics_decls)
 	 Jc_typing.axiomatics_table);
 
 
     (* production phase 4.3: generation of lemmas *)
     Jc_options.lprintf "Translate lemmas@.";
     push_decls
-      (Hashtbl.fold
+      (StringHashtblIter.fold
 	 (fun id (loc,is_axiom,_,labels,p) acc ->
 	    Jc_interp.tr_axiom loc id is_axiom labels p acc)
 	 Jc_typing.lemmas_table);
@@ -341,19 +347,20 @@ let main () =
     (* production phase 7: generation of Why functions *)
     Jc_options.lprintf "Translate functions@.";
     push_decls
-      (Hashtbl.fold
+      (IntHashtblIter.fold
 	 (fun _ (f,loc,s,b) acc ->
-	    Jc_options.lprintf "Pre-treatement Function %s@." f.jc_fun_info_name;
+	    Jc_options.lprintf
+              "Pre-treatement Function %s@." f.jc_fun_info_name;
 	    Jc_interp.pre_tr_fun f loc s b acc)
 	 Jc_typing.functions_table);
     push_decls
-      (Hashtbl.fold
+      (IntHashtblIter.fold
 	 (fun _ (f,loc,s,b) acc ->
 	    Jc_options.lprintf "Function %s@." f.jc_fun_info_name;
 	    Jc_interp.tr_fun f loc s b acc)
 	 Jc_typing.functions_table);
     push_decls
-      (Hashtbl.fold
+      (StringHashtblIter.fold
 	 (fun n (fname,param_name_assoc) acc ->
 	    Jc_interp.tr_specialized_fun n fname param_name_assoc acc)
 	 Jc_interp_misc.specialized_functions);
@@ -364,21 +371,21 @@ let main () =
 	(* production phase 8.1: "mutable" and "committed" declarations *)
 	Jc_options.lprintf "Translate mutable and committed declarations@.";
 	push_decls
-	  (Hashtbl.fold
+	  (StringHashtblIter.fold
 	     (fun _ (st, _) acc -> Jc_invariants.mutable_declaration st acc)
 	     Jc_typing.structs_table);
 
 	(* production phase 8.2: pack *)
 	Jc_options.lprintf "Translate pack@.";
 	push_decls
-	  (Hashtbl.fold
+	  (StringHashtblIter.fold
 	     (fun _ (st, _) acc -> Jc_invariants.pack_declaration st acc)
 	     Jc_typing.structs_table);
 
 	(* production phase 8.3: unpack *)
 	Jc_options.lprintf "Translate unpack@.";
 	push_decls
-	  (Hashtbl.fold
+	  (StringHashtblIter.fold
 	     (fun _ (st, _) acc -> Jc_invariants.unpack_declaration st acc)
 	     Jc_typing.structs_table)
       end;

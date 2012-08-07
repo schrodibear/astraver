@@ -106,7 +106,7 @@ class renameEntities
   in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vfunc f =
     List.iter add_variable f.slocals;
@@ -214,7 +214,7 @@ let rename_entities file =
 class fillOffsetSizeInFields =
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vglob_aux = function
     | GCompTag(compinfo,_loc) ->
@@ -253,7 +253,7 @@ let fill_offset_size_in_fields file =
 class replaceAddrofArray =
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vexpr e = match e.enode with
     | AddrOf lv ->
@@ -387,7 +387,7 @@ class replaceStringConstants =
   in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vexpr e = match e.enode with
     | Const(CStr s) ->
@@ -634,7 +634,7 @@ class rewritePointerCompare =
   in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vexpr e =
     ChangeDoChildrenPost (preaction_expr e, fun x -> x)
@@ -785,7 +785,7 @@ class collectCursorPointers
   in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vfunc f =
     curFundec := f;
@@ -945,7 +945,7 @@ class rewriteCursorPointers
   in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vfunc f =
     let local v =
@@ -1163,7 +1163,7 @@ class collectCursorIntegers
   in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vfunc f =
     (* For simplicity, consider formals as self-cursors initially.
@@ -1243,7 +1243,7 @@ class rewriteCursorIntegers
   in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vfunc f =
     let local v =
@@ -1447,7 +1447,7 @@ class annotateCodeStrlen(strlen : logic_info) =
   in
 object(self)
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vexpr e =
     begin match destruct_string_access e with None -> () | Some(v,off) ->
@@ -1550,7 +1550,7 @@ let annotate_code_strlen file =
 class annotateOverflow =
 object(self)
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vexpr e = 
     match e.enode with
@@ -1657,7 +1657,7 @@ let annotate_overflow file =
 class rewriteVoidPointer =
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vtype ty =
     if isVoidPtrType ty then
@@ -1677,7 +1677,7 @@ end
 
 class debugVoid =
 object
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
   method vterm ts = match ts.term_node with
     | TLval(TResult _,_) -> DoChildren
     | _ ->

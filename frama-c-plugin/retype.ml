@@ -34,10 +34,8 @@
 (* Import from Cil *)
 open Cil_types
 open Cil
-open Cilutil
 open Cil_datatype
 open Ast_info
-open Extlib
 
 open Visitor
 
@@ -53,8 +51,7 @@ class collectIntField
   (cast_field_to_type : typ Cil_datatype.Fieldinfo.Hashtbl.t) =
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace
 
   method vexpr e = match e.enode with
     | CastE(ty,e) ->
@@ -94,8 +91,7 @@ class retypeIntField
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace
 
   method vglob_aux = function
     | GCompTag (compinfo,_) ->
@@ -134,8 +130,8 @@ module UnionFind
 	val equal : t -> t -> bool
 	val prefer : t -> t -> int
     end)
-  (ElemSet : Set.S with type elt = Elem.t)
-  (ElemTable : Hashtbl.S with type key = Elem.t) =
+  (ElemSet : Datatype.Set with type elt = Elem.t)
+  (ElemTable : Datatype.Hashtbl with type key = Elem.t) =
 struct
 
   let table = ElemTable.create 73
@@ -308,8 +304,7 @@ class createStructHierarchy =
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace
 
   method vexpr e = match e.enode with
     | CastE(ty,e) when isPointerType ty ->
@@ -326,10 +321,7 @@ end
 class exploitStructHierarchy =
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
-
-
+  inherit Visitor.frama_c_inplace
 
 end
 

@@ -43,7 +43,6 @@ module ProjectName =
        let option_name = "-jessie-project-name"
        let arg_name = ""
        let help = "specify project name for Jessie analysis"
-       let kind = `Tuning
      end)
 
 module Behavior =
@@ -53,14 +52,12 @@ module Behavior =
        let arg_name = ""
        let help =
 	 "restrict verification to a specific behavior (safety, default or a user-defined behavior)"
-       let kind = `Correctness
      end)
 
 module Analysis =
   False(struct
 	  let option_name = "-jessie"
 	  let help = "perform C to Jessie translation"
-          let kind = `Tuning
 	end)
 
 module ForceAdHocNormalization =
@@ -68,7 +65,6 @@ module ForceAdHocNormalization =
           let option_name = "-jessie-adhoc-normalization"
           let help =
             "enforce code normalization in a mode suitable for Jessie plugin."
-          let kind = `Tuning
         end)
 
 let () =
@@ -104,38 +100,30 @@ let () =
 module JcOpt =
   StringSet(struct
 	      let option_name = "-jessie-jc-opt"
-	      let module_name = "-jessie-jc-opt"
 	      let arg_name = ""
 	      let help = "give an option to Jc (e.g., -jessie-jc-opt=\"-trust-ai\")"
-              let kind = `Tuning
 	    end)
 
 module WhyOpt =
   StringSet
     (struct
        let option_name = "-jessie-why-opt"
-       let module_name = "-jessie-why-opt"
        let arg_name = ""
        let help = "give an option to Why (e.g., -jessie-why-opt=\"-fast-wp\")"
-       let kind = `Tuning
      end)
 
 module GenOnly =
   False(struct
 	  let option_name = "-jessie-gen-only"
-	  let module_name = "-jessie-gen-only"
 	  let help = "only generates jessie code (for developer use)"
-          let kind = `Tuning
 	end)
 
 module InferAnnot =
   EmptyString
     (struct
        let option_name = "-jessie-infer-annot"
-       let module_name = "-jessie-infer-annot"
        let arg_name = ""
        let help = "infer function annotations (inv, pre, spre, wpre)"
-       let kind = `Correctness
      end)
 
 (*
@@ -153,42 +141,34 @@ module CpuLimit =
   Zero
     (struct
        let option_name = "-jessie-cpu-limit"
-       let module_name = "-jessie-cpu-limit"
        let arg_name = ""
        let help = "set the time limit in sec. for the analysis"
-       let kind = `Tuning
      end)
 
 module AbsDomain =
   String
     (struct
        let option_name = "-jessie-abstract-domain"
-       let module_name = "-jessie-abstract-domain"
        let default = "poly"
        let arg_name = ""
        let help = "use specified abstract domain (box, oct or poly)"
-       let kind = `Tuning
      end)
 
 module Atp =
   String
     (struct
        let option_name = "-jessie-atp"
-       let module_name = "-jessie-atp"
        let default = "why3ml"
        let arg_name = ""
        let help = "use given automated theorem prover, among `alt-ergo', `cvc3', `simplify', `vampire', `yices' and `z3'. Use `goals' to simply generate goals in Why syntax."
-       let kind = `Tuning
      end)
 
 module HintLevel =
   Zero
     (struct
        let option_name = "-jessie-hint-level"
-       let module_name = "-jessie-hint-level"
        let arg_name = ""
        let help = "level of hints, i.e. assertions to help the proof (e.g. for string usage)"
-       let kind = `Tuning
      end)
 
 (*

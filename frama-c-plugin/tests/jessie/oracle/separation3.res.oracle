@@ -18,9 +18,9 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int32 = -2147483648..2147483647
-
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag unsigned_charP = {
   uint8 unsigned_charM: 8;
@@ -752,8 +752,8 @@ parameter f :
   reads L_l_2_alloc_table,L_q_l_2,S_a_s0_1,S_l_2_alloc_table,S_s0_1_alloc_table
   writes S_a_l_2,S_a_s0_1
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-     and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
+     ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table))))
     and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter intP_s0_1_alloc_table : intP alloc_table ref
@@ -766,21 +766,21 @@ parameter f2 :
   reads L_l_2_alloc_table,L_p_l_2,S_b_s0_1,S_s0_1_alloc_table,intP_intM_s0_1,intP_s0_1_alloc_table
   writes L_p_l_2,intP_intM_s0_1
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-     and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
+     ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table))))
     and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter f2_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table))))}
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table))))}
   int32
   reads L_l_2_alloc_table,L_p_l_2,S_b_s0_1,S_s0_1_alloc_table,intP_intM_s0_1,intP_s0_1_alloc_table
   writes L_p_l_2,intP_intM_s0_1
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-     and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
+     ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table))))
     and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter f3 :
@@ -789,34 +789,34 @@ parameter f3 :
   reads L_l_2_alloc_table,S_b_s0_1,S_c_s0_1,S_s0_1_alloc_table,intP_intM_s0_1,intP_s0_1_alloc_table
   writes intP_intM_s0_1
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-     and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
+     ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table))))
     and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter f3_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table))))}
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table))))}
   int32
   reads L_l_2_alloc_table,S_b_s0_1,S_c_s0_1,S_s0_1_alloc_table,intP_intM_s0_1,intP_s0_1_alloc_table
   writes intP_intM_s0_1
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-     and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
+     ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table))))
     and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter f_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table))))}
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table))))}
   int32
   reads L_l_2_alloc_table,L_q_l_2,S_a_s0_1,S_l_2_alloc_table,S_s0_1_alloc_table
   writes S_a_l_2,S_a_s0_1
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-     and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
+     ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table))))
     and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter int32_of_integer_ :
@@ -846,8 +846,8 @@ parameter uint8_of_integer_ :
 let f2_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table)))) }
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -877,8 +877,8 @@ let f2_ensures_default =
 let f2_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table)))) }
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -906,14 +906,14 @@ let f2_safety =
       void); (return := !__retres_0); (raise Return) end)))); absurd  end
    with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table)))) }
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
 
 let f3_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table)))) }
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -945,8 +945,8 @@ let f3_ensures_default =
 let f3_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table)))) }
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -975,14 +975,14 @@ let f3_safety =
       void); (return := !__retres_1); (raise Return) end)))); absurd  end
    with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table)))) }
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
 
 let f_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table)))) }
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1004,8 +1004,8 @@ let f_ensures_default =
 let f_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table)))) }
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1024,8 +1024,8 @@ let f_safety =
       void); (return := !__retres); (raise Return) end)))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
-    and (JC_<somenum>: valid_l(L_l_2_alloc_table)))) }
+    ((JC_<somenum>: valid_l(L_l_2_alloc_table))
+    and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C separation3.jessie --quiet -f separation3.makefile project

@@ -16,13 +16,13 @@ axiomatic Padding {
   
 }
 
-type uint32 = 0..4294967295
-
 type uint8 = 0..255
 
-type int32 = -2147483648..2147483647
+type uint32 = 0..4294967295
 
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag intP = {
   int32 intM: 32;
@@ -506,9 +506,9 @@ parameter Frama_C_bzero :
      reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,unsigned_charP_unsigned_charM_dest_4
      writes unsigned_charP_unsigned_charM_dest_4
      { ((JC_<somenum>:
-        ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+        ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
         and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-            and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+            and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table)))))
        and (JC_<somenum>:
            ((JC_<somenum>:
             (forall i_1:int.
@@ -534,16 +534,16 @@ parameter Frama_C_bzero_requires :
         and (JC_<somenum>:
             ge_int(offset_max(unsigned_charP_dest_4_alloc_table, dest),
             sub_int(integer_of_uint32(n), (1))))))
-       and ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+       and ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
            and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-               and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))))}
+               and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))))}
      unit
      reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,unsigned_charP_unsigned_charM_dest_4
      writes unsigned_charP_unsigned_charM_dest_4
      { ((JC_<somenum>:
-        ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+        ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
         and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-            and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+            and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table)))))
        and (JC_<somenum>:
            ((JC_<somenum>:
             (forall i_1:int.
@@ -693,9 +693,9 @@ parameter fg :
   reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,intP_intM_ga1_1,intP_intM_ga2_2,intP_intM_ga3_3
   writes intP_intM_ga1_1,intP_intM_ga2_2,intP_intM_ga3_3
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+     ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
      and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-         and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+         and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          (integer_of_int32(select(intP_intM_ga1_1, shift(ga1, (0)))) = 
@@ -710,16 +710,16 @@ parameter fg :
 parameter fg_requires :
  i:int32 ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))}
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table)))))}
   unit
   reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,intP_intM_ga1_1,intP_intM_ga2_2,intP_intM_ga3_3
   writes intP_intM_ga1_1,intP_intM_ga2_2,intP_intM_ga3_3
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+     ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
      and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-         and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+         and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          (integer_of_int32(select(intP_intM_ga1_1, shift(ga1, (0)))) = 
@@ -739,9 +739,9 @@ parameter implicit_init :
     reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,intP_intM_la3_5
     writes intP_intM_la3_5
     { ((JC_<somenum>:
-       ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+       ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
        and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-           and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+           and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table)))))
       and (JC_<somenum>:
           ((JC_<somenum>:
            ((JC_<somenum>:
@@ -763,16 +763,16 @@ parameter implicit_init_requires :
   intP_intM_la3_5:(intP, int32) memory ref ->
    intP_la3_5_alloc_table:intP alloc_table ->
     { (JC_<somenum>:
-      ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+      ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
       and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-          and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))}
+          and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table)))))}
     unit
     reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,intP_intM_la3_5
     writes intP_intM_la3_5
     { ((JC_<somenum>:
-       ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+       ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
        and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-           and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+           and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table)))))
       and (JC_<somenum>:
           ((JC_<somenum>:
            ((JC_<somenum>:
@@ -804,22 +804,22 @@ parameter lg :
   { } unit
   reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
 
 parameter lg_requires :
  i_0:int32 ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))}
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table)))))}
   unit
   reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -839,23 +839,23 @@ parameter testg :
   reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,intP_intM_ga1_1,intP_intM_ga2_2,intP_intM_ga3_3
   writes intP_intM_ga1_1,intP_intM_ga2_2,intP_intM_ga3_3
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
 
 parameter testg_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))}
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table)))))}
   unit
   reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,intP_intM_ga1_1,intP_intM_ga2_2,intP_intM_ga3_3
   writes intP_intM_ga1_1,intP_intM_ga2_2,intP_intM_ga3_3
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
 
 parameter uint32_of_integer_ :
  x:int ->
@@ -870,9 +870,9 @@ parameter uint8_of_integer_ :
 let fg_ensures_default =
  fun (i : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
   (init:
   try
    (C_6:
@@ -908,9 +908,9 @@ let fg_ensures_default =
 let fg_safety =
  fun (i : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
   (init:
   try
    (C_6:
@@ -934,16 +934,16 @@ let fg_safety =
     (((safe_upd_ intP_intM_ga3_3) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
     (raise Return) end))) with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
 
 let lg_ensures_default =
  fun (i_0 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
   (init:
   try
    begin
@@ -1041,9 +1041,9 @@ let lg_ensures_default =
 let lg_safety =
  fun (i_0 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
   (init:
   try
    begin
@@ -1152,16 +1152,16 @@ let lg_safety =
       ((free_parameter intP_la3_8_alloc_table) !la3_0); (raise Return) end)))))))))))))))))))));
     (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
 
 let testg_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
   (init:
   try
    (C_16:
@@ -1185,9 +1185,9 @@ let testg_ensures_default =
 let testg_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
   (init:
   try
    (C_16:
@@ -1207,9 +1207,9 @@ let testg_safety =
         (integer_of_int32(select(intP_intM_ga3_3, shift(ga3, (2)))) = (5))) } ];
     void; (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+    ((JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-        and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
+        and (JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C array_basic.jessie --quiet -f array_basic.makefile project

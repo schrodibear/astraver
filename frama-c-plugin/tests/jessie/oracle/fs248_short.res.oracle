@@ -18,9 +18,9 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int32 = -2147483648..2147483647
-
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag intP = {
   int32 intM: 32;
@@ -839,12 +839,12 @@ parameter f :
        reads S_e_9_alloc_table,S_g_10_alloc_table,charP_charM_x_0_11,intP_intM_y_0_12,intP_p2_3_alloc_table,intP_p_1_alloc_table,intP_q2_4_alloc_table,intP_q_2_alloc_table
        writes charP_charM_x_0_11,intP_intM_y_0_12
        { (JC_<somenum>:
-         ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-         and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-             and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-                 and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                     and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                         and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+         ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+         and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+             and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+                 and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                     and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                         and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
 
 parameter f2 :
  x_0_0_0:charP pointer ->
@@ -854,34 +854,34 @@ parameter f2 :
     reads S_e_9_alloc_table,S_g_10_alloc_table,charP_charM_x_0_0_13,intP_p2_3_alloc_table,intP_p_1_alloc_table,intP_q2_4_alloc_table,intP_q_2_alloc_table
     writes charP_charM_x_0_0_13
     { (JC_<somenum>:
-      ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-      and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-          and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-              and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                  and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                      and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+      ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+      and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+          and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+              and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                  and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                      and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
 
 parameter f2_requires :
  x_0_0_0:charP pointer ->
   charP_charM_x_0_0_13:(charP, int8) memory ref ->
    charP_x_0_0_13_alloc_table:charP alloc_table ->
     { (JC_<somenum>:
-      ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-      and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-          and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-              and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                  and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                      and (JC_<somenum>: valid_g(S_g_10_alloc_table))))))))}
+      ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+      and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+          and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+              and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                  and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                      and (JC_<somenum>: valid_p(intP_p_1_alloc_table))))))))}
     unit
     reads S_e_9_alloc_table,S_g_10_alloc_table,charP_charM_x_0_0_13,intP_p2_3_alloc_table,intP_p_1_alloc_table,intP_q2_4_alloc_table,intP_q_2_alloc_table
     writes charP_charM_x_0_0_13
     { (JC_<somenum>:
-      ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-      and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-          and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-              and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                  and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                      and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+      ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+      and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+          and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+              and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                  and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                      and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
 
 parameter f_requires :
  x_0_0:charP pointer ->
@@ -891,22 +891,22 @@ parameter f_requires :
      intP_y_0_12_alloc_table:intP alloc_table ->
       charP_x_0_11_alloc_table:charP alloc_table ->
        { (JC_<somenum>:
-         ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-         and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-             and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-                 and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                     and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                         and (JC_<somenum>: valid_g(S_g_10_alloc_table))))))))}
+         ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+         and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+             and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+                 and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                     and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                         and (JC_<somenum>: valid_p(intP_p_1_alloc_table))))))))}
        unit
        reads S_e_9_alloc_table,S_g_10_alloc_table,charP_charM_x_0_11,intP_intM_y_0_12,intP_p2_3_alloc_table,intP_p_1_alloc_table,intP_q2_4_alloc_table,intP_q_2_alloc_table
        writes charP_charM_x_0_11,intP_intM_y_0_12
        { (JC_<somenum>:
-         ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-         and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-             and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-                 and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                     and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                         and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+         ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+         and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+             and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+                 and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                     and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                         and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -940,32 +940,32 @@ parameter main3 :
   reads PTR1,PTR2,PTR3,PTR4,S_e_9_alloc_table,S_g_10_alloc_table,intP_intM_p2_3,intP_p2_3_alloc_table,intP_p_1_alloc_table,intP_q2_4_alloc_table,intP_q_2_alloc_table,u,v
   writes PTR1,PTR2,PTR3,PTR4,intP_intM_p2_3,t,t2,u,v,v2,x_0,z
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
 
 parameter main3_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table))))))))}
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table))))))))}
   unit
   reads PTR1,PTR2,PTR3,PTR4,S_e_9_alloc_table,S_g_10_alloc_table,intP_intM_p2_3,intP_p2_3_alloc_table,intP_p_1_alloc_table,intP_q2_4_alloc_table,intP_q_2_alloc_table,u,v
   writes PTR1,PTR2,PTR3,PTR4,intP_intM_p2_3,t,t2,u,v,v2,x_0,z
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -984,12 +984,12 @@ parameter uint8_of_integer_ :
 let f2_ensures_default =
  fun (x_0_0_0 : charP pointer) (charP_charM_x_0_0_13 : (charP, int8) memory ref) (charP_x_0_0_13_alloc_table : charP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
   (init:
   try
    begin
@@ -1025,12 +1025,12 @@ let f2_ensures_default =
 let f2_safety =
  fun (x_0_0_0 : charP pointer) (charP_charM_x_0_0_13 : (charP, int8) memory ref) (charP_x_0_0_13_alloc_table : charP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
   (init:
   try
    begin
@@ -1070,22 +1070,22 @@ let f2_safety =
       ((((upd_ charP_x_0_0_13_alloc_table) charP_charM_x_0_0_13) jessie_<somenum>) jessie_<somenum>))));
       (raise Return) end)))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
 
 let f_ensures_default =
  fun (x_0_0 : charP pointer) (y_0 : intP pointer) (intP_intM_y_0_12 : (intP, int32) memory ref) (charP_charM_x_0_11 : (charP, int8) memory ref) (charP_x_0_11_alloc_table : charP alloc_table) (intP_y_0_12_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
   (let mutable_x_0_0 = ref x_0_0 in
   (init:
   try
@@ -1133,12 +1133,12 @@ let f_ensures_default =
 let f_safety =
  fun (x_0_0 : charP pointer) (y_0 : intP pointer) (intP_intM_y_0_12 : (intP, int32) memory ref) (charP_charM_x_0_11 : (charP, int8) memory ref) (charP_x_0_11_alloc_table : charP alloc_table) (intP_y_0_12_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
   (let mutable_x_0_0 = ref x_0_0 in
   (init:
   try
@@ -1193,22 +1193,22 @@ let f_safety =
       ((((upd_ intP_y_0_12_alloc_table) intP_intM_y_0_12) jessie_<somenum>) jessie_<somenum>))));
       (raise Return) end)))))); (raise Return) end with Return -> void end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
 
 let main3_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
   (init:
   try
    begin
@@ -1404,12 +1404,12 @@ let main3_ensures_default =
 let main3_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
   (init:
   try
    begin
@@ -1627,12 +1627,12 @@ let main3_safety =
       ((free_parameter S_p_0_16_alloc_table) !s2_1); (raise Return) end)))))))))))))))))))))))))))))));
     (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_p(intP_p_1_alloc_table))
-    and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
-        and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
-            and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
-                and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
-                    and (JC_<somenum>: valid_g(S_g_10_alloc_table)))))))) }
+    ((JC_<somenum>: valid_g(S_g_10_alloc_table))
+    and ((JC_<somenum>: valid_e(S_e_9_alloc_table))
+        and ((JC_<somenum>: valid_q2(intP_q2_4_alloc_table))
+            and ((JC_<somenum>: valid_p2(intP_p2_3_alloc_table))
+                and ((JC_<somenum>: valid_q(intP_q_2_alloc_table))
+                    and (JC_<somenum>: valid_p(intP_p_1_alloc_table)))))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fs248_short.jessie --quiet -f fs248_short.makefile project

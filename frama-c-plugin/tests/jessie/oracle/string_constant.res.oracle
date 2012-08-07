@@ -16,9 +16,9 @@ axiomatic Padding {
   
 }
 
-type uint16 = 0..65535
-
 type uint8 = 0..255
+
+type uint16 = 0..65535
 
 type int8 = -128..127
 
@@ -1858,24 +1858,24 @@ parameter main :
   { } unit
   reads charP___string_done_1_alloc_table,charP_charM___string_done_1
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_done(charP___string_done_1_alloc_table,
-     charP_charM___string_done_1))
-    and (JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table)))) }
+    ((JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table))
+    and (JC_<somenum>:
+        valid___string_done(charP___string_done_1_alloc_table,
+        charP_charM___string_done_1)))) }
 
 parameter main_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_done(charP___string_done_1_alloc_table,
-     charP_charM___string_done_1))
-    and (JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table))))}
+    ((JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table))
+    and (JC_<somenum>:
+        valid___string_done(charP___string_done_1_alloc_table,
+        charP_charM___string_done_1))))}
   unit reads charP___string_done_1_alloc_table,charP_charM___string_done_1
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_done(charP___string_done_1_alloc_table,
-     charP_charM___string_done_1))
-    and (JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table)))) }
+    ((JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table))
+    and (JC_<somenum>:
+        valid___string_done(charP___string_done_1_alloc_table,
+        charP_charM___string_done_1)))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1902,10 +1902,10 @@ parameter uint8_of_integer_ :
 let main_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_done(charP___string_done_1_alloc_table,
-     charP_charM___string_done_1))
-    and (JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table)))) }
+    ((JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table))
+    and (JC_<somenum>:
+        valid___string_done(charP___string_done_1_alloc_table,
+        charP_charM___string_done_1)))) }
   (init:
   try
    begin
@@ -1948,10 +1948,10 @@ let main_ensures_default =
 let main_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_done(charP___string_done_1_alloc_table,
-     charP_charM___string_done_1))
-    and (JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table)))) }
+    ((JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table))
+    and (JC_<somenum>:
+        valid___string_done(charP___string_done_1_alloc_table,
+        charP_charM___string_done_1)))) }
   (init:
   try
    begin
@@ -1992,10 +1992,10 @@ let main_safety =
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_done(charP___string_done_1_alloc_table,
-     charP_charM___string_done_1))
-    and (JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table)))) }
+    ((JC_<somenum>: valid___string_done_0(charP___string_done_1_alloc_table))
+    and (JC_<somenum>:
+        valid___string_done(charP___string_done_1_alloc_table,
+        charP_charM___string_done_1)))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C string_constant.jessie --quiet -f string_constant.makefile project

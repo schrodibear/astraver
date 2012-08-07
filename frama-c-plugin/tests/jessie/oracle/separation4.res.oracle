@@ -18,9 +18,9 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int32 = -2147483648..2147483647
-
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag unsigned_charP = {
   uint8 unsigned_charM: 8;
@@ -598,22 +598,22 @@ parameter f :
   reads S_b_x_1,S_b_y_2,S_x_1_alloc_table,S_y_2_alloc_table,intP_intM_x_1,intP_x_1_alloc_table,intP_y_2_alloc_table
   writes intP_intM_x_1,intP_intM_y_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_x(S_x_1_alloc_table))
-     and (JC_<somenum>: valid_y(S_y_2_alloc_table))))
+     ((JC_<somenum>: valid_y(S_y_2_alloc_table))
+     and (JC_<somenum>: valid_x(S_x_1_alloc_table))))
     and (JC_<somenum>: p(x_0, S_b_x_1, intP_intM_x_1))) }
 
 parameter f_requires :
  tt:unit ->
   { (JC_<somenum>:
     ((JC_<somenum>: p(x_0, S_b_x_1, intP_intM_x_1))
-    and ((JC_<somenum>: valid_x(S_x_1_alloc_table))
-        and (JC_<somenum>: valid_y(S_y_2_alloc_table)))))}
+    and ((JC_<somenum>: valid_y(S_y_2_alloc_table))
+        and (JC_<somenum>: valid_x(S_x_1_alloc_table)))))}
   unit
   reads S_b_x_1,S_b_y_2,S_x_1_alloc_table,S_y_2_alloc_table,intP_intM_x_1,intP_x_1_alloc_table,intP_y_2_alloc_table
   writes intP_intM_x_1,intP_intM_y_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_x(S_x_1_alloc_table))
-     and (JC_<somenum>: valid_y(S_y_2_alloc_table))))
+     ((JC_<somenum>: valid_y(S_y_2_alloc_table))
+     and (JC_<somenum>: valid_x(S_x_1_alloc_table))))
     and (JC_<somenum>: p(x_0, S_b_x_1, intP_intM_x_1))) }
 
 parameter int32_of_integer_ :
@@ -644,8 +644,8 @@ let f_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
     ((JC_<somenum>: p(x_0, S_b_x_1, intP_intM_x_1))
-    and ((JC_<somenum>: valid_x(S_x_1_alloc_table))
-        and (JC_<somenum>: valid_y(S_y_2_alloc_table))))) }
+    and ((JC_<somenum>: valid_y(S_y_2_alloc_table))
+        and (JC_<somenum>: valid_x(S_x_1_alloc_table))))) }
   (init:
   try
    (C_3:
@@ -667,8 +667,8 @@ let f_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
     ((JC_<somenum>: p(x_0, S_b_x_1, intP_intM_x_1))
-    and ((JC_<somenum>: valid_x(S_x_1_alloc_table))
-        and (JC_<somenum>: valid_y(S_y_2_alloc_table))))) }
+    and ((JC_<somenum>: valid_y(S_y_2_alloc_table))
+        and (JC_<somenum>: valid_x(S_x_1_alloc_table))))) }
   (init:
   try
    (C_3:
@@ -685,8 +685,8 @@ let f_safety =
     (((safe_upd_ intP_intM_y_2) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
     (raise Return) end)) with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_x(S_x_1_alloc_table))
-    and (JC_<somenum>: valid_y(S_y_2_alloc_table)))) }
+    ((JC_<somenum>: valid_y(S_y_2_alloc_table))
+    and (JC_<somenum>: valid_x(S_x_1_alloc_table)))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C separation4.jessie --quiet -f separation4.makefile project

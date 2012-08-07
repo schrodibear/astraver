@@ -517,22 +517,22 @@ parameter endsat :
      { } int32
      reads charP___string_toto_1_alloc_table,charP_gtoto_2_alloc_table
      { ((JC_<somenum>:
-        ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-        and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))
+        ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+        and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))))
        and (((integer_of_int8(select(charP_charM_p_4,
                               shift(p, integer_of_int32(i)))) <> (0)) ->
              (JC_<somenum>:
              ((JC_<somenum>: (integer_of_int32(result) = (0)))
-             and ((JC_<somenum>:
-                  valid___string_toto(charP___string_toto_1_alloc_table))
-                 and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))))
+             and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_toto(charP___string_toto_1_alloc_table))))))
            and ((integer_of_int8(select(charP_charM_p_4,
                                  shift(p, integer_of_int32(i)))) = (0)) ->
                 (JC_<somenum>:
                 ((JC_<somenum>: (integer_of_int32(result) = (1)))
-                and ((JC_<somenum>:
-                     valid___string_toto(charP___string_toto_1_alloc_table))
-                    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))))))) }
+                and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+                    and (JC_<somenum>:
+                        valid___string_toto(charP___string_toto_1_alloc_table)))))))) }
 
 parameter endsat_requires :
  p:charP pointer ->
@@ -545,26 +545,27 @@ parameter endsat_requires :
          le_int(offset_min(charP_p_4_alloc_table, p), integer_of_int32(i)))
         and (JC_<somenum>:
             ge_int(offset_max(charP_p_4_alloc_table, p), integer_of_int32(i)))))
-       and ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-           and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))))}
+       and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+           and (JC_<somenum>:
+               valid___string_toto(charP___string_toto_1_alloc_table)))))}
      int32 reads charP___string_toto_1_alloc_table,charP_gtoto_2_alloc_table
      { ((JC_<somenum>:
-        ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-        and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))
+        ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+        and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))))
        and (((integer_of_int8(select(charP_charM_p_4,
                               shift(p, integer_of_int32(i)))) <> (0)) ->
              (JC_<somenum>:
              ((JC_<somenum>: (integer_of_int32(result) = (0)))
-             and ((JC_<somenum>:
-                  valid___string_toto(charP___string_toto_1_alloc_table))
-                 and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))))
+             and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_toto(charP___string_toto_1_alloc_table))))))
            and ((integer_of_int8(select(charP_charM_p_4,
                                  shift(p, integer_of_int32(i)))) = (0)) ->
                 (JC_<somenum>:
                 ((JC_<somenum>: (integer_of_int32(result) = (1)))
-                and ((JC_<somenum>:
-                     valid___string_toto(charP___string_toto_1_alloc_table))
-                    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))))))) }
+                and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+                    and (JC_<somenum>:
+                        valid___string_toto(charP___string_toto_1_alloc_table)))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -590,74 +591,74 @@ parameter test1 :
   { } unit
   reads charP___string_toto_1_alloc_table,charP_charM_gtoto_2,charP_gtoto_2_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 parameter test1_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))}
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))))}
   unit
   reads charP___string_toto_1_alloc_table,charP_charM_gtoto_2,charP_gtoto_2_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 parameter test1ptr :
  tt:unit ->
   { } unit
   reads charP___string_toto_1_alloc_table,charP_charM_gptoto_3,charP_gptoto_3_alloc_table,charP_gtoto_2_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 parameter test1ptr_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))}
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))))}
   unit
   reads charP___string_toto_1_alloc_table,charP_charM_gptoto_3,charP_gptoto_3_alloc_table,charP_gtoto_2_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 parameter test2 :
  tt:unit ->
   { } unit reads charP___string_toto_1_alloc_table,charP_gtoto_2_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 parameter test2_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))}
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))))}
   unit reads charP___string_toto_1_alloc_table,charP_gtoto_2_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 parameter test2ptr :
  tt:unit ->
   { } unit
   reads charP___string_toto_1_alloc_table,charP_charM___string_toto_1,charP_gtoto_2_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 parameter test2ptr_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))}
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))))}
   unit
   reads charP___string_toto_1_alloc_table,charP_charM___string_toto_1,charP_gtoto_2_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 parameter uint8_of_integer_ :
  x:int ->
@@ -672,8 +673,8 @@ let endsat_ensures_default =
       le_int(offset_min(charP_p_4_alloc_table, p), integer_of_int32(i)))
      and (JC_<somenum>:
          ge_int(offset_max(charP_p_4_alloc_table, p), integer_of_int32(i)))))
-    and ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-        and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))) }
+    and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+        and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -709,8 +710,9 @@ let endsat_ensures_ko =
          and (JC_<somenum>:
              ge_int(offset_max(charP_p_4_alloc_table, p),
              integer_of_int32(i)))))
-        and ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-            and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))))) }
+        and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+            and (JC_<somenum>:
+                valid___string_toto(charP___string_toto_1_alloc_table)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -737,8 +739,8 @@ let endsat_ensures_ko =
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_int32(result) = (0)))
-    and ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-        and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))) }
+    and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+        and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))))) }
 
 let endsat_ensures_ok =
  fun (p : charP pointer) (i : int32) (charP_p_4_alloc_table : charP alloc_table) (charP_charM_p_4 : (charP, int8) memory) ->
@@ -750,8 +752,9 @@ let endsat_ensures_ok =
          and (JC_<somenum>:
              ge_int(offset_max(charP_p_4_alloc_table, p),
              integer_of_int32(i)))))
-        and ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-            and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))))) }
+        and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+            and (JC_<somenum>:
+                valid___string_toto(charP___string_toto_1_alloc_table)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -778,8 +781,8 @@ let endsat_ensures_ok =
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_int32(result) = (1)))
-    and ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-        and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))) }
+    and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+        and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))))) }
 
 let endsat_safety =
  fun (p : charP pointer) (i : int32) (charP_p_4_alloc_table : charP alloc_table) (charP_charM_p_4 : (charP, int8) memory) ->
@@ -789,8 +792,8 @@ let endsat_safety =
       le_int(offset_min(charP_p_4_alloc_table, p), integer_of_int32(i)))
      and (JC_<somenum>:
          ge_int(offset_max(charP_p_4_alloc_table, p), integer_of_int32(i)))))
-    and ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-        and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))) }
+    and ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+        and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -816,14 +819,14 @@ let endsat_safety =
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 let test1_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
   (init:
   try
    begin
@@ -843,8 +846,8 @@ let test1_ensures_default =
 let test1_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
   (init:
   try
    begin
@@ -861,14 +864,14 @@ let test1_safety =
       [ { } unit reads r1 { (JC_<somenum>: (integer_of_int32(r1) = (1))) } ]; void;
       (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 let test1ptr_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
   (init:
   try
    begin
@@ -888,8 +891,8 @@ let test1ptr_ensures_default =
 let test1ptr_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
   (init:
   try
    begin
@@ -906,14 +909,14 @@ let test1ptr_safety =
       [ { } unit reads r1_1 { (JC_<somenum>: (integer_of_int32(r1_1) = (1))) } ];
       void; (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 let test2_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
   (init:
   try
    begin
@@ -980,8 +983,8 @@ let test2_ensures_default =
 let test2_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1050,14 +1053,14 @@ let test2_safety =
       (raise Return) end))))))))))))); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 let test2ptr_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1080,8 +1083,8 @@ let test2ptr_ensures_default =
 let test2ptr_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1102,8 +1105,8 @@ let test2ptr_safety =
       void; (raise Return) end)))); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
-    and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
+    ((JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))
+    and (JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table)))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C string_basic.jessie --quiet -f string_basic.makefile project
@@ -1145,7 +1148,7 @@ text = "UserCall"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/string_basic_po21.why">
-      <location file = "why/string_basic.why" line = "849" begin = "19" end = "99"/>
+      <location file = "why/string_basic.why" line = "852" begin = "19" end = "99"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/string_basic_po22.why">
@@ -1159,7 +1162,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/string_basic_po24.why">
-      <location file = "why/string_basic.why" line = "889" begin = "13" end = "62"/>
+      <location file = "why/string_basic.why" line = "892" begin = "13" end = "62"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

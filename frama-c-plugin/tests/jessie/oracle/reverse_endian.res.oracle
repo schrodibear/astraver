@@ -18,9 +18,9 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int16 = -32768..32767
-
 type int8 = -128..127
+
+type int16 = -32768..32767
 
 tag shortP = {
   int16 shortM: 16;

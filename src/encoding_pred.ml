@@ -266,11 +266,12 @@ let rec push d =
 	| Pnamed (s, p) ->
 	    Pnamed (s, translate_eq p) 
 	| p -> p in
-      let rec lifted  l p =
+      (* VP: unused function *)
+      (* let rec lifted  l p =
 	match l with [] -> p
 	| (_,a)::q -> 
 	    lifted q (Forall(false, Ident.create a, Ident.create a, ut, [], p))
-      in
+      in *)
       Queue.add (Dgoal
 		   (loc, is_lemma, expl, name,
 		    Env.empty_scheme

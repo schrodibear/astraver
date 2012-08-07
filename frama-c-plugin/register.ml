@@ -34,16 +34,10 @@
 (* Import from Cil *)
 open Cil_types
 open Cil
-open Cilutil
-open Extlib
 module FCAst = Ast
 module FCProject = Project
 (* Import from Why *)
 open Jc
-open Jc_ast
-open Jc_env
-open Jc_fenv
-open Jc_pervasives
 
 (* Utility functions *)
 open Common

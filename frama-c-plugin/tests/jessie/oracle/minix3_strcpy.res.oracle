@@ -16,9 +16,9 @@ axiomatic Padding {
   
 }
 
-type uint16 = 0..65535
-
 type uint8 = 0..255
+
+type uint16 = 0..65535
 
 type int8 = -128..127
 

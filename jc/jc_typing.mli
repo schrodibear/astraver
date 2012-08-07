@@ -33,6 +33,7 @@ open Jc_stdlib
 open Jc_env
 open Jc_ast
 open Jc_fenv
+open Jc_pervasives
 
 val default_label : label list -> label option
  
@@ -43,29 +44,25 @@ val is_root_struct : struct_info -> bool
 
 val substruct : struct_info -> pointer_class -> bool
 
-val logic_type_table : (string,string * type_var_info list) Hashtbl.t
-  
+val logic_type_table : (string * type_var_info list) StringHashtblIter.t
 
 val logic_constants_table : 
   (int, logic_info * Jc_fenv.logic_info Jc_ast.term) Hashtbl.t
 
-val logic_functions_table : 
-  (int, logic_info * term_or_assertion) Hashtbl.t
+val logic_functions_table:
+  (logic_info * term_or_assertion) IntHashtblIter.t
 
 val functions_table : 
-  (int, fun_info * Loc.position * fun_spec * expr option) Hashtbl.t
+  (fun_info * Loc.position * fun_spec * expr option) IntHashtblIter.t
 
-val variables_table : 
-  (int, var_info * expr option) Hashtbl.t
+val variables_table : (var_info * expr option) IntHashtblIter.t
 
-val structs_table : 
-  (string, (struct_info * (logic_info * assertion) list)) Hashtbl.t
+val structs_table:
+  (struct_info * (logic_info * assertion) list) StringHashtblIter.t
 
-val roots_table :
-  (string, root_info) Hashtbl.t
+val roots_table: (root_info) StringHashtblIter.t
 
-val enum_types_table : 
-  (string, (enum_info (* * logic_info * fun_info * fun_info *))) Hashtbl.t
+val enum_types_table: enum_info StringHashtblIter.t
 
 (*
 val enum_conversion_functions_table : (fun_info, string) Hashtbl.t
@@ -73,7 +70,8 @@ val enum_conversion_logic_functions_table : (logic_info, string) Hashtbl.t
 *)
 
 val lemmas_table : 
-  (string, Loc.position * bool * type_var_info list * label list * assertion) Hashtbl.t
+  (Loc.position * bool * type_var_info list * label list * assertion)
+  StringHashtblIter.t
 
 type axiomatic_decl =
   | ABaxiom of Loc.position * string * Jc_env.label list * Jc_constructors.assertion
@@ -84,13 +82,12 @@ type axiomatic_data = private
       mutable axiomatics_decls : axiomatic_decl list;
     }
 
-val axiomatics_table : (string, axiomatic_data) Hashtbl.t
+val axiomatics_table : axiomatic_data StringHashtblIter.t
 
 val global_invariants_table : 
-  (logic_info, assertion) Hashtbl.t
+  (logic_info * assertion) IntHashtblIter.t
 
-val exceptions_table : 
-  (string, exception_info) Hashtbl.t
+val exceptions_table: exception_info StringHashtblIter.t
 
 exception Typing_error of Loc.position * string
 

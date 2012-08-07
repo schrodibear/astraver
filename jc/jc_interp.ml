@@ -2459,7 +2459,7 @@ and expr e =
 	      let with_body =
 		try
                   let _f,body =
-		    Jc_stdlib.Hashtbl.find 
+		    IntHashtblIter.find 
                       Jc_typing.logic_functions_table
 		      f.jc_logic_info_tag
 		  in
@@ -2546,7 +2546,7 @@ and expr e =
 	      let with_body =
 		try
 		  let _f,_loc,_s,body =
-                    Jc_stdlib.Hashtbl.find 
+                    IntHashtblIter.find 
                       Jc_typing.functions_table f.jc_fun_info_tag
 		  in
 		  body <> None

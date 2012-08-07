@@ -2294,13 +2294,13 @@ parameter assign_char :
   reads charP___string_something_1_alloc_table,charP_c_149_alloc_table,charP_charM___string_something_1,charP_charM_c_149,char_xP_c_3_alloc_table,intP_a_2_alloc_table
   writes char_xP_char_xM_c_3
   { ((JC_<somenum>:
-     ((JC_<somenum>:
-      valid___string_something(charP___string_something_1_alloc_table,
-      charP_charM___string_something_1))
-     and ((JC_<somenum>:
-          valid___string_something_0(charP___string_something_1_alloc_table))
-         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+     ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+     and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and (JC_<somenum>:
+                 valid___string_something(charP___string_something_1_alloc_table,
+                 charP_charM___string_something_1))))))
     and (JC_<somenum>:
         not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
         char_xP_char_xM_c_3, pset_all(pset_singleton(c))))) }
@@ -2308,24 +2308,24 @@ parameter assign_char :
 parameter assign_char_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))}
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1))))))}
   unit
   reads charP___string_something_1_alloc_table,charP_c_149_alloc_table,charP_charM___string_something_1,charP_charM_c_149,char_xP_c_3_alloc_table,intP_a_2_alloc_table
   writes char_xP_char_xM_c_3
   { ((JC_<somenum>:
-     ((JC_<somenum>:
-      valid___string_something(charP___string_something_1_alloc_table,
-      charP_charM___string_something_1))
-     and ((JC_<somenum>:
-          valid___string_something_0(charP___string_something_1_alloc_table))
-         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+     ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+     and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and (JC_<somenum>:
+                 valid___string_something(charP___string_something_1_alloc_table,
+                 charP_charM___string_something_1))))))
     and (JC_<somenum>:
         not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
         char_xP_char_xM_c_3, pset_all(pset_singleton(c))))) }
@@ -2338,13 +2338,13 @@ parameter assign_int :
   reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
   writes intP_intM_a_2
   { ((JC_<somenum>:
-     ((JC_<somenum>:
-      valid___string_something(charP___string_something_1_alloc_table,
-      charP_charM___string_something_1))
-     and ((JC_<somenum>:
-          valid___string_something_0(charP___string_something_1_alloc_table))
-         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+     ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+     and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and (JC_<somenum>:
+                 valid___string_something(charP___string_something_1_alloc_table,
+                 charP_charM___string_something_1))))))
     and (JC_<somenum>:
         not_assigns(intP_a_2_alloc_table@, intP_intM_a_2@, intP_intM_a_2,
         pset_all(pset_singleton(a))))) }
@@ -2352,24 +2352,24 @@ parameter assign_int :
 parameter assign_int_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))}
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1))))))}
   unit
   reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
   writes intP_intM_a_2
   { ((JC_<somenum>:
-     ((JC_<somenum>:
-      valid___string_something(charP___string_something_1_alloc_table,
-      charP_charM___string_something_1))
-     and ((JC_<somenum>:
-          valid___string_something_0(charP___string_something_1_alloc_table))
-         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+     ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+     and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and (JC_<somenum>:
+                 valid___string_something(charP___string_something_1_alloc_table,
+                 charP_charM___string_something_1))))))
     and (JC_<somenum>:
         not_assigns(intP_a_2_alloc_table@, intP_intM_a_2@, intP_intM_a_2,
         pset_all(pset_singleton(a))))) }
@@ -2383,13 +2383,13 @@ parameter foo :
      reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
      writes intP_intM_a_0_94
      { ((JC_<somenum>:
-        ((JC_<somenum>:
-         valid___string_something(charP___string_something_1_alloc_table,
-         charP_charM___string_something_1))
-        and ((JC_<somenum>:
-             valid___string_something_0(charP___string_something_1_alloc_table))
-            and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+        ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+            and ((JC_<somenum>:
+                 valid___string_something_0(charP___string_something_1_alloc_table))
+                and (JC_<somenum>:
+                    valid___string_something(charP___string_something_1_alloc_table,
+                    charP_charM___string_something_1))))))
        and (JC_<somenum>:
            not_assigns(intP_a_0_94_alloc_table, intP_intM_a_0_94@,
            intP_intM_a_0_94, pset_all(pset_singleton(a_0))))) }
@@ -2405,24 +2405,24 @@ parameter foo_requires :
         and (JC_<somenum>:
             ge_int(offset_max(intP_a_0_94_alloc_table, a_0),
             sub_int(aLength, (1))))))
-       and ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1)))))))}
      unit
      reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
      writes intP_intM_a_0_94
      { ((JC_<somenum>:
-        ((JC_<somenum>:
-         valid___string_something(charP___string_something_1_alloc_table,
-         charP_charM___string_something_1))
-        and ((JC_<somenum>:
-             valid___string_something_0(charP___string_something_1_alloc_table))
-            and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+        ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+            and ((JC_<somenum>:
+                 valid___string_something_0(charP___string_something_1_alloc_table))
+                and (JC_<somenum>:
+                    valid___string_something(charP___string_something_1_alloc_table,
+                    charP_charM___string_something_1))))))
        and (JC_<somenum>:
            not_assigns(intP_a_0_94_alloc_table, intP_intM_a_0_94@,
            intP_intM_a_0_94, pset_all(pset_singleton(a_0))))) }
@@ -2433,13 +2433,13 @@ parameter main :
   reads charP___string_something_1_alloc_table,charP_c_149_alloc_table,charP_charM___string_something_1,charP_charM_c_149,char_xP_c_3_alloc_table,intP_a_2_alloc_table
   writes char_xP_char_xM_c_3,intP_intM_a_2
   { ((JC_<somenum>:
-     ((JC_<somenum>:
-      valid___string_something(charP___string_something_1_alloc_table,
-      charP_charM___string_something_1))
-     and ((JC_<somenum>:
-          valid___string_something_0(charP___string_something_1_alloc_table))
-         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+     ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+     and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and (JC_<somenum>:
+                 valid___string_something(charP___string_something_1_alloc_table,
+                 charP_charM___string_something_1))))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
@@ -2451,24 +2451,24 @@ parameter main :
 parameter main_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))}
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1))))))}
   unit
   reads charP___string_something_1_alloc_table,charP_c_149_alloc_table,charP_charM___string_something_1,charP_charM_c_149,char_xP_c_3_alloc_table,intP_a_2_alloc_table
   writes char_xP_char_xM_c_3,intP_intM_a_2
   { ((JC_<somenum>:
-     ((JC_<somenum>:
-      valid___string_something(charP___string_something_1_alloc_table,
-      charP_charM___string_something_1))
-     and ((JC_<somenum>:
-          valid___string_something_0(charP___string_something_1_alloc_table))
-         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+     ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+     and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and (JC_<somenum>:
+                 valid___string_something(charP___string_something_1_alloc_table,
+                 charP_charM___string_something_1))))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
@@ -2486,33 +2486,33 @@ parameter memchr_0 :
       { } charP pointer
       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
       { ((JC_<somenum>:
-         ((JC_<somenum>:
-          valid___string_something(charP___string_something_1_alloc_table,
-          charP_charM___string_something_1))
-         and ((JC_<somenum>:
-              valid___string_something_0(charP___string_something_1_alloc_table))
-             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_something(charP___string_something_1_alloc_table,
+                     charP_charM___string_something_1))))))
         and (((not (memchr(s_2, c_0_0, n_1, charP_charM_s_25) = true)) ->
               (JC_<somenum>:
               ((JC_<somenum>: (result = null))
-              and ((JC_<somenum>:
-                   valid___string_something(charP___string_something_1_alloc_table,
-                   charP_charM___string_something_1))
-                  and ((JC_<somenum>:
-                       valid___string_something_0(charP___string_something_1_alloc_table))
-                      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                          and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+              and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                      and ((JC_<somenum>:
+                           valid___string_something_0(charP___string_something_1_alloc_table))
+                          and (JC_<somenum>:
+                              valid___string_something(charP___string_something_1_alloc_table,
+                              charP_charM___string_something_1))))))))
             and (((memchr(s_2, c_0_0, n_1, charP_charM_s_25) = true) ->
                   (JC_<somenum>:
                   ((JC_<somenum>: (select(charP_charM_s_25, result) = c_0_0))
-                  and ((JC_<somenum>:
-                       valid___string_something(charP___string_something_1_alloc_table,
-                       charP_charM___string_something_1))
-                      and ((JC_<somenum>:
-                           valid___string_something_0(charP___string_something_1_alloc_table))
-                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+                  and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                          and ((JC_<somenum>:
+                               valid___string_something_0(charP___string_something_1_alloc_table))
+                              and (JC_<somenum>:
+                                  valid___string_something(charP___string_something_1_alloc_table,
+                                  charP_charM___string_something_1))))))))
                 and (JC_<somenum>:
                     ((JC_<somenum>: (result = s_2))
                     and (JC_<somenum>: same_block(result, s_2))))))) }
@@ -2529,43 +2529,43 @@ parameter memchr_0_requires :
          and (JC_<somenum>:
              ge_int(offset_max(charP_s_25_alloc_table, s_2),
              sub_int(n_1, (1))))))
-        and ((JC_<somenum>:
-             valid___string_something(charP___string_something_1_alloc_table,
-             charP_charM___string_something_1))
-            and ((JC_<somenum>:
-                 valid___string_something_0(charP___string_something_1_alloc_table))
-                and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                    and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+            and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                and ((JC_<somenum>:
+                     valid___string_something_0(charP___string_something_1_alloc_table))
+                    and (JC_<somenum>:
+                        valid___string_something(charP___string_something_1_alloc_table,
+                        charP_charM___string_something_1)))))))}
       charP pointer
       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
       { ((JC_<somenum>:
-         ((JC_<somenum>:
-          valid___string_something(charP___string_something_1_alloc_table,
-          charP_charM___string_something_1))
-         and ((JC_<somenum>:
-              valid___string_something_0(charP___string_something_1_alloc_table))
-             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_something(charP___string_something_1_alloc_table,
+                     charP_charM___string_something_1))))))
         and (((not (memchr(s_2, c_0_0, n_1, charP_charM_s_25) = true)) ->
               (JC_<somenum>:
               ((JC_<somenum>: (result = null))
-              and ((JC_<somenum>:
-                   valid___string_something(charP___string_something_1_alloc_table,
-                   charP_charM___string_something_1))
-                  and ((JC_<somenum>:
-                       valid___string_something_0(charP___string_something_1_alloc_table))
-                      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                          and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+              and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                      and ((JC_<somenum>:
+                           valid___string_something_0(charP___string_something_1_alloc_table))
+                          and (JC_<somenum>:
+                              valid___string_something(charP___string_something_1_alloc_table,
+                              charP_charM___string_something_1))))))))
             and (((memchr(s_2, c_0_0, n_1, charP_charM_s_25) = true) ->
                   (JC_<somenum>:
                   ((JC_<somenum>: (select(charP_charM_s_25, result) = c_0_0))
-                  and ((JC_<somenum>:
-                       valid___string_something(charP___string_something_1_alloc_table,
-                       charP_charM___string_something_1))
-                      and ((JC_<somenum>:
-                           valid___string_something_0(charP___string_something_1_alloc_table))
-                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+                  and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                          and ((JC_<somenum>:
+                               valid___string_something_0(charP___string_something_1_alloc_table))
+                              and (JC_<somenum>:
+                                  valid___string_something(charP___string_something_1_alloc_table,
+                                  charP_charM___string_something_1))))))))
                 and (JC_<somenum>:
                     ((JC_<somenum>: (result = s_2))
                     and (JC_<somenum>: same_block(result, s_2))))))) }
@@ -2581,13 +2581,13 @@ parameter memcmp_0 :
         { } int
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               (result = memcmp(s1_2, s2_2, n_2_0, charP_charM_s2_24,
                         charP_charM_s1_23)))) }
@@ -2611,23 +2611,23 @@ parameter memcmp_0_requires :
                    and (JC_<somenum>:
                        ge_int(offset_max(charP_s2_24_alloc_table, s2_2),
                        sub_int(n_2_0, (1))))))))
-          and ((JC_<somenum>:
-               valid___string_something(charP___string_something_1_alloc_table,
-               charP_charM___string_something_1))
-              and ((JC_<somenum>:
-                   valid___string_something_0(charP___string_something_1_alloc_table))
-                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+          and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and ((JC_<somenum>:
+                       valid___string_something_0(charP___string_something_1_alloc_table))
+                      and (JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1)))))))}
         int
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               (result = memcmp(s1_2, s2_2, n_2_0, charP_charM_s2_24,
                         charP_charM_s1_23)))) }
@@ -2644,13 +2644,13 @@ parameter memcpy :
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_1_28,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         writes charP_charM_dest_1_28
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               ((JC_<somenum>:
                ((JC_<somenum>:
@@ -2683,24 +2683,24 @@ parameter memcpy_requires :
                    and (JC_<somenum>:
                        ge_int(offset_max(charP_src_29_alloc_table, src),
                        sub_int(n_3, (1))))))))
-          and ((JC_<somenum>:
-               valid___string_something(charP___string_something_1_alloc_table,
-               charP_charM___string_something_1))
-              and ((JC_<somenum>:
-                   valid___string_something_0(charP___string_something_1_alloc_table))
-                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+          and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and ((JC_<somenum>:
+                       valid___string_something_0(charP___string_something_1_alloc_table))
+                      and (JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1)))))))}
         charP pointer
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_1_28,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         writes charP_charM_dest_1_28
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               ((JC_<somenum>:
                ((JC_<somenum>:
@@ -2725,13 +2725,13 @@ parameter memmove :
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_2_32,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         writes charP_charM_dest_2_32
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               ((JC_<somenum>:
                ((JC_<somenum>:
@@ -2766,24 +2766,24 @@ parameter memmove_requires :
                    and (JC_<somenum>:
                        ge_int(offset_max(charP_src_0_33_alloc_table, src_0),
                        sub_int(n_4_0, (1))))))))
-          and ((JC_<somenum>:
-               valid___string_something(charP___string_something_1_alloc_table,
-               charP_charM___string_something_1))
-              and ((JC_<somenum>:
-                   valid___string_something_0(charP___string_something_1_alloc_table))
-                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+          and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and ((JC_<somenum>:
+                       valid___string_something_0(charP___string_something_1_alloc_table))
+                      and (JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1)))))))}
         charP pointer
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_2_32,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         writes charP_charM_dest_2_32
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               ((JC_<somenum>:
                ((JC_<somenum>:
@@ -2807,13 +2807,13 @@ parameter memset_0 :
       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_s_0_36,char_xP_c_3_alloc_table,intP_a_2_alloc_table
       writes charP_charM_s_0_36
       { ((JC_<somenum>:
-         ((JC_<somenum>:
-          valid___string_something(charP___string_something_1_alloc_table,
-          charP_charM___string_something_1))
-         and ((JC_<somenum>:
-              valid___string_something_0(charP___string_something_1_alloc_table))
-             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_something(charP___string_something_1_alloc_table,
+                     charP_charM___string_something_1))))))
         and (JC_<somenum>:
             ((JC_<somenum>:
              ((JC_<somenum>:
@@ -2837,24 +2837,24 @@ parameter memset_0_requires :
          and (JC_<somenum>:
              ge_int(offset_max(charP_s_0_36_alloc_table, s_0_0),
              sub_int(n_5, (1))))))
-        and ((JC_<somenum>:
-             valid___string_something(charP___string_something_1_alloc_table,
-             charP_charM___string_something_1))
-            and ((JC_<somenum>:
-                 valid___string_something_0(charP___string_something_1_alloc_table))
-                and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                    and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+            and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                and ((JC_<somenum>:
+                     valid___string_something_0(charP___string_something_1_alloc_table))
+                    and (JC_<somenum>:
+                        valid___string_something(charP___string_something_1_alloc_table,
+                        charP_charM___string_something_1)))))))}
       charP pointer
       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_s_0_36,char_xP_c_3_alloc_table,intP_a_2_alloc_table
       writes charP_charM_s_0_36
       { ((JC_<somenum>:
-         ((JC_<somenum>:
-          valid___string_something(charP___string_something_1_alloc_table,
-          charP_charM___string_something_1))
-         and ((JC_<somenum>:
-              valid___string_something_0(charP___string_something_1_alloc_table))
-             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_something(charP___string_something_1_alloc_table,
+                     charP_charM___string_something_1))))))
         and (JC_<somenum>:
             ((JC_<somenum>:
              ((JC_<somenum>:
@@ -2877,13 +2877,13 @@ parameter strcat :
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_3_78,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        writes charP_charM_dest_3_78
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              ((JC_<somenum>:
               ((JC_<somenum>:
@@ -2921,24 +2921,24 @@ parameter strcat_requires :
                   and (JC_<somenum>:
                       valid_string(src_1, charP_src_1_79_alloc_table,
                       charP_charM_src_1_79))))))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_3_78,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        writes charP_charM_dest_3_78
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              ((JC_<somenum>:
               ((JC_<somenum>:
@@ -2965,23 +2965,23 @@ parameter strchr_0 :
        { } charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (((not (strchr(s_1_0, c_2, charP_charM_s_1_46) = true)) ->
                (JC_<somenum>:
                ((JC_<somenum>: (result = null))
-               and ((JC_<somenum>:
-                    valid___string_something(charP___string_something_1_alloc_table,
-                    charP_charM___string_something_1))
-                   and ((JC_<somenum>:
-                        valid___string_something_0(charP___string_something_1_alloc_table))
-                       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                           and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+               and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                   and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                       and ((JC_<somenum>:
+                            valid___string_something_0(charP___string_something_1_alloc_table))
+                           and (JC_<somenum>:
+                               valid___string_something(charP___string_something_1_alloc_table,
+                               charP_charM___string_something_1))))))))
              and ((strchr(s_1_0, c_2, charP_charM_s_1_46) = true) ->
                   (JC_<somenum>:
                   ((JC_<somenum>:
@@ -2990,13 +2990,13 @@ parameter strchr_0 :
                        and (JC_<somenum>:
                            valid_string(result, charP_result_47_alloc_table,
                            charP_charM_result_47)))))
-                  and ((JC_<somenum>:
-                       valid___string_something(charP___string_something_1_alloc_table,
-                       charP_charM___string_something_1))
-                      and ((JC_<somenum>:
-                           valid___string_something_0(charP___string_something_1_alloc_table))
-                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))))) }
+                  and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                          and ((JC_<somenum>:
+                               valid___string_something_0(charP___string_something_1_alloc_table))
+                              and (JC_<somenum>:
+                                  valid___string_something(charP___string_something_1_alloc_table,
+                                  charP_charM___string_something_1)))))))))) }
 
 parameter strchr_0_requires :
  s_1_0:charP pointer ->
@@ -3008,33 +3008,33 @@ parameter strchr_0_requires :
        { (JC_<somenum>:
          ((JC_<somenum>:
           valid_string(s_1_0, charP_s_1_46_alloc_table, charP_charM_s_1_46))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (((not (strchr(s_1_0, c_2, charP_charM_s_1_46) = true)) ->
                (JC_<somenum>:
                ((JC_<somenum>: (result = null))
-               and ((JC_<somenum>:
-                    valid___string_something(charP___string_something_1_alloc_table,
-                    charP_charM___string_something_1))
-                   and ((JC_<somenum>:
-                        valid___string_something_0(charP___string_something_1_alloc_table))
-                       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                           and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+               and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                   and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                       and ((JC_<somenum>:
+                            valid___string_something_0(charP___string_something_1_alloc_table))
+                           and (JC_<somenum>:
+                               valid___string_something(charP___string_something_1_alloc_table,
+                               charP_charM___string_something_1))))))))
              and ((strchr(s_1_0, c_2, charP_charM_s_1_46) = true) ->
                   (JC_<somenum>:
                   ((JC_<somenum>:
@@ -3043,13 +3043,13 @@ parameter strchr_0_requires :
                        and (JC_<somenum>:
                            valid_string(result, charP_result_47_alloc_table,
                            charP_charM_result_47)))))
-                  and ((JC_<somenum>:
-                       valid___string_something(charP___string_something_1_alloc_table,
-                       charP_charM___string_something_1))
-                      and ((JC_<somenum>:
-                           valid___string_something_0(charP___string_something_1_alloc_table))
-                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))))) }
+                  and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                          and ((JC_<somenum>:
+                               valid___string_something_0(charP___string_something_1_alloc_table))
+                              and (JC_<somenum>:
+                                  valid___string_something(charP___string_something_1_alloc_table,
+                                  charP_charM___string_something_1)))))))))) }
 
 parameter strcmp_0 :
  s1_0_0:charP pointer ->
@@ -3061,13 +3061,13 @@ parameter strcmp_0 :
        { } int
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              (result = strcmp(s1_0_0, s2_0_0, charP_charM_s2_0_41,
                        charP_charM_s1_0_40)))) }
@@ -3087,23 +3087,23 @@ parameter strcmp_0_requires :
           and (JC_<somenum>:
               valid_string(s2_0_0, charP_s2_0_41_alloc_table,
               charP_charM_s2_0_41))))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        int
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              (result = strcmp(s1_0_0, s2_0_0, charP_charM_s2_0_41,
                        charP_charM_s1_0_40)))) }
@@ -3118,13 +3118,13 @@ parameter strcoll :
        { } int
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { (JC_<somenum>:
-         ((JC_<somenum>:
-          valid___string_something(charP___string_something_1_alloc_table,
-          charP_charM___string_something_1))
-         and ((JC_<somenum>:
-              valid___string_something_0(charP___string_something_1_alloc_table))
-             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+         ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_something(charP___string_something_1_alloc_table,
+                     charP_charM___string_something_1)))))) }
 
 parameter strcoll_requires :
  s1_1_0:charP pointer ->
@@ -3141,23 +3141,23 @@ parameter strcoll_requires :
           and (JC_<somenum>:
               valid_string(s2_1_0, charP_s2_1_45_alloc_table,
               charP_charM_s2_1_45))))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        int
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { (JC_<somenum>:
-         ((JC_<somenum>:
-          valid___string_something(charP___string_something_1_alloc_table,
-          charP_charM___string_something_1))
-         and ((JC_<somenum>:
-              valid___string_something_0(charP___string_something_1_alloc_table))
-             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+         ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_something(charP___string_something_1_alloc_table,
+                     charP_charM___string_something_1)))))) }
 
 parameter strcpy :
  dest_4:charP pointer ->
@@ -3170,13 +3170,13 @@ parameter strcpy :
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_4_70,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        writes charP_charM_dest_4_70
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              ((JC_<somenum>:
               ((JC_<somenum>:
@@ -3207,24 +3207,24 @@ parameter strcpy_requires :
               and (JC_<somenum>:
                   valid_string(src_2, charP_src_2_71_alloc_table,
                   charP_charM_src_2_71)))))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_4_70,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        writes charP_charM_dest_4_70
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              ((JC_<somenum>:
               ((JC_<somenum>:
@@ -3248,13 +3248,13 @@ parameter strcspn :
        { } int
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              ((JC_<somenum>: le_int((0), result))
              and (JC_<somenum>: le_int(result, strlen(s_2_0, charP_charM_s_2_52)))))) }
@@ -3273,23 +3273,23 @@ parameter strcspn_requires :
           and (JC_<somenum>:
               valid_string(reject, charP_reject_53_alloc_table,
               charP_charM_reject_53))))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        int
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              ((JC_<somenum>: le_int((0), result))
              and (JC_<somenum>: le_int(result, strlen(s_2_0, charP_charM_s_2_52)))))) }
@@ -3303,13 +3303,13 @@ parameter strdup :
       { } charP pointer
       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
       { ((JC_<somenum>:
-         ((JC_<somenum>:
-          valid___string_something(charP___string_something_1_alloc_table,
-          charP_charM___string_something_1))
-         and ((JC_<somenum>:
-              valid___string_something_0(charP___string_something_1_alloc_table))
-             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_something(charP___string_something_1_alloc_table,
+                     charP_charM___string_something_1))))))
         and (JC_<somenum>:
             ((JC_<somenum>:
              le_int(offset_min(charP_result_89_alloc_table, result), (0)))
@@ -3329,23 +3329,23 @@ parameter strdup_requires :
       { (JC_<somenum>:
         ((JC_<somenum>:
          valid_string(s_3_0, charP_s_3_88_alloc_table, charP_charM_s_3_88))
-        and ((JC_<somenum>:
-             valid___string_something(charP___string_something_1_alloc_table,
-             charP_charM___string_something_1))
-            and ((JC_<somenum>:
-                 valid___string_something_0(charP___string_something_1_alloc_table))
-                and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                    and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+            and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                and ((JC_<somenum>:
+                     valid___string_something_0(charP___string_something_1_alloc_table))
+                    and (JC_<somenum>:
+                        valid___string_something(charP___string_something_1_alloc_table,
+                        charP_charM___string_something_1)))))))}
       charP pointer
       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
       { ((JC_<somenum>:
-         ((JC_<somenum>:
-          valid___string_something(charP___string_something_1_alloc_table,
-          charP_charM___string_something_1))
-         and ((JC_<somenum>:
-              valid___string_something_0(charP___string_something_1_alloc_table))
-             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_something(charP___string_something_1_alloc_table,
+                     charP_charM___string_something_1))))))
         and (JC_<somenum>:
             ((JC_<somenum>:
              le_int(offset_min(charP_result_89_alloc_table, result), (0)))
@@ -3363,13 +3363,13 @@ parameter strerror :
     { } charP pointer
     reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
     { ((JC_<somenum>:
-       ((JC_<somenum>:
-        valid___string_something(charP___string_something_1_alloc_table,
-        charP_charM___string_something_1))
-       and ((JC_<somenum>:
-            valid___string_something_0(charP___string_something_1_alloc_table))
-           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-               and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+       ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and (JC_<somenum>:
+                   valid___string_something(charP___string_something_1_alloc_table,
+                   charP_charM___string_something_1))))))
       and (JC_<somenum>:
           valid_string(result, charP_result_68_alloc_table,
           charP_charM_result_68))) }
@@ -3379,23 +3379,23 @@ parameter strerror_requires :
   charP_result_68_alloc_table:charP alloc_table ->
    charP_charM_result_68:(charP, int) memory ->
     { (JC_<somenum>:
-      ((JC_<somenum>:
-       valid___string_something(charP___string_something_1_alloc_table,
-       charP_charM___string_something_1))
-      and ((JC_<somenum>:
-           valid___string_something_0(charP___string_something_1_alloc_table))
-          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))}
+      ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and (JC_<somenum>:
+                  valid___string_something(charP___string_something_1_alloc_table,
+                  charP_charM___string_something_1))))))}
     charP pointer
     reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
     { ((JC_<somenum>:
-       ((JC_<somenum>:
-        valid___string_something(charP___string_something_1_alloc_table,
-        charP_charM___string_something_1))
-       and ((JC_<somenum>:
-            valid___string_something_0(charP___string_something_1_alloc_table))
-           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-               and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+       ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and (JC_<somenum>:
+                   valid___string_something(charP___string_something_1_alloc_table,
+                   charP_charM___string_something_1))))))
       and (JC_<somenum>:
           valid_string(result, charP_result_68_alloc_table,
           charP_charM_result_68))) }
@@ -3407,13 +3407,13 @@ parameter strlen_0 :
     { } int
     reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
     { ((JC_<somenum>:
-       ((JC_<somenum>:
-        valid___string_something(charP___string_something_1_alloc_table,
-        charP_charM___string_something_1))
-       and ((JC_<somenum>:
-            valid___string_something_0(charP___string_something_1_alloc_table))
-           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-               and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+       ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and (JC_<somenum>:
+                   valid___string_something(charP___string_something_1_alloc_table,
+                   charP_charM___string_something_1))))))
       and (JC_<somenum>: (result = strlen(s_4, charP_charM_s_4_39)))) }
 
 parameter strlen_0_requires :
@@ -3423,23 +3423,23 @@ parameter strlen_0_requires :
     { (JC_<somenum>:
       ((JC_<somenum>:
        valid_string(s_4, charP_s_4_39_alloc_table, charP_charM_s_4_39))
-      and ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+      and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1)))))))}
     int
     reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
     { ((JC_<somenum>:
-       ((JC_<somenum>:
-        valid___string_something(charP___string_something_1_alloc_table,
-        charP_charM___string_something_1))
-       and ((JC_<somenum>:
-            valid___string_something_0(charP___string_something_1_alloc_table))
-           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-               and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+       ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and (JC_<somenum>:
+                   valid___string_something(charP___string_something_1_alloc_table,
+                   charP_charM___string_something_1))))))
       and (JC_<somenum>: (result = strlen(s_4, charP_charM_s_4_39)))) }
 
 parameter strncat :
@@ -3454,13 +3454,13 @@ parameter strncat :
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_5_82,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         writes charP_charM_dest_5_82
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and ((lt_int(n_6, strlen(src_3, charP_charM_src_3_83)) ->
                 (JC_<somenum>:
                 ((JC_<somenum>:
@@ -3468,13 +3468,13 @@ parameter strncat :
                   (strlen(dest_5, charP_charM_dest_5_82) = add_int(strlen(dest_5,
                                                                    charP_charM_dest_5_82@),
                                                            n_6)))
-                 and ((JC_<somenum>:
-                      valid___string_something(charP___string_something_1_alloc_table,
-                      charP_charM___string_something_1))
-                     and ((JC_<somenum>:
-                          valid___string_something_0(charP___string_something_1_alloc_table))
-                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))
+                 and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                     and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                         and ((JC_<somenum>:
+                              valid___string_something_0(charP___string_something_1_alloc_table))
+                             and (JC_<somenum>:
+                                 valid___string_something(charP___string_something_1_alloc_table,
+                                 charP_charM___string_something_1)))))))
                 and (JC_<somenum>:
                     not_assigns(charP_dest_5_82_alloc_table,
                     charP_charM_dest_5_82@, charP_charM_dest_5_82,
@@ -3489,14 +3489,13 @@ parameter strncat :
                                                                charP_charM_dest_5_82@),
                                                                strlen(src_3,
                                                                charP_charM_src_3_83))))
-                     and ((JC_<somenum>:
-                          valid___string_something(charP___string_something_1_alloc_table,
-                          charP_charM___string_something_1))
-                         and ((JC_<somenum>:
-                              valid___string_something_0(charP___string_something_1_alloc_table))
-                             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                             and ((JC_<somenum>:
+                                  valid___string_something_0(charP___string_something_1_alloc_table))
                                  and (JC_<somenum>:
-                                     valid_c(char_xP_c_3_alloc_table)))))))
+                                     valid___string_something(charP___string_something_1_alloc_table,
+                                     charP_charM___string_something_1)))))))
                     and (JC_<somenum>:
                         not_assigns(charP_dest_5_82_alloc_table,
                         charP_charM_dest_5_82@, charP_charM_dest_5_82,
@@ -3537,24 +3536,24 @@ parameter strncat_requires :
                    and (JC_<somenum>:
                        valid_string(src_3, charP_src_3_83_alloc_table,
                        charP_charM_src_3_83))))))
-          and ((JC_<somenum>:
-               valid___string_something(charP___string_something_1_alloc_table,
-               charP_charM___string_something_1))
-              and ((JC_<somenum>:
-                   valid___string_something_0(charP___string_something_1_alloc_table))
-                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+          and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and ((JC_<somenum>:
+                       valid___string_something_0(charP___string_something_1_alloc_table))
+                      and (JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1)))))))}
         charP pointer
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_5_82,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         writes charP_charM_dest_5_82
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and ((lt_int(n_6, strlen(src_3, charP_charM_src_3_83)) ->
                 (JC_<somenum>:
                 ((JC_<somenum>:
@@ -3562,13 +3561,13 @@ parameter strncat_requires :
                   (strlen(dest_5, charP_charM_dest_5_82) = add_int(strlen(dest_5,
                                                                    charP_charM_dest_5_82@),
                                                            n_6)))
-                 and ((JC_<somenum>:
-                      valid___string_something(charP___string_something_1_alloc_table,
-                      charP_charM___string_something_1))
-                     and ((JC_<somenum>:
-                          valid___string_something_0(charP___string_something_1_alloc_table))
-                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))
+                 and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                     and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                         and ((JC_<somenum>:
+                              valid___string_something_0(charP___string_something_1_alloc_table))
+                             and (JC_<somenum>:
+                                 valid___string_something(charP___string_something_1_alloc_table,
+                                 charP_charM___string_something_1)))))))
                 and (JC_<somenum>:
                     not_assigns(charP_dest_5_82_alloc_table,
                     charP_charM_dest_5_82@, charP_charM_dest_5_82,
@@ -3583,14 +3582,13 @@ parameter strncat_requires :
                                                                charP_charM_dest_5_82@),
                                                                strlen(src_3,
                                                                charP_charM_src_3_83))))
-                     and ((JC_<somenum>:
-                          valid___string_something(charP___string_something_1_alloc_table,
-                          charP_charM___string_something_1))
-                         and ((JC_<somenum>:
-                              valid___string_something_0(charP___string_something_1_alloc_table))
-                             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                             and ((JC_<somenum>:
+                                  valid___string_something_0(charP___string_something_1_alloc_table))
                                  and (JC_<somenum>:
-                                     valid_c(char_xP_c_3_alloc_table)))))))
+                                     valid___string_something(charP___string_something_1_alloc_table,
+                                     charP_charM___string_something_1)))))))
                     and (JC_<somenum>:
                         not_assigns(charP_dest_5_82_alloc_table,
                         charP_charM_dest_5_82@, charP_charM_dest_5_82,
@@ -3621,13 +3619,13 @@ parameter strncmp_0 :
         { } int
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               (result = strncmp(s1_2_0, s2_2_0, n_7, charP_charM_s2_2_43,
                         charP_charM_s1_2_42)))) }
@@ -3648,23 +3646,23 @@ parameter strncmp_0_requires :
            and (JC_<somenum>:
                valid_string(s2_2_0, charP_s2_2_43_alloc_table,
                charP_charM_s2_2_43))))
-          and ((JC_<somenum>:
-               valid___string_something(charP___string_something_1_alloc_table,
-               charP_charM___string_something_1))
-              and ((JC_<somenum>:
-                   valid___string_something_0(charP___string_something_1_alloc_table))
-                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+          and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and ((JC_<somenum>:
+                       valid___string_something_0(charP___string_something_1_alloc_table))
+                      and (JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1)))))))}
         int
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               (result = strncmp(s1_2_0, s2_2_0, n_7, charP_charM_s2_2_43,
                         charP_charM_s1_2_42)))) }
@@ -3681,26 +3679,26 @@ parameter strncpy :
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_6_74,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         writes charP_charM_dest_6_74
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and ((le_int(n_8, strlen(src_4, charP_charM_src_4_75)) ->
                 (JC_<somenum>:
                 ((JC_<somenum>:
                  ((JC_<somenum>:
                   (memcmp(dest_6, src_4, n_8, charP_charM_src_4_75,
                    charP_charM_dest_6_74) = (0)))
-                 and ((JC_<somenum>:
-                      valid___string_something(charP___string_something_1_alloc_table,
-                      charP_charM___string_something_1))
-                     and ((JC_<somenum>:
-                          valid___string_something_0(charP___string_something_1_alloc_table))
-                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))
+                 and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                     and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                         and ((JC_<somenum>:
+                              valid___string_something_0(charP___string_something_1_alloc_table))
+                             and (JC_<somenum>:
+                                 valid___string_something(charP___string_something_1_alloc_table,
+                                 charP_charM___string_something_1)))))))
                 and (JC_<somenum>:
                     not_assigns(charP_dest_6_74_alloc_table,
                     charP_charM_dest_6_74@, charP_charM_dest_6_74,
@@ -3714,14 +3712,13 @@ parameter strncpy :
                        (strcmp(dest_6, src_4, charP_charM_src_4_75,
                         charP_charM_dest_6_74) = (0)))
                       and (JC_<somenum>: same_block(result, dest_6))))
-                     and ((JC_<somenum>:
-                          valid___string_something(charP___string_something_1_alloc_table,
-                          charP_charM___string_something_1))
-                         and ((JC_<somenum>:
-                              valid___string_something_0(charP___string_something_1_alloc_table))
-                             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                             and ((JC_<somenum>:
+                                  valid___string_something_0(charP___string_something_1_alloc_table))
                                  and (JC_<somenum>:
-                                     valid_c(char_xP_c_3_alloc_table)))))))
+                                     valid___string_something(charP___string_something_1_alloc_table,
+                                     charP_charM___string_something_1)))))))
                     and (JC_<somenum>:
                         not_assigns(charP_dest_6_74_alloc_table,
                         charP_charM_dest_6_74@, charP_charM_dest_6_74,
@@ -3753,37 +3750,37 @@ parameter strncpy_requires :
                and (JC_<somenum>:
                    valid_string(src_4, charP_src_4_75_alloc_table,
                    charP_charM_src_4_75)))))
-          and ((JC_<somenum>:
-               valid___string_something(charP___string_something_1_alloc_table,
-               charP_charM___string_something_1))
-              and ((JC_<somenum>:
-                   valid___string_something_0(charP___string_something_1_alloc_table))
-                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+          and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and ((JC_<somenum>:
+                       valid___string_something_0(charP___string_something_1_alloc_table))
+                      and (JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1)))))))}
         charP pointer
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_6_74,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         writes charP_charM_dest_6_74
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and ((le_int(n_8, strlen(src_4, charP_charM_src_4_75)) ->
                 (JC_<somenum>:
                 ((JC_<somenum>:
                  ((JC_<somenum>:
                   (memcmp(dest_6, src_4, n_8, charP_charM_src_4_75,
                    charP_charM_dest_6_74) = (0)))
-                 and ((JC_<somenum>:
-                      valid___string_something(charP___string_something_1_alloc_table,
-                      charP_charM___string_something_1))
-                     and ((JC_<somenum>:
-                          valid___string_something_0(charP___string_something_1_alloc_table))
-                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))
+                 and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                     and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                         and ((JC_<somenum>:
+                              valid___string_something_0(charP___string_something_1_alloc_table))
+                             and (JC_<somenum>:
+                                 valid___string_something(charP___string_something_1_alloc_table,
+                                 charP_charM___string_something_1)))))))
                 and (JC_<somenum>:
                     not_assigns(charP_dest_6_74_alloc_table,
                     charP_charM_dest_6_74@, charP_charM_dest_6_74,
@@ -3797,14 +3794,13 @@ parameter strncpy_requires :
                        (strcmp(dest_6, src_4, charP_charM_src_4_75,
                         charP_charM_dest_6_74) = (0)))
                       and (JC_<somenum>: same_block(result, dest_6))))
-                     and ((JC_<somenum>:
-                          valid___string_something(charP___string_something_1_alloc_table,
-                          charP_charM___string_something_1))
-                         and ((JC_<somenum>:
-                              valid___string_something_0(charP___string_something_1_alloc_table))
-                             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                             and ((JC_<somenum>:
+                                  valid___string_something_0(charP___string_something_1_alloc_table))
                                  and (JC_<somenum>:
-                                     valid_c(char_xP_c_3_alloc_table)))))))
+                                     valid___string_something(charP___string_something_1_alloc_table,
+                                     charP_charM___string_something_1)))))))
                     and (JC_<somenum>:
                         not_assigns(charP_dest_6_74_alloc_table,
                         charP_charM_dest_6_74@, charP_charM_dest_6_74,
@@ -3828,13 +3824,13 @@ parameter strndup :
        { } charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              ((JC_<somenum>:
               le_int(offset_min(charP_result_92_alloc_table, result), (0)))
@@ -3860,23 +3856,23 @@ parameter strndup_requires :
        { (JC_<somenum>:
          ((JC_<somenum>:
           valid_string(s_5, charP_s_5_91_alloc_table, charP_charM_s_5_91))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              ((JC_<somenum>:
               le_int(offset_min(charP_result_92_alloc_table, result), (0)))
@@ -3902,13 +3898,13 @@ parameter strpbrk :
        { } charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>: ((result = null) or same_block(result, s_6)))) }
 
 parameter strpbrk_requires :
@@ -3925,23 +3921,23 @@ parameter strpbrk_requires :
           and (JC_<somenum>:
               valid_string(accept, charP_accept_57_alloc_table,
               charP_charM_accept_57))))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>: ((result = null) or same_block(result, s_6)))) }
 
 parameter strrchr :
@@ -3954,23 +3950,23 @@ parameter strrchr :
        { } charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (((not (strchr(s_7, c_3_0, charP_charM_s_7_49) = true)) ->
                (JC_<somenum>:
                ((JC_<somenum>: (result = null))
-               and ((JC_<somenum>:
-                    valid___string_something(charP___string_something_1_alloc_table,
-                    charP_charM___string_something_1))
-                   and ((JC_<somenum>:
-                        valid___string_something_0(charP___string_something_1_alloc_table))
-                       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                           and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+               and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                   and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                       and ((JC_<somenum>:
+                            valid___string_something_0(charP___string_something_1_alloc_table))
+                           and (JC_<somenum>:
+                               valid___string_something(charP___string_something_1_alloc_table,
+                               charP_charM___string_something_1))))))))
              and ((strchr(s_7, c_3_0, charP_charM_s_7_49) = true) ->
                   (JC_<somenum>:
                   ((JC_<somenum>:
@@ -3979,13 +3975,13 @@ parameter strrchr :
                        and (JC_<somenum>:
                            valid_string(result, charP_result_50_alloc_table,
                            charP_charM_result_50)))))
-                  and ((JC_<somenum>:
-                       valid___string_something(charP___string_something_1_alloc_table,
-                       charP_charM___string_something_1))
-                      and ((JC_<somenum>:
-                           valid___string_something_0(charP___string_something_1_alloc_table))
-                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))))) }
+                  and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                          and ((JC_<somenum>:
+                               valid___string_something_0(charP___string_something_1_alloc_table))
+                              and (JC_<somenum>:
+                                  valid___string_something(charP___string_something_1_alloc_table,
+                                  charP_charM___string_something_1)))))))))) }
 
 parameter strrchr_requires :
  s_7:charP pointer ->
@@ -3997,33 +3993,33 @@ parameter strrchr_requires :
        { (JC_<somenum>:
          ((JC_<somenum>:
           valid_string(s_7, charP_s_7_49_alloc_table, charP_charM_s_7_49))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (((not (strchr(s_7, c_3_0, charP_charM_s_7_49) = true)) ->
                (JC_<somenum>:
                ((JC_<somenum>: (result = null))
-               and ((JC_<somenum>:
-                    valid___string_something(charP___string_something_1_alloc_table,
-                    charP_charM___string_something_1))
-                   and ((JC_<somenum>:
-                        valid___string_something_0(charP___string_something_1_alloc_table))
-                       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                           and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+               and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                   and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                       and ((JC_<somenum>:
+                            valid___string_something_0(charP___string_something_1_alloc_table))
+                           and (JC_<somenum>:
+                               valid___string_something(charP___string_something_1_alloc_table,
+                               charP_charM___string_something_1))))))))
              and ((strchr(s_7, c_3_0, charP_charM_s_7_49) = true) ->
                   (JC_<somenum>:
                   ((JC_<somenum>:
@@ -4032,13 +4028,13 @@ parameter strrchr_requires :
                        and (JC_<somenum>:
                            valid_string(result, charP_result_50_alloc_table,
                            charP_charM_result_50)))))
-                  and ((JC_<somenum>:
-                       valid___string_something(charP___string_something_1_alloc_table,
-                       charP_charM___string_something_1))
-                      and ((JC_<somenum>:
-                           valid___string_something_0(charP___string_something_1_alloc_table))
-                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))))) }
+                  and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+                      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                          and ((JC_<somenum>:
+                               valid___string_something_0(charP___string_something_1_alloc_table))
+                              and (JC_<somenum>:
+                                  valid___string_something(charP___string_something_1_alloc_table,
+                                  charP_charM___string_something_1)))))))))) }
 
 parameter strspn :
  s_8:charP pointer ->
@@ -4050,13 +4046,13 @@ parameter strspn :
        { } int
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              ((JC_<somenum>: le_int((0), result))
              and (JC_<somenum>: le_int(result, strlen(s_8, charP_charM_s_8_54)))))) }
@@ -4075,23 +4071,23 @@ parameter strspn_requires :
           and (JC_<somenum>:
               valid_string(accept_0, charP_accept_0_55_alloc_table,
               charP_charM_accept_0_55))))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        int
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
-          ((JC_<somenum>:
-           valid___string_something(charP___string_something_1_alloc_table,
-           charP_charM___string_something_1))
-          and ((JC_<somenum>:
-               valid___string_something_0(charP___string_something_1_alloc_table))
-              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and (JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))))))
          and (JC_<somenum>:
              ((JC_<somenum>: le_int((0), result))
              and (JC_<somenum>: le_int(result, strlen(s_8, charP_charM_s_8_54)))))) }
@@ -4107,13 +4103,13 @@ parameter strstr :
         { } charP pointer
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               ((result = null)
               or (same_block(result, haystack)
@@ -4137,23 +4133,23 @@ parameter strstr_requires :
            and (JC_<somenum>:
                valid_string(needle, charP_needle_61_alloc_table,
                charP_charM_needle_61))))
-          and ((JC_<somenum>:
-               valid___string_something(charP___string_something_1_alloc_table,
-               charP_charM___string_something_1))
-              and ((JC_<somenum>:
-                   valid___string_something_0(charP___string_something_1_alloc_table))
-                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+          and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and ((JC_<somenum>:
+                       valid___string_something_0(charP___string_something_1_alloc_table))
+                      and (JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1)))))))}
         charP pointer
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               ((result = null)
               or (same_block(result, haystack)
@@ -4171,13 +4167,13 @@ parameter strtok :
        { } charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { (JC_<somenum>:
-         ((JC_<somenum>:
-          valid___string_something(charP___string_something_1_alloc_table,
-          charP_charM___string_something_1))
-         and ((JC_<somenum>:
-              valid___string_something_0(charP___string_something_1_alloc_table))
-             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+         ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_something(charP___string_something_1_alloc_table,
+                     charP_charM___string_something_1)))))) }
 
 parameter strtok_requires :
  s_9:charP pointer ->
@@ -4194,23 +4190,23 @@ parameter strtok_requires :
           and (JC_<somenum>:
               valid_string(delim, charP_delim_65_alloc_table,
               charP_charM_delim_65))))
-         and ((JC_<somenum>:
-              valid___string_something(charP___string_something_1_alloc_table,
-              charP_charM___string_something_1))
-             and ((JC_<somenum>:
-                  valid___string_something_0(charP___string_something_1_alloc_table))
-                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+         and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and ((JC_<somenum>:
+                      valid___string_something_0(charP___string_something_1_alloc_table))
+                     and (JC_<somenum>:
+                         valid___string_something(charP___string_something_1_alloc_table,
+                         charP_charM___string_something_1)))))))}
        charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { (JC_<somenum>:
-         ((JC_<somenum>:
-          valid___string_something(charP___string_something_1_alloc_table,
-          charP_charM___string_something_1))
-         and ((JC_<somenum>:
-              valid___string_something_0(charP___string_something_1_alloc_table))
-             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+         ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and (JC_<somenum>:
+                     valid___string_something(charP___string_something_1_alloc_table,
+                     charP_charM___string_something_1)))))) }
 
 parameter strxfrm :
  dest_7:charP pointer ->
@@ -4224,13 +4220,13 @@ parameter strxfrm :
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         writes charP_charM_dest_7_86
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               not_assigns(charP_dest_7_86_alloc_table,
               charP_charM_dest_7_86@, charP_charM_dest_7_86,
@@ -4254,24 +4250,24 @@ parameter strxfrm_requires :
                and (JC_<somenum>:
                    valid_string(src_5, charP_src_5_87_alloc_table,
                    charP_charM_src_5_87)))))
-          and ((JC_<somenum>:
-               valid___string_something(charP___string_something_1_alloc_table,
-               charP_charM___string_something_1))
-              and ((JC_<somenum>:
-                   valid___string_something_0(charP___string_something_1_alloc_table))
-                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+          and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and ((JC_<somenum>:
+                       valid___string_something_0(charP___string_something_1_alloc_table))
+                      and (JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1)))))))}
         int
         reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
         writes charP_charM_dest_7_86
         { ((JC_<somenum>:
-           ((JC_<somenum>:
-            valid___string_something(charP___string_something_1_alloc_table,
-            charP_charM___string_something_1))
-           and ((JC_<somenum>:
-                valid___string_something_0(charP___string_something_1_alloc_table))
-               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+           ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and ((JC_<somenum>:
+                    valid___string_something_0(charP___string_something_1_alloc_table))
+                   and (JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))))))
           and (JC_<somenum>:
               not_assigns(charP_dest_7_86_alloc_table,
               charP_charM_dest_7_86@, charP_charM_dest_7_86,
@@ -4280,13 +4276,13 @@ parameter strxfrm_requires :
 let assign_char_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1)))))) }
   (init:
   try
    begin
@@ -4341,13 +4337,13 @@ let assign_char_ensures_default =
 let assign_char_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1)))))) }
   (init:
   try
    begin
@@ -4393,24 +4389,24 @@ let assign_char_safety =
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1)))))) }
 
 let assign_int_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1)))))) }
   (init:
   try
    begin
@@ -4458,13 +4454,13 @@ let assign_int_ensures_default =
 let assign_int_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1)))))) }
   (init:
   try
    begin
@@ -4505,13 +4501,13 @@ let assign_int_safety =
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1)))))) }
 
 let foo_ensures_default =
  fun (a_0 : intP pointer) (aLength : int) (intP_intM_a_0_94 : (intP, int) memory ref) (intP_a_0_94_alloc_table : intP alloc_table) ->
@@ -4521,13 +4517,13 @@ let foo_ensures_default =
      and (JC_<somenum>:
          ge_int(offset_max(intP_a_0_94_alloc_table, a_0),
          sub_int(aLength, (1))))))
-    and ((JC_<somenum>:
-         valid___string_something(charP___string_something_1_alloc_table,
-         charP_charM___string_something_1))
-        and ((JC_<somenum>:
-             valid___string_something_0(charP___string_something_1_alloc_table))
-            and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))) }
+    and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+            and ((JC_<somenum>:
+                 valid___string_something_0(charP___string_something_1_alloc_table))
+                and (JC_<somenum>:
+                    valid___string_something(charP___string_something_1_alloc_table,
+                    charP_charM___string_something_1))))))) }
   (init:
   try
    begin
@@ -4580,13 +4576,13 @@ let foo_safety =
      and (JC_<somenum>:
          ge_int(offset_max(intP_a_0_94_alloc_table, a_0),
          sub_int(aLength, (1))))))
-    and ((JC_<somenum>:
-         valid___string_something(charP___string_something_1_alloc_table,
-         charP_charM___string_something_1))
-        and ((JC_<somenum>:
-             valid___string_something_0(charP___string_something_1_alloc_table))
-            and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-                and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))) }
+    and ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+            and ((JC_<somenum>:
+                 valid___string_something_0(charP___string_something_1_alloc_table))
+                and (JC_<somenum>:
+                    valid___string_something(charP___string_something_1_alloc_table,
+                    charP_charM___string_something_1))))))) }
   (init:
   try
    begin
@@ -4625,24 +4621,24 @@ let foo_safety =
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1)))))) }
 
 let main_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1)))))) }
   (init:
   try
    (C_189:
@@ -4661,13 +4657,13 @@ let main_ensures_default =
 let main_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1)))))) }
   (init:
   try
    (C_189:
@@ -4677,13 +4673,13 @@ let main_safety =
     (JC_<somenum>: (assign_char_requires void)); (raise Return); (raise Return)
    end)) with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     valid___string_something(charP___string_something_1_alloc_table,
-     charP_charM___string_something_1))
-    and ((JC_<somenum>:
-         valid___string_something_0(charP___string_something_1_alloc_table))
-        and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
-            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+    ((JC_<somenum>: valid_c(char_xP_c_3_alloc_table))
+    and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+        and ((JC_<somenum>:
+             valid___string_something_0(charP___string_something_1_alloc_table))
+            and (JC_<somenum>:
+                valid___string_something(charP___string_something_1_alloc_table,
+                charP_charM___string_something_1)))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0041.jessie --quiet -f bts0041.makefile project
@@ -4782,11 +4778,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po40.why">
-      <location file = "why/bts0041.why" line = "3786" begin = "44" end = "45"/>
+      <location file = "why/bts0041.why" line = "3782" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po41.why">
-      <location file = "why/bts0041.why" line = "3786" begin = "44" end = "45"/>
+      <location file = "why/bts0041.why" line = "3782" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po42.why">
@@ -4851,11 +4847,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po28.why">
-      <location file = "why/bts0041.why" line = "3664" begin = "44" end = "45"/>
+      <location file = "why/bts0041.why" line = "3660" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po29.why">
-      <location file = "why/bts0041.why" line = "3664" begin = "44" end = "45"/>
+      <location file = "why/bts0041.why" line = "3660" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po30.why">
@@ -4936,11 +4932,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po14.why">
-      <location file = "why/bts0041.why" line = "3547" begin = "44" end = "45"/>
+      <location file = "why/bts0041.why" line = "3543" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po15.why">
-      <location file = "why/bts0041.why" line = "3547" begin = "44" end = "45"/>
+      <location file = "why/bts0041.why" line = "3543" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po16.why">

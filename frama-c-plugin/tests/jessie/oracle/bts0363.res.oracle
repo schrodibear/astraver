@@ -16,15 +16,15 @@ axiomatic Padding {
   
 }
 
-type uint32 = 0..4294967295
-
 type uint8 = 0..255
 
-type int16 = -32768..32767
+type uint32 = 0..4294967295
+
+type int8 = -128..127
 
 type int32 = -2147483648..2147483647
 
-type int8 = -128..127
+type int16 = -32768..32767
 
 tag intP = {
   int32 intM: 32;
@@ -1716,13 +1716,11 @@ parameter balance_queues :
    reads bill_ptr,next_ptr,priv_proc_ptr_28_alloc_table,priv_s_flags_proc_ptr_28,proc_0_p_max_priority_proc_5,proc_0_p_nextready_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_5,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_quantum_size_proc_5,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_5,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_5,proc_0_p_ticks_left_proc_ptr_2,proc_0_proc_5_alloc_table,proc_0_proc_ptr_2_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
    writes bill_ptr,next_ptr,proc_0_p_caller_q_proc_ptr_2,proc_0_p_max_priority_proc_ptr_2,proc_0_p_misc_flags_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_5,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_q_link_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_5,proc_0_p_ticks_left_proc_ptr_2,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
    { (JC_<somenum>:
-     ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-     and ((JC_<somenum>:
-          valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+     ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+     and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
          and ((JC_<somenum>:
-              valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-             and (JC_<somenum>:
-                 valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+              valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+             and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 parameter balance_queues_requires :
  tp:intP pointer ->
@@ -1735,24 +1733,21 @@ parameter balance_queues_requires :
               and (JC_<somenum>:
                   ge_int(offset_max(proc_0_proc_5_alloc_table, proc),
                   sub_int((104), (1)))))))
-     and ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
+     and ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
          and ((JC_<somenum>:
-              valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+              valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
              and ((JC_<somenum>:
-                  valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-                 and (JC_<somenum>:
-                     valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))))}
+                  valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                 and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))))}
    unit
    reads bill_ptr,next_ptr,priv_proc_ptr_28_alloc_table,priv_s_flags_proc_ptr_28,proc_0_p_max_priority_proc_5,proc_0_p_nextready_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_5,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_quantum_size_proc_5,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_5,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_5,proc_0_p_ticks_left_proc_ptr_2,proc_0_proc_5_alloc_table,proc_0_proc_ptr_2_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
    writes bill_ptr,next_ptr,proc_0_p_caller_q_proc_ptr_2,proc_0_p_max_priority_proc_ptr_2,proc_0_p_misc_flags_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_5,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_q_link_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_5,proc_0_p_ticks_left_proc_ptr_2,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
    { (JC_<somenum>:
-     ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-     and ((JC_<somenum>:
-          valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+     ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+     and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
          and ((JC_<somenum>:
-              valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-             and (JC_<somenum>:
-                 valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+              valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+             and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 parameter dequeue :
  rp:proc_0 pointer ->
@@ -1760,29 +1755,29 @@ parameter dequeue :
   reads bill_ptr,next_ptr,priv_proc_ptr_28_alloc_table,priv_s_flags_proc_ptr_28,proc_0_p_nextready_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_proc_5_alloc_table,proc_0_proc_ptr_2_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   writes bill_ptr,next_ptr,proc_0_p_caller_q_proc_ptr_2,proc_0_p_max_priority_proc_ptr_2,proc_0_p_misc_flags_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_q_link_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_ptr_2,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 parameter dequeue_requires :
  rp:proc_0 pointer ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))))))}
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))))))}
   unit
   reads bill_ptr,next_ptr,priv_proc_ptr_28_alloc_table,priv_s_flags_proc_ptr_28,proc_0_p_nextready_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_proc_5_alloc_table,proc_0_proc_ptr_2_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   writes bill_ptr,next_ptr,proc_0_p_caller_q_proc_ptr_2,proc_0_p_max_priority_proc_ptr_2,proc_0_p_misc_flags_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_q_link_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_ptr_2,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 parameter enqueue :
  rp_0:proc_0 pointer ->
@@ -1790,29 +1785,29 @@ parameter enqueue :
   reads bill_ptr,next_ptr,priv_proc_ptr_28_alloc_table,priv_s_flags_proc_ptr_28,proc_0_p_nextready_proc_ptr_2,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_ptr_2,proc_0_proc_5_alloc_table,proc_0_proc_ptr_2_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   writes bill_ptr,next_ptr,proc_0_p_caller_q_proc_ptr_2,proc_0_p_max_priority_proc_ptr_2,proc_0_p_misc_flags_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_q_link_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_ptr_2,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 parameter enqueue_requires :
  rp_0:proc_0 pointer ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))))))}
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))))))}
   unit
   reads bill_ptr,next_ptr,priv_proc_ptr_28_alloc_table,priv_s_flags_proc_ptr_28,proc_0_p_nextready_proc_ptr_2,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_ptr_2,proc_0_proc_5_alloc_table,proc_0_proc_ptr_2_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   writes bill_ptr,next_ptr,proc_0_p_caller_q_proc_ptr_2,proc_0_p_max_priority_proc_ptr_2,proc_0_p_misc_flags_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_q_link_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_ptr_2,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 parameter int16_of_integer_ :
  x:int ->
@@ -1835,35 +1830,29 @@ parameter main :
   reads bill_ptr,next_ptr,priv_proc_ptr_28_alloc_table,priv_s_flags_proc_ptr_28,proc_0_p_max_priority_proc_5,proc_0_p_nextready_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_5,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_quantum_size_proc_5,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_5,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_5,proc_0_p_ticks_left_proc_ptr_2,proc_0_proc_5_alloc_table,proc_0_proc_ptr_2_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   writes bill_ptr,next_ptr,proc_0_p_caller_q_proc_ptr_2,proc_0_p_max_priority_proc_ptr_2,proc_0_p_misc_flags_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_5,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_q_link_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_5,proc_0_p_ticks_left_proc_ptr_2,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 parameter main_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))))))}
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))))))}
   int32
   reads bill_ptr,next_ptr,priv_proc_ptr_28_alloc_table,priv_s_flags_proc_ptr_28,proc_0_p_max_priority_proc_5,proc_0_p_nextready_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_5,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_quantum_size_proc_5,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_5,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_5,proc_0_p_ticks_left_proc_ptr_2,proc_0_proc_5_alloc_table,proc_0_proc_ptr_2_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   writes bill_ptr,next_ptr,proc_0_p_caller_q_proc_ptr_2,proc_0_p_max_priority_proc_ptr_2,proc_0_p_misc_flags_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_5,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_q_link_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_5,proc_0_p_ticks_left_proc_ptr_2,struct_proc___xP_struct_proc___xM_proc_ptr_2,struct_proc___xP_struct_proc___xM_rdy_tail_8
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 parameter pick_proc :
  tt:unit ->
@@ -1871,13 +1860,11 @@ parameter pick_proc :
   reads bill_ptr,next_ptr,priv_proc_ptr_28_alloc_table,priv_s_flags_proc_ptr_28,proc_0_p_nextready_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_proc_5_alloc_table,proc_0_proc_ptr_2_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table,struct_proc___xP_struct_proc___xM_proc_ptr_2
   writes bill_ptr,next_ptr,proc_0_p_caller_q_proc_ptr_2,proc_0_p_max_priority_proc_ptr_2,proc_0_p_misc_flags_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_q_link_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_ptr_2,struct_proc___xP_struct_proc___xM_proc_ptr_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-     and ((JC_<somenum>:
-          valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+     ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+     and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
          and ((JC_<somenum>:
-              valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-             and (JC_<somenum>:
-                 valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))))))
+              valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+             and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((le_int(offset_min(proc_0_proc_ptr_2_alloc_table, next_ptr), (0))
@@ -1973,24 +1960,21 @@ parameter pick_proc_requires :
          and (JC_<somenum>:
              (select(struct_proc___xP_struct_proc___xM_proc_ptr_2,
               shift(rdy_head, (0))) <> null)))))
-    and ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
+    and ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
         and ((JC_<somenum>:
-             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
             and ((JC_<somenum>:
-                 valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-                and (JC_<somenum>:
-                    valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))))}
+                 valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))))}
   unit
   reads bill_ptr,next_ptr,priv_proc_ptr_28_alloc_table,priv_s_flags_proc_ptr_28,proc_0_p_nextready_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_proc_5_alloc_table,proc_0_proc_ptr_2_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table,struct_proc___xP_struct_proc___xM_proc_ptr_2
   writes bill_ptr,next_ptr,proc_0_p_caller_q_proc_ptr_2,proc_0_p_max_priority_proc_ptr_2,proc_0_p_misc_flags_proc_ptr_2,proc_0_p_nr_proc_ptr_2,proc_0_p_priority_proc_ptr_2,proc_0_p_priv_proc_ptr_2,proc_0_p_q_link_proc_ptr_2,proc_0_p_quantum_size_proc_ptr_2,proc_0_p_rts_flags_proc_ptr_2,proc_0_p_ticks_left_proc_ptr_2,struct_proc___xP_struct_proc___xM_proc_ptr_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-     and ((JC_<somenum>:
-          valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+     ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+     and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
          and ((JC_<somenum>:
-              valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-             and (JC_<somenum>:
-                 valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))))))
+              valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+             and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((le_int(offset_min(proc_0_proc_ptr_2_alloc_table, next_ptr), (0))
@@ -2103,13 +2087,13 @@ parameter sched :
             reads proc_0_p_priority_rp_1_11,proc_0_p_ticks_left_rp_1_11,proc_0_proc_5_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table
             writes intP_intM_front_13,intP_intM_queue_12,proc_0_p_priority_rp_1_11,proc_0_p_ticks_left_rp_1_11
             { (JC_<somenum>:
-              ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
+              ((JC_<somenum>:
+               valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
               and ((JC_<somenum>:
-                   valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                   valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
                   and ((JC_<somenum>:
-                       valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-                      and (JC_<somenum>:
-                          valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+                       valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                      and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 parameter sched_requires :
  rp_1:proc_0 pointer ->
@@ -2124,24 +2108,24 @@ parameter sched_requires :
           intP_queue_12_alloc_table:intP alloc_table ->
            proc_0_p_quantum_size_rp_1_11:(proc_0, int8) memory ->
             { (JC_<somenum>:
-              ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
+              ((JC_<somenum>:
+               valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
               and ((JC_<somenum>:
-                   valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                   valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
                   and ((JC_<somenum>:
-                       valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-                      and (JC_<somenum>:
-                          valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))))))}
+                       valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                      and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))))))}
             unit
             reads proc_0_p_priority_rp_1_11,proc_0_p_ticks_left_rp_1_11,proc_0_proc_5_alloc_table,struct_proc___xP_pproc_addr_6_alloc_table,struct_proc___xP_proc_ptr_2_alloc_table,struct_proc___xP_rdy_tail_8_alloc_table
             writes intP_intM_front_13,intP_intM_queue_12,proc_0_p_priority_rp_1_11,proc_0_p_ticks_left_rp_1_11
             { (JC_<somenum>:
-              ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
+              ((JC_<somenum>:
+               valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
               and ((JC_<somenum>:
-                   valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                   valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
                   and ((JC_<somenum>:
-                       valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-                      and (JC_<somenum>:
-                          valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+                       valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                      and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 parameter uint32_of_integer_ :
  x:int ->
@@ -2163,13 +2147,12 @@ let balance_queues_ensures_default =
              and (JC_<somenum>:
                  ge_int(offset_max(proc_0_proc_5_alloc_table, proc),
                  sub_int((104), (1)))))))
-    and ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
+    and ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
         and ((JC_<somenum>:
-             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
             and ((JC_<somenum>:
-                 valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-                and (JC_<somenum>:
-                    valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))))))) }
+                 valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))))))) }
   (init:
   try
    begin
@@ -2313,13 +2296,12 @@ let balance_queues_safety =
              and (JC_<somenum>:
                  ge_int(offset_max(proc_0_proc_5_alloc_table, proc),
                  sub_int((104), (1)))))))
-    and ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
+    and ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
         and ((JC_<somenum>:
-             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
             and ((JC_<somenum>:
-                 valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-                and (JC_<somenum>:
-                    valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))))))) }
+                 valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))))))) }
   (init:
   try
    begin
@@ -2477,22 +2459,20 @@ let balance_queues_safety =
        void); (raise Return) end) end))); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 let dequeue_ensures_default =
  fun (rp : proc_0 pointer) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
   (init:
   try
    begin
@@ -2588,11 +2568,11 @@ let dequeue_ensures_default =
 let dequeue_safety =
  fun (rp : proc_0 pointer) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
   (init:
   try
    begin
@@ -2700,20 +2680,20 @@ let dequeue_safety =
       (while_0_break: begin   void; (raise Return) end) end))));
     (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 let enqueue_ensures_default =
  fun (rp_0 : proc_0 pointer) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
   (init:
   try
    begin
@@ -2870,11 +2850,11 @@ let enqueue_ensures_default =
 let enqueue_safety =
  fun (rp_0 : proc_0 pointer) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
   (init:
   try
    begin
@@ -3052,22 +3032,20 @@ let enqueue_safety =
        (raise Return) end))) end))))))))); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>: valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
-        and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
+        and ((JC_<somenum>:
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 let main_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -3086,13 +3064,11 @@ let main_ensures_default =
 let main_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -3109,13 +3085,11 @@ let main_safety =
       (return := !__retres); (raise Return) end)))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 let pick_proc_ensures_default =
  fun (tt : unit) ->
@@ -3131,13 +3105,12 @@ let pick_proc_ensures_default =
          and (JC_<somenum>:
              (select(struct_proc___xP_struct_proc___xM_proc_ptr_2,
               shift(rdy_head, (0))) <> null)))))
-    and ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
+    and ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
         and ((JC_<somenum>:
-             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
             and ((JC_<somenum>:
-                 valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-                and (JC_<somenum>:
-                    valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))))))) }
+                 valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))))))) }
   (init:
   try
    begin
@@ -4244,13 +4217,12 @@ let pick_proc_safety =
          and (JC_<somenum>:
              (select(struct_proc___xP_struct_proc___xM_proc_ptr_2,
               shift(rdy_head, (0))) <> null)))))
-    and ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
+    and ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
         and ((JC_<somenum>:
-             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
             and ((JC_<somenum>:
-                 valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-                and (JC_<somenum>:
-                    valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))))))) }
+                 valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+                and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))))))) }
   (init:
   try
    begin
@@ -5340,24 +5312,20 @@ let pick_proc_safety =
       (return_label: (raise Return)) end)); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 let sched_ensures_default =
  fun (rp_1 : proc_0 pointer) (queue : intP pointer) (front : intP pointer) (intP_intM_queue_12 : (intP, int32) memory ref) (intP_intM_front_13 : (intP, int32) memory ref) (proc_0_p_priority_rp_1_11 : (proc_0, int8) memory ref) (proc_0_p_ticks_left_rp_1_11 : (proc_0, int8) memory ref) (intP_queue_12_alloc_table : intP alloc_table) (intP_front_13_alloc_table : intP alloc_table) (proc_0_rp_1_11_alloc_table : proc_0 alloc_table) (proc_0_p_quantum_size_rp_1_11 : (proc_0, int8) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
   (init:
   try
    begin
@@ -5414,13 +5382,11 @@ let sched_ensures_default =
 let sched_safety =
  fun (rp_1 : proc_0 pointer) (queue : intP pointer) (front : intP pointer) (intP_intM_queue_12 : (intP, int32) memory ref) (intP_intM_front_13 : (intP, int32) memory ref) (proc_0_p_priority_rp_1_11 : (proc_0, int8) memory ref) (proc_0_p_ticks_left_rp_1_11 : (proc_0, int8) memory ref) (intP_queue_12_alloc_table : intP alloc_table) (intP_front_13_alloc_table : intP alloc_table) (proc_0_rp_1_11_alloc_table : proc_0 alloc_table) (proc_0_p_quantum_size_rp_1_11 : (proc_0, int8) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
   (init:
   try
    begin
@@ -5489,13 +5455,11 @@ let sched_safety =
       ((((upd_ intP_front_13_alloc_table) intP_intM_front_13) jessie_<somenum>) jessie_<somenum>))));
       (raise Return) end)))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table))
-    and ((JC_<somenum>:
-         valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+    ((JC_<somenum>: valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table))
+    and ((JC_<somenum>: valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
         and ((JC_<somenum>:
-             valid_rdy_head(struct_proc___xP_proc_ptr_2_alloc_table))
-            and (JC_<somenum>:
-                valid_rdy_tail(struct_proc___xP_rdy_tail_8_alloc_table)))))) }
+             valid_pproc_addr(struct_proc___xP_pproc_addr_6_alloc_table))
+            and (JC_<somenum>: valid_proc(proc_0_proc_5_alloc_table)))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0363.jessie --quiet -f bts0363.makefile project
@@ -5984,7 +5948,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po255.why">
-      <location file = "why/bts0363.why" line = "3504" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3476" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6057,7 +6021,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po270.why">
-      <location file = "why/bts0363.why" line = "3560" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3532" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6130,7 +6094,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po285.why">
-      <location file = "why/bts0363.why" line = "3616" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3588" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6203,7 +6167,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po300.why">
-      <location file = "why/bts0363.why" line = "3672" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3644" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6276,7 +6240,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po315.why">
-      <location file = "why/bts0363.why" line = "3728" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3700" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6349,7 +6313,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po330.why">
-      <location file = "why/bts0363.why" line = "3784" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3756" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6422,7 +6386,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po345.why">
-      <location file = "why/bts0363.why" line = "3840" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3812" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6495,7 +6459,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po360.why">
-      <location file = "why/bts0363.why" line = "3896" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3868" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6568,7 +6532,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po375.why">
-      <location file = "why/bts0363.why" line = "3952" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3924" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6641,7 +6605,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po390.why">
-      <location file = "why/bts0363.why" line = "4008" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3980" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6714,7 +6678,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po405.why">
-      <location file = "why/bts0363.why" line = "4064" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4036" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6787,7 +6751,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po420.why">
-      <location file = "why/bts0363.why" line = "4120" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4092" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6860,7 +6824,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po435.why">
-      <location file = "why/bts0363.why" line = "4176" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4148" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6933,7 +6897,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po450.why">
-      <location file = "why/bts0363.why" line = "4232" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4204" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7006,7 +6970,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po465.why">
-      <location file = "why/bts0363.why" line = "4288" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4260" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7079,7 +7043,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po480.why">
-      <location file = "why/bts0363.why" line = "4344" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4316" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7152,7 +7116,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po495.why">
-      <location file = "why/bts0363.why" line = "4400" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4372" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7225,7 +7189,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po510.why">
-      <location file = "why/bts0363.why" line = "4467" begin = "21" end = "45"/>
+      <location file = "why/bts0363.why" line = "4439" begin = "21" end = "45"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7288,11 +7252,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0363_po523.why">
-      <location file = "why/bts0363.why" line = "4451" begin = "46" end = "47"/>
+      <location file = "why/bts0363.why" line = "4423" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po524.why">
-      <location file = "why/bts0363.why" line = "4451" begin = "46" end = "47"/>
+      <location file = "why/bts0363.why" line = "4423" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po525.why">
@@ -7374,7 +7338,7 @@ text = "UserCall"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0363_po117.why">
-      <location file = "why/bts0363.why" line = "2085" begin = "19" end = "76"/>
+      <location file = "why/bts0363.why" line = "2065" begin = "19" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0363_po118.why">
@@ -7383,7 +7347,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0363_po119.why">
-      <location file = "why/bts0363.why" line = "2094" begin = "24" end = "142"/>
+      <location file = "why/bts0363.why" line = "2074" begin = "24" end = "142"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0363_po120.why">
@@ -7412,7 +7376,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po125.why">
-      <location file = "why/bts0363.why" line = "2103" begin = "15" end = "354"/>
+      <location file = "why/bts0363.why" line = "2083" begin = "15" end = "354"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7517,7 +7481,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po146.why">
-      <location file = "why/bts0363.why" line = "2199" begin = "20" end = "47"/>
+      <location file = "why/bts0363.why" line = "2179" begin = "20" end = "47"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7602,12 +7566,12 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po163.why">
-      <location file = "why/bts0363.why" line = "2231" begin = "15" end = "56"/>
+      <location file = "why/bts0363.why" line = "2211" begin = "15" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/bts0363_po164.why">
-      <location file = "why/bts0363.why" line = "2232" begin = "8" end = "61"/>
+      <location file = "why/bts0363.why" line = "2212" begin = "8" end = "61"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7669,7 +7633,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po76.why">
-      <location file = "why/bts0363.why" line = "1822" begin = "19" end = "222"/>
+      <location file = "why/bts0363.why" line = "1802" begin = "19" end = "222"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7684,7 +7648,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po79.why">
-      <location file = "why/bts0363.why" line = "1829" begin = "20" end = "220"/>
+      <location file = "why/bts0363.why" line = "1809" begin = "20" end = "220"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7729,7 +7693,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po88.why">
-      <location file = "why/bts0363.why" line = "1847" begin = "22" end = "311"/>
+      <location file = "why/bts0363.why" line = "1827" begin = "22" end = "311"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7744,7 +7708,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po91.why">
-      <location file = "why/bts0363.why" line = "1861" begin = "22" end = "46"/>
+      <location file = "why/bts0363.why" line = "1841" begin = "22" end = "46"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7779,7 +7743,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po98.why">
-      <location file = "why/bts0363.why" line = "1864" begin = "23" end = "48"/>
+      <location file = "why/bts0363.why" line = "1844" begin = "23" end = "48"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7844,11 +7808,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po111.why">
-      <location file = "why/bts0363.why" line = "1814" begin = "43" end = "44"/>
+      <location file = "why/bts0363.why" line = "1794" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po112.why">
-      <location file = "why/bts0363.why" line = "1814" begin = "43" end = "44"/>
+      <location file = "why/bts0363.why" line = "1794" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po113.why">
@@ -7879,7 +7843,7 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0363_po3.why">
-      <location file = "why/bts0363.why" line = "1527" begin = "29" end = "129"/>
+      <location file = "why/bts0363.why" line = "1509" begin = "29" end = "129"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8174,11 +8138,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po62.why">
-      <location file = "why/bts0363.why" line = "1518" begin = "43" end = "44"/>
+      <location file = "why/bts0363.why" line = "1500" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po63.why">
-      <location file = "why/bts0363.why" line = "1518" begin = "43" end = "44"/>
+      <location file = "why/bts0363.why" line = "1500" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po64.why">

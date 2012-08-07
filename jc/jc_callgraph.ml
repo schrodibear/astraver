@@ -143,7 +143,7 @@ let compute_axiomatic_calls a =
     Hashtbl.find axiomatic_calls_table a
   with Not_found ->
     try
-      let l = Hashtbl.find Jc_typing.axiomatics_table a in
+      let l = StringHashtblIter.find Jc_typing.axiomatics_table a in
       let c = List.fold_left compute_axiomatic_decl_call [] l.Jc_typing.axiomatics_decls in
       Hashtbl.add axiomatic_calls_table a c;
       c
@@ -172,7 +172,7 @@ let compute_calls f _s b =
   f.jc_fun_info_calls <- b
       
 module LogicCallGraph = struct 
-  type t = (int, (Jc_fenv.logic_info * Jc_fenv.term_or_assertion)) Hashtbl.t 
+  type t = (Jc_fenv.logic_info * Jc_fenv.term_or_assertion) IntHashtblIter.t 
   module V = struct
     type t = logic_info
     let compare f1 f2 = Pervasives.compare f1.jc_logic_info_tag f2.jc_logic_info_tag
@@ -180,7 +180,7 @@ module LogicCallGraph = struct
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
-    Hashtbl.iter (fun _ (f,_a) -> iter f) 
+    IntHashtblIter.iter (fun _ (f,_a) -> iter f) 
   let iter_succ iter _ f =
     List.iter iter f.jc_logic_info_calls 
   end
@@ -188,7 +188,7 @@ module LogicCallGraph = struct
 module LogicCallComponents = Graph.Components.Make(LogicCallGraph)
 
 module CallGraph = struct 
-  type t = (int, (fun_info * Loc.position * fun_spec * expr option)) Hashtbl.t
+  type t = (fun_info * Loc.position * fun_spec * expr option) IntHashtblIter.t
   module V = struct
     type t = fun_info
     let compare f1 f2 = Pervasives.compare f1.jc_fun_info_tag f2.jc_fun_info_tag
@@ -196,7 +196,7 @@ module CallGraph = struct
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
-    Hashtbl.iter (fun _ (f,_loc,_spec,_b) -> iter f) 
+    IntHashtblIter.iter (fun _ (f,_loc,_spec,_b) -> iter f) 
   let iter_succ iter _ f =
     List.iter iter f.jc_fun_info_calls 
   end
@@ -206,9 +206,7 @@ module CallComponents = Graph.Components.Make(CallGraph)
 open Format
 open Pp
 
-let compute_logic_components :
- (int, Jc_fenv.logic_info * Jc_fenv.term_or_assertion) Hashtbl.t ->
-    Jc_fenv.logic_info list array = fun ltable ->  
+let compute_logic_components ltable =
   let tab_comp = LogicCallComponents.scc_array ltable in
   Jc_options.lprintf "***********************************\n";
   Jc_options.lprintf "Logic call graph: has %d components\n" 

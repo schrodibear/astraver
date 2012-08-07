@@ -21,11 +21,11 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int16 = -32768..32767
-
 type int8 = -128..127
 
 type int32 = -2147483648..2147483647
+
+type int16 = -32768..32767
 
 tag unsigned_charP = {
   uint8 unsigned_charM: 8;
@@ -499,40 +499,40 @@ parameter safe_uint8_of_integer_ :
 parameter test1 :
  tt:unit ->
   { } int16 reads returnValue writes returnValue
-  { ((JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue)))))
+  { ((JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev))))
     and (JC_<somenum>: ge_int(integer_of_int16(result), (0)))) }
 
 parameter test1_requires :
  tt:unit ->
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue)))))}
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev))))}
   int16 reads returnValue writes returnValue
-  { ((JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue)))))
+  { ((JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev))))
     and (JC_<somenum>: ge_int(integer_of_int16(result), (0)))) }
 
 parameter test2 :
  tt:unit ->
   { } int16 reads returnValue writes returnValue
-  { ((JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue)))))
+  { ((JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev))))
     and (JC_<somenum>: ge_int(integer_of_int16(result), (0)))) }
 
 parameter test2_requires :
  tt:unit ->
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue)))))}
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev))))}
   int16 reads returnValue writes returnValue
-  { ((JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue)))))
+  { ((JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev))))
     and (JC_<somenum>: ge_int(integer_of_int16(result), (0)))) }
 
 parameter test3 :
  tt:unit ->
   { } int16 reads returnValue writes returnValue
-  { ((JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue)))))
+  { ((JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev))))
     and (JC_<somenum>: ge_int(integer_of_int16(result), (0)))) }
 
 parameter test3_requires :
  tt:unit ->
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue)))))}
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev))))}
   int16 reads returnValue writes returnValue
-  { ((JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue)))))
+  { ((JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev))))
     and (JC_<somenum>: ge_int(integer_of_int16(result), (0)))) }
 
 parameter uint8_of_integer_ :
@@ -542,7 +542,7 @@ parameter uint8_of_integer_ :
 
 let test1_ensures_default =
  fun (tt : unit) ->
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue))))) }
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
   (init:
   (let return = ref (any_int16 void) in
   try
@@ -563,7 +563,7 @@ let test1_ensures_default =
 
 let test1_safety =
  fun (tt : unit) ->
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue))))) }
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
   (init:
   (let return = ref (any_int16 void) in
   try
@@ -583,11 +583,11 @@ let test1_safety =
                                                             (integer_of_int16 ValueB))))))))))) in
      void); (return := !returnValue); (raise Return); absurd  end) with
    Return -> !return end))
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue))))) }
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
 
 let test2_ensures_default =
  fun (tt : unit) ->
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue))))) }
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
   (init:
   (let return = ref (any_int16 void) in
   try
@@ -630,7 +630,7 @@ let test2_ensures_default =
 
 let test2_safety =
  fun (tt : unit) ->
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue))))) }
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
   (init:
   (let return = ref (any_int16 void) in
   try
@@ -673,11 +673,11 @@ let test2_safety =
       Goto__LOR_0_exc jessie_<somenum> ->
       (_LOR_0: begin   void; (return := !returnValue); (raise Return) end) end;
     absurd  end with Return -> !return end))
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue))))) }
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
 
 let test3_ensures_default =
  fun (tt : unit) ->
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue))))) }
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
   (init:
   (let return = ref (any_int16 void) in
   try
@@ -689,7 +689,7 @@ let test3_ensures_default =
 
 let test3_safety =
  fun (tt : unit) ->
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue))))) }
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
   (init:
   (let return = ref (any_int16 void) in
   try
@@ -698,7 +698,7 @@ let test3_safety =
      (let jessie_<somenum> = (returnValue := !returnValue) in void);
     (return := !returnValue); (raise Return); absurd  end) with Return ->
    !return end))
-  { (JC_<somenum>: ((JC_<somenum>: tev) and ((JC_<somenum>: ev) and (JC_<somenum>: eev(returnValue))))) }
+  { (JC_<somenum>: ((JC_<somenum>: eev(returnValue)) and ((JC_<somenum>: ev) and (JC_<somenum>: tev)))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C band.jessie --quiet -f band.makefile project
@@ -707,17 +707,21 @@ why --project [...] why/band.why
   <function name="Function test3">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
-    <goal why_file="why/band_po23.why">
+    <goal why_file="why/band_po25.why">
       <location file = "PPCHOME/tests/jessie/band.c" line = "39" begin = "12" end = "24"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Safety">
-    <goal why_file="why/band_po24.why">
+    <goal why_file="why/band_po26.why">
       <location file = "PPCHOME/tests/jessie/band.c" line = "41" begin = "6" end = "11"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/band_po25.why">
+    <goal why_file="why/band_po27.why">
+      <location file = "PPCHOME/tests/jessie/band.c" line = "41" begin = "6" end = "11"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/band_po28.why">
       <location file = "PPCHOME/tests/jessie/band.c" line = "41" begin = "6" end = "11"/>
       <explain kind = "Post"/>
     </goal>
@@ -726,24 +730,19 @@ why --project [...] why/band.why
   <function name="Function test2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
-    <goal why_file="why/band_po10.why">
+    <goal why_file="why/band_po11.why">
       <location file = "PPCHOME/tests/jessie/band.c" line = "23" begin = "12" end = "24"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Safety">
-    <goal why_file="why/band_po11.why">
-      <location file = "PPCHOME/tests/jessie/band.c" line = "27" begin = "15" end = "21"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
     <goal why_file="why/band_po12.why">
       <location file = "PPCHOME/tests/jessie/band.c" line = "27" begin = "15" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/band_po13.why">
-      <location file = "PPCHOME/tests/jessie/band.c" line = "27" begin = "24" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/band.c" line = "27" begin = "15" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -753,7 +752,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/band_po15.why">
-      <location file = "PPCHOME/tests/jessie/band.c" line = "27" begin = "15" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/band.c" line = "27" begin = "24" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -763,7 +762,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/band_po17.why">
-      <location file = "PPCHOME/tests/jessie/band.c" line = "29" begin = "5" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/band.c" line = "27" begin = "15" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -773,7 +772,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/band_po19.why">
-      <location file = "PPCHOME/tests/jessie/band.c" line = "29" begin = "26" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/band.c" line = "29" begin = "5" end = "16"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -783,10 +782,19 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/band_po21.why">
+      <location file = "PPCHOME/tests/jessie/band.c" line = "29" begin = "26" end = "37"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/band_po22.why">
       <location file = "PPCHOME/tests/jessie/band.c" line = "25" begin = "6" end = "11"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/band_po22.why">
+    <goal why_file="why/band_po23.why">
+      <location file = "PPCHOME/tests/jessie/band.c" line = "25" begin = "6" end = "11"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/band_po24.why">
       <location file = "PPCHOME/tests/jessie/band.c" line = "25" begin = "6" end = "11"/>
       <explain kind = "Post"/>
     </goal>
@@ -836,6 +844,10 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/band_po9.why">
+      <location file = "PPCHOME/tests/jessie/band.c" line = "14" begin = "6" end = "11"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/band_po10.why">
       <location file = "PPCHOME/tests/jessie/band.c" line = "14" begin = "6" end = "11"/>
       <explain kind = "Post"/>
     </goal>

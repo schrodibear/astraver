@@ -54,22 +54,22 @@ type precision_mode = MApprox | MPrecise
 let current_mode = ref MApprox
 
 (* Constant memories *)
-let constant_memories = Hashtbl.create 17
+let constant_memories = StringHashtblIter.create 17
 
 (* Constant allocation tables *)
-let constant_alloc_tables = Hashtbl.create 17
+let constant_alloc_tables = StringHashtblIter.create 17
 
 (* Constant allocation tables *)
-let constant_tag_tables = Hashtbl.create 17
+let constant_tag_tables = StringHashtblIter.create 17
 
 let add_constant_memory (mc,r) =
-  Hashtbl.add constant_memories (memory_name (mc,r)) (mc,r)
+  StringHashtblIter.add constant_memories (memory_name (mc,r)) (mc,r)
 
 let add_constant_alloc_table (ac,r) =
-  Hashtbl.add constant_alloc_tables (alloc_table_name (ac,r)) (ac,r)
+  StringHashtblIter.add constant_alloc_tables (alloc_table_name (ac,r)) (ac,r)
 
 let add_constant_tag_table (vi,r) =
-  Hashtbl.add constant_tag_tables (tag_table_name (vi,r)) (vi,r)
+  StringHashtblIter.add constant_tag_tables (tag_table_name (vi,r)) (vi,r)
 
 (* Transposition for calls *)
 
@@ -1428,7 +1428,8 @@ let rec expr fef e =
 	   (* Assert the invariants of the structure
 	      => need the reads of the invariants *)
 	   let (_, invs) =
-	     Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name
+	     StringHashtblIter.find
+               Jc_typing.structs_table st.jc_struct_info_name
 	   in
 	   let fef =
 	     List.fold_left
@@ -1620,14 +1621,14 @@ let effects_from_decl fi ax_effects acc d =
 
 let effects_from_axiomatic fi ax acc =
   try
-    let l = Hashtbl.find Jc_typing.axiomatics_table ax in
+    let l = StringHashtblIter.find Jc_typing.axiomatics_table ax in
     let ef = List.fold_left axiomatic_decl_effect empty_effects l.Jc_typing.axiomatics_decls in
     List.fold_left (effects_from_decl fi ef) acc l.Jc_typing.axiomatics_decls
   with Not_found -> assert false
 
 let logic_fun_effects f =
   let f,ta =
-    Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag
+    IntHashtblIter.find Jc_typing.logic_functions_table f.jc_logic_info_tag
   in
   let ef = f.jc_logic_info_effects in
   let ef = match ta with
@@ -1661,7 +1662,7 @@ let logic_fun_effects f =
 
 let fun_effects f =
   let (f,_pos,s,e_opt) =
-    Hashtbl.find Jc_typing.functions_table f.jc_fun_info_tag
+    IntHashtblIter.find Jc_typing.functions_table f.jc_fun_info_tag
   in
   let fef = f.jc_fun_info_effects in
   let fef = spec fef s in

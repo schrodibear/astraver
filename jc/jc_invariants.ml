@@ -78,7 +78,9 @@ let prop_type = simple_logic_type "prop"
 (* returns (inv, reads) where i is the assertion of the invariants of the structure
 and r is a StringSet of the "reads" needed by these invariants *)
 let invariant_for_struct this st =
-  let (_, invs) = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
+  let (_, invs) =
+    StringHashtblIter.find Jc_typing.structs_table st.jc_struct_info_name
+  in
   let inv =
     make_and_list
       (List.map 
@@ -363,7 +365,7 @@ let rec all_structures st acc =
 
 (* Returns all memories used by the structure invariants. *)
 let struct_inv_memories acc st =
-  let _, invs = Hashtbl.find Jc_typing.structs_table st in
+  let _, invs = StringHashtblIter.find Jc_typing.structs_table st in
   List.fold_left
     (fun acc (_, a) -> assertion_memories acc a)
     acc
@@ -401,7 +403,9 @@ let invariant_params acc li =
 
 (* Returns the parameters needed by the invariants of a structure, "this" not included *)
 let invariants_params acc st =
-  let (_, invs) = Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
+  let (_, invs) =
+    StringHashtblIter.find Jc_typing.structs_table st.jc_struct_info_name
+  in
   List.fold_left (fun acc (li, _) -> invariant_params acc li) acc invs
 
 (* Returns the structure and its parents, up to its root *)
@@ -428,7 +432,7 @@ let function_structures params =
   StringSet.elements structures
 
 let hierarchy_structures h =
-  Hashtbl.fold
+  StringHashtblIter.fold
     (fun _ (st, _) acc ->
        (* don't use equality directly on st and h, as it might not terminate *)
        (* we could use == instead though *)
@@ -437,11 +441,12 @@ let hierarchy_structures h =
     []
   
 let hierarchies () =
-  let h = Hashtbl.fold
-    (fun _ (st, _) acc ->
-       StringMap.add (root_name st) st.jc_struct_info_hroot acc)
-    Jc_typing.structs_table
-    StringMap.empty
+  let h =
+    StringHashtblIter.fold
+      (fun _ (st, _) acc ->
+         StringMap.add (root_name st) st.jc_struct_info_hroot acc)
+      Jc_typing.structs_table
+      StringMap.empty
   in
   StringMap.fold
     (fun _ st acc -> st::acc)
@@ -648,10 +653,11 @@ let hierarchy_invariants = Hashtbl.create 97
 let field_invariants fi =
   if not fi.jc_field_info_rep then [] else (* small optimisation, it is not needed *)
     (* List of all structure * invariant *)
-    let invs = Hashtbl.fold
-      (fun _ (st, invs) acc -> (List.map (fun inv -> st, inv) invs)@acc)
-      Jc_typing.structs_table
-      []
+    let invs =
+      StringHashtblIter.fold
+        (fun _ (st, invs) acc -> (List.map (fun inv -> st, inv) invs)@acc)
+        Jc_typing.structs_table
+        []
     in
     (* Only keep the invariants which uses the field *)
     List.fold_left
@@ -882,7 +888,9 @@ let make_hierarchy_global_invariant acc root =
   let mut_inv = List.map
     (fun st ->
        let _, invs =
-	 Hashtbl.find Jc_typing.structs_table st.jc_struct_info_name in
+	 StringHashtblIter.find
+           Jc_typing.structs_table st.jc_struct_info_name
+       in
        List.map (fun inv -> not_mutable_implies_invariant this st inv) invs)
     structs
   in
@@ -1402,7 +1410,7 @@ let tr_valid_inv st acc =
 
 let rec invariant_for_struct ?pos this si =
   let _, invs = 
-    Hashtbl.find Jc_typing.structs_table si.jc_struct_info_name 
+    StringHashtblIter.find Jc_typing.structs_table si.jc_struct_info_name 
   in
   let invs = Assertion.mkand ?pos
     ~conjuncts:(List.map 
@@ -1438,8 +1446,8 @@ let code_function (fi, pos, fs, _sl) vil =
 	      (fun vi -> Term.mkvar ~var:vi ()) vil 
 	  in
 	  let global_invariants =
-	    Hashtbl.fold
-	      (fun li _ acc -> 
+	    IntHashtblIter.fold
+	      (fun _ (li, _) acc -> 
 		 (* li.jc_logic_info_parameters <- vil; *)
 		 let a = { jc_app_fun = li;
 			   jc_app_args = (* vitl *)[];

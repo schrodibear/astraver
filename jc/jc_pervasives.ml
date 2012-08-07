@@ -1139,7 +1139,49 @@ let builtin_function_symbols =
     float_type, "\\neg_float", "neg_single", [float_type], treatfloat ;
 ]
 
+module StringSet = Set.Make(String)
 
+module IntSet = Set.Make(struct type t = int let compare = compare end)
+
+module StringHashtblIter =
+struct
+  type 'a t = (string, 'a) Hashtbl.t * StringSet.t ref
+  let create x = (Hashtbl.create x, ref StringSet.empty)
+  let add (tbl, keys) x infos =
+    Hashtbl.add tbl x infos;
+    keys:=StringSet.add x !keys
+  let replace (tbl, keys) x infos =
+    Hashtbl.replace tbl x infos;
+    keys:=StringSet.add x !keys
+  let find (tbl,_) x = Hashtbl.find tbl x
+  let fold f (tbl,keys) init =
+    let apply s acc =
+      try
+        let infos = Hashtbl.find tbl s in f s infos acc
+      with Not_found -> assert false
+    in StringSet.fold apply !keys init
+  let iter f t = fold (fun s i () -> f s i) t ()
+end
+
+module IntHashtblIter =
+struct
+  type 'a t = (int, 'a) Hashtbl.t * IntSet.t ref
+  let create x = (Hashtbl.create x, ref IntSet.empty)
+  let add (tbl, keys) x infos =
+    Hashtbl.add tbl x infos;
+    keys:=IntSet.add x !keys
+  let replace (tbl, keys) x infos =
+    Hashtbl.replace tbl x infos;
+    keys:=IntSet.add x !keys
+  let find (tbl,_) x = Hashtbl.find tbl x
+  let fold f (tbl,keys) init =
+    let apply s acc =
+      try
+        let infos = Hashtbl.find tbl s in f s infos acc
+      with Not_found -> assert false
+    in IntSet.fold apply !keys init
+  let iter f t = fold (fun n i () -> f n i) t ()
+end
 
 
 (*

@@ -412,5 +412,5 @@ val read_locals : region_list:Jc_region.RegionTable.key list ->
 
 (** {1 Misc} *)
 
-val specialized_functions : (string, string * string Jc_envset.StringMap.t)
-  Jc_stdlib.Hashtbl.t
+val specialized_functions: 
+  (string * string Jc_envset.StringMap.t) Jc_pervasives.StringHashtblIter.t

@@ -55,10 +55,10 @@ let find_struct a =
 (*
   Format.printf "[find_struct] %s@." a;
 *)
-  fst (Hashtbl.find Jc_typing.structs_table a)
+  fst (StringHashtblIter.find Jc_typing.structs_table a)
 
 let find_variant a =
-  Hashtbl.find Jc_typing.roots_table a
+  StringHashtblIter.find Jc_typing.roots_table a
 
 let find_pointer_class a =
   try
@@ -2135,7 +2135,7 @@ let tag_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   in
   (List.map fst writes), (List.map fst reads)
 
-let specialized_functions = Hashtbl.create 0
+let specialized_functions = StringHashtblIter.create 0
 
 let memory_arguments ~callee_reads ~callee_writes ~region_assoc
     ~region_mem_assoc ~param_assoc ~with_body fname =
@@ -2238,7 +2238,7 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc
 	     v :: acc, name_assoc, StringMap.add n ndest already_used_names
 	) reads' ([], name_assoc, already_used_names)
     in
-    Hashtbl.add specialized_functions new_fname (fname,name_assoc);
+    StringHashtblIter.add specialized_functions new_fname (fname,name_assoc);
     pre, new_fname, wpointers, rpointers, writes, reads
 
 let global_arguments ~callee_reads ~callee_writes ~region_assoc:_ =

@@ -17,13 +17,13 @@ axiomatic Padding {
   
 }
 
-type uint32 = 0..4294967295
-
 type uint8 = 0..255
 
-type int8 = -128..127
+type uint32 = 0..4294967295
 
 type uint1 = 0..1
+
+type int8 = -128..127
 
 type int32 = -2147483648..2147483647
 
@@ -659,11 +659,11 @@ parameter pop :
   reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
   writes queue_empty_q_2,queue_first_q_2,queue_full_q_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+     ((JC_<somenum>:
+      q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+      queue_length_q_2, queue_contents_q_2))
      and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-         and (JC_<somenum>:
-             q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-             queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
+         and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
@@ -689,20 +689,20 @@ parameter pop_requires :
  tt:unit ->
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
-    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    and ((JC_<somenum>:
+         q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+         queue_length_q_2, queue_contents_q_2))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-            and (JC_<somenum>:
-                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-                queue_first_q_2, queue_length_q_2, queue_contents_q_2))))))}
+            and (JC_<somenum>: valid_t(charP_t_1_alloc_table))))))}
   int8
   reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
   writes queue_empty_q_2,queue_first_q_2,queue_full_q_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+     ((JC_<somenum>:
+      q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+      queue_length_q_2, queue_contents_q_2))
      and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-         and (JC_<somenum>:
-             q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-             queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
+         and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
@@ -730,11 +730,11 @@ parameter push :
   reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
   writes charP_charM_q_4,queue_empty_q_2,queue_full_q_2,queue_last_q_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+     ((JC_<somenum>:
+      q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+      queue_length_q_2, queue_contents_q_2))
      and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-         and (JC_<somenum>:
-             q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-             queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
+         and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
@@ -764,20 +764,20 @@ parameter push_requires :
  c:int8 ->
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
-    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    and ((JC_<somenum>:
+         q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+         queue_length_q_2, queue_contents_q_2))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-            and (JC_<somenum>:
-                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-                queue_first_q_2, queue_length_q_2, queue_contents_q_2))))))}
+            and (JC_<somenum>: valid_t(charP_t_1_alloc_table))))))}
   unit
   reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
   writes charP_charM_q_4,queue_empty_q_2,queue_full_q_2,queue_last_q_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+     ((JC_<somenum>:
+      q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+      queue_length_q_2, queue_contents_q_2))
      and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-         and (JC_<somenum>:
-             q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-             queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
+         and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
@@ -826,11 +826,11 @@ parameter test :
     reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
     writes queue_empty_q_2,queue_first_q_2,queue_full_q_2
     { ((JC_<somenum>:
-       ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+       ((JC_<somenum>:
+        q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+        queue_length_q_2, queue_contents_q_2))
        and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-           and (JC_<somenum>:
-               q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-               queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
+           and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))
       and (JC_<somenum>:
           (integer_of_int32(result) = integer_of_uint32(select(queue_empty_q1_3,
                                                         q1))))) }
@@ -844,20 +844,20 @@ parameter test_requires :
        ((JC_<somenum>: le_int(offset_min(queue_q1_3_alloc_table, q1), (0)))
        and ((JC_<somenum>: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
            and (JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0))))))
-      and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+      and ((JC_<somenum>:
+           q_invariant(charP_q_4_alloc_table, queue_last_q_2,
+           queue_first_q_2, queue_length_q_2, queue_contents_q_2))
           and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-              and (JC_<somenum>:
-                  q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-                  queue_first_q_2, queue_length_q_2, queue_contents_q_2))))))}
+              and (JC_<somenum>: valid_t(charP_t_1_alloc_table))))))}
     int32
     reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
     writes queue_empty_q_2,queue_first_q_2,queue_full_q_2
     { ((JC_<somenum>:
-       ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+       ((JC_<somenum>:
+        q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+        queue_length_q_2, queue_contents_q_2))
        and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-           and (JC_<somenum>:
-               q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-               queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
+           and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))
       and (JC_<somenum>:
           (integer_of_int32(result) = integer_of_uint32(select(queue_empty_q1_3,
                                                         q1))))) }
@@ -881,11 +881,11 @@ let pop_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
-    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    and ((JC_<somenum>:
+         q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+         queue_length_q_2, queue_contents_q_2))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-            and (JC_<somenum>:
-                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
+            and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))) }
   (init:
   (let return = ref (any_int8 void) in
   try
@@ -960,11 +960,11 @@ let pop_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
-    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    and ((JC_<somenum>:
+         q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+         queue_length_q_2, queue_contents_q_2))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-            and (JC_<somenum>:
-                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
+            and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))) }
   (init:
   (let return = ref (any_int8 void) in
   try
@@ -1015,21 +1015,21 @@ let pop_safety =
       (((safe_upd_ queue_empty_q_2) jessie_<somenum>) jessie_<somenum>))); (return := !r);
       (raise Return) end))))))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    ((JC_<somenum>:
+     q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+     queue_length_q_2, queue_contents_q_2))
     and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-        and (JC_<somenum>:
-            q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-            queue_first_q_2, queue_length_q_2, queue_contents_q_2))))) }
+        and (JC_<somenum>: valid_t(charP_t_1_alloc_table))))) }
 
 let push_ensures_default =
  fun (c : int8) ->
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
-    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    and ((JC_<somenum>:
+         q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+         queue_length_q_2, queue_contents_q_2))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-            and (JC_<somenum>:
-                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
+            and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))) }
   (init:
   try
    begin
@@ -1109,11 +1109,11 @@ let push_safety =
  fun (c : int8) ->
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
-    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    and ((JC_<somenum>:
+         q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+         queue_length_q_2, queue_contents_q_2))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-            and (JC_<somenum>:
-                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
+            and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))) }
   (init:
   try
    begin
@@ -1170,11 +1170,11 @@ let push_safety =
       (((safe_upd_ queue_full_q_2) jessie_<somenum>) jessie_<somenum>))); (raise Return)
      end))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    ((JC_<somenum>:
+     q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+     queue_length_q_2, queue_contents_q_2))
     and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-        and (JC_<somenum>:
-            q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-            queue_first_q_2, queue_length_q_2, queue_contents_q_2))))) }
+        and (JC_<somenum>: valid_t(charP_t_1_alloc_table))))) }
 
 let test_ensures_default =
  fun (q1 : queue pointer) (queue_q1_3_alloc_table : queue alloc_table) (queue_empty_q1_3 : (queue, uint32) memory) ->
@@ -1183,11 +1183,11 @@ let test_ensures_default =
      ((JC_<somenum>: le_int(offset_min(queue_q1_3_alloc_table, q1), (0)))
      and ((JC_<somenum>: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
          and (JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0))))))
-    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    and ((JC_<somenum>:
+         q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+         queue_length_q_2, queue_contents_q_2))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-            and (JC_<somenum>:
-                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
+            and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1215,11 +1215,11 @@ let test_safety =
      ((JC_<somenum>: le_int(offset_min(queue_q1_3_alloc_table, q1), (0)))
      and ((JC_<somenum>: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
          and (JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0))))))
-    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    and ((JC_<somenum>:
+         q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+         queue_length_q_2, queue_contents_q_2))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-            and (JC_<somenum>:
-                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
+            and (JC_<somenum>: valid_t(charP_t_1_alloc_table)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1240,11 +1240,11 @@ let test_safety =
       void); (return := !__retres); (raise Return) end)))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
+    ((JC_<somenum>:
+     q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
+     queue_length_q_2, queue_contents_q_2))
     and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
-        and (JC_<somenum>:
-            q_invariant(charP_q_4_alloc_table, queue_last_q_2,
-            queue_first_q_2, queue_length_q_2, queue_contents_q_2))))) }
+        and (JC_<somenum>: valid_t(charP_t_1_alloc_table))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C queue.jessie --quiet -f queue.makefile project

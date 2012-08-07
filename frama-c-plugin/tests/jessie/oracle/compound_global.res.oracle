@@ -20,9 +20,9 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int32 = -2147483648..2147483647
-
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag unsigned_charP = {
   uint8 unsigned_charM: 8;
@@ -682,10 +682,10 @@ parameter fc :
      reads S_gs_2_alloc_table,S_i_gs_2,S_p_gs_2,T_gt_1_alloc_table,T_ti_gt_1,T_ti_t_3,T_tj_gt_1,T_tj_t_3
      writes T_ti_t_3,T_tj_t_3
      { ((JC_<somenum>:
-        ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-        and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-            and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-                and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))))))
+        ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+        and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+            and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+                and (JC_<somenum>: valid_gt(T_gt_1_alloc_table))))))
        and (JC_<somenum>:
            ((JC_<somenum>: (integer_of_int32(select(T_ti_t_3, t)) = (1)))
            and (JC_<somenum>: (integer_of_int32(select(T_tj_t_3, t)) = (2)))))) }
@@ -699,18 +699,18 @@ parameter fc_requires :
        ((JC_<somenum>:
         ((JC_<somenum>: le_int(offset_min(T_t_3_alloc_table, t), (0)))
         and (JC_<somenum>: ge_int(offset_max(T_t_3_alloc_table, t), (0)))))
-       and ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-           and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-               and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-                   and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2)))))))}
+       and ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+           and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+               and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+                   and (JC_<somenum>: valid_gt(T_gt_1_alloc_table)))))))}
      unit
      reads S_gs_2_alloc_table,S_i_gs_2,S_p_gs_2,T_gt_1_alloc_table,T_ti_gt_1,T_ti_t_3,T_tj_gt_1,T_tj_t_3
      writes T_ti_t_3,T_tj_t_3
      { ((JC_<somenum>:
-        ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-        and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-            and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-                and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))))))
+        ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+        and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+            and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+                and (JC_<somenum>: valid_gt(T_gt_1_alloc_table))))))
        and (JC_<somenum>:
            ((JC_<somenum>: (integer_of_int32(select(T_ti_t_3, t)) = (1)))
            and (JC_<somenum>: (integer_of_int32(select(T_tj_t_3, t)) = (2)))))) }
@@ -724,10 +724,10 @@ parameter fcp :
      reads S_gs_2_alloc_table,S_i_gs_2,S_i_s_4,S_p_gs_2,S_p_s_4,T_gt_1_alloc_table,T_ti_gt_1,T_tj_gt_1
      writes S_i_s_4,S_p_s_4
      { ((JC_<somenum>:
-        ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-        and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-            and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-                and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))))))
+        ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+        and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+            and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+                and (JC_<somenum>: valid_gt(T_gt_1_alloc_table))))))
        and (JC_<somenum>:
            ((JC_<somenum>: (integer_of_int32(select(S_i_s_4, s_0)) = (1)))
            and (JC_<somenum>: (select(S_p_s_4, s_0) = null))))) }
@@ -741,18 +741,18 @@ parameter fcp_requires :
        ((JC_<somenum>:
         ((JC_<somenum>: le_int(offset_min(S_s_4_alloc_table, s_0), (0)))
         and (JC_<somenum>: ge_int(offset_max(S_s_4_alloc_table, s_0), (0)))))
-       and ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-           and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-               and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-                   and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2)))))))}
+       and ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+           and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+               and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+                   and (JC_<somenum>: valid_gt(T_gt_1_alloc_table)))))))}
      unit
      reads S_gs_2_alloc_table,S_i_gs_2,S_i_s_4,S_p_gs_2,S_p_s_4,T_gt_1_alloc_table,T_ti_gt_1,T_tj_gt_1
      writes S_i_s_4,S_p_s_4
      { ((JC_<somenum>:
-        ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-        and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-            and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-                and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))))))
+        ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+        and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+            and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+                and (JC_<somenum>: valid_gt(T_gt_1_alloc_table))))))
        and (JC_<somenum>:
            ((JC_<somenum>: (integer_of_int32(select(S_i_s_4, s_0)) = (1)))
            and (JC_<somenum>: (select(S_p_s_4, s_0) = null))))) }
@@ -787,10 +787,10 @@ let fc_ensures_default =
     ((JC_<somenum>:
      ((JC_<somenum>: le_int(offset_min(T_t_3_alloc_table, t), (0)))
      and (JC_<somenum>: ge_int(offset_max(T_t_3_alloc_table, t), (0)))))
-    and ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-        and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-            and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-                and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))))))) }
+    and ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+        and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+            and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+                and (JC_<somenum>: valid_gt(T_gt_1_alloc_table))))))) }
   (init:
   try
    begin
@@ -815,10 +815,10 @@ let fc_safety =
     ((JC_<somenum>:
      ((JC_<somenum>: le_int(offset_min(T_t_3_alloc_table, t), (0)))
      and (JC_<somenum>: ge_int(offset_max(T_t_3_alloc_table, t), (0)))))
-    and ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-        and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-            and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-                and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))))))) }
+    and ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+        and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+            and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+                and (JC_<somenum>: valid_gt(T_gt_1_alloc_table))))))) }
   (init:
   try
    begin
@@ -836,10 +836,10 @@ let fc_safety =
        jessie_<somenum> end)) end) in void); (raise Return); (raise Return) end with
    Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-    and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-        and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-            and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2)))))) }
+    ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+    and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+        and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+            and (JC_<somenum>: valid_gt(T_gt_1_alloc_table)))))) }
 
 let fcp_ensures_default =
  fun (s_0 : S pointer) (S_i_s_4 : (S, int32) memory ref) (S_p_s_4 : (S, intP pointer) memory ref) (S_s_4_alloc_table : S alloc_table) ->
@@ -847,10 +847,10 @@ let fcp_ensures_default =
     ((JC_<somenum>:
      ((JC_<somenum>: le_int(offset_min(S_s_4_alloc_table, s_0), (0)))
      and (JC_<somenum>: ge_int(offset_max(S_s_4_alloc_table, s_0), (0)))))
-    and ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-        and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-            and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-                and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))))))) }
+    and ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+        and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+            and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+                and (JC_<somenum>: valid_gt(T_gt_1_alloc_table))))))) }
   (init:
   try
    begin
@@ -875,10 +875,10 @@ let fcp_safety =
     ((JC_<somenum>:
      ((JC_<somenum>: le_int(offset_min(S_s_4_alloc_table, s_0), (0)))
      and (JC_<somenum>: ge_int(offset_max(S_s_4_alloc_table, s_0), (0)))))
-    and ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-        and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-            and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-                and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))))))) }
+    and ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+        and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+            and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+                and (JC_<somenum>: valid_gt(T_gt_1_alloc_table))))))) }
   (init:
   try
    begin
@@ -896,10 +896,10 @@ let fcp_safety =
        jessie_<somenum> end)) end) in void); (raise Return); (raise Return) end with
    Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_gt(T_gt_1_alloc_table))
-    and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
-        and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
-            and (JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2)))))) }
+    ((JC_<somenum>: gt2(S_p_gs_2, S_i_gs_2))
+    and ((JC_<somenum>: valid_gs(S_gs_2_alloc_table))
+        and ((JC_<somenum>: gt_0(T_tj_gt_1, T_ti_gt_1))
+            and (JC_<somenum>: valid_gt(T_gt_1_alloc_table)))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C compound_global.jessie --quiet -f compound_global.makefile project

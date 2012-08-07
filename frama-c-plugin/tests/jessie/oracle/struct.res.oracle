@@ -698,8 +698,8 @@ parameter f :
      { } int32 reads S_s_1_alloc_table,T_x_t2_4,struct_S_xP_pps_3_alloc_table
      writes T_x_t2_4
      { ((JC_<somenum>:
-        ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-        and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))))
+        ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+        and (JC_<somenum>: valid_s(S_s_1_alloc_table))))
        and (JC_<somenum>:
            ((JC_<somenum>:
             ((JC_<somenum>: (integer_of_int32(result) = (1)))
@@ -722,13 +722,13 @@ parameter f_requires :
         ((JC_<somenum>: le_int(offset_min(T_t2_4_alloc_table, t2), (0)))
         and ((JC_<somenum>: ge_int(offset_max(T_t2_4_alloc_table, t2), (0)))
             and (JC_<somenum>: (integer_of_int32(select(T_x_t2_4, t2)) = (0))))))
-       and ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-           and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table)))))}
+       and ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+           and (JC_<somenum>: valid_s(S_s_1_alloc_table)))))}
      int32 reads S_s_1_alloc_table,T_x_t2_4,struct_S_xP_pps_3_alloc_table
      writes T_x_t2_4
      { ((JC_<somenum>:
-        ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-        and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))))
+        ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+        and (JC_<somenum>: valid_s(S_s_1_alloc_table))))
        and (JC_<somenum>:
            ((JC_<somenum>:
             ((JC_<somenum>: (integer_of_int32(result) = (1)))
@@ -751,8 +751,8 @@ parameter g :
   reads S_s_1_alloc_table,S_t_s_1,T_s_1_alloc_table,T_x_s_1,ps,struct_S_xP_pps_3_alloc_table
   writes T_x_s_1,ps,struct_S_xP_struct_S_xM_pps_3
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-     and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))))
+     ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+     and (JC_<somenum>: valid_s(S_s_1_alloc_table))))
     and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter g_requires :
@@ -761,14 +761,14 @@ parameter g_requires :
     ((JC_<somenum>:
      ((JC_<somenum>: le_int(offset_min(S_s_1_alloc_table, ps), (0)))
      and (JC_<somenum>: ge_int(offset_max(S_s_1_alloc_table, ps), (0)))))
-    and ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-        and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table)))))}
+    and ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+        and (JC_<somenum>: valid_s(S_s_1_alloc_table)))))}
   int32
   reads S_s_1_alloc_table,S_t_s_1,T_s_1_alloc_table,T_x_s_1,ps,struct_S_xP_pps_3_alloc_table
   writes T_x_s_1,ps,struct_S_xP_struct_S_xM_pps_3
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-     and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))))
+     ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+     and (JC_<somenum>: valid_s(S_s_1_alloc_table))))
     and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter int32_of_integer_ :
@@ -802,8 +802,8 @@ let f_ensures_default =
      ((JC_<somenum>: le_int(offset_min(T_t2_4_alloc_table, t2), (0)))
      and ((JC_<somenum>: ge_int(offset_max(T_t2_4_alloc_table, t2), (0)))
          and (JC_<somenum>: (integer_of_int32(select(T_x_t2_4, t2)) = (0))))))
-    and ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-        and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))))) }
+    and ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+        and (JC_<somenum>: valid_s(S_s_1_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -846,8 +846,8 @@ let f_safety =
      ((JC_<somenum>: le_int(offset_min(T_t2_4_alloc_table, t2), (0)))
      and ((JC_<somenum>: ge_int(offset_max(T_t2_4_alloc_table, t2), (0)))
          and (JC_<somenum>: (integer_of_int32(select(T_x_t2_4, t2)) = (0))))))
-    and ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-        and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))))) }
+    and ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+        and (JC_<somenum>: valid_s(S_s_1_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -881,8 +881,8 @@ let f_safety =
       void; (return := !tmp); (raise Return) end)))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-    and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table)))) }
+    ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+    and (JC_<somenum>: valid_s(S_s_1_alloc_table)))) }
 
 let g_ensures_default =
  fun (tt : unit) ->
@@ -890,8 +890,8 @@ let g_ensures_default =
     ((JC_<somenum>:
      ((JC_<somenum>: le_int(offset_min(S_s_1_alloc_table, ps), (0)))
      and (JC_<somenum>: ge_int(offset_max(S_s_1_alloc_table, ps), (0)))))
-    and ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-        and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))))) }
+    and ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+        and (JC_<somenum>: valid_s(S_s_1_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -924,8 +924,8 @@ let g_safety =
     ((JC_<somenum>:
      ((JC_<somenum>: le_int(offset_min(S_s_1_alloc_table, ps), (0)))
      and (JC_<somenum>: ge_int(offset_max(S_s_1_alloc_table, ps), (0)))))
-    and ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-        and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))))) }
+    and ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+        and (JC_<somenum>: valid_s(S_s_1_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -953,8 +953,8 @@ let g_safety =
       void); (return := !__retres); (raise Return) end))))))); absurd  end
    with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s(S_s_1_alloc_table))
-    and (JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table)))) }
+    ((JC_<somenum>: valid_pps(struct_S_xP_pps_3_alloc_table))
+    and (JC_<somenum>: valid_s(S_s_1_alloc_table)))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C struct.jessie --quiet -f struct.makefile project

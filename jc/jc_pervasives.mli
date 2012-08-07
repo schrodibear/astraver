@@ -187,6 +187,28 @@ module TermTable : Hashtbl.S with type key = term
 
 module AssertionOrd : OrderedType with type t = assertion
 
+module StringHashtblIter:
+sig
+  type 'a t
+  val create: int -> 'a t
+  val add: 'a t -> string -> 'a -> unit
+  val replace: 'a t -> string -> 'a -> unit
+  val find: 'a t -> string -> 'a 
+  val fold: (string -> 'a -> 'b -> 'b) -> 'a t -> 'b -> 'b
+  val iter: (string -> 'a -> unit) -> 'a t -> unit
+end
+
+module IntHashtblIter:
+sig
+  type 'a t
+  val create: int -> 'a t
+  val add: 'a t -> int -> 'a -> unit
+  val replace: 'a t -> int -> 'a -> unit
+  val find: 'a t -> int -> 'a 
+  val fold: (int -> 'a -> 'b -> 'b) -> 'a t -> 'b -> 'b
+  val iter: (int -> 'a -> unit) -> 'a t -> unit
+end
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"

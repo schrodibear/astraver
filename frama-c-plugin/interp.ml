@@ -34,7 +34,6 @@
 (* Import from Cil *)
 open Cil_types
 open Cil
-open Cilutil
 open Cil_datatype
 open Ast_info
 open Extlib
@@ -44,14 +43,11 @@ open Jc
 open Jc_constructors
 open Jc_ast
 open Jc_env
-open Jc_fenv
 open Jc_pervasives
 
 (* Utility functions *)
 open Common
 open Integer
-open Format
-
 
 (*****************************************************************************)
 (* Smart constructors.                                                       *)
@@ -61,7 +57,8 @@ let mktype tnode = new ptype tnode
 
 let mkexpr enode pos = new pexpr ~pos enode
 
-let void_expr = mkexpr (JCPEconst JCCvoid) Loc.dummy_position
+(* VP: unused variable *)
+(* let void_expr = mkexpr (JCPEconst JCCvoid) Loc.dummy_position *)
 let null_expr = mkexpr (JCPEconst JCCnull) Loc.dummy_position
 let true_expr = mkexpr (JCPEconst(JCCboolean true)) Loc.dummy_position
 let false_expr = mkexpr (JCPEconst(JCCboolean false)) Loc.dummy_position
@@ -84,7 +81,7 @@ let rec mkdisjunct elist pos =
     | [e] -> e
     | e::el -> mkexpr (JCPEbinary(e,`Blor,mkdisjunct el pos)) pos
 
-let rec mkimplies elist e pos =
+let mkimplies elist e pos =
   match elist with
     | [] -> e
     | _ -> mkexpr (JCPEbinary(e,`Bimplies,mkconjunct elist pos)) pos
@@ -95,9 +92,6 @@ let mkdecl dnode pos = new decl ~pos dnode
 (*****************************************************************************)
 (* Locate Jessie expressions on source program.                              *)
 (*****************************************************************************)
-
-let reg_pos ?id ?kind ?name pos = 
-  Output.old_reg_pos "C" ?id ?kind ?name pos
 
 let reg_position ?id ?kind ?name pos = 
   Output.old_reg_pos "C" ?id ?kind ?name (Loc.extract pos)
@@ -448,7 +442,8 @@ let type_of_padding = mktype (JCPTidentifier (name_of_padding_type,[]))
 
 let type_conversion_table = Hashtbl.create 0
 
-let type_conversion ty1 ty2 =
+(* VP: unused function *)
+(* let type_conversion ty1 ty2 =
   let ty1 = typeRemoveAttributes ["const";"volatile"] (unrollType ty1) in
   let ty2 = typeRemoveAttributes ["const";"volatile"] (unrollType ty2) in
   let sig1 = typeSig ty1 and sig2 = typeSig ty2 in
@@ -470,7 +465,7 @@ let type_conversion ty1 ty2 =
       Hashtbl.add
         type_conversion_table (sig1,sig2) (ty1,ty2,ty1_to_ty2,ty2_to_ty1);
       ty1_to_ty2,ty2_to_ty1
-
+*)
 (*
 type float_rounding_mode = [ `Downward | `Nearest | `Upward | `Towardzero | `Towardawayzero ]
 
@@ -673,10 +668,6 @@ let term_lhost pos = function
 (*
          Loc.report_position pos
 *)
-
-let isLogicConstant t = match t.term_node with
-    TConst _ -> true
-  | _ -> false
 
 let product f t1 t2 =
   List.fold_right
@@ -1026,12 +1017,13 @@ and term t =
 	unsupported "Expecting a single term, not a set:@ %a@."
           !Ast_printer.d_term t
 
-and term_lval pos lv  =
+(* VP: unused function *)
+(* and term_lval pos lv  =
   match terms_lval pos lv with [ lv ] -> lv
     | _ ->
 	unsupported "Expecting a single lval, not a set:@ %a@."
           !Ast_printer.d_term_lval lv
-
+*)
 and pred p =
   CurrentLoc.set p.loc;
   let enode = match p.content with
@@ -1835,7 +1827,7 @@ let keep_only_declared_nb_of_arguments vi l =
   else if is_variadic then unsupported "unsupported variadic functions"
   else l
 
-let rec instruction = function
+let instruction = function
   | Set(lv,e,pos) ->
       let enode = JCPEassign(lval pos lv,expr e) in
       (locate (mkexpr enode pos))#node
@@ -2698,9 +2690,8 @@ let integral_types () =
   if !int_model = IMexact then
     []
   else
-    Hashtbl.fold
-      (fun name (ty,bitsize) acc -> integral_type name ty bitsize :: acc)
-      all_integral_types []
+    Common.fold_integral_types
+      (fun name ty bitsize acc -> integral_type name ty bitsize :: acc) []
 
 let type_conversions () =
   let typconv_axiom ty1 ty1_to_ty2 ty2_to_ty1 =

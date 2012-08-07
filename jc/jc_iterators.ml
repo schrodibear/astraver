@@ -1057,13 +1057,14 @@ let replace_sub_expr e el =
     | None -> None,el 
     | Some _ -> let e1,r = pop el in Some e1,r
   in
-  let rec popn n el = 
+  (* VP: unused function *)
+  (* let rec popn n el = 
     if n > 0 then 
       let e,r = pop el in
       let el1,el2 = popn (n-1) r in
       e :: el1, el2
     else [],el
-  in
+  in *)
   let enode = match e#node with
     | JCEconst _ | JCEvar _ | JCEassert _ | JCEreturn_void as enode -> enode
     | JCEcontract(req,dec,vi_result,behs,_e) ->

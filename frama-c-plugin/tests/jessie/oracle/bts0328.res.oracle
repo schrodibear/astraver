@@ -18,13 +18,13 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int17 = -65536..65535
-
 type int8 = -128..127
 
-type int15 = -16384..16383
-
 type int32 = -2147483648..2147483647
+
+type int17 = -65536..65535
+
+type int15 = -16384..16383
 
 tag unsigned_charP = {
   uint8 unsigned_charM: 8;

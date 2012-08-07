@@ -20,9 +20,9 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int32 = -2147483648..2147483647
-
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag intP = {
   int32 intM: 32;
@@ -587,27 +587,27 @@ parameter f :
   reads intP_c_2_alloc_table,intP_intM_c_2,s_0_s_1_alloc_table,s_0_x_s_1,s_0_y_s_1
   writes s_0_x_s_1
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s(s_0_s_1_alloc_table))
-    and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
-        and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
-            and (JC_<somenum>: const_c(intP_intM_c_2)))))) }
+    ((JC_<somenum>: const_c(intP_intM_c_2))
+    and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
+        and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
+            and (JC_<somenum>: valid_s(s_0_s_1_alloc_table)))))) }
 
 parameter f_requires :
  n_1:int32 ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
-    and ((JC_<somenum>: valid_s(s_0_s_1_alloc_table))
-        and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
-            and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
-                and (JC_<somenum>: const_c(intP_intM_c_2)))))))}
+    and ((JC_<somenum>: const_c(intP_intM_c_2))
+        and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
+            and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
+                and (JC_<somenum>: valid_s(s_0_s_1_alloc_table)))))))}
   unit
   reads intP_c_2_alloc_table,intP_intM_c_2,s_0_s_1_alloc_table,s_0_x_s_1,s_0_y_s_1
   writes s_0_x_s_1
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s(s_0_s_1_alloc_table))
-    and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
-        and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
-            and (JC_<somenum>: const_c(intP_intM_c_2)))))) }
+    ((JC_<somenum>: const_c(intP_intM_c_2))
+    and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
+        and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
+            and (JC_<somenum>: valid_s(s_0_s_1_alloc_table)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -637,10 +637,10 @@ let f_ensures_default =
  fun (n_1 : int32) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
-    and ((JC_<somenum>: valid_s(s_0_s_1_alloc_table))
-        and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
-            and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
-                and (JC_<somenum>: const_c(intP_intM_c_2))))))) }
+    and ((JC_<somenum>: const_c(intP_intM_c_2))
+        and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
+            and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
+                and (JC_<somenum>: valid_s(s_0_s_1_alloc_table))))))) }
   (init:
   try
    begin
@@ -676,10 +676,10 @@ let f_safety =
  fun (n_1 : int32) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
-    and ((JC_<somenum>: valid_s(s_0_s_1_alloc_table))
-        and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
-            and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
-                and (JC_<somenum>: const_c(intP_intM_c_2))))))) }
+    and ((JC_<somenum>: const_c(intP_intM_c_2))
+        and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
+            and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
+                and (JC_<somenum>: valid_s(s_0_s_1_alloc_table))))))) }
   (init:
   try
    begin
@@ -714,10 +714,10 @@ let f_safety =
       else void); (raise Return) end)); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_s(s_0_s_1_alloc_table))
-    and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
-        and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
-            and (JC_<somenum>: const_c(intP_intM_c_2)))))) }
+    ((JC_<somenum>: const_c(intP_intM_c_2))
+    and ((JC_<somenum>: valid_c(intP_c_2_alloc_table))
+        and ((JC_<somenum>: i_1(s_0_y_s_1, s_0_x_s_1))
+            and (JC_<somenum>: valid_s(s_0_s_1_alloc_table)))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C invariants.jessie --quiet -f invariants.makefile project

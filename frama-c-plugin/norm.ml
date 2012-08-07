@@ -50,12 +50,6 @@
 (* Import from Cil *)
 open Cil_types
 open Cil
-open Cilutil
-(* [VP 2012-05-09] opening Cil_datatype is not really a good idea, as its
-   inner module names are a bit generic and might clash with toplevel modules
-   of Frama-C itself (in particular File)
-*)
-(* open Cil_datatype *)
 open Ast_info
 open Extlib
 
@@ -63,7 +57,6 @@ open Visitor
 
 (* Utility functions *)
 open Common
-open Integer
 
 let label_here = LogicLabel(None,"Here")
 
@@ -203,7 +196,7 @@ class retypeArrayVariables =
   in
 object(self)
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vvdec v =
     if isArrayType v.vtype && not (Cil_datatype.Varinfo.Set.mem v !varset) then
@@ -420,7 +413,7 @@ class retypeLogicFunctions =
   in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vannotation =
     let return_type ty =
@@ -435,7 +428,7 @@ object
             end
         | Ctype _ | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> ty
     in
-    let rec annot = function
+    let annot = function
       | Dfun_or_pred (li,loc) ->
           List.iter var li.l_profile;
           begin
@@ -669,7 +662,7 @@ class expandStructAssign () =
 
 object(self)
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
   method vglob_aux =
     let retype_func fvi =
       let formal (n,ty,a) =
@@ -949,7 +942,7 @@ class retypeStructVariables =
   in
 object(self)
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vvdec v =
     if isStructOrUnionType v.vtype && not v.vformal then
@@ -1222,7 +1215,7 @@ class retypeAddressTaken =
   let in_funspec = ref false in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vglob_aux = function
     | GVar(v,_,_) ->
@@ -1427,7 +1420,7 @@ class retypeFields =
   in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vglob_aux = function
     | GCompTag (compinfo,_) ->
@@ -1479,7 +1472,7 @@ let retype_fields file =
 class retypeTypeTags =
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vterm t = match t.term_node with
     | Ttype ty -> ChangeTo ({ t with term_node = Ttype(TPtr(ty,[])) })
@@ -1493,8 +1486,6 @@ let retype_type_tags file =
 (*****************************************************************************)
 (* Retype pointers to base types.                                            *)
 (*****************************************************************************)
-
-let debugtab = Hashtbl.create 0
 
 (* Retype pointer to base type T to pointer to struct S with:
  * - if T is [TVoid], no field in S
@@ -1639,7 +1630,7 @@ object(self)
 
   (* Usual methods in visitor interface. *)
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vfile _ =
     Common.struct_type_for_void := self#new_wrapper_for_type voidType;
@@ -1798,7 +1789,7 @@ class translateUnions =
   in
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vglob_aux = function
     | GCompTag (compinfo,_) as g when not compinfo.cstruct ->
@@ -1828,7 +1819,7 @@ let translate_unions file =
 class removeArrayAddress =
 object
 
-  inherit Visitor.frama_c_inplace as super
+  inherit Visitor.frama_c_inplace
 
   method vexpr e =
     let preaction e = match e.enode with
@@ -1859,8 +1850,6 @@ let remove_array_address file =
 (*****************************************************************************)
 (* Normalize the C file for Jessie translation.                              *)
 (*****************************************************************************)
-
-open Pervasives
 
 let normalize file =
   if checking then check_types file;

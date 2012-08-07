@@ -91,7 +91,12 @@ val max_value_of_integral_type :
 val min_value_of_integral_type :
   ?bitsize:int -> Cil_types.typ -> My_bigint.t
 
-val all_integral_types : (string, Cil_types.typ * int) Hashtbl.t
+(* iter over existing integral types in alphabetical order. *)
+val iter_integral_types: (string -> Cil_types.typ -> int -> unit) -> unit
+
+(* fold over existing integral types in alphabetical order. *)
+val fold_integral_types:
+  (string -> Cil_types.typ -> int -> 'a -> 'a) -> 'a -> 'a
 
 val term_of_var : Cil_types.varinfo -> Cil_types.term
 

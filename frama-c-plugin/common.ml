@@ -32,7 +32,6 @@
 (* Import from Cil *)
 open Cil_types
 open Cil
-open Cilutil
 open Ast_info
 open Extlib
 open Visitor
@@ -199,7 +198,17 @@ let max_value_of_integral_type ?bitsize ty =
     | TEnum ({ekind=ik},_) -> max_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
+(*TODO: projectify this *)
 let all_integral_types = Hashtbl.create 5
+
+module Integral_types_iterator =
+  State_builder.Set_ref
+    (Datatype.String.Set)
+    (struct
+       let name = "Jessie.Common.Integral_types_iterator"
+       let dependencies = [Ast.self ]
+     end
+     )
 
 let name_of_integral_type ?bitsize ty =
   let name_it signed size_in_bytes =
@@ -208,6 +217,7 @@ let name_of_integral_type ?bitsize ty =
     in
     let name = (if signed then "" else "u") ^ "int" ^ (string_of_int numbits) in
     Hashtbl.replace all_integral_types name (ty,numbits);
+    Integral_types_iterator.add name;
     name
   in
   match unrollType ty with
@@ -217,6 +227,24 @@ let name_of_integral_type ?bitsize ty =
     | TEnum ({ekind= IBool},_) -> "_bool"
     | TEnum ({ekind = ik},_) -> name_it (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
+
+let iter_integral_types f =
+  let apply s =
+    try
+      let (ty,size) = Hashtbl.find all_integral_types s in f s ty size
+    with Not_found -> 
+      Jessie_options.fatal
+        "Integral type %s is referenced but does not have a definition" s
+  in Integral_types_iterator.iter apply
+
+let fold_integral_types f init =
+  let apply s acc =
+    try
+      let (ty,size) = Hashtbl.find all_integral_types s in f s ty size acc
+    with Not_found -> 
+      Jessie_options.fatal
+        "Integral type %s is referenced but does not have a definition" s
+  in Integral_types_iterator.fold apply init
 
 (* Reference type *)
 
@@ -497,7 +525,8 @@ let name_of_string_declspec = "valid_string"
 
 let name_of_hint_assertion = "hint"
 
-let name_of_safety_behavior = "safety"
+(* VP: unused variable *)
+(* let name_of_safety_behavior = "safety" *)
 
 let name_of_default_behavior = "default"
 
@@ -731,12 +760,11 @@ let visit_and_push_statements visit visitor file =
   visit visitor file
 
 (* Visitor for tracing computation *)
-
-class trace_frama_c_visitor (visitor : Visitor.frama_c_visitor) =
+(* VP: unused *)
+(* class trace_frama_c_visitor (visitor : Visitor.frama_c_visitor) =
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace
 
   (* Inherit all visitors, printing visited item on the way *)
 
@@ -834,14 +862,14 @@ object
 
 end
 
-let visit_and_trace_framac visit visitor file =
+ let visit_and_trace_framac visit visitor file =
   let visitor = new trace_frama_c_visitor visitor in
   visit visitor file
 
 let visit_and_trace_cil visit visitor file =
   let visitor = new trace_frama_c_visitor visitor in
   visit (visitor :> cilVisitor) file
-
+*)
 (* Visitor for fixpoint computation *)
 
 let change = ref false
@@ -931,8 +959,7 @@ class checkTypes =
   let preaction_expr e = ignore (typeOf e); e in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace
 
   method vexpr e =
     ChangeDoChildrenPost (preaction_expr e, fun x -> x)
@@ -954,6 +981,8 @@ let check_types file =
   (* check general consistency *)
 (*   Cil.visitCilFile (new File.check_file :> Cil.cilVisitor) file *)
 
+(* VP: unused function *)
+(* 
 class check_file: Visitor.frama_c_visitor  =
 object(self)
 
@@ -1020,7 +1049,7 @@ object(self)
     | _ -> DoChildren
 
 end
-
+*)
 
 (*****************************************************************************)
 (* Miscellaneous                                                             *)
@@ -1055,14 +1084,6 @@ let term_of_var v =
   else
     mkterm (TLval(TVar lv,TNoOffset)) lv.lv_type v.vdecl
 
-let mkpred pnode loc =
-  {
-    ip_name = [];
-    ip_loc = loc;
-    ip_id = Logic_const.fresh_predicate_id ();
-    ip_content = pnode;
-  }
-
 let mkInfo e =
   match e.enode with
       Info _ -> e
@@ -1076,12 +1097,13 @@ let mkInfo e =
         new_exp ~loc:e.eloc (Info(e,einfo))
 
 (* Manipulation of offsets *)
-
+(* VP: unused function *)
+(*
 let rec offset_list = function
   | NoOffset -> []
   | Field (fi,off) -> (Field (fi, NoOffset)) :: offset_list off
   | Index (e,off) -> (Index (e, NoOffset)) :: offset_list off
-
+*)
 let is_last_offset = function
   | NoOffset -> true
   | Field (_fi,NoOffset) -> true
@@ -1129,14 +1151,15 @@ let rec lift_offset ty = function
       else off
   | off -> off
 
-let change_idx idx1 idx siz =
+(* VP: unused function *)
+(* let change_idx idx1 idx siz =
   let boff =
     Logic_utils.mk_dummy_term (TBinOp(Mult,idx1,constant_term Cil_datatype.Location.unknown siz))
       intType
   in
   Logic_utils.mk_dummy_term (TBinOp(PlusA,boff,idx)) intType
 
-let rec lift_toffset ty off =
+ let rec lift_toffset ty off =
   match off with
       TIndex(idx1,(TIndex _ as suboff)) ->
         let subty = direct_element_type ty in
@@ -1156,7 +1179,7 @@ let rec lift_toffset ty off =
                  TNoOffset)
         else off
     | TIndex _ | TField _ | TModel _ | TNoOffset -> off
-
+*)
 (* Allocation/deallocation *)
 
 let malloc_function () =

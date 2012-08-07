@@ -43,9 +43,11 @@ val compute_calls :
 *)
 
 val compute_logic_components :   
-  (int, (Jc_fenv.logic_info * Jc_fenv.term_or_assertion)) Jc_stdlib.Hashtbl.t 
+  (Jc_fenv.logic_info * Jc_fenv.term_or_assertion)
+  Jc_pervasives.IntHashtblIter.t 
   -> Jc_fenv.logic_info list array
 
 val compute_components :   
-  (int, (Jc_fenv.fun_info * Loc.position * Jc_fenv.fun_spec * Jc_fenv.expr option)) Jc_stdlib.Hashtbl.t 
+  (Jc_fenv.fun_info * Loc.position * Jc_fenv.fun_spec * Jc_fenv.expr option) 
+  Jc_pervasives.IntHashtblIter.t 
   -> Jc_fenv.fun_info list array

@@ -16,13 +16,13 @@ axiomatic Padding {
   
 }
 
-type uint32 = 0..4294967295
-
 type uint8 = 0..255
 
-type int32 = -2147483648..2147483647
+type uint32 = 0..4294967295
 
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag intP = {
   int32 intM: 32;

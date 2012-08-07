@@ -259,12 +259,12 @@ let compute_predicate_framed () =
             | `Sub   -> app2::acc
         ) mems [] in
       let ass = new assertion (JCAand apps) in
-      Hashtbl.replace Jc_typing.logic_functions_table tag
+      IntHashtblIter.replace Jc_typing.logic_functions_table tag
         (pi,JCAssertion ass) in
   Hashtbl.iter aux Jc_typing.pragma_gen_frame
 
 let user_predicate_code queue id kind pred =
-  let (logic,_) = Hashtbl.find Jc_typing.logic_functions_table id in
+  let (logic,_) = IntHashtblIter.find Jc_typing.logic_functions_table id in
   Jc_options.lprintf "Generate code of %s with %i params@." 
     logic.jc_logic_info_name (List.length pred);
   let code = fold_exp (separation_between queue kind) [] pred in
@@ -288,7 +288,8 @@ let user_predicate_code queue id kind pred =
       MyBag.make_jc_disj [fapp;gapp] in
   let code = List.map trad_code code in
   let code = new assertion (JCAand code) in
-  Hashtbl.replace Jc_typing.logic_functions_table id (logic,JCAssertion code)
+  IntHashtblIter.replace
+    Jc_typing.logic_functions_table id (logic,JCAssertion code)
 
 let pragma_gen_sep = Jc_typing.pragma_gen_sep
 

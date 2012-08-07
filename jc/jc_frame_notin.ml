@@ -298,7 +298,7 @@ let get_in_logic =
       fin.jc_logic_info_param_regions <- f.jc_logic_info_param_regions;
       fin.jc_logic_info_effects <- f.jc_logic_info_effects;
       fin.jc_logic_info_labels <- f.jc_logic_info_labels;
-      Hashtbl.add Jc_typing.logic_functions_table fin.jc_logic_info_tag
+      IntHashtblIter.add Jc_typing.logic_functions_table fin.jc_logic_info_tag
         (fin,JCNone);
       Hashtbl.add memo (f.jc_logic_info_tag,notin) fin;
       fin

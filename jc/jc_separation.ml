@@ -284,13 +284,13 @@ let axiomatic_decl d =
 
 let axiomatic a =
   try
-    let l = Hashtbl.find Jc_typing.axiomatics_table a in
+    let l = StringHashtblIter.find Jc_typing.axiomatics_table a in
     List.iter axiomatic_decl l.Jc_typing.axiomatics_decls
   with Not_found -> assert false
 
 let logic_function f =
   let (f, ta) =
-    Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag
+    IntHashtblIter.find Jc_typing.logic_functions_table f.jc_logic_info_tag
   in
   let rresult = f.jc_logic_info_result_region in
   begin match ta with
@@ -330,7 +330,7 @@ let funspec rresult spec =
 
 let code_function f =
   let (f, _, spec, body) =
-    Hashtbl.find Jc_typing.functions_table f.jc_fun_info_tag
+    IntHashtblIter.find Jc_typing.functions_table f.jc_fun_info_tag
   in
   Jc_options.lprintf "Separation: treating function %s@." f.jc_fun_info_name;
   let rresult = f.jc_fun_info_return_region in
