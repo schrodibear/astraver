@@ -1469,7 +1469,7 @@ let fprintf_why_decl form d =
 	(if b then "external " else "") (why3ident id.name)
 	  (fprintf_type ~need_colon:true false) t
     | Param(b,id,t) ->
-	fprintf form "@[<hov 1>%sparameter %s :@ %a@]@.@."
+	fprintf form "@[<hov 1>%sparameter %s :@ %a@]@\n@."
 	(if b then "external " else "") id.name
 	  (fprintf_type ~need_colon:false false) t
     | Logic(b,id,args,t) when !why3syntax ->

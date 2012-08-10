@@ -47,6 +47,15 @@ behavior default:
       (return x)
    }
 }
+
+unit shift()
+behavior default:
+  ensures (C_2 : true);
+{  
+   {  
+      (return ())
+   }
+}
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs kw.jessie/kw.cloc kw.jessie/kw.jc
 type charP
 
@@ -389,6 +398,10 @@ parameter safe_int8_of_integer_ :
 parameter safe_uint8_of_integer_ :
  x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
 
+parameter shift_0 : tt:unit -> { } unit { true }
+
+parameter shift_0_requires : tt:unit -> { } unit { true }
+
 parameter uint8_of_integer_ :
  x:int ->
   { (le_int((0), x) and le_int(x, (255)))} uint8
@@ -410,10 +423,27 @@ let loop_0_safety =
   try begin   (return := x_0); (raise Return); absurd  end with Return ->
    !return end)) { true }
 
+let shift_ensures_default =
+ fun (tt : unit) ->
+  { (JC_<somenum>: true) }
+  (init:
+  try begin   (raise Return); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
+
+let shift_safety =
+ fun (tt : unit) ->
+  { (JC_<somenum>: true) }
+  (init:
+  try begin   (raise Return); (raise Return) end with Return -> void end)
+  { true }
+
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C kw.jessie --quiet -f kw.makefile project
 why --project [...] why/kw.why
 <project name="kw" context="why/kw_ctx.why">
+  <function name="Function shift">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
   <function name="Function loop_0">
     <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
