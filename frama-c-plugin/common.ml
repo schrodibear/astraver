@@ -50,14 +50,11 @@ let jessie_emitter =
 let constant_expr ?(loc=Cil_datatype.Location.unknown) e = 
   Ast_info.constant_expr ~loc e
 
-exception NotImplemented of string
 exception Unsupported of string
 
 let fatal fmt = Jessie_options.fatal ~current:true fmt
 
-let notimplemented fmt =
-  Jessie_options.with_failure
-    (fun evt -> raise (NotImplemented evt.Log.evt_message)) ~current:true fmt
+let notimplemented fmt = Jessie_options.not_yet_implemented fmt
 
 let unsupported fmt =
   Jessie_options.with_failure
@@ -146,10 +143,10 @@ let size_in_bytes ik =
 let integral_type_size_in_bytes ty =
   match unrollType ty with
   | TInt(IBool,_attr) -> (* TODO *)
-    Extlib.not_yet_implemented "Common.integral_type_size_in_bytes IBool"
+      notimplemented "Common.integral_type_size_in_bytes IBool"
   | TInt(ik,_attr) -> size_in_bytes ik
   | TEnum ({ekind = IBool},_) -> 
-    Extlib.not_yet_implemented "Common.integral_type_size_in_bytes IBool"
+      notimplemented "Common.integral_type_size_in_bytes IBool"
   | TEnum (ei,_) -> size_in_bytes ei.ekind
   | _ -> assert false
 

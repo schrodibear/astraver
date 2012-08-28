@@ -114,7 +114,6 @@ behavior default:
 unit implicit_init(intP[..] la3)
 behavior default:
   assigns (la3 + [0..(3 - 1)]).intM;
-  allocates \nothing;
   ensures (C_21 : ((C_22 : ((la3 + 0).intM == 0)) &&
                     ((C_24 : ((la3 + 1).intM == 0)) &&
                       (C_25 : (\forall integer __i;
@@ -1297,12 +1296,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_basic_po15.why">
-      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "141" begin = "18" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "140" begin = "18" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_basic_po16.why">
-      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "141" begin = "18" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "140" begin = "18" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

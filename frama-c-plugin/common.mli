@@ -30,7 +30,6 @@
 (**************************************************************************)
 
 
-exception NotImplemented of string
 exception Unsupported of string
 
 val jessie_emitter: Emitter.emitter

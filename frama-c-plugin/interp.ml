@@ -702,11 +702,11 @@ and terms t =
 
     | TUpdate _ ->
 	(* TODO *)
-        Extlib.not_yet_implemented "Interp.terms TUpdate"
+        Common.notimplemented "Interp.terms TUpdate"
 
     | Toffset _ ->
 	(* TODO *)
-        Extlib.not_yet_implemented "Interp.terms TOffset"
+        Common.notimplemented "Interp.terms TOffset"
 
     | TLval lv ->
         List.map (fun x -> x#node) (terms_lval t.term_loc lv)
@@ -892,7 +892,7 @@ and terms t =
 
     | Tblock_length (_lab,_t) ->
 	(* TODO: memory model for Jessie *)
-	Extlib.not_yet_implemented "Interp.terms Tblock_length"
+	Common.notimplemented "Interp.terms Tblock_length"
 
     | Tnull -> [JCPEconst JCCnull]
 
@@ -910,17 +910,17 @@ and terms t =
                 let jc_body = term body in
                 [JCPElet(None,v.lv_name, Some jc_def, jc_body)]
             | (LBterm _ | LBpred _), _::_ ->
-                Extlib.not_yet_implemented "local function definition"
+                Common.notimplemented "local function definition"
             | (LBnone | LBreads _ | LBinductive _), _ ->
                 Jessie_options.fatal "Unexpected definition for local variable"
         end
     | TCoerce(_t,_typ) ->
 	(* TODO: see if useful *)
-	Extlib.not_yet_implemented "Interp.terms TCoerce"
+	Common.notimplemented "Interp.terms TCoerce"
 
     | TCoerceE(_t1,_t2) ->
 	(* TODO: see if useful *)
-	Extlib.not_yet_implemented "Interp.terms TCoerceE"
+	Common.notimplemented "Interp.terms TCoerceE"
 
     | Tlambda _ ->
 	unsupported "Jessie plugin does not support lambda abstraction"
@@ -930,8 +930,8 @@ and terms t =
     | Trange(low,high) -> [JCPErange(opt_map term low,opt_map term high)]
     | Tunion l ->
         List.map (fun x -> x#node) (List.flatten (List.map terms l))
-    | Tcomprehension _ -> Extlib.not_yet_implemented "Interp.terms Tcomprehension" (* TODO: does not exist in Jessie *)
-    | Tinter _ -> Extlib.not_yet_implemented "Interp.terms Tinter" (* TODO: does not exist in Jessie *)
+    | Tcomprehension _ -> Common.notimplemented "Interp.terms Tcomprehension" (* TODO: does not exist in Jessie *)
+    | Tinter _ -> Common.notimplemented "Interp.terms Tinter" (* TODO: does not exist in Jessie *)
     | Tempty_set -> []
   in
   List.map (swap mkexpr t.term_loc) enode
@@ -1117,7 +1117,7 @@ and pred p =
                 let jc_body = pred body in
                 JCPElet(None,v.lv_name, Some jc_def, jc_body)
             | (LBterm _ | LBpred _), _::_ ->
-                Extlib.not_yet_implemented "local function definition"
+                Common.notimplemented "local function definition"
             | (LBnone | LBreads _ | LBinductive _), _ ->
                 Jessie_options.fatal "Unexpected definition for local variable"
         end
@@ -1197,7 +1197,7 @@ and pred p =
     
     | Pvalid_read _ ->
       (* TODO *)
-      Extlib.not_yet_implemented "Interp.pred Pvalid_read"
+      Common.notimplemented "Interp.pred Pvalid_read"
 
     | Pfresh (_lab1,_lab2,t,_) ->
       (* TODO: take into account size *)
@@ -1205,20 +1205,20 @@ and pred p =
 
     | Pallocable _ | Pfreeable _ ->
 	(* TODO *)
-	Extlib.not_yet_implemented "Interp.pred Pallocable|Pfreeable"
+	Common.notimplemented "Interp.pred Pallocable|Pfreeable"
 
     | Psubtype({term_node = Ttypeof t},{term_node = Ttype ty}) ->
         JCPEinstanceof(term t,get_struct_name (pointed_type ty))
 
     | Psubtype(_t1,_t2) ->
 	(* TODO *)
-	Extlib.not_yet_implemented "Interp.pred Psubtype"
+	Common.notimplemented "Interp.pred Psubtype"
 
     | Pseparated(_seps) ->
 	(* TODO *)
-	Extlib.not_yet_implemented "Interp.pred Pseparated"
+	Common.notimplemented "Interp.pred Pseparated"
     | Pinitialized _ ->
-      Extlib.not_yet_implemented "Interp.pred Pinitialized"
+      Common.notimplemented "Interp.pred Pinitialized"
 
   in
   mkexpr enode p.loc
@@ -2221,7 +2221,7 @@ let rec annotation is_axiomatic annot =
                          name,[],
                          logic_labels info.l_labels,
                          params,body)])
-      with (Unsupported _ | NotImplemented _)
+      with (Unsupported _ | Log.FeatureRequest _)
         when drop_on_unsupported_feature ->
 	  warning "Dropping declaration of predicate %s@."
             info.l_var_info.lv_name ;
@@ -2235,7 +2235,7 @@ let rec annotation is_axiomatic annot =
            ~name:("Lemma " ^ name) pos);
       begin try
         [JCDlemma(name,is_axiom,[],logic_labels labels,pred property)]
-      with (Unsupported _ | NotImplemented _)
+      with (Unsupported _ | Log.FeatureRequest _)
           when drop_on_unsupported_feature ->
             warning "Dropping lemma %s@." name; []
       end
@@ -2245,7 +2245,7 @@ let rec annotation is_axiomatic annot =
         CurrentLoc.set pos;
 	let n = translated_name property [] in
         [JCDglobal_inv(n,pred (Logic_utils.get_pred_body property))]
-      with (Unsupported _ | NotImplemented _)
+      with (Unsupported _ | Log.FeatureRequest _)
           when drop_on_unsupported_feature ->
             warning "Dropping invariant %s@." property.l_var_info.lv_name ;
             []
@@ -2259,7 +2259,7 @@ let rec annotation is_axiomatic annot =
            None,n, [],logic_labels annot.l_labels,
            List.map logic_variable annot.l_profile,
            JCexpr(pred (Logic_utils.get_pred_body annot)))]
-      with (Unsupported _ | NotImplemented _)
+      with (Unsupported _ | Log.FeatureRequest _)
           when drop_on_unsupported_feature ->
             warning "Dropping type invariant %s@." annot.l_var_info.lv_name;
             []
@@ -2388,16 +2388,16 @@ let rec annotation is_axiomatic annot =
 
   | Dtype _ ->
       (* TODO *)
-      Extlib.not_yet_implemented "Interp.annotation Dtype"
+      Common.notimplemented "Interp.annotation Dtype"
   | Dvolatile _ ->
     (* TODO *)
-    Extlib.not_yet_implemented "Interp.annotation Dvolatile"
+    Common.notimplemented "Interp.annotation Dvolatile"
   | Dmodel_annot _ ->
       (* already handled in norm.ml *)
       []
   | Dcustom_annot _ ->
     (* TODO *)
-    Extlib.not_yet_implemented "Interp.annotation Dcustom_annot"
+    Common.notimplemented "Interp.annotation Dcustom_annot"
   | Daxiomatic(id,l,pos) ->
       CurrentLoc.set pos;
       (*
@@ -2646,10 +2646,11 @@ let global vardefs g =
               (reg_position ~id:f.svar.vname
                  ~name:("Function " ^ f.svar.vname) f.svar.vdecl);
             [JCDfun(ctype rty,id,formals,s,Some body)]
-          with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->
-            warning "Dropping definition of function %s@." f.svar.vname ;
-            let s,_cba,_dba = spec funspec in
-            [JCDfun(ctype rty,id,formals,s,None)]
+          with (Unsupported _ | Log.FeatureRequest _) 
+              when drop_on_unsupported_feature ->
+                warning "Dropping definition of function %s@." f.svar.vname ;
+                let s,_cba,_dba = spec funspec in
+                [JCDfun(ctype rty,id,formals,s,None)]
           end
 
     | GAsm _ ->

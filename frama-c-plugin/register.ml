@@ -317,20 +317,16 @@ let run_and_catch_error () =
   try run ()
   with
     | Unsupported _ as e ->
-	warn_general "Unsupported feature(s).@\nJessie plugin can not be used on your code." ;
+	warn_general
+          "Unsupported feature(s).@\n\
+           Jessie plugin can not be used on your code.";
 	if Jessie_options.debug_atleast 1 then raise e else ()
-    | NotImplemented _ ->
-	warn_general "Not implemented feature(s). \
-Please submit `feature request' report."
-    (*| Assert_failure(file,a,b) ->
-	fatal
-	  "Unexpected failure.@\nPlease submit bug report (Ref. \"%s:%d:%d\")."
-	  file a b
-      | exn ->
-	fatal
-	  "Unexpected exception.@\nPlease submit bug report (Ref. \"%s\")."
-	  (Printexc.to_string exn)
-*)
+    | Log.FeatureRequest (_,s) as e ->
+	warn_general 
+          "Unimplemented feature: %s. \
+           Please submit `feature request' report." s;
+          if Jessie_options.debug_atleast 1 then raise e else ()
+
 let run_and_catch_error =
   Dynamic.register
     "run_analysis"
