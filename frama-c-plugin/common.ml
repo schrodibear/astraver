@@ -290,11 +290,7 @@ let mkTRefArray (elemty,size,attr) =
 
 let reference_size ty =
   match findAttribute arraylen_attr_name (typeAttrs ty) with
-    | [AInt i] -> 
-(*
-        eprintf "AInt has argument %d@." i;
-*)
-        Int64.of_int i
+    | [AInt i] -> My_bigint.to_int64 i
     | _ -> assert false
 
 let is_reference_type ty =
