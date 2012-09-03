@@ -18,5 +18,5 @@ int main(void)
 { 
   int tmp=f();
   if (tmp) {return 0;}
-  return tmp;}
+  return tmp;
 }
