@@ -64,11 +64,15 @@ behavior default:
    (var int32 __retres);
    
    {  
-      {  (C_2 : ((C_1 : (t + 3).intM) = 0));
-         (C_5 : ((C_4 : (t + 2).intM) = (C_3 : (t + 3).intM)));
-         (C_8 : ((C_7 : (t + 1).intM) = (C_6 : (t + 2).intM)))
+      {  
+         {  
+            {  (C_2 : ((C_1 : (t + 3).intM) = 0));
+               (C_5 : ((C_4 : (t + 2).intM) = (C_3 : (t + 3).intM)))
+            };
+            (C_8 : ((C_7 : (t + 1).intM) = (C_6 : (t + 2).intM)))
+         };
+         (C_11 : ((C_10 : (t + 0).intM) = (C_9 : (t + 1).intM)))
       };
-      (C_11 : ((C_10 : (t + 0).intM) = (C_9 : (t + 1).intM)));
       (C_12 : (__retres = 0));
       
       (return __retres)
@@ -927,44 +931,51 @@ let f_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_11:
      (C_12:
      begin
        (let jessie_<somenum> =
-       (C_2:
-       (C_5:
        begin
-         (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-         (let jessie_<somenum> = t in
-         (let jessie_<somenum> = (3) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
          (let jessie_<somenum> =
-         (C_3: ((safe_acc_ !intP_intM_t_1) ((shift t) (3)))) in
-         (let jessie_<somenum> = t in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         [ { } unit reads intP_intM_t_1,intP_t_1_alloc_table
-           writes intP_intM_t_1
-           { (not_assigns(intP_t_1_alloc_table, intP_intM_t_1@,
-              intP_intM_t_1, pset_range(pset_singleton(jessie_<somenum>), (2), (3)))
-             and ((select(intP_intM_t_1, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
-                 and (select(intP_intM_t_1, shift(jessie_<somenum>, (3))) = jessie_<somenum>))) } ]))))))));
-        (C_8:
+         begin
+           (let jessie_<somenum> =
+           (C_2:
+           begin
+             (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+             (let jessie_<somenum> = t in
+             (let jessie_<somenum> = (3) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) (3)) in
+             (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>))))));
+            (C_5:
+            (let jessie_<somenum> =
+            (C_3: ((safe_acc_ !intP_intM_t_1) ((shift t) (3)))) in
+            begin
+              (let jessie_<somenum> = t in
+              (let jessie_<somenum> = (2) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+              (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>)))));
+             jessie_<somenum> end)) end) in void);
+          (C_8:
+          (let jessie_<somenum> =
+          (C_6: ((safe_acc_ !intP_intM_t_1) ((shift t) (2)))) in
+          begin
+            (let jessie_<somenum> = t in
+            (let jessie_<somenum> = (1) in
+            (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+            (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+            (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>))))); jessie_<somenum>
+          end)) end in void);
+        (C_11:
         (let jessie_<somenum> =
-        (C_6: ((safe_acc_ !intP_intM_t_1) ((shift t) (2)))) in
+        (C_9: ((safe_acc_ !intP_intM_t_1) ((shift t) (1)))) in
         begin
           (let jessie_<somenum> = t in
-          (let jessie_<somenum> = (1) in
-          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-          (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-          (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>))))); jessie_<somenum>
-        end)) end)) in void);
-      (let jessie_<somenum> = (C_9: ((safe_acc_ !intP_intM_t_1) ((shift t) (1)))) in
-      (let jessie_<somenum> = t in
-      (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>)));
+          (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
+       end in void);
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end))
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     not_assigns(intP_t_1_alloc_table@, intP_intM_t_1@, intP_intM_t_1,
     pset_range(pset_singleton(t), (0), (3)))) }
@@ -977,44 +988,51 @@ let f_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_11:
      (C_12:
      begin
        (let jessie_<somenum> =
-       (C_2:
-       (C_5:
        begin
-         (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-         (let jessie_<somenum> = t in
-         (let jessie_<somenum> = (3) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
          (let jessie_<somenum> =
-         (C_3: ((safe_acc_ !intP_intM_t_1) ((shift t) (3)))) in
-         (let jessie_<somenum> = t in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         [ { } unit reads intP_intM_t_1,intP_t_1_alloc_table
-           writes intP_intM_t_1
-           { (not_assigns(intP_t_1_alloc_table, intP_intM_t_1@,
-              intP_intM_t_1, pset_range(pset_singleton(jessie_<somenum>), (2), (3)))
-             and ((select(intP_intM_t_1, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
-                 and (select(intP_intM_t_1, shift(jessie_<somenum>, (3))) = jessie_<somenum>))) } ]))))))));
-        (C_8:
+         begin
+           (let jessie_<somenum> =
+           (C_2:
+           begin
+             (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+             (let jessie_<somenum> = t in
+             (let jessie_<somenum> = (3) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) (3)) in
+             (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>))))));
+            (C_5:
+            (let jessie_<somenum> =
+            (C_3: ((safe_acc_ !intP_intM_t_1) ((shift t) (3)))) in
+            begin
+              (let jessie_<somenum> = t in
+              (let jessie_<somenum> = (2) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+              (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>))))); jessie_<somenum>
+            end)) end) in void);
+          (C_8:
+          (let jessie_<somenum> =
+          (C_6: ((safe_acc_ !intP_intM_t_1) ((shift t) (2)))) in
+          begin
+            (let jessie_<somenum> = t in
+            (let jessie_<somenum> = (1) in
+            (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+            (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+            (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>))))); jessie_<somenum>
+          end)) end in void);
+        (C_11:
         (let jessie_<somenum> =
-        (C_6: ((safe_acc_ !intP_intM_t_1) ((shift t) (2)))) in
+        (C_9: ((safe_acc_ !intP_intM_t_1) ((shift t) (1)))) in
         begin
           (let jessie_<somenum> = t in
-          (let jessie_<somenum> = (1) in
-          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-          (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-          (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>))))); jessie_<somenum>
-        end)) end)) in void);
-      (let jessie_<somenum> = (C_9: ((safe_acc_ !intP_intM_t_1) ((shift t) (1)))) in
-      (let jessie_<somenum> = t in
-      (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>)));
+          (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
+       end in void);
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
 
 let g_ensures_default =
  fun (tt : unit) ->
@@ -1089,12 +1107,12 @@ why --project [...] why/assigns_range.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/assigns_range_po6.why">
-      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "119" begin = "15" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "123" begin = "15" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/assigns_range_po7.why">
-      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "119" begin = "15" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "123" begin = "15" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1109,12 +1127,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/assigns_range_po10.why">
-      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "120" begin = "15" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "124" begin = "15" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/assigns_range_po11.why">
-      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "120" begin = "15" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "124" begin = "15" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1130,12 +1148,12 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/assigns_range_po2.why">
-      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "98" begin = "15" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "102" begin = "15" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/assigns_range_po3.why">
-      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "98" begin = "15" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/assigns_range.jessie/assigns_range.jc" line = "102" begin = "15" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

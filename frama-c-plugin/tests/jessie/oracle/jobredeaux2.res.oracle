@@ -136,13 +136,24 @@ behavior default:
                   {  (if (j < colB_0) then () else 
                      (goto while_1_break));
                      
-                     {  (if (a_0 != (C_24 : (0 :> float))) then (C_23 : (tmp = 1)) else 
-                        (if ((C_22 : (C_21 : ((C_20 : (C_19 : (b_0 + i)).float_xM) +
-                                               j)).floatM) !=
-                              (C_18 : (0 :> float))) then (C_17 : (tmp = 1)) else 
-                        (C_16 : (tmp = 0))));
-                        (C_29 : ((C_28 : (C_27 : ((C_26 : (C_25 : (c_0 + i)).int_xM) +
-                                                   j)).intM) = tmp));
+                     {  
+                        {  
+                           {  (if (a_0 != (C_24 : (0 :> float))) then 
+                              (C_23 : (tmp = 1)) else (if ((C_22 : (C_21 : 
+                                                                   ((C_20 : 
+                                                                    (C_19 : 
+                                                                    (b_0 +
+                                                                    i)).float_xM) +
+                                                                    j)).floatM) !=
+                                                            (C_18 : (0 :> float))) then 
+                                                      (C_17 : (tmp = 1)) else 
+                                                      (C_16 : (tmp = 0))))
+                           };
+                           (C_29 : ((C_28 : (C_27 : ((C_26 : (C_25 : 
+                                                             (c_0 +
+                                                               i)).int_xM) +
+                                                      j)).intM) = tmp))
+                        };
                         (C_32 : (j = (C_31 : ((C_30 : (j + 1)) :> int32))))
                      }
                   }
@@ -1640,47 +1651,50 @@ let or_scalar_ensures_default =
                try
                 begin
                   (let jessie_<somenum> =
-                  (C_29:
                   (C_32:
                   begin
                     (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 colB_0))
                     then void else (raise (Goto_while_1_break_exc void)));
                    (let jessie_<somenum> =
-                   (if ((ne_single_ a_0) (C_24: (single_of_real_exact 0.0)))
-                   then
-                    (C_23:
-                    begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-                   else
-                    (if ((ne_single_ (C_22:
-                                     ((safe_acc_ floatP_floatM_float_xM_9) 
-                                      (C_21:
-                                      ((shift (C_20:
-                                              ((safe_acc_ float_xP_float_xM_b_0_1) 
-                                               (C_19:
-                                               ((shift b_0) (integer_of_int32 !i)))))) 
-                                       (integer_of_int32 !j)))))) (C_18:
-                                                                  (single_of_real_exact 0.0)))
-                    then
-                     (C_17:
-                     begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-                    else
-                     (C_16:
-                     begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))) in
-                   void);
-                   (let jessie_<somenum> =
-                   (let jessie_<somenum> = !tmp in
-                   (let jessie_<somenum> =
-                   (C_26:
-                   ((safe_acc_ int_xP_int_xM_c_0_2) (C_25:
-                                                    ((shift c_0) (integer_of_int32 !i))))) in
-                   (let jessie_<somenum> = (integer_of_int32 !j) in
-                   (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-                   (((safe_upd_ intP_intM_int_xM_10) jessie_<somenum>) jessie_<somenum>))))) in
-                   void);
+                   begin
+                     (let jessie_<somenum> =
+                     (if ((ne_single_ a_0) (C_24: (single_of_real_exact 0.0)))
+                     then
+                      (C_23:
+                      begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+                     else
+                      (if ((ne_single_ (C_22:
+                                       ((safe_acc_ floatP_floatM_float_xM_9) 
+                                        (C_21:
+                                        ((shift (C_20:
+                                                ((safe_acc_ float_xP_float_xM_b_0_1) 
+                                                 (C_19:
+                                                 ((shift b_0) (integer_of_int32 !i)))))) 
+                                         (integer_of_int32 !j)))))) (C_18:
+                                                                    (single_of_real_exact 0.0)))
+                      then
+                       (C_17:
+                       begin   (tmp := (safe_int32_of_integer_ (1))); !tmp
+                       end)
+                      else
+                       (C_16:
+                       begin   (tmp := (safe_int32_of_integer_ (0))); !tmp
+                       end))) in void);
+                    (C_29:
+                    (let jessie_<somenum> = !tmp in
+                    (let jessie_<somenum> =
+                    (C_26:
+                    ((safe_acc_ int_xP_int_xM_c_0_2) (C_25:
+                                                     ((shift c_0) (integer_of_int32 !i))))) in
+                    (let jessie_<somenum> = (integer_of_int32 !j) in
+                    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                    begin
+                      (((safe_upd_ intP_intM_int_xM_10) jessie_<somenum>) jessie_<somenum>);
+                     jessie_<somenum> end))))) end in void);
                    (j := (C_31:
                          (safe_int32_of_integer_ (C_30:
                                                  ((add_int (integer_of_int32 !j)) (1))))));
-                   !j end)) in void); (raise (Loop_continue_exc void)) end
+                   !j end) in void); (raise (Loop_continue_exc void)) end
                 with Loop_continue_exc jessie_<somenum> -> void end end done);
              (raise (Goto_while_1_break_exc void)) end) with
             Goto_while_1_break_exc jessie_<somenum> ->
@@ -1855,49 +1869,52 @@ let or_scalar_safety =
                try
                 begin
                   (let jessie_<somenum> =
-                  (C_29:
                   (C_32:
                   begin
                     (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 colB_0))
                     then void else (raise (Goto_while_1_break_exc void)));
                    (let jessie_<somenum> =
-                   (if ((ne_single_ a_0) (C_24: (single_of_real_exact 0.0)))
-                   then
-                    (C_23:
-                    begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-                   else
-                    (if ((ne_single_ (C_22:
-                                     (JC_<somenum>:
-                                     ((((offset_acc_ floatP_float_xM_9_alloc_table) floatP_floatM_float_xM_9) 
-                                       (C_20:
+                   begin
+                     (let jessie_<somenum> =
+                     (if ((ne_single_ a_0) (C_24: (single_of_real_exact 0.0)))
+                     then
+                      (C_23:
+                      begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+                     else
+                      (if ((ne_single_ (C_22:
                                        (JC_<somenum>:
-                                       ((((offset_acc_ float_xP_b_0_1_alloc_table) float_xP_float_xM_b_0_1) b_0) 
-                                        (integer_of_int32 !i))))) (integer_of_int32 !j))))) 
-                         (C_18: (single_of_real_exact 0.0)))
-                    then
-                     (C_17:
-                     begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-                    else
-                     (C_16:
-                     begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))) in
-                   void);
-                   (let jessie_<somenum> =
-                   (let jessie_<somenum> = !tmp in
-                   (let jessie_<somenum> =
-                   (C_26:
-                   (JC_<somenum>:
-                   ((((offset_acc_ int_xP_c_0_2_alloc_table) int_xP_int_xM_c_0_2) c_0) 
-                    (integer_of_int32 !i)))) in
-                   (let jessie_<somenum> = (integer_of_int32 !j) in
-                   (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-                   (JC_<somenum>:
-                   (((((offset_upd_ intP_int_xM_10_alloc_table) intP_intM_int_xM_10) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-                   void);
+                                       ((((offset_acc_ floatP_float_xM_9_alloc_table) floatP_floatM_float_xM_9) 
+                                         (C_20:
+                                         (JC_<somenum>:
+                                         ((((offset_acc_ float_xP_b_0_1_alloc_table) float_xP_float_xM_b_0_1) b_0) 
+                                          (integer_of_int32 !i))))) (integer_of_int32 !j))))) 
+                           (C_18: (single_of_real_exact 0.0)))
+                      then
+                       (C_17:
+                       begin   (tmp := (safe_int32_of_integer_ (1))); !tmp
+                       end)
+                      else
+                       (C_16:
+                       begin   (tmp := (safe_int32_of_integer_ (0))); !tmp
+                       end))) in void);
+                    (C_29:
+                    (let jessie_<somenum> = !tmp in
+                    (let jessie_<somenum> =
+                    (C_26:
+                    (JC_<somenum>:
+                    ((((offset_acc_ int_xP_c_0_2_alloc_table) int_xP_int_xM_c_0_2) c_0) 
+                     (integer_of_int32 !i)))) in
+                    (let jessie_<somenum> = (integer_of_int32 !j) in
+                    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                    begin
+                      (JC_<somenum>:
+                      (((((offset_upd_ intP_int_xM_10_alloc_table) intP_intM_int_xM_10) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+                     jessie_<somenum> end))))) end in void);
                    (j := (C_31:
                          (JC_<somenum>:
                          (int32_of_integer_ (C_30:
                                             ((add_int (integer_of_int32 !j)) (1)))))));
-                   !j end)) in void); (raise (Loop_continue_exc void)) end
+                   !j end) in void); (raise (Loop_continue_exc void)) end
                 with Loop_continue_exc jessie_<somenum> -> void end end done);
              (raise (Goto_while_1_break_exc void)) end) with
             Goto_while_1_break_exc jessie_<somenum> ->
@@ -2030,12 +2047,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux2_po53.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "138" begin = "33" end = "153"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "146" begin = "36" end = "284"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux2_po54.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "138" begin = "33" end = "153"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "146" begin = "36" end = "284"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2179,12 +2196,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux2_po23.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "237" begin = "33" end = "872"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "248" begin = "33" end = "872"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux2_po24.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "237" begin = "33" end = "872"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "248" begin = "33" end = "872"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

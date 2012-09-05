@@ -76,8 +76,10 @@ behavior default:
          {  (if (i < n_1) then () else 
             (goto while_0_break));
             
-            {  (C_4 : (tmp = (C_3 : nd())));
-               (C_6 : (b = (C_5 : (tmp :> int32))));
+            {  
+               {  (C_4 : (tmp = (C_3 : nd())));
+                  (C_6 : (b = (C_5 : (tmp :> int32))))
+               };
                (if (b != 0) then (C_9 : (y = (C_8 : ((C_7 : (x / i)) :> int32)))) else ())
             }
          }
@@ -507,15 +509,16 @@ let main_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (C_4:
-          (C_6:
           begin
             (if ((lt_int_ (integer_of_int32 i)) (integer_of_int32 n_1))
             then void else (raise (Goto_while_0_break_exc void)));
-           (let jessie_<somenum> = (tmp := (C_3: (JC_<somenum>: (nd void)))) in void);
            (let jessie_<somenum> =
-           (b := (C_5: (safe_int32_of_integer_ (integer_of_uint32 !tmp)))) in
-           void);
+           (C_4:
+           (C_6:
+           begin
+             (let jessie_<somenum> = (tmp := (C_3: (JC_<somenum>: (nd void)))) in void);
+            (b := (C_5: (safe_int32_of_integer_ (integer_of_uint32 !tmp))));
+            !b end)) in void);
            (if ((neq_int_ (integer_of_int32 !b)) (0))
            then
             (let jessie_<somenum> =
@@ -525,7 +528,7 @@ let main_ensures_default =
                                           (JC_<somenum>:
                                           ((computer_div (integer_of_int32 !x_0)) 
                                            (integer_of_int32 i)))))))) in
-            void) else void); (raise (Loop_continue_exc void)) end)) with
+            void) else void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -561,16 +564,18 @@ let main_safety =
         begin
           [ { } unit { true } ];
          try
-          (C_4:
-          (C_6:
           begin
             (if ((lt_int_ (integer_of_int32 i)) (integer_of_int32 n_1))
             then void else (raise (Goto_while_0_break_exc void)));
-           (let jessie_<somenum> = (tmp := (C_3: (JC_<somenum>: (nd_requires void)))) in
-           void);
            (let jessie_<somenum> =
-           (b := (C_5: (JC_<somenum>: (int32_of_integer_ (integer_of_uint32 !tmp))))) in
-           void);
+           (C_4:
+           (C_6:
+           begin
+             (let jessie_<somenum> = (tmp := (C_3: (JC_<somenum>: (nd_requires void)))) in
+             void);
+            (b := (C_5:
+                  (JC_<somenum>: (int32_of_integer_ (integer_of_uint32 !tmp))))); !b
+           end)) in void);
            (if ((neq_int_ (integer_of_int32 !b)) (0))
            then
             (let jessie_<somenum> =
@@ -581,7 +586,7 @@ let main_safety =
                                      (JC_<somenum>:
                                      ((computer_div_ (integer_of_int32 !x_0)) 
                                       (integer_of_int32 i))))))))) in void)
-           else void); (raise (Loop_continue_exc void)) end)) with
+           else void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -634,11 +639,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/cvc3_po7.why">
-      <location file = "why/cvc3.why" line = "464" begin = "42" end = "43"/>
+      <location file = "why/cvc3.why" line = "465" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/cvc3_po8.why">
-      <location file = "why/cvc3.why" line = "464" begin = "42" end = "43"/>
+      <location file = "why/cvc3.why" line = "465" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

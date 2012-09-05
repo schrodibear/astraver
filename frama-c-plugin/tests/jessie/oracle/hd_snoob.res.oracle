@@ -1260,8 +1260,10 @@ behavior default:
                (C_533 : (z = (C_532 : snoob2(x_8))));
                (C_535 : (u = (C_534 : snoob3(x_8))));
                (C_537 : (v = (C_536 : next_set_of_n_elements(x_8))));
-               (C_540 : (tmp_2 = (C_539 : snoob4((C_538 : (x_8 :> int32))))));
-               (C_542 : (w = (C_541 : (tmp_2 :> uint32))));
+               
+               {  (C_540 : (tmp_2 = (C_539 : snoob4((C_538 : (x_8 :> int32))))));
+                  (C_542 : (w = (C_541 : (tmp_2 :> uint32))))
+               };
                (C_544 : (x_8 = (C_543 : snoob(x_8))))
             };
             (if (x_8 <= 255) then () else 
@@ -4715,8 +4717,6 @@ let main_ensures_default =
                (C_533:
                (C_535:
                (C_537:
-               (C_540:
-               (C_542:
                (C_544:
                begin
                  (let jessie_<somenum> =
@@ -4737,18 +4737,21 @@ let main_ensures_default =
                       (JC_<somenum>: (next_set_of_n_elements jessie_<somenum>))))) in
                 void);
                 (let jessie_<somenum> =
-                (tmp_2 := (C_539:
-                          (let jessie_<somenum> =
-                          (C_538:
-                          (safe_int32_of_integer_ (integer_of_uint32 !x_8))) in
-                          (JC_<somenum>: (snoob4 jessie_<somenum>))))) in void);
-                (let jessie_<somenum> =
-                (w := (C_541:
-                      (safe_uint32_of_integer_ (integer_of_int32 !tmp_2)))) in
-                void);
+                (C_540:
+                (C_542:
+                begin
+                  (let jessie_<somenum> =
+                  (tmp_2 := (C_539:
+                            (let jessie_<somenum> =
+                            (C_538:
+                            (safe_int32_of_integer_ (integer_of_uint32 !x_8))) in
+                            (JC_<somenum>: (snoob4 jessie_<somenum>))))) in void);
+                 (w := (C_541:
+                       (safe_uint32_of_integer_ (integer_of_int32 !tmp_2))));
+                 !w end)) in void);
                 (x_8 := (C_543:
                         (let jessie_<somenum> = !x_8 in
-                        (JC_<somenum>: (snoob jessie_<somenum>))))); !x_8 end))))))) in
+                        (JC_<somenum>: (snoob jessie_<somenum>))))); !x_8 end))))) in
                void);
               (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
               else (raise (Goto_while_0_break_exc void)));
@@ -4860,8 +4863,6 @@ let main_safety =
                (C_533:
                (C_535:
                (C_537:
-               (C_540:
-               (C_542:
                (C_544:
                begin
                  (let jessie_<somenum> =
@@ -4882,20 +4883,24 @@ let main_safety =
                       (JC_<somenum>: (next_set_of_n_elements_requires jessie_<somenum>))))) in
                 void);
                 (let jessie_<somenum> =
-                (tmp_2 := (C_539:
-                          (let jessie_<somenum> =
-                          (C_538:
-                          (JC_<somenum>:
-                          (int32_of_integer_ (integer_of_uint32 !x_8)))) in
-                          (JC_<somenum>: (snoob4_requires jessie_<somenum>))))) in void);
-                (let jessie_<somenum> =
-                (w := (C_541:
-                      (JC_<somenum>:
-                      (uint32_of_integer_ (integer_of_int32 !tmp_2))))) in
-                void);
+                (C_540:
+                (C_542:
+                begin
+                  (let jessie_<somenum> =
+                  (tmp_2 := (C_539:
+                            (let jessie_<somenum> =
+                            (C_538:
+                            (JC_<somenum>:
+                            (int32_of_integer_ (integer_of_uint32 !x_8)))) in
+                            (JC_<somenum>: (snoob4_requires jessie_<somenum>))))) in
+                  void);
+                 (w := (C_541:
+                       (JC_<somenum>:
+                       (uint32_of_integer_ (integer_of_int32 !tmp_2))))); !w
+                end)) in void);
                 (x_8 := (C_543:
                         (let jessie_<somenum> = !x_8 in
-                        (JC_<somenum>: (snoob_requires jessie_<somenum>))))); !x_8 end))))))) in
+                        (JC_<somenum>: (snoob_requires jessie_<somenum>))))); !x_8 end))))) in
                void);
               (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
               else (raise (Goto_while_0_break_exc void)));
@@ -6544,11 +6549,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po186.why">
-      <location file = "why/hd_snoob.why" line = "5016" begin = "43" end = "44"/>
+      <location file = "why/hd_snoob.why" line = "5019" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po187.why">
-      <location file = "why/hd_snoob.why" line = "5016" begin = "43" end = "44"/>
+      <location file = "why/hd_snoob.why" line = "5019" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po188.why">
@@ -7542,11 +7547,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po14.why">
-      <location file = "why/hd_snoob.why" line = "3576" begin = "46" end = "47"/>
+      <location file = "why/hd_snoob.why" line = "3577" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po15.why">
-      <location file = "why/hd_snoob.why" line = "3576" begin = "46" end = "47"/>
+      <location file = "why/hd_snoob.why" line = "3577" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

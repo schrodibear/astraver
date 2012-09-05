@@ -82,11 +82,13 @@ behavior default:
       };
       (C_12 : print_equality(i, 0));
       
-      {  (C_13 : (tmp_0 = i));
-         (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))));
-         (C_17 : (j = tmp_0))
+      {  
+         {  (C_13 : (tmp_0 = i));
+            (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))));
+            (C_17 : (j = tmp_0))
+         };
+         (C_18 : (i = j))
       };
-      (C_18 : (i = j));
       
       {  
          (assert for default: (C_19 : (i == 0)));
@@ -465,7 +467,6 @@ let main_ensures_default =
      (C_4:
      (C_10:
      (C_12:
-     (C_18:
      (C_20:
      (C_21:
      begin
@@ -491,23 +492,25 @@ let main_ensures_default =
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (JC_<somenum>: ((print_equality jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> =
-      (C_13:
-      (C_16:
-      (C_17:
+      (C_18:
       begin
-        (let jessie_<somenum> = (tmp_0 := !i) in void);
-       (let jessie_<somenum> =
-       (i := (C_15:
-             (safe_int32_of_integer_ (C_14:
-                                     ((add_int (integer_of_int32 !i)) (1)))))) in
-       void); (j := !tmp_0); !j end))) in void);
-      (let jessie_<somenum> = (i := !j) in void);
-      (assert { (JC_<somenum>: (integer_of_int32(i) = (0))) }; void); void;
+        (let jessie_<somenum> =
+        (C_13:
+        (C_16:
+        (C_17:
+        begin
+          (let jessie_<somenum> = (tmp_0 := !i) in void);
+         (let jessie_<somenum> =
+         (i := (C_15:
+               (safe_int32_of_integer_ (C_14:
+                                       ((add_int (integer_of_int32 !i)) (1)))))) in
+         void); (j := !tmp_0); !j end))) in void); (i := !j); !i end) in
+      void); (assert { (JC_<somenum>: (integer_of_int32(i) = (0))) }; void); void;
       (let jessie_<somenum> = !i in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (JC_<somenum>: ((print_equality jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))))))))))); absurd  end with
+      (return := !__retres); (raise Return) end))))))))))); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
@@ -526,7 +529,6 @@ let main_safety =
      (C_4:
      (C_10:
      (C_12:
-     (C_18:
      (C_20:
      (C_21:
      begin
@@ -552,23 +554,27 @@ let main_safety =
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (JC_<somenum>: ((print_equality_requires jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> =
-      (C_13:
-      (C_16:
-      (C_17:
+      (C_18:
       begin
-        (let jessie_<somenum> = (tmp_0 := !i) in void);
-       (let jessie_<somenum> =
-       (i := (C_15:
-             (JC_<somenum>:
-             (int32_of_integer_ (C_14: ((add_int (integer_of_int32 !i)) (1))))))) in
-       void); (j := !tmp_0); !j end))) in void);
-      (let jessie_<somenum> = (i := !j) in void);
-      [ { } unit reads i { (JC_<somenum>: (integer_of_int32(i) = (0))) } ]; void;
+        (let jessie_<somenum> =
+        (C_13:
+        (C_16:
+        (C_17:
+        begin
+          (let jessie_<somenum> = (tmp_0 := !i) in void);
+         (let jessie_<somenum> =
+         (i := (C_15:
+               (JC_<somenum>:
+               (int32_of_integer_ (C_14:
+                                  ((add_int (integer_of_int32 !i)) (1))))))) in
+         void); (j := !tmp_0); !j end))) in void); (i := !j); !i end) in
+      void); [ { } unit reads i { (JC_<somenum>: (integer_of_int32(i) = (0))) } ];
+      void;
       (let jessie_<somenum> = !i in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (JC_<somenum>: ((print_equality_requires jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))))))))))); absurd  end with
+      (return := !__retres); (raise Return) end))))))))))); absurd  end with
    Return -> !return end)) { true }
 
 let print_equality_ensures_default =

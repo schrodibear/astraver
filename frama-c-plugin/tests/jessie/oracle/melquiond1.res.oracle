@@ -103,10 +103,15 @@ behavior default:
       (C_12 : (Cnan = (C_11 : ((if (absX > 2139095040) then 1 else 0) :> uint32))));
       (C_14 : (Csmall = (C_13 : ((if (E2 <= 102) then 1 else 0) :> uint32))));
       (C_16 : (Clarge_or_nan = (C_15 : ((if (E2 >= 382) then 1 else 0) :> uint32))));
-      (if (Csmall != 0) then (C_19 : (tmp = 1)) else (if (Clarge_or_nan != 0) then 
-                                                     (C_18 : (tmp = 1)) else 
-                                                     (C_17 : (tmp = 0))));
-      (C_21 : (Cspec = (C_20 : (tmp :> uint32))));
+      
+      {  
+         {  (if (Csmall != 0) then (C_19 : (tmp = 1)) else (if (Clarge_or_nan !=
+                                                                 0) then 
+                                                           (C_18 : (tmp = 1)) else 
+                                                           (C_17 : (tmp = 0))))
+         };
+         (C_21 : (Cspec = (C_20 : (tmp :> uint32))))
+      };
       (if (Cspec != 0) then (if (Csmall != 0) then 
                             {  (C_81 : (__retres = 0));
                                
@@ -145,21 +150,16 @@ behavior default:
             (C_56 : (T1 = (C_55 : ((C_54 : (H <<
                                              (C_53 : ((C_52 : (26 - mu)) :> uint32)))) :> uint32))))
          };
-         (if ((C_67 : ((C_66 : (G & 1)) :> uint32)) != 0) then (if ((C_65 : (
-                                                                    (C_64 : 
-                                                                    ((C_63 : (
-                                                                    (C_62 : 
-                                                                    (L &
-                                                                    1)) :> uint32)) |
-                                                                    (C_61 : (
-                                                                    (C_60 : 
-                                                                    (T1 |
-                                                                    T2)) :> uint32)))) :> uint32)) !=
-                                                                    0) then 
-                                                               (C_59 : (tmp_0 = 1)) else 
-                                                               (C_58 : (tmp_0 = 0))) else 
-         (C_57 : (tmp_0 = 0)));
-         (C_69 : (b = (C_68 : (tmp_0 :> uint32))));
+         
+         {  
+            {  (if ((C_67 : ((C_66 : (G & 1)) :> uint32)) != 0) then 
+               (if ((C_65 : ((C_64 : ((C_63 : ((C_62 : (L & 1)) :> uint32)) |
+                                       (C_61 : ((C_60 : (T1 | T2)) :> uint32)))) :> uint32)) !=
+                     0) then (C_59 : (tmp_0 = 1)) else (C_58 : (tmp_0 = 0))) else 
+               (C_57 : (tmp_0 = 0)))
+            };
+            (C_69 : (b = (C_68 : (tmp_0 :> uint32))))
+         };
          (C_78 : (__retres = (C_77 : ((C_76 : ((C_75 : ((C_74 : ((C_73 : (
                                                                  (C_72 : 
                                                                  ((C_71 : (
@@ -599,7 +599,6 @@ let sqr_ensures_default =
       (C_12:
       (C_14:
       (C_16:
-      (C_21:
       begin
         (let jessie_<somenum> =
         (absX := (C_4:
@@ -630,16 +629,20 @@ let sqr_ensures_default =
                                                   then (1) else (0))))) in
        void);
        (let jessie_<somenum> =
-       (if ((neq_int_ (integer_of_uint32 !Csmall)) (0))
-       then (C_19: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-       else
-        (if ((neq_int_ (integer_of_uint32 !Clarge_or_nan)) (0))
-        then (C_18: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-        else (C_17: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))) in
-       void);
-       (let jessie_<somenum> =
-       (Cspec := (C_20: (safe_uint32_of_integer_ (integer_of_int32 !tmp)))) in
-       void);
+       (C_21:
+       begin
+         (let jessie_<somenum> =
+         (if ((neq_int_ (integer_of_uint32 !Csmall)) (0))
+         then (C_19: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+         else
+          (if ((neq_int_ (integer_of_uint32 !Clarge_or_nan)) (0))
+          then
+           (C_18: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+          else
+           (C_17: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))) in
+         void);
+        (Cspec := (C_20: (safe_uint32_of_integer_ (integer_of_int32 !tmp))));
+        !Cspec end) in void);
        (if ((neq_int_ (integer_of_uint32 !Cspec)) (0))
        then
         (if ((neq_int_ (integer_of_uint32 !Csmall)) (0))
@@ -669,7 +672,6 @@ let sqr_ensures_default =
         (C_34:
         (C_36:
         (C_38:
-        (C_69:
         (C_78:
         begin
           (let jessie_<somenum> =
@@ -751,37 +753,40 @@ let sqr_ensures_default =
                                                                 (integer_of_uint32 !mu)))))))))));
           !T1 end) in void);
          (let jessie_<somenum> =
-         (if ((neq_int_ (integer_of_uint32 (C_67:
-                                           (safe_uint32_of_integer_ (C_66:
-                                                                    ((bw_and 
-                                                                    (integer_of_uint32 !G)) (1))))))) (0))
-         then
-          (if ((neq_int_ (integer_of_uint32 (C_65:
-                                            (safe_uint32_of_integer_ 
-                                             (C_64:
-                                             ((bw_or (integer_of_uint32 
-                                                      (C_63:
-                                                      (safe_uint32_of_integer_ 
-                                                       (C_62:
-                                                       ((bw_and (integer_of_uint32 !L)) (1))))))) 
-                                              (integer_of_uint32 (C_61:
-                                                                 (safe_uint32_of_integer_ 
-                                                                  (C_60:
-                                                                  ((bw_or 
+         (C_69:
+         begin
+           (let jessie_<somenum> =
+           (if ((neq_int_ (integer_of_uint32 (C_67:
+                                             (safe_uint32_of_integer_ 
+                                              (C_66:
+                                              ((bw_and (integer_of_uint32 !G)) (1))))))) (0))
+           then
+            (if ((neq_int_ (integer_of_uint32 (C_65:
+                                              (safe_uint32_of_integer_ 
+                                               (C_64:
+                                               ((bw_or (integer_of_uint32 
+                                                        (C_63:
+                                                        (safe_uint32_of_integer_ 
+                                                         (C_62:
+                                                         ((bw_and (integer_of_uint32 !L)) (1))))))) 
+                                                (integer_of_uint32 (C_61:
+                                                                   (safe_uint32_of_integer_ 
+                                                                    (C_60:
+                                                                    ((bw_or 
                                                                     (integer_of_uint32 !T1)) 
-                                                                   (integer_of_uint32 !T2)))))))))))) (0))
-          then
-           (C_59:
-           begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
-          else
-           (C_58:
-           begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
-         else
-          (C_57: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
-         void);
-         (let jessie_<somenum> =
-         (b := (C_68: (safe_uint32_of_integer_ (integer_of_int32 !tmp_0)))) in
-         void);
+                                                                    (integer_of_uint32 !T2)))))))))))) (0))
+            then
+             (C_59:
+             begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
+            else
+             (C_58:
+             begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
+           else
+            (C_57:
+            begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+           void);
+          (b := (C_68: (safe_uint32_of_integer_ (integer_of_int32 !tmp_0))));
+          !b end) in void);
          (let jessie_<somenum> =
          (__retres := (C_77:
                       (safe_uint32_of_integer_ (C_76:
@@ -804,8 +809,8 @@ let sqr_ensures_default =
                                                                     (integer_of_uint32 !F))))))) (8388608))))))) 
                                                             (integer_of_uint32 !L))))))) 
                                                 (integer_of_uint32 !b)))))) in
-         void); (raise (Return_label_exc void)) end)))))))));
-       (raise (Return_label_exc void)) end)))))) with
+         void); (raise (Return_label_exc void)) end))))))));
+       (raise (Return_label_exc void)) end))))) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)))))))))))))))))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -842,7 +847,6 @@ let sqr_safety =
       (C_12:
       (C_14:
       (C_16:
-      (C_21:
       begin
         (let jessie_<somenum> =
         (absX := (C_4:
@@ -878,17 +882,21 @@ let sqr_safety =
                          (uint32_of_integer_ (if ((ge_int_ (integer_of_uint32 !E2)) (382))
                                              then (1) else (0)))))) in void);
        (let jessie_<somenum> =
-       (if ((neq_int_ (integer_of_uint32 !Csmall)) (0))
-       then (C_19: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-       else
-        (if ((neq_int_ (integer_of_uint32 !Clarge_or_nan)) (0))
-        then (C_18: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-        else (C_17: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))) in
-       void);
-       (let jessie_<somenum> =
-       (Cspec := (C_20:
-                 (JC_<somenum>: (uint32_of_integer_ (integer_of_int32 !tmp))))) in
-       void);
+       (C_21:
+       begin
+         (let jessie_<somenum> =
+         (if ((neq_int_ (integer_of_uint32 !Csmall)) (0))
+         then (C_19: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+         else
+          (if ((neq_int_ (integer_of_uint32 !Clarge_or_nan)) (0))
+          then
+           (C_18: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+          else
+           (C_17: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))) in
+         void);
+        (Cspec := (C_20:
+                  (JC_<somenum>: (uint32_of_integer_ (integer_of_int32 !tmp)))));
+        !Cspec end) in void);
        (if ((neq_int_ (integer_of_uint32 !Cspec)) (0))
        then
         (if ((neq_int_ (integer_of_uint32 !Csmall)) (0))
@@ -918,7 +926,6 @@ let sqr_safety =
         (C_34:
         (C_36:
         (C_38:
-        (C_69:
         (C_78:
         begin
           (let jessie_<somenum> =
@@ -1008,44 +1015,47 @@ let sqr_safety =
                                                                     (integer_of_uint32 !mu)))))))))))));
           !T1 end) in void);
          (let jessie_<somenum> =
-         (if ((neq_int_ (integer_of_uint32 (C_67:
-                                           (JC_<somenum>:
-                                           (uint32_of_integer_ (C_66:
-                                                               ((bw_and 
-                                                                 (integer_of_uint32 !G)) (1)))))))) (0))
-         then
-          (if ((neq_int_ (integer_of_uint32 (C_65:
-                                            (JC_<somenum>:
-                                            (uint32_of_integer_ (C_64:
-                                                                ((bw_or 
-                                                                  (integer_of_uint32 
-                                                                   (C_63:
-                                                                   (JC_<somenum>:
-                                                                   (uint32_of_integer_ 
+         (C_69:
+         begin
+           (let jessie_<somenum> =
+           (if ((neq_int_ (integer_of_uint32 (C_67:
+                                             (JC_<somenum>:
+                                             (uint32_of_integer_ (C_66:
+                                                                 ((bw_and 
+                                                                   (integer_of_uint32 !G)) (1)))))))) (0))
+           then
+            (if ((neq_int_ (integer_of_uint32 (C_65:
+                                              (JC_<somenum>:
+                                              (uint32_of_integer_ (C_64:
+                                                                  ((bw_or 
+                                                                    (integer_of_uint32 
+                                                                    (C_63:
+                                                                    (JC_<somenum>:
+                                                                    (uint32_of_integer_ 
                                                                     (C_62:
                                                                     ((bw_and 
                                                                     (integer_of_uint32 !L)) (1)))))))) 
-                                                                 (integer_of_uint32 
-                                                                  (C_61:
-                                                                  (JC_<somenum>:
-                                                                  (uint32_of_integer_ 
-                                                                   (C_60:
-                                                                   ((bw_or 
+                                                                   (integer_of_uint32 
+                                                                    (C_61:
+                                                                    (JC_<somenum>:
+                                                                    (uint32_of_integer_ 
+                                                                    (C_60:
+                                                                    ((bw_or 
                                                                     (integer_of_uint32 !T1)) 
                                                                     (integer_of_uint32 !T2)))))))))))))) (0))
-          then
-           (C_59:
-           begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
-          else
-           (C_58:
-           begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
-         else
-          (C_57: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
-         void);
-         (let jessie_<somenum> =
-         (b := (C_68:
-               (JC_<somenum>: (uint32_of_integer_ (integer_of_int32 !tmp_0))))) in
-         void);
+            then
+             (C_59:
+             begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
+            else
+             (C_58:
+             begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
+           else
+            (C_57:
+            begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+           void);
+          (b := (C_68:
+                (JC_<somenum>: (uint32_of_integer_ (integer_of_int32 !tmp_0))))); !b
+         end) in void);
          (let jessie_<somenum> =
          (__retres := (C_77:
                       (JC_<somenum>:
@@ -1071,8 +1081,8 @@ let sqr_safety =
                                                                     (integer_of_uint32 !F)))))))) (8388608)))))))) 
                                                        (integer_of_uint32 !L)))))))) 
                                            (integer_of_uint32 !b))))))) in
-         void); (raise (Return_label_exc void)) end)))))))));
-       (raise (Return_label_exc void)) end)))))) with
+         void); (raise (Return_label_exc void)) end))))))));
+       (raise (Return_label_exc void)) end))))) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)))))))))))))))))));
     absurd  end with Return -> !return end)) { true }

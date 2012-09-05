@@ -956,10 +956,16 @@ behavior Buchi_property_behavior_1:
          (C_793 : ((C_792 : (buch_CurStates_old + 1).intM) = (C_791 : 
                                                              (buch_CurStates +
                                                                1).intM)));
-         (if ((C_798 : (buch_CurStates_old + 6).intM) != 0) then (C_797 : (tmp = 1)) else 
-         (if ((C_796 : (buch_CurStates_old + 5).intM) != 0) then (C_795 : (tmp = 1)) else 
-         (C_794 : (tmp = 0))));
-         (C_800 : ((C_799 : (buch_CurStates + 6).intM) = tmp));
+         
+         {  
+            {  (if ((C_798 : (buch_CurStates_old + 6).intM) != 0) then 
+               (C_797 : (tmp = 1)) else (if ((C_796 : (buch_CurStates_old +
+                                                        5).intM) !=
+                                              0) then (C_795 : (tmp = 1)) else 
+                                        (C_794 : (tmp = 0))))
+            };
+            (C_800 : ((C_799 : (buch_CurStates + 6).intM) = tmp))
+         };
          (C_802 : ((C_801 : (buch_CurStates + 5).intM) = 0));
          (C_804 : ((C_803 : (buch_CurStates + 0).intM) = 0));
          (C_807 : ((C_806 : (buch_CurStates + 4).intM) = (C_805 : (buch_CurStates_old +
