@@ -702,13 +702,14 @@ let rec destruct_pointer e = match (stripInfo e).enode with
   | CastE(ty,e) ->
       let ety = typeOf e in
       if isPointerType ty && isPointerType ety
-	&& (typeSig (typeRemoveAttributes ["const";"volatile"]
-		       (unrollType (pointed_type ty)))
-	    =
-	    typeSig (typeRemoveAttributes ["const";"volatile"]
-		       (unrollType (pointed_type ety)))) then
-(* 	&& bitsSizeOf(pointed_type ty) = bitsSizeOf(pointed_type ety) then *)
-	  destruct_pointer e
+	&&
+          Cil_datatype.Typ.equal
+          (Cil.typeDeepDropAttributes ["const"; "volatile"]
+             (unrollType (pointed_type ty)))
+          (Cil.typeDeepDropAttributes ["const"; "volatile"]
+             (unrollType (pointed_type ety)))
+      then
+	destruct_pointer e
       else None
   | _ -> None
 

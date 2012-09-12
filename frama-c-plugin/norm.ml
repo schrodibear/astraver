@@ -1694,17 +1694,13 @@ class removeUselessCasts =
     match (stripInfo etop).enode with
       | CastE(ty,e) ->
           let ety = typeOf e in
-          if isPointerType ty && isPointerType ety then
-            (* Ignore type qualifiers *)
-            let tysig =
-              typeSig (typeRemoveAttributes ["const";"volatile"]
-                         (unrollType (pointed_type ty)))
-            in
-            let etysig =
-              typeSig (typeRemoveAttributes ["const";"volatile"]
-                         (unrollType (pointed_type ety)))
-            in
-            if Cilutil.equals tysig etysig then e else etop
+          if isPointerType ty && isPointerType ety &&
+            Cil_datatype.Typ.equal
+              (Cil.typeDeepDropAttributes
+                 ["const"; "volatile"] (pointed_type ty))
+              (Cil.typeDeepDropAttributes
+                 ["const"; "volatile"] (pointed_type ety))
+          then e
           else etop
       | _ -> etop
   in
@@ -1713,19 +1709,15 @@ class removeUselessCasts =
       | TCastE(ty,t) ->
           if isPointerType ty && Logic_utils.isLogicPointer t then
             (* Ignore type qualifiers *)
-            let tysig =
-              Logic_utils.type_sig_logic (unrollType (pointed_type ty))
-            in
-            let ttysig =
+            let pty = Cil.typeDeepDropAllAttributes (pointed_type ty) in
+            let ptty =
               match t.term_type with
                   Ctype tty ->
-                    if isPointerType tty then
-                      Logic_utils.type_sig_logic (unrollType (pointed_type tty))
-                    else
-                      Logic_utils.type_sig_logic (unrollType (element_type tty))
+                    if isPointerType tty then pointed_type tty 
+                    else element_type tty
                 | ty -> fatal "Not a pointer type '%a'" d_logic_type ty
             in
-            if Cilutil.equals tysig ttysig then
+            if Cil_datatype.Typ.equal pty ptty then
               if Logic_utils.isLogicPointerType t.term_type then t
               else
                 (match t.term_node with
