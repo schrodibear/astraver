@@ -565,7 +565,22 @@ let strip_float_suffix s =
       | _ -> s
 
 
-let rec const ~in_code pos = function
+let logic_const pos = function
+  | Integer(_,Some s) -> JCPEconst (JCCinteger s)
+  | Integer(n,None) -> JCPEconst (JCCinteger (My_bigint.to_string n))
+  | LStr _ | LWStr _ -> assert false (* Should have been rewritten *)
+  | LChr c -> JCPEconst (JCCinteger(string_of_int (Char.code c)))
+  | LReal (_,s) -> JCPEconst (JCCreal (strip_float_suffix s))
+  | LEnum ei ->
+      (match Cil.isInteger (ei.eival) with
+        | Some n ->
+            let e =
+              mkexpr (JCPEconst (JCCinteger (My_bigint.to_string n))) pos
+            in
+            JCPEcast(e,ctype(TEnum(ei.eihost,[])))
+        | None -> assert false)
+
+let rec const pos = function
   | CInt64(_,_,Some s) ->
       (* Use the textual representation if available *)
       JCPEconst(JCCinteger s)
@@ -580,24 +595,24 @@ let rec const ~in_code pos = function
   | CReal(_f,fk,Some s) ->
       (* Use the textual representation if available *)
       let s = strip_float_suffix s in
-      begin match in_code,!float_model with
-        | false,_
-	| true, `Math -> JCPEconst(JCCreal s)
-        | true, (`Defensive | `Full | `Multirounding) ->
+      begin match !float_model with
+	| `Math -> JCPEconst(JCCreal s)
+        | `Defensive | `Full | `Multirounding ->
             (* add a cast to float or double depending on the value of fk *)
-            JCPEcast(mkexpr (JCPEconst(JCCreal s)) pos, mktype (JCPTnative (native_type_of_fkind fk)))
+            JCPEcast(mkexpr (JCPEconst(JCCreal s)) pos,
+                     mktype (JCPTnative (native_type_of_fkind fk)))
       end
   | CReal(f,_fk,None) ->
       (* otherwise use the float value *)
       JCPEconst(JCCreal(string_of_float f))
 
   | CEnum item ->
-      let e = mkexpr (const_of_expr ~in_code pos item.eival) pos in
+      let e = mkexpr (const_of_expr pos item.eival) pos in
       JCPEcast(e,ctype (TEnum(item.eihost,[])))
 
-and const_of_expr ~in_code pos e =
+and const_of_expr pos e =
   match (stripInfo e).enode with
-      Const c -> const ~in_code pos c
+      Const c -> const pos c
     | _ -> assert false
 
 and boolean_const = function
@@ -687,7 +702,7 @@ let rec coerce_floats t =
 and terms t =
   CurrentLoc.set t.term_loc;
   let enode = match constFoldTermNodeAtTop t.term_node with
-    | TConst c -> [const ~in_code:false t.term_loc c]
+    | TConst c -> [logic_const t.term_loc c]
 
     | TDataCons({ctor_type = {lt_name = name}} as d,_args)
         when name = Utf8_logic.boolean ->
@@ -792,8 +807,9 @@ and terms t =
           | Tnull ->
               [JCPEconst JCCnull]
           | TConst c
-              when is_integral_const c && 
-                My_bigint.equal (value_of_integral_const c) My_bigint.zero ->
+              when is_integral_logic_const c && 
+                My_bigint.equal
+                (value_of_integral_logic_const c) My_bigint.zero ->
               [JCPEconst JCCnull]
           | _ ->
 (*               if isLogicIntegralType t.term_type then *)
@@ -1512,7 +1528,7 @@ let rec expr e =
     match e.enode with
     | Info _ -> assert false
 
-    | Const c -> const ~in_code:true e.eloc c
+    | Const c -> const e.eloc c
 
     | Lval lv -> (lval e.eloc lv)#node
 
