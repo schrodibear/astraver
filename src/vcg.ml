@@ -616,13 +616,14 @@ let occur_as_var id = function
 
 let clean_sequent hyps concl =
   (* if a variable appears twice, we remove the first and its dependencies *)
-  (* VP: unused function *)
-  (* let rec filter_up_to x = function
+(* dead code
+  let rec filter_up_to x = function
     | [] -> []
     | Svar (y, _) :: _ as hl when x = y -> hl
     | Spred (_, p) :: hl when occur_predicate x p -> filter_up_to x hl
     | h :: hl -> h :: filter_up_to x hl
-  in *)
+  in 
+*)
   (* we remove variables not occuring at all in hypotheses or conclusion *)
   let rec clean = function
     | [] ->

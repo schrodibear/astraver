@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="Hello/why3session.xml">
+ name="Hello/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -26,7 +26,7 @@
    expanded="true">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="Hello/../Hello.mlw"
    loclnum="483" loccnumb="7" loccnume="21"
    verified="false"
@@ -35,8 +35,8 @@
     name="WP_parameter _Hello_main_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Hello.java"
     loclnum="34" loccnumb="23" loccnume="27"
-    expl="parameter _Hello_main_ensures_default"
-    sum="37921b890f7c88d4dcdb3611841f8837"
+    expl="normal postcondition"
+    sum="dfb0e57b70ccf0a231d99c08ea0bbe5b"
     proved="true"
     expanded="true"
     shape="t">
@@ -57,8 +57,8 @@
     name="WP_parameter _Hello_main_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Hello.java"
     loclnum="34" loccnumb="23" loccnume="27"
-    expl="index bounds"
-    sum="0c5238536ff2b9e179a084796dd11755"
+    expl="assertion"
+    sum="361283b8a24dbb74f640e603e03a4737"
     proved="false"
     expanded="true"
     shape="ainfix &gt;=aoffset_maxV1a_System_outc0Ialeft_valid_struct_StringMV0c0V1FF">
@@ -84,19 +84,19 @@
     </proof>
     <proof
      prover="1"
-     timelimit="7"
+     timelimit="8"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="2.84"/>
+     <result status="unknown" time="3.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_FilterOutputStream_OutputStream_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/FilterOutputStream.java"
     loclnum="43" loccnumb="11" loccnume="29"
-    expl="parameter cons_FilterOutputStream_OutputStream_ensures_default"
-    sum="ad48023dff33748d8b7bbffd3273f42d"
+    expl="normal postcondition"
+    sum="c28cda959867eab2bb509b5fb792d97d"
     proved="true"
     expanded="true"
     shape="t">
@@ -117,8 +117,8 @@
     name="WP_parameter cons_FilterOutputStream_OutputStream_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/FilterOutputStream.java"
     loclnum="43" loccnumb="11" loccnume="29"
-    expl="parameter cons_FilterOutputStream_OutputStream_safety"
-    sum="a43c24358605c2c084912d923fa4a5e3"
+    expl="normal postcondition"
+    sum="a9c7773994a3bb34dbe4fc4b046349e3"
     proved="true"
     expanded="true"
     shape="t">
@@ -139,8 +139,8 @@
     name="WP_parameter cons_Hello_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Hello_ensures_default"
-    sum="1d28872e1a533d9045413be32d2e445b"
+    expl="normal postcondition"
+    sum="7a01edbd34263f3a0fbcc9efe9e142e9"
     proved="true"
     expanded="true"
     shape="t">
@@ -161,8 +161,8 @@
     name="WP_parameter cons_Hello_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Hello_safety"
-    sum="eec973a4ee82e552ca3da642f583392c"
+    expl="normal postcondition"
+    sum="9a0cf9c758a83e7a095c33b3b916d7a3"
     proved="true"
     expanded="true"
     shape="t">
@@ -183,8 +183,8 @@
     name="WP_parameter cons_Object_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Object_ensures_default"
-    sum="7dca4b118d8d7a2c454f9b6c0ec37e73"
+    expl="normal postcondition"
+    sum="5234f32f31e6a9df5200477df1c14d14"
     proved="true"
     expanded="true"
     shape="t">
@@ -205,8 +205,8 @@
     name="WP_parameter cons_Object_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Object_safety"
-    sum="acf3e93b1bee26e56b341b8ef2b0cc3c"
+    expl="normal postcondition"
+    sum="24c204f093537a050856b331111cc3d3"
     proved="true"
     expanded="true"
     shape="t">
@@ -227,8 +227,8 @@
     name="WP_parameter cons_OutputStream_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_OutputStream_ensures_default"
-    sum="b0b149187d572e2c8c4eb6a477264263"
+    expl="normal postcondition"
+    sum="fba80d29294accb36bf0da86040cd0c4"
     proved="true"
     expanded="true"
     shape="t">
@@ -249,8 +249,8 @@
     name="WP_parameter cons_OutputStream_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_OutputStream_safety"
-    sum="c92bcba510c3523943479e0b2bdd8849"
+    expl="normal postcondition"
+    sum="055b3bdcd4376140c2b22e36adfbbbcb"
     proved="true"
     expanded="true"
     shape="t">
@@ -271,8 +271,8 @@
     name="WP_parameter cons_PrintStream_OutputStream_boolean_String_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="113" loccnumb="11" loccnume="22"
-    expl="parameter cons_PrintStream_OutputStream_boolean_String_ensures_default"
-    sum="d30bb4cdae5691b0df400c03eaeb6879"
+    expl="normal postcondition"
+    sum="d98feb3cdae61bfc01b2f8bb27a2b840"
     proved="true"
     expanded="true"
     shape="t">
@@ -293,8 +293,8 @@
     name="WP_parameter cons_PrintStream_OutputStream_boolean_String_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="113" loccnumb="11" loccnume="22"
-    expl="parameter cons_PrintStream_OutputStream_boolean_String_safety"
-    sum="3fe270fdb1933bdc1511e27454bcb56a"
+    expl="normal postcondition"
+    sum="e248d37e4dc46e3876d215a4b471fbeb"
     proved="true"
     expanded="true"
     shape="t">
@@ -315,8 +315,8 @@
     name="WP_parameter cons_PrintStream_OutputStream_boolean_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="92" loccnumb="11" loccnume="22"
-    expl="Constructor of class PrintStream, default behavior"
-    sum="ea0517a6803104d424a9e3d20021d752"
+    expl="normal postcondition"
+    sum="b6a924a21961a1605abf9bb0d6726e6b"
     proved="true"
     expanded="true"
     shape="t">
@@ -337,8 +337,8 @@
     name="WP_parameter cons_PrintStream_OutputStream_boolean_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="92" loccnumb="11" loccnume="22"
-    expl="Constructor of class PrintStream, Safety"
-    sum="a9fcc2d73b4309d8dfdd1b17d141c168"
+    expl="normal postcondition"
+    sum="e6a86fdb63fbcf85738eb74556f42ed2"
     proved="true"
     expanded="true"
     shape="t">
@@ -359,8 +359,8 @@
     name="WP_parameter cons_PrintStream_OutputStream_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="55" loccnumb="11" loccnume="22"
-    expl="Constructor of class PrintStream, default behavior"
-    sum="1f78a398bd622ab306bc6170c7d3459c"
+    expl="normal postcondition"
+    sum="d967a1b897bedfa7a4fc7d4e3d8dc094"
     proved="true"
     expanded="true"
     shape="t">
@@ -381,8 +381,8 @@
     name="WP_parameter cons_PrintStream_OutputStream_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="55" loccnumb="11" loccnume="22"
-    expl="Constructor of class PrintStream, Safety"
-    sum="232d8c4c0f7b72253bbd067c2ceeb11f"
+    expl="normal postcondition"
+    sum="213d1b0d2aa78f25f8654e980376c465"
     proved="true"
     expanded="true"
     shape="t">
@@ -403,8 +403,8 @@
     name="WP_parameter cons_PrintStream_boolean_OutputStream_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="67" loccnumb="12" loccnume="23"
-    expl="Constructor of class PrintStream, default behavior"
-    sum="c947586b632bd71ccad8b70b40a40bec"
+    expl="normal postcondition"
+    sum="385a9454496ba68f7a6ef69e3b3862b1"
     proved="true"
     expanded="true"
     shape="t">
@@ -425,8 +425,8 @@
     name="WP_parameter cons_PrintStream_boolean_OutputStream_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="67" loccnumb="12" loccnume="23"
-    expl="Constructor of class PrintStream, Safety"
-    sum="4ce2c3f0f083a001d9eb2945de34e352"
+    expl="normal postcondition"
+    sum="c0e6e479c2754f303a7337a1fa673296"
     proved="true"
     expanded="true"
     shape="t">
@@ -447,8 +447,8 @@
     name="WP_parameter cons_String_StringBuffer_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="403" loccnumb="11" loccnume="17"
-    expl="parameter cons_String_StringBuffer_ensures_default"
-    sum="99c8b2003838cd41fde6ca31bd55f093"
+    expl="normal postcondition"
+    sum="af114a9bf0b6d50e0e218af30439ffea"
     proved="true"
     expanded="true"
     shape="t">
@@ -469,8 +469,8 @@
     name="WP_parameter cons_String_StringBuffer_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="403" loccnumb="11" loccnume="17"
-    expl="parameter cons_String_StringBuffer_safety"
-    sum="81c19034a504426da4a73c0003146e56"
+    expl="normal postcondition"
+    sum="afb9504dc86e254709fd9464fe775435"
     proved="true"
     expanded="true"
     shape="t">
@@ -491,8 +491,8 @@
     name="WP_parameter cons_String_String_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="142" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, default behavior"
-    sum="c0f1b1ed023dbc6f95f980879d523b17"
+    expl="normal postcondition"
+    sum="1526e5977f84bdbcb13b51eb814601ce"
     proved="true"
     expanded="true"
     shape="t">
@@ -513,8 +513,8 @@
     name="WP_parameter cons_String_String_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="142" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, Safety"
-    sum="7333b7607507711f06d3995a880c1889"
+    expl="normal postcondition"
+    sum="82bf7445322c252864c8ed61fbdb03c9"
     proved="true"
     expanded="true"
     shape="t">
@@ -535,8 +535,8 @@
     name="WP_parameter cons_String_byteA_String_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="345" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, default behavior"
-    sum="f56a01283028f2a51652267200531fab"
+    expl="normal postcondition"
+    sum="f015139b2c846ff250f6735c3fb411af"
     proved="true"
     expanded="true"
     shape="t">
@@ -557,8 +557,8 @@
     name="WP_parameter cons_String_byteA_String_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="345" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, Safety"
-    sum="8767933b7d45ea479fcad52d993d808b"
+    expl="normal postcondition"
+    sum="e6bd8ccbeafde7c919378a469dd120a2"
     proved="true"
     expanded="true"
     shape="t">
@@ -579,8 +579,8 @@
     name="WP_parameter cons_String_byteA_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="391" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, default behavior"
-    sum="5a27dce42a7dd1193d0064ab73f13ecf"
+    expl="normal postcondition"
+    sum="d0450c8f14913fe165faf86a38df87b4"
     proved="true"
     expanded="true"
     shape="t">
@@ -601,8 +601,8 @@
     name="WP_parameter cons_String_byteA_int_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="275" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, default behavior"
-    sum="43a81aa6c6ae182cec78a96cd228b76f"
+    expl="normal postcondition"
+    sum="aa970dcc07e823c3ff326fe9666220dc"
     proved="true"
     expanded="true"
     shape="t">
@@ -623,8 +623,8 @@
     name="WP_parameter cons_String_byteA_int_int_String_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="316" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, default behavior"
-    sum="67b7fe75b4e1c8c65fd719038867db11"
+    expl="normal postcondition"
+    sum="ae986b08bb92db7b8a53e1b1628e5ee7"
     proved="true"
     expanded="true"
     shape="t">
@@ -645,8 +645,8 @@
     name="WP_parameter cons_String_byteA_int_int_String_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="316" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, Safety"
-    sum="ea195b563e1322011be0794a4550079d"
+    expl="normal postcondition"
+    sum="2f9fa5c5a5b54d5224a041a2429bba83"
     proved="true"
     expanded="true"
     shape="t">
@@ -667,8 +667,8 @@
     name="WP_parameter cons_String_byteA_int_int_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="371" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, default behavior"
-    sum="7aa469b43b85d2f458219043d1e668e0"
+    expl="normal postcondition"
+    sum="66329945cfe7b151435882cf93545ff2"
     proved="true"
     expanded="true"
     shape="t">
@@ -682,15 +682,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_int_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="234" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, default behavior"
-    sum="1222510a82d7a8740fc4a1d81d9c7c1c"
+    expl="normal postcondition"
+    sum="aa3eefbaf82b14df5f71a3678487445f"
     proved="true"
     expanded="true"
     shape="t">
@@ -711,8 +711,8 @@
     name="WP_parameter cons_String_byteA_int_int_int_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="234" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, Safety"
-    sum="ac82f199d74170347542d6a3196b3d30"
+    expl="normal postcondition"
+    sum="653364fe761186a4c7afd4a0843f4f05"
     proved="true"
     expanded="true"
     shape="t">
@@ -733,8 +733,8 @@
     name="WP_parameter cons_String_byteA_int_int_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="371" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, Safety"
-    sum="9e1a0f55d798616b92a4bd7fdb0d18a8"
+    expl="normal postcondition"
+    sum="3a7d8962b70c3c2cf0aea71bb145b5d6"
     proved="true"
     expanded="true"
     shape="t">
@@ -755,8 +755,8 @@
     name="WP_parameter cons_String_byteA_int_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="275" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, Safety"
-    sum="eb32f61f0c55f4392274d103ef1e08af"
+    expl="normal postcondition"
+    sum="5c32591f8eaf4bdf83dc858c4e762a06"
     proved="true"
     expanded="true"
     shape="t">
@@ -777,8 +777,8 @@
     name="WP_parameter cons_String_byteA_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="391" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, Safety"
-    sum="c4221f31934925a7bde4f52b80edf16b"
+    expl="normal postcondition"
+    sum="b8fc4ff82d1ee94269e37850f68d7e67"
     proved="true"
     expanded="true"
     shape="t">
@@ -799,8 +799,8 @@
     name="WP_parameter cons_String_charA_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="167" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, default behavior"
-    sum="69422cb085aacc400854ac3b7900efa2"
+    expl="normal postcondition"
+    sum="4ec4ec123d3ae0e70b0334dc30ef1a51"
     proved="true"
     expanded="true"
     shape="t">
@@ -814,15 +814,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_String_charA_int_int_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="189" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, default behavior"
-    sum="f7b604ec08921ba704a82687631da694"
+    expl="normal postcondition"
+    sum="b231fe17db66f00ab5028d153baa6e89"
     proved="true"
     expanded="true"
     shape="t">
@@ -836,15 +836,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_String_charA_int_int_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="189" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, Safety"
-    sum="a2cd1036127a05d2aa5c2e2a825d223b"
+    expl="normal postcondition"
+    sum="c26d01b4da4000c89756dba147e78db9"
     proved="true"
     expanded="true"
     shape="t">
@@ -858,15 +858,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_String_charA_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="167" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, Safety"
-    sum="b92d6091abcf2babd9dd3966eadfb84d"
+    expl="normal postcondition"
+    sum="53d78fb2490bf09e1b088e2a1e3ca10e"
     proved="true"
     expanded="true"
     shape="t">
@@ -880,15 +880,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_String_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="129" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, default behavior"
-    sum="d87b46563f3f45af410b858c9c0314b1"
+    expl="normal postcondition"
+    sum="89baff618dd6fe670c968ca38e1574ca"
     proved="true"
     expanded="true"
     shape="t">
@@ -909,8 +909,8 @@
     name="WP_parameter cons_String_int_int_charA_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="413" loccnumb="4" loccnume="10"
-    expl="Constructor of class String, default behavior"
-    sum="f2e988d8f6d03dba100a792b7ae27876"
+    expl="normal postcondition"
+    sum="e76849a4351b8fcb806d4d6d3f314fcd"
     proved="true"
     expanded="true"
     shape="t">
@@ -924,15 +924,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_String_int_int_charA_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="413" loccnumb="4" loccnume="10"
-    expl="Constructor of class String, Safety"
-    sum="0182f8ed830d6a27a3305ffdf7e2310b"
+    expl="normal postcondition"
+    sum="017c6548e788b9c6672c2afd91e1bb09"
     proved="true"
     expanded="true"
     shape="t">
@@ -946,15 +946,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_String_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="129" loccnumb="11" loccnume="17"
-    expl="Constructor of class String, Safety"
-    sum="303e0b71044a02bbd0ad6b383620ca10"
+    expl="normal postcondition"
+    sum="8c052547da682dd3d1e19d631b134892"
     proved="true"
     expanded="true"
     shape="t">
@@ -975,8 +975,8 @@
     name="WP_parameter cons_System_ensures_default"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/System.java"
     loclnum="44" loccnumb="12" loccnume="18"
-    expl="parameter cons_System_ensures_default"
-    sum="7e0fb05351739f18709e413b1667ecb8"
+    expl="normal postcondition"
+    sum="08555e4aee706612cc41f5a7fc241389"
     proved="true"
     expanded="true"
     shape="t">
@@ -997,8 +997,8 @@
     name="WP_parameter cons_System_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/System.java"
     loclnum="44" loccnumb="12" loccnume="18"
-    expl="parameter cons_System_safety"
-    sum="66b957e2e277faad1ea9fbfd68fbb842"
+    expl="normal postcondition"
+    sum="1db9fcf177171025f972c472128c5140"
     proved="true"
     expanded="true"
     shape="t">
@@ -1012,7 +1012,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
   </theory>

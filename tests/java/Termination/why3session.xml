@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="Termination/why3session.xml">
+ name="Termination/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -26,7 +26,7 @@
    expanded="false">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="Termination/../Termination.mlw"
    loclnum="174" loccnumb="7" loccnume="21"
    verified="true"
@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="loop invariant preservation"
-    sum="c419b0f9f718b0204028d2fe4e613f99"
+    sum="fbf24cb31da4013e9622605c65f211c8"
     proved="true"
     expanded="false"
     shape="t">
@@ -74,7 +74,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="loop variant decreases"
-    sum="5aa3c88003c6172ac7b3d5f7d35a7f27"
+    sum="b6038eddef7d851ed99ab3f9789f4d2c"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V3V2Aainfix &lt;=c0V2Iainfix =V3ainfix -V2c1FIainfix &gt;V2c0FIavalid_struct_TerminationV0c0c0V1FF">
@@ -112,7 +112,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="loop invariant preservation"
-    sum="f25030528e9b1f68bc42d3195b70293b"
+    sum="818392abb658a86602591e856dec3c60"
     proved="true"
     expanded="false"
     shape="t">
@@ -150,7 +150,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="loop variant decreases"
-    sum="f798299f33ae8b73b8941dd44cbdf981"
+    sum="cb590645edf3d1515798fd37a03658ab"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -c100V3ainfix -c100V2Aainfix &lt;=c0ainfix -c100V2Iainfix =V3ainfix +V2c1FIainfix &lt;V2c100FIavalid_struct_TerminationV0c0c0V1FF">
@@ -188,7 +188,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="parameter _Termination_loop3_ensures_default"
-    sum="cab01b646099338d2e5859c3187f17cd"
+    sum="265616a1d50ad993e91d48e7147b28dd"
     proved="true"
     expanded="false"
     shape="iainfix &gt;V2c0ainfix &lt;=V3c100Aainfix &lt;=c0V3Iainfix =V3ainfix -V2c1Fainfix =V4c0Iainfix =V4V2FIainfix &lt;=V2c100Aainfix &lt;=c0V2FAainfix &lt;=c100c100Aainfix &lt;=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
@@ -226,7 +226,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="loop variant decreases"
-    sum="36395f84edf0d3313b2ab5eab24bab52"
+    sum="7a95aa0f503be1a63ff694930eca8de8"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V3V2Aainfix &lt;=c0V2Iainfix =V3ainfix -V2c1FIainfix &gt;V2c0Iainfix &lt;=V2c100Aainfix &lt;=c0V2FIavalid_struct_TerminationV0c0c0V1FF">
@@ -256,15 +256,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Termination_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Termination_ensures_default"
-    sum="9ae9153d269d219507b7ed8668be2cd9"
+    expl="normal postcondition"
+    sum="cfc7c6336e0462e0d49809420452ba83"
     proved="true"
     expanded="false"
     shape="t">
@@ -301,8 +301,8 @@
     name="WP_parameter cons_Termination_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Termination_safety"
-    sum="3bd99c5ab6a6928c6f969a6d1ca4c4f1"
+    expl="normal postcondition"
+    sum="2c71479e666e6e704091710aea586888"
     proved="true"
     expanded="false"
     shape="t">
@@ -316,7 +316,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -332,7 +332,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>

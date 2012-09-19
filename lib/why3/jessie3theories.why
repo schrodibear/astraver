@@ -141,27 +141,27 @@ axiom sub_pointer_same_block:
 (* sub_pointer *)
 
 axiom sub_pointer_shift:
-  forall p:pointer 't. forall q:pointer 't [sub_pointer p q].
-    same_block p q ->
-      p = shift q (sub_pointer p q)
+  forall p q:pointer 't [sub_pointer p q].
+    same_block p q -> p = shift q (sub_pointer p q)
 
 axiom sub_pointer_self:
   forall p:pointer 't [sub_pointer p p]. sub_pointer p p = 0
 
 axiom sub_pointer_zero:
-  forall p:pointer 't. forall q:pointer 't [sub_pointer p q].
+  forall p q:pointer 't [sub_pointer p q].
     same_block p q ->
       sub_pointer p q = 0 -> p = q
 
 axiom sub_pointer_shift_left:
-  forall p:pointer 't. forall q:pointer 't.
-    forall i:int [sub_pointer (shift p i) q].
+  forall p q:pointer 't, i:int [sub_pointer (shift p i) q].
       sub_pointer (shift p i) q = sub_pointer p q + i
 
 axiom sub_pointer_shift_right:
-  forall p:pointer 't. forall q:pointer 't.
-    forall i:int [sub_pointer p (shift q i)].
+  forall p q:pointer 't, i:int [sub_pointer p (shift q i)].
       sub_pointer p (shift q i) = sub_pointer p q - i
+
+axiom sub_pointer_neg:
+  forall p q:pointer 't. sub_pointer p q = - sub_pointer q p
 
 (*****************************************************************************)
 (* heap memories, select and store                                           *)
@@ -226,14 +226,14 @@ axiom pset_included_self:
   forall ps:(pset 't). pset_included ps ps
 
 axiom pset_included_range:
-  forall ps:(pset 't). forall a:int. forall b:int. forall c:int. forall d:int
+  forall ps:(pset 't). forall a b c d : int
   [pset_included (pset_range ps a b) (pset_range ps c d)].
     c <= a /\ b <= d ->
       pset_included (pset_range ps a b) (pset_range ps c d)
 
 axiom pset_included_range_all:
-  forall ps:(pset 't). forall a:int. forall b:int. forall c:int. forall d:int
-  [pset_included (pset_range ps a b) (pset_range ps c d)].
+  forall ps:(pset 't), a b : int
+  [pset_included (pset_range ps a b) (pset_all ps) ].
     pset_included (pset_range ps a b) (pset_all ps)
 
 axiom in_pset_empty:
@@ -638,9 +638,9 @@ axiom frame_between_gen_sub2 :
 axiom frame_between_pointer :
       forall sa : mybag (pointer 'a).
       forall m1 m2 : memory 'a 'b.
-      forall p : pointer 'a.
-      forall v : 'b[frame_between sa m1 m2,select(m1) p|
-                    frame_between sa m1 m2,select(m2) p].
+      forall p : pointer 'a
+        [ frame_between sa m1 m2,select(m1) p |
+          frame_between sa m1 m2,select(m2) p ] .
       frame_between sa m1 m2 -> not in_mybag p (sa) ->
       select(m1) p = select(m2) p
 

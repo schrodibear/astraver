@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="TestNonNull/why3session.xml">
+ name="TestNonNull/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -26,7 +26,7 @@
    expanded="true">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="TestNonNull/../TestNonNull.mlw"
    loclnum="336" loccnumb="7" loccnume="21"
    verified="false"
@@ -35,8 +35,8 @@
     name="WP_parameter _TestNonNull_test_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="52" loccnumb="9" loccnume="13"
-    expl="parameter _TestNonNull_test_ensures_default"
-    sum="25227afadeb237ac97ba2e5ce2a43eca"
+    expl="normal postcondition"
+    sum="71360cd0e88264e0c857229af53ac4eb"
     proved="true"
     expanded="true"
     shape="t">
@@ -74,10 +74,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="52" loccnumb="9" loccnume="13"
     expl="parameter _TestNonNull_test_safety"
-    sum="54425c7d95696c1eb2b8e006662f9c45"
+    sum="b109610e8c89196f16faab9089002d43"
     proved="true"
     expanded="true"
-    shape="at_lengthV0V4V3Aast_lengthV4Aainfix &lt;=c3aoffset_maxV4a_TestNonNull_stIainfix =V8astoreV6ashiftV1c3V7FAainfix &lt;=c3aoffset_maxV4V1Iainfix =ainteger_of_int32V7c1FAainfix &lt;=c2aoffset_maxV4V1Iainfix =V6astoreV2ashiftV1c2V5FAainfix &lt;=c2aoffset_maxV4V1Iainfix =ainteger_of_int32V5c1FAainfix &lt;=c3aoffset_maxV4V1Iat_lengthV0V4V3Aast_lengthV4Aainfix &gt;=ainfix +aoffset_maxV4V1c1c4Aavalid_struct_TestNonNullV0c0c0V4V3Aavalid_struct_intMV1c0aprefix -c1V4FFFFF">
+    shape="at_lengthV0V4V3Aast_lengthV4Aainfix &lt;=c3aoffset_maxV4a_TestNonNull_stIainfix =V8astoreV6ashiftV1c3V7FAainfix &lt;=c3aoffset_maxV4V1Iainfix =ainteger_of_int32V7c1FAainfix &lt;=c2aoffset_maxV4V1Iainfix =V6astoreV2ashiftV1c2V5FAainfix &lt;=c2aoffset_maxV4V1Iainfix =ainteger_of_int32V5c1FAainfix &lt;=c3aoffset_maxV4V1Iat_lengthV0V4V3Aast_lengthV4Aainfix &gt;=ainfix +aoffset_maxV4V1c1c4Aavalid_struct_TestNonNullV0c0c0V4V3Aavalid_struct_intMV1c0aprefix -c1V4FF">
     <label
      name="expl:parameter _TestNonNull_test_safety"/>
     <label
@@ -112,10 +112,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="45" loccnumb="4" loccnume="15"
     expl="assertion"
-    sum="c4e0b72386d5f1230e2807d925c1df1a"
+    sum="e14a2864771402c15f2135af7318440c"
     proved="true"
     expanded="true"
-    shape="ainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+    shape="ainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFIainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
     <label
      name="expl:parameter cons_TestNonNull_ensures_default"/>
     <label
@@ -126,7 +126,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
@@ -150,10 +150,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="45" loccnumb="4" loccnume="15"
     expl="parameter cons_TestNonNull_safety"
-    sum="1048b553047d6d1dc23e6bf0d67ba004"
+    sum="ce9a3d1a3c2a8f6680d3914f1b17c25e"
     proved="false"
     expanded="true"
-    shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FAainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFAainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+    shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FAainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFAainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
     <label
      name="expl:parameter cons_TestNonNull_safety"/>
     <label
@@ -166,11 +166,11 @@
       name="WP_parameter cons_TestNonNull_safety.1"
       locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
-      expl="allocation size"
-      sum="f1e6f8205708f7b38dfb08ad28d371b5"
+      expl="precondition"
+      sum="0ae9cd1d528740842fd7e0066c8e6171"
       proved="true"
       expanded="true"
-      shape="ainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+      shape="ainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
       <label
        name="expl:parameter cons_TestNonNull_safety"/>
       <label
@@ -189,7 +189,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="1"
@@ -197,7 +197,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
@@ -205,10 +205,10 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="assertion"
-      sum="3cde4749a5a779a87fac34526dc2f3ba"
+      sum="5ee304cbea19d9df30c5d9d62e45f269"
       proved="true"
       expanded="true"
-      shape="ainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+      shape="ainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
       <label
        name="expl:parameter cons_TestNonNull_safety"/>
       <label
@@ -219,7 +219,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="0"
@@ -235,7 +235,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
@@ -243,10 +243,10 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="normal postcondition"
-      sum="0aaa435283b49a7b5193b877d1c6cf4e"
+      sum="bc5088857a3eae329c030f2d6c6d0fb9"
       proved="false"
       expanded="true"
-      shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+      shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
       <label
        name="expl:parameter cons_TestNonNull_safety"/>
       <label
@@ -260,10 +260,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
         loclnum="45" loccnumb="4" loccnume="15"
         expl="parameter cons_TestNonNull_safety"
-        sum="684f739ce67c12c7e68421e8322e243d"
+        sum="d96fbb6ba64b9c98a5ec3d47d81adcdf"
         proved="false"
         expanded="true"
-        shape="ast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+        shape="ast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
         <label
          name="expl:parameter cons_TestNonNull_safety"/>
         <label
@@ -290,7 +290,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.12"/>
+         <result status="timeout" time="5.02"/>
         </proof>
        </goal>
        <goal
@@ -298,10 +298,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
         loclnum="45" loccnumb="4" loccnume="15"
         expl="parameter cons_TestNonNull_safety"
-        sum="a76211cb4454a6384807099c3f4c49d0"
+        sum="79ec8c7954f8cb553380c232b71732ec"
         proved="true"
         expanded="true"
-        shape="at_lengthV0V5V7Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+        shape="at_lengthV0V5V7Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
         <label
          name="expl:parameter cons_TestNonNull_safety"/>
         <label
@@ -320,7 +320,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.01"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="1"
@@ -328,7 +328,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.03"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
       </transf>

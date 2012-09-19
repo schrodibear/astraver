@@ -14,11 +14,13 @@ C="array_double array_max binary_search cd1d clock_drift \
    duplets \
    eps_line1 eps_line2 \
    find_array flag floats_bsearch float_sqrt \
-   insertion_sort isqrt minmax muller my_cosine quick_sort \
+   insertion_sort interval_arith isqrt minmax muller my_cosine quick_sort \
    rec scalar_product selection_sort sparse_array2 \
    Sterbenz sum_array swap tree_max"
 
 CTODO="binary_heap float_array maze popHeap sparse_array heap_sort"
+
+FRAMA="bts1251 fresh2 hollas_floats power strprevchr"
 
 case "$1" in
   "-force")
@@ -130,5 +132,43 @@ for i in $C; do
 done
 
 cd ..
+
+printf "\n-------- FRAMA-C examples --------\n"
+
+cd ../frama-c-plugin/tests/jessie
+
+for i in $FRAMA; do
+    printf "$i.c... "
+    frama-c -load-module ../../Jessie.cmxs -jessie -jessie-gen-only $i.c 2> $TMPERR > $TMP
+    ret=$?
+    if test "$ret" != "0"; then
+	report_error $ret "frama-c -jessie"
+    else
+       ../../../bin/jessie.opt -why3ml -locs $i.jessie/$i.cloc $i.jessie/$i.jc 2> $TMPERR > $TMP
+       ret=$?
+       if test "$ret" != "0"; then
+	   report_error $ret "jessie"
+        else
+            why3replayer $REPLAYOPT --extra-config $WHYLIB/why3/why3.conf $i.jessie/$i 2> $TMPERR > $TMP
+            ret=$?
+            if test "$ret" != "0"  ; then
+	        printf "replay FAILED (ret code=$ret):"
+                out=`head -1 $TMP`
+                if test -z "$out" ; then
+                    printf "standard error: (standard output empty)"
+                    cat $TMPERR
+                else
+	            cat $TMP
+                fi
+	        res=1
+	    else
+	        printf "OK"
+	        cat $TMP
+	    fi
+        fi
+    fi
+done
+
+cd ../../../tests
 
 exit $res

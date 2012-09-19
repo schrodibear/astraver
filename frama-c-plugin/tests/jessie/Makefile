@@ -98,13 +98,13 @@ default:
 	$(EXECJESSIEBYTE) $(JC_OPTIONS) -locs $*.jessie/$*.cloc $*.jessie/$*.jc
 	$(ENVWHYOPT) make -C $*.jessie -f $*.makefile gui
 
-%.why3ml: %.c
+%.why3: %.c
 	rm -f $*.jessie/$*.jc
 	echo $(FRAMAC_PLUGIN)
 	echo $(FRAMAC_SHARE)
 	$(EXECPPCBYTE) $(PPC_OPTIONS) -jessie-gen-only $^
 	$(EXECJESSIEBYTE) -why3ml $(JC_OPTIONS) -locs $*.jessie/$*.cloc $*.jessie/$*.jc
-	$(ENVWHYOPT) make -C $*.jessie -f $*.makefile why3ml
+	$(ENVWHYOPT) make -C $*.jessie -f $*.makefile why3ide
 
 %.coq: %.c
 	rm -f $*.jessie/$*.jc

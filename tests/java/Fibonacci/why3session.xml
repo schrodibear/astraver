@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="tests/java/Fibonacci/why3session.xml">
+ name="Fibonacci/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -33,7 +33,7 @@
     locfile="/home/cmarche/why2-trunk/tests/java/Fibonacci.java"
     loclnum="46" loccnumb="10" loccnume="19"
     expl="Lemma isfib_2_1, lemma"
-    sum="5ae3fc64432f93db74570b3b8de38bd4"
+    sum="dfa5c6f71556f541b1ad0d613bc54847"
     proved="true"
     expanded="true"
     shape="aisfibc2c1">
@@ -49,12 +49,12 @@
     </proof>
     <proof
      prover="2"
-     timelimit="5"
-     memlimit="0"
+     timelimit="3"
+     memlimit="1000"
      edited="Fibonacci_Jessie_model_isfib_2_1_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.76"/>
+     <result status="valid" time="0.50"/>
     </proof>
    </goal>
    <goal
@@ -62,7 +62,7 @@
     locfile="/home/cmarche/why2-trunk/tests/java/Fibonacci.java"
     loclnum="47" loccnumb="10" loccnume="19"
     expl="Lemma isfib_6_8, lemma"
-    sum="100ad125b29012dde33717d4d722bddf"
+    sum="f54a4eb4e0d587541e7015847f7a53b6"
     proved="true"
     expanded="true"
     shape="aisfibc6c8">
@@ -75,7 +75,7 @@
      edited="Fibonacci_Jessie_model_isfib_6_8_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.85"/>
+     <result status="valid" time="0.49"/>
     </proof>
    </goal>
    <goal
@@ -83,7 +83,7 @@
     locfile="/home/cmarche/why2-trunk/tests/java/Fibonacci.java"
     loclnum="50" loccnumb="10" loccnume="23"
     expl="Lemma not_isfib_2_2, lemma"
-    sum="19719b7bc224585d0192ae00f8e4926b"
+    sum="3bb3ea52dbf7f5048077e653e2ee6c5e"
     proved="true"
     expanded="true"
     shape="aisfibc2c2N">
@@ -116,7 +116,7 @@
    </goal>
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="tests/java/Fibonacci/../Fibonacci.mlw"
    loclnum="196" loccnumb="7" loccnume="21"
    verified="true"
@@ -126,10 +126,10 @@
     locfile="/home/cmarche/why2-trunk/tests/java/Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
     expl="parameter _Fibonacci_Fib_ensures_default"
-    sum="79035f0d45b10055319ee7008790e4ac"
+    sum="cb2b837fd8bfa20dc9891da949f5a6dc"
     proved="true"
     expanded="true"
-    shape="iainfix &lt;V1V0aisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FaisfibV0V8Iainfix =V8V3FIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FFFAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
+    shape="iainfix &lt;V1V0aisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FaisfibV0V8Iainfix =V8V3FIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
     <label
      name="expl:parameter _Fibonacci_Fib_ensures_default"/>
     <label
@@ -148,10 +148,10 @@
     locfile="/home/cmarche/why2-trunk/tests/java/Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
     expl="loop variant decreases"
-    sum="318b2ee04a6234501c8cd5cacc77318b"
+    sum="a7f63a7212ae3bdec0c4616e483fe067"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;ainfix -V0V7ainfix -V0V1Aainfix &lt;=c0ainfix -V0V1Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FFFIainfix &gt;=V0c0F">
+    shape="ainfix &lt;ainfix -V0V7ainfix -V0V1Aainfix &lt;=c0ainfix -V0V1Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
     <label
      name="expl:parameter _Fibonacci_Fib_safety"/>
     <label
@@ -178,15 +178,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_ensures_default"
     locfile="/home/cmarche/why2-trunk/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Fibonacci_ensures_default"
-    sum="5f72743bf347a622b729cc560a6c82b6"
+    expl="normal postcondition"
+    sum="362a088fa3dd4d9d8cea40c4cace26d0"
     proved="true"
     expanded="true"
     shape="t">
@@ -200,7 +200,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -216,15 +216,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_safety"
     locfile="/home/cmarche/why2-trunk/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Fibonacci_safety"
-    sum="6ff37f8db7424d56ea95c272b52c5109"
+    expl="normal postcondition"
+    sum="282a6789fa10d123d33e9f34ee615a10"
     proved="true"
     expanded="true"
     shape="t">
@@ -246,7 +246,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -254,7 +254,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>

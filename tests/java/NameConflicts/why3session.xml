@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="NameConflicts/why3session.xml">
+ name="NameConflicts/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -26,7 +26,7 @@
    expanded="true">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="NameConflicts/../NameConflicts.mlw"
    loclnum="295" loccnumb="7" loccnume="21"
    verified="true"
@@ -35,8 +35,8 @@
     name="WP_parameter _NameConflicts_field_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
-    expl="parameter _NameConflicts_field_ensures_default"
-    sum="a27eb2b49bda5beca9eb63a7db484039"
+    expl="normal postcondition"
+    sum="508c398a60164dab3b521c51e9228fa9"
     proved="true"
     expanded="true"
     shape="t">
@@ -58,7 +58,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -73,8 +73,8 @@
     name="WP_parameter _NameConflicts_field_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
-    expl="parameter _NameConflicts_field_safety"
-    sum="b4e6a4499ae8b34a8e6791f84bad7c55"
+    expl="normal postcondition"
+    sum="b2fdda03bd17cca286272bbb8b1d115c"
     proved="true"
     expanded="true"
     shape="t">
@@ -96,7 +96,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -111,8 +111,8 @@
     name="WP_parameter _NameConflicts_m_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
-    expl="parameter _NameConflicts_m_ensures_default"
-    sum="6afec7657e712c00cbf22fef50e77753"
+    expl="normal postcondition"
+    sum="62df29de3e63d6501b9512e4ce88c1a1"
     proved="true"
     expanded="true"
     shape="t">
@@ -126,7 +126,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -142,7 +142,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -150,7 +150,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="normal postcondition"
-    sum="c8e8a0fee2ab0ceae9862014293a1fcd"
+    sum="812f3c831338f95a5af28c5b41358351"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c0Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
@@ -187,8 +187,8 @@
     name="WP_parameter _NameConflicts_m_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
-    expl="parameter _NameConflicts_m_safety"
-    sum="cd565dee2ef8e174b7475c861119354c"
+    expl="normal postcondition"
+    sum="9833d8b3490dd4213e10164b92ad5946"
     proved="true"
     expanded="true"
     shape="t">
@@ -202,7 +202,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -210,7 +210,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -225,8 +225,8 @@
     name="WP_parameter _NameConflicts_setI_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
-    expl="parameter _NameConflicts_setI_ensures_default"
-    sum="f5c2c110693776bac41bee578222744c"
+    expl="normal postcondition"
+    sum="1b2f032b557f3326d53c004e10fc8dda"
     proved="true"
     expanded="true"
     shape="t">
@@ -240,7 +240,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -248,7 +248,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -263,8 +263,8 @@
     name="WP_parameter _NameConflicts_setI_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
-    expl="parameter _NameConflicts_setI_safety"
-    sum="9db76028c73ee9e32a75e839b1db522a"
+    expl="normal postcondition"
+    sum="17900041530f4c410e08ec97c8847066"
     proved="true"
     expanded="true"
     shape="t">
@@ -286,7 +286,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -294,15 +294,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_NameConflicts_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_NameConflicts_ensures_default"
-    sum="8dd8e9249501e739ccb7ef131ce6ce3a"
+    expl="normal postcondition"
+    sum="eaef38a7bc2f7758ab8a32135e3fe605"
     proved="true"
     expanded="true"
     shape="t">
@@ -316,7 +316,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -324,7 +324,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -332,15 +332,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_NameConflicts_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_NameConflicts_safety"
-    sum="1676e76ddc23233fa532e0fbbaa41011"
+    expl="normal postcondition"
+    sum="108c0f756714473db318c8eaaed3d7ef"
     proved="true"
     expanded="true"
     shape="t">
@@ -354,7 +354,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -370,7 +370,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
   </theory>

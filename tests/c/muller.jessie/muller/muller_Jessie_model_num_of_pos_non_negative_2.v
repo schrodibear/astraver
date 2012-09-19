@@ -5,13 +5,6 @@ Require Import Rbase.
 Require int.Int.
 Require Jessie_memory_model.
 
-(* Why3 assumption *)
-Definition implb(x:bool) (y:bool): bool := match (x,
-  y) with
-  | (true, false) => false
-  | (_, _) => true
-  end.
-
 Parameter charP : Type.
 
 Parameter int32 : Type.
@@ -237,16 +230,16 @@ Axiom num_of_pos_empty : forall (intP_intM_t_1_at_L:(Jessie_memory_model.memory
 
 Axiom num_of_pos_true_case : forall (intP_intM_t_1_at_L:(Jessie_memory_model.memory
   intP int32)), forall (i_1:Z), forall (j_1:Z),
-  forall (t_1:(Jessie_memory_model.pointer intP)), ((i_1 <  j_1)%Z /\
-  (0%Z <  (integer_of_int32 (Jessie_memory_model.select intP_intM_t_1_at_L
+  forall (t_1:(Jessie_memory_model.pointer intP)), ((i_1 < j_1)%Z /\
+  (0%Z < (integer_of_int32 (Jessie_memory_model.select intP_intM_t_1_at_L
   (Jessie_memory_model.shift t_1 (j_1 - 1%Z)%Z))))%Z) -> ((num_of_pos i_1 j_1
   t_1 intP_intM_t_1_at_L) = ((num_of_pos i_1 (j_1 - 1%Z)%Z t_1
   intP_intM_t_1_at_L) + 1%Z)%Z).
 
 Axiom num_of_pos_false_case : forall (intP_intM_t_1_at_L:(Jessie_memory_model.memory
   intP int32)), forall (i_2:Z), forall (j_2:Z),
-  forall (t_2:(Jessie_memory_model.pointer intP)), ((i_2 <  j_2)%Z /\
-  ~ (0%Z <  (integer_of_int32 (Jessie_memory_model.select intP_intM_t_1_at_L
+  forall (t_2:(Jessie_memory_model.pointer intP)), ((i_2 < j_2)%Z /\
+  ~ (0%Z < (integer_of_int32 (Jessie_memory_model.select intP_intM_t_1_at_L
   (Jessie_memory_model.shift t_2 (j_2 - 1%Z)%Z))))%Z) -> ((num_of_pos i_2 j_2
   t_2 intP_intM_t_1_at_L) = (num_of_pos i_2 (j_2 - 1%Z)%Z t_2
   intP_intM_t_1_at_L)).

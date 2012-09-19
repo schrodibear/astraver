@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="sum_array.jessie/sum_array/why3session.xml">
+ name="sum_array.jessie/sum_array/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -37,7 +37,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
     loclnum="16" loccnumb="4" loccnume="137"
     expl="Lemma sum3, lemma"
-    sum="3a283d30c25dc974246e7579ed62dfac"
+    sum="e15a2f8f8a0419122986b9292bb3d27e"
     proved="false"
     expanded="true"
     shape="ainfix =asumV1V2V4V0ainfix +asumV1V2V3V0asumV1V3V4V0Iainfix &lt;=V3V4Aainfix &lt;=V2V3FFFFF">
@@ -57,7 +57,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.07"/>
+     <result status="timeout" time="3.03"/>
     </proof>
     <proof
      prover="0"
@@ -65,7 +65,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="2.58"/>
+     <result status="unknown" time="2.63"/>
     </proof>
     <proof
      prover="2"
@@ -89,7 +89,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
     loclnum="22" loccnumb="4" loccnume="170"
     expl="Lemma sum_footprint, lemma"
-    sum="0c443aa0dabccd04e93065bc5181e0ab"
+    sum="19248b6e15b307b24772e8753d490071"
     proved="false"
     expanded="true"
     shape="ainfix =asumV2V4V5V1asumV3V4V5V0Iainfix =aselectV1ashiftV2V6aselectV0ashiftV3V6Iainfix &lt;V6V5Aainfix &lt;=V4V6FFFFFFF">
@@ -109,7 +109,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.11"/>
+     <result status="timeout" time="3.01"/>
     </proof>
     <proof
      prover="0"
@@ -117,7 +117,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.78"/>
+     <result status="unknown" time="0.79"/>
     </proof>
     <proof
      prover="2"
@@ -125,7 +125,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.11"/>
+     <result status="timeout" time="3.01"/>
     </proof>
     <proof
      prover="4"
@@ -138,7 +138,7 @@
    </goal>
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="sum_array.jessie/sum_array/../sum_array.mlw"
    loclnum="225" loccnumb="7" loccnume="21"
    verified="true"
@@ -148,10 +148,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
     loclnum="31" loccnumb="4" loccnume="9"
     expl="Function test1, default behavior"
-    sum="b721c5a2448565859ed1674428e95621"
+    sum="777eb7d8866b836fd1da2ec35bcc14d6"
     proved="true"
     expanded="false"
-    shape="iainfix &lt;V7V1ainfix =V8asumV0c0V9V3Aainfix &lt;=V9V1Aainfix &lt;=c0V9Iainfix =V9ainfix +V7c1FIainfix =V8ainfix +V6aselectV3ashiftV0V7Fainfix =V10asumV0c0V1V3Iainfix =V10V6FIainfix =V6asumV0c0V7V3Aainfix &lt;=V7V1Aainfix &lt;=c0V7FFAainfix =V4asumV0c0V5V3Aainfix &lt;=V5V1Aainfix &lt;=c0V5Iainfix =V5c0FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+    shape="iainfix &lt;V7V1ainfix =V8asumV0c0V9V3Aainfix &lt;=V9V1Aainfix &lt;=c0V9Iainfix =V9ainfix +V7c1FIainfix =V8ainfix +V6aselectV3ashiftV0V7Fainfix =V10asumV0c0V1V3Iainfix =V10V6FIainfix =V6asumV0c0V7V3Aainfix &lt;=V7V1Aainfix &lt;=c0V7FAainfix =V4asumV0c0V5V3Aainfix &lt;=V5V1Aainfix &lt;=c0V5Iainfix =V5c0FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1F">
     <label
      name="expl:Function test1, default behavior"/>
     <label
@@ -162,7 +162,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -170,10 +170,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
     loclnum="31" loccnumb="4" loccnume="9"
     expl="Function test1, Safety"
-    sum="66819a9192c93700637cb6d95c787426"
+    sum="6a77da950866bffb20470f5f9c99624f"
     proved="true"
     expanded="false"
-    shape="ainfix &lt;ainfix -V1V9ainfix -V1V7Aainfix &lt;=c0ainfix -V1V7Iainfix =V9ainfix +V7c1FIainfix =V8ainfix +V6aselectV3ashiftV0V7FAainfix &lt;=V7aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V7Iainfix &lt;V7V1Iainfix =V6asumV0c0V7V3Aainfix &lt;=V7V1Aainfix &lt;=c0V7FFIainfix =V5c0FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+    shape="ainfix &lt;ainfix -V1V9ainfix -V1V7Aainfix &lt;=c0ainfix -V1V7Iainfix =V9ainfix +V7c1FIainfix =V8ainfix +V6aselectV3ashiftV0V7FAainfix &lt;=V7aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V7Iainfix &lt;V7V1Iainfix =V6asumV0c0V7V3Aainfix &lt;=V7V1Aainfix &lt;=c0V7FIainfix =V5c0FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1F">
     <label
      name="expl:Function test1, Safety"/>
     <label
@@ -184,7 +184,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -192,10 +192,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
     loclnum="49" loccnumb="5" loccnume="10"
     expl="Function test2, default behavior"
-    sum="a66b99f5ca3790ce03ac89e71fc5698c"
+    sum="9b9ca626f3119f027aa5ff315035e128"
     proved="true"
     expanded="false"
-    shape="iainfix &lt;V5V1anot_assignsV2V3V7apset_allapset_singletonV0Aainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Aainfix &lt;=V8V1Aainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FAainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FAainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6anot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FFAanot_assignsV2V3V3apset_allapset_singletonV0Aainfix =asumV0c0V1V3ainfix +asumV0c0V1V3V4Aainfix &lt;=V4V1Aainfix &lt;=c0V4Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+    shape="iainfix &lt;V5V1anot_assignsV2V3V7apset_allapset_singletonV0Aainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Aainfix &lt;=V8V1Aainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FAainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FAainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6anot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FAanot_assignsV2V3V3apset_allapset_singletonV0Aainfix =asumV0c0V1V3ainfix +asumV0c0V1V3V4Aainfix &lt;=V4V1Aainfix &lt;=c0V4Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
     <label
      name="expl:Function test2, default behavior"/>
     <label
@@ -203,16 +203,16 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter test2_ensures_default.1"
       locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="loop invariant init"
-      sum="4af33f327df782a7101ef48f34ea0779"
+      sum="889b69bae212236de9e50313977ae4d5"
       proved="true"
       expanded="false"
-      shape="anot_assignsV2V3V3apset_allapset_singletonV0Aainfix =asumV0c0V1V3ainfix +asumV0c0V1V3V4Aainfix &lt;=V4V1Aainfix &lt;=c0V4Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+      shape="anot_assignsV2V3V3apset_allapset_singletonV0Aainfix =asumV0c0V1V3ainfix +asumV0c0V1V3V4Aainfix &lt;=V4V1Aainfix &lt;=c0V4Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
       <label
        name="expl:Function test2, default behavior"/>
       <label
@@ -231,10 +231,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="assertion"
-      sum="9cb6a21f7764c31917cf4ce3751c62f7"
+      sum="040584b9cea9f310fe561a52ee79fcdb"
       proved="true"
       expanded="false"
-      shape="ainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FFIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+      shape="ainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
       <label
        name="expl:Function test2, default behavior"/>
       <label
@@ -253,10 +253,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="assertion"
-      sum="18eec24b8578b49eac2b6ef4a212aeeb"
+      sum="42dcd65ee599d5dbf3e4279f42c78b8f"
       proved="true"
       expanded="false"
-      shape="ainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FFIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+      shape="ainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
       <label
        name="expl:Function test2, default behavior"/>
       <label
@@ -275,10 +275,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="loop invariant preservation"
-      sum="14a410c97770ee7f154e37799ec1a6d0"
+      sum="af91fe90bc3d523fd2ed05e1f95e2b52"
       proved="true"
       expanded="false"
-      shape="anot_assignsV2V3V7apset_allapset_singletonV0Aainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Aainfix &lt;=V8V1Aainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FFIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+      shape="anot_assignsV2V3V7apset_allapset_singletonV0Aainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Aainfix &lt;=V8V1Aainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
       <label
        name="expl:Function test2, default behavior"/>
       <label
@@ -289,7 +289,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.12"/>
+       <result status="valid" time="0.13"/>
       </proof>
       <proof
        prover="4"
@@ -297,21 +297,21 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.09"/>
       </proof>
       <transf
        name="split_goal"
        proved="true"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter test2_ensures_default.4.1"
         locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="Function test2, default behavior"
-        sum="4aecc31e740a8b88e0dc9df013259c3c"
+        sum="ea9b4bded106516c1af8fb8a1c87cb75"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FFIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+        shape="ainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
         <label
          name="expl:Function test2, default behavior"/>
         <label
@@ -330,10 +330,10 @@
         locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="Function test2, default behavior"
-        sum="c48b0bfd48e2c5443464c51bc12975bc"
+        sum="0b963d1b4b1be235f2e68d743f2896d7"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=V8V1Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FFIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+        shape="ainfix &lt;=V8V1Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
         <label
          name="expl:Function test2, default behavior"/>
         <label
@@ -344,7 +344,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.02"/>
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
@@ -352,10 +352,10 @@
         locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="Function test2, default behavior"
-        sum="286cbe4c260e40e4e4e8428dd15d1929"
+        sum="bf599148a264606681629eaea09414d1"
         proved="true"
         expanded="false"
-        shape="ainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FFIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+        shape="ainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
         <label
          name="expl:Function test2, default behavior"/>
         <label
@@ -366,7 +366,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.13"/>
         </proof>
         <proof
          prover="4"
@@ -374,7 +374,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.27"/>
+         <result status="valid" time="0.11"/>
         </proof>
        </goal>
        <goal
@@ -382,10 +382,10 @@
         locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="Function test2, default behavior"
-        sum="14585fb814cb17fbdac29b7a5cfc3051"
+        sum="4289a2396353b472792d04b1fd86f3f8"
         proved="true"
         expanded="false"
-        shape="anot_assignsV2V3V7apset_allapset_singletonV0Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FFIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+        shape="anot_assignsV2V3V7apset_allapset_singletonV0Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
         <label
          name="expl:Function test2, default behavior"/>
         <label
@@ -406,10 +406,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="normal postcondition"
-      sum="4fe7a2f510b19c86a7a920cf16e3819f"
+      sum="c1ee1260d9af608630cafd684a3d2683"
       proved="true"
       expanded="false"
-      shape="anot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V1Iainfix &lt;V5V1NIanot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FFIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+      shape="anot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V1Iainfix &lt;V5V1NIanot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
       <label
        name="expl:Function test2, default behavior"/>
       <label
@@ -430,10 +430,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
     loclnum="49" loccnumb="5" loccnume="10"
     expl="Function test2, Safety"
-    sum="a23e2dd8ea7922acddd6dc556b3f6619"
+    sum="2bdd3cd1a10f63f694c063dc362511db"
     proved="true"
     expanded="false"
-    shape="ainfix &lt;ainfix -V1V8ainfix -V1V5Aainfix &lt;=c0ainfix -V1V5Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FAainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Aainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Iainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Iainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FFIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FFFF">
+    shape="ainfix &lt;ainfix -V1V8ainfix -V1V5Aainfix &lt;=c0ainfix -V1V5Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FAainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Aainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Iainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Iainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
     <label
      name="expl:Function test2, Safety"/>
     <label
@@ -444,7 +444,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="1"

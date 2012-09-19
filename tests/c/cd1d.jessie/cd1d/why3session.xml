@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="cd1d.jessie/cd1d/why3session.xml">
+ name="cd1d.jessie/cd1d/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -29,7 +29,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
     loclnum="10" loccnumb="4" loccnume="97"
     expl="Lemma completeness, lemma"
-    sum="a5342fc5c57a3fdc5b03a80055a16899"
+    sum="a8acba3448fc7f72b7a2449867e999c7"
     proved="true"
     expanded="true"
     shape="acd1dV0V1IaconflictV0V1Iainfix &gt;=V1c0.0FF">
@@ -54,7 +54,7 @@
    </goal>
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="cd1d.jessie/cd1d/../cd1d.mlw"
    loclnum="172" loccnumb="7" loccnume="21"
    verified="true"
@@ -64,10 +64,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
     expl="Function cd1d_double, Behavior `completeness&apos;"
-    sum="f283b9f1b2488258438e4775aaedfc76"
+    sum="582ac9eac30d83307ac3a1130802f59e"
     proved="true"
     expanded="true"
-    shape="iainfix =V8aTrueainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1Fainfix =ainteger_of_int32V14c1Iainfix =V14V13FIainfix =V13V12FIainfix =ainteger_of_int32V12c0FIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV4V6V7FIamul_postaNearestTiesToEvenV5V1V6FIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1FF">
+    shape="iainfix =V8aTrueainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1Fainfix =ainteger_of_int32V14c1Iainfix =V14V13FIainfix =V13V12FIainfix =ainteger_of_int32V12c0FIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
     <label
      name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
     <label
@@ -81,10 +81,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="normal postcondition"
-      sum="a902c28aac2a4f8a062d709ae29ca9b6"
+      sum="ab8f087ef0ebd41f398fe9b974f5ef6d"
       proved="true"
       expanded="false"
-      shape="ainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1FIainfix =V8aTrueIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV4V6V7FIamul_postaNearestTiesToEvenV5V1V6FIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1FF">
+      shape="ainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1FIainfix =V8aTrueIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
       <label
        name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
       <label
@@ -103,10 +103,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="normal postcondition"
-      sum="e18345ae652d2046b2b9c5793617788d"
+      sum="4843cf1c0506bc804fb13a1834c0d7c7"
       proved="true"
       expanded="true"
-      shape="ainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8aTrueNIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV4V6V7FIamul_postaNearestTiesToEvenV5V1V6FIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1FF">
+      shape="ainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8aTrueNIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
       <label
        name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
       <label
@@ -117,7 +117,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.00"/>
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
     </transf>
@@ -126,8 +126,8 @@
     name="WP_parameter cd1d_double_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
-    expl="Function cd1d_double, default behavior"
-    sum="d87adb744f5838b96bedde0578d0a6db"
+    expl="normal postcondition"
+    sum="52c30a97e2c5a8cc8dc55042c691aaf7"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,10 +149,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
     expl="Function cd1d_double, Safety"
-    sum="5cee2b1c6f403924755a986c03bd26d8"
+    sum="eb24da00c125c4050b94e0fe76b037d5"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV6amax_doubleIamul_postaNearestTiesToEvenV5V1V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV5avalueV1amax_doubleIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-49V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0FF">
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV3amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
     <label
      name="expl:Function cd1d_double, Safety"/>
     <label
@@ -160,16 +160,16 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter cd1d_double_safety.1"
       locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
-      expl="floating-point overflow"
-      sum="2f9c244900da040c3892f2c4d51f35f4"
+      expl="precondition"
+      sum="f07b089f91629ae9da92c348e8fd8526"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0FF">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
@@ -187,11 +187,11 @@
       name="WP_parameter cd1d_double_safety.2"
       locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
-      expl="floating-point overflow"
-      sum="750619b31dcc5c787029e033b1a77f0c"
+      expl="precondition"
+      sum="1e18b404b3f36aa75bd4be6380686784"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0FF">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
@@ -209,11 +209,11 @@
       name="WP_parameter cd1d_double_safety.3"
       locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
-      expl="floating-point overflow"
-      sum="2ea6694e1fbd2626e69fc1de0d09e4d6"
+      expl="precondition"
+      sum="184b8398ea0ce1af89cfe164f2a4f9b4"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV5avalueV1amax_doubleIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0FF">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
@@ -231,11 +231,11 @@
       name="WP_parameter cd1d_double_safety.4"
       locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
-      expl="floating-point overflow"
-      sum="148d43745b5aa4864ff9373ea25dd329"
+      expl="precondition"
+      sum="c33fef4b47cd8853a74a75f50c5f5866"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV6amax_doubleIamul_postaNearestTiesToEvenV5V1V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV5avalueV1amax_doubleIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0FF">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV3amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label

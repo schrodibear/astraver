@@ -989,11 +989,14 @@ why3: why/Arrays_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-why3ide: why/Arrays_why3.why
-	@echo 'why3ide [...] $<' && why3ide $<
-
 why3ml: Arrays.mlw
-	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+
+why3ide: Arrays.mlw
+	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+
+why3replay: Arrays.mlw
+	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include Arrays.depend
 

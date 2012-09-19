@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="FlagStatic/why3session.xml">
+ name="FlagStatic/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -26,7 +26,7 @@
    expanded="true">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="FlagStatic/../FlagStatic.mlw"
    loclnum="217" loccnumb="7" loccnume="21"
    verified="true"
@@ -36,10 +36,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
     expl="parameter _FlagStatic_flag_ensures_default"
-    sum="4312780c7d9189d1953e7c4fcd7b2d9f"
+    sum="0fd6f19198e737013114fb180033327d"
     proved="true"
     expanded="false"
-    shape="LaselectV7ashiftV0V5iainfix =V8a_FlagStatic_BLUEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V12a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V12V4Aainfix &lt;=V6V12Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDais_monochromeV0V13ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV14Aais_monochromeV0V6V5a_FlagStatic_WHITEV14Aais_monochromeV0c0V6a_FlagStatic_BLUEV14Aainfix &lt;=V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V13Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V14Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FIainfix =V13ainfix -V4c1Fais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFAais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="iainfix =V8a_FlagStatic_BLUEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V12a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V12V4Aainfix &lt;=V6V12Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDais_monochromeV0V13ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV14Aais_monochromeV0V6V5a_FlagStatic_WHITEV14Aais_monochromeV0c0V6a_FlagStatic_BLUEV14Aainfix &lt;=V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V13Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V14Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FIainfix =V13ainfix -V4c1Fais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7LaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FAais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _FlagStatic_flag_ensures_default"/>
     <label
@@ -53,10 +53,10 @@
       locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="loop invariant init"
-      sum="352ae2d915bf778dae3650881d1af761"
+      sum="84fd1aa49ebc19629b368f682aaf8f91"
       proved="true"
       expanded="false"
-      shape="ais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+      shape="ais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:parameter _FlagStatic_flag_ensures_default"/>
       <label
@@ -75,7 +75,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="1"
@@ -91,10 +91,10 @@
       locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="loop invariant preservation"
-      sum="b27ac7a3bb9fc4bff119523599c56de7"
+      sum="d6a8b2b5a860cc5845f6e4f6b0943eb6"
       proved="true"
       expanded="false"
-      shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+      shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:parameter _FlagStatic_flag_ensures_default"/>
       <label
@@ -108,10 +108,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="3da58c72cbf3385e8f95e2690fe21981"
+        sum="d1db4595eb2b35ef51bce3b12fcb30d6"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -125,10 +125,10 @@
           locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
           loclnum="87" loccnumb="23" loccnume="27"
           expl="parameter _FlagStatic_flag_ensures_default"
-          sum="b3ca4368fe77e33633b3ee455ab76ae9"
+          sum="74e4c070edb17d9482226e67a7c0fe04"
           proved="true"
           expanded="false"
-          shape="LaselectV7ashiftV0V5ais_coloraselectV11ashiftV0V12Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V12FAa_Non_null_intMV0V2Iainfix =aselectV11V13aselectV7V13Iain_psetV13apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6NAavalidV2V13FAainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8c1Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V14a_FlagStatic_REDIainfix &lt;V14ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_WHITEIainfix &lt;V15V5Aainfix &lt;=V6V15FAainfix =aselectV7ashiftV0V16a_FlagStatic_BLUEIainfix &lt;V16V6Aainfix &lt;=c0V16FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647FIais_coloraselectV1ashiftV0V18Iainfix &lt;V18ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V18FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FFF">
+          shape="ais_coloraselectV11ashiftV0V12Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V12FAa_Non_null_intMV0V2Iainfix =aselectV11V13aselectV7V13Iain_psetV13apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6NAavalidV2V13FAainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8c1LaselectV7ashiftV0V5Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V14a_FlagStatic_REDIainfix &lt;V14ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_WHITEIainfix &lt;V15V5Aainfix &lt;=V6V15FAainfix =aselectV7ashiftV0V16a_FlagStatic_BLUEIainfix &lt;V16V6Aainfix &lt;=c0V16FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2FIainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_coloraselectV1ashiftV0V18Iainfix &lt;V18ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V18FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FF">
           <label
            name="expl:parameter _FlagStatic_flag_ensures_default"/>
           <label
@@ -139,7 +139,7 @@
            memlimit="0"
            obsolete="false"
            archived="false">
-           <result status="valid" time="0.63"/>
+           <result status="valid" time="0.62"/>
           </proof>
          </goal>
         </transf>
@@ -149,10 +149,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="0e805882ba51fbeba20aea800235ee3e"
+        sum="8ed4160ac2a453417372bfb49b6ecf17"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ainfix &lt;=c0V9Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ainfix &lt;=c0V9Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -163,7 +163,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.05"/>
         </proof>
         <proof
          prover="0"
@@ -187,10 +187,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="6f628104583bbbb4573e33600077f680"
+        sum="ace9df66858444331ad250607cf9197f"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ainfix &lt;=V9V10Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ainfix &lt;=V9V10Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -225,10 +225,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="eead5692ea8b472c64defa1a0d0d6f7c"
+        sum="629d679f3275d639c35e25b6b567dd65"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ainfix &lt;=V10V4Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ainfix &lt;=V10V4Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -263,10 +263,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="12ce80e673dc54f932746508c3ceef2f"
+        sum="7f2532e292f115ffb89c39ee52cd3eee"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ainfix &lt;=V4ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ainfix &lt;=V4ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -301,10 +301,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="daff9beec282a87039b685862cbce865"
+        sum="6bd091f3ecd3677e4427e3e0d7925cdf"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ais_monochromeV0c0V9a_FlagStatic_BLUEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ais_monochromeV0c0V9a_FlagStatic_BLUEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -315,7 +315,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.99"/>
+         <result status="valid" time="0.90"/>
         </proof>
        </goal>
        <goal
@@ -323,10 +323,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="89d0596215d0b5f5b8d7ce3f1a02c566"
+        sum="a6735e4075f522965bafcbd19c7d5f0d"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ais_monochromeV0V9V10a_FlagStatic_WHITEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ais_monochromeV0V9V10a_FlagStatic_WHITEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -337,7 +337,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.02"/>
+         <result status="valid" time="0.95"/>
         </proof>
        </goal>
        <goal
@@ -345,10 +345,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="ebd23329f8fc57e86d22222e36432585"
+        sum="8a4643d68796bb81f621640a42e6355a"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -359,7 +359,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.79"/>
+         <result status="valid" time="0.70"/>
         </proof>
        </goal>
       </transf>
@@ -369,10 +369,10 @@
       locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="loop invariant preservation"
-      sum="02c874c70484b2facc02ae6360108347"
+      sum="4fcee7663682049790b88fee1e951977"
       proved="true"
       expanded="false"
-      shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V9V4Aainfix &lt;=V6V9Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V9ainfix +V5c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+      shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V9V4Aainfix &lt;=V6V9Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V9ainfix +V5c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:parameter _FlagStatic_flag_ensures_default"/>
       <label
@@ -407,10 +407,10 @@
       locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="loop invariant preservation"
-      sum="4ec2429fb866dae51f4f78eebb71a1a2"
+      sum="da52fadb6d85eba30eb3d8a165be87e2"
       proved="true"
       expanded="false"
-      shape="LaselectV7ashiftV0V5ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Aais_monochromeV0V6V5a_FlagStatic_WHITEV10Aais_monochromeV0c0V6a_FlagStatic_BLUEV10Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V9Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+      shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Aais_monochromeV0V6V5a_FlagStatic_WHITEV10Aais_monochromeV0c0V6a_FlagStatic_BLUEV10Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V9Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:parameter _FlagStatic_flag_ensures_default"/>
       <label
@@ -424,10 +424,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="0343e091ccb6c5b83dc6a7f2574f78a1"
+        sum="af99dad3d11a823394698b9932ea2f70"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -441,10 +441,10 @@
           locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
           loclnum="87" loccnumb="23" loccnume="27"
           expl="parameter _FlagStatic_flag_ensures_default"
-          sum="c5569e0cfc5a778dd8fc4b30f721e134"
+          sum="5c56d50662ef522ffcb75fee998b207a"
           proved="true"
           expanded="false"
-          shape="LaselectV7ashiftV0V5ais_coloraselectV10ashiftV0V11Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V11FAa_Non_null_intMV0V2Iainfix =aselectV10V12aselectV7V12Iain_psetV12apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9NAavalidV2V12FAainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix +V4aprefix -c1FIainfix =V8c1Oainfix =V8c2Oainfix =V8c3Iainfix =V8c1Oainfix =V8c2NIainfix =V8c1NIainfix &lt;V5V4Iainfix =aselectV7ashiftV0V13a_FlagStatic_REDIainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V13FAainfix =aselectV7ashiftV0V14a_FlagStatic_WHITEIainfix &lt;V14V5Aainfix &lt;=V6V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_BLUEIainfix &lt;V15V6Aainfix &lt;=c0V15FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V16Iainfix &lt;V16ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V16FAa_Non_null_intMV0V2FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647FIais_coloraselectV1ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FFF">
+          shape="ais_coloraselectV10ashiftV0V11Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V11FAa_Non_null_intMV0V2Iainfix =aselectV10V12aselectV7V12Iain_psetV12apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9NAavalidV2V12FAainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix +V4aprefix -c1FIainfix =V8c1Oainfix =V8c2Oainfix =V8c3Iainfix =V8c1Oainfix =V8c2NIainfix =V8c1NLaselectV7ashiftV0V5Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V13a_FlagStatic_REDIainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V13FAainfix =aselectV7ashiftV0V14a_FlagStatic_WHITEIainfix &lt;V14V5Aainfix &lt;=V6V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_BLUEIainfix &lt;V15V6Aainfix &lt;=c0V15FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V16Iainfix &lt;V16ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V16FAa_Non_null_intMV0V2FIainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_coloraselectV1ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FF">
           <label
            name="expl:parameter _FlagStatic_flag_ensures_default"/>
           <label
@@ -455,7 +455,7 @@
            memlimit="0"
            obsolete="false"
            archived="false">
-           <result status="valid" time="1.76"/>
+           <result status="valid" time="1.19"/>
           </proof>
          </goal>
         </transf>
@@ -465,10 +465,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="9ee1d54073c0e303a55d9a9ed71300cc"
+        sum="39f6fc19dcf55f9bc5b7627583a1bd31"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ainfix &lt;=c0V6Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ainfix &lt;=c0V6Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -503,10 +503,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="ac08dccf4f4784b45fca4e80740d61a9"
+        sum="cb44330388ccc7a53aa568b78522ecea"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ainfix &lt;=V6V5Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ainfix &lt;=V6V5Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -541,10 +541,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="68e12d1f69596e61825245337c908cf9"
+        sum="33dea114f968ee2a12de12e4ddad8248"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ainfix &lt;=V5V9Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ainfix &lt;=V5V9Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -555,7 +555,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.06"/>
         </proof>
         <proof
          prover="0"
@@ -579,10 +579,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="9a1c63cc50b02dc996b0c44f246ed173"
+        sum="b8cfaaf8b5281c0e6f439d505a3ded97"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ainfix &lt;=V9ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ainfix &lt;=V9ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -593,7 +593,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.06"/>
         </proof>
         <proof
          prover="0"
@@ -609,7 +609,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
@@ -617,10 +617,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="610b8b5c4b7495d498e6a25911caa124"
+        sum="4b68fb0864bb8118e5239a8feaf9a2dd"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ais_monochromeV0c0V6a_FlagStatic_BLUEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ais_monochromeV0c0V6a_FlagStatic_BLUEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -631,7 +631,11 @@
          memlimit="0"
          obsolete="false"
          archived="false">
+<<<<<<< .working
          <result status="valid" time="0.85"/>
+=======
+         <result status="valid" time="0.80"/>
+>>>>>>> .merge-right.r4939
         </proof>
        </goal>
        <goal
@@ -639,10 +643,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="e89175fc82fed32eb171ede9c6227458"
+        sum="b082924182c5cccdc310d90f6e2d4497"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ais_monochromeV0V6V5a_FlagStatic_WHITEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ais_monochromeV0V6V5a_FlagStatic_WHITEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -653,7 +657,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.03"/>
+         <result status="valid" time="0.94"/>
         </proof>
        </goal>
        <goal
@@ -661,10 +665,10 @@
         locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="parameter _FlagStatic_flag_ensures_default"
-        sum="9daedc4b168d3f2d2863b1702969565e"
+        sum="28b592b56a2a40650ffb5b9b915f1bbb"
         proved="true"
         expanded="false"
-        shape="LaselectV7ashiftV0V5ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
         <label
@@ -675,7 +679,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.13"/>
+         <result status="valid" time="1.04"/>
         </proof>
        </goal>
       </transf>
@@ -685,10 +689,10 @@
       locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="loop invariant preservation"
-      sum="bac9dbae140753dd997d771aaa637914"
+      sum="30d39fe91824fd6fe15d908564d7698e"
       proved="true"
       expanded="false"
-      shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDNIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+      shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDNIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:parameter _FlagStatic_flag_ensures_default"/>
       <label
@@ -725,10 +729,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
     expl="normal postcondition"
-    sum="9ee240055cf644ccae0bb99fa9088a38"
+    sum="c4b1db7198cfda076b3740ee0e63216f"
     proved="true"
     expanded="false"
-    shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V8V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V8a_FlagStatic_BLUEV7EEIainfix &lt;V5V4NIais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V8V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V8a_FlagStatic_BLUEV7EEIainfix &lt;V5V4NIais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _FlagStatic_flag_ensures_sorts"/>
     <label
@@ -739,7 +743,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
@@ -755,7 +759,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -763,14 +767,52 @@
     locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
     expl="index bounds"
-    sum="7a4e227eb47e278cc90d2809715890c9"
+    sum="95fdfb4d3214d716b5669395b87dc3de"
     proved="true"
     expanded="false"
-    shape="LaselectV7ashiftV0V5iainfix =V8a_FlagStatic_BLUEainfix &lt;ainfix -V4V10ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V6Iainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEainfix &lt;ainfix -V4V12ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDainfix &lt;ainfix -V13V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V13Iainfix =V13ainfix -V4c1Fainfix &lt;ainfix -V4V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Aainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FAainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="iainfix =V8a_FlagStatic_BLUEainfix &lt;ainfix -V4V10ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V6Iainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEainfix &lt;ainfix -V4V12ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDainfix &lt;ainfix -V13V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V13Iainfix =V13ainfix -V4c1Fainfix &lt;ainfix -V4V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5LaselectV7ashiftV0V5Aainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _FlagStatic_flag_safety"/>
     <label
      name="expl:Method flag, Safety"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.12"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"
+    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+    loclnum="58" loccnumb="26" loccnume="38"
+    expl="parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"
+    sum="e38794d639fe41a508b841aa4c97c6c4"
+    proved="true"
+    expanded="false"
+    shape="iainfix &lt;V6V2ais_monochromeV0V1V2V3V4qainfix =V7aTrueIainfix =V7aFalseFIainfix =aselectV4ashiftV0V6V3Nais_monochromeV0V1V2V3V4qainfix =V8aTrueIainfix =V8aTrueFIainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
+    <label
+     name="expl:parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"/>
+    <label
+     name="expl:Method isMonochrome, Behavior `decides_monochromatic&apos;"/>
     <proof
      prover="2"
      timelimit="5"
@@ -785,45 +827,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.10"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"
-    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
-    loclnum="58" loccnumb="26" loccnume="38"
-    expl="parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"
-    sum="f6e20a749142f0edd6d33d55de1ea774"
-    proved="true"
-    expanded="false"
-    shape="iainfix &lt;V6V2ais_monochromeV0V1V2V3V4qainfix =V7aTrueIainfix =V7aTrueNFIainfix =aselectV4ashiftV0V6V3Nais_monochromeV0V1V2V3V4qainfix =V8aTrueIainfix =V8aTrueFIainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FFFFFF">
-    <label
-     name="expl:parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"/>
-    <label
-     name="expl:Method isMonochrome, Behavior `decides_monochromatic&apos;"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -839,10 +843,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
     expl="parameter _FlagStatic_isMonochrome_ensures_default"
-    sum="6dc8ab7e23680a2e402194b3db42a083"
+    sum="91f91e5081386976e9877017b7ddb6a5"
     proved="true"
     expanded="false"
-    shape="ainfix =aselectV4ashiftV0V8V3Iainfix &lt;V8V7Aainfix &lt;=V1V8FAainfix &lt;=V1V7Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Iainfix &lt;V6V2Iainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FAainfix =aselectV4ashiftV0V10V3Iainfix &lt;V10V1Aainfix &lt;=V1V10FAainfix &lt;=V1V1Iainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FFFFFF">
+    shape="ainfix =aselectV4ashiftV0V8V3Iainfix &lt;V8V7Aainfix &lt;=V1V8FAainfix &lt;=V1V7Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Iainfix &lt;V6V2Iainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FAainfix =aselectV4ashiftV0V10V3Iainfix &lt;V10V1Aainfix &lt;=V1V10FAainfix &lt;=V1V1Iainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
     <label
      name="expl:parameter _FlagStatic_isMonochrome_ensures_default"/>
     <label
@@ -853,7 +857,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="0"
@@ -861,7 +865,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -877,10 +881,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
     expl="parameter _FlagStatic_isMonochrome_safety"
-    sum="3b84bb924b5ad127a268770b8de490d7"
+    sum="3dbd03d49385e5703e393152c2df1dc7"
     proved="true"
     expanded="false"
-    shape="ainfix &lt;ainfix -V2V7ainfix -V2V6Aainfix &lt;=c0ainfix -V2V6Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Aainfix &lt;=V6aoffset_maxV5V0Aainfix &lt;=aoffset_minV5V0V6Iainfix &lt;V6V2Iainfix =aselectV4ashiftV0V8V3Iainfix &lt;V8V6Aainfix &lt;=V1V8FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FFFFFF">
+    shape="ainfix &lt;ainfix -V2V7ainfix -V2V6Aainfix &lt;=c0ainfix -V2V6Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Aainfix &lt;=V6aoffset_maxV5V0Aainfix &lt;=aoffset_minV5V0V6Iainfix &lt;V6V2Iainfix =aselectV4ashiftV0V8V3Iainfix &lt;V8V6Aainfix &lt;=V1V8FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
     <label
      name="expl:parameter _FlagStatic_isMonochrome_safety"/>
     <label
@@ -891,7 +895,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="0"
@@ -899,7 +903,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -907,15 +911,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_swap_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
-    expl="parameter _FlagStatic_swap_ensures_default"
-    sum="86f0fc53e4d48c987710f2a5d641f54a"
+    expl="normal postcondition"
+    sum="064ecf0c9ea8d1dae688811816c15181"
     proved="true"
     expanded="false"
     shape="t">
@@ -929,7 +933,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -945,7 +949,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -953,10 +957,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
     expl="normal postcondition"
-    sum="4a8182b90e7713c816b9ba9ac8319ad6"
+    sum="c6e218607584c1b169b305f4a92ef297"
     proved="true"
     expanded="false"
-    shape="anot_assignsV4V3V6apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV6ashiftV0V2aselectV3ashiftV0V1Aainfix =aselectV6ashiftV0V1aselectV3ashiftV0V2Iainfix =V6astoreV5ashiftV0V2aselectV3ashiftV0V1FIainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FIainfix &lt;V2ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V2Aainfix &lt;V1ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V1Aaleft_valid_struct_intMV0c0V4FFFFF">
+    shape="anot_assignsV4V3V6apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV6ashiftV0V2aselectV3ashiftV0V1Aainfix =aselectV6ashiftV0V1aselectV3ashiftV0V2Iainfix =V6astoreV5ashiftV0V2aselectV3ashiftV0V1FIainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FIainfix &lt;V2ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V2Aainfix &lt;V1ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V1Aaleft_valid_struct_intMV0c0V4FF">
     <label
      name="expl:parameter _FlagStatic_swap_ensures_i_j_swapped"/>
     <label
@@ -983,10 +987,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
     expl="parameter _FlagStatic_swap_safety"
-    sum="821fb9c813344489ada4068a4ddca020"
+    sum="d16018da020808dca97f2b45972164d0"
     proved="true"
     expanded="false"
-    shape="ainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Iainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FAainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Aainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Aainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Iainfix &lt;V2ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V2Aainfix &lt;V1ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V1Aaleft_valid_struct_intMV0c0V4FFFFF">
+    shape="ainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Iainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FAainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Aainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Aainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Iainfix &lt;V2ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V2Aainfix &lt;V1ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V1Aaleft_valid_struct_intMV0c0V4FF">
     <label
      name="expl:parameter _FlagStatic_swap_safety"/>
     <label
@@ -1005,7 +1009,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -1020,8 +1024,8 @@
     name="WP_parameter cons_FlagStatic_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_FlagStatic_ensures_default"
-    sum="e21b3573c14e8afb69d77954ddfbbfda"
+    expl="normal postcondition"
+    sum="390af29317180379e422c138eaeb557d"
     proved="true"
     expanded="false"
     shape="t">
@@ -1035,7 +1039,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -1051,15 +1055,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_FlagStatic_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_FlagStatic_safety"
-    sum="d6cdd014f3e3ba394bdb721aebc8e665"
+    expl="normal postcondition"
+    sum="f96b995a07c3d50185a4b20b5aa61583"
     proved="true"
     expanded="false"
     shape="t">
@@ -1073,7 +1077,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -1081,7 +1085,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -1089,15 +1093,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Object_ensures_default"
-    sum="c7f9487f955a8e569850656d028d5cbc"
+    expl="normal postcondition"
+    sum="1c9b7a8067cc69d641277502fb756ca4"
     proved="true"
     expanded="false"
     shape="t">
@@ -1111,7 +1115,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -1127,15 +1131,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Object_safety"
-    sum="b13ac3894b5ae05042445785471646b9"
+    expl="normal postcondition"
+    sum="3d6c5ffa2f5dd4b4e4dbbdcdc76e3705"
     proved="true"
     expanded="false"
     shape="t">
@@ -1149,7 +1153,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -1165,7 +1169,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
   </theory>

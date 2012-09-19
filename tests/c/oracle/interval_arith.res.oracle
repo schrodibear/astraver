@@ -1692,11 +1692,14 @@ why3: why/interval_arith_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-why3ide: why/interval_arith_why3.why
-	@echo 'why3ide [...] $<' && why3ide $<
-
 why3ml: interval_arith.mlw
-	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+
+why3ide: interval_arith.mlw
+	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+
+why3replay: interval_arith.mlw
+	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include interval_arith.depend
 
@@ -14692,10 +14695,10 @@ goal mul_up_ensures_default_po_16:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/interval_arith_why.why    : ##?..????..????##.#.#.#.#.#.#.#.#.#.#.#.#..#.#..###...####.####....#.#..#.#...###..####..##..##.#..###..####..###.#####..#.#.####..#.##.###.###....#####....######.#.## (69/0/9/89/0)
+why/interval_arith_why.why    : ##?..????..????##.#.#.#.#.#.#.#.#.#.#.#.#..#.#..###...####.####....#.#..#.#...###..####..###.##.#..###..####..###.#####..#.#.####..#.##.###.###....#####....######.#.## (68/0/9/90/0)
 total   : 167
-valid   :  69 ( 41%)
+valid   :  68 ( 41%)
 invalid :   0 (  0%)
 unknown :   9 (  5%)
-timeout :  89 ( 53%)
+timeout :  90 ( 54%)
 failure :   0 (  0%)

@@ -1,3 +1,3 @@
-theory jessie3.Jessie_memory_model
-  meta "realized" "jessie3.Jessie_memory_model", "Jessie_memory_model"
+theory jessie3theories.Jessie_memory_model
+  meta "realized" "jessie3theories.Jessie_memory_model", "Jessie_memory_model"
 end

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="Switch/why3session.xml">
+ name="Switch/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -26,7 +26,7 @@
    expanded="true">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="Switch/../Switch.mlw"
    loclnum="295" loccnumb="7" loccnume="21"
    verified="true"
@@ -35,8 +35,8 @@
     name="WP_parameter _Switch_test1_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
-    expl="parameter _Switch_test1_ensures_default"
-    sum="68a17d35126e9130881600fb5ce25f16"
+    expl="normal postcondition"
+    sum="1acd59b170321a674649fc73ed1ae7c0"
     proved="true"
     expanded="true"
     shape="t">
@@ -58,7 +58,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -66,7 +66,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -74,7 +74,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
     expl="parameter _Switch_test1_ensures_normal"
-    sum="680c0c8cb6e2dbd7d7c06da14ecf5e3d"
+    sum="ab8069c97165730689139bb7aeca372c"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c2FF">
@@ -111,8 +111,8 @@
     name="WP_parameter _Switch_test1_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
-    expl="parameter _Switch_test1_safety"
-    sum="c36f42b9b77389da90ed9bae23d6f2af"
+    expl="normal postcondition"
+    sum="c6e78ccb93914635bc7513cc7123ab24"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,8 +149,8 @@
     name="WP_parameter _Switch_test2_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
-    expl="parameter _Switch_test2_ensures_default"
-    sum="7a0121ac17cfea22655a4e442a86280b"
+    expl="normal postcondition"
+    sum="227f7dff48bd4d2e588b82bffd0177af"
     proved="true"
     expanded="true"
     shape="t">
@@ -180,7 +180,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -188,7 +188,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
     expl="parameter _Switch_test2_ensures_normal"
-    sum="04b6079dfa35ddcff1cd51842eacdcff"
+    sum="93d67ae4df1208e672453cdf031770dc"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V3c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fiainfix =ainteger_of_int32V0c4Oainfix =ainteger_of_int32V0c7ainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V6c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fainfix =ainteger_of_int32V9c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V9c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c2FF">
@@ -218,15 +218,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Switch_test2_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
-    expl="parameter _Switch_test2_safety"
-    sum="77ad20b0e3dda4b585c4de67f2f8145a"
+    expl="normal postcondition"
+    sum="b52e55a8a9e970b215a749140b2841aa"
     proved="true"
     expanded="true"
     shape="t">
@@ -240,7 +240,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -248,7 +248,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -256,15 +256,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Switch_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Switch_ensures_default"
-    sum="ceb4e9d80008e900300be7479c1af9bb"
+    expl="normal postcondition"
+    sum="f4f1f90212209e9c2c94edd8f62ac8da"
     proved="true"
     expanded="true"
     shape="t">
@@ -294,15 +294,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Switch_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Switch_safety"
-    sum="9e7353dde22ba24dc90de399413b7c8d"
+    expl="normal postcondition"
+    sum="9186aa0718990a0d10133729f50c4797"
     proved="true"
     expanded="true"
     shape="t">

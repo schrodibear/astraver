@@ -101,6 +101,22 @@ default:
 	$(EXECJESSIEBYTE) -why3ml $(JC_OPTIONS) -locs $*.jessie/$*.cloc $*.jessie/$*.jc
 	$(ENVWHYOPT) make -C $*.jessie -f $*.makefile why3ml
 
+%.why3ide: %.c
+	rm -f $*.jessie/$*.jc
+	echo $(FRAMAC_PLUGIN)
+	echo $(FRAMAC_SHARE)
+	$(EXECPPCBYTE) $(PPC_OPTIONS) -jessie-gen-only $^
+	$(EXECJESSIEBYTE) -why3ml $(JC_OPTIONS) -locs $*.jessie/$*.cloc $*.jessie/$*.jc
+	$(ENVWHYOPT) make -C $*.jessie -f $*.makefile why3ide
+
+%.why3replay: %.c
+	rm -f $*.jessie/$*.jc
+	echo $(FRAMAC_PLUGIN)
+	echo $(FRAMAC_SHARE)
+	$(EXECPPCBYTE) $(PPC_OPTIONS) -jessie-gen-only $^
+	$(EXECJESSIEBYTE) -why3ml $(JC_OPTIONS) -locs $*.jessie/$*.cloc $*.jessie/$*.jc
+	$(ENVWHYOPT) make -C $*.jessie -f $*.makefile why3replay
+
 %.coq: %.c
 	rm -f $*.jessie/$*.jc
 	$(EXECPPCBYTE) $(PPC_OPTIONS) -jessie-gen-only $^

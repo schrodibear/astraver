@@ -158,7 +158,7 @@ module Atp =
   String
     (struct
        let option_name = "-jessie-atp"
-       let default = "why3ml"
+       let default = "why3ide"
        let arg_name = ""
        let help = "use given automated theorem prover, among `alt-ergo', `cvc3', `simplify', `vampire', `yices' and `z3'. Use `goals' to simply generate goals in Why syntax."
      end)

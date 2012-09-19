@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="hollas_floats/why3session.xml">
+ name="hollas_floats.jessie/hollas_floats/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -32,7 +32,7 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="hollas_floats/../hollas_floats.mlw"
+   locfile="hollas_floats.jessie/hollas_floats/../hollas_floats.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
@@ -41,7 +41,7 @@
     locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
     loclnum="3" loccnumb="4" loccnume="54"
     expl="Lemma rp, lemma"
-    sum="8c37750149e5c07ba494da1e2423a829"
+    sum="be8c409aa930434798b2f569754c973b"
     proved="true"
     expanded="true"
     shape="ainfix &gt;ainfix /c1.0V0c0.0Iainfix &gt;V0c0.0F">
@@ -66,8 +66,8 @@
    </goal>
   </theory>
   <theory
-   name="WP Jessie_program"
-   locfile="hollas_floats/../hollas_floats.mlw"
+   name="Jessie_program"
+   locfile="hollas_floats.jessie/hollas_floats/../hollas_floats.mlw"
    loclnum="159" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -76,7 +76,7 @@
     locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
     loclnum="21" loccnumb="4" loccnume="8"
     expl="Function main, default behavior"
-    sum="88bf5eb1811fb146f02104b7786b8379"
+    sum="ad9ea2251004898c9f6a690cba3f1912"
     proved="true"
     expanded="true"
     shape="ainfix &gt;V6c0.0Iainfix =V6V5FIainfix &gt;V5c0.0FAainfix &gt;V4c0.0Iainfix =V4V3FIainfix &gt;V3c0.0FIainfix =V2c30.0FIainfix =V1c20.0FIainfix =V0c10.0F">
@@ -98,7 +98,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="0"
@@ -114,7 +114,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="5"
@@ -130,7 +130,7 @@
     locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
     loclnum="21" loccnumb="4" loccnume="8"
     expl="Function main, Safety"
-    sum="62202e244cd8fb9577d93124573cb9f1"
+    sum="56b693052f94b05ddcd2c4579537433d"
     proved="true"
     expanded="true"
     shape="ainfix &gt;V4c0.0Aainfix &gt;V0c0.0Iainfix &gt;V4c0.0Iainfix =V4V3FIainfix &gt;V3c0.0FAainfix &gt;V2c0.0Aainfix &gt;V1c0.0Iainfix =V2c30.0FIainfix =V1c20.0FIainfix =V0c10.0F">
@@ -144,7 +144,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"
@@ -152,7 +152,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
@@ -160,7 +160,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="3"
@@ -168,7 +168,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="5"
@@ -184,10 +184,10 @@
     locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
     loclnum="16" loccnumb="6" loccnume="11"
     expl="normal postcondition"
-    sum="36d50cdf6f5971cbd041f62a2d993637"
+    sum="c22f5300b6a2f7baa885b523ed508de0"
     proved="true"
     expanded="true"
-    shape="ainfix &gt;V3c0.0Iainfix =V3V2FIainfix =V2ainfix /c1.0ainfix +ainfix /c1.0V0ainfix /c1.0V1FIainfix &gt;V1c0.0Aainfix &gt;V0c0.0FF">
+    shape="ainfix &gt;V3c0.0Iainfix =V3V2FIainfix =V2ainfix /c1.0ainfix +ainfix /c1.0V0ainfix /c1.0V1FIainfix &gt;V1c0.0Aainfix &gt;V0c0.0F">
     <label
      name="expl:Function r_par, default behavior"/>
     <label
@@ -198,7 +198,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
@@ -206,7 +206,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="5"
@@ -214,7 +214,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="1"
@@ -222,7 +222,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -230,10 +230,10 @@
     locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
     loclnum="16" loccnumb="6" loccnume="11"
     expl="Function r_par, Safety"
-    sum="9cd7e0a7d92a08a9fa0d5ca8230ffb9e"
+    sum="472f8f66b7a6b93978709bc46de866a1"
     proved="true"
     expanded="true"
-    shape="ainfix =ainfix +ainfix /c1.0V0ainfix /c1.0V1c0.0NAainfix =V1c0.0NAainfix =V0c0.0NIainfix &gt;V1c0.0Aainfix &gt;V0c0.0FF">
+    shape="ainfix =ainfix +ainfix /c1.0V0ainfix /c1.0V1c0.0NAainfix =V0c0.0NAainfix =V1c0.0NIainfix &gt;V1c0.0Aainfix &gt;V0c0.0F">
     <label
      name="expl:Function r_par, Safety"/>
     <label
@@ -244,7 +244,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
@@ -252,7 +252,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="5"
@@ -268,7 +268,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -276,10 +276,10 @@
     locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
     loclnum="8" loccnumb="6" loccnume="11"
     expl="normal postcondition"
-    sum="b9c3c1129addf4fbb440980a606722b5"
+    sum="4dcbb6bbb8b037b803e6a2d078712117"
     proved="true"
     expanded="true"
-    shape="ainfix &gt;V3c0.0Iainfix =V3V2FIainfix =V2ainfix +V0V1FIainfix &gt;V1c0.0Aainfix &gt;V0c0.0FF">
+    shape="ainfix &gt;V3c0.0Iainfix =V3V2FIainfix =V2ainfix +V0V1FIainfix &gt;V1c0.0Aainfix &gt;V0c0.0F">
     <label
      name="expl:Function r_seq, default behavior"/>
     <label
@@ -290,7 +290,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"
@@ -306,7 +306,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="3"
@@ -314,7 +314,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="5"
@@ -322,7 +322,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
@@ -330,15 +330,15 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter r_seq_safety"
     locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
     loclnum="8" loccnumb="6" loccnume="11"
-    expl="Function r_seq, Safety"
-    sum="1b23e8b1d48083366e3cbf94ae9a3825"
+    expl="normal postcondition"
+    sum="8ecf427959c158f181e39490aa36676a"
     proved="true"
     expanded="true"
     shape="t">
@@ -352,7 +352,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="2"
@@ -360,7 +360,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
@@ -376,7 +376,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="5"

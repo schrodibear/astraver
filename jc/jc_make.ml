@@ -215,16 +215,20 @@ let generic full f targets =
        out "\t@@echo 'why -why3 [...] why/$*.why' \
             && $(WHY) $(JESSIELIBFILES) why/$*.why@\n";
 
-       out "why3ide: why/%s@\n" why3_target;
-       out "\t@@echo 'why3ide [...] $<' \
-            && why3ide $<@\n@\n";
-
        let why3ml_target =
 	 (match targets with f::_ -> f^".mlw" | [] -> "")
        in
        out "why3ml: %s@\n" why3ml_target;
-       out "\t@@echo 'why3ml [...] $<' \
+       out "\t@@echo 'why3 [...] $<' \
+            && why3 --extra-config $(JESSIE3CONF) $<@\n@\n";
+
+       out "why3ide: %s@\n" why3ml_target;
+       out "\t@@echo 'why3ide [...] $<' \
             && why3ide --extra-config $(JESSIE3CONF) $<@\n@\n";
+
+       out "why3replay: %s@\n" why3ml_target;
+       out "\t@@echo 'why3replayer [...] $<' \
+            && why3replayer --extra-config $(JESSIE3CONF) $<@\n@\n";
 
        out "-include %s.depend@\n@\n" f;
        out "depend: %a@\n" (print_files coq_v) targets;

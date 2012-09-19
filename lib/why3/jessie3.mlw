@@ -315,7 +315,7 @@ end
 module Jessie_memory_model_parameters
 
 use import int.Int
-use import jessie3.Jessie_memory_model
+use import jessie3theories.Jessie_memory_model
 use import module ref.Ref
 
 val sub_pointer_ (p:pointer 't) (q:pointer 't) :
@@ -589,7 +589,7 @@ val safe_alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't))
     /\ instanceof !tag result s }
 
 val free_parameter (a:ref (alloc_table 't)) (p:pointer 't) :
-  { p = null (* allowed, see man 3 free *) /\
+  { p = null (* allowed, see man 3 free *) \/
   (*Cannot express yet offset_min a p = 0 /\*) offset_max !a p >= 0 }
   unit
   writes a

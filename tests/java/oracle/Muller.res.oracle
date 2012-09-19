@@ -788,11 +788,14 @@ why3: why/Muller_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-why3ide: why/Muller_why3.why
-	@echo 'why3ide [...] $<' && why3ide $<
-
 why3ml: Muller.mlw
-	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+
+why3ide: Muller.mlw
+	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+
+why3replay: Muller.mlw
+	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include Muller.depend
 
@@ -16250,10 +16253,10 @@ goal Muller_m_safety_po_28:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Muller_why.why            : ?###.......................................................... (58/0/1/3/0)
+why/Muller_why.why            : ?#?#.......................................................... (58/0/2/2/0)
 total   :  62
 valid   :  58 ( 94%)
 invalid :   0 (  0%)
-unknown :   1 (  2%)
-timeout :   3 (  5%)
+unknown :   2 (  3%)
+timeout :   2 (  3%)
 failure :   0 (  0%)

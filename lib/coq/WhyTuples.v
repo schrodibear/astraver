@@ -21,7 +21,7 @@
 Definition tuple_1 (X:Set) := X.
 
 Definition tuple_2 := prod.
-Definition Build_tuple_2 := pair.
+Definition Build_tuple_2 (A:Set) (B:Set) := pair A B.
 Implicit Arguments Build_tuple_2.
 Definition proj_2_1 := fst.
 Definition proj_2_2 := snd.

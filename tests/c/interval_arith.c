@@ -258,6 +258,6 @@ void mul(double xl, double xu, double yl, double yu)
 
 /*
 Local Variables:
-compile-command: "LC_ALL=C make interval_arith.why3ml"
+compile-command: "LC_ALL=C make interval_arith.why3ide"
 End:
 */

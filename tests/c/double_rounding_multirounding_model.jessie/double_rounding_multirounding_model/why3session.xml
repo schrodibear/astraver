@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="double_rounding_multirounding_model/why3session.xml">
+ name="double_rounding_multirounding_model.jessie/double_rounding_multirounding_model/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Gappa"
@@ -24,14 +24,14 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="double_rounding_multirounding_model/../double_rounding_multirounding_model.mlw"
+   locfile="double_rounding_multirounding_model.jessie/double_rounding_multirounding_model/../double_rounding_multirounding_model.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
-   name="WP Jessie_program"
-   locfile="double_rounding_multirounding_model/../double_rounding_multirounding_model.mlw"
+   name="Jessie_program"
+   locfile="double_rounding_multirounding_model.jessie/double_rounding_multirounding_model/../double_rounding_multirounding_model.mlw"
    loclnum="133" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -40,10 +40,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
     loclnum="11" loccnumb="7" loccnume="21"
     expl="assertion"
-    sum="bf35aad7db311131c1252a1c2193bfd4"
+    sum="8d92ba128c377e7d80d1eefb0a55c622"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;=avalueV7ainfix +ainfix +c1.0c0x1.p-52c0x1.p-62Aainfix &lt;=ainfix -c1.0c0x1.p-63avalueV7Iainfix =V7V6FIaadd_postaNearestTiesToEvenV1V5V6FIainfix =V5V4FIaadd_postaNearestTiesToEvenV2V3V4FIaof_real_postaNearestTiesToEvenc0x1.p-64V3FIaof_real_postaNearestTiesToEvenc0x1.p-53V2FIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+    shape="ainfix &lt;=avalueV7ainfix +ainfix +c1.0c0x1.p-52c0x1.p-62Aainfix &lt;=ainfix -c1.0c0x1.p-63avalueV7Iainfix =V7V6FIaadd_postaNearestTiesToEvenV1V5V6FIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix =V1V0FIaof_real_exact_postc1.0V0F">
     <label
      name="expl:Function doublerounding, default behavior"/>
     <label
@@ -62,7 +62,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.00"/>
+     <result status="unknown" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -78,7 +78,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
    <goal
@@ -86,10 +86,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
     loclnum="11" loccnumb="7" loccnume="21"
     expl="Function doublerounding, Safety"
-    sum="c3f0c6eec4b8d0f4819072a2cf17bcd9"
+    sum="14f63b2355bcea566fbb026dc728ec8d"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV2V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_exact_postc0x1.p-64V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIaof_real_exact_postc0x1.p-53V2FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
     <label
      name="expl:Function doublerounding, Safety"/>
     <label
@@ -102,11 +102,11 @@
       name="WP_parameter doublerounding_safety.1"
       locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="floating-point overflow"
-      sum="3339acf773fba0743d6c37bc1c4265e7"
+      expl="precondition"
+      sum="eddc67bb8c51e1e9a6d94dbcbfbf5231"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
@@ -148,11 +148,11 @@
       name="WP_parameter doublerounding_safety.2"
       locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="floating-point overflow"
-      sum="d993c0b591e1d1d53f91613ef32fe77e"
+      expl="precondition"
+      sum="3fb9166a26817e2e37d7591278ffd3b7"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIaof_real_exact_postc0x1.p-53V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
@@ -194,11 +194,11 @@
       name="WP_parameter doublerounding_safety.3"
       locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="floating-point overflow"
-      sum="38a407734c1cec6d84f3df42f360b7bb"
+      expl="precondition"
+      sum="c234180efbb09415aff5f4deb9d9ad1e"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_exact_postc0x1.p-64V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIaof_real_exact_postc0x1.p-53V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
@@ -240,11 +240,11 @@
       name="WP_parameter doublerounding_safety.4"
       locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="floating-point overflow"
-      sum="67c17329afc811d2e0afd9bfb3562f44"
+      expl="precondition"
+      sum="518ebc6b3e412c5178ad9c7fa54338bd"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV2V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_exact_postc0x1.p-64V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIaof_real_exact_postc0x1.p-53V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label

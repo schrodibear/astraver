@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
+<<<<<<< .working
  name="tests/java/Literals/why3session.xml">
+=======
+ name="Literals/why3session.xml" shape_version="2">
+>>>>>>> .merge-right.r4939
  <prover
   id="0"
   name="Alt-Ergo"
@@ -26,7 +30,7 @@
    expanded="true">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="tests/java/Literals/../Literals.mlw"
    loclnum="297" loccnumb="7" loccnume="21"
    verified="true"
@@ -36,7 +40,7 @@
     locfile="/home/cmarche/why2-trunk/tests/java/Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="normal postcondition"
-    sum="fa47118f0db26bb723cd967e1fcf2e18"
+    sum="ad6aa90bc7a4a4f03949654549c258bd"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c13Iainfix =V4V3FIainfix =ainteger_of_int32V3c13FIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
@@ -66,15 +70,19 @@
      memlimit="0"
      obsolete="false"
      archived="false">
+<<<<<<< .working
      <result status="valid" time="0.09"/>
+=======
+     <result status="valid" time="0.04"/>
+>>>>>>> .merge-right.r4939
     </proof>
    </goal>
    <goal
     name="WP_parameter _Literals_f_safety"
     locfile="/home/cmarche/why2-trunk/tests/java/Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
-    expl="parameter _Literals_f_safety"
-    sum="a6ea27b7fbd68e8f7ba1d08b53a4826a"
+    expl="normal postcondition"
+    sum="64099fc5b7989ddd3288948844daf6d9"
     proved="true"
     expanded="true"
     shape="t">
@@ -88,7 +96,11 @@
      memlimit="0"
      obsolete="false"
      archived="false">
+<<<<<<< .working
      <result status="valid" time="0.03"/>
+=======
+     <result status="valid" time="0.01"/>
+>>>>>>> .merge-right.r4939
     </proof>
     <proof
      prover="0"
@@ -96,7 +108,11 @@
      memlimit="0"
      obsolete="false"
      archived="false">
+<<<<<<< .working
      <result status="valid" time="0.04"/>
+=======
+     <result status="valid" time="0.02"/>
+>>>>>>> .merge-right.r4939
     </proof>
     <proof
      prover="1"
@@ -111,8 +127,8 @@
     name="WP_parameter cons_Literals_ensures_default"
     locfile="/home/cmarche/why2-trunk/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Literals_ensures_default"
-    sum="7f3ec33fe2ab2caaeb553d92845f3ad1"
+    expl="normal postcondition"
+    sum="8e5656e49dfcede50e1d5091833685fd"
     proved="true"
     expanded="true"
     shape="t">
@@ -134,7 +150,11 @@
      memlimit="0"
      obsolete="false"
      archived="false">
+<<<<<<< .working
      <result status="valid" time="0.04"/>
+=======
+     <result status="valid" time="0.03"/>
+>>>>>>> .merge-right.r4939
     </proof>
     <proof
      prover="1"
@@ -149,8 +169,8 @@
     name="WP_parameter cons_Literals_safety"
     locfile="/home/cmarche/why2-trunk/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Literals_safety"
-    sum="4c4ef5342d4233fc91802be54096ec93"
+    expl="normal postcondition"
+    sum="4a102a68e1eca0953f6ba1de7288fbdc"
     proved="true"
     expanded="true"
     shape="t">
@@ -164,7 +184,11 @@
      memlimit="0"
      obsolete="false"
      archived="false">
+<<<<<<< .working
      <result status="valid" time="0.03"/>
+=======
+     <result status="valid" time="0.01"/>
+>>>>>>> .merge-right.r4939
     </proof>
     <proof
      prover="0"

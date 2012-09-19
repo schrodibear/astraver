@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session
+ name="fresh2.jessie/fresh2/why3session.xml" shape_version="2">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
+  id="1"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="2"
+  name="Alt-Ergo"
+  version="0.95-dev"/>
+ <file
+  name="../fresh2.mlw"
+  verified="false"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="fresh2.jessie/fresh2/../fresh2.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Jessie_program"
+   locfile="fresh2.jessie/fresh2/../fresh2.mlw"
+   loclnum="198" loccnumb="7" loccnume="21"
+   verified="false"
+   expanded="true">
+   <goal
+    name="WP_parameter smoke_detector_ensures_default"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/fresh2.c"
+    loclnum="18" loccnumb="5" loccnume="19"
+    expl="Function smoke_detector, default behavior"
+    sum="a01d8ebc6d5e5c8db9f0d0c10e17170c"
+    proved="false"
+    expanded="true"
+    shape="ainfix =V5V4NFIavalidV0V4NFIainfix =V3V2FIavalidV1V2NFFF">
+    <label
+     name="expl:Function smoke_detector, default behavior"/>
+    <label
+     name="expl:parameter smoke_detector_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="20"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter smoke_detector_safety"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/fresh2.c"
+    loclnum="18" loccnumb="5" loccnume="19"
+    expl="normal postcondition"
+    sum="ea9d8dd1aa681237fec2112deb11d193"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Function smoke_detector, Safety"/>
+    <label
+     name="expl:parameter smoke_detector_safety"/>
+    <proof
+     prover="1"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="20"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter test_ensures_default"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/fresh2.c"
+    loclnum="12" loccnumb="5" loccnume="9"
+    expl="assertion"
+    sum="a94edac8886a8c4d87d0141ee9863d43"
+    proved="true"
+    expanded="true"
+    shape="ainfix =V0V3NIainfix =V3V2FIavalidV1V2NFIainfix &gt;=aoffset_maxV1V0c0Aainfix &lt;=aoffset_minV1V0c0F">
+    <label
+     name="expl:Function test, default behavior"/>
+    <label
+     name="expl:parameter test_ensures_default"/>
+    <proof
+     prover="1"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="20"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter test_safety"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/fresh2.c"
+    loclnum="12" loccnumb="5" loccnume="9"
+    expl="normal postcondition"
+    sum="16b88feb4e5e78bcc0ed364e72093ea6"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Function test, Safety"/>
+    <label
+     name="expl:parameter test_safety"/>
+    <proof
+     prover="1"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="20"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>

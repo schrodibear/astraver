@@ -300,10 +300,10 @@ else
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
       AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
-        Nitrogen-20111001+dev) 
+        Oxygen-20120901) 
            FRAMAC=yes
            ;;
-        *) FRAMACMSG="you need Frama-C version Nitrogen-20111001+dev"
+        *) FRAMACMSG="you need Frama-C version Oxygen-20120901"
            FRAMAC=no
            AC_MSG_WARN($FRAMACMSG)
            ;;
@@ -361,7 +361,7 @@ else
 	COQVER=v7
 	WHYLIBCOQ=lib/coq-v7
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v;;
-    8.*|trunk)
+    8.*)
 	AC_MSG_RESULT($COQVERSION)
 	COQC7="$COQC -v7"
 	COQC8=$COQC
@@ -369,7 +369,7 @@ else
 	WHYLIBCOQ=lib/coq
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
 	case $COQVERSION in
-	8.1*|8.2*|8.3*|trunk)
+	8.1*|8.2*|8.3*|8.4*|trunk)
 	  JESSIELIBCOQ=lib/coq/jessie_why.vo
 	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v
           # useful ??? [VP] Yes, the hack for making the output compliant with

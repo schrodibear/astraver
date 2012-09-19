@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session
+ name="strprevchr.jessie/strprevchr/why3session.xml" shape_version="2">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
+  id="1"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="2"
+  name="Alt-Ergo"
+  version="0.95-dev"/>
+ <prover
+  id="3"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="4"
+  name="CVC3"
+  version="2.2"
+  alternative="alt"/>
+ <prover
+  id="5"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="6"
+  name="Z3"
+  version="2.19"/>
+ <prover
+  id="7"
+  name="Z3"
+  version="2.19"
+  alternative="alt"/>
+ <prover
+  id="8"
+  name="Z3"
+  version="3.2"/>
+ <prover
+  id="9"
+  name="Z3"
+  version="4.0"/>
+ <file
+  name="../strprevchr.mlw"
+  verified="false"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="strprevchr.jessie/strprevchr/../strprevchr.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="false">
+  </theory>
+  <theory
+   name="Jessie_program"
+   locfile="strprevchr.jessie/strprevchr/../strprevchr.mlw"
+   loclnum="161" loccnumb="7" loccnume="21"
+   verified="false"
+   expanded="true">
+   <goal
+    name="WP_parameter strprevchr_ensures_absent"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+    loclnum="17" loccnumb="4" loccnume="14"
+    expl="Function strprevchr, Behavior `absent&apos;"
+    sum="e2a9c90dcff87f558f1b930f6aa3c93e"
+    proved="true"
+    expanded="true"
+    shape="iainfix &gt;=ainteger_of_int32V5c0ainfix =ainteger_of_int32V8aprefix -c1Iainfix =V8V5FIainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1Fainfix =ainteger_of_int32V9aprefix -c1Iainfix =V9V5FIa_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V10ainteger_of_int8V1NIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V10FF">
+    <label
+     name="expl:Function strprevchr, Behavior `absent&apos;"/>
+    <label
+     name="expl:parameter strprevchr_ensures_absent"/>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter strprevchr_ensures_absent.1"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="normal postcondition"
+      sum="fb6bc0b31364a682eef8cf3e36fd4bc0"
+      proved="true"
+      expanded="false"
+      shape="ainfix =ainteger_of_int32V8aprefix -c1Iainfix =V8V5FIainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V9ainteger_of_int8V1NIainfix &lt;=ainteger_of_int32V9ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V9FF">
+      <label
+       name="expl:Function strprevchr, Behavior `absent&apos;"/>
+      <label
+       name="expl:parameter strprevchr_ensures_absent"/>
+      <proof
+       prover="6"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="9"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="8"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="7"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter strprevchr_ensures_absent.2"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="normal postcondition"
+      sum="0d111c3f0efac499c92fd6656b6fb192"
+      proved="true"
+      expanded="false"
+      shape="ainfix =ainteger_of_int32V6aprefix -c1Iainfix =V6V5FIainfix &gt;=ainteger_of_int32V5c0NIa_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V7ainteger_of_int8V1NIainfix &lt;=ainteger_of_int32V7ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V7FF">
+      <label
+       name="expl:Function strprevchr, Behavior `absent&apos;"/>
+      <label
+       name="expl:parameter strprevchr_ensures_absent"/>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter strprevchr_ensures_default"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+    loclnum="17" loccnumb="4" loccnume="14"
+    expl="Function strprevchr, default behavior"
+    sum="5010b09a1ecfa78b74676b8113f74ea9"
+    proved="true"
+    expanded="true"
+    shape="a_AbsentTailV0V9V1V2V4Aainfix &gt;=ainteger_of_int32V9aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V5c1FIainfix =ainteger_of_int32V7ainteger_of_int32V6NIainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FAa_AbsentTailV0V0V1V2V4Aainfix &gt;=ainteger_of_int32V0aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V0Iainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
+    <label
+     name="expl:Function strprevchr, default behavior"/>
+    <label
+     name="expl:parameter strprevchr_ensures_default"/>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter strprevchr_ensures_default.1"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="loop invariant init"
+      sum="4a63e5ac90f2c98419e51133de4db50f"
+      proved="true"
+      expanded="false"
+      shape="a_AbsentTailV0V0V1V2V4Aainfix &gt;=ainteger_of_int32V0aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V0Iainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
+      <label
+       name="expl:Function strprevchr, default behavior"/>
+      <label
+       name="expl:parameter strprevchr_ensures_default"/>
+      <proof
+       prover="6"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="9"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="8"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="7"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter strprevchr_ensures_default.2"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="loop invariant preservation"
+      sum="04198bb84de52985f07993b4368b0068"
+      proved="true"
+      expanded="false"
+      shape="a_AbsentTailV0V9V1V2V4Aainfix &gt;=ainteger_of_int32V9aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V5c1FIainfix =ainteger_of_int32V7ainteger_of_int32V6NIainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
+      <label
+       name="expl:Function strprevchr, default behavior"/>
+      <label
+       name="expl:parameter strprevchr_ensures_default"/>
+      <proof
+       prover="6"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.12"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.13"/>
+      </proof>
+      <proof
+       prover="9"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="8"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="7"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.12"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter strprevchr_ensures_present"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+    loclnum="17" loccnumb="4" loccnume="14"
+    expl="Function strprevchr, Behavior `present&apos;"
+    sum="305169023aa993e09b33eb2088ebde41"
+    proved="false"
+    expanded="true"
+    shape="iainfix &gt;=ainteger_of_int32V5c0ainfix &lt;=ainteger_of_int32V8ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V8Iainfix =V8V5FIainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1Fainfix &lt;=ainteger_of_int32V9ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V9Iainfix =V9V5FIa_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V10ainteger_of_int8V1Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V10EF">
+    <label
+     name="expl:Function strprevchr, Behavior `present&apos;"/>
+    <label
+     name="expl:parameter strprevchr_ensures_present"/>
+    <transf
+     name="split_goal_wp"
+     proved="false"
+     expanded="true">
+     <goal
+      name="WP_parameter strprevchr_ensures_present.1"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="normal postcondition"
+      sum="cd1b6ae8c5ee6b167373c2bed1e542a3"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainteger_of_int32V8ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V8Iainfix =V8V5FIainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V9ainteger_of_int8V1Iainfix &lt;=ainteger_of_int32V9ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V9EF">
+      <label
+       name="expl:Function strprevchr, Behavior `present&apos;"/>
+      <label
+       name="expl:parameter strprevchr_ensures_present"/>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter strprevchr_ensures_present.2"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="normal postcondition"
+      sum="10aeade925bb403be53953554dcf5940"
+      proved="false"
+      expanded="true"
+      shape="ainfix &lt;=ainteger_of_int32V6ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V6Iainfix =V6V5FIainfix &gt;=ainteger_of_int32V5c0NIa_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V7ainteger_of_int8V1Iainfix &lt;=ainteger_of_int32V7ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V7EF">
+      <label
+       name="expl:Function strprevchr, Behavior `present&apos;"/>
+      <label
+       name="expl:parameter strprevchr_ensures_present"/>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.25"/>
+      </proof>
+      <transf
+       name="split_goal_wp"
+       proved="false"
+       expanded="true">
+       <goal
+        name="WP_parameter strprevchr_ensures_present.2.1"
+        locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+        loclnum="17" loccnumb="4" loccnume="14"
+        expl="Function strprevchr, Behavior `present&apos;"
+        sum="f4d20f3684978675f931ec52ebe71ea4"
+        proved="false"
+        expanded="true"
+        shape="ainfix &lt;=c0ainteger_of_int32V6Iainfix =V6V5FIainfix &gt;=ainteger_of_int32V5c0NIa_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V7ainteger_of_int8V1Iainfix &lt;=ainteger_of_int32V7ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V7EF">
+        <label
+         name="expl:Function strprevchr, Behavior `present&apos;"/>
+        <label
+         name="expl:parameter strprevchr_ensures_present"/>
+        <proof
+         prover="1"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="unknown" time="0.02"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="unknown" time="0.24"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter strprevchr_ensures_present.2.2"
+        locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+        loclnum="17" loccnumb="4" loccnume="14"
+        expl="Function strprevchr, Behavior `present&apos;"
+        sum="1a60f12f81f5e38d3153e870c4ab606c"
+        proved="true"
+        expanded="false"
+        shape="ainfix &lt;=ainteger_of_int32V6ainteger_of_int32V0Iainfix =V6V5FIainfix &gt;=ainteger_of_int32V5c0NIa_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V7ainteger_of_int8V1Iainfix &lt;=ainteger_of_int32V7ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V7EF">
+        <label
+         name="expl:Function strprevchr, Behavior `present&apos;"/>
+        <label
+         name="expl:parameter strprevchr_ensures_present"/>
+        <proof
+         prover="1"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+       </goal>
+      </transf>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter strprevchr_safety"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+    loclnum="17" loccnumb="4" loccnume="14"
+    expl="Function strprevchr, Safety"
+    sum="83a05108eef12a115eecf4abfc23fd78"
+    proved="true"
+    expanded="true"
+    shape="ainfix &lt;ainteger_of_int32V10ainteger_of_int32V5Aainfix &lt;=c0ainteger_of_int32V5Iainfix =V10V9FIainfix =ainteger_of_int32V9ainfix -ainteger_of_int32V5c1FAainfix &lt;=ainfix -ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V5c1Iainfix =ainteger_of_int32V8ainteger_of_int32V6NIainfix =ainteger_of_int32V8ainteger_of_int8V7FAainfix &lt;=ainteger_of_int8V7c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V7LaselectV4ashiftV2ainteger_of_int32V5Aainfix &lt;=ainteger_of_int32V5aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2ainteger_of_int32V5Iainfix =ainteger_of_int32V6ainteger_of_int8V1FAainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
+    <label
+     name="expl:Function strprevchr, Safety"/>
+    <label
+     name="expl:parameter strprevchr_safety"/>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter strprevchr_safety.1"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="precondition"
+      sum="fdd19029926c28508b8ed97fa4ee143f"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
+      <label
+       name="expl:Function strprevchr, Safety"/>
+      <label
+       name="expl:parameter strprevchr_safety"/>
+      <proof
+       prover="1"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter strprevchr_safety.2"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="precondition"
+      sum="ef0f864f1b9150a925da03fafb392248"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainteger_of_int32V5aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2ainteger_of_int32V5Iainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
+      <label
+       name="expl:Function strprevchr, Safety"/>
+      <label
+       name="expl:parameter strprevchr_safety"/>
+      <proof
+       prover="1"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter strprevchr_safety.3"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="precondition"
+      sum="11952023b91af1fbb0aed85c0a6c96ce"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainteger_of_int8V7c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V7LaselectV4ashiftV2ainteger_of_int32V5Iainfix &lt;=ainteger_of_int32V5aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2ainteger_of_int32V5Iainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
+      <label
+       name="expl:Function strprevchr, Safety"/>
+      <label
+       name="expl:parameter strprevchr_safety"/>
+      <proof
+       prover="1"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter strprevchr_safety.4"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="precondition"
+      sum="61dc9b32851ac6c91fd32aa2ff576b1b"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainfix -ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V5c1Iainfix =ainteger_of_int32V8ainteger_of_int32V6NIainfix =ainteger_of_int32V8ainteger_of_int8V7FIainfix &lt;=ainteger_of_int8V7c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V7LaselectV4ashiftV2ainteger_of_int32V5Iainfix &lt;=ainteger_of_int32V5aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2ainteger_of_int32V5Iainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
+      <label
+       name="expl:Function strprevchr, Safety"/>
+      <label
+       name="expl:parameter strprevchr_safety"/>
+      <proof
+       prover="1"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter strprevchr_safety.5"
+      locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/strprevchr.c"
+      loclnum="17" loccnumb="4" loccnume="14"
+      expl="loop variant decreases"
+      sum="74449e4f5de59c72a33efaeb44b6d055"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;ainteger_of_int32V10ainteger_of_int32V5Aainfix &lt;=c0ainteger_of_int32V5Iainfix =V10V9FIainfix =ainteger_of_int32V9ainfix -ainteger_of_int32V5c1FIainfix &lt;=ainfix -ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V5c1Iainfix =ainteger_of_int32V8ainteger_of_int32V6NIainfix =ainteger_of_int32V8ainteger_of_int8V7FIainfix &lt;=ainteger_of_int8V7c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V7LaselectV4ashiftV2ainteger_of_int32V5Iainfix &lt;=ainteger_of_int32V5aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2ainteger_of_int32V5Iainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
+      <label
+       name="expl:Function strprevchr, Safety"/>
+      <label
+       name="expl:parameter strprevchr_safety"/>
+      <proof
+       prover="1"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+  </theory>
+ </file>
+</why3session>

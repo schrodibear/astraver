@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="Fresh/why3session.xml">
+ name="Fresh/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -34,7 +34,7 @@
    expanded="false">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="Fresh/../Fresh.mlw"
    loclnum="295" loccnumb="7" loccnume="21"
    verified="true"
@@ -44,10 +44,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
     expl="normal postcondition"
-    sum="0fb73f58cc85a9e99c53735c0f5c4428"
+    sum="32e0f23987a1e917033ca91bea49f3b7"
     proved="true"
     expanded="true"
-    shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFFF">
+    shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
     <label
      name="expl:parameter _Fresh_create_ensures_default"/>
     <label
@@ -82,7 +82,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="0.10"/>
     </proof>
     <proof
      prover="4"
@@ -90,7 +90,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.07"/>
+     <result status="timeout" time="5.06"/>
     </proof>
    </goal>
    <goal
@@ -98,10 +98,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
     expl="parameter _Fresh_create_safety"
-    sum="12191beacb6e8ceaea128b34a75b96c5"
+    sum="de5a02ad3889767590fc41201b44c588"
     proved="true"
     expanded="true"
-    shape="ainfix &gt;=aoffset_maxV2V3c0IainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFFAainfix &gt;=c1c0F">
+    shape="ainfix &gt;=aoffset_maxV2V3c0IainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFAainfix &gt;=c1c0F">
     <label
      name="expl:parameter _Fresh_create_safety"/>
     <label
@@ -112,7 +112,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
@@ -152,7 +152,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="assertion"
-    sum="e2c3043be85f23e8577fdcb95b93675d"
+    sum="0a1bf23d15afffc327e0ef703efad74e"
     proved="true"
     expanded="true"
     shape="ainfix =V0V2NIavalidV1V2NFIavalid_struct_FreshV0c0c0V1FF">
@@ -166,7 +166,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
@@ -174,7 +174,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
@@ -182,7 +182,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="2"
@@ -205,8 +205,8 @@
     name="WP_parameter _Fresh_test_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
-    expl="parameter _Fresh_test_safety"
-    sum="225c459b0de21df370ba2d6613e39450"
+    expl="normal postcondition"
+    sum="390bfc567cd99b56f02728e96685ff09"
     proved="true"
     expanded="true"
     shape="t">
@@ -220,7 +220,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -244,7 +244,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="4"
@@ -259,8 +259,8 @@
     name="WP_parameter cons_Fresh_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Fresh_ensures_default"
-    sum="e37b9c9c20740ae56df745273b7b2201"
+    expl="normal postcondition"
+    sum="2ebc2e1d51c0c1fccae425e1f6e5f5d4"
     proved="true"
     expanded="true"
     shape="t">
@@ -274,7 +274,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -290,7 +290,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="2"
@@ -298,7 +298,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="4"
@@ -313,8 +313,8 @@
     name="WP_parameter cons_Fresh_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Fresh_safety"
-    sum="556224021f53bc64e7bfb135acea8afa"
+    expl="normal postcondition"
+    sum="171b3bbfcef5b5c1ab7fd9f1c9db536d"
     proved="true"
     expanded="true"
     shape="t">
@@ -328,7 +328,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -344,7 +344,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="2"
@@ -352,7 +352,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="4"
@@ -367,8 +367,8 @@
     name="WP_parameter cons_Object_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Object_ensures_default"
-    sum="e486e1448d4f70247d1252369fd8b783"
+    expl="normal postcondition"
+    sum="e0dd4cf9a0136629b5321866a6ad632d"
     proved="true"
     expanded="true"
     shape="t">
@@ -382,7 +382,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -398,7 +398,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="2"
@@ -406,7 +406,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="4"
@@ -421,8 +421,8 @@
     name="WP_parameter cons_Object_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Object_safety"
-    sum="faf4086c90234d918475afa6b2c4052b"
+    expl="normal postcondition"
+    sum="2025afd664cb618d328fa4271eb6876c"
     proved="true"
     expanded="true"
     shape="t">
@@ -436,7 +436,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -452,7 +452,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="2"
@@ -460,7 +460,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="4"

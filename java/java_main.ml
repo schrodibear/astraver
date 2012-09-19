@@ -350,7 +350,7 @@ let main () =
           let d = Filename.dirname f in
           let b = Filename.basename f in
           printf "Calling Why3...@.";
-          let _ret = Sys.command ("make -C " ^ d ^" -f " ^ b ^ ".makefile why3ml") in
+          let _ret = Sys.command ("make -C " ^ d ^" -f " ^ b ^ ".makefile why3ide") in
           ()
         end
     end

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session
+ name="power.jessie/power/why3session.xml" shape_version="2">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="1"
+  name="Coq"
+  version="8.3pl4"/>
+ <file
+  name="../power.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="power.jessie/power/../power.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="true">
+   <goal
+    name="_L"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/power.c"
+    loclnum="10" loccnumb="4" loccnume="33"
+    expl="Lemma L, lemma"
+    sum="f452dbf86572fadb2ad20935c925ab8a"
+    proved="true"
+    expanded="true"
+    shape="ainfix =apowerc2.0c2c4.0">
+    <label
+     name="expl:Lemma L, lemma"/>
+    <proof
+     prover="0"
+     timelimit="3"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="3"
+     memlimit="0"
+     edited="power_Jessie_model__L_2.v"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.56"/>
+    </proof>
+   </goal>
+  </theory>
+  <theory
+   name="Jessie_program"
+   locfile="power.jessie/power/../power.mlw"
+   loclnum="137" loccnumb="7" loccnume="21"
+   verified="true"
+   expanded="false">
+  </theory>
+ </file>
+</why3session>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="Counter/why3session.xml">
+ name="Counter/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -26,7 +26,7 @@
    expanded="true">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="Counter/../Counter.mlw"
    loclnum="178" loccnumb="7" loccnume="21"
    verified="true"
@@ -36,10 +36,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
     expl="normal postcondition"
-    sum="c5d8d72a3075cb5f3cbb552e179096ff"
+    sum="e9a7149e8487f31d9575827e8734dc68"
     proved="true"
     expanded="true"
-    shape="ainfix =avalueV0V4V1ainfix -avalueV0V2V1c1Iainfix =V4astoreV2V0ainfix +aselectV2V0c1FIavalid_struct_CounterV0c0c0V3FFFF">
+    shape="ainfix =avalueV0V4V1ainfix -avalueV0V2V1c1Iainfix =V4astoreV2V0ainfix +aselectV2V0c1FIavalid_struct_CounterV0c0c0V3FF">
     <label
      name="expl:parameter _Counter_decrement_ensures_default"/>
     <label
@@ -73,8 +73,8 @@
     name="WP_parameter _Counter_decrement_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
-    expl="parameter _Counter_decrement_safety"
-    sum="e47223d6da32a8db2f9536ac332bcd9b"
+    expl="normal postcondition"
+    sum="491d7d0717357d6c61a06c0da89742d0"
     proved="true"
     expanded="true"
     shape="t">
@@ -104,7 +104,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -112,10 +112,10 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
     expl="normal postcondition"
-    sum="02b638327778adedea6f680904aab1ac"
+    sum="55723f7bb3fb5712bd5de7471b7c0bb1"
     proved="true"
     expanded="true"
-    shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FFFF">
+    shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FF">
     <label
      name="expl:parameter _Counter_increment_ensures_default"/>
     <label
@@ -126,7 +126,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
@@ -134,7 +134,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -149,8 +149,8 @@
     name="WP_parameter _Counter_increment_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
-    expl="parameter _Counter_increment_safety"
-    sum="5dd8262e5ae8f2110b2d30bc9ac19a00"
+    expl="normal postcondition"
+    sum="c35c3bb7969610548bc1d20c7d32b351"
     proved="true"
     expanded="true"
     shape="t">
@@ -187,8 +187,8 @@
     name="WP_parameter cons_Counter_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Counter_ensures_default"
-    sum="a4e24de7daf4f762c404642a92d72e5b"
+    expl="normal postcondition"
+    sum="28cc03667b39be3bae52a650d95e71c0"
     proved="true"
     expanded="true"
     shape="t">
@@ -202,7 +202,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -225,8 +225,8 @@
     name="WP_parameter cons_Counter_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="parameter cons_Counter_safety"
-    sum="fdf8a09a3b8c2ea273bcf1bc94a999a6"
+    expl="normal postcondition"
+    sum="7d58b898be901cc8371396126681f4a1"
     proved="true"
     expanded="true"
     shape="t">
@@ -240,7 +240,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -248,7 +248,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -256,7 +256,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>

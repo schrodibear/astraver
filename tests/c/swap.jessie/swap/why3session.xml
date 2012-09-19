@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="swap.jessie/swap/why3session.xml">
+ name="swap.jessie/swap/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -26,7 +26,7 @@
    expanded="false">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="swap.jessie/swap/../swap.mlw"
    loclnum="153" loccnumb="7" loccnume="21"
    verified="true"
@@ -36,10 +36,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="2f1556a32b0404b98ed80b79834277c6"
+    sum="76c08a5c744ac9cb864d44617e9cef4e"
     proved="true"
     expanded="true"
-    shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FFF">
+    shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FF">
     <label
      name="expl:parameter swap_ensures_default"/>
     <label
@@ -50,7 +50,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
@@ -66,15 +66,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
     locfile="/home/cmarche/why2-trunk/tests/c/swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
-    expl="parameter swap_safety"
-    sum="21943e2db2603204afbafd7df175d430"
+    expl="normal postcondition"
+    sum="ed17c30c72f5b38202e083f44afdca84"
     proved="true"
     expanded="true"
     shape="t">
@@ -88,7 +88,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -104,7 +104,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>

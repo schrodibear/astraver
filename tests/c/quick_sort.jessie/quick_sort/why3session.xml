@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="quick_sort.jessie/quick_sort/why3session.xml">
+ name="quick_sort.jessie/quick_sort/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -34,7 +34,7 @@
    expanded="true">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="quick_sort.jessie/quick_sort/../quick_sort.mlw"
    loclnum="213" loccnumb="7" loccnume="21"
    verified="false"
@@ -44,10 +44,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="parameter quick_rec_ensures_default"
-    sum="e2b56a345a58dedfd4ac87c3d0fb51ee"
+    sum="96bb3ee9470c45b753f64ed93e05b29f"
     proved="true"
     expanded="true"
-    shape="iainfix &gt;=V1V2anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2iainfix &lt;=V8V2iainfix &lt;aselectV10ashiftV0V8V5anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV12ashiftV0V14V5Iainfix &lt;=V14V11Aainfix &lt;V1V14FAainfix &gt;=aselectV12ashiftV0V15V5Iainfix &lt;V15V13Aainfix &lt;V11V15FAa_PermutV0V1V2V12V4Aainfix &lt;=V13ainfix +V2c1Aainfix &lt;V11V13Aainfix &lt;=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FAa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1Fanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V17V5Iainfix &lt;=V17V9Aainfix &lt;V1V17FAainfix &gt;=aselectV10ashiftV0V18V5Iainfix &lt;V18V16Aainfix &lt;V9V18FAa_PermutV0V1V2V10V4Aainfix &lt;=V16ainfix +V2c1Aainfix &lt;V9V16Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V16ainfix +V8c1Fanot_assignsV3V4V21apset_rangeapset_singletonV0V1V2Ianot_assignsV3V20V21apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V21Aa_PermutV0ainfix +V9c1V2V21V20FIanot_assignsV3V19V20apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V20Aa_PermutV0V1ainfix -V9c1V20V19FAa_PermutV0V1V2V19V10Ianot_assignsV3V10V19apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V19V10FAainfix &lt;=V9V2Aainfix &lt;=V1V9Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V22V5Iainfix &lt;=V22V9Aainfix &lt;V1V22FAainfix &gt;=aselectV10ashiftV0V23V5Iainfix &lt;V23V8Aainfix &lt;V9V23FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFAanot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV4ashiftV0V24V5Iainfix &lt;=V24V6Aainfix &lt;V1V24FAainfix &gt;=aselectV4ashiftV0V25V5Iainfix &lt;V25V7Aainfix &lt;V6V25FAa_PermutV0V1V2V4V4Aainfix &lt;=V7ainfix +V2c1Aainfix &lt;V6V7Aainfix &lt;=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+    shape="iainfix &gt;=V1V2anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2iainfix &lt;=V8V2iainfix &lt;aselectV10ashiftV0V8V5anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV12ashiftV0V14V5Iainfix &lt;=V14V11Aainfix &lt;V1V14FAainfix &gt;=aselectV12ashiftV0V15V5Iainfix &lt;V15V13Aainfix &lt;V11V15FAa_PermutV0V1V2V12V4Aainfix &lt;=V13ainfix +V2c1Aainfix &lt;V11V13Aainfix &lt;=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FAa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1Fanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V17V5Iainfix &lt;=V17V9Aainfix &lt;V1V17FAainfix &gt;=aselectV10ashiftV0V18V5Iainfix &lt;V18V16Aainfix &lt;V9V18FAa_PermutV0V1V2V10V4Aainfix &lt;=V16ainfix +V2c1Aainfix &lt;V9V16Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V16ainfix +V8c1Fanot_assignsV3V4V21apset_rangeapset_singletonV0V1V2Ianot_assignsV3V20V21apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V21Aa_PermutV0ainfix +V9c1V2V21V20FIanot_assignsV3V19V20apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V20Aa_PermutV0V1ainfix -V9c1V20V19FAa_PermutV0V1V2V19V10Ianot_assignsV3V10V19apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V19V10FAainfix &lt;=V9V2Aainfix &lt;=V1V9Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V22V5Iainfix &lt;=V22V9Aainfix &lt;V1V22FAainfix &gt;=aselectV10ashiftV0V23V5Iainfix &lt;V23V8Aainfix &lt;V9V23FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FAanot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV4ashiftV0V24V5Iainfix &lt;=V24V6Aainfix &lt;V1V24FAainfix &gt;=aselectV4ashiftV0V25V5Iainfix &lt;V25V7Aainfix &lt;V6V25FAa_PermutV0V1V2V4V4Aainfix &lt;=V7ainfix +V2c1Aainfix &lt;V6V7Aainfix &lt;=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
     <label
      name="expl:parameter quick_rec_ensures_default"/>
     <label
@@ -61,10 +61,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="3c6a65372ed977e25ab25e41993ac78c"
+      sum="b80ee0716838b34d6b680eb651621dad"
       proved="true"
       expanded="false"
-      shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_default"/>
       <label
@@ -75,7 +75,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="0"
@@ -99,10 +99,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant init"
-      sum="c74bfe94d9b775135dc9b818de33278b"
+      sum="77e177c051cf03586881922c3f43d8b0"
       proved="true"
       expanded="false"
-      shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV4ashiftV0V8V5Iainfix &lt;=V8V6Aainfix &lt;V1V8FAainfix &gt;=aselectV4ashiftV0V9V5Iainfix &lt;V9V7Aainfix &lt;V6V9FAa_PermutV0V1V2V4V4Aainfix &lt;=V7ainfix +V2c1Aainfix &lt;V6V7Aainfix &lt;=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV4ashiftV0V8V5Iainfix &lt;=V8V6Aainfix &lt;V1V8FAainfix &gt;=aselectV4ashiftV0V9V5Iainfix &lt;V9V7Aainfix &lt;V6V9FAa_PermutV0V1V2V4V4Aainfix &lt;=V7ainfix +V2c1Aainfix &lt;V6V7Aainfix &lt;=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_default"/>
       <label
@@ -129,7 +129,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
@@ -137,10 +137,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="e92c3dba7b235a58f36040ac3a8d779a"
+      sum="6f70208b4cdb707259194fb5f1929172"
       proved="true"
       expanded="false"
-      shape="a_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V13V5Iainfix &lt;=V13V9Aainfix &lt;V1V13FAainfix &gt;=aselectV10ashiftV0V14V5Iainfix &lt;V14V8Aainfix &lt;V9V14FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="a_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V13V5Iainfix &lt;=V13V9Aainfix &lt;V1V13FAainfix &gt;=aselectV10ashiftV0V14V5Iainfix &lt;V14V8Aainfix &lt;V9V14FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_default"/>
       <label
@@ -175,10 +175,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant preservation"
-      sum="99deeb16b2d02e189d3ed97770db17c3"
+      sum="52d7edac46190e0c8d77d6a01d305cee"
       proved="true"
       expanded="false"
-      shape="anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV12ashiftV0V14V5Iainfix &lt;=V14V11Aainfix &lt;V1V14FAainfix &gt;=aselectV12ashiftV0V15V5Iainfix &lt;V15V13Aainfix &lt;V11V15FAa_PermutV0V1V2V12V4Aainfix &lt;=V13ainfix +V2c1Aainfix &lt;V11V13Aainfix &lt;=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V16V5Iainfix &lt;=V16V9Aainfix &lt;V1V16FAainfix &gt;=aselectV10ashiftV0V17V5Iainfix &lt;V17V8Aainfix &lt;V9V17FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV12ashiftV0V14V5Iainfix &lt;=V14V11Aainfix &lt;V1V14FAainfix &gt;=aselectV12ashiftV0V15V5Iainfix &lt;V15V13Aainfix &lt;V11V15FAa_PermutV0V1V2V12V4Aainfix &lt;=V13ainfix +V2c1Aainfix &lt;V11V13Aainfix &lt;=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V16V5Iainfix &lt;=V16V9Aainfix &lt;V1V16FAainfix &gt;=aselectV10ashiftV0V17V5Iainfix &lt;V17V8Aainfix &lt;V9V17FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_default"/>
       <label
@@ -189,7 +189,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.94"/>
+       <result status="valid" time="1.02"/>
       </proof>
      </goal>
      <goal
@@ -197,10 +197,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant preservation"
-      sum="a4d71ae25c2152ee16712463596e2b3c"
+      sum="b46c1f9876f336827b7359793c1efb3a"
       proved="true"
       expanded="false"
-      shape="anot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V12V5Iainfix &lt;=V12V9Aainfix &lt;V1V12FAainfix &gt;=aselectV10ashiftV0V13V5Iainfix &lt;V13V11Aainfix &lt;V9V13FAa_PermutV0V1V2V10V4Aainfix &lt;=V11ainfix +V2c1Aainfix &lt;V9V11Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V11ainfix +V8c1FIainfix &lt;aselectV10ashiftV0V8V5NIainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="anot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V12V5Iainfix &lt;=V12V9Aainfix &lt;V1V12FAainfix &gt;=aselectV10ashiftV0V13V5Iainfix &lt;V13V11Aainfix &lt;V9V13FAa_PermutV0V1V2V10V4Aainfix &lt;=V11ainfix +V2c1Aainfix &lt;V9V11Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V11ainfix +V8c1FIainfix &lt;aselectV10ashiftV0V8V5NIainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_default"/>
       <label
@@ -211,7 +211,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.32"/>
+       <result status="valid" time="0.36"/>
       </proof>
       <proof
        prover="0"
@@ -219,7 +219,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="1"
@@ -235,10 +235,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="c3d797d005f5d778eac95e18bde0094d"
+      sum="2452001c8e2b26d22bb1e4e350a2555c"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V11V5Iainfix &lt;=V11V9Aainfix &lt;V1V11FAainfix &gt;=aselectV10ashiftV0V12V5Iainfix &lt;V12V8Aainfix &lt;V9V12FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="ainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V11V5Iainfix &lt;=V11V9Aainfix &lt;V1V11FAainfix &gt;=aselectV10ashiftV0V12V5Iainfix &lt;V12V8Aainfix &lt;V9V12FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_default"/>
       <label
@@ -273,10 +273,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="b928bfb343d74060c357e8513ed9d89f"
+      sum="d4aa55c649f8c0d13a2ecbda9397d484"
       proved="true"
       expanded="false"
-      shape="a_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V12V5Iainfix &lt;=V12V9Aainfix &lt;V1V12FAainfix &gt;=aselectV10ashiftV0V13V5Iainfix &lt;V13V8Aainfix &lt;V9V13FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="a_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V12V5Iainfix &lt;=V12V9Aainfix &lt;V1V12FAainfix &gt;=aselectV10ashiftV0V13V5Iainfix &lt;V13V8Aainfix &lt;V9V13FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_default"/>
       <label
@@ -295,7 +295,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="1"
@@ -303,7 +303,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
@@ -311,10 +311,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="b33173d4bc2dad34b24cc333a9d61a4d"
+      sum="851e705c541bb31d0226dbf64512cc94"
       proved="true"
       expanded="false"
-      shape="anot_assignsV3V4V13apset_rangeapset_singletonV0V1V2Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="anot_assignsV3V4V13apset_rangeapset_singletonV0V1V2Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_default"/>
       <label
@@ -325,7 +325,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.44"/>
+       <result status="valid" time="0.48"/>
       </proof>
      </goal>
     </transf>
@@ -335,10 +335,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="parameter quick_rec_ensures_permutation"
-    sum="cf2957bd9be91b5df025008a56bb11de"
+    sum="280649b8af3bca5aaab111ce61085a68"
     proved="false"
     expanded="true"
-    shape="iainfix &gt;=V1V2a_PermutV0V1V2V4V4a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+    shape="iainfix &gt;=V1V2a_PermutV0V1V2V4V4a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
     <label
      name="expl:parameter quick_rec_ensures_permutation"/>
     <label
@@ -352,10 +352,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="3c0dcbcdea0f2cef048dbc47a0fb514d"
+      sum="b3ea35f667abe3450bb9589cb136c932"
       proved="true"
       expanded="false"
-      shape="a_PermutV0V1V2V4V4Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="a_PermutV0V1V2V4V4Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_permutation"/>
       <label
@@ -390,10 +390,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="664d3fe09ce8db05c153fb839af82625"
+      sum="6d06acf42c93b043bdf22a47381e2036"
       proved="false"
       expanded="true"
-      shape="a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_permutation"/>
       <label
@@ -404,7 +404,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.08"/>
+       <result status="timeout" time="5.02"/>
       </proof>
       <proof
        prover="0"
@@ -412,7 +412,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.04"/>
+       <result status="timeout" time="5.10"/>
       </proof>
       <proof
        prover="1"
@@ -420,7 +420,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.02"/>
+       <result status="timeout" time="5.01"/>
       </proof>
       <proof
        prover="2"
@@ -446,10 +446,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="parameter quick_rec_ensures_sorted"
-    sum="93105d6b3f852dda1659007f56a6a2f7"
+    sum="c1506658904fe8729954771b5570b8bc"
     proved="false"
     expanded="true"
-    shape="iainfix &gt;=V1V2a_SortedV0V1ainfix +V2c1V4a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+    shape="iainfix &gt;=V1V2a_SortedV0V1ainfix +V2c1V4a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
     <label
      name="expl:parameter quick_rec_ensures_sorted"/>
     <label
@@ -463,10 +463,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="6493596544dc1cefd992c94877a1fe7b"
+      sum="51a9821e688012c4f6c1e79eae9fa6b5"
       proved="true"
       expanded="false"
-      shape="a_SortedV0V1ainfix +V2c1V4Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="a_SortedV0V1ainfix +V2c1V4Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_sorted"/>
       <label
@@ -501,10 +501,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="e6a3abf464cf472bcff4b2d686cc46d0"
+      sum="6fd942ab1eab76743ba0f7e6f4fc15d9"
       proved="false"
       expanded="true"
-      shape="a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+      shape="a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
       <label
        name="expl:parameter quick_rec_ensures_sorted"/>
       <label
@@ -547,7 +547,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.10"/>
+       <result status="timeout" time="5.07"/>
       </proof>
      </goal>
     </transf>
@@ -557,10 +557,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="parameter quick_rec_safety"
-    sum="b73c0ee85464c231a1629cdd0d9d631b"
+    sum="9391abc8c89a3760cb4828602ad83dec"
     proved="true"
     expanded="false"
-    shape="iainfix &lt;=V8V2iainfix &lt;aselectV10ashiftV0V8V5ainfix &lt;ainfix -V2V13ainfix -V2V8Aainfix &lt;=c0ainfix -V2V8Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FAainfix &gt;=aoffset_maxV3V0V11Aainfix &lt;=aoffset_minV3V0V11Aainfix &gt;=aoffset_maxV3V0V8Aainfix &lt;=aoffset_minV3V0V8Iainfix =V11ainfix +V9c1Fainfix &lt;ainfix -V2V14ainfix -V2V8Aainfix &lt;=c0ainfix -V2V8Iainfix =V14ainfix +V8c1FAainfix &lt;=V8aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V8ainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0ainfix +V9c1Aazwf_zeroainfix -V2ainfix +V9c1ainfix -V2V1Ianot_assignsV3V15V16apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V16Aa_PermutV0V1ainfix -V9c1V16V15FAainfix &gt;=aoffset_maxV3V0ainfix -V9c1Aainfix &lt;=aoffset_minV3V0V1Aazwf_zeroainfix -ainfix -V9c1V1ainfix -V2V1Ia_PermutV0V1V2V15V10Ianot_assignsV3V10V15apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V15V10FAainfix &gt;=aoffset_maxV3V0V9Aainfix &lt;=aoffset_minV3V0V9Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1Iainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;aselectV10ashiftV0V17V5Iainfix &lt;=V17V9Aainfix &lt;V1V17FAainfix &gt;=aselectV10ashiftV0V18V5Iainfix &lt;V18V8Aainfix &lt;V9V18FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+    shape="iainfix &lt;=V8V2iainfix &lt;aselectV10ashiftV0V8V5ainfix &lt;ainfix -V2V13ainfix -V2V8Aainfix &lt;=c0ainfix -V2V8Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FAainfix &gt;=aoffset_maxV3V0V11Aainfix &lt;=aoffset_minV3V0V11Aainfix &gt;=aoffset_maxV3V0V8Aainfix &lt;=aoffset_minV3V0V8Iainfix =V11ainfix +V9c1Fainfix &lt;ainfix -V2V14ainfix -V2V8Aainfix &lt;=c0ainfix -V2V8Iainfix =V14ainfix +V8c1FAainfix &lt;=V8aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V8ainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0ainfix +V9c1Aazwf_zeroainfix -V2ainfix +V9c1ainfix -V2V1Ianot_assignsV3V15V16apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V16Aa_PermutV0V1ainfix -V9c1V16V15FAainfix &gt;=aoffset_maxV3V0ainfix -V9c1Aainfix &lt;=aoffset_minV3V0V1Aazwf_zeroainfix -ainfix -V9c1V1ainfix -V2V1Ia_PermutV0V1V2V15V10Ianot_assignsV3V10V15apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V15V10FAainfix &gt;=aoffset_maxV3V0V9Aainfix &lt;=aoffset_minV3V0V9Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1Iainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;aselectV10ashiftV0V17V5Iainfix &lt;=V17V9Aainfix &lt;V1V17FAainfix &gt;=aselectV10ashiftV0V18V5Iainfix &lt;V18V8Aainfix &lt;V9V18FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
     <label
      name="expl:parameter quick_rec_safety"/>
     <label
@@ -571,7 +571,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="0"
@@ -587,15 +587,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter quick_sort_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
-    expl="parameter quick_sort_ensures_default"
-    sum="bc7fa0b1a86ef89bb302e07c01721527"
+    expl="normal postcondition"
+    sum="42841416cf011eaf365b586687b8f3d5"
     proved="true"
     expanded="false"
     shape="t">
@@ -633,10 +633,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="normal postcondition"
-    sum="4482a02e3aa176087818b895ce7921d1"
+    sum="6f9347a086dc8c36edd9b6b7bdef467f"
     proved="true"
     expanded="false"
-    shape="a_PermutV0c0ainfix -V1c1V4V3Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
+    shape="a_PermutV0c0ainfix -V1c1V4V3Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
     <label
      name="expl:parameter quick_sort_ensures_permutation"/>
     <label
@@ -671,10 +671,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="normal postcondition"
-    sum="ba71e5ffa45b03748686a39dc54be762"
+    sum="ef1a73410f65efbf3a53445341ca8c18"
     proved="true"
     expanded="false"
-    shape="a_SortedV0c0V1V4Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
+    shape="a_SortedV0c0V1V4Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
     <label
      name="expl:parameter quick_sort_ensures_sorted"/>
     <label
@@ -708,11 +708,11 @@
     name="WP_parameter quick_sort_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
-    expl="precondition for call"
-    sum="008188b12f8f18c81bcd128e09a2ed98"
+    expl="precondition"
+    sum="45929d46f917c92abe91a0c9caa97e73"
     proved="true"
     expanded="false"
-    shape="ainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFF">
+    shape="ainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0F">
     <label
      name="expl:parameter quick_sort_safety"/>
     <label
@@ -747,10 +747,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="2f4ac5b6cea3bc254a2f8781246cb1e1"
+    sum="79cd14593adf7607c1b517b2b03d6f24"
     proved="true"
     expanded="false"
-    shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+    shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
     <label
      name="expl:parameter swap_ensures_default"/>
     <label
@@ -761,7 +761,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.21"/>
+     <result status="valid" time="0.33"/>
     </proof>
     <proof
      prover="0"
@@ -769,7 +769,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.84"/>
+     <result status="valid" time="0.77"/>
     </proof>
     <proof
      prover="1"
@@ -777,7 +777,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.70"/>
+     <result status="valid" time="0.50"/>
     </proof>
    </goal>
    <goal
@@ -785,10 +785,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="parameter swap_safety"
-    sum="d641b82258f107a7ae8ff6789dfa4741"
+    sum="e5c87f8f385af7c845c74a351300fa3c"
     proved="true"
     expanded="false"
-    shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+    shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
     <label
      name="expl:parameter swap_safety"/>
     <label
@@ -799,7 +799,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"

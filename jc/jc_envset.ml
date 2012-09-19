@@ -87,8 +87,9 @@ let () =
       "reads"; "real"; "rec"; "ref"; "result"; "returns"; "then"; "true"; "try";
       "type"; "unit"; "variant"; "void"; "while"; "with"; "writes"; "init";
       (* Why prelude *)
-      "exp" ; "log" ; "sin" ; "cos" ; "tan" ; "sqr_real" ; "atan" ; "shift"
+      "exp" ; "log" ; "sin" ; "cos" ; "tan" ; "sqr_real" ; "atan" ; 
       (* jessie generated names *)
+      "shift"
       (* "global" ; "alloc"  *)
     ]
 

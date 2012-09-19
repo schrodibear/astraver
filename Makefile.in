@@ -309,12 +309,13 @@ JCCMO = src/version.cmo \
 	jc/jc_make.cmo jc/jc_main.cmo
 JCCMX = $(JCCMO:.cmo=.cmx)
 
-jc/jc_stdlib.ml: jc/jc_stdlib_lt312.ml jc/jc_stdlib_ge312.ml
+jc/jc_stdlib.ml: jc/jc_stdlib_lt312.ml jc/jc_stdlib_ge312.ml jc/jc_stdlib_ge40.ml
 	rm -f $@
 	case $(OCAMLVERSION) in \
          3.0*|3.10*|3.11*) cp jc/jc_stdlib_lt312.ml $@ ;; \
          3.12*) cp jc/jc_stdlib_ge312.ml $@ ;; \
-	 4.*) cp jc/jc_stdlib_ge400.ml $@ ;; \
+#	 4.*) cp jc/jc_stdlib_ge400.ml $@ ;; \
+         4.0*) cp jc/jc_stdlib_ge40.ml $@ ;; \
         esac
 	chmod -w $@
 
@@ -631,36 +632,26 @@ bin/cadlog.opt: src/version.cmx c/cversion.cmx tools/cadlog.cmx
 static:: $(STATICBINARY)
 
 ifeq ($(enable_local),no)
-lib/why3/why3.conf: Makefile
-	@(echo "[main]"; \
-	echo "loadpath=\"$(LIBDIR)/why/why3\""; \
-	echo; \
-	echo "[prover coq]"; \
-	echo "option=\"-R $(LIBDIR)/why/coq Why\""; \
-	echo "driver=\"$(LIBDIR)/why/why3/coq.drv\""; \
-	echo; \
-	echo "[editor coqide]"; \
-	echo "option=\"-R $(LIBDIR)/why/coq Why\""; \
-	echo; \
-	echo "[editor proofgeneral-coq]"; \
-	echo "option=\"--eval \\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(LIBDIR)/why/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Why\\\\\\\\\\\\\") coq-load-path))\\\"\""; \
-	) > $@
+LIBWHY3=$(LIBDIR)/why
 else
+LIBWHY3=$(PWD)/lib
+endif
+
 lib/why3/why3.conf: Makefile
 	@(echo "[main]"; \
-	echo "loadpath=\"$(PWD)/lib/why3\""; \
+	echo "loadpath=\"$(LIBWHY3)/why3\""; \
 	echo; \
-	echo "[prover coq]"; \
-	echo "option=\"-R $(PWD)/lib/coq Why\""; \
-	echo "driver=\"$(PWD)/lib/why3/coq.drv\""; \
+	echo "[prover_modifiers]"; \
+	echo 'name="Coq"'; \
+	echo "option=\"-R $(LIBWHY3)/coq Why\""; \
+	echo "driver=\"$(LIBWHY3)/why3/coq.drv\""; \
 	echo; \
-	echo "[editor coqide]"; \
-	echo "option=\"-R $(PWD)/lib/coq Why\""; \
+	echo "[editor_modifiers coqide]"; \
+	echo "option=\"-R $(LIBWHY3)/coq Why\""; \
 	echo; \
-	echo "[editor proofgeneral-coq]"; \
-	echo "option=\"--eval \\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(PWD)/lib/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Why\\\\\\\\\\\\\") coq-load-path))\\\"\""; \
+	echo "[editor_modifiers proofgeneral-coq]"; \
+	echo "option=\"--eval \\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(LIBWHY3)/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Why\\\\\\\\\\\\\") coq-load-path))\\\"\""; \
 	) > $@
-endif
 
 ########
 # COQ
@@ -791,7 +782,7 @@ install-lib: $(JCLIB) lib/why3/why3.conf
 	mkdir -p $(LIBDIR)/why/why
 	cp -f $(PRELUDE) $(LIBDIR)/why/why
 	mkdir -p $(LIBDIR)/why/why3
-	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/jessie3.why lib/why3/jessie3.mlw lib/why3/jessie3_integer.why $(LIBDIR)/why/why3
+	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/jessie3theories.why lib/why3/jessie3.mlw lib/why3/jessie3_integer.why $(LIBDIR)/why/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
 	cd lib; cp -rf java_api $(LIBDIR)/why
@@ -1042,7 +1033,7 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	lib/pvs/pvscontext.el lib/pvs/*.pvs lib/pvs/*.prf \
 	lib/mizar/why.miz lib/mizar/dict/why.voc \
 	lib/why/*.why lib/isabelle/*.thy lib/hol4/*.ml lib/harvey/*.rv \
-	lib/why3/*.why lib/why3/*.mlw \
+	lib/why3/*.why lib/why3/*.mlw lib/why3/coq.drv \
 	lib/java_api/java/*/*.java \
 	lib/javacard_api/java/lang/*.java \
 	lib/javacard_api/javacard/*/*.java \

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="flag.jessie/flag/why3session.xml">
+ name="flag.jessie/flag/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -26,7 +26,7 @@
    expanded="false">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="flag.jessie/flag/../flag.mlw"
    loclnum="166" loccnumb="7" loccnume="21"
    verified="true"
@@ -36,10 +36,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="parameter flag_ensures_default"
-    sum="8387db6612535613a9c6cc1a703c94fb"
+    sum="31eb44c60824d9cb3e5585c67fecc42c"
     proved="true"
     expanded="true"
-    shape="LaselectV10ashiftV0V8iainfix =V11c1ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c1Oainfix =V11c2ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V17c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V17V7Aainfix &lt;=V9V17Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V17ainfix +V8c1Fiainfix =V11c1Oainfix =V11c2Oainfix =V11c3ais_monochromeV0V18V1c3V19Aais_monochromeV0V9V8c2V19Aais_monochromeV0c0V9c1V19Aainfix &lt;=V18V1Aainfix &lt;=V8V18Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V19Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FIainfix =V18ainfix -V7c1Fais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFAais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+    shape="iainfix =V11c1ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c2ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V17c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V17V7Aainfix &lt;=V9V17Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V17ainfix +V8c1Fiainfix =V11c2Oainfix =V11c3ais_monochromeV0V18V1c3V19Aais_monochromeV0V9V8c2V19Aais_monochromeV0c0V9c1V19Aainfix &lt;=V18V1Aainfix &lt;=V8V18Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V19Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FIainfix =V18ainfix -V7c1Fais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FAais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
     <label
      name="expl:parameter flag_ensures_default"/>
     <label
@@ -53,10 +53,10 @@
       locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant init"
-      sum="3c259e578b68696c01b212d20a0f603f"
+      sum="989d7cb456932270566c2565d24cdc30"
       proved="true"
       expanded="true"
-      shape="ais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+      shape="ais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
       <label
        name="expl:parameter flag_ensures_default"/>
       <label
@@ -75,7 +75,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="1"
@@ -83,7 +83,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <transf
        name="split_goal"
@@ -94,10 +94,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="90921f0f09b47a30d1ad4b3b212e732d"
+        sum="88938425142e6048755d2467008c1f55"
         proved="true"
         expanded="false"
-        shape="ais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -116,7 +116,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="1"
@@ -124,7 +124,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
@@ -132,10 +132,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="f2ece1af6a68517c75bcf87eaee841d1"
+        sum="b25760c717daabcf1e32b395bd30f9b0"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=c0V4Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=c0V4Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -162,7 +162,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
@@ -170,10 +170,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="a13457a412dc2729fcc6a7ba162c29e9"
+        sum="99f1e52f877fe0fce844fc15141199de"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=V4V5Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=V4V5Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -208,10 +208,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="5fcc79854fbb5515bfc983a9d42957f2"
+        sum="4326a82cdfc31bf70e22de525732348b"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=V5V6Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=V5V6Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -246,10 +246,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="6fdac171c88a4f7d75362d4d144b5a3e"
+        sum="5684161ac4607e10cb786733f55b929a"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=V6V1Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=V6V1Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -268,7 +268,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.01"/>
         </proof>
         <proof
          prover="1"
@@ -284,10 +284,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="94759cb2cdfb08fe7902bf5bef572999"
+        sum="19d55bb5a0ef3325baaaf51708802e1e"
         proved="true"
         expanded="false"
-        shape="ais_monochromeV0c0V4c1V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_monochromeV0c0V4c1V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -314,7 +314,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.02"/>
         </proof>
        </goal>
        <goal
@@ -322,10 +322,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="ad087c5caf05e8ad45d6924cb1f61b24"
+        sum="c0172194cadb516973af19c02bd61999"
         proved="true"
         expanded="false"
-        shape="ais_monochromeV0V4V5c2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_monochromeV0V4V5c2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -352,7 +352,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.02"/>
         </proof>
        </goal>
        <goal
@@ -360,10 +360,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="86839a061824eb09576acd53f0144fcd"
+        sum="af15c277fbc38cd820d6e159afbc781d"
         proved="true"
         expanded="false"
-        shape="ais_monochromeV0V6V1c3V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_monochromeV0V6V1c3V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -390,7 +390,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
       </transf>
@@ -400,10 +400,10 @@
       locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="43561b5fa21b23d42088105b1183cbb6"
+      sum="c3f99f56fbb684a61bf5e31940aed4e9"
       proved="true"
       expanded="true"
-      shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+      shape="ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
       <label
        name="expl:parameter flag_ensures_default"/>
       <label
@@ -417,10 +417,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="543c3d6429b1ff9d012ec0eb86eff2d5"
+        sum="fcf620380c448a9127f77f8260feef35"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -431,7 +431,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.37"/>
+         <result status="valid" time="0.58"/>
         </proof>
        </goal>
        <goal
@@ -439,10 +439,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="b7e985fc49d6dc8b9525dcebbc9ed793"
+        sum="f726cab8cfc2a02bc43b190d3da55e10"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix &lt;=c0V15Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=c0V15Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -477,10 +477,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="7117fdb4c43ae9f36c0c5daafd1e40aa"
+        sum="118bbe66cea80616c72b1d3a008b1de8"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix &lt;=V15V13Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=V15V13Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -491,7 +491,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.15"/>
+         <result status="valid" time="0.06"/>
         </proof>
         <proof
          prover="0"
@@ -515,10 +515,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="cf421987eb50b5564c3f1d8ef395dd22"
+        sum="d894c06ca065aeee1a7af48d2cba4363"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix &lt;=V13V7Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=V13V7Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -537,7 +537,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="1"
@@ -545,7 +545,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.13"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
@@ -553,10 +553,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="ece254e8c8b1a1f124a47241578d1e4e"
+        sum="9928bcd32539150b7de4419a95c5b466"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix &lt;=V7V1Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=V7V1Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -567,7 +567,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="0"
@@ -575,7 +575,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="1"
@@ -583,7 +583,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.13"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
@@ -591,10 +591,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="26dac1d2eac7f56236881d772ceda288"
+        sum="54a0b5628c89d25c6f0fee3b29034820"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0c0V15c1V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_monochromeV0c0V15c1V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -605,7 +605,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.75"/>
+         <result status="valid" time="0.73"/>
         </proof>
        </goal>
        <goal
@@ -613,10 +613,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="84db8dae03a4f0c2534472cfae762c3a"
+        sum="51da722638050e39d578f930b1aa6d37"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0V15V13c2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_monochromeV0V15V13c2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -635,10 +635,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="b04bd005cdcf9adcddb7de7c9b1fbcec"
+        sum="a15fb06d5a7dc850d56a1c3b186c7add"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_monochromeV0V7V1c3V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -649,7 +649,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.84"/>
+         <result status="valid" time="0.75"/>
         </proof>
        </goal>
       </transf>
@@ -659,10 +659,10 @@
       locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="c5588153178e08209163a1de650d4ec5"
+      sum="082c4a1d0579eb3496c3542857e8cebe"
       proved="true"
       expanded="true"
-      shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V12c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V12V7Aainfix &lt;=V9V12Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V12ainfix +V8c1FIainfix =V11c1Oainfix =V11c2Iainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+      shape="ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V12c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V12V7Aainfix &lt;=V9V12Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V12ainfix +V8c1FIainfix =V11c2Iainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
       <label
        name="expl:parameter flag_ensures_default"/>
       <label
@@ -681,7 +681,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="1"
@@ -697,10 +697,10 @@
       locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="69c6326b61739572e945a9c84760c371"
+      sum="b43701bd39cfbfffaddd4a27b557b262"
       proved="true"
       expanded="true"
-      shape="LaselectV10ashiftV0V8ais_monochromeV0V12V1c3V13Aais_monochromeV0V9V8c2V13Aais_monochromeV0c0V9c1V13Aainfix &lt;=V12V1Aainfix &lt;=V8V12Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+      shape="ais_monochromeV0V12V1c3V13Aais_monochromeV0V9V8c2V13Aais_monochromeV0c0V9c1V13Aainfix &lt;=V12V1Aainfix &lt;=V8V12Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
       <label
        name="expl:parameter flag_ensures_default"/>
       <label
@@ -714,10 +714,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="062c1b49b008e3ac0fb8c87b5330c3e1"
+        sum="d25765f89aa21129fd8e122d34f3ab89"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -728,7 +728,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.38"/>
+         <result status="valid" time="0.54"/>
         </proof>
        </goal>
        <goal
@@ -736,10 +736,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="5c0464411f3ec45ec13c4510e5e7c39e"
+        sum="01760b6da1bfe40891d140836589ed49"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix &lt;=c0V9Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=c0V9Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -774,10 +774,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="f52c3701531f76f8b33fae00ae5dc200"
+        sum="2e904ffa2c32c6d07b1565cc5001eace"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix &lt;=V9V8Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=V9V8Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -812,10 +812,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="dc070676ce6e355bab4e389e91e64907"
+        sum="20e50d5b35d766de6d08d6fb3277e806"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix &lt;=V8V12Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=V8V12Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -826,7 +826,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.15"/>
+         <result status="valid" time="0.06"/>
         </proof>
         <proof
          prover="0"
@@ -842,7 +842,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.13"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
@@ -850,10 +850,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="b718231ee65db518220f25b4f68eedf4"
+        sum="fa7de7fccd8ebe77ea673e48863496b3"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix &lt;=V12V1Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ainfix &lt;=V12V1Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -864,7 +864,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.15"/>
+         <result status="valid" time="0.06"/>
         </proof>
         <proof
          prover="0"
@@ -888,10 +888,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="2d9806c12b8263dc2cc947df36a4ea72"
+        sum="b8220ece81968b8cabb137e32b103eca"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0c0V9c1V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_monochromeV0c0V9c1V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -902,7 +902,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.94"/>
+         <result status="valid" time="0.37"/>
         </proof>
        </goal>
        <goal
@@ -910,10 +910,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="c90a45979aa56ec92b7cbe3300a125e1"
+        sum="700a972159f14998939ef069a2f2021d"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0V9V8c2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_monochromeV0V9V8c2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -924,7 +924,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.94"/>
+         <result status="valid" time="0.38"/>
         </proof>
        </goal>
        <goal
@@ -932,10 +932,10 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="b17bec190894bdeffd70bddfcb8aedc0"
+        sum="3715e86645ef6dcfccf488d610eab935"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0V12V1c3V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        shape="ais_monochromeV0V12V1c3V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
         <label
          name="expl:parameter flag_ensures_default"/>
         <label
@@ -946,7 +946,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.95"/>
+         <result status="valid" time="0.36"/>
         </proof>
        </goal>
       </transf>
@@ -956,10 +956,10 @@
       locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="69262b3e4ea1a30d5f4e1514a63d04a7"
+      sum="04f2f228fc84cbae8b90e00abdfa215a"
       proved="true"
       expanded="false"
-      shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V11c1Oainfix =V11c2Oainfix =V11c3NIainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+      shape="ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V11c2Oainfix =V11c3NIainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
       <label
        name="expl:parameter flag_ensures_default"/>
       <label
@@ -986,7 +986,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
     </transf>
@@ -996,10 +996,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="fda1f6e58e0c82ff2f3ce65c0f3707e7"
+    sum="fe2f2798e89adc79f7115bac24631a12"
     proved="true"
     expanded="false"
-    shape="ais_monochromeV0V12V1c3V10Aais_monochromeV0V11V12c2V10Aais_monochromeV0c0V11c1V10EEIainfix &lt;V8V7NIais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+    shape="ais_monochromeV0V12V1c3V10Aais_monochromeV0V11V12c2V10Aais_monochromeV0c0V11c1V10EEIainfix &lt;V8V7NIais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
     <label
      name="expl:parameter flag_ensures_sorts"/>
     <label
@@ -1010,7 +1010,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
@@ -1018,7 +1018,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
@@ -1026,7 +1026,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -1034,10 +1034,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="parameter flag_safety"
-    sum="2feb408f865f0d35aa06e8c9d7b22373"
+    sum="924ec929150b3509aa806f5c3cdb8baa"
     proved="true"
     expanded="false"
-    shape="LaselectV10ashiftV0V8iainfix =V11c1ainfix &lt;ainfix -V7V13ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FAainfix &gt;=aoffset_maxV2V0V12Aainfix &lt;=aoffset_minV2V0V12Aainfix &gt;=aoffset_maxV2V0V14Aainfix &lt;=aoffset_minV2V0V14Iainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c1Oainfix =V11c2ainfix &lt;ainfix -V7V17ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Iainfix =V17ainfix +V8c1Fiainfix =V11c1Oainfix =V11c2Oainfix =V11c3ainfix &lt;ainfix -V18V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FAainfix &gt;=aoffset_maxV2V0V8Aainfix &lt;=aoffset_minV2V0V8Aainfix &gt;=aoffset_maxV2V0V18Aainfix &lt;=aoffset_minV2V0V18Iainfix =V18ainfix -V7c1Fainfix &lt;ainfix -V7V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Aainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+    shape="iainfix =V11c1ainfix &lt;ainfix -V7V13ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FAainfix &gt;=aoffset_maxV2V0V12Aainfix &lt;=aoffset_minV2V0V12Aainfix &gt;=aoffset_maxV2V0V14Aainfix &lt;=aoffset_minV2V0V14Iainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c2ainfix &lt;ainfix -V7V17ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Iainfix =V17ainfix +V8c1Fiainfix =V11c2Oainfix =V11c3ainfix &lt;ainfix -V18V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FAainfix &gt;=aoffset_maxV2V0V8Aainfix &lt;=aoffset_minV2V0V8Aainfix &gt;=aoffset_maxV2V0V18Aainfix &lt;=aoffset_minV2V0V18Iainfix =V18ainfix -V7c1Fainfix &lt;ainfix -V7V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8LaselectV10ashiftV0V8Aainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
     <label
      name="expl:parameter flag_safety"/>
     <label
@@ -1048,7 +1048,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.18"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="0"
@@ -1064,7 +1064,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.20"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
@@ -1072,10 +1072,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="parameter isMonochrome_ensures_decides_monochromatic"
-    sum="2f408af9ea7bf0c00a9b74ce733a4b34"
+    sum="19b29b3a64d75f1ea1cf6491894a0fdb"
     proved="true"
     expanded="false"
-    shape="iainfix &lt;V7V2ais_monochromeV0V1V2V3V5qainfix =V9c0NIainfix =V9V8FIainfix =V8c0FIainfix =aselectV5ashiftV0V7V3Nais_monochromeV0V1V2V3V5qainfix =V11c0NIainfix =V11V10FIainfix =V10c1FIainfix =aselectV5ashiftV0V12V3Iainfix &lt;V12V7Aainfix &lt;=V1V12FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1FFFFFF">
+    shape="iainfix &lt;V7V2ais_monochromeV0V1V2V3V5qainfix =V9c0NIainfix =V9V8FIainfix =V8c0FIainfix =aselectV5ashiftV0V7V3Nais_monochromeV0V1V2V3V5qainfix =V11c0NIainfix =V11V10FIainfix =V10c1FIainfix =aselectV5ashiftV0V12V3Iainfix &lt;V12V7Aainfix &lt;=V1V12FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
     <label
      name="expl:parameter isMonochrome_ensures_decides_monochromatic"/>
     <label
@@ -1094,7 +1094,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
@@ -1102,7 +1102,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.14"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
@@ -1110,10 +1110,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="parameter isMonochrome_ensures_default"
-    sum="96aa4c9417c95fcd2d424fdb9b1eb02c"
+    sum="41f66bc3a304bbda248ef21dedb8085c"
     proved="true"
     expanded="false"
-    shape="ainfix =aselectV5ashiftV0V9V3Iainfix &lt;V9V8Aainfix &lt;=V1V9FAainfix &lt;=V1V8Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Iainfix &lt;V7V2Iainfix =aselectV5ashiftV0V10V3Iainfix &lt;V10V7Aainfix &lt;=V1V10FAainfix &lt;=V1V7FAainfix =aselectV5ashiftV0V11V3Iainfix &lt;V11V6Aainfix &lt;=V1V11FAainfix &lt;=V1V6Iainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1FFFFFF">
+    shape="ainfix =aselectV5ashiftV0V9V3Iainfix &lt;V9V8Aainfix &lt;=V1V9FAainfix &lt;=V1V8Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Iainfix &lt;V7V2Iainfix =aselectV5ashiftV0V10V3Iainfix &lt;V10V7Aainfix &lt;=V1V10FAainfix &lt;=V1V7FAainfix =aselectV5ashiftV0V11V3Iainfix &lt;V11V6Aainfix &lt;=V1V11FAainfix &lt;=V1V6Iainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
     <label
      name="expl:parameter isMonochrome_ensures_default"/>
     <label
@@ -1148,10 +1148,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="parameter isMonochrome_safety"
-    sum="bb98ee62d37868edb45b039e7561d661"
+    sum="07da63e7a704967f2258030b155b0fd1"
     proved="true"
     expanded="false"
-    shape="ainfix &lt;ainfix -V2V8ainfix -V2V7Aainfix &lt;=c0ainfix -V2V7Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Aainfix &lt;=V7aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V7Iainfix &lt;V7V2Iainfix =aselectV5ashiftV0V9V3Iainfix &lt;V9V7Aainfix &lt;=V1V9FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1FFFFFF">
+    shape="ainfix &lt;ainfix -V2V8ainfix -V2V7Aainfix &lt;=c0ainfix -V2V7Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Aainfix &lt;=V7aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V7Iainfix &lt;V7V2Iainfix =aselectV5ashiftV0V9V3Iainfix &lt;V9V7Aainfix &lt;=V1V9FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
     <label
      name="expl:parameter isMonochrome_safety"/>
     <label
@@ -1162,7 +1162,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.14"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="0"
@@ -1170,7 +1170,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -1185,8 +1185,8 @@
     name="WP_parameter swap_ensures_default"
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
-    expl="parameter swap_ensures_default"
-    sum="274782894a4c1e7be69030db4f854bba"
+    expl="normal postcondition"
+    sum="b17455676a52f055d6e9cf6670b658ab"
     proved="true"
     expanded="false"
     shape="t">
@@ -1208,7 +1208,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -1216,7 +1216,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -1224,10 +1224,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="c578dac87b72847eb06f613c74306e82"
+    sum="9845f4795a406b0d7970d6994cdeae07"
     proved="true"
     expanded="true"
-    shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV7ashiftV0V2aselectV4ashiftV0V1Aainfix =aselectV7ashiftV0V1aselectV4ashiftV0V2Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+    shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV7ashiftV0V2aselectV4ashiftV0V1Aainfix =aselectV7ashiftV0V1aselectV4ashiftV0V2Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
     <label
      name="expl:parameter swap_ensures_i_j_swapped"/>
     <label
@@ -1238,7 +1238,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.57"/>
+     <result status="valid" time="0.29"/>
     </proof>
     <proof
      prover="0"
@@ -1246,7 +1246,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.93"/>
+     <result status="valid" time="0.38"/>
     </proof>
     <proof
      prover="1"
@@ -1254,7 +1254,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="2.08"/>
+     <result status="valid" time="0.39"/>
     </proof>
    </goal>
    <goal
@@ -1262,10 +1262,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
     expl="parameter swap_safety"
-    sum="2fda9ccc0c296282325d5a596c1849b9"
+    sum="dcc63187606c92bf62be656caa68d0bf"
     proved="true"
     expanded="false"
-    shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FFFFF">
+    shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
     <label
      name="expl:parameter swap_safety"/>
     <label
@@ -1292,7 +1292,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
   </theory>

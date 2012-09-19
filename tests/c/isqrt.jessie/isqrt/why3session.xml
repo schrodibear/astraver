@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="isqrt.jessie/isqrt/why3session.xml">
+ name="isqrt.jessie/isqrt/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -34,7 +34,7 @@
    expanded="false">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="isqrt.jessie/isqrt/../isqrt.mlw"
    loclnum="154" loccnumb="7" loccnume="21"
    verified="true"
@@ -44,10 +44,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="parameter isqrt_ensures_default"
-    sum="924affa64c4031e608c5fd93f5d02902"
+    sum="b13be15e5e3f523ad8d83a259b2d2f2c"
     proved="true"
     expanded="true"
-    shape="iainfix &lt;=V3V0ainfix =V6asqrainfix +V5c1Aainfix &gt;=V0asqrV5Aainfix &gt;=V5c0Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1Fainfix &lt;V0asqrainfix +V7c1Aainfix &lt;=asqrV7V0Aainfix &gt;=V7c0Iainfix =V7V4FIainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FFAainfix =V2asqrainfix +V1c1Aainfix &gt;=V0asqrV1Aainfix &gt;=V1c0Iainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
+    shape="iainfix &lt;=V3V0ainfix =V6asqrainfix +V5c1Aainfix &gt;=V0asqrV5Aainfix &gt;=V5c0Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1Fainfix &lt;V0asqrainfix +V7c1Aainfix &lt;=asqrV7V0Aainfix &gt;=V7c0Iainfix =V7V4FIainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FAainfix =V2asqrainfix +V1c1Aainfix &gt;=V0asqrV1Aainfix &gt;=V1c0Iainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
     <label
      name="expl:parameter isqrt_ensures_default"/>
     <label
@@ -74,10 +74,10 @@
     locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="loop variant decreases"
-    sum="580bd8c7a6ee8ee704c73efd6c1db23c"
+    sum="d2d1b8b2d5d545a165c3f7c4fd74dafe"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;ainfix -V0V5ainfix -V0V4Aainfix &lt;=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
+    shape="ainfix &lt;ainfix -V0V5ainfix -V0V4Aainfix &lt;=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FIainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
     <label
      name="expl:parameter isqrt_safety"/>
     <label
@@ -91,10 +91,10 @@
       locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="40" loccnumb="4" loccnume="9"
       expl="loop variant decreases"
-      sum="580bd8c7a6ee8ee704c73efd6c1db23c"
+      sum="d2d1b8b2d5d545a165c3f7c4fd74dafe"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;ainfix -V0V5ainfix -V0V4Aainfix &lt;=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
+      shape="ainfix &lt;ainfix -V0V5ainfix -V0V4Aainfix &lt;=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FIainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
       <label
        name="expl:parameter isqrt_safety"/>
       <label
@@ -113,7 +113,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="1"
@@ -121,7 +121,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.03"/>
       </proof>
      </goal>
     </transf>
@@ -131,7 +131,7 @@
     locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
     expl="parameter main_ensures_default"
-    sum="8238aaf75f6e6680cb3ecaa9d8b67667"
+    sum="200b9f9023c81d0ca844f003b94d2253"
     proved="true"
     expanded="true"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix &gt;V1c4NAainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -164,7 +164,7 @@
       locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="assertion"
-      sum="4ec18ad083f9cf7a866a2e50e85a8b71"
+      sum="d0a79070cfd1252bebb785f35d479be9"
       proved="true"
       expanded="false"
       shape="ainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -186,7 +186,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="4"
@@ -194,7 +194,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
@@ -202,7 +202,7 @@
       locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="assertion"
-      sum="065353e947c17be5b3da69badb43dc6e"
+      sum="c87500539e18550925854efac1a382f5"
       proved="true"
       expanded="false"
       shape="ainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -216,7 +216,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="4"
@@ -232,7 +232,7 @@
       locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="normal postcondition"
-      sum="16ae781760c3670c4dd0e7b3d17fb5e1"
+      sum="58507bbb32d9c6f9d39d68ca72862c1c"
       proved="true"
       expanded="false"
       shape="ainfix =V2c4Iainfix =V2V1FIainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -246,7 +246,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="1"
@@ -262,7 +262,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="2"
@@ -270,7 +270,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="4"
@@ -287,8 +287,8 @@
     name="WP_parameter main_safety"
     locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
-    expl="precondition for call"
-    sum="46af47778fcb532752d10ae50ac9d348"
+    expl="precondition"
+    sum="e782115bfcac290b8728589a61bb3aad"
     proved="true"
     expanded="true"
     shape="ainfix &gt;=c17c0">
@@ -302,7 +302,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="0"
@@ -310,7 +310,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -318,7 +318,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>

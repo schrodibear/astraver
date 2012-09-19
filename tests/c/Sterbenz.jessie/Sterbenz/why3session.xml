@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="Sterbenz.jessie/Sterbenz/why3session.xml">
+ name="Sterbenz.jessie/Sterbenz/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -38,7 +38,7 @@
    expanded="true">
   </theory>
   <theory
-   name="WP Jessie_program"
+   name="Jessie_program"
    locfile="Sterbenz.jessie/Sterbenz/../Sterbenz.mlw"
    loclnum="134" loccnumb="7" loccnume="21"
    verified="false"
@@ -48,10 +48,10 @@
     locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="parameter _Sterbenz_ensures_default"
-    sum="7e2635a1a5e90dedff0a96e046a526e2"
+    sum="5457da614815447f1c4e419aa2df84e5"
     proved="false"
     expanded="true"
-    shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FAainfix &lt;=c0.0avalueV0Aainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0FF">
+    shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FAainfix &lt;=c0.0avalueV0Aainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
     <label
      name="expl:parameter _Sterbenz_ensures_default"/>
     <label
@@ -65,10 +65,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="assertion"
-      sum="1f4f347f02aecfc0722dda162f716403"
+      sum="783a08248968a90d05de9ed8904bcecc"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0FF">
+      shape="ainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
       <label
        name="expl:parameter _Sterbenz_ensures_default"/>
       <label
@@ -79,7 +79,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="0"
@@ -103,10 +103,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="assertion"
-      sum="4e2989b10f9db7178ed92cb019a168d6"
+      sum="b41b8f74a19f5ccc4f7fcbeacb781bbc"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0FF">
+      shape="ainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
       <label
        name="expl:parameter _Sterbenz_ensures_default"/>
       <label
@@ -125,7 +125,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="3"
@@ -141,10 +141,10 @@
       locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="normal postcondition"
-      sum="bf862c46961aa54bc7bae37221eb0a6e"
+      sum="70e04820bc67add4b3ee243da07a68b4"
       proved="false"
       expanded="true"
-      shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0FF">
+      shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
       <label
        name="expl:parameter _Sterbenz_ensures_default"/>
       <label
@@ -155,7 +155,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.12"/>
+       <result status="timeout" time="5.11"/>
       </proof>
       <proof
        prover="1"
@@ -163,7 +163,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="0.25"/>
+       <result status="unknown" time="0.24"/>
       </proof>
       <proof
        prover="0"
@@ -171,7 +171,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="0.04"/>
+       <result status="unknown" time="0.03"/>
       </proof>
       <proof
        prover="2"
@@ -179,7 +179,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.02"/>
+       <result status="timeout" time="5.01"/>
       </proof>
       <proof
        prover="5"
@@ -196,11 +196,11 @@
     name="WP_parameter _Sterbenz_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
-    expl="floating-point overflow"
-    sum="c80ffbf9fb3a1fe7dee0d8717562db10"
+    expl="precondition"
+    sum="37716dba017f663fcea3652778846298"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0FF">
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
     <label
      name="expl:parameter _Sterbenz_safety"/>
     <label

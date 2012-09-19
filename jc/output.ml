@@ -113,6 +113,10 @@ let why3ident s =
   match s with
         (* booleans *)
     | "not" -> "not"
+    | "bool_and" -> "Bool.andb"
+    | "bool_or" -> "Bool.orb"
+    | "bool_xor" -> "Bool.xorb"
+    | "bool_not" -> "Bool.notb"
         (* integers *)
     | "le_int" -> "Int.(<=)"
     | "le_int_" -> "Int.(<=)"
@@ -432,62 +436,6 @@ let () = add_why3_local "result"
 
 let remove_why3_local id = Hashtbl.remove why3_locals id 
 
-let rec fprintf_term form t =
-  match t with
-  | LConst(c) -> fprintf_constant form c
-  | LApp("eq_pointer",[t1;t2]) ->
-      fprintf form "@[(%a=%a)@]"
-	fprintf_term t1
-	fprintf_term t2
-  | LApp("ne_pointer",[t1;t2]) ->
-      fprintf form "@[(%a<>%a)@]"
-	fprintf_term t1
-	fprintf_term t2
-  | LApp(id,t::tl) ->
-      if !why3syntax then
-        begin
-          fprintf form "@[(%s@ %a" (why3ident id) fprintf_term t;
-          List.iter (fun t -> fprintf form "@ %a" fprintf_term t) tl;
-          fprintf form ")@]"
-        end
-      else
-        begin
-          fprintf form "@[%s(%a" id fprintf_term t;
-          List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
-          fprintf form ")@]"
-        end
-  | LApp(id,[]) ->
-      fprintf form "%s" (why3ident_if id)
-  | LVar id ->
-      fprintf form "%s" (why3ident_if id)
-  | LDeref id ->
-      if !why3syntax then
-        if is_why3_local id then
-          fprintf form "%s" (why3ident_if id)
-        else
-          fprintf form "!%s" (why3ident id)
-      else
-        fprintf form "%s" id
-  | LDerefAtLabel(id,l) ->
-      if !why3syntax then
-        if l="" then
-          fprintf form "(old !%s)" (why3ident id)
-        else
-          fprintf form "(at !%s '%s)" (why3ident id) (why3constr l)
-      else
-        fprintf form "%s@@%s" id l
-  | Tnamed(lab,t) ->
-      if !why3syntax then
-        fprintf form "(%a %a)" (why3loc ~prog:false) lab fprintf_term t
-      else
-        fprintf form "(%s : %a)" lab fprintf_term t
-  | TIf(t1,t2,t3) ->
-      fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]"
-	fprintf_term t1 fprintf_term t2 fprintf_term t3
-  | TLet(v,t1,t2) ->
-      fprintf form "@[<hov 1>(let %s@ = %a@ in %a)@]" v
-	fprintf_term t1 fprintf_term t2
-
 type logic_type =
     { logic_type_name : string;
       logic_type_args : logic_type list;
@@ -649,7 +597,84 @@ let rec fprintf_logic_type form t =
 	    (print_list simple_comma fprintf_logic_type) l
 	    t.logic_type_name
 
-let rec fprintf_assertion form a =
+let rec bool_to_prop t =
+  match t with
+    | LConst (Prim_bool true) -> LTrue
+    | LConst (Prim_bool false) -> LFalse
+    | LApp("bool_and",[t1;t2]) -> LAnd(bool_to_prop t1,bool_to_prop t2)
+    | LApp("bool_or",[t1;t2]) -> LOr(bool_to_prop t1,bool_to_prop t2)
+    | LApp("lt_int_bool",[t1;t2]) -> LPred("lt_int",[t1;t2])
+    | LApp("le_int_bool",[t1;t2]) -> LPred("le_int",[t1;t2])
+    | LApp("gt_int_bool",[t1;t2]) -> LPred("gt_int",[t1;t2])
+    | LApp("ge_int_bool",[t1;t2]) -> LPred("ge_int",[t1;t2])
+    | LApp("lt_real_bool",[t1;t2]) -> LPred("lt_real",[t1;t2])
+    | LApp("le_real_bool",[t1;t2]) -> LPred("le_real",[t1;t2])
+    | LApp("gt_real_bool",[t1;t2]) -> LPred("gt_real",[t1;t2])
+    | LApp("ge_real_bool",[t1;t2]) -> LPred("ge_real",[t1;t2])
+    | _ -> assert false
+
+let rec fprintf_term form t =
+  match t with
+  | LConst(c) -> fprintf_constant form c
+  | LApp("eq_pointer",[t1;t2]) ->
+      fprintf form "@[(%a=%a)@]"
+	fprintf_term t1
+	fprintf_term t2
+  | LApp("ne_pointer",[t1;t2]) ->
+      fprintf form "@[(%a<>%a)@]"
+	fprintf_term t1
+	fprintf_term t2
+  | LApp(id,t::tl) ->
+      if !why3syntax then
+        begin
+          fprintf form "@[(%s@ %a" (why3ident id) fprintf_term t;
+          List.iter (fun t -> fprintf form "@ %a" fprintf_term t) tl;
+          fprintf form ")@]"
+        end
+      else
+        begin
+          fprintf form "@[%s(%a" id fprintf_term t;
+          List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
+          fprintf form ")@]"
+        end
+  | LApp(id,[]) ->
+      fprintf form "%s" (why3ident_if id)
+  | LVar id ->
+      fprintf form "%s" (why3ident_if id)
+  | LDeref id ->
+      if !why3syntax then
+        if is_why3_local id then
+          fprintf form "%s" (why3ident_if id)
+        else
+          fprintf form "!%s" (why3ident id)
+      else
+        fprintf form "%s" id
+  | LDerefAtLabel(id,l) ->
+      if !why3syntax then
+        if l="" then
+          fprintf form "(old !%s)" (why3ident id)
+        else
+          fprintf form "(at !%s '%s)" (why3ident id) (why3constr l)
+      else
+        fprintf form "%s@@%s" id l
+  | Tnamed(lab,t) ->
+      if !why3syntax then
+        fprintf form "(%a %a)" (why3loc ~prog:false) lab fprintf_term t
+      else
+        fprintf form "(%s : %a)" lab fprintf_term t
+  | TIf(t1,t2,t3) ->
+    if !why3syntax then 
+      let f = bool_to_prop t1 in
+      fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]"
+        fprintf_assertion f fprintf_term t2 fprintf_term t3
+    else
+      fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]"
+        fprintf_term t1 fprintf_term t2 fprintf_term t3
+  | TLet(v,t1,t2) ->
+      fprintf form "@[<hov 1>(let %s@ = %a@ in %a)@]" v
+	fprintf_term t1 fprintf_term t2
+
+and fprintf_assertion form a =
   match a with
   | LTrue -> fprintf form "true"
   | LFalse -> fprintf form "false"
@@ -1578,31 +1603,31 @@ let output_decls get_id iter_decl output_decl decls =
 
 let output_why3_imports form use_floats float_model =
   fprintf form "use import int.Int@\n@\n";
-  fprintf form "use import bool.Bool@\n@\n";
+  fprintf form "use bool.Bool@\n@\n";
   if !why3_IntMinMax then
-    fprintf form "use import int.MinMax as IntMinMax@\n@\n";
+    fprintf form "use int.MinMax as IntMinMax@\n@\n";
   if !why3_ComputerDivision then
-    fprintf form "use import int.ComputerDivision@\n@\n";
+    fprintf form "use int.ComputerDivision@\n@\n";
   if !why3_reals then
     fprintf form "use import real.RealInfix@\n@\n";
   if !why3_FromInt then
-    fprintf form "use import real.FromInt@\n@\n";
+    fprintf form "use real.FromInt@\n@\n";
   if !why3_Truncate then
-    fprintf form "use import real.Truncate@\n@\n";
+    fprintf form "use real.Truncate@\n@\n";
   if !why3_Square then
-    fprintf form "use import real.Square@\n@\n";
+    fprintf form "use real.Square@\n@\n";
   if !why3_PowerInt then
-    fprintf form "use import real.PowerInt@\n@\n";
+    fprintf form "use real.PowerInt@\n@\n";
   if !why3_PowerReal then
-    fprintf form "use import real.PowerReal@\n@\n";
+    fprintf form "use real.PowerReal@\n@\n";
   if !why3_RealMinMax then
-    fprintf form "use import real.MinMax as RealMinMax@\n@\n";
+    fprintf form "use real.MinMax as RealMinMax@\n@\n";
   if !why3_AbsInt then
-    fprintf form "use import int.Abs as AbsInt@\n@\n";
+    fprintf form "use int.Abs as AbsInt@\n@\n";
   if !why3_AbsReal then
-    fprintf form "use import real.Abs as AbsReal@\n@\n";
+    fprintf form "use real.Abs as AbsReal@\n@\n";
   if !why3_Trigonometry then
-    fprintf form "use import real.Trigonometry@\n@\n";
+    fprintf form "use real.Trigonometry@\n@\n";
   if use_floats then
     begin
       match float_model with
@@ -1618,7 +1643,7 @@ let output_why3_imports form use_floats float_model =
         | Jc_env.FMmath ->
           assert false (* TODO *)
     end;
-  fprintf form "use import jessie3.Jessie_memory_model@\n@\n"
+  fprintf form "use import jessie3theories.Jessie_memory_model@\n@\n"
 
 
 let fprintf_why_decls ?(why3=false) ?(use_floats=false)

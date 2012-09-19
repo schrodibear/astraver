@@ -559,11 +559,14 @@ why3: why/eps_line1_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-why3ide: why/eps_line1_why3.why
-	@echo 'why3ide [...] $<' && why3ide $<
-
 why3ml: eps_line1.mlw
-	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+
+why3ide: eps_line1.mlw
+	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+
+why3replay: eps_line1.mlw
+	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include eps_line1.depend
 
