@@ -9,7 +9,7 @@
  <prover
   id="1"
   name="Coq"
-  version="8.3pl4"/>
+  version="8.4"/>
  <file
   name="../power.mlw"
   verified="true"
@@ -22,10 +22,10 @@
    expanded="true">
    <goal
     name="_L"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/power.c"
+    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/power.c"
     loclnum="10" loccnumb="4" loccnume="33"
     expl="Lemma L, lemma"
-    sum="f452dbf86572fadb2ad20935c925ab8a"
+    sum="54ce782086e3d0de5b23556cddba980b"
     proved="true"
     expanded="true"
     shape="ainfix =apowerc2.0c2c4.0">
@@ -37,7 +37,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="1"
@@ -46,14 +46,14 @@
      edited="power_Jessie_model__L_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.56"/>
+     <result status="valid" time="1.18"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="Jessie_program"
    locfile="power.jessie/power/../power.mlw"
-   loclnum="137" loccnumb="7" loccnume="21"
+   loclnum="208" loccnumb="7" loccnume="21"
    verified="true"
    expanded="false">
   </theory>

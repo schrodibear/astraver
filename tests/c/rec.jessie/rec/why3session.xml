@@ -26,30 +26,30 @@
    expanded="true">
    <goal
     name="sum_rec"
-    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
     loclnum="34" loccnumb="4" loccnume="89"
     expl="Lemma sum_rec, lemma"
-    sum="a52c4e5b5053f1ff5d952020097a17e5"
+    sum="0868d3b061a9614f3b1b3b1793db6ee2"
     proved="true"
     expanded="true"
     shape="ainfix =asum_uptoainfix +V0c1ainfix +ainfix +asum_uptoV0V0c1Iainfix &gt;=V0c0F">
     <label
      name="expl:Lemma sum_rec, lemma"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.16"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.79"/>
+     <result status="valid" time="0.35"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
@@ -57,22 +57,22 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.13"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="Jessie_program"
    locfile="rec.jessie/rec/../rec.mlw"
-   loclnum="165" loccnumb="7" loccnume="21"
+   loclnum="235" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter f91_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="normal postcondition"
-    sum="ee87f15a8ecf0597326440d02ccbd322"
+    sum="7ffe254720a98ca256e4798474e6dd2e"
     proved="true"
     expanded="true"
     shape="t">
@@ -81,7 +81,7 @@
     <label
      name="expl:Function f91, default behavior"/>
     <proof
-     prover="2"
+     prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -89,12 +89,12 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="0"
+     prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="1"
@@ -107,10 +107,10 @@
    </goal>
    <goal
     name="WP_parameter f91_ensures_greater_than_100"
-    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_ensures_greater_than_100"
-    sum="7804e2391f847af3ce9ee407091801ec"
+    sum="4d1efa0648c3a6b497b4435f3f49dd07"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V0c10Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix &lt;=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix &gt;=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10ainfix -ainteger_of_int32V0c10Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix &gt;=ainteger_of_int32V0c101F">
@@ -119,20 +119,20 @@
     <label
      name="expl:Function f91, Behavior `greater_than_100&apos;"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
@@ -145,10 +145,10 @@
    </goal>
    <goal
     name="WP_parameter f91_ensures_less_than_101"
-    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_ensures_less_than_101"
-    sum="861302b45ba8e5d99fecdeb7818406b9"
+    sum="5fdbcd19f96cb478ab97ee935c47459e"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7c91Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix &lt;=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix &gt;=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10c91Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix &lt;=ainteger_of_int32V0c100F">
@@ -156,6 +156,14 @@
      name="expl:parameter f91_ensures_less_than_101"/>
     <label
      name="expl:Function f91, Behavior `less_than_101&apos;"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
     <proof
      prover="2"
      timelimit="5"
@@ -165,28 +173,20 @@
      <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter f91_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_safety"
-    sum="404547e1c16e0e7c844e3ce0a0ce59c9"
+    sum="185398f769ef3701299671526d453c33"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V3ainfix -c101ainteger_of_int32V0Iainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix &lt;=ainfix +ainteger_of_int32V0c11c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix &lt;=ainfix -ainteger_of_int32V0c10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
@@ -195,20 +195,20 @@
     <label
      name="expl:Function f91, Safety"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="1"
@@ -216,15 +216,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter main_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
     loclnum="51" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="c502b358485b510a1fe4def1033c698d"
+    sum="96d9bb5afadb153e8881b910d89d63c5"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V3c36Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1asum_uptoainteger_of_int32V0FIainfix =ainteger_of_int32V0c8F">
@@ -233,43 +233,13 @@
     <label
      name="expl:Function main, default behavior"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.15"/>
+     <result status="valid" time="0.16"/>
     </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.14"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter main_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
-    loclnum="51" loccnumb="5" loccnume="9"
-    expl="precondition"
-    sum="a8e1cda53fb4154cd252faa77cd70759"
-    proved="true"
-    expanded="true"
-    shape="ainfix &lt;=ainteger_of_int32V0c1000Aainfix &gt;=ainteger_of_int32V0c0Iainfix =ainteger_of_int32V0c8F">
-    <label
-     name="expl:parameter main_safety"/>
-    <label
-     name="expl:Function main, Safety"/>
     <proof
      prover="2"
      timelimit="5"
@@ -279,12 +249,42 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.17"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter main_safety"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
+    loclnum="51" loccnumb="5" loccnume="9"
+    expl="precondition"
+    sum="91d82356677e1ccbab586a120885a7ab"
+    proved="true"
+    expanded="true"
+    shape="ainfix &lt;=ainteger_of_int32V0c1000Aainfix &gt;=ainteger_of_int32V0c0Iainfix =ainteger_of_int32V0c8F">
+    <label
+     name="expl:parameter main_safety"/>
+    <label
+     name="expl:Function main, Safety"/>
+    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="1"
@@ -297,10 +297,10 @@
    </goal>
    <goal
     name="WP_parameter sum_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
     loclnum="43" loccnumb="5" loccnume="8"
     expl="parameter sum_ensures_default"
-    sum="1832c358e7e6601b470fb656b8507aac"
+    sum="0129cafa50e0eb0f1f67978751168e50"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0ainfix =ainteger_of_int32V3asum_uptoainteger_of_int32V0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V9asum_uptoainteger_of_int32V0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix +ainteger_of_int32V0ainteger_of_int32V6FIainfix =V6V5FIainfix =ainteger_of_int32V5asum_uptoainteger_of_int32V4FIainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c1FIainfix &lt;=ainteger_of_int32V0c1000Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -314,7 +314,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.59"/>
+     <result status="valid" time="0.58"/>
     </proof>
     <proof
      prover="1"
@@ -322,15 +322,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter sum_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
     loclnum="43" loccnumb="5" loccnume="8"
     expl="parameter sum_safety"
-    sum="8596e6424be45e7dbf01957a7d51151b"
+    sum="ac2fc7098049ca7c1971cd44ee5bc6a9"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=ainfix +ainteger_of_int32V0ainteger_of_int32V3c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V0ainteger_of_int32V3Iainfix =V3V2FIainfix =ainteger_of_int32V2asum_uptoainteger_of_int32V1FAainfix &lt;=ainteger_of_int32V1c1000Aainfix &gt;=ainteger_of_int32V1c0Aazwf_zeroainteger_of_int32V1ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix -ainteger_of_int32V0c1FAainfix &lt;=ainfix -ainteger_of_int32V0c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V0c1Iainfix =ainteger_of_int32V0c0NIainfix &lt;=ainteger_of_int32V0c1000Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -344,7 +344,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
   </theory>

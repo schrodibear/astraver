@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
-<<<<<<< .working
- name="tests/java/Literals/why3session.xml">
-=======
  name="Literals/why3session.xml" shape_version="2">
->>>>>>> .merge-right.r4939
  <prover
   id="0"
   name="Alt-Ergo"
@@ -70,11 +66,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-<<<<<<< .working
-     <result status="valid" time="0.09"/>
-=======
      <result status="valid" time="0.04"/>
->>>>>>> .merge-right.r4939
     </proof>
    </goal>
    <goal
@@ -96,11 +88,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-<<<<<<< .working
-     <result status="valid" time="0.03"/>
-=======
      <result status="valid" time="0.01"/>
->>>>>>> .merge-right.r4939
     </proof>
     <proof
      prover="0"
@@ -108,11 +96,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-<<<<<<< .working
-     <result status="valid" time="0.04"/>
-=======
      <result status="valid" time="0.02"/>
->>>>>>> .merge-right.r4939
     </proof>
     <proof
      prover="1"
@@ -150,11 +134,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-<<<<<<< .working
-     <result status="valid" time="0.04"/>
-=======
      <result status="valid" time="0.03"/>
->>>>>>> .merge-right.r4939
     </proof>
     <proof
      prover="1"
@@ -184,11 +164,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-<<<<<<< .working
-     <result status="valid" time="0.03"/>
-=======
      <result status="valid" time="0.01"/>
->>>>>>> .merge-right.r4939
     </proof>
     <proof
      prover="0"

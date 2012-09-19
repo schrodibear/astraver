@@ -28,15 +28,15 @@
   <theory
    name="Jessie_program"
    locfile="tree_max.jessie/tree_max/../tree_max.mlw"
-   loclnum="347" loccnumb="7" loccnume="21"
+   loclnum="418" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter tree_max_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
     loclnum="62" loccnumb="4" loccnume="12"
     expl="parameter tree_max_ensures_default"
-    sum="105d4c451836ecbe4058552c96255134"
+    sum="ed58c8e384f8eb524feed6fa59e080b3"
     proved="true"
     expanded="true"
     shape="iainfix =V7aTrueiainfix =V14aTrueainfix &gt;=ainteger_of_int32V20ainteger_of_int32V21IamemV21V0V4V3V2FAamemV20V0V4V3V2Iainfix =V20V19FIainfix =V19V18FIainfix =ainteger_of_int32V18amaxainteger_of_int32V12ainteger_of_int32V17FIainfix =V17V16FIainfix &gt;=ainteger_of_int32V16ainteger_of_int32V22IamemV22V15V4V3V2FAamemV16V15V4V3V2FLaselectV4V0ainfix &gt;=ainteger_of_int32V23ainteger_of_int32V24IamemV24V0V4V3V2FAamemV23V0V4V3V2Iainfix =V23V12FIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFLaselectV4V0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V25IamemV25V8V4V3V2FAamemV9V8V4V3V2FLaselectV3V0iainfix =V27aTrueainfix &gt;=ainteger_of_int32V33ainteger_of_int32V34IamemV34V0V4V3V2FAamemV33V0V4V3V2Iainfix =V33V32FIainfix =V32V31FIainfix =ainteger_of_int32V31amaxainteger_of_int32V5ainteger_of_int32V30FIainfix =V30V29FIainfix &gt;=ainteger_of_int32V29ainteger_of_int32V35IamemV35V28V4V3V2FAamemV29V28V4V3V2FLaselectV4V0ainfix &gt;=ainteger_of_int32V36ainteger_of_int32V37IamemV37V0V4V3V2FAamemV36V0V4V3V2Iainfix =V36V5FIiainfix =V27aTrueainfix =V26anullNainfix =V26anullFLaselectV4V0Iiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -50,10 +50,10 @@
      expanded="true">
      <goal
       name="WP_parameter tree_max_ensures_default.1"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="normal postcondition"
-      sum="78b5d387d322a2ceb636cd67a36e3493"
+      sum="cee5293d63781c82d02f3a69ecd023d6"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32V20ainteger_of_int32V21IamemV21V0V4V3V2FAamemV20V0V4V3V2Iainfix =V20V19FIainfix =V19V18FIainfix =ainteger_of_int32V18amaxainteger_of_int32V12ainteger_of_int32V17FIainfix =V17V16FIainfix &gt;=ainteger_of_int32V16ainteger_of_int32V22IamemV22V15V4V3V2FAamemV16V15V4V3V2FLaselectV4V0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFLaselectV4V0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V23IamemV23V8V4V3V2FAamemV9V8V4V3V2FLaselectV3V0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -75,15 +75,15 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.16"/>
+       <result status="valid" time="0.18"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.2"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="normal postcondition"
-      sum="4322a65aefd6f04ddce9c6cc36dd9232"
+      sum="cc5be68ebb3d6db376acd64b3b6ff2a5"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32V15ainteger_of_int32V16IamemV16V0V4V3V2FAamemV15V0V4V3V2Iainfix =V15V12FIainfix =V14aTrueNIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFLaselectV4V0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V17IamemV17V8V4V3V2FAamemV9V8V4V3V2FLaselectV3V0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -91,6 +91,14 @@
        name="expl:parameter tree_max_ensures_default"/>
       <label
        name="expl:Function tree_max, default behavior"/>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.57"/>
+      </proof>
       <proof
        prover="2"
        timelimit="3"
@@ -100,28 +108,20 @@
        <result status="valid" time="0.07"/>
       </proof>
       <proof
-       prover="0"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="1.45"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="3"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.12"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.3"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="normal postcondition"
-      sum="57be5d5d0460981b4a0817dacee95f8a"
+      sum="514e9249480500510a6ac5f46fac42e2"
       proved="true"
       expanded="true"
       shape="ainfix &gt;=ainteger_of_int32V15ainteger_of_int32V16IamemV16V0V4V3V2FAamemV15V0V4V3V2Iainfix =V15V14FIainfix =V14V13FIainfix =ainteger_of_int32V13amaxainteger_of_int32V5ainteger_of_int32V12FIainfix =V12V11FIainfix &gt;=ainteger_of_int32V11ainteger_of_int32V17IamemV17V10V4V3V2FAamemV11V10V4V3V2FLaselectV4V0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -130,20 +130,20 @@
       <label
        name="expl:Function tree_max, default behavior"/>
       <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.16"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="3"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.62"/>
+       <result status="valid" time="0.60"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="1"
@@ -151,7 +151,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.29"/>
+       <result status="valid" time="0.12"/>
       </proof>
       <transf
        name="split_goal"
@@ -159,10 +159,10 @@
        expanded="true">
        <goal
         name="WP_parameter tree_max_ensures_default.3.1"
-        locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
         expl="parameter tree_max_ensures_default"
-        sum="b2f0f1ba3757233d46ed5724e64d5c75"
+        sum="e2ad65aa86ae25af9380cb0080e65f8f"
         proved="true"
         expanded="true"
         shape="amemV15V0V4V3V2Iainfix =V15V14FIainfix =V14V13FIainfix =ainteger_of_int32V13amaxainteger_of_int32V5ainteger_of_int32V12FIainfix =V12V11FIainfix &gt;=ainteger_of_int32V11ainteger_of_int32V16IamemV16V10V4V3V2FAamemV11V10V4V3V2FLaselectV4V0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -170,14 +170,6 @@
          name="expl:parameter tree_max_ensures_default"/>
         <label
          name="expl:Function tree_max, default behavior"/>
-        <proof
-         prover="2"
-         timelimit="3"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
         <proof
          prover="0"
          timelimit="100"
@@ -187,20 +179,28 @@
          <result status="valid" time="0.08"/>
         </proof>
         <proof
+         prover="2"
+         timelimit="3"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
          prover="1"
          timelimit="3"
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.07"/>
+         <result status="valid" time="0.08"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter tree_max_ensures_default.3.2"
-        locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
         expl="parameter tree_max_ensures_default"
-        sum="03c84da85b98088f3d1d2a774d2722d0"
+        sum="ebb0316410aec6f24fb39b875f37b204"
         proved="true"
         expanded="true"
         shape="ainfix &gt;=ainteger_of_int32V15ainteger_of_int32V16IamemV16V0V4V3V2FIainfix =V15V14FIainfix =V14V13FIainfix =ainteger_of_int32V13amaxainteger_of_int32V5ainteger_of_int32V12FIainfix =V12V11FIainfix &gt;=ainteger_of_int32V11ainteger_of_int32V17IamemV17V10V4V3V2FAamemV11V10V4V3V2FLaselectV4V0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -222,17 +222,17 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.15"/>
+         <result status="valid" time="0.06"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.4"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="normal postcondition"
-      sum="ad50c894948aa8d759d90299856606ff"
+      sum="5a256070a496d689278fdb4d2f3e2834"
       proved="true"
       expanded="true"
       shape="ainfix &gt;=ainteger_of_int32V10ainteger_of_int32V11IamemV11V0V4V3V2FAamemV10V0V4V3V2Iainfix =V10V5FIainfix =V9aTrueNIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -254,10 +254,10 @@
        expanded="true">
        <goal
         name="WP_parameter tree_max_ensures_default.4.1"
-        locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
         expl="parameter tree_max_ensures_default"
-        sum="dbf2e7100c9488eced6ccd4314c5e182"
+        sum="eaced902fe90b90839a5d4ce616d61ec"
         proved="true"
         expanded="false"
         shape="amemV10V0V4V3V2Iainfix =V10V5FIainfix =V9aTrueNIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -271,15 +271,15 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.03"/>
+         <result status="valid" time="0.02"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter tree_max_ensures_default.4.2"
-        locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
         expl="parameter tree_max_ensures_default"
-        sum="8776942f64224e3e3797e2628deb19f4"
+        sum="cd03f4d22434188ffdbe430853fed0b6"
         proved="true"
         expanded="false"
         shape="ainfix &gt;=ainteger_of_int32V10ainteger_of_int32V11IamemV11V0V4V3V2FIainfix =V10V5FIainfix =V9aTrueNIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFLaselectV4V0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -302,10 +302,10 @@
    </goal>
    <goal
     name="WP_parameter tree_max_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
     loclnum="62" loccnumb="4" loccnume="12"
     expl="parameter tree_max_safety"
-    sum="42f40535558facc2bf7c6b6179b76658"
+    sum="395fb3bd81b9e532384c63239062b1b5"
     proved="true"
     expanded="true"
     shape="iainfix =V7aTrueavalid_treeV15V1V4V3Aainfix =V15anullNLaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFAainfix =anullanullOainfix =V13anullOasame_blockV13anullLaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V16IamemV16V8V4V3V2FAamemV9V8V4V3V2FAavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0avalid_treeV19V1V4V3Aainfix =V19anullNLaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V18aTrueIiainfix =V18aTrueainfix =V17anullNainfix =V17anullFAainfix =anullanullOainfix =V17anullOasame_blockV17anullLaselectV4V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iiainfix =V7aTrueainfix =V6anullNainfix =V6anullFAainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Aainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FAainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -319,10 +319,10 @@
      expanded="true">
      <goal
       name="WP_parameter tree_max_safety.1"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
-      sum="777edcfdd34b8e4ade315808ee20c088"
+      sum="da55ca84b27c4a446a64b095cf7b2b0e"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -331,6 +331,14 @@
       <label
        name="expl:Function tree_max, Safety"/>
       <proof
+       prover="0"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
        prover="2"
        timelimit="3"
        memlimit="0"
@@ -338,6 +346,178 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
+      <proof
+       prover="1"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter tree_max_safety.2"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      loclnum="62" loccnumb="4" loccnume="12"
+      expl="precondition"
+      sum="0c1222a282d8e022935cfd051b6119d3"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      <label
+       name="expl:parameter tree_max_safety"/>
+      <label
+       name="expl:Function tree_max, Safety"/>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter tree_max_safety.3"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      loclnum="62" loccnumb="4" loccnume="12"
+      expl="precondition"
+      sum="83879899f2bb6ef49c7bd2e607824bb4"
+      proved="true"
+      expanded="false"
+      shape="ainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      <label
+       name="expl:parameter tree_max_safety"/>
+      <label
+       name="expl:Function tree_max, Safety"/>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter tree_max_safety.4"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      loclnum="62" loccnumb="4" loccnume="12"
+      expl="precondition"
+      sum="2693d572cdf730a7321f3dda272d5bb4"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      <label
+       name="expl:parameter tree_max_safety"/>
+      <label
+       name="expl:Function tree_max, Safety"/>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter tree_max_safety.5"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      loclnum="62" loccnumb="4" loccnume="12"
+      expl="precondition"
+      sum="2f47f010e2d25c0d3308bcee33b99702"
+      proved="true"
+      expanded="false"
+      shape="avalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      <label
+       name="expl:parameter tree_max_safety"/>
+      <label
+       name="expl:Function tree_max, Safety"/>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter tree_max_safety.6"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      loclnum="62" loccnumb="4" loccnume="12"
+      expl="precondition"
+      sum="86433d91f653c3ae79bb8dfce78d008a"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V13IamemV13V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      <label
+       name="expl:parameter tree_max_safety"/>
+      <label
+       name="expl:Function tree_max, Safety"/>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter tree_max_safety.7"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      loclnum="62" loccnumb="4" loccnume="12"
+      expl="precondition"
+      sum="01b0021eb73566c1206ae8d9eb960f67"
+      proved="true"
+      expanded="false"
+      shape="ainfix =anullanullOainfix =V13anullOasame_blockV13anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V14IamemV14V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      <label
+       name="expl:parameter tree_max_safety"/>
+      <label
+       name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
        timelimit="3"
@@ -347,187 +527,7 @@
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="1"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter tree_max_safety.2"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
-      loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="46eb1a18d68f3b1f39e710c5cbac42f3"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
-      <label
-       name="expl:parameter tree_max_safety"/>
-      <label
-       name="expl:Function tree_max, Safety"/>
-      <proof
        prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter tree_max_safety.3"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
-      loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="8ffe1e56a943f4dbc06996bf1aa16d77"
-      proved="true"
-      expanded="false"
-      shape="ainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
-      <label
-       name="expl:parameter tree_max_safety"/>
-      <label
-       name="expl:Function tree_max, Safety"/>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter tree_max_safety.4"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
-      loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="3c36939b336d591946f39b61aae00d11"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
-      <label
-       name="expl:parameter tree_max_safety"/>
-      <label
-       name="expl:Function tree_max, Safety"/>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter tree_max_safety.5"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
-      loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="3b293f7f374855ed7e03acd563473ac9"
-      proved="true"
-      expanded="false"
-      shape="avalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
-      <label
-       name="expl:parameter tree_max_safety"/>
-      <label
-       name="expl:Function tree_max, Safety"/>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter tree_max_safety.6"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
-      loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="9a618a7f8f19329e4031b7d98bc9a5a0"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V13IamemV13V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
-      <label
-       name="expl:parameter tree_max_safety"/>
-      <label
-       name="expl:Function tree_max, Safety"/>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter tree_max_safety.7"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
-      loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="c2da1f4aafe92b04c8365d5b976b9deb"
-      proved="true"
-      expanded="false"
-      shape="ainfix =anullanullOainfix =V13anullOasame_blockV13anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V14IamemV14V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
-      <label
-       name="expl:parameter tree_max_safety"/>
-      <label
-       name="expl:Function tree_max, Safety"/>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="0"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -537,10 +537,10 @@
      </goal>
      <goal
       name="WP_parameter tree_max_safety.8"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
-      sum="e0adaeb314124ef84ad169ad3a894b93"
+      sum="38527e860ef566a848d4d8de9309e3b5"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFIainfix =anullanullOainfix =V13anullOasame_blockV13anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V15IamemV15V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -549,14 +549,6 @@
       <label
        name="expl:Function tree_max, Safety"/>
       <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="3"
        memlimit="0"
@@ -564,13 +556,21 @@
        archived="false">
        <result status="valid" time="0.03"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.9"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
-      sum="f0da42753f365f81c593da112c8e3c24"
+      sum="22952c02a9c94d80965740ca5818806f"
       proved="true"
       expanded="false"
       shape="avalid_treeV15V1V4V3Aainfix =V15anullNLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFIainfix =anullanullOainfix =V13anullOasame_blockV13anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V16IamemV16V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -579,6 +579,14 @@
       <label
        name="expl:Function tree_max, Safety"/>
       <proof
+       prover="0"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.50"/>
+      </proof>
+      <proof
        prover="2"
        timelimit="3"
        memlimit="0"
@@ -587,28 +595,20 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="0"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.54"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="3"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.08"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.10"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
-      sum="ef110548ada24fbfa9831bad4cc7887a"
+      sum="1b3bcb77cc40bca7afed9e78e53bbcb8"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
@@ -617,14 +617,6 @@
       <label
        name="expl:Function tree_max, Safety"/>
       <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.12"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="3"
        memlimit="0"
@@ -632,50 +624,6 @@
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
-     </goal>
-     <goal
-      name="WP_parameter tree_max_safety.11"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
-      loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="e268c91983805425ce050b4c951b9252"
-      proved="true"
-      expanded="false"
-      shape="ainfix =anullanullOainfix =V8anullOasame_blockV8anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
-      <label
-       name="expl:parameter tree_max_safety"/>
-      <label
-       name="expl:Function tree_max, Safety"/>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter tree_max_safety.12"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
-      loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="c2ede17a6a17dbbc9bafd6fe65aa3233"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =anullanullOainfix =V8anullOasame_blockV8anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
-      <label
-       name="expl:parameter tree_max_safety"/>
-      <label
-       name="expl:Function tree_max, Safety"/>
       <proof
        prover="2"
        timelimit="3"
@@ -684,36 +632,58 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
+     </goal>
+     <goal
+      name="WP_parameter tree_max_safety.11"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      loclnum="62" loccnumb="4" loccnume="12"
+      expl="precondition"
+      sum="9e5a8e16c392a01d53d71542c1d35800"
+      proved="true"
+      expanded="false"
+      shape="ainfix =anullanullOainfix =V8anullOasame_blockV8anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      <label
+       name="expl:parameter tree_max_safety"/>
+      <label
+       name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
        timelimit="3"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.01"/>
       </proof>
       <proof
-       prover="1"
+       prover="2"
        timelimit="3"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.02"/>
       </proof>
      </goal>
      <goal
-      name="WP_parameter tree_max_safety.13"
-      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
+      name="WP_parameter tree_max_safety.12"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
-      sum="7db1ed1de86b21dfbac37964145f28b8"
+      sum="ac086dc27cfe48680f3eceeb03850cd7"
       proved="true"
       expanded="false"
-      shape="avalid_treeV10V1V4V3Aainfix =V10anullNLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =anullanullOainfix =V8anullOasame_blockV8anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      shape="ainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =anullanullOainfix =V8anullOasame_blockV8anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
       <label
        name="expl:parameter tree_max_safety"/>
       <label
        name="expl:Function tree_max, Safety"/>
+      <proof
+       prover="0"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
       <proof
        prover="2"
        timelimit="3"
@@ -723,12 +693,42 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
+       prover="1"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter tree_max_safety.13"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      loclnum="62" loccnumb="4" loccnume="12"
+      expl="precondition"
+      sum="f415abae0247308a553e7169541aaaca"
+      proved="true"
+      expanded="false"
+      shape="avalid_treeV10V1V4V3Aainfix =V10anullNLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =anullanullOainfix =V8anullOasame_blockV8anullLaselectV4V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullLaselectV3V0Iainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix &lt;=c0aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNF">
+      <label
+       name="expl:parameter tree_max_safety"/>
+      <label
+       name="expl:Function tree_max, Safety"/>
+      <proof
        prover="0"
        timelimit="3"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="1"
@@ -736,7 +736,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.08"/>
       </proof>
      </goal>
     </transf>

@@ -28,15 +28,15 @@
   <theory
    name="Jessie_program"
    locfile="minmax.jessie/minmax/../minmax.mlw"
-   loclnum="160" loccnumb="7" loccnume="21"
+   loclnum="231" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter dmax_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="parameter dmax_ensures_default"
-    sum="cd38a7d53dd2284fe3e2a9d5cbe63a0b"
+    sum="fbe6a3a6e26ef8a07c6aaefd76d1771d"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
@@ -50,7 +50,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -58,15 +58,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter dmax_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="normal postcondition"
-    sum="08963ecb86bd768253a2f8b25d8ead6d"
+    sum="379d36be9bc4d9a016c40d3d940f01d1"
     proved="true"
     expanded="true"
     shape="t">
@@ -75,20 +75,20 @@
     <label
      name="expl:Function dmax, Safety"/>
     <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
      prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="1"
@@ -101,10 +101,10 @@
    </goal>
    <goal
     name="WP_parameter dmin_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="parameter dmin_ensures_default"
-    sum="8ec0bce4debb0dac088d17361e31faa3"
+    sum="629fcdb6495da6a82d7fcf2eafd0027b"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
@@ -118,7 +118,45 @@
      memlimit="0"
      obsolete="false"
      archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter dmin_safety"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
+    loclnum="64" loccnumb="7" loccnume="11"
+    expl="normal postcondition"
+    sum="5eacc73c6fb1867b5c0b9b4fac1178ca"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:parameter dmin_safety"/>
+    <label
+     name="expl:Function dmin, Safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -130,49 +168,11 @@
     </proof>
    </goal>
    <goal
-    name="WP_parameter dmin_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
-    loclnum="64" loccnumb="7" loccnume="11"
-    expl="normal postcondition"
-    sum="9ccf79172ab42f981b31ef65c120efc1"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter dmin_safety"/>
-    <label
-     name="expl:Function dmin, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-   </goal>
-   <goal
     name="WP_parameter fmax_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="parameter fmax_ensures_default"
-    sum="64ce6ec11cdab1f144bc66688d02083c"
+    sum="352a1e6dda794ad73b3d26b1a4bc8b64"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
@@ -194,15 +194,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmax_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="normal postcondition"
-    sum="75c5eee1a59a7450679b8590b92c4be1"
+    sum="aefae13ad2b3d2c938ca1ab9b281309a"
     proved="true"
     expanded="true"
     shape="t">
@@ -211,7 +211,7 @@
     <label
      name="expl:Function fmax, Safety"/>
     <proof
-     prover="2"
+     prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -219,12 +219,12 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="0"
+     prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -237,10 +237,10 @@
    </goal>
    <goal
     name="WP_parameter fmin_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="parameter fmin_ensures_default"
-    sum="c7cc3e03995abf0d81bb94eb12e1bfb6"
+    sum="00b8a3be65742c5cb4d0c6b254b43120"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
@@ -254,7 +254,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -262,15 +262,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmin_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="normal postcondition"
-    sum="3ebc26de219d4c55c9f0c6fb14b31987"
+    sum="dba785550e93bf3dec4b4b7277e88742"
     proved="true"
     expanded="true"
     shape="t">
@@ -279,20 +279,20 @@
     <label
      name="expl:Function fmin, Safety"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -305,10 +305,10 @@
    </goal>
    <goal
     name="WP_parameter max_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="parameter max_ensures_default"
-    sum="c71bb68a70b5328a07e82062e97e5f0c"
+    sum="6adde2bedce323cb90275c474453b2a4"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FF">
@@ -322,44 +322,6 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter max_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
-    loclnum="34" loccnumb="4" loccnume="7"
-    expl="normal postcondition"
-    sum="d6a2eba61de45b738a80e70760b03adf"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter max_safety"/>
-    <label
-     name="expl:Function max, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
@@ -368,15 +330,53 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.06"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter max_safety"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
+    loclnum="34" loccnumb="4" loccnume="7"
+    expl="normal postcondition"
+    sum="de8cf3cd61c9975fe63e0e767d77e3d0"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:parameter max_safety"/>
+    <label
+     name="expl:Function max, Safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter min_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="parameter min_ensures_default"
-    sum="10feec2ffc3eacd6a5cbb9ac702e7202"
+    sum="3eba72a471bd714ba4704639e1462070"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FF">
@@ -390,7 +390,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
@@ -403,10 +403,10 @@
    </goal>
    <goal
     name="WP_parameter min_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="normal postcondition"
-    sum="38d31cedfda9a4ad028ecf820d7479f9"
+    sum="3cfc6086c610ee0064399693223d63e7"
     proved="true"
     expanded="true"
     shape="t">
@@ -415,7 +415,7 @@
     <label
      name="expl:Function min, Safety"/>
     <proof
-     prover="2"
+     prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -423,12 +423,12 @@
      <result status="valid" time="0.01"/>
     </proof>
     <proof
-     prover="0"
+     prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -436,7 +436,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
   </theory>

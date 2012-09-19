@@ -28,15 +28,15 @@
   <theory
    name="Jessie_program"
    locfile="swap.jessie/swap/../swap.mlw"
-   loclnum="153" loccnumb="7" loccnume="21"
+   loclnum="224" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter swap_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/swap.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="76c08a5c744ac9cb864d44617e9cef4e"
+    sum="e08c8ba4f01abb5ddc84319d41b6551d"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FF">
@@ -45,6 +45,14 @@
     <label
      name="expl:Function swap, default behavior"/>
     <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
      prover="2"
      timelimit="5"
      memlimit="0"
@@ -53,28 +61,20 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/swap.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="ed17c30c72f5b38202e083f44afdca84"
+    sum="e48abe753cb45ecc46c8c0d7c8749bb9"
     proved="true"
     expanded="true"
     shape="t">
@@ -83,20 +83,20 @@
     <label
      name="expl:Function swap, Safety"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -104,7 +104,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
   </theory>

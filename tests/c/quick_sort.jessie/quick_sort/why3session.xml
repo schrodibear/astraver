@@ -36,15 +36,15 @@
   <theory
    name="Jessie_program"
    locfile="quick_sort.jessie/quick_sort/../quick_sort.mlw"
-   loclnum="213" loccnumb="7" loccnume="21"
+   loclnum="260" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
    <goal
     name="WP_parameter quick_rec_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="parameter quick_rec_ensures_default"
-    sum="96bb3ee9470c45b753f64ed93e05b29f"
+    sum="30e0fcb1f0a0d312a3217030e7e0bd90"
     proved="true"
     expanded="true"
     shape="iainfix &gt;=V1V2anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2iainfix &lt;=V8V2iainfix &lt;aselectV10ashiftV0V8V5anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV12ashiftV0V14V5Iainfix &lt;=V14V11Aainfix &lt;V1V14FAainfix &gt;=aselectV12ashiftV0V15V5Iainfix &lt;V15V13Aainfix &lt;V11V15FAa_PermutV0V1V2V12V4Aainfix &lt;=V13ainfix +V2c1Aainfix &lt;V11V13Aainfix &lt;=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FAa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1Fanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V17V5Iainfix &lt;=V17V9Aainfix &lt;V1V17FAainfix &gt;=aselectV10ashiftV0V18V5Iainfix &lt;V18V16Aainfix &lt;V9V18FAa_PermutV0V1V2V10V4Aainfix &lt;=V16ainfix +V2c1Aainfix &lt;V9V16Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V16ainfix +V8c1Fanot_assignsV3V4V21apset_rangeapset_singletonV0V1V2Ianot_assignsV3V20V21apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V21Aa_PermutV0ainfix +V9c1V2V21V20FIanot_assignsV3V19V20apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V20Aa_PermutV0V1ainfix -V9c1V20V19FAa_PermutV0V1V2V19V10Ianot_assignsV3V10V19apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V19V10FAainfix &lt;=V9V2Aainfix &lt;=V1V9Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V22V5Iainfix &lt;=V22V9Aainfix &lt;V1V22FAainfix &gt;=aselectV10ashiftV0V23V5Iainfix &lt;V23V8Aainfix &lt;V9V23FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FAanot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV4ashiftV0V24V5Iainfix &lt;=V24V6Aainfix &lt;V1V24FAainfix &gt;=aselectV4ashiftV0V25V5Iainfix &lt;V25V7Aainfix &lt;V6V25FAa_PermutV0V1V2V4V4Aainfix &lt;=V7ainfix +V2c1Aainfix &lt;V6V7Aainfix &lt;=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -58,10 +58,10 @@
      expanded="true">
      <goal
       name="WP_parameter quick_rec_ensures_default.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="b80ee0716838b34d6b680eb651621dad"
+      sum="effbb63474ee9629fe3f20a817309183"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -70,20 +70,20 @@
       <label
        name="expl:Function quick_rec, default behavior"/>
       <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="1"
@@ -96,10 +96,10 @@
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant init"
-      sum="77e177c051cf03586881922c3f43d8b0"
+      sum="564eda4b02cc94b9bbe38f070c8e2f15"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV4ashiftV0V8V5Iainfix &lt;=V8V6Aainfix &lt;V1V8FAainfix &gt;=aselectV4ashiftV0V9V5Iainfix &lt;V9V7Aainfix &lt;V6V9FAa_PermutV0V1V2V4V4Aainfix &lt;=V7ainfix +V2c1Aainfix &lt;V6V7Aainfix &lt;=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -107,6 +107,14 @@
        name="expl:parameter quick_rec_ensures_default"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
       <proof
        prover="3"
        timelimit="5"
@@ -116,28 +124,20 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.08"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="6f70208b4cdb707259194fb5f1929172"
+      sum="1de63c799963ec3a3de95ff826b44d1b"
       proved="true"
       expanded="false"
       shape="a_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V13V5Iainfix &lt;=V13V9Aainfix &lt;V1V13FAainfix &gt;=aselectV10ashiftV0V14V5Iainfix &lt;V14V8Aainfix &lt;V9V14FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -145,6 +145,14 @@
        name="expl:parameter quick_rec_ensures_default"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
       <proof
        prover="3"
        timelimit="5"
@@ -154,28 +162,20 @@
        <result status="valid" time="0.08"/>
       </proof>
       <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.4"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant preservation"
-      sum="52d7edac46190e0c8d77d6a01d305cee"
+      sum="42520117adeb29cac2be94f359a76f5d"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV12ashiftV0V14V5Iainfix &lt;=V14V11Aainfix &lt;V1V14FAainfix &gt;=aselectV12ashiftV0V15V5Iainfix &lt;V15V13Aainfix &lt;V11V15FAa_PermutV0V1V2V12V4Aainfix &lt;=V13ainfix +V2c1Aainfix &lt;V11V13Aainfix &lt;=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V16V5Iainfix &lt;=V16V9Aainfix &lt;V1V16FAainfix &gt;=aselectV10ashiftV0V17V5Iainfix &lt;V17V8Aainfix &lt;V9V17FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -189,15 +189,15 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.02"/>
+       <result status="valid" time="1.39"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.5"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant preservation"
-      sum="b46c1f9876f336827b7359793c1efb3a"
+      sum="e27f2ae4d9253e00156a047229ec7f95"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V12V5Iainfix &lt;=V12V9Aainfix &lt;V1V12FAainfix &gt;=aselectV10ashiftV0V13V5Iainfix &lt;V13V11Aainfix &lt;V9V13FAa_PermutV0V1V2V10V4Aainfix &lt;=V11ainfix +V2c1Aainfix &lt;V9V11Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V11ainfix +V8c1FIainfix &lt;aselectV10ashiftV0V8V5NIainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -205,14 +205,6 @@
        name="expl:parameter quick_rec_ensures_default"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.36"/>
-      </proof>
       <proof
        prover="0"
        timelimit="5"
@@ -222,20 +214,28 @@
        <result status="valid" time="0.03"/>
       </proof>
       <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.42"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.07"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.6"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="2452001c8e2b26d22bb1e4e350a2555c"
+      sum="87a93a8e7621b23f210e2fd2979e21fd"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V11V5Iainfix &lt;=V11V9Aainfix &lt;V1V11FAainfix &gt;=aselectV10ashiftV0V12V5Iainfix &lt;V12V8Aainfix &lt;V9V12FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -244,20 +244,20 @@
       <label
        name="expl:Function quick_rec, default behavior"/>
       <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="1"
@@ -270,10 +270,10 @@
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.7"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="d4aa55c649f8c0d13a2ecbda9397d484"
+      sum="42dd810707302bc0206c155eeaf322ec"
       proved="true"
       expanded="false"
       shape="a_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V12V5Iainfix &lt;=V12V9Aainfix &lt;V1V12FAainfix &gt;=aselectV10ashiftV0V13V5Iainfix &lt;V13V8Aainfix &lt;V9V13FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -281,6 +281,14 @@
        name="expl:parameter quick_rec_ensures_default"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
       <proof
        prover="3"
        timelimit="5"
@@ -290,28 +298,20 @@
        <result status="valid" time="0.07"/>
       </proof>
       <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.8"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="851e705c541bb31d0226dbf64512cc94"
+      sum="6fd0048f0f56d51939f372af1a9279f6"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V13apset_rangeapset_singletonV0V1V2Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -325,17 +325,17 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.48"/>
+       <result status="valid" time="0.51"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter quick_rec_ensures_permutation"
-    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="parameter quick_rec_ensures_permutation"
-    sum="280649b8af3bca5aaab111ce61085a68"
+    sum="e334c51e259b71986ac7b6c56783b14c"
     proved="false"
     expanded="true"
     shape="iainfix &gt;=V1V2a_PermutV0V1V2V4V4a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -349,10 +349,10 @@
      expanded="true">
      <goal
       name="WP_parameter quick_rec_ensures_permutation.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="b3ea35f667abe3450bb9589cb136c932"
+      sum="f222bc1e79b49b11f40c18454d717866"
       proved="true"
       expanded="false"
       shape="a_PermutV0V1V2V4V4Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -360,6 +360,14 @@
        name="expl:parameter quick_rec_ensures_permutation"/>
       <label
        name="expl:Function quick_rec, Behavior `permutation&apos;"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
       <proof
        prover="3"
        timelimit="5"
@@ -369,28 +377,20 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_permutation.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="6d06acf42c93b043bdf22a47381e2036"
+      sum="efc22a9fcabf371f1785de83efd63150"
       proved="false"
       expanded="true"
       shape="a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -399,7 +399,7 @@
       <label
        name="expl:Function quick_rec, Behavior `permutation&apos;"/>
       <proof
-       prover="3"
+       prover="0"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -407,23 +407,23 @@
        <result status="timeout" time="5.02"/>
       </proof>
       <proof
-       prover="0"
+       prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.10"/>
+       <result status="timeout" time="5.08"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.08"/>
       </proof>
       <proof
        prover="1"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.01"/>
-      </proof>
-      <proof
-       prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -443,10 +443,10 @@
    </goal>
    <goal
     name="WP_parameter quick_rec_ensures_sorted"
-    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="parameter quick_rec_ensures_sorted"
-    sum="c1506658904fe8729954771b5570b8bc"
+    sum="7f9ff3d00aae18689ddabb07e0b2c438"
     proved="false"
     expanded="true"
     shape="iainfix &gt;=V1V2a_SortedV0V1ainfix +V2c1V4a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -460,10 +460,10 @@
      expanded="true">
      <goal
       name="WP_parameter quick_rec_ensures_sorted.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="51a9821e688012c4f6c1e79eae9fa6b5"
+      sum="3db9fc9aa01bc3fb997ea8560d918b12"
       proved="true"
       expanded="false"
       shape="a_SortedV0V1ainfix +V2c1V4Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -471,14 +471,6 @@
        name="expl:parameter quick_rec_ensures_sorted"/>
       <label
        name="expl:Function quick_rec, Behavior `sorted&apos;"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
       <proof
        prover="0"
        timelimit="5"
@@ -488,20 +480,28 @@
        <result status="valid" time="0.02"/>
       </proof>
       <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_sorted.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="6fd942ab1eab76743ba0f7e6f4fc15d9"
+      sum="93fc2de5593bc892f7ff608e166cfdd1"
       proved="false"
       expanded="true"
       shape="a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -509,14 +509,6 @@
        name="expl:parameter quick_rec_ensures_sorted"/>
       <label
        name="expl:Function quick_rec, Behavior `sorted&apos;"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.02"/>
-      </proof>
       <proof
        prover="0"
        timelimit="5"
@@ -526,7 +518,7 @@
        <result status="timeout" time="5.02"/>
       </proof>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -534,7 +526,15 @@
        <result status="timeout" time="5.02"/>
       </proof>
       <proof
-       prover="2"
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.02"/>
+      </proof>
+      <proof
+       prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -554,10 +554,10 @@
    </goal>
    <goal
     name="WP_parameter quick_rec_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="parameter quick_rec_safety"
-    sum="9391abc8c89a3760cb4828602ad83dec"
+    sum="5bc6b9d93e93c75a6f5bd4022537bf5c"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=V8V2iainfix &lt;aselectV10ashiftV0V8V5ainfix &lt;ainfix -V2V13ainfix -V2V8Aainfix &lt;=c0ainfix -V2V8Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FAainfix &gt;=aoffset_maxV3V0V11Aainfix &lt;=aoffset_minV3V0V11Aainfix &gt;=aoffset_maxV3V0V8Aainfix &lt;=aoffset_minV3V0V8Iainfix =V11ainfix +V9c1Fainfix &lt;ainfix -V2V14ainfix -V2V8Aainfix &lt;=c0ainfix -V2V8Iainfix =V14ainfix +V8c1FAainfix &lt;=V8aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V8ainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0ainfix +V9c1Aazwf_zeroainfix -V2ainfix +V9c1ainfix -V2V1Ianot_assignsV3V15V16apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V16Aa_PermutV0V1ainfix -V9c1V16V15FAainfix &gt;=aoffset_maxV3V0ainfix -V9c1Aainfix &lt;=aoffset_minV3V0V1Aazwf_zeroainfix -ainfix -V9c1V1ainfix -V2V1Ia_PermutV0V1V2V15V10Ianot_assignsV3V10V15apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V15V10FAainfix &gt;=aoffset_maxV3V0V9Aainfix &lt;=aoffset_minV3V0V9Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1Iainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;aselectV10ashiftV0V17V5Iainfix &lt;=V17V9Aainfix &lt;V1V17FAainfix &gt;=aselectV10ashiftV0V18V5Iainfix &lt;V18V8Aainfix &lt;V9V18FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -565,6 +565,14 @@
      name="expl:parameter quick_rec_safety"/>
     <label
      name="expl:Function quick_rec, Safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
     <proof
      prover="3"
      timelimit="5"
@@ -574,28 +582,20 @@
      <result status="valid" time="0.07"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter quick_sort_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="normal postcondition"
-    sum="42841416cf011eaf365b586687b8f3d5"
+    sum="e830ae780e5ba3e80ee09429a591199e"
     proved="true"
     expanded="false"
     shape="t">
@@ -604,20 +604,20 @@
     <label
      name="expl:Function quick_sort, default behavior"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="1"
@@ -630,10 +630,10 @@
    </goal>
    <goal
     name="WP_parameter quick_sort_ensures_permutation"
-    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="normal postcondition"
-    sum="6f9347a086dc8c36edd9b6b7bdef467f"
+    sum="3ccf3c8a56525666645729a3edcdcb0d"
     proved="true"
     expanded="false"
     shape="a_PermutV0c0ainfix -V1c1V4V3Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -642,6 +642,14 @@
     <label
      name="expl:Function quick_sort, Behavior `permutation&apos;"/>
     <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
      prover="3"
      timelimit="5"
      memlimit="0"
@@ -650,28 +658,20 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter quick_sort_ensures_sorted"
-    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="normal postcondition"
-    sum="ef1a73410f65efbf3a53445341ca8c18"
+    sum="c482dfe5eab1ba2c4b7a5d1a42f67d9b"
     proved="true"
     expanded="false"
     shape="a_SortedV0c0V1V4Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -680,20 +680,20 @@
     <label
      name="expl:Function quick_sort, Behavior `sorted&apos;"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
@@ -706,10 +706,10 @@
    </goal>
    <goal
     name="WP_parameter quick_sort_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="precondition"
-    sum="45929d46f917c92abe91a0c9caa97e73"
+    sum="1c2123f588c5e8b5650aed6f9b2f2f39"
     proved="true"
     expanded="false"
     shape="ainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0F">
@@ -718,20 +718,20 @@
     <label
      name="expl:Function quick_sort, Safety"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -744,10 +744,10 @@
    </goal>
    <goal
     name="WP_parameter swap_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="79cd14593adf7607c1b517b2b03d6f24"
+    sum="b8cd7e74c2e07c7349aa65f15c6293fa"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -755,6 +755,14 @@
      name="expl:parameter swap_ensures_default"/>
     <label
      name="expl:Function swap, default behavior"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.73"/>
+    </proof>
     <proof
      prover="3"
      timelimit="5"
@@ -764,28 +772,20 @@
      <result status="valid" time="0.33"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.77"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.50"/>
+     <result status="valid" time="0.62"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/quick_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="parameter swap_safety"
-    sum="e5c87f8f385af7c845c74a351300fa3c"
+    sum="1a3464f15313d310ddb8b58f738b4997"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -794,20 +794,20 @@
     <label
      name="expl:Function swap, Safety"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="1"

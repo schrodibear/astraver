@@ -34,25 +34,25 @@
    expanded="true">
    <goal
     name="sum3"
-    locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
     loclnum="16" loccnumb="4" loccnume="137"
     expl="Lemma sum3, lemma"
-    sum="e15a2f8f8a0419122986b9292bb3d27e"
+    sum="0de56516ad4cee4084ad11db37049d6e"
     proved="false"
     expanded="true"
     shape="ainfix =asumV1V2V4V0ainfix +asumV1V2V3V0asumV1V3V4V0Iainfix &lt;=V3V4Aainfix &lt;=V2V3FFFFF">
     <label
      name="expl:Lemma sum3, lemma"/>
     <proof
-     prover="3"
-     timelimit="3"
+     prover="0"
+     timelimit="6"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.02"/>
+     <result status="unknown" time="2.72"/>
     </proof>
     <proof
-     prover="1"
+     prover="2"
      timelimit="3"
      memlimit="0"
      obsolete="false"
@@ -60,15 +60,15 @@
      <result status="timeout" time="3.03"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="6"
+     prover="3"
+     timelimit="3"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="2.63"/>
+     <result status="timeout" time="3.04"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="3"
      memlimit="0"
      obsolete="false"
@@ -86,15 +86,31 @@
    </goal>
    <goal
     name="sum_footprint"
-    locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
     loclnum="22" loccnumb="4" loccnume="170"
     expl="Lemma sum_footprint, lemma"
-    sum="19248b6e15b307b24772e8753d490071"
+    sum="38dce19f8d136e955eece8f9b69939b7"
     proved="false"
     expanded="true"
     shape="ainfix =asumV2V4V5V1asumV3V4V5V0Iainfix =aselectV1ashiftV2V6aselectV0ashiftV3V6Iainfix &lt;V6V5Aainfix &lt;=V4V6FFFFFFF">
     <label
      name="expl:Lemma sum_footprint, lemma"/>
+    <proof
+     prover="0"
+     timelimit="3"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.76"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="3"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="3.11"/>
+    </proof>
     <proof
      prover="3"
      timelimit="3"
@@ -109,23 +125,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="3"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.79"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="3"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="3.01"/>
+     <result status="timeout" time="3.11"/>
     </proof>
     <proof
      prover="4"
@@ -140,15 +140,15 @@
   <theory
    name="Jessie_program"
    locfile="sum_array.jessie/sum_array/../sum_array.mlw"
-   loclnum="225" loccnumb="7" loccnume="21"
+   loclnum="272" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter test1_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
     loclnum="31" loccnumb="4" loccnume="9"
     expl="Function test1, default behavior"
-    sum="777eb7d8866b836fd1da2ec35bcc14d6"
+    sum="3c3cdda6f18b9753dd14e02ac5a7afd5"
     proved="true"
     expanded="false"
     shape="iainfix &lt;V7V1ainfix =V8asumV0c0V9V3Aainfix &lt;=V9V1Aainfix &lt;=c0V9Iainfix =V9ainfix +V7c1FIainfix =V8ainfix +V6aselectV3ashiftV0V7Fainfix =V10asumV0c0V1V3Iainfix =V10V6FIainfix =V6asumV0c0V7V3Aainfix &lt;=V7V1Aainfix &lt;=c0V7FAainfix =V4asumV0c0V5V3Aainfix &lt;=V5V1Aainfix &lt;=c0V5Iainfix =V5c0FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1F">
@@ -167,10 +167,10 @@
    </goal>
    <goal
     name="WP_parameter test1_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
     loclnum="31" loccnumb="4" loccnume="9"
     expl="Function test1, Safety"
-    sum="6a77da950866bffb20470f5f9c99624f"
+    sum="ca41155224c188d7bdd87f57d4bc5374"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -V1V9ainfix -V1V7Aainfix &lt;=c0ainfix -V1V7Iainfix =V9ainfix +V7c1FIainfix =V8ainfix +V6aselectV3ashiftV0V7FAainfix &lt;=V7aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V7Iainfix &lt;V7V1Iainfix =V6asumV0c0V7V3Aainfix &lt;=V7V1Aainfix &lt;=c0V7FIainfix =V5c0FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1F">
@@ -189,10 +189,10 @@
    </goal>
    <goal
     name="WP_parameter test2_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
     loclnum="49" loccnumb="5" loccnume="10"
     expl="Function test2, default behavior"
-    sum="9b9ca626f3119f027aa5ff315035e128"
+    sum="29d1c6d852f931aa72da916e3da7df0b"
     proved="true"
     expanded="false"
     shape="iainfix &lt;V5V1anot_assignsV2V3V7apset_allapset_singletonV0Aainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Aainfix &lt;=V8V1Aainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FAainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FAainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6anot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FAanot_assignsV2V3V3apset_allapset_singletonV0Aainfix =asumV0c0V1V3ainfix +asumV0c0V1V3V4Aainfix &lt;=V4V1Aainfix &lt;=c0V4Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -206,10 +206,10 @@
      expanded="true">
      <goal
       name="WP_parameter test2_ensures_default.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="loop invariant init"
-      sum="889b69bae212236de9e50313977ae4d5"
+      sum="2fe5269fa3e2239737bfcacc49ffa30b"
       proved="true"
       expanded="false"
       shape="anot_assignsV2V3V3apset_allapset_singletonV0Aainfix =asumV0c0V1V3ainfix +asumV0c0V1V3V4Aainfix &lt;=V4V1Aainfix &lt;=c0V4Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -223,15 +223,15 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter test2_ensures_default.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="assertion"
-      sum="040584b9cea9f310fe561a52ee79fcdb"
+      sum="85e6bad17e11640e2eb38fee7fd6b4c5"
       proved="true"
       expanded="false"
       shape="ainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -245,15 +245,15 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter test2_ensures_default.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="assertion"
-      sum="42dcd65ee599d5dbf3e4279f42c78b8f"
+      sum="20f8f9a3def4224e86e4066f480ab5c1"
       proved="true"
       expanded="false"
       shape="ainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -267,15 +267,15 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.09"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter test2_ensures_default.4"
-      locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="loop invariant preservation"
-      sum="af91fe90bc3d523fd2ed05e1f95e2b52"
+      sum="4387398fc834330849869ea3397c8b80"
       proved="true"
       expanded="false"
       shape="anot_assignsV2V3V7apset_allapset_singletonV0Aainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Aainfix &lt;=V8V1Aainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -289,7 +289,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.13"/>
+       <result status="valid" time="0.12"/>
       </proof>
       <proof
        prover="4"
@@ -297,7 +297,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.10"/>
       </proof>
       <transf
        name="split_goal"
@@ -305,10 +305,10 @@
        expanded="true">
        <goal
         name="WP_parameter test2_ensures_default.4.1"
-        locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="Function test2, default behavior"
-        sum="ea9b4bded106516c1af8fb8a1c87cb75"
+        sum="3ba1701fbf68a6cca1a43eadd5385ce8"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -322,15 +322,15 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.02"/>
+         <result status="valid" time="0.01"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter test2_ensures_default.4.2"
-        locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="Function test2, default behavior"
-        sum="0b963d1b4b1be235f2e68d743f2896d7"
+        sum="6f1da093fd2e9e52b16e824efe82982c"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V8V1Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -344,15 +344,15 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.03"/>
+         <result status="valid" time="0.01"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter test2_ensures_default.4.3"
-        locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="Function test2, default behavior"
-        sum="bf599148a264606681629eaea09414d1"
+        sum="d2a92bf8738439a3e6a23ae6f0933b79"
         proved="true"
         expanded="false"
         shape="ainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -366,7 +366,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.13"/>
+         <result status="valid" time="0.12"/>
         </proof>
         <proof
          prover="4"
@@ -374,15 +374,15 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.10"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter test2_ensures_default.4.4"
-        locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="Function test2, default behavior"
-        sum="4289a2396353b472792d04b1fd86f3f8"
+        sum="ba5fe5c5111cf0dc5dfbd469c57bae0c"
         proved="true"
         expanded="false"
         shape="anot_assignsV2V3V7apset_allapset_singletonV0Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -396,17 +396,17 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.08"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter test2_ensures_default.5"
-      locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="normal postcondition"
-      sum="c1ee1260d9af608630cafd684a3d2683"
+      sum="4652ec26bc4363e4c7a3912d0211bb0e"
       proved="true"
       expanded="false"
       shape="anot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V1Iainfix &lt;V5V1NIanot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -420,17 +420,17 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter test2_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/sum_array.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/sum_array.c"
     loclnum="49" loccnumb="5" loccnume="10"
     expl="Function test2, Safety"
-    sum="2bdd3cd1a10f63f694c063dc362511db"
+    sum="1af8dde7703cc1d49c3df03ae68d265f"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -V1V8ainfix -V1V5Aainfix &lt;=c0ainfix -V1V5Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FAainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Aainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Iainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Iainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -439,31 +439,31 @@
     <label
      name="expl:parameter test2_safety"/>
     <proof
-     prover="3"
-     timelimit="3"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.08"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="3"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="3"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="2"
+     timelimit="3"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="3"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.09"/>
+    </proof>
+    <proof
+     prover="1"
      timelimit="3"
      memlimit="0"
      obsolete="false"
@@ -476,7 +476,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
   </theory>

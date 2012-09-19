@@ -286,11 +286,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-<<<<<<< .working
      <result status="valid" time="0.01"/>
-=======
-     <result status="valid" time="0.03"/>
->>>>>>> .merge-right.r4939
     </proof>
     <proof
      prover="1"
@@ -396,11 +392,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-<<<<<<< .working
-     <result status="valid" time="0.01"/>
-=======
      <result status="valid" time="0.03"/>
->>>>>>> .merge-right.r4939
     </proof>
     <proof
      prover="1"

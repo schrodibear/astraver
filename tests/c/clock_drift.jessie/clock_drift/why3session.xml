@@ -38,10 +38,10 @@
    expanded="false">
    <goal
     name="real_of_int_inf_NMAX"
-    locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
     loclnum="38" loccnumb="4" loccnume="89"
     expl="Lemma real_of_int_inf_NMAX, lemma"
-    sum="a5682b7109fba3bdc8781ab463b7647b"
+    sum="cc100804df0564b018ce7a4ba4123014"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=afrom_intV0c1000000.0Iainfix &lt;=V0c1000000F">
@@ -53,27 +53,27 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="real_of_int_succ"
-    locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
     loclnum="45" loccnumb="4" loccnume="62"
     expl="Lemma real_of_int_succ, lemma"
-    sum="bd15edd2fa91076eb8fc885c919e6d6a"
+    sum="176c827585316ef1cb6caca6b51eb3e5"
     proved="true"
     expanded="false"
     shape="ainfix =afrom_intainfix +V0c1ainfix +afrom_intV0c1.0F">
     <label
      name="expl:Lemma real_of_int_succ, lemma"/>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.13"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="0"
@@ -81,15 +81,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="3"
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="5"
@@ -97,7 +97,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>
@@ -109,10 +109,10 @@
    expanded="false">
    <goal
     name="WP_parameter f_single_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
     loclnum="69" loccnumb="6" loccnume="14"
     expl="parameter f_single_ensures_default"
-    sum="2b8a7ac60d2b5212ca15bf7a133f273a"
+    sum="f92dc16843fea1aadf565d71706a33ba"
     proved="true"
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0ainfix &lt;=ainteger_of_int32V11ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FAainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FAainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6ainfix &lt;=aabsainfix -avalueV12ainfix *afrom_intainteger_of_int32V0c0.1ainfix *afrom_intainteger_of_int32V0ainfix +c0x1.p-8c1.49012e-09Iainfix =V12V6FIainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FAainfix &lt;=ainteger_of_int32V4ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V4Aainfix &lt;=aabsainfix -avalueV2ainfix *afrom_intainteger_of_int32V4c0.1ainfix *afrom_intainteger_of_int32V4ainfix +c0x1.p-8c1.49012e-09Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -126,10 +126,10 @@
      expanded="true">
      <goal
       name="WP_parameter f_single_ensures_default.1"
-      locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="loop invariant init"
-      sum="dde345d471f356e1b714f208d4c45b36"
+      sum="e838c7dc3b17bf77ce89cc06ce68de13"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V4ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V4Aainfix &lt;=aabsainfix -avalueV2ainfix *afrom_intainteger_of_int32V4c0.1ainfix *afrom_intainteger_of_int32V4ainfix +c0x1.p-8c1.49012e-09Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -138,12 +138,12 @@
       <label
        name="expl:Function f_single, default behavior"/>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.27"/>
+       <result status="valid" time="0.00"/>
       </proof>
       <proof
        prover="0"
@@ -151,15 +151,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.14"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="2"
@@ -170,12 +162,20 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="3"
+       prover="4"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="5"
@@ -183,15 +183,15 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.25"/>
+       <result status="valid" time="0.08"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter f_single_ensures_default.2"
-      locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="assertion"
-      sum="b4cc03fa38ca94f43555befecae01b5f"
+      sum="6cbf1d3e8c19c266d1af7bea1b08b06d"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -205,7 +205,15 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="1"
@@ -215,21 +223,13 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter f_single_ensures_default.3"
-      locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="assertion"
-      sum="71544058b8b99a356bd1eaf97597505e"
+      sum="4a7c8c6868ce0ba295139bfb0156b8a0"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -248,10 +248,10 @@
      </goal>
      <goal
       name="WP_parameter f_single_ensures_default.4"
-      locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="loop invariant preservation"
-      sum="e2ee4841750363fa178bc1f6d6575dbc"
+      sum="9ac5ccb07e2f21b60b3e3c31aa1f0e2d"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V11ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -265,15 +265,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.84"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="1.72"/>
       </proof>
       <proof
        prover="2"
@@ -281,7 +273,15 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.31"/>
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.11"/>
       </proof>
       <transf
        name="split_goal"
@@ -289,10 +289,10 @@
        expanded="true">
        <goal
         name="WP_parameter f_single_ensures_default.4.1"
-        locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
         loclnum="69" loccnumb="6" loccnume="14"
         expl="parameter f_single_ensures_default"
-        sum="3b2d5c91a2b2c3cdde936b831ac6cab8"
+        sum="1f49745cd7b69bce18420b94cd5960da"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -306,15 +306,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.66"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.62"/>
         </proof>
         <proof
          prover="2"
@@ -324,13 +316,21 @@
          archived="false">
          <result status="valid" time="0.12"/>
         </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
+        </proof>
        </goal>
        <goal
         name="WP_parameter f_single_ensures_default.4.2"
-        locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
         loclnum="69" loccnumb="6" loccnume="14"
         expl="parameter f_single_ensures_default"
-        sum="089443949bfd0e431c79cb46e870957b"
+        sum="61a10a3336afe2cace4fc971b735c07a"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -339,6 +339,22 @@
         <label
          name="expl:Function f_single, default behavior"/>
         <proof
+         prover="0"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
          prover="4"
          timelimit="5"
          memlimit="0"
@@ -347,28 +363,12 @@
          <result status="valid" time="0.06"/>
         </proof>
         <proof
-         prover="0"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.14"/>
-        </proof>
-        <proof
          prover="1"
          timelimit="5"
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.21"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.33"/>
+         <result status="valid" time="0.05"/>
         </proof>
         <proof
          prover="5"
@@ -376,15 +376,15 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.30"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter f_single_ensures_default.4.3"
-        locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+        locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
         loclnum="69" loccnumb="6" loccnume="14"
         expl="parameter f_single_ensures_default"
-        sum="1f2ced751b425d0cbcc88682765ddb1f"
+        sum="eeab882b2e773fbcdddf01b88f4f3c88"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=ainteger_of_int32V11ainteger_of_int32V0Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -393,28 +393,12 @@
         <label
          name="expl:Function f_single, default behavior"/>
         <proof
-         prover="4"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
          prover="0"
          timelimit="5"
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.16"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.23"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="2"
@@ -422,7 +406,23 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.20"/>
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
         </proof>
         <proof
          prover="5"
@@ -437,10 +437,10 @@
      </goal>
      <goal
       name="WP_parameter f_single_ensures_default.5"
-      locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="normal postcondition"
-      sum="e73a174963a12345376c4ff6902a6006"
+      sum="f778caf955b154cb314cebced301cfb1"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsainfix -avalueV7ainfix *afrom_intainteger_of_int32V0c0.1ainfix *afrom_intainteger_of_int32V0ainfix +c0x1.p-8c1.49012e-09Iainfix =V7V6FIainfix &lt;ainteger_of_int32V5ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -454,18 +454,18 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.14"/>
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -477,10 +477,10 @@
    </goal>
    <goal
     name="WP_parameter f_single_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
     loclnum="69" loccnumb="6" loccnume="14"
     expl="parameter f_single_safety"
-    sum="f5fb7fe00cd2deafd2ee8a607ff6741f"
+    sum="79f3a9847f3d186efabd3559515c6fc5"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -ainteger_of_int32V0ainteger_of_int32V11ainfix -ainteger_of_int32V0ainteger_of_int32V5Aainfix &lt;=c0ainfix -ainteger_of_int32V0ainteger_of_int32V5Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FAainfix &lt;=ainfix +ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -494,10 +494,10 @@
      expanded="true">
      <goal
       name="WP_parameter f_single_safety.1"
-      locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="precondition"
-      sum="aecf3c1fe0d5619014b2daabb34e8af5"
+      sum="ed3d418e091c4582a4674dec2ffb340b"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -506,12 +506,12 @@
       <label
        name="expl:Function f_single, Safety"/>
       <proof
-       prover="1"
+       prover="3"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="2"
@@ -519,23 +519,23 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.33"/>
+       <result status="valid" time="0.35"/>
       </proof>
       <proof
-       prover="3"
+       prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.11"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter f_single_safety.2"
-      locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="precondition"
-      sum="f638ad661334800e6c9701838d431488"
+      sum="4162863ee4ef6665520279402a49d5b6"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix +ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -544,31 +544,31 @@
       <label
        name="expl:Function f_single, Safety"/>
       <proof
-       prover="4"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.16"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.18"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="2"
+       prover="4"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -586,10 +586,10 @@
      </goal>
      <goal
       name="WP_parameter f_single_safety.3"
-      locfile="/home/cmarche/why2-trunk/tests/c/clock_drift.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="loop variant decreases"
-      sum="bb45d868c1ce9a70ed48e3f8028f0972"
+      sum="c7170c953bfc95e885f932ee1b484a28"
       proved="true"
       expanded="false"
       shape="ainfix &lt;ainfix -ainteger_of_int32V0ainteger_of_int32V11ainfix -ainteger_of_int32V0ainteger_of_int32V5Aainfix &lt;=c0ainfix -ainteger_of_int32V0ainteger_of_int32V5Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix &lt;=ainfix +ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -598,20 +598,28 @@
       <label
        name="expl:Function f_single, Safety"/>
       <proof
-       prover="4"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.18"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="1"
@@ -622,20 +630,12 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.19"/>
-      </proof>
-      <proof
        prover="5"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.17"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
     </transf>

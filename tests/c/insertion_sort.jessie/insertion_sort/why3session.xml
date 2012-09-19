@@ -28,15 +28,15 @@
   <theory
    name="Jessie_program"
    locfile="insertion_sort.jessie/insertion_sort/../insertion_sort.mlw"
-   loclnum="212" loccnumb="7" loccnume="21"
+   loclnum="260" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter insert_sort_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/insertion_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
     loclnum="41" loccnumb="5" loccnume="16"
     expl="parameter insert_sort_ensures_default"
-    sum="1f3fca843b6fe2ee75bf8f5d0db2cf3c"
+    sum="458d5b8a0095bd3ada09ffa46880dad9"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=V1c1a_SortedV0c0ainfix -V1c1V3iainfix &lt;V5V1iainfix &gt;V9c0iainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7ainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7Fainfix &lt;=V14V5Aainfix &lt;=c0V14Aa_SortedV0c0V5V13Iainfix =V14V5Aa_SortedV0c0ainfix +V5c1V13Iainfix &lt;V14V5Aainfix &gt;aselectV13ashiftV0V15V7Iainfix &lt;V15V5Aainfix &lt;=V14V15FIainfix =V14ainfix -V9c1FIainfix =V13astoreV10ashiftV0V9aselectV10ashiftV0ainfix -V9c1Fainfix &lt;=V17V1Aainfix &lt;=c0V17Aa_SortedV0c0V17V16Iainfix =V17ainfix +V5c1FIainfix =V16astoreV10ashiftV0V9V7FIainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V18V7Iainfix &lt;V18V5Aainfix &lt;=V9V18FFAainfix &lt;=V8V5Aainfix &lt;=c0V8Aa_SortedV0c0V5V6Iainfix =V8V5Aa_SortedV0c0ainfix +V5c1V6Iainfix &lt;V8V5Aainfix &gt;aselectV6ashiftV0V19V7Iainfix &lt;V19V5Aainfix &lt;=V8V19FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_SortedV0c0ainfix -V1c1V6Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FAainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V3Iainfix =V4c1FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -50,7 +50,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.88"/>
+     <result status="valid" time="1.03"/>
     </proof>
     <transf
      name="split_goal"
@@ -58,10 +58,10 @@
      expanded="true">
      <goal
       name="WP_parameter insert_sort_ensures_default.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/insertion_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="normal postcondition"
-      sum="1852d5379e7b896d06444ff5fa0370c0"
+      sum="779a8bb3cc041a4f0c34072777026529"
       proved="true"
       expanded="false"
       shape="a_SortedV0c0ainfix -V1c1V3Iainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -70,6 +70,14 @@
       <label
        name="expl:Function insert_sort, default behavior"/>
       <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
        prover="2"
        timelimit="5"
        memlimit="0"
@@ -78,28 +86,20 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/insertion_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="loop invariant init"
-      sum="4ad5d3d2ae1c2839684344a8a1406e96"
+      sum="59b1a38da49e09369719162c39c7219c"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V3Iainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -108,20 +108,20 @@
       <label
        name="expl:Function insert_sort, default behavior"/>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="1"
@@ -134,10 +134,10 @@
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/insertion_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="loop invariant init"
-      sum="63b86f2b73be99fa98031c939b017939"
+      sum="6a431cb7cee762d43847ba3730cf2a77"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V8V5Aainfix &lt;=c0V8Aa_SortedV0c0V5V6Iainfix =V8V5Aa_SortedV0c0ainfix +V5c1V6Iainfix &lt;V8V5Aainfix &gt;aselectV6ashiftV0V9V7Iainfix &lt;V9V5Aainfix &lt;=V8V9FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -146,20 +146,20 @@
       <label
        name="expl:Function insert_sort, default behavior"/>
       <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
        prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="1"
@@ -172,10 +172,10 @@
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.4"
-      locfile="/home/marche/why2-nitrogen/tests/c/insertion_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="loop invariant preservation"
-      sum="b119ad0c27a059ce76994bf1cd2ae8f2"
+      sum="76ed7dff1d8f266e00b01ee9218678a9"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7FIainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7Iainfix &gt;V9c0Iainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V9V13FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -184,28 +184,28 @@
       <label
        name="expl:Function insert_sort, default behavior"/>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="1.24"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.36"/>
+       <result status="valid" time="1.33"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="1.12"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.5"
-      locfile="/home/marche/why2-nitrogen/tests/c/insertion_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="loop invariant preservation"
-      sum="c435434381c12c8c7763cde27329a841"
+      sum="2d0ece0c9ce9145a8f4bc40f3484e7b7"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V12V5Aainfix &lt;=c0V12Aa_SortedV0c0V5V11Iainfix =V12V5Aa_SortedV0c0ainfix +V5c1V11Iainfix &lt;V12V5Aainfix &gt;aselectV11ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V12V13FIainfix =V12ainfix -V9c1FIainfix =V11astoreV10ashiftV0V9aselectV10ashiftV0ainfix -V9c1FIainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7NIainfix &gt;V9c0Iainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V14V7Iainfix &lt;V14V5Aainfix &lt;=V9V14FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -219,15 +219,15 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.63"/>
+       <result status="valid" time="0.59"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.6"
-      locfile="/home/marche/why2-nitrogen/tests/c/insertion_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="loop invariant preservation"
-      sum="4fc91284d327fb8451fa9ac7a9086495"
+      sum="50a5d937a5268a9b758a41245881c953"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7FIainfix &gt;V9c0NIainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V9V13FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -236,28 +236,28 @@
       <label
        name="expl:Function insert_sort, default behavior"/>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.50"/>
+       <result status="valid" time="0.48"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.7"
-      locfile="/home/marche/why2-nitrogen/tests/c/insertion_sort.c"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="normal postcondition"
-      sum="7908948667f6c6886f1d9ce2565909e1"
+      sum="ed61fa08a0094278a59b687d32748ada"
       proved="true"
       expanded="false"
       shape="a_SortedV0c0ainfix -V1c1V6Iainfix &lt;V5V1NIainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -265,14 +265,6 @@
        name="expl:parameter insert_sort_ensures_default"/>
       <label
        name="expl:Function insert_sort, default behavior"/>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
       <proof
        prover="0"
        timelimit="5"
@@ -282,22 +274,30 @@
        <result status="valid" time="0.02"/>
       </proof>
       <proof
+       prover="2"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter insert_sort_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/insertion_sort.c"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
     loclnum="41" loccnumb="5" loccnume="16"
     expl="parameter insert_sort_safety"
-    sum="8f5fdb35cb4dfcc3ad3a310c87bae59f"
+    sum="87ebd4f181b688f46d7ddae769e97a52"
     proved="true"
     expanded="false"
     shape="iainfix &gt;V8c0iainfix &lt;=aselectV9ashiftV0ainfix -V8c1V6ainfix &lt;ainfix -V1V11ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V11ainfix +V4c1FIainfix =V10astoreV9ashiftV0V8V6FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8ainfix &lt;V13V8Aainfix &lt;=c0V8Iainfix =V13ainfix -V8c1FIainfix =V12astoreV9ashiftV0V8aselectV9ashiftV0ainfix -V8c1FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Aainfix &lt;=ainfix -V8c1aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainfix -V8c1Aainfix &lt;=ainfix -V8c1aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainfix -V8c1ainfix &lt;ainfix -V1V15ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V15ainfix +V4c1FIainfix =V14astoreV9ashiftV0V8V6FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Iainfix &lt;=V8V4Aainfix &lt;=c0V8Aa_SortedV0c0V4V9Iainfix =V8V4Aa_SortedV0c0ainfix +V4c1V9Iainfix &lt;V8V4Aainfix &gt;aselectV9ashiftV0V16V6Iainfix &lt;V16V4Aainfix &lt;=V8V16FFIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Iainfix &lt;V4V1Iainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V5FIainfix =V3c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0F">
@@ -305,6 +305,14 @@
      name="expl:parameter insert_sort_safety"/>
     <label
      name="expl:Function insert_sort, Safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
     <proof
      prover="2"
      timelimit="5"
@@ -314,20 +322,12 @@
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
   </theory>
