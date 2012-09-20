@@ -2,9 +2,11 @@
 
 
 
-/*@ ensures \valid(\result) && \fresh(\result,sizeof(int));
+/*@ assigns \nothing;
+  @ allocates \result;
+  @ ensures \valid(\result) && \fresh(\result,sizeof(int));
   @*/
-int* f();
+int* f(void);
 
 
 void g() {
@@ -15,6 +17,6 @@ void g() {
 
 /* 
 Local Variables:
-compile-command: "LC_ALL=C make fresh.why3ml"
+compile-command: "LC_ALL=C make fresh.why3ide"
 End:
 */

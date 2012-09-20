@@ -1,6 +1,10 @@
 
 #pragma SeparationPolicy(none)
 
+/* #include <stdlib.h> */
+void *malloc(unsigned int size);
+
+
 typedef struct Str {int x; } *str;
 
 
@@ -8,7 +12,11 @@ typedef struct Str {int x; } *str;
   @ assigns \nothing;
   @ ensures \valid(\result) && \fresh(\result,sizeof(*\result));
   @*/
-str create(void);
+str create(void) {
+  str s;
+  s = (str)malloc(sizeof(struct Str));
+  return s;
+}
 
 /*@ requires \valid(this);
   @*/

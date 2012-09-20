@@ -1197,7 +1197,7 @@ let single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location) =
 	      (* Add effect on allocation table for [not_assigns] predicate *)
 	        let ac = alloc_class_of_mem_class mc in
 	        add_alloc_reads lab fef (ac,locs#region)
-            | Allocates -> assert false
+            | Allocates -> assert false (* TODO *)
             | Reads ->
 	      if only_writes then fef else
 	        add_memory_reads lab fef (mc,locs#region)
