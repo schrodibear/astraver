@@ -82,7 +82,7 @@
   @*/
 
 /*@ lemma gcd_property :
-  @   \forall integer a b d q;
+  @   \forall integer a b d;
   @      a >= 0 && b > 0 && isGcd(b,a % b,d) ==> isGcd(a,b,d) ;
   @*/
 
@@ -125,7 +125,7 @@ class Gcd {
 
 /*
 Local Variables:
-compile-command: "make Gcd.why3ml"
+compile-command: "make Gcd.why3ide"
 End:
 */
 

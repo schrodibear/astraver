@@ -47,7 +47,7 @@ let jessie_emitter =
     [Jessie_options.Behavior.parameter; Jessie_options.InferAnnot.parameter]
     ~tuning:[]
 
-let constant_expr ?(loc=Cil_datatype.Location.unknown) e = 
+let constant_expr ?(loc=Cil_datatype.Location.unknown) e =
   Ast_info.constant_expr ~loc e
 
 exception Unsupported of string
@@ -145,7 +145,7 @@ let integral_type_size_in_bytes ty =
   | TInt(IBool,_attr) -> (* TODO *)
       notimplemented "Common.integral_type_size_in_bytes IBool"
   | TInt(ik,_attr) -> size_in_bytes ik
-  | TEnum ({ekind = IBool},_) -> 
+  | TEnum ({ekind = IBool},_) ->
       notimplemented "Common.integral_type_size_in_bytes IBool"
   | TEnum (ei,_) -> size_in_bytes ei.ekind
   | _ -> assert false
@@ -229,7 +229,7 @@ let iter_integral_types f =
   let apply s =
     try
       let (ty,size) = Hashtbl.find all_integral_types s in f s ty size
-    with Not_found -> 
+    with Not_found ->
       Jessie_options.fatal
         "Integral type %s is referenced but does not have a definition" s
   in Integral_types_iterator.iter apply
@@ -238,7 +238,7 @@ let fold_integral_types f init =
   let apply s acc =
     try
       let (ty,size) = Hashtbl.find all_integral_types s in f s ty size acc
-    with Not_found -> 
+    with Not_found ->
       Jessie_options.fatal
         "Integral type %s is referenced but does not have a definition" s
   in Integral_types_iterator.fold apply init
@@ -437,7 +437,7 @@ let unique_name_if_empty s =
 
 let jessie_reserved_names =
   [
-    (* a *) "abstract"; "allocates"; "and"; "as"; "assert"; 
+    (* a *) "abstract"; "allocates"; "and"; "as"; "assert";
             "assigns"; "assumes"; "axiom"; "axiomatic";
     (* b *) "behavior"; "boolean"; "break";
     (* c *) "case"; "catch"; "check"; "continue";
@@ -975,7 +975,7 @@ let check_types file =
 (*   Cil.visitCilFile (new File.check_file :> Cil.cilVisitor) file *)
 
 (* VP: unused function *)
-(* 
+(*
 class check_file: Visitor.frama_c_visitor  =
 object(self)
 
@@ -1166,8 +1166,8 @@ let rec lift_offset ty = function
         if isArrayType subty then
           let siz = array_size subty in
           TIndex(change_idx
-                   idx1 
-                   (constant_term Cil_datatype.Location.unknown My_bigint.zero) 
+                   idx1
+                   (constant_term Cil_datatype.Location.unknown My_bigint.zero)
                    siz,
                  TNoOffset)
         else off
@@ -1190,17 +1190,17 @@ let malloc_function () =
       with Not_found | Invalid_argument _ ->
         fatal "unexpected prototype for malloc"
     in
-    let range = 
-      Logic_const.trange 
-        (Some (Cil.lzero ()), 
+    let range =
+      Logic_const.trange
+        (Some (Cil.lzero ()),
          Some (Logic_const.tvar (Cil.cvar_to_lvar prm)))
     in
     let typ = Ctype Cil.charPtrType in
     let base =
-      Logic_const.term 
+      Logic_const.term
         (TCastE(Cil.charPtrType,Logic_const.tresult Cil.charPtrType)) typ
     in
-    let alloc = 
+    let alloc =
       Logic_const.new_identified_term
         (Logic_const.term (TBinOp(PlusPI,base,range)) typ)
     in
@@ -1235,7 +1235,7 @@ let free_function () =
       with Not_found | Invalid_argument _ ->
         fatal "unexpected prototype for free"
     in
-    let frees = 
+    let frees =
       Logic_const.new_identified_term
         (Logic_const.tvar (Cil.cvar_to_lvar prm))
     in
@@ -1247,7 +1247,7 @@ let free_function () =
       b_extended = [];
       b_allocation = FreeAlloc([],[frees]);
       b_assigns = Writes [];
-    } 
+    }
     in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
     Globals.Functions.replace_by_declaration
@@ -1265,7 +1265,7 @@ let mkalloc_statement v ty loc = mkStmt (Instr(mkalloc v ty loc))
 
 let mkalloc_array v ty num loc =
   let callee = new_exp ~loc (Lval(Var(malloc_function ()),NoOffset)) in
-  let arg = constant_expr 
+  let arg = constant_expr
     (My_bigint.of_int64 (Int64.mul num (Int64.of_int (sizeOf_int ty))))
   in
   Call(Some(Var v,NoOffset),callee,[arg],loc)

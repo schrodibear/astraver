@@ -13,15 +13,19 @@
  <prover
   id="2"
   name="Coq"
-  version="8.3pl4"/>
+  version="8.4"/>
  <prover
   id="3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.0"/>
  <file
   name="../Gcd.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
    locfile="Gcd/../Gcd.mlw"
@@ -30,12 +34,12 @@
    expanded="true">
    <goal
     name="distr_right"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="36" loccnumb="10" loccnume="21"
     expl="Lemma distr_right, lemma"
     sum="015bc08440ec20534de75345e2a972b8"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =ainfix *V0ainfix +V1V2ainfix +ainfix *V0V1ainfix *V0V2FFF">
     <label
      name="expl:Lemma distr_right, lemma"/>
@@ -66,12 +70,12 @@
    </goal>
    <goal
     name="distr_left"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="40" loccnumb="10" loccnume="20"
     expl="Lemma distr_left, lemma"
     sum="f89e1aa5a92fffa412711791dc00740b"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =ainfix *ainfix +V0V1V2ainfix +ainfix *V0V2ainfix *V1V2FFF">
     <label
      name="expl:Lemma distr_left, lemma"/>
@@ -102,12 +106,12 @@
    </goal>
    <goal
     name="distr_right_minus"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="44" loccnumb="10" loccnume="27"
     expl="Lemma distr_right_minus, lemma"
     sum="b09d773d84c186edb71c3480c5227f1c"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =ainfix *V0ainfix -V1V2ainfix -ainfix *V0V1ainfix *V0V2FFF">
     <label
      name="expl:Lemma distr_right_minus, lemma"/>
@@ -138,12 +142,12 @@
    </goal>
    <goal
     name="distr_left_minus"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="48" loccnumb="10" loccnume="26"
     expl="Lemma distr_left_minus, lemma"
     sum="a780d86d44914527ecb0702143966a73"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =ainfix *ainfix -V0V1V2ainfix -ainfix *V0V2ainfix *V1V2FFF">
     <label
      name="expl:Lemma distr_left_minus, lemma"/>
@@ -174,12 +178,12 @@
    </goal>
    <goal
     name="mul_comm"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="52" loccnumb="10" loccnume="18"
     expl="Lemma mul_comm, lemma"
     sum="9c0f1c973602c8694f1bdbdd253b9c10"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =ainfix *V0V1ainfix *V1V0FF">
     <label
      name="expl:Lemma mul_comm, lemma"/>
@@ -210,12 +214,12 @@
    </goal>
    <goal
     name="mul_assoc"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="56" loccnumb="10" loccnume="19"
     expl="Lemma mul_assoc, lemma"
     sum="d1ae9642deb0456dac25ac001eae542c"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =ainfix *V0ainfix *V1V2ainfix *ainfix *V0V1V2FFF">
     <label
      name="expl:Lemma mul_assoc, lemma"/>
@@ -246,12 +250,12 @@
    </goal>
    <goal
     name="div_mod_property"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="64" loccnumb="10" loccnume="26"
     expl="Lemma div_mod_property, lemma"
     sum="88afc1376bd3d32cbb441235983250e1"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =amodV0V1ainfix -V0ainfix *V1adivV0V1Iainfix &gt;V1c0Aainfix &gt;=V0c0FF">
     <label
      name="expl:Lemma div_mod_property, lemma"/>
@@ -282,12 +286,12 @@
    </goal>
    <goal
     name="mod_property"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="69" loccnumb="10" loccnume="22"
     expl="Lemma mod_property, lemma"
     sum="9fe03e8ebf1fb5386ea6eb71346bad35"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix &lt;amodV0V1V1Aainfix &lt;=c0amodV0V1Iainfix &gt;V1c0Aainfix &gt;=V0c0FF">
     <label
      name="expl:Lemma mod_property, lemma"/>
@@ -318,12 +322,12 @@
    </goal>
    <goal
     name="gcd_zero"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="80" loccnumb="10" loccnume="18"
     expl="Lemma gcd_zero, lemma"
     sum="820aa7a44c1c80501fce8333e3616ffd"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="aisGcdV0c0V0F">
     <label
      name="expl:Lemma gcd_zero, lemma"/>
@@ -334,18 +338,18 @@
      edited="Gcd_Jessie_model_gcd_zero_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.56"/>
+     <result status="valid" time="1.83"/>
     </proof>
    </goal>
    <goal
     name="gcd_property"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="84" loccnumb="10" loccnume="22"
     expl="Lemma gcd_property, lemma"
-    sum="ac6ddd7f5f9d7ea7ba5ed3f9f7e3d12a"
+    sum="6778fa4b3f7d9a868e8a15dbb96bb4a7"
     proved="true"
-    expanded="true"
-    shape="aisGcdV0V1V2IaisGcdV1amodV0V1V2Aainfix &gt;V1c0Aainfix &gt;=V0c0FFFF">
+    expanded="false"
+    shape="aisGcdV0V1V2IaisGcdV1amodV0V1V2Aainfix &gt;V1c0Aainfix &gt;=V0c0FFF">
     <label
      name="expl:Lemma gcd_property, lemma"/>
     <proof
@@ -355,24 +359,24 @@
      edited="Gcd_Jessie_model_gcd_property_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.67"/>
+     <result status="valid" time="2.25"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="Jessie_program"
    locfile="Gcd/../Gcd.mlw"
-   loclnum="259" loccnumb="7" loccnume="21"
+   loclnum="257" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Gcd_gcd_ensures_bezoutProperty"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="normal postcondition"
-    sum="7d4ba208f3c8113172518f35efb6f762"
+    sum="501c77abcdbfed06d167bb561ec2bc8b"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =ainfix +ainfix *V9V0ainfix *V10V1V8EEIainfix =V8V7FIainfix &gt;V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V11IaisGcdV7V6V11FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
     <label
      name="expl:parameter _Gcd_gcd_ensures_bezoutProperty"/>
@@ -384,17 +388,17 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="parameter _Gcd_gcd_ensures_default"
-    sum="3477c9caa00d63da8c40067d12d67a6c"
+    sum="20e8db4aab28b0db9ae5c294bb25d0a5"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =ainfix +ainfix *V12V0ainfix *V13V1V9Aainfix =ainfix +ainfix *V10V0ainfix *V11V1V8AaisGcdV0V1V14IaisGcdV8V9V14FAainfix &gt;=V9c0Aainfix &gt;=V8c0Iainfix =V13ainfix -V4ainfix *V2adivV7V6FIainfix =V12ainfix -V5ainfix *V3adivV7V6FIainfix =V11V2FIainfix =V10V3FIainfix =V9amodV7V6FIainfix =V8V6FIainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix &gt;=V6c0Aainfix &gt;=V7c0FAainfix =ainfix +ainfix *c0V0ainfix *c1V1V1Aainfix =ainfix +ainfix *c1V0ainfix *c0V1V0Aainfix &gt;=V1c0Aainfix &gt;=V0c0Iainfix &gt;=V1c0Aainfix &gt;=V0c0F">
     <label
      name="expl:parameter _Gcd_gcd_ensures_default"/>
@@ -406,17 +410,17 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.16"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_ensures_resultIsGcd"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="normal postcondition"
-    sum="f57effa951de830d62907534b4ff583c"
+    sum="563c52c2db366bbb8740a813622c3c99"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="aisGcdV0V1V8Iainfix =V8V7FIainfix &gt;V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V9IaisGcdV7V6V9FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
     <label
      name="expl:parameter _Gcd_gcd_ensures_resultIsGcd"/>
@@ -428,7 +432,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="1"
@@ -436,37 +440,29 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.17"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="parameter _Gcd_gcd_safety"
-    sum="163e7b9f0d3a033bbc2b617e3445c022"
+    sum="735d2af51f131ac7c460dc2f71b35106"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix &lt;V10V6Aainfix &lt;=c0V6Iainfix =V14ainfix -V4ainfix *V2V8FIainfix =V13ainfix -V5ainfix *V3V8FIainfix =V12V2FIainfix =V11V3FIainfix =V10amodV7V6FIainfix =V9V6FLadivV7V6Aainfix =V6c0NAainfix =V6c0NIainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
     <label
      name="expl:parameter _Gcd_gcd_safety"/>
     <label
      name="expl:Method gcd, Safety"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.23"/>
+     <result status="valid" time="0.29"/>
     </proof>
     <proof
      prover="1"
@@ -474,37 +470,37 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Gcd_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="normal postcondition"
-    sum="4649ed9b287a8a051a1ba5298a110ce0"
+    sum="76e37fb2b741e55d04b42436c8b30881"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:parameter cons_Gcd_ensures_default"/>
     <label
      name="expl:Constructor of class Gcd, default behavior"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
@@ -512,37 +508,37 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Gcd_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
-    loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="5db00b28de4921a8b865881bb36fc777"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter cons_Gcd_safety"/>
-    <label
-     name="expl:Constructor of class Gcd, Safety"/>
     <proof
-     prover="3"
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Gcd_safety"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="normal postcondition"
+    sum="0d2468eca48e55c357f2edbc40e6c465"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:parameter cons_Gcd_safety"/>
+    <label
+     name="expl:Constructor of class Gcd, Safety"/>
     <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -550,7 +546,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
   </theory>

@@ -5,6 +5,7 @@ typedef struct Str {int x; } *str;
 
 
 /*@ allocates \result;
+  @ assigns \nothing;
   @ ensures \valid(\result) && \fresh(\result,sizeof(*\result));
   @*/
 str create(void);
@@ -23,8 +24,8 @@ void smoke_detector() {
   //@ assert 0 == 1;
 }
 
-/* 
+/*
 Local Variables:
-compile-command: "LC_ALL=C make fresh2.why3ml"
+compile-command: "LC_ALL=C make fresh2.why3ide"
 End:
 */

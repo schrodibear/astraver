@@ -64,6 +64,12 @@ default:
 	$(EXECJESSIEBYTE) -why3ml $(JC_OPTIONS) -locs $*.jloc $*.jc
 	$(ENVWHYOPT) make -f $*.makefile why3ml
 
+%.why3ide: %.java
+	rm -f $*.jc
+	$(EXECKRAKATOABYTE) $(KRAK_OPTIONS) $^
+	$(EXECJESSIEBYTE) -why3ml $(JC_OPTIONS) -locs $*.jloc $*.jc
+	$(ENVWHYOPT) make -f $*.makefile why3ide
+
 %.coq: %.java
 	rm -f $*.jc
 	$(EXECKRAKATOABYTE) $(KRAK_OPTIONS) $^

@@ -98,7 +98,9 @@ default:
 	$(EXECJESSIEBYTE) $(JC_OPTIONS) -locs $*.jessie/$*.cloc $*.jessie/$*.jc
 	$(ENVWHYOPT) make -C $*.jessie -f $*.makefile gui
 
-%.why3: %.c
+%.why3: %.why3ide
+
+%.why3ide: %.c
 	rm -f $*.jessie/$*.jc
 	echo $(FRAMAC_PLUGIN)
 	echo $(FRAMAC_SHARE)

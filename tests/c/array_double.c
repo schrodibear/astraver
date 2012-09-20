@@ -6,10 +6,10 @@ double b[2];
 double c[2];
 
 
-/*@ requires 
-  \valid_range(a,0,1) && 
-  \valid_range(b,0,1) && 
-  \valid_range(c,0,1) && 
+/*@ requires
+  \valid(a+(0..1)) &&
+  \valid(b+(0..1)) &&
+  \valid(c+(0..1)) &&
       \abs(b[0]) <= 1.0 &&
       \abs(b[1]) <= 1.0 &&
       \abs(c[0]) <= 1.0 &&
@@ -25,6 +25,6 @@ void test() {
 
 /*
 Local Variables:
-compile-command: "make array_double.why3ml"
+compile-command: "make array_double.why3ide"
 End:
 */

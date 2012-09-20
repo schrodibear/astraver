@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="fresh2.jessie/fresh2/why3session.xml" shape_version="2">
+ name="fresh2/why3session.xml" shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.93.1"/>
+  version="0.93"/>
  <prover
   id="1"
   name="Alt-Ergo"
@@ -16,49 +16,49 @@
   version="0.95-dev"/>
  <file
   name="../fresh2.mlw"
-  verified="false"
+  verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="fresh2.jessie/fresh2/../fresh2.mlw"
+   locfile="fresh2/../fresh2.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="fresh2.jessie/fresh2/../fresh2.mlw"
-   loclnum="198" loccnumb="7" loccnume="21"
-   verified="false"
+   locfile="fresh2/../fresh2.mlw"
+   loclnum="269" loccnumb="7" loccnume="21"
+   verified="true"
    expanded="true">
    <goal
     name="WP_parameter smoke_detector_ensures_default"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/fresh2.c"
-    loclnum="18" loccnumb="5" loccnume="19"
-    expl="Function smoke_detector, default behavior"
-    sum="a01d8ebc6d5e5c8db9f0d0c10e17170c"
-    proved="false"
+    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/fresh2.c"
+    loclnum="20" loccnumb="5" loccnume="19"
+    expl="assertion"
+    sum="d6c392ea12a3b1efab64d00e71b2f891"
+    proved="true"
     expanded="true"
-    shape="ainfix =V5V4NFIavalidV0V4NFIainfix =V3V2FIavalidV1V2NFFF">
+    shape="ainfix =c0c1Iainfix =V5V4FIavalidV0V4NAainfix &gt;=aoffset_maxV0V4c0Aainfix &lt;=aoffset_minV0V4c0FIainfix =V3V2FIavalidV1V2NAainfix &gt;=aoffset_maxV1V2c0Aainfix &lt;=aoffset_minV1V2c0FFF">
     <label
      name="expl:Function smoke_detector, default behavior"/>
     <label
      name="expl:parameter smoke_detector_ensures_default"/>
-    <proof
-     prover="0"
-     timelimit="20"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.02"/>
-    </proof>
     <proof
      prover="1"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.03"/>
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="20"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"
@@ -66,15 +66,15 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.03"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter smoke_detector_safety"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/fresh2.c"
-    loclnum="18" loccnumb="5" loccnume="19"
+    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/fresh2.c"
+    loclnum="20" loccnumb="5" loccnume="19"
     expl="normal postcondition"
-    sum="ea9d8dd1aa681237fec2112deb11d193"
+    sum="1220773bbfdb7f42db229c22b5415deb"
     proved="true"
     expanded="true"
     shape="t">
@@ -96,7 +96,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"
@@ -109,13 +109,13 @@
    </goal>
    <goal
     name="WP_parameter test_ensures_default"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/fresh2.c"
-    loclnum="12" loccnumb="5" loccnume="9"
+    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/fresh2.c"
+    loclnum="14" loccnumb="5" loccnume="9"
     expl="assertion"
-    sum="a94edac8886a8c4d87d0141ee9863d43"
+    sum="1c74999b654783645598e7cdfa0ac2f6"
     proved="true"
     expanded="true"
-    shape="ainfix =V0V3NIainfix =V3V2FIavalidV1V2NFIainfix &gt;=aoffset_maxV1V0c0Aainfix &lt;=aoffset_minV1V0c0F">
+    shape="ainfix =V0V3NIainfix =V3V2FIavalidV1V2NAainfix &gt;=aoffset_maxV1V2c0Aainfix &lt;=aoffset_minV1V2c0FIainfix &gt;=aoffset_maxV1V0c0Aainfix &lt;=aoffset_minV1V0c0F">
     <label
      name="expl:Function test, default behavior"/>
     <label
@@ -126,7 +126,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
@@ -134,7 +134,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"
@@ -142,15 +142,15 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter test_safety"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/fresh2.c"
-    loclnum="12" loccnumb="5" loccnume="9"
+    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/fresh2.c"
+    loclnum="14" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="16b88feb4e5e78bcc0ed364e72093ea6"
+    sum="d7c6b2cb43466f5505c817febd751f05"
     proved="true"
     expanded="true"
     shape="t">
@@ -164,7 +164,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
@@ -172,7 +172,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"

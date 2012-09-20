@@ -124,13 +124,11 @@ Admitted.
   (forall (p:(pointer unit)),
    p = (pointer_address (Object_of_pointer_address p))).
 Admitted.
-Dp_hint pointer_addr_of_Object_of_pointer_address.
 
 (*Why axiom*) Lemma pointer_addr_of_interface_of_pointer_address :
   (forall (p:(pointer unit)),
    p = (pointer_address (interface_of_pointer_address p))).
 Admitted.
-Dp_hint pointer_addr_of_interface_of_pointer_address.
 
 (*Why predicate*) Definition right_valid_struct_Object  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (offset_max Object_alloc_table p) >= b.
@@ -220,7 +218,6 @@ apply isfibn with (r_0:=0) (p:=1); intuition.
 apply isfib0.
 apply isfib1.
 Save.
-Dp_hint isfib_2_1.
 
 (* Why obligation from file "Fibonacci.java", line 47, characters 10-19: *)
 (*Why goal*) Lemma isfib_6_8 : 
@@ -237,7 +234,6 @@ assert (isfib5: isfib 5 5).
 apply isfibn with (r_0:=2) (p:=3); intuition.
 apply isfibn with (r_0:=3) (p:=5); intuition.
 Save.
-Dp_hint isfib_6_8.
 
 (* Why obligation from file "Fibonacci.java", line 50, characters 10-23: *)
 (*Why goal*) Lemma not_isfib_2_2 : 
@@ -251,7 +247,6 @@ subst.
 replace (2 + 0 - 1) with 1 in H4 by omega.
 inversion H4; auto with zarith.
 Save.
-Dp_hint not_isfib_2_2.
 
 
 

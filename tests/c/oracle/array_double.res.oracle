@@ -7,10 +7,10 @@ double b[2];
 double c[2];
 
 
-/*@ requires 
-  \valid_range(a,0,1) && 
-  \valid_range(b,0,1) && 
-  \valid_range(c,0,1) && 
+/*@ requires
+  \valid(a+(0..1)) &&
+  \valid(b+(0..1)) &&
+  \valid(c+(0..1)) &&
       \abs(b[0]) <= 1.0 &&
       \abs(b[1]) <= 1.0 &&
       \abs(c[0]) <= 1.0 &&
@@ -26,7 +26,7 @@ void test() {
 
 /*
 Local Variables:
-compile-command: "make array_double.why3ml"
+compile-command: "make array_double.why3ide"
 End:
 */
 ========== frama-c -jessie execution ==========
@@ -48,6 +48,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int8 = -128..127
 
 tag doubleP = {
@@ -55,6 +57,12 @@ tag doubleP = {
 }
 
 type doubleP = [doubleP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -142,43 +150,43 @@ end = -1
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 179
+end = 170
 
 [C_14]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 152
+end = 143
 
 [C_15]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 125
+end = 116
 
 [C_16]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 98
+end = 89
 
 [C_17]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 71
+end = 62
 
 [C_18]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 46
+end = 40
 
 [C_19]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 21
+end = 18
 
 [C_1]
 file = "HOME/tests/c/array_double.c"
@@ -208,7 +216,7 @@ end = 20
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 21
+end = 18
 
 [C_5]
 file = "HOME/tests/c/array_double.c"
@@ -220,7 +228,7 @@ end = 20
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 21
+end = 18
 
 [C_6]
 file = "HOME/tests/c/array_double.c"
@@ -232,7 +240,7 @@ end = 20
 file = "HOME/tests/c/array_double.c"
 line = 11
 begin = 2
-end = 21
+end = 18
 
 [C_7]
 file = "HOME/tests/c/array_double.c"
@@ -244,7 +252,7 @@ end = 13
 file = "HOME/tests/c/array_double.c"
 line = 11
 begin = 2
-end = 21
+end = 18
 
 [C_8]
 file = "HOME/tests/c/array_double.c"
@@ -256,7 +264,7 @@ end = 20
 file = "HOME/tests/c/array_double.c"
 line = 11
 begin = 2
-end = 21
+end = 18
 
 [C_9]
 file = "HOME/tests/c/array_double.c"
@@ -268,19 +276,19 @@ end = 20
 file = "HOME/tests/c/array_double.c"
 line = 12
 begin = 2
-end = 21
+end = 18
 
 [C_26]
 file = "HOME/tests/c/array_double.c"
 line = 12
 begin = 2
-end = 21
+end = 18
 
 [C_27]
 file = "HOME/tests/c/array_double.c"
 line = 12
 begin = 2
-end = 21
+end = 18
 
 [C_28]
 file = "HOME/tests/c/array_double.c"
@@ -465,13 +473,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: array_double.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: array_double.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: array_double.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include array_double.depend
 
@@ -549,37 +557,37 @@ end = 20
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 21
+end = 18
 
 [JC_5]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 21
+end = 18
 
 [JC_6]
 file = "HOME/tests/c/array_double.c"
 line = 11
 begin = 2
-end = 21
+end = 18
 
 [JC_7]
 file = "HOME/tests/c/array_double.c"
 line = 11
 begin = 2
-end = 21
+end = 18
 
 [JC_8]
 file = "HOME/tests/c/array_double.c"
 line = 12
 begin = 2
-end = 21
+end = 18
 
 [JC_9]
 file = "HOME/tests/c/array_double.c"
 line = 12
 begin = 2
-end = 21
+end = 18
 
 [JC_50]
 kind = FPOverflow
@@ -630,7 +638,7 @@ end = 23
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 179
+end = 170
 
 [JC_15]
 file = "HOME/tests/c/array_double.c"
@@ -666,37 +674,37 @@ end = -1
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 21
+end = 18
 
 [JC_21]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 21
+end = 18
 
 [JC_22]
 file = "HOME/tests/c/array_double.c"
 line = 11
 begin = 2
-end = 21
+end = 18
 
 [JC_23]
 file = "HOME/tests/c/array_double.c"
 line = 11
 begin = 2
-end = 21
+end = 18
 
 [JC_24]
 file = "HOME/tests/c/array_double.c"
 line = 12
 begin = 2
-end = 21
+end = 18
 
 [JC_25]
 file = "HOME/tests/c/array_double.c"
 line = 12
 begin = 2
-end = 21
+end = 18
 
 [JC_26]
 file = "HOME/tests/c/array_double.c"
@@ -726,7 +734,7 @@ end = 23
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
-end = 179
+end = 170
 
 [JC_31]
 file = "HOME/tests/c/array_double.c"
@@ -805,6 +813,10 @@ type int8
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic a:  -> doubleP pointer
@@ -851,6 +863,11 @@ logic integer_of_int8: int8 -> int
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
+
 logic int8_of_integer: int -> int8
 
 axiom int8_coerce :
@@ -875,6 +892,10 @@ predicate left_valid_struct_doubleP(p:doubleP pointer, a:int,
  doubleP_alloc_table:doubleP alloc_table) =
  (offset_min(doubleP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -885,6 +906,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 axiom pointer_addr_of_doubleP_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(doubleP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -899,6 +926,10 @@ predicate right_valid_struct_doubleP(p:doubleP pointer, b:int,
  doubleP_alloc_table:doubleP alloc_table) =
  (offset_max(doubleP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
@@ -912,6 +943,11 @@ predicate strict_valid_root_doubleP(p:doubleP pointer, a:int, b:int,
  doubleP_alloc_table:doubleP alloc_table) =
  ((offset_min(doubleP_alloc_table, p) = a)
  and (offset_max(doubleP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -928,10 +964,47 @@ predicate strict_valid_struct_doubleP(p:doubleP pointer, a:int, b:int,
  ((offset_min(doubleP_alloc_table, p) = a)
  and (offset_max(doubleP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_a(doubleP_a_1_alloc_table:doubleP alloc_table) =
  (le_int(offset_min(doubleP_a_1_alloc_table, a), (0))
@@ -955,6 +1028,11 @@ predicate valid_root_doubleP(p:doubleP pointer, a:int, b:int,
  ((offset_min(doubleP_alloc_table, p) <= a)
  and (offset_max(doubleP_alloc_table, p) >= b))
 
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
+
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) <= a)
@@ -969,6 +1047,11 @@ predicate valid_struct_doubleP(p:doubleP pointer, a:int, b:int,
  doubleP_alloc_table:doubleP alloc_table) =
  ((offset_min(doubleP_alloc_table, p) <= a)
  and (offset_max(doubleP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1048,6 +1131,38 @@ parameter alloc_struct_doubleP_requires :
           and (alloc_fresh(doubleP_alloc_table@, result, n)
               and instanceof(doubleP_tag_table, result, doubleP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -1076,6 +1191,8 @@ parameter alloc_struct_voidP_requires :
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter doubleP_a_1_alloc_table : doubleP alloc_table ref
 
 parameter doubleP_b_2_alloc_table : doubleP alloc_table ref
@@ -1096,15 +1213,18 @@ parameter int8_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
 parameter test :
  tt:unit ->
   { } unit
   reads doubleP_a_1_alloc_table,doubleP_b_2_alloc_table,doubleP_c_3_alloc_table,doubleP_doubleM_a_1,doubleP_doubleM_b_2,doubleP_doubleM_c_3
   writes doubleP_doubleM_a_1
   { (JC_45:
-    ((JC_42: valid_a(doubleP_a_1_alloc_table))
+    ((JC_42: valid_c(doubleP_c_3_alloc_table))
     and ((JC_43: valid_b(doubleP_b_2_alloc_table))
-        and (JC_44: valid_c(doubleP_c_3_alloc_table))))) }
+        and (JC_44: valid_a(doubleP_a_1_alloc_table))))) }
 
 parameter test_requires :
  tt:unit ->
@@ -1136,16 +1256,21 @@ parameter test_requires :
                                                           select(doubleP_doubleM_c_3,
                                                           shift(c, (1))))),
                                          1.0))))))))))))
-    and ((JC_15: valid_a(doubleP_a_1_alloc_table))
+    and ((JC_15: valid_c(doubleP_c_3_alloc_table))
         and ((JC_16: valid_b(doubleP_b_2_alloc_table))
-            and (JC_17: valid_c(doubleP_c_3_alloc_table))))))}
+            and (JC_17: valid_a(doubleP_a_1_alloc_table))))))}
   unit
   reads doubleP_a_1_alloc_table,doubleP_b_2_alloc_table,doubleP_c_3_alloc_table,doubleP_doubleM_a_1,doubleP_doubleM_b_2,doubleP_doubleM_c_3
   writes doubleP_doubleM_a_1
   { (JC_45:
-    ((JC_42: valid_a(doubleP_a_1_alloc_table))
+    ((JC_42: valid_c(doubleP_c_3_alloc_table))
     and ((JC_43: valid_b(doubleP_b_2_alloc_table))
-        and (JC_44: valid_c(doubleP_c_3_alloc_table))))) }
+        and (JC_44: valid_a(doubleP_a_1_alloc_table))))) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let test_ensures_default =
  fun (tt : unit) ->
@@ -1178,9 +1303,9 @@ let test_ensures_default =
                                                           select(doubleP_doubleM_c_3,
                                                           shift(c, (1))))),
                                          1.0))))))))))))
-    and ((JC_31: valid_a(doubleP_a_1_alloc_table))
+    and ((JC_31: valid_c(doubleP_c_3_alloc_table))
         and ((JC_32: valid_b(doubleP_b_2_alloc_table))
-            and (JC_33: valid_c(doubleP_c_3_alloc_table)))))) }
+            and (JC_33: valid_a(doubleP_a_1_alloc_table)))))) }
   (init:
   try
    (C_5:
@@ -1255,9 +1380,9 @@ let test_safety =
                                                           select(doubleP_doubleM_c_3,
                                                           shift(c, (1))))),
                                          1.0))))))))))))
-    and ((JC_31: valid_a(doubleP_a_1_alloc_table))
+    and ((JC_31: valid_c(doubleP_c_3_alloc_table))
         and ((JC_32: valid_b(doubleP_b_2_alloc_table))
-            and (JC_33: valid_c(doubleP_c_3_alloc_table)))))) }
+            and (JC_33: valid_a(doubleP_a_1_alloc_table)))))) }
   (init:
   try
    (C_5:
@@ -1298,9 +1423,9 @@ let test_safety =
         0x1p-53)) } ]; void; (raise Return); (raise Return) end)) with
    Return -> void end)
   { (JC_41:
-    ((JC_38: valid_a(doubleP_a_1_alloc_table))
+    ((JC_38: valid_c(doubleP_c_3_alloc_table))
     and ((JC_39: valid_b(doubleP_b_2_alloc_table))
-        and (JC_40: valid_c(doubleP_c_3_alloc_table))))) }
+        and (JC_40: valid_a(doubleP_a_1_alloc_table))))) }
 
 
 ========== generation of alt-ergo VC output ==========
@@ -2557,6 +2682,10 @@ type int8
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic a : doubleP pointer
@@ -2604,6 +2733,11 @@ logic integer_of_int8 : int8 -> int
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
+
 logic int8_of_integer : int -> int8
 
 axiom int8_coerce:
@@ -2627,6 +2761,10 @@ predicate left_valid_struct_doubleP(p: doubleP pointer, a: int,
   doubleP_alloc_table: doubleP alloc_table) =
   (offset_min(doubleP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2637,6 +2775,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 axiom pointer_addr_of_doubleP_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(doubleP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2651,6 +2795,10 @@ predicate right_valid_struct_doubleP(p: doubleP pointer, b: int,
   doubleP_alloc_table: doubleP alloc_table) =
   (offset_max(doubleP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -2664,6 +2812,11 @@ predicate strict_valid_root_doubleP(p: doubleP pointer, a: int, b: int,
   doubleP_alloc_table: doubleP alloc_table) =
   ((offset_min(doubleP_alloc_table, p) = a) and
    (offset_max(doubleP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2680,10 +2833,46 @@ predicate strict_valid_struct_doubleP(p: doubleP pointer, a: int, b: int,
   ((offset_min(doubleP_alloc_table, p) = a) and
    (offset_max(doubleP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8.
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_a(doubleP_a_1_alloc_table: doubleP alloc_table) =
   ((offset_min(doubleP_a_1_alloc_table, a) <= 0) and
@@ -2707,6 +2896,11 @@ predicate valid_root_doubleP(p: doubleP pointer, a: int, b: int,
   ((offset_min(doubleP_alloc_table, p) <= a) and
    (offset_max(doubleP_alloc_table, p) >= b))
 
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
+
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
@@ -2721,6 +2915,11 @@ predicate valid_struct_doubleP(p: doubleP pointer, a: int, b: int,
   doubleP_alloc_table: doubleP alloc_table) =
   ((offset_min(doubleP_alloc_table, p) <= a) and
    (offset_max(doubleP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2768,9 +2967,9 @@ goal test_ensures_default_po_1:
             shift(c, 0)))) <= 1.0)) and
             ("JC_29": (abs_real(double_value(select(doubleP_doubleM_c_3,
             shift(c, 1)))) <= 1.0)))))))))))) and
-   (("JC_31": valid_a(doubleP_a_1_alloc_table)) and
+   (("JC_31": valid_c(doubleP_c_3_alloc_table)) and
     (("JC_32": valid_b(doubleP_b_2_alloc_table)) and
-     ("JC_33": valid_c(doubleP_c_3_alloc_table)))))) ->
+     ("JC_33": valid_a(doubleP_a_1_alloc_table)))))) ->
   forall result:double.
   (result = select(doubleP_doubleM_b_2, shift(b, 0))) ->
   forall result0:double.
@@ -2818,9 +3017,9 @@ goal test_safety_po_1:
             shift(c, 0)))) <= 1.0)) and
             ("JC_29": (abs_real(double_value(select(doubleP_doubleM_c_3,
             shift(c, 1)))) <= 1.0)))))))))))) and
-   (("JC_31": valid_a(doubleP_a_1_alloc_table)) and
+   (("JC_31": valid_c(doubleP_c_3_alloc_table)) and
     (("JC_32": valid_b(doubleP_b_2_alloc_table)) and
-     ("JC_33": valid_c(doubleP_c_3_alloc_table)))))) ->
+     ("JC_33": valid_a(doubleP_a_1_alloc_table)))))) ->
   forall result:double.
   (result = select(doubleP_doubleM_b_2, shift(b, 0))) ->
   forall result0:double.
@@ -2852,9 +3051,9 @@ goal test_safety_po_2:
             shift(c, 0)))) <= 1.0)) and
             ("JC_29": (abs_real(double_value(select(doubleP_doubleM_c_3,
             shift(c, 1)))) <= 1.0)))))))))))) and
-   (("JC_31": valid_a(doubleP_a_1_alloc_table)) and
+   (("JC_31": valid_c(doubleP_c_3_alloc_table)) and
     (("JC_32": valid_b(doubleP_b_2_alloc_table)) and
-     ("JC_33": valid_c(doubleP_c_3_alloc_table)))))) ->
+     ("JC_33": valid_a(doubleP_a_1_alloc_table)))))) ->
   forall result:double.
   (result = select(doubleP_doubleM_b_2, shift(b, 0))) ->
   forall result0:double.
@@ -2896,9 +3095,9 @@ goal test_safety_po_3:
             shift(c, 0)))) <= 1.0)) and
             ("JC_29": (abs_real(double_value(select(doubleP_doubleM_c_3,
             shift(c, 1)))) <= 1.0)))))))))))) and
-   (("JC_31": valid_a(doubleP_a_1_alloc_table)) and
+   (("JC_31": valid_c(doubleP_c_3_alloc_table)) and
     (("JC_32": valid_b(doubleP_b_2_alloc_table)) and
-     ("JC_33": valid_c(doubleP_c_3_alloc_table)))))) ->
+     ("JC_33": valid_a(doubleP_a_1_alloc_table)))))) ->
   forall result:double.
   (result = select(doubleP_doubleM_b_2, shift(b, 0))) ->
   forall result0:double.
@@ -2925,7 +3124,7 @@ goal test_safety_po_3:
   0))) - (double_value(select(doubleP_doubleM_b_2, shift(b,
   0))) + double_value(select(doubleP_doubleM_c_3, shift(c,
   0)))))) <= 0x1.p-53)) ->
-  ("JC_41": ("JC_38": valid_a(doubleP_a_1_alloc_table)))
+  ("JC_41": ("JC_38": valid_c(doubleP_c_3_alloc_table)))
 
 goal test_safety_po_4:
   forall doubleP_a_1_alloc_table:doubleP alloc_table.
@@ -2953,9 +3152,9 @@ goal test_safety_po_4:
             shift(c, 0)))) <= 1.0)) and
             ("JC_29": (abs_real(double_value(select(doubleP_doubleM_c_3,
             shift(c, 1)))) <= 1.0)))))))))))) and
-   (("JC_31": valid_a(doubleP_a_1_alloc_table)) and
+   (("JC_31": valid_c(doubleP_c_3_alloc_table)) and
     (("JC_32": valid_b(doubleP_b_2_alloc_table)) and
-     ("JC_33": valid_c(doubleP_c_3_alloc_table)))))) ->
+     ("JC_33": valid_a(doubleP_a_1_alloc_table)))))) ->
   forall result:double.
   (result = select(doubleP_doubleM_b_2, shift(b, 0))) ->
   forall result0:double.
@@ -3010,9 +3209,9 @@ goal test_safety_po_5:
             shift(c, 0)))) <= 1.0)) and
             ("JC_29": (abs_real(double_value(select(doubleP_doubleM_c_3,
             shift(c, 1)))) <= 1.0)))))))))))) and
-   (("JC_31": valid_a(doubleP_a_1_alloc_table)) and
+   (("JC_31": valid_c(doubleP_c_3_alloc_table)) and
     (("JC_32": valid_b(doubleP_b_2_alloc_table)) and
-     ("JC_33": valid_c(doubleP_c_3_alloc_table)))))) ->
+     ("JC_33": valid_a(doubleP_a_1_alloc_table)))))) ->
   forall result:double.
   (result = select(doubleP_doubleM_b_2, shift(b, 0))) ->
   forall result0:double.
@@ -3039,7 +3238,7 @@ goal test_safety_po_5:
   0))) - (double_value(select(doubleP_doubleM_b_2, shift(b,
   0))) + double_value(select(doubleP_doubleM_c_3, shift(c,
   0)))))) <= 0x1.p-53)) ->
-  ("JC_41": ("JC_40": valid_c(doubleP_c_3_alloc_table)))
+  ("JC_41": ("JC_40": valid_a(doubleP_a_1_alloc_table)))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

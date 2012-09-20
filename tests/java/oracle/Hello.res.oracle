@@ -2068,11 +2068,15 @@ begin = 19
 end = 27
 
 ========== jessie execution ==========
-Generating Why function cons_PrintStream_OutputStream_boolean
-Generating Why function cons_PrintStream_OutputStream_boolean_String
 Generating Why function Hello_main
 Generating Why function cons_Hello
 Generating Why function cons_System
+Generating Why function cons_OutputStream
+Generating Why function cons_FilterOutputStream_OutputStream
+Generating Why function cons_PrintStream_OutputStream
+Generating Why function cons_PrintStream_boolean_OutputStream
+Generating Why function cons_PrintStream_OutputStream_boolean
+Generating Why function cons_PrintStream_OutputStream_boolean_String
 Generating Why function cons_Object
 Generating Why function cons_String
 Generating Why function cons_String_String
@@ -2086,10 +2090,6 @@ Generating Why function cons_String_byteA_int_int
 Generating Why function cons_String_byteA
 Generating Why function cons_String_StringBuffer
 Generating Why function cons_String_int_int_charA
-Generating Why function cons_OutputStream
-Generating Why function cons_FilterOutputStream_OutputStream
-Generating Why function cons_PrintStream_OutputStream
-Generating Why function cons_PrintStream_boolean_OutputStream
 ========== file tests/java/Hello.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -2301,10 +2301,10 @@ begin = -1
 end = -1
 
 [JC_1084]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1600
-begin = 19
-end = 26
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 485
+begin = 16
+end = 23
 
 [JC_922]
 file = "HOME/"
@@ -2325,16 +2325,16 @@ begin = -1
 end = -1
 
 [JC_1086]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1600
-begin = 19
-end = 26
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 485
+begin = 16
+end = 23
 
 [JC_924]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1414
-begin = 18
-end = 27
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 299
+begin = 17
+end = 22
 
 [JC_1087]
 file = "HOME/"
@@ -2355,10 +2355,10 @@ begin = -1
 end = -1
 
 [JC_926]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1414
-begin = 18
-end = 27
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 299
+begin = 17
+end = 22
 
 [JC_1089]
 file = "HOME/"
@@ -2397,10 +2397,10 @@ begin = -1
 end = -1
 
 [JC_1092]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 444
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 499
 begin = 16
-end = 22
+end = 23
 
 [JC_930]
 file = "HOME/"
@@ -2421,16 +2421,16 @@ begin = -1
 end = -1
 
 [JC_1094]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 444
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 499
 begin = 16
-end = 22
+end = 23
 
 [JC_932]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 234
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
 
 [JC_1095]
 file = "HOME/"
@@ -2451,16 +2451,16 @@ begin = -1
 end = -1
 
 [JC_934]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 234
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
 
 [JC_700]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1194
-begin = 15
-end = 26
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 138
+begin = 16
+end = 21
 
 [JC_1097]
 file = "HOME/"
@@ -2493,10 +2493,10 @@ begin = -1
 end = -1
 
 [JC_702]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1194
-begin = 15
-end = 26
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 138
+begin = 16
+end = 21
 
 [JC_1099]
 file = "HOME/"
@@ -2554,9 +2554,9 @@ end = -1
 
 [JC_708]
 file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 527
-begin = 16
-end = 23
+line = 55
+begin = 11
+end = 22
 
 [JC_709]
 file = "HOME/"
@@ -2573,10 +2573,10 @@ begin = 11
 end = 17
 
 [JC_940]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 843
-begin = 23
-end = 34
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 318
+begin = 17
+end = 24
 
 [JC_941]
 file = "HOME/"
@@ -2585,10 +2585,10 @@ begin = -1
 end = -1
 
 [JC_942]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 843
-begin = 23
-end = 34
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 318
+begin = 17
+end = 24
 
 [JC_943]
 file = "HOME/"
@@ -2604,9 +2604,9 @@ end = -1
 
 [JC_710]
 file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 527
-begin = 16
-end = 23
+line = 55
+begin = 11
+end = 22
 
 [JC_945]
 file = "HOME/"
@@ -2645,10 +2645,10 @@ begin = -1
 end = -1
 
 [JC_948]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 275
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
 
 [JC_714]
 file = "HOME/"
@@ -2669,10 +2669,10 @@ begin = -1
 end = -1
 
 [JC_716]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 656
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2177
 begin = 25
-end = 36
+end = 32
 
 [JC_717]
 file = "HOME/"
@@ -2681,10 +2681,10 @@ begin = -1
 end = -1
 
 [JC_718]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 656
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2177
 begin = 25
-end = 36
+end = 32
 
 [JC_719]
 file = "HOME/"
@@ -2693,10 +2693,10 @@ begin = -1
 end = -1
 
 [JC_950]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 275
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
 
 [JC_951]
 file = "HOME/"
@@ -2741,10 +2741,10 @@ begin = -1
 end = -1
 
 [JC_956]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1440
-begin = 18
-end = 27
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 349
+begin = 16
+end = 21
 
 [JC_722]
 file = "HOME/"
@@ -2765,15 +2765,15 @@ begin = -1
 end = -1
 
 [JC_958]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1440
-begin = 18
-end = 27
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 349
+begin = 16
+end = 21
 
 [JC_724]
 file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 541
-begin = 16
+line = 67
+begin = 12
 end = 23
 
 [JC_959]
@@ -2790,8 +2790,8 @@ end = -1
 
 [JC_726]
 file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 541
-begin = 16
+line = 67
+begin = 12
 end = 23
 
 [JC_727]
@@ -2837,10 +2837,10 @@ begin = -1
 end = -1
 
 [JC_964]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 283
-begin = 24
-end = 35
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
 
 [JC_730]
 file = "HOME/"
@@ -2861,16 +2861,16 @@ begin = -1
 end = -1
 
 [JC_966]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 283
-begin = 24
-end = 35
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
 
 [JC_732]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 1221
-begin = 15
-end = 22
+line = 2191
+begin = 25
+end = 36
 
 [JC_967]
 file = "HOME/"
@@ -2892,15 +2892,15 @@ end = -1
 
 [JC_734]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 1221
-begin = 15
-end = 22
+line = 2191
+begin = 25
+end = 36
 
 [JC_500]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 389
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1546
+begin = 18
+end = 25
 
 [JC_969]
 file = "HOME/"
@@ -2927,10 +2927,10 @@ begin = -1
 end = -1
 
 [JC_502]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 389
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1546
+begin = 18
+end = 25
 
 [JC_737]
 file = "HOME/"
@@ -2981,10 +2981,10 @@ begin = -1
 end = -1
 
 [JC_508]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1038
-begin = 19
-end = 29
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 882
+begin = 24
+end = 45
 
 [JC_509]
 file = "HOME/"
@@ -2998,12 +2998,6 @@ line = 0
 begin = -1
 end = -1
 
-[JC_971]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [cons_String_byteA_int_ensures_default]
 name = "Constructor of class String"
 behavior = "default behavior"
@@ -3012,11 +3006,17 @@ line = 275
 begin = 11
 end = 17
 
+[JC_971]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_972]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 857
-begin = 32
-end = 46
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 361
+begin = 16
+end = 21
 
 [JC_973]
 file = "HOME/"
@@ -3025,16 +3025,16 @@ begin = -1
 end = -1
 
 [JC_974]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 857
-begin = 32
-end = 46
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 361
+begin = 16
+end = 21
 
 [JC_740]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 555
-begin = 16
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2204
+begin = 25
+end = 36
 
 [JC_975]
 file = "HOME/"
@@ -3055,10 +3055,10 @@ begin = -1
 end = -1
 
 [JC_742]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 555
-begin = 16
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2204
+begin = 25
+end = 36
 
 [JC_977]
 file = "HOME/"
@@ -3085,10 +3085,10 @@ begin = -1
 end = -1
 
 [JC_510]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1038
-begin = 19
-end = 29
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 882
+begin = 24
+end = 45
 
 [JC_979]
 file = "HOME/"
@@ -3133,10 +3133,10 @@ begin = -1
 end = -1
 
 [JC_748]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 700
-begin = 25
-end = 31
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 75
+begin = 17
+end = 21
 
 [JC_514]
 file = "HOME/"
@@ -3157,9 +3157,9 @@ begin = -1
 end = -1
 
 [JC_516]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1600
+begin = 19
 end = 26
 
 [JC_517]
@@ -3169,9 +3169,9 @@ begin = -1
 end = -1
 
 [JC_518]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1600
+begin = 19
 end = 26
 
 [JC_519]
@@ -3181,10 +3181,10 @@ begin = -1
 end = -1
 
 [JC_980]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 316
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
 
 [JC_981]
 file = "HOME/"
@@ -3193,10 +3193,10 @@ begin = -1
 end = -1
 
 [JC_982]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 316
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
 
 [JC_983]
 file = "HOME/"
@@ -3211,10 +3211,10 @@ begin = -1
 end = -1
 
 [JC_750]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 700
-begin = 25
-end = 31
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 75
+begin = 17
+end = 21
 
 [JC_985]
 file = "HOME/"
@@ -3253,10 +3253,10 @@ begin = -1
 end = -1
 
 [JC_988]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1482
-begin = 24
-end = 35
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 375
+begin = 16
+end = 21
 
 [JC_754]
 file = "HOME/"
@@ -3290,9 +3290,9 @@ end = -1
 
 [JC_756]
 file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 569
-begin = 16
-end = 23
+line = 92
+begin = 11
+end = 22
 
 [JC_522]
 file = "HOME/"
@@ -3314,15 +3314,15 @@ end = -1
 
 [JC_758]
 file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 569
-begin = 16
-end = 23
+line = 92
+begin = 11
+end = 22
 
 [JC_524]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 182
-begin = 31
-end = 38
+file = "HOME/lib/java_api/java/io/OutputStream.java"
+line = 45
+begin = 25
+end = 30
 
 [cons_String_charA_int_int_safety]
 name = "Constructor of class String"
@@ -3345,10 +3345,10 @@ begin = -1
 end = -1
 
 [JC_526]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 182
-begin = 31
-end = 38
+file = "HOME/lib/java_api/java/io/OutputStream.java"
+line = 45
+begin = 25
+end = 30
 
 [JC_527]
 file = "HOME/"
@@ -3369,10 +3369,10 @@ begin = -1
 end = -1
 
 [JC_990]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1482
-begin = 24
-end = 35
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 375
+begin = 16
+end = 21
 
 [JC_991]
 file = "HOME/"
@@ -3417,10 +3417,10 @@ begin = -1
 end = -1
 
 [JC_996]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 345
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
 
 [JC_762]
 file = "HOME/"
@@ -3441,16 +3441,16 @@ begin = -1
 end = -1
 
 [JC_998]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 345
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
 
 [JC_764]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 1239
-begin = 15
-end = 22
+line = 2216
+begin = 25
+end = 32
 
 [JC_530]
 file = "HOME/"
@@ -3478,15 +3478,15 @@ end = -1
 
 [JC_766]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 1239
-begin = 15
-end = 22
+line = 2216
+begin = 25
+end = 32
 
 [JC_532]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 403
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1633
+begin = 18
+end = 30
 
 [JC_767]
 file = "HOME/"
@@ -3507,22 +3507,22 @@ begin = -1
 end = -1
 
 [JC_534]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 403
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1633
+begin = 18
+end = 30
 
 [JC_300]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 681
-begin = 19
-end = 35
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 575
+begin = 25
+end = 36
 
 [JC_1300]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2152
-begin = 25
-end = 32
+line = 444
+begin = 16
+end = 22
 
 [JC_769]
 file = "HOME/"
@@ -3555,16 +3555,16 @@ begin = -1
 end = -1
 
 [JC_302]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 681
-begin = 19
-end = 35
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 575
+begin = 25
+end = 36
 
 [JC_1302]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2152
-begin = 25
-end = 32
+line = 444
+begin = 16
+end = 22
 
 [JC_537]
 file = "HOME/"
@@ -3645,16 +3645,16 @@ begin = -1
 end = -1
 
 [JC_308]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 277
-begin = 17
-end = 22
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1167
+begin = 15
+end = 26
 
 [JC_1308]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 138
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 481
 begin = 16
-end = 21
+end = 24
 
 [JC_309]
 file = "HOME/"
@@ -3682,15 +3682,27 @@ end = -1
 
 [JC_772]
 file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 597
-begin = 16
-end = 23
+line = 113
+begin = 11
+end = 22
 
 [JC_773]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_774]
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 113
+begin = 11
+end = 22
+
+[JC_540]
+file = "HOME/lib/java_api/java/io/OutputStream.java"
+line = 57
+begin = 16
+end = 21
 
 [cons_FilterOutputStream_OutputStream_ensures_default]
 name = "Constructor of class FilterOutputStream"
@@ -3699,18 +3711,6 @@ file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
 line = 43
 begin = 11
 end = 29
-
-[JC_774]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 597
-begin = 16
-end = 23
-
-[JC_540]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1053
-begin = 19
-end = 27
 
 [JC_775]
 file = "HOME/"
@@ -3731,10 +3731,10 @@ begin = -1
 end = -1
 
 [JC_542]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1053
-begin = 19
-end = 27
+file = "HOME/lib/java_api/java/io/OutputStream.java"
+line = 57
+begin = 16
+end = 21
 
 [JC_777]
 file = "HOME/"
@@ -3761,16 +3761,16 @@ begin = -1
 end = -1
 
 [JC_310]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 277
-begin = 17
-end = 22
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1167
+begin = 15
+end = 26
 
 [JC_1310]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 138
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 481
 begin = 16
-end = 21
+end = 24
 
 [JC_779]
 file = "HOME/"
@@ -3841,10 +3841,10 @@ begin = -1
 end = -1
 
 [JC_548]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1666
+begin = 18
+end = 28
 
 [JC_314]
 file = "HOME/"
@@ -3877,16 +3877,16 @@ begin = -1
 end = -1
 
 [JC_316]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 728
-begin = 15
-end = 24
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 614
+begin = 25
+end = 36
 
 [JC_1316]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 55
-begin = 11
-end = 22
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 532
+begin = 16
+end = 24
 
 [JC_317]
 file = "HOME/"
@@ -3901,16 +3901,16 @@ begin = -1
 end = -1
 
 [JC_318]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 728
-begin = 15
-end = 24
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 614
+begin = 25
+end = 36
 
 [JC_1318]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 55
-begin = 11
-end = 22
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 532
+begin = 16
+end = 24
 
 [JC_319]
 file = "HOME/"
@@ -3933,10 +3933,10 @@ begin = -1
 end = -1
 
 [JC_780]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 724
-begin = 23
-end = 27
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2228
+begin = 25
+end = 32
 
 [JC_781]
 file = "HOME/"
@@ -3945,10 +3945,10 @@ begin = -1
 end = -1
 
 [JC_782]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 724
-begin = 23
-end = 27
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2228
+begin = 25
+end = 32
 
 [JC_783]
 file = "HOME/"
@@ -3963,10 +3963,10 @@ begin = -1
 end = -1
 
 [JC_550]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1666
+begin = 18
+end = 28
 
 [JC_785]
 file = "HOME/"
@@ -4005,10 +4005,10 @@ begin = -1
 end = -1
 
 [JC_788]
-file = "HOME/lib/java_api/java/lang/Comparable.java"
-line = 121
-begin = 15
-end = 24
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2243
+begin = 25
+end = 32
 
 [JC_554]
 file = "HOME/"
@@ -4053,10 +4053,10 @@ begin = -1
 end = -1
 
 [JC_556]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 280
-begin = 30
-end = 47
+file = "HOME/lib/java_api/java/io/OutputStream.java"
+line = 89
+begin = 16
+end = 21
 
 [JC_322]
 file = "HOME/"
@@ -4089,22 +4089,22 @@ begin = -1
 end = -1
 
 [JC_558]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 280
-begin = 30
-end = 47
+file = "HOME/lib/java_api/java/io/OutputStream.java"
+line = 89
+begin = 16
+end = 21
 
 [JC_324]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1194
+begin = 15
+end = 26
 
 [JC_1324]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2177
-begin = 25
-end = 32
+line = 572
+begin = 18
+end = 26
 
 [JC_559]
 file = "HOME/"
@@ -4125,16 +4125,16 @@ begin = -1
 end = -1
 
 [JC_326]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1194
+begin = 15
+end = 26
 
 [JC_1326]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2177
-begin = 25
-end = 32
+line = 572
+begin = 18
+end = 26
 
 [JC_327]
 file = "HOME/"
@@ -4173,10 +4173,10 @@ begin = -1
 end = -1
 
 [JC_790]
-file = "HOME/lib/java_api/java/lang/Comparable.java"
-line = 121
-begin = 15
-end = 24
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2243
+begin = 25
+end = 32
 
 [JC_791]
 file = "HOME/"
@@ -4221,10 +4221,10 @@ begin = -1
 end = -1
 
 [JC_796]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1257
-begin = 15
-end = 22
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 121
+begin = 17
+end = 27
 
 [JC_562]
 file = "HOME/"
@@ -4245,16 +4245,16 @@ begin = -1
 end = -1
 
 [JC_798]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1257
-begin = 15
-end = 22
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 121
+begin = 17
+end = 27
 
 [JC_564]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 417
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1750
+begin = 20
+end = 25
 
 [JC_330]
 file = "HOME/"
@@ -4293,22 +4293,22 @@ begin = -1
 end = -1
 
 [JC_566]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 417
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1750
+begin = 20
+end = 25
 
 [JC_332]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 38
-begin = 31
-end = 46
+line = 656
+begin = 25
+end = 36
 
 [JC_1332]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 67
-begin = 12
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 591
+begin = 18
+end = 26
 
 [JC_567]
 file = "HOME/"
@@ -4336,9 +4336,9 @@ end = -1
 
 [JC_334]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 38
-begin = 31
-end = 46
+line = 656
+begin = 25
+end = 36
 
 [JC_100]
 file = "HOME/"
@@ -4347,16 +4347,16 @@ begin = -1
 end = -1
 
 [JC_1334]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 67
-begin = 12
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 591
+begin = 18
+end = 26
 
 [JC_1100]
-file = "HOME/lib/java_api/java/io/OutputStream.java"
-line = 45
-begin = 25
-end = 30
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 513
+begin = 16
+end = 23
 
 [JC_569]
 file = "HOME/"
@@ -4371,10 +4371,10 @@ begin = -1
 end = -1
 
 [JC_101]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 132
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1335]
 file = "HOME/"
@@ -4407,10 +4407,10 @@ begin = -1
 end = -1
 
 [JC_1102]
-file = "HOME/lib/java_api/java/io/OutputStream.java"
-line = 45
-begin = 25
-end = 30
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 513
+begin = 16
+end = 23
 
 [JC_337]
 file = "HOME/"
@@ -4419,10 +4419,11 @@ begin = -1
 end = -1
 
 [JC_103]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/Hello.jc"
+line = 171
+begin = 49
+end = 61
 
 [JC_1337]
 file = "HOME/"
@@ -4443,10 +4444,11 @@ begin = -1
 end = -1
 
 [JC_104]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/Hello.jc"
+line = 171
+begin = 10
+end = 62
 
 [JC_1338]
 file = "HOME/"
@@ -4467,10 +4469,11 @@ begin = -1
 end = -1
 
 [JC_105]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = IndexBounds
+file = "HOME/tests/java/Hello.jc"
+line = 171
+begin = 10
+end = 62
 
 [JC_1339]
 file = "HOME/"
@@ -4485,10 +4488,11 @@ begin = -1
 end = -1
 
 [JC_106]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/Hello.jc"
+line = 171
+begin = 49
+end = 61
 
 [JC_1106]
 file = "HOME/"
@@ -4497,10 +4501,11 @@ begin = -1
 end = -1
 
 [JC_107]
+kind = UserCall
 file = "HOME/tests/java/Hello.jc"
-line = 122
-begin = 8
-end = 31
+line = 171
+begin = 10
+end = 62
 
 [JC_1107]
 file = "HOME/"
@@ -4517,22 +4522,22 @@ begin = 11
 end = 22
 
 [JC_108]
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 640
+begin = 19
+end = 32
+
+[JC_1108]
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 527
+begin = 16
+end = 23
+
+[JC_109]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_1108]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 481
-begin = 16
-end = 24
-
-[JC_109]
-file = "HOME/tests/java/Hello.jc"
-line = 122
-begin = 8
-end = 31
 
 [JC_1109]
 file = "HOME/"
@@ -4553,10 +4558,10 @@ begin = -1
 end = -1
 
 [JC_572]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1070
-begin = 15
-end = 23
+file = "HOME/lib/java_api/java/io/OutputStream.java"
+line = 115
+begin = 16
+end = 21
 
 [JC_573]
 file = "HOME/"
@@ -4565,15 +4570,15 @@ begin = -1
 end = -1
 
 [JC_574]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1070
-begin = 15
-end = 23
+file = "HOME/lib/java_api/java/io/OutputStream.java"
+line = 115
+begin = 16
+end = 21
 
 [JC_340]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 299
-begin = 17
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1221
+begin = 15
 end = 22
 
 [JC_575]
@@ -4595,9 +4600,9 @@ begin = -1
 end = -1
 
 [JC_342]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 299
-begin = 17
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1221
+begin = 15
 end = 22
 
 [JC_577]
@@ -4625,16 +4630,16 @@ begin = -1
 end = -1
 
 [JC_110]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 640
+begin = 19
+end = 32
 
 [JC_1110]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 481
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 527
 begin = 16
-end = 24
+end = 23
 
 [JC_579]
 file = "HOME/"
@@ -4649,10 +4654,10 @@ begin = -1
 end = -1
 
 [JC_111]
-file = "HOME/tests/java/Hello.jc"
-line = 125
-begin = 11
-end = 103
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1111]
 file = "HOME/"
@@ -4667,10 +4672,10 @@ begin = -1
 end = -1
 
 [JC_112]
-file = "HOME/tests/java/Hello.jc"
-line = 124
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1112]
 file = "HOME/"
@@ -4685,10 +4690,10 @@ begin = -1
 end = -1
 
 [JC_113]
-file = "HOME/tests/java/Hello.jc"
-line = 125
-begin = 11
-end = 103
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1113]
 file = "HOME/"
@@ -4698,15 +4703,15 @@ end = -1
 
 [JC_348]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 44
-begin = 12
-end = 18
+line = 700
+begin = 25
+end = 31
 
 [JC_114]
-file = "HOME/tests/java/Hello.jc"
-line = 124
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1114]
 file = "HOME/"
@@ -4739,16 +4744,16 @@ begin = -1
 end = -1
 
 [JC_1116]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1633
-begin = 18
-end = 30
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 541
+begin = 16
+end = 23
 
 [JC_117]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2271
-begin = 25
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1117]
 file = "HOME/"
@@ -4763,16 +4768,16 @@ begin = -1
 end = -1
 
 [JC_1118]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1633
-begin = 18
-end = 30
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 541
+begin = 16
+end = 23
 
 [JC_119]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2271
-begin = 25
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1119]
 file = "HOME/"
@@ -4781,10 +4786,10 @@ begin = -1
 end = -1
 
 [JC_580]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1792
+begin = 20
+end = 25
 
 [JC_581]
 file = "HOME/"
@@ -4793,10 +4798,10 @@ begin = -1
 end = -1
 
 [JC_582]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1792
+begin = 20
+end = 25
 
 [JC_583]
 file = "HOME/"
@@ -4812,9 +4817,9 @@ end = -1
 
 [JC_350]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 44
-begin = 12
-end = 18
+line = 700
+begin = 25
+end = 31
 
 [JC_585]
 file = "HOME/"
@@ -4853,10 +4858,10 @@ begin = -1
 end = -1
 
 [JC_588]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 374
-begin = 30
-end = 39
+file = "HOME/lib/java_api/java/io/OutputStream.java"
+line = 128
+begin = 16
+end = 21
 
 [JC_354]
 file = "HOME/"
@@ -4901,10 +4906,10 @@ begin = -1
 end = -1
 
 [JC_356]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1239
+begin = 15
+end = 22
 
 [JC_122]
 file = "HOME/"
@@ -4937,22 +4942,16 @@ begin = -1
 end = -1
 
 [JC_358]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1239
+begin = 15
+end = 22
 
 [JC_124]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_1124]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 532
-begin = 16
-end = 24
+line = 681
+begin = 19
+end = 35
 
 [cons_String_safety]
 name = "Constructor of class String"
@@ -4962,6 +4961,12 @@ line = 129
 begin = 11
 end = 17
 
+[JC_1124]
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 555
+begin = 16
+end = 23
+
 [JC_359]
 file = "HOME/"
 line = 0
@@ -4969,10 +4974,10 @@ begin = -1
 end = -1
 
 [JC_125]
-file = "HOME/tests/java/Hello.jc"
-line = 129
-begin = 8
-end = 22
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_Hello_ensures_default]
 name = "Constructor of class Hello"
@@ -4989,22 +4994,22 @@ begin = -1
 end = -1
 
 [JC_126]
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 681
+begin = 19
+end = 35
+
+[JC_1126]
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 555
+begin = 16
+end = 23
+
+[JC_127]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_1126]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 532
-begin = 16
-end = 24
-
-[JC_127]
-file = "HOME/tests/java/Hello.jc"
-line = 129
-begin = 8
-end = 22
 
 [JC_1127]
 file = "HOME/"
@@ -5025,12 +5030,6 @@ begin = -1
 end = -1
 
 [JC_129]
-file = "HOME/tests/java/Hello.jc"
-line = 132
-begin = 11
-end = 66
-
-[JC_1129]
 file = "HOME/"
 line = 0
 begin = -1
@@ -5044,6 +5043,12 @@ line = 391
 begin = 11
 end = 17
 
+[JC_1129]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [cons_PrintStream_OutputStream_boolean_safety]
 name = "Constructor of class PrintStream"
 behavior = "Safety"
@@ -5053,10 +5058,10 @@ begin = 11
 end = 22
 
 [JC_590]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 374
-begin = 30
-end = 39
+file = "HOME/lib/java_api/java/io/OutputStream.java"
+line = 128
+begin = 16
+end = 21
 
 [JC_591]
 file = "HOME/"
@@ -5101,10 +5106,10 @@ begin = -1
 end = -1
 
 [JC_596]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 431
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_362]
 file = "HOME/"
@@ -5125,22 +5130,22 @@ begin = -1
 end = -1
 
 [JC_598]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 431
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_364]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 778
-begin = 15
-end = 24
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 724
+begin = 23
+end = 27
 
 [JC_130]
-file = "HOME/tests/java/Hello.jc"
-line = 131
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1130]
 file = "HOME/"
@@ -5161,10 +5166,10 @@ begin = -1
 end = -1
 
 [JC_131]
-file = "HOME/tests/java/Hello.jc"
-line = 132
-begin = 11
-end = 66
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1131]
 file = "HOME/"
@@ -5173,16 +5178,16 @@ begin = -1
 end = -1
 
 [JC_366]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 778
-begin = 15
-end = 24
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 724
+begin = 23
+end = 27
 
 [JC_132]
-file = "HOME/tests/java/Hello.jc"
-line = 131
-begin = 10
-end = 18
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 728
+begin = 15
+end = 24
 
 [cons_PrintStream_OutputStream_boolean_ensures_default]
 name = "Constructor of class PrintStream"
@@ -5193,10 +5198,10 @@ begin = 11
 end = 22
 
 [JC_1132]
-file = "HOME/lib/java_api/java/io/OutputStream.java"
-line = 57
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 569
 begin = 16
-end = 21
+end = 23
 
 [JC_367]
 file = "HOME/"
@@ -5210,12 +5215,6 @@ line = 0
 begin = -1
 end = -1
 
-[JC_1133]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [cons_String_StringBuffer_ensures_default]
 name = "Constructor of class String"
 behavior = "default behavior"
@@ -5224,6 +5223,12 @@ line = 403
 begin = 11
 end = 17
 
+[JC_1133]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_368]
 file = "HOME/"
 line = 0
@@ -5231,16 +5236,16 @@ begin = -1
 end = -1
 
 [JC_134]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 728
+begin = 15
+end = 24
 
 [JC_1134]
-file = "HOME/lib/java_api/java/io/OutputStream.java"
-line = 57
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 569
 begin = 16
-end = 21
+end = 23
 
 [JC_369]
 file = "HOME/"
@@ -5249,10 +5254,10 @@ begin = -1
 end = -1
 
 [JC_135]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 152
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1135]
 file = "HOME/"
@@ -5273,14 +5278,6 @@ begin = -1
 end = -1
 
 [JC_137]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 152
-begin = 16
-end = 21
-
-[cons_OutputStream_ensures_default]
-name = "Constructor of class OutputStream"
-behavior = "default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -5293,6 +5290,14 @@ begin = -1
 end = -1
 
 [JC_138]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_OutputStream_ensures_default]
+name = "Constructor of class OutputStream"
+behavior = "default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -5329,10 +5334,16 @@ begin = -1
 end = -1
 
 [JC_372]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 318
-begin = 17
-end = 24
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1257
+begin = 15
+end = 22
+
+[JC_373]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_OutputStream_safety]
 name = "Constructor of class OutputStream"
@@ -5342,29 +5353,23 @@ line = 0
 begin = -1
 end = -1
 
-[JC_373]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_374]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 318
-begin = 17
-end = 24
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1257
+begin = 15
+end = 22
 
 [JC_140]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 38
+begin = 31
+end = 46
 
 [JC_1140]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 572
-begin = 18
-end = 26
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 597
+begin = 16
+end = 23
 
 [JC_375]
 file = "HOME/"
@@ -5391,16 +5396,16 @@ begin = -1
 end = -1
 
 [JC_142]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 38
+begin = 31
+end = 46
 
 [JC_1142]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 572
-begin = 18
-end = 26
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 597
+begin = 16
+end = 23
 
 [JC_377]
 file = "HOME/"
@@ -5409,10 +5414,10 @@ begin = -1
 end = -1
 
 [JC_143]
-file = "HOME/tests/java/Hello.jc"
-line = 135
-begin = 8
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1143]
 file = "HOME/"
@@ -5445,10 +5450,10 @@ begin = -1
 end = -1
 
 [JC_145]
-file = "HOME/tests/java/Hello.jc"
-line = 135
-begin = 8
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1145]
 file = "HOME/"
@@ -5469,10 +5474,10 @@ begin = -1
 end = -1
 
 [JC_147]
-file = "HOME/tests/java/Hello.jc"
-line = 138
-begin = 11
-end = 103
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1147]
 file = "HOME/"
@@ -5481,22 +5486,22 @@ begin = -1
 end = -1
 
 [JC_148]
-file = "HOME/tests/java/Hello.jc"
-line = 137
-begin = 10
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 44
+begin = 12
 end = 18
 
 [JC_1148]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1666
-begin = 18
-end = 28
+file = "HOME/lib/java_api/java/lang/Comparable.java"
+line = 121
+begin = 15
+end = 24
 
 [JC_149]
-file = "HOME/tests/java/Hello.jc"
-line = 138
-begin = 11
-end = 103
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1149]
 file = "HOME/"
@@ -5511,10 +5516,10 @@ begin = -1
 end = -1
 
 [JC_11]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2204
-begin = 25
-end = 36
+file = "HOME/tests/java/Hello.jc"
+line = 116
+begin = 8
+end = 22
 
 [JC_12]
 file = "HOME/"
@@ -5523,22 +5528,22 @@ begin = -1
 end = -1
 
 [JC_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 119
+begin = 11
+end = 66
 
 [JC_380]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 846
-begin = 15
-end = 34
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 746
+begin = 23
+end = 25
 
 [JC_14]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 118
+begin = 10
+end = 18
 
 [JC_381]
 file = "HOME/"
@@ -5547,22 +5552,22 @@ begin = -1
 end = -1
 
 [JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 119
+begin = 11
+end = 66
 
 [JC_382]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 846
-begin = 15
-end = 34
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 746
+begin = 23
+end = 25
 
 [JC_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 118
+begin = 10
+end = 18
 
 [JC_383]
 file = "HOME/"
@@ -5571,10 +5576,10 @@ begin = -1
 end = -1
 
 [JC_17]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 75
-begin = 17
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_384]
 file = "HOME/"
@@ -5583,9 +5588,9 @@ begin = -1
 end = -1
 
 [JC_150]
-file = "HOME/tests/java/Hello.jc"
-line = 137
-begin = 10
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 44
+begin = 12
 end = 18
 
 [JC_18]
@@ -5595,10 +5600,10 @@ begin = -1
 end = -1
 
 [JC_1150]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1666
-begin = 18
-end = 28
+file = "HOME/lib/java_api/java/lang/Comparable.java"
+line = 121
+begin = 15
+end = 24
 
 [JC_385]
 file = "HOME/"
@@ -5613,10 +5618,10 @@ begin = -1
 end = -1
 
 [JC_19]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 75
-begin = 17
-end = 21
+file = "HOME/tests/java/Hello.jc"
+line = 122
+begin = 8
+end = 31
 
 [JC_1151]
 file = "HOME/"
@@ -5649,10 +5654,10 @@ begin = -1
 end = -1
 
 [JC_153]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2285
-begin = 25
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1153]
 file = "HOME/"
@@ -5661,10 +5666,10 @@ begin = -1
 end = -1
 
 [JC_388]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1315
+begin = 15
+end = 26
 
 [JC_154]
 file = "HOME/"
@@ -5679,10 +5684,10 @@ begin = -1
 end = -1
 
 [JC_155]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2285
-begin = 25
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_389]
 file = "HOME/"
@@ -5697,16 +5702,16 @@ begin = -1
 end = -1
 
 [JC_156]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 778
+begin = 15
+end = 24
 
 [JC_1156]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 591
-begin = 18
-end = 26
+file = "HOME/lib/java_api/java/lang/CharSequence.java"
+line = 40
+begin = 8
+end = 14
 
 [JC_157]
 file = "HOME/"
@@ -5721,10 +5726,16 @@ begin = -1
 end = -1
 
 [JC_158]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 778
+begin = 15
+end = 24
+
+[JC_1158]
+file = "HOME/lib/java_api/java/lang/CharSequence.java"
+line = 40
+begin = 8
+end = 14
 
 [cons_PrintStream_OutputStream_ensures_default]
 name = "Constructor of class PrintStream"
@@ -5733,12 +5744,6 @@ file = "HOME/lib/java_api/java/io/PrintStream.java"
 line = 55
 begin = 11
 end = 22
-
-[JC_1158]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 591
-begin = 18
-end = 26
 
 [JC_159]
 file = "HOME/"
@@ -5759,16 +5764,22 @@ begin = -1
 end = -1
 
 [JC_21]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 122
+begin = 8
+end = 31
 
 [JC_22]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_23]
+file = "HOME/tests/java/Hello.jc"
+line = 125
+begin = 11
+end = 103
 
 [cons_PrintStream_boolean_OutputStream_safety]
 name = "Constructor of class PrintStream"
@@ -5778,29 +5789,23 @@ line = 67
 begin = 12
 end = 23
 
-[JC_23]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_24]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 124
+begin = 10
+end = 18
 
 [JC_390]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1315
+begin = 15
+end = 26
 
 [JC_25]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 92
+file = "HOME/tests/java/Hello.jc"
+line = 125
 begin = 11
-end = 22
+end = 103
 
 [JC_391]
 file = "HOME/"
@@ -5809,10 +5814,10 @@ begin = -1
 end = -1
 
 [JC_26]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 124
+begin = 10
+end = 18
 
 [JC_392]
 file = "HOME/"
@@ -5821,10 +5826,10 @@ begin = -1
 end = -1
 
 [JC_27]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 92
-begin = 11
-end = 22
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_393]
 file = "HOME/"
@@ -5857,10 +5862,10 @@ begin = -1
 end = -1
 
 [JC_29]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 129
+begin = 8
+end = 22
 
 [JC_395]
 file = "HOME/"
@@ -5869,10 +5874,10 @@ begin = -1
 end = -1
 
 [JC_161]
-file = "HOME/tests/java/Hello.jc"
-line = 142
-begin = 8
-end = 24
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1161]
 file = "HOME/"
@@ -5882,9 +5887,9 @@ end = -1
 
 [JC_396]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 146
+line = 768
 begin = 23
-end = 29
+end = 38
 
 [JC_162]
 file = "HOME/"
@@ -5905,10 +5910,10 @@ begin = -1
 end = -1
 
 [JC_163]
-file = "HOME/tests/java/Hello.jc"
-line = 142
-begin = 8
-end = 24
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1163]
 file = "HOME/"
@@ -5918,21 +5923,21 @@ end = -1
 
 [JC_398]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 146
+line = 768
 begin = 23
-end = 29
+end = 38
 
 [JC_164]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 846
+begin = 15
+end = 34
 
 [JC_1164]
-file = "HOME/lib/java_api/java/io/OutputStream.java"
-line = 89
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/CharSequence.java"
+line = 56
+begin = 9
+end = 15
 
 [JC_399]
 file = "HOME/"
@@ -5941,10 +5946,10 @@ begin = -1
 end = -1
 
 [JC_165]
-file = "HOME/tests/java/Hello.jc"
-line = 145
-begin = 11
-end = 66
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1165]
 file = "HOME/"
@@ -5953,22 +5958,22 @@ begin = -1
 end = -1
 
 [JC_166]
-file = "HOME/tests/java/Hello.jc"
-line = 144
-begin = 10
-end = 18
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 846
+begin = 15
+end = 34
 
 [JC_1166]
-file = "HOME/lib/java_api/java/io/OutputStream.java"
-line = 89
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/CharSequence.java"
+line = 56
+begin = 9
+end = 15
 
 [JC_167]
-file = "HOME/tests/java/Hello.jc"
-line = 145
-begin = 11
-end = 66
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1167]
 file = "HOME/"
@@ -5977,10 +5982,10 @@ begin = -1
 end = -1
 
 [JC_168]
-file = "HOME/tests/java/Hello.jc"
-line = 144
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1168]
 file = "HOME/"
@@ -6007,10 +6012,10 @@ begin = -1
 end = -1
 
 [JC_31]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 129
+begin = 8
+end = 22
 
 [JC_32]
 file = "HOME/"
@@ -6019,28 +6024,28 @@ begin = -1
 end = -1
 
 [JC_33]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2216
-begin = 25
-end = 32
+file = "HOME/tests/java/Hello.jc"
+line = 132
+begin = 11
+end = 66
 
 [JC_34]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 131
+begin = 10
+end = 18
 
 [JC_35]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2216
-begin = 25
-end = 32
+file = "HOME/tests/java/Hello.jc"
+line = 132
+begin = 11
+end = 66
 
 [JC_36]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 131
+begin = 10
+end = 18
 
 [JC_37]
 file = "HOME/"
@@ -6067,16 +6072,16 @@ begin = -1
 end = -1
 
 [JC_39]
+file = "HOME/tests/java/Hello.jc"
+line = 135
+begin = 8
+end = 31
+
+[JC_171]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_171]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 188
-begin = 19
-end = 29
 
 [JC_1171]
 file = "HOME/"
@@ -6085,22 +6090,22 @@ begin = -1
 end = -1
 
 [JC_172]
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 146
+begin = 23
+end = 29
+
+[JC_1172]
+file = "HOME/lib/java_api/java/lang/CharSequence.java"
+line = 75
+begin = 17
+end = 28
+
+[JC_173]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_1172]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1750
-begin = 20
-end = 25
-
-[JC_173]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 188
-begin = 19
-end = 29
 
 [JC_1173]
 file = "HOME/"
@@ -6109,24 +6114,18 @@ begin = -1
 end = -1
 
 [JC_174]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 146
+begin = 23
+end = 29
 
 [JC_1174]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1750
-begin = 20
-end = 25
+file = "HOME/lib/java_api/java/lang/CharSequence.java"
+line = 75
+begin = 17
+end = 28
 
 [JC_175]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_1175]
 file = "HOME/"
 line = 0
 begin = -1
@@ -6139,6 +6138,12 @@ file = "HOME/lib/java_api/java/lang/String.java"
 line = 391
 begin = 11
 end = 17
+
+[JC_1175]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_176]
 file = "HOME/"
@@ -6177,10 +6182,10 @@ begin = -1
 end = -1
 
 [JC_179]
-file = "HOME/tests/java/Hello.jc"
-line = 148
-begin = 8
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1179]
 file = "HOME/"
@@ -6195,10 +6200,10 @@ begin = -1
 end = -1
 
 [JC_41]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 113
-begin = 11
-end = 22
+file = "HOME/tests/java/Hello.jc"
+line = 135
+begin = 8
+end = 31
 
 [JC_42]
 file = "HOME/"
@@ -6207,28 +6212,28 @@ begin = -1
 end = -1
 
 [JC_43]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 113
+file = "HOME/tests/java/Hello.jc"
+line = 138
 begin = 11
-end = 22
+end = 103
 
 [JC_44]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 137
+begin = 10
+end = 18
 
 [JC_45]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 138
+begin = 11
+end = 103
 
 [JC_46]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 137
+begin = 10
+end = 18
 
 [JC_47]
 file = "HOME/"
@@ -6237,10 +6242,10 @@ begin = -1
 end = -1
 
 [JC_180]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 881
+begin = 19
+end = 32
 
 [JC_48]
 file = "HOME/"
@@ -6249,28 +6254,22 @@ begin = -1
 end = -1
 
 [JC_1180]
-file = "HOME/lib/java_api/java/io/OutputStream.java"
-line = 115
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/CharSequence.java"
+line = 84
+begin = 18
+end = 26
 
 [JC_181]
-file = "HOME/tests/java/Hello.jc"
-line = 148
-begin = 8
-end = 33
-
-[JC_49]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2228
-begin = 25
-end = 32
-
-[JC_1181]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_49]
+file = "HOME/tests/java/Hello.jc"
+line = 142
+begin = 8
+end = 24
 
 [cons_String_byteA_int_int_ensures_default]
 name = "Constructor of class String"
@@ -6280,23 +6279,29 @@ line = 371
 begin = 11
 end = 17
 
-[JC_182]
+[JC_1181]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_182]
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 881
+begin = 19
+end = 32
+
 [JC_1182]
-file = "HOME/lib/java_api/java/io/OutputStream.java"
-line = 115
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/CharSequence.java"
+line = 84
+begin = 18
+end = 26
 
 [JC_183]
-file = "HOME/tests/java/Hello.jc"
-line = 151
-begin = 11
-end = 103
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1183]
 file = "HOME/"
@@ -6305,10 +6310,10 @@ begin = -1
 end = -1
 
 [JC_184]
-file = "HOME/tests/java/Hello.jc"
-line = 150
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1184]
 file = "HOME/"
@@ -6317,10 +6322,10 @@ begin = -1
 end = -1
 
 [JC_185]
-file = "HOME/tests/java/Hello.jc"
-line = 151
-begin = 11
-end = 103
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1185]
 file = "HOME/"
@@ -6329,10 +6334,10 @@ begin = -1
 end = -1
 
 [JC_186]
-file = "HOME/tests/java/Hello.jc"
-line = 150
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1186]
 file = "HOME/"
@@ -6353,22 +6358,22 @@ begin = -1
 end = -1
 
 [JC_188]
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 170
+begin = 23
+end = 29
+
+[JC_1188]
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 129
+begin = 11
+end = 17
+
+[JC_189]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_1188]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1792
-begin = 20
-end = 25
-
-[JC_189]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2313
-begin = 25
-end = 31
 
 [JC_1189]
 file = "HOME/"
@@ -6383,10 +6388,10 @@ begin = -1
 end = -1
 
 [JC_51]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2228
-begin = 25
-end = 32
+file = "HOME/tests/java/Hello.jc"
+line = 142
+begin = 8
+end = 24
 
 [JC_52]
 file = "HOME/"
@@ -6395,16 +6400,16 @@ begin = -1
 end = -1
 
 [JC_53]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 145
+begin = 11
+end = 66
 
 [JC_54]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 144
+begin = 10
+end = 18
 
 [cons_String_int_int_charA_ensures_default]
 name = "Constructor of class String"
@@ -6415,28 +6420,28 @@ begin = 4
 end = 10
 
 [JC_55]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 145
+begin = 11
+end = 66
 
 [JC_56]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 144
+begin = 10
+end = 18
 
 [JC_57]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2243
-begin = 25
-end = 32
-
-[JC_190]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_190]
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 170
+begin = 23
+end = 29
 
 [JC_58]
 file = "HOME/"
@@ -6446,21 +6451,21 @@ end = -1
 
 [JC_1190]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 1792
-begin = 20
-end = 25
+line = 129
+begin = 11
+end = 17
 
 [JC_191]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2313
-begin = 25
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_59]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2243
-begin = 25
-end = 32
+file = "HOME/tests/java/Hello.jc"
+line = 148
+begin = 8
+end = 33
 
 [JC_1191]
 file = "HOME/"
@@ -6481,10 +6486,10 @@ begin = -1
 end = -1
 
 [JC_1]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2191
-begin = 25
-end = 36
+file = "HOME/tests/java/Hello.jc"
+line = 50
+begin = 12
+end = 22
 
 [JC_193]
 file = "HOME/"
@@ -6517,10 +6522,10 @@ begin = -1
 end = -1
 
 [JC_3]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2191
-begin = 25
-end = 36
+file = "HOME/tests/java/Hello.jc"
+line = 50
+begin = 12
+end = 22
 
 [JC_195]
 file = "HOME/"
@@ -6541,16 +6546,16 @@ begin = -1
 end = -1
 
 [JC_196]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 950
+begin = 19
+end = 32
 
 [JC_1196]
-file = "HOME/lib/java_api/java/io/OutputStream.java"
-line = 128
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 142
+begin = 11
+end = 17
 
 [JC_800]
 file = "HOME/"
@@ -6565,10 +6570,10 @@ begin = -1
 end = -1
 
 [JC_197]
-file = "HOME/tests/java/Hello.jc"
-line = 155
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1197]
 file = "HOME/"
@@ -6589,16 +6594,16 @@ begin = -1
 end = -1
 
 [JC_198]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 950
+begin = 19
+end = 32
 
 [JC_1198]
-file = "HOME/lib/java_api/java/io/OutputStream.java"
-line = 128
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 142
+begin = 11
+end = 17
 
 [JC_802]
 file = "HOME/"
@@ -6613,10 +6618,10 @@ begin = -1
 end = -1
 
 [JC_199]
-file = "HOME/tests/java/Hello.jc"
-line = 155
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1199]
 file = "HOME/"
@@ -6637,16 +6642,16 @@ begin = -1
 end = -1
 
 [JC_804]
-file = "HOME/lib/java_api/java/lang/CharSequence.java"
-line = 40
-begin = 8
-end = 14
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2257
+begin = 25
+end = 32
 
 [JC_9]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2204
-begin = 25
-end = 36
+file = "HOME/tests/java/Hello.jc"
+line = 116
+begin = 8
+end = 22
 
 [JC_60]
 file = "HOME/"
@@ -6661,16 +6666,16 @@ begin = -1
 end = -1
 
 [JC_61]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 148
+begin = 8
+end = 33
 
 [JC_806]
-file = "HOME/lib/java_api/java/lang/CharSequence.java"
-line = 40
-begin = 8
-end = 14
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2257
+begin = 25
+end = 32
 
 [JC_62]
 file = "HOME/"
@@ -6685,10 +6690,10 @@ begin = -1
 end = -1
 
 [JC_63]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 151
+begin = 11
+end = 103
 
 [JC_808]
 file = "HOME/"
@@ -6697,10 +6702,10 @@ begin = -1
 end = -1
 
 [JC_64]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 150
+begin = 10
+end = 18
 
 [JC_809]
 file = "HOME/"
@@ -6709,22 +6714,22 @@ begin = -1
 end = -1
 
 [JC_65]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 121
-begin = 17
-end = 27
+file = "HOME/tests/java/Hello.jc"
+line = 151
+begin = 11
+end = 103
 
 [JC_66]
+file = "HOME/tests/java/Hello.jc"
+line = 150
+begin = 10
+end = 18
+
+[JC_67]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_67]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 121
-begin = 17
-end = 27
 
 [Hello_main_ensures_default]
 name = "Method main"
@@ -6741,10 +6746,10 @@ begin = -1
 end = -1
 
 [JC_69]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 155
+begin = 8
+end = 23
 
 [JC_810]
 file = "HOME/"
@@ -6759,10 +6764,10 @@ begin = -1
 end = -1
 
 [JC_812]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 746
-begin = 23
-end = 25
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 132
+begin = 16
+end = 21
 
 [JC_813]
 file = "HOME/"
@@ -6771,10 +6776,10 @@ begin = -1
 end = -1
 
 [JC_814]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 746
-begin = 23
-end = 25
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 132
+begin = 16
+end = 21
 
 [JC_70]
 file = "HOME/"
@@ -6789,10 +6794,10 @@ begin = -1
 end = -1
 
 [JC_71]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 155
+begin = 8
+end = 23
 
 [JC_816]
 file = "HOME/"
@@ -6813,10 +6818,10 @@ begin = -1
 end = -1
 
 [JC_73]
-file = "HOME/tests/java/Hello.jc"
-line = 50
-begin = 12
-end = 22
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_818]
 file = "HOME/"
@@ -6853,10 +6858,10 @@ begin = -1
 end = -1
 
 [JC_75]
-file = "HOME/tests/java/Hello.jc"
-line = 50
-begin = 12
-end = 22
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_76]
 file = "HOME/"
@@ -6873,22 +6878,22 @@ begin = 11
 end = 17
 
 [JC_77]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 157
+begin = 11
+end = 65
 
 [JC_78]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.jc"
+line = 157
+begin = 11
+end = 65
 
 [JC_79]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 608
+begin = 19
+end = 25
 
 [cons_PrintStream_boolean_OutputStream_ensures_default]
 name = "Constructor of class PrintStream"
@@ -6899,10 +6904,10 @@ begin = 12
 end = 23
 
 [JC_820]
-file = "HOME/lib/java_api/java/lang/CharSequence.java"
-line = 56
-begin = 9
-end = 15
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2271
+begin = 25
+end = 32
 
 [JC_821]
 file = "HOME/"
@@ -6911,10 +6916,10 @@ begin = -1
 end = -1
 
 [JC_822]
-file = "HOME/lib/java_api/java/lang/CharSequence.java"
-line = 56
-begin = 9
-end = 15
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2271
+begin = 25
+end = 32
 
 [JC_823]
 file = "HOME/"
@@ -6942,9 +6947,9 @@ end = -1
 
 [JC_81]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2257
-begin = 25
-end = 32
+line = 608
+begin = 19
+end = 25
 
 [JC_826]
 file = "HOME/"
@@ -6965,16 +6970,16 @@ begin = -1
 end = -1
 
 [JC_83]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2257
-begin = 25
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_828]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1315
-begin = 15
-end = 26
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 152
+begin = 16
+end = 21
 
 [JC_84]
 file = "HOME/"
@@ -7001,10 +7006,10 @@ begin = -1
 end = -1
 
 [JC_87]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 583
+begin = 16
+end = 23
 
 [JC_88]
 file = "HOME/"
@@ -7013,16 +7018,16 @@ begin = -1
 end = -1
 
 [JC_89]
-file = "HOME/tests/java/Hello.jc"
-line = 116
-begin = 8
-end = 22
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 583
+begin = 16
+end = 23
 
 [JC_830]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1315
-begin = 15
-end = 26
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 152
+begin = 16
+end = 21
 
 [JC_831]
 file = "HOME/"
@@ -7073,16 +7078,16 @@ begin = -1
 end = -1
 
 [JC_91]
-file = "HOME/tests/java/Hello.jc"
-line = 116
-begin = 8
-end = 22
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_836]
-file = "HOME/lib/java_api/java/lang/CharSequence.java"
-line = 75
-begin = 17
-end = 28
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2285
+begin = 25
+end = 32
 
 [JC_602]
 file = "HOME/"
@@ -7109,28 +7114,28 @@ begin = -1
 end = -1
 
 [JC_93]
-file = "HOME/tests/java/Hello.jc"
-line = 119
-begin = 11
-end = 66
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_838]
-file = "HOME/lib/java_api/java/lang/CharSequence.java"
-line = 75
-begin = 17
-end = 28
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2285
+begin = 25
+end = 32
 
 [JC_604]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 1102
-begin = 15
-end = 22
+line = 1904
+begin = 18
+end = 29
 
 [JC_94]
-file = "HOME/tests/java/Hello.jc"
-line = 118
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_839]
 file = "HOME/"
@@ -7145,22 +7150,22 @@ begin = -1
 end = -1
 
 [JC_95]
-file = "HOME/tests/java/Hello.jc"
-line = 119
-begin = 11
-end = 66
+file = "HOME/tests/java/Hello.java"
+line = 34
+begin = 23
+end = 27
 
 [JC_606]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 1102
-begin = 15
-end = 22
+line = 1904
+begin = 18
+end = 29
 
 [JC_96]
-file = "HOME/tests/java/Hello.jc"
-line = 118
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_607]
 file = "HOME/"
@@ -7169,10 +7174,10 @@ begin = -1
 end = -1
 
 [JC_97]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Hello.java"
+line = 34
+begin = 23
+end = 27
 
 [JC_608]
 file = "HOME/"
@@ -7193,10 +7198,10 @@ begin = -1
 end = -1
 
 [JC_99]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 132
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_840]
 file = "HOME/"
@@ -7223,10 +7228,10 @@ begin = -1
 end = -1
 
 [JC_844]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 768
-begin = 23
-end = 38
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 188
+begin = 19
+end = 29
 
 [JC_610]
 file = "HOME/"
@@ -7247,16 +7252,16 @@ begin = -1
 end = -1
 
 [JC_846]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 768
-begin = 23
-end = 38
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 188
+begin = 19
+end = 29
 
 [JC_612]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 444
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 43
+begin = 11
+end = 29
 
 [JC_847]
 file = "HOME/"
@@ -7277,10 +7282,10 @@ begin = -1
 end = -1
 
 [JC_614]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 444
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 43
+begin = 11
+end = 29
 
 [cons_String_byteA_int_int_String_ensures_default]
 name = "Constructor of class String"
@@ -7347,10 +7352,10 @@ begin = -1
 end = -1
 
 [JC_852]
-file = "HOME/lib/java_api/java/lang/CharSequence.java"
-line = 84
-begin = 18
-end = 26
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2313
+begin = 25
+end = 31
 
 [JC_853]
 file = "HOME/"
@@ -7359,16 +7364,16 @@ begin = -1
 end = -1
 
 [JC_854]
-file = "HOME/lib/java_api/java/lang/CharSequence.java"
-line = 84
-begin = 18
-end = 26
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2313
+begin = 25
+end = 31
 
 [JC_620]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 389
-begin = 29
-end = 45
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2056
+begin = 18
+end = 29
 
 [JC_855]
 file = "HOME/"
@@ -7389,10 +7394,10 @@ begin = -1
 end = -1
 
 [JC_622]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 389
-begin = 29
-end = 45
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2056
+begin = 18
+end = 29
 
 [JC_857]
 file = "HOME/"
@@ -7443,10 +7448,10 @@ begin = -1
 end = -1
 
 [JC_628]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 461
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2092
+begin = 18
+end = 22
 
 [JC_629]
 file = "HOME/"
@@ -7455,10 +7460,10 @@ begin = -1
 end = -1
 
 [JC_860]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1333
-begin = 15
-end = 26
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 199
+begin = 19
+end = 27
 
 [JC_861]
 file = "HOME/"
@@ -7467,10 +7472,10 @@ begin = -1
 end = -1
 
 [JC_862]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1333
-begin = 15
-end = 26
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 199
+begin = 19
+end = 27
 
 [cons_String_String_ensures_default]
 name = "Constructor of class String"
@@ -7493,10 +7498,10 @@ begin = -1
 end = -1
 
 [JC_630]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 461
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2092
+begin = 18
+end = 22
 
 [JC_865]
 file = "HOME/"
@@ -7535,10 +7540,10 @@ begin = -1
 end = -1
 
 [JC_868]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 129
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
 
 [JC_634]
 file = "HOME/"
@@ -7571,10 +7576,10 @@ begin = -1
 end = -1
 
 [JC_636]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1134
-begin = 15
-end = 22
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 59
+begin = 16
+end = 21
 
 [JC_402]
 file = "HOME/"
@@ -7603,16 +7608,16 @@ begin = 4
 end = 10
 
 [JC_638]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1134
-begin = 15
-end = 22
-
-[JC_404]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 349
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 59
 begin = 16
 end = 21
+
+[JC_404]
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1333
+begin = 15
+end = 26
 
 [JC_639]
 file = "HOME/"
@@ -7627,10 +7632,10 @@ begin = -1
 end = -1
 
 [JC_406]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 349
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1333
+begin = 15
+end = 26
 
 [JC_407]
 file = "HOME/"
@@ -7659,10 +7664,10 @@ begin = 23
 end = 27
 
 [JC_870]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 129
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
 
 [JC_871]
 file = "HOME/"
@@ -7715,10 +7720,10 @@ begin = -1
 end = -1
 
 [JC_876]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 797
-begin = 23
-end = 42
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 223
+begin = 16
+end = 21
 
 [JC_642]
 file = "HOME/"
@@ -7739,16 +7744,16 @@ begin = -1
 end = -1
 
 [JC_878]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 797
-begin = 23
-end = 42
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 223
+begin = 16
+end = 21
 
 [JC_644]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 474
-begin = 16
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2112
+begin = 18
+end = 26
 
 [JC_410]
 file = "HOME/"
@@ -7775,16 +7780,16 @@ begin = -1
 end = -1
 
 [JC_646]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 474
-begin = 16
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2112
+begin = 18
+end = 26
 
 [JC_412]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 881
-begin = 19
-end = 32
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 797
+begin = 23
+end = 42
 
 [cons_String_byteA_int_int_int_ensures_default]
 name = "Constructor of class String"
@@ -7813,10 +7818,10 @@ begin = -1
 end = -1
 
 [JC_414]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 881
-begin = 19
-end = 32
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 797
+begin = 23
+end = 42
 
 [JC_649]
 file = "HOME/"
@@ -7879,10 +7884,10 @@ begin = -1
 end = -1
 
 [JC_884]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 142
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
 
 [JC_650]
 file = "HOME/"
@@ -7903,16 +7908,16 @@ begin = -1
 end = -1
 
 [JC_886]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 142
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
 
 [JC_652]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 575
-begin = 25
-end = 36
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 79
+begin = 16
+end = 21
 
 [JC_887]
 file = "HOME/"
@@ -7933,16 +7938,16 @@ begin = -1
 end = -1
 
 [JC_654]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 575
-begin = 25
-end = 36
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 79
+begin = 16
+end = 21
 
 [JC_420]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1351
+begin = 15
+end = 26
 
 [JC_889]
 file = "HOME/"
@@ -7969,10 +7974,10 @@ begin = -1
 end = -1
 
 [JC_422]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1351
+begin = 15
+end = 26
 
 [JC_657]
 file = "HOME/"
@@ -8024,9 +8029,9 @@ end = -1
 
 [JC_428]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 170
+line = 820
 begin = 23
-end = 29
+end = 27
 
 [JC_429]
 file = "HOME/"
@@ -8054,6 +8059,12 @@ line = 0
 begin = -1
 end = -1
 
+[JC_892]
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 254
+begin = 16
+end = 21
+
 [cons_PrintStream_OutputStream_safety]
 name = "Constructor of class PrintStream"
 behavior = "Safety"
@@ -8062,12 +8073,6 @@ line = 55
 begin = 11
 end = 22
 
-[JC_892]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1351
-begin = 15
-end = 26
-
 [JC_893]
 file = "HOME/"
 line = 0
@@ -8075,16 +8080,16 @@ begin = -1
 end = -1
 
 [JC_894]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1351
-begin = 15
-end = 26
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 254
+begin = 16
+end = 21
 
 [JC_660]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 485
-begin = 16
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2123
+begin = 18
+end = 29
 
 [JC_895]
 file = "HOME/"
@@ -8105,10 +8110,10 @@ begin = -1
 end = -1
 
 [JC_662]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 485
-begin = 16
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2123
+begin = 18
+end = 29
 
 [JC_897]
 file = "HOME/"
@@ -8136,9 +8141,9 @@ end = -1
 
 [JC_430]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 170
+line = 820
 begin = 23
-end = 29
+end = 27
 
 [JC_899]
 file = "HOME/"
@@ -8183,10 +8188,10 @@ begin = -1
 end = -1
 
 [JC_668]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1167
-begin = 15
-end = 26
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 103
+begin = 16
+end = 21
 
 [JC_434]
 file = "HOME/"
@@ -8224,12 +8229,6 @@ line = 0
 begin = -1
 end = -1
 
-[JC_1201]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [cons_String_byteA_String_safety]
 name = "Constructor of class String"
 behavior = "Safety"
@@ -8238,11 +8237,17 @@ line = 345
 begin = 11
 end = 17
 
+[JC_1201]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_436]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 361
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1414
+begin = 18
+end = 27
 
 [JC_202]
 file = "HOME/"
@@ -8275,22 +8280,22 @@ begin = -1
 end = -1
 
 [JC_438]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 361
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1414
+begin = 18
+end = 27
 
 [JC_204]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 175
+begin = 24
+end = 31
 
 [JC_1204]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 167
+begin = 11
+end = 17
 
 [JC_439]
 file = "HOME/"
@@ -8299,10 +8304,10 @@ begin = -1
 end = -1
 
 [JC_205]
-file = "HOME/tests/java/Hello.jc"
-line = 157
-begin = 11
-end = 65
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1205]
 file = "HOME/"
@@ -8311,22 +8316,22 @@ begin = -1
 end = -1
 
 [JC_206]
-file = "HOME/tests/java/Hello.jc"
-line = 157
-begin = 11
-end = 65
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 175
+begin = 24
+end = 31
 
 [JC_1206]
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 167
+begin = 11
+end = 17
+
+[JC_207]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_207]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 199
-begin = 19
-end = 27
 
 [JC_1207]
 file = "HOME/"
@@ -8347,10 +8352,10 @@ begin = -1
 end = -1
 
 [JC_209]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 199
-begin = 19
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1209]
 file = "HOME/"
@@ -8359,10 +8364,10 @@ begin = -1
 end = -1
 
 [JC_670]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1167
-begin = 15
-end = 26
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 103
+begin = 16
+end = 21
 
 [JC_671]
 file = "HOME/"
@@ -8407,10 +8412,10 @@ begin = -1
 end = -1
 
 [JC_676]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 499
-begin = 16
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2138
+begin = 25
+end = 32
 
 [JC_442]
 file = "HOME/"
@@ -8431,16 +8436,16 @@ begin = -1
 end = -1
 
 [JC_678]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 499
-begin = 16
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2138
+begin = 25
+end = 32
 
 [JC_444]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 950
-begin = 19
-end = 32
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 843
+begin = 23
+end = 34
 
 [JC_210]
 file = "HOME/"
@@ -8479,22 +8484,22 @@ begin = -1
 end = -1
 
 [JC_446]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 950
-begin = 19
-end = 32
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 843
+begin = 23
+end = 34
 
 [JC_212]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1007
+begin = 19
+end = 29
 
 [JC_1212]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 1904
-begin = 18
-end = 29
+line = 189
+begin = 11
+end = 17
 
 [JC_447]
 file = "HOME/"
@@ -8521,16 +8526,16 @@ begin = -1
 end = -1
 
 [JC_214]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1007
+begin = 19
+end = 29
 
 [JC_1214]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 1904
-begin = 18
-end = 29
+line = 189
+begin = 11
+end = 17
 
 [JC_449]
 file = "HOME/"
@@ -8539,10 +8544,10 @@ begin = -1
 end = -1
 
 [JC_215]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 608
-begin = 19
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1215]
 file = "HOME/"
@@ -8563,10 +8568,10 @@ begin = -1
 end = -1
 
 [JC_217]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 608
-begin = 19
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1217]
 file = "HOME/"
@@ -8623,10 +8628,10 @@ begin = -1
 end = -1
 
 [JC_684]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 614
-begin = 25
-end = 36
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 122
+begin = 16
+end = 21
 
 [JC_450]
 file = "HOME/"
@@ -8647,16 +8652,16 @@ begin = -1
 end = -1
 
 [JC_686]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 614
-begin = 25
-end = 36
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 122
+begin = 16
+end = 21
 
 [JC_452]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1440
+begin = 18
+end = 27
 
 [JC_687]
 file = "HOME/"
@@ -8677,22 +8682,22 @@ begin = -1
 end = -1
 
 [JC_454]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1440
+begin = 18
+end = 27
 
 [JC_220]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 181
+begin = 31
+end = 38
 
 [JC_1220]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 43
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 234
 begin = 11
-end = 29
+end = 17
 
 [JC_689]
 file = "HOME/"
@@ -8725,16 +8730,16 @@ begin = -1
 end = -1
 
 [JC_222]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 181
+begin = 31
+end = 38
 
 [JC_1222]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 43
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 234
 begin = 11
-end = 29
+end = 17
 
 [JC_457]
 file = "HOME/"
@@ -8743,10 +8748,10 @@ begin = -1
 end = -1
 
 [JC_223]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1223]
 file = "HOME/"
@@ -8779,10 +8784,10 @@ begin = -1
 end = -1
 
 [JC_225]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1225]
 file = "HOME/"
@@ -8815,16 +8820,16 @@ begin = -1
 end = -1
 
 [JC_228]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1038
+begin = 19
+end = 29
 
 [JC_1228]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2056
-begin = 18
-end = 29
+line = 275
+begin = 11
+end = 17
 
 [JC_229]
 file = "HOME/"
@@ -8851,10 +8856,10 @@ begin = -1
 end = -1
 
 [JC_692]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 513
-begin = 16
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2152
+begin = 25
+end = 32
 
 [JC_693]
 file = "HOME/"
@@ -8863,16 +8868,16 @@ begin = -1
 end = -1
 
 [JC_694]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 513
-begin = 16
-end = 23
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 2152
+begin = 25
+end = 32
 
 [JC_460]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 175
-begin = 24
-end = 31
+line = 857
+begin = 32
+end = 46
 
 [JC_695]
 file = "HOME/"
@@ -8894,9 +8899,9 @@ end = -1
 
 [JC_462]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 175
-begin = 24
-end = 31
+line = 857
+begin = 32
+end = 46
 
 [JC_697]
 file = "HOME/"
@@ -8909,14 +8914,6 @@ file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[cons_FilterOutputStream_OutputStream_safety]
-name = "Constructor of class FilterOutputStream"
-behavior = "Safety"
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 43
-begin = 11
-end = 29
 
 [JC_698]
 file = "HOME/"
@@ -8931,16 +8928,24 @@ begin = -1
 end = -1
 
 [JC_230]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1038
+begin = 19
+end = 29
+
+[cons_FilterOutputStream_OutputStream_safety]
+name = "Constructor of class FilterOutputStream"
+behavior = "Safety"
+file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
+line = 43
+begin = 11
+end = 29
 
 [JC_1230]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2056
-begin = 18
-end = 29
+line = 275
+begin = 11
+end = 17
 
 [JC_699]
 file = "HOME/"
@@ -8955,10 +8960,10 @@ begin = -1
 end = -1
 
 [JC_231]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 583
-begin = 16
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1231]
 file = "HOME/"
@@ -8991,10 +8996,10 @@ begin = -1
 end = -1
 
 [JC_233]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 583
-begin = 16
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1233]
 file = "HOME/"
@@ -9003,10 +9008,10 @@ begin = -1
 end = -1
 
 [JC_468]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 375
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1482
+begin = 24
+end = 35
 
 [JC_234]
 file = "HOME/"
@@ -9051,16 +9056,16 @@ begin = -1
 end = -1
 
 [JC_236]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 182
+begin = 31
+end = 38
 
 [JC_1236]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2092
-begin = 18
-end = 22
+line = 283
+begin = 24
+end = 35
 
 [JC_1002]
 file = "HOME/"
@@ -9087,28 +9092,28 @@ begin = -1
 end = -1
 
 [JC_238]
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 182
+begin = 31
+end = 38
+
+[JC_1238]
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 283
+begin = 24
+end = 35
+
+[JC_1004]
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 389
+begin = 16
+end = 21
+
+[JC_239]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_1238]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 2092
-begin = 18
-end = 22
-
-[JC_1004]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 865
-begin = 31
-end = 46
-
-[JC_239]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 223
-begin = 16
-end = 21
 
 [JC_1239]
 file = "HOME/"
@@ -9123,10 +9128,10 @@ begin = -1
 end = -1
 
 [JC_1006]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 865
-begin = 31
-end = 46
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 389
+begin = 16
+end = 21
 
 [JC_1007]
 file = "HOME/"
@@ -9147,10 +9152,10 @@ begin = -1
 end = -1
 
 [JC_470]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 375
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1482
+begin = 24
+end = 35
 
 [JC_471]
 file = "HOME/"
@@ -9203,10 +9208,10 @@ begin = -1
 end = -1
 
 [JC_241]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 223
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1241]
 file = "HOME/"
@@ -9215,10 +9220,10 @@ begin = -1
 end = -1
 
 [JC_476]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1007
-begin = 19
-end = 29
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 865
+begin = 31
+end = 46
 
 [JC_242]
 file = "HOME/"
@@ -9251,22 +9256,22 @@ begin = -1
 end = -1
 
 [JC_478]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1007
-begin = 19
-end = 29
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 865
+begin = 31
+end = 46
 
 [JC_244]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1053
+begin = 19
+end = 27
 
 [JC_1244]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 59
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 316
+begin = 11
+end = 17
 
 [JC_1010]
 file = "HOME/"
@@ -9299,28 +9304,28 @@ begin = -1
 end = -1
 
 [JC_246]
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1053
+begin = 19
+end = 27
+
+[JC_1246]
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 316
+begin = 11
+end = 17
+
+[JC_1012]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_247]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_1246]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 59
-begin = 16
-end = 21
-
-[JC_1012]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 371
-begin = 11
-end = 17
-
-[JC_247]
-file = "HOME/tests/java/Hello.java"
-line = 34
-begin = 23
-end = 27
 
 [JC_1247]
 file = "HOME/"
@@ -9347,16 +9352,16 @@ begin = -1
 end = -1
 
 [JC_1014]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 371
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
 
 [JC_249]
-file = "HOME/tests/java/Hello.java"
-line = 34
-begin = 23
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1249]
 file = "HOME/"
@@ -9427,10 +9432,10 @@ begin = -1
 end = -1
 
 [JC_484]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1506
+begin = 18
+end = 24
 
 [JC_250]
 file = "HOME/"
@@ -9463,22 +9468,22 @@ begin = -1
 end = -1
 
 [JC_486]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1506
+begin = 18
+end = 24
 
 [JC_252]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 280
+begin = 30
+end = 47
 
 [JC_1252]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2112
-begin = 18
-end = 26
+line = 345
+begin = 11
+end = 17
 
 [JC_487]
 file = "HOME/"
@@ -9505,22 +9510,22 @@ begin = -1
 end = -1
 
 [JC_254]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 280
+begin = 30
+end = 47
 
 [JC_1254]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2112
-begin = 18
-end = 26
+line = 345
+begin = 11
+end = 17
 
 [JC_1020]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1506
-begin = 18
-end = 24
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 403
+begin = 16
+end = 21
 
 [JC_489]
 file = "HOME/"
@@ -9529,11 +9534,10 @@ begin = -1
 end = -1
 
 [JC_255]
-kind = UserCall
-file = "HOME/tests/java/Hello.jc"
-line = 171
-begin = 49
-end = 61
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1255]
 file = "HOME/"
@@ -9548,11 +9552,10 @@ begin = -1
 end = -1
 
 [JC_256]
-kind = UserCall
-file = "HOME/tests/java/Hello.jc"
-line = 171
-begin = 10
-end = 62
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1256]
 file = "HOME/"
@@ -9561,17 +9564,16 @@ begin = -1
 end = -1
 
 [JC_1022]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1506
-begin = 18
-end = 24
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 403
+begin = 16
+end = 21
 
 [JC_257]
-kind = IndexBounds
-file = "HOME/tests/java/Hello.jc"
-line = 171
-begin = 10
-end = 62
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1257]
 file = "HOME/"
@@ -9586,11 +9588,10 @@ begin = -1
 end = -1
 
 [JC_258]
-kind = UserCall
-file = "HOME/tests/java/Hello.jc"
-line = 171
-begin = 49
-end = 61
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1258]
 file = "HOME/"
@@ -9605,11 +9606,10 @@ begin = -1
 end = -1
 
 [JC_259]
-kind = UserCall
-file = "HOME/tests/java/Hello.jc"
-line = 171
-begin = 10
-end = 62
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1259]
 file = "HOME/"
@@ -9636,10 +9636,10 @@ begin = -1
 end = -1
 
 [JC_1028]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 391
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
 
 [JC_1029]
 file = "HOME/"
@@ -9661,9 +9661,9 @@ end = -1
 
 [JC_492]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 181
+line = 873
 begin = 31
-end = 38
+end = 46
 
 [JC_493]
 file = "HOME/"
@@ -9673,21 +9673,21 @@ end = -1
 
 [JC_494]
 file = "HOME/lib/java_api/java/lang/System.java"
-line = 181
+line = 873
 begin = 31
-end = 38
+end = 46
 
 [JC_260]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1070
+begin = 15
+end = 23
 
 [JC_1260]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 79
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 371
+begin = 11
+end = 17
 
 [JC_495]
 file = "HOME/"
@@ -9714,16 +9714,16 @@ begin = -1
 end = -1
 
 [JC_262]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1070
+begin = 15
+end = 23
 
 [JC_1262]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 79
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 371
+begin = 11
+end = 17
 
 [JC_497]
 file = "HOME/"
@@ -9762,10 +9762,10 @@ begin = -1
 end = -1
 
 [JC_1030]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 391
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
 
 [JC_499]
 file = "HOME/"
@@ -9828,16 +9828,16 @@ begin = -1
 end = -1
 
 [JC_268]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 640
-begin = 19
-end = 32
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 374
+begin = 30
+end = 39
 
 [JC_1268]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2123
-begin = 18
-end = 29
+line = 391
+begin = 11
+end = 17
 
 [JC_1034]
 file = "HOME/"
@@ -9872,10 +9872,10 @@ begin = 11
 end = 22
 
 [JC_1036]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 873
-begin = 31
-end = 46
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 417
+begin = 16
+end = 21
 
 [JC_1037]
 file = "HOME/"
@@ -9884,10 +9884,10 @@ begin = -1
 end = -1
 
 [JC_1038]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 873
-begin = 31
-end = 46
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 417
+begin = 16
+end = 21
 
 [JC_1039]
 file = "HOME/"
@@ -9896,16 +9896,16 @@ begin = -1
 end = -1
 
 [JC_270]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 640
-begin = 19
-end = 32
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 374
+begin = 30
+end = 39
 
 [JC_1270]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2123
-begin = 18
-end = 29
+line = 391
+begin = 11
+end = 17
 
 [JC_271]
 file = "HOME/"
@@ -9980,16 +9980,16 @@ begin = -1
 end = -1
 
 [JC_276]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 254
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1102
+begin = 15
+end = 22
 
 [JC_1276]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 103
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 403
+begin = 11
+end = 17
 
 [JC_1042]
 file = "HOME/"
@@ -10016,22 +10016,22 @@ begin = -1
 end = -1
 
 [JC_278]
-file = "HOME/lib/java_api/java/io/PrintStream.java"
-line = 254
-begin = 16
-end = 21
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1102
+begin = 15
+end = 22
 
 [JC_1278]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 103
-begin = 16
-end = 21
-
-[JC_1044]
 file = "HOME/lib/java_api/java/lang/String.java"
 line = 403
 begin = 11
 end = 17
+
+[JC_1044]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_279]
 file = "HOME/"
@@ -10052,10 +10052,10 @@ begin = -1
 end = -1
 
 [JC_1046]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 403
-begin = 11
-end = 17
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1047]
 file = "HOME/"
@@ -10140,16 +10140,16 @@ begin = -1
 end = -1
 
 [JC_284]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 389
+begin = 29
+end = 45
 
 [JC_1284]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2138
-begin = 25
-end = 32
+line = 413
+begin = 4
+end = 10
 
 [JC_1050]
 file = "HOME/"
@@ -10176,22 +10176,22 @@ begin = -1
 end = -1
 
 [JC_286]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/System.java"
+line = 389
+begin = 29
+end = 45
 
 [JC_1286]
 file = "HOME/lib/java_api/java/lang/String.java"
-line = 2138
-begin = 25
-end = 32
+line = 413
+begin = 4
+end = 10
 
 [JC_1052]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1546
-begin = 18
-end = 25
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 431
+begin = 16
+end = 21
 
 [JC_287]
 file = "HOME/"
@@ -10224,10 +10224,10 @@ begin = -1
 end = -1
 
 [JC_1054]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 1546
-begin = 18
-end = 25
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 431
+begin = 16
+end = 21
 
 [JC_289]
 file = "HOME/"
@@ -10296,15 +10296,15 @@ begin = -1
 end = -1
 
 [JC_292]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1134
+begin = 15
+end = 22
 
 [JC_1292]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 122
-begin = 16
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 427
+begin = 15
 end = 21
 
 [JC_293]
@@ -10320,22 +10320,22 @@ begin = -1
 end = -1
 
 [JC_294]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 1134
+begin = 15
+end = 22
 
 [JC_1294]
-file = "HOME/lib/java_api/java/io/FilterOutputStream.java"
-line = 122
-begin = 16
+file = "HOME/lib/java_api/java/lang/String.java"
+line = 427
+begin = 15
 end = 21
 
 [JC_1060]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 413
-begin = 4
-end = 10
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 444
+begin = 16
+end = 21
 
 [JC_295]
 file = "HOME/"
@@ -10368,16 +10368,16 @@ begin = -1
 end = -1
 
 [JC_1062]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 413
-begin = 4
-end = 10
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 444
+begin = 16
+end = 21
 
 [JC_900]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 167
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
 
 [JC_297]
 file = "HOME/"
@@ -10422,10 +10422,10 @@ begin = -1
 end = -1
 
 [JC_902]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 167
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
 
 [JC_299]
 file = "HOME/"
@@ -10476,10 +10476,10 @@ begin = -1
 end = -1
 
 [JC_1068]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 882
-begin = 24
-end = 45
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 461
+begin = 16
+end = 21
 
 [JC_906]
 file = "HOME/"
@@ -10499,12 +10499,6 @@ line = 0
 begin = -1
 end = -1
 
-[JC_908]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 820
-begin = 23
-end = 27
-
 [cons_Object_ensures_default]
 name = "Constructor of class Object"
 behavior = "default behavior"
@@ -10513,6 +10507,12 @@ line = 0
 begin = -1
 end = -1
 
+[JC_908]
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 277
+begin = 17
+end = 22
+
 [JC_909]
 file = "HOME/"
 line = 0
@@ -10520,10 +10520,10 @@ begin = -1
 end = -1
 
 [JC_1070]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 882
-begin = 24
-end = 45
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 461
+begin = 16
+end = 21
 
 [JC_1071]
 file = "HOME/"
@@ -10538,10 +10538,10 @@ begin = -1
 end = -1
 
 [JC_910]
-file = "HOME/lib/java_api/java/lang/System.java"
-line = 820
-begin = 23
-end = 27
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 277
+begin = 17
+end = 22
 
 [JC_1073]
 file = "HOME/"
@@ -10580,10 +10580,10 @@ begin = -1
 end = -1
 
 [JC_1076]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 427
-begin = 15
-end = 21
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 474
+begin = 16
+end = 23
 
 [JC_914]
 file = "HOME/"
@@ -10604,22 +10604,16 @@ begin = -1
 end = -1
 
 [JC_1078]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 427
-begin = 15
-end = 21
+file = "HOME/lib/java_api/java/io/PrintStream.java"
+line = 474
+begin = 16
+end = 23
 
 [JC_916]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 189
-begin = 11
-end = 17
-
-[JC_1079]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
 
 [cons_String_byteA_int_int_String_safety]
 name = "Constructor of class String"
@@ -10629,6 +10623,12 @@ line = 316
 begin = 11
 end = 17
 
+[JC_1079]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_917]
 file = "HOME/"
 line = 0
@@ -10636,10 +10636,10 @@ begin = -1
 end = -1
 
 [JC_918]
-file = "HOME/lib/java_api/java/lang/String.java"
-line = 189
-begin = 11
-end = 17
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
 
 [JC_919]
 file = "HOME/"
@@ -12918,7 +12918,7 @@ parameter int32_of_integer_ :
 parameter java_array_length_StringM :
  x_9:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_185:
+  { (JC_65:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and (result = add_int(offset_max(Object_alloc_table, x_9), (1)))))) }
@@ -12926,7 +12926,7 @@ parameter java_array_length_StringM :
 parameter java_array_length_StringM_requires :
  x_9:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_185:
+  { (JC_65:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and (result = add_int(offset_max(Object_alloc_table, x_9), (1)))))) }
@@ -12934,7 +12934,7 @@ parameter java_array_length_StringM_requires :
 parameter java_array_length_byteM :
  x_5:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_113:
+  { (JC_25:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and (result = add_int(offset_max(Object_alloc_table, x_5), (1)))))) }
@@ -12942,7 +12942,7 @@ parameter java_array_length_byteM :
 parameter java_array_length_byteM_requires :
  x_5:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_113:
+  { (JC_25:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and (result = add_int(offset_max(Object_alloc_table, x_5), (1)))))) }
@@ -12950,7 +12950,7 @@ parameter java_array_length_byteM_requires :
 parameter java_array_length_charM :
  x_7:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_149:
+  { (JC_45:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and (result = add_int(offset_max(Object_alloc_table, x_7), (1)))))) }
@@ -12958,7 +12958,7 @@ parameter java_array_length_charM :
 parameter java_array_length_charM_requires :
  x_7:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_149:
+  { (JC_45:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and (result = add_int(offset_max(Object_alloc_table, x_7), (1)))))) }
@@ -12971,56 +12971,56 @@ parameter long_of_integer_ :
 parameter non_null_Object :
  x_10:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_206:
+  { (JC_78:
     (if result then (offset_max(Object_alloc_table, x_10) = (0))
      else (x_10 = null))) }
 
 parameter non_null_Object_requires :
  x_10:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_206:
+  { (JC_78:
     (if result then (offset_max(Object_alloc_table, x_10) = (0))
      else (x_10 = null))) }
 
 parameter non_null_StringM :
  x_8:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_167:
+  { (JC_55:
     (if result then ge_int(offset_max(Object_alloc_table, x_8), neg_int((1)))
      else (x_8 = null))) }
 
 parameter non_null_StringM_requires :
  x_8:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_167:
+  { (JC_55:
     (if result then ge_int(offset_max(Object_alloc_table, x_8), neg_int((1)))
      else (x_8 = null))) }
 
 parameter non_null_byteM :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_95:
+  { (JC_15:
     (if result then ge_int(offset_max(Object_alloc_table, x_4), neg_int((1)))
      else (x_4 = null))) }
 
 parameter non_null_byteM_requires :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_95:
+  { (JC_15:
     (if result then ge_int(offset_max(Object_alloc_table, x_4), neg_int((1)))
      else (x_4 = null))) }
 
 parameter non_null_charM :
  x_6:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_131:
+  { (JC_35:
     (if result then ge_int(offset_max(Object_alloc_table, x_6), neg_int((1)))
      else (x_6 = null))) }
 
 parameter non_null_charM_requires :
  x_6:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_131:
+  { (JC_35:
     (if result then ge_int(offset_max(Object_alloc_table, x_6), neg_int((1)))
      else (x_6 = null))) }
 
@@ -13052,9 +13052,9 @@ let Hello_main_ensures_default =
    begin
      (K_1:
      (let jessie_<num> = System_out in
-     (let jessie_<num> = (JC_258: (any_string_0 void)) in
-     (JC_259: ((PrintStream_println_String jessie_<num>) jessie_<num>)))));
-    (raise Return) end with Return -> void end) { (JC_251: true) }
+     (let jessie_<num> = (JC_106: (any_string_0 void)) in
+     (JC_107: ((PrintStream_println_String jessie_<num>) jessie_<num>)))));
+    (raise Return) end with Return -> void end) { (JC_99: true) }
 
 let Hello_main_safety =
  fun (argv : Object pointer) ->
@@ -13064,10 +13064,10 @@ let Hello_main_safety =
    begin
      (K_1:
      (let jessie_<num> = System_out in
-     (let jessie_<num> = (JC_255: (any_string_0_requires void)) in
-     (JC_257:
+     (let jessie_<num> = (JC_103: (any_string_0_requires void)) in
+     (JC_105:
      (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
-     (JC_256: ((PrintStream_println_String_requires jessie_<num>) jessie_<num>)))))));
+     (JC_104: ((PrintStream_println_String_requires jessie_<num>) jessie_<num>)))))));
     (raise Return) end with Return -> void end) { true }
 
 let cons_FilterOutputStream_OutputStream_ensures_default =
@@ -13082,9 +13082,9 @@ let cons_FilterOutputStream_OutputStream_ensures_default =
      (let jessie_<num> = null in
      begin
        (let jessie_<num> = this_106 in
-       (((safe_upd_ FilterOutputStream_out) jessie_<num>) jessie_<num>));
-      jessie_<num> end) in void); (raise Return) end with Return -> void end)
-  { (JC_1224: true) }
+       (((safe_upd_ FilterOutputStream_out) jessie_<num>) jessie_<num>)); jessie_<num>
+     end) in void); (raise Return) end with Return -> void end)
+  { (JC_616: true) }
 
 let cons_FilterOutputStream_OutputStream_safety =
  fun (this_106 : Object pointer) (out_1 : Object pointer) ->
@@ -13098,15 +13098,14 @@ let cons_FilterOutputStream_OutputStream_safety =
      (let jessie_<num> = null in
      begin
        (let jessie_<num> = this_106 in
-       (((safe_upd_ FilterOutputStream_out) jessie_<num>) jessie_<num>));
-      jessie_<num> end) in void); (raise Return) end with Return -> void end)
-  { true }
+       (((safe_upd_ FilterOutputStream_out) jessie_<num>) jessie_<num>)); jessie_<num>
+     end) in void); (raise Return) end with Return -> void end) { true }
 
 let cons_Hello_ensures_default =
  fun (this_6 : Object pointer) ->
   { valid_struct_Hello(this_6, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_288: true) }
+  { (JC_120: true) }
 
 let cons_Hello_safety =
  fun (this_6 : Object pointer) ->
@@ -13118,7 +13117,7 @@ let cons_Object_ensures_default =
  fun (this_111 : Object pointer) ->
   { valid_struct_Object(this_111, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_584: true) }
+  { (JC_1048: true) }
 
 let cons_Object_safety =
  fun (this_111 : Object pointer) ->
@@ -13130,7 +13129,7 @@ let cons_OutputStream_ensures_default =
  fun (this_105 : Object pointer) ->
   { valid_struct_OutputStream(this_105, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_1208: true) }
+  { (JC_600: true) }
 
 let cons_OutputStream_safety =
  fun (this_105 : Object pointer) ->
@@ -13157,9 +13156,9 @@ let cons_PrintStream_OutputStream_boolean_String_ensures_default =
       (let jessie_<num> = false in
       begin
         (let jessie_<num> = this_110 in
-        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>)); jessie_<num>
-      end) end in void); (raise Return) end with Return -> void end)
-  { (JC_45: true) }
+        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>));
+       jessie_<num> end) end in void); (raise Return) end with Return ->
+   void end) { (JC_776: true) }
 
 let cons_PrintStream_OutputStream_boolean_String_safety =
  fun (this_110 : Object pointer) (out_5 : Object pointer) (autoFlush_1 : bool) (encoding : Object pointer) ->
@@ -13180,9 +13179,9 @@ let cons_PrintStream_OutputStream_boolean_String_safety =
       (let jessie_<num> = false in
       begin
         (let jessie_<num> = this_110 in
-        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>)); jessie_<num>
-      end) end in void); (raise Return) end with Return -> void end) 
-  { true }
+        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>));
+       jessie_<num> end) end in void); (raise Return) end with Return ->
+   void end) { true }
 
 let cons_PrintStream_OutputStream_boolean_ensures_default =
  fun (this_109 : Object pointer) (out_4 : Object pointer) (autoFlush_0 : bool) ->
@@ -13202,9 +13201,9 @@ let cons_PrintStream_OutputStream_boolean_ensures_default =
       (let jessie_<num> = false in
       begin
         (let jessie_<num> = this_109 in
-        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>)); jessie_<num>
-      end) end in void); (raise Return) end with Return -> void end)
-  { (JC_29: true) }
+        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>));
+       jessie_<num> end) end in void); (raise Return) end with Return ->
+   void end) { (JC_760: true) }
 
 let cons_PrintStream_OutputStream_boolean_safety =
  fun (this_109 : Object pointer) (out_4 : Object pointer) (autoFlush_0 : bool) ->
@@ -13246,9 +13245,9 @@ let cons_PrintStream_OutputStream_ensures_default =
       (let jessie_<num> = false in
       begin
         (let jessie_<num> = this_107 in
-        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>));
-       jessie_<num> end) end in void); (raise Return) end with Return ->
-   void end) { (JC_1320: true) }
+        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>)); jessie_<num>
+      end) end in void); (raise Return) end with Return -> void end)
+  { (JC_712: true) }
 
 let cons_PrintStream_OutputStream_safety =
  fun (this_107 : Object pointer) (out_2 : Object pointer) ->
@@ -13268,9 +13267,9 @@ let cons_PrintStream_OutputStream_safety =
       (let jessie_<num> = false in
       begin
         (let jessie_<num> = this_107 in
-        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>));
-       jessie_<num> end) end in void); (raise Return) end with Return ->
-   void end) { true }
+        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>)); jessie_<num>
+      end) end in void); (raise Return) end with Return -> void end) 
+  { true }
 
 let cons_PrintStream_boolean_OutputStream_ensures_default =
  fun (this_108 : Object pointer) (autoFlush : bool) (out_3 : Object pointer) ->
@@ -13290,9 +13289,9 @@ let cons_PrintStream_boolean_OutputStream_ensures_default =
       (let jessie_<num> = false in
       begin
         (let jessie_<num> = this_108 in
-        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>));
-       jessie_<num> end) end in void); (raise Return) end with Return ->
-   void end) { (JC_1336: true) }
+        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>)); jessie_<num>
+      end) end in void); (raise Return) end with Return -> void end)
+  { (JC_728: true) }
 
 let cons_PrintStream_boolean_OutputStream_safety =
  fun (this_108 : Object pointer) (autoFlush : bool) (out_3 : Object pointer) ->
@@ -13312,9 +13311,9 @@ let cons_PrintStream_boolean_OutputStream_safety =
       (let jessie_<num> = false in
       begin
         (let jessie_<num> = this_108 in
-        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>));
-       jessie_<num> end) end in void); (raise Return) end with Return ->
-   void end) { true }
+        (((safe_upd_ PrintStream_closing) jessie_<num>) jessie_<num>)); jessie_<num>
+      end) end in void); (raise Return) end with Return -> void end) 
+  { true }
 
 let cons_String_StringBuffer_ensures_default =
  fun (this_122 : Object pointer) (buffer : Object pointer) ->
@@ -13339,7 +13338,7 @@ let cons_String_StringBuffer_ensures_default =
         (let jessie_<num> = this_122 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_1048: true) }
+  { (JC_1280: true) }
 
 let cons_String_StringBuffer_safety =
  fun (this_122 : Object pointer) (buffer : Object pointer) ->
@@ -13388,7 +13387,7 @@ let cons_String_String_ensures_default =
         (let jessie_<num> = this_113 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_888: true) }
+  { (JC_1200: true) }
 
 let cons_String_String_safety =
  fun (this_113 : Object pointer) (original : Object pointer) ->
@@ -13438,7 +13437,7 @@ let cons_String_byteA_String_ensures_default =
         (let jessie_<num> = this_119 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_1000: true) }
+  { (JC_1256: true) }
 
 let cons_String_byteA_String_safety =
  fun (this_119 : Object pointer) (bytes_1 : Object pointer) (charsetName_0 : Object pointer) ->
@@ -13488,7 +13487,7 @@ let cons_String_byteA_ensures_default =
         (let jessie_<num> = this_121 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_1032: true) }
+  { (JC_1272: true) }
 
 let cons_String_byteA_int_ensures_default =
  fun (this_117 : Object pointer) (ascii_0 : Object pointer) (hibyte_0 : int32) ->
@@ -13513,7 +13512,7 @@ let cons_String_byteA_int_ensures_default =
         (let jessie_<num> = this_117 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_952: true) }
+  { (JC_1232: true) }
 
 let cons_String_byteA_int_int_String_ensures_default =
  fun (this_118 : Object pointer) (bytes_0 : Object pointer) (offset_2 : int32) (length_1 : int32) (charsetName : Object pointer) ->
@@ -13539,7 +13538,7 @@ let cons_String_byteA_int_int_String_ensures_default =
         (let jessie_<num> = this_118 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_984: true) }
+  { (JC_1248: true) }
 
 let cons_String_byteA_int_int_String_safety =
  fun (this_118 : Object pointer) (bytes_0 : Object pointer) (offset_2 : int32) (length_1 : int32) (charsetName : Object pointer) ->
@@ -13589,7 +13588,7 @@ let cons_String_byteA_int_int_ensures_default =
         (let jessie_<num> = this_120 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_1016: true) }
+  { (JC_1264: true) }
 
 let cons_String_byteA_int_int_int_ensures_default =
  fun (this_116 : Object pointer) (ascii : Object pointer) (hibyte : int32) (offset_0 : int32) (count_0 : int32) ->
@@ -13614,7 +13613,7 @@ let cons_String_byteA_int_int_int_ensures_default =
         (let jessie_<num> = this_116 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_936: true) }
+  { (JC_1224: true) }
 
 let cons_String_byteA_int_int_int_safety =
  fun (this_116 : Object pointer) (ascii : Object pointer) (hibyte : int32) (offset_0 : int32) (count_0 : int32) ->
@@ -13735,7 +13734,7 @@ let cons_String_charA_ensures_default =
         (let jessie_<num> = this_114 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_904: true) }
+  { (JC_1208: true) }
 
 let cons_String_charA_int_int_ensures_default =
  fun (this_115 : Object pointer) (value_2 : Object pointer) (offset : int32) (count : int32) ->
@@ -13760,7 +13759,7 @@ let cons_String_charA_int_int_ensures_default =
         (let jessie_<num> = this_115 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_920: true) }
+  { (JC_1216: true) }
 
 let cons_String_charA_int_int_safety =
  fun (this_115 : Object pointer) (value_2 : Object pointer) (offset : int32) (count : int32) ->
@@ -13832,7 +13831,7 @@ let cons_String_ensures_default =
         (let jessie_<num> = this_112 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_872: true) }
+  { (JC_1192: true) }
 
 let cons_String_int_int_charA_ensures_default =
  fun (this_123 : Object pointer) (offset_4 : int32) (count_1 : int32) (value_3 : Object pointer) ->
@@ -13857,7 +13856,7 @@ let cons_String_int_int_charA_ensures_default =
         (let jessie_<num> = this_123 in
         (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_1064: true) }
+  { (JC_1288: true) }
 
 let cons_String_int_int_charA_safety =
  fun (this_123 : Object pointer) (offset_4 : int32) (count_1 : int32) (value_3 : Object pointer) ->
@@ -13903,14 +13902,14 @@ let cons_String_safety =
       (let jessie_<num> = (safe_int32_of_integer_ (0)) in
       begin
         (let jessie_<num> = this_112 in
-        (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end) end in
-     void); (raise Return) end with Return -> void end) { true }
+        (((safe_upd_ String_hash) jessie_<num>) jessie_<num>)); jessie_<num> end)
+     end in void); (raise Return) end with Return -> void end) { true }
 
 let cons_System_ensures_default =
  fun (this_104 : Object pointer) ->
   { valid_struct_System(this_104, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_352: true) }
+  { (JC_152: true) }
 
 let cons_System_safety =
  fun (this_104 : Object pointer) ->
@@ -13927,7 +13926,7 @@ why --project [...] why/Hello.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Hello_po1.why">
-      <location file = "why/Hello.why" line = "2411" begin = "15" end = "69"/>
+      <location file = "why/Hello.why" line = "2411" begin = "15" end = "68"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -16675,7 +16674,7 @@ why -simplify [...] why/Hello.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Hello_main_safety_po_1, File "why/Hello.why", line 2411, characters 15-69
+;; Hello_main_safety_po_1, File "why/Hello.why", line 2411, characters 15-68
 (FORALL (argv)
 (FORALL (Object_alloc_table)
 (IMPLIES (left_valid_struct_StringM argv 0 Object_alloc_table)

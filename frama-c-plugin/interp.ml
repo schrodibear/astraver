@@ -1272,17 +1272,23 @@ let assigns = function
 
 let allocates a =
   match a with
-    | FreeAlloc(alloc,frees) -> 
+    | FreeAllocAny ->
+        Format.eprintf "*********** FreeAllocAny ! ************@.";
+        None
+    | FreeAlloc([],[]) ->
+        Format.eprintf "*********** FreeAlloc empty ! ************@.";
+        None
+    | FreeAlloc(alloc,frees) ->
       let assign_list =
         List.fold_left
-          (fun acc out -> 
-            if false (* Logic_utils.is_result out.it_content *)
-            then acc else (out,1)::acc)
+          (fun acc out ->
+             Format.eprintf "*********** dealing with some allocates ************@.";
+             if false (* Logic_utils.is_result out.it_content *)
+             then acc else (out,1)::acc)
           [] (alloc @ frees)
       in
       let assign_list = List.flatten (List.map zone assign_list) in
       Some(Loc.dummy_position,assign_list)
-    | FreeAllocAny -> None
 
 let spec funspec =
   let is_normal_postcond =
@@ -1299,9 +1305,7 @@ let spec funspec =
         name_of_default_behavior ^ "_jessie"
       else b.b_name
     in
-(*
     Format.eprintf "producing behavior '%s' from behavior '%s'@." name b.b_name;
-*)
     JCCbehavior(
       Loc.dummy_position,
       name,

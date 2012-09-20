@@ -9260,10 +9260,10 @@ goal ArrayMax_max_safety_po_15:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/ArrayMax_why.why          : .......#..#.................. (27/0/0/2/0)
+why/ArrayMax_why.why          : ............................. (29/0/0/0/0)
 total   :  29
-valid   :  27 ( 93%)
+valid   :  29 (100%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   2 (  7%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

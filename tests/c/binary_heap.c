@@ -29,8 +29,11 @@
 /*                                                                        */
 /**************************************************************************/
 
+typedef unsigned int uint;
 
-struct heap;
+struct Heap;
+
+typedef struct Heap *heap;
 
 heap create(uint sz);
 

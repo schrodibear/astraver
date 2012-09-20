@@ -16253,10 +16253,10 @@ goal Muller_m_safety_po_28:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Muller_why.why            : ?#?#.......................................................... (58/0/2/2/0)
+why/Muller_why.why            : ?###.......................................................... (58/0/1/3/0)
 total   :  62
 valid   :  58 ( 94%)
 invalid :   0 (  0%)
-unknown :   2 (  3%)
-timeout :   2 (  3%)
+unknown :   1 (  2%)
+timeout :   3 (  5%)
 failure :   0 (  0%)

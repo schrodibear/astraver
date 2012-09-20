@@ -83,7 +83,7 @@
   @*/
 
 /*@ lemma gcd_property :
-  @   \forall integer a b d q;
+  @   \forall integer a b d;
   @      a >= 0 && b > 0 && isGcd(b,a % b,d) ==> isGcd(a,b,d) ;
   @*/
 
@@ -126,7 +126,7 @@ class Gcd {
 
 /*
 Local Variables:
-compile-command: "make Gcd.why3ml"
+compile-command: "make Gcd.why3ide"
 End:
 */
 
@@ -240,9 +240,8 @@ lemma gcd_property :
 (\forall integer a_1;
   (\forall integer b_0;
     (\forall integer d_0;
-      (\forall integer q_0;
-        ((((a_1 >= 0) && (b_0 > 0)) && isGcd(b_0, (a_1 % b_0), d_0)) ==>
-          isGcd(a_1, b_0, d_0))))))
+      ((((a_1 >= 0) && (b_0 > 0)) && isGcd(b_0, (a_1 % b_0), d_0)) ==>
+        isGcd(a_1, b_0, d_0)))))
 
 exception Throwable of Throwable[0..]
 
@@ -300,7 +299,7 @@ behavior bezoutProperty:
                         (var integer r = (K_23 : (x_8 % y_8)));
                         
                         {  
-                           (var integer q_1 = (K_22 : (x_8 / y_8)));
+                           (var integer q_0 = (K_22 : (x_8 / y_8)));
                            
                            {  (x_8 = y_8);
                               (y_8 = r);
@@ -313,9 +312,9 @@ behavior bezoutProperty:
                                     
                                     {  (a_3 = c);
                                        (b_2 = d_1);
-                                       (c = (K_17 : (ta - (K_16 : (c * q_1)))));
+                                       (c = (K_17 : (ta - (K_16 : (c * q_0)))));
                                        (d_1 = (K_19 : (tb -
-                                                        (K_18 : (d_1 * q_1)))))
+                                                        (K_18 : (d_1 * q_0)))))
                                     }
                                  }
                               }
@@ -753,13 +752,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: Gcd.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: Gcd.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: Gcd.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include Gcd.depend
 
@@ -800,7 +799,7 @@ end = -1
 
 [JC_42]
 file = "HOME/tests/java/Gcd.jc"
-line = 134
+line = 133
 begin = 18
 end = 2892
 
@@ -814,7 +813,7 @@ end = 20
 
 [JC_43]
 file = "HOME/tests/java/Gcd.jc"
-line = 134
+line = 133
 begin = 18
 end = 2892
 
@@ -952,7 +951,7 @@ end = -1
 
 [JC_54]
 file = "HOME/tests/java/Gcd.jc"
-line = 134
+line = 133
 begin = 18
 end = 2892
 
@@ -974,7 +973,7 @@ end = 21
 
 [JC_55]
 file = "HOME/tests/java/Gcd.jc"
-line = 134
+line = 133
 begin = 18
 end = 2892
 
@@ -1070,7 +1069,7 @@ end = -1
 
 [JC_65]
 file = "HOME/tests/java/Gcd.jc"
-line = 134
+line = 133
 begin = 18
 end = 2892
 
@@ -1082,7 +1081,7 @@ end = -1
 
 [JC_66]
 file = "HOME/tests/java/Gcd.jc"
-line = 134
+line = 133
 begin = 18
 end = 2892
 
@@ -1228,7 +1227,7 @@ end = 23
 
 [JC_76]
 file = "HOME/tests/java/Gcd.jc"
-line = 134
+line = 133
 begin = 18
 end = 2892
 
@@ -1240,7 +1239,7 @@ end = 33
 
 [JC_77]
 file = "HOME/tests/java/Gcd.jc"
-line = 134
+line = 133
 begin = 18
 end = 2892
 
@@ -1678,10 +1677,9 @@ lemma gcd_property :
  (forall a_1:int.
   (forall b_0:int.
    (forall d_0:int.
-    (forall q_0:int.
-     ((ge_int(a_1, (0))
-      and (gt_int(b_0, (0)) and isGcd(b_0, computer_mod(a_1, b_0), d_0))) ->
-      isGcd(a_1, b_0, d_0))))))
+    ((ge_int(a_1, (0))
+     and (gt_int(b_0, (0)) and isGcd(b_0, computer_mod(a_1, b_0), d_0))) ->
+     isGcd(a_1, b_0, d_0)))))
 
 exception Exception_exc of Object pointer
 
@@ -1923,7 +1921,7 @@ let Gcd_gcd_ensures_bezoutProperty =
               (let jessie_<num> =
               (let r =
               (K_23: (JC_78: ((computer_mod !mutable_x_8) !mutable_y_8))) in
-              (let q_1 =
+              (let q_0 =
               (K_22: (JC_79: ((computer_div !mutable_x_8) !mutable_y_8))) in
               begin
                 (let jessie_<num> = (mutable_x_8 := !mutable_y_8) in void);
@@ -1934,9 +1932,9 @@ let Gcd_gcd_ensures_bezoutProperty =
                  (let jessie_<num> = (a_3 := !c) in void);
                 (let jessie_<num> = (b_2 := !d_1) in void);
                 (let jessie_<num> =
-                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_1))))) in
+                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_0))))) in
                 void);
-                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_1)))));
+                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_0)))));
                 !d_1 end)) end)) in void) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<num> -> void end end done) with
@@ -1988,7 +1986,7 @@ let Gcd_gcd_ensures_default =
               (let jessie_<num> =
               (let r =
               (K_23: (JC_56: ((computer_mod !mutable_x_8) !mutable_y_8))) in
-              (let q_1 =
+              (let q_0 =
               (K_22: (JC_57: ((computer_div !mutable_x_8) !mutable_y_8))) in
               begin
                 (let jessie_<num> = (mutable_x_8 := !mutable_y_8) in void);
@@ -1999,9 +1997,9 @@ let Gcd_gcd_ensures_default =
                  (let jessie_<num> = (a_3 := !c) in void);
                 (let jessie_<num> = (b_2 := !d_1) in void);
                 (let jessie_<num> =
-                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_1))))) in
+                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_0))))) in
                 void);
-                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_1)))));
+                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_0)))));
                 !d_1 end)) end)) in void) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<num> -> void end end done) with
@@ -2049,7 +2047,7 @@ let Gcd_gcd_ensures_resultIsGcd =
               (let jessie_<num> =
               (let r =
               (K_23: (JC_67: ((computer_mod !mutable_x_8) !mutable_y_8))) in
-              (let q_1 =
+              (let q_0 =
               (K_22: (JC_68: ((computer_div !mutable_x_8) !mutable_y_8))) in
               begin
                 (let jessie_<num> = (mutable_x_8 := !mutable_y_8) in void);
@@ -2060,9 +2058,9 @@ let Gcd_gcd_ensures_resultIsGcd =
                  (let jessie_<num> = (a_3 := !c) in void);
                 (let jessie_<num> = (b_2 := !d_1) in void);
                 (let jessie_<num> =
-                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_1))))) in
+                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_0))))) in
                 void);
-                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_1)))));
+                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_0)))));
                 !d_1 end)) end)) in void) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<num> -> void end end done) with
@@ -2110,7 +2108,7 @@ let Gcd_gcd_safety =
               (let jessie_<num> =
               (let r =
               (K_23: (JC_44: ((computer_mod_ !mutable_x_8) !mutable_y_8))) in
-              (let q_1 =
+              (let q_0 =
               (K_22: (JC_45: ((computer_div_ !mutable_x_8) !mutable_y_8))) in
               begin
                 (let jessie_<num> = (mutable_x_8 := !mutable_y_8) in void);
@@ -2121,9 +2119,9 @@ let Gcd_gcd_safety =
                  (let jessie_<num> = (a_3 := !c) in void);
                 (let jessie_<num> = (b_2 := !d_1) in void);
                 (let jessie_<num> =
-                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_1))))) in
+                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_0))))) in
                 void);
-                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_1)))));
+                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_0)))));
                 !d_1 end)) end)) in void) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<num> -> void end end done) with
@@ -3456,10 +3454,9 @@ lemma gcd_property:
   (forall a_1:int.
     (forall b_0:int.
       (forall d_0:int.
-        (forall q_0:int.
-          (((a_1 >= 0) and
-            ((b_0 > 0) and isGcd(b_0, computer_mod(a_1, b_0), d_0))) ->
-           isGcd(a_1, b_0, d_0))))))
+        (((a_1 >= 0) and
+          ((b_0 > 0) and isGcd(b_0, computer_mod(a_1, b_0), d_0))) ->
+         isGcd(a_1, b_0, d_0)))))
 
 ========== file tests/java/why/Gcd_po11.why ==========
 goal Gcd_gcd_ensures_bezoutProperty_po_1:
@@ -4918,14 +4915,14 @@ why -simplify [...] why/Gcd.why
 (FORALL (a_0) (isGcd a_0 0 a_0)))
 
 ;; gcd_property, File "HOME/tests/java/Gcd.java", line 84, characters 10-22
-(FORALL (a_1 b_0 d_0 q_0)
+(FORALL (a_1 b_0 d_0)
 (IMPLIES
 (AND (>= a_1 0) (AND (> b_0 0) (isGcd b_0 (computer_mod a_1 b_0) d_0)))
 (isGcd a_1 b_0 d_0)))
 
 (BG_PUSH
  ;; lemma gcd_property as axiom
-(FORALL (a_1 b_0 d_0 q_0)
+(FORALL (a_1 b_0 d_0)
 (IMPLIES
 (AND (>= a_1 0) (AND (> b_0 0) (isGcd b_0 (computer_mod a_1 b_0) d_0)))
 (isGcd a_1 b_0 d_0))))
@@ -6482,19 +6479,17 @@ goal gcd_property:
   (forall a_1:int.
     (forall b_0:int.
       (forall d_0:int.
-        (forall q_0:int.
-          (((a_1 >= 0) and
-            ((b_0 > 0) and isGcd(b_0, computer_mod(a_1, b_0), d_0))) ->
-           isGcd(a_1, b_0, d_0))))))
+        (((a_1 >= 0) and
+          ((b_0 > 0) and isGcd(b_0, computer_mod(a_1, b_0), d_0))) ->
+         isGcd(a_1, b_0, d_0)))))
 
 axiom gcd_property_as_axiom:
   (forall a_1:int.
     (forall b_0:int.
       (forall d_0:int.
-        (forall q_0:int.
-          (((a_1 >= 0) and
-            ((b_0 > 0) and isGcd(b_0, computer_mod(a_1, b_0), d_0))) ->
-           isGcd(a_1, b_0, d_0))))))
+        (((a_1 >= 0) and
+          ((b_0 > 0) and isGcd(b_0, computer_mod(a_1, b_0), d_0))) ->
+         isGcd(a_1, b_0, d_0)))))
 
 goal Gcd_gcd_ensures_bezoutProperty_po_1:
   forall x_8:int.
@@ -6829,10 +6824,10 @@ goal Gcd_gcd_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ........?#............ (20/0/1/1/0)
+why/Gcd_why.why               : ........?#.......?.... (19/0/2/1/0)
 total   :  22
-valid   :  20 ( 91%)
+valid   :  19 ( 86%)
 invalid :   0 (  0%)
-unknown :   1 (  5%)
+unknown :   2 (  9%)
 timeout :   1 (  5%)
 failure :   0 (  0%)

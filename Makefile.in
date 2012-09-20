@@ -638,20 +638,20 @@ LIBWHY3=$(PWD)/lib
 endif
 
 lib/why3/why3.conf: Makefile
-	@(echo "[main]"; \
-	echo "loadpath=\"$(LIBWHY3)/why3\""; \
-	echo; \
-	echo "[prover_modifiers]"; \
-	echo 'name="Coq"'; \
-	echo "option=\"-R $(LIBWHY3)/coq Why\""; \
-	echo "driver=\"$(LIBWHY3)/why3/coq.drv\""; \
-	echo; \
-	echo "[editor_modifiers coqide]"; \
-	echo "option=\"-R $(LIBWHY3)/coq Why\""; \
-	echo; \
-	echo "[editor_modifiers proofgeneral-coq]"; \
-	echo "option=\"--eval \\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(LIBWHY3)/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Why\\\\\\\\\\\\\") coq-load-path))\\\"\""; \
-	) > $@
+	printf "[main]\n" > $@
+	printf "loadpath=\"$(LIBWHY3)/why3\"\n" >> $@
+	printf "\n" >> $@
+	printf "[prover_modifiers]\n" >> $@
+	printf "name=\"Coq\"\n" >> $@
+	printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
+	printf "driver=\"$(LIBWHY3)/why3/coq.drv\"\n" >> $@
+	printf "\n"  >> $@
+	printf "[editor_modifiers coqide]\n" >> $@
+	printf "option=\"-R $(LIBWHY3)/coq Why\"\n" >> $@
+	printf "\n"  >> $@
+	printf "[editor_modifiers proofgeneral-coq]\n" >> $@
+	printf "option=\"--eval \\\\\"(setq coq-load-path (cons '(\\\\\\\\\\\\\"$(LIBWHY3)/coq\\\\\\\\\\\\\" \\\\\\\\\\\\\"Why\\\\\\\\\\\\\") coq-load-path))\\\\\"\"\n"  >> $@
+
 
 ########
 # COQ
@@ -805,6 +805,9 @@ install-coq-v7:
 	cp -f $(VO7) $(LIBDIR)/why/coq7
 install-coq-v8 install-coq-v8.1:
 	if test -w $(COQLIB) ; then \
+	  rm -f $(COQLIB)/user-contrib/Why*.v* ; \
+	  rm -f $(COQLIB)/user-contrib/caduceus*.v* $(COQLIB)/user-contrib/Caduceus*.v* ; \
+	  rm -f $(COQLIB)/user-contrib/jessie*.v* $(COQLIB)/user-contrib/Jessie*.v* ; \
 	  mkdir -p $(COQLIB)/user-contrib/Why ; \
 	  cp -f $(VO8) $(COQLIB)/user-contrib/Why ; \
 	else \
