@@ -93,7 +93,7 @@ let mkdecl dnode pos = new decl ~pos dnode
 (* Locate Jessie expressions on source program.                              *)
 (*****************************************************************************)
 
-let reg_position ?id ?kind ?name pos = 
+let reg_position ?id ?kind ?name pos =
   Output.old_reg_pos "C" ?id ?kind ?name (Loc.extract pos)
 
 (* [locate] should be called on every Jessie expression which we would like to
@@ -400,7 +400,7 @@ let translated_name linfo largs =
 	    end
 	| s ->
 
-          try 
+          try
             Hashtbl.find jessie_builtins s
           with Not_found ->
 	    try
@@ -744,7 +744,7 @@ and terms t =
 
     | TBinOp(Shiftrt,t1,t2) ->
         begin match possible_value_of_integral_term t2 with
-          | Some i when My_bigint.ge i My_bigint.zero 
+          | Some i when My_bigint.ge i My_bigint.zero
               && My_bigint.lt i (My_bigint.of_int 63)  ->
               (* Right shift by constant is division by constant *)
               let pow = constant_term t2.term_loc (My_bigint.two_power i) in
@@ -762,7 +762,7 @@ and terms t =
 
     | TBinOp(Shiftlt as op,t1,t2) ->
         begin match possible_value_of_integral_term t2 with
-          | Some i when My_bigint.ge i My_bigint.zero && 
+          | Some i when My_bigint.ge i My_bigint.zero &&
               My_bigint.lt i (My_bigint.of_int 63) ->
               (* Left shift by constant is multiplication by constant *)
               let pow = constant_term t2.term_loc (My_bigint.two_power i) in
@@ -807,7 +807,7 @@ and terms t =
           | Tnull ->
               [JCPEconst JCCnull]
           | TConst c
-              when is_integral_logic_const c && 
+              when is_integral_logic_const c &&
                 My_bigint.equal
                 (value_of_integral_logic_const c) My_bigint.zero ->
               [JCPEconst JCCnull]
@@ -969,11 +969,11 @@ and terms_lval pos lv =
     | (TVar _ | TResult _), _off ->
         assert false (* Should have been rewritten *)
 
-    | TMem t, TModel(mi, toff) -> 
+    | TMem t, TModel(mi, toff) ->
         assert (toff = TNoOffset); (* Others should have been rewritten *)
         let e = terms t in
           List.map (fun e -> mkexpr (JCPEderef(e,mi.mi_name)) pos) e
-        
+
     | TMem t, TField(fi,toff) ->
         assert (toff = TNoOffset); (* Others should have been rewritten *)
         let e = terms t in
@@ -1024,7 +1024,7 @@ and terms_lval pos lv =
           in
           List.map (fun e -> mkexpr (JCPEderef(e,fi.fname)) pos) e
     | TMem _e, TIndex _ ->
-        unsupported "cannot interpret this lvalue: %a" 
+        unsupported "cannot interpret this lvalue: %a"
           !Ast_printer.d_term_lval lv
 
 and term t =
@@ -1210,7 +1210,7 @@ and pred p =
           ) (terms t))
         in
         (mkconjunct elist p.loc)#node
-    
+
     | Pvalid_read _ ->
       (* TODO *)
       Common.notimplemented "Interp.pred Pvalid_read"
@@ -1273,16 +1273,11 @@ let assigns = function
 let allocates a =
   match a with
     | FreeAllocAny ->
-        Format.eprintf "*********** FreeAllocAny ! ************@.";
-        None
-    | FreeAlloc([],[]) ->
-        Format.eprintf "*********** FreeAlloc empty ! ************@.";
         None
     | FreeAlloc(alloc,frees) ->
       let assign_list =
         List.fold_left
           (fun acc out ->
-             Format.eprintf "*********** dealing with some allocates ************@.";
              if false (* Logic_utils.is_result out.it_content *)
              then acc else (out,1)::acc)
           [] (alloc @ frees)
@@ -1290,7 +1285,7 @@ let allocates a =
       let assign_list = List.flatten (List.map zone assign_list) in
       Some(Loc.dummy_position,assign_list)
 
-let spec funspec =
+let spec fname funspec =
   let is_normal_postcond =
     function (Normal,_) -> true
       | (Exits | Returns | Breaks | Continues),_ -> false
@@ -1305,7 +1300,15 @@ let spec funspec =
         name_of_default_behavior ^ "_jessie"
       else b.b_name
     in
-    Format.eprintf "producing behavior '%s' from behavior '%s'@." name b.b_name;
+    Format.eprintf "[spec] function %s, producing behavior '%s' from behavior '%s'@." fname name b.b_name;
+    Format.eprintf "b_allocation = ";
+    begin
+      match b.b_allocation with
+        | FreeAllocAny ->
+            Format.eprintf "FreeAllocAny@."
+        | FreeAlloc(l1,l2) ->
+            Format.eprintf "FreeAlloc(%d,%d)@." (List.length l1) (List.length l2)
+    end;
     JCCbehavior(
       Loc.dummy_position,
       name,
@@ -1421,10 +1424,10 @@ let spec funspec =
           [JCCdecreases(locate (term t),Some (new identifier id))]
   in
 
+  (* TODO: translate terminates clauses *)
   if funspec.spec_terminates <> None then
     warn_once "Termination condition(s) ignored" ;
 
-  (* TODO: translate terminates clauses *)
   (requires @ decreases @ behaviors),
   complete_behaviors_assertions,
   disjoint_behaviors_assertions
@@ -1479,7 +1482,7 @@ let code_annot pos ((acc_assert_before,contract) as acc) a =
                     | None -> (acc_assert_before,Some s)
                     | Some _ -> assert false
                 end
-            | AStmtSpec _ -> 
+            | AStmtSpec _ ->
               unsupported "statement contract for a specific behavior"
         end
     | AI(alarm,annot) ->
@@ -1725,7 +1728,7 @@ and integral_expr e =
 
       | BinOp(Shiftrt,e1,e2,_ty) ->
           let e = match possible_value_of_integral_expr e2 with
-            | Some i when My_bigint.ge i My_bigint.zero && 
+            | Some i when My_bigint.ge i My_bigint.zero &&
                 My_bigint.lt i (My_bigint.of_int 63) ->
                 (* Right shift by constant is division by constant *)
                 let pow = constant_expr (My_bigint.two_power i) in
@@ -1741,7 +1744,7 @@ and integral_expr e =
 
       | BinOp(Shiftlt as op,e1,e2,_ty) ->
           let e = match possible_value_of_integral_expr e2 with
-            | Some i when My_bigint.ge i My_bigint.zero && 
+            | Some i when My_bigint.ge i My_bigint.zero &&
                 My_bigint.lt i (My_bigint.of_int 63) ->
                 (* Left shift by constant is multiplication by constant *)
                 let pow = constant_expr (My_bigint.two_power i) in
@@ -1888,8 +1891,8 @@ let instruction = function
             | Const c when is_integral_const c ->
                 let allocsiz = My_bigint.div (value_of_integral_expr arg) lvsiz
                 in
-                let siznode = 
-                  JCPEconst(JCCinteger(My_bigint.to_string allocsiz)) 
+                let siznode =
+                  JCPEconst(JCCinteger(My_bigint.to_string allocsiz))
                 in
                 lvtyp, mkexpr siznode pos
             | BinOp(Mult,({enode = Const c} as arg),nelem,_ty)
@@ -1971,8 +1974,8 @@ let instruction = function
         else
           let tmpv = makeTempVar (get_curFundec()) (getReturnType v.vtype) in
           let tmplv = Var tmpv, NoOffset in
-          let cast = 
-            new_exp ~loc:pos (CastE(lvty,new_exp ~loc:pos (Lval tmplv))) 
+          let cast =
+            new_exp ~loc:pos (CastE(lvty,new_exp ~loc:pos (Lval tmplv)))
           in
           let tmpassign = JCPEassign(lval pos lv,expr cast) in
           JCPElet(None,tmpv.vname,Some call,locate (mkexpr tmpassign pos))
@@ -2149,7 +2152,7 @@ let rec statement s =
     match contract with
       | None -> s
       | Some sp ->
-          let sp,_cba,_dba = spec sp in
+          let sp,_cba,_dba = spec "statement contract" sp in
           let requires, decreases, behaviors =
             List.fold_left
               (fun (r,d,b) c ->
@@ -2201,7 +2204,7 @@ let rec annotation is_axiomatic annot =
   match annot with
   | Dfun_or_pred (info,pos) ->
       CurrentLoc.set pos;
-      begin 
+      begin
         try
         let params = List.map logic_variable info.l_profile in
         let body =
@@ -2227,7 +2230,7 @@ let rec annotation is_axiomatic annot =
             let _ = Hashtbl.find jessie_builtins info.l_var_info.lv_name in
             info.l_var_info.lv_name
         with Not_found ->
-          translated_name info [] 
+          translated_name info []
         in
         (match info.l_type, info.l_labels, params with
              Some t, [], [] ->
@@ -2458,16 +2461,16 @@ let global vardefs g =
             mi.mi_name, None
         in
         let fields =
-          List.fold_right 
+          List.fold_right
             (fun fi acc ->
                let repfi = Retype.FieldUnion.repr fi in
                if Fieldinfo.equal fi repfi then
                  field fi @ acc
-               else acc) 
+               else acc)
             compinfo.cfields []
         in
         let fields =
-          List.fold_right 
+          List.fold_right
             (fun mi acc -> model_field mi :: acc)
             (Norm.model_fields compinfo) fields
         in
@@ -2560,15 +2563,15 @@ let global vardefs g =
         in
         let emin =
           List.fold_left (fun acc enum ->
-                            if My_bigint.lt acc enum then acc else enum) 
+                            if My_bigint.lt acc enum then acc else enum)
             (List.hd enums)
             enums
         in
         let min = Num.num_of_string (My_bigint.to_string emin) in
         let emax =
           List.fold_left (fun acc enum ->
-                            if My_bigint.gt acc enum then acc else enum) 
-            (List.hd enums) 
+                            if My_bigint.gt acc enum then acc else enum)
+            (List.hd enums)
             enums
         in
         let max = Num.num_of_string (My_bigint.to_string emax) in
@@ -2591,14 +2594,14 @@ let global vardefs g =
           in
           let id = mkidentifier v.vname pos in
           let kf = Globals.Functions.get v in
-          Jessie_options.debug 
+          Jessie_options.debug
             "Getting spec of %s" (Kernel_function.get_name kf);
           let funspec = Annotations.funspec kf in
           Jessie_options.debug "OK";
           let params = Globals.Functions.get_params kf in
           let formal v = true, ctype v.vtype, unique_name_if_empty v.vname in
           let formals = List.map formal params in
-          let s,_cba,_dba = spec funspec in
+          let s,_cba,_dba = spec v.vname funspec in
           [JCDfun(ctype rtyp,id,formals,s,None)]
         else
           [JCDvar(ctype v.vtype,v.vname,None)]
@@ -2634,7 +2637,7 @@ let global vardefs g =
             in
             let locals = List.rev (List.rev_map local f.slocals) in
             let body = mkexpr (JCPEblock(statement_list f.sbody.bstmts)) pos in
-            let s,cba,dba = spec funspec in
+            let s,cba,dba = spec f.svar.vname funspec in
             let body =
               List.fold_left
                 (fun acc a ->
@@ -2666,10 +2669,10 @@ let global vardefs g =
               (reg_position ~id:f.svar.vname
                  ~name:("Function " ^ f.svar.vname) f.svar.vdecl);
             [JCDfun(ctype rty,id,formals,s,Some body)]
-          with (Unsupported _ | Log.FeatureRequest _) 
+          with (Unsupported _ | Log.FeatureRequest _)
               when drop_on_unsupported_feature ->
                 warning "Dropping definition of function %s@." f.svar.vname ;
-                let s,_cba,_dba = spec funspec in
+                let s,_cba,_dba = spec f.svar.vname funspec in
                 [JCDfun(ctype rty,id,formals,s,None)]
           end
 
