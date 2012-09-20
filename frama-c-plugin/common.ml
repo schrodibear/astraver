@@ -1210,7 +1210,7 @@ let malloc_function () =
       b_requires = [];
       b_extended = [];
       b_assigns = Writes [];
-      b_allocation = FreeAlloc([alloc],[]);
+      b_allocation = FreeAlloc([],[alloc]);
       b_post_cond = [];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
@@ -1245,7 +1245,7 @@ let free_function () =
       b_post_cond = [];
       b_requires = [];
       b_extended = [];
-      b_allocation = FreeAlloc([],[frees]);
+      b_allocation = FreeAlloc([frees],[]);
       b_assigns = Writes [];
     }
     in

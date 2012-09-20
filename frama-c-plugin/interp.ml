@@ -1285,7 +1285,7 @@ let allocates a =
       let assign_list = List.flatten (List.map zone assign_list) in
       Some(Loc.dummy_position,assign_list)
 
-let spec fname funspec =
+let spec _fname funspec =
   let is_normal_postcond =
     function (Normal,_) -> true
       | (Exits | Returns | Breaks | Continues),_ -> false
@@ -1300,7 +1300,7 @@ let spec fname funspec =
         name_of_default_behavior ^ "_jessie"
       else b.b_name
     in
-    Format.eprintf "[spec] function %s, producing behavior '%s' from behavior '%s'@." fname name b.b_name;
+(*    Format.eprintf "[spec] function %s, producing behavior '%s' from behavior '%s'@." fname name b.b_name;
     Format.eprintf "b_allocation = ";
     begin
       match b.b_allocation with
@@ -1309,6 +1309,7 @@ let spec fname funspec =
         | FreeAlloc(l1,l2) ->
             Format.eprintf "FreeAlloc(%d,%d)@." (List.length l1) (List.length l2)
     end;
+*)
     JCCbehavior(
       Loc.dummy_position,
       name,

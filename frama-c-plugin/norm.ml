@@ -786,7 +786,7 @@ object(self)
           WritesAny -> WritesAny
         | Writes l -> Writes (List.flatten (List.map assign l)))
     in
-    Format.eprintf "[Norm.vbehavior] b_allocation = ";
+(*    Format.eprintf "[Norm.vbehavior] b_allocation = ";
     begin
       match b.b_allocation with
         | FreeAllocAny ->
@@ -794,6 +794,7 @@ object(self)
         | FreeAlloc(l1,l2) ->
             Format.eprintf "FreeAlloc(%d,%d)@." (List.length l1) (List.length l2)
     end;
+*)
     let new_bhv =
       Cil.mk_behavior
         ~name:b.b_name

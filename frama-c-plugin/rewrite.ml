@@ -1705,6 +1705,30 @@ object(self)
         Visitor.visitFramacPredicates 
           (self:>Visitor.frama_c_visitor) b.b_assumes
       in
+      let allocation =
+        match b.b_allocation with
+          | FreeAllocAny -> FreeAllocAny
+          | FreeAlloc(free,alloc) ->
+              rep_lab <- Logic_const.here_label;
+              let free = 
+                List.map 
+                  (Visitor.visitFramacIdTerm 
+                     (self:>Visitor.frama_c_visitor))
+                  free
+              in
+              rep_lab <- Logic_const.old_label;
+              let alloc =
+                List.map
+                  (Visitor.visitFramacIdTerm
+                     (self:>Visitor.frama_c_visitor))
+                  alloc
+              in
+              FreeAlloc(free,alloc)
+      in
+      (* VP: 2012-09-20: signature of Cil.mk_behavior is utterly broken.
+         We'll have to live with that for Oxygen, but this will change as
+         soon as possible. *)
+      let allocation = Some allocation in
       rep_lab <- Logic_const.old_label;
       let assigns =
         Visitor.visitFramacAssigns 
@@ -1723,7 +1747,7 @@ object(self)
       rep_lab <- Logic_const.pre_label;
       let name = b.b_name in
       let b = Cil.mk_behavior
-        ~name ~requires ~assumes ~assigns ~post_cond () in
+        ~name ~requires ~assumes ~assigns ~allocation ~post_cond () in
       ChangeTo b
 
   method vlogic_label l =
@@ -1738,44 +1762,26 @@ let rewrite_pre_old file =
   let visitor = new rewritePreOld in
   visitFramacFile visitor file
 
+class remove_unsupported: Visitor.frama_c_visitor =
+object
+  inherit Visitor.frama_c_inplace
+  method vpredicate =
+    function
+      | Pseparated _ ->
+          Jessie_options.warning ~once:true
+            "\\separated is not supported by Jessie. This predicate will be \
+             ignored";
+          ChangeTo Ptrue
+      | _ -> DoChildren
+end
+
+let remove_unsupported file =
+  let visitor = new remove_unsupported in
+  visitFramacFile visitor file
+
 (*****************************************************************************)
 (* Rewrite the C file for Jessie translation.                                *)
 (*****************************************************************************)
-
-(* class collectTiti (table : varinfo Cil_datatype.Varinfo.Hashtbl.t) = *)
-(* object *)
-
-(*   inherit Visitor.generic_frama_c_visitor *)
-(*     (Cil.inplace_visit ()) (Project.current ()) as super *)
-
-(*   method vfunc f = *)
-(*     let var v = Cil_datatype.Varinfo.Hashtbl.add table v v in *)
-(*     List.iter var f.sformals; *)
-(*     List.iter var f.slocals; *)
-(*     DoChildren *)
-
-(* end *)
-
-(* class rewriteTiti (table : varinfo Cil_datatype.Varinfo.Hashtbl.t) = *)
-(* object *)
-
-(*   inherit Visitor.generic_frama_c_visitor *)
-(*     (Cil.inplace_visit ()) (Project.current ()) as super *)
-
-(*   method vlval (host,_off) = match host with *)
-(*     | Var v -> *)
-(* 	begin try ignore (Cil_datatype.Varinfo.Hashtbl.find table v) *)
-(* 	with Not_found -> () end; DoChildren *)
-(*     | _ -> DoChildren *)
-
-(* end *)
-
-(* let rewrite_titi file = *)
-(*   let table = Cil_datatype.Varinfo.Hashtbl.create 17 in *)
-(*   let visitor = new collectTiti table in *)
-(*   visitFramacFile (visitor :> cilVisitor) file; *)
-(*   let visitor = new rewriteTiti table in *)
-(*   visit_and_push_statements visitFramacFile visitor file *)
 
 let rewrite file =
   if checking then check_types file;
@@ -1852,7 +1858,9 @@ let rewrite file =
   Jessie_options.debug "Annotate code with overflow checks";
   annotate_overflow file;
   if checking then check_types file;
-
+  Jessie_options.debug "Checking if there are unsupported predicates";
+  remove_unsupported file;
+  if checking then check_types file
 
 (*
 Local Variables:
