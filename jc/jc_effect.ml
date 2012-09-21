@@ -1166,7 +1166,7 @@ let single_assertion fef a =
 
 type assign_alloc_clause = Assigns | Allocates | Reads
 
-let single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location) =
+let rec single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location) =
   let lab =
     match loc#label with None -> LabelHere | Some lab -> lab
   in
@@ -1197,7 +1197,10 @@ let single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location) =
 	      (* Add effect on allocation table for [not_assigns] predicate *)
 	        let ac = alloc_class_of_mem_class mc in
 	        add_alloc_reads lab fef (ac,locs#region)
-            | Allocates -> assert false (* TODO *)
+            | Allocates ->
+              if only_writes then fef else
+	        let ac = alloc_class_of_mem_class mc in
+	        add_alloc_writes lab fef (ac,locs#region)
             | Reads ->
 	      if only_writes then fef else
 	        add_memory_reads lab fef (mc,locs#region)
@@ -1221,7 +1224,10 @@ let single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location) =
 	      (* Add effect on allocation table for [not_assigns] predicate *)
 	        let ac = alloc_class_of_mem_class mc in
 	        add_alloc_reads lab fef (ac,t1#region)
-            | Allocates -> assert false
+            | Allocates -> 
+	      if only_writes then fef else
+	        let ac = alloc_class_of_mem_class mc in
+	        add_alloc_writes lab fef (ac,t1#region)
 	    | Reads ->
 	        if only_writes then fef else
 	          add_memory_reads lab fef (mc,t1#region)
@@ -1236,7 +1242,9 @@ let single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location) =
 	  | JCmem_plain_union _, _
 	  | JCmem_bitvector, _ -> fef
 	end
-    | JCLat(_loc,_lab) -> fef
+    | JCLat(loc,lab) -> 
+      assert (loc#label = Some lab);
+      snd (single_location ~in_clause fef loc)
   in true, fef
 
 let rec single_location_set fef locs =
