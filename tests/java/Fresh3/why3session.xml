@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session
+ name="Fresh3/why3session.xml" shape_version="2">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.93"/>
+ <prover
+  id="1"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
+  name="Z3"
+  version="4.0"/>
+ <file
+  name="../Fresh3.mlw"
+  verified="false"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="Fresh3/../Fresh3.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Jessie_program"
+   locfile="Fresh3/../Fresh3.mlw"
+   loclnum="312" loccnumb="7" loccnume="21"
+   verified="false"
+   expanded="true">
+   <goal
+    name="WP_parameter _Fresh3_create_ensures_default"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+    loclnum="14" loccnumb="5" loccnume="11"
+    expl="normal postcondition"
+    sum="101597bd62ef83824503a39ed5136a4c"
+    proved="false"
+    expanded="true"
+    shape="anot_assignsV3V2V8apset_singletonV0Aanot_assignsV3V1V7apset_emptyAavalidV3aselectV8V0NAa_Non_null_ObjectaselectV8V0V5Iainfix =V8astoreV2V0V6FFIainstanceofV4V6a_Int_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_IntV6c0ainfix -c1c1V5FFIavalid_struct_Fresh3V0c0c0V3FF">
+    <label
+     name="expl:Method create, default behavior"/>
+    <label
+     name="expl:parameter _Fresh3_create_ensures_default"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.08"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.08"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.16"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Fresh3_create_safety"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+    loclnum="14" loccnumb="5" loccnume="11"
+    expl="Method create, Safety"
+    sum="3a141f64b161be77220629f91bd53d37"
+    proved="true"
+    expanded="false"
+    shape="ainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Int_tagAaalloc_freshV1V4c1Aaalloc_extendsV1V3Aastrict_valid_struct_IntV4c0ainfix -c1c1V3FFAainfix &gt;=c1c0Iavalid_struct_Fresh3V0c0c0V1FF">
+    <label
+     name="expl:Method create, Safety"/>
+    <label
+     name="expl:parameter _Fresh3_create_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Fresh3_smoke_detector_ensures_default"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+    loclnum="25" loccnumb="12" loccnume="26"
+    expl="assertion"
+    sum="de19c3919247e6bd2af5ce001ede0a8c"
+    proved="false"
+    expanded="true"
+    shape="ainfix =c0c1Ianot_assignsV13V12V15apset_singletonV10Aanot_assignsV13V11V14apset_emptyAavalidV13aselectV15V10NAa_Non_null_ObjectaselectV15V10V16FIanot_assignsV7V9V12apset_singletonV5Aanot_assignsV7V0V11apset_emptyAavalidV7aselectV12V5NAa_Non_null_ObjectaselectV12V5V13FIainfix =V10V8FFIainstanceofV6V8a_Fresh3_tagAaalloc_freshV3V8c1Aaalloc_extendsV3V7Aastrict_valid_struct_Fresh3V8c0ainfix -c1c1V7FFIainfix =V5V4FIainstanceofV2V4a_Fresh3_tagAaalloc_freshV1V4c1Aaalloc_extendsV1V3Aastrict_valid_struct_Fresh3V4c0ainfix -c1c1V3FFF">
+    <label
+     name="expl:Method smoke_detector, default behavior"/>
+    <label
+     name="expl:parameter _Fresh3_smoke_detector_ensures_default"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.09"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.09"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.14"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Fresh3_smoke_detector_safety"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+    loclnum="25" loccnumb="12" loccnume="26"
+    expl="Method smoke_detector, Safety"
+    sum="5b29103bbad9919cb62ee0bfaa0f85d3"
+    proved="false"
+    expanded="true"
+    shape="ainfix &gt;=aoffset_maxV13V10c0Ianot_assignsV7V9V12apset_singletonV5Aanot_assignsV7V0V11apset_emptyAavalidV7aselectV12V5NAa_Non_null_ObjectaselectV12V5V13FAainfix &gt;=aoffset_maxV7V5c0Iainfix =V10V8FFAainfix &gt;=aoffset_maxV7V8c0IainstanceofV6V8a_Fresh3_tagAaalloc_freshV3V8c1Aaalloc_extendsV3V7Aastrict_valid_struct_Fresh3V8c0ainfix -c1c1V7FFAainfix &gt;=c1c0Iainfix =V5V4FAainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Fresh3_tagAaalloc_freshV1V4c1Aaalloc_extendsV1V3Aastrict_valid_struct_Fresh3V4c0ainfix -c1c1V3FFAainfix &gt;=c1c0F">
+    <label
+     name="expl:Method smoke_detector, Safety"/>
+    <label
+     name="expl:parameter _Fresh3_smoke_detector_safety"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.06"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.07"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="1.17"/>
+    </proof>
+    <transf
+     name="split_goal_wp"
+     proved="false"
+     expanded="true">
+     <goal
+      name="WP_parameter _Fresh3_smoke_detector_safety.0"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+      loclnum="25" loccnumb="12" loccnume="26"
+      expl="precondition"
+      sum="9fc7745a96e144557bbe9a30ab626650"
+      proved="true"
+      expanded="false"
+      shape="ainfix &gt;=c1c0F">
+      <label
+       name="expl:Method smoke_detector, Safety"/>
+      <label
+       name="expl:parameter _Fresh3_smoke_detector_safety"/>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Fresh3_smoke_detector_safety.1"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+      loclnum="25" loccnumb="12" loccnume="26"
+      expl="assertion"
+      sum="e2d697abeb50be95d804b03f7e375c3e"
+      proved="true"
+      expanded="false"
+      shape="ainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Fresh3_tagAaalloc_freshV1V4c1Aaalloc_extendsV1V3Aastrict_valid_struct_Fresh3V4c0ainfix -c1c1V3FFIainfix &gt;=c1c0F">
+      <label
+       name="expl:Method smoke_detector, Safety"/>
+      <label
+       name="expl:parameter _Fresh3_smoke_detector_safety"/>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Fresh3_smoke_detector_safety.2"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+      loclnum="25" loccnumb="12" loccnume="26"
+      expl="precondition"
+      sum="fed37bde1002579e5151370c0aec459a"
+      proved="true"
+      expanded="false"
+      shape="ainfix &gt;=c1c0Iainfix =V5V4FIainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Fresh3_tagAaalloc_freshV1V4c1Aaalloc_extendsV1V3Aastrict_valid_struct_Fresh3V4c0ainfix -c1c1V3FFIainfix &gt;=c1c0F">
+      <label
+       name="expl:Method smoke_detector, Safety"/>
+      <label
+       name="expl:parameter _Fresh3_smoke_detector_safety"/>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Fresh3_smoke_detector_safety.3"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+      loclnum="25" loccnumb="12" loccnume="26"
+      expl="assertion"
+      sum="a9a44d9908dd63d83bcf26ca1c77b0e8"
+      proved="true"
+      expanded="false"
+      shape="ainfix &gt;=aoffset_maxV7V8c0IainstanceofV6V8a_Fresh3_tagAaalloc_freshV3V8c1Aaalloc_extendsV3V7Aastrict_valid_struct_Fresh3V8c0ainfix -c1c1V7FFIainfix &gt;=c1c0Iainfix =V5V4FIainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Fresh3_tagAaalloc_freshV1V4c1Aaalloc_extendsV1V3Aastrict_valid_struct_Fresh3V4c0ainfix -c1c1V3FFIainfix &gt;=c1c0F">
+      <label
+       name="expl:Method smoke_detector, Safety"/>
+      <label
+       name="expl:parameter _Fresh3_smoke_detector_safety"/>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Fresh3_smoke_detector_safety.4"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+      loclnum="25" loccnumb="12" loccnume="26"
+      expl="assertion"
+      sum="ebde6368ac08fedf490ba345a6b0ff1f"
+      proved="true"
+      expanded="false"
+      shape="ainfix &gt;=aoffset_maxV7V5c0Iainfix =V10V8FFIainfix &gt;=aoffset_maxV7V8c0IainstanceofV6V8a_Fresh3_tagAaalloc_freshV3V8c1Aaalloc_extendsV3V7Aastrict_valid_struct_Fresh3V8c0ainfix -c1c1V7FFIainfix &gt;=c1c0Iainfix =V5V4FIainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Fresh3_tagAaalloc_freshV1V4c1Aaalloc_extendsV1V3Aastrict_valid_struct_Fresh3V4c0ainfix -c1c1V3FFIainfix &gt;=c1c0F">
+      <label
+       name="expl:Method smoke_detector, Safety"/>
+      <label
+       name="expl:parameter _Fresh3_smoke_detector_safety"/>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Fresh3_smoke_detector_safety.5"
+      locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+      loclnum="25" loccnumb="12" loccnume="26"
+      expl="assertion"
+      sum="66c1f306a1b4186d0a3036074e8436b0"
+      proved="false"
+      expanded="false"
+      shape="ainfix &gt;=aoffset_maxV13V10c0Ianot_assignsV7V9V12apset_singletonV5Aanot_assignsV7V0V11apset_emptyAavalidV7aselectV12V5NAa_Non_null_ObjectaselectV12V5V13FIainfix &gt;=aoffset_maxV7V5c0Iainfix =V10V8FFIainfix &gt;=aoffset_maxV7V8c0IainstanceofV6V8a_Fresh3_tagAaalloc_freshV3V8c1Aaalloc_extendsV3V7Aastrict_valid_struct_Fresh3V8c0ainfix -c1c1V7FFIainfix &gt;=c1c0Iainfix =V5V4FIainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Fresh3_tagAaalloc_freshV1V4c1Aaalloc_extendsV1V3Aastrict_valid_struct_Fresh3V4c0ainfix -c1c1V3FFIainfix &gt;=c1c0F">
+      <label
+       name="expl:Method smoke_detector, Safety"/>
+      <label
+       name="expl:parameter _Fresh3_smoke_detector_safety"/>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="1.19"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.04"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.10"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter _Fresh3_test_ensures_default"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+    loclnum="20" loccnumb="5" loccnume="9"
+    expl="assertion"
+    sum="5336671b710f756abce4145ff842d364"
+    proved="false"
+    expanded="true"
+    shape="ainfix =aselectV6V0aselectV6V1NIanot_assignsV4V3V6apset_singletonV1Aanot_assignsV4V2V5apset_emptyAavalidV4aselectV6V1NAa_Non_null_ObjectaselectV6V1V7FIainfix =V0V1NAa_Non_null_ObjectaselectV3V0V4Aa_Non_null_ObjectV1V4Aavalid_struct_Fresh3V0c0c0V4Aaleft_valid_struct_Fresh3V1c0V4FF">
+    <label
+     name="expl:Method test, default behavior"/>
+    <label
+     name="expl:parameter _Fresh3_test_ensures_default"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.08"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Fresh3_test_safety"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Fresh3.java"
+    loclnum="20" loccnumb="5" loccnume="9"
+    expl="assertion"
+    sum="5903ff1b6d5afba0834d70829eb0c22f"
+    proved="true"
+    expanded="true"
+    shape="ainfix &gt;=aoffset_maxV3V1c0Iainfix =V0V1NAa_Non_null_ObjectaselectV2V0V3Aa_Non_null_ObjectV1V3Aavalid_struct_Fresh3V0c0c0V3Aaleft_valid_struct_Fresh3V1c0V3FF">
+    <label
+     name="expl:Method test, Safety"/>
+    <label
+     name="expl:parameter _Fresh3_test_safety"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Fresh3_ensures_default"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="normal postcondition"
+    sum="42823fd21434da180ce43573a5047c3c"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Fresh3, default behavior"/>
+    <label
+     name="expl:parameter cons_Fresh3_ensures_default"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Fresh3_safety"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="normal postcondition"
+    sum="9417490bf61bf438c5f9816f785fac65"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Fresh3, Safety"/>
+    <label
+     name="expl:parameter cons_Fresh3_safety"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Int_ensures_default"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="normal postcondition"
+    sum="ec44381d03a82e7833bce4e408673e44"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Int, default behavior"/>
+    <label
+     name="expl:parameter cons_Int_ensures_default"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Int_safety"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="normal postcondition"
+    sum="1a1cf3bed5793b793d4a6c1feb203203"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Int, Safety"/>
+    <label
+     name="expl:parameter cons_Int_safety"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Object_ensures_default"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="normal postcondition"
+    sum="f63473b86814ffd328ccf5340365433a"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Object, default behavior"/>
+    <label
+     name="expl:parameter cons_Object_ensures_default"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Object_safety"
+    locfile="/home/cmarche/recherche/why2-trunk/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="normal postcondition"
+    sum="a6f452ab5445809e9977bcf79d102398"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Object, Safety"/>
+    <label
+     name="expl:parameter cons_Object_safety"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>
