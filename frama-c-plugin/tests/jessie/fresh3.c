@@ -2,6 +2,7 @@
 #pragma SeparationPolicy(none)
 
 /* #include <stdlib.h> */
+
 void *malloc(unsigned int size);
 
 typedef struct Str {int *x; } *str;
