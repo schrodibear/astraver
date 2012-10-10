@@ -20,7 +20,7 @@ C="array_double array_max binary_search cd1d clock_drift \
 
 CTODO="binary_heap float_array maze popHeap sparse_array heap_sort"
 
-FRAMA="bts1251 fresh2 hollas_floats power strprevchr"
+FRAMA="bts1251 fresh2 fresh2_sep hollas_floats power strprevchr"
 
 case "$1" in
   "-force")

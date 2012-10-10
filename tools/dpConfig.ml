@@ -249,6 +249,23 @@ let pvs =
   }
 
 
+let zenon =
+  {
+    name = "Zenon";
+    is_interactive = false;
+    version = "";
+    version_switch = "-v";
+    version_regexp = "zenon version \\([^ ]+\\)";
+    versions_ok = ["0.7.1"];
+    versions_old = [];
+    command = "zenon";
+    command_switches = "-itptp";
+    valid_regexp = Some (make_regexp "PROOF-FOUND");
+    undecided_regexp = make_regexp "Error";
+    stdin_switch = None;
+  }
+
+
 let prover_list =
   [
     Ergo, (alt_ergo, ["alt-ergo" ; "ergo"]) ;
@@ -262,6 +279,7 @@ let prover_list =
     Coq, (coq, ["coqc"]);
     PVS, (pvs, ["pvs"]);
     VeriT, (verit, ["verit"]);
+    Zenon, (zenon, ["zenon"]);
   ]
 
 let rc_file () =

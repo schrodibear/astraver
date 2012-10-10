@@ -78,7 +78,7 @@ float my_cos4(float x) {
 
 /*
 Local Variables:
-compile-command: "make my_cosine.why3ml"
+compile-command: "make my_cosine.why3ide"
 End:
 */
 
