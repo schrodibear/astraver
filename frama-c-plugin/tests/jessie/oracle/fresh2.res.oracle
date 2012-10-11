@@ -49,23 +49,30 @@ Str[..] create()
 behavior default:
   assigns \nothing;
   allocates \result;
-  ensures (C_1 : (((C_3 : (\offset_min(\result) <= 0)) &&
-                    (C_4 : (\offset_max(\result) >= 0))) &&
-                   (C_5 : \fresh(\result))));
-;
+  ensures (C_3 : (((C_5 : (\offset_min(\result) <= 0)) &&
+                    (C_6 : (\offset_max(\result) >= 0))) &&
+                   (C_7 : \fresh(\result))));
+{  
+   (var Str[..] s);
+   
+   {  (C_2 : (s = (C_1 : (new Str[1]))));
+      
+      (return s)
+   }
+}
 
 unit test(Str[..] this)
-  requires (C_10 : ((C_11 : (\offset_min(this) <= 0)) &&
-                     (C_12 : (\offset_max(this) >= 0))));
+  requires (C_12 : ((C_13 : (\offset_min(this) <= 0)) &&
+                     (C_14 : (\offset_max(this) >= 0))));
 behavior default:
-  ensures (C_9 : true);
+  ensures (C_11 : true);
 {  
    (var Str[..] f);
    
-   {  (C_7 : (f = (C_6 : create())));
+   {  (C_9 : (f = (C_8 : create())));
       
       {  
-         (assert for default: (C_8 : (this != f)));
+         (assert for default: (C_10 : (this != f)));
          ()
       };
       
@@ -75,17 +82,17 @@ behavior default:
 
 unit smoke_detector()
 behavior default:
-  ensures (C_18 : true);
+  ensures (C_20 : true);
 {  
    (var Str[..] s1);
    
    (var Str[..] s2);
    
-   {  (C_14 : (s1 = (C_13 : create())));
-      (C_16 : (s2 = (C_15 : create())));
+   {  (C_16 : (s1 = (C_15 : create())));
+      (C_18 : (s2 = (C_17 : create())));
       
       {  
-         (assert for default: (C_17 : (0 == 1)));
+         (assert for default: (C_19 : (0 == 1)));
          ()
       };
       
@@ -487,7 +494,7 @@ parameter charP_charM : (charP, int8) memory ref
 
 parameter create :
  tt:unit ->
-  { } Str pointer reads Str_alloc_table
+  { } Str pointer reads Str_alloc_table writes Str_alloc_table,Str_tag_table
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(Str_alloc_table, result), (0)))
     and ((JC_<somenum>: ge_int(offset_max(Str_alloc_table, result), (0)))
@@ -495,7 +502,7 @@ parameter create :
 
 parameter create_requires :
  tt:unit ->
-  { } Str pointer reads Str_alloc_table
+  { } Str pointer reads Str_alloc_table writes Str_alloc_table,Str_tag_table
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(Str_alloc_table, result), (0)))
     and ((JC_<somenum>: ge_int(offset_max(Str_alloc_table, result), (0)))
@@ -520,19 +527,27 @@ parameter safe_int8_of_integer_ :
 parameter safe_uint8_of_integer_ :
  x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
 
-parameter smoke_detector : tt:unit -> { } unit reads Str_alloc_table { true }
+parameter smoke_detector :
+ tt:unit ->
+  { } unit reads Str_alloc_table writes Str_alloc_table,Str_tag_table
+  { true }
 
 parameter smoke_detector_requires :
- tt:unit -> { } unit reads Str_alloc_table { true }
+ tt:unit ->
+  { } unit reads Str_alloc_table writes Str_alloc_table,Str_tag_table
+  { true }
 
-parameter test : this:Str pointer -> { } unit reads Str_alloc_table { true }
+parameter test :
+ this:Str pointer ->
+  { } unit reads Str_alloc_table writes Str_alloc_table,Str_tag_table
+  { true }
 
 parameter test_requires :
  this:Str pointer ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(Str_alloc_table, this), (0)))
     and (JC_<somenum>: ge_int(offset_max(Str_alloc_table, this), (0)))))}
-  unit reads Str_alloc_table { true }
+  unit reads Str_alloc_table writes Str_alloc_table,Str_tag_table { true }
 
 parameter uint8_of_integer_ :
  x:int ->
@@ -540,6 +555,44 @@ parameter uint8_of_integer_ :
   { eq_int(integer_of_uint8(result), x) }
 
 parameter unsigned_charP_unsigned_charM : (unsigned_charP, uint8) memory ref
+
+let create_ensures_default =
+ fun (tt : unit) ->
+  { (JC_<somenum>: true) }
+  (init:
+  (let return = ref (any_pointer void) in
+  try
+   begin
+     (let s_0 = ref (any_pointer void) in
+     (C_2:
+     begin
+       (let jessie_<somenum> =
+       (s_0 := (C_1:
+               (JC_<somenum>:
+               (((alloc_struct_Str (1)) Str_alloc_table) Str_tag_table)))) in
+       void); (return := !s_0); (raise Return) end)); absurd  end with
+   Return -> !return end))
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(Str_alloc_table, result), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(Str_alloc_table, result), (0)))
+        and (JC_<somenum>: (not valid(Str_alloc_table@, result)))))) }
+
+let create_safety =
+ fun (tt : unit) ->
+  { (JC_<somenum>: true) }
+  (init:
+  (let return = ref (any_pointer void) in
+  try
+   begin
+     (let s_0 = ref (any_pointer void) in
+     (C_2:
+     begin
+       (let jessie_<somenum> =
+       (s_0 := (C_1:
+               (JC_<somenum>:
+               (((alloc_struct_Str_requires (1)) Str_alloc_table) Str_tag_table)))) in
+       void); (return := !s_0); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 let smoke_detector_ensures_default =
  fun (tt : unit) ->
@@ -549,11 +602,11 @@ let smoke_detector_ensures_default =
    begin
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
-     (C_14:
      (C_16:
+     (C_18:
      begin
-       (let jessie_<somenum> = (s1_1 := (C_13: (JC_<somenum>: (create void)))) in void);
-      (let jessie_<somenum> = (s2_1 := (C_15: (JC_<somenum>: (create void)))) in void);
+       (let jessie_<somenum> = (s1_1 := (C_15: (JC_<somenum>: (create void)))) in void);
+      (let jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create void)))) in void);
       (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return) end))));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
@@ -565,12 +618,12 @@ let smoke_detector_safety =
    begin
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
-     (C_14:
      (C_16:
+     (C_18:
      begin
-       (let jessie_<somenum> = (s1_1 := (C_13: (JC_<somenum>: (create_requires void)))) in
+       (let jessie_<somenum> = (s1_1 := (C_15: (JC_<somenum>: (create_requires void)))) in
        void);
-      (let jessie_<somenum> = (s2_1 := (C_15: (JC_<somenum>: (create_requires void)))) in
+      (let jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create_requires void)))) in
       void); [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return) end))));
     (raise Return) end with Return -> void end) { true }
 
@@ -583,9 +636,9 @@ let test_ensures_default =
   try
    begin
      (let f = ref (any_pointer void) in
-     (C_7:
+     (C_9:
      begin
-       (let jessie_<somenum> = (f := (C_6: (JC_<somenum>: (create void)))) in void);
+       (let jessie_<somenum> = (f := (C_8: (JC_<somenum>: (create void)))) in void);
       (assert { (JC_<somenum>: (this <> f)) }; void); void; (raise Return) end));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
@@ -598,9 +651,9 @@ let test_safety =
   try
    begin
      (let f = ref (any_pointer void) in
-     (C_7:
+     (C_9:
      begin
-       (let jessie_<somenum> = (f := (C_6: (JC_<somenum>: (create_requires void)))) in void);
+       (let jessie_<somenum> = (f := (C_8: (JC_<somenum>: (create_requires void)))) in void);
       [ { } unit reads f { (JC_<somenum>: (this <> f)) } ]; void; (raise Return) end));
     (raise Return) end with Return -> void end) { true }
 
@@ -611,8 +664,8 @@ why --project [...] why/fresh2.why
   <function name="Function test">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
-    <goal why_file="why/fresh2_po2.why">
-      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "18" begin = "13" end = "22"/>
+    <goal why_file="why/fresh2_po6.why">
+      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "30" begin = "13" end = "22"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -620,9 +673,33 @@ why --project [...] why/fresh2.why
   <function name="Function smoke_detector">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
-    <goal why_file="why/fresh2_po1.why">
-      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "24" begin = "13" end = "19"/>
+    <goal why_file="why/fresh2_po5.why">
+      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "36" begin = "13" end = "19"/>
       <explain kind = "Assert"/>
+    </goal>
+    </behavior>
+  </function>
+  <function name="Function create">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/fresh2_po1.why">
+      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "17" begin = "12" end = "27"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/fresh2_po2.why">
+      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "17" begin = "12" end = "27"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/fresh2_po3.why">
+      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "17" begin = "31" end = "63"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/fresh2_po4.why">
+      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "21" begin = "11" end = "37"/>
+      <explain kind = "Pre"
+text = "AllocSize"/>
     </goal>
     </behavior>
   </function>

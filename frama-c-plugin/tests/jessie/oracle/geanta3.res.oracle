@@ -18,8 +18,6 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type uint32 = 0..4294967295
-
 type int8 = -128..127
 
 type int32 = -2147483648..2147483647
@@ -66,18 +64,20 @@ axiomatic statusInitial {
 }
 
 unit p1(enum___anonenum_RESULTAT_1P[..] last, int32 n_2)
-  requires (C_8 : ((C_9 : (\offset_min(last) <= 0)) &&
-                    (C_10 : (\offset_max(last) >= 0))));
+  requires (C_7 : ((C_8 : (\offset_min(last) <= 0)) &&
+                    (C_9 : (\offset_max(last) >= 0))));
 behavior default:
   assigns last.enum___anonenum_RESULTAT_1M;
-  ensures (C_7 : (result{Here}(\at(last.enum___anonenum_RESULTAT_1M,Old),
+  ensures (C_6 : (result{Here}(\at(last.enum___anonenum_RESULTAT_1M,Old),
                                \at(n_2,Old)) ==>
                    (\at(last,Old).enum___anonenum_RESULTAT_1M ==
                      (0 :> __anonenum_RESULTAT_1))));
 {  
-   {  (if ((C_6 : ((C_5 : last.enum___anonenum_RESULTAT_1M) :> uint32)) == 0) then 
-      (if (n_2 > 0) then (C_4 : ((C_3 : last.enum___anonenum_RESULTAT_1M) = 0)) else 
-      (C_2 : ((C_1 : last.enum___anonenum_RESULTAT_1M) = 1))) else ());
+   {  (if ((C_5 : last.enum___anonenum_RESULTAT_1M) == 0) then (if (n_2 > 0) then 
+                                                               (C_4 : (
+                                                               (C_3 : last.enum___anonenum_RESULTAT_1M) = 0)) else 
+                                                               (C_2 : (
+                                                               (C_1 : last.enum___anonenum_RESULTAT_1M) = 1))) else ());
       
       (return ())
    }
@@ -85,16 +85,16 @@ behavior default:
 
 __anonenum_RESULTAT_1 f2(int32 n_1)
 behavior default:
-  ensures (C_16 : (function2_res{Here}(\at(n_1,Old)) ==>
+  ensures (C_15 : (function2_res{Here}(\at(n_1,Old)) ==>
                     (\result == (0 :> __anonenum_RESULTAT_1))));
 {  
    (var enum___anonenum_RESULTAT_1P[..] initial);
    
    (var __anonenum_RESULTAT_1 __retres);
    
-   {  (C_12 : ((C_11 : initial.enum___anonenum_RESULTAT_1M) = 0));
-      (C_13 : p1(initial, n_1));
-      (C_15 : (__retres = (C_14 : initial.enum___anonenum_RESULTAT_1M)));
+   {  (C_11 : ((C_10 : initial.enum___anonenum_RESULTAT_1M) = 0));
+      (C_12 : p1(initial, n_1));
+      (C_14 : (__retres = (C_13 : initial.enum___anonenum_RESULTAT_1M)));
       
       (return __retres)
    }
@@ -111,8 +111,6 @@ type int32
 type int8
 
 type padding
-
-type uint32
 
 type uint8
 
@@ -194,11 +192,6 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
-
-logic integer_of_uint32: uint32 -> int
-
-predicate eq_uint32(x:uint32, y:uint32) =
- eq_int(integer_of_uint32(x), integer_of_uint32(y))
 
 logic integer_of_uint8: uint8 -> int
 
@@ -340,23 +333,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
-
-logic uint32_of_integer: int -> uint32
-
-axiom uint32_coerce :
- (forall x:int.
-  ((le_int((0), x) and le_int(x, (4294967295))) ->
-   eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
-
-axiom uint32_extensionality :
- (forall x:uint32.
-  (forall y:uint32[eq_int(integer_of_uint32(x), integer_of_uint32(y))].
-   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
-
-axiom uint32_range :
- (forall x:uint32.
-  (le_int((0), integer_of_uint32(x))
-  and le_int(integer_of_uint32(x), (4294967295))))
 
 logic uint8_of_integer: int -> uint8
 
@@ -589,8 +565,6 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
-parameter any_uint32 : unit -> { } uint32 { true }
-
 parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter f2 :
@@ -683,16 +657,8 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
-parameter safe_uint32_of_integer_ :
- x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
-
 parameter safe_uint8_of_integer_ :
  x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
-
-parameter uint32_of_integer_ :
- x:int ->
-  { (le_int((0), x) and le_int(x, (4294967295)))} uint32
-  { eq_int(integer_of_uint32(result), x) }
 
 parameter uint8_of_integer_ :
  x:int ->
@@ -712,9 +678,9 @@ let f2_ensures_default =
      (any_alloc_table void) in
      (let initial = (any_pointer void) in
      (let __retres = ref (any___anonenum_RESULTAT_1 void) in
+     (C_11:
      (C_12:
-     (C_13:
-     (C_15:
+     (C_14:
      begin
        (let jessie_<somenum> = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
        (let jessie_<somenum> = initial in
@@ -724,7 +690,7 @@ let f2_ensures_default =
       (JC_<somenum>:
       ((((p1 jessie_<somenum>) jessie_<somenum>) enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_initial_2) enum___anonenum_RESULTAT_1P_initial_2_alloc_table))));
       (let jessie_<somenum> =
-      (__retres := (C_14:
+      (__retres := (C_13:
                    ((safe_acc_ !enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_initial_2) initial))) in
       void); (return := !__retres); (raise Return) end))))))); absurd  end
    with Return -> !return end))
@@ -746,9 +712,9 @@ let f2_safety =
      (any_alloc_table void) in
      (let initial = (any_pointer void) in
      (let __retres = ref (any___anonenum_RESULTAT_1 void) in
+     (C_11:
      (C_12:
-     (C_13:
-     (C_15:
+     (C_14:
      begin
        (let jessie_<somenum> = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
        (let jessie_<somenum> = initial in
@@ -759,7 +725,7 @@ let f2_safety =
       (JC_<somenum>:
       ((((p1_requires jessie_<somenum>) jessie_<somenum>) enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_initial_2) enum___anonenum_RESULTAT_1P_initial_2_alloc_table))));
       (let jessie_<somenum> =
-      (__retres := (C_14:
+      (__retres := (C_13:
                    (JC_<somenum>:
                    (((acc_ enum___anonenum_RESULTAT_1P_initial_2_alloc_table) !enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_initial_2) initial)))) in
       void); (return := !__retres); (raise Return) end))))))); absurd  end
@@ -778,10 +744,8 @@ let p1_ensures_default =
   (init:
   try
    begin
-     (if ((eq_int_ (integer_of_uint32 (C_6:
-                                      (safe_uint32_of_integer_ (integer_of___anonenum_RESULTAT_1 
-                                                                (C_5:
-                                                                ((safe_acc_ !enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1) last))))))) (0))
+     (if ((eq_int_ (integer_of___anonenum_RESULTAT_1 (C_5:
+                                                     ((safe_acc_ !enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1) last)))) (0))
      then
       (let jessie_<somenum> =
       (if ((gt_int_ (integer_of_int32 n_2)) (0))
@@ -827,12 +791,9 @@ let p1_safety =
   (init:
   try
    begin
-     (if ((eq_int_ (integer_of_uint32 (C_6:
-                                      (JC_<somenum>:
-                                      (uint32_of_integer_ (integer_of___anonenum_RESULTAT_1 
-                                                           (C_5:
-                                                           (JC_<somenum>:
-                                                           (((acc_ enum___anonenum_RESULTAT_1P_last_1_alloc_table) !enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1) last))))))))) (0))
+     (if ((eq_int_ (integer_of___anonenum_RESULTAT_1 (C_5:
+                                                     (JC_<somenum>:
+                                                     (((acc_ enum___anonenum_RESULTAT_1P_last_1_alloc_table) !enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1) last))))) (0))
      then
       (let jessie_<somenum> =
       (if ((gt_int_ (integer_of_int32 n_2)) (0))
@@ -882,31 +843,21 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta3_po12.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "35" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "38" begin = "7" end = "9"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta3_po13.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "35" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "38" begin = "7" end = "9"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta3_po14.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "38" begin = "7" end = "9"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/geanta3_po15.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "38" begin = "7" end = "9"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/geanta3_po16.why">
       <location file = "PPCHOME/tests/jessie/geanta3.c" line = "40" begin = "7" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/geanta3_po17.why">
+    <goal why_file="why/geanta3_po15.why">
       <location file = "PPCHOME/tests/jessie/geanta3.c" line = "40" begin = "7" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
@@ -1905,8 +1856,6 @@ type int8
 
 type padding
 
-type uint32
-
 type uint8
 
 type unsigned_charP
@@ -1983,11 +1932,6 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
-
-logic integer_of_uint32 : uint32 -> int
-
-predicate eq_uint32(x: uint32, y: uint32) =
-  (integer_of_uint32(x) = integer_of_uint32(y))
 
 logic integer_of_uint8 : uint8 -> int
 
@@ -2128,22 +2072,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-logic uint32_of_integer : int -> uint32
-
-axiom uint32_coerce:
-  (forall x:int.
-    (((0 <= x) and (x <= 4294967295)) ->
-     (integer_of_uint32(uint32_of_integer(x)) = x)))
-
-axiom uint32_extensionality:
-  (forall x:uint32.
-    (forall y:uint32 [(integer_of_uint32(x) = integer_of_uint32(y))].
-      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
-
-axiom uint32_range:
-  (forall x:uint32.
-    ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
 logic uint8_of_integer : int -> uint8
 

@@ -2,6 +2,10 @@
 #pragma SeparationPolicy(none)
 
 /* #include <stdlib.h> */
+/*@ allocates \result;
+  assigns \nothing;
+  ensures \valid((char *)\result+(0..size)) && \fresh(\result,size);
+*/
 void *malloc(unsigned int size);
 
 
