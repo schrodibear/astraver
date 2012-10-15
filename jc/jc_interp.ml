@@ -847,7 +847,11 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
         let t1' = ft t1 in
         let t2' = ft t2 in
         let t3' = ft t3 in
-        TIf(t1', t2', t3')
+        TIf(t1',
+            (** type of t2 and t3 are equal or one is the subtype of
+                the other *)
+            term_coerce t2#pos t#typ t2#typ t2 t2',
+            term_coerce t3#pos t#typ t3#typ t3 t3')
     | JCTlet(vi,t1,t2) ->
         let t1' = ft t1 in
         let t2' = ft t2 in
