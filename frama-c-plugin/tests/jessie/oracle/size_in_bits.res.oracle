@@ -492,18 +492,20 @@ let f_ensures_default =
      (let S_s_1_alloc_table = ref (any_alloc_table void) in
      (let s_0 = ref (any_pointer void) in
      (C_2:
-     (C_4:
-     (C_5:
      begin
        (let jessie_<somenum> =
        (s_0 := (C_1:
                (JC_<somenum>:
                (((alloc_struct_S (1)) S_s_1_alloc_table) S_s_1_tag_table)))) in
        void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !s_0 in (((safe_upd_ S_i_s_1) jessie_<somenum>) jessie_<somenum>)));
-      ((safe_free_parameter S_s_1_alloc_table) !s_0); (raise Return) end)))))));
-    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
+      (C_4:
+      begin
+        (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+        (let jessie_<somenum> = !s_0 in (((safe_upd_ S_i_s_1) jessie_<somenum>) jessie_<somenum>)));
+       (C_5:
+       begin   ((safe_free_parameter S_s_1_alloc_table) !s_0); (raise Return)
+       end) end) end))))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -516,8 +518,6 @@ let f_safety =
      (let S_s_1_alloc_table = ref (any_alloc_table void) in
      (let s_0 = ref (any_pointer void) in
      (C_2:
-     (C_4:
-     (C_5:
      begin
        (let jessie_<somenum> =
        (s_0 := (let jessie_<somenum> =
@@ -528,10 +528,13 @@ let f_safety =
                (assert
                { ge_int(offset_max(S_s_1_alloc_table, jessie_<somenum>), (0)) };
                jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !s_0 in (((safe_upd_ S_i_s_1) jessie_<somenum>) jessie_<somenum>)));
-      ((free_parameter S_s_1_alloc_table) !s_0); (raise Return) end)))))));
-    (raise Return) end with Return -> void end) { true }
+      (C_4:
+      begin
+        (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+        (let jessie_<somenum> = !s_0 in (((safe_upd_ S_i_s_1) jessie_<somenum>) jessie_<somenum>)));
+       (C_5:
+       begin   ((free_parameter S_s_1_alloc_table) !s_0); (raise Return) end)
+      end) end))))); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C size_in_bits.jessie --quiet -f size_in_bits.makefile project
@@ -550,7 +553,7 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/size_in_bits_po3.why">
-      <location file = "why/size_in_bits.why" line = "464" begin = "7" end = "46"/>
+      <location file = "why/size_in_bits.why" line = "467" begin = "16" end = "55"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

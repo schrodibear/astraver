@@ -455,7 +455,7 @@ let h_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>: true) }
   (init:
-  try (C_5: begin   (JC_<somenum>: (f void)); (raise Return); (raise Return) end)
+  try (C_5: (JC_<somenum>: begin   (f void); (raise Return); (raise Return) end))
    with Return -> void end)
   { (JC_<somenum>: ((JC_<somenum>: gzero(g)) and (JC_<somenum>: (integer_of_int32(g) = (0))))) }
 
@@ -465,7 +465,7 @@ let h_safety =
   (init:
   try
    (C_5:
-   begin   (JC_<somenum>: (f_requires void)); (raise Return); (raise Return) end)
+   (JC_<somenum>: begin   (f_requires void); (raise Return); (raise Return) end))
    with Return -> void end) { true }
 
 

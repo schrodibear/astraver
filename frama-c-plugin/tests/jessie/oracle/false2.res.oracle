@@ -428,14 +428,17 @@ let main_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_2:
-     (C_3:
-     (C_4:
      begin
        (let jessie_<somenum> = (e := (safe_int32_of_integer_ (1))) in void);
-      (JC_<somenum>: (f void));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(e) = (1))) }
+      (C_3:
+      (JC_<somenum>:
+      begin
+        (f void);
+       (C_4:
+       begin
+         (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres); (raise Return) end) end)) end)); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(e) = (1))) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -446,14 +449,17 @@ let main_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_2:
-     (C_3:
-     (C_4:
      begin
        (let jessie_<somenum> = (e := (safe_int32_of_integer_ (1))) in void);
-      (JC_<somenum>: (f_requires void));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { true }
+      (C_3:
+      (JC_<somenum>:
+      begin
+        (f_requires void);
+       (C_4:
+       begin
+         (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres); (raise Return) end) end)) end)); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C false2.jessie --quiet -f false2.makefile project

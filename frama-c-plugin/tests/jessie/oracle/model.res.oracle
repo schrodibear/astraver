@@ -885,39 +885,42 @@ let test_ensures_default =
      (let tmp = ref (any_int32 void) in
      try
       (C_1:
-      (C_2:
       begin
         (let jessie_<somenum> = s_3 in
         (JC_<somenum>:
         ((((reset jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
-       (let jessie_<somenum> = s_3 in
-       (JC_<somenum>:
-       ((((inc jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
-       (assert { (JC_<somenum>: gt_int(select(S_foo_s_3_1, s_3), (0))) }; void);
-       void;
-       (loop_2:
-       while true do
-       { invariant (JC_<somenum>: true)  }
+       (C_2:
+       begin
+         (let jessie_<somenum> = s_3 in
+         (JC_<somenum>:
+         ((((inc jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
+        (assert { (JC_<somenum>: gt_int(select(S_foo_s_3_1, s_3), (0))) }; void);
+        void;
+        (loop_2:
         begin
-          [ { } unit { true } ];
-         try
-          (C_6:
-          begin
-            (let jessie_<somenum> =
-            (tmp := (C_5:
-                    (let jessie_<somenum> = s_3 in
-                    (JC_<somenum>:
-                    ((((is_pos jessie_<somenum>) S_s_3_1_alloc_table) !S_bar_s_3_1) S_foo_s_3_1))))) in
-            void);
-           (if ((neq_int_ (integer_of_int32 !tmp)) (0)) then void
-           else (raise (Goto_while_0_break_exc void)));
-           (C_7:
-           (let jessie_<somenum> = s_3 in
-           (JC_<somenum>:
-           ((((dec jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1))));
-           (raise (Loop_continue_exc void)) end) with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) with
+          while true do
+          { invariant (JC_<somenum>: true)  }
+           begin
+             [ { } unit { true } ];
+            try
+             (C_6:
+             begin
+               (let jessie_<somenum> =
+               (tmp := (C_5:
+                       (let jessie_<somenum> = s_3 in
+                       (JC_<somenum>:
+                       ((((is_pos jessie_<somenum>) S_s_3_1_alloc_table) !S_bar_s_3_1) S_foo_s_3_1))))) in
+               void);
+              (if ((neq_int_ (integer_of_int32 !tmp)) (0)) then void
+              else (raise (Goto_while_0_break_exc void)));
+              (C_7:
+              begin
+                (let jessie_<somenum> = s_3 in
+                (JC_<somenum>:
+                ((((dec jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
+               (raise (Loop_continue_exc void)) end) end) with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin
@@ -935,38 +938,43 @@ let test_safety =
      (let tmp = ref (any_int32 void) in
      try
       (C_1:
-      (C_2:
       begin
         (let jessie_<somenum> = s_3 in
         (JC_<somenum>:
         ((((reset_requires jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
-       (let jessie_<somenum> = s_3 in
-       (JC_<somenum>:
-       ((((inc_requires jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
-       [ { } unit { (JC_<somenum>: gt_int(select(S_foo_s_3_1, s_3), (0))) } ]; void;
-       (loop_1:
-       while true do
-       { invariant (JC_<somenum>: true) variant (JC_<somenum> : select(S_foo_s_3_1, s_3)) }
+       (C_2:
+       begin
+         (let jessie_<somenum> = s_3 in
+         (JC_<somenum>:
+         ((((inc_requires jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
+        [ { } unit { (JC_<somenum>: gt_int(select(S_foo_s_3_1, s_3), (0))) } ];
+        void;
+        (loop_1:
         begin
-          [ { } unit { true } ];
-         try
-          (C_6:
-          begin
-            (let jessie_<somenum> =
-            (tmp := (C_5:
-                    (let jessie_<somenum> = s_3 in
-                    (JC_<somenum>:
-                    ((((is_pos_requires jessie_<somenum>) S_s_3_1_alloc_table) !S_bar_s_3_1) S_foo_s_3_1))))) in
-            void);
-           (if ((neq_int_ (integer_of_int32 !tmp)) (0)) then void
-           else (raise (Goto_while_0_break_exc void)));
-           (C_7:
-           (let jessie_<somenum> = s_3 in
-           (JC_<somenum>:
-           ((((dec_requires jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1))));
-           (raise (Loop_continue_exc void)) end) with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) with
+          while true do
+          { invariant (JC_<somenum>: true)
+            variant (JC_<somenum> : select(S_foo_s_3_1, s_3)) }
+           begin
+             [ { } unit { true } ];
+            try
+             (C_6:
+             begin
+               (let jessie_<somenum> =
+               (tmp := (C_5:
+                       (let jessie_<somenum> = s_3 in
+                       (JC_<somenum>:
+                       ((((is_pos_requires jessie_<somenum>) S_s_3_1_alloc_table) !S_bar_s_3_1) S_foo_s_3_1))))) in
+               void);
+              (if ((neq_int_ (integer_of_int32 !tmp)) (0)) then void
+              else (raise (Goto_while_0_break_exc void)));
+              (C_7:
+              begin
+                (let jessie_<somenum> = s_3 in
+                (JC_<somenum>:
+                ((((dec_requires jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
+               (raise (Loop_continue_exc void)) end) end) with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin

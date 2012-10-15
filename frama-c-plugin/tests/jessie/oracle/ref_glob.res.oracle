@@ -1025,20 +1025,22 @@ let f4_ensures_default =
   (init:
   try
    (C_14:
-   (C_16:
-   (C_18:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
      (let jessie_<somenum> =
      (C_12: ((safe_acc_ !__anonstruct_las_1_c2_plas_2) plas)) in
      (((safe_upd_ intP_intM_plas_2) jessie_<somenum>) jessie_<somenum>)));
-    (let jessie_<somenum> =
-    (C_15: ((safe_acc_ !__anonstruct_las_1_c1_plas_2) plas)) in
-    (JC_<somenum>: (((g jessie_<somenum>) intP_intM_plas_2) !intP_plas_2_alloc_table)));
-    (let jessie_<somenum> =
-    (C_17: ((safe_acc_ !__anonstruct_las_1_c2_plas_2) plas)) in
-    (JC_<somenum>: (((g jessie_<somenum>) intP_intM_plas_2) !intP_plas_2_alloc_table)));
-    (raise Return); (raise Return) end))) with Return -> void end)
+    (C_16:
+    begin
+      (let jessie_<somenum> =
+      (C_15: ((safe_acc_ !__anonstruct_las_1_c1_plas_2) plas)) in
+      (JC_<somenum>: (((g jessie_<somenum>) intP_intM_plas_2) !intP_plas_2_alloc_table)));
+     (C_18:
+     begin
+       (let jessie_<somenum> =
+       (C_17: ((safe_acc_ !__anonstruct_las_1_c2_plas_2) plas)) in
+       (JC_<somenum>: (((g jessie_<somenum>) intP_intM_plas_2) !intP_plas_2_alloc_table)));
+      (raise Return); (raise Return) end) end) end) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
@@ -1066,8 +1068,6 @@ let f4_safety =
   (init:
   try
    (C_14:
-   (C_16:
-   (C_18:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
      (let jessie_<somenum> =
@@ -1075,19 +1075,23 @@ let f4_safety =
      (JC_<somenum>:
      (((acc_ !__anonstruct_las_1_plas_2_alloc_table) !__anonstruct_las_1_c2_plas_2) plas))) in
      (((safe_upd_ intP_intM_plas_2) jessie_<somenum>) jessie_<somenum>)));
-    (let jessie_<somenum> =
-    (C_15:
-    (JC_<somenum>:
-    (((acc_ !__anonstruct_las_1_plas_2_alloc_table) !__anonstruct_las_1_c1_plas_2) plas))) in
-    (JC_<somenum>:
-    (((g_requires jessie_<somenum>) intP_intM_plas_2) !intP_plas_2_alloc_table)));
-    (let jessie_<somenum> =
-    (C_17:
-    (JC_<somenum>:
-    (((acc_ !__anonstruct_las_1_plas_2_alloc_table) !__anonstruct_las_1_c2_plas_2) plas))) in
-    (JC_<somenum>:
-    (((g_requires jessie_<somenum>) intP_intM_plas_2) !intP_plas_2_alloc_table)));
-    (raise Return); (raise Return) end))) with Return -> void end)
+    (C_16:
+    begin
+      (let jessie_<somenum> =
+      (C_15:
+      (JC_<somenum>:
+      (((acc_ !__anonstruct_las_1_plas_2_alloc_table) !__anonstruct_las_1_c1_plas_2) plas))) in
+      (JC_<somenum>:
+      (((g_requires jessie_<somenum>) intP_intM_plas_2) !intP_plas_2_alloc_table)));
+     (C_18:
+     begin
+       (let jessie_<somenum> =
+       (C_17:
+       (JC_<somenum>:
+       (((acc_ !__anonstruct_las_1_plas_2_alloc_table) !__anonstruct_las_1_c2_plas_2) plas))) in
+       (JC_<somenum>:
+       (((g_requires jessie_<somenum>) intP_intM_plas_2) !intP_plas_2_alloc_table)));
+      (raise Return); (raise Return) end) end) end) with Return -> void end)
   { (JC_<somenum>: valid_t(intP_t_3_alloc_table)) }
 
 let g_ensures_default =

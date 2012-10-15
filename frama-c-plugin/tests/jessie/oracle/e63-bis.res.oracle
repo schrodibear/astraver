@@ -632,7 +632,6 @@ let f_ensures_default =
      (let floatP_floatM_t_6 = (any_memory void) in
      (let t_4 = ref (any_pointer void) in
      (C_2:
-     (C_26:
      begin
        (let jessie_<somenum> =
        (t_4 := (C_1:
@@ -727,8 +726,11 @@ let f_ensures_default =
       void;
       (assert
       { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (19), floatP_floatM_t_6)) };
-      void); void; ((safe_free_parameter floatP_t_6_alloc_table) !t_4);
-      (raise Return) end)))))); (raise Return) end with Return -> void end)
+      void); void;
+      (C_26:
+      begin
+        ((safe_free_parameter floatP_t_6_alloc_table) !t_4); (raise Return)
+      end) end))))); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -742,7 +744,6 @@ let f_safety =
      (let floatP_floatM_t_6 = (any_memory void) in
      (let t_4 = ref (any_pointer void) in
      (C_2:
-     (C_26:
      begin
        (let jessie_<somenum> =
        (t_4 := (let jessie_<somenum> =
@@ -841,8 +842,10 @@ let f_safety =
       void;
       [ { } unit reads t_4
         { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (19), floatP_floatM_t_6)) } ];
-      void; ((free_parameter floatP_t_6_alloc_table) !t_4); (raise Return)
-     end)))))); (raise Return) end with Return -> void end) { true }
+      void;
+      (C_26:
+      begin   ((free_parameter floatP_t_6_alloc_table) !t_4); (raise Return)
+      end) end))))); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C e63-bis.jessie --quiet -f e63-bis.makefile project
@@ -951,11 +954,11 @@ why --project [...] why/e63-bis.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/e63-bis_po25.why">
-      <location file = "why/e63-bis.why" line = "552" begin = "17" end = "75"/>
+      <location file = "why/e63-bis.why" line = "553" begin = "17" end = "75"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63-bis_po26.why">
-      <location file = "why/e63-bis.why" line = "642" begin = "13" end = "57"/>
+      <location file = "why/e63-bis.why" line = "645" begin = "15" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

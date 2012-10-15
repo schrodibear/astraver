@@ -433,7 +433,6 @@ let f_ensures_default =
            void); (raise (Return_label_exc void)) end)
         else
          (C_4:
-         (C_5:
          begin
            (let jessie_<somenum> =
            (tmp := (C_3:
@@ -442,8 +441,10 @@ let f_ensures_default =
                    (safe_int32_of_integer_ (C_1:
                                            ((sub_int (integer_of_int32 x_0)) (1))))) in
                    (JC_<somenum>: (f jessie_<somenum>))))) in void);
-          (let jessie_<somenum> = (__retres := !tmp) in void);
-          (raise (Return_label_exc void)) end)));
+          (C_5:
+          begin
+            (let jessie_<somenum> = (__retres := !tmp) in void);
+           (raise (Return_label_exc void)) end) end));
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -468,7 +469,6 @@ let f_safety =
            void); (raise (Return_label_exc void)) end)
         else
          (C_4:
-         (C_5:
          begin
            (let jessie_<somenum> =
            (tmp := (C_3:
@@ -480,8 +480,10 @@ let f_safety =
                    (JC_<somenum>:
                    (check { zwf_zero((0), (0)) };
                    (JC_<somenum>: (f_requires jessie_<somenum>))))))) in void);
-          (let jessie_<somenum> = (__retres := !tmp) in void);
-          (raise (Return_label_exc void)) end)));
+          (C_5:
+          begin
+            (let jessie_<somenum> = (__retres := !tmp) in void);
+           (raise (Return_label_exc void)) end) end));
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }

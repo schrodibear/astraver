@@ -421,8 +421,6 @@ let f_ensures_default =
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (C_5:
-      (C_6:
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
@@ -430,15 +428,19 @@ let f_ensures_default =
          begin
            (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> =
-       (tmp := (C_4:
-               (let jessie_<somenum> =
-               (C_3:
-               (safe_int32_of_integer_ (C_2:
-                                       ((sub_int (integer_of_int32 x_0)) (1))))) in
-               (JC_<somenum>: (f jessie_<somenum>))))) in void);
-       (let jessie_<somenum> = (__retres := !tmp) in void);
-       (raise (Return_label_exc void)) end)) with
+       (C_5:
+       begin
+         (let jessie_<somenum> =
+         (tmp := (C_4:
+                 (let jessie_<somenum> =
+                 (C_3:
+                 (safe_int32_of_integer_ (C_2:
+                                         ((sub_int (integer_of_int32 x_0)) (1))))) in
+                 (JC_<somenum>: (f jessie_<somenum>))))) in void);
+        (C_6:
+        begin
+          (let jessie_<somenum> = (__retres := !tmp) in void);
+         (raise (Return_label_exc void)) end) end) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -454,8 +456,6 @@ let f_safety =
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (C_5:
-      (C_6:
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
@@ -463,17 +463,22 @@ let f_safety =
          begin
            (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> =
-       (tmp := (C_4:
-               (let jessie_<somenum> =
-               (C_3:
-               (JC_<somenum>:
-               (int32_of_integer_ (C_2:
-                                  ((sub_int (integer_of_int32 x_0)) (1)))))) in
-               (JC_<somenum>:
-               (check { zwf_zero((0), (0)) }; (JC_<somenum>: (f_requires jessie_<somenum>))))))) in
-       void); (let jessie_<somenum> = (__retres := !tmp) in void);
-       (raise (Return_label_exc void)) end)) with
+       (C_5:
+       begin
+         (let jessie_<somenum> =
+         (tmp := (C_4:
+                 (let jessie_<somenum> =
+                 (C_3:
+                 (JC_<somenum>:
+                 (int32_of_integer_ (C_2:
+                                    ((sub_int (integer_of_int32 x_0)) (1)))))) in
+                 (JC_<somenum>:
+                 (check { zwf_zero((0), (0)) };
+                 (JC_<somenum>: (f_requires jessie_<somenum>))))))) in void);
+        (C_6:
+        begin
+          (let jessie_<somenum> = (__retres := !tmp) in void);
+         (raise (Return_label_exc void)) end) end) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -502,11 +507,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/rec2_po4.why">
-      <location file = "why/rec2.why" line = "411" begin = "24" end = "42"/>
+      <location file = "why/rec2.why" line = "413" begin = "26" end = "44"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/rec2_po5.why">
-      <location file = "why/rec2.why" line = "411" begin = "24" end = "42"/>
+      <location file = "why/rec2.why" line = "413" begin = "26" end = "44"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/rec2_po6.why">

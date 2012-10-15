@@ -439,7 +439,6 @@ let foo_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_6:
       begin
         (if ((eq_int_ (integer_of_int32 a)) (11))
         then
@@ -456,8 +455,11 @@ let foo_ensures_default =
                                                                     ((sub_int 
                                                                     (integer_of_int32 a)) (11)))))))))))) in
            void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := a) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+       (C_6:
+       begin
+         (let jessie_<somenum> = (__retres := a) in void);
+        (raise (Return_label_exc void)) end) end with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -479,7 +481,6 @@ let foo_safety =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_6:
       begin
         (if ((eq_int_ (integer_of_int32 a)) (11))
         then
@@ -498,8 +499,11 @@ let foo_safety =
                                                                   ((sub_int 
                                                                     (integer_of_int32 a)) (11)))))))))))))) in
            void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (__retres := a) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+       (C_6:
+       begin
+         (let jessie_<somenum> = (__retres := a) in void);
+        (raise (Return_label_exc void)) end) end with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 

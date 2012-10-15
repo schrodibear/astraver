@@ -437,8 +437,8 @@ let f_ensures_default =
   try
    begin
      try
+      (loop_2:
       begin
-        (loop_2:
         while true do
         { invariant (JC_<somenum>: ge_int(integer_of_int32(i), (0)))  }
          begin
@@ -465,8 +465,8 @@ let f_ensures_default =
                        (safe_int32_of_integer_ (C_3:
                                                ((sub_int (integer_of_int32 !i)) (1))))));
                 !i end)) end in void); (raise (Loop_continue_exc void)) end
-           with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end with
+           with Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { (JC_<somenum>: (integer_of_int32(i) = (0))) }
@@ -480,8 +480,8 @@ let f_safety =
   try
    begin
      try
+      (loop_1:
       begin
-        (loop_1:
         while true do
         { invariant (JC_<somenum>: true) variant integer_of_int32((JC_<somenum> : i)) }
          begin
@@ -509,8 +509,8 @@ let f_safety =
                        (int32_of_integer_ (C_3:
                                           ((sub_int (integer_of_int32 !i)) (1)))))));
                 !i end)) end in void); (raise (Loop_continue_exc void)) end
-           with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end with
+           with Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { true }

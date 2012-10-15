@@ -3613,8 +3613,6 @@ let SelectionSort_sort_ensures_permutation =
                                                                (JC_144:
                                                                (java_array_length_intM jessie_<num>))))) (1)))))))
             then
-             (Before:
-             (K_41:
              begin
                (let jessie_<num> =
                (mv := (K_24:
@@ -3672,18 +3670,21 @@ let SelectionSort_sort_ensures_permutation =
                     (j_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
                     void); jessie_<num> end)) in void) end end done) with
                Loop_exit_exc jessie_<num> -> void end;
-              (let jessie_<num> = this_0 in
-              (let jessie_<num> = t_0 in
-              (let jessie_<num> = !i_3 in
-              (let jessie_<num> = !mi in
-              (JC_153:
-              ((((SelectionSort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
-              (K_43:
-              (assert
-              { (JC_154:
-                Permut(t_0, (0),
-                sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
-                (1)), intM_intP, intM_intP@Before)) }; void)) end))
+              (Before:
+              (K_41:
+              begin
+                (let jessie_<num> = this_0 in
+                (let jessie_<num> = t_0 in
+                (let jessie_<num> = !i_3 in
+                (let jessie_<num> = !mi in
+                (JC_153:
+                ((((SelectionSort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+               (K_43:
+               (assert
+               { (JC_154:
+                 Permut(t_0, (0),
+                 sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
+                 (1)), intM_intP, intM_intP@Before)) }; void)) end)) end
             else (raise (Loop_exit_exc void)));
            (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<num> ->
@@ -4066,10 +4067,10 @@ let SelectionSort_swap_safety =
       (let jessie_<num> = t in
       (let jessie_<num> = (integer_of_int32 j_2) in
       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (JC_64:
       begin
-        (JC_64:
-        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>));
-       jessie_<num> end))))) end)) in void); (raise Return) end with Return ->
+        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>);
+       jessie_<num> end)))))) end)) in void); (raise Return) end with Return ->
    void end) { true }
 
 let cons_Object_ensures_default =
@@ -4186,7 +4187,7 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/SelectionSort_po25.why">
-      <location file = "why/SelectionSort.why" line = "1240" begin = "65" end = "316"/>
+      <location file = "why/SelectionSort.why" line = "1241" begin = "65" end = "316"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SelectionSort_po26.why">
@@ -10794,7 +10795,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
 (IMPLIES (>= (integer_of_int32 i_3_0) (integer_of_int32 result1))
 (Sorted t_0 0 (+ (offset_max Object_alloc_table t_0) 1) intM_intP0))))))))))))))))))
 
-;; SelectionSort_sort_safety_po_1, File "why/SelectionSort.why", line 1240, characters 65-316
+;; SelectionSort_sort_safety_po_1, File "why/SelectionSort.why", line 1241, characters 65-316
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)

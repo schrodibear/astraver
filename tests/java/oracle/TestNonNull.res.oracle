@@ -1716,21 +1716,25 @@ let cons_TestNonNull_ensures_default =
     and (JC_49: st_length(Object_alloc_table))) }
   (init:
   try
-   (K_1:
    begin
      (let jessie_<num> = null in
      (let jessie_<num> = this_1 in
      (((safe_upd_ TestNonNull_t) jessie_<num>) jessie_<num>)));
-    (let jessie_<num> =
-    (JC_60: (((alloc_struct_intM (5)) Object_alloc_table) Object_tag_table)) in
-    (let jessie_<num> = this_1 in
-    (((safe_upd_ TestNonNull_t) jessie_<num>) jessie_<num>)));
-    (K_3:
-    (assert
-    { (JC_61:
-      (add_int(offset_max(Object_alloc_table, select(TestNonNull_t, this_1)),
-       (1)) = (5))) }; void)); (raise Return) end) with Return -> void end)
-  { (JC_51: true) }
+    (K_1:
+    begin
+      (let jessie_<num> =
+      (JC_60:
+      (((alloc_struct_intM (5)) Object_alloc_table) Object_tag_table)) in
+      (let jessie_<num> = this_1 in
+      (((safe_upd_ TestNonNull_t) jessie_<num>) jessie_<num>)));
+     (K_3:
+     begin
+       (assert
+       { (JC_61:
+         (add_int(offset_max(Object_alloc_table,
+                  select(TestNonNull_t, this_1)),
+          (1)) = (5))) }; void); (raise Return) end) end) end with Return ->
+   void end) { (JC_51: true) }
 
 let cons_TestNonNull_safety =
  fun (this_1 : Object pointer) ->
@@ -1739,26 +1743,29 @@ let cons_TestNonNull_safety =
     and (JC_49: st_length(Object_alloc_table))) }
   (init:
   try
-   (K_1:
    begin
      (let jessie_<num> = null in
      (let jessie_<num> = this_1 in
      (((safe_upd_ TestNonNull_t) jessie_<num>) jessie_<num>)));
-    (let jessie_<num> =
-    (let jessie_<num> =
-    (JC_57:
-    (((alloc_struct_intM_requires (5)) Object_alloc_table) Object_tag_table)) in
-    (JC_58:
-    (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (-1)) };
-    jessie_<num>))) in
-    (let jessie_<num> = this_1 in
-    (((safe_upd_ TestNonNull_t) jessie_<num>) jessie_<num>)));
-    (K_3:
-    [ { } unit reads Object_alloc_table,TestNonNull_t
-      { (JC_59:
-        (add_int(offset_max(Object_alloc_table,
-                 select(TestNonNull_t, this_1)),
-         (1)) = (5))) } ]); (raise Return) end) with Return -> void end)
+    (K_1:
+    begin
+      (let jessie_<num> =
+      (let jessie_<num> =
+      (JC_57:
+      (((alloc_struct_intM_requires (5)) Object_alloc_table) Object_tag_table)) in
+      (JC_58:
+      (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (-1)) };
+      jessie_<num>))) in
+      (let jessie_<num> = this_1 in
+      (((safe_upd_ TestNonNull_t) jessie_<num>) jessie_<num>)));
+     (K_3:
+     begin
+       [ { } unit reads Object_alloc_table,TestNonNull_t
+         { (JC_59:
+           (add_int(offset_max(Object_alloc_table,
+                    select(TestNonNull_t, this_1)),
+            (1)) = (5))) } ]; (raise Return) end) end) end with Return ->
+   void end)
   { (JC_54:
     ((JC_53: st_length(Object_alloc_table))
     and t_length(this_1, Object_alloc_table, TestNonNull_t))) }
@@ -1811,7 +1818,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/TestNonNull_po8.why">
-      <location file = "why/TestNonNull.why" line = "817" begin = "14" end = "68"/>
+      <location file = "why/TestNonNull.why" line = "822" begin = "16" end = "70"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/TestNonNull_po9.why">
@@ -4654,7 +4661,7 @@ why -simplify [...] why/TestNonNull.why
 (IMPLIES (EQ TestNonNull_t0 (|why__store| TestNonNull_t this_1 null))
 (>= 5 0)))))))
 
-;; cons_TestNonNull_safety_po_2, File "why/TestNonNull.why", line 817, characters 14-68
+;; cons_TestNonNull_safety_po_2, File "why/TestNonNull.why", line 822, characters 16-70
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (FORALL (TestNonNull_t)

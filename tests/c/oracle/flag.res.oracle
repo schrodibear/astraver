@@ -2178,90 +2178,104 @@ let flag_ensures_default =
      (let tmp_0 = ref (any_int void) in
      try
       (C_38:
-      (C_39:
-      (C_40:
       begin
         (let jessie_<num> = (b_0 := (0)) in void);
-       (let jessie_<num> = (i_1_0 := (0)) in void);
-       (let jessie_<num> = (r_0 := l_0) in void);
-       (loop_5:
-       while true do
-       { invariant
-           (JC_103:
-           ((JC_95:
-            is_color_array(t_2, l_0, charP_t_5_alloc_table, charP_charM_t_5))
-           and ((JC_96: le_int((0), b_0))
-               and ((JC_97: le_int(b_0, i_1_0))
-                   and ((JC_98: le_int(i_1_0, r_0))
-                       and ((JC_99: le_int(r_0, l_0))
-                           and ((JC_100:
-                                is_monochrome(t_2, (0), b_0, (1),
-                                charP_charM_t_5))
-                               and ((JC_101:
-                                    is_monochrome(t_2, b_0, i_1_0, (2),
-                                    charP_charM_t_5))
-                                   and (JC_102:
-                                       is_monochrome(t_2, r_0, l_0, (3),
-                                       charP_charM_t_5))))))))))  }
+       (C_39:
+       begin
+         (let jessie_<num> = (i_1_0 := (0)) in void);
+        (C_40:
         begin
-          [ { } unit { true } ];
-         try
-          begin
-            (if ((lt_int_ !i_1_0) !r_0) then void
-            else (raise (Goto_while_0_break_exc void)));
-           try
+          (let jessie_<num> = (r_0 := l_0) in void);
+         (loop_5:
+         begin
+           while true do
+           { invariant
+               (JC_103:
+               ((JC_95:
+                is_color_array(t_2, l_0, charP_t_5_alloc_table,
+                charP_charM_t_5))
+               and ((JC_96: le_int((0), b_0))
+                   and ((JC_97: le_int(b_0, i_1_0))
+                       and ((JC_98: le_int(i_1_0, r_0))
+                           and ((JC_99: le_int(r_0, l_0))
+                               and ((JC_100:
+                                    is_monochrome(t_2, (0), b_0, (1),
+                                    charP_charM_t_5))
+                                   and ((JC_101:
+                                        is_monochrome(t_2, b_0, i_1_0, (2),
+                                        charP_charM_t_5))
+                                       and (JC_102:
+                                           is_monochrome(t_2, r_0, l_0, (3),
+                                           charP_charM_t_5)))))))))) 
+              }
             begin
-              (let jessie_<num> =
-              (C_70:
-              ((safe_acc_ !charP_charM_t_5) (C_69: ((shift t_2) !i_1_0)))) in
+              [ { } unit { true } ];
+             try
               begin
-                (if ((eq_int_ jessie_<num>) (1))
-                then
-                 (C_57:
-                 (C_59:
-                 (C_60:
-                 (C_62:
-                 (C_63:
-                 begin
-                   (let jessie_<num> = (tmp := !i_1_0) in void);
-                  (let jessie_<num> =
-                  (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void); void;
-                  (let jessie_<num> = (tmp_0 := !b_0) in void);
-                  (let jessie_<num> = (b_0 := (C_61: ((add_int !b_0) (1)))) in
-                  void); void; void;
-                  (let jessie_<num> = t_2 in
-                  (let jessie_<num> = !tmp_0 in
-                  (let jessie_<num> = !tmp in
-                  (JC_107:
-                  (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                  (raise (Goto_switch_1_break_exc void)) end))))) else void);
-               (if (((eq_int_ jessie_<num>) (2)) || ((eq_int_ jessie_<num>) (1)))
-               then
-                (C_65:
+                (if ((lt_int_ !i_1_0) !r_0) then void
+                else (raise (Goto_while_0_break_exc void)));
+               try
                 begin
                   (let jessie_<num> =
-                  (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
-                 (raise (Goto_switch_1_break_exc void)) end) else void);
-               (if (((eq_int_ jessie_<num>) (3)) || (((eq_int_ jessie_<num>) (2)) || 
-                                                ((eq_int_ jessie_<num>) (1))))
-               then
-                (C_67:
-                (C_68:
-                begin
-                  void;
-                 (let jessie_<num> = (r_0 := (C_66: ((sub_int !r_0) (1)))) in
-                 void); void;
-                 (let jessie_<num> = t_2 in
-                 (let jessie_<num> = !r_0 in
-                 (let jessie_<num> = !i_1_0 in
-                 (JC_108:
-                 (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                 (raise (Goto_switch_1_break_exc void)) end)) else void) end);
-             (raise (Goto_switch_1_break_exc void)) end with
-            Goto_switch_1_break_exc jessie_<num> -> (switch_1_break: void) end;
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end))) with
+                  (C_70:
+                  ((safe_acc_ !charP_charM_t_5) (C_69: ((shift t_2) !i_1_0)))) in
+                  begin
+                    (if ((eq_int_ jessie_<num>) (1))
+                    then
+                     (C_57:
+                     begin
+                       (let jessie_<num> = (tmp := !i_1_0) in void);
+                      (C_59:
+                      begin
+                        (let jessie_<num> =
+                        (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void);
+                       void;
+                       (C_60:
+                       begin
+                         (let jessie_<num> = (tmp_0 := !b_0) in void);
+                        (C_62:
+                        begin
+                          (let jessie_<num> =
+                          (b_0 := (C_61: ((add_int !b_0) (1)))) in void);
+                         void; void;
+                         (C_63:
+                         begin
+                           (let jessie_<num> = t_2 in
+                           (let jessie_<num> = !tmp_0 in
+                           (let jessie_<num> = !tmp in
+                           (JC_107:
+                           (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                          (raise (Goto_switch_1_break_exc void)) end) end)
+                       end) end) end) else void);
+                   (if (((eq_int_ jessie_<num>) (2)) || ((eq_int_ jessie_<num>) (1)))
+                   then
+                    (C_65:
+                    begin
+                      (let jessie_<num> =
+                      (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
+                     (raise (Goto_switch_1_break_exc void)) end) else void);
+                   (if (((eq_int_ jessie_<num>) (3)) || (((eq_int_ jessie_<num>) (2)) || 
+                                                    ((eq_int_ jessie_<num>) (1))))
+                   then
+                    begin
+                      void;
+                     (C_67:
+                     begin
+                       (let jessie_<num> =
+                       (r_0 := (C_66: ((sub_int !r_0) (1)))) in void); void;
+                      (C_68:
+                      begin
+                        (let jessie_<num> = t_2 in
+                        (let jessie_<num> = !r_0 in
+                        (let jessie_<num> = !i_1_0 in
+                        (JC_108:
+                        (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                       (raise (Goto_switch_1_break_exc void)) end) end) end
+                   else void) end); (raise (Goto_switch_1_break_exc void))
+                end with Goto_switch_1_break_exc jessie_<num> ->
+                (switch_1_break: void) end; (raise (Loop_continue_exc void))
+              end with Loop_continue_exc jessie_<num> -> void end end done;
+          (raise (Goto_while_0_break_exc void)) end) end) end) end) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end)))));
     (raise Return) end with Return -> void end) { (JC_73: true) }
@@ -2282,91 +2296,103 @@ let flag_ensures_sorts =
      (let tmp_0 = ref (any_int void) in
      try
       (C_38:
-      (C_39:
-      (C_40:
       begin
         (let jessie_<num> = (b_0 := (0)) in void);
-       (let jessie_<num> = (i_1_0 := (0)) in void);
-       (let jessie_<num> = (r_0 := l_0) in void);
-       (loop_6:
-       while true do
-       { invariant (JC_119: true)  }
+       (C_39:
+       begin
+         (let jessie_<num> = (i_1_0 := (0)) in void);
+        (C_40:
         begin
-          [ { } unit reads b_0,charP_charM_t_5,i_1_0,r_0
-            { (JC_117:
-              ((JC_109:
-               is_color_array(t_2, l_0, charP_t_5_alloc_table,
-               charP_charM_t_5))
-              and ((JC_110: le_int((0), b_0))
-                  and ((JC_111: le_int(b_0, i_1_0))
-                      and ((JC_112: le_int(i_1_0, r_0))
-                          and ((JC_113: le_int(r_0, l_0))
-                              and ((JC_114:
-                                   is_monochrome(t_2, (0), b_0, (1),
-                                   charP_charM_t_5))
-                                  and ((JC_115:
-                                       is_monochrome(t_2, b_0, i_1_0, (2),
-                                       charP_charM_t_5))
-                                      and (JC_116:
-                                          is_monochrome(t_2, r_0, l_0, (3),
-                                          charP_charM_t_5)))))))))) } ];
-         try
-          begin
-            (if ((lt_int_ !i_1_0) !r_0) then void
-            else (raise (Goto_while_0_break_exc void)));
-           try
+          (let jessie_<num> = (r_0 := l_0) in void);
+         (loop_6:
+         begin
+           while true do
+           { invariant (JC_119: true)  }
             begin
-              (let jessie_<num> =
-              (C_70:
-              ((safe_acc_ !charP_charM_t_5) (C_69: ((shift t_2) !i_1_0)))) in
+              [ { } unit reads b_0,charP_charM_t_5,i_1_0,r_0
+                { (JC_117:
+                  ((JC_109:
+                   is_color_array(t_2, l_0, charP_t_5_alloc_table,
+                   charP_charM_t_5))
+                  and ((JC_110: le_int((0), b_0))
+                      and ((JC_111: le_int(b_0, i_1_0))
+                          and ((JC_112: le_int(i_1_0, r_0))
+                              and ((JC_113: le_int(r_0, l_0))
+                                  and ((JC_114:
+                                       is_monochrome(t_2, (0), b_0, (1),
+                                       charP_charM_t_5))
+                                      and ((JC_115:
+                                           is_monochrome(t_2, b_0, i_1_0,
+                                           (2), charP_charM_t_5))
+                                          and (JC_116:
+                                              is_monochrome(t_2, r_0, l_0,
+                                              (3), charP_charM_t_5)))))))))) } ];
+             try
               begin
-                (if ((eq_int_ jessie_<num>) (1))
-                then
-                 (C_57:
-                 (C_59:
-                 (C_60:
-                 (C_62:
-                 (C_63:
-                 begin
-                   (let jessie_<num> = (tmp := !i_1_0) in void);
-                  (let jessie_<num> =
-                  (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void); void;
-                  (let jessie_<num> = (tmp_0 := !b_0) in void);
-                  (let jessie_<num> = (b_0 := (C_61: ((add_int !b_0) (1)))) in
-                  void); void; void;
-                  (let jessie_<num> = t_2 in
-                  (let jessie_<num> = !tmp_0 in
-                  (let jessie_<num> = !tmp in
-                  (JC_121:
-                  (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                  (raise (Goto_switch_1_break_exc void)) end))))) else void);
-               (if (((eq_int_ jessie_<num>) (2)) || ((eq_int_ jessie_<num>) (1)))
-               then
-                (C_65:
+                (if ((lt_int_ !i_1_0) !r_0) then void
+                else (raise (Goto_while_0_break_exc void)));
+               try
                 begin
                   (let jessie_<num> =
-                  (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
-                 (raise (Goto_switch_1_break_exc void)) end) else void);
-               (if (((eq_int_ jessie_<num>) (3)) || (((eq_int_ jessie_<num>) (2)) || 
-                                                ((eq_int_ jessie_<num>) (1))))
-               then
-                (C_67:
-                (C_68:
-                begin
-                  void;
-                 (let jessie_<num> = (r_0 := (C_66: ((sub_int !r_0) (1)))) in
-                 void); void;
-                 (let jessie_<num> = t_2 in
-                 (let jessie_<num> = !r_0 in
-                 (let jessie_<num> = !i_1_0 in
-                 (JC_122:
-                 (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                 (raise (Goto_switch_1_break_exc void)) end)) else void) end);
-             (raise (Goto_switch_1_break_exc void)) end with
-            Goto_switch_1_break_exc jessie_<num> -> (switch_1_break: void) end;
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end))) with
+                  (C_70:
+                  ((safe_acc_ !charP_charM_t_5) (C_69: ((shift t_2) !i_1_0)))) in
+                  begin
+                    (if ((eq_int_ jessie_<num>) (1))
+                    then
+                     (C_57:
+                     begin
+                       (let jessie_<num> = (tmp := !i_1_0) in void);
+                      (C_59:
+                      begin
+                        (let jessie_<num> =
+                        (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void);
+                       void;
+                       (C_60:
+                       begin
+                         (let jessie_<num> = (tmp_0 := !b_0) in void);
+                        (C_62:
+                        begin
+                          (let jessie_<num> =
+                          (b_0 := (C_61: ((add_int !b_0) (1)))) in void);
+                         void; void;
+                         (C_63:
+                         begin
+                           (let jessie_<num> = t_2 in
+                           (let jessie_<num> = !tmp_0 in
+                           (let jessie_<num> = !tmp in
+                           (JC_121:
+                           (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                          (raise (Goto_switch_1_break_exc void)) end) end)
+                       end) end) end) else void);
+                   (if (((eq_int_ jessie_<num>) (2)) || ((eq_int_ jessie_<num>) (1)))
+                   then
+                    (C_65:
+                    begin
+                      (let jessie_<num> =
+                      (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
+                     (raise (Goto_switch_1_break_exc void)) end) else void);
+                   (if (((eq_int_ jessie_<num>) (3)) || (((eq_int_ jessie_<num>) (2)) || 
+                                                    ((eq_int_ jessie_<num>) (1))))
+                   then
+                    begin
+                      void;
+                     (C_67:
+                     begin
+                       (let jessie_<num> =
+                       (r_0 := (C_66: ((sub_int !r_0) (1)))) in void); void;
+                      (C_68:
+                      begin
+                        (let jessie_<num> = t_2 in
+                        (let jessie_<num> = !r_0 in
+                        (let jessie_<num> = !i_1_0 in
+                        (JC_122:
+                        (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                       (raise (Goto_switch_1_break_exc void)) end) end) end
+                   else void) end); (raise (Goto_switch_1_break_exc void))
+                end with Goto_switch_1_break_exc jessie_<num> ->
+                (switch_1_break: void) end; (raise (Loop_continue_exc void))
+              end with Loop_continue_exc jessie_<num> -> void end end done;
+          (raise (Goto_while_0_break_exc void)) end) end) end) end) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end)))));
     (raise Return) end with Return -> void end)
@@ -2393,92 +2419,104 @@ let flag_safety =
      (let tmp_0 = ref (any_int void) in
      try
       (C_38:
-      (C_39:
-      (C_40:
       begin
         (let jessie_<num> = (b_0 := (0)) in void);
-       (let jessie_<num> = (i_1_0 := (0)) in void);
-       (let jessie_<num> = (r_0 := l_0) in void);
-       (loop_4:
-       while true do
-       { invariant (JC_89: true) variant (JC_94 : sub_int(r_0, i_1_0)) }
+       (C_39:
+       begin
+         (let jessie_<num> = (i_1_0 := (0)) in void);
+        (C_40:
         begin
-          [ { } unit reads b_0,charP_charM_t_5,i_1_0,r_0
-            { (JC_87:
-              ((JC_79:
-               is_color_array(t_2, l_0, charP_t_5_alloc_table,
-               charP_charM_t_5))
-              and ((JC_80: le_int((0), b_0))
-                  and ((JC_81: le_int(b_0, i_1_0))
-                      and ((JC_82: le_int(i_1_0, r_0))
-                          and ((JC_83: le_int(r_0, l_0))
-                              and ((JC_84:
-                                   is_monochrome(t_2, (0), b_0, (1),
-                                   charP_charM_t_5))
-                                  and ((JC_85:
-                                       is_monochrome(t_2, b_0, i_1_0, (2),
-                                       charP_charM_t_5))
-                                      and (JC_86:
-                                          is_monochrome(t_2, r_0, l_0, (3),
-                                          charP_charM_t_5)))))))))) } ];
-         try
-          begin
-            (if ((lt_int_ !i_1_0) !r_0) then void
-            else (raise (Goto_while_0_break_exc void)));
-           try
+          (let jessie_<num> = (r_0 := l_0) in void);
+         (loop_4:
+         begin
+           while true do
+           { invariant (JC_89: true) variant (JC_94 : sub_int(r_0, i_1_0)) }
             begin
-              (let jessie_<num> =
-              (C_70:
-              (JC_91:
-              ((((offset_acc_ charP_t_5_alloc_table) !charP_charM_t_5) t_2) !i_1_0))) in
+              [ { } unit reads b_0,charP_charM_t_5,i_1_0,r_0
+                { (JC_87:
+                  ((JC_79:
+                   is_color_array(t_2, l_0, charP_t_5_alloc_table,
+                   charP_charM_t_5))
+                  and ((JC_80: le_int((0), b_0))
+                      and ((JC_81: le_int(b_0, i_1_0))
+                          and ((JC_82: le_int(i_1_0, r_0))
+                              and ((JC_83: le_int(r_0, l_0))
+                                  and ((JC_84:
+                                       is_monochrome(t_2, (0), b_0, (1),
+                                       charP_charM_t_5))
+                                      and ((JC_85:
+                                           is_monochrome(t_2, b_0, i_1_0,
+                                           (2), charP_charM_t_5))
+                                          and (JC_86:
+                                              is_monochrome(t_2, r_0, l_0,
+                                              (3), charP_charM_t_5)))))))))) } ];
+             try
               begin
-                (if ((eq_int_ jessie_<num>) (1))
-                then
-                 (C_57:
-                 (C_59:
-                 (C_60:
-                 (C_62:
-                 (C_63:
-                 begin
-                   (let jessie_<num> = (tmp := !i_1_0) in void);
-                  (let jessie_<num> =
-                  (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void); void;
-                  (let jessie_<num> = (tmp_0 := !b_0) in void);
-                  (let jessie_<num> = (b_0 := (C_61: ((add_int !b_0) (1)))) in
-                  void); void; void;
-                  (let jessie_<num> = t_2 in
-                  (let jessie_<num> = !tmp_0 in
-                  (let jessie_<num> = !tmp in
-                  (JC_92:
-                  (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                  (raise (Goto_switch_1_break_exc void)) end))))) else void);
-               (if (((eq_int_ jessie_<num>) (2)) || ((eq_int_ jessie_<num>) (1)))
-               then
-                (C_65:
+                (if ((lt_int_ !i_1_0) !r_0) then void
+                else (raise (Goto_while_0_break_exc void)));
+               try
                 begin
                   (let jessie_<num> =
-                  (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
-                 (raise (Goto_switch_1_break_exc void)) end) else void);
-               (if (((eq_int_ jessie_<num>) (3)) || (((eq_int_ jessie_<num>) (2)) || 
-                                                ((eq_int_ jessie_<num>) (1))))
-               then
-                (C_67:
-                (C_68:
-                begin
-                  void;
-                 (let jessie_<num> = (r_0 := (C_66: ((sub_int !r_0) (1)))) in
-                 void); void;
-                 (let jessie_<num> = t_2 in
-                 (let jessie_<num> = !r_0 in
-                 (let jessie_<num> = !i_1_0 in
-                 (JC_93:
-                 (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                 (raise (Goto_switch_1_break_exc void)) end)) else void) end);
-             (raise (Goto_switch_1_break_exc void)) end with
-            Goto_switch_1_break_exc jessie_<num> -> (switch_1_break: void) end;
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end))) with
+                  (C_70:
+                  (JC_91:
+                  ((((offset_acc_ charP_t_5_alloc_table) !charP_charM_t_5) t_2) !i_1_0))) in
+                  begin
+                    (if ((eq_int_ jessie_<num>) (1))
+                    then
+                     (C_57:
+                     begin
+                       (let jessie_<num> = (tmp := !i_1_0) in void);
+                      (C_59:
+                      begin
+                        (let jessie_<num> =
+                        (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void);
+                       void;
+                       (C_60:
+                       begin
+                         (let jessie_<num> = (tmp_0 := !b_0) in void);
+                        (C_62:
+                        begin
+                          (let jessie_<num> =
+                          (b_0 := (C_61: ((add_int !b_0) (1)))) in void);
+                         void; void;
+                         (C_63:
+                         begin
+                           (let jessie_<num> = t_2 in
+                           (let jessie_<num> = !tmp_0 in
+                           (let jessie_<num> = !tmp in
+                           (JC_92:
+                           (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                          (raise (Goto_switch_1_break_exc void)) end) end)
+                       end) end) end) else void);
+                   (if (((eq_int_ jessie_<num>) (2)) || ((eq_int_ jessie_<num>) (1)))
+                   then
+                    (C_65:
+                    begin
+                      (let jessie_<num> =
+                      (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
+                     (raise (Goto_switch_1_break_exc void)) end) else void);
+                   (if (((eq_int_ jessie_<num>) (3)) || (((eq_int_ jessie_<num>) (2)) || 
+                                                    ((eq_int_ jessie_<num>) (1))))
+                   then
+                    begin
+                      void;
+                     (C_67:
+                     begin
+                       (let jessie_<num> =
+                       (r_0 := (C_66: ((sub_int !r_0) (1)))) in void); void;
+                      (C_68:
+                      begin
+                        (let jessie_<num> = t_2 in
+                        (let jessie_<num> = !r_0 in
+                        (let jessie_<num> = !i_1_0 in
+                        (JC_93:
+                        (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                       (raise (Goto_switch_1_break_exc void)) end) end) end
+                   else void) end); (raise (Goto_switch_1_break_exc void))
+                end with Goto_switch_1_break_exc jessie_<num> ->
+                (switch_1_break: void) end; (raise (Loop_continue_exc void))
+              end with Loop_continue_exc jessie_<num> -> void end end done;
+          (raise (Goto_while_0_break_exc void)) end) end) end) end) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end)))));
     (raise Return) end with Return -> void end) { true }
@@ -2495,45 +2533,48 @@ let isMonochrome_ensures_decides_monochromatic =
      (let k_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (C_11:
       begin
         try
          (C_1:
          begin
            (let jessie_<num> = (k_0 := i) in void);
           (loop_3:
-          while true do
-          { invariant (JC_33: true)  }
-           begin
-             [ { } unit reads k_0
-               { (JC_31:
-                 ((JC_29: le_int(i, k_0))
-                 and (JC_30:
-                     (forall l_0_0:int.
-                      ((le_int(i, l_0_0) and lt_int(l_0_0, k_0)) ->
-                       (select(charP_charM_t_0_3, shift(t_0_0, l_0_0)) = c_1)))))) } ];
-            try
+          begin
+            while true do
+            { invariant (JC_33: true)  }
              begin
-               (let jessie_<num> =
-               (C_10:
+               [ { } unit reads k_0
+                 { (JC_31:
+                   ((JC_29: le_int(i, k_0))
+                   and (JC_30:
+                       (forall l_0_0:int.
+                        ((le_int(i, l_0_0) and lt_int(l_0_0, k_0)) ->
+                         (select(charP_charM_t_0_3, shift(t_0_0, l_0_0)) = c_1)))))) } ];
+              try
                begin
-                 (if ((lt_int_ !k_0) j) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((neq_int_ (C_8:
-                               ((safe_acc_ charP_charM_t_0_3) (C_7:
-                                                              ((shift t_0_0) !k_0))))) c_1)
-                then
-                 (C_6:
+                 (let jessie_<num> =
                  begin
-                   (let jessie_<num> = (__retres := (0)) in void);
-                  (raise (Return_label_exc void)) end) else void);
-                (k_0 := (C_9: ((add_int !k_0) (1)))); !k_0 end) in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                   (if ((lt_int_ !k_0) j) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  (if ((neq_int_ (C_8:
+                                 ((safe_acc_ charP_charM_t_0_3) (C_7:
+                                                                ((shift t_0_0) !k_0))))) c_1)
+                  then
+                   (C_6:
+                   begin
+                     (let jessie_<num> = (__retres := (0)) in void);
+                    (raise (Return_label_exc void)) end) else void);
+                  (C_10:
+                  begin   (k_0 := (C_9: ((add_int !k_0) (1)))); !k_0 end) end in
+                 void); (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) with
          Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
-       (let jessie_<num> = (__retres := (1)) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<num> ->
+       (C_11:
+       begin
+         (let jessie_<num> = (__retres := (1)) in void);
+        (raise (Return_label_exc void)) end) end with
+      Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_13:
@@ -2551,46 +2592,49 @@ let isMonochrome_ensures_default =
      (let k_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (C_11:
       begin
         try
          (C_1:
          begin
            (let jessie_<num> = (k_0 := i) in void);
           (loop_2:
-          while true do
-          { invariant
-              (JC_25:
-              ((JC_23: le_int(i, k_0))
-              and (JC_24:
-                  (forall l_0_0:int.
-                   ((le_int(i, l_0_0) and lt_int(l_0_0, k_0)) ->
-                    (select(charP_charM_t_0_3, shift(t_0_0, l_0_0)) = c_1))))))
-             }
-           begin
-             [ { } unit { true } ];
-            try
+          begin
+            while true do
+            { invariant
+                (JC_25:
+                ((JC_23: le_int(i, k_0))
+                and (JC_24:
+                    (forall l_0_0:int.
+                     ((le_int(i, l_0_0) and lt_int(l_0_0, k_0)) ->
+                      (select(charP_charM_t_0_3, shift(t_0_0, l_0_0)) = c_1))))))
+               }
              begin
-               (let jessie_<num> =
-               (C_10:
+               [ { } unit { true } ];
+              try
                begin
-                 (if ((lt_int_ !k_0) j) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((neq_int_ (C_8:
-                               ((safe_acc_ charP_charM_t_0_3) (C_7:
-                                                              ((shift t_0_0) !k_0))))) c_1)
-                then
-                 (C_6:
+                 (let jessie_<num> =
                  begin
-                   (let jessie_<num> = (__retres := (0)) in void);
-                  (raise (Return_label_exc void)) end) else void);
-                (k_0 := (C_9: ((add_int !k_0) (1)))); !k_0 end) in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                   (if ((lt_int_ !k_0) j) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  (if ((neq_int_ (C_8:
+                                 ((safe_acc_ charP_charM_t_0_3) (C_7:
+                                                                ((shift t_0_0) !k_0))))) c_1)
+                  then
+                   (C_6:
+                   begin
+                     (let jessie_<num> = (__retres := (0)) in void);
+                    (raise (Return_label_exc void)) end) else void);
+                  (C_10:
+                  begin   (k_0 := (C_9: ((add_int !k_0) (1)))); !k_0 end) end in
+                 void); (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) with
          Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
-       (let jessie_<num> = (__retres := (1)) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<num> ->
+       (C_11:
+       begin
+         (let jessie_<num> = (__retres := (1)) in void);
+        (raise (Return_label_exc void)) end) end with
+      Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { (JC_9: true) }
 
@@ -2606,45 +2650,48 @@ let isMonochrome_safety =
      (let k_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (C_11:
       begin
         try
          (C_1:
          begin
            (let jessie_<num> = (k_0 := i) in void);
           (loop_1:
-          while true do
-          { invariant (JC_19: true) variant (JC_22 : sub_int(j, k_0)) }
-           begin
-             [ { } unit reads k_0
-               { (JC_17:
-                 ((JC_15: le_int(i, k_0))
-                 and (JC_16:
-                     (forall l_0_0:int.
-                      ((le_int(i, l_0_0) and lt_int(l_0_0, k_0)) ->
-                       (select(charP_charM_t_0_3, shift(t_0_0, l_0_0)) = c_1)))))) } ];
-            try
+          begin
+            while true do
+            { invariant (JC_19: true) variant (JC_22 : sub_int(j, k_0)) }
              begin
-               (let jessie_<num> =
-               (C_10:
+               [ { } unit reads k_0
+                 { (JC_17:
+                   ((JC_15: le_int(i, k_0))
+                   and (JC_16:
+                       (forall l_0_0:int.
+                        ((le_int(i, l_0_0) and lt_int(l_0_0, k_0)) ->
+                         (select(charP_charM_t_0_3, shift(t_0_0, l_0_0)) = c_1)))))) } ];
+              try
                begin
-                 (if ((lt_int_ !k_0) j) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((neq_int_ (C_8:
-                               (JC_21:
-                               ((((offset_acc_ charP_t_0_3_alloc_table) charP_charM_t_0_3) t_0_0) !k_0)))) c_1)
-                then
-                 (C_6:
+                 (let jessie_<num> =
                  begin
-                   (let jessie_<num> = (__retres := (0)) in void);
-                  (raise (Return_label_exc void)) end) else void);
-                (k_0 := (C_9: ((add_int !k_0) (1)))); !k_0 end) in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                   (if ((lt_int_ !k_0) j) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  (if ((neq_int_ (C_8:
+                                 (JC_21:
+                                 ((((offset_acc_ charP_t_0_3_alloc_table) charP_charM_t_0_3) t_0_0) !k_0)))) c_1)
+                  then
+                   (C_6:
+                   begin
+                     (let jessie_<num> = (__retres := (0)) in void);
+                    (raise (Return_label_exc void)) end) else void);
+                  (C_10:
+                  begin   (k_0 := (C_9: ((add_int !k_0) (1)))); !k_0 end) end in
+                 void); (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) with
          Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
-       (let jessie_<num> = (__retres := (1)) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<num> ->
+       (C_11:
+       begin
+         (let jessie_<num> = (__retres := (1)) in void);
+        (raise (Return_label_exc void)) end) end with
+      Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -2661,28 +2708,30 @@ let swap_ensures_default =
    begin
      (let z = ref (any_int void) in
      (C_19:
-     (C_24:
-     (C_27:
      begin
        (let jessie_<num> =
        (z := (C_18:
              ((safe_acc_ !charP_charM_t_1_4) (C_17: ((shift t_1) i_0))))) in
        void);
-      (let jessie_<num> =
-      (let jessie_<num> =
-      (C_21: ((safe_acc_ !charP_charM_t_1_4) (C_20: ((shift t_1) j_0_0)))) in
-      (let jessie_<num> = t_1 in
-      (let jessie_<num> = i_0 in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (((safe_upd_ charP_charM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
-      (let jessie_<num> =
-      (let jessie_<num> = !z in
-      (let jessie_<num> = t_1 in
-      (let jessie_<num> = j_0_0 in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (((safe_upd_ charP_charM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
-      (raise Return) end)))); (raise Return) end with Return -> void end)
-  { (JC_47: true) }
+      (C_24:
+      begin
+        (let jessie_<num> =
+        (let jessie_<num> =
+        (C_21: ((safe_acc_ !charP_charM_t_1_4) (C_20: ((shift t_1) j_0_0)))) in
+        (let jessie_<num> = t_1 in
+        (let jessie_<num> = i_0 in
+        (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+        (((safe_upd_ charP_charM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
+       (C_27:
+       begin
+         (let jessie_<num> =
+         (let jessie_<num> = !z in
+         (let jessie_<num> = t_1 in
+         (let jessie_<num> = j_0_0 in
+         (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+         (((safe_upd_ charP_charM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
+        (raise Return) end) end) end)); (raise Return) end with Return ->
+   void end) { (JC_47: true) }
 
 let swap_ensures_i_j_swapped =
  fun (t_1 : charP pointer) (i_0 : int) (j_0_0 : int) (charP_charM_t_1_4 : (charP, int) memory ref) (charP_t_1_4_alloc_table : charP alloc_table) ->
@@ -2697,27 +2746,30 @@ let swap_ensures_i_j_swapped =
    begin
      (let z = ref (any_int void) in
      (C_19:
-     (C_24:
-     (C_27:
      begin
        (let jessie_<num> =
        (z := (C_18:
              ((safe_acc_ !charP_charM_t_1_4) (C_17: ((shift t_1) i_0))))) in
        void);
-      (let jessie_<num> =
-      (let jessie_<num> =
-      (C_21: ((safe_acc_ !charP_charM_t_1_4) (C_20: ((shift t_1) j_0_0)))) in
-      (let jessie_<num> = t_1 in
-      (let jessie_<num> = i_0 in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (((safe_upd_ charP_charM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
-      (let jessie_<num> =
-      (let jessie_<num> = !z in
-      (let jessie_<num> = t_1 in
-      (let jessie_<num> = j_0_0 in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (((safe_upd_ charP_charM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
-      (raise Return) end)))); (raise Return) end with Return -> void end)
+      (C_24:
+      begin
+        (let jessie_<num> =
+        (let jessie_<num> =
+        (C_21: ((safe_acc_ !charP_charM_t_1_4) (C_20: ((shift t_1) j_0_0)))) in
+        (let jessie_<num> = t_1 in
+        (let jessie_<num> = i_0 in
+        (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+        (((safe_upd_ charP_charM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
+       (C_27:
+       begin
+         (let jessie_<num> =
+         (let jessie_<num> = !z in
+         (let jessie_<num> = t_1 in
+         (let jessie_<num> = j_0_0 in
+         (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+         (((safe_upd_ charP_charM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
+        (raise Return) end) end) end)); (raise Return) end with Return ->
+   void end)
   { (JC_55:
     ((JC_53:
      ((JC_51:
@@ -2745,34 +2797,36 @@ let swap_safety =
    begin
      (let z = ref (any_int void) in
      (C_19:
-     (C_24:
-     (C_27:
      begin
        (let jessie_<num> =
        (z := (C_18:
              (JC_61:
              ((((offset_acc_ charP_t_1_4_alloc_table) !charP_charM_t_1_4) t_1) i_0)))) in
        void);
-      (let jessie_<num> =
-      (let jessie_<num> =
-      (C_21:
-      (JC_62:
-      ((((offset_acc_ charP_t_1_4_alloc_table) !charP_charM_t_1_4) t_1) j_0_0))) in
-      (let jessie_<num> = t_1 in
-      (let jessie_<num> = i_0 in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (JC_63:
-      (((((offset_upd_ charP_t_1_4_alloc_table) charP_charM_t_1_4) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
-      void);
-      (let jessie_<num> =
-      (let jessie_<num> = !z in
-      (let jessie_<num> = t_1 in
-      (let jessie_<num> = j_0_0 in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (JC_64:
-      (((((offset_upd_ charP_t_1_4_alloc_table) charP_charM_t_1_4) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
-      void); (raise Return) end)))); (raise Return) end with Return ->
-   void end) { true }
+      (C_24:
+      begin
+        (let jessie_<num> =
+        (let jessie_<num> =
+        (C_21:
+        (JC_62:
+        ((((offset_acc_ charP_t_1_4_alloc_table) !charP_charM_t_1_4) t_1) j_0_0))) in
+        (let jessie_<num> = t_1 in
+        (let jessie_<num> = i_0 in
+        (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+        (JC_63:
+        (((((offset_upd_ charP_t_1_4_alloc_table) charP_charM_t_1_4) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+        void);
+       (C_27:
+       begin
+         (let jessie_<num> =
+         (let jessie_<num> = !z in
+         (let jessie_<num> = t_1 in
+         (let jessie_<num> = j_0_0 in
+         (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+         (JC_64:
+         (((((offset_upd_ charP_t_1_4_alloc_table) charP_charM_t_1_4) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+         void); (raise Return) end) end) end)); (raise Return) end with
+   Return -> void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========

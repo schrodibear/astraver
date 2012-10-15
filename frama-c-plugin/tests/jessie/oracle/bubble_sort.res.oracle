@@ -922,87 +922,99 @@ let bubble_sort_ensures_default =
      (let fixed_up = ref (any_int32 void) in
      try
       (C_22:
-      (C_23:
       begin
         (let jessie_<somenum> = (up := (safe_int32_of_integer_ (1))) in void);
-       (let jessie_<somenum> = (fixed_up := !up) in void);
-       (loop_3:
-       while true do
-       { invariant (JC_<somenum>: true)  }
+       (C_23:
+       begin
+         (let jessie_<somenum> = (fixed_up := !up) in void);
+        (loop_3:
         begin
-          [ { } unit { true } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (C_79:
-            (C_80:
-            begin
-              (if ((lt_int_ (integer_of_int32 !up)) (integer_of_int32 length))
-              then void else (raise (Goto_while_0_break_exc void)));
-             try
-              (C_33:
-              (C_34:
-              begin
-                void; void; (let jessie_<somenum> = (fixed_up := !up) in void);
-               (let jessie_<somenum> = (down := !up) in void); void;
-               (assert
-               { (JC_<somenum>:
-                 lt_int(integer_of_int32(down), integer_of_int32(length))) };
-               void); void;
-               (loop_4:
-               while true do
-               { invariant (JC_<somenum>: true)  }
-                begin
-                  [ { } unit { true } ];
-                 try
-                  (C_63:
-                  (C_71:
-                  begin
-                    (if ((lt_int_ (0)) (integer_of_int32 !down))
-                    then
-                     (if ((lt_int_ (integer_of_int32 (C_56:
-                                                     ((safe_acc_ !intP_intM_a_5) 
-                                                      (C_55:
-                                                      ((shift a_2) (integer_of_int32 !down))))))) 
-                          (integer_of_int32 (C_54:
-                                            ((safe_acc_ !intP_intM_a_5) 
-                                             (C_53:
-                                             ((shift a_2) (integer_of_int32 
-                                                           (C_52:
-                                                           (safe_int32_of_integer_ 
-                                                            (C_51:
-                                                            ((sub_int 
-                                                              (integer_of_int32 !down)) (1))))))))))))
-                     then void else (raise (Goto_while_1_break_exc void)))
-                    else (raise (Goto_while_1_break_exc void))); void; void;
+          while true do
+          { invariant (JC_<somenum>: true)  }
+           begin
+             [ { } unit { true } ];
+            try
+             begin
+               (let jessie_<somenum> =
+               begin
+                 (if ((lt_int_ (integer_of_int32 !up)) (integer_of_int32 length))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                try
+                 begin
                    void; void;
-                   (let jessie_<somenum> = a_2 in
-                   (let jessie_<somenum> = !down in
-                   (let jessie_<somenum> =
-                   (C_62:
-                   (safe_int32_of_integer_ (C_61:
-                                           ((sub_int (integer_of_int32 !down)) (1))))) in
-                   (let jessie_<somenum> = length in
-                   (JC_<somenum>:
-                   ((((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_5) intP_a_5_alloc_table))))));
-                   void; void; void; void; void;
-                   (let jessie_<somenum> =
-                   (down := (C_70:
-                            (safe_int32_of_integer_ (C_69:
-                                                    ((sub_int (integer_of_int32 !down)) (1)))))) in
-                   void); void; void; void; (raise (Loop_continue_exc void))
-                  end)) with Loop_continue_exc jessie_<somenum> -> void end end done);
-               (raise (Goto_while_1_break_exc void)) end)) with
-              Goto_while_1_break_exc jessie_<somenum> ->
-              (while_1_break: begin   void; void; void end) end;
-             (let jessie_<somenum> =
-             (up := (C_78:
-                    (safe_int32_of_integer_ (C_77:
-                                            ((add_int (integer_of_int32 !up)) (1)))))) in
-             void); (fixed_up := !up); !fixed_up end)) in void);
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) with
+                  (C_33:
+                  begin
+                    (let jessie_<somenum> = (fixed_up := !up) in void);
+                   (C_34:
+                   begin
+                     (let jessie_<somenum> = (down := !up) in void); void;
+                    (assert
+                    { (JC_<somenum>:
+                      lt_int(integer_of_int32(down),
+                      integer_of_int32(length))) }; void); void;
+                    (loop_4:
+                    begin
+                      while true do
+                      { invariant (JC_<somenum>: true)  }
+                       begin
+                         [ { } unit { true } ];
+                        try
+                         begin
+                           (if ((lt_int_ (0)) (integer_of_int32 !down))
+                           then
+                            (if ((lt_int_ (integer_of_int32 (C_56:
+                                                            ((safe_acc_ !intP_intM_a_5) 
+                                                             (C_55:
+                                                             ((shift a_2) 
+                                                              (integer_of_int32 !down))))))) 
+                                 (integer_of_int32 (C_54:
+                                                   ((safe_acc_ !intP_intM_a_5) 
+                                                    (C_53:
+                                                    ((shift a_2) (integer_of_int32 
+                                                                  (C_52:
+                                                                  (safe_int32_of_integer_ 
+                                                                   (C_51:
+                                                                   ((sub_int 
+                                                                    (integer_of_int32 !down)) (1))))))))))))
+                            then void
+                            else (raise (Goto_while_1_break_exc void)))
+                           else (raise (Goto_while_1_break_exc void))); void;
+                          void; void; void;
+                          (C_63:
+                          begin
+                            (let jessie_<somenum> = a_2 in
+                            (let jessie_<somenum> = !down in
+                            (let jessie_<somenum> =
+                            (C_62:
+                            (safe_int32_of_integer_ (C_61:
+                                                    ((sub_int (integer_of_int32 !down)) (1))))) in
+                            (let jessie_<somenum> = length in
+                            (JC_<somenum>:
+                            ((((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_5) intP_a_5_alloc_table))))));
+                           void; void; void; void; void;
+                           (C_71:
+                           begin
+                             (let jessie_<somenum> =
+                             (down := (C_70:
+                                      (safe_int32_of_integer_ (C_69:
+                                                              ((sub_int 
+                                                                (integer_of_int32 !down)) (1)))))) in
+                             void); void; void; void;
+                            (raise (Loop_continue_exc void)) end) end) end
+                         with Loop_continue_exc jessie_<somenum> -> void end end done;
+                     (raise (Goto_while_1_break_exc void)) end) end) end) end
+                 with Goto_while_1_break_exc jessie_<somenum> ->
+                 (while_1_break: begin   void; void; void end) end;
+                (C_79:
+                begin
+                  (let jessie_<somenum> =
+                  (up := (C_78:
+                         (safe_int32_of_integer_ (C_77:
+                                                 ((add_int (integer_of_int32 !up)) (1)))))) in
+                  void); (C_80: begin   (fixed_up := !up); !fixed_up end) end)
+               end in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; void; (raise Return) end) end)));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
@@ -1023,117 +1035,131 @@ let bubble_sort_ensures_permutation =
      (let fixed_up = ref (any_int32 void) in
      try
       (C_22:
-      (C_23:
       begin
         (let jessie_<somenum> = (up := (safe_int32_of_integer_ (1))) in void);
-       (let jessie_<somenum> = (fixed_up := !up) in void);
-       (loop_7:
-       while true do
-       { invariant
-           (JC_<somenum>:
-           Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
-           intP_intM_a_5, intP_intM_a_5@init))  }
+       (C_23:
+       begin
+         (let jessie_<somenum> = (fixed_up := !up) in void);
+        (loop_7:
         begin
-          [ { } unit { true } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (C_79:
-            (C_80:
-            begin
-              (if ((lt_int_ (integer_of_int32 !up)) (integer_of_int32 length))
-              then void else (raise (Goto_while_0_break_exc void)));
-             try
-              (C_33:
-              (C_34:
-              begin
-                void;
-               (assert
-               { (JC_<somenum>:
-                 Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
-                 intP_intM_a_5, intP_intM_a_5@init)) }; void); void;
-               (let jessie_<somenum> = (fixed_up := !up) in void);
-               (let jessie_<somenum> = (down := !up) in void); void;
-               [ { } unit reads down
-                 { (JC_<somenum>:
-                   lt_int(integer_of_int32(down), integer_of_int32(length))) } ];
-               void;
-               (loop_8:
-               while true do
-               { invariant
-                   (JC_<somenum>:
-                   Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
-                   intP_intM_a_5, intP_intM_a_5@init))  }
-                begin
-                  [ { } unit { true } ];
-                 try
-                  (C_63:
-                  (C_71:
+          while true do
+          { invariant
+              (JC_<somenum>:
+              Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
+              intP_intM_a_5, intP_intM_a_5@init))  }
+           begin
+             [ { } unit { true } ];
+            try
+             begin
+               (let jessie_<somenum> =
+               begin
+                 (if ((lt_int_ (integer_of_int32 !up)) (integer_of_int32 length))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                try
+                 begin
+                   void;
+                  (assert
+                  { (JC_<somenum>:
+                    Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
+                    intP_intM_a_5, intP_intM_a_5@init)) }; void); void;
+                  (C_33:
                   begin
-                    (if ((lt_int_ (0)) (integer_of_int32 !down))
-                    then
-                     (if ((lt_int_ (integer_of_int32 (C_56:
-                                                     ((safe_acc_ !intP_intM_a_5) 
-                                                      (C_55:
-                                                      ((shift a_2) (integer_of_int32 !down))))))) 
-                          (integer_of_int32 (C_54:
-                                            ((safe_acc_ !intP_intM_a_5) 
-                                             (C_53:
-                                             ((shift a_2) (integer_of_int32 
-                                                           (C_52:
-                                                           (safe_int32_of_integer_ 
-                                                            (C_51:
-                                                            ((sub_int 
-                                                              (integer_of_int32 !down)) (1))))))))))))
-                     then void else (raise (Goto_while_1_break_exc void)))
-                    else (raise (Goto_while_1_break_exc void)));
-                   (assert
-                   { (JC_<somenum>:
-                     Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
-                     intP_intM_a_5, intP_intM_a_5@init)) }; void); void;
-                   void; void; void;
-                   (let jessie_<somenum> = a_2 in
-                   (let jessie_<somenum> = !down in
-                   (let jessie_<somenum> =
-                   (C_62:
-                   (safe_int32_of_integer_ (C_61:
-                                           ((sub_int (integer_of_int32 !down)) (1))))) in
-                   (let jessie_<somenum> = length in
-                   (JC_<somenum>:
-                   ((((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_5) intP_a_5_alloc_table))))));
-                   (assert
-                   { (JC_<somenum>:
-                     Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
-                     intP_intM_a_5, intP_intM_a_5@init)) }; void); void;
-                   void; void; void; void;
-                   (let jessie_<somenum> =
-                   (down := (C_70:
-                            (safe_int32_of_integer_ (C_69:
-                                                    ((sub_int (integer_of_int32 !down)) (1)))))) in
-                   void); void; void;
-                   (assert
-                   { (JC_<somenum>:
-                     Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
-                     intP_intM_a_5, intP_intM_a_5@init)) }; void); void;
-                   (raise (Loop_continue_exc void)) end)) with
-                  Loop_continue_exc jessie_<somenum> -> void end end done);
-               (raise (Goto_while_1_break_exc void)) end)) with
-              Goto_while_1_break_exc jessie_<somenum> ->
-              (while_1_break:
-              begin
-                void; void;
-               (assert
-               { (JC_<somenum>:
-                 Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
-                 intP_intM_a_5, intP_intM_a_5@init)) }; void); void end) end;
-             (let jessie_<somenum> =
-             (up := (C_78:
-                    (safe_int32_of_integer_ (C_77:
-                                            ((add_int (integer_of_int32 !up)) (1)))))) in
-             void); (fixed_up := !up); !fixed_up end)) in void);
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) with
+                    (let jessie_<somenum> = (fixed_up := !up) in void);
+                   (C_34:
+                   begin
+                     (let jessie_<somenum> = (down := !up) in void); void;
+                    [ { } unit reads down
+                      { (JC_<somenum>:
+                        lt_int(integer_of_int32(down),
+                        integer_of_int32(length))) } ]; void;
+                    (loop_8:
+                    begin
+                      while true do
+                      { invariant
+                          (JC_<somenum>:
+                          Permut(a_2, (0),
+                          sub_int(integer_of_int32(length), (1)),
+                          intP_intM_a_5, intP_intM_a_5@init))  }
+                       begin
+                         [ { } unit { true } ];
+                        try
+                         begin
+                           (if ((lt_int_ (0)) (integer_of_int32 !down))
+                           then
+                            (if ((lt_int_ (integer_of_int32 (C_56:
+                                                            ((safe_acc_ !intP_intM_a_5) 
+                                                             (C_55:
+                                                             ((shift a_2) 
+                                                              (integer_of_int32 !down))))))) 
+                                 (integer_of_int32 (C_54:
+                                                   ((safe_acc_ !intP_intM_a_5) 
+                                                    (C_53:
+                                                    ((shift a_2) (integer_of_int32 
+                                                                  (C_52:
+                                                                  (safe_int32_of_integer_ 
+                                                                   (C_51:
+                                                                   ((sub_int 
+                                                                    (integer_of_int32 !down)) (1))))))))))))
+                            then void
+                            else (raise (Goto_while_1_break_exc void)))
+                           else (raise (Goto_while_1_break_exc void)));
+                          (assert
+                          { (JC_<somenum>:
+                            Permut(a_2, (0),
+                            sub_int(integer_of_int32(length), (1)),
+                            intP_intM_a_5, intP_intM_a_5@init)) }; void);
+                          void; void; void; void;
+                          (C_63:
+                          begin
+                            (let jessie_<somenum> = a_2 in
+                            (let jessie_<somenum> = !down in
+                            (let jessie_<somenum> =
+                            (C_62:
+                            (safe_int32_of_integer_ (C_61:
+                                                    ((sub_int (integer_of_int32 !down)) (1))))) in
+                            (let jessie_<somenum> = length in
+                            (JC_<somenum>:
+                            ((((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_5) intP_a_5_alloc_table))))));
+                           (assert
+                           { (JC_<somenum>:
+                             Permut(a_2, (0),
+                             sub_int(integer_of_int32(length), (1)),
+                             intP_intM_a_5, intP_intM_a_5@init)) }; void);
+                           void; void; void; void; void;
+                           (C_71:
+                           begin
+                             (let jessie_<somenum> =
+                             (down := (C_70:
+                                      (safe_int32_of_integer_ (C_69:
+                                                              ((sub_int 
+                                                                (integer_of_int32 !down)) (1)))))) in
+                             void); void; void;
+                            (assert
+                            { (JC_<somenum>:
+                              Permut(a_2, (0),
+                              sub_int(integer_of_int32(length), (1)),
+                              intP_intM_a_5, intP_intM_a_5@init)) }; void);
+                            void; (raise (Loop_continue_exc void)) end) end)
+                         end with Loop_continue_exc jessie_<somenum> -> void end end
+                      done; (raise (Goto_while_1_break_exc void)) end) end)
+                  end) end with Goto_while_1_break_exc jessie_<somenum> ->
+                 (while_1_break:
+                 begin
+                   void; void;
+                  (assert
+                  { (JC_<somenum>:
+                    Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
+                    intP_intM_a_5, intP_intM_a_5@init)) }; void); void end) end;
+                (C_79:
+                begin
+                  (let jessie_<somenum> =
+                  (up := (C_78:
+                         (safe_int32_of_integer_ (C_77:
+                                                 ((add_int (integer_of_int32 !up)) (1)))))) in
+                  void); (C_80: begin   (fixed_up := !up); !fixed_up end) end)
+               end in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin
@@ -1163,209 +1189,231 @@ let bubble_sort_ensures_sorted =
      (let fixed_up = ref (any_int32 void) in
      try
       (C_22:
-      (C_23:
       begin
         (let jessie_<somenum> = (up := (safe_int32_of_integer_ (1))) in void);
-       (let jessie_<somenum> = (fixed_up := !up) in void);
-       (loop_5:
-       while true do
-       { invariant
-           ((JC_<somenum>:
-            (forall k_2:int.
-             ((lt_int(integer_of_int32(up), k_2)
-              and lt_int(k_2, integer_of_int32(length))) ->
-              (integer_of_int32(select(intP_intM_a_5, shift(a_2, k_2))) = 
-              integer_of_int32(select(intP_intM_a_5@init, shift(a_2, k_2)))))))
-           and ((JC_<somenum>:
-                sorted(a_2, (0), sub_int(integer_of_int32(up), (1)),
-                intP_intM_a_5))
-               and ((JC_<somenum>:
-                    ((JC_<somenum>: lt_int((0), integer_of_int32(up)))
-                    and (JC_<somenum>:
-                        le_int(integer_of_int32(up),
-                        integer_of_int32(length)))))
-                   and (JC_<somenum>:
-                       (integer_of_int32(fixed_up) = integer_of_int32(up))))))
-          }
+       (C_23:
+       begin
+         (let jessie_<somenum> = (fixed_up := !up) in void);
+        (loop_5:
         begin
-          [ { } unit { true } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (C_79:
-            (C_80:
-            begin
-              (if ((lt_int_ (integer_of_int32 !up)) (integer_of_int32 length))
-              then void else (raise (Goto_while_0_break_exc void)));
-             try
-              (C_33:
-              (C_34:
-              begin
-                (assert
-                { (JC_<somenum>:
-                  sorted(a_2, (0), sub_int(integer_of_int32(up), (1)),
-                  intP_intM_a_5)) }; void); void; void;
-               (let jessie_<somenum> = (fixed_up := !up) in void);
-               (let jessie_<somenum> = (down := !up) in void);
-               (assert
-               { (JC_<somenum>:
-                 sorted(a_2, integer_of_int32(down), integer_of_int32(up),
-                 intP_intM_a_5)) }; void); void;
-               [ { } unit reads down
-                 { (JC_<somenum>:
-                   lt_int(integer_of_int32(down), integer_of_int32(length))) } ];
-               void;
-               (loop_6:
-               while true do
-               { invariant
-                   ((JC_<somenum>:
-                    ((lt_int((0), integer_of_int32(down))
-                     and lt_int(integer_of_int32(down), integer_of_int32(up))) ->
-                     le_int(integer_of_int32(select(intP_intM_a_5,
-                                             shift(a_2,
-                                             sub_int(integer_of_int32(down),
-                                             (1))))),
-                     integer_of_int32(select(intP_intM_a_5,
-                                      shift(a_2,
-                                      add_int(integer_of_int32(down), (1))))))))
-                   and ((JC_<somenum>:
-                        (forall k_1:int.
-                         ((lt_int(integer_of_int32(up), k_1)
-                          and lt_int(k_1, integer_of_int32(length))) ->
-                          (integer_of_int32(select(intP_intM_a_5,
-                                            shift(a_2, k_1))) = integer_of_int32(
-                                                                select(intP_intM_a_5@init,
-                                                                shift(a_2,
-                                                                k_1)))))))
-                       and ((JC_<somenum>:
-                            sorted(a_2, integer_of_int32(down),
-                            integer_of_int32(up), intP_intM_a_5))
-                           and ((JC_<somenum>:
-                                sorted(a_2, (0),
-                                sub_int(integer_of_int32(down), (1)),
-                                intP_intM_a_5))
-                               and ((JC_<somenum>:
-                                    ((JC_<somenum>:
-                                     le_int((0), integer_of_int32(down)))
-                                    and ((JC_<somenum>:
-                                         le_int(integer_of_int32(down),
-                                         integer_of_int32(up)))
-                                        and (JC_<somenum>:
-                                            lt_int(integer_of_int32(up),
-                                            integer_of_int32(length))))))
-                                   and ((JC_<somenum>:
-                                        ((JC_<somenum>:
-                                         le_int((0), integer_of_int32(down)))
-                                        and (JC_<somenum>:
-                                            lt_int(integer_of_int32(down),
-                                            integer_of_int32(length)))))
-                                       and (JC_<somenum>:
-                                           (integer_of_int32(fixed_up) = 
-                                           integer_of_int32(up))))))))) 
-                  }
-                begin
-                  [ { } unit { true } ];
-                 try
-                  (C_63:
-                  (C_71:
+          while true do
+          { invariant
+              ((JC_<somenum>:
+               (forall k_2:int.
+                ((lt_int(integer_of_int32(up), k_2)
+                 and lt_int(k_2, integer_of_int32(length))) ->
+                 (integer_of_int32(select(intP_intM_a_5, shift(a_2, k_2))) = 
+                 integer_of_int32(select(intP_intM_a_5@init, shift(a_2, k_2)))))))
+              and ((JC_<somenum>:
+                   sorted(a_2, (0), sub_int(integer_of_int32(up), (1)),
+                   intP_intM_a_5))
+                  and ((JC_<somenum>:
+                       ((JC_<somenum>: lt_int((0), integer_of_int32(up)))
+                       and (JC_<somenum>:
+                           le_int(integer_of_int32(up),
+                           integer_of_int32(length)))))
+                      and (JC_<somenum>:
+                          (integer_of_int32(fixed_up) = integer_of_int32(up))))))
+             }
+           begin
+             [ { } unit { true } ];
+            try
+             begin
+               (let jessie_<somenum> =
+               begin
+                 (if ((lt_int_ (integer_of_int32 !up)) (integer_of_int32 length))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                try
+                 begin
+                   (assert
+                   { (JC_<somenum>:
+                     sorted(a_2, (0), sub_int(integer_of_int32(up), (1)),
+                     intP_intM_a_5)) }; void); void; void;
+                  (C_33:
                   begin
-                    (if ((lt_int_ (0)) (integer_of_int32 !down))
-                    then
-                     (if ((lt_int_ (integer_of_int32 (C_56:
-                                                     ((safe_acc_ !intP_intM_a_5) 
-                                                      (C_55:
-                                                      ((shift a_2) (integer_of_int32 !down))))))) 
-                          (integer_of_int32 (C_54:
-                                            ((safe_acc_ !intP_intM_a_5) 
-                                             (C_53:
-                                             ((shift a_2) (integer_of_int32 
-                                                           (C_52:
-                                                           (safe_int32_of_integer_ 
-                                                            (C_51:
-                                                            ((sub_int 
-                                                              (integer_of_int32 !down)) (1))))))))))))
-                     then void else (raise (Goto_while_1_break_exc void)))
-                    else (raise (Goto_while_1_break_exc void))); void;
-                   (assert
-                   { (JC_<somenum>:
-                     sorted(a_2, (0), sub_int(integer_of_int32(down), (1)),
-                     intP_intM_a_5)) }; void); void;
-                   (assert
-                   { (JC_<somenum>:
-                     sorted(a_2, integer_of_int32(down),
-                     integer_of_int32(up), intP_intM_a_5)) }; void); void;
-                   (assert
-                   { (JC_<somenum>:
-                     lt_int(integer_of_int32(select(intP_intM_a_5,
+                    (let jessie_<somenum> = (fixed_up := !up) in void);
+                   (C_34:
+                   begin
+                     (let jessie_<somenum> = (down := !up) in void);
+                    (assert
+                    { (JC_<somenum>:
+                      sorted(a_2, integer_of_int32(down),
+                      integer_of_int32(up), intP_intM_a_5)) }; void); void;
+                    [ { } unit reads down
+                      { (JC_<somenum>:
+                        lt_int(integer_of_int32(down),
+                        integer_of_int32(length))) } ]; void;
+                    (loop_6:
+                    begin
+                      while true do
+                      { invariant
+                          ((JC_<somenum>:
+                           ((lt_int((0), integer_of_int32(down))
+                            and lt_int(integer_of_int32(down),
+                                integer_of_int32(up))) ->
+                            le_int(integer_of_int32(select(intP_intM_a_5,
+                                                    shift(a_2,
+                                                    sub_int(integer_of_int32(down),
+                                                    (1))))),
+                            integer_of_int32(select(intP_intM_a_5,
                                              shift(a_2,
-                                             integer_of_int32(down)))),
-                     integer_of_int32(select(intP_intM_a_5,
-                                      shift(a_2,
-                                      sub_int(integer_of_int32(down), (1))))))) };
-                   void); void;
-                   (let jessie_<somenum> = a_2 in
-                   (let jessie_<somenum> = !down in
-                   (let jessie_<somenum> =
-                   (C_62:
-                   (safe_int32_of_integer_ (C_61:
-                                           ((sub_int (integer_of_int32 !down)) (1))))) in
-                   (let jessie_<somenum> = length in
-                   (JC_<somenum>:
-                   ((((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_5) intP_a_5_alloc_table))))));
-                   void;
-                   (assert
-                   { (JC_<somenum>:
-                     le_int(integer_of_int32(select(intP_intM_a_5,
+                                             add_int(integer_of_int32(down),
+                                             (1))))))))
+                          and ((JC_<somenum>:
+                               (forall k_1:int.
+                                ((lt_int(integer_of_int32(up), k_1)
+                                 and lt_int(k_1, integer_of_int32(length))) ->
+                                 (integer_of_int32(select(intP_intM_a_5,
+                                                   shift(a_2, k_1))) = 
+                                 integer_of_int32(select(intP_intM_a_5@init,
+                                                  shift(a_2, k_1)))))))
+                              and ((JC_<somenum>:
+                                   sorted(a_2, integer_of_int32(down),
+                                   integer_of_int32(up), intP_intM_a_5))
+                                  and ((JC_<somenum>:
+                                       sorted(a_2, (0),
+                                       sub_int(integer_of_int32(down), (1)),
+                                       intP_intM_a_5))
+                                      and ((JC_<somenum>:
+                                           ((JC_<somenum>:
+                                            le_int((0),
+                                            integer_of_int32(down)))
+                                           and ((JC_<somenum>:
+                                                le_int(integer_of_int32(down),
+                                                integer_of_int32(up)))
+                                               and (JC_<somenum>:
+                                                   lt_int(integer_of_int32(up),
+                                                   integer_of_int32(length))))))
+                                          and ((JC_<somenum>:
+                                               ((JC_<somenum>:
+                                                le_int((0),
+                                                integer_of_int32(down)))
+                                               and (JC_<somenum>:
+                                                   lt_int(integer_of_int32(down),
+                                                   integer_of_int32(length)))))
+                                              and (JC_<somenum>:
+                                                  (integer_of_int32(fixed_up) = 
+                                                  integer_of_int32(up)))))))))
+                         }
+                       begin
+                         [ { } unit { true } ];
+                        try
+                         begin
+                           (if ((lt_int_ (0)) (integer_of_int32 !down))
+                           then
+                            (if ((lt_int_ (integer_of_int32 (C_56:
+                                                            ((safe_acc_ !intP_intM_a_5) 
+                                                             (C_55:
+                                                             ((shift a_2) 
+                                                              (integer_of_int32 !down))))))) 
+                                 (integer_of_int32 (C_54:
+                                                   ((safe_acc_ !intP_intM_a_5) 
+                                                    (C_53:
+                                                    ((shift a_2) (integer_of_int32 
+                                                                  (C_52:
+                                                                  (safe_int32_of_integer_ 
+                                                                   (C_51:
+                                                                   ((sub_int 
+                                                                    (integer_of_int32 !down)) (1))))))))))))
+                            then void
+                            else (raise (Goto_while_1_break_exc void)))
+                           else (raise (Goto_while_1_break_exc void))); void;
+                          (assert
+                          { (JC_<somenum>:
+                            sorted(a_2, (0),
+                            sub_int(integer_of_int32(down), (1)),
+                            intP_intM_a_5)) }; void); void;
+                          (assert
+                          { (JC_<somenum>:
+                            sorted(a_2, integer_of_int32(down),
+                            integer_of_int32(up), intP_intM_a_5)) }; void);
+                          void;
+                          (assert
+                          { (JC_<somenum>:
+                            lt_int(integer_of_int32(select(intP_intM_a_5,
+                                                    shift(a_2,
+                                                    integer_of_int32(down)))),
+                            integer_of_int32(select(intP_intM_a_5,
                                              shift(a_2,
                                              sub_int(integer_of_int32(down),
-                                             (1))))),
-                     integer_of_int32(select(intP_intM_a_5,
-                                      shift(a_2, integer_of_int32(down)))))) };
-                   void); void;
-                   (assert
-                   { (JC_<somenum>:
-                     sorted(a_2, (0), sub_int(integer_of_int32(down), (2)),
-                     intP_intM_a_5)) }; void); void;
-                   (assert
-                   { (JC_<somenum>:
-                     sorted(a_2, integer_of_int32(down),
-                     integer_of_int32(up), intP_intM_a_5)) }; void); void;
-                   (assert
-                   { (JC_<somenum>:
-                     sorted(a_2, sub_int(integer_of_int32(down), (1)),
-                     integer_of_int32(up), intP_intM_a_5)) }; void); void;
-                   (let jessie_<somenum> =
-                   (down := (C_70:
-                            (safe_int32_of_integer_ (C_69:
-                                                    ((sub_int (integer_of_int32 !down)) (1)))))) in
-                   void);
-                   (assert
-                   { (JC_<somenum>:
-                     sorted(a_2, (0), sub_int(integer_of_int32(down), (1)),
-                     intP_intM_a_5)) }; void); void;
-                   (assert
-                   { (JC_<somenum>:
-                     sorted(a_2, integer_of_int32(down),
-                     integer_of_int32(up), intP_intM_a_5)) }; void); void;
-                   void; (raise (Loop_continue_exc void)) end)) with
-                  Loop_continue_exc jessie_<somenum> -> void end end done);
-               (raise (Goto_while_1_break_exc void)) end)) with
-              Goto_while_1_break_exc jessie_<somenum> ->
-              (while_1_break:
-              begin
-                void;
-               (assert
-               { (JC_<somenum>:
-                 sorted(a_2, (0), integer_of_int32(up), intP_intM_a_5)) };
-               void); void; void end) end;
-             (let jessie_<somenum> =
-             (up := (C_78:
-                    (safe_int32_of_integer_ (C_77:
-                                            ((add_int (integer_of_int32 !up)) (1)))))) in
-             void); (fixed_up := !up); !fixed_up end)) in void);
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) with
+                                             (1))))))) }; void); void;
+                          (C_63:
+                          begin
+                            (let jessie_<somenum> = a_2 in
+                            (let jessie_<somenum> = !down in
+                            (let jessie_<somenum> =
+                            (C_62:
+                            (safe_int32_of_integer_ (C_61:
+                                                    ((sub_int (integer_of_int32 !down)) (1))))) in
+                            (let jessie_<somenum> = length in
+                            (JC_<somenum>:
+                            ((((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_5) intP_a_5_alloc_table))))));
+                           void;
+                           (assert
+                           { (JC_<somenum>:
+                             le_int(integer_of_int32(select(intP_intM_a_5,
+                                                     shift(a_2,
+                                                     sub_int(integer_of_int32(down),
+                                                     (1))))),
+                             integer_of_int32(select(intP_intM_a_5,
+                                              shift(a_2,
+                                              integer_of_int32(down)))))) };
+                           void); void;
+                           (assert
+                           { (JC_<somenum>:
+                             sorted(a_2, (0),
+                             sub_int(integer_of_int32(down), (2)),
+                             intP_intM_a_5)) }; void); void;
+                           (assert
+                           { (JC_<somenum>:
+                             sorted(a_2, integer_of_int32(down),
+                             integer_of_int32(up), intP_intM_a_5)) }; void);
+                           void;
+                           (assert
+                           { (JC_<somenum>:
+                             sorted(a_2,
+                             sub_int(integer_of_int32(down), (1)),
+                             integer_of_int32(up), intP_intM_a_5)) }; void);
+                           void;
+                           (C_71:
+                           begin
+                             (let jessie_<somenum> =
+                             (down := (C_70:
+                                      (safe_int32_of_integer_ (C_69:
+                                                              ((sub_int 
+                                                                (integer_of_int32 !down)) (1)))))) in
+                             void);
+                            (assert
+                            { (JC_<somenum>:
+                              sorted(a_2, (0),
+                              sub_int(integer_of_int32(down), (1)),
+                              intP_intM_a_5)) }; void); void;
+                            (assert
+                            { (JC_<somenum>:
+                              sorted(a_2, integer_of_int32(down),
+                              integer_of_int32(up), intP_intM_a_5)) }; void);
+                            void; void; (raise (Loop_continue_exc void)) end)
+                          end) end with Loop_continue_exc jessie_<somenum> ->
+                         void end end done;
+                     (raise (Goto_while_1_break_exc void)) end) end) end) end
+                 with Goto_while_1_break_exc jessie_<somenum> ->
+                 (while_1_break:
+                 begin
+                   void;
+                  (assert
+                  { (JC_<somenum>:
+                    sorted(a_2, (0), integer_of_int32(up), intP_intM_a_5)) };
+                  void); void; void end) end;
+                (C_79:
+                begin
+                  (let jessie_<somenum> =
+                  (up := (C_78:
+                         (safe_int32_of_integer_ (C_77:
+                                                 ((add_int (integer_of_int32 !up)) (1)))))) in
+                  void); (C_80: begin   (fixed_up := !up); !fixed_up end) end)
+               end in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; void; (raise Return) end) end)));
     (raise Return) end with Return -> void end)
@@ -1388,90 +1436,100 @@ let bubble_sort_safety =
      (let fixed_up = ref (any_int32 void) in
      try
       (C_22:
-      (C_23:
       begin
         (let jessie_<somenum> = (up := (safe_int32_of_integer_ (1))) in void);
-       (let jessie_<somenum> = (fixed_up := !up) in void);
-       (loop_1:
-       while true do
-       { invariant (JC_<somenum>: true)  }
+       (C_23:
+       begin
+         (let jessie_<somenum> = (fixed_up := !up) in void);
+        (loop_1:
         begin
-          [ { } unit { true } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (C_79:
-            (C_80:
-            begin
-              (if ((lt_int_ (integer_of_int32 !up)) (integer_of_int32 length))
-              then void else (raise (Goto_while_0_break_exc void)));
-             try
-              (C_33:
-              (C_34:
-              begin
-                void; void; (let jessie_<somenum> = (fixed_up := !up) in void);
-               (let jessie_<somenum> = (down := !up) in void); void;
-               [ { } unit reads down
-                 { (JC_<somenum>:
-                   lt_int(integer_of_int32(down), integer_of_int32(length))) } ];
-               void;
-               (loop_2:
-               while true do
-               { invariant (JC_<somenum>: true)  }
-                begin
-                  [ { } unit { true } ];
-                 try
-                  (C_63:
-                  (C_71:
-                  begin
-                    (if ((lt_int_ (0)) (integer_of_int32 !down))
-                    then
-                     (if ((lt_int_ (integer_of_int32 (C_56:
-                                                     (JC_<somenum>:
-                                                     ((((offset_acc_ intP_a_5_alloc_table) !intP_intM_a_5) a_2) 
-                                                      (integer_of_int32 !down)))))) 
-                          (integer_of_int32 (C_54:
-                                            (JC_<somenum>:
-                                            ((((offset_acc_ intP_a_5_alloc_table) !intP_intM_a_5) a_2) 
-                                             (integer_of_int32 (C_52:
-                                                               (JC_<somenum>:
-                                                               (int32_of_integer_ 
-                                                                (C_51:
-                                                                ((sub_int 
-                                                                  (integer_of_int32 !down)) (1))))))))))))
-                     then void else (raise (Goto_while_1_break_exc void)))
-                    else (raise (Goto_while_1_break_exc void))); void; void;
+          while true do
+          { invariant (JC_<somenum>: true)  }
+           begin
+             [ { } unit { true } ];
+            try
+             begin
+               (let jessie_<somenum> =
+               begin
+                 (if ((lt_int_ (integer_of_int32 !up)) (integer_of_int32 length))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                try
+                 begin
                    void; void;
-                   (let jessie_<somenum> = a_2 in
-                   (let jessie_<somenum> = !down in
-                   (let jessie_<somenum> =
-                   (C_62:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_61:
-                                      ((sub_int (integer_of_int32 !down)) (1)))))) in
-                   (let jessie_<somenum> = length in
-                   (JC_<somenum>:
-                   ((((((swap_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_5) intP_a_5_alloc_table))))));
-                   void; void; void; void; void;
-                   (let jessie_<somenum> =
-                   (down := (C_70:
+                  (C_33:
+                  begin
+                    (let jessie_<somenum> = (fixed_up := !up) in void);
+                   (C_34:
+                   begin
+                     (let jessie_<somenum> = (down := !up) in void); void;
+                    [ { } unit reads down
+                      { (JC_<somenum>:
+                        lt_int(integer_of_int32(down),
+                        integer_of_int32(length))) } ]; void;
+                    (loop_2:
+                    begin
+                      while true do
+                      { invariant (JC_<somenum>: true)  }
+                       begin
+                         [ { } unit { true } ];
+                        try
+                         begin
+                           (if ((lt_int_ (0)) (integer_of_int32 !down))
+                           then
+                            (if ((lt_int_ (integer_of_int32 (C_56:
+                                                            (JC_<somenum>:
+                                                            ((((offset_acc_ intP_a_5_alloc_table) !intP_intM_a_5) a_2) 
+                                                             (integer_of_int32 !down)))))) 
+                                 (integer_of_int32 (C_54:
+                                                   (JC_<somenum>:
+                                                   ((((offset_acc_ intP_a_5_alloc_table) !intP_intM_a_5) a_2) 
+                                                    (integer_of_int32 
+                                                     (C_52:
+                                                     (JC_<somenum>:
+                                                     (int32_of_integer_ 
+                                                      (C_51:
+                                                      ((sub_int (integer_of_int32 !down)) (1))))))))))))
+                            then void
+                            else (raise (Goto_while_1_break_exc void)))
+                           else (raise (Goto_while_1_break_exc void))); void;
+                          void; void; void;
+                          (C_63:
+                          begin
+                            (let jessie_<somenum> = a_2 in
+                            (let jessie_<somenum> = !down in
+                            (let jessie_<somenum> =
+                            (C_62:
                             (JC_<somenum>:
-                            (int32_of_integer_ (C_69:
-                                               ((sub_int (integer_of_int32 !down)) (1))))))) in
-                   void); void; void; void; (raise (Loop_continue_exc void))
-                  end)) with Loop_continue_exc jessie_<somenum> -> void end end done);
-               (raise (Goto_while_1_break_exc void)) end)) with
-              Goto_while_1_break_exc jessie_<somenum> ->
-              (while_1_break: begin   void; void; void end) end;
-             (let jessie_<somenum> =
-             (up := (C_78:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (C_77:
-                                       ((add_int (integer_of_int32 !up)) (1))))))) in
-             void); (fixed_up := !up); !fixed_up end)) in void);
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) with
+                            (int32_of_integer_ (C_61:
+                                               ((sub_int (integer_of_int32 !down)) (1)))))) in
+                            (let jessie_<somenum> = length in
+                            (JC_<somenum>:
+                            ((((((swap_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_5) intP_a_5_alloc_table))))));
+                           void; void; void; void; void;
+                           (C_71:
+                           begin
+                             (let jessie_<somenum> =
+                             (down := (C_70:
+                                      (JC_<somenum>:
+                                      (int32_of_integer_ (C_69:
+                                                         ((sub_int (integer_of_int32 !down)) (1))))))) in
+                             void); void; void; void;
+                            (raise (Loop_continue_exc void)) end) end) end
+                         with Loop_continue_exc jessie_<somenum> -> void end end done;
+                     (raise (Goto_while_1_break_exc void)) end) end) end) end
+                 with Goto_while_1_break_exc jessie_<somenum> ->
+                 (while_1_break: begin   void; void; void end) end;
+                (C_79:
+                begin
+                  (let jessie_<somenum> =
+                  (up := (C_78:
+                         (JC_<somenum>:
+                         (int32_of_integer_ (C_77:
+                                            ((add_int (integer_of_int32 !up)) (1))))))) in
+                  void); (C_80: begin   (fixed_up := !up); !fixed_up end) end)
+               end in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; void; (raise Return) end) end)));
     (raise Return) end with Return -> void end) { true }
@@ -1492,29 +1550,32 @@ let swap_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      (C_3:
-     (C_8:
-     (C_11:
      begin
        (let jessie_<somenum> =
        (tmp := (C_2:
                ((safe_acc_ !intP_intM_t_4) (C_1:
                                            ((shift t) (integer_of_int32 i)))))) in
        void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> =
-      (C_5:
-      ((safe_acc_ !intP_intM_t_4) (C_4: ((shift t) (integer_of_int32 j))))) in
-      (let jessie_<somenum> = t in
-      (let jessie_<somenum> = (integer_of_int32 i) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (((safe_upd_ intP_intM_t_4) jessie_<somenum>) jessie_<somenum>))))) in void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> = !tmp in
-      (let jessie_<somenum> = t in
-      (let jessie_<somenum> = (integer_of_int32 j) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (((safe_upd_ intP_intM_t_4) jessie_<somenum>) jessie_<somenum>))))) in void);
-      (raise Return) end)))); (raise Return) end with Return -> void end)
+      (C_8:
+      begin
+        (let jessie_<somenum> =
+        (let jessie_<somenum> =
+        (C_5:
+        ((safe_acc_ !intP_intM_t_4) (C_4: ((shift t) (integer_of_int32 j))))) in
+        (let jessie_<somenum> = t in
+        (let jessie_<somenum> = (integer_of_int32 i) in
+        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+        (((safe_upd_ intP_intM_t_4) jessie_<somenum>) jessie_<somenum>))))) in void);
+       (C_11:
+       begin
+         (let jessie_<somenum> =
+         (let jessie_<somenum> = !tmp in
+         (let jessie_<somenum> = t in
+         (let jessie_<somenum> = (integer_of_int32 j) in
+         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+         (((safe_upd_ intP_intM_t_4) jessie_<somenum>) jessie_<somenum>))))) in void);
+        (raise Return) end) end) end)); (raise Return) end with Return ->
+   void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      (forall k_0:int.
@@ -1546,34 +1607,36 @@ let swap_safety =
    begin
      (let tmp = ref (any_int32 void) in
      (C_3:
-     (C_8:
-     (C_11:
      begin
        (let jessie_<somenum> =
        (tmp := (C_2:
                (JC_<somenum>:
                ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) 
                 (integer_of_int32 i))))) in void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> =
-      (C_5:
-      (JC_<somenum>:
-      ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) (integer_of_int32 j)))) in
-      (let jessie_<somenum> = t in
-      (let jessie_<somenum> = (integer_of_int32 i) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (JC_<somenum>:
-      (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-      void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> = !tmp in
-      (let jessie_<somenum> = t in
-      (let jessie_<somenum> = (integer_of_int32 j) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (JC_<somenum>:
-      (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-      void); (raise Return) end)))); (raise Return) end with Return ->
-   void end) { true }
+      (C_8:
+      begin
+        (let jessie_<somenum> =
+        (let jessie_<somenum> =
+        (C_5:
+        (JC_<somenum>:
+        ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) (integer_of_int32 j)))) in
+        (let jessie_<somenum> = t in
+        (let jessie_<somenum> = (integer_of_int32 i) in
+        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+        (JC_<somenum>:
+        (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+        void);
+       (C_11:
+       begin
+         (let jessie_<somenum> =
+         (let jessie_<somenum> = !tmp in
+         (let jessie_<somenum> = t in
+         (let jessie_<somenum> = (integer_of_int32 j) in
+         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+         (JC_<somenum>:
+         (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+         void); (raise Return) end) end) end)); (raise Return) end with
+   Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bubble_sort.jessie --quiet -f bubble_sort.makefile project

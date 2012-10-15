@@ -809,18 +809,19 @@ let main_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_8:
-     (C_11:
      begin
        (let jessie_<somenum> =
        (C_7: ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1)) in
        (JC_<somenum>:
        (((g jessie_<somenum>) __anonstruct_las2_1_a_v1_1) !__anonstruct_las2_1_v1_1_alloc_table)));
-      (let jessie_<somenum> =
-      (__retres := (C_10:
-                   ((safe_acc_ !__anonstruct_las2_1_a_v1_1) (C_9:
-                                                            ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1))))) in
-      void); (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end))
+      (C_11:
+      begin
+        (let jessie_<somenum> =
+        (__retres := (C_10:
+                     ((safe_acc_ !__anonstruct_las2_1_a_v1_1) (C_9:
+                                                              ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1))))) in
+        void); (return := !__retres); (raise Return) end) end)); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      (integer_of_int32(select(__anonstruct_las2_1_a_v1_1,
@@ -849,18 +850,19 @@ let main_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_8:
-     (C_11:
      begin
        (let jessie_<somenum> =
        (C_7: ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1)) in
        (JC_<somenum>:
        (((g_requires jessie_<somenum>) __anonstruct_las2_1_a_v1_1) !__anonstruct_las2_1_v1_1_alloc_table)));
-      (let jessie_<somenum> =
-      (__retres := (C_10:
-                   ((safe_acc_ !__anonstruct_las2_1_a_v1_1) (C_9:
-                                                            ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1))))) in
-      void); (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end))
+      (C_11:
+      begin
+        (let jessie_<somenum> =
+        (__retres := (C_10:
+                     ((safe_acc_ !__anonstruct_las2_1_a_v1_1) (C_9:
+                                                              ((safe_acc_ !__anonstruct_las1_2_s_v1_1) v1))))) in
+        void); (return := !__retres); (raise Return) end) end)); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>: valid_v1(__anonstruct_las1_2_v1_1_alloc_table)) }
 
 

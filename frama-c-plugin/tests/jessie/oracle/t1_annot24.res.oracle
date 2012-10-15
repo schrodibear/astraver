@@ -2323,168 +2323,177 @@ let fake_ensures_Buchi_property_behavior =
      (let tmp_0 = ref (any_int32 void) in
      (let tmp_1 = ref (any_int32 void) in
      (C_3:
-     (C_4:
-     (C_5:
-     (C_8:
-     (C_11:
-     (C_14:
-     (C_17:
-     (C_20:
-     (C_40:
      begin
        (let jessie_<somenum> =
        (rr := (C_2:
               (safe_int32_of_integer_ (C_1:
                                       ((add_int (integer_of_int32 !rr)) (1)))))) in
        void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (C_6:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> =
-      (C_9:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurStates_old_3_alloc_table,intP_intM_buch_CurStates_old_3
-        writes intP_intM_buch_CurStates_old_3
-        { (not_assigns(intP_buch_CurStates_old_3_alloc_table,
-           intP_intM_buch_CurStates_old_3@, intP_intM_buch_CurStates_old_3,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_buch_CurStates_old_3,
-                shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_buch_CurStates_old_3,
-                   shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> =
-      (C_12:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> =
-      (C_15:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> =
-      (C_18:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurTrans_tmp_4_alloc_table,intP_intM_buch_CurTrans_tmp_4
-        writes intP_intM_buch_CurTrans_tmp_4
-        { (not_assigns(intP_buch_CurTrans_tmp_4_alloc_table,
-           intP_intM_buch_CurTrans_tmp_4@, intP_intM_buch_CurTrans_tmp_4,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_buch_CurTrans_tmp_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_buch_CurTrans_tmp_4,
-                       shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
+      (C_4:
       begin
         (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_24:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then (C_23: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-         else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-        else (C_21: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-        void);
-       (C_26:
-       (let jessie_<somenum> = !tmp in
+        (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in void);
+       (C_5:
        begin
-         (let jessie_<somenum> = buch_CurStates in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        void;
-       (C_30:
-       (let jessie_<somenum> =
-       (C_28:
-       (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 (C_27:
-                                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                                                 ((shift buch_CurStates_old) (1)))))) (0))
-                               then (1) else (0)))) in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_36:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (if ((neq_int_ (integer_of_int32 (C_35:
-                                           ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                            ((shift buch_CurStates) (0)))))) (0))
-          then
-           (C_34:
-           begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
-          else
-           (C_33:
-           begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
-         else
-          (C_32: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
-        else
-         (C_31: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
-        void);
-       (C_38:
-       (let jessie_<somenum> = !tmp_0 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = buch_CurTrans in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_45:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (1)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_44:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_43: begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
-         else
-          (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
-        else
-         (C_41: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
-        void);
-       (C_47:
-       (let jessie_<somenum> = !tmp_1 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void); (raise Return) end))))))))))));
-    (raise Return) end with Return -> void end)
+         (let jessie_<somenum> =
+         (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+         void);
+        (C_8:
+        begin
+          (let jessie_<somenum> =
+          (C_6:
+          ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+          (let jessie_<somenum> = buch_CurStates_old in
+          (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>)));
+         (C_11:
+         begin
+           (let jessie_<somenum> =
+           (C_9:
+           ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+           (let jessie_<somenum> = buch_CurStates_old in
+           (let jessie_<somenum> = (1) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+           (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>))))));
+          (C_14:
+          begin
+            (let jessie_<somenum> =
+            (C_12:
+            ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+            (let jessie_<somenum> = buch_CurTrans_tmp in
+            (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>)));
+           (C_17:
+           begin
+             (let jessie_<somenum> =
+             (C_15:
+             ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+             (let jessie_<somenum> = buch_CurTrans_tmp in
+             (let jessie_<somenum> = (1) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+             (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+            (C_20:
+            begin
+              (let jessie_<somenum> =
+              (C_18:
+              ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+              (let jessie_<somenum> = buch_CurTrans_tmp in
+              (let jessie_<somenum> = (2) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+              (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_24:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (C_23:
+                 begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+                else
+                 (C_22:
+                 begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
+               else
+                (C_21:
+                begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
+               void);
+              (C_26:
+              (let jessie_<somenum> = !tmp in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               void;
+              (C_30:
+              (let jessie_<somenum> =
+              (C_28:
+              (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 
+                                                      (C_27:
+                                                      ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                       ((shift buch_CurStates_old) (1)))))) (0))
+                                      then (1) else (0)))) in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (let jessie_<somenum> = (1) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_36:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_35:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (0)))))) (0))
+                 then
+                  (C_34:
+                  begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
+                 else
+                  (C_33:
+                  begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
+                else
+                 (C_32:
+                 begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
+               else
+                (C_31:
+                begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+               void);
+              (C_38:
+              (let jessie_<somenum> = !tmp_0 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (C_40:
+             begin
+               (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+               (let jessie_<somenum> = buch_CurTrans in
+               (let jessie_<somenum> = (1) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+               (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
+              (let jessie_<somenum> =
+              begin
+                (let jessie_<somenum> =
+                (if ((neq_int_ (integer_of_int32 (C_45:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (1)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_44:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (1)))))) (0))
+                 then
+                  (C_43:
+                  begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
+                 else
+                  (C_42:
+                  begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
+                else
+                 (C_41:
+                 begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
+                void);
+               (C_47:
+               (let jessie_<somenum> = !tmp_1 in
+               begin
+                 (let jessie_<somenum> = buch_CurTrans in
+                 (let jessie_<somenum> = (2) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                 (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+                jessie_<somenum> end)) end in void); (raise Return) end) end) end)
+          end) end) end) end) end) end)))); (raise Return) end with Return ->
+   void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
@@ -2623,167 +2632,177 @@ let fake_ensures_default =
      (let tmp_0 = ref (any_int32 void) in
      (let tmp_1 = ref (any_int32 void) in
      (C_3:
-     (C_4:
-     (C_5:
-     (C_8:
-     (C_11:
-     (C_14:
-     (C_17:
-     (C_20:
-     (C_40:
      begin
        (let jessie_<somenum> =
        (rr := (C_2:
               (safe_int32_of_integer_ (C_1:
                                       ((add_int (integer_of_int32 !rr)) (1)))))) in
        void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (C_6:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> =
-      (C_9:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurStates_old_3_alloc_table,intP_intM_buch_CurStates_old_3
-        writes intP_intM_buch_CurStates_old_3
-        { (not_assigns(intP_buch_CurStates_old_3_alloc_table,
-           intP_intM_buch_CurStates_old_3@, intP_intM_buch_CurStates_old_3,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_buch_CurStates_old_3, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_buch_CurStates_old_3,
-                   shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> =
-      (C_12:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> =
-      (C_15:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> =
-      (C_18:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurTrans_tmp_4_alloc_table,intP_intM_buch_CurTrans_tmp_4
-        writes intP_intM_buch_CurTrans_tmp_4
-        { (not_assigns(intP_buch_CurTrans_tmp_4_alloc_table,
-           intP_intM_buch_CurTrans_tmp_4@, intP_intM_buch_CurTrans_tmp_4,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_buch_CurTrans_tmp_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_buch_CurTrans_tmp_4,
-                       shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
+      (C_4:
       begin
         (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_24:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then (C_23: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-         else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-        else (C_21: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-        void);
-       (C_26:
-       (let jessie_<somenum> = !tmp in
+        (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in void);
+       (C_5:
        begin
-         (let jessie_<somenum> = buch_CurStates in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        void;
-       (C_30:
-       (let jessie_<somenum> =
-       (C_28:
-       (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 (C_27:
-                                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                                                 ((shift buch_CurStates_old) (1)))))) (0))
-                               then (1) else (0)))) in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_36:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (if ((neq_int_ (integer_of_int32 (C_35:
-                                           ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                            ((shift buch_CurStates) (0)))))) (0))
-          then
-           (C_34:
-           begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
-          else
-           (C_33:
-           begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
-         else
-          (C_32: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
-        else
-         (C_31: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
-        void);
-       (C_38:
-       (let jessie_<somenum> = !tmp_0 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = buch_CurTrans in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_45:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (1)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_44:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_43: begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
-         else
-          (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
-        else
-         (C_41: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
-        void);
-       (C_47:
-       (let jessie_<somenum> = !tmp_1 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void); (raise Return) end))))))))))));
-    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
+         (let jessie_<somenum> =
+         (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+         void);
+        (C_8:
+        begin
+          (let jessie_<somenum> =
+          (C_6:
+          ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+          (let jessie_<somenum> = buch_CurStates_old in
+          (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>)));
+         (C_11:
+         begin
+           (let jessie_<somenum> =
+           (C_9:
+           ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+           (let jessie_<somenum> = buch_CurStates_old in
+           (let jessie_<somenum> = (1) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+           (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>))))));
+          (C_14:
+          begin
+            (let jessie_<somenum> =
+            (C_12:
+            ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+            (let jessie_<somenum> = buch_CurTrans_tmp in
+            (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>)));
+           (C_17:
+           begin
+             (let jessie_<somenum> =
+             (C_15:
+             ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+             (let jessie_<somenum> = buch_CurTrans_tmp in
+             (let jessie_<somenum> = (1) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+             (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+            (C_20:
+            begin
+              (let jessie_<somenum> =
+              (C_18:
+              ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+              (let jessie_<somenum> = buch_CurTrans_tmp in
+              (let jessie_<somenum> = (2) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+              (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_24:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (C_23:
+                 begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+                else
+                 (C_22:
+                 begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
+               else
+                (C_21:
+                begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
+               void);
+              (C_26:
+              (let jessie_<somenum> = !tmp in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               void;
+              (C_30:
+              (let jessie_<somenum> =
+              (C_28:
+              (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 
+                                                      (C_27:
+                                                      ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                       ((shift buch_CurStates_old) (1)))))) (0))
+                                      then (1) else (0)))) in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (let jessie_<somenum> = (1) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_36:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_35:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (0)))))) (0))
+                 then
+                  (C_34:
+                  begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
+                 else
+                  (C_33:
+                  begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
+                else
+                 (C_32:
+                 begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
+               else
+                (C_31:
+                begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+               void);
+              (C_38:
+              (let jessie_<somenum> = !tmp_0 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (C_40:
+             begin
+               (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+               (let jessie_<somenum> = buch_CurTrans in
+               (let jessie_<somenum> = (1) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+               (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
+              (let jessie_<somenum> =
+              begin
+                (let jessie_<somenum> =
+                (if ((neq_int_ (integer_of_int32 (C_45:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (1)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_44:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (1)))))) (0))
+                 then
+                  (C_43:
+                  begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
+                 else
+                  (C_42:
+                  begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
+                else
+                 (C_41:
+                 begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
+                void);
+               (C_47:
+               (let jessie_<somenum> = !tmp_1 in
+               begin
+                 (let jessie_<somenum> = buch_CurTrans in
+                 (let jessie_<somenum> = (2) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                 (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+                jessie_<somenum> end)) end in void); (raise Return) end) end) end)
+          end) end) end) end) end) end)))); (raise Return) end with Return ->
+   void end) { (JC_<somenum>: true) }
 
 let fake_ensures_j =
  fun (tt : unit) ->
@@ -2858,168 +2877,177 @@ let fake_ensures_j =
      (let tmp_0 = ref (any_int32 void) in
      (let tmp_1 = ref (any_int32 void) in
      (C_3:
-     (C_4:
-     (C_5:
-     (C_8:
-     (C_11:
-     (C_14:
-     (C_17:
-     (C_20:
-     (C_40:
      begin
        (let jessie_<somenum> =
        (rr := (C_2:
               (safe_int32_of_integer_ (C_1:
                                       ((add_int (integer_of_int32 !rr)) (1)))))) in
        void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (C_6:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> =
-      (C_9:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurStates_old_3_alloc_table,intP_intM_buch_CurStates_old_3
-        writes intP_intM_buch_CurStates_old_3
-        { (not_assigns(intP_buch_CurStates_old_3_alloc_table,
-           intP_intM_buch_CurStates_old_3@, intP_intM_buch_CurStates_old_3,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_buch_CurStates_old_3,
-                shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_buch_CurStates_old_3,
-                   shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> =
-      (C_12:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> =
-      (C_15:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> =
-      (C_18:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurTrans_tmp_4_alloc_table,intP_intM_buch_CurTrans_tmp_4
-        writes intP_intM_buch_CurTrans_tmp_4
-        { (not_assigns(intP_buch_CurTrans_tmp_4_alloc_table,
-           intP_intM_buch_CurTrans_tmp_4@, intP_intM_buch_CurTrans_tmp_4,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_buch_CurTrans_tmp_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_buch_CurTrans_tmp_4,
-                       shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
+      (C_4:
       begin
         (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_24:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then (C_23: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-         else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-        else (C_21: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-        void);
-       (C_26:
-       (let jessie_<somenum> = !tmp in
+        (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in void);
+       (C_5:
        begin
-         (let jessie_<somenum> = buch_CurStates in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        void;
-       (C_30:
-       (let jessie_<somenum> =
-       (C_28:
-       (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 (C_27:
-                                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                                                 ((shift buch_CurStates_old) (1)))))) (0))
-                               then (1) else (0)))) in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_36:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (if ((neq_int_ (integer_of_int32 (C_35:
-                                           ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                            ((shift buch_CurStates) (0)))))) (0))
-          then
-           (C_34:
-           begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
-          else
-           (C_33:
-           begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
-         else
-          (C_32: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
-        else
-         (C_31: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
-        void);
-       (C_38:
-       (let jessie_<somenum> = !tmp_0 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = buch_CurTrans in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_45:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (1)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_44:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_43: begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
-         else
-          (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
-        else
-         (C_41: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
-        void);
-       (C_47:
-       (let jessie_<somenum> = !tmp_1 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void); (raise Return) end))))))))))));
-    (raise Return) end with Return -> void end)
+         (let jessie_<somenum> =
+         (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+         void);
+        (C_8:
+        begin
+          (let jessie_<somenum> =
+          (C_6:
+          ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+          (let jessie_<somenum> = buch_CurStates_old in
+          (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>)));
+         (C_11:
+         begin
+           (let jessie_<somenum> =
+           (C_9:
+           ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+           (let jessie_<somenum> = buch_CurStates_old in
+           (let jessie_<somenum> = (1) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+           (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>))))));
+          (C_14:
+          begin
+            (let jessie_<somenum> =
+            (C_12:
+            ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+            (let jessie_<somenum> = buch_CurTrans_tmp in
+            (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>)));
+           (C_17:
+           begin
+             (let jessie_<somenum> =
+             (C_15:
+             ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+             (let jessie_<somenum> = buch_CurTrans_tmp in
+             (let jessie_<somenum> = (1) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+             (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+            (C_20:
+            begin
+              (let jessie_<somenum> =
+              (C_18:
+              ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+              (let jessie_<somenum> = buch_CurTrans_tmp in
+              (let jessie_<somenum> = (2) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+              (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_24:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (C_23:
+                 begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+                else
+                 (C_22:
+                 begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
+               else
+                (C_21:
+                begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
+               void);
+              (C_26:
+              (let jessie_<somenum> = !tmp in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               void;
+              (C_30:
+              (let jessie_<somenum> =
+              (C_28:
+              (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 
+                                                      (C_27:
+                                                      ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                       ((shift buch_CurStates_old) (1)))))) (0))
+                                      then (1) else (0)))) in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (let jessie_<somenum> = (1) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_36:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_35:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (0)))))) (0))
+                 then
+                  (C_34:
+                  begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
+                 else
+                  (C_33:
+                  begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
+                else
+                 (C_32:
+                 begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
+               else
+                (C_31:
+                begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+               void);
+              (C_38:
+              (let jessie_<somenum> = !tmp_0 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (C_40:
+             begin
+               (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+               (let jessie_<somenum> = buch_CurTrans in
+               (let jessie_<somenum> = (1) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+               (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
+              (let jessie_<somenum> =
+              begin
+                (let jessie_<somenum> =
+                (if ((neq_int_ (integer_of_int32 (C_45:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (1)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_44:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (1)))))) (0))
+                 then
+                  (C_43:
+                  begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
+                 else
+                  (C_42:
+                  begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
+                else
+                 (C_41:
+                 begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
+                void);
+               (C_47:
+               (let jessie_<somenum> = !tmp_1 in
+               begin
+                 (let jessie_<somenum> = buch_CurTrans in
+                 (let jessie_<somenum> = (2) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                 (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+                jessie_<somenum> end)) end in void); (raise Return) end) end) end)
+          end) end) end) end) end) end)))); (raise Return) end with Return ->
+   void end)
   { (JC_<somenum>:
     ((JC_<somenum>: lt_int(integer_of_int32(rr), (5001)))
     and ((JC_<somenum>:
@@ -3144,14 +3172,6 @@ let fake_safety =
      (let tmp_0 = ref (any_int32 void) in
      (let tmp_1 = ref (any_int32 void) in
      (C_3:
-     (C_4:
-     (C_5:
-     (C_8:
-     (C_11:
-     (C_14:
-     (C_17:
-     (C_20:
-     (C_40:
      begin
        (let jessie_<somenum> =
        (rr := (C_2:
@@ -3159,154 +3179,171 @@ let fake_safety =
               (int32_of_integer_ (C_1:
                                  ((add_int (integer_of_int32 !rr)) (1))))))) in
        void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (C_6:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> =
-      (C_9:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurStates_old_3_alloc_table,intP_intM_buch_CurStates_old_3
-        writes intP_intM_buch_CurStates_old_3
-        { (not_assigns(intP_buch_CurStates_old_3_alloc_table,
-           intP_intM_buch_CurStates_old_3@, intP_intM_buch_CurStates_old_3,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_buch_CurStates_old_3, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_buch_CurStates_old_3,
-                   shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> =
-      (C_12:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> =
-      (C_15:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> =
-      (C_18:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurTrans_tmp_4_alloc_table,intP_intM_buch_CurTrans_tmp_4
-        writes intP_intM_buch_CurTrans_tmp_4
-        { (not_assigns(intP_buch_CurTrans_tmp_4_alloc_table,
-           intP_intM_buch_CurTrans_tmp_4@, intP_intM_buch_CurTrans_tmp_4,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_buch_CurTrans_tmp_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_buch_CurTrans_tmp_4,
-                       shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
+      (C_4:
       begin
         (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_24:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then (C_23: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-         else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-        else (C_21: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-        void);
-       (C_26:
-       (let jessie_<somenum> = !tmp in
+        (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in void);
+       (C_5:
        begin
-         (let jessie_<somenum> = buch_CurStates in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        void;
-       (C_30:
-       (let jessie_<somenum> =
-       (C_28:
-       (JC_<somenum>:
-       (int32_of_integer_ (if ((neq_int_ (integer_of_int32 (C_27:
-                                                           ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                                            ((shift buch_CurStates_old) (1)))))) (0))
-                          then (1) else (0))))) in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_36:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (if ((neq_int_ (integer_of_int32 (C_35:
-                                           ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                            ((shift buch_CurStates) (0)))))) (0))
-          then
-           (C_34:
-           begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
-          else
-           (C_33:
-           begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
-         else
-          (C_32: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
-        else
-         (C_31: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
-        void);
-       (C_38:
-       (let jessie_<somenum> = !tmp_0 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = buch_CurTrans in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_45:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (1)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_44:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_43: begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
-         else
-          (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
-        else
-         (C_41: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
-        void);
-       (C_47:
-       (let jessie_<somenum> = !tmp_1 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void); (raise Return) end))))))))))));
-    (raise Return) end with Return -> void end)
+         (let jessie_<somenum> =
+         (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+         void);
+        (C_8:
+        begin
+          (let jessie_<somenum> =
+          (C_6:
+          ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+          (let jessie_<somenum> = buch_CurStates_old in
+          (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>)));
+         (C_11:
+         begin
+           (let jessie_<somenum> =
+           (C_9:
+           ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+           (let jessie_<somenum> = buch_CurStates_old in
+           (let jessie_<somenum> = (1) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+           (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>))))));
+          (C_14:
+          begin
+            (let jessie_<somenum> =
+            (C_12:
+            ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+            (let jessie_<somenum> = buch_CurTrans_tmp in
+            (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>)));
+           (C_17:
+           begin
+             (let jessie_<somenum> =
+             (C_15:
+             ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+             (let jessie_<somenum> = buch_CurTrans_tmp in
+             (let jessie_<somenum> = (1) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+             (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+            (C_20:
+            begin
+              (let jessie_<somenum> =
+              (C_18:
+              ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+              (let jessie_<somenum> = buch_CurTrans_tmp in
+              (let jessie_<somenum> = (2) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+              (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_24:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (C_23:
+                 begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
+                else
+                 (C_22:
+                 begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
+               else
+                (C_21:
+                begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
+               void);
+              (C_26:
+              (let jessie_<somenum> = !tmp in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               void;
+              (C_30:
+              (let jessie_<somenum> =
+              (C_28:
+              (JC_<somenum>:
+              (int32_of_integer_ (if ((neq_int_ (integer_of_int32 (C_27:
+                                                                  ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                                   ((shift buch_CurStates_old) (1)))))) (0))
+                                 then (1) else (0))))) in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (let jessie_<somenum> = (1) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_36:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_35:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (0)))))) (0))
+                 then
+                  (C_34:
+                  begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
+                 else
+                  (C_33:
+                  begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
+                else
+                 (C_32:
+                 begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
+               else
+                (C_31:
+                begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+               void);
+              (C_38:
+              (let jessie_<somenum> = !tmp_0 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (C_40:
+             begin
+               (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+               (let jessie_<somenum> = buch_CurTrans in
+               (let jessie_<somenum> = (1) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+               (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
+              (let jessie_<somenum> =
+              begin
+                (let jessie_<somenum> =
+                (if ((neq_int_ (integer_of_int32 (C_45:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (1)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_44:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (1)))))) (0))
+                 then
+                  (C_43:
+                  begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
+                 else
+                  (C_42:
+                  begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
+                else
+                 (C_41:
+                 begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
+                void);
+               (C_47:
+               (let jessie_<somenum> = !tmp_1 in
+               begin
+                 (let jessie_<somenum> = buch_CurTrans in
+                 (let jessie_<somenum> = (2) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                 (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+                jessie_<somenum> end)) end in void); (raise Return) end) end) end)
+          end) end) end) end) end) end)))); (raise Return) end with Return ->
+   void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      _Buch_tr_cross_3(intP_intM_buch_CurStates_old_3,
@@ -3427,194 +3464,219 @@ let main_ensures_Buchi_property_behavior =
      (let tmp_0_2 = ref (any_int32 void) in
      (let tmp_0_3 = ref (any_int32 void) in
      (let tmp_1_1 = ref (any_int32 void) in
-     (C_130:
-     (C_131:
-     (C_133:
-     (C_134:
-     (C_135:
-     (C_138:
-     (C_141:
-     (C_144:
-     (C_147:
-     (C_150:
-     (C_170:
      begin
        (if ((lt_int_ (integer_of_int32 !rr)) (5000))
        then
         (C_127:
-        (C_128:
         begin
           (let jessie_<somenum> =
           (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in
           void);
+         (C_128:
+         begin
+           (let jessie_<somenum> =
+           (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in
+           void); (C_129: (JC_<somenum>: (fake void))) end) end) else void);
+      (C_130:
+      begin
+        (let jessie_<somenum> =
+        (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
+       (C_131:
+       begin
          (let jessie_<somenum> =
          (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in
-         void); (C_129: (JC_<somenum>: (fake void))) end)) else void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in void);
-      (C_132: (JC_<somenum>: (op void)));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (C_136:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> =
-      (C_139:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurStates_old_3_alloc_table,intP_intM_buch_CurStates_old_3
-        writes intP_intM_buch_CurStates_old_3
-        { (not_assigns(intP_buch_CurStates_old_3_alloc_table,
-           intP_intM_buch_CurStates_old_3@, intP_intM_buch_CurStates_old_3,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_buch_CurStates_old_3,
-                shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_buch_CurStates_old_3,
-                   shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> =
-      (C_142:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> =
-      (C_145:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> =
-      (C_148:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurTrans_tmp_4_alloc_table,intP_intM_buch_CurTrans_tmp_4
-        writes intP_intM_buch_CurTrans_tmp_4
-        { (not_assigns(intP_buch_CurTrans_tmp_4_alloc_table,
-           intP_intM_buch_CurTrans_tmp_4@, intP_intM_buch_CurTrans_tmp_4,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_buch_CurTrans_tmp_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_buch_CurTrans_tmp_4,
-                       shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_154:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (C_153:
-          begin   (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2 end)
-         else
-          (C_152:
-          begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end))
-        else
-         (C_151:
-         begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
-        void);
-       (C_156:
-       (let jessie_<somenum> = !tmp_0_2 in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        void;
-       (C_160:
-       (let jessie_<somenum> =
-       (C_158:
-       (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 (C_157:
-                                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                                                 ((shift buch_CurStates_old) (1)))))) (0))
-                               then (1) else (0)))) in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_166:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (if ((neq_int_ (integer_of_int32 (C_165:
-                                           ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                            ((shift buch_CurStates) (0)))))) (0))
-          then
-           (C_164:
-           begin   (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3 end)
-          else
-           (C_163:
-           begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
-         else
-          (C_162:
-          begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
-        else
-         (C_161:
-         begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
-        void);
-       (C_168:
-       (let jessie_<somenum> = !tmp_0_3 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = buch_CurTrans in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_175:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (1)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_174:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_173:
-          begin   (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1 end)
-         else
-          (C_172:
-          begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end))
-        else
-         (C_171:
-         begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
-        void);
-       (C_177:
-       (let jessie_<somenum> = !tmp_1_1 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void); (return := !__retres); (raise Return)
-     end))))))))))))))); absurd  end with Return -> !return end))
+         void);
+        (C_132:
+        (JC_<somenum>:
+        begin
+          (op void);
+         (C_133:
+         begin
+           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+           void);
+          (C_134:
+          begin
+            (let jessie_<somenum> =
+            (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in
+            void);
+           (C_135:
+           begin
+             (let jessie_<somenum> =
+             (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+             void);
+            (C_138:
+            begin
+              (let jessie_<somenum> =
+              (C_136:
+              ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+              (let jessie_<somenum> = buch_CurStates_old in
+              (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>)));
+             (C_141:
+             begin
+               (let jessie_<somenum> =
+               (C_139:
+               ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+               (let jessie_<somenum> = buch_CurStates_old in
+               (let jessie_<somenum> = (1) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+               (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>))))));
+              (C_144:
+              begin
+                (let jessie_<somenum> =
+                (C_142:
+                ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+                (let jessie_<somenum> = buch_CurTrans_tmp in
+                (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>)));
+               (C_147:
+               begin
+                 (let jessie_<somenum> =
+                 (C_145:
+                 ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+                 (let jessie_<somenum> = buch_CurTrans_tmp in
+                 (let jessie_<somenum> = (1) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                 (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+                (C_150:
+                begin
+                  (let jessie_<somenum> =
+                  (C_148:
+                  ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+                  (let jessie_<somenum> = buch_CurTrans_tmp in
+                  (let jessie_<somenum> = (2) in
+                  (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                  (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                  (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+                 (let jessie_<somenum> =
+                 begin
+                   (let jessie_<somenum> =
+                   (if ((eq_int_ (integer_of_int32 !status)) (0))
+                   then
+                    (if ((neq_int_ (integer_of_int32 (C_154:
+                                                     ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                      ((shift buch_CurStates_old) (0)))))) (0))
+                    then
+                     (C_153:
+                     begin
+                       (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2
+                     end)
+                    else
+                     (C_152:
+                     begin
+                       (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2
+                     end))
+                   else
+                    (C_151:
+                    begin
+                      (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
+                   void);
+                  (C_156:
+                  (let jessie_<somenum> = !tmp_0_2 in
+                  begin
+                    (let jessie_<somenum> = buch_CurStates in
+                    (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
+                   jessie_<somenum> end)) end in void);
+                 (let jessie_<somenum> =
+                 begin
+                   void;
+                  (C_160:
+                  (let jessie_<somenum> =
+                  (C_158:
+                  (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 
+                                                          (C_157:
+                                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                           ((shift buch_CurStates_old) (1)))))) (0))
+                                          then (1) else (0)))) in
+                  begin
+                    (let jessie_<somenum> = buch_CurStates in
+                    (let jessie_<somenum> = (1) in
+                    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                    (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                    (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
+                   jessie_<somenum> end)) end in void);
+                 (let jessie_<somenum> =
+                 begin
+                   (let jessie_<somenum> =
+                   (if ((eq_int_ (integer_of_int32 !status)) (0))
+                   then
+                    (if ((neq_int_ (integer_of_int32 (C_166:
+                                                     ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                      ((shift buch_CurStates_old) (0)))))) (0))
+                    then
+                     (if ((neq_int_ (integer_of_int32 (C_165:
+                                                      ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                       ((shift buch_CurStates) (0)))))) (0))
+                     then
+                      (C_164:
+                      begin
+                        (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3
+                      end)
+                     else
+                      (C_163:
+                      begin
+                        (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3
+                      end))
+                    else
+                     (C_162:
+                     begin
+                       (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3
+                     end))
+                   else
+                    (C_161:
+                    begin
+                      (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
+                   void);
+                  (C_168:
+                  (let jessie_<somenum> = !tmp_0_3 in
+                  begin
+                    (let jessie_<somenum> = buch_CurTrans in
+                    (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
+                   jessie_<somenum> end)) end in void);
+                 (C_170:
+                 begin
+                   (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+                   (let jessie_<somenum> = buch_CurTrans in
+                   (let jessie_<somenum> = (1) in
+                   (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                   (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                   (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
+                  (let jessie_<somenum> =
+                  begin
+                    (let jessie_<somenum> =
+                    (if ((neq_int_ (integer_of_int32 (C_175:
+                                                     ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                      ((shift buch_CurStates_old) (1)))))) (0))
+                    then
+                     (if ((neq_int_ (integer_of_int32 (C_174:
+                                                      ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                       ((shift buch_CurStates) (1)))))) (0))
+                     then
+                      (C_173:
+                      begin
+                        (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1
+                      end)
+                     else
+                      (C_172:
+                      begin
+                        (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1
+                      end))
+                    else
+                     (C_171:
+                     begin
+                       (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1
+                     end)) in void);
+                   (C_177:
+                   (let jessie_<somenum> = !tmp_1_1 in
+                   begin
+                     (let jessie_<somenum> = buch_CurTrans in
+                     (let jessie_<somenum> = (2) in
+                     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                     (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                     (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+                    jessie_<somenum> end)) end in void); (return := !__retres);
+                  (raise Return) end) end) end) end) end) end) end) end) end)
+        end)) end) end) end)))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
@@ -3753,194 +3815,219 @@ let main_ensures_default =
      (let tmp_0_2 = ref (any_int32 void) in
      (let tmp_0_3 = ref (any_int32 void) in
      (let tmp_1_1 = ref (any_int32 void) in
-     (C_130:
-     (C_131:
-     (C_133:
-     (C_134:
-     (C_135:
-     (C_138:
-     (C_141:
-     (C_144:
-     (C_147:
-     (C_150:
-     (C_170:
      begin
        (if ((lt_int_ (integer_of_int32 !rr)) (5000))
        then
         (C_127:
-        (C_128:
         begin
           (let jessie_<somenum> =
           (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in
           void);
+         (C_128:
+         begin
+           (let jessie_<somenum> =
+           (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in
+           void); (C_129: (JC_<somenum>: (fake void))) end) end) else void);
+      (C_130:
+      begin
+        (let jessie_<somenum> =
+        (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
+       (C_131:
+       begin
          (let jessie_<somenum> =
          (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in
-         void); (C_129: (JC_<somenum>: (fake void))) end)) else void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in void);
-      (C_132: (JC_<somenum>: (op void)));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (C_136:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> =
-      (C_139:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurStates_old_3_alloc_table,intP_intM_buch_CurStates_old_3
-        writes intP_intM_buch_CurStates_old_3
-        { (not_assigns(intP_buch_CurStates_old_3_alloc_table,
-           intP_intM_buch_CurStates_old_3@, intP_intM_buch_CurStates_old_3,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_buch_CurStates_old_3,
-                shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_buch_CurStates_old_3,
-                   shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> =
-      (C_142:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> =
-      (C_145:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> =
-      (C_148:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurTrans_tmp_4_alloc_table,intP_intM_buch_CurTrans_tmp_4
-        writes intP_intM_buch_CurTrans_tmp_4
-        { (not_assigns(intP_buch_CurTrans_tmp_4_alloc_table,
-           intP_intM_buch_CurTrans_tmp_4@, intP_intM_buch_CurTrans_tmp_4,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_buch_CurTrans_tmp_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_buch_CurTrans_tmp_4,
-                       shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_154:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (C_153:
-          begin   (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2 end)
-         else
-          (C_152:
-          begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end))
-        else
-         (C_151:
-         begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
-        void);
-       (C_156:
-       (let jessie_<somenum> = !tmp_0_2 in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        void;
-       (C_160:
-       (let jessie_<somenum> =
-       (C_158:
-       (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 (C_157:
-                                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                                                 ((shift buch_CurStates_old) (1)))))) (0))
-                               then (1) else (0)))) in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_166:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (if ((neq_int_ (integer_of_int32 (C_165:
-                                           ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                            ((shift buch_CurStates) (0)))))) (0))
-          then
-           (C_164:
-           begin   (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3 end)
-          else
-           (C_163:
-           begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
-         else
-          (C_162:
-          begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
-        else
-         (C_161:
-         begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
-        void);
-       (C_168:
-       (let jessie_<somenum> = !tmp_0_3 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = buch_CurTrans in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_175:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (1)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_174:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_173:
-          begin   (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1 end)
-         else
-          (C_172:
-          begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end))
-        else
-         (C_171:
-         begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
-        void);
-       (C_177:
-       (let jessie_<somenum> = !tmp_1_1 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void); (return := !__retres); (raise Return)
-     end))))))))))))))); absurd  end with Return -> !return end))
+         void);
+        (C_132:
+        (JC_<somenum>:
+        begin
+          (op void);
+         (C_133:
+         begin
+           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+           void);
+          (C_134:
+          begin
+            (let jessie_<somenum> =
+            (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in
+            void);
+           (C_135:
+           begin
+             (let jessie_<somenum> =
+             (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+             void);
+            (C_138:
+            begin
+              (let jessie_<somenum> =
+              (C_136:
+              ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+              (let jessie_<somenum> = buch_CurStates_old in
+              (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>)));
+             (C_141:
+             begin
+               (let jessie_<somenum> =
+               (C_139:
+               ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+               (let jessie_<somenum> = buch_CurStates_old in
+               (let jessie_<somenum> = (1) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+               (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>))))));
+              (C_144:
+              begin
+                (let jessie_<somenum> =
+                (C_142:
+                ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+                (let jessie_<somenum> = buch_CurTrans_tmp in
+                (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>)));
+               (C_147:
+               begin
+                 (let jessie_<somenum> =
+                 (C_145:
+                 ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+                 (let jessie_<somenum> = buch_CurTrans_tmp in
+                 (let jessie_<somenum> = (1) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                 (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+                (C_150:
+                begin
+                  (let jessie_<somenum> =
+                  (C_148:
+                  ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+                  (let jessie_<somenum> = buch_CurTrans_tmp in
+                  (let jessie_<somenum> = (2) in
+                  (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                  (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                  (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+                 (let jessie_<somenum> =
+                 begin
+                   (let jessie_<somenum> =
+                   (if ((eq_int_ (integer_of_int32 !status)) (0))
+                   then
+                    (if ((neq_int_ (integer_of_int32 (C_154:
+                                                     ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                      ((shift buch_CurStates_old) (0)))))) (0))
+                    then
+                     (C_153:
+                     begin
+                       (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2
+                     end)
+                    else
+                     (C_152:
+                     begin
+                       (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2
+                     end))
+                   else
+                    (C_151:
+                    begin
+                      (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
+                   void);
+                  (C_156:
+                  (let jessie_<somenum> = !tmp_0_2 in
+                  begin
+                    (let jessie_<somenum> = buch_CurStates in
+                    (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
+                   jessie_<somenum> end)) end in void);
+                 (let jessie_<somenum> =
+                 begin
+                   void;
+                  (C_160:
+                  (let jessie_<somenum> =
+                  (C_158:
+                  (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 
+                                                          (C_157:
+                                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                           ((shift buch_CurStates_old) (1)))))) (0))
+                                          then (1) else (0)))) in
+                  begin
+                    (let jessie_<somenum> = buch_CurStates in
+                    (let jessie_<somenum> = (1) in
+                    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                    (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                    (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
+                   jessie_<somenum> end)) end in void);
+                 (let jessie_<somenum> =
+                 begin
+                   (let jessie_<somenum> =
+                   (if ((eq_int_ (integer_of_int32 !status)) (0))
+                   then
+                    (if ((neq_int_ (integer_of_int32 (C_166:
+                                                     ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                      ((shift buch_CurStates_old) (0)))))) (0))
+                    then
+                     (if ((neq_int_ (integer_of_int32 (C_165:
+                                                      ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                       ((shift buch_CurStates) (0)))))) (0))
+                     then
+                      (C_164:
+                      begin
+                        (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3
+                      end)
+                     else
+                      (C_163:
+                      begin
+                        (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3
+                      end))
+                    else
+                     (C_162:
+                     begin
+                       (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3
+                     end))
+                   else
+                    (C_161:
+                    begin
+                      (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
+                   void);
+                  (C_168:
+                  (let jessie_<somenum> = !tmp_0_3 in
+                  begin
+                    (let jessie_<somenum> = buch_CurTrans in
+                    (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
+                   jessie_<somenum> end)) end in void);
+                 (C_170:
+                 begin
+                   (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+                   (let jessie_<somenum> = buch_CurTrans in
+                   (let jessie_<somenum> = (1) in
+                   (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                   (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                   (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
+                  (let jessie_<somenum> =
+                  begin
+                    (let jessie_<somenum> =
+                    (if ((neq_int_ (integer_of_int32 (C_175:
+                                                     ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                      ((shift buch_CurStates_old) (1)))))) (0))
+                    then
+                     (if ((neq_int_ (integer_of_int32 (C_174:
+                                                      ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                       ((shift buch_CurStates) (1)))))) (0))
+                     then
+                      (C_173:
+                      begin
+                        (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1
+                      end)
+                     else
+                      (C_172:
+                      begin
+                        (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1
+                      end))
+                    else
+                     (C_171:
+                     begin
+                       (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1
+                     end)) in void);
+                   (C_177:
+                   (let jessie_<somenum> = !tmp_1_1 in
+                   begin
+                     (let jessie_<somenum> = buch_CurTrans in
+                     (let jessie_<somenum> = (2) in
+                     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                     (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                     (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+                    jessie_<somenum> end)) end in void); (return := !__retres);
+                  (raise Return) end) end) end) end) end) end) end) end) end)
+        end)) end) end) end)))); absurd  end with Return -> !return end))
   { (JC_<somenum>: true) }
 
 let main_safety =
@@ -4016,195 +4103,221 @@ let main_safety =
      (let tmp_0_2 = ref (any_int32 void) in
      (let tmp_0_3 = ref (any_int32 void) in
      (let tmp_1_1 = ref (any_int32 void) in
-     (C_130:
-     (C_131:
-     (C_133:
-     (C_134:
-     (C_135:
-     (C_138:
-     (C_141:
-     (C_144:
-     (C_147:
-     (C_150:
-     (C_170:
      begin
        (if ((lt_int_ (integer_of_int32 !rr)) (5000))
        then
         (C_127:
-        (C_128:
         begin
           (let jessie_<somenum> =
           (buch_CurOperation := (safe_buch_ListOper_of_integer_ (0))) in
           void);
+         (C_128:
+         begin
+           (let jessie_<somenum> =
+           (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in
+           void); (C_129: (JC_<somenum>: (fake_requires void))) end) end)
+       else void);
+      (C_130:
+      begin
+        (let jessie_<somenum> =
+        (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
+       (C_131:
+       begin
          (let jessie_<somenum> =
          (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in
-         void); (C_129: (JC_<somenum>: (fake_requires void))) end)) else void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in void);
-      (C_132: (JC_<somenum>: (op_requires void)));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (C_136:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> =
-      (C_139:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurStates_old_3_alloc_table,intP_intM_buch_CurStates_old_3
-        writes intP_intM_buch_CurStates_old_3
-        { (not_assigns(intP_buch_CurStates_old_3_alloc_table,
-           intP_intM_buch_CurStates_old_3@, intP_intM_buch_CurStates_old_3,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_buch_CurStates_old_3,
-                shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_buch_CurStates_old_3,
-                   shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> =
-      (C_142:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> =
-      (C_145:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> =
-      (C_148:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurTrans_tmp_4_alloc_table,intP_intM_buch_CurTrans_tmp_4
-        writes intP_intM_buch_CurTrans_tmp_4
-        { (not_assigns(intP_buch_CurTrans_tmp_4_alloc_table,
-           intP_intM_buch_CurTrans_tmp_4@, intP_intM_buch_CurTrans_tmp_4,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_buch_CurTrans_tmp_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_buch_CurTrans_tmp_4,
-                       shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_154:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (C_153:
-          begin   (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2 end)
-         else
-          (C_152:
-          begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end))
-        else
-         (C_151:
-         begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
-        void);
-       (C_156:
-       (let jessie_<somenum> = !tmp_0_2 in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        void;
-       (C_160:
-       (let jessie_<somenum> =
-       (C_158:
-       (JC_<somenum>:
-       (int32_of_integer_ (if ((neq_int_ (integer_of_int32 (C_157:
-                                                           ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                                            ((shift buch_CurStates_old) (1)))))) (0))
-                          then (1) else (0))))) in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_166:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (if ((neq_int_ (integer_of_int32 (C_165:
-                                           ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                            ((shift buch_CurStates) (0)))))) (0))
-          then
-           (C_164:
-           begin   (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3 end)
-          else
-           (C_163:
-           begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
-         else
-          (C_162:
-          begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
-        else
-         (C_161:
-         begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
-        void);
-       (C_168:
-       (let jessie_<somenum> = !tmp_0_3 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = buch_CurTrans in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_175:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (1)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_174:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_173:
-          begin   (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1 end)
-         else
-          (C_172:
-          begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end))
-        else
-         (C_171:
-         begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
-        void);
-       (C_177:
-       (let jessie_<somenum> = !tmp_1_1 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void); (return := !__retres); (raise Return)
-     end))))))))))))))); absurd  end with Return -> !return end))
+         void);
+        (C_132:
+        (JC_<somenum>:
+        begin
+          (op_requires void);
+         (C_133:
+         begin
+           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+           void);
+          (C_134:
+          begin
+            (let jessie_<somenum> =
+            (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in
+            void);
+           (C_135:
+           begin
+             (let jessie_<somenum> =
+             (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+             void);
+            (C_138:
+            begin
+              (let jessie_<somenum> =
+              (C_136:
+              ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+              (let jessie_<somenum> = buch_CurStates_old in
+              (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>)));
+             (C_141:
+             begin
+               (let jessie_<somenum> =
+               (C_139:
+               ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+               (let jessie_<somenum> = buch_CurStates_old in
+               (let jessie_<somenum> = (1) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+               (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>))))));
+              (C_144:
+              begin
+                (let jessie_<somenum> =
+                (C_142:
+                ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+                (let jessie_<somenum> = buch_CurTrans_tmp in
+                (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>)));
+               (C_147:
+               begin
+                 (let jessie_<somenum> =
+                 (C_145:
+                 ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+                 (let jessie_<somenum> = buch_CurTrans_tmp in
+                 (let jessie_<somenum> = (1) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                 (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                 (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+                (C_150:
+                begin
+                  (let jessie_<somenum> =
+                  (C_148:
+                  ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+                  (let jessie_<somenum> = buch_CurTrans_tmp in
+                  (let jessie_<somenum> = (2) in
+                  (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                  (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                  (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+                 (let jessie_<somenum> =
+                 begin
+                   (let jessie_<somenum> =
+                   (if ((eq_int_ (integer_of_int32 !status)) (0))
+                   then
+                    (if ((neq_int_ (integer_of_int32 (C_154:
+                                                     ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                      ((shift buch_CurStates_old) (0)))))) (0))
+                    then
+                     (C_153:
+                     begin
+                       (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2
+                     end)
+                    else
+                     (C_152:
+                     begin
+                       (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2
+                     end))
+                   else
+                    (C_151:
+                    begin
+                      (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
+                   void);
+                  (C_156:
+                  (let jessie_<somenum> = !tmp_0_2 in
+                  begin
+                    (let jessie_<somenum> = buch_CurStates in
+                    (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
+                   jessie_<somenum> end)) end in void);
+                 (let jessie_<somenum> =
+                 begin
+                   void;
+                  (C_160:
+                  (let jessie_<somenum> =
+                  (C_158:
+                  (JC_<somenum>:
+                  (int32_of_integer_ (if ((neq_int_ (integer_of_int32 
+                                                     (C_157:
+                                                     ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                      ((shift buch_CurStates_old) (1)))))) (0))
+                                     then (1) else (0))))) in
+                  begin
+                    (let jessie_<somenum> = buch_CurStates in
+                    (let jessie_<somenum> = (1) in
+                    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                    (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                    (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
+                   jessie_<somenum> end)) end in void);
+                 (let jessie_<somenum> =
+                 begin
+                   (let jessie_<somenum> =
+                   (if ((eq_int_ (integer_of_int32 !status)) (0))
+                   then
+                    (if ((neq_int_ (integer_of_int32 (C_166:
+                                                     ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                      ((shift buch_CurStates_old) (0)))))) (0))
+                    then
+                     (if ((neq_int_ (integer_of_int32 (C_165:
+                                                      ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                       ((shift buch_CurStates) (0)))))) (0))
+                     then
+                      (C_164:
+                      begin
+                        (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3
+                      end)
+                     else
+                      (C_163:
+                      begin
+                        (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3
+                      end))
+                    else
+                     (C_162:
+                     begin
+                       (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3
+                     end))
+                   else
+                    (C_161:
+                    begin
+                      (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
+                   void);
+                  (C_168:
+                  (let jessie_<somenum> = !tmp_0_3 in
+                  begin
+                    (let jessie_<somenum> = buch_CurTrans in
+                    (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
+                   jessie_<somenum> end)) end in void);
+                 (C_170:
+                 begin
+                   (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+                   (let jessie_<somenum> = buch_CurTrans in
+                   (let jessie_<somenum> = (1) in
+                   (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                   (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                   (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
+                  (let jessie_<somenum> =
+                  begin
+                    (let jessie_<somenum> =
+                    (if ((neq_int_ (integer_of_int32 (C_175:
+                                                     ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                      ((shift buch_CurStates_old) (1)))))) (0))
+                    then
+                     (if ((neq_int_ (integer_of_int32 (C_174:
+                                                      ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                       ((shift buch_CurStates) (1)))))) (0))
+                     then
+                      (C_173:
+                      begin
+                        (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1
+                      end)
+                     else
+                      (C_172:
+                      begin
+                        (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1
+                      end))
+                    else
+                     (C_171:
+                     begin
+                       (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1
+                     end)) in void);
+                   (C_177:
+                   (let jessie_<somenum> = !tmp_1_1 in
+                   begin
+                     (let jessie_<somenum> = buch_CurTrans in
+                     (let jessie_<somenum> = (2) in
+                     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                     (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                     (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+                    jessie_<somenum> end)) end in void); (return := !__retres);
+                  (raise Return) end) end) end) end) end) end) end) end) end)
+        end)) end) end) end)))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      _Buch_tr_cross_3(intP_intM_buch_CurStates_old_3,
@@ -4326,207 +4439,212 @@ let op_ensures_Buchi_property_behavior =
      (let tmp_2 = ref (any_int32 void) in
      (let tmp_3 = ref (any_int32 void) in
      (C_62:
-     (C_63:
-     (C_64:
-     (C_67:
-     (C_70:
-     (C_73:
-     (C_76:
-     (C_79:
      begin
        (let jessie_<somenum> = (status := (safe_int32_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (C_65:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> =
-      (C_68:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurStates_old_3_alloc_table,intP_intM_buch_CurStates_old_3
-        writes intP_intM_buch_CurStates_old_3
-        { (not_assigns(intP_buch_CurStates_old_3_alloc_table,
-           intP_intM_buch_CurStates_old_3@, intP_intM_buch_CurStates_old_3,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_buch_CurStates_old_3,
-                shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_buch_CurStates_old_3,
-                   shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> =
-      (C_71:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> =
-      (C_74:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> =
-      (C_77:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurTrans_tmp_4_alloc_table,intP_intM_buch_CurTrans_tmp_4
-        writes intP_intM_buch_CurTrans_tmp_4
-        { (not_assigns(intP_buch_CurTrans_tmp_4_alloc_table,
-           intP_intM_buch_CurTrans_tmp_4@, intP_intM_buch_CurTrans_tmp_4,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_buch_CurTrans_tmp_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_buch_CurTrans_tmp_4,
-                       shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
+      (C_63:
       begin
         (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_83:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (C_82:
-          begin   (tmp_0_0 := (safe_int32_of_integer_ (1))); !tmp_0_0 end)
-         else
-          (C_81:
-          begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end))
-        else
-         (C_80:
-         begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end)) in
-        void);
-       (C_85:
-       (let jessie_<somenum> = !tmp_0_0 in
+        (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
+       (C_64:
        begin
-         (let jessie_<somenum> = buch_CurStates in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_90:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (0)))))) (0))
-        then
-         (C_89:
-         begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
-        else
-         (if ((neq_int_ (integer_of_int32 (C_88:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (1)))))) (0))
-         then
-          (C_87:
-          begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
-         else
-          (C_86:
-          begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1 end))) in
-        void);
-       (C_92:
-       (let jessie_<somenum> = !tmp_0_1 in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_98:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (if ((neq_int_ (integer_of_int32 (C_97:
-                                           ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                            ((shift buch_CurStates) (0)))))) (0))
-          then
-           (C_96:
-           begin   (tmp_1_0 := (safe_int32_of_integer_ (1))); !tmp_1_0 end)
-          else
-           (C_95:
-           begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
-         else
-          (C_94:
-          begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
-        else
-         (C_93:
-         begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end)) in
-        void);
-       (C_100:
-       (let jessie_<somenum> = !tmp_1_0 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_105:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (0)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_104:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_103:
-          begin   (tmp_2 := (safe_int32_of_integer_ (1))); !tmp_2 end)
-         else
-          (C_102:
-          begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end))
-        else
-         (C_101: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
-        void);
-       (C_107:
-       (let jessie_<somenum> = !tmp_2 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_112:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (1)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_111:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_110:
-          begin   (tmp_3 := (safe_int32_of_integer_ (1))); !tmp_3 end)
-         else
-          (C_109:
-          begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end))
-        else
-         (C_108: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
-        void);
-       (C_114:
-       (let jessie_<somenum> = !tmp_3 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void); (raise Return) end)))))))))))));
-    (raise Return) end with Return -> void end)
+         (let jessie_<somenum> =
+         (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+         void);
+        (C_67:
+        begin
+          (let jessie_<somenum> =
+          (C_65:
+          ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+          (let jessie_<somenum> = buch_CurStates_old in
+          (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>)));
+         (C_70:
+         begin
+           (let jessie_<somenum> =
+           (C_68:
+           ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+           (let jessie_<somenum> = buch_CurStates_old in
+           (let jessie_<somenum> = (1) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+           (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>))))));
+          (C_73:
+          begin
+            (let jessie_<somenum> =
+            (C_71:
+            ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+            (let jessie_<somenum> = buch_CurTrans_tmp in
+            (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>)));
+           (C_76:
+           begin
+             (let jessie_<somenum> =
+             (C_74:
+             ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+             (let jessie_<somenum> = buch_CurTrans_tmp in
+             (let jessie_<somenum> = (1) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+             (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+            (C_79:
+            begin
+              (let jessie_<somenum> =
+              (C_77:
+              ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+              (let jessie_<somenum> = buch_CurTrans_tmp in
+              (let jessie_<somenum> = (2) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+              (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_83:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (C_82:
+                 begin   (tmp_0_0 := (safe_int32_of_integer_ (1))); !tmp_0_0
+                 end)
+                else
+                 (C_81:
+                 begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0
+                 end))
+               else
+                (C_80:
+                begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0
+                end)) in void);
+              (C_85:
+              (let jessie_<somenum> = !tmp_0_0 in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((neq_int_ (integer_of_int32 (C_90:
+                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (0)))))) (0))
+               then
+                (C_89:
+                begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1
+                end)
+               else
+                (if ((neq_int_ (integer_of_int32 (C_88:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (1)))))) (0))
+                then
+                 (C_87:
+                 begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1
+                 end)
+                else
+                 (C_86:
+                 begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1
+                 end))) in void);
+              (C_92:
+              (let jessie_<somenum> = !tmp_0_1 in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (let jessie_<somenum> = (1) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_98:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_97:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (0)))))) (0))
+                 then
+                  (C_96:
+                  begin   (tmp_1_0 := (safe_int32_of_integer_ (1))); !tmp_1_0
+                  end)
+                 else
+                  (C_95:
+                  begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0
+                  end))
+                else
+                 (C_94:
+                 begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0
+                 end))
+               else
+                (C_93:
+                begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0
+                end)) in void);
+              (C_100:
+              (let jessie_<somenum> = !tmp_1_0 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((neq_int_ (integer_of_int32 (C_105:
+                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (0)))))) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_104:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                  ((shift buch_CurStates) (1)))))) (0))
+                then
+                 (C_103:
+                 begin   (tmp_2 := (safe_int32_of_integer_ (1))); !tmp_2 end)
+                else
+                 (C_102:
+                 begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end))
+               else
+                (C_101:
+                begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
+               void);
+              (C_107:
+              (let jessie_<somenum> = !tmp_2 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (let jessie_<somenum> = (1) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((neq_int_ (integer_of_int32 (C_112:
+                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (1)))))) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_111:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                  ((shift buch_CurStates) (1)))))) (0))
+                then
+                 (C_110:
+                 begin   (tmp_3 := (safe_int32_of_integer_ (1))); !tmp_3 end)
+                else
+                 (C_109:
+                 begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end))
+               else
+                (C_108:
+                begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
+               void);
+              (C_114:
+              (let jessie_<somenum> = !tmp_3 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (let jessie_<somenum> = (2) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void); (raise Return) end) end) end)
+         end) end) end) end) end)))))); (raise Return) end with Return ->
+   void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
@@ -4666,207 +4784,212 @@ let op_ensures_default =
      (let tmp_2 = ref (any_int32 void) in
      (let tmp_3 = ref (any_int32 void) in
      (C_62:
-     (C_63:
-     (C_64:
-     (C_67:
-     (C_70:
-     (C_73:
-     (C_76:
-     (C_79:
      begin
        (let jessie_<somenum> = (status := (safe_int32_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (C_65:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> =
-      (C_68:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurStates_old_3_alloc_table,intP_intM_buch_CurStates_old_3
-        writes intP_intM_buch_CurStates_old_3
-        { (not_assigns(intP_buch_CurStates_old_3_alloc_table,
-           intP_intM_buch_CurStates_old_3@, intP_intM_buch_CurStates_old_3,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_buch_CurStates_old_3,
-                shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_buch_CurStates_old_3,
-                   shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> =
-      (C_71:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> =
-      (C_74:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> =
-      (C_77:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurTrans_tmp_4_alloc_table,intP_intM_buch_CurTrans_tmp_4
-        writes intP_intM_buch_CurTrans_tmp_4
-        { (not_assigns(intP_buch_CurTrans_tmp_4_alloc_table,
-           intP_intM_buch_CurTrans_tmp_4@, intP_intM_buch_CurTrans_tmp_4,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_buch_CurTrans_tmp_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_buch_CurTrans_tmp_4,
-                       shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
+      (C_63:
       begin
         (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_83:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (C_82:
-          begin   (tmp_0_0 := (safe_int32_of_integer_ (1))); !tmp_0_0 end)
-         else
-          (C_81:
-          begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end))
-        else
-         (C_80:
-         begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end)) in
-        void);
-       (C_85:
-       (let jessie_<somenum> = !tmp_0_0 in
+        (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
+       (C_64:
        begin
-         (let jessie_<somenum> = buch_CurStates in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_90:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (0)))))) (0))
-        then
-         (C_89:
-         begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
-        else
-         (if ((neq_int_ (integer_of_int32 (C_88:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (1)))))) (0))
-         then
-          (C_87:
-          begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
-         else
-          (C_86:
-          begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1 end))) in
-        void);
-       (C_92:
-       (let jessie_<somenum> = !tmp_0_1 in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_98:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (if ((neq_int_ (integer_of_int32 (C_97:
-                                           ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                            ((shift buch_CurStates) (0)))))) (0))
-          then
-           (C_96:
-           begin   (tmp_1_0 := (safe_int32_of_integer_ (1))); !tmp_1_0 end)
-          else
-           (C_95:
-           begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
-         else
-          (C_94:
-          begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
-        else
-         (C_93:
-         begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end)) in
-        void);
-       (C_100:
-       (let jessie_<somenum> = !tmp_1_0 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_105:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (0)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_104:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_103:
-          begin   (tmp_2 := (safe_int32_of_integer_ (1))); !tmp_2 end)
-         else
-          (C_102:
-          begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end))
-        else
-         (C_101: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
-        void);
-       (C_107:
-       (let jessie_<somenum> = !tmp_2 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_112:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (1)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_111:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_110:
-          begin   (tmp_3 := (safe_int32_of_integer_ (1))); !tmp_3 end)
-         else
-          (C_109:
-          begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end))
-        else
-         (C_108: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
-        void);
-       (C_114:
-       (let jessie_<somenum> = !tmp_3 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void); (raise Return) end)))))))))))));
-    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
+         (let jessie_<somenum> =
+         (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+         void);
+        (C_67:
+        begin
+          (let jessie_<somenum> =
+          (C_65:
+          ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+          (let jessie_<somenum> = buch_CurStates_old in
+          (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>)));
+         (C_70:
+         begin
+           (let jessie_<somenum> =
+           (C_68:
+           ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+           (let jessie_<somenum> = buch_CurStates_old in
+           (let jessie_<somenum> = (1) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+           (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>))))));
+          (C_73:
+          begin
+            (let jessie_<somenum> =
+            (C_71:
+            ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+            (let jessie_<somenum> = buch_CurTrans_tmp in
+            (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>)));
+           (C_76:
+           begin
+             (let jessie_<somenum> =
+             (C_74:
+             ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+             (let jessie_<somenum> = buch_CurTrans_tmp in
+             (let jessie_<somenum> = (1) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+             (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+            (C_79:
+            begin
+              (let jessie_<somenum> =
+              (C_77:
+              ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+              (let jessie_<somenum> = buch_CurTrans_tmp in
+              (let jessie_<somenum> = (2) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+              (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_83:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (C_82:
+                 begin   (tmp_0_0 := (safe_int32_of_integer_ (1))); !tmp_0_0
+                 end)
+                else
+                 (C_81:
+                 begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0
+                 end))
+               else
+                (C_80:
+                begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0
+                end)) in void);
+              (C_85:
+              (let jessie_<somenum> = !tmp_0_0 in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((neq_int_ (integer_of_int32 (C_90:
+                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (0)))))) (0))
+               then
+                (C_89:
+                begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1
+                end)
+               else
+                (if ((neq_int_ (integer_of_int32 (C_88:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (1)))))) (0))
+                then
+                 (C_87:
+                 begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1
+                 end)
+                else
+                 (C_86:
+                 begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1
+                 end))) in void);
+              (C_92:
+              (let jessie_<somenum> = !tmp_0_1 in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (let jessie_<somenum> = (1) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_98:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_97:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (0)))))) (0))
+                 then
+                  (C_96:
+                  begin   (tmp_1_0 := (safe_int32_of_integer_ (1))); !tmp_1_0
+                  end)
+                 else
+                  (C_95:
+                  begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0
+                  end))
+                else
+                 (C_94:
+                 begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0
+                 end))
+               else
+                (C_93:
+                begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0
+                end)) in void);
+              (C_100:
+              (let jessie_<somenum> = !tmp_1_0 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((neq_int_ (integer_of_int32 (C_105:
+                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (0)))))) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_104:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                  ((shift buch_CurStates) (1)))))) (0))
+                then
+                 (C_103:
+                 begin   (tmp_2 := (safe_int32_of_integer_ (1))); !tmp_2 end)
+                else
+                 (C_102:
+                 begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end))
+               else
+                (C_101:
+                begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
+               void);
+              (C_107:
+              (let jessie_<somenum> = !tmp_2 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (let jessie_<somenum> = (1) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((neq_int_ (integer_of_int32 (C_112:
+                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (1)))))) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_111:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                  ((shift buch_CurStates) (1)))))) (0))
+                then
+                 (C_110:
+                 begin   (tmp_3 := (safe_int32_of_integer_ (1))); !tmp_3 end)
+                else
+                 (C_109:
+                 begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end))
+               else
+                (C_108:
+                begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
+               void);
+              (C_114:
+              (let jessie_<somenum> = !tmp_3 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (let jessie_<somenum> = (2) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void); (raise Return) end) end) end)
+         end) end) end) end) end)))))); (raise Return) end with Return ->
+   void end) { (JC_<somenum>: true) }
 
 let op_safety =
  fun (tt : unit) ->
@@ -4942,207 +5065,212 @@ let op_safety =
      (let tmp_2 = ref (any_int32 void) in
      (let tmp_3 = ref (any_int32 void) in
      (C_62:
-     (C_63:
-     (C_64:
-     (C_67:
-     (C_70:
-     (C_73:
-     (C_76:
-     (C_79:
      begin
        (let jessie_<somenum> = (status := (safe_int32_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
-      (let jessie_<somenum> =
-      (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in void);
-      (let jessie_<somenum> =
-      (C_65:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> =
-      (C_68:
-      ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-      (let jessie_<somenum> = buch_CurStates_old in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurStates_old_3_alloc_table,intP_intM_buch_CurStates_old_3
-        writes intP_intM_buch_CurStates_old_3
-        { (not_assigns(intP_buch_CurStates_old_3_alloc_table,
-           intP_intM_buch_CurStates_old_3@, intP_intM_buch_CurStates_old_3,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(intP_intM_buch_CurStates_old_3,
-                shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(intP_intM_buch_CurStates_old_3,
-                   shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-      (let jessie_<somenum> =
-      (C_71:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> =
-      (C_74:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> =
-      (C_77:
-      ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-      (let jessie_<somenum> = buch_CurTrans_tmp in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit
-        reads intP_buch_CurTrans_tmp_4_alloc_table,intP_intM_buch_CurTrans_tmp_4
-        writes intP_intM_buch_CurTrans_tmp_4
-        { (not_assigns(intP_buch_CurTrans_tmp_4_alloc_table,
-           intP_intM_buch_CurTrans_tmp_4@, intP_intM_buch_CurTrans_tmp_4,
-           pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_buch_CurTrans_tmp_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_buch_CurTrans_tmp_4,
-                       shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-      (let jessie_<somenum> =
+      (C_63:
       begin
         (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_83:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (C_82:
-          begin   (tmp_0_0 := (safe_int32_of_integer_ (1))); !tmp_0_0 end)
-         else
-          (C_81:
-          begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end))
-        else
-         (C_80:
-         begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end)) in
-        void);
-       (C_85:
-       (let jessie_<somenum> = !tmp_0_0 in
+        (buch_CurOperation := (safe_buch_ListOper_of_integer_ (2))) in void);
+       (C_64:
        begin
-         (let jessie_<somenum> = buch_CurStates in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_90:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (0)))))) (0))
-        then
-         (C_89:
-         begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
-        else
-         (if ((neq_int_ (integer_of_int32 (C_88:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (1)))))) (0))
-         then
-          (C_87:
-          begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
-         else
-          (C_86:
-          begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1 end))) in
-        void);
-       (C_92:
-       (let jessie_<somenum> = !tmp_0_1 in
-       begin
-         (let jessie_<somenum> = buch_CurStates in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((eq_int_ (integer_of_int32 !status)) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_98:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                           ((shift buch_CurStates_old) (0)))))) (0))
-         then
-          (if ((neq_int_ (integer_of_int32 (C_97:
-                                           ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                            ((shift buch_CurStates) (0)))))) (0))
-          then
-           (C_96:
-           begin   (tmp_1_0 := (safe_int32_of_integer_ (1))); !tmp_1_0 end)
-          else
-           (C_95:
-           begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
-         else
-          (C_94:
-          begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
-        else
-         (C_93:
-         begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end)) in
-        void);
-       (C_100:
-       (let jessie_<somenum> = !tmp_1_0 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_105:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (0)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_104:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_103:
-          begin   (tmp_2 := (safe_int32_of_integer_ (1))); !tmp_2 end)
-         else
-          (C_102:
-          begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end))
-        else
-         (C_101: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
-        void);
-       (C_107:
-       (let jessie_<somenum> = !tmp_2 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void);
-      (let jessie_<somenum> =
-      begin
-        (let jessie_<somenum> =
-        (if ((neq_int_ (integer_of_int32 (C_112:
-                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
-                                          ((shift buch_CurStates_old) (1)))))) (0))
-        then
-         (if ((neq_int_ (integer_of_int32 (C_111:
-                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
-                                           ((shift buch_CurStates) (1)))))) (0))
-         then
-          (C_110:
-          begin   (tmp_3 := (safe_int32_of_integer_ (1))); !tmp_3 end)
-         else
-          (C_109:
-          begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end))
-        else
-         (C_108: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
-        void);
-       (C_114:
-       (let jessie_<somenum> = !tmp_3 in
-       begin
-         (let jessie_<somenum> = buch_CurTrans in
-         (let jessie_<somenum> = (2) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-         (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
-        jessie_<somenum> end)) end in void); (raise Return) end)))))))))))));
-    (raise Return) end with Return -> void end)
+         (let jessie_<somenum> =
+         (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+         void);
+        (C_67:
+        begin
+          (let jessie_<somenum> =
+          (C_65:
+          ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+          (let jessie_<somenum> = buch_CurStates_old in
+          (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>)));
+         (C_70:
+         begin
+           (let jessie_<somenum> =
+           (C_68:
+           ((safe_acc_ !intP_intM_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+           (let jessie_<somenum> = buch_CurStates_old in
+           (let jessie_<somenum> = (1) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+           (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+           (((safe_upd_ intP_intM_buch_CurStates_old_3) jessie_<somenum>) jessie_<somenum>))))));
+          (C_73:
+          begin
+            (let jessie_<somenum> =
+            (C_71:
+            ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+            (let jessie_<somenum> = buch_CurTrans_tmp in
+            (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>)));
+           (C_76:
+           begin
+             (let jessie_<somenum> =
+             (C_74:
+             ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+             (let jessie_<somenum> = buch_CurTrans_tmp in
+             (let jessie_<somenum> = (1) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+             (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+            (C_79:
+            begin
+              (let jessie_<somenum> =
+              (C_77:
+              ((safe_acc_ !intP_intM_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+              (let jessie_<somenum> = buch_CurTrans_tmp in
+              (let jessie_<somenum> = (2) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+              (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+              (((safe_upd_ intP_intM_buch_CurTrans_tmp_4) jessie_<somenum>) jessie_<somenum>))))));
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_83:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (C_82:
+                 begin   (tmp_0_0 := (safe_int32_of_integer_ (1))); !tmp_0_0
+                 end)
+                else
+                 (C_81:
+                 begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0
+                 end))
+               else
+                (C_80:
+                begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0
+                end)) in void);
+              (C_85:
+              (let jessie_<somenum> = !tmp_0_0 in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((neq_int_ (integer_of_int32 (C_90:
+                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (0)))))) (0))
+               then
+                (C_89:
+                begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1
+                end)
+               else
+                (if ((neq_int_ (integer_of_int32 (C_88:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (1)))))) (0))
+                then
+                 (C_87:
+                 begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1
+                 end)
+                else
+                 (C_86:
+                 begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1
+                 end))) in void);
+              (C_92:
+              (let jessie_<somenum> = !tmp_0_1 in
+              begin
+                (let jessie_<somenum> = buch_CurStates in
+                (let jessie_<somenum> = (1) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((eq_int_ (integer_of_int32 !status)) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_98:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                  ((shift buch_CurStates_old) (0)))))) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_97:
+                                                  ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                   ((shift buch_CurStates) (0)))))) (0))
+                 then
+                  (C_96:
+                  begin   (tmp_1_0 := (safe_int32_of_integer_ (1))); !tmp_1_0
+                  end)
+                 else
+                  (C_95:
+                  begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0
+                  end))
+                else
+                 (C_94:
+                 begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0
+                 end))
+               else
+                (C_93:
+                begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0
+                end)) in void);
+              (C_100:
+              (let jessie_<somenum> = !tmp_1_0 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((neq_int_ (integer_of_int32 (C_105:
+                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (0)))))) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_104:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                  ((shift buch_CurStates) (1)))))) (0))
+                then
+                 (C_103:
+                 begin   (tmp_2 := (safe_int32_of_integer_ (1))); !tmp_2 end)
+                else
+                 (C_102:
+                 begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end))
+               else
+                (C_101:
+                begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
+               void);
+              (C_107:
+              (let jessie_<somenum> = !tmp_2 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (let jessie_<somenum> = (1) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void);
+             (let jessie_<somenum> =
+             begin
+               (let jessie_<somenum> =
+               (if ((neq_int_ (integer_of_int32 (C_112:
+                                                ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (1)))))) (0))
+               then
+                (if ((neq_int_ (integer_of_int32 (C_111:
+                                                 ((safe_acc_ !intP_intM_buch_CurStates_1) 
+                                                  ((shift buch_CurStates) (1)))))) (0))
+                then
+                 (C_110:
+                 begin   (tmp_3 := (safe_int32_of_integer_ (1))); !tmp_3 end)
+                else
+                 (C_109:
+                 begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end))
+               else
+                (C_108:
+                begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
+               void);
+              (C_114:
+              (let jessie_<somenum> = !tmp_3 in
+              begin
+                (let jessie_<somenum> = buch_CurTrans in
+                (let jessie_<somenum> = (2) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+                (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+                (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)))));
+               jessie_<somenum> end)) end in void); (raise Return) end) end) end)
+         end) end) end) end) end)))))); (raise Return) end with Return ->
+   void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      _Buch_tr_cross_3(intP_intM_buch_CurStates_old_3,
@@ -5432,94 +5560,94 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po91.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po92.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po93.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po94.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po95.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po96.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po97.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po98.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po99.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po100.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po101.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po102.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po103.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po104.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po105.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po106.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po107.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po108.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "403" begin = "18" end = "22"/>
+      <location file = "why/t1_annot24.why" line = "3651" begin = "11" end = "27"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = ""/>
     </goal>
     <goal why_file="why/t1_annot24_po109.why">
       <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "276" begin = "22" end = "55"/>

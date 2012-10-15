@@ -598,23 +598,24 @@ let f_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_1:
-     (C_8:
      begin
        (let jessie_<somenum> = (a := b) in void);
-      (let jessie_<somenum> =
-      (__retres := (C_7:
-                   (safe_int32_of_integer_ (C_6:
-                                           ((add_int (integer_of_int32 
-                                                      (C_5:
-                                                      ((safe_acc_ !intP_intM_a_4) 
-                                                       (C_4:
-                                                       ((safe_acc_ !S_x_a_1) !a)))))) 
-                                            (integer_of_int32 (C_3:
-                                                              ((safe_acc_ !intP_intM_b_3) 
-                                                               (C_2:
-                                                               ((safe_acc_ !S_y_a_1) b)))))))))) in
-      void); (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+      (C_8:
+      begin
+        (let jessie_<somenum> =
+        (__retres := (C_7:
+                     (safe_int32_of_integer_ (C_6:
+                                             ((add_int (integer_of_int32 
+                                                        (C_5:
+                                                        ((safe_acc_ !intP_intM_a_4) 
+                                                         (C_4:
+                                                         ((safe_acc_ !S_x_a_1) !a)))))) 
+                                              (integer_of_int32 (C_3:
+                                                                ((safe_acc_ !intP_intM_b_3) 
+                                                                 (C_2:
+                                                                 ((safe_acc_ !S_y_a_1) b)))))))))) in
+        void); (return := !__retres); (raise Return) end) end)); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -625,27 +626,28 @@ let f_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_1:
-     (C_8:
      begin
        (let jessie_<somenum> = (a := b) in void);
-      (let jessie_<somenum> =
-      (__retres := (C_7:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_6:
-                                      ((add_int (integer_of_int32 (C_5:
-                                                                  (JC_<somenum>:
-                                                                  (((acc_ !intP_a_4_alloc_table) !intP_intM_a_4) 
-                                                                   (C_4:
-                                                                   (JC_<somenum>:
-                                                                   (((acc_ !S_a_1_alloc_table) !S_x_a_1) !a)))))))) 
-                                       (integer_of_int32 (C_3:
-                                                         (JC_<somenum>:
-                                                         (((acc_ !intP_b_3_alloc_table) !intP_intM_b_3) 
-                                                          (C_2:
-                                                          (JC_<somenum>:
-                                                          (((acc_ !S_a_1_alloc_table) !S_y_a_1) b))))))))))))) in
-      void); (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end)) { true }
+      (C_8:
+      begin
+        (let jessie_<somenum> =
+        (__retres := (C_7:
+                     (JC_<somenum>:
+                     (int32_of_integer_ (C_6:
+                                        ((add_int (integer_of_int32 (C_5:
+                                                                    (JC_<somenum>:
+                                                                    (((acc_ !intP_a_4_alloc_table) !intP_intM_a_4) 
+                                                                    (C_4:
+                                                                    (JC_<somenum>:
+                                                                    (((acc_ !S_a_1_alloc_table) !S_x_a_1) !a)))))))) 
+                                         (integer_of_int32 (C_3:
+                                                           (JC_<somenum>:
+                                                           (((acc_ !intP_b_3_alloc_table) !intP_intM_b_3) 
+                                                            (C_2:
+                                                            (JC_<somenum>:
+                                                            (((acc_ !S_a_1_alloc_table) !S_y_a_1) b))))))))))))) in
+        void); (return := !__retres); (raise Return) end) end)); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C zones.jessie --quiet -f zones.makefile project

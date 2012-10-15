@@ -591,11 +591,13 @@ let free_null_ensures_default =
      (let intP_p_1_3_alloc_table = ref (any_alloc_table void) in
      (let p_1 = ref (any_pointer void) in
      (C_13:
-     (C_14:
      begin
        (let jessie_<somenum> = (p_1 := null) in void);
-      ((safe_free_parameter intP_p_1_3_alloc_table) !p_1); (raise Return) end))));
-    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
+      (C_14:
+      begin
+        ((safe_free_parameter intP_p_1_3_alloc_table) !p_1); (raise Return)
+      end) end))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let free_null_safety =
  fun (tt : unit) ->
@@ -606,11 +608,11 @@ let free_null_safety =
      (let intP_p_1_3_alloc_table = ref (any_alloc_table void) in
      (let p_1 = ref (any_pointer void) in
      (C_13:
-     (C_14:
      begin
        (let jessie_<somenum> = (p_1 := null) in void);
-      ((free_parameter intP_p_1_3_alloc_table) !p_1); (raise Return) end))));
-    (raise Return) end with Return -> void end) { true }
+      (C_14:
+      begin   ((free_parameter intP_p_1_3_alloc_table) !p_1); (raise Return)
+      end) end))); (raise Return) end with Return -> void end) { true }
 
 let main_ensures_default =
  fun (q : intP pointer) (intP_q_2_alloc_table : intP alloc_table ref) ->
@@ -623,11 +625,12 @@ let main_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_7:
-     (C_8:
      begin
        (let jessie_<somenum> = q in (JC_<somenum>: ((f jessie_<somenum>) intP_q_2_alloc_table)));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
+      (C_8:
+      begin
+        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
@@ -641,12 +644,13 @@ let main_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_7:
-     (C_8:
      begin
        (let jessie_<somenum> = q in
        (JC_<somenum>: ((f_requires jessie_<somenum>) intP_q_2_alloc_table)));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
+      (C_8:
+      begin
+        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end)); absurd  end with
    Return -> !return end)) { true }
 
 
@@ -672,7 +676,7 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/free_po5.why">
-      <location file = "why/free.why" line = "514" begin = "7" end = "51"/>
+      <location file = "why/free.why" line = "516" begin = "15" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

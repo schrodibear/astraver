@@ -768,29 +768,32 @@ let f_ensures_default =
    begin
      (let y = ref (any_double void) in
      (C_2:
-     (C_4:
-     (C_6:
-     (C_8:
      begin
        (let jessie_<num> =
        (y := (C_1:
              (JC_16:
              (((add_double_safe nearest_even) x_0) ((double_of_real_safe nearest_even) 1.e291))))) in
        void);
-      (let jessie_<num> =
-      (y := (C_3:
-            (JC_17:
-            (((add_double_safe nearest_even) x_0) ((double_of_real_safe nearest_even) 1.e292))))) in
-      void);
-      (let jessie_<num> =
-      (y := (C_5: (JC_18: (((add_double_safe nearest_even) x_0) x_0)))) in
-      void);
-      (let jessie_<num> =
-      (y := (C_7:
-            (JC_19:
-            (((add_double_safe nearest_even) x_0) ((double_of_real_safe nearest_even) 1e-6))))) in
-      void); (raise Return) end))))); (raise Return) end with Return ->
-   void end) { (JC_5: true) }
+      (C_4:
+      begin
+        (let jessie_<num> =
+        (y := (C_3:
+              (JC_17:
+              (((add_double_safe nearest_even) x_0) ((double_of_real_safe nearest_even) 1.e292))))) in
+        void);
+       (C_6:
+       begin
+         (let jessie_<num> =
+         (y := (C_5: (JC_18: (((add_double_safe nearest_even) x_0) x_0)))) in
+         void);
+        (C_8:
+        begin
+          (let jessie_<num> =
+          (y := (C_7:
+                (JC_19:
+                (((add_double_safe nearest_even) x_0) ((double_of_real_safe nearest_even) 1e-6))))) in
+          void); (raise Return) end) end) end) end)); (raise Return) end with
+   Return -> void end) { (JC_5: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -800,9 +803,6 @@ let f_safety =
    begin
      (let y = ref (any_double void) in
      (C_2:
-     (C_4:
-     (C_6:
-     (C_8:
      begin
        (let jessie_<num> =
        (y := (C_1:
@@ -810,21 +810,28 @@ let f_safety =
              (((add_double nearest_even) x_0) (JC_9:
                                               ((double_of_real nearest_even) 1.e291)))))) in
        void);
-      (let jessie_<num> =
-      (y := (C_3:
-            (JC_12:
-            (((add_double nearest_even) x_0) (JC_11:
-                                             ((double_of_real nearest_even) 1.e292)))))) in
-      void);
-      (let jessie_<num> =
-      (y := (C_5: (JC_13: (((add_double nearest_even) x_0) x_0)))) in void);
-      (let jessie_<num> =
-      (y := (C_7:
-            (JC_15:
-            (((add_double nearest_even) x_0) (JC_14:
-                                             ((double_of_real nearest_even) 1e-6)))))) in
-      void); (raise Return) end))))); (raise Return) end with Return ->
-   void end) { true }
+      (C_4:
+      begin
+        (let jessie_<num> =
+        (y := (C_3:
+              (JC_12:
+              (((add_double nearest_even) x_0) (JC_11:
+                                               ((double_of_real nearest_even) 1.e292)))))) in
+        void);
+       (C_6:
+       begin
+         (let jessie_<num> =
+         (y := (C_5: (JC_13: (((add_double nearest_even) x_0) x_0)))) in
+         void);
+        (C_8:
+        begin
+          (let jessie_<num> =
+          (y := (C_7:
+                (JC_15:
+                (((add_double nearest_even) x_0) (JC_14:
+                                                 ((double_of_real nearest_even) 1e-6)))))) in
+          void); (raise Return) end) end) end) end)); (raise Return) end with
+   Return -> void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========

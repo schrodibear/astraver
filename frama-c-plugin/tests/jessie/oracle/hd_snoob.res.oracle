@@ -4646,125 +4646,141 @@ let main_ensures_default =
         try
          begin
            try
-            (C_515:
             begin
               (if ((neq_int_ (integer_of_int32 argc)) (2))
               then
                (C_509:
                (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
                (JC_<somenum>: (exit jessie_<somenum>)))) else void);
-             (let jessie_<somenum> =
-             (let __cil_tmp =
-             (C_512:
-             (let jessie_<somenum> =
-             (C_511:
-             ((safe_acc_ char_xP_char_xM_argv_126) (C_510:
-                                                   ((shift argv) (1))))) in
-             (let jessie_<somenum> = null in
-             (let jessie_<somenum> = (safe_int32_of_integer_ (10)) in
-             (JC_<somenum>: (((strtol jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-             (C_514: begin   (n_17 := (C_513: __cil_tmp)); !n_17 end)) in
-             void);
-             (if ((lt_int_ (integer_of_int32 !n_17)) (1))
-             then (raise (Goto__LOR_exc void))
-             else
-              (if ((gt_int_ (integer_of_int32 !n_17)) (7))
-              then (raise (Goto__LOR_exc void)) else void));
-             (raise (Goto__LOR_0_exc void)); (raise (Goto__LOR_exc void)) end)
-            with Goto__LOR_exc jessie_<somenum> ->
+             (C_515:
+             begin
+               (let jessie_<somenum> =
+               (let __cil_tmp =
+               (C_512:
+               (let jessie_<somenum> =
+               (C_511:
+               ((safe_acc_ char_xP_char_xM_argv_126) (C_510:
+                                                     ((shift argv) (1))))) in
+               (let jessie_<somenum> = null in
+               (let jessie_<somenum> = (safe_int32_of_integer_ (10)) in
+               (JC_<somenum>: (((strtol jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+               (C_514: begin   (n_17 := (C_513: __cil_tmp)); !n_17 end)) in
+               void);
+              (if ((lt_int_ (integer_of_int32 !n_17)) (1))
+              then (raise (Goto__LOR_exc void))
+              else
+               (if ((gt_int_ (integer_of_int32 !n_17)) (7))
+               then (raise (Goto__LOR_exc void)) else void));
+              (raise (Goto__LOR_0_exc void)); (raise (Goto__LOR_exc void))
+             end) end with Goto__LOR_exc jessie_<somenum> ->
             (_LOR:
             (C_516:
             (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
             (JC_<somenum>: (exit jessie_<somenum>))))) end;
           (raise (Goto__LOR_0_exc void)) end with Goto__LOR_0_exc jessie_<somenum> ->
          (_LOR_0:
-         (C_525:
-         (C_526:
-         (C_527:
-         (C_528:
-         (C_529:
          begin
            void;
           (let jessie_<somenum> =
-          (C_524:
           begin
             (assert { (JC_<somenum>: ge_int(integer_of_int32(n_17), (0))) }; void);
            (assert { (JC_<somenum>: lt_int(integer_of_int32(n_17), (32))) }; void);
            (assert
            { (JC_<somenum>:
              le_int((1), asr((2147483647), integer_of_int32(n_17)))) }; void);
-           (x_8 := (C_523:
-                   (safe_uint32_of_integer_ (C_522:
-                                            ((sub_int (integer_of_int32 
-                                                       (C_521:
-                                                       (safe_int32_of_integer_ 
-                                                        (C_520:
-                                                        ((lsl (1)) (integer_of_int32 !n_17))))))) (1))))));
-           !x_8 end) in void); (let jessie_<somenum> = (y_0 := !x_8) in void);
-          (let jessie_<somenum> = (z := !x_8) in void);
-          (let jessie_<somenum> = (u := !x_8) in void);
-          (let jessie_<somenum> = (v := !x_8) in void);
-          (let jessie_<somenum> = (w := !x_8) in void);
-          (loop_4:
-          while true do
-          { invariant (JC_<somenum>: true)  }
+           (C_524:
            begin
-             [ { } unit { true } ];
-            try
+             (x_8 := (C_523:
+                     (safe_uint32_of_integer_ (C_522:
+                                              ((sub_int (integer_of_int32 
+                                                         (C_521:
+                                                         (safe_int32_of_integer_ 
+                                                          (C_520:
+                                                          ((lsl (1)) 
+                                                           (integer_of_int32 !n_17))))))) (1))))));
+            !x_8 end) end in void);
+          (C_525:
+          begin
+            (let jessie_<somenum> = (y_0 := !x_8) in void);
+           (C_526:
+           begin
+             (let jessie_<somenum> = (z := !x_8) in void);
+            (C_527:
+            begin
+              (let jessie_<somenum> = (u := !x_8) in void);
+             (C_528:
              begin
-               (let jessie_<somenum> =
-               (C_531:
-               (C_533:
-               (C_535:
-               (C_537:
-               (C_544:
-               begin
-                 (let jessie_<somenum> =
-                 (y_0 := (C_530:
-                         (let jessie_<somenum> = !x_8 in
-                         (JC_<somenum>: (snoob1 jessie_<somenum>))))) in void);
-                (let jessie_<somenum> =
-                (z := (C_532:
-                      (let jessie_<somenum> = !x_8 in
-                      (JC_<somenum>: (snoob2 jessie_<somenum>))))) in void);
-                (let jessie_<somenum> =
-                (u := (C_534:
-                      (let jessie_<somenum> = !x_8 in
-                      (JC_<somenum>: (snoob3 jessie_<somenum>))))) in void);
-                (let jessie_<somenum> =
-                (v := (C_536:
-                      (let jessie_<somenum> = !x_8 in
-                      (JC_<somenum>: (next_set_of_n_elements jessie_<somenum>))))) in
-                void);
-                (let jessie_<somenum> =
-                (C_540:
-                (C_542:
+               (let jessie_<somenum> = (v := !x_8) in void);
+              (C_529:
+              begin
+                (let jessie_<somenum> = (w := !x_8) in void);
+               (loop_4:
+               while true do
+               { invariant (JC_<somenum>: true)  }
                 begin
-                  (let jessie_<somenum> =
-                  (tmp_2 := (C_539:
-                            (let jessie_<somenum> =
-                            (C_538:
-                            (safe_int32_of_integer_ (integer_of_uint32 !x_8))) in
-                            (JC_<somenum>: (snoob4 jessie_<somenum>))))) in void);
-                 (w := (C_541:
-                       (safe_uint32_of_integer_ (integer_of_int32 !tmp_2))));
-                 !w end)) in void);
-                (x_8 := (C_543:
-                        (let jessie_<somenum> = !x_8 in
-                        (JC_<somenum>: (snoob jessie_<somenum>))))); !x_8 end))))) in
-               void);
-              (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
-              else (raise (Goto_while_0_break_exc void)));
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<somenum> -> void end end done) end)))))) end;
-       (raise (Goto_while_0_break_exc void)) end with
-      Goto_while_0_break_exc jessie_<somenum> ->
+                  [ { } unit { true } ];
+                 try
+                  begin
+                    (let jessie_<somenum> =
+                    (C_531:
+                    begin
+                      (let jessie_<somenum> =
+                      (y_0 := (C_530:
+                              (let jessie_<somenum> = !x_8 in
+                              (JC_<somenum>: (snoob1 jessie_<somenum>))))) in void);
+                     (C_533:
+                     begin
+                       (let jessie_<somenum> =
+                       (z := (C_532:
+                             (let jessie_<somenum> = !x_8 in
+                             (JC_<somenum>: (snoob2 jessie_<somenum>))))) in void);
+                      (C_535:
+                      begin
+                        (let jessie_<somenum> =
+                        (u := (C_534:
+                              (let jessie_<somenum> = !x_8 in
+                              (JC_<somenum>: (snoob3 jessie_<somenum>))))) in void);
+                       (C_537:
+                       begin
+                         (let jessie_<somenum> =
+                         (v := (C_536:
+                               (let jessie_<somenum> = !x_8 in
+                               (JC_<somenum>: (next_set_of_n_elements jessie_<somenum>))))) in
+                         void);
+                        (let jessie_<somenum> =
+                        (C_540:
+                        begin
+                          (let jessie_<somenum> =
+                          (tmp_2 := (C_539:
+                                    (let jessie_<somenum> =
+                                    (C_538:
+                                    (safe_int32_of_integer_ (integer_of_uint32 !x_8))) in
+                                    (JC_<somenum>: (snoob4 jessie_<somenum>))))) in
+                          void);
+                         (C_542:
+                         begin
+                           (w := (C_541:
+                                 (safe_uint32_of_integer_ (integer_of_int32 !tmp_2))));
+                          !w end) end) in void);
+                        (C_544:
+                        begin
+                          (x_8 := (C_543:
+                                  (let jessie_<somenum> = !x_8 in
+                                  (JC_<somenum>: (snoob jessie_<somenum>))))); !x_8 end)
+                       end) end) end) end) in void);
+                   (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                   (raise (Loop_continue_exc void)) end with
+                  Loop_continue_exc jessie_<somenum> -> void end end done) end) end)
+            end) end) end) end) end; (raise (Goto_while_0_break_exc void))
+      end with Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
-      (C_545:
       begin
         void;
-       (let jessie_<somenum> = (__retres_8 := (safe_int32_of_integer_ (0))) in
-       void); (return := !__retres_8); (raise Return) end)) end)))))))));
+       (C_545:
+       begin
+         (let jessie_<somenum> = (__retres_8 := (safe_int32_of_integer_ (0))) in
+         void); (return := !__retres_8); (raise Return) end) end) end)))))))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
@@ -4788,47 +4804,43 @@ let main_safety =
         try
          begin
            try
-            (C_515:
             begin
               (if ((neq_int_ (integer_of_int32 argc)) (2))
               then
                (C_509:
                (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
                (JC_<somenum>: (exit_requires jessie_<somenum>)))) else void);
-             (let jessie_<somenum> =
-             (let __cil_tmp =
-             (C_512:
-             (let jessie_<somenum> =
-             (C_511:
-             (JC_<somenum>:
-             ((((offset_acc_ char_xP_argv_126_alloc_table) char_xP_char_xM_argv_126) argv) (1)))) in
-             (let jessie_<somenum> = null in
-             (let jessie_<somenum> = (safe_int32_of_integer_ (10)) in
-             (JC_<somenum>: (((strtol_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-             (C_514: begin   (n_17 := (C_513: __cil_tmp)); !n_17 end)) in
-             void);
-             (if ((lt_int_ (integer_of_int32 !n_17)) (1))
-             then (raise (Goto__LOR_exc void))
-             else
-              (if ((gt_int_ (integer_of_int32 !n_17)) (7))
-              then (raise (Goto__LOR_exc void)) else void));
-             (raise (Goto__LOR_0_exc void)); (raise (Goto__LOR_exc void)) end)
-            with Goto__LOR_exc jessie_<somenum> ->
+             (C_515:
+             begin
+               (let jessie_<somenum> =
+               (let __cil_tmp =
+               (C_512:
+               (let jessie_<somenum> =
+               (C_511:
+               (JC_<somenum>:
+               ((((offset_acc_ char_xP_argv_126_alloc_table) char_xP_char_xM_argv_126) argv) (1)))) in
+               (let jessie_<somenum> = null in
+               (let jessie_<somenum> = (safe_int32_of_integer_ (10)) in
+               (JC_<somenum>:
+               (((strtol_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+               (C_514: begin   (n_17 := (C_513: __cil_tmp)); !n_17 end)) in
+               void);
+              (if ((lt_int_ (integer_of_int32 !n_17)) (1))
+              then (raise (Goto__LOR_exc void))
+              else
+               (if ((gt_int_ (integer_of_int32 !n_17)) (7))
+               then (raise (Goto__LOR_exc void)) else void));
+              (raise (Goto__LOR_0_exc void)); (raise (Goto__LOR_exc void))
+             end) end with Goto__LOR_exc jessie_<somenum> ->
             (_LOR:
             (C_516:
             (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
             (JC_<somenum>: (exit_requires jessie_<somenum>))))) end;
           (raise (Goto__LOR_0_exc void)) end with Goto__LOR_0_exc jessie_<somenum> ->
          (_LOR_0:
-         (C_525:
-         (C_526:
-         (C_527:
-         (C_528:
-         (C_529:
          begin
            void;
           (let jessie_<somenum> =
-          (C_524:
           begin
             [ { } unit reads n_17
               { (JC_<somenum>: ge_int(integer_of_int32(n_17), (0))) } ];
@@ -4837,83 +4849,106 @@ let main_safety =
            [ { } unit reads n_17
              { (JC_<somenum>:
                le_int((1), asr((2147483647), integer_of_int32(n_17)))) } ];
-           (x_8 := (C_523:
-                   (JC_<somenum>:
-                   (uint32_of_integer_ (C_522:
-                                       ((sub_int (integer_of_int32 (C_521:
-                                                                   (JC_<somenum>:
-                                                                   (int32_of_integer_ 
-                                                                    (C_520:
-                                                                    ((lsl (1)) 
-                                                                    (integer_of_int32 !n_17)))))))) (1)))))));
-           !x_8 end) in void); (let jessie_<somenum> = (y_0 := !x_8) in void);
-          (let jessie_<somenum> = (z := !x_8) in void);
-          (let jessie_<somenum> = (u := !x_8) in void);
-          (let jessie_<somenum> = (v := !x_8) in void);
-          (let jessie_<somenum> = (w := !x_8) in void);
-          (loop_3:
-          while true do
-          { invariant (JC_<somenum>: true) variant (0) }
+           (C_524:
            begin
-             [ { } unit { true } ];
-            try
+             (x_8 := (C_523:
+                     (JC_<somenum>:
+                     (uint32_of_integer_ (C_522:
+                                         ((sub_int (integer_of_int32 
+                                                    (C_521:
+                                                    (JC_<somenum>:
+                                                    (int32_of_integer_ 
+                                                     (C_520:
+                                                     ((lsl (1)) (integer_of_int32 !n_17)))))))) (1)))))));
+            !x_8 end) end in void);
+          (C_525:
+          begin
+            (let jessie_<somenum> = (y_0 := !x_8) in void);
+           (C_526:
+           begin
+             (let jessie_<somenum> = (z := !x_8) in void);
+            (C_527:
+            begin
+              (let jessie_<somenum> = (u := !x_8) in void);
+             (C_528:
              begin
-               (let jessie_<somenum> =
-               (C_531:
-               (C_533:
-               (C_535:
-               (C_537:
-               (C_544:
-               begin
-                 (let jessie_<somenum> =
-                 (y_0 := (C_530:
-                         (let jessie_<somenum> = !x_8 in
-                         (JC_<somenum>: (snoob1_requires jessie_<somenum>))))) in void);
-                (let jessie_<somenum> =
-                (z := (C_532:
-                      (let jessie_<somenum> = !x_8 in
-                      (JC_<somenum>: (snoob2_requires jessie_<somenum>))))) in void);
-                (let jessie_<somenum> =
-                (u := (C_534:
-                      (let jessie_<somenum> = !x_8 in
-                      (JC_<somenum>: (snoob3_requires jessie_<somenum>))))) in void);
-                (let jessie_<somenum> =
-                (v := (C_536:
-                      (let jessie_<somenum> = !x_8 in
-                      (JC_<somenum>: (next_set_of_n_elements_requires jessie_<somenum>))))) in
-                void);
-                (let jessie_<somenum> =
-                (C_540:
-                (C_542:
+               (let jessie_<somenum> = (v := !x_8) in void);
+              (C_529:
+              begin
+                (let jessie_<somenum> = (w := !x_8) in void);
+               (loop_3:
+               while true do
+               { invariant (JC_<somenum>: true) variant (0) }
                 begin
-                  (let jessie_<somenum> =
-                  (tmp_2 := (C_539:
-                            (let jessie_<somenum> =
-                            (C_538:
-                            (JC_<somenum>:
-                            (int32_of_integer_ (integer_of_uint32 !x_8)))) in
-                            (JC_<somenum>: (snoob4_requires jessie_<somenum>))))) in
-                  void);
-                 (w := (C_541:
-                       (JC_<somenum>:
-                       (uint32_of_integer_ (integer_of_int32 !tmp_2))))); !w
-                end)) in void);
-                (x_8 := (C_543:
-                        (let jessie_<somenum> = !x_8 in
-                        (JC_<somenum>: (snoob_requires jessie_<somenum>))))); !x_8 end))))) in
-               void);
-              (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
-              else (raise (Goto_while_0_break_exc void)));
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<somenum> -> void end end done) end)))))) end;
-       (raise (Goto_while_0_break_exc void)) end with
-      Goto_while_0_break_exc jessie_<somenum> ->
+                  [ { } unit { true } ];
+                 try
+                  begin
+                    (let jessie_<somenum> =
+                    (C_531:
+                    begin
+                      (let jessie_<somenum> =
+                      (y_0 := (C_530:
+                              (let jessie_<somenum> = !x_8 in
+                              (JC_<somenum>: (snoob1_requires jessie_<somenum>))))) in
+                      void);
+                     (C_533:
+                     begin
+                       (let jessie_<somenum> =
+                       (z := (C_532:
+                             (let jessie_<somenum> = !x_8 in
+                             (JC_<somenum>: (snoob2_requires jessie_<somenum>))))) in
+                       void);
+                      (C_535:
+                      begin
+                        (let jessie_<somenum> =
+                        (u := (C_534:
+                              (let jessie_<somenum> = !x_8 in
+                              (JC_<somenum>: (snoob3_requires jessie_<somenum>))))) in
+                        void);
+                       (C_537:
+                       begin
+                         (let jessie_<somenum> =
+                         (v := (C_536:
+                               (let jessie_<somenum> = !x_8 in
+                               (JC_<somenum>:
+                               (next_set_of_n_elements_requires jessie_<somenum>))))) in
+                         void);
+                        (let jessie_<somenum> =
+                        (C_540:
+                        begin
+                          (let jessie_<somenum> =
+                          (tmp_2 := (C_539:
+                                    (let jessie_<somenum> =
+                                    (C_538:
+                                    (JC_<somenum>:
+                                    (int32_of_integer_ (integer_of_uint32 !x_8)))) in
+                                    (JC_<somenum>: (snoob4_requires jessie_<somenum>))))) in
+                          void);
+                         (C_542:
+                         begin
+                           (w := (C_541:
+                                 (JC_<somenum>:
+                                 (uint32_of_integer_ (integer_of_int32 !tmp_2)))));
+                          !w end) end) in void);
+                        (C_544:
+                        begin
+                          (x_8 := (C_543:
+                                  (let jessie_<somenum> = !x_8 in
+                                  (JC_<somenum>: (snoob_requires jessie_<somenum>)))));
+                         !x_8 end) end) end) end) end) in void);
+                   (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                   (raise (Loop_continue_exc void)) end with
+                  Loop_continue_exc jessie_<somenum> -> void end end done) end) end)
+            end) end) end) end) end; (raise (Goto_while_0_break_exc void))
+      end with Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
-      (C_545:
       begin
         void;
-       (let jessie_<somenum> = (__retres_8 := (safe_int32_of_integer_ (0))) in
-       void); (return := !__retres_8); (raise Return) end)) end)))))))));
+       (C_545:
+       begin
+         (let jessie_<somenum> = (__retres_8 := (safe_int32_of_integer_ (0))) in
+         void); (return := !__retres_8); (raise Return) end) end) end)))))))));
     absurd  end with Return -> !return end)) { true }
 
 let next_set_of_n_elements_ensures_default =
@@ -4929,11 +4964,6 @@ let next_set_of_n_elements_ensures_default =
      (let ones_3 = ref (any_uint32 void) in
      (let __retres_6 = ref (any_uint32 void) in
      try
-      (C_465:
-      (C_468:
-      (C_473:
-      (C_480:
-      (C_483:
       begin
         (if ((eq_int_ (integer_of_uint32 x_7)) (0))
         then
@@ -4941,57 +4971,67 @@ let next_set_of_n_elements_ensures_default =
          begin
            (let jessie_<somenum> = (__retres_6 := (safe_uint32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> =
-       (smallest_3 := (C_464:
-                      (safe_uint32_of_integer_ (C_463:
-                                               ((bw_and (integer_of_uint32 x_7)) 
-                                                (integer_of_uint32 (C_462:
-                                                                   (safe_uint32_of_integer_ 
-                                                                    (C_461:
-                                                                    (neg_int 
-                                                                    (integer_of_uint32 x_7))))))))))) in
-       void);
-       (let jessie_<somenum> =
-       (ripple_3 := (C_467:
-                    (safe_uint32_of_integer_ (C_466:
-                                             ((add_int (integer_of_uint32 x_7)) 
-                                              (integer_of_uint32 !smallest_3)))))) in
-       void);
-       (let jessie_<somenum> =
-       (new_smallest := (C_472:
-                        (safe_uint32_of_integer_ (C_471:
-                                                 ((bw_and (integer_of_uint32 !ripple_3)) 
+       (C_465:
+       begin
+         (let jessie_<somenum> =
+         (smallest_3 := (C_464:
+                        (safe_uint32_of_integer_ (C_463:
+                                                 ((bw_and (integer_of_uint32 x_7)) 
                                                   (integer_of_uint32 
-                                                   (C_470:
+                                                   (C_462:
                                                    (safe_uint32_of_integer_ 
-                                                    (C_469:
-                                                    (neg_int (integer_of_uint32 !ripple_3))))))))))) in
-       void);
-       (let jessie_<somenum> =
-       (ones_3 := (C_479:
-                  (safe_uint32_of_integer_ (C_478:
-                                           ((sub_int (integer_of_uint32 
-                                                      (C_477:
-                                                      (safe_uint32_of_integer_ 
-                                                       (C_476:
-                                                       (JC_<somenum>:
-                                                       ((computer_div 
-                                                         (integer_of_uint32 
-                                                          (C_475:
-                                                          (safe_uint32_of_integer_ 
-                                                           (C_474:
-                                                           (JC_<somenum>:
-                                                           ((computer_div 
-                                                             (integer_of_uint32 !new_smallest)) 
-                                                            (integer_of_uint32 !smallest_3)))))))) (2)))))))) (1)))))) in
-       void);
-       (let jessie_<somenum> =
-       (__retres_6 := (C_482:
-                      (safe_uint32_of_integer_ (C_481:
-                                               ((bw_or (integer_of_uint32 !ripple_3)) 
-                                                (integer_of_uint32 !ones_3)))))) in
-       void); (raise (Return_label_exc void)) end))))) with
-      Return_label_exc jessie_<somenum> ->
+                                                    (C_461:
+                                                    (neg_int (integer_of_uint32 x_7))))))))))) in
+         void);
+        (C_468:
+        begin
+          (let jessie_<somenum> =
+          (ripple_3 := (C_467:
+                       (safe_uint32_of_integer_ (C_466:
+                                                ((add_int (integer_of_uint32 x_7)) 
+                                                 (integer_of_uint32 !smallest_3)))))) in
+          void);
+         (C_473:
+         begin
+           (let jessie_<somenum> =
+           (new_smallest := (C_472:
+                            (safe_uint32_of_integer_ (C_471:
+                                                     ((bw_and (integer_of_uint32 !ripple_3)) 
+                                                      (integer_of_uint32 
+                                                       (C_470:
+                                                       (safe_uint32_of_integer_ 
+                                                        (C_469:
+                                                        (neg_int (integer_of_uint32 !ripple_3))))))))))) in
+           void);
+          (C_480:
+          begin
+            (let jessie_<somenum> =
+            (ones_3 := (C_479:
+                       (safe_uint32_of_integer_ (C_478:
+                                                ((sub_int (integer_of_uint32 
+                                                           (C_477:
+                                                           (safe_uint32_of_integer_ 
+                                                            (C_476:
+                                                            (JC_<somenum>:
+                                                            ((computer_div 
+                                                              (integer_of_uint32 
+                                                               (C_475:
+                                                               (safe_uint32_of_integer_ 
+                                                                (C_474:
+                                                                (JC_<somenum>:
+                                                                ((computer_div 
+                                                                  (integer_of_uint32 !new_smallest)) 
+                                                                 (integer_of_uint32 !smallest_3)))))))) (2)))))))) (1)))))) in
+            void);
+           (C_483:
+           begin
+             (let jessie_<somenum> =
+             (__retres_6 := (C_482:
+                            (safe_uint32_of_integer_ (C_481:
+                                                     ((bw_or (integer_of_uint32 !ripple_3)) 
+                                                      (integer_of_uint32 !ones_3)))))) in
+             void); (raise (Return_label_exc void)) end) end) end) end) end)
+      end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_6); (raise Return) end) end)))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -5008,11 +5048,6 @@ let next_set_of_n_elements_safety =
      (let ones_3 = ref (any_uint32 void) in
      (let __retres_6 = ref (any_uint32 void) in
      try
-      (C_465:
-      (C_468:
-      (C_473:
-      (C_480:
-      (C_483:
       begin
         (if ((eq_int_ (integer_of_uint32 x_7)) (0))
         then
@@ -5020,65 +5055,76 @@ let next_set_of_n_elements_safety =
          begin
            (let jessie_<somenum> = (__retres_6 := (safe_uint32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> =
-       (smallest_3 := (C_464:
-                      (JC_<somenum>:
-                      (uint32_of_integer_ (C_463:
-                                          ((bw_and (integer_of_uint32 x_7)) 
-                                           (integer_of_uint32 (C_462:
-                                                              (JC_<somenum>:
-                                                              (uint32_of_integer_ 
-                                                               (C_461:
-                                                               (neg_int 
-                                                                (integer_of_uint32 x_7))))))))))))) in
-       void);
-       (let jessie_<somenum> =
-       (ripple_3 := (C_467:
-                    (JC_<somenum>:
-                    (uint32_of_integer_ (C_466:
-                                        ((add_int (integer_of_uint32 x_7)) 
-                                         (integer_of_uint32 !smallest_3))))))) in
-       void);
-       (let jessie_<somenum> =
-       (new_smallest := (C_472:
+       (C_465:
+       begin
+         (let jessie_<somenum> =
+         (smallest_3 := (C_464:
                         (JC_<somenum>:
-                        (uint32_of_integer_ (C_471:
-                                            ((bw_and (integer_of_uint32 !ripple_3)) 
-                                             (integer_of_uint32 (C_470:
+                        (uint32_of_integer_ (C_463:
+                                            ((bw_and (integer_of_uint32 x_7)) 
+                                             (integer_of_uint32 (C_462:
                                                                 (JC_<somenum>:
                                                                 (uint32_of_integer_ 
-                                                                 (C_469:
+                                                                 (C_461:
                                                                  (neg_int 
-                                                                  (integer_of_uint32 !ripple_3))))))))))))) in
-       void);
-       (let jessie_<somenum> =
-       (ones_3 := (C_479:
-                  (JC_<somenum>:
-                  (uint32_of_integer_ (C_478:
-                                      ((sub_int (integer_of_uint32 (C_477:
-                                                                   (JC_<somenum>:
-                                                                   (uint32_of_integer_ 
-                                                                    (C_476:
-                                                                    (JC_<somenum>:
-                                                                    ((computer_div_ 
-                                                                    (integer_of_uint32 
-                                                                    (C_475:
+                                                                  (integer_of_uint32 x_7))))))))))))) in
+         void);
+        (C_468:
+        begin
+          (let jessie_<somenum> =
+          (ripple_3 := (C_467:
+                       (JC_<somenum>:
+                       (uint32_of_integer_ (C_466:
+                                           ((add_int (integer_of_uint32 x_7)) 
+                                            (integer_of_uint32 !smallest_3))))))) in
+          void);
+         (C_473:
+         begin
+           (let jessie_<somenum> =
+           (new_smallest := (C_472:
+                            (JC_<somenum>:
+                            (uint32_of_integer_ (C_471:
+                                                ((bw_and (integer_of_uint32 !ripple_3)) 
+                                                 (integer_of_uint32 (C_470:
                                                                     (JC_<somenum>:
                                                                     (uint32_of_integer_ 
-                                                                    (C_474:
-                                                                    (JC_<somenum>:
-                                                                    ((computer_div_ 
-                                                                    (integer_of_uint32 !new_smallest)) 
-                                                                    (integer_of_uint32 !smallest_3))))))))) (2))))))))) (1))))))) in
-       void);
-       (let jessie_<somenum> =
-       (__retres_6 := (C_482:
-                      (JC_<somenum>:
-                      (uint32_of_integer_ (C_481:
-                                          ((bw_or (integer_of_uint32 !ripple_3)) 
-                                           (integer_of_uint32 !ones_3))))))) in
-       void); (raise (Return_label_exc void)) end))))) with
-      Return_label_exc jessie_<somenum> ->
+                                                                    (C_469:
+                                                                    (neg_int 
+                                                                    (integer_of_uint32 !ripple_3))))))))))))) in
+           void);
+          (C_480:
+          begin
+            (let jessie_<somenum> =
+            (ones_3 := (C_479:
+                       (JC_<somenum>:
+                       (uint32_of_integer_ (C_478:
+                                           ((sub_int (integer_of_uint32 
+                                                      (C_477:
+                                                      (JC_<somenum>:
+                                                      (uint32_of_integer_ 
+                                                       (C_476:
+                                                       (JC_<somenum>:
+                                                       ((computer_div_ 
+                                                         (integer_of_uint32 
+                                                          (C_475:
+                                                          (JC_<somenum>:
+                                                          (uint32_of_integer_ 
+                                                           (C_474:
+                                                           (JC_<somenum>:
+                                                           ((computer_div_ 
+                                                             (integer_of_uint32 !new_smallest)) 
+                                                            (integer_of_uint32 !smallest_3))))))))) (2))))))))) (1))))))) in
+            void);
+           (C_483:
+           begin
+             (let jessie_<somenum> =
+             (__retres_6 := (C_482:
+                            (JC_<somenum>:
+                            (uint32_of_integer_ (C_481:
+                                                ((bw_or (integer_of_uint32 !ripple_3)) 
+                                                 (integer_of_uint32 !ones_3))))))) in
+             void); (raise (Return_label_exc void)) end) end) end) end) end)
+      end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_6); (raise Return) end) end)))));
     absurd  end with Return -> !return end)) { true }
 
@@ -5093,8 +5139,6 @@ let nlz_ensures_default =
      (let n_16 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      try
-      (C_300:
-      (C_328:
       begin
         (if ((eq_int_ (integer_of_uint32 !mutable_x_0)) (0))
         then
@@ -5102,76 +5146,85 @@ let nlz_ensures_default =
          begin
            (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (32))) in
            void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (n_16 := (safe_int32_of_integer_ (0))) in void);
-       (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (65535))
-       then
-        (let jessie_<somenum> =
-        (C_303:
-        (C_306:
+       (C_300:
+       begin
+         (let jessie_<somenum> = (n_16 := (safe_int32_of_integer_ (0))) in void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (65535))
+        then
+         (let jessie_<somenum> =
+         (C_303:
+         begin
+           (let jessie_<somenum> =
+           (n_16 := (C_302:
+                    (safe_int32_of_integer_ (C_301:
+                                            ((add_int (integer_of_int32 !n_16)) (16)))))) in
+           void);
+          (C_306:
+          begin
+            (mutable_x_0 := (C_305:
+                            (safe_uint32_of_integer_ (C_304:
+                                                     ((mul_int (integer_of_uint32 !mutable_x_0)) (65536))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (16777215))
+        then
+         (let jessie_<somenum> =
+         (C_309:
+         begin
+           (let jessie_<somenum> =
+           (n_16 := (C_308:
+                    (safe_int32_of_integer_ (C_307:
+                                            ((add_int (integer_of_int32 !n_16)) (8)))))) in
+           void);
+          (C_312:
+          begin
+            (mutable_x_0 := (C_311:
+                            (safe_uint32_of_integer_ (C_310:
+                                                     ((mul_int (integer_of_uint32 !mutable_x_0)) (256))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (268435455))
+        then
+         (let jessie_<somenum> =
+         (C_315:
+         begin
+           (let jessie_<somenum> =
+           (n_16 := (C_314:
+                    (safe_int32_of_integer_ (C_313:
+                                            ((add_int (integer_of_int32 !n_16)) (4)))))) in
+           void);
+          (C_318:
+          begin
+            (mutable_x_0 := (C_317:
+                            (safe_uint32_of_integer_ (C_316:
+                                                     ((mul_int (integer_of_uint32 !mutable_x_0)) (16))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (1073741823))
+        then
+         (let jessie_<somenum> =
+         (C_321:
+         begin
+           (let jessie_<somenum> =
+           (n_16 := (C_320:
+                    (safe_int32_of_integer_ (C_319:
+                                            ((add_int (integer_of_int32 !n_16)) (2)))))) in
+           void);
+          (C_324:
+          begin
+            (mutable_x_0 := (C_323:
+                            (safe_uint32_of_integer_ (C_322:
+                                                     ((mul_int (integer_of_uint32 !mutable_x_0)) (4))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (2147483647))
+        then
+         (let jessie_<somenum> =
+         (C_327:
+         (n_16 := (C_326:
+                  (safe_int32_of_integer_ (C_325:
+                                          ((add_int (integer_of_int32 !n_16)) (1))))))) in
+         void) else void);
+        (C_328:
         begin
-          (let jessie_<somenum> =
-          (n_16 := (C_302:
-                   (safe_int32_of_integer_ (C_301:
-                                           ((add_int (integer_of_int32 !n_16)) (16)))))) in
-          void);
-         (mutable_x_0 := (C_305:
-                         (safe_uint32_of_integer_ (C_304:
-                                                  ((mul_int (integer_of_uint32 !mutable_x_0)) (65536))))));
-         !mutable_x_0 end)) in void) else void);
-       (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (16777215))
-       then
-        (let jessie_<somenum> =
-        (C_309:
-        (C_312:
-        begin
-          (let jessie_<somenum> =
-          (n_16 := (C_308:
-                   (safe_int32_of_integer_ (C_307:
-                                           ((add_int (integer_of_int32 !n_16)) (8)))))) in
-          void);
-         (mutable_x_0 := (C_311:
-                         (safe_uint32_of_integer_ (C_310:
-                                                  ((mul_int (integer_of_uint32 !mutable_x_0)) (256))))));
-         !mutable_x_0 end)) in void) else void);
-       (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (268435455))
-       then
-        (let jessie_<somenum> =
-        (C_315:
-        (C_318:
-        begin
-          (let jessie_<somenum> =
-          (n_16 := (C_314:
-                   (safe_int32_of_integer_ (C_313:
-                                           ((add_int (integer_of_int32 !n_16)) (4)))))) in
-          void);
-         (mutable_x_0 := (C_317:
-                         (safe_uint32_of_integer_ (C_316:
-                                                  ((mul_int (integer_of_uint32 !mutable_x_0)) (16))))));
-         !mutable_x_0 end)) in void) else void);
-       (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (1073741823))
-       then
-        (let jessie_<somenum> =
-        (C_321:
-        (C_324:
-        begin
-          (let jessie_<somenum> =
-          (n_16 := (C_320:
-                   (safe_int32_of_integer_ (C_319:
-                                           ((add_int (integer_of_int32 !n_16)) (2)))))) in
-          void);
-         (mutable_x_0 := (C_323:
-                         (safe_uint32_of_integer_ (C_322:
-                                                  ((mul_int (integer_of_uint32 !mutable_x_0)) (4))))));
-         !mutable_x_0 end)) in void) else void);
-       (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (2147483647))
-       then
-        (let jessie_<somenum> =
-        (C_327:
-        (n_16 := (C_326:
-                 (safe_int32_of_integer_ (C_325:
-                                         ((add_int (integer_of_int32 !n_16)) (1))))))) in
-        void) else void); (let jessie_<somenum> = (__retres_0 := !n_16) in void);
-       (raise (Return_label_exc void)) end)) with
+          (let jessie_<somenum> = (__retres_0 := !n_16) in void);
+         (raise (Return_label_exc void)) end) end) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end));
     absurd  end with Return -> !return end))) { (JC_<somenum>: true) }
@@ -5187,8 +5240,6 @@ let nlz_safety =
      (let n_16 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      try
-      (C_300:
-      (C_328:
       begin
         (if ((eq_int_ (integer_of_uint32 !mutable_x_0)) (0))
         then
@@ -5196,85 +5247,94 @@ let nlz_safety =
          begin
            (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (32))) in
            void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (n_16 := (safe_int32_of_integer_ (0))) in void);
-       (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (65535))
-       then
-        (let jessie_<somenum> =
-        (C_303:
-        (C_306:
+       (C_300:
+       begin
+         (let jessie_<somenum> = (n_16 := (safe_int32_of_integer_ (0))) in void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (65535))
+        then
+         (let jessie_<somenum> =
+         (C_303:
+         begin
+           (let jessie_<somenum> =
+           (n_16 := (C_302:
+                    (JC_<somenum>:
+                    (int32_of_integer_ (C_301:
+                                       ((add_int (integer_of_int32 !n_16)) (16))))))) in
+           void);
+          (C_306:
+          begin
+            (mutable_x_0 := (C_305:
+                            (JC_<somenum>:
+                            (uint32_of_integer_ (C_304:
+                                                ((mul_int (integer_of_uint32 !mutable_x_0)) (65536)))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (16777215))
+        then
+         (let jessie_<somenum> =
+         (C_309:
+         begin
+           (let jessie_<somenum> =
+           (n_16 := (C_308:
+                    (JC_<somenum>:
+                    (int32_of_integer_ (C_307:
+                                       ((add_int (integer_of_int32 !n_16)) (8))))))) in
+           void);
+          (C_312:
+          begin
+            (mutable_x_0 := (C_311:
+                            (JC_<somenum>:
+                            (uint32_of_integer_ (C_310:
+                                                ((mul_int (integer_of_uint32 !mutable_x_0)) (256)))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (268435455))
+        then
+         (let jessie_<somenum> =
+         (C_315:
+         begin
+           (let jessie_<somenum> =
+           (n_16 := (C_314:
+                    (JC_<somenum>:
+                    (int32_of_integer_ (C_313:
+                                       ((add_int (integer_of_int32 !n_16)) (4))))))) in
+           void);
+          (C_318:
+          begin
+            (mutable_x_0 := (C_317:
+                            (JC_<somenum>:
+                            (uint32_of_integer_ (C_316:
+                                                ((mul_int (integer_of_uint32 !mutable_x_0)) (16)))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (1073741823))
+        then
+         (let jessie_<somenum> =
+         (C_321:
+         begin
+           (let jessie_<somenum> =
+           (n_16 := (C_320:
+                    (JC_<somenum>:
+                    (int32_of_integer_ (C_319:
+                                       ((add_int (integer_of_int32 !n_16)) (2))))))) in
+           void);
+          (C_324:
+          begin
+            (mutable_x_0 := (C_323:
+                            (JC_<somenum>:
+                            (uint32_of_integer_ (C_322:
+                                                ((mul_int (integer_of_uint32 !mutable_x_0)) (4)))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (2147483647))
+        then
+         (let jessie_<somenum> =
+         (C_327:
+         (n_16 := (C_326:
+                  (JC_<somenum>:
+                  (int32_of_integer_ (C_325:
+                                     ((add_int (integer_of_int32 !n_16)) (1)))))))) in
+         void) else void);
+        (C_328:
         begin
-          (let jessie_<somenum> =
-          (n_16 := (C_302:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_301:
-                                      ((add_int (integer_of_int32 !n_16)) (16))))))) in
-          void);
-         (mutable_x_0 := (C_305:
-                         (JC_<somenum>:
-                         (uint32_of_integer_ (C_304:
-                                             ((mul_int (integer_of_uint32 !mutable_x_0)) (65536)))))));
-         !mutable_x_0 end)) in void) else void);
-       (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (16777215))
-       then
-        (let jessie_<somenum> =
-        (C_309:
-        (C_312:
-        begin
-          (let jessie_<somenum> =
-          (n_16 := (C_308:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_307:
-                                      ((add_int (integer_of_int32 !n_16)) (8))))))) in
-          void);
-         (mutable_x_0 := (C_311:
-                         (JC_<somenum>:
-                         (uint32_of_integer_ (C_310:
-                                             ((mul_int (integer_of_uint32 !mutable_x_0)) (256)))))));
-         !mutable_x_0 end)) in void) else void);
-       (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (268435455))
-       then
-        (let jessie_<somenum> =
-        (C_315:
-        (C_318:
-        begin
-          (let jessie_<somenum> =
-          (n_16 := (C_314:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_313:
-                                      ((add_int (integer_of_int32 !n_16)) (4))))))) in
-          void);
-         (mutable_x_0 := (C_317:
-                         (JC_<somenum>:
-                         (uint32_of_integer_ (C_316:
-                                             ((mul_int (integer_of_uint32 !mutable_x_0)) (16)))))));
-         !mutable_x_0 end)) in void) else void);
-       (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (1073741823))
-       then
-        (let jessie_<somenum> =
-        (C_321:
-        (C_324:
-        begin
-          (let jessie_<somenum> =
-          (n_16 := (C_320:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_319:
-                                      ((add_int (integer_of_int32 !n_16)) (2))))))) in
-          void);
-         (mutable_x_0 := (C_323:
-                         (JC_<somenum>:
-                         (uint32_of_integer_ (C_322:
-                                             ((mul_int (integer_of_uint32 !mutable_x_0)) (4)))))));
-         !mutable_x_0 end)) in void) else void);
-       (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (2147483647))
-       then
-        (let jessie_<somenum> =
-        (C_327:
-        (n_16 := (C_326:
-                 (JC_<somenum>:
-                 (int32_of_integer_ (C_325:
-                                    ((add_int (integer_of_int32 !n_16)) (1)))))))) in
-        void) else void); (let jessie_<somenum> = (__retres_0 := !n_16) in void);
-       (raise (Return_label_exc void)) end)) with
+          (let jessie_<somenum> = (__retres_0 := !n_16) in void);
+         (raise (Return_label_exc void)) end) end) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end));
     absurd  end with Return -> !return end))) { true }
@@ -5290,8 +5350,6 @@ let ntz_ensures_default =
      (let n_15 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (C_259:
-      (C_297:
       begin
         (if ((eq_int_ (integer_of_uint32 !mutable_x_1)) (0))
         then
@@ -5299,96 +5357,104 @@ let ntz_ensures_default =
          begin
            (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (32))) in
            void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (n_15 := (safe_int32_of_integer_ (1))) in void);
-       (if ((eq_int_ (integer_of_uint32 (C_267:
-                                        (safe_uint32_of_integer_ (C_266:
-                                                                 ((bw_and 
-                                                                   (integer_of_uint32 !mutable_x_1)) (65535))))))) (0))
-       then
-        (let jessie_<somenum> =
-        (C_262:
-        (C_265:
+       (C_259:
+       begin
+         (let jessie_<somenum> = (n_15 := (safe_int32_of_integer_ (1))) in void);
+        (if ((eq_int_ (integer_of_uint32 (C_267:
+                                         (safe_uint32_of_integer_ (C_266:
+                                                                  ((bw_and 
+                                                                    (integer_of_uint32 !mutable_x_1)) (65535))))))) (0))
+        then
+         (let jessie_<somenum> =
+         (C_262:
+         begin
+           (let jessie_<somenum> =
+           (n_15 := (C_261:
+                    (safe_int32_of_integer_ (C_260:
+                                            ((add_int (integer_of_int32 !n_15)) (16)))))) in
+           void);
+          (C_265:
+          begin
+            (mutable_x_1 := (C_264:
+                            (safe_uint32_of_integer_ (C_263:
+                                                     (JC_<somenum>:
+                                                     ((computer_div (integer_of_uint32 !mutable_x_1)) (65536)))))));
+           !mutable_x_1 end) end) in void) else void);
+        (if ((eq_int_ (integer_of_uint32 (C_275:
+                                         (safe_uint32_of_integer_ (C_274:
+                                                                  ((bw_and 
+                                                                    (integer_of_uint32 !mutable_x_1)) (255))))))) (0))
+        then
+         (let jessie_<somenum> =
+         (C_270:
+         begin
+           (let jessie_<somenum> =
+           (n_15 := (C_269:
+                    (safe_int32_of_integer_ (C_268:
+                                            ((add_int (integer_of_int32 !n_15)) (8)))))) in
+           void);
+          (C_273:
+          begin
+            (mutable_x_1 := (C_272:
+                            (safe_uint32_of_integer_ (C_271:
+                                                     (JC_<somenum>:
+                                                     ((computer_div (integer_of_uint32 !mutable_x_1)) (256)))))));
+           !mutable_x_1 end) end) in void) else void);
+        (if ((eq_int_ (integer_of_uint32 (C_283:
+                                         (safe_uint32_of_integer_ (C_282:
+                                                                  ((bw_and 
+                                                                    (integer_of_uint32 !mutable_x_1)) (15))))))) (0))
+        then
+         (let jessie_<somenum> =
+         (C_278:
+         begin
+           (let jessie_<somenum> =
+           (n_15 := (C_277:
+                    (safe_int32_of_integer_ (C_276:
+                                            ((add_int (integer_of_int32 !n_15)) (4)))))) in
+           void);
+          (C_281:
+          begin
+            (mutable_x_1 := (C_280:
+                            (safe_uint32_of_integer_ (C_279:
+                                                     (JC_<somenum>:
+                                                     ((computer_div (integer_of_uint32 !mutable_x_1)) (16)))))));
+           !mutable_x_1 end) end) in void) else void);
+        (if ((eq_int_ (integer_of_uint32 (C_291:
+                                         (safe_uint32_of_integer_ (C_290:
+                                                                  ((bw_and 
+                                                                    (integer_of_uint32 !mutable_x_1)) (3))))))) (0))
+        then
+         (let jessie_<somenum> =
+         (C_286:
+         begin
+           (let jessie_<somenum> =
+           (n_15 := (C_285:
+                    (safe_int32_of_integer_ (C_284:
+                                            ((add_int (integer_of_int32 !n_15)) (2)))))) in
+           void);
+          (C_289:
+          begin
+            (mutable_x_1 := (C_288:
+                            (safe_uint32_of_integer_ (C_287:
+                                                     (JC_<somenum>:
+                                                     ((computer_div (integer_of_uint32 !mutable_x_1)) (4)))))));
+           !mutable_x_1 end) end) in void) else void);
+        (C_297:
         begin
           (let jessie_<somenum> =
-          (n_15 := (C_261:
-                   (safe_int32_of_integer_ (C_260:
-                                           ((add_int (integer_of_int32 !n_15)) (16)))))) in
-          void);
-         (mutable_x_1 := (C_264:
-                         (safe_uint32_of_integer_ (C_263:
-                                                  (JC_<somenum>:
-                                                  ((computer_div (integer_of_uint32 !mutable_x_1)) (65536)))))));
-         !mutable_x_1 end)) in void) else void);
-       (if ((eq_int_ (integer_of_uint32 (C_275:
-                                        (safe_uint32_of_integer_ (C_274:
-                                                                 ((bw_and 
-                                                                   (integer_of_uint32 !mutable_x_1)) (255))))))) (0))
-       then
-        (let jessie_<somenum> =
-        (C_270:
-        (C_273:
-        begin
-          (let jessie_<somenum> =
-          (n_15 := (C_269:
-                   (safe_int32_of_integer_ (C_268:
-                                           ((add_int (integer_of_int32 !n_15)) (8)))))) in
-          void);
-         (mutable_x_1 := (C_272:
-                         (safe_uint32_of_integer_ (C_271:
-                                                  (JC_<somenum>:
-                                                  ((computer_div (integer_of_uint32 !mutable_x_1)) (256)))))));
-         !mutable_x_1 end)) in void) else void);
-       (if ((eq_int_ (integer_of_uint32 (C_283:
-                                        (safe_uint32_of_integer_ (C_282:
-                                                                 ((bw_and 
-                                                                   (integer_of_uint32 !mutable_x_1)) (15))))))) (0))
-       then
-        (let jessie_<somenum> =
-        (C_278:
-        (C_281:
-        begin
-          (let jessie_<somenum> =
-          (n_15 := (C_277:
-                   (safe_int32_of_integer_ (C_276:
-                                           ((add_int (integer_of_int32 !n_15)) (4)))))) in
-          void);
-         (mutable_x_1 := (C_280:
-                         (safe_uint32_of_integer_ (C_279:
-                                                  (JC_<somenum>:
-                                                  ((computer_div (integer_of_uint32 !mutable_x_1)) (16)))))));
-         !mutable_x_1 end)) in void) else void);
-       (if ((eq_int_ (integer_of_uint32 (C_291:
-                                        (safe_uint32_of_integer_ (C_290:
-                                                                 ((bw_and 
-                                                                   (integer_of_uint32 !mutable_x_1)) (3))))))) (0))
-       then
-        (let jessie_<somenum> =
-        (C_286:
-        (C_289:
-        begin
-          (let jessie_<somenum> =
-          (n_15 := (C_285:
-                   (safe_int32_of_integer_ (C_284:
-                                           ((add_int (integer_of_int32 !n_15)) (2)))))) in
-          void);
-         (mutable_x_1 := (C_288:
-                         (safe_uint32_of_integer_ (C_287:
-                                                  (JC_<somenum>:
-                                                  ((computer_div (integer_of_uint32 !mutable_x_1)) (4)))))));
-         !mutable_x_1 end)) in void) else void);
-       (let jessie_<somenum> =
-       (__retres := (C_296:
-                    (safe_int32_of_integer_ (C_295:
-                                            ((sub_int (integer_of_uint32 
-                                                       (C_294:
-                                                       (safe_uint32_of_integer_ 
-                                                        (integer_of_int32 !n_15))))) 
-                                             (integer_of_uint32 (C_293:
-                                                                (safe_uint32_of_integer_ 
-                                                                 (C_292:
-                                                                 ((bw_and 
-                                                                   (integer_of_uint32 !mutable_x_1)) (1))))))))))) in
-       void); (raise (Return_label_exc void)) end)) with
+          (__retres := (C_296:
+                       (safe_int32_of_integer_ (C_295:
+                                               ((sub_int (integer_of_uint32 
+                                                          (C_294:
+                                                          (safe_uint32_of_integer_ 
+                                                           (integer_of_int32 !n_15))))) 
+                                                (integer_of_uint32 (C_293:
+                                                                   (safe_uint32_of_integer_ 
+                                                                    (C_292:
+                                                                    ((bw_and 
+                                                                    (integer_of_uint32 !mutable_x_1)) (1))))))))))) in
+          void); (raise (Return_label_exc void)) end) end) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))) { (JC_<somenum>: true) }
@@ -5404,8 +5470,6 @@ let ntz_safety =
      (let n_15 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (C_259:
-      (C_297:
       begin
         (if ((eq_int_ (integer_of_uint32 !mutable_x_1)) (0))
         then
@@ -5413,110 +5477,119 @@ let ntz_safety =
          begin
            (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (32))) in
            void); (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> = (n_15 := (safe_int32_of_integer_ (1))) in void);
-       (if ((eq_int_ (integer_of_uint32 (C_267:
-                                        (JC_<somenum>:
-                                        (uint32_of_integer_ (C_266:
-                                                            ((bw_and 
-                                                              (integer_of_uint32 !mutable_x_1)) (65535)))))))) (0))
-       then
-        (let jessie_<somenum> =
-        (C_262:
-        (C_265:
-        begin
-          (let jessie_<somenum> =
-          (n_15 := (C_261:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_260:
-                                      ((add_int (integer_of_int32 !n_15)) (16))))))) in
-          void);
-         (mutable_x_1 := (C_264:
-                         (JC_<somenum>:
-                         (uint32_of_integer_ (C_263:
-                                             (JC_<somenum>:
-                                             ((computer_div_ (integer_of_uint32 !mutable_x_1)) (65536))))))));
-         !mutable_x_1 end)) in void) else void);
-       (if ((eq_int_ (integer_of_uint32 (C_275:
-                                        (JC_<somenum>:
-                                        (uint32_of_integer_ (C_274:
-                                                            ((bw_and 
-                                                              (integer_of_uint32 !mutable_x_1)) (255)))))))) (0))
-       then
-        (let jessie_<somenum> =
-        (C_270:
-        (C_273:
-        begin
-          (let jessie_<somenum> =
-          (n_15 := (C_269:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_268:
-                                      ((add_int (integer_of_int32 !n_15)) (8))))))) in
-          void);
-         (mutable_x_1 := (C_272:
-                         (JC_<somenum>:
-                         (uint32_of_integer_ (C_271:
-                                             (JC_<somenum>:
-                                             ((computer_div_ (integer_of_uint32 !mutable_x_1)) (256))))))));
-         !mutable_x_1 end)) in void) else void);
-       (if ((eq_int_ (integer_of_uint32 (C_283:
-                                        (JC_<somenum>:
-                                        (uint32_of_integer_ (C_282:
-                                                            ((bw_and 
-                                                              (integer_of_uint32 !mutable_x_1)) (15)))))))) (0))
-       then
-        (let jessie_<somenum> =
-        (C_278:
-        (C_281:
-        begin
-          (let jessie_<somenum> =
-          (n_15 := (C_277:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_276:
-                                      ((add_int (integer_of_int32 !n_15)) (4))))))) in
-          void);
-         (mutable_x_1 := (C_280:
-                         (JC_<somenum>:
-                         (uint32_of_integer_ (C_279:
-                                             (JC_<somenum>:
-                                             ((computer_div_ (integer_of_uint32 !mutable_x_1)) (16))))))));
-         !mutable_x_1 end)) in void) else void);
-       (if ((eq_int_ (integer_of_uint32 (C_291:
-                                        (JC_<somenum>:
-                                        (uint32_of_integer_ (C_290:
-                                                            ((bw_and 
-                                                              (integer_of_uint32 !mutable_x_1)) (3)))))))) (0))
-       then
-        (let jessie_<somenum> =
-        (C_286:
-        (C_289:
-        begin
-          (let jessie_<somenum> =
-          (n_15 := (C_285:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_284:
-                                      ((add_int (integer_of_int32 !n_15)) (2))))))) in
-          void);
-         (mutable_x_1 := (C_288:
-                         (JC_<somenum>:
-                         (uint32_of_integer_ (C_287:
-                                             (JC_<somenum>:
-                                             ((computer_div_ (integer_of_uint32 !mutable_x_1)) (4))))))));
-         !mutable_x_1 end)) in void) else void);
-       (let jessie_<somenum> =
-       (__retres := (C_296:
+       (C_259:
+       begin
+         (let jessie_<somenum> = (n_15 := (safe_int32_of_integer_ (1))) in void);
+        (if ((eq_int_ (integer_of_uint32 (C_267:
+                                         (JC_<somenum>:
+                                         (uint32_of_integer_ (C_266:
+                                                             ((bw_and 
+                                                               (integer_of_uint32 !mutable_x_1)) (65535)))))))) (0))
+        then
+         (let jessie_<somenum> =
+         (C_262:
+         begin
+           (let jessie_<somenum> =
+           (n_15 := (C_261:
                     (JC_<somenum>:
-                    (int32_of_integer_ (C_295:
-                                       ((sub_int (integer_of_uint32 (C_294:
-                                                                    (JC_<somenum>:
-                                                                    (uint32_of_integer_ 
-                                                                    (integer_of_int32 !n_15)))))) 
-                                        (integer_of_uint32 (C_293:
-                                                           (JC_<somenum>:
-                                                           (uint32_of_integer_ 
-                                                            (C_292:
-                                                            ((bw_and 
-                                                              (integer_of_uint32 !mutable_x_1)) (1))))))))))))) in
-       void); (raise (Return_label_exc void)) end)) with
+                    (int32_of_integer_ (C_260:
+                                       ((add_int (integer_of_int32 !n_15)) (16))))))) in
+           void);
+          (C_265:
+          begin
+            (mutable_x_1 := (C_264:
+                            (JC_<somenum>:
+                            (uint32_of_integer_ (C_263:
+                                                (JC_<somenum>:
+                                                ((computer_div_ (integer_of_uint32 !mutable_x_1)) (65536))))))));
+           !mutable_x_1 end) end) in void) else void);
+        (if ((eq_int_ (integer_of_uint32 (C_275:
+                                         (JC_<somenum>:
+                                         (uint32_of_integer_ (C_274:
+                                                             ((bw_and 
+                                                               (integer_of_uint32 !mutable_x_1)) (255)))))))) (0))
+        then
+         (let jessie_<somenum> =
+         (C_270:
+         begin
+           (let jessie_<somenum> =
+           (n_15 := (C_269:
+                    (JC_<somenum>:
+                    (int32_of_integer_ (C_268:
+                                       ((add_int (integer_of_int32 !n_15)) (8))))))) in
+           void);
+          (C_273:
+          begin
+            (mutable_x_1 := (C_272:
+                            (JC_<somenum>:
+                            (uint32_of_integer_ (C_271:
+                                                (JC_<somenum>:
+                                                ((computer_div_ (integer_of_uint32 !mutable_x_1)) (256))))))));
+           !mutable_x_1 end) end) in void) else void);
+        (if ((eq_int_ (integer_of_uint32 (C_283:
+                                         (JC_<somenum>:
+                                         (uint32_of_integer_ (C_282:
+                                                             ((bw_and 
+                                                               (integer_of_uint32 !mutable_x_1)) (15)))))))) (0))
+        then
+         (let jessie_<somenum> =
+         (C_278:
+         begin
+           (let jessie_<somenum> =
+           (n_15 := (C_277:
+                    (JC_<somenum>:
+                    (int32_of_integer_ (C_276:
+                                       ((add_int (integer_of_int32 !n_15)) (4))))))) in
+           void);
+          (C_281:
+          begin
+            (mutable_x_1 := (C_280:
+                            (JC_<somenum>:
+                            (uint32_of_integer_ (C_279:
+                                                (JC_<somenum>:
+                                                ((computer_div_ (integer_of_uint32 !mutable_x_1)) (16))))))));
+           !mutable_x_1 end) end) in void) else void);
+        (if ((eq_int_ (integer_of_uint32 (C_291:
+                                         (JC_<somenum>:
+                                         (uint32_of_integer_ (C_290:
+                                                             ((bw_and 
+                                                               (integer_of_uint32 !mutable_x_1)) (3)))))))) (0))
+        then
+         (let jessie_<somenum> =
+         (C_286:
+         begin
+           (let jessie_<somenum> =
+           (n_15 := (C_285:
+                    (JC_<somenum>:
+                    (int32_of_integer_ (C_284:
+                                       ((add_int (integer_of_int32 !n_15)) (2))))))) in
+           void);
+          (C_289:
+          begin
+            (mutable_x_1 := (C_288:
+                            (JC_<somenum>:
+                            (uint32_of_integer_ (C_287:
+                                                (JC_<somenum>:
+                                                ((computer_div_ (integer_of_uint32 !mutable_x_1)) (4))))))));
+           !mutable_x_1 end) end) in void) else void);
+        (C_297:
+        begin
+          (let jessie_<somenum> =
+          (__retres := (C_296:
+                       (JC_<somenum>:
+                       (int32_of_integer_ (C_295:
+                                          ((sub_int (integer_of_uint32 
+                                                     (C_294:
+                                                     (JC_<somenum>:
+                                                     (uint32_of_integer_ 
+                                                      (integer_of_int32 !n_15)))))) 
+                                           (integer_of_uint32 (C_293:
+                                                              (JC_<somenum>:
+                                                              (uint32_of_integer_ 
+                                                               (C_292:
+                                                               ((bw_and 
+                                                                 (integer_of_uint32 !mutable_x_1)) (1))))))))))))) in
+          void); (raise (Return_label_exc void)) end) end) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))) { true }
@@ -5531,11 +5604,6 @@ let pop_ensures_default =
    begin
      (let __retres_1 = ref (any_int32 void) in
      (C_336:
-     (C_345:
-     (C_352:
-     (C_357:
-     (C_362:
-     (C_365:
      begin
        (let jessie_<somenum> =
        (mutable_x_2 := (C_335:
@@ -5553,69 +5621,82 @@ let pop_ensures_default =
                                                                     ((computer_div 
                                                                     (integer_of_uint32 !mutable_x_2)) (2)))))))) (1431655765))))))))))) in
        void);
-      (let jessie_<somenum> =
-      (mutable_x_2 := (C_344:
-                      (safe_uint32_of_integer_ (C_343:
-                                               ((add_int (integer_of_uint32 
-                                                          (C_342:
-                                                          (safe_uint32_of_integer_ 
-                                                           (C_341:
-                                                           ((bw_and (integer_of_uint32 !mutable_x_2)) (858993459))))))) 
-                                                (integer_of_uint32 (C_340:
-                                                                   (safe_uint32_of_integer_ 
-                                                                    (C_339:
-                                                                    ((bw_and 
-                                                                    (integer_of_uint32 
-                                                                    (C_338:
-                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_337:
-                                                                    (JC_<somenum>:
-                                                                    ((computer_div 
-                                                                    (integer_of_uint32 !mutable_x_2)) (4)))))))) (858993459))))))))))) in
-      void);
-      (let jessie_<somenum> =
-      (mutable_x_2 := (C_351:
-                      (safe_uint32_of_integer_ (C_350:
-                                               ((bw_and (integer_of_uint32 
-                                                         (C_349:
-                                                         (safe_uint32_of_integer_ 
-                                                          (C_348:
-                                                          ((add_int (integer_of_uint32 !mutable_x_2)) 
-                                                           (integer_of_uint32 
-                                                            (C_347:
+      (C_345:
+      begin
+        (let jessie_<somenum> =
+        (mutable_x_2 := (C_344:
+                        (safe_uint32_of_integer_ (C_343:
+                                                 ((add_int (integer_of_uint32 
+                                                            (C_342:
                                                             (safe_uint32_of_integer_ 
-                                                             (C_346:
-                                                             (JC_<somenum>:
-                                                             ((computer_div 
-                                                               (integer_of_uint32 !mutable_x_2)) (16))))))))))))) (252645135)))))) in
-      void);
-      (let jessie_<somenum> =
-      (mutable_x_2 := (C_356:
-                      (safe_uint32_of_integer_ (C_355:
-                                               ((add_int (integer_of_uint32 !mutable_x_2)) 
-                                                (integer_of_uint32 (C_354:
-                                                                   (safe_uint32_of_integer_ 
-                                                                    (C_353:
-                                                                    ((mul_int 
-                                                                    (integer_of_uint32 !mutable_x_2)) (256))))))))))) in
-      void);
-      (let jessie_<somenum> =
-      (mutable_x_2 := (C_361:
-                      (safe_uint32_of_integer_ (C_360:
-                                               ((add_int (integer_of_uint32 !mutable_x_2)) 
-                                                (integer_of_uint32 (C_359:
-                                                                   (safe_uint32_of_integer_ 
-                                                                    (C_358:
-                                                                    ((mul_int 
-                                                                    (integer_of_uint32 !mutable_x_2)) (65536))))))))))) in
-      void);
-      (let jessie_<somenum> =
-      (__retres_1 := (C_364:
-                     (safe_int32_of_integer_ (C_363:
-                                             (JC_<somenum>:
-                                             ((computer_div (integer_of_uint32 !mutable_x_2)) (16777216))))))) in
-      void); (return := !__retres_1); (raise Return) end))))))); absurd  end
-   with Return -> !return end))) { (JC_<somenum>: true) }
+                                                             (C_341:
+                                                             ((bw_and 
+                                                               (integer_of_uint32 !mutable_x_2)) (858993459))))))) 
+                                                  (integer_of_uint32 
+                                                   (C_340:
+                                                   (safe_uint32_of_integer_ 
+                                                    (C_339:
+                                                    ((bw_and (integer_of_uint32 
+                                                              (C_338:
+                                                              (safe_uint32_of_integer_ 
+                                                               (C_337:
+                                                               (JC_<somenum>:
+                                                               ((computer_div 
+                                                                 (integer_of_uint32 !mutable_x_2)) (4)))))))) (858993459))))))))))) in
+        void);
+       (C_352:
+       begin
+         (let jessie_<somenum> =
+         (mutable_x_2 := (C_351:
+                         (safe_uint32_of_integer_ (C_350:
+                                                  ((bw_and (integer_of_uint32 
+                                                            (C_349:
+                                                            (safe_uint32_of_integer_ 
+                                                             (C_348:
+                                                             ((add_int 
+                                                               (integer_of_uint32 !mutable_x_2)) 
+                                                              (integer_of_uint32 
+                                                               (C_347:
+                                                               (safe_uint32_of_integer_ 
+                                                                (C_346:
+                                                                (JC_<somenum>:
+                                                                ((computer_div 
+                                                                  (integer_of_uint32 !mutable_x_2)) (16))))))))))))) (252645135)))))) in
+         void);
+        (C_357:
+        begin
+          (let jessie_<somenum> =
+          (mutable_x_2 := (C_356:
+                          (safe_uint32_of_integer_ (C_355:
+                                                   ((add_int (integer_of_uint32 !mutable_x_2)) 
+                                                    (integer_of_uint32 
+                                                     (C_354:
+                                                     (safe_uint32_of_integer_ 
+                                                      (C_353:
+                                                      ((mul_int (integer_of_uint32 !mutable_x_2)) (256))))))))))) in
+          void);
+         (C_362:
+         begin
+           (let jessie_<somenum> =
+           (mutable_x_2 := (C_361:
+                           (safe_uint32_of_integer_ (C_360:
+                                                    ((add_int (integer_of_uint32 !mutable_x_2)) 
+                                                     (integer_of_uint32 
+                                                      (C_359:
+                                                      (safe_uint32_of_integer_ 
+                                                       (C_358:
+                                                       ((mul_int (integer_of_uint32 !mutable_x_2)) (65536))))))))))) in
+           void);
+          (C_365:
+          begin
+            (let jessie_<somenum> =
+            (__retres_1 := (C_364:
+                           (safe_int32_of_integer_ (C_363:
+                                                   (JC_<somenum>:
+                                                   ((computer_div (integer_of_uint32 !mutable_x_2)) (16777216))))))) in
+            void); (return := !__retres_1); (raise Return) end) end) end) end)
+      end) end)); absurd  end with Return -> !return end)))
+  { (JC_<somenum>: true) }
 
 let pop_safety =
  fun (x_2 : uint32) ->
@@ -5627,11 +5708,6 @@ let pop_safety =
    begin
      (let __retres_1 = ref (any_int32 void) in
      (C_336:
-     (C_345:
-     (C_352:
-     (C_357:
-     (C_362:
-     (C_365:
      begin
        (let jessie_<somenum> =
        (mutable_x_2 := (C_335:
@@ -5652,81 +5728,91 @@ let pop_safety =
                                                                     ((computer_div_ 
                                                                     (integer_of_uint32 !mutable_x_2)) (2))))))))) (1431655765))))))))))))) in
        void);
-      (let jessie_<somenum> =
-      (mutable_x_2 := (C_344:
-                      (JC_<somenum>:
-                      (uint32_of_integer_ (C_343:
-                                          ((add_int (integer_of_uint32 
-                                                     (C_342:
-                                                     (JC_<somenum>:
-                                                     (uint32_of_integer_ 
-                                                      (C_341:
-                                                      ((bw_and (integer_of_uint32 !mutable_x_2)) (858993459)))))))) 
-                                           (integer_of_uint32 (C_340:
-                                                              (JC_<somenum>:
-                                                              (uint32_of_integer_ 
-                                                               (C_339:
-                                                               ((bw_and 
-                                                                 (integer_of_uint32 
-                                                                  (C_338:
-                                                                  (JC_<somenum>:
-                                                                  (uint32_of_integer_ 
-                                                                   (C_337:
-                                                                   (JC_<somenum>:
-                                                                   ((computer_div_ 
-                                                                    (integer_of_uint32 !mutable_x_2)) (4))))))))) (858993459))))))))))))) in
-      void);
-      (let jessie_<somenum> =
-      (mutable_x_2 := (C_351:
-                      (JC_<somenum>:
-                      (uint32_of_integer_ (C_350:
-                                          ((bw_and (integer_of_uint32 
-                                                    (C_349:
-                                                    (JC_<somenum>:
-                                                    (uint32_of_integer_ 
-                                                     (C_348:
-                                                     ((add_int (integer_of_uint32 !mutable_x_2)) 
-                                                      (integer_of_uint32 
-                                                       (C_347:
+      (C_345:
+      begin
+        (let jessie_<somenum> =
+        (mutable_x_2 := (C_344:
+                        (JC_<somenum>:
+                        (uint32_of_integer_ (C_343:
+                                            ((add_int (integer_of_uint32 
+                                                       (C_342:
                                                        (JC_<somenum>:
                                                        (uint32_of_integer_ 
-                                                        (C_346:
-                                                        (JC_<somenum>:
-                                                        ((computer_div_ 
-                                                          (integer_of_uint32 !mutable_x_2)) (16))))))))))))))) (252645135))))))) in
-      void);
-      (let jessie_<somenum> =
-      (mutable_x_2 := (C_356:
-                      (JC_<somenum>:
-                      (uint32_of_integer_ (C_355:
-                                          ((add_int (integer_of_uint32 !mutable_x_2)) 
-                                           (integer_of_uint32 (C_354:
-                                                              (JC_<somenum>:
-                                                              (uint32_of_integer_ 
-                                                               (C_353:
-                                                               ((mul_int 
-                                                                 (integer_of_uint32 !mutable_x_2)) (256))))))))))))) in
-      void);
-      (let jessie_<somenum> =
-      (mutable_x_2 := (C_361:
-                      (JC_<somenum>:
-                      (uint32_of_integer_ (C_360:
-                                          ((add_int (integer_of_uint32 !mutable_x_2)) 
-                                           (integer_of_uint32 (C_359:
-                                                              (JC_<somenum>:
-                                                              (uint32_of_integer_ 
-                                                               (C_358:
-                                                               ((mul_int 
-                                                                 (integer_of_uint32 !mutable_x_2)) (65536))))))))))))) in
-      void);
-      (let jessie_<somenum> =
-      (__retres_1 := (C_364:
-                     (JC_<somenum>:
-                     (int32_of_integer_ (C_363:
-                                        (JC_<somenum>:
-                                        ((computer_div_ (integer_of_uint32 !mutable_x_2)) (16777216)))))))) in
-      void); (return := !__retres_1); (raise Return) end))))))); absurd  end
-   with Return -> !return end))) { true }
+                                                        (C_341:
+                                                        ((bw_and (integer_of_uint32 !mutable_x_2)) (858993459)))))))) 
+                                             (integer_of_uint32 (C_340:
+                                                                (JC_<somenum>:
+                                                                (uint32_of_integer_ 
+                                                                 (C_339:
+                                                                 ((bw_and 
+                                                                   (integer_of_uint32 
+                                                                    (C_338:
+                                                                    (JC_<somenum>:
+                                                                    (uint32_of_integer_ 
+                                                                    (C_337:
+                                                                    (JC_<somenum>:
+                                                                    ((computer_div_ 
+                                                                    (integer_of_uint32 !mutable_x_2)) (4))))))))) (858993459))))))))))))) in
+        void);
+       (C_352:
+       begin
+         (let jessie_<somenum> =
+         (mutable_x_2 := (C_351:
+                         (JC_<somenum>:
+                         (uint32_of_integer_ (C_350:
+                                             ((bw_and (integer_of_uint32 
+                                                       (C_349:
+                                                       (JC_<somenum>:
+                                                       (uint32_of_integer_ 
+                                                        (C_348:
+                                                        ((add_int (integer_of_uint32 !mutable_x_2)) 
+                                                         (integer_of_uint32 
+                                                          (C_347:
+                                                          (JC_<somenum>:
+                                                          (uint32_of_integer_ 
+                                                           (C_346:
+                                                           (JC_<somenum>:
+                                                           ((computer_div_ 
+                                                             (integer_of_uint32 !mutable_x_2)) (16))))))))))))))) (252645135))))))) in
+         void);
+        (C_357:
+        begin
+          (let jessie_<somenum> =
+          (mutable_x_2 := (C_356:
+                          (JC_<somenum>:
+                          (uint32_of_integer_ (C_355:
+                                              ((add_int (integer_of_uint32 !mutable_x_2)) 
+                                               (integer_of_uint32 (C_354:
+                                                                  (JC_<somenum>:
+                                                                  (uint32_of_integer_ 
+                                                                   (C_353:
+                                                                   ((mul_int 
+                                                                    (integer_of_uint32 !mutable_x_2)) (256))))))))))))) in
+          void);
+         (C_362:
+         begin
+           (let jessie_<somenum> =
+           (mutable_x_2 := (C_361:
+                           (JC_<somenum>:
+                           (uint32_of_integer_ (C_360:
+                                               ((add_int (integer_of_uint32 !mutable_x_2)) 
+                                                (integer_of_uint32 (C_359:
+                                                                   (JC_<somenum>:
+                                                                   (uint32_of_integer_ 
+                                                                    (C_358:
+                                                                    ((mul_int 
+                                                                    (integer_of_uint32 !mutable_x_2)) (65536))))))))))))) in
+           void);
+          (C_365:
+          begin
+            (let jessie_<somenum> =
+            (__retres_1 := (C_364:
+                           (JC_<somenum>:
+                           (int32_of_integer_ (C_363:
+                                              (JC_<somenum>:
+                                              ((computer_div_ (integer_of_uint32 !mutable_x_2)) (16777216)))))))) in
+            void); (return := !__retres_1); (raise Return) end) end) end) end)
+      end) end)); absurd  end with Return -> !return end))) { true }
 
 let snoob1_ensures_default =
  fun (x_4 : uint32) ->
@@ -5741,9 +5827,6 @@ let snoob1_ensures_default =
      (let tmp = ref (any_int32 void) in
      (let __retres_3 = ref (any_uint32 void) in
      (C_391:
-     (C_394:
-     (C_397:
-     (C_408:
      begin
        (let jessie_<somenum> =
        (smallest_0 := (C_390:
@@ -5755,43 +5838,52 @@ let snoob1_ensures_default =
                                                                     (neg_int 
                                                                     (integer_of_uint32 x_4))))))))))) in
        void);
-      (let jessie_<somenum> =
-      (ripple_0 := (C_393:
-                   (safe_uint32_of_integer_ (C_392:
-                                            ((add_int (integer_of_uint32 x_4)) 
-                                             (integer_of_uint32 !smallest_0)))))) in
-      void);
-      (let jessie_<somenum> =
-      (ones_0 := (C_396:
-                 (safe_uint32_of_integer_ (C_395:
-                                          ((bw_xor (integer_of_uint32 x_4)) 
-                                           (integer_of_uint32 !ripple_0)))))) in
-      void);
-      (let jessie_<somenum> =
-      (C_399:
-      (C_405:
+      (C_394:
       begin
         (let jessie_<somenum> =
-        (tmp := (C_398: (let jessie_<somenum> = x_4 in (JC_<somenum>: (ntz jessie_<somenum>))))) in
+        (ripple_0 := (C_393:
+                     (safe_uint32_of_integer_ (C_392:
+                                              ((add_int (integer_of_uint32 x_4)) 
+                                               (integer_of_uint32 !smallest_0)))))) in
         void);
-       (assert
-       { (JC_<somenum>: lt_int(add_int((2), integer_of_int32(tmp)), (32))) }; void);
-       (ones_0 := (C_404:
-                  (safe_uint32_of_integer_ (C_403:
-                                           ((lsr (integer_of_uint32 !ones_0)) 
-                                            (integer_of_int32 (C_402:
-                                                              (safe_int32_of_integer_ 
-                                                               (C_401:
-                                                               ((add_int (2)) 
-                                                                (integer_of_int32 !tmp)))))))))));
-       !ones_0 end)) in void);
-      (let jessie_<somenum> =
-      (__retres_3 := (C_407:
-                     (safe_uint32_of_integer_ (C_406:
-                                              ((bw_or (integer_of_uint32 !ripple_0)) 
-                                               (integer_of_uint32 !ones_0)))))) in
-      void); (return := !__retres_3); (raise Return) end))))))))); absurd 
-   end with Return -> !return end)) { (JC_<somenum>: true) }
+       (C_397:
+       begin
+         (let jessie_<somenum> =
+         (ones_0 := (C_396:
+                    (safe_uint32_of_integer_ (C_395:
+                                             ((bw_xor (integer_of_uint32 x_4)) 
+                                              (integer_of_uint32 !ripple_0)))))) in
+         void);
+        (let jessie_<somenum> =
+        (C_399:
+        begin
+          (let jessie_<somenum> =
+          (tmp := (C_398:
+                  (let jessie_<somenum> = x_4 in (JC_<somenum>: (ntz jessie_<somenum>))))) in
+          void);
+         (assert
+         { (JC_<somenum>: lt_int(add_int((2), integer_of_int32(tmp)), (32))) };
+         void);
+         (C_405:
+         begin
+           (ones_0 := (C_404:
+                      (safe_uint32_of_integer_ (C_403:
+                                               ((lsr (integer_of_uint32 !ones_0)) 
+                                                (integer_of_int32 (C_402:
+                                                                  (safe_int32_of_integer_ 
+                                                                   (C_401:
+                                                                   ((add_int (2)) 
+                                                                    (integer_of_int32 !tmp)))))))))));
+          !ones_0 end) end) in void);
+        (C_408:
+        begin
+          (let jessie_<somenum> =
+          (__retres_3 := (C_407:
+                         (safe_uint32_of_integer_ (C_406:
+                                                  ((bw_or (integer_of_uint32 !ripple_0)) 
+                                                   (integer_of_uint32 !ones_0)))))) in
+          void); (return := !__retres_3); (raise Return) end) end) end) end))))));
+    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let snoob1_safety =
  fun (x_4 : uint32) ->
@@ -5806,9 +5898,6 @@ let snoob1_safety =
      (let tmp = ref (any_int32 void) in
      (let __retres_3 = ref (any_uint32 void) in
      (C_391:
-     (C_394:
-     (C_397:
-     (C_408:
      begin
        (let jessie_<somenum> =
        (smallest_0 := (C_390:
@@ -5822,49 +5911,56 @@ let snoob1_safety =
                                                                (neg_int 
                                                                 (integer_of_uint32 x_4))))))))))))) in
        void);
-      (let jessie_<somenum> =
-      (ripple_0 := (C_393:
-                   (JC_<somenum>:
-                   (uint32_of_integer_ (C_392:
-                                       ((add_int (integer_of_uint32 x_4)) 
-                                        (integer_of_uint32 !smallest_0))))))) in
-      void);
-      (let jessie_<somenum> =
-      (ones_0 := (C_396:
-                 (JC_<somenum>:
-                 (uint32_of_integer_ (C_395:
-                                     ((bw_xor (integer_of_uint32 x_4)) 
-                                      (integer_of_uint32 !ripple_0))))))) in
-      void);
-      (let jessie_<somenum> =
-      (C_399:
-      (C_405:
+      (C_394:
       begin
         (let jessie_<somenum> =
-        (tmp := (C_398:
-                (let jessie_<somenum> = x_4 in (JC_<somenum>: (ntz_requires jessie_<somenum>))))) in
-        void);
-       [ { } unit reads tmp
-         { (JC_<somenum>: lt_int(add_int((2), integer_of_int32(tmp)), (32))) } ];
-       (ones_0 := (C_404:
-                  (JC_<somenum>:
-                  (uint32_of_integer_ (C_403:
-                                      ((lsr (integer_of_uint32 !ones_0)) 
-                                       (integer_of_int32 (C_402:
-                                                         (JC_<somenum>:
-                                                         (int32_of_integer_ 
-                                                          (C_401:
-                                                          ((add_int (2)) 
-                                                           (integer_of_int32 !tmp)))))))))))));
-       !ones_0 end)) in void);
-      (let jessie_<somenum> =
-      (__retres_3 := (C_407:
+        (ripple_0 := (C_393:
                      (JC_<somenum>:
-                     (uint32_of_integer_ (C_406:
-                                         ((bw_or (integer_of_uint32 !ripple_0)) 
-                                          (integer_of_uint32 !ones_0))))))) in
-      void); (return := !__retres_3); (raise Return) end))))))))); absurd 
-   end with Return -> !return end)) { true }
+                     (uint32_of_integer_ (C_392:
+                                         ((add_int (integer_of_uint32 x_4)) 
+                                          (integer_of_uint32 !smallest_0))))))) in
+        void);
+       (C_397:
+       begin
+         (let jessie_<somenum> =
+         (ones_0 := (C_396:
+                    (JC_<somenum>:
+                    (uint32_of_integer_ (C_395:
+                                        ((bw_xor (integer_of_uint32 x_4)) 
+                                         (integer_of_uint32 !ripple_0))))))) in
+         void);
+        (let jessie_<somenum> =
+        (C_399:
+        begin
+          (let jessie_<somenum> =
+          (tmp := (C_398:
+                  (let jessie_<somenum> = x_4 in
+                  (JC_<somenum>: (ntz_requires jessie_<somenum>))))) in void);
+         [ { } unit reads tmp
+           { (JC_<somenum>: lt_int(add_int((2), integer_of_int32(tmp)), (32))) } ];
+         (C_405:
+         begin
+           (ones_0 := (C_404:
+                      (JC_<somenum>:
+                      (uint32_of_integer_ (C_403:
+                                          ((lsr (integer_of_uint32 !ones_0)) 
+                                           (integer_of_int32 (C_402:
+                                                             (JC_<somenum>:
+                                                             (int32_of_integer_ 
+                                                              (C_401:
+                                                              ((add_int (2)) 
+                                                               (integer_of_int32 !tmp)))))))))))));
+          !ones_0 end) end) in void);
+        (C_408:
+        begin
+          (let jessie_<somenum> =
+          (__retres_3 := (C_407:
+                         (JC_<somenum>:
+                         (uint32_of_integer_ (C_406:
+                                             ((bw_or (integer_of_uint32 !ripple_0)) 
+                                              (integer_of_uint32 !ones_0))))))) in
+          void); (return := !__retres_3); (raise Return) end) end) end) end))))));
+    absurd  end with Return -> !return end)) { true }
 
 let snoob2_ensures_default =
  fun (x_5 : uint32) ->
@@ -5879,9 +5975,6 @@ let snoob2_ensures_default =
      (let tmp_0 = ref (any_int32 void) in
      (let __retres_4 = ref (any_uint32 void) in
      (C_414:
-     (C_417:
-     (C_420:
-     (C_431:
      begin
        (let jessie_<somenum> =
        (smallest_1 := (C_413:
@@ -5893,45 +5986,52 @@ let snoob2_ensures_default =
                                                                     (neg_int 
                                                                     (integer_of_uint32 x_5))))))))))) in
        void);
-      (let jessie_<somenum> =
-      (ripple_1 := (C_416:
-                   (safe_uint32_of_integer_ (C_415:
-                                            ((add_int (integer_of_uint32 x_5)) 
-                                             (integer_of_uint32 !smallest_1)))))) in
-      void);
-      (let jessie_<somenum> =
-      (ones_1 := (C_419:
-                 (safe_uint32_of_integer_ (C_418:
-                                          ((bw_xor (integer_of_uint32 x_5)) 
-                                           (integer_of_uint32 !ripple_1)))))) in
-      void);
-      (let jessie_<somenum> =
-      (C_422:
-      (C_428:
+      (C_417:
       begin
         (let jessie_<somenum> =
-        (tmp_0 := (C_421:
-                  (let jessie_<somenum> = !smallest_1 in
-                  (JC_<somenum>: (nlz jessie_<somenum>))))) in void);
-       (assert
-       { (JC_<somenum>: lt_int(sub_int((33), integer_of_int32(tmp_0)), (32))) };
-       void);
-       (ones_1 := (C_427:
-                  (safe_uint32_of_integer_ (C_426:
-                                           ((lsr (integer_of_uint32 !ones_1)) 
-                                            (integer_of_int32 (C_425:
-                                                              (safe_int32_of_integer_ 
-                                                               (C_424:
-                                                               ((sub_int (33)) 
-                                                                (integer_of_int32 !tmp_0)))))))))));
-       !ones_1 end)) in void);
-      (let jessie_<somenum> =
-      (__retres_4 := (C_430:
-                     (safe_uint32_of_integer_ (C_429:
-                                              ((bw_or (integer_of_uint32 !ripple_1)) 
-                                               (integer_of_uint32 !ones_1)))))) in
-      void); (return := !__retres_4); (raise Return) end))))))))); absurd 
-   end with Return -> !return end)) { (JC_<somenum>: true) }
+        (ripple_1 := (C_416:
+                     (safe_uint32_of_integer_ (C_415:
+                                              ((add_int (integer_of_uint32 x_5)) 
+                                               (integer_of_uint32 !smallest_1)))))) in
+        void);
+       (C_420:
+       begin
+         (let jessie_<somenum> =
+         (ones_1 := (C_419:
+                    (safe_uint32_of_integer_ (C_418:
+                                             ((bw_xor (integer_of_uint32 x_5)) 
+                                              (integer_of_uint32 !ripple_1)))))) in
+         void);
+        (let jessie_<somenum> =
+        (C_422:
+        begin
+          (let jessie_<somenum> =
+          (tmp_0 := (C_421:
+                    (let jessie_<somenum> = !smallest_1 in
+                    (JC_<somenum>: (nlz jessie_<somenum>))))) in void);
+         (assert
+         { (JC_<somenum>: lt_int(sub_int((33), integer_of_int32(tmp_0)), (32))) };
+         void);
+         (C_428:
+         begin
+           (ones_1 := (C_427:
+                      (safe_uint32_of_integer_ (C_426:
+                                               ((lsr (integer_of_uint32 !ones_1)) 
+                                                (integer_of_int32 (C_425:
+                                                                  (safe_int32_of_integer_ 
+                                                                   (C_424:
+                                                                   ((sub_int (33)) 
+                                                                    (integer_of_int32 !tmp_0)))))))))));
+          !ones_1 end) end) in void);
+        (C_431:
+        begin
+          (let jessie_<somenum> =
+          (__retres_4 := (C_430:
+                         (safe_uint32_of_integer_ (C_429:
+                                                  ((bw_or (integer_of_uint32 !ripple_1)) 
+                                                   (integer_of_uint32 !ones_1)))))) in
+          void); (return := !__retres_4); (raise Return) end) end) end) end))))));
+    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let snoob2_safety =
  fun (x_5 : uint32) ->
@@ -5946,9 +6046,6 @@ let snoob2_safety =
      (let tmp_0 = ref (any_int32 void) in
      (let __retres_4 = ref (any_uint32 void) in
      (C_414:
-     (C_417:
-     (C_420:
-     (C_431:
      begin
        (let jessie_<somenum> =
        (smallest_1 := (C_413:
@@ -5962,49 +6059,56 @@ let snoob2_safety =
                                                                (neg_int 
                                                                 (integer_of_uint32 x_5))))))))))))) in
        void);
-      (let jessie_<somenum> =
-      (ripple_1 := (C_416:
-                   (JC_<somenum>:
-                   (uint32_of_integer_ (C_415:
-                                       ((add_int (integer_of_uint32 x_5)) 
-                                        (integer_of_uint32 !smallest_1))))))) in
-      void);
-      (let jessie_<somenum> =
-      (ones_1 := (C_419:
-                 (JC_<somenum>:
-                 (uint32_of_integer_ (C_418:
-                                     ((bw_xor (integer_of_uint32 x_5)) 
-                                      (integer_of_uint32 !ripple_1))))))) in
-      void);
-      (let jessie_<somenum> =
-      (C_422:
-      (C_428:
+      (C_417:
       begin
         (let jessie_<somenum> =
-        (tmp_0 := (C_421:
-                  (let jessie_<somenum> = !smallest_1 in
-                  (JC_<somenum>: (nlz_requires jessie_<somenum>))))) in void);
-       [ { } unit reads tmp_0
-         { (JC_<somenum>: lt_int(sub_int((33), integer_of_int32(tmp_0)), (32))) } ];
-       (ones_1 := (C_427:
-                  (JC_<somenum>:
-                  (uint32_of_integer_ (C_426:
-                                      ((lsr (integer_of_uint32 !ones_1)) 
-                                       (integer_of_int32 (C_425:
-                                                         (JC_<somenum>:
-                                                         (int32_of_integer_ 
-                                                          (C_424:
-                                                          ((sub_int (33)) 
-                                                           (integer_of_int32 !tmp_0)))))))))))));
-       !ones_1 end)) in void);
-      (let jessie_<somenum> =
-      (__retres_4 := (C_430:
+        (ripple_1 := (C_416:
                      (JC_<somenum>:
-                     (uint32_of_integer_ (C_429:
-                                         ((bw_or (integer_of_uint32 !ripple_1)) 
-                                          (integer_of_uint32 !ones_1))))))) in
-      void); (return := !__retres_4); (raise Return) end))))))))); absurd 
-   end with Return -> !return end)) { true }
+                     (uint32_of_integer_ (C_415:
+                                         ((add_int (integer_of_uint32 x_5)) 
+                                          (integer_of_uint32 !smallest_1))))))) in
+        void);
+       (C_420:
+       begin
+         (let jessie_<somenum> =
+         (ones_1 := (C_419:
+                    (JC_<somenum>:
+                    (uint32_of_integer_ (C_418:
+                                        ((bw_xor (integer_of_uint32 x_5)) 
+                                         (integer_of_uint32 !ripple_1))))))) in
+         void);
+        (let jessie_<somenum> =
+        (C_422:
+        begin
+          (let jessie_<somenum> =
+          (tmp_0 := (C_421:
+                    (let jessie_<somenum> = !smallest_1 in
+                    (JC_<somenum>: (nlz_requires jessie_<somenum>))))) in void);
+         [ { } unit reads tmp_0
+           { (JC_<somenum>: lt_int(sub_int((33), integer_of_int32(tmp_0)), (32))) } ];
+         (C_428:
+         begin
+           (ones_1 := (C_427:
+                      (JC_<somenum>:
+                      (uint32_of_integer_ (C_426:
+                                          ((lsr (integer_of_uint32 !ones_1)) 
+                                           (integer_of_int32 (C_425:
+                                                             (JC_<somenum>:
+                                                             (int32_of_integer_ 
+                                                              (C_424:
+                                                              ((sub_int (33)) 
+                                                               (integer_of_int32 !tmp_0)))))))))))));
+          !ones_1 end) end) in void);
+        (C_431:
+        begin
+          (let jessie_<somenum> =
+          (__retres_4 := (C_430:
+                         (JC_<somenum>:
+                         (uint32_of_integer_ (C_429:
+                                             ((bw_or (integer_of_uint32 !ripple_1)) 
+                                              (integer_of_uint32 !ones_1))))))) in
+          void); (return := !__retres_4); (raise Return) end) end) end) end))))));
+    absurd  end with Return -> !return end)) { true }
 
 let snoob3_ensures_default =
  fun (x_6 : uint32) ->
@@ -6019,9 +6123,6 @@ let snoob3_ensures_default =
      (let tmp_1 = ref (any_int32 void) in
      (let __retres_5 = ref (any_uint32 void) in
      (C_437:
-     (C_440:
-     (C_443:
-     (C_458:
      begin
        (let jessie_<somenum> =
        (smallest_2 := (C_436:
@@ -6033,56 +6134,65 @@ let snoob3_ensures_default =
                                                                     (neg_int 
                                                                     (integer_of_uint32 x_6))))))))))) in
        void);
-      (let jessie_<somenum> =
-      (ripple_2 := (C_439:
-                   (safe_uint32_of_integer_ (C_438:
-                                            ((add_int (integer_of_uint32 x_6)) 
-                                             (integer_of_uint32 !smallest_2)))))) in
-      void);
-      (let jessie_<somenum> =
-      (ones_2 := (C_442:
-                 (safe_uint32_of_integer_ (C_441:
-                                          ((bw_xor (integer_of_uint32 x_6)) 
-                                           (integer_of_uint32 !ripple_2)))))) in
-      void);
-      (let jessie_<somenum> =
-      (C_445:
-      (C_455:
+      (C_440:
       begin
         (let jessie_<somenum> =
-        (tmp_1 := (C_444:
-                  (let jessie_<somenum> = !ones_2 in (JC_<somenum>: (pop jessie_<somenum>))))) in
+        (ripple_2 := (C_439:
+                     (safe_uint32_of_integer_ (C_438:
+                                              ((add_int (integer_of_uint32 x_6)) 
+                                               (integer_of_uint32 !smallest_2)))))) in
         void);
-       (assert
-       { (JC_<somenum>: ge_int(sub_int(integer_of_int32(tmp_1), (2)), (0))) };
-       void);
-       (assert
-       { (JC_<somenum>: lt_int(sub_int(integer_of_int32(tmp_1), (2)), (32))) };
-       void);
-       (assert
-       { (JC_<somenum>:
-         le_int((1),
-         asr((2147483647), sub_int(integer_of_int32(tmp_1), (2))))) }; void);
-       (ones_2 := (C_454:
-                  (safe_uint32_of_integer_ (C_453:
-                                           ((sub_int (integer_of_int32 
-                                                      (C_452:
-                                                      (safe_int32_of_integer_ 
-                                                       (C_451:
-                                                       ((lsl (1)) (integer_of_int32 
-                                                                   (C_450:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_449:
-                                                                    ((sub_int 
-                                                                    (integer_of_int32 !tmp_1)) (2)))))))))))) (1))))));
-       !ones_2 end)) in void);
-      (let jessie_<somenum> =
-      (__retres_5 := (C_457:
-                     (safe_uint32_of_integer_ (C_456:
-                                              ((bw_or (integer_of_uint32 !ripple_2)) 
-                                               (integer_of_uint32 !ones_2)))))) in
-      void); (return := !__retres_5); (raise Return) end))))))))); absurd 
-   end with Return -> !return end)) { (JC_<somenum>: true) }
+       (C_443:
+       begin
+         (let jessie_<somenum> =
+         (ones_2 := (C_442:
+                    (safe_uint32_of_integer_ (C_441:
+                                             ((bw_xor (integer_of_uint32 x_6)) 
+                                              (integer_of_uint32 !ripple_2)))))) in
+         void);
+        (let jessie_<somenum> =
+        (C_445:
+        begin
+          (let jessie_<somenum> =
+          (tmp_1 := (C_444:
+                    (let jessie_<somenum> = !ones_2 in (JC_<somenum>: (pop jessie_<somenum>))))) in
+          void);
+         (assert
+         { (JC_<somenum>: ge_int(sub_int(integer_of_int32(tmp_1), (2)), (0))) };
+         void);
+         (assert
+         { (JC_<somenum>: lt_int(sub_int(integer_of_int32(tmp_1), (2)), (32))) };
+         void);
+         (assert
+         { (JC_<somenum>:
+           le_int((1),
+           asr((2147483647), sub_int(integer_of_int32(tmp_1), (2))))) };
+         void);
+         (C_455:
+         begin
+           (ones_2 := (C_454:
+                      (safe_uint32_of_integer_ (C_453:
+                                               ((sub_int (integer_of_int32 
+                                                          (C_452:
+                                                          (safe_int32_of_integer_ 
+                                                           (C_451:
+                                                           ((lsl (1)) 
+                                                            (integer_of_int32 
+                                                             (C_450:
+                                                             (safe_int32_of_integer_ 
+                                                              (C_449:
+                                                              ((sub_int 
+                                                                (integer_of_int32 !tmp_1)) (2)))))))))))) (1))))));
+          !ones_2 end) end) in void);
+        (C_458:
+        begin
+          (let jessie_<somenum> =
+          (__retres_5 := (C_457:
+                         (safe_uint32_of_integer_ (C_456:
+                                                  ((bw_or (integer_of_uint32 !ripple_2)) 
+                                                   (integer_of_uint32 !ones_2)))))) in
+          void); (return := !__retres_5); (raise Return) end) end) end) end))))));
+    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let snoob3_safety =
  fun (x_6 : uint32) ->
@@ -6097,9 +6207,6 @@ let snoob3_safety =
      (let tmp_1 = ref (any_int32 void) in
      (let __retres_5 = ref (any_uint32 void) in
      (C_437:
-     (C_440:
-     (C_443:
-     (C_458:
      begin
        (let jessie_<somenum> =
        (smallest_2 := (C_436:
@@ -6113,60 +6220,67 @@ let snoob3_safety =
                                                                (neg_int 
                                                                 (integer_of_uint32 x_6))))))))))))) in
        void);
-      (let jessie_<somenum> =
-      (ripple_2 := (C_439:
-                   (JC_<somenum>:
-                   (uint32_of_integer_ (C_438:
-                                       ((add_int (integer_of_uint32 x_6)) 
-                                        (integer_of_uint32 !smallest_2))))))) in
-      void);
-      (let jessie_<somenum> =
-      (ones_2 := (C_442:
-                 (JC_<somenum>:
-                 (uint32_of_integer_ (C_441:
-                                     ((bw_xor (integer_of_uint32 x_6)) 
-                                      (integer_of_uint32 !ripple_2))))))) in
-      void);
-      (let jessie_<somenum> =
-      (C_445:
-      (C_455:
+      (C_440:
       begin
         (let jessie_<somenum> =
-        (tmp_1 := (C_444:
-                  (let jessie_<somenum> = !ones_2 in
-                  (JC_<somenum>: (pop_requires jessie_<somenum>))))) in void);
-       [ { } unit reads tmp_1
-         { (JC_<somenum>: ge_int(sub_int(integer_of_int32(tmp_1), (2)), (0))) } ];
-       [ { } unit reads tmp_1
-         { (JC_<somenum>: lt_int(sub_int(integer_of_int32(tmp_1), (2)), (32))) } ];
-       [ { } unit reads tmp_1
-         { (JC_<somenum>:
-           le_int((1),
-           asr((2147483647), sub_int(integer_of_int32(tmp_1), (2))))) } ];
-       (ones_2 := (C_454:
-                  (JC_<somenum>:
-                  (uint32_of_integer_ (C_453:
-                                      ((sub_int (integer_of_int32 (C_452:
+        (ripple_2 := (C_439:
+                     (JC_<somenum>:
+                     (uint32_of_integer_ (C_438:
+                                         ((add_int (integer_of_uint32 x_6)) 
+                                          (integer_of_uint32 !smallest_2))))))) in
+        void);
+       (C_443:
+       begin
+         (let jessie_<somenum> =
+         (ones_2 := (C_442:
+                    (JC_<somenum>:
+                    (uint32_of_integer_ (C_441:
+                                        ((bw_xor (integer_of_uint32 x_6)) 
+                                         (integer_of_uint32 !ripple_2))))))) in
+         void);
+        (let jessie_<somenum> =
+        (C_445:
+        begin
+          (let jessie_<somenum> =
+          (tmp_1 := (C_444:
+                    (let jessie_<somenum> = !ones_2 in
+                    (JC_<somenum>: (pop_requires jessie_<somenum>))))) in void);
+         [ { } unit reads tmp_1
+           { (JC_<somenum>: ge_int(sub_int(integer_of_int32(tmp_1), (2)), (0))) } ];
+         [ { } unit reads tmp_1
+           { (JC_<somenum>: lt_int(sub_int(integer_of_int32(tmp_1), (2)), (32))) } ];
+         [ { } unit reads tmp_1
+           { (JC_<somenum>:
+             le_int((1),
+             asr((2147483647), sub_int(integer_of_int32(tmp_1), (2))))) } ];
+         (C_455:
+         begin
+           (ones_2 := (C_454:
+                      (JC_<somenum>:
+                      (uint32_of_integer_ (C_453:
+                                          ((sub_int (integer_of_int32 
+                                                     (C_452:
+                                                     (JC_<somenum>:
+                                                     (int32_of_integer_ 
+                                                      (C_451:
+                                                      ((lsl (1)) (integer_of_int32 
+                                                                  (C_450:
                                                                   (JC_<somenum>:
                                                                   (int32_of_integer_ 
-                                                                   (C_451:
-                                                                   ((lsl (1)) 
-                                                                    (integer_of_int32 
-                                                                    (C_450:
-                                                                    (JC_<somenum>:
-                                                                    (int32_of_integer_ 
-                                                                    (C_449:
-                                                                    ((sub_int 
+                                                                   (C_449:
+                                                                   ((sub_int 
                                                                     (integer_of_int32 !tmp_1)) (2)))))))))))))) (1)))))));
-       !ones_2 end)) in void);
-      (let jessie_<somenum> =
-      (__retres_5 := (C_457:
-                     (JC_<somenum>:
-                     (uint32_of_integer_ (C_456:
-                                         ((bw_or (integer_of_uint32 !ripple_2)) 
-                                          (integer_of_uint32 !ones_2))))))) in
-      void); (return := !__retres_5); (raise Return) end))))))))); absurd 
-   end with Return -> !return end)) { true }
+          !ones_2 end) end) in void);
+        (C_458:
+        begin
+          (let jessie_<somenum> =
+          (__retres_5 := (C_457:
+                         (JC_<somenum>:
+                         (uint32_of_integer_ (C_456:
+                                             ((bw_or (integer_of_uint32 !ripple_2)) 
+                                              (integer_of_uint32 !ones_2))))))) in
+          void); (return := !__retres_5); (raise Return) end) end) end) end))))));
+    absurd  end with Return -> !return end)) { true }
 
 let snoob4_ensures_default =
  fun (x_7_0 : int32) ->
@@ -6180,7 +6294,6 @@ let snoob4_ensures_default =
      (let __retres_7 = ref (any_int32 void) in
      try
       (C_491:
-      (C_496:
       begin
         (let jessie_<somenum> =
         (y := (C_490:
@@ -6197,58 +6310,65 @@ let snoob4_ensures_default =
                                                              (neg_int 
                                                               (integer_of_int32 !mutable_x_7_0)))))))))))))))) in
         void);
-       (let jessie_<somenum> =
-       (mutable_x_7_0 := (C_495:
-                         (safe_int32_of_integer_ (C_494:
-                                                 ((bw_and (integer_of_int32 !mutable_x_7_0)) 
-                                                  (integer_of_int32 (C_493:
-                                                                    (safe_int32_of_integer_ 
-                                                                    (C_492:
-                                                                    (bw_compl 
-                                                                    (integer_of_int32 !y))))))))))) in
-       void);
-       (loop_2:
-       while true do
-       { invariant (JC_<somenum>: true)  }
+       (C_496:
+       begin
+         (let jessie_<somenum> =
+         (mutable_x_7_0 := (C_495:
+                           (safe_int32_of_integer_ (C_494:
+                                                   ((bw_and (integer_of_int32 !mutable_x_7_0)) 
+                                                    (integer_of_int32 
+                                                     (C_493:
+                                                     (safe_int32_of_integer_ 
+                                                      (C_492:
+                                                      (bw_compl (integer_of_int32 !y))))))))))) in
+         void);
+        (loop_2:
         begin
-          [ { } unit { true } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (C_501:
-            begin
-              (if ((eq_int_ (integer_of_int32 (C_498:
-                                              (safe_int32_of_integer_ 
-                                               (C_497:
-                                               ((bw_and (integer_of_int32 !mutable_x_7_0)) (1))))))) (0))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (mutable_x_7_0 := (C_500:
-                               (safe_int32_of_integer_ (C_499:
-                                                       (JC_<somenum>:
-                                                       ((computer_div 
-                                                         (integer_of_int32 !mutable_x_7_0)) (2)))))));
-             !mutable_x_7_0 end) in void); (raise (Loop_continue_exc void))
-          end with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) with
+          while true do
+          { invariant (JC_<somenum>: true)  }
+           begin
+             [ { } unit { true } ];
+            try
+             begin
+               (let jessie_<somenum> =
+               begin
+                 (if ((eq_int_ (integer_of_int32 (C_498:
+                                                 (safe_int32_of_integer_ 
+                                                  (C_497:
+                                                  ((bw_and (integer_of_int32 !mutable_x_7_0)) (1))))))) (0))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                (C_501:
+                begin
+                  (mutable_x_7_0 := (C_500:
+                                    (safe_int32_of_integer_ (C_499:
+                                                            (JC_<somenum>:
+                                                            ((computer_div 
+                                                              (integer_of_int32 !mutable_x_7_0)) (2)))))));
+                 !mutable_x_7_0 end) end in void);
+              (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
-      (C_504:
-      (C_507:
       begin
         void;
-       (let jessie_<somenum> =
-       (mutable_x_7_0 := (C_503:
-                         (safe_int32_of_integer_ (C_502:
-                                                 (JC_<somenum>:
-                                                 ((computer_div (integer_of_int32 !mutable_x_7_0)) (2))))))) in
-       void);
-       (let jessie_<somenum> =
-       (__retres_7 := (C_506:
-                      (safe_int32_of_integer_ (C_505:
-                                              ((bw_or (integer_of_int32 !y)) 
-                                               (integer_of_int32 !mutable_x_7_0)))))) in
-       void); (return := !__retres_7); (raise Return) end))) end)); absurd 
-   end with Return -> !return end))) { (JC_<somenum>: true) }
+       (C_504:
+       begin
+         (let jessie_<somenum> =
+         (mutable_x_7_0 := (C_503:
+                           (safe_int32_of_integer_ (C_502:
+                                                   (JC_<somenum>:
+                                                   ((computer_div (integer_of_int32 !mutable_x_7_0)) (2))))))) in
+         void);
+        (C_507:
+        begin
+          (let jessie_<somenum> =
+          (__retres_7 := (C_506:
+                         (safe_int32_of_integer_ (C_505:
+                                                 ((bw_or (integer_of_int32 !y)) 
+                                                  (integer_of_int32 !mutable_x_7_0)))))) in
+          void); (return := !__retres_7); (raise Return) end) end) end) end));
+    absurd  end with Return -> !return end))) { (JC_<somenum>: true) }
 
 let snoob4_safety =
  fun (x_7_0 : int32) ->
@@ -6262,7 +6382,6 @@ let snoob4_safety =
      (let __retres_7 = ref (any_int32 void) in
      try
       (C_491:
-      (C_496:
       begin
         (let jessie_<somenum> =
         (y := (C_490:
@@ -6281,63 +6400,71 @@ let snoob4_safety =
                                                         (C_485:
                                                         (neg_int (integer_of_int32 !mutable_x_7_0))))))))))))))))))) in
         void);
-       (let jessie_<somenum> =
-       (mutable_x_7_0 := (C_495:
-                         (JC_<somenum>:
-                         (int32_of_integer_ (C_494:
-                                            ((bw_and (integer_of_int32 !mutable_x_7_0)) 
-                                             (integer_of_int32 (C_493:
-                                                               (JC_<somenum>:
-                                                               (int32_of_integer_ 
-                                                                (C_492:
-                                                                (bw_compl 
-                                                                 (integer_of_int32 !y))))))))))))) in
-       void);
-       (loop_1:
-       while true do
-       { invariant (JC_<somenum>: true) variant (0) }
+       (C_496:
+       begin
+         (let jessie_<somenum> =
+         (mutable_x_7_0 := (C_495:
+                           (JC_<somenum>:
+                           (int32_of_integer_ (C_494:
+                                              ((bw_and (integer_of_int32 !mutable_x_7_0)) 
+                                               (integer_of_int32 (C_493:
+                                                                 (JC_<somenum>:
+                                                                 (int32_of_integer_ 
+                                                                  (C_492:
+                                                                  (bw_compl 
+                                                                   (integer_of_int32 !y))))))))))))) in
+         void);
+        (loop_1:
         begin
-          [ { } unit { true } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (C_501:
-            begin
-              (if ((eq_int_ (integer_of_int32 (C_498:
-                                              (JC_<somenum>:
-                                              (int32_of_integer_ (C_497:
-                                                                 ((bw_and 
-                                                                   (integer_of_int32 !mutable_x_7_0)) (1)))))))) (0))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (mutable_x_7_0 := (C_500:
-                               (JC_<somenum>:
-                               (int32_of_integer_ (C_499:
-                                                  (JC_<somenum>:
-                                                  ((computer_div_ (integer_of_int32 !mutable_x_7_0)) (2))))))));
-             !mutable_x_7_0 end) in void); (raise (Loop_continue_exc void))
-          end with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) with
+          while true do
+          { invariant (JC_<somenum>: true) variant (0) }
+           begin
+             [ { } unit { true } ];
+            try
+             begin
+               (let jessie_<somenum> =
+               begin
+                 (if ((eq_int_ (integer_of_int32 (C_498:
+                                                 (JC_<somenum>:
+                                                 (int32_of_integer_ (C_497:
+                                                                    ((bw_and 
+                                                                    (integer_of_int32 !mutable_x_7_0)) (1)))))))) (0))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                (C_501:
+                begin
+                  (mutable_x_7_0 := (C_500:
+                                    (JC_<somenum>:
+                                    (int32_of_integer_ (C_499:
+                                                       (JC_<somenum>:
+                                                       ((computer_div_ 
+                                                         (integer_of_int32 !mutable_x_7_0)) (2))))))));
+                 !mutable_x_7_0 end) end in void);
+              (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
-      (C_504:
-      (C_507:
       begin
         void;
-       (let jessie_<somenum> =
-       (mutable_x_7_0 := (C_503:
+       (C_504:
+       begin
+         (let jessie_<somenum> =
+         (mutable_x_7_0 := (C_503:
+                           (JC_<somenum>:
+                           (int32_of_integer_ (C_502:
+                                              (JC_<somenum>:
+                                              ((computer_div_ (integer_of_int32 !mutable_x_7_0)) (2)))))))) in
+         void);
+        (C_507:
+        begin
+          (let jessie_<somenum> =
+          (__retres_7 := (C_506:
                          (JC_<somenum>:
-                         (int32_of_integer_ (C_502:
-                                            (JC_<somenum>:
-                                            ((computer_div_ (integer_of_int32 !mutable_x_7_0)) (2)))))))) in
-       void);
-       (let jessie_<somenum> =
-       (__retres_7 := (C_506:
-                      (JC_<somenum>:
-                      (int32_of_integer_ (C_505:
-                                         ((bw_or (integer_of_int32 !y)) 
-                                          (integer_of_int32 !mutable_x_7_0))))))) in
-       void); (return := !__retres_7); (raise Return) end))) end)); absurd 
-   end with Return -> !return end))) { true }
+                         (int32_of_integer_ (C_505:
+                                            ((bw_or (integer_of_int32 !y)) 
+                                             (integer_of_int32 !mutable_x_7_0))))))) in
+          void); (return := !__retres_7); (raise Return) end) end) end) end));
+    absurd  end with Return -> !return end))) { true }
 
 let snoob_ensures_default =
  fun (x_3 : uint32) ->
@@ -6351,10 +6478,6 @@ let snoob_ensures_default =
      (let ones = ref (any_uint32 void) in
      (let __retres_2 = ref (any_uint32 void) in
      (C_371:
-     (C_374:
-     (C_377:
-     (C_382:
-     (C_385:
      begin
        (let jessie_<somenum> =
        (smallest := (C_370:
@@ -6366,38 +6489,46 @@ let snoob_ensures_default =
                                                                   (neg_int 
                                                                    (integer_of_uint32 x_3))))))))))) in
        void);
-      (let jessie_<somenum> =
-      (ripple := (C_373:
-                 (safe_uint32_of_integer_ (C_372:
-                                          ((add_int (integer_of_uint32 x_3)) 
-                                           (integer_of_uint32 !smallest)))))) in
-      void);
-      (let jessie_<somenum> =
-      (ones := (C_376:
-               (safe_uint32_of_integer_ (C_375:
-                                        ((bw_xor (integer_of_uint32 x_3)) 
-                                         (integer_of_uint32 !ripple)))))) in
-      void);
-      (let jessie_<somenum> =
-      (ones := (C_381:
-               (safe_uint32_of_integer_ (C_380:
-                                        (JC_<somenum>:
-                                        ((computer_div (integer_of_uint32 
-                                                        (C_379:
-                                                        (safe_uint32_of_integer_ 
-                                                         (C_378:
-                                                         (JC_<somenum>:
-                                                         ((computer_div 
-                                                           (integer_of_uint32 !ones)) (4)))))))) 
-                                         (integer_of_uint32 !smallest))))))) in
-      void);
-      (let jessie_<somenum> =
-      (__retres_2 := (C_384:
-                     (safe_uint32_of_integer_ (C_383:
-                                              ((bw_or (integer_of_uint32 !ripple)) 
-                                               (integer_of_uint32 !ones)))))) in
-      void); (return := !__retres_2); (raise Return) end))))))))); absurd 
-   end with Return -> !return end)) { (JC_<somenum>: true) }
+      (C_374:
+      begin
+        (let jessie_<somenum> =
+        (ripple := (C_373:
+                   (safe_uint32_of_integer_ (C_372:
+                                            ((add_int (integer_of_uint32 x_3)) 
+                                             (integer_of_uint32 !smallest)))))) in
+        void);
+       (C_377:
+       begin
+         (let jessie_<somenum> =
+         (ones := (C_376:
+                  (safe_uint32_of_integer_ (C_375:
+                                           ((bw_xor (integer_of_uint32 x_3)) 
+                                            (integer_of_uint32 !ripple)))))) in
+         void);
+        (C_382:
+        begin
+          (let jessie_<somenum> =
+          (ones := (C_381:
+                   (safe_uint32_of_integer_ (C_380:
+                                            (JC_<somenum>:
+                                            ((computer_div (integer_of_uint32 
+                                                            (C_379:
+                                                            (safe_uint32_of_integer_ 
+                                                             (C_378:
+                                                             (JC_<somenum>:
+                                                             ((computer_div 
+                                                               (integer_of_uint32 !ones)) (4)))))))) 
+                                             (integer_of_uint32 !smallest))))))) in
+          void);
+         (C_385:
+         begin
+           (let jessie_<somenum> =
+           (__retres_2 := (C_384:
+                          (safe_uint32_of_integer_ (C_383:
+                                                   ((bw_or (integer_of_uint32 !ripple)) 
+                                                    (integer_of_uint32 !ones)))))) in
+           void); (return := !__retres_2); (raise Return) end) end) end) end)
+     end))))); absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let snoob_safety =
  fun (x_3 : uint32) ->
@@ -6411,10 +6542,6 @@ let snoob_safety =
      (let ones = ref (any_uint32 void) in
      (let __retres_2 = ref (any_uint32 void) in
      (C_371:
-     (C_374:
-     (C_377:
-     (C_382:
-     (C_385:
      begin
        (let jessie_<somenum> =
        (smallest := (C_370:
@@ -6428,43 +6555,51 @@ let snoob_safety =
                                                              (neg_int 
                                                               (integer_of_uint32 x_3))))))))))))) in
        void);
-      (let jessie_<somenum> =
-      (ripple := (C_373:
-                 (JC_<somenum>:
-                 (uint32_of_integer_ (C_372:
-                                     ((add_int (integer_of_uint32 x_3)) 
-                                      (integer_of_uint32 !smallest))))))) in
-      void);
-      (let jessie_<somenum> =
-      (ones := (C_376:
-               (JC_<somenum>:
-               (uint32_of_integer_ (C_375:
-                                   ((bw_xor (integer_of_uint32 x_3)) 
-                                    (integer_of_uint32 !ripple))))))) in
-      void);
-      (let jessie_<somenum> =
-      (ones := (C_381:
-               (JC_<somenum>:
-               (uint32_of_integer_ (C_380:
-                                   (JC_<somenum>:
-                                   ((computer_div_ (integer_of_uint32 
-                                                    (C_379:
-                                                    (JC_<somenum>:
-                                                    (uint32_of_integer_ 
-                                                     (C_378:
-                                                     (JC_<somenum>:
-                                                     ((computer_div_ 
-                                                       (integer_of_uint32 !ones)) (4))))))))) 
-                                    (integer_of_uint32 !smallest)))))))) in
-      void);
-      (let jessie_<somenum> =
-      (__retres_2 := (C_384:
-                     (JC_<somenum>:
-                     (uint32_of_integer_ (C_383:
-                                         ((bw_or (integer_of_uint32 !ripple)) 
-                                          (integer_of_uint32 !ones))))))) in
-      void); (return := !__retres_2); (raise Return) end))))))))); absurd 
-   end with Return -> !return end)) { true }
+      (C_374:
+      begin
+        (let jessie_<somenum> =
+        (ripple := (C_373:
+                   (JC_<somenum>:
+                   (uint32_of_integer_ (C_372:
+                                       ((add_int (integer_of_uint32 x_3)) 
+                                        (integer_of_uint32 !smallest))))))) in
+        void);
+       (C_377:
+       begin
+         (let jessie_<somenum> =
+         (ones := (C_376:
+                  (JC_<somenum>:
+                  (uint32_of_integer_ (C_375:
+                                      ((bw_xor (integer_of_uint32 x_3)) 
+                                       (integer_of_uint32 !ripple))))))) in
+         void);
+        (C_382:
+        begin
+          (let jessie_<somenum> =
+          (ones := (C_381:
+                   (JC_<somenum>:
+                   (uint32_of_integer_ (C_380:
+                                       (JC_<somenum>:
+                                       ((computer_div_ (integer_of_uint32 
+                                                        (C_379:
+                                                        (JC_<somenum>:
+                                                        (uint32_of_integer_ 
+                                                         (C_378:
+                                                         (JC_<somenum>:
+                                                         ((computer_div_ 
+                                                           (integer_of_uint32 !ones)) (4))))))))) 
+                                        (integer_of_uint32 !smallest)))))))) in
+          void);
+         (C_385:
+         begin
+           (let jessie_<somenum> =
+           (__retres_2 := (C_384:
+                          (JC_<somenum>:
+                          (uint32_of_integer_ (C_383:
+                                              ((bw_or (integer_of_uint32 !ripple)) 
+                                               (integer_of_uint32 !ones))))))) in
+           void); (return := !__retres_2); (raise Return) end) end) end) end)
+     end))))); absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C hd_snoob.jessie --quiet -f hd_snoob.makefile project
@@ -6549,11 +6684,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po186.why">
-      <location file = "why/hd_snoob.why" line = "5019" begin = "43" end = "44"/>
+      <location file = "why/hd_snoob.why" line = "5141" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po187.why">
-      <location file = "why/hd_snoob.why" line = "5019" begin = "43" end = "44"/>
+      <location file = "why/hd_snoob.why" line = "5141" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po188.why">
@@ -7547,11 +7682,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po14.why">
-      <location file = "why/hd_snoob.why" line = "3577" begin = "46" end = "47"/>
+      <location file = "why/hd_snoob.why" line = "3602" begin = "51" end = "52"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po15.why">
-      <location file = "why/hd_snoob.why" line = "3577" begin = "46" end = "47"/>
+      <location file = "why/hd_snoob.why" line = "3602" begin = "51" end = "52"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

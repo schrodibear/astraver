@@ -547,28 +547,29 @@ let f_ensures_default =
       (if ((gt_int_ (integer_of_int32 !i)) (0))
       then
        try
+        (loop_2:
         begin
-          (loop_2:
           while true do
           { invariant (JC_<somenum>: ge_int(integer_of_int32(i), (1)))  }
            begin
              [ { } unit { true } ];
             try
              (C_6:
-             (C_9:
              begin
                (let jessie_<somenum> =
                (mutable_a := (C_5: ((shift !mutable_a) (8)))) in void);
-              (let jessie_<somenum> =
-              (i := (C_8:
-                    (safe_int32_of_integer_ (C_7:
-                                            ((sub_int (integer_of_int32 !i)) (1)))))) in
-              void);
-              (if ((eq_int_ (integer_of_int32 !i)) (0))
-              then (raise (Goto_while_0_break_exc void)) else void);
-              (raise (Loop_continue_exc void)) end)) with
-             Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end with
+              (C_9:
+              begin
+                (let jessie_<somenum> =
+                (i := (C_8:
+                      (safe_int32_of_integer_ (C_7:
+                                              ((sub_int (integer_of_int32 !i)) (1)))))) in
+                void);
+               (if ((eq_int_ (integer_of_int32 !i)) (0))
+               then (raise (Goto_while_0_break_exc void)) else void);
+               (raise (Loop_continue_exc void)) end) end) with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) with
         Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end
       else void); (raise Return) end)); (raise Return) end with Return ->
    void end)) { (JC_<somenum>: true) }
@@ -604,29 +605,30 @@ let f_safety =
       (if ((gt_int_ (integer_of_int32 !i)) (0))
       then
        try
+        (loop_1:
         begin
-          (loop_1:
           while true do
           { invariant (JC_<somenum>: true) variant (0) }
            begin
              [ { } unit reads i { (JC_<somenum>: ge_int(integer_of_int32(i), (1))) } ];
             try
              (C_6:
-             (C_9:
              begin
                (let jessie_<somenum> =
                (mutable_a := (C_5: ((shift !mutable_a) (8)))) in void);
-              (let jessie_<somenum> =
-              (i := (C_8:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (C_7:
-                                       ((sub_int (integer_of_int32 !i)) (1))))))) in
-              void);
-              (if ((eq_int_ (integer_of_int32 !i)) (0))
-              then (raise (Goto_while_0_break_exc void)) else void);
-              (raise (Loop_continue_exc void)) end)) with
-             Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end with
+              (C_9:
+              begin
+                (let jessie_<somenum> =
+                (i := (C_8:
+                      (JC_<somenum>:
+                      (int32_of_integer_ (C_7:
+                                         ((sub_int (integer_of_int32 !i)) (1))))))) in
+                void);
+               (if ((eq_int_ (integer_of_int32 !i)) (0))
+               then (raise (Goto_while_0_break_exc void)) else void);
+               (raise (Loop_continue_exc void)) end) end) with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) with
         Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end
       else void); (raise Return) end)); (raise Return) end with Return ->
    void end)) { true }
@@ -674,11 +676,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vieira2_po8.why">
-      <location file = "why/vieira2.why" line = "530" begin = "45" end = "46"/>
+      <location file = "why/vieira2.why" line = "531" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vieira2_po9.why">
-      <location file = "why/vieira2.why" line = "530" begin = "45" end = "46"/>
+      <location file = "why/vieira2.why" line = "531" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

@@ -649,18 +649,20 @@ let main1_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_2:
-     (C_5:
-     (C_6:
      begin
        (let jessie_<somenum> = r in
        (let jessie_<somenum> = p in
        (((safe_upd_ __anonstruct_S_1_rc_p_1) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
-      (let jessie_<somenum> = (C_3: ((safe_acc_ !__anonstruct_S_1_rc_p_1) p)) in
-      (((safe_upd_ intP_intM_r_2) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end))
+      (C_5:
+      begin
+        (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
+        (let jessie_<somenum> = (C_3: ((safe_acc_ !__anonstruct_S_1_rc_p_1) p)) in
+        (((safe_upd_ intP_intM_r_2) jessie_<somenum>) jessie_<somenum>)));
+       (C_6:
+       begin
+         (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+        (return := !__retres); (raise Return) end) end) end)); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      not_assigns(intP_r_2_alloc_table, intP_intM_r_2@, intP_intM_r_2,
@@ -693,23 +695,25 @@ let main1_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_2:
-     (C_5:
-     (C_6:
      begin
        (let jessie_<somenum> = r in
        (let jessie_<somenum> = p in
        (JC_<somenum>:
        ((((upd_ __anonstruct_S_1_p_1_alloc_table) __anonstruct_S_1_rc_p_1) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
-      (let jessie_<somenum> =
-      (C_3:
-      (JC_<somenum>:
-      (((acc_ __anonstruct_S_1_p_1_alloc_table) !__anonstruct_S_1_rc_p_1) p))) in
-      (JC_<somenum>:
-      ((((upd_ intP_r_2_alloc_table) intP_intM_r_2) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { true }
+      (C_5:
+      begin
+        (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
+        (let jessie_<somenum> =
+        (C_3:
+        (JC_<somenum>:
+        (((acc_ __anonstruct_S_1_p_1_alloc_table) !__anonstruct_S_1_rc_p_1) p))) in
+        (JC_<somenum>:
+        ((((upd_ intP_r_2_alloc_table) intP_intM_r_2) jessie_<somenum>) jessie_<somenum>))));
+       (C_6:
+       begin
+         (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+        (return := !__retres); (raise Return) end) end) end)); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0160.jessie --quiet -f bts0160.makefile project

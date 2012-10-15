@@ -777,13 +777,14 @@ let swap_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      (C_1:
-     (C_2:
-     (C_3:
      begin
        (let jessie_<num> = (tmp := !a) in void);
-      (let jessie_<num> = (a := !b) in void);
-      (let jessie_<num> = (b := !tmp) in void); (raise Return) end))));
-    (raise Return) end with Return -> void end)
+      (C_2:
+      begin
+        (let jessie_<num> = (a := !b) in void);
+       (C_3:
+       begin   (let jessie_<num> = (b := !tmp) in void); (raise Return) end) end)
+     end)); (raise Return) end with Return -> void end)
   { (JC_7:
     ((JC_5: (integer_of_int32(a) = integer_of_int32(b@)))
     and (JC_6: (integer_of_int32(b) = integer_of_int32(a@))))) }
@@ -796,13 +797,14 @@ let swap_safety =
    begin
      (let tmp = ref (any_int32 void) in
      (C_1:
-     (C_2:
-     (C_3:
      begin
        (let jessie_<num> = (tmp := !a) in void);
-      (let jessie_<num> = (a := !b) in void);
-      (let jessie_<num> = (b := !tmp) in void); (raise Return) end))));
-    (raise Return) end with Return -> void end) { true }
+      (C_2:
+      begin
+        (let jessie_<num> = (a := !b) in void);
+       (C_3:
+       begin   (let jessie_<num> = (b := !tmp) in void); (raise Return) end) end)
+     end)); (raise Return) end with Return -> void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========

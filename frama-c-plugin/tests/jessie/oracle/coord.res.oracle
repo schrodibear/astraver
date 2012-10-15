@@ -534,16 +534,17 @@ let g_ensures_default =
   (init:
   try
    (C_3:
-   (C_5:
    begin
      (let jessie_<somenum> =
      (C_2:
      ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index)))) in
      (JC_<somenum>: (f jessie_<somenum>)));
-    (let jessie_<somenum> =
-    (C_4:
-    ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index)))) in
-    (JC_<somenum>: (f jessie_<somenum>))); (raise Return); (raise Return) end)) with
+    (C_5:
+    begin
+      (let jessie_<somenum> =
+      (C_4:
+      ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index)))) in
+      (JC_<somenum>: (f jessie_<somenum>))); (raise Return); (raise Return) end) end) with
    Return -> void end) { (JC_<somenum>: true) }
 
 let g_safety =
@@ -556,19 +557,20 @@ let g_safety =
   (init:
   try
    (C_3:
-   (C_5:
    begin
      (let jessie_<somenum> =
      (C_2:
      (JC_<somenum>:
      ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
       (integer_of_int32 index)))) in (JC_<somenum>: (f_requires jessie_<somenum>)));
-    (let jessie_<somenum> =
-    (C_4:
-    (JC_<somenum>:
-    ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
-     (integer_of_int32 index)))) in (JC_<somenum>: (f_requires jessie_<somenum>)));
-    (raise Return); (raise Return) end)) with Return -> void end)
+    (C_5:
+    begin
+      (let jessie_<somenum> =
+      (C_4:
+      (JC_<somenum>:
+      ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
+       (integer_of_int32 index)))) in (JC_<somenum>: (f_requires jessie_<somenum>)));
+     (raise Return); (raise Return) end) end) with Return -> void end)
   { (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)) }
 
 

@@ -652,84 +652,95 @@ let min_sort_ensures_default =
      try
       begin
         try
-         (C_20:
          begin
            (if ((le_int_ n_1) (0)) then (raise (Return_label_exc void))
-           else void); (let jessie_<somenum> = (i_0 := (0)) in void);
-          (loop_3:
-          while true do
-          { invariant
-              (JC_<somenum>:
-              ((JC_<somenum>: le_int((0), i_0)) and (JC_<somenum>: lt_int(i_0, n_1)))) 
-             }
+           else void);
+          (C_20:
+          begin
+            (let jessie_<somenum> = (i_0 := (0)) in void);
+           (loop_3:
            begin
-             [ { } unit { true } ];
-            try
-             begin
-               (let jessie_<somenum> =
-               (C_56:
-               begin
-                 (if ((lt_int_ !i_0) (C_29: ((sub_int n_1) (1)))) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                try
-                 (C_32:
-                 (C_33:
-                 (C_35:
-                 begin
-                   (let jessie_<somenum> =
-                   (mv := (C_31:
-                          ((safe_acc_ !intP_intM_t_5) (C_30:
-                                                      ((shift t) !i_0))))) in
-                   void); (let jessie_<somenum> = (mi := !i_0) in void);
-                  (let jessie_<somenum> = (j_0_0 := (C_34: ((add_int !i_0) (1)))) in
-                  void);
-                  (loop_4:
-                  while true do
-                  { invariant
-                      (JC_<somenum>:
-                      ((JC_<somenum>: lt_int(i_0, j_0_0))
-                      and ((JC_<somenum>: le_int(i_0, mi))
-                          and (JC_<somenum>: lt_int(mi, n_1)))))  }
-                   begin
-                     [ { } unit { true } ];
-                    try
+             while true do
+             { invariant
+                 (JC_<somenum>:
+                 ((JC_<somenum>: le_int((0), i_0)) and (JC_<somenum>: lt_int(i_0, n_1))))
+                }
+              begin
+                [ { } unit { true } ];
+               try
+                begin
+                  (let jessie_<somenum> =
+                  begin
+                    (if ((lt_int_ !i_0) (C_29: ((sub_int n_1) (1))))
+                    then void else (raise (Goto_while_0_break_exc void)));
+                   try
+                    (C_32:
+                    begin
+                      (let jessie_<somenum> =
+                      (mv := (C_31:
+                             ((safe_acc_ !intP_intM_t_5) (C_30:
+                                                         ((shift t) !i_0))))) in
+                      void);
+                     (C_33:
                      begin
-                       (let jessie_<somenum> =
-                       (C_53:
+                       (let jessie_<somenum> = (mi := !i_0) in void);
+                      (C_35:
+                      begin
+                        (let jessie_<somenum> =
+                        (j_0_0 := (C_34: ((add_int !i_0) (1)))) in void);
+                       (loop_4:
                        begin
-                         (if ((lt_int_ !j_0_0) n_1) then void
-                         else (raise (Goto_while_1_break_exc void)));
-                        (if ((lt_int_ (C_51:
-                                      ((safe_acc_ !intP_intM_t_5) (C_50:
-                                                                  ((shift t) !j_0_0))))) !mv)
-                        then
-                         (let jessie_<somenum> =
-                         (C_46:
-                         (C_49:
-                         begin
-                           (let jessie_<somenum> = (mi := !j_0_0) in void);
-                          (mv := (C_48:
-                                 ((safe_acc_ !intP_intM_t_5) (C_47:
-                                                             ((shift t) !j_0_0)))));
-                          !mv end)) in void) else void);
-                        (j_0_0 := (C_52: ((add_int !j_0_0) (1)))); !j_0_0 end) in
-                       void); (raise (Loop_continue_exc void)) end with
-                     Loop_continue_exc jessie_<somenum> -> void end end done);
-                  (raise (Goto_while_1_break_exc void)) end))) with
-                 Goto_while_1_break_exc jessie_<somenum> ->
-                 (while_1_break:
-                 begin
-                   void;
-                  (C_54:
-                  (let jessie_<somenum> = t in
-                  (let jessie_<somenum> = !i_0 in
-                  (let jessie_<somenum> = !mi in
-                  (JC_<somenum>:
-                  (((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
-                 end) end; (i_0 := (C_55: ((add_int !i_0) (1)))); !i_0 end) in
-               void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                         while true do
+                         { invariant
+                             (JC_<somenum>:
+                             ((JC_<somenum>: lt_int(i_0, j_0_0))
+                             and ((JC_<somenum>: le_int(i_0, mi))
+                                 and (JC_<somenum>: lt_int(mi, n_1)))))  }
+                          begin
+                            [ { } unit { true } ];
+                           try
+                            begin
+                              (let jessie_<somenum> =
+                              begin
+                                (if ((lt_int_ !j_0_0) n_1) then void
+                                else (raise (Goto_while_1_break_exc void)));
+                               (if ((lt_int_ (C_51:
+                                             ((safe_acc_ !intP_intM_t_5) 
+                                              (C_50: ((shift t) !j_0_0))))) !mv)
+                               then
+                                (let jessie_<somenum> =
+                                (C_46:
+                                begin
+                                  (let jessie_<somenum> = (mi := !j_0_0) in void);
+                                 (C_49:
+                                 begin
+                                   (mv := (C_48:
+                                          ((safe_acc_ !intP_intM_t_5) 
+                                           (C_47: ((shift t) !j_0_0))))); !mv
+                                 end) end) in void) else void);
+                               (C_53:
+                               begin
+                                 (j_0_0 := (C_52: ((add_int !j_0_0) (1))));
+                                !j_0_0 end) end in void);
+                             (raise (Loop_continue_exc void)) end with
+                            Loop_continue_exc jessie_<somenum> -> void end end done;
+                        (raise (Goto_while_1_break_exc void)) end) end) end)
+                    end) with Goto_while_1_break_exc jessie_<somenum> ->
+                    (while_1_break:
+                    begin
+                      void;
+                     (C_54:
+                     (let jessie_<somenum> = t in
+                     (let jessie_<somenum> = !i_0 in
+                     (let jessie_<somenum> = !mi in
+                     (JC_<somenum>:
+                     (((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
+                    end) end;
+                   (C_56:
+                   begin   (i_0 := (C_55: ((add_int !i_0) (1)))); !i_0 end)
+                  end in void); (raise (Loop_continue_exc void)) end with
+                Loop_continue_exc jessie_<somenum> -> void end end done;
+            (raise (Goto_while_0_break_exc void)) end) end) end with
          Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end)))); (raise Return) end with
@@ -751,89 +762,100 @@ let min_sort_ensures_permutation =
      try
       begin
         try
-         (C_20:
          begin
            (if ((le_int_ n_1) (0)) then (raise (Return_label_exc void))
-           else void); (let jessie_<somenum> = (i_0 := (0)) in void);
-          (loop_7:
-          while true do
-          { invariant
-              (JC_<somenum>:
-              Permut(t, (0), sub_int(n_1, (1)), intP_intM_t_5,
-              intP_intM_t_5@init))  }
+           else void);
+          (C_20:
+          begin
+            (let jessie_<somenum> = (i_0 := (0)) in void);
+           (loop_7:
            begin
-             [ { } unit reads i_0
-               { (JC_<somenum>:
-                 ((JC_<somenum>: le_int((0), i_0)) and (JC_<somenum>: lt_int(i_0, n_1)))) } ];
-            try
-             begin
-               (let jessie_<somenum> =
-               (C_56:
-               begin
-                 (if ((lt_int_ !i_0) (C_29: ((sub_int n_1) (1)))) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                try
-                 (C_32:
-                 (C_33:
-                 (C_35:
-                 begin
-                   (let jessie_<somenum> =
-                   (mv := (C_31:
-                          ((safe_acc_ !intP_intM_t_5) (C_30:
-                                                      ((shift t) !i_0))))) in
-                   void); (let jessie_<somenum> = (mi := !i_0) in void);
+             while true do
+             { invariant
+                 (JC_<somenum>:
+                 Permut(t, (0), sub_int(n_1, (1)), intP_intM_t_5,
+                 intP_intM_t_5@init))  }
+              begin
+                [ { } unit reads i_0
+                  { (JC_<somenum>:
+                    ((JC_<somenum>: le_int((0), i_0)) and (JC_<somenum>: lt_int(i_0, n_1)))) } ];
+               try
+                begin
                   (let jessie_<somenum> =
-                  (j_0_0 := (C_34: ((add_int !i_0) (1)))) in void);
-                  (loop_8:
-                  while true do
-                  { invariant
-                      (JC_<somenum>:
-                      Permut(t, (0), sub_int(n_1, (1)), intP_intM_t_5,
-                      intP_intM_t_5@init))  }
-                   begin
-                     [ { } unit reads i_0,j_0_0,mi
-                       { (JC_<somenum>:
-                         ((JC_<somenum>: lt_int(i_0, j_0_0))
-                         and ((JC_<somenum>: le_int(i_0, mi))
-                             and (JC_<somenum>: lt_int(mi, n_1))))) } ];
-                    try
+                  begin
+                    (if ((lt_int_ !i_0) (C_29: ((sub_int n_1) (1))))
+                    then void else (raise (Goto_while_0_break_exc void)));
+                   try
+                    (C_32:
+                    begin
+                      (let jessie_<somenum> =
+                      (mv := (C_31:
+                             ((safe_acc_ !intP_intM_t_5) (C_30:
+                                                         ((shift t) !i_0))))) in
+                      void);
+                     (C_33:
                      begin
-                       (let jessie_<somenum> =
-                       (C_53:
+                       (let jessie_<somenum> = (mi := !i_0) in void);
+                      (C_35:
+                      begin
+                        (let jessie_<somenum> =
+                        (j_0_0 := (C_34: ((add_int !i_0) (1)))) in void);
+                       (loop_8:
                        begin
-                         (if ((lt_int_ !j_0_0) n_1) then void
-                         else (raise (Goto_while_1_break_exc void)));
-                        (if ((lt_int_ (C_51:
-                                      ((safe_acc_ !intP_intM_t_5) (C_50:
-                                                                  ((shift t) !j_0_0))))) !mv)
-                        then
-                         (let jessie_<somenum> =
-                         (C_46:
-                         (C_49:
-                         begin
-                           (let jessie_<somenum> = (mi := !j_0_0) in void);
-                          (mv := (C_48:
-                                 ((safe_acc_ !intP_intM_t_5) (C_47:
-                                                             ((shift t) !j_0_0)))));
-                          !mv end)) in void) else void);
-                        (j_0_0 := (C_52: ((add_int !j_0_0) (1)))); !j_0_0 end) in
-                       void); (raise (Loop_continue_exc void)) end with
-                     Loop_continue_exc jessie_<somenum> -> void end end done);
-                  (raise (Goto_while_1_break_exc void)) end))) with
-                 Goto_while_1_break_exc jessie_<somenum> ->
-                 (while_1_break:
-                 begin
-                   void;
-                  (C_54:
-                  (let jessie_<somenum> = t in
-                  (let jessie_<somenum> = !i_0 in
-                  (let jessie_<somenum> = !mi in
-                  (JC_<somenum>:
-                  (((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
-                 end) end; (i_0 := (C_55: ((add_int !i_0) (1)))); !i_0 end) in
-               void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                         while true do
+                         { invariant
+                             (JC_<somenum>:
+                             Permut(t, (0), sub_int(n_1, (1)), intP_intM_t_5,
+                             intP_intM_t_5@init))  }
+                          begin
+                            [ { } unit reads i_0,j_0_0,mi
+                              { (JC_<somenum>:
+                                ((JC_<somenum>: lt_int(i_0, j_0_0))
+                                and ((JC_<somenum>: le_int(i_0, mi))
+                                    and (JC_<somenum>: lt_int(mi, n_1))))) } ];
+                           try
+                            begin
+                              (let jessie_<somenum> =
+                              begin
+                                (if ((lt_int_ !j_0_0) n_1) then void
+                                else (raise (Goto_while_1_break_exc void)));
+                               (if ((lt_int_ (C_51:
+                                             ((safe_acc_ !intP_intM_t_5) 
+                                              (C_50: ((shift t) !j_0_0))))) !mv)
+                               then
+                                (let jessie_<somenum> =
+                                (C_46:
+                                begin
+                                  (let jessie_<somenum> = (mi := !j_0_0) in void);
+                                 (C_49:
+                                 begin
+                                   (mv := (C_48:
+                                          ((safe_acc_ !intP_intM_t_5) 
+                                           (C_47: ((shift t) !j_0_0))))); !mv
+                                 end) end) in void) else void);
+                               (C_53:
+                               begin
+                                 (j_0_0 := (C_52: ((add_int !j_0_0) (1))));
+                                !j_0_0 end) end in void);
+                             (raise (Loop_continue_exc void)) end with
+                            Loop_continue_exc jessie_<somenum> -> void end end done;
+                        (raise (Goto_while_1_break_exc void)) end) end) end)
+                    end) with Goto_while_1_break_exc jessie_<somenum> ->
+                    (while_1_break:
+                    begin
+                      void;
+                     (C_54:
+                     (let jessie_<somenum> = t in
+                     (let jessie_<somenum> = !i_0 in
+                     (let jessie_<somenum> = !mi in
+                     (JC_<somenum>:
+                     (((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
+                    end) end;
+                   (C_56:
+                   begin   (i_0 := (C_55: ((add_int !i_0) (1)))); !i_0 end)
+                  end in void); (raise (Loop_continue_exc void)) end with
+                Loop_continue_exc jessie_<somenum> -> void end end done;
+            (raise (Goto_while_0_break_exc void)) end) end) end with
          Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end)))); (raise Return) end with
@@ -856,100 +878,113 @@ let min_sort_ensures_sorted =
      try
       begin
         try
-         (C_20:
          begin
            (if ((le_int_ n_1) (0)) then (raise (Return_label_exc void))
-           else void); (let jessie_<somenum> = (i_0 := (0)) in void);
-          (loop_5:
-          while true do
-          { invariant
-              (JC_<somenum>:
-              ((JC_<somenum>: Sorted(t, (0), i_0, intP_intM_t_5))
-              and (JC_<somenum>:
-                  (forall k1:int.
-                   (forall k2:int.
-                    ((le_int((0), k1)
-                     and (lt_int(k1, i_0)
-                         and (le_int(i_0, k2) and lt_int(k2, n_1)))) ->
-                     le_int(select(intP_intM_t_5, shift(t, k1)),
-                     select(intP_intM_t_5, shift(t, k2)))))))))  }
+           else void);
+          (C_20:
+          begin
+            (let jessie_<somenum> = (i_0 := (0)) in void);
+           (loop_5:
            begin
-             [ { } unit reads i_0
-               { (JC_<somenum>:
-                 ((JC_<somenum>: le_int((0), i_0)) and (JC_<somenum>: lt_int(i_0, n_1)))) } ];
-            try
-             begin
-               (let jessie_<somenum> =
-               (C_56:
-               begin
-                 (if ((lt_int_ !i_0) (C_29: ((sub_int n_1) (1)))) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                try
-                 (C_32:
-                 (C_33:
-                 (C_35:
-                 begin
-                   (let jessie_<somenum> =
-                   (mv := (C_31:
-                          ((safe_acc_ !intP_intM_t_5) (C_30:
-                                                      ((shift t) !i_0))))) in
-                   void); (let jessie_<somenum> = (mi := !i_0) in void);
-                  (let jessie_<somenum> = (j_0_0 := (C_34: ((add_int !i_0) (1)))) in
-                  void);
-                  (loop_6:
-                  while true do
-                  { invariant
-                      (JC_<somenum>:
-                      ((JC_<somenum>: (mv = select(intP_intM_t_5, shift(t, mi))))
-                      and (JC_<somenum>:
-                          (forall k_0:int.
-                           ((le_int(i_0, k_0) and lt_int(k_0, j_0_0)) ->
-                            ge_int(select(intP_intM_t_5, shift(t, k_0)), mv))))))
-                     }
-                   begin
-                     [ { } unit reads i_0,j_0_0,mi
-                       { (JC_<somenum>:
-                         ((JC_<somenum>: lt_int(i_0, j_0_0))
-                         and ((JC_<somenum>: le_int(i_0, mi))
-                             and (JC_<somenum>: lt_int(mi, n_1))))) } ];
-                    try
+             while true do
+             { invariant
+                 (JC_<somenum>:
+                 ((JC_<somenum>: Sorted(t, (0), i_0, intP_intM_t_5))
+                 and (JC_<somenum>:
+                     (forall k1:int.
+                      (forall k2:int.
+                       ((le_int((0), k1)
+                        and (lt_int(k1, i_0)
+                            and (le_int(i_0, k2) and lt_int(k2, n_1)))) ->
+                        le_int(select(intP_intM_t_5, shift(t, k1)),
+                        select(intP_intM_t_5, shift(t, k2)))))))))  }
+              begin
+                [ { } unit reads i_0
+                  { (JC_<somenum>:
+                    ((JC_<somenum>: le_int((0), i_0)) and (JC_<somenum>: lt_int(i_0, n_1)))) } ];
+               try
+                begin
+                  (let jessie_<somenum> =
+                  begin
+                    (if ((lt_int_ !i_0) (C_29: ((sub_int n_1) (1))))
+                    then void else (raise (Goto_while_0_break_exc void)));
+                   try
+                    (C_32:
+                    begin
+                      (let jessie_<somenum> =
+                      (mv := (C_31:
+                             ((safe_acc_ !intP_intM_t_5) (C_30:
+                                                         ((shift t) !i_0))))) in
+                      void);
+                     (C_33:
                      begin
-                       (let jessie_<somenum> =
-                       (C_53:
+                       (let jessie_<somenum> = (mi := !i_0) in void);
+                      (C_35:
+                      begin
+                        (let jessie_<somenum> =
+                        (j_0_0 := (C_34: ((add_int !i_0) (1)))) in void);
+                       (loop_6:
                        begin
-                         (if ((lt_int_ !j_0_0) n_1) then void
-                         else (raise (Goto_while_1_break_exc void)));
-                        (if ((lt_int_ (C_51:
-                                      ((safe_acc_ !intP_intM_t_5) (C_50:
-                                                                  ((shift t) !j_0_0))))) !mv)
-                        then
-                         (let jessie_<somenum> =
-                         (C_46:
-                         (C_49:
-                         begin
-                           (let jessie_<somenum> = (mi := !j_0_0) in void);
-                          (mv := (C_48:
-                                 ((safe_acc_ !intP_intM_t_5) (C_47:
-                                                             ((shift t) !j_0_0)))));
-                          !mv end)) in void) else void);
-                        (j_0_0 := (C_52: ((add_int !j_0_0) (1)))); !j_0_0 end) in
-                       void); (raise (Loop_continue_exc void)) end with
-                     Loop_continue_exc jessie_<somenum> -> void end end done);
-                  (raise (Goto_while_1_break_exc void)) end))) with
-                 Goto_while_1_break_exc jessie_<somenum> ->
-                 (while_1_break:
-                 begin
-                   void;
-                  (C_54:
-                  (let jessie_<somenum> = t in
-                  (let jessie_<somenum> = !i_0 in
-                  (let jessie_<somenum> = !mi in
-                  (JC_<somenum>:
-                  (((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
-                 end) end; (i_0 := (C_55: ((add_int !i_0) (1)))); !i_0 end) in
-               void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                         while true do
+                         { invariant
+                             (JC_<somenum>:
+                             ((JC_<somenum>:
+                              (mv = select(intP_intM_t_5, shift(t, mi))))
+                             and (JC_<somenum>:
+                                 (forall k_0:int.
+                                  ((le_int(i_0, k_0) and lt_int(k_0, j_0_0)) ->
+                                   ge_int(select(intP_intM_t_5,
+                                          shift(t, k_0)),
+                                   mv))))))  }
+                          begin
+                            [ { } unit reads i_0,j_0_0,mi
+                              { (JC_<somenum>:
+                                ((JC_<somenum>: lt_int(i_0, j_0_0))
+                                and ((JC_<somenum>: le_int(i_0, mi))
+                                    and (JC_<somenum>: lt_int(mi, n_1))))) } ];
+                           try
+                            begin
+                              (let jessie_<somenum> =
+                              begin
+                                (if ((lt_int_ !j_0_0) n_1) then void
+                                else (raise (Goto_while_1_break_exc void)));
+                               (if ((lt_int_ (C_51:
+                                             ((safe_acc_ !intP_intM_t_5) 
+                                              (C_50: ((shift t) !j_0_0))))) !mv)
+                               then
+                                (let jessie_<somenum> =
+                                (C_46:
+                                begin
+                                  (let jessie_<somenum> = (mi := !j_0_0) in void);
+                                 (C_49:
+                                 begin
+                                   (mv := (C_48:
+                                          ((safe_acc_ !intP_intM_t_5) 
+                                           (C_47: ((shift t) !j_0_0))))); !mv
+                                 end) end) in void) else void);
+                               (C_53:
+                               begin
+                                 (j_0_0 := (C_52: ((add_int !j_0_0) (1))));
+                                !j_0_0 end) end in void);
+                             (raise (Loop_continue_exc void)) end with
+                            Loop_continue_exc jessie_<somenum> -> void end end done;
+                        (raise (Goto_while_1_break_exc void)) end) end) end)
+                    end) with Goto_while_1_break_exc jessie_<somenum> ->
+                    (while_1_break:
+                    begin
+                      void;
+                     (C_54:
+                     (let jessie_<somenum> = t in
+                     (let jessie_<somenum> = !i_0 in
+                     (let jessie_<somenum> = !mi in
+                     (JC_<somenum>:
+                     (((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
+                    end) end;
+                   (C_56:
+                   begin   (i_0 := (C_55: ((add_int !i_0) (1)))); !i_0 end)
+                  end in void); (raise (Loop_continue_exc void)) end with
+                Loop_continue_exc jessie_<somenum> -> void end end done;
+            (raise (Goto_while_0_break_exc void)) end) end) end with
          Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end)))); (raise Return) end with
@@ -972,84 +1007,95 @@ let min_sort_safety =
      try
       begin
         try
-         (C_20:
          begin
            (if ((le_int_ n_1) (0)) then (raise (Return_label_exc void))
-           else void); (let jessie_<somenum> = (i_0 := (0)) in void);
-          (loop_1:
-          while true do
-          { invariant (JC_<somenum>: true) variant (JC_<somenum> : sub_int(n_1, i_0)) }
+           else void);
+          (C_20:
+          begin
+            (let jessie_<somenum> = (i_0 := (0)) in void);
+           (loop_1:
            begin
-             [ { } unit reads i_0
-               { (JC_<somenum>:
-                 ((JC_<somenum>: le_int((0), i_0)) and (JC_<somenum>: lt_int(i_0, n_1)))) } ];
-            try
-             begin
-               (let jessie_<somenum> =
-               (C_56:
-               begin
-                 (if ((lt_int_ !i_0) (C_29: ((sub_int n_1) (1)))) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                try
-                 (C_32:
-                 (C_33:
-                 (C_35:
-                 begin
-                   (let jessie_<somenum> =
-                   (mv := (C_31:
-                          (JC_<somenum>:
-                          ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) !i_0)))) in
-                   void); (let jessie_<somenum> = (mi := !i_0) in void);
-                  (let jessie_<somenum> = (j_0_0 := (C_34: ((add_int !i_0) (1)))) in
-                  void);
-                  (loop_2:
-                  while true do
-                  { invariant (JC_<somenum>: true)
-                    variant (JC_<somenum> : sub_int(n_1, j_0_0)) }
-                   begin
-                     [ { } unit reads i_0,j_0_0,mi
-                       { (JC_<somenum>:
-                         ((JC_<somenum>: lt_int(i_0, j_0_0))
-                         and ((JC_<somenum>: le_int(i_0, mi))
-                             and (JC_<somenum>: lt_int(mi, n_1))))) } ];
-                    try
+             while true do
+             { invariant (JC_<somenum>: true) variant (JC_<somenum> : sub_int(n_1, i_0)) }
+              begin
+                [ { } unit reads i_0
+                  { (JC_<somenum>:
+                    ((JC_<somenum>: le_int((0), i_0)) and (JC_<somenum>: lt_int(i_0, n_1)))) } ];
+               try
+                begin
+                  (let jessie_<somenum> =
+                  begin
+                    (if ((lt_int_ !i_0) (C_29: ((sub_int n_1) (1))))
+                    then void else (raise (Goto_while_0_break_exc void)));
+                   try
+                    (C_32:
+                    begin
+                      (let jessie_<somenum> =
+                      (mv := (C_31:
+                             (JC_<somenum>:
+                             ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) !i_0)))) in
+                      void);
+                     (C_33:
                      begin
-                       (let jessie_<somenum> =
-                       (C_53:
+                       (let jessie_<somenum> = (mi := !i_0) in void);
+                      (C_35:
+                      begin
+                        (let jessie_<somenum> =
+                        (j_0_0 := (C_34: ((add_int !i_0) (1)))) in void);
+                       (loop_2:
                        begin
-                         (if ((lt_int_ !j_0_0) n_1) then void
-                         else (raise (Goto_while_1_break_exc void)));
-                        (if ((lt_int_ (C_51:
-                                      (JC_<somenum>:
-                                      ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) !j_0_0)))) !mv)
-                        then
-                         (let jessie_<somenum> =
-                         (C_46:
-                         (C_49:
-                         begin
-                           (let jessie_<somenum> = (mi := !j_0_0) in void);
-                          (mv := (C_48:
-                                 (JC_<somenum>:
-                                 ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) !j_0_0))));
-                          !mv end)) in void) else void);
-                        (j_0_0 := (C_52: ((add_int !j_0_0) (1)))); !j_0_0 end) in
-                       void); (raise (Loop_continue_exc void)) end with
-                     Loop_continue_exc jessie_<somenum> -> void end end done);
-                  (raise (Goto_while_1_break_exc void)) end))) with
-                 Goto_while_1_break_exc jessie_<somenum> ->
-                 (while_1_break:
-                 begin
-                   void;
-                  (C_54:
-                  (let jessie_<somenum> = t in
-                  (let jessie_<somenum> = !i_0 in
-                  (let jessie_<somenum> = !mi in
-                  (JC_<somenum>:
-                  (((((swap_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
-                 end) end; (i_0 := (C_55: ((add_int !i_0) (1)))); !i_0 end) in
-               void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                         while true do
+                         { invariant (JC_<somenum>: true)
+                           variant (JC_<somenum> : sub_int(n_1, j_0_0)) }
+                          begin
+                            [ { } unit reads i_0,j_0_0,mi
+                              { (JC_<somenum>:
+                                ((JC_<somenum>: lt_int(i_0, j_0_0))
+                                and ((JC_<somenum>: le_int(i_0, mi))
+                                    and (JC_<somenum>: lt_int(mi, n_1))))) } ];
+                           try
+                            begin
+                              (let jessie_<somenum> =
+                              begin
+                                (if ((lt_int_ !j_0_0) n_1) then void
+                                else (raise (Goto_while_1_break_exc void)));
+                               (if ((lt_int_ (C_51:
+                                             (JC_<somenum>:
+                                             ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) !j_0_0)))) !mv)
+                               then
+                                (let jessie_<somenum> =
+                                (C_46:
+                                begin
+                                  (let jessie_<somenum> = (mi := !j_0_0) in void);
+                                 (C_49:
+                                 begin
+                                   (mv := (C_48:
+                                          (JC_<somenum>:
+                                          ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) !j_0_0))));
+                                  !mv end) end) in void) else void);
+                               (C_53:
+                               begin
+                                 (j_0_0 := (C_52: ((add_int !j_0_0) (1))));
+                                !j_0_0 end) end in void);
+                             (raise (Loop_continue_exc void)) end with
+                            Loop_continue_exc jessie_<somenum> -> void end end done;
+                        (raise (Goto_while_1_break_exc void)) end) end) end)
+                    end) with Goto_while_1_break_exc jessie_<somenum> ->
+                    (while_1_break:
+                    begin
+                      void;
+                     (C_54:
+                     (let jessie_<somenum> = t in
+                     (let jessie_<somenum> = !i_0 in
+                     (let jessie_<somenum> = !mi in
+                     (JC_<somenum>:
+                     (((((swap_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
+                    end) end;
+                   (C_56:
+                   begin   (i_0 := (C_55: ((add_int !i_0) (1)))); !i_0 end)
+                  end in void); (raise (Loop_continue_exc void)) end with
+                Loop_continue_exc jessie_<somenum> -> void end end done;
+            (raise (Goto_while_0_break_exc void)) end) end) end with
          Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end)))); (raise Return) end with
@@ -1067,26 +1113,29 @@ let swap_ensures_default =
    begin
      (let tmp = ref (any_int void) in
      (C_3:
-     (C_8:
-     (C_11:
      begin
        (let jessie_<somenum> =
        (tmp := (C_2: ((safe_acc_ !intP_intM_t_0_4) (C_1: ((shift t_0) i))))) in
        void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> =
-      (C_5: ((safe_acc_ !intP_intM_t_0_4) (C_4: ((shift t_0) j)))) in
-      (let jessie_<somenum> = t_0 in
-      (let jessie_<somenum> = i in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (((safe_upd_ intP_intM_t_0_4) jessie_<somenum>) jessie_<somenum>))))) in void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> = !tmp in
-      (let jessie_<somenum> = t_0 in
-      (let jessie_<somenum> = j in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (((safe_upd_ intP_intM_t_0_4) jessie_<somenum>) jessie_<somenum>))))) in void);
-      (raise Return) end)))); (raise Return) end with Return -> void end)
+      (C_8:
+      begin
+        (let jessie_<somenum> =
+        (let jessie_<somenum> =
+        (C_5: ((safe_acc_ !intP_intM_t_0_4) (C_4: ((shift t_0) j)))) in
+        (let jessie_<somenum> = t_0 in
+        (let jessie_<somenum> = i in
+        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+        (((safe_upd_ intP_intM_t_0_4) jessie_<somenum>) jessie_<somenum>))))) in void);
+       (C_11:
+       begin
+         (let jessie_<somenum> =
+         (let jessie_<somenum> = !tmp in
+         (let jessie_<somenum> = t_0 in
+         (let jessie_<somenum> = j in
+         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+         (((safe_upd_ intP_intM_t_0_4) jessie_<somenum>) jessie_<somenum>))))) in void);
+        (raise Return) end) end) end)); (raise Return) end with Return ->
+   void end)
   { (JC_<somenum>:
     ((JC_<somenum>: Swap(t_0, i, j, intP_intM_t_0_4, intP_intM_t_0_4@))
     and (JC_<somenum>:
@@ -1107,34 +1156,36 @@ let swap_safety =
    begin
      (let tmp = ref (any_int void) in
      (C_3:
-     (C_8:
-     (C_11:
      begin
        (let jessie_<somenum> =
        (tmp := (C_2:
                (JC_<somenum>:
                ((((offset_acc_ intP_t_0_4_alloc_table) !intP_intM_t_0_4) t_0) i)))) in
        void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> =
-      (C_5:
-      (JC_<somenum>:
-      ((((offset_acc_ intP_t_0_4_alloc_table) !intP_intM_t_0_4) t_0) j))) in
-      (let jessie_<somenum> = t_0 in
-      (let jessie_<somenum> = i in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (JC_<somenum>:
-      (((((offset_upd_ intP_t_0_4_alloc_table) intP_intM_t_0_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-      void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> = !tmp in
-      (let jessie_<somenum> = t_0 in
-      (let jessie_<somenum> = j in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (JC_<somenum>:
-      (((((offset_upd_ intP_t_0_4_alloc_table) intP_intM_t_0_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-      void); (raise Return) end)))); (raise Return) end with Return ->
-   void end) { true }
+      (C_8:
+      begin
+        (let jessie_<somenum> =
+        (let jessie_<somenum> =
+        (C_5:
+        (JC_<somenum>:
+        ((((offset_acc_ intP_t_0_4_alloc_table) !intP_intM_t_0_4) t_0) j))) in
+        (let jessie_<somenum> = t_0 in
+        (let jessie_<somenum> = i in
+        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+        (JC_<somenum>:
+        (((((offset_upd_ intP_t_0_4_alloc_table) intP_intM_t_0_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+        void);
+       (C_11:
+       begin
+         (let jessie_<somenum> =
+         (let jessie_<somenum> = !tmp in
+         (let jessie_<somenum> = t_0 in
+         (let jessie_<somenum> = j in
+         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+         (JC_<somenum>:
+         (((((offset_upd_ intP_t_0_4_alloc_table) intP_intM_t_0_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+         void); (raise Return) end) end) end)); (raise Return) end with
+   Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C minimum_sort.jessie --quiet -f minimum_sort.makefile project

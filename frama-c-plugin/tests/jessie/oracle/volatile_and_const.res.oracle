@@ -517,28 +517,31 @@ let main_ensures_default =
      (let newValue = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      (C_2:
-     (C_4:
-     (C_7:
-     (C_8:
      begin
        (let jessie_<somenum> =
        (currentValue := (C_1:
                         ((safe_acc_ !intP_intM_hardwareRegister_1) hardwareRegister))) in
        void);
-      (let jessie_<somenum> =
-      (newValue := (C_3:
-                   ((safe_acc_ !intP_intM_hardwareRegister_1) hardwareRegister))) in
-      void);
-      (assert
-      { (JC_<somenum>:
-        (integer_of_int32(currentValue) = integer_of_int32(newValue))) };
-      void); void;
-      (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
-      (let jessie_<somenum> = hardwareRegister in
-      (((safe_upd_ intP_intM_hardwareRegister_1) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))))))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+      (C_4:
+      begin
+        (let jessie_<somenum> =
+        (newValue := (C_3:
+                     ((safe_acc_ !intP_intM_hardwareRegister_1) hardwareRegister))) in
+        void);
+       (assert
+       { (JC_<somenum>:
+         (integer_of_int32(currentValue) = integer_of_int32(newValue))) };
+       void); void;
+       (C_7:
+       begin
+         (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
+         (let jessie_<somenum> = hardwareRegister in
+         (((safe_upd_ intP_intM_hardwareRegister_1) jessie_<somenum>) jessie_<somenum>)));
+        (C_8:
+        begin
+          (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+          void); (return := !__retres); (raise Return) end) end) end) end))));
+    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -551,31 +554,34 @@ let main_safety =
      (let newValue = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      (C_2:
-     (C_4:
-     (C_7:
-     (C_8:
      begin
        (let jessie_<somenum> =
        (currentValue := (C_1:
                         (JC_<somenum>:
                         (((acc_ !intP_hardwareRegister_1_alloc_table) !intP_intM_hardwareRegister_1) hardwareRegister)))) in
        void);
-      (let jessie_<somenum> =
-      (newValue := (C_3:
-                   (JC_<somenum>:
-                   (((acc_ !intP_hardwareRegister_1_alloc_table) !intP_intM_hardwareRegister_1) hardwareRegister)))) in
-      void);
-      [ { } unit reads currentValue,newValue
-        { (JC_<somenum>:
-          (integer_of_int32(currentValue) = integer_of_int32(newValue))) } ];
-      void;
-      (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
-      (let jessie_<somenum> = hardwareRegister in
-      (JC_<somenum>:
-      ((((upd_ !intP_hardwareRegister_1_alloc_table) intP_intM_hardwareRegister_1) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))))))); absurd  end with
-   Return -> !return end)) { true }
+      (C_4:
+      begin
+        (let jessie_<somenum> =
+        (newValue := (C_3:
+                     (JC_<somenum>:
+                     (((acc_ !intP_hardwareRegister_1_alloc_table) !intP_intM_hardwareRegister_1) hardwareRegister)))) in
+        void);
+       [ { } unit reads currentValue,newValue
+         { (JC_<somenum>:
+           (integer_of_int32(currentValue) = integer_of_int32(newValue))) } ];
+       void;
+       (C_7:
+       begin
+         (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
+         (let jessie_<somenum> = hardwareRegister in
+         (JC_<somenum>:
+         ((((upd_ !intP_hardwareRegister_1_alloc_table) intP_intM_hardwareRegister_1) jessie_<somenum>) jessie_<somenum>))));
+        (C_8:
+        begin
+          (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+          void); (return := !__retres); (raise Return) end) end) end) end))));
+    absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C volatile_and_const.jessie --quiet -f volatile_and_const.makefile project

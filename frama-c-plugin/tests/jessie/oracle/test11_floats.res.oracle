@@ -452,7 +452,6 @@ let f_ensures_default =
      (let tmp = ref (any_single void) in
      (let tmp_0 = ref (any_double void) in
      (C_9:
-     (C_14:
      begin
        (let jessie_<somenum> =
        (tmp := (C_8:
@@ -460,16 +459,18 @@ let f_ensures_default =
                (C_7: ((single_of_double_safe nearest_even) x_0_0)) in
                (let jessie_<somenum> = (single_of_real_exact 1.0) in
                (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>)))))) in void); void;
-      (let jessie_<somenum> =
-      (let __cil_tmp =
-      (C_11:
-      (let jessie_<somenum> =
-      (C_10: ((single_of_double_safe nearest_even) x_0_0)) in
-      (let jessie_<somenum> = !tmp in (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>))))) in
-      (C_13:
-      begin   (tmp_0 := (C_12: (double_of_single __cil_tmp))); !tmp_0 end)) in
-      void); (return := !tmp_0); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: (double_value(result) = 1.0)) }
+      (C_14:
+      begin
+        (let jessie_<somenum> =
+        (let __cil_tmp =
+        (C_11:
+        (let jessie_<somenum> =
+        (C_10: ((single_of_double_safe nearest_even) x_0_0)) in
+        (let jessie_<somenum> = !tmp in (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>))))) in
+        (C_13:
+        begin   (tmp_0 := (C_12: (double_of_single __cil_tmp))); !tmp_0 end)) in
+        void); (return := !tmp_0); (raise Return) end) end))); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: (double_value(result) = 1.0)) }
 
 let f_safety =
  fun (x_0_0 : double) ->
@@ -481,7 +482,6 @@ let f_safety =
      (let tmp = ref (any_single void) in
      (let tmp_0 = ref (any_double void) in
      (C_9:
-     (C_14:
      begin
        (let jessie_<somenum> =
        (tmp := (C_8:
@@ -490,17 +490,19 @@ let f_safety =
                (let jessie_<somenum> = (single_of_real_exact 1.0) in
                (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>)))))) in void);
       void;
-      (let jessie_<somenum> =
-      (let __cil_tmp =
-      (C_11:
-      (let jessie_<somenum> =
-      (C_10: (JC_<somenum>: ((single_of_double nearest_even) x_0_0))) in
-      (let jessie_<somenum> = !tmp in
-      (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>))))) in
-      (C_13:
-      begin   (tmp_0 := (C_12: (double_of_single __cil_tmp))); !tmp_0 end)) in
-      void); (return := !tmp_0); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { true }
+      (C_14:
+      begin
+        (let jessie_<somenum> =
+        (let __cil_tmp =
+        (C_11:
+        (let jessie_<somenum> =
+        (C_10: (JC_<somenum>: ((single_of_double nearest_even) x_0_0))) in
+        (let jessie_<somenum> = !tmp in
+        (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>))))) in
+        (C_13:
+        begin   (tmp_0 := (C_12: (double_of_single __cil_tmp))); !tmp_0 end)) in
+        void); (return := !tmp_0); (raise Return) end) end))); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test11_floats.jessie --quiet -f test11_floats.makefile project

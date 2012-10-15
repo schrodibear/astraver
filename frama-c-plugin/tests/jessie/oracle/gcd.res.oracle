@@ -519,65 +519,86 @@ let gcd_ensures_bezoutProperty =
      (let tb = ref (any_int void) in
      try
       (C_1:
-      (C_2:
-      (C_3:
-      (C_4:
       begin
         (let jessie_<somenum> = (a_3 := (1)) in void);
-       (let jessie_<somenum> = (b_2 := (0)) in void);
-       (let jessie_<somenum> = (c := (0)) in void);
-       (let jessie_<somenum> = (d_1 := (1)) in void);
-       (loop_4:
-       while true do
-       { invariant
-           (JC_<somenum>:
-           ((JC_<somenum>:
-            (add_int(mul_int(a_3, mutable_x_0@init),
-             mul_int(b_2, mutable_y@init)) = mutable_x_0))
-           and (JC_<somenum>:
-               (add_int(mul_int(c, mutable_x_0@init),
-                mul_int(d_1, mutable_y@init)) = mutable_y))))  }
+       (C_2:
+       begin
+         (let jessie_<somenum> = (b_2 := (0)) in void);
+        (C_3:
         begin
-          [ { } unit reads mutable_x_0,mutable_y
-            { (JC_<somenum>:
-              ((JC_<somenum>: ge_int(mutable_x_0, (0)))
-              and (JC_<somenum>: ge_int(mutable_y, (0))))) } ];
-         try
+          (let jessie_<somenum> = (c := (0)) in void);
+         (C_4:
+         begin
+           (let jessie_<somenum> = (d_1 := (1)) in void);
+          (loop_4:
           begin
-            (let jessie_<somenum> =
-            (C_14:
-            (C_16:
-            (C_17:
-            (C_18:
-            (C_19:
-            (C_20:
-            (C_21:
-            (C_22:
-            (C_25:
-            (C_28:
-            begin
-              (if ((gt_int_ !mutable_y) (0)) then void
-              else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             (r := (C_13: (JC_<somenum>: ((computer_mod !mutable_x_0) !mutable_y)))) in
-             void);
-             (let jessie_<somenum> =
-             (q_1 := (C_15:
-                     (JC_<somenum>: ((computer_div !mutable_x_0) !mutable_y)))) in
-             void); (let jessie_<somenum> = (mutable_x_0 := !mutable_y) in void);
-             (let jessie_<somenum> = (mutable_y := !r) in void);
-             (let jessie_<somenum> = (ta := !a_3) in void);
-             (let jessie_<somenum> = (tb := !b_2) in void);
-             (let jessie_<somenum> = (a_3 := !c) in void);
-             (let jessie_<somenum> = (b_2 := !d_1) in void);
-             (let jessie_<somenum> =
-             (c := (C_24: ((sub_int !ta) (C_23: ((mul_int !c) !q_1))))) in
-             void);
-             (d_1 := (C_27: ((sub_int !tb) (C_26: ((mul_int !d_1) !q_1)))));
-             !d_1 end)))))))))) in void); (raise (Loop_continue_exc void))
-          end with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+            while true do
+            { invariant
+                (JC_<somenum>:
+                ((JC_<somenum>:
+                 (add_int(mul_int(a_3, mutable_x_0@init),
+                  mul_int(b_2, mutable_y@init)) = mutable_x_0))
+                and (JC_<somenum>:
+                    (add_int(mul_int(c, mutable_x_0@init),
+                     mul_int(d_1, mutable_y@init)) = mutable_y))))  }
+             begin
+               [ { } unit reads mutable_x_0,mutable_y
+                 { (JC_<somenum>:
+                   ((JC_<somenum>: ge_int(mutable_x_0, (0)))
+                   and (JC_<somenum>: ge_int(mutable_y, (0))))) } ];
+              try
+               begin
+                 (let jessie_<somenum> =
+                 begin
+                   (if ((gt_int_ !mutable_y) (0)) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  (C_14:
+                  begin
+                    (let jessie_<somenum> =
+                    (r := (C_13:
+                          (JC_<somenum>: ((computer_mod !mutable_x_0) !mutable_y)))) in
+                    void);
+                   (C_16:
+                   begin
+                     (let jessie_<somenum> =
+                     (q_1 := (C_15:
+                             (JC_<somenum>:
+                             ((computer_div !mutable_x_0) !mutable_y)))) in
+                     void);
+                    (C_17:
+                    begin
+                      (let jessie_<somenum> = (mutable_x_0 := !mutable_y) in void);
+                     (C_18:
+                     begin
+                       (let jessie_<somenum> = (mutable_y := !r) in void);
+                      (C_19:
+                      begin
+                        (let jessie_<somenum> = (ta := !a_3) in void);
+                       (C_20:
+                       begin
+                         (let jessie_<somenum> = (tb := !b_2) in void);
+                        (C_21:
+                        begin
+                          (let jessie_<somenum> = (a_3 := !c) in void);
+                         (C_22:
+                         begin
+                           (let jessie_<somenum> = (b_2 := !d_1) in void);
+                          (C_25:
+                          begin
+                            (let jessie_<somenum> =
+                            (c := (C_24:
+                                  ((sub_int !ta) (C_23: ((mul_int !c) !q_1))))) in
+                            void);
+                           (C_28:
+                           begin
+                             (d_1 := (C_27:
+                                     ((sub_int !tb) (C_26:
+                                                    ((mul_int !d_1) !q_1)))));
+                            !d_1 end) end) end) end) end) end) end) end) end)
+                  end) end in void); (raise (Loop_continue_exc void)) end
+               with Loop_continue_exc jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) end) end) end)
+      with Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin   void; (return := !mutable_x_0); (raise Return) end) end))))))));
     absurd  end with Return -> !return end))))
@@ -604,58 +625,79 @@ let gcd_ensures_default =
      (let tb = ref (any_int void) in
      try
       (C_1:
-      (C_2:
-      (C_3:
-      (C_4:
       begin
         (let jessie_<somenum> = (a_3 := (1)) in void);
-       (let jessie_<somenum> = (b_2 := (0)) in void);
-       (let jessie_<somenum> = (c := (0)) in void);
-       (let jessie_<somenum> = (d_1 := (1)) in void);
-       (loop_2:
-       while true do
-       { invariant
-           (JC_<somenum>:
-           ((JC_<somenum>: ge_int(mutable_x_0, (0)))
-           and (JC_<somenum>: ge_int(mutable_y, (0)))))  }
+       (C_2:
+       begin
+         (let jessie_<somenum> = (b_2 := (0)) in void);
+        (C_3:
         begin
-          [ { } unit { true } ];
-         try
+          (let jessie_<somenum> = (c := (0)) in void);
+         (C_4:
+         begin
+           (let jessie_<somenum> = (d_1 := (1)) in void);
+          (loop_2:
           begin
-            (let jessie_<somenum> =
-            (C_14:
-            (C_16:
-            (C_17:
-            (C_18:
-            (C_19:
-            (C_20:
-            (C_21:
-            (C_22:
-            (C_25:
-            (C_28:
-            begin
-              (if ((gt_int_ !mutable_y) (0)) then void
-              else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             (r := (C_13: (JC_<somenum>: ((computer_mod !mutable_x_0) !mutable_y)))) in
-             void);
-             (let jessie_<somenum> =
-             (q_1 := (C_15:
-                     (JC_<somenum>: ((computer_div !mutable_x_0) !mutable_y)))) in
-             void); (let jessie_<somenum> = (mutable_x_0 := !mutable_y) in void);
-             (let jessie_<somenum> = (mutable_y := !r) in void);
-             (let jessie_<somenum> = (ta := !a_3) in void);
-             (let jessie_<somenum> = (tb := !b_2) in void);
-             (let jessie_<somenum> = (a_3 := !c) in void);
-             (let jessie_<somenum> = (b_2 := !d_1) in void);
-             (let jessie_<somenum> =
-             (c := (C_24: ((sub_int !ta) (C_23: ((mul_int !c) !q_1))))) in
-             void);
-             (d_1 := (C_27: ((sub_int !tb) (C_26: ((mul_int !d_1) !q_1)))));
-             !d_1 end)))))))))) in void); (raise (Loop_continue_exc void))
-          end with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+            while true do
+            { invariant
+                (JC_<somenum>:
+                ((JC_<somenum>: ge_int(mutable_x_0, (0)))
+                and (JC_<somenum>: ge_int(mutable_y, (0)))))  }
+             begin
+               [ { } unit { true } ];
+              try
+               begin
+                 (let jessie_<somenum> =
+                 begin
+                   (if ((gt_int_ !mutable_y) (0)) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  (C_14:
+                  begin
+                    (let jessie_<somenum> =
+                    (r := (C_13:
+                          (JC_<somenum>: ((computer_mod !mutable_x_0) !mutable_y)))) in
+                    void);
+                   (C_16:
+                   begin
+                     (let jessie_<somenum> =
+                     (q_1 := (C_15:
+                             (JC_<somenum>:
+                             ((computer_div !mutable_x_0) !mutable_y)))) in
+                     void);
+                    (C_17:
+                    begin
+                      (let jessie_<somenum> = (mutable_x_0 := !mutable_y) in void);
+                     (C_18:
+                     begin
+                       (let jessie_<somenum> = (mutable_y := !r) in void);
+                      (C_19:
+                      begin
+                        (let jessie_<somenum> = (ta := !a_3) in void);
+                       (C_20:
+                       begin
+                         (let jessie_<somenum> = (tb := !b_2) in void);
+                        (C_21:
+                        begin
+                          (let jessie_<somenum> = (a_3 := !c) in void);
+                         (C_22:
+                         begin
+                           (let jessie_<somenum> = (b_2 := !d_1) in void);
+                          (C_25:
+                          begin
+                            (let jessie_<somenum> =
+                            (c := (C_24:
+                                  ((sub_int !ta) (C_23: ((mul_int !c) !q_1))))) in
+                            void);
+                           (C_28:
+                           begin
+                             (d_1 := (C_27:
+                                     ((sub_int !tb) (C_26:
+                                                    ((mul_int !d_1) !q_1)))));
+                            !d_1 end) end) end) end) end) end) end) end) end)
+                  end) end in void); (raise (Loop_continue_exc void)) end
+               with Loop_continue_exc jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) end) end) end)
+      with Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin   void; (return := !mutable_x_0); (raise Return) end) end))))))));
     absurd  end with Return -> !return end)))) { (JC_<somenum>: true) }
@@ -679,62 +721,83 @@ let gcd_ensures_resultIsGcd =
      (let tb = ref (any_int void) in
      try
       (C_1:
-      (C_2:
-      (C_3:
-      (C_4:
       begin
         (let jessie_<somenum> = (a_3 := (1)) in void);
-       (let jessie_<somenum> = (b_2 := (0)) in void);
-       (let jessie_<somenum> = (c := (0)) in void);
-       (let jessie_<somenum> = (d_1 := (1)) in void);
-       (loop_3:
-       while true do
-       { invariant
-           (JC_<somenum>:
-           (forall d_1_0:int.
-            (isGcd(mutable_x_0, mutable_y, d_1_0) ->
-             isGcd(mutable_x_0@init, mutable_y@init, d_1_0))))  }
+       (C_2:
+       begin
+         (let jessie_<somenum> = (b_2 := (0)) in void);
+        (C_3:
         begin
-          [ { } unit reads mutable_x_0,mutable_y
-            { (JC_<somenum>:
-              ((JC_<somenum>: ge_int(mutable_x_0, (0)))
-              and (JC_<somenum>: ge_int(mutable_y, (0))))) } ];
-         try
+          (let jessie_<somenum> = (c := (0)) in void);
+         (C_4:
+         begin
+           (let jessie_<somenum> = (d_1 := (1)) in void);
+          (loop_3:
           begin
-            (let jessie_<somenum> =
-            (C_14:
-            (C_16:
-            (C_17:
-            (C_18:
-            (C_19:
-            (C_20:
-            (C_21:
-            (C_22:
-            (C_25:
-            (C_28:
-            begin
-              (if ((gt_int_ !mutable_y) (0)) then void
-              else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             (r := (C_13: (JC_<somenum>: ((computer_mod !mutable_x_0) !mutable_y)))) in
-             void);
-             (let jessie_<somenum> =
-             (q_1 := (C_15:
-                     (JC_<somenum>: ((computer_div !mutable_x_0) !mutable_y)))) in
-             void); (let jessie_<somenum> = (mutable_x_0 := !mutable_y) in void);
-             (let jessie_<somenum> = (mutable_y := !r) in void);
-             (let jessie_<somenum> = (ta := !a_3) in void);
-             (let jessie_<somenum> = (tb := !b_2) in void);
-             (let jessie_<somenum> = (a_3 := !c) in void);
-             (let jessie_<somenum> = (b_2 := !d_1) in void);
-             (let jessie_<somenum> =
-             (c := (C_24: ((sub_int !ta) (C_23: ((mul_int !c) !q_1))))) in
-             void);
-             (d_1 := (C_27: ((sub_int !tb) (C_26: ((mul_int !d_1) !q_1)))));
-             !d_1 end)))))))))) in void); (raise (Loop_continue_exc void))
-          end with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+            while true do
+            { invariant
+                (JC_<somenum>:
+                (forall d_1_0:int.
+                 (isGcd(mutable_x_0, mutable_y, d_1_0) ->
+                  isGcd(mutable_x_0@init, mutable_y@init, d_1_0))))  }
+             begin
+               [ { } unit reads mutable_x_0,mutable_y
+                 { (JC_<somenum>:
+                   ((JC_<somenum>: ge_int(mutable_x_0, (0)))
+                   and (JC_<somenum>: ge_int(mutable_y, (0))))) } ];
+              try
+               begin
+                 (let jessie_<somenum> =
+                 begin
+                   (if ((gt_int_ !mutable_y) (0)) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  (C_14:
+                  begin
+                    (let jessie_<somenum> =
+                    (r := (C_13:
+                          (JC_<somenum>: ((computer_mod !mutable_x_0) !mutable_y)))) in
+                    void);
+                   (C_16:
+                   begin
+                     (let jessie_<somenum> =
+                     (q_1 := (C_15:
+                             (JC_<somenum>:
+                             ((computer_div !mutable_x_0) !mutable_y)))) in
+                     void);
+                    (C_17:
+                    begin
+                      (let jessie_<somenum> = (mutable_x_0 := !mutable_y) in void);
+                     (C_18:
+                     begin
+                       (let jessie_<somenum> = (mutable_y := !r) in void);
+                      (C_19:
+                      begin
+                        (let jessie_<somenum> = (ta := !a_3) in void);
+                       (C_20:
+                       begin
+                         (let jessie_<somenum> = (tb := !b_2) in void);
+                        (C_21:
+                        begin
+                          (let jessie_<somenum> = (a_3 := !c) in void);
+                         (C_22:
+                         begin
+                           (let jessie_<somenum> = (b_2 := !d_1) in void);
+                          (C_25:
+                          begin
+                            (let jessie_<somenum> =
+                            (c := (C_24:
+                                  ((sub_int !ta) (C_23: ((mul_int !c) !q_1))))) in
+                            void);
+                           (C_28:
+                           begin
+                             (d_1 := (C_27:
+                                     ((sub_int !tb) (C_26:
+                                                    ((mul_int !d_1) !q_1)))));
+                            !d_1 end) end) end) end) end) end) end) end) end)
+                  end) end in void); (raise (Loop_continue_exc void)) end
+               with Loop_continue_exc jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) end) end) end)
+      with Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin   void; (return := !mutable_x_0); (raise Return) end) end))))))));
     absurd  end with Return -> !return end))))
@@ -759,58 +822,79 @@ let gcd_safety =
      (let tb = ref (any_int void) in
      try
       (C_1:
-      (C_2:
-      (C_3:
-      (C_4:
       begin
         (let jessie_<somenum> = (a_3 := (1)) in void);
-       (let jessie_<somenum> = (b_2 := (0)) in void);
-       (let jessie_<somenum> = (c := (0)) in void);
-       (let jessie_<somenum> = (d_1 := (1)) in void);
-       (loop_1:
-       while true do
-       { invariant (JC_<somenum>: true) variant (JC_<somenum> : mutable_y) }
+       (C_2:
+       begin
+         (let jessie_<somenum> = (b_2 := (0)) in void);
+        (C_3:
         begin
-          [ { } unit reads mutable_x_0,mutable_y
-            { (JC_<somenum>:
-              ((JC_<somenum>: ge_int(mutable_x_0, (0)))
-              and (JC_<somenum>: ge_int(mutable_y, (0))))) } ];
-         try
+          (let jessie_<somenum> = (c := (0)) in void);
+         (C_4:
+         begin
+           (let jessie_<somenum> = (d_1 := (1)) in void);
+          (loop_1:
           begin
-            (let jessie_<somenum> =
-            (C_14:
-            (C_16:
-            (C_17:
-            (C_18:
-            (C_19:
-            (C_20:
-            (C_21:
-            (C_22:
-            (C_25:
-            (C_28:
-            begin
-              (if ((gt_int_ !mutable_y) (0)) then void
-              else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             (r := (C_13: (JC_<somenum>: ((computer_mod_ !mutable_x_0) !mutable_y)))) in
-             void);
-             (let jessie_<somenum> =
-             (q_1 := (C_15:
-                     (JC_<somenum>: ((computer_div_ !mutable_x_0) !mutable_y)))) in
-             void); (let jessie_<somenum> = (mutable_x_0 := !mutable_y) in void);
-             (let jessie_<somenum> = (mutable_y := !r) in void);
-             (let jessie_<somenum> = (ta := !a_3) in void);
-             (let jessie_<somenum> = (tb := !b_2) in void);
-             (let jessie_<somenum> = (a_3 := !c) in void);
-             (let jessie_<somenum> = (b_2 := !d_1) in void);
-             (let jessie_<somenum> =
-             (c := (C_24: ((sub_int !ta) (C_23: ((mul_int !c) !q_1))))) in
-             void);
-             (d_1 := (C_27: ((sub_int !tb) (C_26: ((mul_int !d_1) !q_1)))));
-             !d_1 end)))))))))) in void); (raise (Loop_continue_exc void))
-          end with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+            while true do
+            { invariant (JC_<somenum>: true) variant (JC_<somenum> : mutable_y) }
+             begin
+               [ { } unit reads mutable_x_0,mutable_y
+                 { (JC_<somenum>:
+                   ((JC_<somenum>: ge_int(mutable_x_0, (0)))
+                   and (JC_<somenum>: ge_int(mutable_y, (0))))) } ];
+              try
+               begin
+                 (let jessie_<somenum> =
+                 begin
+                   (if ((gt_int_ !mutable_y) (0)) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  (C_14:
+                  begin
+                    (let jessie_<somenum> =
+                    (r := (C_13:
+                          (JC_<somenum>: ((computer_mod_ !mutable_x_0) !mutable_y)))) in
+                    void);
+                   (C_16:
+                   begin
+                     (let jessie_<somenum> =
+                     (q_1 := (C_15:
+                             (JC_<somenum>:
+                             ((computer_div_ !mutable_x_0) !mutable_y)))) in
+                     void);
+                    (C_17:
+                    begin
+                      (let jessie_<somenum> = (mutable_x_0 := !mutable_y) in void);
+                     (C_18:
+                     begin
+                       (let jessie_<somenum> = (mutable_y := !r) in void);
+                      (C_19:
+                      begin
+                        (let jessie_<somenum> = (ta := !a_3) in void);
+                       (C_20:
+                       begin
+                         (let jessie_<somenum> = (tb := !b_2) in void);
+                        (C_21:
+                        begin
+                          (let jessie_<somenum> = (a_3 := !c) in void);
+                         (C_22:
+                         begin
+                           (let jessie_<somenum> = (b_2 := !d_1) in void);
+                          (C_25:
+                          begin
+                            (let jessie_<somenum> =
+                            (c := (C_24:
+                                  ((sub_int !ta) (C_23: ((mul_int !c) !q_1))))) in
+                            void);
+                           (C_28:
+                           begin
+                             (d_1 := (C_27:
+                                     ((sub_int !tb) (C_26:
+                                                    ((mul_int !d_1) !q_1)))));
+                            !d_1 end) end) end) end) end) end) end) end) end)
+                  end) end in void); (raise (Loop_continue_exc void)) end
+               with Loop_continue_exc jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) end) end) end)
+      with Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin   void; (return := !mutable_x_0); (raise Return) end) end))))))));
     absurd  end with Return -> !return end)))) { true }

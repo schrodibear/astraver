@@ -544,6 +544,7 @@ let ftest_ensures_default =
    begin
      (let intP_intM_c_5 = (any_memory void) in
      (M:
+     (C_3:
      begin
        (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
        (let jessie_<somenum> = b in
@@ -558,7 +559,7 @@ let ftest_ensures_default =
       void;
       (assert
       { (JC_<somenum>: (s_0(b, (8), intP_intM_b_2) = s_0(b, (8), intP_intM_b_2@M))) };
-      void); void; (raise Return) end)); (raise Return) end with Return ->
+      void); void; (raise Return) end))); (raise Return) end with Return ->
    void end) { (JC_<somenum>: true) }
 
 let ftest_safety =
@@ -572,6 +573,7 @@ let ftest_safety =
    begin
      (let intP_intM_c_5 = (any_memory void) in
      (M:
+     (C_3:
      begin
        (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
        (let jessie_<somenum> = b in
@@ -588,7 +590,7 @@ let ftest_safety =
       [ { } unit reads intP_intM_b_2
         { (JC_<somenum>:
           (s_0(b, (8), intP_intM_b_2) = s_0(b, (8), intP_intM_b_2@M))) } ];
-      void; (raise Return) end)); (raise Return) end with Return -> void end)
+      void; (raise Return) end))); (raise Return) end with Return -> void end)
   { true }
 
 

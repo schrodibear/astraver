@@ -696,51 +696,54 @@ let all_zeros_0_ensures_default =
          begin
            (let jessie_<somenum> = (k_0 := (safe_int32_of_integer_ (0))) in void);
           (loop_6:
-          while true do
-          { invariant
-              (JC_<somenum>:
-              ((JC_<somenum>: le_int((0), integer_of_int32(k_0)))
-              and ((JC_<somenum>:
-                   le_int(integer_of_int32(k_0), integer_of_int32(n_2)))
-                  and (JC_<somenum>:
-                      (forall i_5:int.
-                       ((le_int((0), i_5)
-                        and lt_int(i_5, integer_of_int32(k_0))) ->
-                        (integer_of_int32(select(intP_intM_t_0_3,
-                                          shift(t_0, i_5))) = (0)))))))) 
-             }
-           begin
-             [ { } unit { true } ];
-            try
+          begin
+            while true do
+            { invariant
+                (JC_<somenum>:
+                ((JC_<somenum>: le_int((0), integer_of_int32(k_0)))
+                and ((JC_<somenum>:
+                     le_int(integer_of_int32(k_0), integer_of_int32(n_2)))
+                    and (JC_<somenum>:
+                        (forall i_5:int.
+                         ((le_int((0), i_5)
+                          and lt_int(i_5, integer_of_int32(k_0))) ->
+                          (integer_of_int32(select(intP_intM_t_0_3,
+                                            shift(t_0, i_5))) = (0)))))))) 
+               }
              begin
-               (let jessie_<somenum> =
-               (C_53:
+               [ { } unit { true } ];
+              try
                begin
-                 (if ((lt_int_ (integer_of_int32 !k_0)) (integer_of_int32 n_2))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (if ((neq_int_ (integer_of_int32 (C_50:
-                                                 ((safe_acc_ intP_intM_t_0_3) 
-                                                  (C_49:
-                                                  ((shift t_0) (integer_of_int32 !k_0))))))) (0))
-                then
-                 (C_48:
+                 (let jessie_<somenum> =
                  begin
-                   (let jessie_<somenum> =
-                   (__retres_1 := (safe_int32_of_integer_ (0))) in void);
-                  (raise (Return_label_exc void)) end) else void);
-                (k_0 := (C_52:
-                        (safe_int32_of_integer_ (C_51:
-                                                ((add_int (integer_of_int32 !k_0)) (1))))));
-                !k_0 end) in void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                   (if ((lt_int_ (integer_of_int32 !k_0)) (integer_of_int32 n_2))
+                   then void else (raise (Goto_while_0_break_exc void)));
+                  (if ((neq_int_ (integer_of_int32 (C_50:
+                                                   ((safe_acc_ intP_intM_t_0_3) 
+                                                    (C_49:
+                                                    ((shift t_0) (integer_of_int32 !k_0))))))) (0))
+                  then
+                   (C_48:
+                   begin
+                     (let jessie_<somenum> =
+                     (__retres_1 := (safe_int32_of_integer_ (0))) in void);
+                    (raise (Return_label_exc void)) end) else void);
+                  (C_53:
+                  begin
+                    (k_0 := (C_52:
+                            (safe_int32_of_integer_ (C_51:
+                                                    ((add_int (integer_of_int32 !k_0)) (1))))));
+                   !k_0 end) end in void); (raise (Loop_continue_exc void))
+               end with Loop_continue_exc jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (while_0_break:
-         (C_54:
          begin
-           void; (__retres_1 := (safe_int32_of_integer_ (1))); !__retres_1
-         end)) in void) end; (raise (Return_label_exc void)) end with
+           void;
+          (C_54:
+          begin   (__retres_1 := (safe_int32_of_integer_ (1))); !__retres_1
+          end) end) in void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_1); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -771,53 +774,56 @@ let all_zeros_0_safety =
          begin
            (let jessie_<somenum> = (k_0 := (safe_int32_of_integer_ (0))) in void);
           (loop_5:
-          while true do
-          { invariant (JC_<somenum>: true)
-            variant (JC_<somenum> : sub_int(integer_of_int32(n_2),
-                             integer_of_int32(k_0))) }
-           begin
-             [ { } unit reads k_0
-               { (JC_<somenum>:
-                 ((JC_<somenum>: le_int((0), integer_of_int32(k_0)))
-                 and ((JC_<somenum>:
-                      le_int(integer_of_int32(k_0), integer_of_int32(n_2)))
-                     and (JC_<somenum>:
-                         (forall i_5:int.
-                          ((le_int((0), i_5)
-                           and lt_int(i_5, integer_of_int32(k_0))) ->
-                           (integer_of_int32(select(intP_intM_t_0_3,
-                                             shift(t_0, i_5))) = (0)))))))) } ];
-            try
+          begin
+            while true do
+            { invariant (JC_<somenum>: true)
+              variant (JC_<somenum> : sub_int(integer_of_int32(n_2),
+                               integer_of_int32(k_0))) }
              begin
-               (let jessie_<somenum> =
-               (C_53:
+               [ { } unit reads k_0
+                 { (JC_<somenum>:
+                   ((JC_<somenum>: le_int((0), integer_of_int32(k_0)))
+                   and ((JC_<somenum>:
+                        le_int(integer_of_int32(k_0), integer_of_int32(n_2)))
+                       and (JC_<somenum>:
+                           (forall i_5:int.
+                            ((le_int((0), i_5)
+                             and lt_int(i_5, integer_of_int32(k_0))) ->
+                             (integer_of_int32(select(intP_intM_t_0_3,
+                                               shift(t_0, i_5))) = (0)))))))) } ];
+              try
                begin
-                 (if ((lt_int_ (integer_of_int32 !k_0)) (integer_of_int32 n_2))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (if ((neq_int_ (integer_of_int32 (C_50:
-                                                 (JC_<somenum>:
-                                                 ((((offset_acc_ intP_t_0_3_alloc_table) intP_intM_t_0_3) t_0) 
-                                                  (integer_of_int32 !k_0)))))) (0))
-                then
-                 (C_48:
+                 (let jessie_<somenum> =
                  begin
-                   (let jessie_<somenum> =
-                   (__retres_1 := (safe_int32_of_integer_ (0))) in void);
-                  (raise (Return_label_exc void)) end) else void);
-                (k_0 := (C_52:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_51:
-                                           ((add_int (integer_of_int32 !k_0)) (1)))))));
-                !k_0 end) in void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                   (if ((lt_int_ (integer_of_int32 !k_0)) (integer_of_int32 n_2))
+                   then void else (raise (Goto_while_0_break_exc void)));
+                  (if ((neq_int_ (integer_of_int32 (C_50:
+                                                   (JC_<somenum>:
+                                                   ((((offset_acc_ intP_t_0_3_alloc_table) intP_intM_t_0_3) t_0) 
+                                                    (integer_of_int32 !k_0)))))) (0))
+                  then
+                   (C_48:
+                   begin
+                     (let jessie_<somenum> =
+                     (__retres_1 := (safe_int32_of_integer_ (0))) in void);
+                    (raise (Return_label_exc void)) end) else void);
+                  (C_53:
+                  begin
+                    (k_0 := (C_52:
+                            (JC_<somenum>:
+                            (int32_of_integer_ (C_51:
+                                               ((add_int (integer_of_int32 !k_0)) (1)))))));
+                   !k_0 end) end in void); (raise (Loop_continue_exc void))
+               end with Loop_continue_exc jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (while_0_break:
-         (C_54:
          begin
-           void; (__retres_1 := (safe_int32_of_integer_ (1))); !__retres_1
-         end)) in void) end; (raise (Return_label_exc void)) end with
+           void;
+          (C_54:
+          begin   (__retres_1 := (safe_int32_of_integer_ (1))); !__retres_1
+          end) end) in void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_1); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -842,53 +848,57 @@ let all_zeros_1_ensures_default =
       begin
         (let jessie_<somenum> = (k := (safe_int32_of_integer_ (0))) in void);
        (loop_4:
-       while true do
-       { invariant
-           (JC_<somenum>:
-           ((JC_<somenum>: le_int((0), integer_of_int32(k)))
-           and ((JC_<somenum>: le_int(integer_of_int32(k), integer_of_int32(n_3)))
-               and (JC_<somenum>:
-                   (forall i_3:int.
-                    ((le_int((0), i_3) and lt_int(i_3, integer_of_int32(k))) ->
-                     (integer_of_int32(select(intP_intM_t_1_2,
-                                       shift(t_1, i_3))) = (0)))))))) 
-          }
-        begin
-          [ { } unit { true } ];
-         try
+       begin
+         while true do
+         { invariant
+             (JC_<somenum>:
+             ((JC_<somenum>: le_int((0), integer_of_int32(k)))
+             and ((JC_<somenum>: le_int(integer_of_int32(k), integer_of_int32(n_3)))
+                 and (JC_<somenum>:
+                     (forall i_3:int.
+                      ((le_int((0), i_3)
+                       and lt_int(i_3, integer_of_int32(k))) ->
+                       (integer_of_int32(select(intP_intM_t_1_2,
+                                         shift(t_1, i_3))) = (0)))))))) 
+            }
           begin
-            (if ((lt_int_ (integer_of_int32 !k)) (integer_of_int32 n_3))
-            then
-             (C_27:
-             (C_30:
-             begin
-               (let jessie_<somenum> = (tmp := !k) in void);
-              (let jessie_<somenum> =
-              (k := (C_29:
-                    (safe_int32_of_integer_ (C_28:
-                                            ((add_int (integer_of_int32 !k)) (1)))))) in
-              void); void;
-              (if ((neq_int_ (integer_of_int32 (C_32:
-                                               ((safe_acc_ intP_intM_t_1_2) 
-                                                (C_31:
-                                                ((shift t_1) (integer_of_int32 !tmp))))))) (0))
-              then (raise (Goto_while_0_break_exc void)) else void) end))
-            else (raise (Goto_while_0_break_exc void)));
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) with
+            [ { } unit { true } ];
+           try
+            begin
+              (if ((lt_int_ (integer_of_int32 !k)) (integer_of_int32 n_3))
+              then
+               (C_27:
+               begin
+                 (let jessie_<somenum> = (tmp := !k) in void);
+                (C_30:
+                begin
+                  (let jessie_<somenum> =
+                  (k := (C_29:
+                        (safe_int32_of_integer_ (C_28:
+                                                ((add_int (integer_of_int32 !k)) (1)))))) in
+                  void); void;
+                 (if ((neq_int_ (integer_of_int32 (C_32:
+                                                  ((safe_acc_ intP_intM_t_1_2) 
+                                                   (C_31:
+                                                   ((shift t_1) (integer_of_int32 !tmp))))))) (0))
+                 then (raise (Goto_while_0_break_exc void)) else void) end)
+               end) else (raise (Goto_while_0_break_exc void)));
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
-      (C_34:
       begin
         void;
-       (let jessie_<somenum> =
-       (__retres_0 := (C_33:
-                      (safe_int32_of_integer_ (if ((eq_int_ (integer_of_int32 !k)) 
-                                                   (integer_of_int32 n_3))
-                                              then (1) else (0))))) in void);
-       (return := !__retres_0); (raise Return) end)) end))); absurd  end with
-   Return -> !return end))
+       (C_34:
+       begin
+         (let jessie_<somenum> =
+         (__retres_0 := (C_33:
+                        (safe_int32_of_integer_ (if ((eq_int_ (integer_of_int32 !k)) 
+                                                     (integer_of_int32 n_3))
+                                                then (1) else (0))))) in
+         void); (return := !__retres_0); (raise Return) end) end) end)));
+    absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((integer_of_int32(result) <> (0))
     <-> (forall i_4:int.
@@ -915,57 +925,61 @@ let all_zeros_1_safety =
       begin
         (let jessie_<somenum> = (k := (safe_int32_of_integer_ (0))) in void);
        (loop_3:
-       while true do
-       { invariant (JC_<somenum>: true)
-         variant (JC_<somenum> : sub_int(integer_of_int32(n_3), integer_of_int32(k))) }
-        begin
-          [ { } unit reads k
-            { (JC_<somenum>:
-              ((JC_<somenum>: le_int((0), integer_of_int32(k)))
-              and ((JC_<somenum>:
-                   le_int(integer_of_int32(k), integer_of_int32(n_3)))
-                  and (JC_<somenum>:
-                      (forall i_3:int.
-                       ((le_int((0), i_3)
-                        and lt_int(i_3, integer_of_int32(k))) ->
-                        (integer_of_int32(select(intP_intM_t_1_2,
-                                          shift(t_1, i_3))) = (0)))))))) } ];
-         try
+       begin
+         while true do
+         { invariant (JC_<somenum>: true)
+           variant (JC_<somenum> : sub_int(integer_of_int32(n_3),
+                            integer_of_int32(k))) }
           begin
-            (if ((lt_int_ (integer_of_int32 !k)) (integer_of_int32 n_3))
-            then
-             (C_27:
-             (C_30:
-             begin
-               (let jessie_<somenum> = (tmp := !k) in void);
-              (let jessie_<somenum> =
-              (k := (C_29:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (C_28:
-                                       ((add_int (integer_of_int32 !k)) (1))))))) in
-              void); void;
-              (if ((neq_int_ (integer_of_int32 (C_32:
-                                               (JC_<somenum>:
-                                               ((((offset_acc_ intP_t_1_2_alloc_table) intP_intM_t_1_2) t_1) 
-                                                (integer_of_int32 !tmp)))))) (0))
-              then (raise (Goto_while_0_break_exc void)) else void) end))
-            else (raise (Goto_while_0_break_exc void)));
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) with
+            [ { } unit reads k
+              { (JC_<somenum>:
+                ((JC_<somenum>: le_int((0), integer_of_int32(k)))
+                and ((JC_<somenum>:
+                     le_int(integer_of_int32(k), integer_of_int32(n_3)))
+                    and (JC_<somenum>:
+                        (forall i_3:int.
+                         ((le_int((0), i_3)
+                          and lt_int(i_3, integer_of_int32(k))) ->
+                          (integer_of_int32(select(intP_intM_t_1_2,
+                                            shift(t_1, i_3))) = (0)))))))) } ];
+           try
+            begin
+              (if ((lt_int_ (integer_of_int32 !k)) (integer_of_int32 n_3))
+              then
+               (C_27:
+               begin
+                 (let jessie_<somenum> = (tmp := !k) in void);
+                (C_30:
+                begin
+                  (let jessie_<somenum> =
+                  (k := (C_29:
+                        (JC_<somenum>:
+                        (int32_of_integer_ (C_28:
+                                           ((add_int (integer_of_int32 !k)) (1))))))) in
+                  void); void;
+                 (if ((neq_int_ (integer_of_int32 (C_32:
+                                                  (JC_<somenum>:
+                                                  ((((offset_acc_ intP_t_1_2_alloc_table) intP_intM_t_1_2) t_1) 
+                                                   (integer_of_int32 !tmp)))))) (0))
+                 then (raise (Goto_while_0_break_exc void)) else void) end)
+               end) else (raise (Goto_while_0_break_exc void)));
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
-      (C_34:
       begin
         void;
-       (let jessie_<somenum> =
-       (__retres_0 := (C_33:
-                      (JC_<somenum>:
-                      (int32_of_integer_ (if ((eq_int_ (integer_of_int32 !k)) 
-                                              (integer_of_int32 n_3))
-                                         then (1) else (0)))))) in void);
-       (return := !__retres_0); (raise Return) end)) end))); absurd  end with
-   Return -> !return end)) { true }
+       (C_34:
+       begin
+         (let jessie_<somenum> =
+         (__retres_0 := (C_33:
+                        (JC_<somenum>:
+                        (int32_of_integer_ (if ((eq_int_ (integer_of_int32 !k)) 
+                                                (integer_of_int32 n_3))
+                                           then (1) else (0)))))) in void);
+        (return := !__retres_0); (raise Return) end) end) end))); absurd  end
+   with Return -> !return end)) { true }
 
 let all_zeros_ensures_default =
  fun (t : intP pointer) (n_1 : int32) (intP_t_1_alloc_table : intP alloc_table) (intP_intM_t_1 : (intP, int32) memory) ->
@@ -981,8 +995,8 @@ let all_zeros_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      try
+      (loop_2:
       begin
-        (loop_2:
         while true do
         { invariant
             (JC_<somenum>:
@@ -1018,19 +1032,20 @@ let all_zeros_ensures_default =
              then void else (raise (Goto_while_0_break_exc void)))
             else (raise (Goto_while_0_break_exc void)));
             (raise (Loop_continue_exc void)) end) with
-           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end with
+           Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
-      (C_13:
       begin
         void;
-       (let jessie_<somenum> =
-       (__retres := (C_12:
-                    (safe_int32_of_integer_ (if ((lt_int_ (integer_of_int32 !mutable_n_1)) (0))
-                                            then (1) else (0))))) in void);
-       (return := !__retres); (raise Return) end)) end); absurd  end with
-   Return -> !return end)))
+       (C_13:
+       begin
+         (let jessie_<somenum> =
+         (__retres := (C_12:
+                      (safe_int32_of_integer_ (if ((lt_int_ (integer_of_int32 !mutable_n_1)) (0))
+                                              then (1) else (0))))) in void);
+        (return := !__retres); (raise Return) end) end) end); absurd  end
+   with Return -> !return end)))
   { (JC_<somenum>:
     ((integer_of_int32(result) <> (0))
     <-> (forall i_2:int.
@@ -1051,8 +1066,8 @@ let all_zeros_safety =
    begin
      (let __retres = ref (any_int32 void) in
      try
+      (loop_1:
       begin
-        (loop_1:
         while true do
         { invariant (JC_<somenum>: true)
           variant integer_of_int32((JC_<somenum> : mutable_n_1)) }
@@ -1089,20 +1104,21 @@ let all_zeros_safety =
              then void else (raise (Goto_while_0_break_exc void)))
             else (raise (Goto_while_0_break_exc void)));
             (raise (Loop_continue_exc void)) end) with
-           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end with
+           Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
-      (C_13:
       begin
         void;
-       (let jessie_<somenum> =
-       (__retres := (C_12:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (if ((lt_int_ (integer_of_int32 !mutable_n_1)) (0))
-                                       then (1) else (0)))))) in void);
-       (return := !__retres); (raise Return) end)) end); absurd  end with
-   Return -> !return end))) { true }
+       (C_13:
+       begin
+         (let jessie_<somenum> =
+         (__retres := (C_12:
+                      (JC_<somenum>:
+                      (int32_of_integer_ (if ((lt_int_ (integer_of_int32 !mutable_n_1)) (0))
+                                         then (1) else (0)))))) in void);
+        (return := !__retres); (raise Return) end) end) end); absurd  end
+   with Return -> !return end))) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C all_zeros.jessie --quiet -f all_zeros.makefile project
@@ -1310,11 +1326,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/all_zeros_po43.why">
-      <location file = "why/all_zeros.why" line = "888" begin = "18" end = "57"/>
+      <location file = "why/all_zeros.why" line = "903" begin = "18" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/all_zeros_po44.why">
-      <location file = "why/all_zeros.why" line = "888" begin = "18" end = "57"/>
+      <location file = "why/all_zeros.why" line = "903" begin = "18" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/all_zeros_po45.why">

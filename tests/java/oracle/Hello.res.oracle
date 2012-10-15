@@ -13050,26 +13050,26 @@ let Hello_main_ensures_default =
   { left_valid_struct_StringM(argv, (0), Object_alloc_table) }
   (init:
   try
+   (K_1:
    begin
-     (K_1:
      (let jessie_<num> = System_out in
      (let jessie_<num> = (JC_106: (any_string_0 void)) in
-     (JC_107: ((PrintStream_println_String jessie_<num>) jessie_<num>)))));
-    (raise Return) end with Return -> void end) { (JC_99: true) }
+     (JC_107: ((PrintStream_println_String jessie_<num>) jessie_<num>))));
+    (raise Return) end) with Return -> void end) { (JC_99: true) }
 
 let Hello_main_safety =
  fun (argv : Object pointer) ->
   { left_valid_struct_StringM(argv, (0), Object_alloc_table) }
   (init:
   try
+   (K_1:
    begin
-     (K_1:
      (let jessie_<num> = System_out in
      (let jessie_<num> = (JC_103: (any_string_0_requires void)) in
      (JC_105:
      (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
-     (JC_104: ((PrintStream_println_String_requires jessie_<num>) jessie_<num>)))))));
-    (raise Return) end with Return -> void end) { true }
+     (JC_104: ((PrintStream_println_String_requires jessie_<num>) jessie_<num>))))));
+    (raise Return) end) with Return -> void end) { true }
 
 let cons_FilterOutputStream_OutputStream_ensures_default =
  fun (this_106 : Object pointer) (out_1 : Object pointer) ->

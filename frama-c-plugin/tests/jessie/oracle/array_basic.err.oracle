@@ -1,12 +1,12 @@
-File "why/array_basic.why", line 817, characters 6-732:
+File "why/array_basic.why", line 817, characters 8-798:
 warning: mutable intP_intM_la3_8 is not declared in effect; added as read
-File "why/array_basic.why", line 817, characters 6-732:
+File "why/array_basic.why", line 817, characters 8-798:
 warning: mutable intP_la3_8_alloc_table is not declared in effect; added as read
-File "why/array_basic.why", line 817, characters 6-732:
+File "why/array_basic.why", line 817, characters 8-798:
 warning: mutable la3_0 is not declared in effect; added as read
-File "why/array_basic.why", line 930, characters 8-798:
+File "why/array_basic.why", line 939, characters 10-830:
 warning: mutable intP_intM_la3_8 is not declared in effect; added as read
-File "why/array_basic.why", line 930, characters 8-798:
+File "why/array_basic.why", line 939, characters 10-830:
 warning: mutable intP_la3_8_alloc_table is not declared in effect; added as read
-File "why/array_basic.why", line 930, characters 8-798:
+File "why/array_basic.why", line 939, characters 10-830:
 warning: mutable la3_0 is not declared in effect; added as read

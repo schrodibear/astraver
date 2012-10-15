@@ -2916,10 +2916,10 @@ let Arrays_arrayShift_safety =
             (let jessie_<num> = t_2 in
             (let jessie_<num> = !j_0 in
             (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+            (JC_174:
             begin
-              (JC_174:
-              (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>));
-             jessie_<num> end))))) in void) else (raise (Loop_exit_exc void)));
+              (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>);
+             jessie_<num> end)))))) in void) else (raise (Loop_exit_exc void)));
           (raise (Loop_continue_exc void)) end with
          Loop_continue_exc jessie_<num> ->
          (let jessie_<num> =
@@ -3698,14 +3698,14 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Arrays_po12.why">
-      <location file = "HOME/tests/java/Arrays.jc" line = "219" begin = "21" end = "80"/>
+      <location file = "why/Arrays.why" line = "671" begin = "15" end = "94"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = ""/>
     </goal>
     <goal why_file="why/Arrays_po13.why">
-      <location file = "HOME/tests/java/Arrays.jc" line = "219" begin = "21" end = "80"/>
+      <location file = "why/Arrays.why" line = "671" begin = "15" end = "94"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = ""/>
     </goal>
     <goal why_file="why/Arrays_po14.why">
       <location file = "HOME/tests/java/Arrays.java" line = "105" begin = "18" end = "19"/>
@@ -8545,7 +8545,7 @@ why -simplify [...] why/Arrays.why
          (select intM_intP (shift t_2 (- i_2 1))))))))))
 (IMPLIES (> j_0 0) (<= (- j_0 1) (offset_max Object_alloc_table t_2))))))))))))))
 
-;; Arrays_arrayShift_safety_po_4, File "HOME/tests/java/Arrays.jc", line 219, characters 21-80
+;; Arrays_arrayShift_safety_po_4, File "why/Arrays.why", line 671, characters 15-94
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8579,7 +8579,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result0 (select intM_intP0 (shift t_2 (- j_0 1))))
 (<= (offset_min Object_alloc_table t_2) j_0))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_5, File "HOME/tests/java/Arrays.jc", line 219, characters 21-80
+;; Arrays_arrayShift_safety_po_5, File "why/Arrays.why", line 671, characters 15-94
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

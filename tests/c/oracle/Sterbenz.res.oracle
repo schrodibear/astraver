@@ -808,14 +808,15 @@ let Sterbenz_ensures_default =
   try
    begin
      (let __retres = ref (any_single void) in
-     (C_4:
      begin
        (assert { (JC_16: le_real(0.0, single_value(y))) }; void); void;
       (assert { (JC_17: le_real(0.0, single_value(x_0))) }; void); void;
-      (let jessie_<num> =
-      (__retres := (C_3: (JC_18: (((sub_single_safe nearest_even) x_0) y)))) in
-      void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end))
+      (C_4:
+      begin
+        (let jessie_<num> =
+        (__retres := (C_3: (JC_18: (((sub_single_safe nearest_even) x_0) y)))) in
+        void); (return := !__retres); (raise Return) end) end); absurd  end
+   with Return -> !return end))
   { (JC_9:
     (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
 
@@ -829,14 +830,15 @@ let Sterbenz_safety =
   try
    begin
      (let __retres = ref (any_single void) in
-     (C_4:
      begin
        [ { } unit { (JC_13: le_real(0.0, single_value(y))) } ]; void;
       [ { } unit { (JC_14: le_real(0.0, single_value(x_0))) } ]; void;
-      (let jessie_<num> =
-      (__retres := (C_3: (JC_15: (((sub_single nearest_even) x_0) y)))) in
-      void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { true }
+      (C_4:
+      begin
+        (let jessie_<num> =
+        (__retres := (C_3: (JC_15: (((sub_single nearest_even) x_0) y)))) in
+        void); (return := !__retres); (raise Return) end) end); absurd  end
+   with Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========

@@ -1354,20 +1354,40 @@ let make_block labels l =
       | [e] -> {e with expr_labels = labels @ e.expr_labels }
       | _ -> { expr_labels = labels ; expr_node = Block l }
 
+(** Try hard to keep the labels visible by all the instructions that follow
+    but also to remove unneeded block
+
+    The principle is to push e2 inside e1 such that every labels visible for
+    the last instruction (not a block) of e1 can be visible for e2
+ *)
+let rec append' e1 e2 =
+  match e1.expr_node,e2.expr_node with
+    | Void,_ -> (* assert (e1.expr_labels = []);*) [e2]
+    | _,Void -> assert (e2.expr_labels = []); [e1]
+    | Block(_),Block([]) -> [e1]
+    | Block(l1),_ ->
+      [make_block e1.expr_labels (concat l1 e2)]
+    | _,Block(l2) when e2.expr_labels = [] ->
+      if e1.expr_labels = [] then
+        append_list e1 l2
+      else
+        let e1' = {e1 with expr_labels = []} in
+        [make_block e1.expr_labels (append_list e1' l2)]
+    | _ ->
+      if e1.expr_labels = [] then
+        append_list e1 [e2]
+      else
+        let e1' = {e1 with expr_labels = []} in
+        [make_block e1.expr_labels (append_list e1' [e2])]
+
+and concat l1 e2 =
+  match l1 with
+  | [] -> [e2]
+  | [a1] -> append' a1 e2
+  | a1::l1 -> a1::(concat l1 e2)
 
 let append e1 e2 =
-  match e1.expr_node,e2.expr_node with
-    | Void,_ -> (* assert (e1.expr_labels = []);*) e2
-    | _,Void -> assert (e2.expr_labels = []); e1
-    | Block(l1),Block(l2) ->
-        make_block (e1.expr_labels@e2.expr_labels)
-          (List.fold_right append_list l1 l2)
-    | Block(l1),_ ->
-        make_block e1.expr_labels (List.fold_right append_list l1 [e2])
-    | _,Block(l2) ->
-        make_block e2 .expr_labels (append_list e1 l2)
-    | _ -> make_block [] (append_list e1 [e2])
-
+  make_block [] (append' e1 e2)
 
 type goal_kind = KAxiom | KLemma | KGoal
 

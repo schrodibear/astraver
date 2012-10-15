@@ -3565,9 +3565,6 @@ let pop_heap_ensures_default =
      (let child_0 = ref (any_int32 void) in
      try
       (C_11:
-      (C_15:
-      (C_20:
-      (C_23:
       begin
         (let jessie_<num> = a_4 in
         (let jessie_<num> = n_1_0 in
@@ -3581,235 +3578,256 @@ let pop_heap_ensures_default =
        void;
        (let jessie_<num> =
        (C_13:
-       (C_14:
        begin
          (let jessie_<num> = (tmp := (safe_int32_of_integer_ (0))) in void);
-        (max_1 := (safe_int32_of_integer_ (0))); !max_1 end)) in void);
-       (let jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<num> =
-       (tmp := (C_19:
-               ((safe_acc_ !intP_intM) (C_18:
-                                       ((shift a_4) (integer_of_int32 
-                                                     (C_17:
-                                                     (safe_int32_of_integer_ 
-                                                      (C_16:
-                                                      ((sub_int (integer_of_int32 n_1_0)) (1))))))))))) in
-       void);
-       (let jessie_<num> =
-       (max_1 := (C_22: ((safe_acc_ !intP_intM) (C_21: ((shift a_4) (0)))))) in
-       void);
-       (assert
-       { (JC_106:
-         (forall x_1:int32.
-          (CountWithHole(a_4, x_1, (0), integer_of_int32(hole),
-           integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_1, (1),
-                                                 integer_of_int32(n_1_0),
-                                                 intP_intM@init)))) }; void);
-       void;
-       (loop_2:
-       while true do
-       { invariant
-           (((JC_107:
-             (integer_of_int32(select(intP_intM@init,
-                               shift(a_4,
-                               sub_int(integer_of_int32(n_1_0), (1))))) = 
-             integer_of_int32(select(intP_intM,
-                              shift(a_4,
-                              sub_int(integer_of_int32(n_1_0), (1)))))))
-            and ((JC_108:
-                 (forall x_2:int32.
-                  (CountWithHole(a_4, x_2, (0), integer_of_int32(hole),
-                   integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_2, (1),
-                                                         integer_of_int32(n_1_0),
-                                                         intP_intM@init))))
-                and ((JC_109:
-                     (forall i_18:int.
-                      ((lt_int(integer_of_int32(hole),
-                        sub_int(integer_of_int32(n_1_0), (1)))
-                       and ParentChild(i_18, integer_of_int32(hole))) ->
-                       ge_int(integer_of_int32(select(intP_intM,
-                                               shift(a_4, i_18))),
-                       integer_of_int32(tmp)))))
-                    and ((JC_110:
-                         (forall i_17:int.
-                          ((le_int((0), i_17)
-                           and lt_int(i_17, integer_of_int32(n_1_0))) ->
-                           le_int(integer_of_int32(select(intP_intM,
-                                                   shift(a_4, i_17))),
-                           integer_of_int32(max_1)))))
-                        and ((JC_111:
-                             IsHeap(a_4,
-                             sub_int(integer_of_int32(n_1_0), (1)),
-                             intP_intM))
-                            and (JC_114:
-                                ((JC_112:
-                                 le_int((0), integer_of_int32(hole)))
-                                and (JC_113:
-                                    lt_int(integer_of_int32(hole),
-                                    integer_of_int32(n_1_0))))))))))
-           and ((JC_116:
-                not_assigns(intP_alloc_table@loop_2, intP_intM@loop_2,
-                intP_intM,
-                pset_range(pset_singleton(a_4), (0), integer_of_int32(hole))))
-               and (JC_117:
-                   not_assigns(intP_alloc_table@init, intP_intM@init,
-                   intP_intM,
-                   pset_range(pset_singleton(a_4), (0),
-                   sub_int(integer_of_int32(n_1_0), (1)))))))  }
+        (C_14: begin   (max_1 := (safe_int32_of_integer_ (0))); !max_1 end)
+       end) in void);
+       (C_15:
+       begin
+         (let jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
+        (C_20:
         begin
-          [ { } unit { true } ];
-         try
-          (C_38:
+          (let jessie_<num> =
+          (tmp := (C_19:
+                  ((safe_acc_ !intP_intM) (C_18:
+                                          ((shift a_4) (integer_of_int32 
+                                                        (C_17:
+                                                        (safe_int32_of_integer_ 
+                                                         (C_16:
+                                                         ((sub_int (integer_of_int32 n_1_0)) (1))))))))))) in
+          void);
+         (C_23:
+         begin
+           (let jessie_<num> =
+           (max_1 := (C_22:
+                     ((safe_acc_ !intP_intM) (C_21: ((shift a_4) (0)))))) in
+           void);
+          (assert
+          { (JC_106:
+            (forall x_1:int32.
+             (CountWithHole(a_4, x_1, (0), integer_of_int32(hole),
+              integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_1, (1),
+                                                    integer_of_int32(n_1_0),
+                                                    intP_intM@init)))) };
+          void); void;
+          (loop_2:
           begin
-            (let jessie_<num> =
-            (child_0 := (C_37:
-                        (safe_int32_of_integer_ (C_36:
-                                                ((add_int (integer_of_int32 
-                                                           (C_35:
-                                                           (safe_int32_of_integer_ 
-                                                            (C_34:
-                                                            ((mul_int (2)) 
-                                                             (integer_of_int32 !hole))))))) (2)))))) in
-            void);
-           (if ((lt_int_ (integer_of_int32 !child_0)) (integer_of_int32 
-                                                       (C_79:
-                                                       (safe_int32_of_integer_ 
-                                                        (C_78:
-                                                        ((sub_int (integer_of_int32 n_1_0)) (1)))))))
-           then
-            begin
-              (if ((lt_int_ (integer_of_int32 (C_65:
-                                              ((safe_acc_ !intP_intM) 
-                                               (C_64:
-                                               ((shift a_4) (integer_of_int32 !child_0))))))) 
-                   (integer_of_int32 (C_63:
-                                     ((safe_acc_ !intP_intM) (C_62:
-                                                             ((shift a_4) 
-                                                              (integer_of_int32 
-                                                               (C_61:
-                                                               (safe_int32_of_integer_ 
-                                                                (C_60:
-                                                                ((sub_int 
-                                                                  (integer_of_int32 !child_0)) (1))))))))))))
-              then
-               (let jessie_<num> =
-               (C_59:
-               (child_0 := (C_58:
-                           (safe_int32_of_integer_ (C_57:
-                                                   ((sub_int (integer_of_int32 !child_0)) (1))))))) in
-               void) else void);
-             (assert
-             { (JC_118:
-               ParentChild(integer_of_int32(hole), integer_of_int32(child_0))) };
-             void); void;
-             (if ((gt_int_ (integer_of_int32 (C_77:
-                                             ((safe_acc_ !intP_intM) 
-                                              (C_76:
-                                              ((shift a_4) (integer_of_int32 !child_0))))))) 
-                  (integer_of_int32 !tmp))
-             then
-              (let jessie_<num> =
-              (C_72:
-              (C_74:
-              (C_75:
-              begin
-                (assert
-                { (JC_119:
-                  lt_int(integer_of_int32(hole),
-                  sub_int(integer_of_int32(n_1_0), (1)))) }; void); void;
-               (let jessie_<num> =
-               (let jessie_<num> =
-               (C_69:
-               ((safe_acc_ !intP_intM) (C_68:
-                                       ((shift a_4) (integer_of_int32 !child_0))))) in
-               (let jessie_<num> = a_4 in
-               (let jessie_<num> = (integer_of_int32 !hole) in
-               (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-               (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
-               (assert
-               { (JC_120:
-                 (integer_of_int32(select(intP_intM@init,
-                                   shift(a_4,
-                                   sub_int(integer_of_int32(n_1_0), (1))))) = 
-                 integer_of_int32(select(intP_intM,
-                                  shift(a_4,
-                                  sub_int(integer_of_int32(n_1_0), (1))))))) };
-               void); void;
-               (let jessie_<num> = a_4 in
-               (let jessie_<num> = n_1_0 in
-               (let jessie_<num> = !hole in
-               (let jessie_<num> = !child_0 in
-               (JC_121:
-               ((((pop_push_heap_copy jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
-               (hole := !child_0); !hole end))) in void)
-             else (raise (Goto_while_0_break_exc void))) end
-           else
-            (C_43:
-            begin
-              (let jessie_<num> =
-              (child_0 := (C_42:
-                          (safe_int32_of_integer_ (C_41:
-                                                  ((add_int (integer_of_int32 
-                                                             (C_40:
-                                                             (safe_int32_of_integer_ 
-                                                              (C_39:
-                                                              ((mul_int (2)) 
-                                                               (integer_of_int32 !hole))))))) (1)))))) in
-              void);
-             (if ((eq_int_ (integer_of_int32 !child_0)) (integer_of_int32 
-                                                         (C_56:
-                                                         (safe_int32_of_integer_ 
-                                                          (C_55:
-                                                          ((sub_int (integer_of_int32 n_1_0)) (2)))))))
-             then
-              (if ((gt_int_ (integer_of_int32 (C_54:
-                                              ((safe_acc_ !intP_intM) 
-                                               (C_53:
-                                               ((shift a_4) (integer_of_int32 !child_0))))))) 
-                   (integer_of_int32 !tmp))
-              then
-               (let jessie_<num> =
-               (C_49:
-               (C_51:
-               (C_52:
-               begin
-                 (assert
-                 { (JC_122:
-                   lt_int(integer_of_int32(hole),
-                   sub_int(integer_of_int32(n_1_0), (1)))) }; void); void;
-                (let jessie_<num> =
-                (let jessie_<num> =
-                (C_46:
-                ((safe_acc_ !intP_intM) (C_45:
-                                        ((shift a_4) (integer_of_int32 !child_0))))) in
-                (let jessie_<num> = a_4 in
-                (let jessie_<num> = (integer_of_int32 !hole) in
-                (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-                (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
-                (assert
-                { (JC_123:
+            while true do
+            { invariant
+                (((JC_107:
                   (integer_of_int32(select(intP_intM@init,
                                     shift(a_4,
                                     sub_int(integer_of_int32(n_1_0), (1))))) = 
                   integer_of_int32(select(intP_intM,
                                    shift(a_4,
-                                   sub_int(integer_of_int32(n_1_0), (1))))))) };
-                void); void;
-                (let jessie_<num> = a_4 in
-                (let jessie_<num> = n_1_0 in
-                (let jessie_<num> = !hole in
-                (let jessie_<num> = !child_0 in
-                (JC_124:
-                ((((pop_push_heap_copy jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
-                (hole := !child_0); !hole end))) in void) else void)
-             else void); (raise (Goto_while_0_break_exc void)) end));
-           (raise (Loop_continue_exc void)) end) with
-          Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) with
-      Goto_while_0_break_exc jessie_<num> ->
+                                   sub_int(integer_of_int32(n_1_0), (1)))))))
+                 and ((JC_108:
+                      (forall x_2:int32.
+                       (CountWithHole(a_4, x_2, (0), integer_of_int32(hole),
+                        integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_2,
+                                                              (1),
+                                                              integer_of_int32(n_1_0),
+                                                              intP_intM@init))))
+                     and ((JC_109:
+                          (forall i_18:int.
+                           ((lt_int(integer_of_int32(hole),
+                             sub_int(integer_of_int32(n_1_0), (1)))
+                            and ParentChild(i_18, integer_of_int32(hole))) ->
+                            ge_int(integer_of_int32(select(intP_intM,
+                                                    shift(a_4, i_18))),
+                            integer_of_int32(tmp)))))
+                         and ((JC_110:
+                              (forall i_17:int.
+                               ((le_int((0), i_17)
+                                and lt_int(i_17, integer_of_int32(n_1_0))) ->
+                                le_int(integer_of_int32(select(intP_intM,
+                                                        shift(a_4, i_17))),
+                                integer_of_int32(max_1)))))
+                             and ((JC_111:
+                                  IsHeap(a_4,
+                                  sub_int(integer_of_int32(n_1_0), (1)),
+                                  intP_intM))
+                                 and (JC_114:
+                                     ((JC_112:
+                                      le_int((0), integer_of_int32(hole)))
+                                     and (JC_113:
+                                         lt_int(integer_of_int32(hole),
+                                         integer_of_int32(n_1_0))))))))))
+                and ((JC_116:
+                     not_assigns(intP_alloc_table@loop_2, intP_intM@loop_2,
+                     intP_intM,
+                     pset_range(pset_singleton(a_4), (0),
+                     integer_of_int32(hole))))
+                    and (JC_117:
+                        not_assigns(intP_alloc_table@init, intP_intM@init,
+                        intP_intM,
+                        pset_range(pset_singleton(a_4), (0),
+                        sub_int(integer_of_int32(n_1_0), (1)))))))  }
+             begin
+               [ { } unit { true } ];
+              try
+               (C_38:
+               begin
+                 (let jessie_<num> =
+                 (child_0 := (C_37:
+                             (safe_int32_of_integer_ (C_36:
+                                                     ((add_int (integer_of_int32 
+                                                                (C_35:
+                                                                (safe_int32_of_integer_ 
+                                                                 (C_34:
+                                                                 ((mul_int (2)) 
+                                                                  (integer_of_int32 !hole))))))) (2)))))) in
+                 void);
+                (if ((lt_int_ (integer_of_int32 !child_0)) (integer_of_int32 
+                                                            (C_79:
+                                                            (safe_int32_of_integer_ 
+                                                             (C_78:
+                                                             ((sub_int 
+                                                               (integer_of_int32 n_1_0)) (1)))))))
+                then
+                 begin
+                   (if ((lt_int_ (integer_of_int32 (C_65:
+                                                   ((safe_acc_ !intP_intM) 
+                                                    (C_64:
+                                                    ((shift a_4) (integer_of_int32 !child_0))))))) 
+                        (integer_of_int32 (C_63:
+                                          ((safe_acc_ !intP_intM) (C_62:
+                                                                  ((shift a_4) 
+                                                                   (integer_of_int32 
+                                                                    (C_61:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_60:
+                                                                    ((sub_int 
+                                                                    (integer_of_int32 !child_0)) (1))))))))))))
+                   then
+                    (let jessie_<num> =
+                    (C_59:
+                    (child_0 := (C_58:
+                                (safe_int32_of_integer_ (C_57:
+                                                        ((sub_int (integer_of_int32 !child_0)) (1))))))) in
+                    void) else void);
+                  (assert
+                  { (JC_118:
+                    ParentChild(integer_of_int32(hole),
+                    integer_of_int32(child_0))) }; void); void;
+                  (if ((gt_int_ (integer_of_int32 (C_77:
+                                                  ((safe_acc_ !intP_intM) 
+                                                   (C_76:
+                                                   ((shift a_4) (integer_of_int32 !child_0))))))) 
+                       (integer_of_int32 !tmp))
+                  then
+                   (let jessie_<num> =
+                   begin
+                     (assert
+                     { (JC_119:
+                       lt_int(integer_of_int32(hole),
+                       sub_int(integer_of_int32(n_1_0), (1)))) }; void);
+                    void;
+                    (C_72:
+                    begin
+                      (let jessie_<num> =
+                      (let jessie_<num> =
+                      (C_69:
+                      ((safe_acc_ !intP_intM) (C_68:
+                                              ((shift a_4) (integer_of_int32 !child_0))))) in
+                      (let jessie_<num> = a_4 in
+                      (let jessie_<num> = (integer_of_int32 !hole) in
+                      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+                      (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in
+                      void);
+                     (assert
+                     { (JC_120:
+                       (integer_of_int32(select(intP_intM@init,
+                                         shift(a_4,
+                                         sub_int(integer_of_int32(n_1_0),
+                                         (1))))) = integer_of_int32(select(intP_intM,
+                                                                    shift(a_4,
+                                                                    sub_int(
+                                                                    integer_of_int32(n_1_0),
+                                                                    (1))))))) };
+                     void); void;
+                     (C_74:
+                     begin
+                       (let jessie_<num> = a_4 in
+                       (let jessie_<num> = n_1_0 in
+                       (let jessie_<num> = !hole in
+                       (let jessie_<num> = !child_0 in
+                       (JC_121:
+                       ((((pop_push_heap_copy jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+                      (C_75: begin   (hole := !child_0); !hole end) end) end)
+                   end in void) else (raise (Goto_while_0_break_exc void)))
+                 end
+                else
+                 (C_43:
+                 begin
+                   (let jessie_<num> =
+                   (child_0 := (C_42:
+                               (safe_int32_of_integer_ (C_41:
+                                                       ((add_int (integer_of_int32 
+                                                                  (C_40:
+                                                                  (safe_int32_of_integer_ 
+                                                                   (C_39:
+                                                                   ((mul_int (2)) 
+                                                                    (integer_of_int32 !hole))))))) (1)))))) in
+                   void);
+                  (if ((eq_int_ (integer_of_int32 !child_0)) (integer_of_int32 
+                                                              (C_56:
+                                                              (safe_int32_of_integer_ 
+                                                               (C_55:
+                                                               ((sub_int 
+                                                                 (integer_of_int32 n_1_0)) (2)))))))
+                  then
+                   (if ((gt_int_ (integer_of_int32 (C_54:
+                                                   ((safe_acc_ !intP_intM) 
+                                                    (C_53:
+                                                    ((shift a_4) (integer_of_int32 !child_0))))))) 
+                        (integer_of_int32 !tmp))
+                   then
+                    (let jessie_<num> =
+                    begin
+                      (assert
+                      { (JC_122:
+                        lt_int(integer_of_int32(hole),
+                        sub_int(integer_of_int32(n_1_0), (1)))) }; void);
+                     void;
+                     (C_49:
+                     begin
+                       (let jessie_<num> =
+                       (let jessie_<num> =
+                       (C_46:
+                       ((safe_acc_ !intP_intM) (C_45:
+                                               ((shift a_4) (integer_of_int32 !child_0))))) in
+                       (let jessie_<num> = a_4 in
+                       (let jessie_<num> = (integer_of_int32 !hole) in
+                       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+                       (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in
+                       void);
+                      (assert
+                      { (JC_123:
+                        (integer_of_int32(select(intP_intM@init,
+                                          shift(a_4,
+                                          sub_int(integer_of_int32(n_1_0),
+                                          (1))))) = integer_of_int32(
+                                                    select(intP_intM,
+                                                    shift(a_4,
+                                                    sub_int(integer_of_int32(n_1_0),
+                                                    (1))))))) }; void); void;
+                      (C_51:
+                      begin
+                        (let jessie_<num> = a_4 in
+                        (let jessie_<num> = n_1_0 in
+                        (let jessie_<num> = !hole in
+                        (let jessie_<num> = !child_0 in
+                        (JC_124:
+                        ((((pop_push_heap_copy jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+                       (C_52: begin   (hole := !child_0); !hole end) end) end)
+                    end in void) else void) else void);
+                  (raise (Goto_while_0_break_exc void)) end));
+                (raise (Loop_continue_exc void)) end) with
+               Loop_continue_exc jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) end) end) end)
+      with Goto_while_0_break_exc jessie_<num> ->
       (while_0_break:
-      (C_83:
-      (C_93:
       begin
         void;
        (assert
@@ -3820,160 +3838,168 @@ let pop_heap_ensures_default =
            and ParentChild(i_19, integer_of_int32(hole))) ->
            ge_int(integer_of_int32(select(intP_intM, shift(a_4, i_19))),
            integer_of_int32(tmp))))) }; void); void;
-       (let jessie_<num> =
-       (let jessie_<num> = !tmp in
-       (let jessie_<num> = a_4 in
-       (let jessie_<num> = (integer_of_int32 !hole) in
-       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-       (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
-       (assert
-       { (JC_126:
-         (forall x_3:int32.
-          (CountWithHole(a_4, x_3, (0), integer_of_int32(hole),
-           integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_3, (1),
-                                                 integer_of_int32(n_1_0),
-                                                 intP_intM@init)))) }; void);
-       void;
-       (assert
-       { (JC_127:
-         (lt_int(integer_of_int32(hole),
-          sub_int(integer_of_int32(n_1_0), (1))) ->
-          ((integer_of_int32(select(intP_intM,
-                             shift(a_4, integer_of_int32(hole)))) = integer_of_int32(tmp))
-          and ((integer_of_int32(tmp) = integer_of_int32(select(intP_intM@init,
-                                                         shift(a_4,
-                                                         sub_int(integer_of_int32(n_1_0),
-                                                         (1))))))
-              and (integer_of_int32(select(intP_intM@init,
-                                    shift(a_4,
-                                    sub_int(integer_of_int32(n_1_0), (1))))) = 
-                  integer_of_int32(select(intP_intM,
-                                   shift(a_4,
-                                   sub_int(integer_of_int32(n_1_0), (1)))))))))) };
-       void); void;
-       (assert
-       { (JC_128:
-         (forall x_4:int32.
+       (C_83:
+       begin
+         (let jessie_<num> =
+         (let jessie_<num> = !tmp in
+         (let jessie_<num> = a_4 in
+         (let jessie_<num> = (integer_of_int32 !hole) in
+         (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+         (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
+        (assert
+        { (JC_126:
+          (forall x_3:int32.
+           (CountWithHole(a_4, x_3, (0), integer_of_int32(hole),
+            integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_3, (1),
+                                                  integer_of_int32(n_1_0),
+                                                  intP_intM@init)))) }; void);
+        void;
+        (assert
+        { (JC_127:
           (lt_int(integer_of_int32(hole),
            sub_int(integer_of_int32(n_1_0), (1))) ->
-           (Count(a_4, x_4, add_int(integer_of_int32(hole), (1)),
-            add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
-           CountWithoutHole(a_4, x_4, add_int(integer_of_int32(hole), (1)),
-           sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
-           intP_intM))))) }; void); void;
-       (assert
-       { (JC_129:
-         (forall x_5:int32.
-          ((lt_int(integer_of_int32(hole),
-            sub_int(integer_of_int32(n_1_0), (1))) ->
-            ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
-              integer_of_int32(n_1_0), intP_intM) = add_int(CountWithHole(a_4,
-                                                            x_5, (0),
-                                                            integer_of_int32(hole),
-                                                            sub_int(integer_of_int32(n_1_0),
-                                                            (1)), intP_intM),
-                                                    Count(a_4, x_5,
-                                                    sub_int(integer_of_int32(n_1_0),
-                                                    (1)),
-                                                    add_int(sub_int(integer_of_int32(n_1_0),
-                                                            (1)),
-                                                    (1)), intP_intM)))
-            and ((add_int(CountWithHole(a_4, x_5, (0),
-                          integer_of_int32(hole),
-                          sub_int(integer_of_int32(n_1_0), (1)), intP_intM),
-                  Count(a_4, x_5, sub_int(integer_of_int32(n_1_0), (1)),
-                  add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
-                  intP_intM)) = add_int(CountWithoutHole(a_4, x_5, (0),
-                                        integer_of_int32(hole),
-                                        add_int(integer_of_int32(hole), (1)),
-                                        intP_intM),
-                                Count(a_4, x_5,
-                                add_int(integer_of_int32(hole), (1)),
-                                sub_int(integer_of_int32(n_1_0), (1)),
-                                intP_intM)))
-                and ((add_int(CountWithoutHole(a_4, x_5, (0),
-                              integer_of_int32(hole),
-                              add_int(integer_of_int32(hole), (1)),
-                              intP_intM),
-                      Count(a_4, x_5, add_int(integer_of_int32(hole), (1)),
-                      sub_int(integer_of_int32(n_1_0), (1)), intP_intM)) = 
-                     CountWithoutHole(a_4, x_5, (0), integer_of_int32(hole),
-                     sub_int(integer_of_int32(n_1_0), (1)), intP_intM))
-                    and (CountWithoutHole(a_4, x_5, (0),
-                         integer_of_int32(hole),
-                         sub_int(integer_of_int32(n_1_0), (1)), intP_intM) = 
-                        Count(a_4, x_5, (0),
-                        sub_int(integer_of_int32(n_1_0), (1)), intP_intM))))))
-          and ((integer_of_int32(hole) = sub_int(integer_of_int32(n_1_0),
-                                         (1))) ->
-               ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
-                 integer_of_int32(n_1_0), intP_intM) = CountWithHole(a_4,
-                                                       x_5, (0),
-                                                       sub_int(integer_of_int32(n_1_0),
-                                                       (1)),
-                                                       integer_of_int32(n_1_0),
-                                                       intP_intM))
-               and (CountWithHole(a_4, x_5, (0),
-                    sub_int(integer_of_int32(n_1_0), (1)),
-                    integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_5,
-                                                          (0),
+           ((integer_of_int32(select(intP_intM,
+                              shift(a_4, integer_of_int32(hole)))) = 
+            integer_of_int32(tmp))
+           and ((integer_of_int32(tmp) = integer_of_int32(select(intP_intM@init,
+                                                          shift(a_4,
                                                           sub_int(integer_of_int32(n_1_0),
-                                                          (1)), intP_intM))))))) };
-       void); void;
-       (assert
-       { (JC_130:
-         (forall x_6:int32.
-          ((Count(a_4, x_6, (0), sub_int(integer_of_int32(n_1_0), (1)),
-            intP_intM) = CountWithHole(a_4, x_6, (0), integer_of_int32(hole),
-                         integer_of_int32(n_1_0), intP_intM))
-          and (CountWithHole(a_4, x_6, (0), integer_of_int32(hole),
-               integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_6, (1),
-                                                     integer_of_int32(n_1_0),
-                                                     intP_intM@init))))) };
-       void); void;
-       (let jessie_<num> =
-       (let jessie_<num> = !max_1 in
-       (let jessie_<num> = a_4 in
-       (let jessie_<num> =
-       (integer_of_int32 (C_90:
-                         (safe_int32_of_integer_ (C_89:
-                                                 ((sub_int (integer_of_int32 n_1_0)) (1)))))) in
-       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-       (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
-       (assert
-       { (JC_131:
-         (forall x_7:int32.
-          (Count(a_4, x_7, sub_int(integer_of_int32(n_1_0), (1)),
-           add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
-          Count(a_4, x_7, (0), (1), intP_intM@init)))) }; void); void;
-       (assert
-       { (JC_132:
-         (forall x_8:int32.
-          (CountWithoutHole(a_4, x_8, (0),
-           sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
-           intP_intM) = CountWithoutHole(a_4, x_8, (0), (1),
-                        integer_of_int32(n_1_0), intP_intM@init)))) }; void);
-       void;
-       (assert
-       { (JC_133:
-         (forall x_9:int32.
-          ((Count(a_4, x_9, (0), integer_of_int32(n_1_0), intP_intM) = 
-           CountWithoutHole(a_4, x_9, (0),
-           sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
-           intP_intM))
-          and ((CountWithoutHole(a_4, x_9, (0),
-                sub_int(integer_of_int32(n_1_0), (1)),
-                integer_of_int32(n_1_0), intP_intM) = CountWithoutHole(a_4,
-                                                      x_9, (0), (1),
+                                                          (1))))))
+               and (integer_of_int32(select(intP_intM@init,
+                                     shift(a_4,
+                                     sub_int(integer_of_int32(n_1_0), (1))))) = 
+                   integer_of_int32(select(intP_intM,
+                                    shift(a_4,
+                                    sub_int(integer_of_int32(n_1_0), (1)))))))))) };
+        void); void;
+        (assert
+        { (JC_128:
+          (forall x_4:int32.
+           (lt_int(integer_of_int32(hole),
+            sub_int(integer_of_int32(n_1_0), (1))) ->
+            (Count(a_4, x_4, add_int(integer_of_int32(hole), (1)),
+             add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
+            CountWithoutHole(a_4, x_4, add_int(integer_of_int32(hole), (1)),
+            sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
+            intP_intM))))) }; void); void;
+        (assert
+        { (JC_129:
+          (forall x_5:int32.
+           ((lt_int(integer_of_int32(hole),
+             sub_int(integer_of_int32(n_1_0), (1))) ->
+             ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
+               integer_of_int32(n_1_0), intP_intM) = add_int(CountWithHole(a_4,
+                                                             x_5, (0),
+                                                             integer_of_int32(hole),
+                                                             sub_int(
+                                                             integer_of_int32(n_1_0),
+                                                             (1)), intP_intM),
+                                                     Count(a_4, x_5,
+                                                     sub_int(integer_of_int32(n_1_0),
+                                                     (1)),
+                                                     add_int(sub_int(
+                                                             integer_of_int32(n_1_0),
+                                                             (1)),
+                                                     (1)), intP_intM)))
+             and ((add_int(CountWithHole(a_4, x_5, (0),
+                           integer_of_int32(hole),
+                           sub_int(integer_of_int32(n_1_0), (1)), intP_intM),
+                   Count(a_4, x_5, sub_int(integer_of_int32(n_1_0), (1)),
+                   add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
+                   intP_intM)) = add_int(CountWithoutHole(a_4, x_5, (0),
+                                         integer_of_int32(hole),
+                                         add_int(integer_of_int32(hole), (1)),
+                                         intP_intM),
+                                 Count(a_4, x_5,
+                                 add_int(integer_of_int32(hole), (1)),
+                                 sub_int(integer_of_int32(n_1_0), (1)),
+                                 intP_intM)))
+                 and ((add_int(CountWithoutHole(a_4, x_5, (0),
+                               integer_of_int32(hole),
+                               add_int(integer_of_int32(hole), (1)),
+                               intP_intM),
+                       Count(a_4, x_5, add_int(integer_of_int32(hole), (1)),
+                       sub_int(integer_of_int32(n_1_0), (1)), intP_intM)) = 
+                      CountWithoutHole(a_4, x_5, (0), integer_of_int32(hole),
+                      sub_int(integer_of_int32(n_1_0), (1)), intP_intM))
+                     and (CountWithoutHole(a_4, x_5, (0),
+                          integer_of_int32(hole),
+                          sub_int(integer_of_int32(n_1_0), (1)), intP_intM) = 
+                         Count(a_4, x_5, (0),
+                         sub_int(integer_of_int32(n_1_0), (1)), intP_intM))))))
+           and ((integer_of_int32(hole) = sub_int(integer_of_int32(n_1_0),
+                                          (1))) ->
+                ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
+                  integer_of_int32(n_1_0), intP_intM) = CountWithHole(a_4,
+                                                        x_5, (0),
+                                                        sub_int(integer_of_int32(n_1_0),
+                                                        (1)),
+                                                        integer_of_int32(n_1_0),
+                                                        intP_intM))
+                and (CountWithHole(a_4, x_5, (0),
+                     sub_int(integer_of_int32(n_1_0), (1)),
+                     integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_5,
+                                                           (0),
+                                                           sub_int(integer_of_int32(n_1_0),
+                                                           (1)), intP_intM))))))) };
+        void); void;
+        (assert
+        { (JC_130:
+          (forall x_6:int32.
+           ((Count(a_4, x_6, (0), sub_int(integer_of_int32(n_1_0), (1)),
+             intP_intM) = CountWithHole(a_4, x_6, (0),
+                          integer_of_int32(hole), integer_of_int32(n_1_0),
+                          intP_intM))
+           and (CountWithHole(a_4, x_6, (0), integer_of_int32(hole),
+                integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_6, (1),
                                                       integer_of_int32(n_1_0),
-                                                      intP_intM@init))
-              and (CountWithoutHole(a_4, x_9, (0), (1),
-                   integer_of_int32(n_1_0), intP_intM@init) = Count(a_4, x_9,
-                                                              (0),
-                                                              integer_of_int32(n_1_0),
-                                                              intP_intM@init)))))) };
-       void); void; (raise Return) end))) end)))); (raise Return) end with
-   Return -> void end)
+                                                      intP_intM@init))))) };
+        void); void;
+        (C_93:
+        begin
+          (let jessie_<num> =
+          (let jessie_<num> = !max_1 in
+          (let jessie_<num> = a_4 in
+          (let jessie_<num> =
+          (integer_of_int32 (C_90:
+                            (safe_int32_of_integer_ (C_89:
+                                                    ((sub_int (integer_of_int32 n_1_0)) (1)))))) in
+          (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+          (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
+         (assert
+         { (JC_131:
+           (forall x_7:int32.
+            (Count(a_4, x_7, sub_int(integer_of_int32(n_1_0), (1)),
+             add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
+            Count(a_4, x_7, (0), (1), intP_intM@init)))) }; void); void;
+         (assert
+         { (JC_132:
+           (forall x_8:int32.
+            (CountWithoutHole(a_4, x_8, (0),
+             sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
+             intP_intM) = CountWithoutHole(a_4, x_8, (0), (1),
+                          integer_of_int32(n_1_0), intP_intM@init)))) };
+         void); void;
+         (assert
+         { (JC_133:
+           (forall x_9:int32.
+            ((Count(a_4, x_9, (0), integer_of_int32(n_1_0), intP_intM) = 
+             CountWithoutHole(a_4, x_9, (0),
+             sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
+             intP_intM))
+            and ((CountWithoutHole(a_4, x_9, (0),
+                  sub_int(integer_of_int32(n_1_0), (1)),
+                  integer_of_int32(n_1_0), intP_intM) = CountWithoutHole(a_4,
+                                                        x_9, (0), (1),
+                                                        integer_of_int32(n_1_0),
+                                                        intP_intM@init))
+                and (CountWithoutHole(a_4, x_9, (0), (1),
+                     integer_of_int32(n_1_0), intP_intM@init) = Count(a_4,
+                                                                x_9, (0),
+                                                                integer_of_int32(n_1_0),
+                                                                intP_intM@init)))))) };
+         void); void; (raise Return) end) end) end) end)))); (raise Return)
+   end with Return -> void end)
   { (JC_41:
     ((JC_39:
      ((JC_35: IsHeap(a_4, sub_int(integer_of_int32(n_1_0), (1)), intP_intM))
@@ -4006,41 +4032,43 @@ let pop_heap_induction_ensures_default =
       begin
         (let jessie_<num> = (i := (safe_int32_of_integer_ (1))) in void);
        (loop_4:
-       while true do
-       { invariant
-           ((JC_160:
-            (forall j_9:int.
-             ((le_int((0), j_9)
-              and (lt_int(j_9, integer_of_int32(i))
-                  and le_int(integer_of_int32(i), integer_of_int32(n_2_0)))) ->
-              ge_int(integer_of_int32(select(intP_intM, shift(a_0_0, (0)))),
-              integer_of_int32(select(intP_intM, shift(a_0_0, j_9)))))))
-           and (JC_163:
-               ((JC_161: le_int((0), integer_of_int32(i)))
-               and (JC_162:
-                   le_int(integer_of_int32(i), integer_of_int32(n_2_0))))))
-          }
-        begin
-          [ { } unit { true } ];
-         try
+       begin
+         while true do
+         { invariant
+             ((JC_160:
+              (forall j_9:int.
+               ((le_int((0), j_9)
+                and (lt_int(j_9, integer_of_int32(i))
+                    and le_int(integer_of_int32(i), integer_of_int32(n_2_0)))) ->
+                ge_int(integer_of_int32(select(intP_intM, shift(a_0_0, (0)))),
+                integer_of_int32(select(intP_intM, shift(a_0_0, j_9)))))))
+             and (JC_163:
+                 ((JC_161: le_int((0), integer_of_int32(i)))
+                 and (JC_162:
+                     le_int(integer_of_int32(i), integer_of_int32(n_2_0))))))
+            }
           begin
-            (let jessie_<num> =
-            (C_118:
+            [ { } unit { true } ];
+           try
             begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_2_0))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (assert
-             { (JC_167:
-               (lt_int((0), integer_of_int32(i)) ->
-                ParentChild(computer_div(sub_int(integer_of_int32(i), (1)),
-                            (2)),
-                integer_of_int32(i)))) }; void); void;
-             (i := (C_117:
-                   (safe_int32_of_integer_ (C_116:
-                                           ((add_int (integer_of_int32 !i)) (1))))));
-             !i end) in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) with
+              (let jessie_<num> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_2_0))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (assert
+               { (JC_167:
+                 (lt_int((0), integer_of_int32(i)) ->
+                  ParentChild(computer_div(sub_int(integer_of_int32(i), (1)),
+                              (2)),
+                  integer_of_int32(i)))) }; void); void;
+               (C_118:
+               begin
+                 (i := (C_117:
+                       (safe_int32_of_integer_ (C_116:
+                                               ((add_int (integer_of_int32 !i)) (1))))));
+                !i end) end in void); (raise (Loop_continue_exc void)) end
+            with Loop_continue_exc jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
@@ -4066,43 +4094,48 @@ let pop_heap_induction_safety =
       begin
         (let jessie_<num> = (i := (safe_int32_of_integer_ (1))) in void);
        (loop_3:
-       while true do
-       { invariant (JC_155: true)
-         variant (JC_159 : sub_int(integer_of_int32(n_2_0),
-                           integer_of_int32(i))) }
-        begin
-          [ { } unit reads i,intP_intM
-            { ((JC_150:
-               (forall j_9:int.
-                ((le_int((0), j_9)
-                 and (lt_int(j_9, integer_of_int32(i))
-                     and le_int(integer_of_int32(i), integer_of_int32(n_2_0)))) ->
-                 ge_int(integer_of_int32(select(intP_intM, shift(a_0_0, (0)))),
-                 integer_of_int32(select(intP_intM, shift(a_0_0, j_9)))))))
-              and (JC_153:
-                  ((JC_151: le_int((0), integer_of_int32(i)))
-                  and (JC_152:
-                      le_int(integer_of_int32(i), integer_of_int32(n_2_0)))))) } ];
-         try
+       begin
+         while true do
+         { invariant (JC_155: true)
+           variant (JC_159 : sub_int(integer_of_int32(n_2_0),
+                             integer_of_int32(i))) }
           begin
-            (let jessie_<num> =
-            (C_118:
+            [ { } unit reads i,intP_intM
+              { ((JC_150:
+                 (forall j_9:int.
+                  ((le_int((0), j_9)
+                   and (lt_int(j_9, integer_of_int32(i))
+                       and le_int(integer_of_int32(i),
+                           integer_of_int32(n_2_0)))) ->
+                   ge_int(integer_of_int32(select(intP_intM,
+                                           shift(a_0_0, (0)))),
+                   integer_of_int32(select(intP_intM, shift(a_0_0, j_9)))))))
+                and (JC_153:
+                    ((JC_151: le_int((0), integer_of_int32(i)))
+                    and (JC_152:
+                        le_int(integer_of_int32(i), integer_of_int32(n_2_0)))))) } ];
+           try
             begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_2_0))
-              then void else (raise (Goto_while_0_break_exc void)));
-             [ { } unit reads i
-               { (JC_157:
-                 (lt_int((0), integer_of_int32(i)) ->
-                  ParentChild(computer_div(sub_int(integer_of_int32(i), (1)),
-                              (2)),
-                  integer_of_int32(i)))) } ]; void;
-             (i := (C_117:
-                   (JC_158:
-                   (int32_of_integer_ (C_116:
-                                      ((add_int (integer_of_int32 !i)) (1)))))));
-             !i end) in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) with
+              (let jessie_<num> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_2_0))
+                then void else (raise (Goto_while_0_break_exc void)));
+               [ { } unit reads i
+                 { (JC_157:
+                   (lt_int((0), integer_of_int32(i)) ->
+                    ParentChild(computer_div(sub_int(integer_of_int32(i),
+                                             (1)),
+                                (2)),
+                    integer_of_int32(i)))) } ]; void;
+               (C_118:
+               begin
+                 (i := (C_117:
+                       (JC_158:
+                       (int32_of_integer_ (C_116:
+                                          ((add_int (integer_of_int32 !i)) (1)))))));
+                !i end) end in void); (raise (Loop_continue_exc void)) end
+            with Loop_continue_exc jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { true }
@@ -4126,9 +4159,6 @@ let pop_heap_safety =
      (let child_0 = ref (any_int32 void) in
      try
       (C_11:
-      (C_15:
-      (C_20:
-      (C_23:
       begin
         (let jessie_<num> = a_4 in
         (let jessie_<num> = n_1_0 in
@@ -4142,241 +4172,256 @@ let pop_heap_safety =
        void;
        (let jessie_<num> =
        (C_13:
-       (C_14:
        begin
          (let jessie_<num> = (tmp := (safe_int32_of_integer_ (0))) in void);
-        (max_1 := (safe_int32_of_integer_ (0))); !max_1 end)) in void);
-       (let jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<num> =
-       (tmp := (C_19:
-               (JC_54:
-               ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) (integer_of_int32 
-                                                                    (C_17:
-                                                                    (JC_53:
-                                                                    (int32_of_integer_ 
-                                                                    (C_16:
-                                                                    ((sub_int 
-                                                                    (integer_of_int32 n_1_0)) (1))))))))))) in
-       void);
-       (let jessie_<num> =
-       (max_1 := (C_22: (JC_55: (((acc_ !intP_alloc_table) !intP_intM) a_4)))) in
-       void);
-       [ { } unit reads hole,intP_intM
-         { (JC_56:
-           (forall x_1:int32.
-            (CountWithHole(a_4, x_1, (0), integer_of_int32(hole),
-             integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_1, (1),
-                                                   integer_of_int32(n_1_0),
-                                                   intP_intM@init)))) } ];
-       void;
-       (loop_1:
-       while true do
-       { invariant (JC_66: true)
-         variant (JC_91 : sub_int(integer_of_int32(n_1_0),
-                          integer_of_int32(hole))) }
+        (C_14: begin   (max_1 := (safe_int32_of_integer_ (0))); !max_1 end)
+       end) in void);
+       (C_15:
+       begin
+         (let jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
+        (C_20:
         begin
-          [ { } unit reads hole,intP_intM,max_1,tmp
-            { ((JC_57:
-               (integer_of_int32(select(intP_intM@init,
-                                 shift(a_4,
-                                 sub_int(integer_of_int32(n_1_0), (1))))) = 
-               integer_of_int32(select(intP_intM,
-                                shift(a_4,
-                                sub_int(integer_of_int32(n_1_0), (1)))))))
-              and ((JC_58:
-                   (forall x_2:int32.
-                    (CountWithHole(a_4, x_2, (0), integer_of_int32(hole),
-                     integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_2,
-                                                           (1),
-                                                           integer_of_int32(n_1_0),
-                                                           intP_intM@init))))
-                  and ((JC_59:
-                       (forall i_18:int.
-                        ((lt_int(integer_of_int32(hole),
-                          sub_int(integer_of_int32(n_1_0), (1)))
-                         and ParentChild(i_18, integer_of_int32(hole))) ->
-                         ge_int(integer_of_int32(select(intP_intM,
-                                                 shift(a_4, i_18))),
-                         integer_of_int32(tmp)))))
-                      and ((JC_60:
-                           (forall i_17:int.
-                            ((le_int((0), i_17)
-                             and lt_int(i_17, integer_of_int32(n_1_0))) ->
-                             le_int(integer_of_int32(select(intP_intM,
-                                                     shift(a_4, i_17))),
-                             integer_of_int32(max_1)))))
-                          and ((JC_61:
-                               IsHeap(a_4,
-                               sub_int(integer_of_int32(n_1_0), (1)),
-                               intP_intM))
-                              and (JC_64:
-                                  ((JC_62:
-                                   le_int((0), integer_of_int32(hole)))
-                                  and (JC_63:
-                                      lt_int(integer_of_int32(hole),
-                                      integer_of_int32(n_1_0)))))))))) } ];
-         try
-          (C_38:
+          (let jessie_<num> =
+          (tmp := (C_19:
+                  (JC_54:
+                  ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                   (integer_of_int32 (C_17:
+                                     (JC_53:
+                                     (int32_of_integer_ (C_16:
+                                                        ((sub_int (integer_of_int32 n_1_0)) (1))))))))))) in
+          void);
+         (C_23:
+         begin
+           (let jessie_<num> =
+           (max_1 := (C_22:
+                     (JC_55: (((acc_ !intP_alloc_table) !intP_intM) a_4)))) in
+           void);
+          [ { } unit reads hole,intP_intM
+            { (JC_56:
+              (forall x_1:int32.
+               (CountWithHole(a_4, x_1, (0), integer_of_int32(hole),
+                integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_1, (1),
+                                                      integer_of_int32(n_1_0),
+                                                      intP_intM@init)))) } ];
+          void;
+          (loop_1:
           begin
-            (let jessie_<num> =
-            (child_0 := (C_37:
-                        (JC_69:
-                        (int32_of_integer_ (C_36:
-                                           ((add_int (integer_of_int32 
-                                                      (C_35:
-                                                      (JC_68:
-                                                      (int32_of_integer_ 
-                                                       (C_34:
-                                                       ((mul_int (2)) 
-                                                        (integer_of_int32 !hole)))))))) (2))))))) in
-            void);
-           (if ((lt_int_ (integer_of_int32 !child_0)) (integer_of_int32 
-                                                       (C_79:
-                                                       (JC_70:
-                                                       (int32_of_integer_ 
-                                                        (C_78:
-                                                        ((sub_int (integer_of_int32 n_1_0)) (1))))))))
-           then
-            begin
-              (if ((lt_int_ (integer_of_int32 (C_65:
-                                              (JC_71:
-                                              ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
-                                               (integer_of_int32 !child_0)))))) 
-                   (integer_of_int32 (C_63:
-                                     (JC_73:
-                                     ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
-                                      (integer_of_int32 (C_61:
-                                                        (JC_72:
-                                                        (int32_of_integer_ 
-                                                         (C_60:
-                                                         ((sub_int (integer_of_int32 !child_0)) (1))))))))))))
-              then
-               (let jessie_<num> =
-               (C_59:
-               (child_0 := (C_58:
-                           (JC_74:
-                           (int32_of_integer_ (C_57:
-                                              ((sub_int (integer_of_int32 !child_0)) (1)))))))) in
-               void) else void);
-             [ { } unit reads child_0,hole
-               { (JC_75:
-                 ParentChild(integer_of_int32(hole),
-                 integer_of_int32(child_0))) } ]; void;
-             (if ((gt_int_ (integer_of_int32 (C_77:
-                                             (JC_76:
-                                             ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
-                                              (integer_of_int32 !child_0)))))) 
-                  (integer_of_int32 !tmp))
-             then
-              (let jessie_<num> =
-              (C_72:
-              (C_74:
-              (C_75:
-              begin
-                [ { } unit reads hole
-                  { (JC_77:
-                    lt_int(integer_of_int32(hole),
-                    sub_int(integer_of_int32(n_1_0), (1)))) } ]; void;
-               (let jessie_<num> =
-               (let jessie_<num> =
-               (C_69:
-               (JC_78:
-               ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) (integer_of_int32 !child_0)))) in
-               (let jessie_<num> = a_4 in
-               (let jessie_<num> = (integer_of_int32 !hole) in
-               (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-               (JC_79:
-               (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
-               void);
-               [ { } unit reads intP_intM
-                 { (JC_80:
-                   (integer_of_int32(select(intP_intM@init,
-                                     shift(a_4,
-                                     sub_int(integer_of_int32(n_1_0), (1))))) = 
-                   integer_of_int32(select(intP_intM,
-                                    shift(a_4,
-                                    sub_int(integer_of_int32(n_1_0), (1))))))) } ];
-               void;
-               (let jessie_<num> = a_4 in
-               (let jessie_<num> = n_1_0 in
-               (let jessie_<num> = !hole in
-               (let jessie_<num> = !child_0 in
-               (JC_81:
-               ((((pop_push_heap_copy_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
-               (hole := !child_0); !hole end))) in void)
-             else (raise (Goto_while_0_break_exc void))) end
-           else
-            (C_43:
-            begin
-              (let jessie_<num> =
-              (child_0 := (C_42:
-                          (JC_83:
-                          (int32_of_integer_ (C_41:
-                                             ((add_int (integer_of_int32 
-                                                        (C_40:
-                                                        (JC_82:
-                                                        (int32_of_integer_ 
-                                                         (C_39:
-                                                         ((mul_int (2)) 
-                                                          (integer_of_int32 !hole)))))))) (1))))))) in
-              void);
-             (if ((eq_int_ (integer_of_int32 !child_0)) (integer_of_int32 
-                                                         (C_56:
-                                                         (JC_84:
-                                                         (int32_of_integer_ 
-                                                          (C_55:
-                                                          ((sub_int (integer_of_int32 n_1_0)) (2))))))))
-             then
-              (if ((gt_int_ (integer_of_int32 (C_54:
-                                              (JC_85:
-                                              ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
-                                               (integer_of_int32 !child_0)))))) 
-                   (integer_of_int32 !tmp))
-              then
-               (let jessie_<num> =
-               (C_49:
-               (C_51:
-               (C_52:
-               begin
-                 [ { } unit reads hole
-                   { (JC_86:
-                     lt_int(integer_of_int32(hole),
-                     sub_int(integer_of_int32(n_1_0), (1)))) } ]; void;
-                (let jessie_<num> =
-                (let jessie_<num> =
-                (C_46:
-                (JC_87:
-                ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) (integer_of_int32 !child_0)))) in
-                (let jessie_<num> = a_4 in
-                (let jessie_<num> = (integer_of_int32 !hole) in
-                (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-                (JC_88:
-                (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
-                void);
-                [ { } unit reads intP_intM
-                  { (JC_89:
+            while true do
+            { invariant (JC_66: true)
+              variant (JC_91 : sub_int(integer_of_int32(n_1_0),
+                               integer_of_int32(hole))) }
+             begin
+               [ { } unit reads hole,intP_intM,max_1,tmp
+                 { ((JC_57:
                     (integer_of_int32(select(intP_intM@init,
                                       shift(a_4,
                                       sub_int(integer_of_int32(n_1_0), (1))))) = 
                     integer_of_int32(select(intP_intM,
                                      shift(a_4,
-                                     sub_int(integer_of_int32(n_1_0), (1))))))) } ];
-                void;
-                (let jessie_<num> = a_4 in
-                (let jessie_<num> = n_1_0 in
-                (let jessie_<num> = !hole in
-                (let jessie_<num> = !child_0 in
-                (JC_90:
-                ((((pop_push_heap_copy_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
-                (hole := !child_0); !hole end))) in void) else void)
-             else void); (raise (Goto_while_0_break_exc void)) end));
-           (raise (Loop_continue_exc void)) end) with
-          Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) with
-      Goto_while_0_break_exc jessie_<num> ->
+                                     sub_int(integer_of_int32(n_1_0), (1)))))))
+                   and ((JC_58:
+                        (forall x_2:int32.
+                         (CountWithHole(a_4, x_2, (0),
+                          integer_of_int32(hole), integer_of_int32(n_1_0),
+                          intP_intM) = Count(a_4, x_2, (1),
+                                       integer_of_int32(n_1_0),
+                                       intP_intM@init))))
+                       and ((JC_59:
+                            (forall i_18:int.
+                             ((lt_int(integer_of_int32(hole),
+                               sub_int(integer_of_int32(n_1_0), (1)))
+                              and ParentChild(i_18, integer_of_int32(hole))) ->
+                              ge_int(integer_of_int32(select(intP_intM,
+                                                      shift(a_4, i_18))),
+                              integer_of_int32(tmp)))))
+                           and ((JC_60:
+                                (forall i_17:int.
+                                 ((le_int((0), i_17)
+                                  and lt_int(i_17, integer_of_int32(n_1_0))) ->
+                                  le_int(integer_of_int32(select(intP_intM,
+                                                          shift(a_4, i_17))),
+                                  integer_of_int32(max_1)))))
+                               and ((JC_61:
+                                    IsHeap(a_4,
+                                    sub_int(integer_of_int32(n_1_0), (1)),
+                                    intP_intM))
+                                   and (JC_64:
+                                       ((JC_62:
+                                        le_int((0), integer_of_int32(hole)))
+                                       and (JC_63:
+                                           lt_int(integer_of_int32(hole),
+                                           integer_of_int32(n_1_0)))))))))) } ];
+              try
+               (C_38:
+               begin
+                 (let jessie_<num> =
+                 (child_0 := (C_37:
+                             (JC_69:
+                             (int32_of_integer_ (C_36:
+                                                ((add_int (integer_of_int32 
+                                                           (C_35:
+                                                           (JC_68:
+                                                           (int32_of_integer_ 
+                                                            (C_34:
+                                                            ((mul_int (2)) 
+                                                             (integer_of_int32 !hole)))))))) (2))))))) in
+                 void);
+                (if ((lt_int_ (integer_of_int32 !child_0)) (integer_of_int32 
+                                                            (C_79:
+                                                            (JC_70:
+                                                            (int32_of_integer_ 
+                                                             (C_78:
+                                                             ((sub_int 
+                                                               (integer_of_int32 n_1_0)) (1))))))))
+                then
+                 begin
+                   (if ((lt_int_ (integer_of_int32 (C_65:
+                                                   (JC_71:
+                                                   ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                                                    (integer_of_int32 !child_0)))))) 
+                        (integer_of_int32 (C_63:
+                                          (JC_73:
+                                          ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                                           (integer_of_int32 (C_61:
+                                                             (JC_72:
+                                                             (int32_of_integer_ 
+                                                              (C_60:
+                                                              ((sub_int 
+                                                                (integer_of_int32 !child_0)) (1))))))))))))
+                   then
+                    (let jessie_<num> =
+                    (C_59:
+                    (child_0 := (C_58:
+                                (JC_74:
+                                (int32_of_integer_ (C_57:
+                                                   ((sub_int (integer_of_int32 !child_0)) (1)))))))) in
+                    void) else void);
+                  [ { } unit reads child_0,hole
+                    { (JC_75:
+                      ParentChild(integer_of_int32(hole),
+                      integer_of_int32(child_0))) } ]; void;
+                  (if ((gt_int_ (integer_of_int32 (C_77:
+                                                  (JC_76:
+                                                  ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                                                   (integer_of_int32 !child_0)))))) 
+                       (integer_of_int32 !tmp))
+                  then
+                   (let jessie_<num> =
+                   begin
+                     [ { } unit reads hole
+                       { (JC_77:
+                         lt_int(integer_of_int32(hole),
+                         sub_int(integer_of_int32(n_1_0), (1)))) } ]; void;
+                    (C_72:
+                    begin
+                      (let jessie_<num> =
+                      (let jessie_<num> =
+                      (C_69:
+                      (JC_78:
+                      ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                       (integer_of_int32 !child_0)))) in
+                      (let jessie_<num> = a_4 in
+                      (let jessie_<num> = (integer_of_int32 !hole) in
+                      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+                      (JC_79:
+                      (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+                      void);
+                     [ { } unit reads intP_intM
+                       { (JC_80:
+                         (integer_of_int32(select(intP_intM@init,
+                                           shift(a_4,
+                                           sub_int(integer_of_int32(n_1_0),
+                                           (1))))) = integer_of_int32(
+                                                     select(intP_intM,
+                                                     shift(a_4,
+                                                     sub_int(integer_of_int32(n_1_0),
+                                                     (1))))))) } ]; void;
+                     (C_74:
+                     begin
+                       (let jessie_<num> = a_4 in
+                       (let jessie_<num> = n_1_0 in
+                       (let jessie_<num> = !hole in
+                       (let jessie_<num> = !child_0 in
+                       (JC_81:
+                       ((((pop_push_heap_copy_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+                      (C_75: begin   (hole := !child_0); !hole end) end) end)
+                   end in void) else (raise (Goto_while_0_break_exc void)))
+                 end
+                else
+                 (C_43:
+                 begin
+                   (let jessie_<num> =
+                   (child_0 := (C_42:
+                               (JC_83:
+                               (int32_of_integer_ (C_41:
+                                                  ((add_int (integer_of_int32 
+                                                             (C_40:
+                                                             (JC_82:
+                                                             (int32_of_integer_ 
+                                                              (C_39:
+                                                              ((mul_int (2)) 
+                                                               (integer_of_int32 !hole)))))))) (1))))))) in
+                   void);
+                  (if ((eq_int_ (integer_of_int32 !child_0)) (integer_of_int32 
+                                                              (C_56:
+                                                              (JC_84:
+                                                              (int32_of_integer_ 
+                                                               (C_55:
+                                                               ((sub_int 
+                                                                 (integer_of_int32 n_1_0)) (2))))))))
+                  then
+                   (if ((gt_int_ (integer_of_int32 (C_54:
+                                                   (JC_85:
+                                                   ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                                                    (integer_of_int32 !child_0)))))) 
+                        (integer_of_int32 !tmp))
+                   then
+                    (let jessie_<num> =
+                    begin
+                      [ { } unit reads hole
+                        { (JC_86:
+                          lt_int(integer_of_int32(hole),
+                          sub_int(integer_of_int32(n_1_0), (1)))) } ]; void;
+                     (C_49:
+                     begin
+                       (let jessie_<num> =
+                       (let jessie_<num> =
+                       (C_46:
+                       (JC_87:
+                       ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
+                        (integer_of_int32 !child_0)))) in
+                       (let jessie_<num> = a_4 in
+                       (let jessie_<num> = (integer_of_int32 !hole) in
+                       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+                       (JC_88:
+                       (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+                       void);
+                      [ { } unit reads intP_intM
+                        { (JC_89:
+                          (integer_of_int32(select(intP_intM@init,
+                                            shift(a_4,
+                                            sub_int(integer_of_int32(n_1_0),
+                                            (1))))) = integer_of_int32(
+                                                      select(intP_intM,
+                                                      shift(a_4,
+                                                      sub_int(integer_of_int32(n_1_0),
+                                                      (1))))))) } ]; void;
+                      (C_51:
+                      begin
+                        (let jessie_<num> = a_4 in
+                        (let jessie_<num> = n_1_0 in
+                        (let jessie_<num> = !hole in
+                        (let jessie_<num> = !child_0 in
+                        (JC_90:
+                        ((((pop_push_heap_copy_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+                       (C_52: begin   (hole := !child_0); !hole end) end) end)
+                    end in void) else void) else void);
+                  (raise (Goto_while_0_break_exc void)) end));
+                (raise (Loop_continue_exc void)) end) with
+               Loop_continue_exc jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) end) end) end)
+      with Goto_while_0_break_exc jessie_<num> ->
       (while_0_break:
-      (C_83:
-      (C_93:
       begin
         void;
        [ { } unit reads hole,intP_intM,tmp
@@ -4387,171 +4432,183 @@ let pop_heap_safety =
              and ParentChild(i_19, integer_of_int32(hole))) ->
              ge_int(integer_of_int32(select(intP_intM, shift(a_4, i_19))),
              integer_of_int32(tmp))))) } ]; void;
-       (let jessie_<num> =
-       (let jessie_<num> = !tmp in
-       (let jessie_<num> = a_4 in
-       (let jessie_<num> = (integer_of_int32 !hole) in
-       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-       (JC_93:
-       (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
-       void);
-       [ { } unit reads hole,intP_intM
-         { (JC_94:
-           (forall x_3:int32.
-            (CountWithHole(a_4, x_3, (0), integer_of_int32(hole),
-             integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_3, (1),
-                                                   integer_of_int32(n_1_0),
-                                                   intP_intM@init)))) } ];
-       void;
-       [ { } unit reads hole,intP_intM,tmp
-         { (JC_95:
-           (lt_int(integer_of_int32(hole),
-            sub_int(integer_of_int32(n_1_0), (1))) ->
-            ((integer_of_int32(select(intP_intM,
-                               shift(a_4, integer_of_int32(hole)))) = 
-             integer_of_int32(tmp))
-            and ((integer_of_int32(tmp) = integer_of_int32(select(intP_intM@init,
-                                                           shift(a_4,
-                                                           sub_int(integer_of_int32(n_1_0),
-                                                           (1))))))
-                and (integer_of_int32(select(intP_intM@init,
-                                      shift(a_4,
-                                      sub_int(integer_of_int32(n_1_0), (1))))) = 
-                    integer_of_int32(select(intP_intM,
-                                     shift(a_4,
-                                     sub_int(integer_of_int32(n_1_0), (1)))))))))) } ];
-       void;
-       [ { } unit reads hole,intP_intM
-         { (JC_96:
-           (forall x_4:int32.
+       (C_83:
+       begin
+         (let jessie_<num> =
+         (let jessie_<num> = !tmp in
+         (let jessie_<num> = a_4 in
+         (let jessie_<num> = (integer_of_int32 !hole) in
+         (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+         (JC_93:
+         (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+         void);
+        [ { } unit reads hole,intP_intM
+          { (JC_94:
+            (forall x_3:int32.
+             (CountWithHole(a_4, x_3, (0), integer_of_int32(hole),
+              integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_3, (1),
+                                                    integer_of_int32(n_1_0),
+                                                    intP_intM@init)))) } ];
+        void;
+        [ { } unit reads hole,intP_intM,tmp
+          { (JC_95:
             (lt_int(integer_of_int32(hole),
              sub_int(integer_of_int32(n_1_0), (1))) ->
-             (Count(a_4, x_4, add_int(integer_of_int32(hole), (1)),
-              add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
-             CountWithoutHole(a_4, x_4, add_int(integer_of_int32(hole), (1)),
-             sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
-             intP_intM))))) } ]; void;
-       [ { } unit reads hole,intP_intM
-         { (JC_97:
-           (forall x_5:int32.
-            ((lt_int(integer_of_int32(hole),
-              sub_int(integer_of_int32(n_1_0), (1))) ->
-              ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
-                integer_of_int32(n_1_0), intP_intM) = add_int(CountWithHole(a_4,
-                                                              x_5, (0),
-                                                              integer_of_int32(hole),
-                                                              sub_int(
-                                                              integer_of_int32(n_1_0),
-                                                              (1)),
-                                                              intP_intM),
-                                                      Count(a_4, x_5,
-                                                      sub_int(integer_of_int32(n_1_0),
-                                                      (1)),
-                                                      add_int(sub_int(
-                                                              integer_of_int32(n_1_0),
-                                                              (1)),
-                                                      (1)), intP_intM)))
-              and ((add_int(CountWithHole(a_4, x_5, (0),
-                            integer_of_int32(hole),
-                            sub_int(integer_of_int32(n_1_0), (1)), intP_intM),
-                    Count(a_4, x_5, sub_int(integer_of_int32(n_1_0), (1)),
-                    add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
-                    intP_intM)) = add_int(CountWithoutHole(a_4, x_5, (0),
-                                          integer_of_int32(hole),
-                                          add_int(integer_of_int32(hole),
-                                          (1)), intP_intM),
-                                  Count(a_4, x_5,
-                                  add_int(integer_of_int32(hole), (1)),
-                                  sub_int(integer_of_int32(n_1_0), (1)),
-                                  intP_intM)))
-                  and ((add_int(CountWithoutHole(a_4, x_5, (0),
-                                integer_of_int32(hole),
-                                add_int(integer_of_int32(hole), (1)),
-                                intP_intM),
-                        Count(a_4, x_5, add_int(integer_of_int32(hole), (1)),
-                        sub_int(integer_of_int32(n_1_0), (1)), intP_intM)) = 
-                       CountWithoutHole(a_4, x_5, (0),
-                       integer_of_int32(hole),
-                       sub_int(integer_of_int32(n_1_0), (1)), intP_intM))
-                      and (CountWithoutHole(a_4, x_5, (0),
-                           integer_of_int32(hole),
-                           sub_int(integer_of_int32(n_1_0), (1)), intP_intM) = 
-                          Count(a_4, x_5, (0),
-                          sub_int(integer_of_int32(n_1_0), (1)), intP_intM))))))
-            and ((integer_of_int32(hole) = sub_int(integer_of_int32(n_1_0),
-                                           (1))) ->
-                 ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
-                   integer_of_int32(n_1_0), intP_intM) = CountWithHole(a_4,
-                                                         x_5, (0),
-                                                         sub_int(integer_of_int32(n_1_0),
-                                                         (1)),
-                                                         integer_of_int32(n_1_0),
-                                                         intP_intM))
-                 and (CountWithHole(a_4, x_5, (0),
-                      sub_int(integer_of_int32(n_1_0), (1)),
-                      integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_5,
-                                                            (0),
+             ((integer_of_int32(select(intP_intM,
+                                shift(a_4, integer_of_int32(hole)))) = 
+              integer_of_int32(tmp))
+             and ((integer_of_int32(tmp) = integer_of_int32(select(intP_intM@init,
+                                                            shift(a_4,
                                                             sub_int(integer_of_int32(n_1_0),
-                                                            (1)), intP_intM))))))) } ];
-       void;
-       [ { } unit reads hole,intP_intM
-         { (JC_98:
-           (forall x_6:int32.
-            ((Count(a_4, x_6, (0), sub_int(integer_of_int32(n_1_0), (1)),
-              intP_intM) = CountWithHole(a_4, x_6, (0),
-                           integer_of_int32(hole), integer_of_int32(n_1_0),
-                           intP_intM))
-            and (CountWithHole(a_4, x_6, (0), integer_of_int32(hole),
-                 integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_6, (1),
-                                                       integer_of_int32(n_1_0),
-                                                       intP_intM@init))))) } ];
-       void;
-       (let jessie_<num> =
-       (let jessie_<num> = !max_1 in
-       (let jessie_<num> = a_4 in
-       (let jessie_<num> =
-       (integer_of_int32 (C_90:
-                         (JC_99:
-                         (int32_of_integer_ (C_89:
-                                            ((sub_int (integer_of_int32 n_1_0)) (1))))))) in
-       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-       (JC_100:
-       (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
-       void);
-       [ { } unit reads intP_intM
-         { (JC_101:
-           (forall x_7:int32.
-            (Count(a_4, x_7, sub_int(integer_of_int32(n_1_0), (1)),
-             add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)), intP_intM) = 
-            Count(a_4, x_7, (0), (1), intP_intM@init)))) } ]; void;
-       [ { } unit reads intP_intM
-         { (JC_102:
-           (forall x_8:int32.
-            (CountWithoutHole(a_4, x_8, (0),
-             sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
-             intP_intM) = CountWithoutHole(a_4, x_8, (0), (1),
-                          integer_of_int32(n_1_0), intP_intM@init)))) } ];
-       void;
-       [ { } unit reads intP_intM
-         { (JC_103:
-           (forall x_9:int32.
-            ((Count(a_4, x_9, (0), integer_of_int32(n_1_0), intP_intM) = 
-             CountWithoutHole(a_4, x_9, (0),
-             sub_int(integer_of_int32(n_1_0), (1)), integer_of_int32(n_1_0),
-             intP_intM))
-            and ((CountWithoutHole(a_4, x_9, (0),
-                  sub_int(integer_of_int32(n_1_0), (1)),
-                  integer_of_int32(n_1_0), intP_intM) = CountWithoutHole(a_4,
-                                                        x_9, (0), (1),
+                                                            (1))))))
+                 and (integer_of_int32(select(intP_intM@init,
+                                       shift(a_4,
+                                       sub_int(integer_of_int32(n_1_0), (1))))) = 
+                     integer_of_int32(select(intP_intM,
+                                      shift(a_4,
+                                      sub_int(integer_of_int32(n_1_0), (1)))))))))) } ];
+        void;
+        [ { } unit reads hole,intP_intM
+          { (JC_96:
+            (forall x_4:int32.
+             (lt_int(integer_of_int32(hole),
+              sub_int(integer_of_int32(n_1_0), (1))) ->
+              (Count(a_4, x_4, add_int(integer_of_int32(hole), (1)),
+               add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
+               intP_intM) = CountWithoutHole(a_4, x_4,
+                            add_int(integer_of_int32(hole), (1)),
+                            sub_int(integer_of_int32(n_1_0), (1)),
+                            integer_of_int32(n_1_0), intP_intM))))) } ];
+        void;
+        [ { } unit reads hole,intP_intM
+          { (JC_97:
+            (forall x_5:int32.
+             ((lt_int(integer_of_int32(hole),
+               sub_int(integer_of_int32(n_1_0), (1))) ->
+               ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
+                 integer_of_int32(n_1_0), intP_intM) = add_int(CountWithHole(a_4,
+                                                               x_5, (0),
+                                                               integer_of_int32(hole),
+                                                               sub_int(
+                                                               integer_of_int32(n_1_0),
+                                                               (1)),
+                                                               intP_intM),
+                                                       Count(a_4, x_5,
+                                                       sub_int(integer_of_int32(n_1_0),
+                                                       (1)),
+                                                       add_int(sub_int(
+                                                               integer_of_int32(n_1_0),
+                                                               (1)),
+                                                       (1)), intP_intM)))
+               and ((add_int(CountWithHole(a_4, x_5, (0),
+                             integer_of_int32(hole),
+                             sub_int(integer_of_int32(n_1_0), (1)),
+                             intP_intM),
+                     Count(a_4, x_5, sub_int(integer_of_int32(n_1_0), (1)),
+                     add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
+                     intP_intM)) = add_int(CountWithoutHole(a_4, x_5, (0),
+                                           integer_of_int32(hole),
+                                           add_int(integer_of_int32(hole),
+                                           (1)), intP_intM),
+                                   Count(a_4, x_5,
+                                   add_int(integer_of_int32(hole), (1)),
+                                   sub_int(integer_of_int32(n_1_0), (1)),
+                                   intP_intM)))
+                   and ((add_int(CountWithoutHole(a_4, x_5, (0),
+                                 integer_of_int32(hole),
+                                 add_int(integer_of_int32(hole), (1)),
+                                 intP_intM),
+                         Count(a_4, x_5,
+                         add_int(integer_of_int32(hole), (1)),
+                         sub_int(integer_of_int32(n_1_0), (1)), intP_intM)) = 
+                        CountWithoutHole(a_4, x_5, (0),
+                        integer_of_int32(hole),
+                        sub_int(integer_of_int32(n_1_0), (1)), intP_intM))
+                       and (CountWithoutHole(a_4, x_5, (0),
+                            integer_of_int32(hole),
+                            sub_int(integer_of_int32(n_1_0), (1)), intP_intM) = 
+                           Count(a_4, x_5, (0),
+                           sub_int(integer_of_int32(n_1_0), (1)), intP_intM))))))
+             and ((integer_of_int32(hole) = sub_int(integer_of_int32(n_1_0),
+                                            (1))) ->
+                  ((CountWithHole(a_4, x_5, (0), integer_of_int32(hole),
+                    integer_of_int32(n_1_0), intP_intM) = CountWithHole(a_4,
+                                                          x_5, (0),
+                                                          sub_int(integer_of_int32(n_1_0),
+                                                          (1)),
+                                                          integer_of_int32(n_1_0),
+                                                          intP_intM))
+                  and (CountWithHole(a_4, x_5, (0),
+                       sub_int(integer_of_int32(n_1_0), (1)),
+                       integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_5,
+                                                             (0),
+                                                             sub_int(
+                                                             integer_of_int32(n_1_0),
+                                                             (1)), intP_intM))))))) } ];
+        void;
+        [ { } unit reads hole,intP_intM
+          { (JC_98:
+            (forall x_6:int32.
+             ((Count(a_4, x_6, (0), sub_int(integer_of_int32(n_1_0), (1)),
+               intP_intM) = CountWithHole(a_4, x_6, (0),
+                            integer_of_int32(hole), integer_of_int32(n_1_0),
+                            intP_intM))
+             and (CountWithHole(a_4, x_6, (0), integer_of_int32(hole),
+                  integer_of_int32(n_1_0), intP_intM) = Count(a_4, x_6, (1),
                                                         integer_of_int32(n_1_0),
-                                                        intP_intM@init))
-                and (CountWithoutHole(a_4, x_9, (0), (1),
-                     integer_of_int32(n_1_0), intP_intM@init) = Count(a_4,
-                                                                x_9, (0),
-                                                                integer_of_int32(n_1_0),
-                                                                intP_intM@init)))))) } ];
-       void; (raise Return) end))) end)))); (raise Return) end with Return ->
-   void end) { true }
+                                                        intP_intM@init))))) } ];
+        void;
+        (C_93:
+        begin
+          (let jessie_<num> =
+          (let jessie_<num> = !max_1 in
+          (let jessie_<num> = a_4 in
+          (let jessie_<num> =
+          (integer_of_int32 (C_90:
+                            (JC_99:
+                            (int32_of_integer_ (C_89:
+                                               ((sub_int (integer_of_int32 n_1_0)) (1))))))) in
+          (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+          (JC_100:
+          (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+          void);
+         [ { } unit reads intP_intM
+           { (JC_101:
+             (forall x_7:int32.
+              (Count(a_4, x_7, sub_int(integer_of_int32(n_1_0), (1)),
+               add_int(sub_int(integer_of_int32(n_1_0), (1)), (1)),
+               intP_intM) = Count(a_4, x_7, (0), (1), intP_intM@init)))) } ];
+         void;
+         [ { } unit reads intP_intM
+           { (JC_102:
+             (forall x_8:int32.
+              (CountWithoutHole(a_4, x_8, (0),
+               sub_int(integer_of_int32(n_1_0), (1)),
+               integer_of_int32(n_1_0), intP_intM) = CountWithoutHole(a_4,
+                                                     x_8, (0), (1),
+                                                     integer_of_int32(n_1_0),
+                                                     intP_intM@init)))) } ];
+         void;
+         [ { } unit reads intP_intM
+           { (JC_103:
+             (forall x_9:int32.
+              ((Count(a_4, x_9, (0), integer_of_int32(n_1_0), intP_intM) = 
+               CountWithoutHole(a_4, x_9, (0),
+               sub_int(integer_of_int32(n_1_0), (1)),
+               integer_of_int32(n_1_0), intP_intM))
+              and ((CountWithoutHole(a_4, x_9, (0),
+                    sub_int(integer_of_int32(n_1_0), (1)),
+                    integer_of_int32(n_1_0), intP_intM) = CountWithoutHole(a_4,
+                                                          x_9, (0), (1),
+                                                          integer_of_int32(n_1_0),
+                                                          intP_intM@init))
+                  and (CountWithoutHole(a_4, x_9, (0), (1),
+                       integer_of_int32(n_1_0), intP_intM@init) = Count(a_4,
+                                                                  x_9, (0),
+                                                                  integer_of_int32(n_1_0),
+                                                                  intP_intM@init)))))) } ];
+         void; (raise Return) end) end) end) end)))); (raise Return) end with
+   Return -> void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========

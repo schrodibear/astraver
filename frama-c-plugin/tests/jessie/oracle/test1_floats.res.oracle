@@ -680,7 +680,6 @@ let cosine1b_ensures_default =
   try
    begin
      (let __retres_0 = ref (any_single void) in
-     (C_35:
      begin
        (assert
        { (JC_<somenum>:
@@ -690,17 +689,19 @@ let cosine1b_ensures_default =
                                    0.5)),
                           cos(single_value(x_0_0)))),
          0x0.Fp-20)) }; void); void;
-      (let jessie_<somenum> =
-      (__retres_0 := (C_34:
-                     (JC_<somenum>:
-                     (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                      (C_33:
-                      (JC_<somenum>:
-                      (((mul_single_safe nearest_even) (C_32:
-                                                       (JC_<somenum>:
-                                                       (((mul_single_safe nearest_even) x_0_0) x_0_0)))) 
-                       (single_of_real_exact 0.5)))))))) in void);
-      (return := !__retres_0); (raise Return) end)); absurd  end with
+      (C_35:
+      begin
+        (let jessie_<somenum> =
+        (__retres_0 := (C_34:
+                       (JC_<somenum>:
+                       (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+                        (C_33:
+                        (JC_<somenum>:
+                        (((mul_single_safe nearest_even) (C_32:
+                                                         (JC_<somenum>:
+                                                         (((mul_single_safe nearest_even) x_0_0) x_0_0)))) 
+                         (single_of_real_exact 0.5)))))))) in void);
+       (return := !__retres_0); (raise Return) end) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0_0)))),
@@ -714,7 +715,6 @@ let cosine1b_safety =
   try
    begin
      (let __retres_0 = ref (any_single void) in
-     (C_35:
      begin
        [ { } unit
          { (JC_<somenum>:
@@ -724,17 +724,19 @@ let cosine1b_safety =
                                      0.5)),
                             cos(single_value(x_0_0)))),
            0x0.Fp-20)) } ]; void;
-      (let jessie_<somenum> =
-      (__retres_0 := (C_34:
-                     (JC_<somenum>:
-                     (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                      (C_33:
-                      (JC_<somenum>:
-                      (((mul_single nearest_even) (C_32:
-                                                  (JC_<somenum>:
-                                                  (((mul_single nearest_even) x_0_0) x_0_0)))) 
-                       (single_of_real_exact 0.5)))))))) in void);
-      (return := !__retres_0); (raise Return) end)); absurd  end with
+      (C_35:
+      begin
+        (let jessie_<somenum> =
+        (__retres_0 := (C_34:
+                       (JC_<somenum>:
+                       (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+                        (C_33:
+                        (JC_<somenum>:
+                        (((mul_single nearest_even) (C_32:
+                                                    (JC_<somenum>:
+                                                    (((mul_single nearest_even) x_0_0) x_0_0)))) 
+                         (single_of_real_exact 0.5)))))))) in void);
+       (return := !__retres_0); (raise Return) end) end); absurd  end with
    Return -> !return end)) { true }
 
 let cosine2_ensures_default =
@@ -804,7 +806,6 @@ let moncos_ensures_default =
   try
    begin
      (let __retres = ref (any_single void) in
-     (C_5:
      begin
        (assert
        { (JC_<somenum>:
@@ -814,18 +815,20 @@ let moncos_ensures_default =
                                    0.5)),
                           cos(single_value(x_2)))),
          0x1p-24)) }; void); void;
-      (let jessie_<somenum> =
-      (__retres := (C_4:
-                   (JC_<somenum>:
-                   (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                    (C_3:
-                    (JC_<somenum>:
-                    (((mul_single_safe nearest_even) (C_2:
-                                                     (JC_<somenum>:
-                                                     (((mul_single_safe nearest_even) x_2) x_2)))) 
-                     (single_of_real_exact 0.5)))))))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
-   !return end))
+      (C_5:
+      begin
+        (let jessie_<somenum> =
+        (__retres := (C_4:
+                     (JC_<somenum>:
+                     (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+                      (C_3:
+                      (JC_<somenum>:
+                      (((mul_single_safe nearest_even) (C_2:
+                                                       (JC_<somenum>:
+                                                       (((mul_single_safe nearest_even) x_2) x_2)))) 
+                       (single_of_real_exact 0.5)))))))) in void);
+       (return := !__retres); (raise Return) end) end); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
     0x1p-23)) }
@@ -838,7 +841,6 @@ let moncos_safety =
   try
    begin
      (let __retres = ref (any_single void) in
-     (C_5:
      begin
        [ { } unit
          { (JC_<somenum>:
@@ -848,18 +850,20 @@ let moncos_safety =
                                      0.5)),
                             cos(single_value(x_2)))),
            0x1p-24)) } ]; void;
-      (let jessie_<somenum> =
-      (__retres := (C_4:
-                   (JC_<somenum>:
-                   (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                    (C_3:
-                    (JC_<somenum>:
-                    (((mul_single nearest_even) (C_2:
-                                                (JC_<somenum>:
-                                                (((mul_single nearest_even) x_2) x_2)))) 
-                     (single_of_real_exact 0.5)))))))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
-   !return end)) { true }
+      (C_5:
+      begin
+        (let jessie_<somenum> =
+        (__retres := (C_4:
+                     (JC_<somenum>:
+                     (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+                      (C_3:
+                      (JC_<somenum>:
+                      (((mul_single nearest_even) (C_2:
+                                                  (JC_<somenum>:
+                                                  (((mul_single nearest_even) x_2) x_2)))) 
+                       (single_of_real_exact 0.5)))))))) in void);
+       (return := !__retres); (raise Return) end) end); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test1_floats.jessie --quiet -f test1_floats.makefile project

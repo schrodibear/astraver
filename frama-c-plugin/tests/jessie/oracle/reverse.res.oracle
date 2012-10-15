@@ -760,46 +760,53 @@ let list_reverse_ensures_default =
      (let q = ref (any_pointer void) in
      try
       (C_1:
-      (C_2:
       begin
         (let jessie_<somenum> = (r := p0) in void);
-       (let jessie_<somenum> = (p_5 := null) in void);
-       (loop_2:
-       while true do
-       { invariant
-           (JC_<somenum>:
-           (exists lp:list.
-            (exists lr:list.
-             (list_contents(p_5, lp, struct_list_alloc_table, struct_list_tl)
-             and (list_contents(r, lr, struct_list_alloc_table,
-                  struct_list_tl)
-                 and (disjoint(lp, lr)
-                     and (forall l_14:list.
-                          (list_contents(p0, l_14,
-                           struct_list_alloc_table@init, struct_list_tl@init) ->
-                           (app(rev(lr), lp) = rev(l_14))))))))))  }
+       (C_2:
+       begin
+         (let jessie_<somenum> = (p_5 := null) in void);
+        (loop_2:
         begin
-          [ { } unit { true } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (C_4:
-            (C_6:
-            (C_8:
-            (C_9:
-            begin
-              (if ((safe_neq_pointer !r) null) then void
-              else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> = (q := !r) in void);
-             (let jessie_<somenum> =
-             (r := (C_5: ((safe_acc_ !struct_list_tl) !r))) in void);
-             (let jessie_<somenum> = !p_5 in
-             (let jessie_<somenum> = !q in
-             (((safe_upd_ struct_list_tl) jessie_<somenum>) jessie_<somenum>)));
-             (p_5 := !q); !p_5 end)))) in void);
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) with
+          while true do
+          { invariant
+              (JC_<somenum>:
+              (exists lp:list.
+               (exists lr:list.
+                (list_contents(p_5, lp, struct_list_alloc_table,
+                 struct_list_tl)
+                and (list_contents(r, lr, struct_list_alloc_table,
+                     struct_list_tl)
+                    and (disjoint(lp, lr)
+                        and (forall l_14:list.
+                             (list_contents(p0, l_14,
+                              struct_list_alloc_table@init,
+                              struct_list_tl@init) ->
+                              (app(rev(lr), lp) = rev(l_14)))))))))) 
+             }
+           begin
+             [ { } unit { true } ];
+            try
+             begin
+               (let jessie_<somenum> =
+               begin
+                 (if ((safe_neq_pointer !r) null) then void
+                 else (raise (Goto_while_0_break_exc void)));
+                (C_4:
+                begin
+                  (let jessie_<somenum> = (q := !r) in void);
+                 (C_6:
+                 begin
+                   (let jessie_<somenum> =
+                   (r := (C_5: ((safe_acc_ !struct_list_tl) !r))) in void);
+                  (C_8:
+                  begin
+                    (let jessie_<somenum> = !p_5 in
+                    (let jessie_<somenum> = !q in
+                    (((safe_upd_ struct_list_tl) jessie_<somenum>) jessie_<somenum>)));
+                   (C_9: begin   (p_5 := !q); !p_5 end) end) end) end) end in
+               void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !p_5); (raise Return) end) end)));
     absurd  end with Return -> !return end))
@@ -820,52 +827,56 @@ let list_reverse_safety =
      (let q = ref (any_pointer void) in
      try
       (C_1:
-      (C_2:
       begin
         (let jessie_<somenum> = (r := p0) in void);
-       (let jessie_<somenum> = (p_5 := null) in void);
-       (loop_1:
-       while true do
-       { invariant (JC_<somenum>: true) variant (0) }
+       (C_2:
+       begin
+         (let jessie_<somenum> = (p_5 := null) in void);
+        (loop_1:
         begin
-          [ { } unit reads p_5,r,struct_list_alloc_table,struct_list_tl
-            { (JC_<somenum>:
-              (exists lp:list.
-               (exists lr:list.
-                (list_contents(p_5, lp, struct_list_alloc_table,
-                 struct_list_tl)
-                and (list_contents(r, lr, struct_list_alloc_table,
-                     struct_list_tl)
-                    and (disjoint(lp, lr)
-                        and (forall l_14:list.
-                             (list_contents(p0, l_14,
-                              struct_list_alloc_table@init,
-                              struct_list_tl@init) ->
-                              (app(rev(lr), lp) = rev(l_14)))))))))) } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (C_4:
-            (C_6:
-            (C_8:
-            (C_9:
-            begin
-              (if ((neq_pointer !r) null) then void
-              else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> = (q := !r) in void);
-             (let jessie_<somenum> =
-             (r := (C_5:
-                   (JC_<somenum>:
-                   (((acc_ !struct_list_alloc_table) !struct_list_tl) !r)))) in
-             void);
-             (let jessie_<somenum> = !p_5 in
-             (let jessie_<somenum> = !q in
-             (JC_<somenum>:
-             ((((upd_ !struct_list_alloc_table) struct_list_tl) jessie_<somenum>) jessie_<somenum>))));
-             (p_5 := !q); !p_5 end)))) in void);
-           (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) with
+          while true do
+          { invariant (JC_<somenum>: true) variant (0) }
+           begin
+             [ { } unit reads p_5,r,struct_list_alloc_table,struct_list_tl
+               { (JC_<somenum>:
+                 (exists lp:list.
+                  (exists lr:list.
+                   (list_contents(p_5, lp, struct_list_alloc_table,
+                    struct_list_tl)
+                   and (list_contents(r, lr, struct_list_alloc_table,
+                        struct_list_tl)
+                       and (disjoint(lp, lr)
+                           and (forall l_14:list.
+                                (list_contents(p0, l_14,
+                                 struct_list_alloc_table@init,
+                                 struct_list_tl@init) ->
+                                 (app(rev(lr), lp) = rev(l_14)))))))))) } ];
+            try
+             begin
+               (let jessie_<somenum> =
+               begin
+                 (if ((neq_pointer !r) null) then void
+                 else (raise (Goto_while_0_break_exc void)));
+                (C_4:
+                begin
+                  (let jessie_<somenum> = (q := !r) in void);
+                 (C_6:
+                 begin
+                   (let jessie_<somenum> =
+                   (r := (C_5:
+                         (JC_<somenum>:
+                         (((acc_ !struct_list_alloc_table) !struct_list_tl) !r)))) in
+                   void);
+                  (C_8:
+                  begin
+                    (let jessie_<somenum> = !p_5 in
+                    (let jessie_<somenum> = !q in
+                    (JC_<somenum>:
+                    ((((upd_ !struct_list_alloc_table) struct_list_tl) jessie_<somenum>) jessie_<somenum>))));
+                   (C_9: begin   (p_5 := !q); !p_5 end) end) end) end) end in
+               void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !p_5); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
@@ -932,7 +943,7 @@ why --project [...] why/reverse.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/reverse_po8.why">
-      <location file = "why/reverse.why" line = "667" begin = "19" end = "40"/>
+      <location file = "why/reverse.why" line = "672" begin = "22" end = "43"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -957,11 +968,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/reverse_po13.why">
-      <location file = "why/reverse.why" line = "643" begin = "42" end = "43"/>
+      <location file = "why/reverse.why" line = "652" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/reverse_po14.why">
-      <location file = "why/reverse.why" line = "643" begin = "42" end = "43"/>
+      <location file = "why/reverse.why" line = "652" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

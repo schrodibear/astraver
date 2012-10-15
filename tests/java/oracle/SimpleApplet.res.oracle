@@ -7817,8 +7817,8 @@ let Card_install_ensures_default =
   { left_valid_struct_byteM(bArray_1, (0), Object_alloc_table) }
   (init:
   try
+   (K_4:
    begin
-     (K_4:
      (let jessie_<num> =
      (let this =
      (JC_146:
@@ -7835,16 +7835,16 @@ let Card_install_ensures_default =
      (K_3:
      ((safe_acc_ !byteM_byteP) ((shift bArray_1) (integer_of_short bOffset_1)))) in
      (JC_148:
-     ((((Applet_register_byteA_short_byte jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>)))))));
-    (raise Return) end with Return -> void end) { (JC_135: true) }
+     ((((Applet_register_byteA_short_byte jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+    (raise Return) end) with Return -> void end) { (JC_135: true) }
 
 let Card_install_safety =
  fun (bArray_1 : Object pointer) (bOffset_1 : short) (bLength_1 : byte) ->
   { left_valid_struct_byteM(bArray_1, (0), Object_alloc_table) }
   (init:
   try
+   (K_4:
    begin
-     (K_4:
      (let jessie_<num> =
      (let this =
      (let jessie_<num> =
@@ -7869,8 +7869,8 @@ let Card_install_safety =
      (JC_139:
      ((((offset_acc_ !Object_alloc_table) !byteM_byteP) bArray_1) (integer_of_short bOffset_1)))) in
      (JC_145:
-     ((((Applet_register_byteA_short_byte_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>)))))));
-    (raise Return) end with Return -> void end) { true }
+     ((((Applet_register_byteA_short_byte_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+    (raise Return) end) with Return -> void end) { true }
 
 let Card_process_ensures_default =
  fun (this_1 : Object pointer) (apdu_0 : Object pointer) ->

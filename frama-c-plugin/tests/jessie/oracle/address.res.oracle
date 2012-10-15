@@ -513,34 +513,37 @@ let f_ensures_default =
      (let j = ref (any_pointer void) in
      try
       (C_2:
-      (C_4:
       begin
         (let jessie_<somenum> =
         (i := (C_1:
               (JC_<somenum>:
               (((alloc_struct_intP (1)) intP_i_1_alloc_table) intP_i_1_tag_table)))) in
         void);
-       (let jessie_<somenum> =
-       (j := (C_3:
-             (JC_<somenum>:
-             (((alloc_struct_intP (1)) intP_i_1_alloc_table) intP_i_1_tag_table)))) in
-       void); (assert { (JC_<somenum>: (i <> j)) }; void); void;
-       (if ((lt_int_ ((safe_sub_pointer_ !i) !j)) (0))
-       then (raise (Return_label_exc void)) else void);
-       (assert { (JC_<somenum>: ge_int(sub_pointer(i, j), (0))) }; void); void;
-       (if ((gt_int_ (integer_of_int32 (C_8:
-                                       (safe_int32_of_integer_ (C_7:
-                                                               ((safe_sub_pointer_ !i) !j)))))) (0))
-       then (raise (Return_label_exc void)) else void);
-       (raise (Return_label_exc void)) end)) with
+       (C_4:
+       begin
+         (let jessie_<somenum> =
+         (j := (C_3:
+               (JC_<somenum>:
+               (((alloc_struct_intP (1)) intP_i_1_alloc_table) intP_i_1_tag_table)))) in
+         void); (assert { (JC_<somenum>: (i <> j)) }; void); void;
+        (if ((lt_int_ ((safe_sub_pointer_ !i) !j)) (0))
+        then (raise (Return_label_exc void)) else void);
+        (assert { (JC_<somenum>: ge_int(sub_pointer(i, j), (0))) }; void); void;
+        (if ((gt_int_ (integer_of_int32 (C_8:
+                                        (safe_int32_of_integer_ (C_7:
+                                                                ((safe_sub_pointer_ !i) !j)))))) (0))
+        then (raise (Return_label_exc void)) else void);
+        (raise (Return_label_exc void)) end) end) with
       Return_label_exc jessie_<somenum> ->
       (return_label:
       (C_9:
-      (C_10:
       begin
         ((safe_free_parameter intP_i_1_alloc_table) !i);
-       ((safe_free_parameter intP_i_1_alloc_table) !j); (raise Return) end))) end))));
-    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
+       (C_10:
+       begin
+         ((safe_free_parameter intP_i_1_alloc_table) !j); (raise Return) end)
+      end)) end)))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -554,7 +557,6 @@ let f_safety =
      (let j = ref (any_pointer void) in
      try
       (C_2:
-      (C_4:
       begin
         (let jessie_<somenum> =
         (i := (let jessie_<somenum> =
@@ -565,34 +567,36 @@ let f_safety =
               (assert
               { ge_int(offset_max(intP_i_1_alloc_table, jessie_<somenum>), (0)) };
               jessie_<somenum>)))) in void);
-       (let jessie_<somenum> =
-       (j := (let jessie_<somenum> =
-             (C_3:
-             (JC_<somenum>:
-             (((alloc_struct_intP_requires (1)) intP_i_1_alloc_table) intP_i_1_tag_table))) in
-             (JC_<somenum>:
-             (assert
-             { ge_int(offset_max(intP_i_1_alloc_table, jessie_<somenum>), (0)) };
-             jessie_<somenum>)))) in void);
-       [ { } unit reads i,j { (JC_<somenum>: (i <> j)) } ]; void;
-       (if ((lt_int_ ((sub_pointer_ !i) !j)) (0))
-       then (raise (Return_label_exc void)) else void);
-       [ { } unit reads i,j { (JC_<somenum>: ge_int(sub_pointer(i, j), (0))) } ];
-       void;
-       (if ((gt_int_ (integer_of_int32 (C_8:
-                                       (JC_<somenum>:
-                                       (int32_of_integer_ (C_7:
-                                                          ((sub_pointer_ !i) !j))))))) (0))
-       then (raise (Return_label_exc void)) else void);
-       (raise (Return_label_exc void)) end)) with
+       (C_4:
+       begin
+         (let jessie_<somenum> =
+         (j := (let jessie_<somenum> =
+               (C_3:
+               (JC_<somenum>:
+               (((alloc_struct_intP_requires (1)) intP_i_1_alloc_table) intP_i_1_tag_table))) in
+               (JC_<somenum>:
+               (assert
+               { ge_int(offset_max(intP_i_1_alloc_table, jessie_<somenum>), (0)) };
+               jessie_<somenum>)))) in void);
+        [ { } unit reads i,j { (JC_<somenum>: (i <> j)) } ]; void;
+        (if ((lt_int_ ((sub_pointer_ !i) !j)) (0))
+        then (raise (Return_label_exc void)) else void);
+        [ { } unit reads i,j { (JC_<somenum>: ge_int(sub_pointer(i, j), (0))) } ];
+        void;
+        (if ((gt_int_ (integer_of_int32 (C_8:
+                                        (JC_<somenum>:
+                                        (int32_of_integer_ (C_7:
+                                                           ((sub_pointer_ !i) !j))))))) (0))
+        then (raise (Return_label_exc void)) else void);
+        (raise (Return_label_exc void)) end) end) with
       Return_label_exc jessie_<somenum> ->
       (return_label:
       (C_9:
-      (C_10:
       begin
         ((free_parameter intP_i_1_alloc_table) !i);
-       ((free_parameter intP_i_1_alloc_table) !j); (raise Return) end))) end))));
-    (raise Return) end with Return -> void end) { true }
+       (C_10:
+       begin   ((free_parameter intP_i_1_alloc_table) !j); (raise Return) end)
+      end)) end)))); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C address.jessie --quiet -f address.makefile project
@@ -617,7 +621,7 @@ why --project [...] why/address.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/address_po4.why">
-      <location file = "why/address.why" line = "482" begin = "16" end = "71"/>
+      <location file = "why/address.why" line = "484" begin = "16" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/address_po5.why">
@@ -626,16 +630,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/address_po6.why">
-      <location file = "why/address.why" line = "491" begin = "15" end = "70"/>
+      <location file = "why/address.why" line = "495" begin = "17" end = "72"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/address_po7.why">
-      <location file = "why/address.why" line = "494" begin = "22" end = "42"/>
+      <location file = "why/address.why" line = "498" begin = "23" end = "43"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/address_po8.why">
-      <location file = "why/address.why" line = "501" begin = "59" end = "79"/>
+      <location file = "why/address.why" line = "505" begin = "60" end = "80"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -650,12 +654,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/address_po11.why">
-      <location file = "why/address.why" line = "509" begin = "9" end = "49"/>
+      <location file = "why/address.why" line = "512" begin = "9" end = "49"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/address_po12.why">
-      <location file = "why/address.why" line = "510" begin = "8" end = "48"/>
+      <location file = "why/address.why" line = "514" begin = "16" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

@@ -205,7 +205,8 @@ val make_app_e : expr -> expr list -> expr
 
   [make_label l e] adds label l to e
 
-
+  In the case of a block, add it to the first instruction of the block, if there
+  is one.
 *)
 
 val make_label : string -> expr -> expr;;

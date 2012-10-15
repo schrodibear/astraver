@@ -621,18 +621,21 @@ let f_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_2:
-     (C_4:
-     (C_6:
      begin
        (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
        (let jessie_<somenum> = x_0 in
        (((safe_upd_ intP_intM_x_2) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = y in
-      (((safe_upd_ intP_intM_y_3) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (__retres := (C_5: ((safe_acc_ intP_intM_z_4) z))) in
-      void); (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
+      (C_4:
+      begin
+        (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+        (let jessie_<somenum> = y in
+        (((safe_upd_ intP_intM_y_3) jessie_<somenum>) jessie_<somenum>)));
+       (C_6:
+       begin
+         (let jessie_<somenum> =
+         (__retres := (C_5: ((safe_acc_ intP_intM_z_4) z))) in void);
+        (return := !__retres); (raise Return) end) end) end)); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let f_safety =
  fun (x_0 : intP pointer) (y : intP pointer) (z : intP pointer) (intP_intM_x_2 : (intP, int32) memory ref) (intP_intM_y_3 : (intP, int32) memory ref) (intP_x_2_alloc_table : intP alloc_table) (intP_y_3_alloc_table : intP alloc_table) (intP_z_4_alloc_table : intP alloc_table) (intP_intM_z_4 : (intP, int32) memory) ->
@@ -653,22 +656,26 @@ let f_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_2:
-     (C_4:
-     (C_6:
      begin
        (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
        (let jessie_<somenum> = x_0 in
        (JC_<somenum>:
        ((((upd_ intP_x_2_alloc_table) intP_intM_x_2) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = y in
-      (JC_<somenum>:
-      ((((upd_ intP_y_3_alloc_table) intP_intM_y_3) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> =
-      (__retres := (C_5:
-                   (JC_<somenum>: (((acc_ intP_z_4_alloc_table) intP_intM_z_4) z)))) in
-      void); (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: valid_p(intP_p_1_alloc_table)) }
+      (C_4:
+      begin
+        (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+        (let jessie_<somenum> = y in
+        (JC_<somenum>:
+        ((((upd_ intP_y_3_alloc_table) intP_intM_y_3) jessie_<somenum>) jessie_<somenum>))));
+       (C_6:
+       begin
+         (let jessie_<somenum> =
+         (__retres := (C_5:
+                      (JC_<somenum>:
+                      (((acc_ intP_z_4_alloc_table) intP_intM_z_4) z)))) in
+         void); (return := !__retres); (raise Return) end) end) end)); 
+    absurd  end with Return -> !return end))
+  { (JC_<somenum>: valid_p(intP_p_1_alloc_table)) }
 
 let main_ensures_default =
  fun (tt : unit) ->
@@ -723,15 +730,15 @@ why --project [...] why/alias.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/alias_po8.why">
-      <location file = "why/alias.why" line = "626" begin = "17" end = "219"/>
+      <location file = "why/alias.why" line = "633" begin = "17" end = "219"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alias_po9.why">
-      <location file = "why/alias.why" line = "626" begin = "17" end = "219"/>
+      <location file = "why/alias.why" line = "633" begin = "17" end = "219"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alias_po10.why">
-      <location file = "why/alias.why" line = "626" begin = "17" end = "219"/>
+      <location file = "why/alias.why" line = "633" begin = "17" end = "219"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alias_po11.why">

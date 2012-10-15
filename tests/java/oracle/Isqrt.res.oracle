@@ -2279,16 +2279,19 @@ let Isqrt_main_ensures_default =
   try
    begin
      (let r = ref (any_int void) in
-     (K_23:
-     (K_25:
      begin
        (let jessie_<num> =
        (r := (K_21:
              (let jessie_<num> = (17) in (JC_59: (Isqrt_isqrt jessie_<num>))))) in
-       void); (assert { (JC_60: (lt_int(r, (4)) -> (false = true))) }; void);
-      (assert { (JC_61: (gt_int(r, (4)) -> (false = true))) }; void);
-      (return := !r); (raise Return) end))); absurd  end with Return ->
-   !return end)) { (JC_52: (result = (4))) }
+       void);
+      (K_23:
+      begin
+        (assert { (JC_60: (lt_int(r, (4)) -> (false = true))) }; void);
+       (K_25:
+       begin
+         (assert { (JC_61: (gt_int(r, (4)) -> (false = true))) }; void);
+        (return := !r); (raise Return) end) end) end); absurd  end with
+   Return -> !return end)) { (JC_52: (result = (4))) }
 
 let Isqrt_main_safety =
  fun (tt : unit) ->
@@ -2298,17 +2301,19 @@ let Isqrt_main_safety =
   try
    begin
      (let r = ref (any_int void) in
-     (K_23:
-     (K_25:
      begin
        (let jessie_<num> =
        (r := (K_21:
              (let jessie_<num> = (17) in
              (JC_56: (Isqrt_isqrt_requires jessie_<num>))))) in void);
-      [ { } unit reads r { (JC_57: (lt_int(r, (4)) -> (false = true))) } ];
-      [ { } unit reads r { (JC_58: (gt_int(r, (4)) -> (false = true))) } ];
-      (return := !r); (raise Return) end))); absurd  end with Return ->
-   !return end)) { true }
+      (K_23:
+      begin
+        [ { } unit reads r { (JC_57: (lt_int(r, (4)) -> (false = true))) } ];
+       (K_25:
+       begin
+         [ { } unit reads r { (JC_58: (gt_int(r, (4)) -> (false = true))) } ];
+        (return := !r); (raise Return) end) end) end); absurd  end with
+   Return -> !return end)) { true }
 
 let cons_Isqrt_ensures_default =
  fun (this_1 : Object pointer) ->

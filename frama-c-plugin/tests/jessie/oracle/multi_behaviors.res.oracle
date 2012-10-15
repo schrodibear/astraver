@@ -448,14 +448,15 @@ let f_ensures_default =
     (if ((eq_int_ (integer_of_int32 !x_0)) (1))
     then
      (let jessie_<somenum> =
-     (C_5:
      begin
        void;
-      (x_0 := (C_4:
-              (safe_int32_of_integer_ (C_3:
-                                      ((add_int (integer_of_int32 !x_0)) (1))))));
-      !x_0 end) in void) else void); void; (raise Return); (raise Return) end
-   with Return -> void end)
+      (C_5:
+      begin
+        (x_0 := (C_4:
+                (safe_int32_of_integer_ (C_3:
+                                        ((add_int (integer_of_int32 !x_0)) (1))))));
+       !x_0 end) end in void) else void); void; (raise Return);
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((le_int((1), integer_of_int32(x_0@))
      and le_int(integer_of_int32(x_0@), (2))) ->
@@ -474,13 +475,14 @@ let f_ensures_one =
     (if ((eq_int_ (integer_of_int32 !x_0)) (1))
     then
      (let jessie_<somenum> =
-     (C_5:
      begin
        (assert { (JC_<somenum>: (integer_of_int32(x_0) = (1))) }; void); void;
-      (x_0 := (C_4:
-              (safe_int32_of_integer_ (C_3:
-                                      ((add_int (integer_of_int32 !x_0)) (1))))));
-      !x_0 end) in void) else void);
+      (C_5:
+      begin
+        (x_0 := (C_4:
+                (safe_int32_of_integer_ (C_3:
+                                        ((add_int (integer_of_int32 !x_0)) (1))))));
+       !x_0 end) end in void) else void);
     (assert { (JC_<somenum>: (integer_of_int32(x_0) = (2))) }; void); void;
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
@@ -498,13 +500,14 @@ let f_ensures_two =
     (if ((eq_int_ (integer_of_int32 !x_0)) (1))
     then
      (let jessie_<somenum> =
-     (C_5:
      begin
        void;
-      (x_0 := (C_4:
-              (safe_int32_of_integer_ (C_3:
-                                      ((add_int (integer_of_int32 !x_0)) (1))))));
-      !x_0 end) in void) else void);
+      (C_5:
+      begin
+        (x_0 := (C_4:
+                (safe_int32_of_integer_ (C_3:
+                                        ((add_int (integer_of_int32 !x_0)) (1))))));
+       !x_0 end) end in void) else void);
     (assert { (JC_<somenum>: (integer_of_int32(x_0) = (2))) }; void); void;
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
@@ -519,15 +522,16 @@ let f_safety =
     (if ((eq_int_ (integer_of_int32 !x_0)) (1))
     then
      (let jessie_<somenum> =
-     (C_5:
      begin
        void;
-      (x_0 := (C_4:
-              (JC_<somenum>:
-              (int32_of_integer_ (C_3:
-                                 ((add_int (integer_of_int32 !x_0)) (1)))))));
-      !x_0 end) in void) else void); void; (raise Return); (raise Return) end
-   with Return -> void end) { true }
+      (C_5:
+      begin
+        (x_0 := (C_4:
+                (JC_<somenum>:
+                (int32_of_integer_ (C_3:
+                                   ((add_int (integer_of_int32 !x_0)) (1)))))));
+       !x_0 end) end in void) else void); void; (raise Return);
+    (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C multi_behaviors.jessie --quiet -f multi_behaviors.makefile project

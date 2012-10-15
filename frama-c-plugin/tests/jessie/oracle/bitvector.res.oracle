@@ -540,8 +540,6 @@ let f_ensures_default =
      (let s_0 = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_2:
-     (C_13:
-     (C_14:
      begin
        (let jessie_<somenum> =
        (s_0 := (C_1:
@@ -559,17 +557,22 @@ let f_ensures_default =
          (let jessie_<somenum> = !s_0 in
          (((safe_upd_ S_j_s_2) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end)) end) in
       void);
-      (let jessie_<somenum> =
-      (__retres := (C_12:
-                   (safe_int32_of_integer_ (C_11:
-                                           ((add_int (integer_of_int1 
-                                                      (C_10:
-                                                      ((safe_acc_ !S_i_s_2) !s_0)))) 
-                                            (integer_of_int1 (C_9:
-                                                             ((safe_acc_ !S_j_s_2) !s_0)))))))) in
-      void); ((safe_free_parameter S_s_2_alloc_table) !s_0);
-      (return := !__retres); (raise Return) end))))))))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+      (C_13:
+      begin
+        (let jessie_<somenum> =
+        (__retres := (C_12:
+                     (safe_int32_of_integer_ (C_11:
+                                             ((add_int (integer_of_int1 
+                                                        (C_10:
+                                                        ((safe_acc_ !S_i_s_2) !s_0)))) 
+                                              (integer_of_int1 (C_9:
+                                                               ((safe_acc_ !S_j_s_2) !s_0)))))))) in
+        void);
+       (C_14:
+       begin
+         ((safe_free_parameter S_s_2_alloc_table) !s_0);
+        (return := !__retres); (raise Return) end) end) end))))))); absurd 
+   end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (v_s : S pointer) (S_v_s_1_alloc_table : S alloc_table) (S_i_v_s_1 : (S, int1) memory) (S_j_v_s_1 : (S, int1) memory) ->
@@ -585,8 +588,6 @@ let f_safety =
      (let s_0 = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_2:
-     (C_13:
-     (C_14:
      begin
        (let jessie_<somenum> =
        (s_0 := (let jessie_<somenum> =
@@ -607,17 +608,22 @@ let f_safety =
        begin
          (let jessie_<somenum> = !s_0 in (((safe_upd_ S_j_s_2) jessie_<somenum>) jessie_<somenum>));
         jessie_<somenum> end)) end) in void);
-      (let jessie_<somenum> =
-      (__retres := (C_12:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_11:
-                                      ((add_int (integer_of_int1 (C_10:
-                                                                 ((safe_acc_ !S_i_s_2) !s_0)))) 
-                                       (integer_of_int1 (C_9:
-                                                        ((safe_acc_ !S_j_s_2) !s_0))))))))) in
-      void); ((free_parameter S_s_2_alloc_table) !s_0);
-      (return := !__retres); (raise Return) end))))))))); absurd  end with
-   Return -> !return end)) { true }
+      (C_13:
+      begin
+        (let jessie_<somenum> =
+        (__retres := (C_12:
+                     (JC_<somenum>:
+                     (int32_of_integer_ (C_11:
+                                        ((add_int (integer_of_int1 (C_10:
+                                                                   ((safe_acc_ !S_i_s_2) !s_0)))) 
+                                         (integer_of_int1 (C_9:
+                                                          ((safe_acc_ !S_j_s_2) !s_0))))))))) in
+        void);
+       (C_14:
+       begin
+         ((free_parameter S_s_2_alloc_table) !s_0); (return := !__retres);
+        (raise Return) end) end) end))))))); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bitvector.jessie --quiet -f bitvector.makefile project
@@ -632,7 +638,7 @@ why --project [...] why/bitvector.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bitvector_po2.why">
-      <location file = "why/bitvector.why" line = "525" begin = "17" end = "69"/>
+      <location file = "why/bitvector.why" line = "526" begin = "17" end = "69"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bitvector_po3.why">
@@ -646,7 +652,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bitvector_po5.why">
-      <location file = "why/bitvector.why" line = "545" begin = "14" end = "53"/>
+      <location file = "why/bitvector.why" line = "551" begin = "10" end = "49"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

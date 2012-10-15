@@ -2654,146 +2654,154 @@ let duplet_ensures_default =
          begin
            (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
           (loop_3:
-          while true do
-          { invariant
-              ((JC_68:
-               ((JC_65: le_int((0), integer_of_int32(i)))
-               and ((JC_66:
-                    le_int(integer_of_int32(i),
-                    sub_int(integer_of_int32(len_0), (1))))
-                   and (JC_67:
-                       (forall k:int.
-                        (forall l_0:int.
-                         ((le_int((0), k)
-                          and (lt_int(k, integer_of_int32(i))
-                              and (lt_int(k, l_0)
-                                  and lt_int(l_0, integer_of_int32(len_0))))) ->
-                          ((not eq_opt(integer_of_int32(select(intP_intM_a_3,
-                                                        shift(a_0, k))),
-                                except, intP_intM_except_4)) ->
-                           (not is_duplet(a_0, integer_of_int32(len_0), k,
-                                l_0, intP_intM_a_3))))))))))
-              and (JC_72:
-                  ((JC_70:
-                   not_assigns(intP_pi_5_alloc_table, intP_intM_pi_5@init,
-                   intP_intM_pi_5, pset_singleton(pi)))
-                  and (JC_71:
-                      not_assigns(intP_pj_6_alloc_table, intP_intM_pj_6@init,
-                      intP_intM_pj_6, pset_singleton(pj))))))  }
-           begin
-             [ { } unit { true } ];
-            try
+          begin
+            while true do
+            { invariant
+                ((JC_68:
+                 ((JC_65: le_int((0), integer_of_int32(i)))
+                 and ((JC_66:
+                      le_int(integer_of_int32(i),
+                      sub_int(integer_of_int32(len_0), (1))))
+                     and (JC_67:
+                         (forall k:int.
+                          (forall l_0:int.
+                           ((le_int((0), k)
+                            and (lt_int(k, integer_of_int32(i))
+                                and (lt_int(k, l_0)
+                                    and lt_int(l_0, integer_of_int32(len_0))))) ->
+                            ((not eq_opt(integer_of_int32(select(intP_intM_a_3,
+                                                          shift(a_0, k))),
+                                  except, intP_intM_except_4)) ->
+                             (not is_duplet(a_0, integer_of_int32(len_0), k,
+                                  l_0, intP_intM_a_3))))))))))
+                and (JC_72:
+                    ((JC_70:
+                     not_assigns(intP_pi_5_alloc_table, intP_intM_pi_5@init,
+                     intP_intM_pi_5, pset_singleton(pi)))
+                    and (JC_71:
+                        not_assigns(intP_pj_6_alloc_table,
+                        intP_intM_pj_6@init, intP_intM_pj_6,
+                        pset_singleton(pj))))))  }
              begin
-               (let jessie_<num> =
-               (C_34:
+               [ { } unit { true } ];
+              try
                begin
-                 (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 
-                                                       (C_9:
-                                                       (safe_int32_of_integer_ 
-                                                        (C_8:
-                                                        ((sub_int (integer_of_int32 len_0)) (2)))))))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                try
+                 (let jessie_<num> =
                  begin
-                   try
-                    (C_12:
-                    begin
-                      (let jessie_<num> =
-                      (v := (C_11:
-                            ((safe_acc_ intP_intM_a_3) (C_10:
-                                                       ((shift a_0) (integer_of_int32 !i)))))) in
-                      void);
-                     (if ((safe_eq_pointer except) null)
-                     then (raise (Goto__LOR_exc void))
-                     else
-                      (if ((neq_int_ (integer_of_int32 (C_13:
-                                                       ((safe_acc_ intP_intM_except_4) except)))) 
-                           (integer_of_int32 !v))
-                      then (raise (Goto__LOR_exc void)) else void));
-                     (raise (Goto__LOR_0_exc void));
-                     (raise (Goto__LOR_exc void)) end) with
-                    Goto__LOR_exc jessie_<num> ->
-                    (_LOR:
-                    try
-                     (C_16:
-                     begin
-                       (let jessie_<num> =
-                       (j := (C_15:
-                             (safe_int32_of_integer_ (C_14:
-                                                     ((add_int (integer_of_int32 !i)) (1)))))) in
-                       void);
-                      (loop_4:
-                      while true do
-                      { invariant
-                          ((JC_77:
-                           ((JC_74:
-                            le_int(add_int(integer_of_int32(i), (1)),
-                            integer_of_int32(j)))
-                           and ((JC_75:
-                                le_int(integer_of_int32(j),
-                                integer_of_int32(len_0)))
-                               and (JC_76:
-                                   (forall l:int.
-                                    ((lt_int(integer_of_int32(i), l)
-                                     and lt_int(l, integer_of_int32(j))) ->
-                                     (not is_duplet(a_0,
-                                          integer_of_int32(len_0),
-                                          integer_of_int32(i), l,
-                                          intP_intM_a_3))))))))
-                          and (JC_81:
-                              ((JC_79:
-                               not_assigns(intP_pi_5_alloc_table,
-                               intP_intM_pi_5@init, intP_intM_pi_5,
-                               pset_singleton(pi)))
-                              and (JC_80:
-                                  not_assigns(intP_pj_6_alloc_table,
-                                  intP_intM_pj_6@init, intP_intM_pj_6,
-                                  pset_singleton(pj))))))  }
+                   (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 
+                                                         (C_9:
+                                                         (safe_int32_of_integer_ 
+                                                          (C_8:
+                                                          ((sub_int (integer_of_int32 len_0)) (2)))))))
+                   then void else (raise (Goto_while_0_break_exc void)));
+                  try
+                   begin
+                     try
+                      (C_12:
+                      begin
+                        (let jessie_<num> =
+                        (v := (C_11:
+                              ((safe_acc_ intP_intM_a_3) (C_10:
+                                                         ((shift a_0) 
+                                                          (integer_of_int32 !i)))))) in
+                        void);
+                       (if ((safe_eq_pointer except) null)
+                       then (raise (Goto__LOR_exc void))
+                       else
+                        (if ((neq_int_ (integer_of_int32 (C_13:
+                                                         ((safe_acc_ intP_intM_except_4) except)))) 
+                             (integer_of_int32 !v))
+                        then (raise (Goto__LOR_exc void)) else void));
+                       (raise (Goto__LOR_0_exc void));
+                       (raise (Goto__LOR_exc void)) end) with
+                      Goto__LOR_exc jessie_<num> ->
+                      (_LOR:
+                      try
+                       (C_16:
                        begin
-                         [ { } unit { true } ];
-                        try
-                         begin
-                           (let jessie_<num> =
-                           (C_31:
+                         (let jessie_<num> =
+                         (j := (C_15:
+                               (safe_int32_of_integer_ (C_14:
+                                                       ((add_int (integer_of_int32 !i)) (1)))))) in
+                         void);
+                        (loop_4:
+                        begin
+                          while true do
+                          { invariant
+                              ((JC_77:
+                               ((JC_74:
+                                le_int(add_int(integer_of_int32(i), (1)),
+                                integer_of_int32(j)))
+                               and ((JC_75:
+                                    le_int(integer_of_int32(j),
+                                    integer_of_int32(len_0)))
+                                   and (JC_76:
+                                       (forall l:int.
+                                        ((lt_int(integer_of_int32(i), l)
+                                         and lt_int(l, integer_of_int32(j))) ->
+                                         (not is_duplet(a_0,
+                                              integer_of_int32(len_0),
+                                              integer_of_int32(i), l,
+                                              intP_intM_a_3))))))))
+                              and (JC_81:
+                                  ((JC_79:
+                                   not_assigns(intP_pi_5_alloc_table,
+                                   intP_intM_pi_5@init, intP_intM_pi_5,
+                                   pset_singleton(pi)))
+                                  and (JC_80:
+                                      not_assigns(intP_pj_6_alloc_table,
+                                      intP_intM_pj_6@init, intP_intM_pj_6,
+                                      pset_singleton(pj))))))  }
                            begin
-                             (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 len_0))
-                             then void
-                             else (raise (Goto_while_1_break_exc void)));
-                            (if ((eq_int_ (integer_of_int32 (C_28:
-                                                            ((safe_acc_ intP_intM_a_3) 
-                                                             (C_27:
-                                                             ((shift a_0) 
-                                                              (integer_of_int32 !j))))))) 
-                                 (integer_of_int32 !v))
-                            then
-                             (C_24:
-                             (C_26:
+                             [ { } unit { true } ];
+                            try
                              begin
-                               (let jessie_<num> = !i in
-                               (let jessie_<num> = pi in
-                               (((safe_upd_ intP_intM_pi_5) jessie_<num>) jessie_<num>)));
-                              (let jessie_<num> = !j in
-                              (let jessie_<num> = pj in
-                              (((safe_upd_ intP_intM_pj_6) jessie_<num>) jessie_<num>)));
-                              (raise (Return_label_exc void)) end))
-                            else void);
-                            (j := (C_30:
-                                  (safe_int32_of_integer_ (C_29:
-                                                          ((add_int (integer_of_int32 !j)) (1))))));
-                            !j end) in void);
-                          (raise (Loop_continue_exc void)) end with
-                         Loop_continue_exc jessie_<num> -> void end end done);
-                      (raise (Goto_while_1_break_exc void)) end) with
-                     Goto_while_1_break_exc jessie_<num> ->
-                     (while_1_break: void) end) end;
-                  (raise (Goto__LOR_0_exc void)) end with
-                 Goto__LOR_0_exc jessie_<num> -> (_LOR_0: void) end;
-                (i := (C_33:
-                      (safe_int32_of_integer_ (C_32:
-                                              ((add_int (integer_of_int32 !i)) (1))))));
-                !i end) in void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                               (let jessie_<num> =
+                               begin
+                                 (if ((lt_int_ (integer_of_int32 !j)) 
+                                      (integer_of_int32 len_0)) then void
+                                 else (raise (Goto_while_1_break_exc void)));
+                                (if ((eq_int_ (integer_of_int32 (C_28:
+                                                                ((safe_acc_ intP_intM_a_3) 
+                                                                 (C_27:
+                                                                 ((shift a_0) 
+                                                                  (integer_of_int32 !j))))))) 
+                                     (integer_of_int32 !v))
+                                then
+                                 (C_24:
+                                 begin
+                                   (let jessie_<num> = !i in
+                                   (let jessie_<num> = pi in
+                                   (((safe_upd_ intP_intM_pi_5) jessie_<num>) jessie_<num>)));
+                                  (C_26:
+                                  begin
+                                    (let jessie_<num> = !j in
+                                    (let jessie_<num> = pj in
+                                    (((safe_upd_ intP_intM_pj_6) jessie_<num>) jessie_<num>)));
+                                   (raise (Return_label_exc void)) end) end)
+                                else void);
+                                (C_31:
+                                begin
+                                  (j := (C_30:
+                                        (safe_int32_of_integer_ (C_29:
+                                                                ((add_int 
+                                                                  (integer_of_int32 !j)) (1))))));
+                                 !j end) end in void);
+                              (raise (Loop_continue_exc void)) end with
+                             Loop_continue_exc jessie_<num> -> void end end done;
+                         (raise (Goto_while_1_break_exc void)) end) end) with
+                       Goto_while_1_break_exc jessie_<num> ->
+                       (while_1_break: void) end) end;
+                    (raise (Goto__LOR_0_exc void)) end with
+                   Goto__LOR_0_exc jessie_<num> -> (_LOR_0: void) end;
+                  (C_34:
+                  begin
+                    (i := (C_33:
+                          (safe_int32_of_integer_ (C_32:
+                                                  ((add_int (integer_of_int32 !i)) (1))))));
+                   !i end) end in void); (raise (Loop_continue_exc void)) end
+               with Loop_continue_exc jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) with
          Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
        (assert { (JC_83: (false = true)) }; void); void;
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
@@ -2866,140 +2874,147 @@ let duplet_safety =
          begin
            (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
           (loop_1:
-          while true do
-          { invariant (JC_44: true)
-            variant (JC_61 : sub_int(integer_of_int32(len_0),
-                             integer_of_int32(i))) }
-           begin
-             [ { } unit reads i
-               { (JC_42:
-                 ((JC_39: le_int((0), integer_of_int32(i)))
-                 and ((JC_40:
-                      le_int(integer_of_int32(i),
-                      sub_int(integer_of_int32(len_0), (1))))
-                     and (JC_41:
-                         (forall k:int.
-                          (forall l_0:int.
-                           ((le_int((0), k)
-                            and (lt_int(k, integer_of_int32(i))
-                                and (lt_int(k, l_0)
-                                    and lt_int(l_0, integer_of_int32(len_0))))) ->
-                            ((not eq_opt(integer_of_int32(select(intP_intM_a_3,
-                                                          shift(a_0, k))),
-                                  except, intP_intM_except_4)) ->
-                             (not is_duplet(a_0, integer_of_int32(len_0), k,
-                                  l_0, intP_intM_a_3)))))))))) } ];
-            try
+          begin
+            while true do
+            { invariant (JC_44: true)
+              variant (JC_61 : sub_int(integer_of_int32(len_0),
+                               integer_of_int32(i))) }
              begin
-               (let jessie_<num> =
-               (C_34:
+               [ { } unit reads i
+                 { (JC_42:
+                   ((JC_39: le_int((0), integer_of_int32(i)))
+                   and ((JC_40:
+                        le_int(integer_of_int32(i),
+                        sub_int(integer_of_int32(len_0), (1))))
+                       and (JC_41:
+                           (forall k:int.
+                            (forall l_0:int.
+                             ((le_int((0), k)
+                              and (lt_int(k, integer_of_int32(i))
+                                  and (lt_int(k, l_0)
+                                      and lt_int(l_0,
+                                          integer_of_int32(len_0))))) ->
+                              ((not eq_opt(integer_of_int32(select(intP_intM_a_3,
+                                                            shift(a_0, k))),
+                                    except, intP_intM_except_4)) ->
+                               (not is_duplet(a_0, integer_of_int32(len_0),
+                                    k, l_0, intP_intM_a_3)))))))))) } ];
+              try
                begin
-                 (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 
-                                                       (C_9:
-                                                       (JC_46:
-                                                       (int32_of_integer_ 
-                                                        (C_8:
-                                                        ((sub_int (integer_of_int32 len_0)) (2))))))))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                try
+                 (let jessie_<num> =
                  begin
-                   try
-                    (C_12:
-                    begin
-                      (let jessie_<num> =
-                      (v := (C_11:
-                            (JC_47:
-                            ((((offset_acc_ intP_a_3_alloc_table) intP_intM_a_3) a_0) 
-                             (integer_of_int32 !i))))) in void);
-                     (if ((eq_pointer except) null)
-                     then (raise (Goto__LOR_exc void))
-                     else
-                      (if ((neq_int_ (integer_of_int32 (C_13:
-                                                       (JC_48:
-                                                       (((acc_ intP_except_4_alloc_table) intP_intM_except_4) except))))) 
-                           (integer_of_int32 !v))
-                      then (raise (Goto__LOR_exc void)) else void));
-                     (raise (Goto__LOR_0_exc void));
-                     (raise (Goto__LOR_exc void)) end) with
-                    Goto__LOR_exc jessie_<num> ->
-                    (_LOR:
-                    try
-                     (C_16:
-                     begin
-                       (let jessie_<num> =
-                       (j := (C_15:
-                             (JC_49:
-                             (int32_of_integer_ (C_14:
-                                                ((add_int (integer_of_int32 !i)) (1))))))) in
-                       void);
-                      (loop_2:
-                      while true do
-                      { invariant (JC_55: true)
-                        variant (JC_59 : sub_int(integer_of_int32(len_0),
-                                         integer_of_int32(j))) }
+                   (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 
+                                                         (C_9:
+                                                         (JC_46:
+                                                         (int32_of_integer_ 
+                                                          (C_8:
+                                                          ((sub_int (integer_of_int32 len_0)) (2))))))))
+                   then void else (raise (Goto_while_0_break_exc void)));
+                  try
+                   begin
+                     try
+                      (C_12:
+                      begin
+                        (let jessie_<num> =
+                        (v := (C_11:
+                              (JC_47:
+                              ((((offset_acc_ intP_a_3_alloc_table) intP_intM_a_3) a_0) 
+                               (integer_of_int32 !i))))) in void);
+                       (if ((eq_pointer except) null)
+                       then (raise (Goto__LOR_exc void))
+                       else
+                        (if ((neq_int_ (integer_of_int32 (C_13:
+                                                         (JC_48:
+                                                         (((acc_ intP_except_4_alloc_table) intP_intM_except_4) except))))) 
+                             (integer_of_int32 !v))
+                        then (raise (Goto__LOR_exc void)) else void));
+                       (raise (Goto__LOR_0_exc void));
+                       (raise (Goto__LOR_exc void)) end) with
+                      Goto__LOR_exc jessie_<num> ->
+                      (_LOR:
+                      try
+                       (C_16:
                        begin
-                         [ { } unit reads i,j
-                           { (JC_53:
-                             ((JC_50:
-                              le_int(add_int(integer_of_int32(i), (1)),
-                              integer_of_int32(j)))
-                             and ((JC_51:
-                                  le_int(integer_of_int32(j),
-                                  integer_of_int32(len_0)))
-                                 and (JC_52:
-                                     (forall l:int.
-                                      ((lt_int(integer_of_int32(i), l)
-                                       and lt_int(l, integer_of_int32(j))) ->
-                                       (not is_duplet(a_0,
-                                            integer_of_int32(len_0),
-                                            integer_of_int32(i), l,
-                                            intP_intM_a_3)))))))) } ];
-                        try
-                         begin
-                           (let jessie_<num> =
-                           (C_31:
+                         (let jessie_<num> =
+                         (j := (C_15:
+                               (JC_49:
+                               (int32_of_integer_ (C_14:
+                                                  ((add_int (integer_of_int32 !i)) (1))))))) in
+                         void);
+                        (loop_2:
+                        begin
+                          while true do
+                          { invariant (JC_55: true)
+                            variant (JC_59 : sub_int(integer_of_int32(len_0),
+                                             integer_of_int32(j))) }
                            begin
-                             (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 len_0))
-                             then void
-                             else (raise (Goto_while_1_break_exc void)));
-                            (if ((eq_int_ (integer_of_int32 (C_28:
-                                                            (JC_57:
-                                                            ((((offset_acc_ intP_a_3_alloc_table) intP_intM_a_3) a_0) 
-                                                             (integer_of_int32 !j)))))) 
-                                 (integer_of_int32 !v))
-                            then
-                             (C_24:
-                             (C_26:
+                             [ { } unit reads i,j
+                               { (JC_53:
+                                 ((JC_50:
+                                  le_int(add_int(integer_of_int32(i), (1)),
+                                  integer_of_int32(j)))
+                                 and ((JC_51:
+                                      le_int(integer_of_int32(j),
+                                      integer_of_int32(len_0)))
+                                     and (JC_52:
+                                         (forall l:int.
+                                          ((lt_int(integer_of_int32(i), l)
+                                           and lt_int(l, integer_of_int32(j))) ->
+                                           (not is_duplet(a_0,
+                                                integer_of_int32(len_0),
+                                                integer_of_int32(i), l,
+                                                intP_intM_a_3)))))))) } ];
+                            try
                              begin
-                               (let jessie_<num> = !i in
-                               (let jessie_<num> = pi in
-                               (JC_63:
-                               ((((upd_ intP_pi_5_alloc_table) intP_intM_pi_5) jessie_<num>) jessie_<num>))));
-                              (let jessie_<num> = !j in
-                              (let jessie_<num> = pj in
-                              (JC_64:
-                              ((((upd_ intP_pj_6_alloc_table) intP_intM_pj_6) jessie_<num>) jessie_<num>))));
-                              (raise (Return_label_exc void)) end))
-                            else void);
-                            (j := (C_30:
-                                  (JC_58:
-                                  (int32_of_integer_ (C_29:
-                                                     ((add_int (integer_of_int32 !j)) (1)))))));
-                            !j end) in void);
-                          (raise (Loop_continue_exc void)) end with
-                         Loop_continue_exc jessie_<num> -> void end end done);
-                      (raise (Goto_while_1_break_exc void)) end) with
-                     Goto_while_1_break_exc jessie_<num> ->
-                     (while_1_break: void) end) end;
-                  (raise (Goto__LOR_0_exc void)) end with
-                 Goto__LOR_0_exc jessie_<num> -> (_LOR_0: void) end;
-                (i := (C_33:
-                      (JC_60:
-                      (int32_of_integer_ (C_32:
-                                         ((add_int (integer_of_int32 !i)) (1)))))));
-                !i end) in void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) with
+                               (let jessie_<num> =
+                               begin
+                                 (if ((lt_int_ (integer_of_int32 !j)) 
+                                      (integer_of_int32 len_0)) then void
+                                 else (raise (Goto_while_1_break_exc void)));
+                                (if ((eq_int_ (integer_of_int32 (C_28:
+                                                                (JC_57:
+                                                                ((((offset_acc_ intP_a_3_alloc_table) intP_intM_a_3) a_0) 
+                                                                 (integer_of_int32 !j)))))) 
+                                     (integer_of_int32 !v))
+                                then
+                                 (C_24:
+                                 begin
+                                   (let jessie_<num> = !i in
+                                   (let jessie_<num> = pi in
+                                   (JC_63:
+                                   ((((upd_ intP_pi_5_alloc_table) intP_intM_pi_5) jessie_<num>) jessie_<num>))));
+                                  (C_26:
+                                  begin
+                                    (let jessie_<num> = !j in
+                                    (let jessie_<num> = pj in
+                                    (JC_64:
+                                    ((((upd_ intP_pj_6_alloc_table) intP_intM_pj_6) jessie_<num>) jessie_<num>))));
+                                   (raise (Return_label_exc void)) end) end)
+                                else void);
+                                (C_31:
+                                begin
+                                  (j := (C_30:
+                                        (JC_58:
+                                        (int32_of_integer_ (C_29:
+                                                           ((add_int 
+                                                             (integer_of_int32 !j)) (1)))))));
+                                 !j end) end in void);
+                              (raise (Loop_continue_exc void)) end with
+                             Loop_continue_exc jessie_<num> -> void end end done;
+                         (raise (Goto_while_1_break_exc void)) end) end) with
+                       Goto_while_1_break_exc jessie_<num> ->
+                       (while_1_break: void) end) end;
+                    (raise (Goto__LOR_0_exc void)) end with
+                   Goto__LOR_0_exc jessie_<num> -> (_LOR_0: void) end;
+                  (C_34:
+                  begin
+                    (i := (C_33:
+                          (JC_60:
+                          (int32_of_integer_ (C_32:
+                                             ((add_int (integer_of_int32 !i)) (1)))))));
+                   !i end) end in void); (raise (Loop_continue_exc void)) end
+               with Loop_continue_exc jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) with
          Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
        [ { } unit { (JC_62: (false = true)) } ]; void;
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
@@ -3066,7 +3081,6 @@ let duplets_ensures_default =
      (let intP_intM_null_15 = (any_memory void) in
      (let intP_null_15_alloc_table = (any_alloc_table void) in
      (C_56:
-     (C_59:
      begin
        (let jessie_<num> = a_0_0 in
        (let jessie_<num> = len_0_0 in
@@ -3075,17 +3089,19 @@ let duplets_ensures_default =
        (let jessie_<num> = pj_0 in
        (JC_137:
        (((((((((((((duplet jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_pj_0_9) intP_intM_pi_0_8) intP_pj_0_9_alloc_table) intP_pi_0_8_alloc_table) intP_null_15_alloc_table) intP_a_0_7_alloc_table) intP_intM_null_15) intP_intM_a_0_7)))))));
-      (let jessie_<num> = a_0_0 in
-      (let jessie_<num> = len_0_0 in
-      (let jessie_<num> =
-      (C_58:
-      ((shift a_0_0) (integer_of_int32 (C_57:
-                                       ((safe_acc_ !intP_intM_pi_0_8) pi_0))))) in
-      (let jessie_<num> = pk in
-      (let jessie_<num> = pl in
-      (JC_138:
-      (((((((((((((duplet jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_pl_11) intP_intM_pk_10) intP_pl_11_alloc_table) intP_pk_10_alloc_table) intP_a_0_7_alloc_table) intP_a_0_7_alloc_table) intP_intM_a_0_7) intP_intM_a_0_7)))))));
-      (raise Return) end)))); (raise Return) end with Return -> void end)
+      (C_59:
+      begin
+        (let jessie_<num> = a_0_0 in
+        (let jessie_<num> = len_0_0 in
+        (let jessie_<num> =
+        (C_58:
+        ((shift a_0_0) (integer_of_int32 (C_57:
+                                         ((safe_acc_ !intP_intM_pi_0_8) pi_0))))) in
+        (let jessie_<num> = pk in
+        (let jessie_<num> = pl in
+        (JC_138:
+        (((((((((((((duplet jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_pl_11) intP_intM_pk_10) intP_pl_11_alloc_table) intP_pk_10_alloc_table) intP_a_0_7_alloc_table) intP_a_0_7_alloc_table) intP_intM_a_0_7) intP_intM_a_0_7)))))));
+       (raise Return) end) end))); (raise Return) end with Return -> void end)
   { (JC_121:
     ((JC_115:
      ((JC_112:
@@ -3180,7 +3196,6 @@ let duplets_safety =
      (let intP_intM_null_15 = (any_memory void) in
      (let intP_null_15_alloc_table = (any_alloc_table void) in
      (C_56:
-     (C_59:
      begin
        (let jessie_<num> = a_0_0 in
        (let jessie_<num> = len_0_0 in
@@ -3189,18 +3204,20 @@ let duplets_safety =
        (let jessie_<num> = pj_0 in
        (JC_134:
        (((((((((((((duplet_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_pj_0_9) intP_intM_pi_0_8) intP_pj_0_9_alloc_table) intP_pi_0_8_alloc_table) intP_null_15_alloc_table) intP_a_0_7_alloc_table) intP_intM_null_15) intP_intM_a_0_7)))))));
-      (let jessie_<num> = a_0_0 in
-      (let jessie_<num> = len_0_0 in
-      (let jessie_<num> =
-      (C_58:
-      ((shift a_0_0) (integer_of_int32 (C_57:
-                                       (JC_135:
-                                       (((acc_ intP_pi_0_8_alloc_table) !intP_intM_pi_0_8) pi_0)))))) in
-      (let jessie_<num> = pk in
-      (let jessie_<num> = pl in
-      (JC_136:
-      (((((((((((((duplet_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_pl_11) intP_intM_pk_10) intP_pl_11_alloc_table) intP_pk_10_alloc_table) intP_a_0_7_alloc_table) intP_a_0_7_alloc_table) intP_intM_a_0_7) intP_intM_a_0_7)))))));
-      (raise Return) end)))); (raise Return) end with Return -> void end)
+      (C_59:
+      begin
+        (let jessie_<num> = a_0_0 in
+        (let jessie_<num> = len_0_0 in
+        (let jessie_<num> =
+        (C_58:
+        ((shift a_0_0) (integer_of_int32 (C_57:
+                                         (JC_135:
+                                         (((acc_ intP_pi_0_8_alloc_table) !intP_intM_pi_0_8) pi_0)))))) in
+        (let jessie_<num> = pk in
+        (let jessie_<num> = pl in
+        (JC_136:
+        (((((((((((((duplet_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_pl_11) intP_intM_pk_10) intP_pl_11_alloc_table) intP_pk_10_alloc_table) intP_a_0_7_alloc_table) intP_a_0_7_alloc_table) intP_intM_a_0_7) intP_intM_a_0_7)))))));
+       (raise Return) end) end))); (raise Return) end with Return -> void end)
   { true }
 
 

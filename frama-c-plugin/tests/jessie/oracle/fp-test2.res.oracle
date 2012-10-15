@@ -435,40 +435,49 @@ let main_ensures_default =
      (let res = ref (any_double void) in
      (let __retres = ref (any_int32 void) in
      (C_1:
-     (C_2:
-     (C_4:
-     (C_6:
-     (C_8:
-     (C_11:
-     (C_13:
      begin
        (let jessie_<somenum> =
        (tmp1 := ((double_of_real_safe nearest_even) 0x1p53)) in void);
-      (let jessie_<somenum> =
-      (tmp2 := ((double_of_real_safe nearest_even) 0x1p52)) in void);
-      (let jessie_<somenum> =
-      (a := (C_3:
-            (JC_<somenum>:
-            (((sub_double_safe nearest_even) !tmp1) (double_of_real_exact 1.0))))) in
-      void);
-      (let jessie_<somenum> =
-      (b := (C_5:
-            (JC_<somenum>:
-            (((add_double_safe nearest_even) !tmp2) (double_of_real_exact 1.0))))) in
-      void);
-      (let jessie_<somenum> =
-      (c := (C_7: (JC_<somenum>: (((mul_double_safe nearest_even) !tmp1) !tmp2)))) in
-      void);
-      (let jessie_<somenum> =
-      (res := (C_10:
-              (JC_<somenum>:
-              (((sub_double_safe nearest_even) (C_9:
-                                               (JC_<somenum>:
-                                               (((mul_double_safe nearest_even) !a) !b)))) !c)))) in
-      void); (assert { (JC_<somenum>: (double_value(res) = 0.0)) }; void); void;
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))))))))))))); absurd  end
-   with Return -> !return end)) { (JC_<somenum>: true) }
+      (C_2:
+      begin
+        (let jessie_<somenum> =
+        (tmp2 := ((double_of_real_safe nearest_even) 0x1p52)) in void);
+       (C_4:
+       begin
+         (let jessie_<somenum> =
+         (a := (C_3:
+               (JC_<somenum>:
+               (((sub_double_safe nearest_even) !tmp1) (double_of_real_exact 1.0))))) in
+         void);
+        (C_6:
+        begin
+          (let jessie_<somenum> =
+          (b := (C_5:
+                (JC_<somenum>:
+                (((add_double_safe nearest_even) !tmp2) (double_of_real_exact 1.0))))) in
+          void);
+         (C_8:
+         begin
+           (let jessie_<somenum> =
+           (c := (C_7:
+                 (JC_<somenum>: (((mul_double_safe nearest_even) !tmp1) !tmp2)))) in
+           void);
+          (C_11:
+          begin
+            (let jessie_<somenum> =
+            (res := (C_10:
+                    (JC_<somenum>:
+                    (((sub_double_safe nearest_even) (C_9:
+                                                     (JC_<somenum>:
+                                                     (((mul_double_safe nearest_even) !a) !b)))) !c)))) in
+            void); (assert { (JC_<somenum>: (double_value(res) = 0.0)) }; void);
+           void;
+           (C_13:
+           begin
+             (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+             void); (return := !__retres); (raise Return) end) end) end) end)
+       end) end) end)))))))); absurd  end with Return -> !return end))
+  { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -485,41 +494,49 @@ let main_safety =
      (let res = ref (any_double void) in
      (let __retres = ref (any_int32 void) in
      (C_1:
-     (C_2:
-     (C_4:
-     (C_6:
-     (C_8:
-     (C_11:
-     (C_13:
      begin
        (let jessie_<somenum> =
        (tmp1 := (JC_<somenum>: ((double_of_real nearest_even) 0x1p53))) in void);
-      (let jessie_<somenum> =
-      (tmp2 := (JC_<somenum>: ((double_of_real nearest_even) 0x1p52))) in void);
-      (let jessie_<somenum> =
-      (a := (C_3:
-            (JC_<somenum>:
-            (((sub_double nearest_even) !tmp1) (double_of_real_exact 1.0))))) in
-      void);
-      (let jessie_<somenum> =
-      (b := (C_5:
-            (JC_<somenum>:
-            (((add_double nearest_even) !tmp2) (double_of_real_exact 1.0))))) in
-      void);
-      (let jessie_<somenum> =
-      (c := (C_7: (JC_<somenum>: (((mul_double nearest_even) !tmp1) !tmp2)))) in
-      void);
-      (let jessie_<somenum> =
-      (res := (C_10:
-              (JC_<somenum>:
-              (((sub_double nearest_even) (C_9:
-                                          (JC_<somenum>:
-                                          (((mul_double nearest_even) !a) !b)))) !c)))) in
-      void); [ { } unit reads res { (JC_<somenum>: (double_value(res) = 0.0)) } ];
-      void;
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))))))))))))); absurd  end
-   with Return -> !return end)) { true }
+      (C_2:
+      begin
+        (let jessie_<somenum> =
+        (tmp2 := (JC_<somenum>: ((double_of_real nearest_even) 0x1p52))) in void);
+       (C_4:
+       begin
+         (let jessie_<somenum> =
+         (a := (C_3:
+               (JC_<somenum>:
+               (((sub_double nearest_even) !tmp1) (double_of_real_exact 1.0))))) in
+         void);
+        (C_6:
+        begin
+          (let jessie_<somenum> =
+          (b := (C_5:
+                (JC_<somenum>:
+                (((add_double nearest_even) !tmp2) (double_of_real_exact 1.0))))) in
+          void);
+         (C_8:
+         begin
+           (let jessie_<somenum> =
+           (c := (C_7: (JC_<somenum>: (((mul_double nearest_even) !tmp1) !tmp2)))) in
+           void);
+          (C_11:
+          begin
+            (let jessie_<somenum> =
+            (res := (C_10:
+                    (JC_<somenum>:
+                    (((sub_double nearest_even) (C_9:
+                                                (JC_<somenum>:
+                                                (((mul_double nearest_even) !a) !b)))) !c)))) in
+            void);
+           [ { } unit reads res { (JC_<somenum>: (double_value(res) = 0.0)) } ];
+           void;
+           (C_13:
+           begin
+             (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+             void); (return := !__retres); (raise Return) end) end) end) end)
+       end) end) end)))))))); absurd  end with Return -> !return end))
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fp-test2.jessie --quiet -f fp-test2.makefile project

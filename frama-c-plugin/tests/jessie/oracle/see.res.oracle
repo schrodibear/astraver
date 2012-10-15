@@ -491,17 +491,19 @@ let k_ensures_default =
        (let jessie_<somenum> = (b := (safe_int32_of_integer_ (1))) in void);
       (let jessie_<somenum> =
       (C_9:
-      (C_11:
-      (C_14:
       begin
         (let jessie_<somenum> = (tmp := (C_8: (JC_<somenum>: (f void)))) in void);
-       (let jessie_<somenum> = (tmp_0 := (C_10: (JC_<somenum>: (f void)))) in void);
-       (b1 := (C_13:
-              (safe_int32_of_integer_ (C_12:
-                                      ((add_int (integer_of_int32 !tmp)) 
-                                       (integer_of_int32 !tmp_0)))))); !b1
-      end))) in void); (raise Return) end))); (raise Return) end with
-   Return -> void end) { (JC_<somenum>: (integer_of_int32(b1) = (1))) }
+       (C_11:
+       begin
+         (let jessie_<somenum> = (tmp_0 := (C_10: (JC_<somenum>: (f void)))) in void);
+        (C_14:
+        begin
+          (b1 := (C_13:
+                 (safe_int32_of_integer_ (C_12:
+                                         ((add_int (integer_of_int32 !tmp)) 
+                                          (integer_of_int32 !tmp_0)))))); !b1
+        end) end) end) in void); (raise Return) end))); (raise Return) end
+   with Return -> void end) { (JC_<somenum>: (integer_of_int32(b1) = (1))) }
 
 let k_safety =
  fun (tt : unit) ->
@@ -516,17 +518,20 @@ let k_safety =
        (let jessie_<somenum> = (b := (safe_int32_of_integer_ (1))) in void);
       (let jessie_<somenum> =
       (C_9:
-      (C_11:
-      (C_14:
       begin
         (let jessie_<somenum> = (tmp := (C_8: (JC_<somenum>: (f_requires void)))) in void);
-       (let jessie_<somenum> = (tmp_0 := (C_10: (JC_<somenum>: (f_requires void)))) in
-       void);
-       (b1 := (C_13:
-              (JC_<somenum>:
-              (int32_of_integer_ (C_12:
-                                 ((add_int (integer_of_int32 !tmp)) (integer_of_int32 !tmp_0)))))));
-       !b1 end))) in void); (raise Return) end))); (raise Return) end with
+       (C_11:
+       begin
+         (let jessie_<somenum> = (tmp_0 := (C_10: (JC_<somenum>: (f_requires void)))) in
+         void);
+        (C_14:
+        begin
+          (b1 := (C_13:
+                 (JC_<somenum>:
+                 (int32_of_integer_ (C_12:
+                                    ((add_int (integer_of_int32 !tmp)) 
+                                     (integer_of_int32 !tmp_0))))))); !b1 end)
+       end) end) in void); (raise Return) end))); (raise Return) end with
    Return -> void end) { true }
 
 

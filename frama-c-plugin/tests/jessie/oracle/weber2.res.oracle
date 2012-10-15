@@ -586,7 +586,6 @@ let find_int_array_ensures_default =
    begin
      (let __retres = ref (any_pointer void) in
      (C_3:
-     (C_5:
      begin
        (let jessie_<somenum> = value in
        (let jessie_<somenum> = last in
@@ -594,9 +593,11 @@ let find_int_array_ensures_default =
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) (-1)) in
        (((safe_upd_ intP_intM_first_1) jessie_<somenum>) jessie_<somenum>))))));
-      (let jessie_<somenum> = (__retres := (C_4: ((shift last) (neg_int (1))))) in
-      void); (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end))
+      (C_5:
+      begin
+        (let jessie_<somenum> = (__retres := (C_4: ((shift last) (neg_int (1))))) in
+        void); (return := !__retres); (raise Return) end) end)); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM_first_1, result)) = integer_of_int32(value))) }
 
@@ -614,7 +615,6 @@ let find_int_array_safety =
    begin
      (let __retres = ref (any_pointer void) in
      (C_3:
-     (C_5:
      begin
        (let jessie_<somenum> = value in
        (let jessie_<somenum> = last in
@@ -623,9 +623,11 @@ let find_int_array_safety =
        (let jessie_<somenum> = ((shift jessie_<somenum>) (-1)) in
        (JC_<somenum>:
        ((((upd_ intP_first_1_alloc_table) intP_intM_first_1) jessie_<somenum>) jessie_<somenum>)))))));
-      (let jessie_<somenum> = (__retres := (C_4: ((shift last) (neg_int (1))))) in
-      void); (return := !__retres); (raise Return) end))); absurd  end with
-   Return -> !return end)) { true }
+      (C_5:
+      begin
+        (let jessie_<somenum> = (__retres := (C_4: ((shift last) (neg_int (1))))) in
+        void); (return := !__retres); (raise Return) end) end)); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C weber2.jessie --quiet -f weber2.makefile project

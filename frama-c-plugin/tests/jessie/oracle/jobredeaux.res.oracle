@@ -849,9 +849,6 @@ let ones_ensures_default =
      (let i = ref (any_int32 void) in
      (let j = ref (any_int32 void) in
      try
-      (C_16:
-      (C_17:
-      (C_18:
       begin
         (assert
         { (JC_<somenum>:
@@ -882,196 +879,224 @@ let ones_ensures_default =
                               select(float_xP_float_xM_result_3,
                               shift(c, k_0))),
                        sub_int(integer_of_int32(n_2), (1)))))))))) }; void);
-       void; (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       (loop_3:
-       while true do
-       { invariant
-           ((JC_<somenum>:
-            ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-            and ((JC_<somenum>: le_int(integer_of_int32(i), integer_of_int32(m_0)))
-                and (JC_<somenum>:
-                    (forall k_1:int.
-                     (forall q_1:int.
-                      ((le_int((0), k_1)
-                       and (lt_int(k_1, integer_of_int32(i))
-                           and (le_int((0), q_1)
-                               and lt_int(q_1, integer_of_int32(n_2))))) ->
-                       (single_value(select(floatP_floatM_float_xM_7,
-                                     shift(select(float_xP_float_xM_result_3,
-                                           shift(c, k_1)),
-                                     q_1))) = 1.0))))))))
-           and ((JC_<somenum>:
-                not_assigns(floatP_float_xM_7_alloc_table,
-                floatP_floatM_float_xM_7@loop_3, floatP_floatM_float_xM_7,
-                pset_range(pset_deref(float_xP_float_xM_result_3,
-                           pset_range(pset_singleton(c), (0),
-                           sub_int(integer_of_int32(m_0), (1)))),
-                (0), sub_int(integer_of_int32(n_2), (1)))))
-               and (JC_<somenum>:
-                   not_assigns(floatP_float_xM_7_alloc_table,
-                   floatP_floatM_float_xM_7@init, floatP_floatM_float_xM_7,
-                   pset_empty))))  }
+       void;
+       (C_16:
+       begin
+         (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+        (C_17:
         begin
-          [ { } unit { true } ];
-         try
+          (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
+         (C_18:
+         begin
+           (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+          (loop_3:
           begin
-            (let jessie_<somenum> =
-            (C_59:
-            begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 m_0))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (assert
-             { (JC_<somenum>:
-               ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-               and (JC_<somenum>:
-                   lt_int(integer_of_int32(i), integer_of_int32(m_0))))) };
-             void); void;
-             (assert
-             { (JC_<somenum>:
-               ((JC_<somenum>:
-                le_int(offset_min(floatP_float_xM_7_alloc_table,
-                       select(float_xP_float_xM_result_3,
-                       shift(c, integer_of_int32(i)))),
-                (0)))
-               and (JC_<somenum>:
-                   ge_int(offset_max(floatP_float_xM_7_alloc_table,
-                          select(float_xP_float_xM_result_3,
-                          shift(c, integer_of_int32(i)))),
-                   sub_int(integer_of_int32(n_2), (1)))))) }; void); void;
-             try
-              (C_31:
-              begin
-                (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
-               (loop_4:
-               while true do
-               { invariant
-                   (((JC_<somenum>:
-                     (forall p_0:int.
-                      (forall q_0:int.
-                       ((lt_int(integer_of_int32(i), p_0)
-                        and (lt_int(p_0, integer_of_int32(n_2))
-                            and (le_int((0), q_0)
-                                and lt_int(q_0, integer_of_int32(n_2))))) ->
-                        (single_value(select(floatP_floatM_float_xM_7,
-                                      shift(select(float_xP_float_xM_result_3,
-                                            shift(c, p_0)),
-                                      q_0))) = single_value(select(floatP_floatM_float_xM_7,
-                                                            shift(select(float_xP_float_xM_result_3,
-                                                                  shift(c,
-                                                                  p_0)),
-                                                            q_0))))))))
-                    and ((JC_<somenum>:
-                         (forall p:int.
-                          (forall q:int.
-                           ((le_int((0), p)
-                            and (lt_int(p, integer_of_int32(i))
-                                and (le_int((0), q)
-                                    and lt_int(q, integer_of_int32(n_2))))) ->
+            while true do
+            { invariant
+                ((JC_<somenum>:
+                 ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                 and ((JC_<somenum>:
+                      le_int(integer_of_int32(i), integer_of_int32(m_0)))
+                     and (JC_<somenum>:
+                         (forall k_1:int.
+                          (forall q_1:int.
+                           ((le_int((0), k_1)
+                            and (lt_int(k_1, integer_of_int32(i))
+                                and (le_int((0), q_1)
+                                    and lt_int(q_1, integer_of_int32(n_2))))) ->
                             (single_value(select(floatP_floatM_float_xM_7,
                                           shift(select(float_xP_float_xM_result_3,
-                                                shift(c, p)),
-                                          q))) = single_value(select(floatP_floatM_float_xM_7,
-                                                              shift(select(float_xP_float_xM_result_3,
-                                                                    shift(c,
-                                                                    p)),
-                                                              q))))))))
-                        and (JC_<somenum>:
-                            ((JC_<somenum>: le_int((0), integer_of_int32(j)))
-                            and ((JC_<somenum>:
-                                 le_int(integer_of_int32(j),
-                                 integer_of_int32(n_2)))
-                                and (JC_<somenum>:
-                                    (forall l:int.
-                                     ((le_int((0), l)
-                                      and lt_int(l, integer_of_int32(j))) ->
-                                      (single_value(select(floatP_floatM_float_xM_7,
-                                                    shift(select(float_xP_float_xM_result_3,
-                                                          shift(c,
-                                                          integer_of_int32(i))),
-                                                    l))) = 1.0)))))))))
-                   and ((JC_<somenum>:
+                                                shift(c, k_1)),
+                                          q_1))) = 1.0))))))))
+                and ((JC_<somenum>:
+                     not_assigns(floatP_float_xM_7_alloc_table,
+                     floatP_floatM_float_xM_7@loop_3,
+                     floatP_floatM_float_xM_7,
+                     pset_range(pset_deref(float_xP_float_xM_result_3,
+                                pset_range(pset_singleton(c), (0),
+                                sub_int(integer_of_int32(m_0), (1)))),
+                     (0), sub_int(integer_of_int32(n_2), (1)))))
+                    and (JC_<somenum>:
                         not_assigns(floatP_float_xM_7_alloc_table,
-                        floatP_floatM_float_xM_7@loop_4,
-                        floatP_floatM_float_xM_7,
-                        pset_range(pset_deref(float_xP_float_xM_result_3,
-                                   pset_range(pset_singleton(c),
-                                   integer_of_int32(i), integer_of_int32(i))),
-                        (0), sub_int(integer_of_int32(n_2), (1)))))
-                       and (JC_<somenum>:
-                           not_assigns(floatP_float_xM_7_alloc_table,
-                           floatP_floatM_float_xM_7@init,
-                           floatP_floatM_float_xM_7, pset_empty))))  }
-                begin
-                  [ { } unit { true } ];
-                 try
-                  begin
-                    (let jessie_<somenum> =
-                    (C_51:
-                    (C_55:
-                    begin
-                      (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 n_2))
-                      then void else (raise (Goto_while_1_break_exc void)));
-                     (assert
-                     { (JC_<somenum>:
-                       ((JC_<somenum>: le_int((0), integer_of_int32(j)))
-                       and (JC_<somenum>:
-                           lt_int(integer_of_int32(j), integer_of_int32(n_2))))) };
-                     void); void;
-                     (assert
-                     { (JC_<somenum>:
-                       ((JC_<somenum>:
-                        le_int(offset_min(floatP_float_xM_7_alloc_table,
+                        floatP_floatM_float_xM_7@init,
+                        floatP_floatM_float_xM_7, pset_empty))))  }
+             begin
+               [ { } unit { true } ];
+              try
+               begin
+                 (let jessie_<somenum> =
+                 begin
+                   (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 m_0))
+                   then void else (raise (Goto_while_0_break_exc void)));
+                  (assert
+                  { (JC_<somenum>:
+                    ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                    and (JC_<somenum>:
+                        lt_int(integer_of_int32(i), integer_of_int32(m_0))))) };
+                  void); void;
+                  (assert
+                  { (JC_<somenum>:
+                    ((JC_<somenum>:
+                     le_int(offset_min(floatP_float_xM_7_alloc_table,
+                            select(float_xP_float_xM_result_3,
+                            shift(c, integer_of_int32(i)))),
+                     (0)))
+                    and (JC_<somenum>:
+                        ge_int(offset_max(floatP_float_xM_7_alloc_table,
                                select(float_xP_float_xM_result_3,
                                shift(c, integer_of_int32(i)))),
-                        integer_of_int32(j)))
-                       and (JC_<somenum>:
-                           ge_int(offset_max(floatP_float_xM_7_alloc_table,
-                                  select(float_xP_float_xM_result_3,
-                                  shift(c, integer_of_int32(i)))),
-                           integer_of_int32(j))))) }; void); void;
-                     (let jessie_<somenum> =
-                     (let jessie_<somenum> =
-                     (C_46:
-                     ((single_of_double_safe nearest_even) (double_of_real_exact 1.0))) in
-                     (let jessie_<somenum> =
-                     (C_48:
-                     ((safe_acc_ float_xP_float_xM_result_3) (C_47:
-                                                             ((shift !c) 
-                                                              (integer_of_int32 !i))))) in
-                     (let jessie_<somenum> = (integer_of_int32 !j) in
-                     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-                     (((safe_upd_ floatP_floatM_float_xM_7) jessie_<somenum>) jessie_<somenum>))))) in
+                        sub_int(integer_of_int32(n_2), (1)))))) }; void);
+                  void;
+                  try
+                   (C_31:
+                   begin
+                     (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in
                      void);
-                     (assert
-                     { (JC_<somenum>:
-                       (single_value(select(floatP_floatM_float_xM_7,
-                                     shift(select(float_xP_float_xM_result_3,
-                                           shift(c, integer_of_int32(i))),
-                                     integer_of_int32(j)))) = 1.0)) }; void);
-                     void;
-                     (j := (C_54:
-                           (safe_int32_of_integer_ (C_53:
-                                                   ((add_int (integer_of_int32 !j)) (1))))));
-                     !j end)) in void); (raise (Loop_continue_exc void)) end
-                  with Loop_continue_exc jessie_<somenum> -> void end end done);
-               (raise (Goto_while_1_break_exc void)) end) with
-              Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
-             (assert
-             { (JC_<somenum>:
-               (forall l_0:int.
-                ((le_int((0), l_0) and lt_int(l_0, integer_of_int32(n_2))) ->
-                 (single_value(select(floatP_floatM_float_xM_7,
-                               shift(select(float_xP_float_xM_result_3,
-                                     shift(c, integer_of_int32(i))),
-                               l_0))) = 1.0)))) }; void); void;
-             (i := (C_58:
-                   (safe_int32_of_integer_ (C_57:
-                                           ((add_int (integer_of_int32 !i)) (1))))));
-             !i end) in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end))) with
+                    (loop_4:
+                    begin
+                      while true do
+                      { invariant
+                          (((JC_<somenum>:
+                            (forall p_0:int.
+                             (forall q_0:int.
+                              ((lt_int(integer_of_int32(i), p_0)
+                               and (lt_int(p_0, integer_of_int32(n_2))
+                                   and (le_int((0), q_0)
+                                       and lt_int(q_0, integer_of_int32(n_2))))) ->
+                               (single_value(select(floatP_floatM_float_xM_7,
+                                             shift(select(float_xP_float_xM_result_3,
+                                                   shift(c, p_0)),
+                                             q_0))) = single_value(select(floatP_floatM_float_xM_7,
+                                                                   shift(
+                                                                   select(float_xP_float_xM_result_3,
+                                                                   shift(c,
+                                                                   p_0)),
+                                                                   q_0))))))))
+                           and ((JC_<somenum>:
+                                (forall p:int.
+                                 (forall q:int.
+                                  ((le_int((0), p)
+                                   and (lt_int(p, integer_of_int32(i))
+                                       and (le_int((0), q)
+                                           and lt_int(q,
+                                               integer_of_int32(n_2))))) ->
+                                   (single_value(select(floatP_floatM_float_xM_7,
+                                                 shift(select(float_xP_float_xM_result_3,
+                                                       shift(c, p)),
+                                                 q))) = single_value(
+                                                        select(floatP_floatM_float_xM_7,
+                                                        shift(select(float_xP_float_xM_result_3,
+                                                              shift(c, p)),
+                                                        q))))))))
+                               and (JC_<somenum>:
+                                   ((JC_<somenum>:
+                                    le_int((0), integer_of_int32(j)))
+                                   and ((JC_<somenum>:
+                                        le_int(integer_of_int32(j),
+                                        integer_of_int32(n_2)))
+                                       and (JC_<somenum>:
+                                           (forall l:int.
+                                            ((le_int((0), l)
+                                             and lt_int(l,
+                                                 integer_of_int32(j))) ->
+                                             (single_value(select(floatP_floatM_float_xM_7,
+                                                           shift(select(float_xP_float_xM_result_3,
+                                                                 shift(c,
+                                                                 integer_of_int32(i))),
+                                                           l))) = 1.0)))))))))
+                          and ((JC_<somenum>:
+                               not_assigns(floatP_float_xM_7_alloc_table,
+                               floatP_floatM_float_xM_7@loop_4,
+                               floatP_floatM_float_xM_7,
+                               pset_range(pset_deref(float_xP_float_xM_result_3,
+                                          pset_range(pset_singleton(c),
+                                          integer_of_int32(i),
+                                          integer_of_int32(i))),
+                               (0), sub_int(integer_of_int32(n_2), (1)))))
+                              and (JC_<somenum>:
+                                  not_assigns(floatP_float_xM_7_alloc_table,
+                                  floatP_floatM_float_xM_7@init,
+                                  floatP_floatM_float_xM_7, pset_empty)))) 
+                         }
+                       begin
+                         [ { } unit { true } ];
+                        try
+                         begin
+                           (let jessie_<somenum> =
+                           begin
+                             (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 n_2))
+                             then void
+                             else (raise (Goto_while_1_break_exc void)));
+                            (assert
+                            { (JC_<somenum>:
+                              ((JC_<somenum>: le_int((0), integer_of_int32(j)))
+                              and (JC_<somenum>:
+                                  lt_int(integer_of_int32(j),
+                                  integer_of_int32(n_2))))) }; void); void;
+                            (assert
+                            { (JC_<somenum>:
+                              ((JC_<somenum>:
+                               le_int(offset_min(floatP_float_xM_7_alloc_table,
+                                      select(float_xP_float_xM_result_3,
+                                      shift(c, integer_of_int32(i)))),
+                               integer_of_int32(j)))
+                              and (JC_<somenum>:
+                                  ge_int(offset_max(floatP_float_xM_7_alloc_table,
+                                         select(float_xP_float_xM_result_3,
+                                         shift(c, integer_of_int32(i)))),
+                                  integer_of_int32(j))))) }; void); void;
+                            (C_51:
+                            begin
+                              (let jessie_<somenum> =
+                              (let jessie_<somenum> =
+                              (C_46:
+                              ((single_of_double_safe nearest_even) (double_of_real_exact 1.0))) in
+                              (let jessie_<somenum> =
+                              (C_48:
+                              ((safe_acc_ float_xP_float_xM_result_3) 
+                               (C_47: ((shift !c) (integer_of_int32 !i))))) in
+                              (let jessie_<somenum> = (integer_of_int32 !j) in
+                              (let jessie_<somenum> =
+                              ((shift jessie_<somenum>) jessie_<somenum>) in
+                              (((safe_upd_ floatP_floatM_float_xM_7) jessie_<somenum>) jessie_<somenum>))))) in
+                              void);
+                             (assert
+                             { (JC_<somenum>:
+                               (single_value(select(floatP_floatM_float_xM_7,
+                                             shift(select(float_xP_float_xM_result_3,
+                                                   shift(c,
+                                                   integer_of_int32(i))),
+                                             integer_of_int32(j)))) = 1.0)) };
+                             void); void;
+                             (C_55:
+                             begin
+                               (j := (C_54:
+                                     (safe_int32_of_integer_ (C_53:
+                                                             ((add_int 
+                                                               (integer_of_int32 !j)) (1))))));
+                              !j end) end) end in void);
+                          (raise (Loop_continue_exc void)) end with
+                         Loop_continue_exc jessie_<somenum> -> void end end done;
+                     (raise (Goto_while_1_break_exc void)) end) end) with
+                   Goto_while_1_break_exc jessie_<somenum> ->
+                   (while_1_break: void) end;
+                  (assert
+                  { (JC_<somenum>:
+                    (forall l_0:int.
+                     ((le_int((0), l_0)
+                      and lt_int(l_0, integer_of_int32(n_2))) ->
+                      (single_value(select(floatP_floatM_float_xM_7,
+                                    shift(select(float_xP_float_xM_result_3,
+                                          shift(c, integer_of_int32(i))),
+                                    l_0))) = 1.0)))) }; void); void;
+                  (C_59:
+                  begin
+                    (i := (C_58:
+                          (safe_int32_of_integer_ (C_57:
+                                                  ((add_int (integer_of_int32 !i)) (1))))));
+                   !i end) end in void); (raise (Loop_continue_exc void)) end
+               with Loop_continue_exc jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) end) end) end with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !c); (raise Return) end) end)));
     absurd  end with Return -> !return end))
@@ -1104,9 +1129,6 @@ let ones_safety =
      (let i = ref (any_int32 void) in
      (let j = ref (any_int32 void) in
      try
-      (C_16:
-      (C_17:
-      (C_18:
       begin
         [ { } unit
           { (JC_<somenum>:
@@ -1140,181 +1162,205 @@ let ones_safety =
                                 select(float_xP_float_xM_result_3,
                                 shift(c, k_0))),
                          sub_int(integer_of_int32(n_2), (1)))))))))) } ];
-       void; (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       (loop_1:
-       while true do
-       { invariant (JC_<somenum>: true)
-         variant (JC_<somenum> : sub_int(integer_of_int32(m_0), integer_of_int32(i))) }
+       void;
+       (C_16:
+       begin
+         (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+        (C_17:
         begin
-          [ { } unit reads c,floatP_floatM_float_xM_7,i
-            { (JC_<somenum>:
-              ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-              and ((JC_<somenum>:
-                   le_int(integer_of_int32(i), integer_of_int32(m_0)))
-                  and (JC_<somenum>:
-                      (forall k_1:int.
-                       (forall q_1:int.
-                        ((le_int((0), k_1)
-                         and (lt_int(k_1, integer_of_int32(i))
-                             and (le_int((0), q_1)
-                                 and lt_int(q_1, integer_of_int32(n_2))))) ->
-                         (single_value(select(floatP_floatM_float_xM_7,
-                                       shift(select(float_xP_float_xM_result_3,
-                                             shift(c, k_1)),
-                                       q_1))) = 1.0)))))))) } ];
-         try
+          (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
+         (C_18:
+         begin
+           (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+          (loop_1:
           begin
-            (let jessie_<somenum> =
-            (C_59:
-            begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 m_0))
-              then void else (raise (Goto_while_0_break_exc void)));
-             [ { } unit reads i
-               { (JC_<somenum>:
-                 ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-                 and (JC_<somenum>:
-                     lt_int(integer_of_int32(i), integer_of_int32(m_0))))) } ];
-             void;
-             [ { } unit reads c,i
-               { (JC_<somenum>:
-                 ((JC_<somenum>:
-                  le_int(offset_min(floatP_float_xM_7_alloc_table,
-                         select(float_xP_float_xM_result_3,
-                         shift(c, integer_of_int32(i)))),
-                  (0)))
-                 and (JC_<somenum>:
-                     ge_int(offset_max(floatP_float_xM_7_alloc_table,
-                            select(float_xP_float_xM_result_3,
-                            shift(c, integer_of_int32(i)))),
-                     sub_int(integer_of_int32(n_2), (1)))))) } ]; void;
-             try
-              (C_31:
-              begin
-                (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
-               (loop_2:
-               while true do
-               { invariant (JC_<somenum>: true)
-                 variant (JC_<somenum> : sub_int(integer_of_int32(n_2),
-                                  integer_of_int32(j))) }
-                begin
-                  [ { } unit reads c,floatP_floatM_float_xM_7,i,j
-                    { ((JC_<somenum>:
-                       (forall p_0:int.
-                        (forall q_0:int.
-                         ((lt_int(integer_of_int32(i), p_0)
-                          and (lt_int(p_0, integer_of_int32(n_2))
-                              and (le_int((0), q_0)
-                                  and lt_int(q_0, integer_of_int32(n_2))))) ->
-                          (single_value(select(floatP_floatM_float_xM_7,
-                                        shift(select(float_xP_float_xM_result_3,
-                                              shift(c, p_0)),
-                                        q_0))) = single_value(select(floatP_floatM_float_xM_7,
-                                                              shift(select(float_xP_float_xM_result_3,
-                                                                    shift(c,
-                                                                    p_0)),
-                                                              q_0))))))))
-                      and ((JC_<somenum>:
-                           (forall p:int.
-                            (forall q:int.
-                             ((le_int((0), p)
-                              and (lt_int(p, integer_of_int32(i))
-                                  and (le_int((0), q)
-                                      and lt_int(q, integer_of_int32(n_2))))) ->
+            while true do
+            { invariant (JC_<somenum>: true)
+              variant (JC_<somenum> : sub_int(integer_of_int32(m_0),
+                               integer_of_int32(i))) }
+             begin
+               [ { } unit reads c,floatP_floatM_float_xM_7,i
+                 { (JC_<somenum>:
+                   ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                   and ((JC_<somenum>:
+                        le_int(integer_of_int32(i), integer_of_int32(m_0)))
+                       and (JC_<somenum>:
+                           (forall k_1:int.
+                            (forall q_1:int.
+                             ((le_int((0), k_1)
+                              and (lt_int(k_1, integer_of_int32(i))
+                                  and (le_int((0), q_1)
+                                      and lt_int(q_1, integer_of_int32(n_2))))) ->
                               (single_value(select(floatP_floatM_float_xM_7,
                                             shift(select(float_xP_float_xM_result_3,
-                                                  shift(c, p)),
-                                            q))) = single_value(select(floatP_floatM_float_xM_7,
-                                                                shift(
-                                                                select(float_xP_float_xM_result_3,
-                                                                shift(c, p)),
-                                                                q))))))))
-                          and (JC_<somenum>:
-                              ((JC_<somenum>: le_int((0), integer_of_int32(j)))
-                              and ((JC_<somenum>:
-                                   le_int(integer_of_int32(j),
-                                   integer_of_int32(n_2)))
-                                  and (JC_<somenum>:
-                                      (forall l:int.
-                                       ((le_int((0), l)
-                                        and lt_int(l, integer_of_int32(j))) ->
-                                        (single_value(select(floatP_floatM_float_xM_7,
-                                                      shift(select(float_xP_float_xM_result_3,
-                                                            shift(c,
-                                                            integer_of_int32(i))),
-                                                      l))) = 1.0))))))))) } ];
-                 try
-                  begin
-                    (let jessie_<somenum> =
-                    (C_51:
-                    (C_55:
-                    begin
-                      (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 n_2))
-                      then void else (raise (Goto_while_1_break_exc void)));
-                     [ { } unit reads j
-                       { (JC_<somenum>:
-                         ((JC_<somenum>: le_int((0), integer_of_int32(j)))
-                         and (JC_<somenum>:
-                             lt_int(integer_of_int32(j),
-                             integer_of_int32(n_2))))) } ]; void;
-                     [ { } unit reads c,i,j
-                       { (JC_<somenum>:
-                         ((JC_<somenum>:
-                          le_int(offset_min(floatP_float_xM_7_alloc_table,
+                                                  shift(c, k_1)),
+                                            q_1))) = 1.0)))))))) } ];
+              try
+               begin
+                 (let jessie_<somenum> =
+                 begin
+                   (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 m_0))
+                   then void else (raise (Goto_while_0_break_exc void)));
+                  [ { } unit reads i
+                    { (JC_<somenum>:
+                      ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                      and (JC_<somenum>:
+                          lt_int(integer_of_int32(i), integer_of_int32(m_0))))) } ];
+                  void;
+                  [ { } unit reads c,i
+                    { (JC_<somenum>:
+                      ((JC_<somenum>:
+                       le_int(offset_min(floatP_float_xM_7_alloc_table,
+                              select(float_xP_float_xM_result_3,
+                              shift(c, integer_of_int32(i)))),
+                       (0)))
+                      and (JC_<somenum>:
+                          ge_int(offset_max(floatP_float_xM_7_alloc_table,
                                  select(float_xP_float_xM_result_3,
                                  shift(c, integer_of_int32(i)))),
-                          integer_of_int32(j)))
-                         and (JC_<somenum>:
-                             ge_int(offset_max(floatP_float_xM_7_alloc_table,
-                                    select(float_xP_float_xM_result_3,
-                                    shift(c, integer_of_int32(i)))),
-                             integer_of_int32(j))))) } ]; void;
-                     (let jessie_<somenum> =
-                     (let jessie_<somenum> =
-                     (C_46:
-                     (JC_<somenum>:
-                     ((single_of_double nearest_even) (double_of_real_exact 1.0)))) in
-                     (let jessie_<somenum> =
-                     (C_48:
-                     (JC_<somenum>:
-                     ((((offset_acc_ float_xP_result_3_alloc_table) float_xP_float_xM_result_3) !c) 
-                      (integer_of_int32 !i)))) in
-                     (let jessie_<somenum> = (integer_of_int32 !j) in
-                     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-                     (JC_<somenum>:
-                     (((((offset_upd_ floatP_float_xM_7_alloc_table) floatP_floatM_float_xM_7) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+                          sub_int(integer_of_int32(n_2), (1)))))) } ]; void;
+                  try
+                   (C_31:
+                   begin
+                     (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in
                      void);
-                     [ { } unit reads c,floatP_floatM_float_xM_7,i,j
-                       { (JC_<somenum>:
-                         (single_value(select(floatP_floatM_float_xM_7,
-                                       shift(select(float_xP_float_xM_result_3,
-                                             shift(c, integer_of_int32(i))),
-                                       integer_of_int32(j)))) = 1.0)) } ];
-                     void;
-                     (j := (C_54:
-                           (JC_<somenum>:
-                           (int32_of_integer_ (C_53:
-                                              ((add_int (integer_of_int32 !j)) (1)))))));
-                     !j end)) in void); (raise (Loop_continue_exc void)) end
-                  with Loop_continue_exc jessie_<somenum> -> void end end done);
-               (raise (Goto_while_1_break_exc void)) end) with
-              Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
-             [ { } unit reads c,floatP_floatM_float_xM_7,i
-               { (JC_<somenum>:
-                 (forall l_0:int.
-                  ((le_int((0), l_0) and lt_int(l_0, integer_of_int32(n_2))) ->
-                   (single_value(select(floatP_floatM_float_xM_7,
-                                 shift(select(float_xP_float_xM_result_3,
-                                       shift(c, integer_of_int32(i))),
-                                 l_0))) = 1.0)))) } ]; void;
-             (i := (C_58:
-                   (JC_<somenum>:
-                   (int32_of_integer_ (C_57:
-                                      ((add_int (integer_of_int32 !i)) (1)))))));
-             !i end) in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end))) with
+                    (loop_2:
+                    begin
+                      while true do
+                      { invariant (JC_<somenum>: true)
+                        variant (JC_<somenum> : sub_int(integer_of_int32(n_2),
+                                         integer_of_int32(j))) }
+                       begin
+                         [ { } unit reads c,floatP_floatM_float_xM_7,i,j
+                           { ((JC_<somenum>:
+                              (forall p_0:int.
+                               (forall q_0:int.
+                                ((lt_int(integer_of_int32(i), p_0)
+                                 and (lt_int(p_0, integer_of_int32(n_2))
+                                     and (le_int((0), q_0)
+                                         and lt_int(q_0,
+                                             integer_of_int32(n_2))))) ->
+                                 (single_value(select(floatP_floatM_float_xM_7,
+                                               shift(select(float_xP_float_xM_result_3,
+                                                     shift(c, p_0)),
+                                               q_0))) = single_value(
+                                                        select(floatP_floatM_float_xM_7,
+                                                        shift(select(float_xP_float_xM_result_3,
+                                                              shift(c, p_0)),
+                                                        q_0))))))))
+                             and ((JC_<somenum>:
+                                  (forall p:int.
+                                   (forall q:int.
+                                    ((le_int((0), p)
+                                     and (lt_int(p, integer_of_int32(i))
+                                         and (le_int((0), q)
+                                             and lt_int(q,
+                                                 integer_of_int32(n_2))))) ->
+                                     (single_value(select(floatP_floatM_float_xM_7,
+                                                   shift(select(float_xP_float_xM_result_3,
+                                                         shift(c, p)),
+                                                   q))) = single_value(
+                                                          select(floatP_floatM_float_xM_7,
+                                                          shift(select(float_xP_float_xM_result_3,
+                                                                shift(c, p)),
+                                                          q))))))))
+                                 and (JC_<somenum>:
+                                     ((JC_<somenum>:
+                                      le_int((0), integer_of_int32(j)))
+                                     and ((JC_<somenum>:
+                                          le_int(integer_of_int32(j),
+                                          integer_of_int32(n_2)))
+                                         and (JC_<somenum>:
+                                             (forall l:int.
+                                              ((le_int((0), l)
+                                               and lt_int(l,
+                                                   integer_of_int32(j))) ->
+                                               (single_value(select(floatP_floatM_float_xM_7,
+                                                             shift(select(float_xP_float_xM_result_3,
+                                                                   shift(c,
+                                                                   integer_of_int32(i))),
+                                                             l))) = 1.0))))))))) } ];
+                        try
+                         begin
+                           (let jessie_<somenum> =
+                           begin
+                             (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 n_2))
+                             then void
+                             else (raise (Goto_while_1_break_exc void)));
+                            [ { } unit reads j
+                              { (JC_<somenum>:
+                                ((JC_<somenum>: le_int((0), integer_of_int32(j)))
+                                and (JC_<somenum>:
+                                    lt_int(integer_of_int32(j),
+                                    integer_of_int32(n_2))))) } ]; void;
+                            [ { } unit reads c,i,j
+                              { (JC_<somenum>:
+                                ((JC_<somenum>:
+                                 le_int(offset_min(floatP_float_xM_7_alloc_table,
+                                        select(float_xP_float_xM_result_3,
+                                        shift(c, integer_of_int32(i)))),
+                                 integer_of_int32(j)))
+                                and (JC_<somenum>:
+                                    ge_int(offset_max(floatP_float_xM_7_alloc_table,
+                                           select(float_xP_float_xM_result_3,
+                                           shift(c, integer_of_int32(i)))),
+                                    integer_of_int32(j))))) } ]; void;
+                            (C_51:
+                            begin
+                              (let jessie_<somenum> =
+                              (let jessie_<somenum> =
+                              (C_46:
+                              (JC_<somenum>:
+                              ((single_of_double nearest_even) (double_of_real_exact 1.0)))) in
+                              (let jessie_<somenum> =
+                              (C_48:
+                              (JC_<somenum>:
+                              ((((offset_acc_ float_xP_result_3_alloc_table) float_xP_float_xM_result_3) !c) 
+                               (integer_of_int32 !i)))) in
+                              (let jessie_<somenum> = (integer_of_int32 !j) in
+                              (let jessie_<somenum> =
+                              ((shift jessie_<somenum>) jessie_<somenum>) in
+                              (JC_<somenum>:
+                              (((((offset_upd_ floatP_float_xM_7_alloc_table) floatP_floatM_float_xM_7) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+                              void);
+                             [ { } unit reads c,floatP_floatM_float_xM_7,i,j
+                               { (JC_<somenum>:
+                                 (single_value(select(floatP_floatM_float_xM_7,
+                                               shift(select(float_xP_float_xM_result_3,
+                                                     shift(c,
+                                                     integer_of_int32(i))),
+                                               integer_of_int32(j)))) = 1.0)) } ];
+                             void;
+                             (C_55:
+                             begin
+                               (j := (C_54:
+                                     (JC_<somenum>:
+                                     (int32_of_integer_ (C_53:
+                                                        ((add_int (integer_of_int32 !j)) (1)))))));
+                              !j end) end) end in void);
+                          (raise (Loop_continue_exc void)) end with
+                         Loop_continue_exc jessie_<somenum> -> void end end done;
+                     (raise (Goto_while_1_break_exc void)) end) end) with
+                   Goto_while_1_break_exc jessie_<somenum> ->
+                   (while_1_break: void) end;
+                  [ { } unit reads c,floatP_floatM_float_xM_7,i
+                    { (JC_<somenum>:
+                      (forall l_0:int.
+                       ((le_int((0), l_0)
+                        and lt_int(l_0, integer_of_int32(n_2))) ->
+                        (single_value(select(floatP_floatM_float_xM_7,
+                                      shift(select(float_xP_float_xM_result_3,
+                                            shift(c, integer_of_int32(i))),
+                                      l_0))) = 1.0)))) } ]; void;
+                  (C_59:
+                  begin
+                    (i := (C_58:
+                          (JC_<somenum>:
+                          (int32_of_integer_ (C_57:
+                                             ((add_int (integer_of_int32 !i)) (1)))))));
+                   !i end) end in void); (raise (Loop_continue_exc void)) end
+               with Loop_continue_exc jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) end) end) end with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !c); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }

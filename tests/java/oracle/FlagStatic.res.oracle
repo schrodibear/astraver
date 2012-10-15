@@ -3972,10 +3972,10 @@ let FlagStatic_swap_safety =
       (let jessie_<num> = t_0 in
       (let jessie_<num> = j_0 in
       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (JC_106:
       begin
-        (JC_106:
-        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>));
-       jessie_<num> end))))) end)) in void); (raise Return) end with Return ->
+        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>);
+       jessie_<num> end)))))) end)) in void); (raise Return) end with Return ->
    void end) { true }
 
 let cons_FlagStatic_ensures_default =

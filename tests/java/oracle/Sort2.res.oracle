@@ -3484,10 +3484,10 @@ let Sort_swap_safety =
       (let jessie_<num> = t in
       (let jessie_<num> = j_1 in
       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (JC_64:
       begin
-        (JC_64:
-        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>));
-       jessie_<num> end))))) end)) in void); (raise Return) end with Return ->
+        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>);
+       jessie_<num> end)))))) end)) in void); (raise Return) end with Return ->
    void end) { true }
 
 let cons_Object_ensures_default =

@@ -404,31 +404,33 @@ let poly_ensures_default =
      (let tmp = ref (any_double void) in
      (let __retres = ref (any_double void) in
      (C_3:
-     (C_5:
-     (C_9:
      begin
        (let jessie_<somenum> =
        (tmp := (C_2:
                (let jessie_<somenum> = (double_of_real_exact 2.0) in
                (JC_<somenum>: (sqrt jessie_<somenum>))))) in void);
-      (let jessie_<somenum> =
-      (x_0_0 := (C_4:
-                (JC_<somenum>:
-                (((div_double_safe nearest_even) !tmp) (double_of_real_exact 2.0))))) in
-      void);
-      (let jessie_<somenum> =
-      (__retres := (C_8:
-                   (JC_<somenum>:
-                   (((sub_double_safe nearest_even) (C_7:
-                                                    (JC_<somenum>:
-                                                    (((mul_double_safe nearest_even) 
-                                                      (C_6:
-                                                      (JC_<somenum>:
-                                                      (((mul_double_safe nearest_even) 
-                                                        (double_of_real_exact 2.0)) !x_0_0)))) !x_0_0)))) 
-                    (double_of_real_exact 1.0))))) in void);
-      (return := !__retres); (raise Return) end)))))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: (double_value(result) = 0x1p-52)) }
+      (C_5:
+      begin
+        (let jessie_<somenum> =
+        (x_0_0 := (C_4:
+                  (JC_<somenum>:
+                  (((div_double_safe nearest_even) !tmp) (double_of_real_exact 2.0))))) in
+        void);
+       (C_9:
+       begin
+         (let jessie_<somenum> =
+         (__retres := (C_8:
+                      (JC_<somenum>:
+                      (((sub_double_safe nearest_even) (C_7:
+                                                       (JC_<somenum>:
+                                                       (((mul_double_safe nearest_even) 
+                                                         (C_6:
+                                                         (JC_<somenum>:
+                                                         (((mul_double_safe nearest_even) 
+                                                           (double_of_real_exact 2.0)) !x_0_0)))) !x_0_0)))) 
+                       (double_of_real_exact 1.0))))) in void);
+        (return := !__retres); (raise Return) end) end) end)))); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: (double_value(result) = 0x1p-52)) }
 
 let poly_safety =
  fun (tt : unit) ->
@@ -441,31 +443,33 @@ let poly_safety =
      (let tmp = ref (any_double void) in
      (let __retres = ref (any_double void) in
      (C_3:
-     (C_5:
-     (C_9:
      begin
        (let jessie_<somenum> =
        (tmp := (C_2:
                (let jessie_<somenum> = (double_of_real_exact 2.0) in
                (JC_<somenum>: (sqrt_requires jessie_<somenum>))))) in void);
-      (let jessie_<somenum> =
-      (x_0_0 := (C_4:
-                (JC_<somenum>:
-                (((div_double nearest_even) !tmp) (double_of_real_exact 2.0))))) in
-      void);
-      (let jessie_<somenum> =
-      (__retres := (C_8:
-                   (JC_<somenum>:
-                   (((sub_double nearest_even) (C_7:
-                                               (JC_<somenum>:
-                                               (((mul_double nearest_even) 
-                                                 (C_6:
-                                                 (JC_<somenum>:
-                                                 (((mul_double nearest_even) 
-                                                   (double_of_real_exact 2.0)) !x_0_0)))) !x_0_0)))) 
-                    (double_of_real_exact 1.0))))) in void);
-      (return := !__retres); (raise Return) end)))))); absurd  end with
-   Return -> !return end)) { true }
+      (C_5:
+      begin
+        (let jessie_<somenum> =
+        (x_0_0 := (C_4:
+                  (JC_<somenum>:
+                  (((div_double nearest_even) !tmp) (double_of_real_exact 2.0))))) in
+        void);
+       (C_9:
+       begin
+         (let jessie_<somenum> =
+         (__retres := (C_8:
+                      (JC_<somenum>:
+                      (((sub_double nearest_even) (C_7:
+                                                  (JC_<somenum>:
+                                                  (((mul_double nearest_even) 
+                                                    (C_6:
+                                                    (JC_<somenum>:
+                                                    (((mul_double nearest_even) 
+                                                      (double_of_real_exact 2.0)) !x_0_0)))) !x_0_0)))) 
+                       (double_of_real_exact 1.0))))) in void);
+        (return := !__retres); (raise Return) end) end) end)))); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test2_floats.jessie --quiet -f test2_floats.makefile project

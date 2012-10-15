@@ -445,14 +445,15 @@ let g_ensures_default =
        (if ((safe_neq_pointer !tmp_1) null)
        then
         (C_6:
-        (C_8:
         begin
           (let jessie_<somenum> = (tmp := (C_5: (JC_<somenum>: (ff void)))) in void);
          (if ((safe_neq_pointer !tmp) null)
          then (raise (Return_label_exc void)) else void);
-         (let jessie_<somenum> = (tmp_0 := (C_7: (JC_<somenum>: (ff void)))) in void);
-         (if ((safe_neq_pointer !tmp_0) null) then void
-         else (raise (Return_label_exc void))) end)) else void);
+         (C_8:
+         begin
+           (let jessie_<somenum> = (tmp_0 := (C_7: (JC_<somenum>: (ff void)))) in void);
+          (if ((safe_neq_pointer !tmp_0) null) then void
+          else (raise (Return_label_exc void))) end) end) else void);
        (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end))); (raise Return) end with
    Return -> void end) { (JC_<somenum>: true) }
@@ -474,16 +475,17 @@ let g_safety =
        (if ((neq_pointer !tmp_1) null)
        then
         (C_6:
-        (C_8:
         begin
           (let jessie_<somenum> = (tmp := (C_5: (JC_<somenum>: (ff_requires void)))) in
           void);
          (if ((neq_pointer !tmp) null) then (raise (Return_label_exc void))
          else void);
-         (let jessie_<somenum> = (tmp_0 := (C_7: (JC_<somenum>: (ff_requires void)))) in
-         void);
-         (if ((neq_pointer !tmp_0) null) then void
-         else (raise (Return_label_exc void))) end)) else void);
+         (C_8:
+         begin
+           (let jessie_<somenum> = (tmp_0 := (C_7: (JC_<somenum>: (ff_requires void)))) in
+           void);
+          (if ((neq_pointer !tmp_0) null) then void
+          else (raise (Return_label_exc void))) end) end) else void);
        (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end))); (raise Return) end with
    Return -> void end) { true }
@@ -504,14 +506,15 @@ let h_ensures_default =
        (if ((safe_neq_pointer !tmp_1_0) null)
        then
         (C_13:
-        (C_15:
         begin
           (let jessie_<somenum> = (tmp_0_0 := (C_12: (JC_<somenum>: (f void)))) in void);
          (if ((safe_neq_pointer !tmp_0_0) null)
          then (raise (Return_label_exc void)) else void);
-         (let jessie_<somenum> = (tmp_0_1 := (C_14: (JC_<somenum>: (f void)))) in void);
-         (if ((safe_neq_pointer !tmp_0_1) null) then void
-         else (raise (Return_label_exc void))) end)) else void);
+         (C_15:
+         begin
+           (let jessie_<somenum> = (tmp_0_1 := (C_14: (JC_<somenum>: (f void)))) in void);
+          (if ((safe_neq_pointer !tmp_0_1) null) then void
+          else (raise (Return_label_exc void))) end) end) else void);
        (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end))); (raise Return) end with
    Return -> void end) { (JC_<somenum>: true) }
@@ -533,16 +536,17 @@ let h_safety =
        (if ((neq_pointer !tmp_1_0) null)
        then
         (C_13:
-        (C_15:
         begin
           (let jessie_<somenum> = (tmp_0_0 := (C_12: (JC_<somenum>: (f_requires void)))) in
           void);
          (if ((neq_pointer !tmp_0_0) null)
          then (raise (Return_label_exc void)) else void);
-         (let jessie_<somenum> = (tmp_0_1 := (C_14: (JC_<somenum>: (f_requires void)))) in
-         void);
-         (if ((neq_pointer !tmp_0_1) null) then void
-         else (raise (Return_label_exc void))) end)) else void);
+         (C_15:
+         begin
+           (let jessie_<somenum> =
+           (tmp_0_1 := (C_14: (JC_<somenum>: (f_requires void)))) in void);
+          (if ((neq_pointer !tmp_0_1) null) then void
+          else (raise (Return_label_exc void))) end) end) else void);
        (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end))); (raise Return) end with
    Return -> void end) { true }
@@ -555,17 +559,17 @@ why --project [...] why/varname.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/varname_po4.why">
-      <location file = "why/varname.why" line = "426" begin = "12" end = "39"/>
+      <location file = "why/varname.why" line = "429" begin = "12" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/varname_po5.why">
-      <location file = "why/varname.why" line = "433" begin = "14" end = "41"/>
+      <location file = "why/varname.why" line = "435" begin = "14" end = "41"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/varname_po6.why">
-      <location file = "why/varname.why" line = "437" begin = "14" end = "41"/>
+      <location file = "why/varname.why" line = "441" begin = "15" end = "42"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -575,7 +579,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/varname_po1.why">
-      <location file = "why/varname.why" line = "367" begin = "12" end = "37"/>
+      <location file = "why/varname.why" line = "368" begin = "12" end = "37"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -585,7 +589,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/varname_po3.why">
-      <location file = "why/varname.why" line = "378" begin = "14" end = "39"/>
+      <location file = "why/varname.why" line = "380" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

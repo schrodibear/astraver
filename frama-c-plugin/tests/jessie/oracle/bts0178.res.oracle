@@ -606,18 +606,21 @@ let g_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      (C_2:
-     (C_5:
-     (C_7:
      begin
        (let jessie_<somenum> = (tmp := (C_1: ((safe_acc_ !intP_intM_j_1) j))) in
        void);
-      (let jessie_<somenum> = (C_3: ((safe_acc_ !intP_intM_k_2) k)) in
-      (let jessie_<somenum> = j in
-      (((safe_upd_ intP_intM_j_1) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = !tmp in
-      (let jessie_<somenum> = k in
-      (((safe_upd_ intP_intM_k_2) jessie_<somenum>) jessie_<somenum>))); (raise Return) end))));
-    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
+      (C_5:
+      begin
+        (let jessie_<somenum> = (C_3: ((safe_acc_ !intP_intM_k_2) k)) in
+        (let jessie_<somenum> = j in
+        (((safe_upd_ intP_intM_j_1) jessie_<somenum>) jessie_<somenum>)));
+       (C_7:
+       begin
+         (let jessie_<somenum> = !tmp in
+         (let jessie_<somenum> = k in
+         (((safe_upd_ intP_intM_k_2) jessie_<somenum>) jessie_<somenum>))); (raise Return)
+       end) end) end)); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let g_safety =
  fun (j : intP pointer) (k : intP pointer) (intP_intM_j_1 : (intP, int32) memory ref) (intP_intM_k_2 : (intP, int32) memory ref) (intP_j_1_alloc_table : intP alloc_table) (intP_k_2_alloc_table : intP alloc_table) ->
@@ -627,24 +630,26 @@ let g_safety =
    begin
      (let tmp = ref (any_int32 void) in
      (C_2:
-     (C_5:
-     (C_7:
      begin
        (let jessie_<somenum> =
        (tmp := (C_1:
                (JC_<somenum>: (((acc_ intP_j_1_alloc_table) !intP_intM_j_1) j)))) in
        void);
-      (let jessie_<somenum> =
-      (C_3: (JC_<somenum>: (((acc_ intP_k_2_alloc_table) !intP_intM_k_2) k))) in
-      (let jessie_<somenum> = j in
-      (JC_<somenum>:
-      ((((upd_ intP_j_1_alloc_table) intP_intM_j_1) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = !tmp in
-      (let jessie_<somenum> = k in
-      (JC_<somenum>:
-      ((((upd_ intP_k_2_alloc_table) intP_intM_k_2) jessie_<somenum>) jessie_<somenum>))));
-      (raise Return) end)))); (raise Return) end with Return -> void end)
-  { true }
+      (C_5:
+      begin
+        (let jessie_<somenum> =
+        (C_3: (JC_<somenum>: (((acc_ intP_k_2_alloc_table) !intP_intM_k_2) k))) in
+        (let jessie_<somenum> = j in
+        (JC_<somenum>:
+        ((((upd_ intP_j_1_alloc_table) intP_intM_j_1) jessie_<somenum>) jessie_<somenum>))));
+       (C_7:
+       begin
+         (let jessie_<somenum> = !tmp in
+         (let jessie_<somenum> = k in
+         (JC_<somenum>:
+         ((((upd_ intP_k_2_alloc_table) intP_intM_k_2) jessie_<somenum>) jessie_<somenum>))));
+        (raise Return) end) end) end)); (raise Return) end with Return ->
+   void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0178.jessie --quiet -f bts0178.makefile project
