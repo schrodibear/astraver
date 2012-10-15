@@ -229,6 +229,9 @@ let reset_current_behavior () = current_behavior := None
 let get_current_behavior () =
   match !current_behavior with None -> assert false | Some behav -> behav
 let safety_checking () = get_current_behavior () = "safety"
+let variant_checking () =
+  let behv = get_current_behavior () in
+  behv = "safety" || behv = "variant"
 
 let is_current_behavior id = id = get_current_behavior ()
 

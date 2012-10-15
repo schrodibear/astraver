@@ -2979,7 +2979,7 @@ and expr e =
 	(* loop variant *)
 	let loop_variant =
           match la.jc_loop_variant with
-            | Some (t,r) when safety_checking () &&
+            | Some (t,r) when variant_checking () &&
                 !Jc_options.termination_policy <> TPnever ->
 		let variant =
 		  named_term
@@ -2994,7 +2994,7 @@ and expr e =
                   | Some id -> variant, Some id.jc_logic_info_name
                 in
                 Some (variant,r)
-            | None when safety_checking () &&
+            | None when variant_checking () &&
                 !Jc_options.termination_policy = TPalways ->
                 eprintf
                   "Warning, generating a dummy variant for loop. \
@@ -3902,8 +3902,11 @@ let tr_fun f funpos spec body acc =
 
           (* safety behavior *)
 	  let acc =
-	    if Jc_options.verify_behavior "safety" then
-              let safety_body = wrap_body f spec "safety" body in
+	    if Jc_options.verify_behavior "safety" ||
+               Jc_options.verify_behavior "variant" then
+              let behav = if Jc_options.verify_behavior "safety"
+                then "safety" else "variant" in
+              let safety_body = wrap_body f spec behav body in
               let newid = f.jc_fun_info_name ^ "_safety" in
               reg_decl
 		~out_mark:newid

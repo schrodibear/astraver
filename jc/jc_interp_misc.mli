@@ -67,6 +67,8 @@ val logic_variant_of_bitvector : Jc_env.root_info -> string
 
 val safety_checking : unit -> bool
 
+val variant_checking : unit -> bool
+
 val in_current_behavior : < name : string; .. > list -> bool
 
 val in_default_behavior : < name : string; .. > list -> bool

@@ -137,7 +137,7 @@ let _ =
 	"-locs", Arg.String (fun f -> pos_files := f :: !pos_files),
 	  "  <f> reads source locations from file f" ;
         "-behavior", Arg.String (fun s -> behavior := s),
-	  "  verify only specified behavior (safety, default or user-defined behavior)";
+	  "  verify only specified behavior (safety, variant, default or user-defined behavior)";
 
         "-why3ml", Arg.Set why3_backend,
           "  (experimental) produce a program in why3ml syntax" ;
