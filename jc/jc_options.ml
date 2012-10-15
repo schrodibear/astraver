@@ -85,7 +85,7 @@ let why_opt = ref ""
 let verify_all_offsets = ref false
 let verify_invariants_only = ref false
 let verify = ref []
-let behavior = ref ""
+let behavior = ref []
 
 let why3_backend = ref false
 
@@ -136,7 +136,7 @@ let _ =
           "  debugging mode";
 	"-locs", Arg.String (fun f -> pos_files := f :: !pos_files),
 	  "  <f> reads source locations from file f" ;
-        "-behavior", Arg.String (fun s -> behavior := s),
+        "-behavior", Arg.String (fun s -> behavior := s::!behavior),
 	  "  verify only specified behavior (safety, variant, default or user-defined behavior)";
 
         "-why3ml", Arg.Set why3_backend,
@@ -221,7 +221,7 @@ let gen_frame_rule_with_ft = !gen_frame_rule_with_ft
 let () = if gen_frame_rule_with_ft then libfiles := "mybag.why"::!libfiles
 
 let verify_behavior s =
-  behavior = "" || behavior = s
+  behavior = [] || List.mem s behavior
 
 let set_int_model im =
   if im = IMmodulo && trust_ai then

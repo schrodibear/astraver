@@ -57,7 +57,7 @@ val why_opt : string
 val verify_all_offsets : bool
 val verify_invariants_only : bool
 val verify : string list
-val behavior : string
+val behavior : string list
 
 val interprocedural : bool
 val main : string
