@@ -156,7 +156,7 @@ type expr_node =
       *)
   | Let of string * expr * expr
   | Let_ref of string * expr * expr
-  | App of expr * expr
+  | App of expr * expr * why_type option
   | Raise of string * expr option
   | Try of expr * string * string option * expr
   | Fun of (string * why_type) list *
@@ -197,9 +197,9 @@ val make_and_expr : expr -> expr -> expr
 
 *)
 
-val make_app : string -> expr list -> expr
-val make_logic_app : string -> expr list -> expr
-val make_app_e : expr -> expr list -> expr
+val make_app : ?ty:why_type -> string -> expr list -> expr
+val make_logic_app : ?ty:why_type -> string -> expr list -> expr
+val make_app_e : ?ty:why_type -> expr -> expr list -> expr
 
 (*
 

@@ -371,7 +371,7 @@ let tr_var_base_type v =
 let tr_var_type v =
   tr_type ~region:v.jc_var_info_region v.jc_var_info_type
 
-let any_value t =
+let any_value region t =
   match t with
     | JCTnative ty ->
         begin match ty with
@@ -383,7 +383,7 @@ let any_value t =
 	  | Tstring -> make_app "any_string" [void]
         end
     | JCTnull
-    | JCTpointer _ -> make_app "any_pointer" [void]
+    | JCTpointer _ -> make_app ~ty:(tr_type ~region t) "any_pointer" [void]
     | JCTenum ri -> make_app (fun_any_enum ri) [void]
     | JCTlogic _ as ty ->
         let t =
@@ -428,7 +428,7 @@ let any_value' ty' =
     else if is_memory_type ty' then "any_memory"
     else assert false
   in
-  make_app anyfun [void]
+  make_app ~ty:(Base_type ty') anyfun [void]
 
 
 (******************************************************************************)

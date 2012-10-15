@@ -2306,7 +2306,7 @@ and expr e =
         let ty = native_operator_type op in
         let mk = match fst op with
           | `Bdiv | `Bmod -> make_guarded_app ~mark:e#mark DivByZero e#pos
-          | _ -> make_app
+          | _ -> make_app ?ty:None
 	in
         mk (bin_op op)
           [coerce ~check_int_overflow:(safety_checking())
@@ -2738,7 +2738,7 @@ and expr e =
     | JCElet(v,e1,e2) ->
         let e1' = match e1 with
           | None ->
-              any_value v.jc_var_info_type
+              any_value v.jc_var_info_region v.jc_var_info_type
           | Some e1 ->
 	      value_assigned e#mark e#pos v.jc_var_info_type e1
 	in
@@ -3247,8 +3247,8 @@ let rec finalize e =
         {e with expr_node = Try(finalize e1, exc, arg, finalize e2)}
     | Raise (id, Some e1) ->
         {e with expr_node = Raise(id, Some(finalize e1))}
-    | App (e1, e2) ->
-        {e with expr_node = App(finalize e1, finalize e2)}
+    | App (e1, e2, ty) ->
+        {e with expr_node = App(finalize e1, finalize e2, ty)}
     | Let_ref (x, e1, e2) ->
         {e with expr_node = Let_ref(x, finalize e1, finalize e2)}
     | Let (x, e1, e2) ->
@@ -3877,7 +3877,9 @@ let tr_fun f funpos spec body acc =
 		  mk_expr (Try(append body (mk_expr (Raise(jessie_return_exception,None))),
 		               jessie_return_exception, None, void))
 	      | _ ->
-		  let e' = any_value f.jc_fun_info_result.jc_var_info_type in
+                  let result = f.jc_fun_info_result in
+		  let e' = any_value
+                    result.jc_var_info_region result.jc_var_info_type in
 		  mk_expr (Let_ref(jessie_return_variable, e',
 			           mk_expr (Try(append body (mk_expr Absurd),
 			                        jessie_return_exception, None,

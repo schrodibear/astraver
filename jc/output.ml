@@ -933,7 +933,8 @@ type expr_node =
       (int * bool * bool * string) list
   | Let of string * expr * expr
   | Let_ref of string * expr * expr
-  | App of expr * expr
+ (* optionnaly give the return type to enforce *)
+  | App of expr * expr * why_type option
   | Raise of string * expr option
   | Try of expr * string * string option * expr
   | Fun of (string * why_type) list *
@@ -982,7 +983,7 @@ let rec iter_expr f e =
         assert false
     | Let(_id,e1,e2) -> iter_expr f e1; iter_expr f e2
     | Let_ref(_id,e1,e2) -> iter_expr f e1; iter_expr f e2
-    | App(e1,e2) -> iter_expr f e1; iter_expr f e2
+    | App(e1,e2,_) -> iter_expr f e1; iter_expr f e2
     | Raise (_, None) -> ()
     | Raise(_id,Some e) -> iter_expr f e
     | Try(e1,_exc,_id,e2) -> iter_expr f e1; iter_expr f e2
@@ -1074,13 +1075,16 @@ let rec fprintf_expr_node form e =
     | Let_ref(id,e1,e2) ->
         fprintf form "@[<hov 0>(let %s =@ ref %a in@ %a)@]" (why3id_if id)
 	  fprintf_expr e1 fprintf_expr e2
-    | App({expr_node = App({expr_node = Var id},e1)},e2)
+    | App({expr_node = App({expr_node = Var id},e1,_)},e2,_)
         when !why3syntax && id="eq_int_" ->
 	fprintf form "@[<hov 1>(%a = %a)@]" fprintf_expr e1 fprintf_expr e2
-    | App({expr_node = App({expr_node = Var id},e1)},e2)
+    | App({expr_node = App({expr_node = Var id},e1,_)},e2,_)
         when !why3syntax && id="neq_int_" ->
 	fprintf form "@[<hov 1>(%a <> %a)@]" fprintf_expr e1 fprintf_expr e2
-    | App(e1,e2) ->
+    | App(e1,e2,ty) when !why3syntax ->
+	fprintf form "@[<hov 1>(%a %a%a)@]" fprintf_expr e1 fprintf_expr e2
+          (Pp.print_option (fprintf_type ~need_colon:true false)) ty
+    | App(e1,e2,_) ->
 	fprintf form "@[<hov 1>(%a %a)@]" fprintf_expr e1 fprintf_expr e2
     | Raise(id,None) ->
 	fprintf form "@[<hov 1>(raise@ %s)@]" id
@@ -1254,18 +1258,31 @@ let make_and_expr a1 a2 =
 let make_app_rec ~logic f l =
   let rec make_rec accu = function
     | [] -> accu
-    | e::r -> make_rec (mk_expr (App(accu,e))) r
+    | e::r -> make_rec (mk_expr (App(accu,e,None))) r
   in
   match l with
     | [] -> if logic then make_rec f [] else make_rec f [void]
     | l -> make_rec f l
 ;;
 
-let make_app id l = make_app_rec ~logic:false (mk_var id) l
+let app_add_ty ?ty e =
+  match ty,e.expr_node with
+  | None,_ -> e
+  | Some _, App(e1,e2,None) -> { e with expr_node = App(e1,e2,ty)}
+  | Some _, _ ->
+    invalid_arg "Output.app_add_ty: type coercion for constant. To correct."
 
-let make_logic_app id l = make_app_rec ~logic:true (mk_var id) l
+let make_app ?ty id l =
+  let app = make_app_rec ~logic:false (mk_var id) l in
+  app_add_ty ?ty app
 
-let make_app_e = make_app_rec ~logic:false
+let make_logic_app ?ty id l =
+  let app = make_app_rec ~logic:true (mk_var id) l in
+  app_add_ty ?ty app
+
+let make_app_e ?ty e l =
+  let app = make_app_rec ~logic:false e l in
+  app_add_ty ?ty app
 
 let make_while cond inv var e =
   let body =

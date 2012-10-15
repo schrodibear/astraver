@@ -182,7 +182,7 @@ val ref_term :
     Jc_env.label -> Jc_env.label -> Jc_fenv.term -> Output.term)
   ref
 
-val any_value : Jc_env.jc_type -> Output.expr
+val any_value : Jc_env.region -> Jc_env.jc_type -> Output.expr
 
 val eq_of_enum : Jc_env.enum_info -> string
 
