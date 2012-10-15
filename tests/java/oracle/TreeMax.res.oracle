@@ -543,9 +543,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs TreeMax.loc
+USERWHYOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs TreeMax.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs TreeMax.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs TreeMax.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -690,13 +691,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: TreeMax.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: TreeMax.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: TreeMax.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
 
 -include TreeMax.depend
 

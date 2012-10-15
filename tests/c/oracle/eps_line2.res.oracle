@@ -423,9 +423,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs eps_line2.loc
+USERWHYOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs eps_line2.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs eps_line2.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs eps_line2.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_multi_rounding.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -570,13 +571,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: eps_line2.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: eps_line2.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: eps_line2.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
 
 -include eps_line2.depend
 
