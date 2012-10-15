@@ -183,10 +183,10 @@ behavior default:
       
       loop 
       behavior default:
-        invariant (C_6 : Sorted{Here}(t, 0, i));
+        invariant (C_4 : ((C_5 : (0 <= i)) && (C_6 : (i <= n_1))));
       behavior default:
-        invariant (C_2 : ((C_3 : (0 <= i)) && (C_4 : (i <= n_1))));
-      variant (C_5 : (n_1 - i));
+        invariant (C_3 : Sorted{Here}(t, 0, i));
+      variant (C_2 : (n_1 - i));
       while (true)
       {  
          {  (if (i < n_1) then () else 
@@ -305,20 +305,20 @@ end = 10
 
 [C_2]
 file = "HOME/tests/c/insertion_sort.c"
-line = 45
-begin = 21
-end = 32
+line = 47
+begin = 19
+end = 22
 
 [C_3]
 file = "HOME/tests/c/insertion_sort.c"
-line = 45
+line = 46
 begin = 21
-end = 27
+end = 34
 
 [C_4]
 file = "HOME/tests/c/insertion_sort.c"
 line = 45
-begin = 26
+begin = 21
 end = 32
 
 [C_20]
@@ -329,9 +329,9 @@ end = 16
 
 [C_5]
 file = "HOME/tests/c/insertion_sort.c"
-line = 47
-begin = 19
-end = 22
+line = 45
+begin = 21
+end = 27
 
 [C_21]
 file = "HOME/tests/c/insertion_sort.c"
@@ -341,9 +341,9 @@ end = 18
 
 [C_6]
 file = "HOME/tests/c/insertion_sort.c"
-line = 46
-begin = 21
-end = 34
+line = 45
+begin = 26
+end = 32
 
 [C_22]
 file = "HOME/tests/c/insertion_sort.c"
@@ -625,13 +625,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: insertion_sort.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: insertion_sort.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: insertion_sort.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include insertion_sort.depend
 
@@ -796,27 +796,27 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/c/insertion_sort.c"
+line = 46
+begin = 21
+end = 34
+
+[JC_14]
+file = "HOME/tests/c/insertion_sort.c"
 line = 45
 begin = 21
 end = 27
 
-[JC_14]
+[JC_15]
 file = "HOME/tests/c/insertion_sort.c"
 line = 45
 begin = 26
 end = 32
 
-[JC_15]
+[JC_16]
 file = "HOME/tests/c/insertion_sort.c"
 line = 45
 begin = 21
 end = 32
-
-[JC_16]
-file = "HOME/tests/c/insertion_sort.c"
-line = 46
-begin = 21
-end = 34
 
 [JC_17]
 file = "HOME/"
@@ -947,27 +947,27 @@ end = 22
 
 [JC_36]
 file = "HOME/tests/c/insertion_sort.c"
+line = 46
+begin = 21
+end = 34
+
+[JC_37]
+file = "HOME/tests/c/insertion_sort.c"
 line = 45
 begin = 21
 end = 27
 
-[JC_37]
+[JC_38]
 file = "HOME/tests/c/insertion_sort.c"
 line = 45
 begin = 26
 end = 32
 
-[JC_38]
+[JC_39]
 file = "HOME/tests/c/insertion_sort.c"
 line = 45
 begin = 21
 end = 32
-
-[JC_39]
-file = "HOME/tests/c/insertion_sort.c"
-line = 46
-begin = 21
-end = 34
 
 ========== file tests/c/insertion_sort.jessie/why/insertion_sort.why ==========
 type charP
@@ -1397,8 +1397,10 @@ let insert_sort_ensures_default =
           (loop_3:
           while true do
           { invariant
-              ((JC_38: ((JC_36: le_int((0), i)) and (JC_37: le_int(i, n_1))))
-              and (JC_39: Sorted(t, (0), i, intP_intM_t_4)))  }
+              ((JC_36: Sorted(t, (0), i, intP_intM_t_4))
+              and (JC_39:
+                  ((JC_37: le_int((0), i)) and (JC_38: le_int(i, n_1))))) 
+             }
            begin
              [ { } unit { true } ];
             try
@@ -1512,9 +1514,9 @@ let insert_sort_safety =
           { invariant (JC_18: true) variant (JC_35 : sub_int(n_1, i)) }
            begin
              [ { } unit reads i,intP_intM_t_4
-               { ((JC_15:
-                  ((JC_13: le_int((0), i)) and (JC_14: le_int(i, n_1))))
-                 and (JC_16: Sorted(t, (0), i, intP_intM_t_4))) } ];
+               { ((JC_13: Sorted(t, (0), i, intP_intM_t_4))
+                 and (JC_16:
+                     ((JC_14: le_int((0), i)) and (JC_15: le_int(i, n_1))))) } ];
             try
              begin
                (let jessie_<num> =
@@ -2896,13 +2898,15 @@ goal insert_sort_ensures_default_po_2:
   forall t:intP pointer.
   forall n_1:int.
   forall intP_t_4_alloc_table:intP alloc_table.
+  forall intP_intM_t_4:(intP,
+  int) memory.
   ("JC_7":
   (("JC_5": (offset_min(intP_t_4_alloc_table, t) <= 0)) and
    ("JC_6": (offset_max(intP_t_4_alloc_table, t) >= (n_1 - 1))))) ->
   (n_1 > 1) ->
   forall i:int.
   (i = 1) ->
-  ("JC_38": ("JC_36": (0 <= i)))
+  ("JC_36": Sorted(t, 0, i, intP_intM_t_4))
 
 goal insert_sort_ensures_default_po_3:
   forall t:intP pointer.
@@ -2914,21 +2918,19 @@ goal insert_sort_ensures_default_po_3:
   (n_1 > 1) ->
   forall i:int.
   (i = 1) ->
-  ("JC_38": ("JC_37": (i <= n_1)))
+  ("JC_39": ("JC_37": (0 <= i)))
 
 goal insert_sort_ensures_default_po_4:
   forall t:intP pointer.
   forall n_1:int.
   forall intP_t_4_alloc_table:intP alloc_table.
-  forall intP_intM_t_4:(intP,
-  int) memory.
   ("JC_7":
   (("JC_5": (offset_min(intP_t_4_alloc_table, t) <= 0)) and
    ("JC_6": (offset_max(intP_t_4_alloc_table, t) >= (n_1 - 1))))) ->
   (n_1 > 1) ->
   forall i:int.
   (i = 1) ->
-  ("JC_39": Sorted(t, 0, i, intP_intM_t_4))
+  ("JC_39": ("JC_38": (i <= n_1)))
 
 goal insert_sort_ensures_default_po_5:
   forall t:intP pointer.
@@ -2943,8 +2945,8 @@ goal insert_sort_ensures_default_po_5:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -2969,8 +2971,8 @@ goal insert_sort_ensures_default_po_6:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -2994,8 +2996,8 @@ goal insert_sort_ensures_default_po_7:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3018,8 +3020,8 @@ goal insert_sort_ensures_default_po_8:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3042,8 +3044,8 @@ goal insert_sort_ensures_default_po_9:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3070,7 +3072,7 @@ goal insert_sort_ensures_default_po_9:
   (intP_intM_t_4_2 = store(intP_intM_t_4_1, shift(t, j0), mv)) ->
   forall i1:int.
   (i1 = (i0 + 1)) ->
-  ("JC_38": ("JC_36": (0 <= i1)))
+  ("JC_36": Sorted(t, 0, i1, intP_intM_t_4_2))
 
 goal insert_sort_ensures_default_po_10:
   forall t:intP pointer.
@@ -3085,8 +3087,8 @@ goal insert_sort_ensures_default_po_10:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3113,7 +3115,7 @@ goal insert_sort_ensures_default_po_10:
   (intP_intM_t_4_2 = store(intP_intM_t_4_1, shift(t, j0), mv)) ->
   forall i1:int.
   (i1 = (i0 + 1)) ->
-  ("JC_38": ("JC_37": (i1 <= n_1)))
+  ("JC_39": ("JC_37": (0 <= i1)))
 
 goal insert_sort_ensures_default_po_11:
   forall t:intP pointer.
@@ -3128,8 +3130,8 @@ goal insert_sort_ensures_default_po_11:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3156,7 +3158,7 @@ goal insert_sort_ensures_default_po_11:
   (intP_intM_t_4_2 = store(intP_intM_t_4_1, shift(t, j0), mv)) ->
   forall i1:int.
   (i1 = (i0 + 1)) ->
-  ("JC_39": Sorted(t, 0, i1, intP_intM_t_4_2))
+  ("JC_39": ("JC_38": (i1 <= n_1)))
 
 goal insert_sort_ensures_default_po_12:
   forall t:intP pointer.
@@ -3171,8 +3173,8 @@ goal insert_sort_ensures_default_po_12:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3218,8 +3220,8 @@ goal insert_sort_ensures_default_po_13:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3264,8 +3266,8 @@ goal insert_sort_ensures_default_po_14:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3310,8 +3312,8 @@ goal insert_sort_ensures_default_po_15:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3355,8 +3357,8 @@ goal insert_sort_ensures_default_po_16:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3400,8 +3402,8 @@ goal insert_sort_ensures_default_po_17:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3425,7 +3427,7 @@ goal insert_sort_ensures_default_po_17:
   (intP_intM_t_4_2 = store(intP_intM_t_4_1, shift(t, j0), mv)) ->
   forall i1:int.
   (i1 = (i0 + 1)) ->
-  ("JC_38": ("JC_36": (0 <= i1)))
+  ("JC_36": Sorted(t, 0, i1, intP_intM_t_4_2))
 
 goal insert_sort_ensures_default_po_18:
   forall t:intP pointer.
@@ -3440,8 +3442,8 @@ goal insert_sort_ensures_default_po_18:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3465,7 +3467,7 @@ goal insert_sort_ensures_default_po_18:
   (intP_intM_t_4_2 = store(intP_intM_t_4_1, shift(t, j0), mv)) ->
   forall i1:int.
   (i1 = (i0 + 1)) ->
-  ("JC_38": ("JC_37": (i1 <= n_1)))
+  ("JC_39": ("JC_37": (0 <= i1)))
 
 goal insert_sort_ensures_default_po_19:
   forall t:intP pointer.
@@ -3480,8 +3482,8 @@ goal insert_sort_ensures_default_po_19:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   forall result:int.
   (result = select(intP_intM_t_4_0, shift(t, i0))) ->
@@ -3505,7 +3507,7 @@ goal insert_sort_ensures_default_po_19:
   (intP_intM_t_4_2 = store(intP_intM_t_4_1, shift(t, j0), mv)) ->
   forall i1:int.
   (i1 = (i0 + 1)) ->
-  ("JC_39": Sorted(t, 0, i1, intP_intM_t_4_2))
+  ("JC_39": ("JC_38": (i1 <= n_1)))
 
 goal insert_sort_ensures_default_po_20:
   forall t:intP pointer.
@@ -3520,8 +3522,8 @@ goal insert_sort_ensures_default_po_20:
   forall i0:int.
   forall intP_intM_t_4_0:(intP,
   int) memory.
-  (("JC_38": (("JC_36": (0 <= i0)) and ("JC_37": (i0 <= n_1)))) and
-   ("JC_39": Sorted(t, 0, i0, intP_intM_t_4_0))) ->
+  (("JC_36": Sorted(t, 0, i0, intP_intM_t_4_0)) and
+   ("JC_39": (("JC_37": (0 <= i0)) and ("JC_38": (i0 <= n_1))))) ->
   (i0 >= n_1) ->
   ("JC_9": Sorted(t, 0, (n_1 - 1), intP_intM_t_4_0))
 
@@ -3539,8 +3541,8 @@ goal insert_sort_safety_po_1:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   (offset_min(intP_t_4_alloc_table, t) <= i0)
 
@@ -3558,8 +3560,8 @@ goal insert_sort_safety_po_2:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   (i0 <= offset_max(intP_t_4_alloc_table, t))
 
@@ -3577,8 +3579,8 @@ goal insert_sort_safety_po_3:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -3616,8 +3618,8 @@ goal insert_sort_safety_po_4:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -3655,8 +3657,8 @@ goal insert_sort_safety_po_5:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -3699,8 +3701,8 @@ goal insert_sort_safety_po_6:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -3743,8 +3745,8 @@ goal insert_sort_safety_po_7:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -3794,8 +3796,8 @@ goal insert_sort_safety_po_8:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -3845,8 +3847,8 @@ goal insert_sort_safety_po_9:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -3893,8 +3895,8 @@ goal insert_sort_safety_po_10:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -3941,8 +3943,8 @@ goal insert_sort_safety_po_11:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -3996,8 +3998,8 @@ goal insert_sort_safety_po_12:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -4051,8 +4053,8 @@ goal insert_sort_safety_po_13:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -4090,8 +4092,8 @@ goal insert_sort_safety_po_14:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -4129,8 +4131,8 @@ goal insert_sort_safety_po_15:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -4175,8 +4177,8 @@ goal insert_sort_safety_po_16:
   forall intP_intM_t_4:(intP,
   int) memory.
   ("JC_18": true) ->
-  (("JC_15": (("JC_13": (0 <= i0)) and ("JC_14": (i0 <= n_1)))) and
-   ("JC_16": Sorted(t, 0, i0, intP_intM_t_4))) ->
+  (("JC_13": Sorted(t, 0, i0, intP_intM_t_4)) and
+   ("JC_16": (("JC_14": (0 <= i0)) and ("JC_15": (i0 <= n_1))))) ->
   (i0 < n_1) ->
   ((offset_min(intP_t_4_alloc_table, t) <= i0) and
    (i0 <= offset_max(intP_t_4_alloc_table, t))) ->
@@ -5342,23 +5344,7 @@ why -simplify [...] why/insertion_sort.why
          (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
 (IMPLIES (<= n_1 1) (Sorted t 0 (- n_1 1) intP_intM_t_4)))))))
 
-;; insert_sort_ensures_default_po_2, File "HOME/tests/c/insertion_sort.c", line 45, characters 21-27
-(FORALL (t)
-(FORALL (n_1)
-(FORALL (intP_t_4_alloc_table)
-(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
-         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
-(IMPLIES (> n_1 1) (FORALL (i) (IMPLIES (EQ i 1) (<= 0 i))))))))
-
-;; insert_sort_ensures_default_po_3, File "HOME/tests/c/insertion_sort.c", line 45, characters 26-32
-(FORALL (t)
-(FORALL (n_1)
-(FORALL (intP_t_4_alloc_table)
-(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
-         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
-(IMPLIES (> n_1 1) (FORALL (i) (IMPLIES (EQ i 1) (<= i n_1))))))))
-
-;; insert_sort_ensures_default_po_4, File "HOME/tests/c/insertion_sort.c", line 46, characters 21-34
+;; insert_sort_ensures_default_po_2, File "HOME/tests/c/insertion_sort.c", line 46, characters 21-34
 (FORALL (t)
 (FORALL (n_1)
 (FORALL (intP_t_4_alloc_table)
@@ -5367,6 +5353,22 @@ why -simplify [...] why/insertion_sort.why
          (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
 (IMPLIES (> n_1 1)
 (FORALL (i) (IMPLIES (EQ i 1) (Sorted t 0 i intP_intM_t_4)))))))))
+
+;; insert_sort_ensures_default_po_3, File "HOME/tests/c/insertion_sort.c", line 45, characters 21-27
+(FORALL (t)
+(FORALL (n_1)
+(FORALL (intP_t_4_alloc_table)
+(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
+         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
+(IMPLIES (> n_1 1) (FORALL (i) (IMPLIES (EQ i 1) (<= 0 i))))))))
+
+;; insert_sort_ensures_default_po_4, File "HOME/tests/c/insertion_sort.c", line 45, characters 26-32
+(FORALL (t)
+(FORALL (n_1)
+(FORALL (intP_t_4_alloc_table)
+(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
+         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
+(IMPLIES (> n_1 1) (FORALL (i) (IMPLIES (EQ i 1) (<= i n_1))))))))
 
 ;; insert_sort_ensures_default_po_5, File "HOME/tests/c/insertion_sort.c", line 55, characters 23-66
 (FORALL (t)
@@ -5379,7 +5381,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
@@ -5402,7 +5404,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
@@ -5422,7 +5424,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
@@ -5440,14 +5442,14 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
 (FORALL (mv)
 (IMPLIES (EQ mv result) (FORALL (j) (IMPLIES (EQ j i0) (<= j i0))))))))))))))))))
 
-;; insert_sort_ensures_default_po_9, File "HOME/tests/c/insertion_sort.c", line 45, characters 21-27
+;; insert_sort_ensures_default_po_9, File "HOME/tests/c/insertion_sort.c", line 46, characters 21-34
 (FORALL (t)
 (FORALL (n_1)
 (FORALL (intP_t_4_alloc_table)
@@ -5458,79 +5460,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
-(IMPLIES (< i0 n_1)
-(FORALL (result)
-(IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
-(FORALL (mv)
-(IMPLIES (EQ mv result)
-(FORALL (j)
-(IMPLIES (EQ j i0)
-(FORALL (intP_intM_t_4_1)
-(FORALL (j0)
-(IMPLIES (AND
-         (FORALL (k_0)
-         (IMPLIES (AND (<= j0 k_0) (< k_0 i0))
-         (> (select intP_intM_t_4_1 (shift t k_0)) mv)))
-         (AND (IMPLIES (< j0 i0) (Sorted t 0 (+ i0 1) intP_intM_t_4_1))
-         (AND (IMPLIES (EQ j0 i0) (Sorted t 0 i0 intP_intM_t_4_1))
-         (AND (<= 0 j0) (<= j0 i0)))))
-(IMPLIES (> j0 0)
-(FORALL (result0)
-(IMPLIES (EQ result0 (select intP_intM_t_4_1 (shift t (- j0 1))))
-(IMPLIES (<= result0 mv)
-(FORALL (intP_intM_t_4_2)
-(IMPLIES (EQ intP_intM_t_4_2 (|why__store| intP_intM_t_4_1 (shift t j0) mv))
-(FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (<= 0 i1)))))))))))))))))))))))))))))
-
-;; insert_sort_ensures_default_po_10, File "HOME/tests/c/insertion_sort.c", line 45, characters 26-32
-(FORALL (t)
-(FORALL (n_1)
-(FORALL (intP_t_4_alloc_table)
-(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
-         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
-(IMPLIES (> n_1 1)
-(FORALL (i)
-(IMPLIES (EQ i 1)
-(FORALL (i0)
-(FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
-(IMPLIES (< i0 n_1)
-(FORALL (result)
-(IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
-(FORALL (mv)
-(IMPLIES (EQ mv result)
-(FORALL (j)
-(IMPLIES (EQ j i0)
-(FORALL (intP_intM_t_4_1)
-(FORALL (j0)
-(IMPLIES (AND
-         (FORALL (k_0)
-         (IMPLIES (AND (<= j0 k_0) (< k_0 i0))
-         (> (select intP_intM_t_4_1 (shift t k_0)) mv)))
-         (AND (IMPLIES (< j0 i0) (Sorted t 0 (+ i0 1) intP_intM_t_4_1))
-         (AND (IMPLIES (EQ j0 i0) (Sorted t 0 i0 intP_intM_t_4_1))
-         (AND (<= 0 j0) (<= j0 i0)))))
-(IMPLIES (> j0 0)
-(FORALL (result0)
-(IMPLIES (EQ result0 (select intP_intM_t_4_1 (shift t (- j0 1))))
-(IMPLIES (<= result0 mv)
-(FORALL (intP_intM_t_4_2)
-(IMPLIES (EQ intP_intM_t_4_2 (|why__store| intP_intM_t_4_1 (shift t j0) mv))
-(FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (<= i1 n_1)))))))))))))))))))))))))))))
-
-;; insert_sort_ensures_default_po_11, File "HOME/tests/c/insertion_sort.c", line 46, characters 21-34
-(FORALL (t)
-(FORALL (n_1)
-(FORALL (intP_t_4_alloc_table)
-(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
-         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
-(IMPLIES (> n_1 1)
-(FORALL (i)
-(IMPLIES (EQ i 1)
-(FORALL (i0)
-(FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
@@ -5555,6 +5485,78 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ intP_intM_t_4_2 (|why__store| intP_intM_t_4_1 (shift t j0) mv))
 (FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (Sorted t 0 i1 intP_intM_t_4_2)))))))))))))))))))))))))))))
 
+;; insert_sort_ensures_default_po_10, File "HOME/tests/c/insertion_sort.c", line 45, characters 21-27
+(FORALL (t)
+(FORALL (n_1)
+(FORALL (intP_t_4_alloc_table)
+(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
+         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
+(IMPLIES (> n_1 1)
+(FORALL (i)
+(IMPLIES (EQ i 1)
+(FORALL (i0)
+(FORALL (intP_intM_t_4_0)
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
+(IMPLIES (< i0 n_1)
+(FORALL (result)
+(IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (j)
+(IMPLIES (EQ j i0)
+(FORALL (intP_intM_t_4_1)
+(FORALL (j0)
+(IMPLIES (AND
+         (FORALL (k_0)
+         (IMPLIES (AND (<= j0 k_0) (< k_0 i0))
+         (> (select intP_intM_t_4_1 (shift t k_0)) mv)))
+         (AND (IMPLIES (< j0 i0) (Sorted t 0 (+ i0 1) intP_intM_t_4_1))
+         (AND (IMPLIES (EQ j0 i0) (Sorted t 0 i0 intP_intM_t_4_1))
+         (AND (<= 0 j0) (<= j0 i0)))))
+(IMPLIES (> j0 0)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select intP_intM_t_4_1 (shift t (- j0 1))))
+(IMPLIES (<= result0 mv)
+(FORALL (intP_intM_t_4_2)
+(IMPLIES (EQ intP_intM_t_4_2 (|why__store| intP_intM_t_4_1 (shift t j0) mv))
+(FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (<= 0 i1)))))))))))))))))))))))))))))
+
+;; insert_sort_ensures_default_po_11, File "HOME/tests/c/insertion_sort.c", line 45, characters 26-32
+(FORALL (t)
+(FORALL (n_1)
+(FORALL (intP_t_4_alloc_table)
+(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
+         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
+(IMPLIES (> n_1 1)
+(FORALL (i)
+(IMPLIES (EQ i 1)
+(FORALL (i0)
+(FORALL (intP_intM_t_4_0)
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
+(IMPLIES (< i0 n_1)
+(FORALL (result)
+(IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (j)
+(IMPLIES (EQ j i0)
+(FORALL (intP_intM_t_4_1)
+(FORALL (j0)
+(IMPLIES (AND
+         (FORALL (k_0)
+         (IMPLIES (AND (<= j0 k_0) (< k_0 i0))
+         (> (select intP_intM_t_4_1 (shift t k_0)) mv)))
+         (AND (IMPLIES (< j0 i0) (Sorted t 0 (+ i0 1) intP_intM_t_4_1))
+         (AND (IMPLIES (EQ j0 i0) (Sorted t 0 i0 intP_intM_t_4_1))
+         (AND (<= 0 j0) (<= j0 i0)))))
+(IMPLIES (> j0 0)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select intP_intM_t_4_1 (shift t (- j0 1))))
+(IMPLIES (<= result0 mv)
+(FORALL (intP_intM_t_4_2)
+(IMPLIES (EQ intP_intM_t_4_2 (|why__store| intP_intM_t_4_1 (shift t j0) mv))
+(FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (<= i1 n_1)))))))))))))))))))))))))))))
+
 ;; insert_sort_ensures_default_po_12, File "HOME/tests/c/insertion_sort.c", line 55, characters 23-66
 (FORALL (t)
 (FORALL (n_1)
@@ -5566,7 +5568,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
@@ -5609,7 +5611,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
@@ -5650,7 +5652,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
@@ -5691,7 +5693,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
@@ -5730,7 +5732,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
@@ -5758,7 +5760,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_1 (shift t j0) result1))
 (FORALL (j1) (IMPLIES (EQ j1 (- j0 1)) (<= j1 i0)))))))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_17, File "HOME/tests/c/insertion_sort.c", line 45, characters 21-27
+;; insert_sort_ensures_default_po_17, File "HOME/tests/c/insertion_sort.c", line 46, characters 21-34
 (FORALL (t)
 (FORALL (n_1)
 (FORALL (intP_t_4_alloc_table)
@@ -5769,73 +5771,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
-(IMPLIES (< i0 n_1)
-(FORALL (result)
-(IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
-(FORALL (mv)
-(IMPLIES (EQ mv result)
-(FORALL (j)
-(IMPLIES (EQ j i0)
-(FORALL (intP_intM_t_4_1)
-(FORALL (j0)
-(IMPLIES (AND
-         (FORALL (k_0)
-         (IMPLIES (AND (<= j0 k_0) (< k_0 i0))
-         (> (select intP_intM_t_4_1 (shift t k_0)) mv)))
-         (AND (IMPLIES (< j0 i0) (Sorted t 0 (+ i0 1) intP_intM_t_4_1))
-         (AND (IMPLIES (EQ j0 i0) (Sorted t 0 i0 intP_intM_t_4_1))
-         (AND (<= 0 j0) (<= j0 i0)))))
-(IMPLIES (<= j0 0)
-(FORALL (intP_intM_t_4_2)
-(IMPLIES (EQ intP_intM_t_4_2 (|why__store| intP_intM_t_4_1 (shift t j0) mv))
-(FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (<= 0 i1))))))))))))))))))))))))))
-
-;; insert_sort_ensures_default_po_18, File "HOME/tests/c/insertion_sort.c", line 45, characters 26-32
-(FORALL (t)
-(FORALL (n_1)
-(FORALL (intP_t_4_alloc_table)
-(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
-         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
-(IMPLIES (> n_1 1)
-(FORALL (i)
-(IMPLIES (EQ i 1)
-(FORALL (i0)
-(FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
-(IMPLIES (< i0 n_1)
-(FORALL (result)
-(IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
-(FORALL (mv)
-(IMPLIES (EQ mv result)
-(FORALL (j)
-(IMPLIES (EQ j i0)
-(FORALL (intP_intM_t_4_1)
-(FORALL (j0)
-(IMPLIES (AND
-         (FORALL (k_0)
-         (IMPLIES (AND (<= j0 k_0) (< k_0 i0))
-         (> (select intP_intM_t_4_1 (shift t k_0)) mv)))
-         (AND (IMPLIES (< j0 i0) (Sorted t 0 (+ i0 1) intP_intM_t_4_1))
-         (AND (IMPLIES (EQ j0 i0) (Sorted t 0 i0 intP_intM_t_4_1))
-         (AND (<= 0 j0) (<= j0 i0)))))
-(IMPLIES (<= j0 0)
-(FORALL (intP_intM_t_4_2)
-(IMPLIES (EQ intP_intM_t_4_2 (|why__store| intP_intM_t_4_1 (shift t j0) mv))
-(FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (<= i1 n_1))))))))))))))))))))))))))
-
-;; insert_sort_ensures_default_po_19, File "HOME/tests/c/insertion_sort.c", line 46, characters 21-34
-(FORALL (t)
-(FORALL (n_1)
-(FORALL (intP_t_4_alloc_table)
-(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
-         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
-(IMPLIES (> n_1 1)
-(FORALL (i)
-(IMPLIES (EQ i 1)
-(FORALL (i0)
-(FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (FORALL (result)
 (IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
@@ -5857,6 +5793,72 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ intP_intM_t_4_2 (|why__store| intP_intM_t_4_1 (shift t j0) mv))
 (FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (Sorted t 0 i1 intP_intM_t_4_2))))))))))))))))))))))))))
 
+;; insert_sort_ensures_default_po_18, File "HOME/tests/c/insertion_sort.c", line 45, characters 21-27
+(FORALL (t)
+(FORALL (n_1)
+(FORALL (intP_t_4_alloc_table)
+(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
+         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
+(IMPLIES (> n_1 1)
+(FORALL (i)
+(IMPLIES (EQ i 1)
+(FORALL (i0)
+(FORALL (intP_intM_t_4_0)
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
+(IMPLIES (< i0 n_1)
+(FORALL (result)
+(IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (j)
+(IMPLIES (EQ j i0)
+(FORALL (intP_intM_t_4_1)
+(FORALL (j0)
+(IMPLIES (AND
+         (FORALL (k_0)
+         (IMPLIES (AND (<= j0 k_0) (< k_0 i0))
+         (> (select intP_intM_t_4_1 (shift t k_0)) mv)))
+         (AND (IMPLIES (< j0 i0) (Sorted t 0 (+ i0 1) intP_intM_t_4_1))
+         (AND (IMPLIES (EQ j0 i0) (Sorted t 0 i0 intP_intM_t_4_1))
+         (AND (<= 0 j0) (<= j0 i0)))))
+(IMPLIES (<= j0 0)
+(FORALL (intP_intM_t_4_2)
+(IMPLIES (EQ intP_intM_t_4_2 (|why__store| intP_intM_t_4_1 (shift t j0) mv))
+(FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (<= 0 i1))))))))))))))))))))))))))
+
+;; insert_sort_ensures_default_po_19, File "HOME/tests/c/insertion_sort.c", line 45, characters 26-32
+(FORALL (t)
+(FORALL (n_1)
+(FORALL (intP_t_4_alloc_table)
+(IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) 0)
+         (>= (offset_max intP_t_4_alloc_table t) (- n_1 1)))
+(IMPLIES (> n_1 1)
+(FORALL (i)
+(IMPLIES (EQ i 1)
+(FORALL (i0)
+(FORALL (intP_intM_t_4_0)
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
+(IMPLIES (< i0 n_1)
+(FORALL (result)
+(IMPLIES (EQ result (select intP_intM_t_4_0 (shift t i0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (j)
+(IMPLIES (EQ j i0)
+(FORALL (intP_intM_t_4_1)
+(FORALL (j0)
+(IMPLIES (AND
+         (FORALL (k_0)
+         (IMPLIES (AND (<= j0 k_0) (< k_0 i0))
+         (> (select intP_intM_t_4_1 (shift t k_0)) mv)))
+         (AND (IMPLIES (< j0 i0) (Sorted t 0 (+ i0 1) intP_intM_t_4_1))
+         (AND (IMPLIES (EQ j0 i0) (Sorted t 0 i0 intP_intM_t_4_1))
+         (AND (<= 0 j0) (<= j0 i0)))))
+(IMPLIES (<= j0 0)
+(FORALL (intP_intM_t_4_2)
+(IMPLIES (EQ intP_intM_t_4_2 (|why__store| intP_intM_t_4_1 (shift t j0) mv))
+(FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (<= i1 n_1))))))))))))))))))))))))))
+
 ;; insert_sort_ensures_default_po_20, File "HOME/tests/c/insertion_sort.c", line 39, characters 12-27
 (FORALL (t)
 (FORALL (n_1)
@@ -5868,7 +5870,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ i 1)
 (FORALL (i0)
 (FORALL (intP_intM_t_4_0)
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4_0))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4_0) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (>= i0 n_1) (Sorted t 0 (- n_1 1) intP_intM_t_4_0))))))))))))
 
 ;; insert_sort_safety_po_1, File "HOME/tests/c/insertion_sort.c", line 51, characters 9-13
@@ -5883,7 +5885,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1) (<= (offset_min intP_t_4_alloc_table t) i0)))))))))))))
 
 ;; insert_sort_safety_po_2, File "HOME/tests/c/insertion_sort.c", line 51, characters 9-13
@@ -5898,7 +5900,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1) (<= i0 (offset_max intP_t_4_alloc_table t))))))))))))))
 
 ;; insert_sort_safety_po_3, File "HOME/tests/c/insertion_sort.c", line 60, characters 10-16
@@ -5913,7 +5915,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -5947,7 +5949,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -5981,7 +5983,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6020,7 +6022,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6059,7 +6061,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6103,7 +6105,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6147,7 +6149,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6191,7 +6193,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6235,7 +6237,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6284,7 +6286,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6333,7 +6335,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6367,7 +6369,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6401,7 +6403,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))
@@ -6440,7 +6442,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i0)
 (FORALL (intP_intM_t_4)
 (IMPLIES TRUE
-(IMPLIES (AND (AND (<= 0 i0) (<= i0 n_1)) (Sorted t 0 i0 intP_intM_t_4))
+(IMPLIES (AND (Sorted t 0 i0 intP_intM_t_4) (AND (<= 0 i0) (<= i0 n_1)))
 (IMPLIES (< i0 n_1)
 (IMPLIES (AND (<= (offset_min intP_t_4_alloc_table t) i0)
          (<= i0 (offset_max intP_t_4_alloc_table t)))

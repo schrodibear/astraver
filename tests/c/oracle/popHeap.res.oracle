@@ -277,9 +277,9 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int32 = -2147483648..2147483647
-
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag intP = {
   int32 intM: 32;
@@ -412,7 +412,6 @@ unit pop_push_heap_copy(intP[..] a_1, int32 n_3, int32 parent, int32 child)
   requires (C_2 : ((a_1 + parent).intM == (a_1 + child).intM));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : (\forall int32 x_0;
                    (CountWithHole{Here}(\at(a_1,Old), x_0, 0, \at(child,Old),
                                         \at(n_3,Old)) ==
@@ -1705,13 +1704,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: popHeap.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: popHeap.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: popHeap.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include popHeap.depend
 
@@ -1725,7 +1724,7 @@ clean:
 [JC_90]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 289
+line = 288
 begin = 26
 end = 67
 
@@ -1750,13 +1749,13 @@ end = 13
 [JC_93]
 kind = PointerDeref
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 306
+line = 305
 begin = 15
 end = 54
 
 [JC_41]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 163
+line = 162
 begin = 9
 end = 16
 
@@ -1855,7 +1854,7 @@ end = 28
 [JC_100]
 kind = PointerDeref
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 396
+line = 395
 begin = 15
 end = 88
 
@@ -1892,7 +1891,7 @@ end = 88
 
 [JC_48]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 163
+line = 162
 begin = 9
 end = 16
 
@@ -1928,7 +1927,7 @@ end = 30
 
 [JC_155]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 452
+line = 451
 begin = 6
 end = 863
 
@@ -1946,14 +1945,14 @@ end = 34
 
 [JC_156]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 452
+line = 451
 begin = 6
 end = 863
 
 [JC_104]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 181
+line = 180
 begin = 14
 end = 40
 
@@ -2063,7 +2062,7 @@ end = 184
 [JC_51]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 181
+line = 180
 begin = 14
 end = 40
 
@@ -2176,7 +2175,7 @@ end = 96
 
 [JC_165]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 452
+line = 451
 begin = 6
 end = 863
 
@@ -2188,7 +2187,7 @@ end = 33
 
 [JC_166]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 452
+line = 451
 begin = 6
 end = 863
 
@@ -2212,13 +2211,13 @@ end = -1
 
 [JC_116]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 206
+line = 205
 begin = 6
 end = 4192
 
 [JC_117]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 206
+line = 205
 begin = 6
 end = 4192
 
@@ -2312,7 +2311,7 @@ end = 34
 
 [JC_66]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 206
+line = 205
 begin = 6
 end = 4192
 
@@ -2330,7 +2329,7 @@ end = 44
 
 [JC_67]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 206
+line = 205
 begin = 6
 end = 4192
 
@@ -2343,7 +2342,7 @@ end = -1
 [JC_121]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 262
+line = 261
 begin = 29
 end = 70
 
@@ -2394,7 +2393,7 @@ end = 18
 [JC_124]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 289
+line = 288
 begin = 26
 end = 67
 
@@ -2590,7 +2589,7 @@ end = 108
 [JC_79]
 kind = PointerDeref
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 252
+line = 251
 begin = 30
 end = 304
 
@@ -2663,7 +2662,7 @@ end = 44
 [JC_81]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 262
+line = 261
 begin = 29
 end = 70
 
@@ -2759,7 +2758,7 @@ end = 23
 [JC_88]
 kind = PointerDeref
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 279
+line = 278
 begin = 27
 end = 292
 
@@ -2813,7 +2812,7 @@ end = -1
 
 [JC_145]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 442
+line = 441
 begin = 10
 end = 18
 
@@ -2825,7 +2824,7 @@ end = 56
 
 [JC_147]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 442
+line = 441
 begin = 10
 end = 18
 

@@ -568,13 +568,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: eps_line1.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: eps_line1.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: eps_line1.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include eps_line1.depend
 
@@ -3905,10 +3905,10 @@ goal sign_ensures_default_po_6:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/eps_line1_why.why         : .??###########...... (7/0/2/11/0)
+why/eps_line1_why.why         : .??#.#########...... (8/0/2/10/0)
 total   :  20
-valid   :   7 ( 35%)
+valid   :   8 ( 40%)
 invalid :   0 (  0%)
 unknown :   2 ( 10%)
-timeout :  11 ( 55%)
+timeout :  10 ( 50%)
 failure :   0 (  0%)

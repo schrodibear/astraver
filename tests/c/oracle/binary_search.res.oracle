@@ -38,7 +38,7 @@
   @    \forall integer i,j; a <= i <= j <= b ==> t[i] <= t[j];
   @*/
 
-/*@ requires n >= 0 && \valid_range(t,0,n-1);
+/*@ requires n >= 0 && \valid(t+(0..n-1));
   @ ensures -1 <= \result < n;
   @ behavior success:
   @   ensures \result >= 0 ==> t[\result] == v;
@@ -68,12 +68,11 @@ int binary_search(long t[], int n, long v) {
 
 /*
 Local Variables:
-compile-command: "make binary_search.why3ml"
+compile-command: "make binary_search.why3ide"
 End:
 */
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/binary_search.c"
-tests/c/binary_search.c:40:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir tests/c/binary_search.jessie
 [jessie] File tests/c/binary_search.jessie/binary_search.jc written.
@@ -91,15 +90,23 @@ axiomatic Padding {
   
 }
 
-type int32 = -2147483648..2147483647
+type uint8 = 0..255
 
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag longP = {
   int32 longM: 32;
 }
 
 type longP = [longP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -118,26 +125,26 @@ lemma mean :
     ((x <= y) ==> ((x <= ((x + y) / 2)) && (((x + y) / 2) <= y)))))
 
 predicate sorted{L}(longP[..] t, integer a, integer b) =
-(\forall integer i;
-  (\forall integer j;
-    (((a <= i) && ((i <= j) && (j <= b))) ==>
-      ((t + i).longM <= (t + j).longM))))
+(\forall integer i_1;
+  (\forall integer j_0;
+    (((a <= i_1) && ((i_1 <= j_0) && (j_0 <= b))) ==>
+      ((t + i_1).longM <= (t + j_0).longM))))
 
-int32 binary_search(longP[..] t, int32 n, int32 v)
-  requires (C_35 : ((C_36 : (n >= 0)) &&
+int32 binary_search(longP[..] t, int32 n_1, int32 v)
+  requires (C_35 : ((C_36 : (n_1 >= 0)) &&
                      ((C_38 : (\offset_min(t) <= 0)) &&
-                       (C_39 : (\offset_max(t) >= (n - 1))))));
+                       (C_39 : (\offset_max(t) >= (n_1 - 1))))));
 behavior default:
   ensures (C_30 : ((C_31 : ((- 1) <= \result)) &&
-                    (C_32 : (\result < \at(n,Old)))));
+                    (C_32 : (\result < \at(n_1,Old)))));
 behavior success:
   ensures (C_33 : ((\result >= 0) ==>
                     ((\at(t,Old) + \result).longM == \at(v,Old))));
 behavior failure:
-  assumes sorted{Here}(t, 0, (n - 1));
+  assumes sorted{Here}(t, 0, (n_1 - 1));
   ensures (C_34 : ((\result == (- 1)) ==>
                     (\forall integer k_0;
-                      (((0 <= k_0) && (k_0 < \at(n,Old))) ==>
+                      (((0 <= k_0) && (k_0 < \at(n_1,Old))) ==>
                         ((\at(t,Old) + k_0).longM != \at(v,Old))))));
 {  
    (var int32 l);
@@ -149,14 +156,14 @@ behavior failure:
    (var int32 __retres);
    
    {  (C_1 : (l = 0));
-      (C_4 : (u = (C_3 : ((C_2 : (n - 1)) :> int32))));
+      (C_4 : (u = (C_3 : ((C_2 : (n_1 - 1)) :> int32))));
       
       loop 
       behavior default:
-        invariant (C_7 : ((C_8 : (0 <= l)) && (C_9 : (u <= (n - 1)))));
+        invariant (C_7 : ((C_8 : (0 <= l)) && (C_9 : (u <= (n_1 - 1)))));
       behavior failure:
         invariant (C_6 : (\forall integer k;
-                           ((((0 <= k) && (k < n)) && ((t + k).longM == v)) ==>
+                           ((((0 <= k) && (k < n_1)) && ((t + k).longM == v)) ==>
                              ((l <= k) && (k <= u)))));
       variant (C_5 : (u - l));
       while (true)
@@ -420,7 +427,7 @@ end = 83
 file = "HOME/tests/c/binary_search.c"
 line = 40
 begin = 13
-end = 44
+end = 41
 
 [C_36]
 file = "HOME/tests/c/binary_search.c"
@@ -432,19 +439,19 @@ end = 19
 file = "HOME/tests/c/binary_search.c"
 line = 40
 begin = 23
-end = 44
+end = 41
 
 [C_38]
 file = "HOME/tests/c/binary_search.c"
 line = 40
 begin = 23
-end = 44
+end = 41
 
 [C_39]
 file = "HOME/tests/c/binary_search.c"
 line = 40
 begin = 23
-end = 44
+end = 41
 
 ========== jessie execution ==========
 Generating Why function binary_search
@@ -605,13 +612,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: binary_search.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: binary_search.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: binary_search.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include binary_search.depend
 
@@ -662,15 +669,15 @@ end = -1
 
 [JC_45]
 file = "HOME/tests/c/binary_search.jessie/binary_search.jc"
-line = 73
+line = 81
 begin = 6
-end = 1796
+end = 1800
 
 [JC_46]
 file = "HOME/tests/c/binary_search.jessie/binary_search.jc"
-line = 73
+line = 81
 begin = 6
-end = 1796
+end = 1800
 
 [JC_1]
 file = "HOME/tests/c/binary_search.c"
@@ -689,7 +696,7 @@ end = 23
 file = "HOME/tests/c/binary_search.c"
 line = 40
 begin = 23
-end = 44
+end = 41
 
 [JC_48]
 file = "HOME/tests/c/binary_search.c"
@@ -701,7 +708,7 @@ end = 21
 file = "HOME/tests/c/binary_search.c"
 line = 40
 begin = 23
-end = 44
+end = 41
 
 [JC_49]
 file = "HOME/tests/c/binary_search.c"
@@ -713,7 +720,7 @@ end = 26
 file = "HOME/tests/c/binary_search.c"
 line = 40
 begin = 13
-end = 44
+end = 41
 
 [JC_5]
 file = "HOME/"
@@ -731,19 +738,19 @@ end = 19
 file = "HOME/tests/c/binary_search.c"
 line = 40
 begin = 23
-end = 44
+end = 41
 
 [JC_8]
 file = "HOME/tests/c/binary_search.c"
 line = 40
 begin = 23
-end = 44
+end = 41
 
 [JC_9]
 file = "HOME/tests/c/binary_search.c"
 line = 40
 begin = 13
-end = 44
+end = 41
 
 [JC_50]
 file = "HOME/tests/c/binary_search.c"
@@ -785,15 +792,15 @@ end = -1
 
 [JC_55]
 file = "HOME/tests/c/binary_search.jessie/binary_search.jc"
-line = 73
+line = 81
 begin = 6
-end = 1796
+end = 1800
 
 [JC_56]
 file = "HOME/tests/c/binary_search.jessie/binary_search.jc"
-line = 73
+line = 81
 begin = 6
-end = 1796
+end = 1800
 
 [JC_57]
 kind = DivByZero
@@ -876,9 +883,9 @@ end = 29
 
 [JC_66]
 file = "HOME/tests/c/binary_search.jessie/binary_search.jc"
-line = 73
+line = 81
 begin = 6
-end = 1796
+end = 1800
 
 [binary_search_ensures_success]
 name = "Function binary_search"
@@ -896,9 +903,9 @@ end = 25
 
 [JC_67]
 file = "HOME/tests/c/binary_search.jessie/binary_search.jc"
-line = 73
+line = 81
 begin = 6
-end = 1796
+end = 1800
 
 [JC_15]
 file = "HOME/tests/c/binary_search.c"
@@ -1014,15 +1021,15 @@ end = -1
 
 [JC_28]
 file = "HOME/tests/c/binary_search.jessie/binary_search.jc"
-line = 73
+line = 81
 begin = 6
-end = 1796
+end = 1800
 
 [JC_29]
 file = "HOME/tests/c/binary_search.jessie/binary_search.jc"
-line = 73
+line = 81
 begin = 6
-end = 1796
+end = 1800
 
 [JC_30]
 kind = ArithOverflow
@@ -1110,6 +1117,10 @@ type longP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag:  -> charP tag_id
@@ -1137,6 +1148,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -1179,6 +1195,10 @@ predicate left_valid_struct_longP(p:longP pointer, a:int,
  longP_alloc_table:longP alloc_table) =
  (offset_min(longP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -1205,6 +1225,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 axiom pointer_addr_of_longP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(longP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address :
@@ -1218,17 +1244,21 @@ predicate right_valid_struct_longP(p:longP pointer, b:int,
  longP_alloc_table:longP alloc_table) =
  (offset_max(longP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
 
 predicate sorted(t:longP pointer, a:int, b:int,
  longP_longM_t_1_at_L:(longP, int32) memory) =
- (forall i:int.
-  (forall j:int.
-   ((le_int(a, i) and (le_int(i, j) and le_int(j, b))) ->
-    le_int(integer_of_int32(select(longP_longM_t_1_at_L, shift(t, i))),
-    integer_of_int32(select(longP_longM_t_1_at_L, shift(t, j)))))))
+ (forall i_1:int.
+  (forall j_0:int.
+   ((le_int(a, i_1) and (le_int(i_1, j_0) and le_int(j_0, b))) ->
+    le_int(integer_of_int32(select(longP_longM_t_1_at_L, shift(t, i_1))),
+    integer_of_int32(select(longP_longM_t_1_at_L, shift(t, j_0)))))))
 
 predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -1239,6 +1269,11 @@ predicate strict_valid_root_longP(p:longP pointer, a:int, b:int,
  longP_alloc_table:longP alloc_table) =
  ((offset_min(longP_alloc_table, p) = a)
  and (offset_max(longP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1255,10 +1290,47 @@ predicate strict_valid_struct_longP(p:longP pointer, a:int, b:int,
  ((offset_min(longP_alloc_table, p) = a)
  and (offset_max(longP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -1269,6 +1341,11 @@ predicate valid_root_longP(p:longP pointer, a:int, b:int,
  longP_alloc_table:longP alloc_table) =
  ((offset_min(longP_alloc_table, p) <= a)
  and (offset_max(longP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1284,6 +1361,11 @@ predicate valid_struct_longP(p:longP pointer, a:int, b:int,
  longP_alloc_table:longP alloc_table) =
  ((offset_min(longP_alloc_table, p) <= a)
  and (offset_max(longP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1371,6 +1453,38 @@ parameter alloc_struct_longP_requires :
           and (alloc_fresh(longP_alloc_table@, result, n)
               and instanceof(longP_tag_table, result, longP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -1401,19 +1515,21 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter binary_search :
  t_0:longP pointer ->
-  n:int32 ->
+  n_1:int32 ->
    v:int32 ->
     longP_t_2_alloc_table:longP alloc_table ->
      longP_longM_t_2:(longP, int32) memory ->
       { } int32
-      { ((sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
+      { ((sorted(t_0, (0), sub_int(integer_of_int32(n_1), (1)),
           longP_longM_t_2) ->
           (JC_22:
           ((integer_of_int32(result) = neg_int((1))) ->
            (forall k_0:int.
-            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
              (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
              integer_of_int32(v)))))))
         and ((JC_20:
@@ -1424,27 +1540,27 @@ parameter binary_search :
             and (JC_16:
                 ((JC_14: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_15:
-                    lt_int(integer_of_int32(result), integer_of_int32(n))))))) }
+                    lt_int(integer_of_int32(result), integer_of_int32(n_1))))))) }
 
 parameter binary_search_requires :
  t_0:longP pointer ->
-  n:int32 ->
+  n_1:int32 ->
    v:int32 ->
     longP_t_2_alloc_table:longP alloc_table ->
      longP_longM_t_2:(longP, int32) memory ->
       { (JC_4:
-        ((JC_1: ge_int(integer_of_int32(n), (0)))
+        ((JC_1: ge_int(integer_of_int32(n_1), (0)))
         and ((JC_2: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
             and (JC_3:
                 ge_int(offset_max(longP_t_2_alloc_table, t_0),
-                sub_int(integer_of_int32(n), (1)))))))}
+                sub_int(integer_of_int32(n_1), (1)))))))}
       int32
-      { ((sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
+      { ((sorted(t_0, (0), sub_int(integer_of_int32(n_1), (1)),
           longP_longM_t_2) ->
           (JC_22:
           ((integer_of_int32(result) = neg_int((1))) ->
            (forall k_0:int.
-            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
              (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
              integer_of_int32(v)))))))
         and ((JC_20:
@@ -1455,7 +1571,7 @@ parameter binary_search_requires :
             and (JC_16:
                 ((JC_14: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_15:
-                    lt_int(integer_of_int32(result), integer_of_int32(n))))))) }
+                    lt_int(integer_of_int32(result), integer_of_int32(n_1))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1473,14 +1589,22 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let binary_search_ensures_default =
- fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+ fun (t_0 : longP pointer) (n_1 : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
   { (JC_9:
-    ((JC_6: ge_int(integer_of_int32(n), (0)))
+    ((JC_6: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_7: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
         and (JC_8:
             ge_int(offset_max(longP_t_2_alloc_table, t_0),
-            sub_int(integer_of_int32(n), (1))))))) }
+            sub_int(integer_of_int32(n_1), (1))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1499,7 +1623,7 @@ let binary_search_ensures_default =
           (let jessie_<num> =
           (u := (C_3:
                 (safe_int32_of_integer_ (C_2:
-                                        ((sub_int (integer_of_int32 n)) (1)))))) in
+                                        ((sub_int (integer_of_int32 n_1)) (1)))))) in
           void);
           (loop_2:
           while true do
@@ -1508,7 +1632,7 @@ let binary_search_ensures_default =
               ((JC_41: le_int((0), integer_of_int32(l)))
               and (JC_42:
                   le_int(integer_of_int32(u),
-                  sub_int(integer_of_int32(n), (1))))))  }
+                  sub_int(integer_of_int32(n_1), (1))))))  }
            begin
              [ { } unit { true } ];
             try
@@ -1578,17 +1702,17 @@ let binary_search_ensures_default =
     absurd  end with Return -> !return end))
   { (JC_13:
     ((JC_11: le_int(neg_int((1)), integer_of_int32(result)))
-    and (JC_12: lt_int(integer_of_int32(result), integer_of_int32(n))))) }
+    and (JC_12: lt_int(integer_of_int32(result), integer_of_int32(n_1))))) }
 
 let binary_search_ensures_failure =
- fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
-  { (sorted(t_0, (0), sub_int(integer_of_int32(n), (1)), longP_longM_t_2)
+ fun (t_0 : longP pointer) (n_1 : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+  { (sorted(t_0, (0), sub_int(integer_of_int32(n_1), (1)), longP_longM_t_2)
     and (JC_9:
-        ((JC_6: ge_int(integer_of_int32(n), (0)))
+        ((JC_6: ge_int(integer_of_int32(n_1), (0)))
         and ((JC_7: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
             and (JC_8:
                 ge_int(offset_max(longP_t_2_alloc_table, t_0),
-                sub_int(integer_of_int32(n), (1)))))))) }
+                sub_int(integer_of_int32(n_1), (1)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1607,7 +1731,7 @@ let binary_search_ensures_failure =
           (let jessie_<num> =
           (u := (C_3:
                 (safe_int32_of_integer_ (C_2:
-                                        ((sub_int (integer_of_int32 n)) (1)))))) in
+                                        ((sub_int (integer_of_int32 n_1)) (1)))))) in
           void);
           (loop_4:
           while true do
@@ -1615,7 +1739,7 @@ let binary_search_ensures_failure =
               (JC_61:
               (forall k:int.
                ((le_int((0), k)
-                and (lt_int(k, integer_of_int32(n))
+                and (lt_int(k, integer_of_int32(n_1))
                     and (integer_of_int32(select(longP_longM_t_2,
                                           shift(t_0, k))) = integer_of_int32(v)))) ->
                 (le_int(integer_of_int32(l), k)
@@ -1626,7 +1750,7 @@ let binary_search_ensures_failure =
                  ((JC_62: le_int((0), integer_of_int32(l)))
                  and (JC_63:
                      le_int(integer_of_int32(u),
-                     sub_int(integer_of_int32(n), (1)))))) } ];
+                     sub_int(integer_of_int32(n_1), (1)))))) } ];
             try
              (C_14:
              begin
@@ -1696,18 +1820,18 @@ let binary_search_ensures_failure =
   { (JC_21:
     ((integer_of_int32(result) = neg_int((1))) ->
      (forall k_0:int.
-      ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+      ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
        (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
        integer_of_int32(v)))))) }
 
 let binary_search_ensures_success =
- fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+ fun (t_0 : longP pointer) (n_1 : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
   { (JC_9:
-    ((JC_6: ge_int(integer_of_int32(n), (0)))
+    ((JC_6: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_7: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
         and (JC_8:
             ge_int(offset_max(longP_t_2_alloc_table, t_0),
-            sub_int(integer_of_int32(n), (1))))))) }
+            sub_int(integer_of_int32(n_1), (1))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1726,7 +1850,7 @@ let binary_search_ensures_success =
           (let jessie_<num> =
           (u := (C_3:
                 (safe_int32_of_integer_ (C_2:
-                                        ((sub_int (integer_of_int32 n)) (1)))))) in
+                                        ((sub_int (integer_of_int32 n_1)) (1)))))) in
           void);
           (loop_3:
           while true do
@@ -1737,7 +1861,7 @@ let binary_search_ensures_success =
                  ((JC_51: le_int((0), integer_of_int32(l)))
                  and (JC_52:
                      le_int(integer_of_int32(u),
-                     sub_int(integer_of_int32(n), (1)))))) } ];
+                     sub_int(integer_of_int32(n_1), (1)))))) } ];
             try
              (C_14:
              begin
@@ -1810,13 +1934,13 @@ let binary_search_ensures_success =
                        shift(t_0, integer_of_int32(result)))) = integer_of_int32(v)))) }
 
 let binary_search_safety =
- fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+ fun (t_0 : longP pointer) (n_1 : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
   { (JC_9:
-    ((JC_6: ge_int(integer_of_int32(n), (0)))
+    ((JC_6: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_7: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
         and (JC_8:
             ge_int(offset_max(longP_t_2_alloc_table, t_0),
-            sub_int(integer_of_int32(n), (1))))))) }
+            sub_int(integer_of_int32(n_1), (1))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1836,7 +1960,7 @@ let binary_search_safety =
           (u := (C_3:
                 (JC_23:
                 (int32_of_integer_ (C_2:
-                                   ((sub_int (integer_of_int32 n)) (1))))))) in
+                                   ((sub_int (integer_of_int32 n_1)) (1))))))) in
           void);
           (loop_1:
           while true do
@@ -1849,7 +1973,7 @@ let binary_search_safety =
                  ((JC_24: le_int((0), integer_of_int32(l)))
                  and (JC_25:
                      le_int(integer_of_int32(u),
-                     sub_int(integer_of_int32(n), (1)))))) } ];
+                     sub_int(integer_of_int32(n_1), (1)))))) } ];
             try
              (C_14:
              begin
@@ -2872,6 +2996,10 @@ type longP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -2900,6 +3028,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -2941,6 +3074,10 @@ predicate left_valid_struct_longP(p: longP pointer, a: int,
   longP_alloc_table: longP alloc_table) = (offset_min(longP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2968,6 +3105,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 axiom pointer_addr_of_longP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(longP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address:
@@ -2981,17 +3124,22 @@ predicate right_valid_struct_longP(p: longP pointer, b: int,
   longP_alloc_table: longP alloc_table) = (offset_max(longP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
 predicate sorted(t: longP pointer, a: int, b: int,
   longP_longM_t_1_at_L: (longP, int32) memory) =
-  (forall i:int.
-    (forall j:int.
-      (((a <= i) and ((i <= j) and (j <= b))) ->
+  (forall i_1:int.
+    (forall j_0:int.
+      (((a <= i_1) and ((i_1 <= j_0) and (j_0 <= b))) ->
        (integer_of_int32(select(longP_longM_t_1_at_L, shift(t,
-       i))) <= integer_of_int32(select(longP_longM_t_1_at_L, shift(t, j)))))))
+       i_1))) <= integer_of_int32(select(longP_longM_t_1_at_L, shift(t,
+       j_0)))))))
 
 predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -3002,6 +3150,11 @@ predicate strict_valid_root_longP(p: longP pointer, a: int, b: int,
   longP_alloc_table: longP alloc_table) =
   ((offset_min(longP_alloc_table, p) = a) and (offset_max(longP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3018,10 +3171,46 @@ predicate strict_valid_struct_longP(p: longP pointer, a: int, b: int,
   ((offset_min(longP_alloc_table, p) = a) and (offset_max(longP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8.
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -3032,6 +3221,11 @@ predicate valid_root_longP(p: longP pointer, a: int, b: int,
   longP_alloc_table: longP alloc_table) =
   ((offset_min(longP_alloc_table, p) <= a) and (offset_max(longP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3047,6 +3241,11 @@ predicate valid_struct_longP(p: longP pointer, a: int, b: int,
   longP_alloc_table: longP alloc_table) =
   ((offset_min(longP_alloc_table, p) <= a) and (offset_max(longP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3084,64 +3283,64 @@ axiom mean_as_axiom:
 
 goal binary_search_ensures_default_po_1:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   ("JC_43": ("JC_41": (0 <= integer_of_int32(l))))
 
 goal binary_search_ensures_default_po_2:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
-  ("JC_43": ("JC_42": (integer_of_int32(u) <= (integer_of_int32(n) - 1))))
+  ("JC_43": ("JC_42": (integer_of_int32(u) <= (integer_of_int32(n_1) - 1))))
 
 goal binary_search_ensures_default_po_3:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
   ("JC_43":
   (("JC_41": (0 <= integer_of_int32(l0))) and
-   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3153,26 +3352,26 @@ goal binary_search_ensures_default_po_3:
 
 goal binary_search_ensures_default_po_4:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
   ("JC_43":
   (("JC_41": (0 <= integer_of_int32(l0))) and
-   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3184,29 +3383,29 @@ goal binary_search_ensures_default_po_4:
 
 goal binary_search_ensures_default_po_5:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
   ("JC_43":
   (("JC_41": (0 <= integer_of_int32(l0))) and
-   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3228,29 +3427,29 @@ goal binary_search_ensures_default_po_5:
 
 goal binary_search_ensures_default_po_6:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
   ("JC_43":
   (("JC_41": (0 <= integer_of_int32(l0))) and
-   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3271,33 +3470,33 @@ goal binary_search_ensures_default_po_6:
   (integer_of_int32(result5) = (integer_of_int32(m) - 1)) ->
   forall u1:int32.
   (u1 = result5) ->
-  ("JC_43": ("JC_42": (integer_of_int32(u1) <= (integer_of_int32(n) - 1))))
+  ("JC_43": ("JC_42": (integer_of_int32(u1) <= (integer_of_int32(n_1) - 1))))
 
 goal binary_search_ensures_default_po_7:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
   ("JC_43":
   (("JC_41": (0 <= integer_of_int32(l0))) and
-   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3322,29 +3521,29 @@ goal binary_search_ensures_default_po_7:
 
 goal binary_search_ensures_default_po_8:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
   ("JC_43":
   (("JC_41": (0 <= integer_of_int32(l0))) and
-   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3365,30 +3564,30 @@ goal binary_search_ensures_default_po_8:
   (__retres = m) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_13": ("JC_12": (integer_of_int32(return) < integer_of_int32(n))))
+  ("JC_13": ("JC_12": (integer_of_int32(return) < integer_of_int32(n_1))))
 
 goal binary_search_ensures_default_po_9:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
   ("JC_43":
   (("JC_41": (0 <= integer_of_int32(l0))) and
-   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) > integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (-1)) ->
@@ -3400,26 +3599,26 @@ goal binary_search_ensures_default_po_9:
 
 goal binary_search_ensures_default_po_10:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
   ("JC_43":
   (("JC_41": (0 <= integer_of_int32(l0))) and
-   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_42": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) > integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (-1)) ->
@@ -3427,81 +3626,81 @@ goal binary_search_ensures_default_po_10:
   (__retres = result1) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_13": ("JC_12": (integer_of_int32(return) < integer_of_int32(n))))
+  ("JC_13": ("JC_12": (integer_of_int32(return) < integer_of_int32(n_1))))
 
 goal binary_search_ensures_failure_po_1:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), longP_longM_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n_1) - 1), longP_longM_t_2) and
    ("JC_9":
-   (("JC_6": (integer_of_int32(n) >= 0)) and
+   (("JC_6": (integer_of_int32(n_1) >= 0)) and
     (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
      ("JC_8": (offset_max(longP_t_2_alloc_table,
-     t_0) >= (integer_of_int32(n) - 1))))))) ->
+     t_0) >= (integer_of_int32(n_1) - 1))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall k:int.
   ((0 <= k) and
-   ((k < integer_of_int32(n)) and (integer_of_int32(select(longP_longM_t_2,
+   ((k < integer_of_int32(n_1)) and (integer_of_int32(select(longP_longM_t_2,
     shift(t_0, k))) = integer_of_int32(v)))) ->
   ("JC_61": (integer_of_int32(l) <= k))
 
 goal binary_search_ensures_failure_po_2:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), longP_longM_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n_1) - 1), longP_longM_t_2) and
    ("JC_9":
-   (("JC_6": (integer_of_int32(n) >= 0)) and
+   (("JC_6": (integer_of_int32(n_1) >= 0)) and
     (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
      ("JC_8": (offset_max(longP_t_2_alloc_table,
-     t_0) >= (integer_of_int32(n) - 1))))))) ->
+     t_0) >= (integer_of_int32(n_1) - 1))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall k:int.
   ((0 <= k) and
-   ((k < integer_of_int32(n)) and (integer_of_int32(select(longP_longM_t_2,
+   ((k < integer_of_int32(n_1)) and (integer_of_int32(select(longP_longM_t_2,
     shift(t_0, k))) = integer_of_int32(v)))) ->
   ("JC_61": (k <= integer_of_int32(u)))
 
 goal binary_search_ensures_failure_po_3:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), longP_longM_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n_1) - 1), longP_longM_t_2) and
    ("JC_9":
-   (("JC_6": (integer_of_int32(n) >= 0)) and
+   (("JC_6": (integer_of_int32(n_1) >= 0)) and
     (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
      ("JC_8": (offset_max(longP_t_2_alloc_table,
-     t_0) >= (integer_of_int32(n) - 1))))))) ->
+     t_0) >= (integer_of_int32(n_1) - 1))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -3509,13 +3708,13 @@ goal binary_search_ensures_failure_po_3:
   ("JC_61":
   (forall k:int.
     (((0 <= k) and
-      ((k < integer_of_int32(n)) and
+      ((k < integer_of_int32(n_1)) and
        (integer_of_int32(select(longP_longM_t_2, shift(t_0,
        k))) = integer_of_int32(v)))) ->
      ((integer_of_int32(l0) <= k) and (k <= integer_of_int32(u0)))))) ->
   ("JC_64":
   (("JC_62": (0 <= integer_of_int32(l0))) and
-   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3535,29 +3734,29 @@ goal binary_search_ensures_failure_po_3:
   (l1 = result4) ->
   forall k:int.
   ((0 <= k) and
-   ((k < integer_of_int32(n)) and (integer_of_int32(select(longP_longM_t_2,
+   ((k < integer_of_int32(n_1)) and (integer_of_int32(select(longP_longM_t_2,
     shift(t_0, k))) = integer_of_int32(v)))) ->
   ("JC_61": (integer_of_int32(l1) <= k))
 
 goal binary_search_ensures_failure_po_4:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), longP_longM_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n_1) - 1), longP_longM_t_2) and
    ("JC_9":
-   (("JC_6": (integer_of_int32(n) >= 0)) and
+   (("JC_6": (integer_of_int32(n_1) >= 0)) and
     (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
      ("JC_8": (offset_max(longP_t_2_alloc_table,
-     t_0) >= (integer_of_int32(n) - 1))))))) ->
+     t_0) >= (integer_of_int32(n_1) - 1))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -3565,13 +3764,13 @@ goal binary_search_ensures_failure_po_4:
   ("JC_61":
   (forall k:int.
     (((0 <= k) and
-      ((k < integer_of_int32(n)) and
+      ((k < integer_of_int32(n_1)) and
        (integer_of_int32(select(longP_longM_t_2, shift(t_0,
        k))) = integer_of_int32(v)))) ->
      ((integer_of_int32(l0) <= k) and (k <= integer_of_int32(u0)))))) ->
   ("JC_64":
   (("JC_62": (0 <= integer_of_int32(l0))) and
-   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3591,29 +3790,29 @@ goal binary_search_ensures_failure_po_4:
   (l1 = result4) ->
   forall k:int.
   ((0 <= k) and
-   ((k < integer_of_int32(n)) and (integer_of_int32(select(longP_longM_t_2,
+   ((k < integer_of_int32(n_1)) and (integer_of_int32(select(longP_longM_t_2,
     shift(t_0, k))) = integer_of_int32(v)))) ->
   ("JC_61": (k <= integer_of_int32(u0)))
 
 goal binary_search_ensures_failure_po_5:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), longP_longM_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n_1) - 1), longP_longM_t_2) and
    ("JC_9":
-   (("JC_6": (integer_of_int32(n) >= 0)) and
+   (("JC_6": (integer_of_int32(n_1) >= 0)) and
     (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
      ("JC_8": (offset_max(longP_t_2_alloc_table,
-     t_0) >= (integer_of_int32(n) - 1))))))) ->
+     t_0) >= (integer_of_int32(n_1) - 1))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -3621,13 +3820,13 @@ goal binary_search_ensures_failure_po_5:
   ("JC_61":
   (forall k:int.
     (((0 <= k) and
-      ((k < integer_of_int32(n)) and
+      ((k < integer_of_int32(n_1)) and
        (integer_of_int32(select(longP_longM_t_2, shift(t_0,
        k))) = integer_of_int32(v)))) ->
      ((integer_of_int32(l0) <= k) and (k <= integer_of_int32(u0)))))) ->
   ("JC_64":
   (("JC_62": (0 <= integer_of_int32(l0))) and
-   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3650,29 +3849,29 @@ goal binary_search_ensures_failure_po_5:
   (u1 = result5) ->
   forall k:int.
   ((0 <= k) and
-   ((k < integer_of_int32(n)) and (integer_of_int32(select(longP_longM_t_2,
+   ((k < integer_of_int32(n_1)) and (integer_of_int32(select(longP_longM_t_2,
     shift(t_0, k))) = integer_of_int32(v)))) ->
   ("JC_61": (integer_of_int32(l0) <= k))
 
 goal binary_search_ensures_failure_po_6:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), longP_longM_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n_1) - 1), longP_longM_t_2) and
    ("JC_9":
-   (("JC_6": (integer_of_int32(n) >= 0)) and
+   (("JC_6": (integer_of_int32(n_1) >= 0)) and
     (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
      ("JC_8": (offset_max(longP_t_2_alloc_table,
-     t_0) >= (integer_of_int32(n) - 1))))))) ->
+     t_0) >= (integer_of_int32(n_1) - 1))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -3680,13 +3879,13 @@ goal binary_search_ensures_failure_po_6:
   ("JC_61":
   (forall k:int.
     (((0 <= k) and
-      ((k < integer_of_int32(n)) and
+      ((k < integer_of_int32(n_1)) and
        (integer_of_int32(select(longP_longM_t_2, shift(t_0,
        k))) = integer_of_int32(v)))) ->
      ((integer_of_int32(l0) <= k) and (k <= integer_of_int32(u0)))))) ->
   ("JC_64":
   (("JC_62": (0 <= integer_of_int32(l0))) and
-   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3709,29 +3908,29 @@ goal binary_search_ensures_failure_po_6:
   (u1 = result5) ->
   forall k:int.
   ((0 <= k) and
-   ((k < integer_of_int32(n)) and (integer_of_int32(select(longP_longM_t_2,
+   ((k < integer_of_int32(n_1)) and (integer_of_int32(select(longP_longM_t_2,
     shift(t_0, k))) = integer_of_int32(v)))) ->
   ("JC_61": (k <= integer_of_int32(u1)))
 
 goal binary_search_ensures_failure_po_7:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), longP_longM_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n_1) - 1), longP_longM_t_2) and
    ("JC_9":
-   (("JC_6": (integer_of_int32(n) >= 0)) and
+   (("JC_6": (integer_of_int32(n_1) >= 0)) and
     (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
      ("JC_8": (offset_max(longP_t_2_alloc_table,
-     t_0) >= (integer_of_int32(n) - 1))))))) ->
+     t_0) >= (integer_of_int32(n_1) - 1))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -3739,13 +3938,13 @@ goal binary_search_ensures_failure_po_7:
   ("JC_61":
   (forall k:int.
     (((0 <= k) and
-      ((k < integer_of_int32(n)) and
+      ((k < integer_of_int32(n_1)) and
        (integer_of_int32(select(longP_longM_t_2, shift(t_0,
        k))) = integer_of_int32(v)))) ->
      ((integer_of_int32(l0) <= k) and (k <= integer_of_int32(u0)))))) ->
   ("JC_64":
   (("JC_62": (0 <= integer_of_int32(l0))) and
-   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3768,29 +3967,29 @@ goal binary_search_ensures_failure_po_7:
   (return = __retres) ->
   (integer_of_int32(return) = (-1)) ->
   forall k_0:int.
-  ((0 <= k_0) and (k_0 < integer_of_int32(n))) ->
+  ((0 <= k_0) and (k_0 < integer_of_int32(n_1))) ->
   ("JC_21": (integer_of_int32(select(longP_longM_t_2, shift(t_0,
   k_0))) <> integer_of_int32(v)))
 
 goal binary_search_ensures_failure_po_8:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), longP_longM_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n_1) - 1), longP_longM_t_2) and
    ("JC_9":
-   (("JC_6": (integer_of_int32(n) >= 0)) and
+   (("JC_6": (integer_of_int32(n_1) >= 0)) and
     (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
      ("JC_8": (offset_max(longP_t_2_alloc_table,
-     t_0) >= (integer_of_int32(n) - 1))))))) ->
+     t_0) >= (integer_of_int32(n_1) - 1))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -3798,13 +3997,13 @@ goal binary_search_ensures_failure_po_8:
   ("JC_61":
   (forall k:int.
     (((0 <= k) and
-      ((k < integer_of_int32(n)) and
+      ((k < integer_of_int32(n_1)) and
        (integer_of_int32(select(longP_longM_t_2, shift(t_0,
        k))) = integer_of_int32(v)))) ->
      ((integer_of_int32(l0) <= k) and (k <= integer_of_int32(u0)))))) ->
   ("JC_64":
   (("JC_62": (0 <= integer_of_int32(l0))) and
-   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_63": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) > integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (-1)) ->
@@ -3814,28 +4013,28 @@ goal binary_search_ensures_failure_po_8:
   (return = __retres) ->
   (integer_of_int32(return) = (-1)) ->
   forall k_0:int.
-  ((0 <= k_0) and (k_0 < integer_of_int32(n))) ->
+  ((0 <= k_0) and (k_0 < integer_of_int32(n_1))) ->
   ("JC_21": (integer_of_int32(select(longP_longM_t_2, shift(t_0,
   k_0))) <> integer_of_int32(v)))
 
 goal binary_search_ensures_success_po_1:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -3843,7 +4042,7 @@ goal binary_search_ensures_success_po_1:
   ("JC_55": true) ->
   ("JC_53":
   (("JC_51": (0 <= integer_of_int32(l0))) and
-   ("JC_52": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_52": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(l0) + integer_of_int32(u0))) ->
@@ -3870,22 +4069,22 @@ goal binary_search_ensures_success_po_1:
 
 goal binary_search_ensures_success_po_2:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -3893,7 +4092,7 @@ goal binary_search_ensures_success_po_2:
   ("JC_55": true) ->
   ("JC_53":
   (("JC_51": (0 <= integer_of_int32(l0))) and
-   ("JC_52": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_52": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) > integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (-1)) ->
@@ -3907,51 +4106,51 @@ goal binary_search_ensures_success_po_2:
 
 goal binary_search_safety_po_1:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  ((-2147483648) <= (integer_of_int32(n) - 1))
+  ((-2147483648) <= (integer_of_int32(n_1) - 1))
 
 goal binary_search_safety_po_2:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  ((integer_of_int32(n) - 1) <= 2147483647)
+  ((integer_of_int32(n_1) - 1) <= 2147483647)
 
 goal binary_search_safety_po_3:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -3959,27 +4158,27 @@ goal binary_search_safety_po_3:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   ((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0)))
 
 goal binary_search_safety_po_4:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -3987,27 +4186,27 @@ goal binary_search_safety_po_4:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)
 
 goal binary_search_safety_po_5:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4015,7 +4214,7 @@ goal binary_search_safety_po_5:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4025,21 +4224,21 @@ goal binary_search_safety_po_5:
 
 goal binary_search_safety_po_6:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4047,7 +4246,7 @@ goal binary_search_safety_po_6:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4060,21 +4259,21 @@ goal binary_search_safety_po_6:
 
 goal binary_search_safety_po_7:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4082,7 +4281,7 @@ goal binary_search_safety_po_7:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4095,21 +4294,21 @@ goal binary_search_safety_po_7:
 
 goal binary_search_safety_po_8:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4117,7 +4316,7 @@ goal binary_search_safety_po_8:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4138,21 +4337,21 @@ goal binary_search_safety_po_8:
 
 goal binary_search_safety_po_9:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4160,7 +4359,7 @@ goal binary_search_safety_po_9:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4181,24 +4380,24 @@ goal binary_search_safety_po_9:
 
 goal binary_search_safety_po_10:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4206,7 +4405,7 @@ goal binary_search_safety_po_10:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4232,24 +4431,24 @@ goal binary_search_safety_po_10:
 
 goal binary_search_safety_po_11:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4257,7 +4456,7 @@ goal binary_search_safety_po_11:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4283,24 +4482,24 @@ goal binary_search_safety_po_11:
 
 goal binary_search_safety_po_12:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4308,7 +4507,7 @@ goal binary_search_safety_po_12:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4340,24 +4539,24 @@ goal binary_search_safety_po_12:
 
 goal binary_search_safety_po_13:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4365,7 +4564,7 @@ goal binary_search_safety_po_13:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4398,24 +4597,24 @@ goal binary_search_safety_po_13:
 
 goal binary_search_safety_po_14:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4423,7 +4622,7 @@ goal binary_search_safety_po_14:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4454,24 +4653,24 @@ goal binary_search_safety_po_14:
 
 goal binary_search_safety_po_15:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4479,7 +4678,7 @@ goal binary_search_safety_po_15:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4510,24 +4709,24 @@ goal binary_search_safety_po_15:
 
 goal binary_search_safety_po_16:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4535,7 +4734,7 @@ goal binary_search_safety_po_16:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -4572,24 +4771,24 @@ goal binary_search_safety_po_16:
 
 goal binary_search_safety_po_17:
   forall t_0:longP pointer.
-  forall n:int32.
+  forall n_1:int32.
   forall v:int32.
   forall longP_t_2_alloc_table:longP alloc_table.
   forall longP_longM_t_2:(longP,
   int32) memory.
   ("JC_9":
-  (("JC_6": (integer_of_int32(n) >= 0)) and
+  (("JC_6": (integer_of_int32(n_1) >= 0)) and
    (("JC_7": (offset_min(longP_t_2_alloc_table, t_0) <= 0)) and
     ("JC_8": (offset_max(longP_t_2_alloc_table,
-    t_0) >= (integer_of_int32(n) - 1)))))) ->
+    t_0) >= (integer_of_int32(n_1) - 1)))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
   (l = result) ->
-  (((-2147483648) <= (integer_of_int32(n) - 1)) and
-   ((integer_of_int32(n) - 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(n_1) - 1)) and
+   ((integer_of_int32(n_1) - 1) <= 2147483647)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
+  (integer_of_int32(result0) = (integer_of_int32(n_1) - 1)) ->
   forall u:int32.
   (u = result0) ->
   forall l0:int32.
@@ -4597,7 +4796,7 @@ goal binary_search_safety_po_17:
   ("JC_28": true) ->
   ("JC_26":
   (("JC_24": (0 <= integer_of_int32(l0))) and
-   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+   ("JC_25": (integer_of_int32(u0) <= (integer_of_int32(n_1) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   (((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(u0))) and
    ((integer_of_int32(l0) + integer_of_int32(u0)) <= 2147483647)) ->
@@ -5492,6 +5691,8 @@ why -simplify [...] why/binary_search.why
 
 (DEFPRED (eq_int8 x y) (EQ (integer_of_int8 x) (integer_of_int8 y)))
 
+(DEFPRED (eq_uint8 x y) (EQ (integer_of_uint8 x) (integer_of_uint8 y)))
+
 (BG_PUSH
  ;; Why axiom int32_coerce
  (FORALL (x)
@@ -5533,6 +5734,9 @@ why -simplify [...] why/binary_search.why
 (DEFPRED (left_valid_struct_longP p a longP_alloc_table)
   (<= (offset_min longP_alloc_table p) a))
 
+(DEFPRED (left_valid_struct_unsigned_charP p a unsigned_charP_alloc_table)
+  (<= (offset_min unsigned_charP_alloc_table p) a))
+
 (DEFPRED (left_valid_struct_voidP p a voidP_alloc_table)
   (<= (offset_min voidP_alloc_table p) a))
 
@@ -5561,6 +5765,10 @@ why -simplify [...] why/binary_search.why
  (FORALL (p) (EQ p (pointer_address (longP_of_pointer_address p)))))
 
 (BG_PUSH
+ ;; Why axiom pointer_addr_of_unsigned_charP_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (unsigned_charP_of_pointer_address p)))))
+
+(BG_PUSH
  ;; Why axiom pointer_addr_of_voidP_of_pointer_address
  (FORALL (p) (EQ p (pointer_address (voidP_of_pointer_address p)))))
 
@@ -5570,17 +5778,17 @@ why -simplify [...] why/binary_search.why
 (DEFPRED (right_valid_struct_longP p b longP_alloc_table)
   (>= (offset_max longP_alloc_table p) b))
 
+(DEFPRED (right_valid_struct_unsigned_charP p b unsigned_charP_alloc_table)
+  (>= (offset_max unsigned_charP_alloc_table p) b))
+
 (DEFPRED (right_valid_struct_voidP p b voidP_alloc_table)
   (>= (offset_max voidP_alloc_table p) b))
 
 (DEFPRED (sorted t a b longP_longM_t_1_at_L)
-  (FORALL (i j)
-  (IMPLIES (AND (<= a i) (AND (<= i j) (<= j b)))
-  (<= (integer_of_int32 (select longP_longM_t_1_at_L (shift t i))) (integer_of_int32
-                                                                   (select
-                                                                   longP_longM_t_1_at_L 
-                                                                   (shift
-                                                                   t j)))))))
+  (FORALL (i_1 j_0)
+  (IMPLIES (AND (<= a i_1) (AND (<= i_1 j_0) (<= j_0 b)))
+  (<= (integer_of_int32 (select longP_longM_t_1_at_L (shift t i_1))) 
+  (integer_of_int32 (select longP_longM_t_1_at_L (shift t j_0)))))))
 
 (DEFPRED (strict_valid_root_charP p a b charP_alloc_table)
   (AND (EQ (offset_min charP_alloc_table p) a)
@@ -5589,6 +5797,10 @@ why -simplify [...] why/binary_search.why
 (DEFPRED (strict_valid_root_longP p a b longP_alloc_table)
   (AND (EQ (offset_min longP_alloc_table p) a)
   (EQ (offset_max longP_alloc_table p) b)))
+
+(DEFPRED (strict_valid_root_unsigned_charP p a b unsigned_charP_alloc_table)
+  (AND (EQ (offset_min unsigned_charP_alloc_table p) a)
+  (EQ (offset_max unsigned_charP_alloc_table p) b)))
 
 (DEFPRED (strict_valid_root_voidP p a b voidP_alloc_table)
   (AND (EQ (offset_min voidP_alloc_table p) a)
@@ -5602,9 +5814,45 @@ why -simplify [...] why/binary_search.why
   (AND (EQ (offset_min longP_alloc_table p) a)
   (EQ (offset_max longP_alloc_table p) b)))
 
+(DEFPRED (strict_valid_struct_unsigned_charP p a b unsigned_charP_alloc_table)
+  (AND (EQ (offset_min unsigned_charP_alloc_table p) a)
+  (EQ (offset_max unsigned_charP_alloc_table p) b)))
+
 (DEFPRED (strict_valid_struct_voidP p a b voidP_alloc_table)
   (AND (EQ (offset_min voidP_alloc_table p) a)
   (EQ (offset_max voidP_alloc_table p) b)))
+
+(BG_PUSH
+ ;; Why axiom uint8_coerce
+ (FORALL (x)
+ (IMPLIES (AND (<= 0 x) (<= x 255))
+ (EQ (integer_of_uint8 (uint8_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom uint8_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_uint8 x) (integer_of_uint8 y)) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom uint8_range
+ (FORALL (x) (AND (<= 0 (integer_of_uint8 x)) (<= (integer_of_uint8 x) 255))))
+
+(BG_PUSH
+ ;; Why axiom unsigned_charP_int
+ (EQ (int_of_tag unsigned_charP_tag) 1))
+
+(BG_PUSH
+ ;; Why axiom unsigned_charP_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (unsigned_charP_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom unsigned_charP_parenttag_bottom
+ (EQ (parenttag unsigned_charP_tag bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom unsigned_charP_tags
+ (FORALL (x unsigned_charP_tag_table)
+ (instanceof unsigned_charP_tag_table x unsigned_charP_tag)))
 
 (DEFPRED (valid_root_charP p a b charP_alloc_table)
   (AND (<= (offset_min charP_alloc_table p) a)
@@ -5613,6 +5861,10 @@ why -simplify [...] why/binary_search.why
 (DEFPRED (valid_root_longP p a b longP_alloc_table)
   (AND (<= (offset_min longP_alloc_table p) a)
   (>= (offset_max longP_alloc_table p) b)))
+
+(DEFPRED (valid_root_unsigned_charP p a b unsigned_charP_alloc_table)
+  (AND (<= (offset_min unsigned_charP_alloc_table p) a)
+  (>= (offset_max unsigned_charP_alloc_table p) b)))
 
 (DEFPRED (valid_root_voidP p a b voidP_alloc_table)
   (AND (<= (offset_min voidP_alloc_table p) a)
@@ -5625,6 +5877,10 @@ why -simplify [...] why/binary_search.why
 (DEFPRED (valid_struct_longP p a b longP_alloc_table)
   (AND (<= (offset_min longP_alloc_table p) a)
   (>= (offset_max longP_alloc_table p) b)))
+
+(DEFPRED (valid_struct_unsigned_charP p a b unsigned_charP_alloc_table)
+  (AND (<= (offset_min unsigned_charP_alloc_table p) a)
+  (>= (offset_max unsigned_charP_alloc_table p) b)))
 
 (DEFPRED (valid_struct_voidP p a b voidP_alloc_table)
   (AND (<= (offset_min voidP_alloc_table p) a)
@@ -5659,54 +5915,55 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_ensures_default_po_1, File "HOME/tests/c/binary_search.c", line 52, characters 8-14
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u) (IMPLIES (EQ u result0) (<= 0 (integer_of_int32 l))))))))))))))
 
 ;; binary_search_ensures_default_po_2, File "HOME/tests/c/binary_search.c", line 52, characters 18-26
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
-(IMPLIES (EQ u result0) (<= (integer_of_int32 u) (- (integer_of_int32 n) 1))))))))))))))
+(IMPLIES (EQ u result0)
+(<= (integer_of_int32 u) (- (integer_of_int32 n_1) 1))))))))))))))
 
 ;; binary_search_ensures_default_po_3, File "HOME/tests/c/binary_search.c", line 60, characters 15-21
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -5719,23 +5976,23 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_ensures_default_po_4, File "HOME/tests/c/binary_search.c", line 60, characters 20-26
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -5748,25 +6005,25 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_ensures_default_po_5, File "HOME/tests/c/binary_search.c", line 52, characters 8-14
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -5788,25 +6045,25 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_ensures_default_po_6, File "HOME/tests/c/binary_search.c", line 52, characters 18-26
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -5830,29 +6087,29 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ (integer_of_int32 result5) (- (integer_of_int32 m) 1))
 (FORALL (u1)
 (IMPLIES (EQ u1 result5)
-(<= (integer_of_int32 u1) (- (integer_of_int32 n) 1)))))))))))))))))))))))))))))))))))))
+(<= (integer_of_int32 u1) (- (integer_of_int32 n_1) 1)))))))))))))))))))))))))))))))))))))
 
 ;; binary_search_ensures_default_po_7, File "HOME/tests/c/binary_search.c", line 41, characters 12-25
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -5879,25 +6136,25 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_ensures_default_po_8, File "HOME/tests/c/binary_search.c", line 41, characters 18-29
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -5921,27 +6178,27 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ |__retres| m)
 (FORALL (return)
 (IMPLIES (EQ return |__retres|)
-(< (integer_of_int32 return) (integer_of_int32 n)))))))))))))))))))))))))))))))))))))
+(< (integer_of_int32 return) (integer_of_int32 n_1)))))))))))))))))))))))))))))))))))))
 
 ;; binary_search_ensures_default_po_9, File "HOME/tests/c/binary_search.c", line 41, characters 12-25
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (> (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1) (- 0 1))
@@ -5952,23 +6209,23 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_ensures_default_po_10, File "HOME/tests/c/binary_search.c", line 41, characters 18-29
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (> (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1) (- 0 1))
@@ -5976,74 +6233,74 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ |__retres| result1)
 (FORALL (return)
 (IMPLIES (EQ return |__retres|)
-(< (integer_of_int32 return) (integer_of_int32 n))))))))))))))))))))))))
+(< (integer_of_int32 return) (integer_of_int32 n_1))))))))))))))))))))))))
 
 ;; binary_search_ensures_failure_po_1, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n) 1) longP_longM_t_2)
-         (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n_1) 1) longP_longM_t_2)
+         (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1)))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1)))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (k)
 (IMPLIES (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
 (<= (integer_of_int32 l) k)))))))))))))))))
 
 ;; binary_search_ensures_failure_po_2, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n) 1) longP_longM_t_2)
-         (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n_1) 1) longP_longM_t_2)
+         (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1)))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1)))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (k)
 (IMPLIES (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
 (<= k (integer_of_int32 u))))))))))))))))))
 
 ;; binary_search_ensures_failure_po_3, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n) 1) longP_longM_t_2)
-         (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n_1) 1) longP_longM_t_2)
+         (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1)))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1)))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
@@ -6051,12 +6308,12 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (FORALL (k)
          (IMPLIES
          (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
          (AND (<= (integer_of_int32 l0) k) (<= k (integer_of_int32 u0)))))
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -6078,27 +6335,27 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ l1 result4)
 (FORALL (k)
 (IMPLIES (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
 (<= (integer_of_int32 l1) k))))))))))))))))))))))))))))))))))))
 
 ;; binary_search_ensures_failure_po_4, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n) 1) longP_longM_t_2)
-         (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n_1) 1) longP_longM_t_2)
+         (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1)))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1)))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
@@ -6106,12 +6363,12 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (FORALL (k)
          (IMPLIES
          (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
          (AND (<= (integer_of_int32 l0) k) (<= k (integer_of_int32 u0)))))
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -6133,27 +6390,27 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ l1 result4)
 (FORALL (k)
 (IMPLIES (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
 (<= k (integer_of_int32 u0)))))))))))))))))))))))))))))))))))))
 
 ;; binary_search_ensures_failure_po_5, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n) 1) longP_longM_t_2)
-         (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n_1) 1) longP_longM_t_2)
+         (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1)))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1)))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
@@ -6161,12 +6418,12 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (FORALL (k)
          (IMPLIES
          (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
          (AND (<= (integer_of_int32 l0) k) (<= k (integer_of_int32 u0)))))
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -6192,27 +6449,27 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ u1 result5)
 (FORALL (k)
 (IMPLIES (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
 (<= (integer_of_int32 l0) k)))))))))))))))))))))))))))))))))))))))
 
 ;; binary_search_ensures_failure_po_6, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n) 1) longP_longM_t_2)
-         (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n_1) 1) longP_longM_t_2)
+         (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1)))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1)))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
@@ -6220,12 +6477,12 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (FORALL (k)
          (IMPLIES
          (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
          (AND (<= (integer_of_int32 l0) k) (<= k (integer_of_int32 u0)))))
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -6251,27 +6508,27 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ u1 result5)
 (FORALL (k)
 (IMPLIES (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
 (<= k (integer_of_int32 u1))))))))))))))))))))))))))))))))))))))))
 
 ;; binary_search_ensures_failure_po_7, File "HOME/tests/c/binary_search.c", line 46, characters 14-83
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n) 1) longP_longM_t_2)
-         (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n_1) 1) longP_longM_t_2)
+         (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1)))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1)))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
@@ -6279,12 +6536,12 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (FORALL (k)
          (IMPLIES
          (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
          (AND (<= (integer_of_int32 l0) k) (<= k (integer_of_int32 u0)))))
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -6310,26 +6567,26 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ return |__retres|)
 (IMPLIES (EQ (integer_of_int32 return) (- 0 1))
 (FORALL (k_0)
-(IMPLIES (AND (<= 0 k_0) (< k_0 (integer_of_int32 n)))
+(IMPLIES (AND (<= 0 k_0) (< k_0 (integer_of_int32 n_1)))
 (NEQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k_0)))
 (integer_of_int32 v)))))))))))))))))))))))))))))))))))))))))
 
 ;; binary_search_ensures_failure_po_8, File "HOME/tests/c/binary_search.c", line 46, characters 14-83
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n) 1) longP_longM_t_2)
-         (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (sorted t_0 0 (- (integer_of_int32 n_1) 1) longP_longM_t_2)
+         (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1)))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1)))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
@@ -6337,12 +6594,12 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (FORALL (k)
          (IMPLIES
          (AND (<= 0 k)
-         (AND (< k (integer_of_int32 n))
+         (AND (< k (integer_of_int32 n_1))
          (EQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k)))
          (integer_of_int32 v))))
          (AND (<= (integer_of_int32 l0) k) (<= k (integer_of_int32 u0)))))
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (> (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1) (- 0 1))
@@ -6352,32 +6609,32 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ return |__retres|)
 (IMPLIES (EQ (integer_of_int32 return) (- 0 1))
 (FORALL (k_0)
-(IMPLIES (AND (<= 0 k_0) (< k_0 (integer_of_int32 n)))
+(IMPLIES (AND (<= 0 k_0) (< k_0 (integer_of_int32 n_1)))
 (NEQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k_0)))
 (integer_of_int32 v))))))))))))))))))))))))))))))
 
 ;; binary_search_ensures_success_po_1, File "HOME/tests/c/binary_search.c", line 43, characters 14-46
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1)
@@ -6408,26 +6665,26 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_ensures_success_po_2, File "HOME/tests/c/binary_search.c", line 43, characters 14-46
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (> (integer_of_int32 l0) (integer_of_int32 u0))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1) (- 0 1))
@@ -6442,106 +6699,106 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_1, File "HOME/tests/c/binary_search.c", line 50, characters 17-20
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
-(<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))))))))))
+(<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))))))))))
 
 ;; binary_search_safety_po_2, File "HOME/tests/c/binary_search.c", line 50, characters 17-20
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
-(<= (- (integer_of_int32 n) 1) constant_too_large_2147483647)))))))))
+(<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647)))))))))
 
 ;; binary_search_safety_po_3, File "HOME/tests/c/binary_search.c", line 59, characters 13-18
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) (integer_of_int32
                                                                  u0)))))))))))))))))))))
 
 ;; binary_search_safety_po_4, File "HOME/tests/c/binary_search.c", line 59, characters 13-18
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (<= (+ (integer_of_int32 l0) (integer_of_int32 u0)) constant_too_large_2147483647)))))))))))))))))))
 
 ;; binary_search_safety_po_5, File "HOME/tests/c/binary_search.c", line 59, characters 12-23
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -6554,27 +6811,27 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_6, File "HOME/tests/c/binary_search.c", line 59, characters 12-23
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -6590,27 +6847,27 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_7, File "HOME/tests/c/binary_search.c", line 59, characters 12-23
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -6626,27 +6883,27 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_8, File "HOME/tests/c/binary_search.c", line 61, characters 8-12
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -6670,27 +6927,27 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_9, File "HOME/tests/c/binary_search.c", line 61, characters 8-12
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (longP_t_2_alloc_table)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -6714,29 +6971,29 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_10, File "HOME/tests/c/binary_search.c", line 61, characters 22-27
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -6767,29 +7024,29 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_11, File "HOME/tests/c/binary_search.c", line 61, characters 22-27
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -6820,29 +7077,29 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_12, File "HOME/tests/c/binary_search.c", line 56, characters 19-22
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -6880,29 +7137,29 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_13, File "HOME/tests/c/binary_search.c", line 56, characters 19-22
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -6941,29 +7198,29 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_14, File "HOME/tests/c/binary_search.c", line 62, characters 27-32
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -7001,29 +7258,29 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_15, File "HOME/tests/c/binary_search.c", line 62, characters 27-32
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -7061,29 +7318,29 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_16, File "HOME/tests/c/binary_search.c", line 56, characters 19-22
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 
@@ -7128,29 +7385,29 @@ why -simplify [...] why/binary_search.why
 
 ;; binary_search_safety_po_17, File "HOME/tests/c/binary_search.c", line 56, characters 19-22
 (FORALL (t_0)
-(FORALL (n)
+(FORALL (n_1)
 (FORALL (v)
 (FORALL (longP_t_2_alloc_table)
 (FORALL (longP_longM_t_2)
-(IMPLIES (AND (>= (integer_of_int32 n) 0)
+(IMPLIES (AND (>= (integer_of_int32 n_1) 0)
          (AND (<= (offset_min longP_t_2_alloc_table t_0) 0)
-         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n) 1))))
+         (>= (offset_max longP_t_2_alloc_table t_0) (- (integer_of_int32 n_1) 1))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (l)
 (IMPLIES (EQ l result)
 (IMPLIES (AND
-         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))
-         (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647))
+         (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n_1) 1))
+         (<= (- (integer_of_int32 n_1) 1) constant_too_large_2147483647))
 (FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
+(IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n_1) 1))
 (FORALL (u)
 (IMPLIES (EQ u result0)
 (FORALL (l0)
 (FORALL (u0)
 (IMPLIES TRUE
 (IMPLIES (AND (<= 0 (integer_of_int32 l0))
-         (<= (integer_of_int32 u0) (- (integer_of_int32 n) 1)))
+         (<= (integer_of_int32 u0) (- (integer_of_int32 n_1) 1)))
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (IMPLIES (AND
          (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) 

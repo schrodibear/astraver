@@ -649,13 +649,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: floats_bsearch.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: floats_bsearch.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: floats_bsearch.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include floats_bsearch.depend
 
@@ -6084,10 +6084,10 @@ goal binary_search_safety_po_19:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/floats_bsearch_why.why    : ..##.............##.........#.......... (34/0/0/5/0)
+why/floats_bsearch_why.why    : ..##..............#.........#.......... (35/0/0/4/0)
 total   :  39
-valid   :  34 ( 87%)
+valid   :  35 ( 90%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   5 ( 13%)
+timeout :   4 ( 10%)
 failure :   0 (  0%)

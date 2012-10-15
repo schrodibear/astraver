@@ -70,9 +70,9 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int32 = -2147483648..2147483647
-
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag intP = {
   int32 intM: 32;
@@ -558,13 +558,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: find_array.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: find_array.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: find_array.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include find_array.depend
 
@@ -5021,10 +5021,10 @@ goal find_array_safety_po_19:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/find_array_why.why        : .....#.##.#...#...........#.#.#...# (26/0/0/9/0)
+why/find_array_why.why        : .....#..#.#...#.............#.#...# (28/0/0/7/0)
 total   :  35
-valid   :  26 ( 74%)
+valid   :  28 ( 80%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   9 ( 26%)
+timeout :   7 ( 20%)
 failure :   0 (  0%)

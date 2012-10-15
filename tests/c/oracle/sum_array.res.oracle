@@ -700,13 +700,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: sum_array.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: sum_array.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: sum_array.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include sum_array.depend
 
@@ -3866,10 +3866,10 @@ goal test2_safety_po_4:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/sum_array_why.why         : ##...................#...... (25/0/0/3/0)
+why/sum_array_why.why         : #?...................#...... (25/0/1/2/0)
 total   :  28
 valid   :  25 ( 89%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   3 ( 11%)
+unknown :   1 (  4%)
+timeout :   2 (  7%)
 failure :   0 (  0%)

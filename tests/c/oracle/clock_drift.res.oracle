@@ -500,13 +500,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: clock_drift.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: clock_drift.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: clock_drift.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include clock_drift.depend
 
@@ -3280,12 +3280,12 @@ goal f_single_safety_po_5:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/clock_drift_why.why       : ?......##........ (14/0/1/2/0)
+why/clock_drift_why.why       : ?......#......... (15/0/1/1/0)
 total   :  17
-valid   :  14 ( 82%)
+valid   :  15 ( 88%)
 invalid :   0 (  0%)
 unknown :   1 (  6%)
-timeout :   2 ( 12%)
+timeout :   1 (  6%)
 failure :   0 (  0%)
 // RUNGAPPA: will ask regtests to run gappa on VCs of this program
 ========== generation of Gappa VC output ==========

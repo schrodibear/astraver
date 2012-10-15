@@ -179,7 +179,6 @@ double sqrt_init(double x_0)
                     (C_4 : ((x_0 :> real) <= 2))));
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : (\real_abs(((\result :> real) -
                               (1 / \real_sqrt((\at(x_0,Old) :> real))))) <=
                    (0x1p-6 *
@@ -692,13 +691,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: float_sqrt.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: float_sqrt.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: float_sqrt.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include float_sqrt.depend
 
@@ -4834,10 +4833,10 @@ goal sqrt_safety_po_16:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/float_sqrt_why.why        : ?.#.#.###.############### (4/0/1/20/0)
+why/float_sqrt_why.why        : ?.#.#.###.?############## (4/0/2/19/0)
 total   :  25
 valid   :   4 ( 16%)
 invalid :   0 (  0%)
-unknown :   1 (  4%)
-timeout :  20 ( 80%)
+unknown :   2 (  8%)
+timeout :  19 ( 76%)
 failure :   0 (  0%)

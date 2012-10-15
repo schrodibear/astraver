@@ -111,9 +111,9 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type int32 = -2147483648..2147483647
-
 type int8 = -128..127
+
+type int32 = -2147483648..2147483647
 
 tag intP = {
   int32 intM: 32;
@@ -983,13 +983,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: duplets.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: duplets.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: duplets.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include duplets.depend
 
@@ -14085,10 +14085,10 @@ goal duplets_safety_po_19:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/duplets_why.why           : ..........#..................##...............................................................#......................# (113/0/0/5/0)
+why/duplets_why.why           : ..........#..................#................................................................#......................# (114/0/0/4/0)
 total   : 118
-valid   : 113 ( 96%)
+valid   : 114 ( 97%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   5 (  4%)
+timeout :   4 (  3%)
 failure :   0 (  0%)

@@ -121,7 +121,6 @@ type Tree = [Tree]
 int32 max(int32 x, int32 y)
 behavior default:
   assigns \nothing;
-  allocates \nothing;
   ensures (C_1 : (\result == \integer_max(\at(x,Old), \at(y,Old))));
 ;
 
@@ -585,13 +584,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: tree_max.mlw
-	@echo 'why3 [...] $<' && why3 --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: tree_max.mlw
-	@echo 'why3ide [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: tree_max.mlw
-	@echo 'why3replayer [...] $<' && why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include tree_max.depend
 
@@ -3776,10 +3775,10 @@ goal tree_max_safety_po_11:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/tree_max_why.why          : ##.#.#.#........... (14/0/0/5/0)
+why/tree_max_why.why          : .#.#.#.#........... (15/0/0/4/0)
 total   :  19
-valid   :  14 ( 74%)
+valid   :  15 ( 79%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   5 ( 26%)
+timeout :   4 ( 21%)
 failure :   0 (  0%)
