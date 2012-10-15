@@ -58,7 +58,7 @@ let fprintf_constant form e =
     | Prim_real(f) -> fprintf form "%s" f
     | Prim_bool(b) ->
         if !why3syntax then
-          fprintf form "%s" (if b then "True" else "False")
+          fprintf form "%s" (if b then "Bool.True" else "Bool.False")
         else
           fprintf form "%b" b
 (*
@@ -601,6 +601,7 @@ let rec bool_to_prop t =
   match t with
     | LConst (Prim_bool true) -> LTrue
     | LConst (Prim_bool false) -> LFalse
+    | LApp("bool_not",[t1]) -> LNot(bool_to_prop t1)
     | LApp("bool_and",[t1;t2]) -> LAnd(bool_to_prop t1,bool_to_prop t2)
     | LApp("bool_or",[t1;t2]) -> LOr(bool_to_prop t1,bool_to_prop t2)
     | LApp("lt_int_bool",[t1;t2]) -> LPred("lt_int",[t1;t2])
@@ -611,7 +612,8 @@ let rec bool_to_prop t =
     | LApp("le_real_bool",[t1;t2]) -> LPred("le_real",[t1;t2])
     | LApp("gt_real_bool",[t1;t2]) -> LPred("gt_real",[t1;t2])
     | LApp("ge_real_bool",[t1;t2]) -> LPred("ge_real",[t1;t2])
-    | _ -> assert false
+      (** by default *)
+    | _ -> LPred("eq",[t;LConst(Prim_bool true)])
 
 let rec fprintf_term form t =
   match t with

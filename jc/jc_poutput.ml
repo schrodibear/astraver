@@ -473,6 +473,8 @@ let rec pdecl fmt d =
       fprintf fmt "# Gen_Frame %s %s" name logic
     | JCDpragma_gen_sub (name,logic) ->
       fprintf fmt "# Gen_Sub %s %s" name logic
+    | JCDpragma_gen_same (name,logic) ->
+      fprintf fmt "# Gen_Same_Footprint %s %s" name logic
     | JCDaxiomatic(id,l) ->
 	fprintf fmt "@\n@[axiomatic %s {@\n@[<v 2>%a@]@\n}@]@\n" id
 	  (print_list space pdecl) l

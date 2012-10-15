@@ -691,7 +691,8 @@ let rec decl d =
     | JCDinvariant_policy _
     | JCDpragma_gen_sep _
     | JCDpragma_gen_frame _
-    | JCDpragma_gen_sub _ as e -> e
+    | JCDpragma_gen_sub _
+    | JCDpragma_gen_same _ as e -> e
 
 
   in new decl ~pos:d#pos dnode

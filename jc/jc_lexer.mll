@@ -301,6 +301,7 @@ rule token = parse
   | '#' ' '* "Gen_Separation" { PRAGMA_GEN_SEP }
   | '#' ' '* "Gen_Frame" { PRAGMA_GEN_FRAME }
   | '#' ' '* "Gen_Sub" { PRAGMA_GEN_SUB }
+  | '#' ' '* "Gen_Same_Footprint" { PRAGMA_GEN_SAME }
   | rL (rL | rD)*           { match lexeme lexbuf with
 				| "_" -> UNDERSCORE
 				| s -> IDENTIFIER s }

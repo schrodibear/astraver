@@ -85,6 +85,7 @@ let variables_env = Hashtbl.create 97
 (* Store the generated user predicates *)
 let pragma_gen_sep = Hashtbl.create 10
 let pragma_gen_frame = Hashtbl.create 10
+let pragma_gen_same = Hashtbl.create 10
 
 (* Keep the pragma which are defined
    before one of its argument *)
@@ -2495,7 +2496,8 @@ let rec type_labels_in_decl d = match d#node with
   | JCDtermination_policy _ | JCDlogic_var _ ->
       ()
   | JCDaxiomatic(_id,l) -> List.iter type_labels_in_decl l
-  | JCDpragma_gen_sep _ | JCDpragma_gen_frame _ |JCDpragma_gen_sub _ -> ()
+  | JCDpragma_gen_sep _ | JCDpragma_gen_frame _ | JCDpragma_gen_sub _
+  | JCDpragma_gen_same _ -> ()
 
 
 (* <====== A partir d'ici, c'est pas encore fait *)
@@ -3412,6 +3414,22 @@ of an invariant policy";
         if Jc_options.gen_frame_rule_with_ft && not only_types then
 	  begin
             create_pragma_gen_frame_sub `Sub loc name logic
+          end;
+      acc
+    | JCDpragma_gen_same(name,logic) -> 
+        if Jc_options.gen_frame_rule_with_ft && not only_types then
+	  begin
+            let logic_info =
+              try
+                find_logic_info name
+              with Not_found -> raise (Identifier_Not_found name) in
+            let pred_info =
+              try
+                find_logic_info logic
+              with Not_found -> raise (Identifier_Not_found logic) in
+            (** TODO test that the arguments are the same *)
+            Hashtbl.add pragma_gen_same
+              logic_info.jc_logic_info_tag pred_info
           end;
       acc
     | JCDaxiomatic(id,l) ->

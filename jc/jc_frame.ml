@@ -1382,9 +1382,10 @@ sig
   
   val def_frame_in :  string -> NotIn.t -> (string * Output.logic_type) list ->
     Output.why_decl list -> NotIn.t list -> Output.why_decl list
-  val def_frame : string -> bool -> (string * Output.logic_type) list ->
+  val def_frame : string -> bool -> string ->
+    (string * Output.logic_type) list ->
     Output.why_decl list -> NotIn.t list -> Output.why_decl list
-  
+
   type for_in = string -> (string * logic_type) list ->
     NotIn.t -> (Jc_fenv.logic_info * (string * logic_type) list) list ->
     why_decl list -> why_decl list
@@ -2081,19 +2082,20 @@ struct
       acc notin_updates in
     acc
 
-  let def_frame f_name is_pred params acc notin_updates =
+  (** framed_name must have the same param than f_name *)
+  let def_frame framed_name is_pred f_name params acc notin_updates =
     let gen_framed =
       if is_pred
-      then `Pred (fun params -> LPred(f_name,params))
-      else `Term (fun params -> LApp(f_name,params)) in
+      then `Pred (fun params -> LPred(framed_name,params))
+      else `Term (fun params -> LApp(framed_name,params)) in
     let acc = List.fold_left
       (fun acc notin_update ->
-        (gen f_name f_name gen_framed notin_update params params)::acc) 
+        (gen framed_name f_name gen_framed notin_update params params)::acc) 
       acc notin_updates in
     let acc = List.fold_all_part 
       (fun acc part -> match part with | [] -> acc (* trivial axiom *)
         | notin_updates ->
-          gen_many f_name f_name gen_framed notin_updates params params ::acc)
+          gen_many framed_name f_name gen_framed notin_updates params params ::acc)
       acc notin_updates in
     acc
        
@@ -2162,6 +2164,7 @@ struct
     let axiom_name = name^"_sub_x_def" in
     Goal(KAxiom,id_no_loc axiom_name,code)::acc 
 
+
 end
 
 let lemma_disjoint_cases ta_conv acc =
@@ -2229,7 +2232,8 @@ let tr_logic_fun_aux f ta acc =
   (* generation of ft *)
   let acc =
     if Jc_options.gen_frame_rule_with_ft 
-    then if Hashtbl.mem pragma_gen_sep f.jc_logic_info_tag
+    then
+      let acc = if Hashtbl.mem pragma_gen_sep f.jc_logic_info_tag
       then begin
         (* use_predicate *)
         let (_,which) = Hashtbl.find pragma_gen_sep f.jc_logic_info_tag in
@@ -2294,9 +2298,26 @@ let tr_logic_fun_aux f ta acc =
                 acc in
         let acc = List.fold_left make_todo acc todos in
         let is_pred = f.jc_logic_info_result_type = None in
-        InDisj.def_frame f_name is_pred params acc notin_updates
-      end
-    else acc in 
+        InDisj.def_frame f_name is_pred f_name params acc notin_updates
+      end in
+      if Hashtbl.mem Jc_typing.pragma_gen_same f.jc_logic_info_tag then
+        let f_name = f.jc_logic_info_final_name in
+        let mirror =
+          Hashtbl.find Jc_typing.pragma_gen_same f.jc_logic_info_tag in
+        let mirror_name = mirror.jc_logic_info_final_name in
+        let todos =
+          Hashtbl.find_all predicates_to_generate mirror.jc_logic_info_tag in
+        let filter_notin acc = function
+          | (`In , notin) -> notin::acc
+          | _ -> acc in
+        (* notin_updates is used to create the frames axioms *)
+        let notin_updates = List.fold_left filter_notin [] todos in
+        Jc_options.lprintf "Frame of %s using footprint of %s@."
+          f_name mirror_name;
+        let is_pred = f.jc_logic_info_result_type = None in
+        InDisj.def_frame f_name is_pred mirror_name params acc notin_updates
+      else acc
+    else acc in
   acc
 
 
@@ -2372,6 +2393,6 @@ let tr_logic_fun ft ta acc = tr_logic_fun_aux ft ta acc
 
 (*
   Local Variables: 
-  compile-command: "unset LANG; make -j -C .. bin/jessie.byte"
+  compile-command: "unset LANG; make -C .. bin/jessie.byte"
   End: 
 *)
