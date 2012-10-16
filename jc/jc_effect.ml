@@ -1166,28 +1166,29 @@ let single_assertion fef a =
 
 type assign_alloc_clause = Assigns | Allocates | Reads
 
-let rec single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location) =
+let rec single_location ~in_clause fef 
+    (loc : Jc_fenv.logic_info Jc_ast.location) =
   let lab =
     match loc#label with None -> LabelHere | Some lab -> lab
   in
   let fef = match loc#node with
     | JCLvar v ->
-(**)
-	if v.jc_var_info_assigned then
-	  if v.jc_var_info_static then
-(**)
-      begin
-	    match in_clause with
-              | Assigns -> add_global_writes lab fef v
-              | Allocates -> 
-                let ac = lderef_alloc_class ~type_safe:true loc in
-	        add_alloc_writes lab fef (ac,loc#region)
-	      | Reads -> add_global_reads lab fef v
-      end
-(**)
+        let fef =
+	  if v.jc_var_info_assigned then
+	    if v.jc_var_info_static then
+              begin
+	        match in_clause with
+                  | Assigns -> add_global_writes lab fef v
+                  | Allocates -> 
+                      let ac = lderef_alloc_class ~type_safe:true loc in
+	              add_alloc_writes lab fef (ac,loc#region)
+	          | Reads -> add_global_reads lab fef v
+              end
+	    else fef
 	  else fef
-	else fef
-(**)
+        in
+        fef
+        
     | JCLderef(locs,lab,fi,_r) ->
 	let add_mem ~only_writes fef mc =
 	  match in_clause with
@@ -1198,23 +1199,31 @@ let rec single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location
 	        let ac = alloc_class_of_mem_class mc in
 	        add_alloc_reads lab fef (ac,locs#region)
             | Allocates ->
-              if only_writes then fef else
-	        let ac = alloc_class_of_mem_class mc in
-	        add_alloc_writes lab fef (ac,locs#region)
+                (* wrong !
+                  let fef =
+                  if only_writes then fef else
+	            let ac = alloc_class_of_mem_class mc in
+	            add_alloc_writes lab fef (ac,locs#region)
+                in
+                *)
+                fef
             | Reads ->
-	      if only_writes then fef else
-	        add_memory_reads lab fef (mc,locs#region)
+	        if only_writes then fef else
+	          add_memory_reads lab fef (mc,locs#region)
 	in
 	let mc,ufi_opt = lderef_mem_class ~type_safe:true locs fi in
 	let fef = add_mem ~only_writes:false fef mc in
-	begin match mc,ufi_opt with
-	  | JCmem_field _fi, Some ufi ->
-	      let mems = overlapping_union_memories ufi in
-	      List.fold_left (add_mem ~only_writes:true) fef mems
-	  | JCmem_field _, None
-	  | JCmem_plain_union _, _
-	  | JCmem_bitvector, _ -> fef
-	end
+	let fef =
+          begin match mc,ufi_opt with
+	    | JCmem_field _fi, Some ufi ->
+	        let mems = overlapping_union_memories ufi in
+	        List.fold_left (add_mem ~only_writes:true) fef mems
+	    | JCmem_field _, None
+	    | JCmem_plain_union _, _
+	    | JCmem_bitvector, _ -> fef
+	  end
+        in
+        fef
     | JCLderef_term(t1,fi) ->
 	let add_mem ~only_writes fef mc =
 	  match in_clause with
@@ -1225,9 +1234,12 @@ let rec single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location
 	        let ac = alloc_class_of_mem_class mc in
 	        add_alloc_reads lab fef (ac,t1#region)
             | Allocates -> 
+(* wrong !
 	      if only_writes then fef else
 	        let ac = alloc_class_of_mem_class mc in
 	        add_alloc_writes lab fef (ac,t1#region)
+*)
+                fef
 	    | Reads ->
 	        if only_writes then fef else
 	          add_memory_reads lab fef (mc,t1#region)
@@ -1268,8 +1280,11 @@ let rec single_location_set fef locs =
   in true, fef
 
 let location ~in_clause fef loc =
-  Jc_iterators.fold_rec_location single_term
-    (single_location ~in_clause) single_location_set fef loc
+  let fef =
+    Jc_iterators.fold_rec_location single_term
+      (single_location ~in_clause) single_location_set fef loc
+  in
+  fef
 
 
 (******************************************************************************)
@@ -1418,11 +1433,13 @@ let rec expr fef e =
 		  add_memory_writes LabelHere fef (mc,e#region)
 	       ) fef all_mems
 	   in
+(**)
 	   let fef =
 	     List.fold_left
 	       (fun fef ac -> add_alloc_writes LabelHere fef (ac,e#region))
 	       fef all_allocs
 	   in
+(**)
 	   true,
 	   List.fold_left
 	     (fun fef vi -> add_tag_writes LabelHere fef (vi,e#region))

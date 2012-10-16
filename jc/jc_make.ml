@@ -70,9 +70,9 @@ let generic full f targets =
        out "WHYEXEC ?= why@\n";
        out "GWHYEXEC ?= gwhy-bin@\n";
        out "WHYLIB ?= %s@\n@\n" (String.escaped Jc_options.libdir);
-       out "USERWHYOPT=%s@\n"  (Jc_options.why_opt);
-       out "WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs %s.loc@\n@\n" f;
-       out "GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs %s.loc@\n@\n"  f;
+       out "USERWHYDEUXOPT=%s@\n"  (Jc_options.why_opt);
+       out "WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs %s.loc@\n@\n" f;
+       out "GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs %s.loc@\n@\n"  f;
        out "JESSIELIBFILES ?=";
        List.iter (fun s ->
 		    out " %s"
@@ -220,13 +220,13 @@ let generic full f targets =
 	 (match targets with f::_ -> f^".mlw" | [] -> "")
        in
        out "why3ml: %s@\n" why3ml_target;
-       out "\t why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
+       out "\t why3 --extra-config $(JESSIE3CONF) $<@\n@\n";
 
        out "why3ide: %s@\n" why3ml_target;
-       out "\t why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
+       out "\t why3ide --extra-config $(JESSIE3CONF) $<@\n@\n";
 
        out "why3replay: %s@\n" why3ml_target;
-       out "\t why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<@\n@\n";
+       out "\t why3replayer --extra-config $(JESSIE3CONF) $<@\n@\n";
 
        out "-include %s.depend@\n@\n" f;
        out "depend: %a@\n" (print_files coq_v) targets;

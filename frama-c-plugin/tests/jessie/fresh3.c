@@ -3,6 +3,10 @@
 
 /* #include <stdlib.h> */
 
+/*@ allocates \result;
+  @ assigns \nothing;
+  @ ensures \valid((char*)\result) && \fresh(\result,size);
+  @*/
 void *malloc(unsigned int size);
 
 typedef struct Str {int *x; } *str;
@@ -16,6 +20,8 @@ typedef struct Str {int *x; } *str;
 void create(str s) {
   s->x = (int*)malloc(sizeof(int*));
 }
+
+// #if 0
 
 str f;
 
@@ -36,6 +42,8 @@ void smoke_detector() {
   create (s2);
   //@ assert 0 == 1;
 }
+
+// #endif
 
 /*
 Local Variables:

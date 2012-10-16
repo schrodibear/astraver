@@ -846,17 +846,26 @@ let rec fprintf_type ~need_colon anon form t =
     | Annot_type(p,t,reads,writes,q,signals) ->
 	begin
           if need_colon then fprintf form ": ";
-	  fprintf form "@[@[<hov 2>{ ";
-	  if is_not_true p
-	  then fprintf_assertion form p;
-	  fprintf form "}@]@ %a@ " (fprintf_type ~need_colon:false anon) t;
+          if !why3syntax then
+            begin
+	      fprintf form "%a@ " (fprintf_type ~need_colon:false anon) t;
+	      fprintf form "@[@[<hov 2>requires { %a }@]@ "
+                fprintf_assertion p;
+            end
+          else
+            begin
+	      fprintf form "@[@[<hov 2>{ ";
+	      if is_not_true p
+	      then fprintf_assertion form p;
+	      fprintf form "}@]@ %a@ " (fprintf_type ~need_colon:false anon) t
+            end;
 	  begin
 	    match List.sort compare reads with
 	      | [] -> ()
 	      | r::l as reads ->
                   if !why3syntax then
-		    fprintf form "reads@ %a@ "
-                      (print_list space
+		    fprintf form "reads@ { %a } @ "
+                      (print_list comma
                          (fun form r -> fprintf form "%s" (why3ident r))) reads
                   else
 		  fprintf form "reads %s%a@ " r fprint_comma_string_list l
@@ -866,8 +875,8 @@ let rec fprintf_type ~need_colon anon form t =
 	      | [] -> ()
 	      | r::l as writes ->
                   if !why3syntax then
-		    fprintf form "writes@ %a@ "
-                      (print_list space
+		    fprintf form "writes@ { %a }@ "
+                      (print_list comma
                          (fun form r -> fprintf form "%s" (why3ident r))) writes
                   else
 		    fprintf form "writes %s%a@ " r fprint_comma_string_list l
@@ -875,19 +884,21 @@ let rec fprintf_type ~need_colon anon form t =
 	  begin
 	    match signals with
 	      | [] ->
-		  fprintf form "@[<hov 2>{ %a }@]@]" fprintf_assertion q
+                  if !why3syntax then
+		    fprintf form "@[<hov 2> ensures { %a }@]@]" fprintf_assertion q
+                  else
+		    fprintf form "@[<hov 2>{ %a }@]@]" fprintf_assertion q
 	      | l ->
                   if !why3syntax then
-		    fprintf form
-		      "raises%a@ @[<hov 2>{ %a@ } | %a @]@]"
-		      (print_list comma (fun fmt (e,_r) -> fprintf fmt " %s" e))
-		      l
-		      fprintf_assertion q
-		      (print_list alt
-                         (fun fmt (e,r) ->
-			    fprintf fmt "@[<hov 2>%s ->@ { %a }@]" e
-			      fprintf_assertion r))
-		      l
+		    begin
+                      fprintf form "@[<hov 2> ensures { %a@ }@]@ "
+		        fprintf_assertion q;
+		      List.iter
+                         (fun (e,r) ->
+			    fprintf form "@[<hov 2>raises { %s result ->@ %a }@]" e
+			      fprintf_assertion r)
+		        l
+                    end
                   else
 		    fprintf form
 		      "raises%a@ @[<hov 2>{ %a@ | %a }@]@]"
@@ -1106,32 +1117,43 @@ let rec fprintf_expr_node form e =
              fprintf form "(%s : %a) " (why3id_if x)
                (fprintf_type ~need_colon:false false) t)
 	  params;
-	fprintf form "@]->@ @[<hov 0>{ ";
-	if pre <> LTrue
-	then fprintf_assertion form pre;
-	fprintf form " }@ %a@]@ " fprintf_expr body;
-	begin
-	  match signals with
-	    | [] ->
-		fprintf form "@[<hov 2>{ %a }@]@]" fprintf_assertion post
-	     | l ->
-                 if !why3syntax then
-		   fprintf form "@[<hov 2>{ %a@ } | %a @]"
-		     fprintf_assertion post
-		     (print_list alt
-		        (fun fmt (e,r) ->
-			   fprintf fmt "@[<hov 2>%s ->@ { %a }@]" e
-			     fprintf_assertion r))
-		     l
-                 else
-		   fprintf form "@[<hov 2>{ %a@ | %a }@]"
-		     fprintf_assertion post
-		     (print_list alt
-		        (fun fmt (e,r) ->
-			   fprintf fmt "@[<hov 2>%s =>@ %a@]" e
-			     fprintf_assertion r))
-		     l
-	end;
+        if !why3syntax then
+          begin
+	    fprintf form "@]->@ @[<hov 0>requires { %a  }@ "
+              fprintf_assertion pre;
+            begin
+	    match signals with
+	      | [] ->
+		  fprintf form "@[<hov 2>ensures { %a }@]@]" fprintf_assertion post
+	      | l ->
+		    fprintf form "@[<hov 2> ensures { %a@ } %a @]"
+		      fprintf_assertion post
+		      (print_list alt
+		         (fun fmt (e,r) ->
+			    fprintf fmt "@[<hov 2>raises { %s result ->@ %a }@]" e
+			      fprintf_assertion r))
+		      l
+            end;
+	    fprintf form "%a@]@ " fprintf_expr body;
+          end
+        else
+          begin
+	    fprintf form "@]->@ @[<hov 0>{ ";
+	    if pre <> LTrue
+	    then fprintf_assertion form pre;
+	    fprintf form " }@ %a@]@ " fprintf_expr body;
+	    match signals with
+	      | [] ->
+		  fprintf form "@[<hov 2>{ %a }@]@]" fprintf_assertion post
+	      | l ->
+		  fprintf form "@[<hov 2>{ %a@ | %a }@]"
+		    fprintf_assertion post
+		    (print_list alt
+		       (fun fmt (e,r) ->
+			  fprintf fmt "@[<hov 2>%s =>@ %a@]" e
+			    fprintf_assertion r))
+		    l
+	  end;
         List.iter
 	  (fun (x,t) ->
              (match t with
@@ -1753,21 +1775,21 @@ let fprintf_why_decls ?(why3=false) ?(use_floats=false)
       fprintf form "module Jessie_program@\n@\n";
       output_why3_imports form use_floats float_model;
       fprintf form "use import Jessie_model@\n@\n";
-      fprintf form "use import module ref.Ref@\n@\n";
-      fprintf form "use import module jessie3.JessieDivision@\n@\n";
+      fprintf form "use import ref.Ref@\n@\n";
+      fprintf form "use import jessie3.JessieDivision@\n@\n";
       if use_floats then
         begin
           fprintf form "use import floating_point.Rounding@\n@\n";
           match float_model with
             | Jc_env.FMfull ->
-              fprintf form "use import module jessie3.JessieFloatsFull@\n@\n"
+              fprintf form "use import jessie3.JessieFloatsFull@\n@\n"
             | Jc_env.FMdefensive ->
-              fprintf form "use import module jessie3.JessieFloats@\n@\n"
+              fprintf form "use import jessie3.JessieFloats@\n@\n"
             | Jc_env.FMmultirounding ->
-              fprintf form "use import module jessie3.JessieFloatsMultiRounding@\n@\n"
+              fprintf form "use import jessie3.JessieFloatsMultiRounding@\n@\n"
             | Jc_env.FMmath -> assert false (* TODO *)
         end;
-      fprintf form "use import module jessie3.Jessie_memory_model_parameters@\n@\n";
+      fprintf form "use import jessie3.Jessie_memory_model_parameters@\n@\n";
       fprintf form "use import jessie3_integer.Integer@\n@\n";
     end;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) params;

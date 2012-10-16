@@ -93,9 +93,6 @@ sig
 	mutable jc_logic_info_effects : effect;
 	mutable jc_logic_info_calls : logic_info list;
 	mutable jc_logic_info_axiomatic : string option;
-(* obsolete
-	mutable jc_logic_info_is_recursive : bool;
-*)
 	mutable jc_logic_info_labels : label list;
       }
 
