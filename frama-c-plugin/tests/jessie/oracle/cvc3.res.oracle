@@ -87,7 +87,7 @@ behavior default:
       (while_0_break : ());
       
       {  
-         (assert for default: (C_10 : (x == 10)));
+         (assert for default: (C_10 : (jessie : (x == 10))));
          ()
       };
       (C_11 : (__retres = 0));

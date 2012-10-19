@@ -65,7 +65,8 @@ behavior default:
       (C_11 : (res = (C_10 : ((C_9 : (a * b)) - c))));
       
       {  
-         (assert for default: (C_12 : (ifIEEE754 : ((res :> real) == 0.0))));
+         (assert for default: (C_12 : (jessie : (ifIEEE754 : ((res :> real) ==
+                                                               0.0)))));
          ()
       };
       (C_13 : (__retres = 0));

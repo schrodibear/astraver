@@ -56,7 +56,8 @@ behavior default:
       (C_4 : ((C_3 : (t + 1).doubleM) = (2.0 :> double)));
       
       {  
-         (assert for default: (C_5 : (((t + 0).doubleM :> real) == 1.0)));
+         (assert for default: (C_5 : (jessie : (((t + 0).doubleM :> real) ==
+                                                 1.0))));
          ()
       };
       
@@ -75,7 +76,8 @@ behavior default:
       (C_15 : ((C_14 : (C_13 : (t_0 + 2)).doubleM) = (3.0 :> double)));
       
       {  
-         (assert for default: (C_16 : (((t_0 + 0).doubleM :> real) == 1.0)));
+         (assert for default: (C_16 : (jessie : (((t_0 + 0).doubleM :> real) ==
+                                                  1.0))));
          ()
       };
       
@@ -653,12 +655,12 @@ why --project [...] why/parallel_assign.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/parallel_assign_po3.why">
-      <location file = "PPCHOME/tests/jessie/parallel_assign.jessie/parallel_assign.jc" line = "68" begin = "15" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/parallel_assign.jessie/parallel_assign.jc" line = "69" begin = "15" end = "68"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/parallel_assign_po4.why">
-      <location file = "PPCHOME/tests/jessie/parallel_assign.jessie/parallel_assign.jc" line = "69" begin = "15" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/parallel_assign.jessie/parallel_assign.jc" line = "70" begin = "15" end = "68"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>

@@ -82,7 +82,7 @@ behavior notfound:
       } else ());
       
       {  
-         (assert for default: (C_2 : (n_1 > 0)));
+         (assert for default: (C_2 : (jessie : (n_1 > 0))));
          ()
       };
       

@@ -1,2 +1,2 @@
-File "bts0476.jessie/bts0476.jc", line 48, characters 43-57: typing error: Unsupported range in term, sorry
+File "bts0476.jessie/bts0476.jc", line 48, characters 53-67: typing error: Unsupported range in term, sorry
 make: *** [bts0476.regtest] Error 1

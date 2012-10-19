@@ -161,15 +161,17 @@ behavior default:
                (while_1_break : ());
                
                {  
-                  (assert for default: (C_33 : (\forall integer k_0;
-                                                 (((0 <= k_0) &&
-                                                    (k_0 < colB_0)) ==>
-                                                   ((((c_0 + i).int_xM + k_0).intM !=
-                                                      0) ==
-                                                     (((a_0 :> real) != 0) ||
-                                                       ((((b_0 + i).float_xM +
-                                                           k_0).floatM :> real) !=
-                                                         0)))))));
+                  (assert for default: (C_33 : (jessie : (\forall integer k_0;
+                                                           (((0 <= k_0) &&
+                                                              (k_0 < colB_0)) ==>
+                                                             ((((c_0 + i).int_xM +
+                                                                 k_0).intM !=
+                                                                0) ==
+                                                               (((a_0 :> real) !=
+                                                                  0) ||
+                                                                 ((((b_0 + i).float_xM +
+                                                                    k_0).floatM :> real) !=
+                                                                   0))))))));
                   ()
                };
                (C_36 : (i = (C_35 : ((C_34 : (i + 1)) :> int32))))
@@ -269,14 +271,15 @@ behavior default:
                (while_1_break : ());
                
                {  
-                  (assert for default: (C_79 : (\forall integer k_5;
-                                                 (((0 <= k_5) &&
-                                                    (k_5 < colB)) ==>
-                                                   ((((c + i_0).int_xM + k_5).intM !=
-                                                      0) ==
-                                                     ((((b + i_0).float_xM +
-                                                         k_5).floatM :> real) ==
-                                                       (a :> real)))))));
+                  (assert for default: (C_79 : (jessie : (\forall integer k_5;
+                                                           (((0 <= k_5) &&
+                                                              (k_5 < colB)) ==>
+                                                             ((((c + i_0).int_xM +
+                                                                 k_5).intM !=
+                                                                0) ==
+                                                               ((((b + i_0).float_xM +
+                                                                   k_5).floatM :> real) ==
+                                                                 (a :> real))))))));
                   ()
                };
                (C_82 : (i_0 = (C_81 : ((C_80 : (i_0 + 1)) :> int32))))
@@ -2254,12 +2257,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux2_po23.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "248" begin = "33" end = "872"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "250" begin = "33" end = "872"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux2_po24.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "248" begin = "33" end = "872"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux2.jessie/jobredeaux2.jc" line = "250" begin = "33" end = "872"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

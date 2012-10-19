@@ -1041,7 +1041,7 @@ behavior default:
       {  (C_399 : (tmp = (C_398 : ntz(x_4))));
          
          {  
-            (assert for default: (C_400 : ((2 + tmp) < 32)));
+            (assert for default: (C_400 : (jessie : ((2 + tmp) < 32))));
             (C_405 : (ones_0 = (C_404 : ((C_403 : (ones_0 >>
                                                     (C_402 : ((C_401 : 
                                                               (2 +
@@ -1076,7 +1076,7 @@ behavior default:
       {  (C_422 : (tmp_0 = (C_421 : nlz(smallest_1))));
          
          {  
-            (assert for default: (C_423 : ((33 - tmp_0) < 32)));
+            (assert for default: (C_423 : (jessie : ((33 - tmp_0) < 32))));
             (C_428 : (ones_1 = (C_427 : ((C_426 : (ones_1 >>
                                                     (C_425 : ((C_424 : 
                                                               (33 -
@@ -1111,11 +1111,13 @@ behavior default:
       {  (C_445 : (tmp_1 = (C_444 : pop(ones_2))));
          
          {  
-            (assert for default: (C_448 : ((tmp_1 - 2) >= 0)));
+            (assert for default: (C_448 : (jessie : ((tmp_1 - 2) >= 0))));
             
-            (assert for default: (C_447 : ((tmp_1 - 2) < 32)));
+            (assert for default: (C_447 : (jessie : ((tmp_1 - 2) < 32))));
             
-            (assert for default: (C_446 : (1 <= (2147483647 >>> (tmp_1 - 2)))));
+            (assert for default: (C_446 : (jessie : (1 <=
+                                                      (2147483647 >>>
+                                                        (tmp_1 - 2))))));
             (C_455 : (ones_2 = (C_454 : ((C_453 : ((C_452 : ((C_451 : 
                                                              (1 <<
                                                                (C_450 : (
@@ -1238,11 +1240,11 @@ behavior default:
       (_LOR_0 : ());
       
       {  
-         (assert for default: (C_519 : (n_17 >= 0)));
+         (assert for default: (C_519 : (jessie : (n_17 >= 0))));
          
-         (assert for default: (C_518 : (n_17 < 32)));
+         (assert for default: (C_518 : (jessie : (n_17 < 32))));
          
-         (assert for default: (C_517 : (1 <= (2147483647 >>> n_17))));
+         (assert for default: (C_517 : (jessie : (1 <= (2147483647 >>> n_17)))));
          (C_524 : (x_8 = (C_523 : ((C_522 : ((C_521 : ((C_520 : (1 << n_17)) :> int32)) -
                                               1)) :> uint32))))
       };

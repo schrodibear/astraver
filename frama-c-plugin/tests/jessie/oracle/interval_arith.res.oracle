@@ -147,192 +147,224 @@ behavior default:
       (C_36 : (z_0 = (C_35 : (- b))));
       
       {  
-         (assert for default: (C_37 : ((\double_is_infinite(x_2) ||
-                                         \double_is_infinite(y_2)) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_37 : (jessie : ((\double_is_infinite(
+                                                   x_2) ||
+                                                   \double_is_infinite(
+                                                   y_2)) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_38 : ((\double_is_finite(x_2) &&
-                                         \double_is_infinite(y_2)) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_38 : (jessie : ((\double_is_finite(x_2) &&
+                                                   \double_is_infinite(
+                                                   y_2)) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_39 : (((\double_is_infinite(x_2) &&
-                                          \double_is_finite(y_2)) &&
-                                         \no_overflow_double(\Down(),
-                                                             (- (y_2 :> real)))) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_39 : (jessie : (((\double_is_infinite(
+                                                    x_2) &&
+                                                    \double_is_finite(
+                                                    y_2)) &&
+                                                   \no_overflow_double(
+                                                   \Down(), (- (y_2 :> real)))) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_40 : (((\double_is_infinite(x_2) &&
-                                          \double_is_finite(y_2)) &&
-                                         (! \no_overflow_double(\Down(
-                                                                ),
-                                                                (- (y_2 :> real))))) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_40 : (jessie : (((\double_is_infinite(
+                                                    x_2) &&
+                                                    \double_is_finite(
+                                                    y_2)) &&
+                                                   (! \no_overflow_double(
+                                                   \Down(), (- (y_2 :> real))))) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_41 : ((\double_is_infinite(x_2) &&
-                                         \double_is_infinite(y_2)) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_41 : (jessie : ((\double_is_infinite(
+                                                   x_2) &&
+                                                   \double_is_infinite(
+                                                   y_2)) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_42 : (((((\double_is_finite(x_2) &&
-                                            \double_is_finite(y_2)) &&
-                                           \no_overflow_double(\Down(
-                                                               ),
-                                                               (- (y_2 :> real)))) &&
-                                          \no_overflow_double(\Down(),
-                                                              ((x_2 :> real) *
-                                                                (a :> real)))) &&
-                                         (! \no_overflow_double(\Down(
-                                                                ),
-                                                                (- (b :> real))))) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_42 : (jessie : (((((\double_is_finite(
+                                                      x_2) &&
+                                                      \double_is_finite(
+                                                      y_2)) &&
+                                                     \no_overflow_double(
+                                                     \Down(),
+                                                     (- (y_2 :> real)))) &&
+                                                    \no_overflow_double(
+                                                    \Down(),
+                                                    ((x_2 :> real) *
+                                                      (a :> real)))) &&
+                                                   (! \no_overflow_double(
+                                                   \Down(), (- (b :> real))))) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_43 : ((((\double_is_finite(x_2) &&
-                                           \double_is_finite(y_2)) &&
-                                          \no_overflow_double(\Down(),
-                                                              (- (y_2 :> real)))) &&
-                                         (! \no_overflow_double(\Down(
-                                                                ),
-                                                                ((x_2 :> real) *
-                                                                  (a :> real))))) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_43 : (jessie : ((((\double_is_finite(
+                                                     x_2) &&
+                                                     \double_is_finite(
+                                                     y_2)) &&
+                                                    \no_overflow_double(
+                                                    \Down(),
+                                                    (- (y_2 :> real)))) &&
+                                                   (! \no_overflow_double(
+                                                   \Down(),
+                                                   ((x_2 :> real) *
+                                                     (a :> real))))) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_44 : ((((\double_is_finite(x_2) &&
-                                           \double_is_finite(y_2)) &&
-                                          (! \no_overflow_double(\Down(
-                                                                 ),
-                                                                 (- (y_2 :> real))))) &&
-                                         (\double_sign(y_2) == \Positive())) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_44 : (jessie : ((((\double_is_finite(
+                                                     x_2) &&
+                                                     \double_is_finite(
+                                                     y_2)) &&
+                                                    (! \no_overflow_double(
+                                                    \Down(),
+                                                    (- (y_2 :> real))))) &&
+                                                   (\double_sign(y_2) ==
+                                                     \Positive())) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_45 : (((((\double_is_finite(x_2) &&
-                                            \double_is_finite(y_2)) &&
-                                           (! \no_overflow_double(\Down(
-                                                                  ),
-                                                                  (- (y_2 :> real))))) &&
-                                          (\double_sign(y_2) == \Negative())) &&
-                                         (! \no_overflow_double(\Down(
-                                                                ),
-                                                                ((x_2 :> real) *
-                                                                  (a :> real))))) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_45 : (jessie : (((((\double_is_finite(
+                                                      x_2) &&
+                                                      \double_is_finite(
+                                                      y_2)) &&
+                                                     (! \no_overflow_double(
+                                                     \Down(),
+                                                     (- (y_2 :> real))))) &&
+                                                    (\double_sign(y_2) ==
+                                                      \Negative())) &&
+                                                   (! \no_overflow_double(
+                                                   \Down(),
+                                                   ((x_2 :> real) *
+                                                     (a :> real))))) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_46 : ((((((\double_is_finite(x_2) &&
-                                             \double_is_finite(y_2)) &&
-                                            (! \no_overflow_double(\Down(
-                                                                   ),
-                                                                   (- (y_2 :> real))))) &&
-                                           (\double_sign(y_2) == \Negative())) &&
-                                          \no_overflow_double(\Down(),
-                                                              ((x_2 :> real) *
-                                                                (a :> real)))) &&
-                                         (! \no_overflow_double(\Down(
-                                                                ),
-                                                                (- (b :> real))))) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_46 : (jessie : ((((((\double_is_finite(
+                                                       x_2) &&
+                                                       \double_is_finite(
+                                                       y_2)) &&
+                                                      (! \no_overflow_double(
+                                                      \Down(),
+                                                      (- (y_2 :> real))))) &&
+                                                     (\double_sign(y_2) ==
+                                                       \Negative())) &&
+                                                    \no_overflow_double(
+                                                    \Down(),
+                                                    ((x_2 :> real) *
+                                                      (a :> real)))) &&
+                                                   (! \no_overflow_double(
+                                                   \Down(), (- (b :> real))))) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_47 : ((((((\double_is_finite(x_2) &&
-                                             \double_is_finite(y_2)) &&
-                                            (! \no_overflow_double(\Down(
-                                                                   ),
-                                                                   (- (y_2 :> real))))) &&
-                                           (\double_sign(y_2) == \Negative())) &&
-                                          \no_overflow_double(\Down(),
-                                                              ((x_2 :> real) *
-                                                                (a :> real)))) &&
-                                         \no_overflow_double(\Down(),
-                                                             (- (b :> real)))) ==>
-                                        real_le_double(((x_2 :> real) *
-                                                         (y_2 :> real)),
-                                                       z_0))));
+         (assert for default: (C_47 : (jessie : ((((((\double_is_finite(
+                                                       x_2) &&
+                                                       \double_is_finite(
+                                                       y_2)) &&
+                                                      (! \no_overflow_double(
+                                                      \Down(),
+                                                      (- (y_2 :> real))))) &&
+                                                     (\double_sign(y_2) ==
+                                                       \Negative())) &&
+                                                    \no_overflow_double(
+                                                    \Down(),
+                                                    ((x_2 :> real) *
+                                                      (a :> real)))) &&
+                                                   \no_overflow_double(
+                                                   \Down(), (- (b :> real)))) ==>
+                                                  real_le_double(((x_2 :> real) *
+                                                                   (y_2 :> real)),
+                                                                 z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_48 : ((((((\double_is_finite(x_2) &&
-                                             \double_is_finite(y_2)) &&
-                                            \no_overflow_double(\Down(
-                                                                ),
-                                                                (- (y_2 :> real)))) &&
-                                           \no_overflow_double(\Down(
-                                                               ),
-                                                               ((x_2 :> real) *
-                                                                 (a :> real)))) &&
-                                          \no_overflow_double(\Down(),
-                                                              (- (b :> real)))) &&
-                                         ((x_2 :> real) > 0.0)) ==>
-                                        (\double_is_finite(z_0) &&
-                                          real_le_double(((x_2 :> real) *
-                                                           (y_2 :> real)),
-                                                         z_0)))));
+         (assert for default: (C_48 : (jessie : ((((((\double_is_finite(
+                                                       x_2) &&
+                                                       \double_is_finite(
+                                                       y_2)) &&
+                                                      \no_overflow_double(
+                                                      \Down(),
+                                                      (- (y_2 :> real)))) &&
+                                                     \no_overflow_double(
+                                                     \Down(),
+                                                     ((x_2 :> real) *
+                                                       (a :> real)))) &&
+                                                    \no_overflow_double(
+                                                    \Down(), (- (b :> real)))) &&
+                                                   ((x_2 :> real) > 0.0)) ==>
+                                                  (\double_is_finite(
+                                                    z_0) &&
+                                                    real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                   z_0))))));
          ()
       };
       
       {  
-         (assert for default: (C_49 : ((((((\double_is_finite(x_2) &&
-                                             \double_is_finite(y_2)) &&
-                                            \no_overflow_double(\Down(
-                                                                ),
-                                                                (- (y_2 :> real)))) &&
-                                           \no_overflow_double(\Down(
-                                                               ),
-                                                               ((x_2 :> real) *
-                                                                 (a :> real)))) &&
-                                          \no_overflow_double(\Down(),
-                                                              (- (b :> real)))) &&
-                                         ((x_2 :> real) < 0.0)) ==>
-                                        (\double_is_finite(z_0) &&
-                                          real_le_double(((x_2 :> real) *
-                                                           (y_2 :> real)),
-                                                         z_0)))));
+         (assert for default: (C_49 : (jessie : ((((((\double_is_finite(
+                                                       x_2) &&
+                                                       \double_is_finite(
+                                                       y_2)) &&
+                                                      \no_overflow_double(
+                                                      \Down(),
+                                                      (- (y_2 :> real)))) &&
+                                                     \no_overflow_double(
+                                                     \Down(),
+                                                     ((x_2 :> real) *
+                                                       (a :> real)))) &&
+                                                    \no_overflow_double(
+                                                    \Down(), (- (b :> real)))) &&
+                                                   ((x_2 :> real) < 0.0)) ==>
+                                                  (\double_is_finite(
+                                                    z_0) &&
+                                                    real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                   z_0))))));
          ()
       };
       

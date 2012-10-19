@@ -92,9 +92,10 @@ behavior default:
       (while_0_break : ());
       
       {  
-         (assert for default: (C_20 : (\forall int32 k_0;
-                                        (((0 <= k_0) && (k_0 < v_s.i)) ==>
-                                          ((v_s.a + k_0).intM == 0)))));
+         (assert for default: (C_20 : (jessie : (\forall int32 k_0;
+                                                  (((0 <= k_0) &&
+                                                     (k_0 < v_s.i)) ==>
+                                                    ((v_s.a + k_0).intM == 0))))));
          ()
       };
       
@@ -143,9 +144,11 @@ behavior default:
       (while_0_break : ());
       
       {  
-         (assert for default: (C_52 : (\forall int32 k_2;
-                                        (((0 <= k_2) && (k_2 < v_s_0.i1)) ==>
-                                          ((v_s_0.a1 + k_2).intM == 0)))));
+         (assert for default: (C_52 : (jessie : (\forall int32 k_2;
+                                                  (((0 <= k_2) &&
+                                                     (k_2 < v_s_0.i1)) ==>
+                                                    ((v_s_0.a1 + k_2).intM ==
+                                                      0))))));
          ()
       };
       
@@ -1314,12 +1317,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/struct_hack_po10.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "133" begin = "21" end = "62"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "134" begin = "21" end = "62"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_hack_po11.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "133" begin = "21" end = "62"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "134" begin = "21" end = "62"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

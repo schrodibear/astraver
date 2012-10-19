@@ -165,25 +165,27 @@ behavior permutation:
             
             {  
                {  
-                  (assert for sorted: (C_31 : sorted{Here}(a, 0, (up - 1))));
+                  (assert for sorted: (C_31 : (jessie : sorted{Here}(
+                                              a, 0, (up - 1)))));
                   ()
                };
                
                {  
-                  (assert for permutation: (C_32 : Permut{Pre,
-                                           Here}(a, 0, (length - 1))));
+                  (assert for permutation: (C_32 : (jessie : Permut{Pre,
+                                                   Here}(a, 0, (length - 1)))));
                   ()
                };
                (C_33 : (fixed_up = up));
                (C_34 : (down = up));
                
                {  
-                  (assert for sorted: (C_35 : sorted{Here}(a, down, up)));
+                  (assert for sorted: (C_35 : (jessie : sorted{Here}(
+                                              a, down, up))));
                   ()
                };
                
                {  
-                  (assert for default: (C_36 : (down < length)));
+                  (assert for default: (C_36 : (jessie : (down < length))));
                   ()
                };
                
@@ -225,27 +227,30 @@ behavior permutation:
                      
                      {  
                         {  
-                           (assert for permutation: (C_57 : Permut{Pre,
-                                                    Here}(a, 0, (length - 1))));
+                           (assert for permutation: (C_57 : (jessie : Permut{Pre,
+                                                            Here}(a, 0,
+                                                                  (length -
+                                                                    1)))));
                            ()
                         };
                         
                         {  
-                           (assert for sorted: (C_58 : sorted{Here}(a, 0,
+                           (assert for sorted: (C_58 : (jessie : sorted{Here}(
+                                                       a, 0, (down - 1)))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (C_59 : (jessie : sorted{Here}(
+                                                       a, down, up))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (C_60 : (jessie : ((a + down).intM <
+                                                                   (a +
                                                                     (down -
-                                                                    1))));
-                           ()
-                        };
-                        
-                        {  
-                           (assert for sorted: (C_59 : sorted{Here}(a, down,
-                                                                    up)));
-                           ()
-                        };
-                        
-                        {  
-                           (assert for sorted: (C_60 : ((a + down).intM <
-                                                         (a + (down - 1)).intM)));
+                                                                    1)).intM))));
                            ()
                         };
                         (C_63 : swap(a, down,
@@ -253,54 +258,57 @@ behavior permutation:
                                      length));
                         
                         {  
-                           (assert for permutation: (C_64 : Permut{Pre,
-                                                    Here}(a, 0, (length - 1))));
+                           (assert for permutation: (C_64 : (jessie : Permut{Pre,
+                                                            Here}(a, 0,
+                                                                  (length -
+                                                                    1)))));
                            ()
                         };
                         
                         {  
-                           (assert for sorted: (C_65 : ((a + (down - 1)).intM <=
-                                                         (a + down).intM)));
-                           ()
-                        };
-                        
-                        {  
-                           (assert for sorted: (C_66 : sorted{Here}(a, 0,
+                           (assert for sorted: (C_65 : (jessie : ((a +
                                                                     (down -
-                                                                    2))));
+                                                                    1)).intM <=
+                                                                   (a + down).intM))));
                            ()
                         };
                         
                         {  
-                           (assert for sorted: (C_67 : sorted{Here}(a, down,
-                                                                    up)));
+                           (assert for sorted: (C_66 : (jessie : sorted{Here}(
+                                                       a, 0, (down - 2)))));
                            ()
                         };
                         
                         {  
-                           (assert for sorted: (C_68 : sorted{Here}(a,
-                                                                    (down -
-                                                                    1), up)));
+                           (assert for sorted: (C_67 : (jessie : sorted{Here}(
+                                                       a, down, up))));
+                           ()
+                        };
+                        
+                        {  
+                           (assert for sorted: (C_68 : (jessie : sorted{Here}(
+                                                       a, (down - 1), up))));
                            ()
                         };
                         (C_71 : (down = (C_70 : ((C_69 : (down - 1)) :> int32))));
                         
                         {  
-                           (assert for sorted: (C_72 : sorted{Here}(a, 0,
-                                                                    (down -
-                                                                    1))));
+                           (assert for sorted: (C_72 : (jessie : sorted{Here}(
+                                                       a, 0, (down - 1)))));
                            ()
                         };
                         
                         {  
-                           (assert for sorted: (C_73 : sorted{Here}(a, down,
-                                                                    up)));
+                           (assert for sorted: (C_73 : (jessie : sorted{Here}(
+                                                       a, down, up))));
                            ()
                         };
                         
                         {  
-                           (assert for permutation: (C_74 : Permut{Pre,
-                                                    Here}(a, 0, (length - 1))));
+                           (assert for permutation: (C_74 : (jessie : Permut{Pre,
+                                                            Here}(a, 0,
+                                                                  (length -
+                                                                    1)))));
                            ()
                         }
                      }
@@ -309,13 +317,14 @@ behavior permutation:
                (while_1_break : ());
                
                {  
-                  (assert for sorted: (C_75 : sorted{Here}(a, 0, up)));
+                  (assert for sorted: (C_75 : (jessie : sorted{Here}(
+                                              a, 0, up))));
                   ()
                };
                
                {  
-                  (assert for permutation: (C_76 : Permut{Pre,
-                                           Here}(a, 0, (length - 1))));
+                  (assert for permutation: (C_76 : (jessie : Permut{Pre,
+                                                   Here}(a, 0, (length - 1)))));
                   ()
                }
             };
@@ -326,8 +335,8 @@ behavior permutation:
       (while_0_break : ());
       
       {  
-         (assert for permutation: (C_81 : Permut{Pre,
-                                  Here}(a, 0, (length - 1))));
+         (assert for permutation: (C_81 : (jessie : Permut{Pre,
+                                          Here}(a, 0, (length - 1)))));
          ()
       };
       
@@ -1747,22 +1756,22 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po57.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "245" begin = "32" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "250" begin = "32" end = "168"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po58.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "245" begin = "32" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "250" begin = "32" end = "168"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po59.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "245" begin = "32" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "250" begin = "32" end = "168"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po60.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "245" begin = "32" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "250" begin = "32" end = "168"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

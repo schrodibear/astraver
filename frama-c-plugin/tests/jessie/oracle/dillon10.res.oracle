@@ -76,7 +76,7 @@ behavior default:
         });
       
       {  
-         (assert for default: (C_8 : (s.intM == 1)));
+         (assert for default: (C_8 : (jessie : (s.intM == 1))));
          ()
       };
       

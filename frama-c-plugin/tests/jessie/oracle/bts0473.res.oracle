@@ -48,7 +48,7 @@ behavior default:
    {  (C_1 : (x = 2));
       
       {  
-         (assert for default: (C_2 : (x == 2)));
+         (assert for default: (C_2 : (jessie : (x == 2))));
          ()
       };
       (C_5 : (x = (C_4 : ((C_3 : (1 / 0)) :> int32))));

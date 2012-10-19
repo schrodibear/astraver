@@ -72,42 +72,47 @@ behavior default:
                                        (C_8 : ((C_7 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_14 : (\real_abs(((u :> real) -
-                                                   ((0.5 * (t :> real)) *
+         (assert for default: (C_14 : (jessie : (\real_abs(((u :> real) -
+                                                             ((0.5 *
+                                                                (t :> real)) *
+                                                               (3 -
+                                                                 (((t :> real) *
+                                                                    (t :> real)) *
+                                                                   (x :> real)))))) <=
+                                                  1))));
+         ()
+      };
+      
+      {  
+         (assert for default: (C_15 : (jessie : (((((0.5 * (t :> real)) *
                                                      (3 -
                                                        (((t :> real) *
                                                           (t :> real)) *
-                                                         (x :> real)))))) <=
-                                        1)));
+                                                         (x :> real)))) -
+                                                    invsqrt((x :> real))) /
+                                                   invsqrt((x :> real))) ==
+                                                  ((- (1.5 +
+                                                        (0.5 *
+                                                          (((t :> real) -
+                                                             invsqrt(
+                                                             (x :> real))) /
+                                                            invsqrt((x :> real)))))) *
+                                                    ((((t :> real) -
+                                                        invsqrt((x :> real))) /
+                                                       invsqrt((x :> real))) *
+                                                      (((t :> real) -
+                                                         invsqrt((x :> real))) /
+                                                        invsqrt((x :> real)))))))));
          ()
       };
       
       {  
-         (assert for default: (C_15 : (((((0.5 * (t :> real)) *
-                                           (3 -
-                                             (((t :> real) * (t :> real)) *
-                                               (x :> real)))) -
-                                          invsqrt((x :> real))) /
-                                         invsqrt((x :> real))) ==
-                                        ((- (1.5 +
-                                              (0.5 *
-                                                (((t :> real) -
-                                                   invsqrt((x :> real))) /
-                                                  invsqrt((x :> real)))))) *
-                                          ((((t :> real) -
-                                              invsqrt((x :> real))) /
-                                             invsqrt((x :> real))) *
-                                            (((t :> real) -
-                                               invsqrt((x :> real))) /
-                                              invsqrt((x :> real))))))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_16 : (\real_abs(((u :> real) -
-                                                   invsqrt((x :> real)))) <=
-                                        (0x1p-10 *
-                                          \real_abs(invsqrt((x :> real)))))));
+         (assert for default: (C_16 : (jessie : (\real_abs(((u :> real) -
+                                                             invsqrt(
+                                                             (x :> real)))) <=
+                                                  (0x1p-10 *
+                                                    \real_abs(invsqrt(
+                                                              (x :> real))))))));
          ()
       };
       (C_17 : (t = u));
@@ -116,42 +121,47 @@ behavior default:
                                        (C_19 : ((C_18 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_25 : (\real_abs(((u :> real) -
-                                                   ((0.5 * (t :> real)) *
+         (assert for default: (C_25 : (jessie : (\real_abs(((u :> real) -
+                                                             ((0.5 *
+                                                                (t :> real)) *
+                                                               (3 -
+                                                                 (((t :> real) *
+                                                                    (t :> real)) *
+                                                                   (x :> real)))))) <=
+                                                  1))));
+         ()
+      };
+      
+      {  
+         (assert for default: (C_26 : (jessie : (((((0.5 * (t :> real)) *
                                                      (3 -
                                                        (((t :> real) *
                                                           (t :> real)) *
-                                                         (x :> real)))))) <=
-                                        1)));
+                                                         (x :> real)))) -
+                                                    invsqrt((x :> real))) /
+                                                   invsqrt((x :> real))) ==
+                                                  ((- (1.5 +
+                                                        (0.5 *
+                                                          (((t :> real) -
+                                                             invsqrt(
+                                                             (x :> real))) /
+                                                            invsqrt((x :> real)))))) *
+                                                    ((((t :> real) -
+                                                        invsqrt((x :> real))) /
+                                                       invsqrt((x :> real))) *
+                                                      (((t :> real) -
+                                                         invsqrt((x :> real))) /
+                                                        invsqrt((x :> real)))))))));
          ()
       };
       
       {  
-         (assert for default: (C_26 : (((((0.5 * (t :> real)) *
-                                           (3 -
-                                             (((t :> real) * (t :> real)) *
-                                               (x :> real)))) -
-                                          invsqrt((x :> real))) /
-                                         invsqrt((x :> real))) ==
-                                        ((- (1.5 +
-                                              (0.5 *
-                                                (((t :> real) -
-                                                   invsqrt((x :> real))) /
-                                                  invsqrt((x :> real)))))) *
-                                          ((((t :> real) -
-                                              invsqrt((x :> real))) /
-                                             invsqrt((x :> real))) *
-                                            (((t :> real) -
-                                               invsqrt((x :> real))) /
-                                              invsqrt((x :> real))))))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_27 : (\real_abs(((u :> real) -
-                                                   invsqrt((x :> real)))) <=
-                                        (0x1p-10 *
-                                          \real_abs(invsqrt((x :> real)))))));
+         (assert for default: (C_27 : (jessie : (\real_abs(((u :> real) -
+                                                             invsqrt(
+                                                             (x :> real)))) <=
+                                                  (0x1p-10 *
+                                                    \real_abs(invsqrt(
+                                                              (x :> real))))))));
          ()
       };
       (C_28 : (t = u));
@@ -160,49 +170,55 @@ behavior default:
                                        (C_30 : ((C_29 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_36 : (\real_abs(((u :> real) -
-                                                   ((0.5 * (t :> real)) *
+         (assert for default: (C_36 : (jessie : (\real_abs(((u :> real) -
+                                                             ((0.5 *
+                                                                (t :> real)) *
+                                                               (3 -
+                                                                 (((t :> real) *
+                                                                    (t :> real)) *
+                                                                   (x :> real)))))) <=
+                                                  1))));
+         ()
+      };
+      
+      {  
+         (assert for default: (C_37 : (jessie : (((((0.5 * (t :> real)) *
                                                      (3 -
                                                        (((t :> real) *
                                                           (t :> real)) *
-                                                         (x :> real)))))) <=
-                                        1)));
+                                                         (x :> real)))) -
+                                                    invsqrt((x :> real))) /
+                                                   invsqrt((x :> real))) ==
+                                                  ((- (1.5 +
+                                                        (0.5 *
+                                                          (((t :> real) -
+                                                             invsqrt(
+                                                             (x :> real))) /
+                                                            invsqrt((x :> real)))))) *
+                                                    ((((t :> real) -
+                                                        invsqrt((x :> real))) /
+                                                       invsqrt((x :> real))) *
+                                                      (((t :> real) -
+                                                         invsqrt((x :> real))) /
+                                                        invsqrt((x :> real)))))))));
          ()
       };
       
       {  
-         (assert for default: (C_37 : (((((0.5 * (t :> real)) *
-                                           (3 -
-                                             (((t :> real) * (t :> real)) *
-                                               (x :> real)))) -
-                                          invsqrt((x :> real))) /
-                                         invsqrt((x :> real))) ==
-                                        ((- (1.5 +
-                                              (0.5 *
-                                                (((t :> real) -
-                                                   invsqrt((x :> real))) /
-                                                  invsqrt((x :> real)))))) *
-                                          ((((t :> real) -
-                                              invsqrt((x :> real))) /
-                                             invsqrt((x :> real))) *
-                                            (((t :> real) -
-                                               invsqrt((x :> real))) /
-                                              invsqrt((x :> real))))))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_38 : (\real_abs(((u :> real) -
-                                                   invsqrt((x :> real)))) <=
-                                        (0x1p-10 *
-                                          \real_abs(invsqrt((x :> real)))))));
+         (assert for default: (C_38 : (jessie : (\real_abs(((u :> real) -
+                                                             invsqrt(
+                                                             (x :> real)))) <=
+                                                  (0x1p-10 *
+                                                    \real_abs(invsqrt(
+                                                              (x :> real))))))));
          ()
       };
       (C_39 : (t = u));
       
       {  
-         (assert for default: (C_40 : (((x :> real) * invsqrt((x :> real))) ==
-                                        \real_sqrt((x :> real)))));
+         (assert for default: (C_40 : (jessie : (((x :> real) *
+                                                   invsqrt((x :> real))) ==
+                                                  \real_sqrt((x :> real))))));
          ()
       };
       

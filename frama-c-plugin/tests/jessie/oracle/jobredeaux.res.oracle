@@ -65,10 +65,10 @@ behavior default:
 ;
 
 float_xP[..] ones(int32 m_0, int32 n_2)
-  requires (C_61 : ((C_62 : (m_0 > 0)) && (C_63 : (n_2 > 0))));
+  requires (C_47 : ((C_48 : (m_0 > 0)) && (C_49 : (n_2 > 0))));
 behavior default:
   assigns \nothing;
-  ensures (C_60 : ((\result == null) ||
+  ensures (C_46 : ((\result == null) ||
                     (\forall integer i_1;
                       (\forall integer j_0;
                         ((((0 <= i_1) && (i_1 < \at(m_0,Old))) &&
@@ -84,34 +84,34 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_6 : ((C_7 : (m_0 > 0)) && (C_8 : (n_2 > 0)))));
+         (assert for default: (C_6 : (jessie : ((m_0 > 0) && (n_2 > 0)))));
          ()
       };
       
-      {  (C_10 : (c = (C_9 : allocM(m_0, n_2))))
+      {  (C_8 : (c = (C_7 : allocM(m_0, n_2))))
       };
       
       {  
-         (assert for default: (C_11 : (((C_13 : (\offset_min(c) <= 0)) &&
-                                         (C_14 : (\offset_max(c) >=
-                                                   (m_0 - 1)))) &&
-                                        (C_15 : (\forall integer k_0;
-                                                  (((0 <= k_0) &&
-                                                     (k_0 < m_0)) ==>
-                                                    ((\offset_min((c + k_0).float_xM) <=
-                                                       0) &&
-                                                      (\offset_max((c + k_0).float_xM) >=
-                                                        (n_2 - 1)))))))));
+         (assert for default: (C_9 : (jessie : (((\offset_min(c) <= 0) &&
+                                                  (\offset_max(c) >=
+                                                    (m_0 - 1))) &&
+                                                 (\forall integer k_0;
+                                                   (((0 <= k_0) &&
+                                                      (k_0 < m_0)) ==>
+                                                     ((\offset_min((c + k_0).float_xM) <=
+                                                        0) &&
+                                                       (\offset_max((c + k_0).float_xM) >=
+                                                         (n_2 - 1)))))))));
          ()
       };
-      (C_16 : (i = 0));
-      (C_17 : (j = 0));
-      (C_18 : (i = 0));
+      (C_10 : (i = 0));
+      (C_11 : (j = 0));
+      (C_12 : (i = 0));
       
       loop 
       behavior default:
-        invariant (C_20 : (((C_22 : (0 <= i)) && (C_23 : (i <= m_0))) &&
-                            (C_24 : (\forall integer k_1;
+        invariant (C_14 : (((C_16 : (0 <= i)) && (C_17 : (i <= m_0))) &&
+                            (C_18 : (\forall integer k_1;
                                       (\forall integer q_1;
                                         ((((0 <= k_1) && (k_1 < i)) &&
                                            ((0 <= q_1) && (q_1 < n_2))) ==>
@@ -120,7 +120,7 @@ behavior default:
       behavior default:
         
         assigns ((c + [0..(m_0 - 1)]).float_xM + [0..(n_2 - 1)]).floatM;
-      variant (C_19 : (m_0 - i));
+      variant (C_13 : (m_0 - i));
       while (true)
       {  
          {  (if (i < m_0) then () else 
@@ -128,40 +128,42 @@ behavior default:
             
             {  
                {  
-                  (assert for default: (C_25 : ((C_26 : (0 <= i)) &&
-                                                 (C_27 : (i < m_0)))));
+                  (assert for default: (C_19 : (jessie : ((0 <= i) &&
+                                                           (i < m_0)))));
                   ()
                };
                
                {  
-                  (assert for default: (C_28 : ((C_29 : (\offset_min(
-                                                          (c + i).float_xM) <=
-                                                          0)) &&
-                                                 (C_30 : (\offset_max(
-                                                           (c + i).float_xM) >=
-                                                           (n_2 - 1))))));
+                  (assert for default: (C_20 : (jessie : ((\offset_min(
+                                                            (c +
+                                                              i).float_xM) <=
+                                                            0) &&
+                                                           (\offset_max(
+                                                             (c +
+                                                               i).float_xM) >=
+                                                             (n_2 - 1))))));
                   ()
                };
                
-               {  (C_31 : (j = 0));
+               {  (C_21 : (j = 0));
                   
                   loop 
                   behavior default:
-                    invariant (C_35 : (((C_37 : (0 <= j)) &&
-                                         (C_38 : (j <= n_2))) &&
-                                        (C_39 : (\forall integer l;
+                    invariant (C_25 : (((C_27 : (0 <= j)) &&
+                                         (C_28 : (j <= n_2))) &&
+                                        (C_29 : (\forall integer l;
                                                   (((0 <= l) && (l < j)) ==>
                                                     ((((c + i).float_xM + l).floatM :> real) ==
                                                       1.0))))));
                   behavior default:
-                    invariant (C_34 : (\forall integer p;
+                    invariant (C_24 : (\forall integer p;
                                         (\forall integer q;
                                           ((((0 <= p) && (p < i)) &&
                                              ((0 <= q) && (q < n_2))) ==>
                                             ((((c + p).float_xM + q).floatM :> real) ==
                                               (\at(((c + p).float_xM + q).floatM,Here) :> real))))));
                   behavior default:
-                    invariant (C_33 : (\forall integer p_0;
+                    invariant (C_23 : (\forall integer p_0;
                                         (\forall integer q_0;
                                           ((((i < p_0) && (p_0 < n_2)) &&
                                              ((0 <= q_0) && (q_0 < n_2))) ==>
@@ -170,7 +172,7 @@ behavior default:
                   behavior default:
                     
                     assigns ((c + i).float_xM + [0..(n_2 - 1)]).floatM;
-                  variant (C_32 : (n_2 - j));
+                  variant (C_22 : (n_2 - j));
                   while (true)
                   {  
                      {  (if (j < n_2) then () else 
@@ -178,50 +180,52 @@ behavior default:
                         
                         {  
                            {  
-                              (assert for default: (C_40 : ((C_41 : (0 <= j)) &&
-                                                             (C_42 : 
-                                                             (j <
-                                                               n_2)))));
+                              (assert for default: (C_30 : (jessie : 
+                                                           ((0 <= j) &&
+                                                             (j < n_2)))));
                               ()
                            };
                            
                            {  
-                              (assert for default: (C_43 : ((C_44 : (\offset_min(
-                                                                    (c +
-                                                                    i).float_xM) <=
-                                                                    j)) &&
-                                                             (C_45 : 
+                              (assert for default: (C_31 : (jessie : 
+                                                           ((\offset_min(
+                                                              (c +
+                                                                i).float_xM) <=
+                                                              j) &&
                                                              (\offset_max(
                                                                (c +
                                                                  i).float_xM) >=
                                                                j)))));
                               ()
                            };
-                           (C_51 : ((C_50 : (C_49 : ((C_48 : (C_47 : (c + i)).float_xM) +
-                                                      j)).floatM) = (C_46 : ((1.0 :> double) :> float))));
+                           (C_37 : ((C_36 : (C_35 : ((C_34 : (C_33 : (c + i)).float_xM) +
+                                                      j)).floatM) = (C_32 : ((1.0 :> double) :> float))));
                            
                            {  
-                              (assert for default: (C_52 : ((((c + i).float_xM +
+                              (assert for default: (C_38 : (jessie : 
+                                                           ((((c + i).float_xM +
                                                                j).floatM :> real) ==
-                                                             1.0)));
+                                                             1.0))));
                               ()
                            }
                         };
-                        (C_55 : (j = (C_54 : ((C_53 : (j + 1)) :> int32))))
+                        (C_41 : (j = (C_40 : ((C_39 : (j + 1)) :> int32))))
                      }
                   };
                   (while_1_break : ())
                };
                
                {  
-                  (assert for default: (C_56 : (\forall integer l_0;
-                                                 (((0 <= l_0) && (l_0 < n_2)) ==>
-                                                   ((((c + i).float_xM + l_0).floatM :> real) ==
-                                                     1.0)))));
+                  (assert for default: (C_42 : (jessie : (\forall integer l_0;
+                                                           (((0 <= l_0) &&
+                                                              (l_0 < n_2)) ==>
+                                                             ((((c + i).float_xM +
+                                                                 l_0).floatM :> real) ==
+                                                               1.0))))));
                   ()
                }
             };
-            (C_59 : (i = (C_58 : ((C_57 : (i + 1)) :> int32))))
+            (C_45 : (i = (C_44 : ((C_43 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -852,12 +856,12 @@ let ones_ensures_default =
       begin
         (assert
         { (JC_<somenum>:
-          ((JC_<somenum>: gt_int(integer_of_int32(m_0), (0)))
-          and (JC_<somenum>: gt_int(integer_of_int32(n_2), (0))))) }; void); void;
+          (gt_int(integer_of_int32(m_0), (0))
+          and gt_int(integer_of_int32(n_2), (0)))) }; void); void;
        (let jessie_<somenum> =
-       (C_10:
+       (C_8:
        begin
-         (c := (C_9:
+         (c := (C_7:
                (let jessie_<somenum> = m_0 in
                (let jessie_<somenum> = n_2 in
                (JC_<somenum>:
@@ -865,12 +869,10 @@ let ones_ensures_default =
         !c end) in void);
        (assert
        { (JC_<somenum>:
-         ((JC_<somenum>: le_int(offset_min(float_xP_result_3_alloc_table, c), (0)))
-         and ((JC_<somenum>:
-              ge_int(offset_max(float_xP_result_3_alloc_table, c),
-              sub_int(integer_of_int32(m_0), (1))))
-             and (JC_<somenum>:
-                 (forall k_0:int.
+         (le_int(offset_min(float_xP_result_3_alloc_table, c), (0))
+         and (ge_int(offset_max(float_xP_result_3_alloc_table, c),
+              sub_int(integer_of_int32(m_0), (1)))
+             and (forall k_0:int.
                   ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(m_0))) ->
                    (le_int(offset_min(floatP_float_xM_7_alloc_table,
                            select(float_xP_float_xM_result_3, shift(c, k_0))),
@@ -878,15 +880,15 @@ let ones_ensures_default =
                    and ge_int(offset_max(floatP_float_xM_7_alloc_table,
                               select(float_xP_float_xM_result_3,
                               shift(c, k_0))),
-                       sub_int(integer_of_int32(n_2), (1)))))))))) }; void);
+                       sub_int(integer_of_int32(n_2), (1))))))))) }; void);
        void;
-       (C_16:
+       (C_10:
        begin
          (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-        (C_17:
+        (C_11:
         begin
           (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
-         (C_18:
+         (C_12:
          begin
            (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
           (loop_3:
@@ -930,25 +932,22 @@ let ones_ensures_default =
                    then void else (raise (Goto_while_0_break_exc void)));
                   (assert
                   { (JC_<somenum>:
-                    ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-                    and (JC_<somenum>:
-                        lt_int(integer_of_int32(i), integer_of_int32(m_0))))) };
+                    (le_int((0), integer_of_int32(i))
+                    and lt_int(integer_of_int32(i), integer_of_int32(m_0)))) };
                   void); void;
                   (assert
                   { (JC_<somenum>:
-                    ((JC_<somenum>:
-                     le_int(offset_min(floatP_float_xM_7_alloc_table,
+                    (le_int(offset_min(floatP_float_xM_7_alloc_table,
                             select(float_xP_float_xM_result_3,
                             shift(c, integer_of_int32(i)))),
-                     (0)))
-                    and (JC_<somenum>:
-                        ge_int(offset_max(floatP_float_xM_7_alloc_table,
+                     (0))
+                    and ge_int(offset_max(floatP_float_xM_7_alloc_table,
                                select(float_xP_float_xM_result_3,
                                shift(c, integer_of_int32(i)))),
-                        sub_int(integer_of_int32(n_2), (1)))))) }; void);
+                        sub_int(integer_of_int32(n_2), (1))))) }; void);
                   void;
                   try
-                   (C_31:
+                   (C_21:
                    begin
                      (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in
                      void);
@@ -989,8 +988,7 @@ let ones_ensures_default =
                                                               shift(c, p)),
                                                         q))))))))
                                and (JC_<somenum>:
-                                   ((JC_<somenum>:
-                                    le_int((0), integer_of_int32(j)))
+                                   ((JC_<somenum>: le_int((0), integer_of_int32(j)))
                                    and ((JC_<somenum>:
                                         le_int(integer_of_int32(j),
                                         integer_of_int32(n_2)))
@@ -1029,32 +1027,29 @@ let ones_ensures_default =
                              else (raise (Goto_while_1_break_exc void)));
                             (assert
                             { (JC_<somenum>:
-                              ((JC_<somenum>: le_int((0), integer_of_int32(j)))
-                              and (JC_<somenum>:
-                                  lt_int(integer_of_int32(j),
-                                  integer_of_int32(n_2))))) }; void); void;
+                              (le_int((0), integer_of_int32(j))
+                              and lt_int(integer_of_int32(j),
+                                  integer_of_int32(n_2)))) }; void); void;
                             (assert
                             { (JC_<somenum>:
-                              ((JC_<somenum>:
-                               le_int(offset_min(floatP_float_xM_7_alloc_table,
+                              (le_int(offset_min(floatP_float_xM_7_alloc_table,
                                       select(float_xP_float_xM_result_3,
                                       shift(c, integer_of_int32(i)))),
-                               integer_of_int32(j)))
-                              and (JC_<somenum>:
-                                  ge_int(offset_max(floatP_float_xM_7_alloc_table,
+                               integer_of_int32(j))
+                              and ge_int(offset_max(floatP_float_xM_7_alloc_table,
                                          select(float_xP_float_xM_result_3,
                                          shift(c, integer_of_int32(i)))),
-                                  integer_of_int32(j))))) }; void); void;
-                            (C_51:
+                                  integer_of_int32(j)))) }; void); void;
+                            (C_37:
                             begin
                               (let jessie_<somenum> =
                               (let jessie_<somenum> =
-                              (C_46:
+                              (C_32:
                               ((single_of_double_safe nearest_even) (double_of_real_exact 1.0))) in
                               (let jessie_<somenum> =
-                              (C_48:
+                              (C_34:
                               ((safe_acc_ float_xP_float_xM_result_3) 
-                               (C_47: ((shift !c) (integer_of_int32 !i))))) in
+                               (C_33: ((shift !c) (integer_of_int32 !i))))) in
                               (let jessie_<somenum> = (integer_of_int32 !j) in
                               (let jessie_<somenum> =
                               ((shift jessie_<somenum>) jessie_<somenum>) in
@@ -1068,10 +1063,10 @@ let ones_ensures_default =
                                                    integer_of_int32(i))),
                                              integer_of_int32(j)))) = 1.0)) };
                              void); void;
-                             (C_55:
+                             (C_41:
                              begin
-                               (j := (C_54:
-                                     (safe_int32_of_integer_ (C_53:
+                               (j := (C_40:
+                                     (safe_int32_of_integer_ (C_39:
                                                              ((add_int 
                                                                (integer_of_int32 !j)) (1))))));
                               !j end) end) end in void);
@@ -1089,10 +1084,10 @@ let ones_ensures_default =
                                     shift(select(float_xP_float_xM_result_3,
                                           shift(c, integer_of_int32(i))),
                                     l_0))) = 1.0)))) }; void); void;
-                  (C_59:
+                  (C_45:
                   begin
-                    (i := (C_58:
-                          (safe_int32_of_integer_ (C_57:
+                    (i := (C_44:
+                          (safe_int32_of_integer_ (C_43:
                                                   ((add_int (integer_of_int32 !i)) (1))))));
                    !i end) end in void); (raise (Loop_continue_exc void)) end
                with Loop_continue_exc jessie_<somenum> -> void end end done;
@@ -1132,12 +1127,12 @@ let ones_safety =
       begin
         [ { } unit
           { (JC_<somenum>:
-            ((JC_<somenum>: gt_int(integer_of_int32(m_0), (0)))
-            and (JC_<somenum>: gt_int(integer_of_int32(n_2), (0))))) } ]; void;
+            (gt_int(integer_of_int32(m_0), (0))
+            and gt_int(integer_of_int32(n_2), (0)))) } ]; void;
        (let jessie_<somenum> =
-       (C_10:
+       (C_8:
        begin
-         (c := (C_9:
+         (c := (C_7:
                (let jessie_<somenum> = m_0 in
                (let jessie_<somenum> = n_2 in
                (JC_<somenum>:
@@ -1145,13 +1140,10 @@ let ones_safety =
         !c end) in void);
        [ { } unit reads c
          { (JC_<somenum>:
-           ((JC_<somenum>:
-            le_int(offset_min(float_xP_result_3_alloc_table, c), (0)))
-           and ((JC_<somenum>:
-                ge_int(offset_max(float_xP_result_3_alloc_table, c),
-                sub_int(integer_of_int32(m_0), (1))))
-               and (JC_<somenum>:
-                   (forall k_0:int.
+           (le_int(offset_min(float_xP_result_3_alloc_table, c), (0))
+           and (ge_int(offset_max(float_xP_result_3_alloc_table, c),
+                sub_int(integer_of_int32(m_0), (1)))
+               and (forall k_0:int.
                     ((le_int((0), k_0)
                      and lt_int(k_0, integer_of_int32(m_0))) ->
                      (le_int(offset_min(floatP_float_xM_7_alloc_table,
@@ -1161,15 +1153,15 @@ let ones_safety =
                      and ge_int(offset_max(floatP_float_xM_7_alloc_table,
                                 select(float_xP_float_xM_result_3,
                                 shift(c, k_0))),
-                         sub_int(integer_of_int32(n_2), (1)))))))))) } ];
+                         sub_int(integer_of_int32(n_2), (1))))))))) } ];
        void;
-       (C_16:
+       (C_10:
        begin
          (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-        (C_17:
+        (C_11:
         begin
           (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
-         (C_18:
+         (C_12:
          begin
            (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
           (loop_1:
@@ -1203,24 +1195,21 @@ let ones_safety =
                    then void else (raise (Goto_while_0_break_exc void)));
                   [ { } unit reads i
                     { (JC_<somenum>:
-                      ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-                      and (JC_<somenum>:
-                          lt_int(integer_of_int32(i), integer_of_int32(m_0))))) } ];
+                      (le_int((0), integer_of_int32(i))
+                      and lt_int(integer_of_int32(i), integer_of_int32(m_0)))) } ];
                   void;
                   [ { } unit reads c,i
                     { (JC_<somenum>:
-                      ((JC_<somenum>:
-                       le_int(offset_min(floatP_float_xM_7_alloc_table,
+                      (le_int(offset_min(floatP_float_xM_7_alloc_table,
                               select(float_xP_float_xM_result_3,
                               shift(c, integer_of_int32(i)))),
-                       (0)))
-                      and (JC_<somenum>:
-                          ge_int(offset_max(floatP_float_xM_7_alloc_table,
+                       (0))
+                      and ge_int(offset_max(floatP_float_xM_7_alloc_table,
                                  select(float_xP_float_xM_result_3,
                                  shift(c, integer_of_int32(i)))),
-                          sub_int(integer_of_int32(n_2), (1)))))) } ]; void;
+                          sub_int(integer_of_int32(n_2), (1))))) } ]; void;
                   try
-                   (C_31:
+                   (C_21:
                    begin
                      (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in
                      void);
@@ -1289,31 +1278,28 @@ let ones_safety =
                              else (raise (Goto_while_1_break_exc void)));
                             [ { } unit reads j
                               { (JC_<somenum>:
-                                ((JC_<somenum>: le_int((0), integer_of_int32(j)))
-                                and (JC_<somenum>:
-                                    lt_int(integer_of_int32(j),
-                                    integer_of_int32(n_2))))) } ]; void;
+                                (le_int((0), integer_of_int32(j))
+                                and lt_int(integer_of_int32(j),
+                                    integer_of_int32(n_2)))) } ]; void;
                             [ { } unit reads c,i,j
                               { (JC_<somenum>:
-                                ((JC_<somenum>:
-                                 le_int(offset_min(floatP_float_xM_7_alloc_table,
+                                (le_int(offset_min(floatP_float_xM_7_alloc_table,
                                         select(float_xP_float_xM_result_3,
                                         shift(c, integer_of_int32(i)))),
-                                 integer_of_int32(j)))
-                                and (JC_<somenum>:
-                                    ge_int(offset_max(floatP_float_xM_7_alloc_table,
+                                 integer_of_int32(j))
+                                and ge_int(offset_max(floatP_float_xM_7_alloc_table,
                                            select(float_xP_float_xM_result_3,
                                            shift(c, integer_of_int32(i)))),
-                                    integer_of_int32(j))))) } ]; void;
-                            (C_51:
+                                    integer_of_int32(j)))) } ]; void;
+                            (C_37:
                             begin
                               (let jessie_<somenum> =
                               (let jessie_<somenum> =
-                              (C_46:
+                              (C_32:
                               (JC_<somenum>:
                               ((single_of_double nearest_even) (double_of_real_exact 1.0)))) in
                               (let jessie_<somenum> =
-                              (C_48:
+                              (C_34:
                               (JC_<somenum>:
                               ((((offset_acc_ float_xP_result_3_alloc_table) float_xP_float_xM_result_3) !c) 
                                (integer_of_int32 !i)))) in
@@ -1331,11 +1317,11 @@ let ones_safety =
                                                      integer_of_int32(i))),
                                                integer_of_int32(j)))) = 1.0)) } ];
                              void;
-                             (C_55:
+                             (C_41:
                              begin
-                               (j := (C_54:
+                               (j := (C_40:
                                      (JC_<somenum>:
-                                     (int32_of_integer_ (C_53:
+                                     (int32_of_integer_ (C_39:
                                                         ((add_int (integer_of_int32 !j)) (1)))))));
                               !j end) end) end in void);
                           (raise (Loop_continue_exc void)) end with
@@ -1352,11 +1338,11 @@ let ones_safety =
                                       shift(select(float_xP_float_xM_result_3,
                                             shift(c, integer_of_int32(i))),
                                       l_0))) = 1.0)))) } ]; void;
-                  (C_59:
+                  (C_45:
                   begin
-                    (i := (C_58:
+                    (i := (C_44:
                           (JC_<somenum>:
-                          (int32_of_integer_ (C_57:
+                          (int32_of_integer_ (C_43:
                                              ((add_int (integer_of_int32 !i)) (1)))))));
                    !i end) end in void); (raise (Loop_continue_exc void)) end
                with Loop_continue_exc jessie_<somenum> -> void end end done;
@@ -1373,19 +1359,19 @@ why --project [...] why/jobredeaux.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/jobredeaux_po1.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "17" begin = "16" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "17" begin = "15" end = "100"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/jobredeaux_po2.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "17" begin = "16" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "17" begin = "15" end = "100"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/jobredeaux_po3.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "17" begin = "39" end = "99"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "17" begin = "15" end = "100"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/jobredeaux_po4.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "17" begin = "39" end = "99"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "17" begin = "15" end = "100"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/jobredeaux_po5.why">
@@ -1401,19 +1387,19 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po8.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "104" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "104" begin = "6" end = "6148"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po9.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "104" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "104" begin = "6" end = "6148"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po10.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "28" begin = "15" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "28" begin = "15" end = "24"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/jobredeaux_po11.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "28" begin = "19" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "28" begin = "15" end = "24"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/jobredeaux_po12.why">
@@ -1437,19 +1423,19 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po17.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "141" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "143" begin = "18" end = "3724"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po18.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "141" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "143" begin = "18" end = "3724"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po19.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "39" begin = "19" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "39" begin = "19" end = "27"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/jobredeaux_po20.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "39" begin = "22" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.c" line = "39" begin = "19" end = "27"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/jobredeaux_po21.why">
@@ -1477,11 +1463,11 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po27.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "141" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "143" begin = "18" end = "3724"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po28.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "141" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "143" begin = "18" end = "3724"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po29.why">
@@ -1501,11 +1487,11 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po33.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "104" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "104" begin = "6" end = "6148"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po34.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "104" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "104" begin = "6" end = "6148"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po35.why">
@@ -1534,12 +1520,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux_po40.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "193" begin = "36" end = "193"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "194" begin = "36" end = "193"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux_po41.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "193" begin = "36" end = "193"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "194" begin = "36" end = "193"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

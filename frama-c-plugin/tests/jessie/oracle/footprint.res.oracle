@@ -66,7 +66,7 @@ behavior default:
    {  (C_3 : ((C_2 : (C_1 : (x + 1)).intM) = 0));
       
       {  
-         (assert for default: (C_4 : p{Here}(x)));
+         (assert for default: (C_4 : (jessie : p{Here}(x))));
          ()
       };
       
@@ -85,7 +85,7 @@ behavior default:
    {  (C_11 : f(x_0));
       
       {  
-         (assert for default: (C_12 : p{Here}(x_0)));
+         (assert for default: (C_12 : (jessie : p{Here}(x_0))));
          ()
       };
       

@@ -65,7 +65,7 @@ behavior default:
       } else 
       {  
          {  
-            (assert for one: (C_1 : (x == 1)));
+            (assert for one: (C_1 : (jessie : (x == 1))));
             ()
          };
          (C_2 : (x = 10))

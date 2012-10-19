@@ -73,17 +73,17 @@ behavior default:
    {  (C_2 : (a = (C_1 : (z - x1))));
       
       {  
-         (assert for default: (C_3 : (\real_abs(((a :> real) -
-                                                  ((z :> real) -
-                                                    (x1 :> real)))) <=
-                                       (0x1p-53 *
-                                         \real_abs(((z :> real) -
-                                                     (x1 :> real)))))));
+         (assert for default: (C_3 : (jessie : (\real_abs(((a :> real) -
+                                                            ((z :> real) -
+                                                              (x1 :> real)))) <=
+                                                 (0x1p-53 *
+                                                   \real_abs(((z :> real) -
+                                                               (x1 :> real))))))));
          ()
       };
       
       {  
-         (assert for default: (C_4 : bounded((a :> real), 0x1p502)));
+         (assert for default: (C_4 : (jessie : bounded((a :> real), 0x1p502))));
          ()
       };
       
@@ -91,26 +91,28 @@ behavior default:
       };
       
       {  
-         (assert for default: (C_7 : (\real_abs(((b :> real) -
-                                                  ((v :> real) * (a :> real)))) <=
-                                       (0x1p-10 *
-                                         \real_abs(((v :> real) *
-                                                     (a :> real)))))));
+         (assert for default: (C_7 : (jessie : (\real_abs(((b :> real) -
+                                                            ((v :> real) *
+                                                              (a :> real)))) <=
+                                                 (0x1p-10 *
+                                                   \real_abs(((v :> real) *
+                                                               (a :> real))))))));
          ()
       };
       
       {  
-         (assert for default: (C_8 : (let real slope =
-                                     (((y2 :> real) - (y1 :> real)) /
-                                       ((x2 :> real) - (x1 :> real)))
-                                     in (\real_abs(((b :> real) -
-                                                     (slope *
-                                                       ((z :> real) -
-                                                         (x1 :> real))))) <=
-                                          (0x1p-25 *
-                                            \real_abs((slope *
-                                                        ((z :> real) -
-                                                          (x1 :> real)))))))));
+         (assert for default: (C_8 : (jessie : (let real slope =
+                                               (((y2 :> real) - (y1 :> real)) /
+                                                 ((x2 :> real) -
+                                                   (x1 :> real)))
+                                               in (\real_abs(((b :> real) -
+                                                               (slope *
+                                                                 ((z :> real) -
+                                                                   (x1 :> real))))) <=
+                                                    (0x1p-25 *
+                                                      \real_abs((slope *
+                                                                  ((z :> real) -
+                                                                    (x1 :> real))))))))));
          ()
       };
       

@@ -46,7 +46,7 @@ behavior default:
 {  
    {  
       {  
-         (assert for default: (C_1 : (! (not(true) == true))));
+         (assert for default: (C_1 : (jessie : (! (not(true) == true)))));
          ()
       };
       

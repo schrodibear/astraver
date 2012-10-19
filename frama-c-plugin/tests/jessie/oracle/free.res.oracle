@@ -57,10 +57,9 @@ behavior default:
    {  (C_1 : (free(p)));
       
       {  
-         (assert for default: (C_2 : (must_not_be_proved : ((\offset_min(p) <=
-                                                              0) &&
-                                                             (\offset_max(p) >=
-                                                               0)))));
+         (assert for default: (C_2 : (jessie : (must_not_be_proved : 
+                                               ((\offset_min(p) <= 0) &&
+                                                 (\offset_max(p) >= 0))))));
          ()
       };
       
@@ -661,12 +660,12 @@ why --project [...] why/free.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/free_po6.why">
-      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "72" begin = "13" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "71" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/free_po7.why">
-      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "72" begin = "13" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "71" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

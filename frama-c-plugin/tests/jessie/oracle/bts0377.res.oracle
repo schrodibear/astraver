@@ -152,7 +152,8 @@ behavior default:
       (C_202 : ((C_201 : (t + 99).doubleM) = (9. :> double)));
       
       {  
-         (assert for default: (C_203 : (((t + 0).doubleM :> real) == 0.)));
+         (assert for default: (C_203 : (jessie : (((t + 0).doubleM :> real) ==
+                                                   0.))));
          ()
       };
       

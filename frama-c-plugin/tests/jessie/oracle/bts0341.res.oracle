@@ -62,12 +62,12 @@ behavior default:
    {  (C_3 : ((C_2 : (C_1 : (x :> iP[0])).iM) = 0));
       
       {  
-         (assert for default: (C_4 : ((x :> sP[0]).sM.s1 == 0)));
+         (assert for default: (C_4 : (jessie : ((x :> sP[0]).sM.s1 == 0))));
          ()
       };
       
       {  
-         (assert for default: (C_5 : ((x :> sP[0]).sM.s2 == 0)));
+         (assert for default: (C_5 : (jessie : ((x :> sP[0]).sM.s2 == 0))));
          ()
       };
       

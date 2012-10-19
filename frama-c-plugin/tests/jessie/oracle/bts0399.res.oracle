@@ -55,7 +55,7 @@ behavior default:
         });
       
       {  
-         (assert for default: (C_4 : (y > 0)));
+         (assert for default: (C_4 : (jessie : (y > 0))));
          ()
       };
       
@@ -82,7 +82,7 @@ behavior default:
         });
       
       {  
-         (assert for default: (C_10 : (y_0 > 0)));
+         (assert for default: (C_10 : (jessie : (y_0 > 0))));
          ()
       };
       

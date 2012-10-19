@@ -61,7 +61,7 @@ behavior default:
       (C_4 : (newValue = (C_3 : hardwareRegister.intM)));
       
       {  
-         (assert for default: (C_5 : (currentValue == newValue)));
+         (assert for default: (C_5 : (jessie : (currentValue == newValue))));
          ()
       };
       (C_7 : ((C_6 : hardwareRegister.intM) = 5));

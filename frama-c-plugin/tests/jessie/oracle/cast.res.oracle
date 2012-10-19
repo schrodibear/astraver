@@ -79,7 +79,7 @@ behavior default:
       (C_27 : ((C_26 : i_0.intM) = (C_25 : f(i_0))));
       
       {  
-         (assert for default: (C_28 : (i_0.intM == 0)));
+         (assert for default: (C_28 : (jessie : (i_0.intM == 0))));
          ()
       };
       

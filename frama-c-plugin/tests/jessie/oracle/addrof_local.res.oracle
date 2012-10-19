@@ -113,7 +113,7 @@ behavior default:
       (C_45 : gp(p_1, (C_44 : p_1.int_xM)));
       
       {  
-         (assert for default: (C_46 : (i_2.intM == 0)));
+         (assert for default: (C_46 : (jessie : (i_2.intM == 0))));
          ()
       };
       (C_49 : ((C_48 : (C_47 : p_1.int_xM).intM) = 0));

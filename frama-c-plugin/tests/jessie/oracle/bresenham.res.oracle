@@ -111,7 +111,7 @@ behavior default:
             
             {  
                {  
-                  (assert for default: (C_15 : best{Here}(x, y)));
+                  (assert for default: (C_15 : (jessie : best{Here}(x, y))));
                   ()
                };
                

@@ -95,10 +95,10 @@ behavior default:
         });
       
       {  
-         (assert for default: (C_20 : (\forall integer m;
-                                        (((0 <= m) && (m < 3)) ==>
-                                          ((vect.Sum + m).unsigned_charM ==
-                                            \at((vect.Sum + m).unsigned_charM,Pre))))));
+         (assert for default: (C_20 : (jessie : (\forall integer m;
+                                                  (((0 <= m) && (m < 3)) ==>
+                                                    ((vect.Sum + m).unsigned_charM ==
+                                                      \at((vect.Sum + m).unsigned_charM,Pre)))))));
          ()
       };
       

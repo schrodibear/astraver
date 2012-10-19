@@ -120,6 +120,7 @@ let run () =
     File.create_project_from_visitor "jessie" 
       (fun prj -> new Visitor.frama_c_copy prj)
   in
+  Jessie_options.debug "Project created";
   FCProject.copy ~selection:(Plugin.get_selection ()) prj;
   FCProject.set_current prj;
   let file = FCAst.get () in

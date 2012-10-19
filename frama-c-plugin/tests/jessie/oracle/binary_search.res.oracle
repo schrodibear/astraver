@@ -51,16 +51,16 @@ lemma mean_1 :
     ((x <= y) ==> ((x <= ((x + y) / 2)) && (((x + y) / 2) <= y)))))
 
 int32 binary_search(intP[..] t, int32 n_1, int32 v)
-  requires (C_38 : (((C_40 : (n_1 >= 0)) &&
-                      ((C_42 : (\offset_min(t) <= 0)) &&
-                        (C_43 : (\offset_max(t) >= (n_1 - 1))))) &&
-                     (C_44 : (\forall int32 k1;
+  requires (C_36 : (((C_38 : (n_1 >= 0)) &&
+                      ((C_40 : (\offset_min(t) <= 0)) &&
+                        (C_41 : (\offset_max(t) >= (n_1 - 1))))) &&
+                     (C_42 : (\forall int32 k1;
                                (\forall int32 k2;
                                  (((0 <= k1) &&
                                     ((k1 <= k2) && (k2 <= (n_1 - 1)))) ==>
                                    ((t + k1).intM <= (t + k2).intM)))))));
 behavior default:
-  ensures (C_37 : (((\result >= 0) &&
+  ensures (C_35 : (((\result >= 0) &&
                      ((\at(t,Old) + \result).intM == \at(v,Old))) ||
                     ((\result == (- 1)) &&
                       (\forall int32 k_0;
@@ -100,22 +100,22 @@ behavior default:
                                                2)) :> int32))));
                
                {  
-                  (assert for default: (C_23 : ((C_24 : (l <= m)) &&
-                                                 (C_25 : (m <= u)))));
+                  (assert for default: (C_23 : (jessie : ((l <= m) &&
+                                                           (m <= u)))));
                   ()
                };
                
-               {  (if ((C_36 : (C_35 : (t + m)).intM) < v) then (C_34 : (l = 
-                                                                (C_33 : (
-                                                                (C_32 : 
+               {  (if ((C_34 : (C_33 : (t + m)).intM) < v) then (C_32 : (l = 
+                                                                (C_31 : (
+                                                                (C_30 : 
                                                                 (m +
                                                                   1)) :> int32)))) else 
-                  (if ((C_31 : (C_30 : (t + m)).intM) > v) then (C_29 : (u = 
-                                                                (C_28 : (
-                                                                (C_27 : 
+                  (if ((C_29 : (C_28 : (t + m)).intM) > v) then (C_27 : (u = 
+                                                                (C_26 : (
+                                                                (C_25 : 
                                                                 (m -
                                                                   1)) :> int32)))) else 
-                  {  (C_26 : (p = m));
+                  {  (C_24 : (p = m));
                      
                      (goto while_0_break)
                   }))
@@ -708,37 +708,36 @@ let binary_search_ensures_default =
                  void);
                 (assert
                 { (JC_<somenum>:
-                  ((JC_<somenum>: le_int(integer_of_int32(l), integer_of_int32(m)))
-                  and (JC_<somenum>:
-                      le_int(integer_of_int32(m), integer_of_int32(u))))) };
+                  (le_int(integer_of_int32(l), integer_of_int32(m))
+                  and le_int(integer_of_int32(m), integer_of_int32(u)))) };
                 void); void;
-                (if ((lt_int_ (integer_of_int32 (C_36:
+                (if ((lt_int_ (integer_of_int32 (C_34:
                                                 ((safe_acc_ intP_intM_t_1) 
-                                                 (C_35:
+                                                 (C_33:
                                                  ((shift t) (integer_of_int32 !m))))))) 
                      (integer_of_int32 v))
                 then
                  (let jessie_<somenum> =
-                 (C_34:
-                 (l := (C_33:
-                       (safe_int32_of_integer_ (C_32:
+                 (C_32:
+                 (l := (C_31:
+                       (safe_int32_of_integer_ (C_30:
                                                ((add_int (integer_of_int32 !m)) (1))))))) in
                  void)
                 else
-                 (if ((gt_int_ (integer_of_int32 (C_31:
+                 (if ((gt_int_ (integer_of_int32 (C_29:
                                                  ((safe_acc_ intP_intM_t_1) 
-                                                  (C_30:
+                                                  (C_28:
                                                   ((shift t) (integer_of_int32 !m))))))) 
                       (integer_of_int32 v))
                  then
                   (let jessie_<somenum> =
-                  (C_29:
-                  (u := (C_28:
-                        (safe_int32_of_integer_ (C_27:
+                  (C_27:
+                  (u := (C_26:
+                        (safe_int32_of_integer_ (C_25:
                                                 ((sub_int (integer_of_int32 !m)) (1))))))) in
                   void)
                  else
-                  (C_26:
+                  (C_24:
                   begin
                     (let jessie_<somenum> = (p := !m) in void);
                    (raise (Goto_while_0_break_exc void)) end)));
@@ -861,40 +860,38 @@ let binary_search_safety =
                  void);
                 [ { } unit reads l,m,u
                   { (JC_<somenum>:
-                    ((JC_<somenum>:
-                     le_int(integer_of_int32(l), integer_of_int32(m)))
-                    and (JC_<somenum>:
-                        le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
+                    (le_int(integer_of_int32(l), integer_of_int32(m))
+                    and le_int(integer_of_int32(m), integer_of_int32(u)))) } ];
                 void;
-                (if ((lt_int_ (integer_of_int32 (C_36:
+                (if ((lt_int_ (integer_of_int32 (C_34:
                                                 (JC_<somenum>:
                                                 ((((offset_acc_ intP_t_1_alloc_table) intP_intM_t_1) t) 
                                                  (integer_of_int32 !m)))))) 
                      (integer_of_int32 v))
                 then
                  (let jessie_<somenum> =
-                 (C_34:
-                 (l := (C_33:
+                 (C_32:
+                 (l := (C_31:
                        (JC_<somenum>:
-                       (int32_of_integer_ (C_32:
+                       (int32_of_integer_ (C_30:
                                           ((add_int (integer_of_int32 !m)) (1)))))))) in
                  void)
                 else
-                 (if ((gt_int_ (integer_of_int32 (C_31:
+                 (if ((gt_int_ (integer_of_int32 (C_29:
                                                  (JC_<somenum>:
                                                  ((((offset_acc_ intP_t_1_alloc_table) intP_intM_t_1) t) 
                                                   (integer_of_int32 !m)))))) 
                       (integer_of_int32 v))
                  then
                   (let jessie_<somenum> =
-                  (C_29:
-                  (u := (C_28:
+                  (C_27:
+                  (u := (C_26:
                         (JC_<somenum>:
-                        (int32_of_integer_ (C_27:
+                        (int32_of_integer_ (C_25:
                                            ((sub_int (integer_of_int32 !m)) (1)))))))) in
                   void)
                  else
-                  (C_26:
+                  (C_24:
                   begin
                     (let jessie_<somenum> = (p := !m) in void);
                    (raise (Goto_while_0_break_exc void)) end)));
@@ -951,11 +948,11 @@ why --project [...] why/binary_search.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/binary_search_po9.why">
-      <location file = "PPCHOME/tests/jessie/binary_search.c" line = "51" begin = "15" end = "21"/>
+      <location file = "PPCHOME/tests/jessie/binary_search.c" line = "51" begin = "15" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/binary_search_po10.why">
-      <location file = "PPCHOME/tests/jessie/binary_search.c" line = "51" begin = "20" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/binary_search.c" line = "51" begin = "15" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/binary_search_po11.why">
