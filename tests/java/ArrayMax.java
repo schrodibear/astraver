@@ -44,7 +44,7 @@ public class ArrayMax {
 
 /*
 Local Variables:
-compile-command: "make ArrayMax.why3ml"
+compile-command: "make ArrayMax.why3ide"
 End:
 */
 

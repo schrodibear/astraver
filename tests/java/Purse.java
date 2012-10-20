@@ -84,7 +84,7 @@ public class Purse {
 
 /*
 Local Variables:
-compile-command: "make Purse.why3ml"
+compile-command: "make Purse.why3ide"
 End:
 */
 
