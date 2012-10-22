@@ -83,7 +83,7 @@ void duplets(int a[], int len, int *pi, int *pj, int *pk, int *pl) {
 
 /*
 Local Variables:
-compile-command: "make duplets.why3ml"
+compile-command: "make duplets.why3ide"
 End:
 */
 

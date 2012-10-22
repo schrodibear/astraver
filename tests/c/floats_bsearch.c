@@ -72,6 +72,6 @@ int binary_search(double t[], int n, double v) {
 
 /*
 Local Variables:
-compile-command: "make floats_bsearch.why3ml"
+compile-command: "make floats_bsearch.why3ide"
 End:
 */

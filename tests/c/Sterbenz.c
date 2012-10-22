@@ -43,6 +43,6 @@ float Sterbenz(float x, float y) {
 
 /*
 Local Variables:
-compile-command: "make Sterbenz.why3ml"
+compile-command: "make Sterbenz.why3ide"
 End:
 */

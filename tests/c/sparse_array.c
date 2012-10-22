@@ -88,7 +88,7 @@ int main() {
 
 /*
 Local Variables:
-compile-command: "make sparse_array.why3ml"
+compile-command: "make sparse_array.why3ide"
 End:
 */
 

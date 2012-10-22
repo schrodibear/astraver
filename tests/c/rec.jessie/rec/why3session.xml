@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="rec.jessie/rec/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -12,21 +11,29 @@
   version="2.2"/>
  <prover
   id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.0"/>
  <file
   name="../rec.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
-   locfile="rec.jessie/rec/../rec.mlw"
+   locfile="../rec.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
    <goal
     name="sum_rec"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
+    locfile="../../rec.c"
     loclnum="34" loccnumb="4" loccnume="89"
     expl="Lemma sum_rec, lemma"
     sum="0868d3b061a9614f3b1b3b1793db6ee2"
@@ -38,40 +45,56 @@
     <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.35"/>
     </proof>
     <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
      prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="2.03"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
    </goal>
   </theory>
   <theory
    name="Jessie_program"
-   locfile="rec.jessie/rec/../rec.mlw"
+   locfile="../rec.mlw"
    loclnum="235" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter f91_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
+    locfile="../../rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
-    expl="normal postcondition"
+    expl="Function f91, default behavior"
     sum="7ffe254720a98ca256e4798474e6dd2e"
     proved="true"
     expanded="true"
@@ -83,33 +106,49 @@
     <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
      prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter f91_ensures_greater_than_100"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
+    locfile="../../rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
-    expl="parameter f91_ensures_greater_than_100"
+    expl="Function f91, Behavior `greater_than_100&apos;"
     sum="4d1efa0648c3a6b497b4435f3f49dd07"
     proved="true"
     expanded="true"
@@ -121,33 +160,49 @@
     <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
     </proof>
     <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
      prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter f91_ensures_less_than_101"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
+    locfile="../../rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
-    expl="parameter f91_ensures_less_than_101"
+    expl="Function f91, Behavior `less_than_101&apos;"
     sum="5fdbcd19f96cb478ab97ee935c47459e"
     proved="true"
     expanded="true"
@@ -159,21 +214,37 @@
     <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="1"
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -183,9 +254,9 @@
    </goal>
    <goal
     name="WP_parameter f91_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
+    locfile="../../rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
-    expl="parameter f91_safety"
+    expl="Function f91, Safety"
     sum="185398f769ef3701299671526d453c33"
     proved="true"
     expanded="true"
@@ -197,21 +268,37 @@
     <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="1"
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -221,9 +308,9 @@
    </goal>
    <goal
     name="WP_parameter main_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
+    locfile="../../rec.c"
     loclnum="51" loccnumb="5" loccnume="9"
-    expl="normal postcondition"
+    expl="postcondition"
     sum="96d9bb5afadb153e8881b910d89d63c5"
     proved="true"
     expanded="true"
@@ -235,33 +322,49 @@
     <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.16"/>
     </proof>
     <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.17"/>
+    </proof>
+    <proof
      prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.12"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.17"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter main_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
+    locfile="../../rec.c"
     loclnum="51" loccnumb="5" loccnume="9"
-    expl="precondition"
+    expl="precondition for call"
     sum="91d82356677e1ccbab586a120885a7ab"
     proved="true"
     expanded="true"
@@ -273,33 +376,49 @@
     <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
     </proof>
     <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
      prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter sum_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
+    locfile="../../rec.c"
     loclnum="43" loccnumb="5" loccnume="8"
-    expl="parameter sum_ensures_default"
+    expl="Function sum, default behavior"
     sum="0129cafa50e0eb0f1f67978751168e50"
     proved="true"
     expanded="true"
@@ -309,27 +428,43 @@
     <label
      name="expl:Function sum, default behavior"/>
     <proof
-     prover="2"
+     prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.58"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.11"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter sum_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/rec.c"
+    locfile="../../rec.c"
     loclnum="43" loccnumb="5" loccnume="8"
-    expl="parameter sum_safety"
+    expl="Function sum, Safety"
     sum="ac2fc7098049ca7c1971cd44ee5bc6a9"
     proved="true"
     expanded="true"
@@ -339,12 +474,44 @@
     <label
      name="expl:Function sum, Safety"/>
     <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.17"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.12"/>
+    </proof>
+    <proof
      prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.15"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.81"/>
     </proof>
    </goal>
   </theory>

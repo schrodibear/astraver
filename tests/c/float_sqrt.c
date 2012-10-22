@@ -110,7 +110,7 @@ double sqrt(double x)
 
 /*
 Local Variables:
-compile-command: "make float_sqrt.why3ml"
+compile-command: "make float_sqrt.why3ide"
 End:
 */
 

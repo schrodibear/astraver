@@ -62,6 +62,6 @@ void test2(int t[],int n) {
 
 /*
 Local Variables:
-compile-command: "make sum_array.why3ml"
+compile-command: "make sum_array.why3ide"
 End:
 */

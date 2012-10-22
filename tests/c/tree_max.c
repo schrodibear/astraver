@@ -65,3 +65,11 @@ int tree_max(tree t) {
   if (t->right != NULL) m = max(m,tree_max(t->right));
   return m;
   }
+
+
+
+/*
+Local Variables:
+compile-command: "make tree_max.why3ide"
+End:
+*/

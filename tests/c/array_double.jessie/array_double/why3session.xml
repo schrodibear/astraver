@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="array_double.jessie/array_double/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -9,6 +8,22 @@
  <prover
   id="1"
   name="Gappa"
+  version="0.14.1"/>
+ <prover
+  id="2"
+  name="Gappa"
+  version="0.15.1"/>
+ <prover
+  id="3"
+  name="Gappa"
+  version="0.16.0"/>
+ <prover
+  id="4"
+  name="Gappa"
+  version="0.16.1"/>
+ <prover
+  id="5"
+  name="Gappa+dev"
   version="0.16.0"/>
  <file
   name="../array_double.mlw"
@@ -16,20 +31,20 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="array_double.jessie/array_double/../array_double.mlw"
+   locfile="../array_double.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="array_double.jessie/array_double/../array_double.mlw"
+   locfile="../array_double.mlw"
    loclnum="277" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter test_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/array_double.c"
+    locfile="../../array_double.c"
     loclnum="18" loccnumb="5" loccnume="9"
     expl="assertion"
     sum="bff99ce8bb4f1b1f385d0ffdbc3c76b4"
@@ -48,12 +63,37 @@
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     edited="array_double-Jessie_program-WP_parameter_test_ensures_default_1.gappa"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter test_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/array_double.c"
+    locfile="../../array_double.c"
     loclnum="18" loccnumb="5" loccnume="9"
-    expl="Function test, Safety"
+    expl="parameter test_safety"
     sum="2a22fad76bdfe168d87a97d6f3c49f32"
     proved="true"
     expanded="true"
@@ -68,9 +108,9 @@
      expanded="true">
      <goal
       name="WP_parameter test_safety.1"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/array_double.c"
+      locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
-      expl="precondition"
+      expl="floating-point overflow"
       sum="c5fb78d023344e4079b91887ed5e2d9d"
       proved="true"
       expanded="true"
@@ -80,7 +120,7 @@
       <label
        name="expl:parameter test_safety"/>
       <proof
-       prover="1"
+       prover="3"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -90,9 +130,9 @@
      </goal>
      <goal
       name="WP_parameter test_safety.2"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/array_double.c"
+      locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
-      expl="precondition"
+      expl="floating-point overflow"
       sum="70d8c7b62c35c1429f353b7ba121fbe9"
       proved="true"
       expanded="true"
@@ -102,7 +142,7 @@
       <label
        name="expl:parameter test_safety"/>
       <proof
-       prover="1"
+       prover="4"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -112,9 +152,9 @@
      </goal>
      <goal
       name="WP_parameter test_safety.3"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/array_double.c"
+      locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
-      expl="normal postcondition"
+      expl="postcondition"
       sum="ce5420f130f8e9c096b59dd9b74b0a19"
       proved="true"
       expanded="true"

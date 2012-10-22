@@ -117,6 +117,6 @@ void flag(color t[], int l) {
 
 /*
 Local Variables:
-compile-command: "make flag.why3ml"
+compile-command: "make flag.why3ide"
 End:
 */

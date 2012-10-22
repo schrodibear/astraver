@@ -67,6 +67,6 @@ void insert_sort(int t[], int n) {
 
 /*
 Local Variables:
-compile-command: "make insertion_sort.why3ml"
+compile-command: "make insertion_sort.why3ide"
 End:
 */

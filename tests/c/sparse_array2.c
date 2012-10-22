@@ -29,6 +29,10 @@
 /*                                                                        */
 /**************************************************************************/
 
+typedef unsigned int size_t;
+void *malloc(size_t size);
+void *calloc(size_t nmemb, size_t size);
+
 typedef unsigned int uint;
 
 #define DEFAULT 0
@@ -58,9 +62,9 @@ typedef struct SparseArray {
 /*@ predicate inv(sparse_array a) =
   @   \valid(a) &&
   @   0 <= a->n <= a-> sz &&
-  @   \valid_range(a->val,0,a->sz-1) &&
-  @   \valid_range(a->idx,0,a->sz-1) &&
-  @   \valid_range(a->back,0,a->sz-1) &&
+  @   \valid(a->val+(0..a->sz-1)) &&
+  @   \valid(a->idx+(0..a->sz-1)) &&
+  @   \valid(a->back+(0..a->sz-1)) &&
   @   \forall integer i; 0 <= i < a->n ==>  
   @      0 <= a->back[i] < a->sz && a->idx[a->back[i]] == i;
   @*/
@@ -135,6 +139,6 @@ int main() {
 
 /*
 Local Variables:
-compile-command: "make sparse_array2.why3ml"
+compile-command: "make sparse_array2.why3ide"
 End:
 */

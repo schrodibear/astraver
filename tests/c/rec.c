@@ -73,7 +73,7 @@ int f91(int n) {
 
 /*
 Local Variables:
-compile-command: "make rec.why3ml"
+compile-command: "make rec.why3ide"
 End:
 */
 

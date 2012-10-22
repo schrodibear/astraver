@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="bts1251/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
-  name="Z3"
-  version="2.19"/>
+  name="Alt-Ergo"
+  version="0.94"/>
  <prover
   id="1"
-  name="Z3"
-  version="2.19"
-  alternative="alt"/>
+  name="CVC3"
+  version="2.2"/>
  <prover
   id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
   name="Z3"
   version="3.2"/>
  <prover
-  id="3"
+  id="4"
   name="Z3"
   version="4.0"/>
  <file
@@ -25,23 +27,23 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="bts1251/../bts1251.mlw"
+   locfile="../bts1251.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="bts1251/../bts1251.mlw"
-   loclnum="207" loccnumb="7" loccnume="21"
+   locfile="../bts1251.mlw"
+   loclnum="278" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter bsearch_ensures_default"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/bts1251.c"
+    locfile="../../bts1251.c"
     loclnum="17" loccnumb="4" loccnume="11"
-    expl="Function bsearch, default behavior"
-    sum="84668727025ad5f936b2d7be4c9c5a55"
+    expl="parameter bsearch_ensures_default"
+    sum="af12b183ee3d121895afdfe2cbc8377a"
     proved="true"
     expanded="true"
     shape="iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2ainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V16Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;V17ainteger_of_int32V16Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;=V18ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1Fainfix &lt;=ainteger_of_int32V20ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;V21ainteger_of_int32V10Aainfix &lt;=c0V21FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V22ainteger_of_int32V2Iainfix &lt;=V22ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V20V22FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V14c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V23ainteger_of_int32V2Iainfix &lt;V23ainteger_of_int32V10Aainfix &lt;=c0V23FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V24ainteger_of_int32V2Iainfix &lt;=V24ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V24FFAainfix &lt;=ainteger_of_int32V8ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V6Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V25ainteger_of_int32V2Iainfix &lt;V25ainteger_of_int32V6Aainfix &lt;=c0V25FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V26ainteger_of_int32V2Iainfix &lt;=V26ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V8V26FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FAainfix =ainteger_of_int32aselectV4ashiftV0V27ainteger_of_int32V2Aainfix &lt;=V27ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V27EOainfix =ainteger_of_int32aselectV4ashiftV0V28ainteger_of_int32V2Aainfix &lt;=V28ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V28ENAainfix =ainteger_of_int32aselectV4ashiftV0V29ainteger_of_int32V2Aainfix &lt;=V29ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V29ENAainfix =ainteger_of_int32aselectV4ashiftV0V30ainteger_of_int32V2Aainfix &lt;=V30ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V30ENIa_SortedV0c0ainfix -ainteger_of_int32V1c1V4Aainfix &gt;=ainteger_of_int32V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0F">
@@ -51,11 +53,27 @@
      name="expl:parameter bsearch_ensures_default"/>
     <proof
      prover="0"
-     timelimit="3"
+     timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="timeout" time="5.49"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.19"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.11"/>
     </proof>
     <proof
      prover="3"
@@ -63,31 +81,23 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="1"
+     prover="4"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter bsearch_ensures_failure"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/bts1251.c"
+    locfile="../../bts1251.c"
     loclnum="17" loccnumb="4" loccnume="11"
-    expl="Function bsearch, Behavior `failure&apos;"
-    sum="33d6511384abc8250611d1f693b10ae3"
+    expl="parameter bsearch_ensures_failure"
+    sum="8a5494ce49e5ab4182ec95a680ec5404"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9ainfix =ainteger_of_int32V16aprefix -c1Iainfix =V16V15FIainfix =V15V14FIainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix =ainteger_of_int32V19aprefix -c1Iainfix =V19V18FIainfix =V18V17FIainfix =ainteger_of_int32V17aprefix -c1FIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V10Aainfix &lt;=c0V20FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;=V21ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V21FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV0c0ainfix -ainteger_of_int32V1c1V4Aainfix &gt;=ainteger_of_int32V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix =ainteger_of_int32aselectV4ashiftV0V22ainteger_of_int32V2Aainfix &lt;=V22ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V22ENF">
@@ -97,11 +107,27 @@
      name="expl:parameter bsearch_ensures_failure"/>
     <proof
      prover="0"
-     timelimit="3"
+     timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="timeout" time="5.18"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.10"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="3"
@@ -109,31 +135,23 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.05"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter bsearch_ensures_success"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/bts1251.c"
+    locfile="../../bts1251.c"
     loclnum="17" loccnumb="4" loccnume="11"
-    expl="Function bsearch, Behavior `success&apos;"
-    sum="538197cbc1783bfcd03672b94865794a"
+    expl="parameter bsearch_ensures_success"
+    sum="635fc275a0800ec7329c5a612e3b95ea"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9ainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2Aainfix &lt;=ainteger_of_int32V16ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V16Iainfix =V16V15FIainfix =V15V14FIainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V19ainteger_of_int32V2Aainfix &lt;=ainteger_of_int32V19ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V19Iainfix =V19V18FIainfix =V18V17FIainfix =ainteger_of_int32V17aprefix -c1FIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V10Aainfix &lt;=c0V20FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;=V21ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V21FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV0c0ainfix -ainteger_of_int32V1c1V4Aainfix &gt;=ainteger_of_int32V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix =ainteger_of_int32aselectV4ashiftV0V22ainteger_of_int32V2Aainfix &lt;=V22ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V22EF">
@@ -143,11 +161,27 @@
      name="expl:parameter bsearch_ensures_success"/>
     <proof
      prover="0"
-     timelimit="3"
+     timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.10"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.12"/>
     </proof>
     <proof
      prover="3"
@@ -155,31 +189,23 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="1"
+     prover="4"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter bsearch_safety"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/bts1251.c"
+    locfile="../../bts1251.c"
     loclnum="17" loccnumb="4" loccnume="11"
-    expl="Function bsearch, Safety"
-    sum="f50b2c373a35e28b5a424f74a603cad2"
+    expl="parameter bsearch_safety"
+    sum="8cfc65ed0004c81ccace97132ce6adfb"
     proved="true"
     expanded="true"
     shape="iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V15ainteger_of_int32V2ainfix &lt;ainfix -ainteger_of_int32V9ainteger_of_int32V17ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V15c1FAainfix &lt;=ainfix +ainteger_of_int32V15c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V15c1ainfix &lt;ainfix -ainteger_of_int32V19ainteger_of_int32V10ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix -ainteger_of_int32V15c1FAainfix &lt;=ainfix -ainteger_of_int32V15c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V15c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V15ainteger_of_int32V2Aainfix &lt;=ainteger_of_int32V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V15Aainfix &lt;=ainteger_of_int32V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V15Iainfix =V15V14FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V10ainteger_of_int32V13FAainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V13c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V13Iainfix =ainteger_of_int32V13V12FAainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Aainfix =c2c0NIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FAainfix &lt;=ainfix -ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V10Aainfix &lt;=c0V20FAainfix &gt;ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix &lt;=V21ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V21FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FAainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV0c0ainfix -ainteger_of_int32V1c1V4Aainfix &gt;=ainteger_of_int32V1c0Aainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0F">
@@ -189,11 +215,27 @@
      name="expl:parameter bsearch_safety"/>
     <proof
      prover="0"
-     timelimit="3"
+     timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="3.72"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.11"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.13"/>
     </proof>
     <proof
      prover="3"
@@ -204,15 +246,7 @@
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
-     prover="1"
+     prover="4"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
@@ -222,10 +256,10 @@
    </goal>
    <goal
     name="WP_parameter main_ensures_default"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/bts1251.c"
+    locfile="../../bts1251.c"
     loclnum="39" loccnumb="4" loccnume="8"
-    expl="normal postcondition"
-    sum="f69b0370b32392335871cc7b784ab458"
+    expl="parameter main_ensures_default"
+    sum="a8a6ea9721ec646c4521d8aa2c531542"
     proved="true"
     expanded="true"
     shape="t">
@@ -235,11 +269,27 @@
      name="expl:parameter main_ensures_default"/>
     <proof
      prover="0"
-     timelimit="3"
+     timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="3"
@@ -250,28 +300,20 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="2"
+     prover="4"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
-    <proof
-     prover="1"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter main_safety"
-    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/bts1251.c"
+    locfile="../../bts1251.c"
     loclnum="39" loccnumb="4" loccnume="8"
-    expl="Function main, Safety"
-    sum="9bd77ddf34ba6f66528df6287e8f1783"
+    expl="parameter main_safety"
+    sum="bdd5c5091076e47a72478e1059ce0c2c"
     proved="true"
     expanded="true"
     shape="ainfix &gt;=aoffset_maxV2V5c0Oainfix =V5anullIainfix =V18V17FIainfix =ainteger_of_int32V17c0FIainfix =V16V15FIainfix =ainteger_of_int32aselectV12ashiftV5ainteger_of_int32V15ainteger_of_int32V14Aainfix &lt;=ainteger_of_int32V15ainfix -ainteger_of_int32V13c1Aainfix &lt;=c0ainteger_of_int32V15Iainfix =ainteger_of_int32aselectV12ashiftV5V19ainteger_of_int32V14Aainfix &lt;=V19ainfix -ainteger_of_int32V13c1Aainfix &lt;=c0V19EAainfix =ainteger_of_int32V15aprefix -c1Iainfix =ainteger_of_int32aselectV12ashiftV5V20ainteger_of_int32V14Aainfix &lt;=V20ainfix -ainteger_of_int32V13c1Aainfix &lt;=c0V20ENFAa_SortedV5c0ainfix -ainteger_of_int32V13c1V12Aainfix &gt;=ainteger_of_int32V13c0Aainfix &gt;=aoffset_maxV2V5ainfix -ainteger_of_int32V13c1Aainfix &lt;=aoffset_minV2V5c0Iainfix =ainteger_of_int32V14aprefix -c8FIainfix =ainteger_of_int32V13c6FIainfix =aselectV12ashiftV5c5V11Aainfix =aselectV12ashiftV5c4V10Aainfix =aselectV12ashiftV5c3V9Aainfix =aselectV12ashiftV5c2V8Aainfix =aselectV12ashiftV5c1V7Aainfix =aselectV12ashiftV5c0V6Aanot_assignsV2V0V12apset_rangeapset_singletonV5c0c5FIainfix =ainteger_of_int32V11c19FIainfix =ainteger_of_int32V10c8FIainfix =ainteger_of_int32V9c6FIainfix =ainteger_of_int32V8c4FIainfix =ainteger_of_int32V7c3FIainfix =ainteger_of_int32V6c1FIainfix =V5V4FAainfix &gt;=aoffset_maxV2V4c5IainstanceofV3V4aintP_tagAaalloc_freshV1V4c6Aaalloc_extendsV1V2Aastrict_valid_struct_intPV4c0ainfix -c6c1V2FFAainfix &gt;=c6c0FF">
@@ -281,11 +323,27 @@
      name="expl:parameter main_safety"/>
     <proof
      prover="0"
-     timelimit="3"
+     timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.17"/>
+     <result status="valid" time="0.86"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.91"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.17"/>
     </proof>
     <proof
      prover="3"
@@ -293,23 +351,15 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.02"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.13"/>
     </proof>
     <proof
-     prover="1"
+     prover="4"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
   </theory>

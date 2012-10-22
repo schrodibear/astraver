@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="double_rounding_strict_model.jessie/double_rounding_strict_model/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Gappa"
@@ -9,7 +8,7 @@
  <prover
   id="1"
   name="Gappa"
-  version="0.16.0"/>
+  version="0.16.1"/>
  <prover
   id="2"
   name="Gappa+dev"
@@ -20,23 +19,23 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="double_rounding_strict_model.jessie/double_rounding_strict_model/../double_rounding_strict_model.mlw"
+   locfile="../double_rounding_strict_model.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="double_rounding_strict_model.jessie/double_rounding_strict_model/../double_rounding_strict_model.mlw"
-   loclnum="134" loccnumb="7" loccnume="21"
+   locfile="../double_rounding_strict_model.mlw"
+   loclnum="205" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter doublerounding_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_strict_model.c"
+    locfile="../../double_rounding_strict_model.c"
     loclnum="3" loccnumb="7" loccnume="21"
     expl="assertion"
-    sum="489ac9df17d49c500b9c4a08bfd28bb9"
+    sum="5c01fb190d61be9bd16b26a39b34f3df"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV7ainfix +c1.0c0x1.p-52Iainfix =V7V6FIaadd_postaNearestTiesToEvenV1V5V6FIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -71,10 +70,10 @@
    </goal>
    <goal
     name="WP_parameter doublerounding_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_strict_model.c"
+    locfile="../../double_rounding_strict_model.c"
     loclnum="3" loccnumb="7" loccnume="21"
-    expl="Function doublerounding, Safety"
-    sum="e78cc2eab2f734d458d31a4b48ed282e"
+    expl="parameter doublerounding_safety"
+    sum="dd7a2d212e574fc6e74fe2a6414fe4a5"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -88,10 +87,10 @@
      expanded="true">
      <goal
       name="WP_parameter doublerounding_safety.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_strict_model.c"
+      locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
-      expl="precondition"
-      sum="ea28f1cfc3cdfd075dc5f440cd5064dc"
+      expl="floating-point overflow"
+      sum="21f52c1d24b2f30c686339b57d5bb08d"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -126,10 +125,10 @@
      </goal>
      <goal
       name="WP_parameter doublerounding_safety.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_strict_model.c"
+      locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
-      expl="precondition"
-      sum="adba8533a78b68cf032d359cbe7f40a9"
+      expl="floating-point overflow"
+      sum="15e0433851d4a95cb17581e139dc9e36"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -164,10 +163,10 @@
      </goal>
      <goal
       name="WP_parameter doublerounding_safety.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_strict_model.c"
+      locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
-      expl="precondition"
-      sum="0f37dc567751f946079e91d7c10be9a4"
+      expl="floating-point overflow"
+      sum="1a86ee73802f10001aa9032604f677da"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -202,10 +201,10 @@
      </goal>
      <goal
       name="WP_parameter doublerounding_safety.4"
-      locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_strict_model.c"
+      locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
-      expl="precondition"
-      sum="469a5aaa35a9730e9dddea8d1e80a739"
+      expl="floating-point overflow"
+      sum="ed6d3ba4f0bf307c1559368ef2c3d25f"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">

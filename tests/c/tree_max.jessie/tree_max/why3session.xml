@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="tree_max.jessie/tree_max/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -12,30 +11,38 @@
   version="2.2"/>
  <prover
   id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.0"/>
  <file
   name="../tree_max.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
-   locfile="tree_max.jessie/tree_max/../tree_max.mlw"
+   locfile="../tree_max.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="tree_max.jessie/tree_max/../tree_max.mlw"
+   locfile="../tree_max.mlw"
    loclnum="418" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter tree_max_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+    locfile="../../tree_max.c"
     loclnum="62" loccnumb="4" loccnume="12"
-    expl="parameter tree_max_ensures_default"
+    expl="Function tree_max, default behavior"
     sum="ed58c8e384f8eb524feed6fa59e080b3"
     proved="true"
     expanded="true"
@@ -50,24 +57,24 @@
      expanded="true">
      <goal
       name="WP_parameter tree_max_ensures_default.1"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="normal postcondition"
+      expl="postcondition"
       sum="cee5293d63781c82d02f3a69ecd023d6"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ainfix &gt;=ainteger_of_int32V20ainteger_of_int32V21IamemV21V0V4V3V2FAamemV20V0V4V3V2Iainfix =V20V19FIainfix =V19V18FIainfix =ainteger_of_int32V18amaxainteger_of_int32V12ainteger_of_int32V17FIainfix =V17V16FIainfix &gt;=ainteger_of_int32V16ainteger_of_int32V22IamemV22V15V4V3V2FAamemV16V15V4V3V2FLaselectV4V0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFLaselectV4V0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix &gt;=ainteger_of_int32V9ainteger_of_int32V23IamemV23V8V4V3V2FAamemV9V8V4V3V2FLaselectV3V0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFLaselectV3V0Iainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNF">
       <label
        name="expl:parameter tree_max_ensures_default"/>
       <label
        name="expl:Function tree_max, default behavior"/>
       <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="timeout" time="5.11"/>
       </proof>
       <proof
        prover="1"
@@ -77,12 +84,36 @@
        archived="false">
        <result status="valid" time="0.18"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.26"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="3.71"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.2"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="normal postcondition"
+      expl="postcondition"
       sum="cc5be68ebb3d6db376acd64b3b6ff2a5"
       proved="true"
       expanded="false"
@@ -93,19 +124,11 @@
        name="expl:Function tree_max, default behavior"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.57"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.88"/>
       </proof>
       <proof
        prover="1"
@@ -115,12 +138,36 @@
        archived="false">
        <result status="valid" time="0.12"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.18"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="3.71"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.3"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="normal postcondition"
+      expl="postcondition"
       sum="514e9249480500510a6ac5f46fac42e2"
       proved="true"
       expanded="true"
@@ -135,15 +182,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.60"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.95"/>
       </proof>
       <proof
        prover="1"
@@ -153,15 +192,23 @@
        archived="false">
        <result status="valid" time="0.12"/>
       </proof>
+      <proof
+       prover="4"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="3.36"/>
+      </proof>
       <transf
        name="split_goal"
        proved="true"
        expanded="true">
        <goal
         name="WP_parameter tree_max_ensures_default.3.1"
-        locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+        locfile="../../tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
-        expl="parameter tree_max_ensures_default"
+        expl="Function tree_max, default behavior"
         sum="e2ad65aa86ae25af9380cb0080e65f8f"
         proved="true"
         expanded="true"
@@ -172,19 +219,11 @@
          name="expl:Function tree_max, default behavior"/>
         <proof
          prover="0"
-         timelimit="100"
-         memlimit="0"
+         timelimit="5"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.08"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="3"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
         </proof>
         <proof
          prover="1"
@@ -194,12 +233,36 @@
          archived="false">
          <result status="valid" time="0.08"/>
         </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.15"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="3"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
        </goal>
        <goal
         name="WP_parameter tree_max_ensures_default.3.2"
-        locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+        locfile="../../tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
-        expl="parameter tree_max_ensures_default"
+        expl="Function tree_max, default behavior"
         sum="ebb0316410aec6f24fb39b875f37b204"
         proved="true"
         expanded="true"
@@ -209,12 +272,12 @@
         <label
          name="expl:Function tree_max, default behavior"/>
         <proof
-         prover="2"
-         timelimit="3"
-         memlimit="0"
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.07"/>
+         <result status="timeout" time="5.18"/>
         </proof>
         <proof
          prover="1"
@@ -224,14 +287,38 @@
          archived="false">
          <result status="valid" time="0.06"/>
         </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.09"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="3"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="3.27"/>
+        </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.4"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="normal postcondition"
+      expl="postcondition"
       sum="5a256070a496d689278fdb4d2f3e2834"
       proved="true"
       expanded="true"
@@ -254,9 +341,9 @@
        expanded="true">
        <goal
         name="WP_parameter tree_max_ensures_default.4.1"
-        locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+        locfile="../../tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
-        expl="parameter tree_max_ensures_default"
+        expl="Function tree_max, default behavior"
         sum="eaced902fe90b90839a5d4ce616d61ec"
         proved="true"
         expanded="false"
@@ -267,18 +354,34 @@
          name="expl:Function tree_max, default behavior"/>
         <proof
          prover="0"
-         timelimit="3"
-         memlimit="0"
+         timelimit="5"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.02"/>
         </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
        </goal>
        <goal
         name="WP_parameter tree_max_ensures_default.4.2"
-        locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+        locfile="../../tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
-        expl="parameter tree_max_ensures_default"
+        expl="Function tree_max, default behavior"
         sum="cd03f4d22434188ffdbe430853fed0b6"
         proved="true"
         expanded="false"
@@ -288,12 +391,36 @@
         <label
          name="expl:Function tree_max, default behavior"/>
         <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.13"/>
+        </proof>
+        <proof
          prover="1"
          timelimit="3"
          memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="6.01"/>
         </proof>
        </goal>
       </transf>
@@ -302,9 +429,9 @@
    </goal>
    <goal
     name="WP_parameter tree_max_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+    locfile="../../tree_max.c"
     loclnum="62" loccnumb="4" loccnume="12"
-    expl="parameter tree_max_safety"
+    expl="Function tree_max, Safety"
     sum="395fb3bd81b9e532384c63239062b1b5"
     proved="true"
     expanded="true"
@@ -319,9 +446,9 @@
      expanded="true">
      <goal
       name="WP_parameter tree_max_safety.1"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="pointer dereference"
       sum="da55ca84b27c4a446a64b095cf7b2b0e"
       proved="true"
       expanded="false"
@@ -332,19 +459,11 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="1"
@@ -354,12 +473,36 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.2"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="pointer dereference"
       sum="0c1222a282d8e022935cfd051b6119d3"
       proved="true"
       expanded="false"
@@ -370,14 +513,30 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -387,7 +546,7 @@
      </goal>
      <goal
       name="WP_parameter tree_max_safety.3"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
       sum="83879899f2bb6ef49c7bd2e607824bb4"
@@ -400,14 +559,30 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -417,9 +592,9 @@
      </goal>
      <goal
       name="WP_parameter tree_max_safety.4"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="pointer dereference"
       sum="2693d572cdf730a7321f3dda272d5bb4"
       proved="true"
       expanded="false"
@@ -430,14 +605,30 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -447,9 +638,9 @@
      </goal>
      <goal
       name="WP_parameter tree_max_safety.5"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="precondition for call"
       sum="2f47f010e2d25c0d3308bcee33b99702"
       proved="true"
       expanded="false"
@@ -460,14 +651,30 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -477,9 +684,9 @@
      </goal>
      <goal
       name="WP_parameter tree_max_safety.6"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="pointer dereference"
       sum="86433d91f653c3ae79bb8dfce78d008a"
       proved="true"
       expanded="false"
@@ -490,14 +697,30 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -507,7 +730,7 @@
      </goal>
      <goal
       name="WP_parameter tree_max_safety.7"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
       sum="01b0021eb73566c1206ae8d9eb960f67"
@@ -520,14 +743,30 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -537,9 +776,9 @@
      </goal>
      <goal
       name="WP_parameter tree_max_safety.8"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="pointer dereference"
       sum="38527e860ef566a848d4d8de9309e3b5"
       proved="true"
       expanded="false"
@@ -550,14 +789,30 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -567,9 +822,9 @@
      </goal>
      <goal
       name="WP_parameter tree_max_safety.9"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="precondition for call"
       sum="22952c02a9c94d80965740ca5818806f"
       proved="true"
       expanded="false"
@@ -580,19 +835,11 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.50"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.72"/>
       </proof>
       <proof
        prover="1"
@@ -602,12 +849,36 @@
        archived="false">
        <result status="valid" time="0.08"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.14"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.10"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="pointer dereference"
       sum="1b3bcb77cc40bca7afed9e78e53bbcb8"
       proved="true"
       expanded="false"
@@ -618,14 +889,30 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -635,7 +922,7 @@
      </goal>
      <goal
       name="WP_parameter tree_max_safety.11"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
       sum="9e5a8e16c392a01d53d71542c1d35800"
@@ -648,14 +935,30 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -665,9 +968,9 @@
      </goal>
      <goal
       name="WP_parameter tree_max_safety.12"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="pointer dereference"
       sum="ac086dc27cfe48680f3eceeb03850cd7"
       proved="true"
       expanded="false"
@@ -678,19 +981,11 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="1"
@@ -700,12 +995,36 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.13"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/tree_max.c"
+      locfile="../../tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="precondition for call"
       sum="f415abae0247308a553e7169541aaaca"
       proved="true"
       expanded="false"
@@ -716,19 +1035,11 @@
        name="expl:Function tree_max, Safety"/>
       <proof
        prover="0"
-       timelimit="3"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="3"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="1"
@@ -737,6 +1048,30 @@
        obsolete="false"
        archived="false">
        <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="3"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
       </proof>
      </goal>
     </transf>

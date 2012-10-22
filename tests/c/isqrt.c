@@ -57,7 +57,7 @@ int main () {
 
 /*
 Local Variables:
-compile-command: "make isqrt.why3ml"
+compile-command: "make isqrt.why3ide"
 End:
 */
 

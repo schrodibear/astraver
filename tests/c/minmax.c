@@ -69,7 +69,7 @@ double dmin(double x, double y) {
 
 /*
 Local Variables:
-compile-command: "make minmax.why3ml"
+compile-command: "make minmax.why3ide"
 End:
 */
 

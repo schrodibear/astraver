@@ -98,6 +98,6 @@ int* m(int *t, int l) {
 
 /*
 Local Variables:
-compile-command: "make muller.why3ml"
+compile-command: "make muller.why3ide"
 End:
 */

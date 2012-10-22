@@ -87,7 +87,7 @@ float f_single(int n)
 
 /*
 Local Variables:
-compile-command: "make clock_drift.why3ml"
+compile-command: "make clock_drift.why3ide"
 End:
 */
 

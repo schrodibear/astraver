@@ -39,6 +39,6 @@ int eps_line(double sx, double sy,double vx, double vy){
 
 /*
 Local Variables:
-compile-command: "LC_ALL=C make eps_line2.why3ml"
+compile-command: "LC_ALL=C make eps_line2.why3ide"
 End:
 */

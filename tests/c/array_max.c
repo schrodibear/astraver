@@ -32,7 +32,7 @@ int max(int *a, int len) {
 
 /*
 Local Variables:
-compile-command: "make array_max.why3ml"
+compile-command: "make array_max.why3ide"
 End:
 */
 

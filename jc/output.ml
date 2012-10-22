@@ -1406,12 +1406,12 @@ let rec append' e1 e2 =
     | Block(_),Block([]) -> [e1]
     | Block(l1),_ ->
       [make_block e1.expr_labels (concat l1 e2)]
-    | _,Block(l2) when e2.expr_labels = [] ->
-      if e1.expr_labels = [] then
+    | _,Block(l2) ->
+      if e1.expr_labels = [] && e2.expr_labels = [] then
         append_list e1 l2
       else
         let e1' = {e1 with expr_labels = []} in
-        [make_block e1.expr_labels (append_list e1' l2)]
+        [make_block (e1.expr_labels @ e2.expr_labels) (append_list e1' l2)]
     | _ ->
       if e1.expr_labels = [] then
         append_list e1 [e2]

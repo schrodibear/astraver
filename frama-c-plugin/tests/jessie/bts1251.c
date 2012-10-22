@@ -42,3 +42,10 @@ int main() {
 	// assert k == -1;
 	return 0;
 }
+
+
+/*
+Local Variables:
+compile-command: "make bts1251.why3ide"
+End:
+*/

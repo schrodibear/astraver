@@ -11,6 +11,6 @@ double doublerounding() {
 
 /*
 Local Variables:
-compile-command: "LC_ALL=C make double_rounding_strict_model.why3ml"
+compile-command: "LC_ALL=C make double_rounding_strict_model.why3ide"
 End:
 */

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="eps_line2.jessie/eps_line2/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -29,7 +28,7 @@
  <prover
   id="6"
   name="Gappa"
-  version="0.16.0"/>
+  version="0.16.1"/>
  <prover
   id="7"
   name="Gappa+dev"
@@ -40,23 +39,23 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="eps_line2.jessie/eps_line2/../eps_line2.mlw"
+   locfile="../eps_line2.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="eps_line2.jessie/eps_line2/../eps_line2.mlw"
-   loclnum="164" loccnumb="7" loccnume="21"
+   locfile="../eps_line2.mlw"
+   loclnum="235" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter eps_line_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+    locfile="../../eps_line2.c"
     loclnum="31" loccnumb="4" loccnume="12"
-    expl="normal postcondition"
-    sum="be5f882d5876d7477aeb02b9c7e53334"
+    expl="postcondition"
+    sum="7d40ed430f419fbb5f7658d09d64d1dd"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V22ainfix *al_signainfix +ainfix *aexactV0aexactV2ainfix *aexactV1aexactV3al_signainfix -ainfix *aexactV0aexactV3ainfix *aexactV1aexactV2Iainfix =ainteger_of_int32V22c0NIainfix =V22V21FIainfix =V21V20FIainfix =ainteger_of_int32V20ainfix *ainteger_of_int32V11ainteger_of_int32V19FIainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFIaof_real_postaNearestTiesToEvenc0x1.90641p-45V17FIaneg_postaNearestTiesToEvenV15V16FIaof_real_postaNearestTiesToEvenc0x1.90641p-45V15FIasub_postaNearestTiesToEvenV13V12V14FIamul_postaNearestTiesToEvenV0V3V13FIamul_postaNearestTiesToEvenV1V2V12FIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIaof_real_postaNearestTiesToEvenc0x1.90641p-45V9FIaneg_postaNearestTiesToEvenV7V8FIaof_real_postaNearestTiesToEvenc0x1.90641p-45V7FIaadd_postaNearestTiesToEvenV5V4V6FIamul_postaNearestTiesToEvenV0V2V5FIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -64,14 +63,6 @@
      name="expl:Function eps_line, default behavior"/>
     <label
      name="expl:parameter eps_line_ensures_default"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.24"/>
-    </proof>
     <proof
      prover="0"
      timelimit="5"
@@ -81,14 +72,6 @@
      <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.47"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="1000"
@@ -96,13 +79,29 @@
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.24"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.47"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter eps_line_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+    locfile="../../eps_line2.c"
     loclnum="31" loccnumb="4" loccnume="12"
-    expl="Function eps_line, Safety"
-    sum="bc55204bca04b66a1244e6aca3edf41f"
+    expl="parameter eps_line_safety"
+    sum="f3974f9ec0c56c214e65bbc6e81189f3"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=ainfix *ainteger_of_int32V11ainteger_of_int32V19c2147483647Aainfix &lt;=aprefix -c2147483648ainfix *ainteger_of_int32V11ainteger_of_int32V19Iainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFAainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_exact_postc0x1.90641p-45V17FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV15V16FAainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV15amax_doubleIaof_real_exact_postc0x1.90641p-45V15FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFAainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_exact_postc0x1.90641p-45V9FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FAainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -116,10 +115,10 @@
      expanded="true">
      <goal
       name="WP_parameter eps_line_safety.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="86a31f752f5ab010668bcb3d82b8397e"
+      expl="floating-point overflow"
+      sum="0bb3a21849c955553921391bf6ddfd2e"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -127,6 +126,14 @@
        name="expl:Function eps_line, Safety"/>
       <label
        name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
       <proof
        prover="5"
        timelimit="5"
@@ -137,14 +144,6 @@
       </proof>
       <proof
        prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -162,10 +161,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="c7c1ea6902949a00a6e888b6dedf28f3"
+      expl="floating-point overflow"
+      sum="f42c433f0d0d31c25ebd3cdd0a711b37"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -173,6 +172,14 @@
        name="expl:Function eps_line, Safety"/>
       <label
        name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
       <proof
        prover="5"
        timelimit="5"
@@ -190,14 +197,6 @@
        <result status="valid" time="0.00"/>
       </proof>
       <proof
-       prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
        prover="7"
        timelimit="5"
        memlimit="1000"
@@ -208,10 +207,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="4c2287fa1dfabc220f97238f74d7f935"
+      expl="floating-point overflow"
+      sum="89c1fc5430fb7dbfc8af593e7fe203f4"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -238,10 +237,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.4"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="445df53d37ddea5eae7869cfef38a2f6"
+      expl="floating-point overflow"
+      sum="eb0223b159eb214118c9bff7b075ebc5"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -249,6 +248,14 @@
        name="expl:Function eps_line, Safety"/>
       <label
        name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
       <proof
        prover="5"
        timelimit="5"
@@ -259,14 +266,6 @@
       </proof>
       <proof
        prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -284,10 +283,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.5"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="4e8490f06205565a47f56992b1567e84"
+      expl="floating-point overflow"
+      sum="d9b6b0c400b297ed737fa8689ad6a0f7"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -295,6 +294,14 @@
        name="expl:Function eps_line, Safety"/>
       <label
        name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
       <proof
        prover="5"
        timelimit="5"
@@ -305,14 +312,6 @@
       </proof>
       <proof
        prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -330,10 +329,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.6"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="237bfce34b3d6bc9c41fa3ed037257f2"
+      expl="floating-point overflow"
+      sum="6f689f514cc42632817326b22e3e11be"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -348,6 +347,14 @@
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="5"
@@ -366,14 +373,6 @@
        <result status="valid" time="0.01"/>
       </proof>
       <proof
-       prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
        prover="7"
        timelimit="5"
        memlimit="1000"
@@ -384,10 +383,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.7"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="7aab9deb32dbe3c55720a06ac525e77e"
+      expl="precondition for call"
+      sum="54cc7c600dc3e613a335805e4a9d526e"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_exact_postc0x1.90641p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -414,10 +413,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.8"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="f1cc427ec87c37b57d78fee8c0144120"
+      expl="floating-point overflow"
+      sum="cb49376e827152a35059deff1af3a211"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_exact_postc0x1.90641p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -425,6 +424,14 @@
        name="expl:Function eps_line, Safety"/>
       <label
        name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
       <proof
        prover="5"
        timelimit="5"
@@ -435,14 +442,6 @@
       </proof>
       <proof
        prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -460,10 +459,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.9"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="4c3fce2b139d534f3eefaa5bf6754188"
+      expl="floating-point overflow"
+      sum="17f07f801f8ae43b49790a624ea3299d"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_exact_postc0x1.90641p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -471,6 +470,14 @@
        name="expl:Function eps_line, Safety"/>
       <label
        name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
       <proof
        prover="5"
        timelimit="5"
@@ -488,14 +495,6 @@
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
        prover="7"
        timelimit="5"
        memlimit="1000"
@@ -506,10 +505,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.10"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="a32dfe1956be87d777df2478d522dac6"
+      expl="floating-point overflow"
+      sum="8062d0a9fcbceaf6562c0bfeef1a54b8"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_exact_postc0x1.90641p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -536,10 +535,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.11"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="7b7ba20dc5a4c823da021a82db14b1f7"
+      expl="floating-point overflow"
+      sum="3e43a0a86fec9ca7ea93439ed6db6bf0"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_exact_postc0x1.90641p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -556,6 +555,14 @@
        <result status="valid" time="0.03"/>
       </proof>
       <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
        prover="5"
        timelimit="5"
        memlimit="1000"
@@ -565,14 +572,6 @@
       </proof>
       <proof
        prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -590,10 +589,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.12"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="a2711502cc67f4f8f227bf8feba919ca"
+      expl="floating-point overflow"
+      sum="5f295bbba54f40f5137070cdf1f6ee82"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV15amax_doubleIaof_real_exact_postc0x1.90641p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_exact_postc0x1.90641p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -610,6 +609,14 @@
        <result status="valid" time="0.11"/>
       </proof>
       <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
        prover="5"
        timelimit="5"
        memlimit="1000"
@@ -619,14 +626,6 @@
       </proof>
       <proof
        prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -644,10 +643,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.13"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="e7252acf93e3541f09bbf525f80b3a21"
+      expl="floating-point overflow"
+      sum="0f6b87b5f6df20b0512c589ec7915723"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV15V16FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV15amax_doubleIaof_real_exact_postc0x1.90641p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_exact_postc0x1.90641p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -664,6 +663,14 @@
        <result status="valid" time="0.03"/>
       </proof>
       <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
        prover="5"
        timelimit="5"
        memlimit="1000"
@@ -673,14 +680,6 @@
       </proof>
       <proof
        prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -698,10 +697,10 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.14"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="a490d460ffe80783fc3fee180c4142ec"
+      expl="precondition for call"
+      sum="ef4e18b3e6e5294acd617d00b7cc3c05"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_exact_postc0x1.90641p-45V17FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV15V16FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV15amax_doubleIaof_real_exact_postc0x1.90641p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_exact_postc0x1.90641p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -715,7 +714,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="7.90"/>
+       <result status="valid" time="8.86"/>
       </proof>
       <proof
        prover="7"
@@ -723,15 +722,15 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="8.38"/>
+       <result status="valid" time="10.15"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter eps_line_safety.15"
-      locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+      locfile="../../eps_line2.c"
       loclnum="31" loccnumb="4" loccnume="12"
-      expl="precondition"
-      sum="f9e654290347494ef0e87279a1cd3a1c"
+      expl="arithmetic overflow"
+      sum="e0301f5e29476d17782c7e175069df85"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix *ainteger_of_int32V11ainteger_of_int32V19c2147483647Aainfix &lt;=aprefix -c2147483648ainfix *ainteger_of_int32V11ainteger_of_int32V19Iainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFIainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_exact_postc0x1.90641p-45V17FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV15V16FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV15amax_doubleIaof_real_exact_postc0x1.90641p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_exact_postc0x1.90641p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaneg_postaNearestTiesToEvenV7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenaprefix -avalueV7amax_doubleIaof_real_exact_postc0x1.90641p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.90641p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -739,6 +738,14 @@
        name="expl:Function eps_line, Safety"/>
       <label
        name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
       <proof
        prover="5"
        timelimit="5"
@@ -756,14 +763,6 @@
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
        prover="7"
        timelimit="5"
        memlimit="1000"
@@ -776,10 +775,10 @@
    </goal>
    <goal
     name="WP_parameter sign_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+    locfile="../../eps_line2.c"
     loclnum="12" loccnumb="4" loccnume="8"
-    expl="Function sign, default behavior"
-    sum="cb9d1c2e308755e008872ff104b0c674"
+    expl="parameter sign_ensures_default"
+    sum="bf4cc22d179cbfdc8036d2463794bc19"
     proved="true"
     expanded="true"
     shape="iainfix =V3aTrueainfix &lt;=aabsainteger_of_int32V6c1Aainfix =ainteger_of_int32V6al_signaexactV0Iainfix =ainteger_of_int32V6c0NIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fiainfix =V7aTrueainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV0Iainfix =ainteger_of_int32V10c0NIainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8aprefix -c1Fainfix &lt;=aabsainteger_of_int32V13c1Aainfix =ainteger_of_int32V13al_signaexactV0Iainfix =ainteger_of_int32V13c0NIainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11c0FIiainfix =V7aTruealtV0V1altV0V1NFIiainfix =V3aTrueagtV0V2agtV0V2NFIainfix &lt;=ainfix -avalueV0aexactV0avalueV2Aainfix &lt;=avalueV1ainfix -avalueV0aexactV0F">
@@ -798,10 +797,10 @@
    </goal>
    <goal
     name="WP_parameter sign_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/eps_line2.c"
+    locfile="../../eps_line2.c"
     loclnum="12" loccnumb="4" loccnume="8"
-    expl="normal postcondition"
-    sum="074d2c9e9eda8b6e6d6ac52dd2bf7d08"
+    expl="parameter sign_safety"
+    sum="3b584ebc14bf4462326d0496cdebfce5"
     proved="true"
     expanded="true"
     shape="t">
