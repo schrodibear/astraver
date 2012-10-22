@@ -509,10 +509,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs my_cosine.loc
+USERWHYDEUXOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs my_cosine.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs my_cosine.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs my_cosine.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -657,13 +657,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: my_cosine.mlw
-	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: my_cosine.mlw
-	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: my_cosine.mlw
-	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include my_cosine.depend
 
@@ -1640,19 +1640,20 @@ let my_cos1_ensures_default =
                                             single_value(x_0)),
                                    0.5)),
                           cos(single_value(x_0)))),
-         0x1p-24)) }; void); void;
+         0x1p-24)) }; void);
       (C_5:
       begin
-        (let jessie_<num> =
-        (__retres := (C_4:
-                     (JC_16:
-                     (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                      (C_3:
-                      (JC_15:
-                      (((mul_single_safe nearest_even) (C_2:
-                                                       (JC_14:
-                                                       (((mul_single_safe nearest_even) x_0) x_0)))) 
-                       (single_of_real_exact 0.5)))))))) in void);
+        void;
+       (let jessie_<num> =
+       (__retres := (C_4:
+                    (JC_16:
+                    (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+                     (C_3:
+                     (JC_15:
+                     (((mul_single_safe nearest_even) (C_2:
+                                                      (JC_14:
+                                                      (((mul_single_safe nearest_even) x_0) x_0)))) 
+                      (single_of_real_exact 0.5)))))))) in void);
        (return := !__retres); (raise Return) end) end); absurd  end with
    Return -> !return end))
   { (JC_5:
@@ -1675,19 +1676,20 @@ let my_cos1_safety =
                                               single_value(x_0)),
                                      0.5)),
                             cos(single_value(x_0)))),
-           0x1p-24)) } ]; void;
+           0x1p-24)) } ];
       (C_5:
       begin
-        (let jessie_<num> =
-        (__retres := (C_4:
-                     (JC_12:
-                     (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                      (C_3:
-                      (JC_11:
-                      (((mul_single nearest_even) (C_2:
-                                                  (JC_10:
-                                                  (((mul_single nearest_even) x_0) x_0)))) 
-                       (single_of_real_exact 0.5)))))))) in void);
+        void;
+       (let jessie_<num> =
+       (__retres := (C_4:
+                    (JC_12:
+                    (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+                     (C_3:
+                     (JC_11:
+                     (((mul_single nearest_even) (C_2:
+                                                 (JC_10:
+                                                 (((mul_single nearest_even) x_0) x_0)))) 
+                      (single_of_real_exact 0.5)))))))) in void);
        (return := !__retres); (raise Return) end) end); absurd  end with
    Return -> !return end)) { true }
 
@@ -1837,19 +1839,20 @@ let my_cos4_ensures_default =
                                             single_value(x_2)),
                                    0.5)),
                           cos(single_value(x_2)))),
-         0x1.2p-20)) }; void); void;
+         0x1.2p-20)) }; void);
       (C_33:
       begin
-        (let jessie_<num> =
-        (__retres_0 := (C_32:
-                       (JC_78:
-                       (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                        (C_31:
-                        (JC_77:
-                        (((mul_single_safe nearest_even) (C_30:
-                                                         (JC_76:
-                                                         (((mul_single_safe nearest_even) x_2) x_2)))) 
-                         (single_of_real_exact 0.5)))))))) in void);
+        void;
+       (let jessie_<num> =
+       (__retres_0 := (C_32:
+                      (JC_78:
+                      (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+                       (C_31:
+                       (JC_77:
+                       (((mul_single_safe nearest_even) (C_30:
+                                                        (JC_76:
+                                                        (((mul_single_safe nearest_even) x_2) x_2)))) 
+                        (single_of_real_exact 0.5)))))))) in void);
        (return := !__retres_0); (raise Return) end) end); absurd  end with
    Return -> !return end))
   { (JC_67:
@@ -1872,19 +1875,20 @@ let my_cos4_safety =
                                               single_value(x_2)),
                                      0.5)),
                             cos(single_value(x_2)))),
-           0x1.2p-20)) } ]; void;
+           0x1.2p-20)) } ];
       (C_33:
       begin
-        (let jessie_<num> =
-        (__retres_0 := (C_32:
-                       (JC_74:
-                       (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                        (C_31:
-                        (JC_73:
-                        (((mul_single nearest_even) (C_30:
-                                                    (JC_72:
-                                                    (((mul_single nearest_even) x_2) x_2)))) 
-                         (single_of_real_exact 0.5)))))))) in void);
+        void;
+       (let jessie_<num> =
+       (__retres_0 := (C_32:
+                      (JC_74:
+                      (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+                       (C_31:
+                       (JC_73:
+                       (((mul_single nearest_even) (C_30:
+                                                   (JC_72:
+                                                   (((mul_single nearest_even) x_2) x_2)))) 
+                        (single_of_real_exact 0.5)))))))) in void);
        (return := !__retres_0); (raise Return) end) end); absurd  end with
    Return -> !return end)) { true }
 
@@ -3747,8 +3751,8 @@ failure :   0 (  0%)
 // RUNCOQ: for the first VC
 ========== generation of Coq VC output ==========
 why -coq [...] why/my_cosine.why
-File "/home/bobot/Sources/caml/why2/tests/c/my_cosine.jessie/coq/my_cosine_why.v", line 4, characters 0-31:
-Error: Cannot find library WhyFloatsStrict in loadpath
+File "/home/cmarche/recherche/why2-trunk/tests/c/my_cosine.jessie/coq/my_cosine_why.v", line 5, characters 0-31:
+Error: Cannot find library Interval_tactic in loadpath
 ========== file tests/c/my_cosine.jessie/coq/my_cosine_why.v ==========
 (* This file was originally generated by why.
    It can be modified; only the generated parts will be overwritten. *)
@@ -4657,5 +4661,5 @@ Save.
 
 
 ========== running Coq ==========
-File "/home/bobot/Sources/caml/why2/tests/c/my_cosine.jessie/coq/my_cosine_why.v", line 4, characters 0-31:
-Error: Cannot find library WhyFloatsStrict in loadpath
+File "/home/cmarche/recherche/why2-trunk/tests/c/my_cosine.jessie/coq/my_cosine_why.v", line 5, characters 0-31:
+Error: Cannot find library Interval_tactic in loadpath

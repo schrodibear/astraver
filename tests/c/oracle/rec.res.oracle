@@ -74,7 +74,7 @@ int f91(int n) {
 
 /*
 Local Variables:
-compile-command: "make rec.why3ml"
+compile-command: "make rec.why3ide"
 End:
 */
 
@@ -424,10 +424,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs rec.loc
+USERWHYDEUXOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs rec.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs rec.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs rec.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -572,13 +572,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: rec.mlw
-	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: rec.mlw
-	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: rec.mlw
-	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include rec.depend
 
@@ -1425,6 +1425,8 @@ let f91_ensures_default =
         (if ((le_int_ (integer_of_int32 n_1)) (100))
         then
          (C_23:
+         (C_25:
+         (C_26:
          begin
            (let jessie_<num> =
            (tmp_0 := (C_22:
@@ -1433,16 +1435,11 @@ let f91_ensures_default =
                      (safe_int32_of_integer_ (C_20:
                                              ((add_int (integer_of_int32 n_1)) (11))))) in
                      (JC_52: (f91 jessie_<num>))))) in void);
-          (C_25:
-          begin
-            (let jessie_<num> =
-            (tmp_0_0 := (C_24:
-                        (let jessie_<num> = !tmp_0 in (JC_53: (f91 jessie_<num>))))) in
-            void);
-           (C_26:
-           begin
-             (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-            (raise (Return_label_exc void)) end) end) end)
+          (let jessie_<num> =
+          (tmp_0_0 := (C_24:
+                      (let jessie_<num> = !tmp_0 in (JC_53: (f91 jessie_<num>))))) in
+          void); (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
+          (raise (Return_label_exc void)) end)))
         else
          (C_19:
          begin
@@ -1470,6 +1467,8 @@ let f91_ensures_greater_than_100 =
         (if ((le_int_ (integer_of_int32 n_1)) (100))
         then
          (C_23:
+         (C_25:
+         (C_26:
          begin
            (let jessie_<num> =
            (tmp_0 := (C_22:
@@ -1478,16 +1477,11 @@ let f91_ensures_greater_than_100 =
                      (safe_int32_of_integer_ (C_20:
                                              ((add_int (integer_of_int32 n_1)) (11))))) in
                      (JC_56: (f91 jessie_<num>))))) in void);
-          (C_25:
-          begin
-            (let jessie_<num> =
-            (tmp_0_0 := (C_24:
-                        (let jessie_<num> = !tmp_0 in (JC_57: (f91 jessie_<num>))))) in
-            void);
-           (C_26:
-           begin
-             (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-            (raise (Return_label_exc void)) end) end) end)
+          (let jessie_<num> =
+          (tmp_0_0 := (C_24:
+                      (let jessie_<num> = !tmp_0 in (JC_57: (f91 jessie_<num>))))) in
+          void); (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
+          (raise (Return_label_exc void)) end)))
         else
          (C_19:
          begin
@@ -1517,6 +1511,8 @@ let f91_ensures_less_than_101 =
         (if ((le_int_ (integer_of_int32 n_1)) (100))
         then
          (C_23:
+         (C_25:
+         (C_26:
          begin
            (let jessie_<num> =
            (tmp_0 := (C_22:
@@ -1525,16 +1521,11 @@ let f91_ensures_less_than_101 =
                      (safe_int32_of_integer_ (C_20:
                                              ((add_int (integer_of_int32 n_1)) (11))))) in
                      (JC_54: (f91 jessie_<num>))))) in void);
-          (C_25:
-          begin
-            (let jessie_<num> =
-            (tmp_0_0 := (C_24:
-                        (let jessie_<num> = !tmp_0 in (JC_55: (f91 jessie_<num>))))) in
-            void);
-           (C_26:
-           begin
-             (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-            (raise (Return_label_exc void)) end) end) end)
+          (let jessie_<num> =
+          (tmp_0_0 := (C_24:
+                      (let jessie_<num> = !tmp_0 in (JC_55: (f91 jessie_<num>))))) in
+          void); (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
+          (raise (Return_label_exc void)) end)))
         else
          (C_19:
          begin
@@ -1563,6 +1554,8 @@ let f91_safety =
         (if ((le_int_ (integer_of_int32 n_1)) (100))
         then
          (C_23:
+         (C_25:
+         (C_26:
          begin
            (let jessie_<num> =
            (tmp_0 := (C_22:
@@ -1577,21 +1570,17 @@ let f91_safety =
                                          integer_of_int32(jessie_<num>))),
                        (JC_44 : sub_int((101), integer_of_int32(n_1)))) };
                      (JC_43: (f91_requires jessie_<num>))))))) in void);
-          (C_25:
-          begin
-            (let jessie_<num> =
-            (tmp_0_0 := (C_24:
-                        (let jessie_<num> = !tmp_0 in
-                        (JC_50:
-                        (check
-                        { zwf_zero((JC_49 : sub_int((101),
-                                            integer_of_int32(jessie_<num>))),
-                          (JC_48 : sub_int((101), integer_of_int32(n_1)))) };
-                        (JC_47: (f91_requires jessie_<num>))))))) in void);
-           (C_26:
-           begin
-             (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-            (raise (Return_label_exc void)) end) end) end)
+          (let jessie_<num> =
+          (tmp_0_0 := (C_24:
+                      (let jessie_<num> = !tmp_0 in
+                      (JC_50:
+                      (check
+                      { zwf_zero((JC_49 : sub_int((101),
+                                          integer_of_int32(jessie_<num>))),
+                        (JC_48 : sub_int((101), integer_of_int32(n_1)))) };
+                      (JC_47: (f91_requires jessie_<num>))))))) in void);
+          (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
+          (raise (Return_label_exc void)) end)))
         else
          (C_19:
          begin
@@ -1667,16 +1656,17 @@ let sum_ensures_default =
                    (C_2:
                    (safe_int32_of_integer_ (C_1:
                                            ((sub_int (integer_of_int32 x_0)) (1))))) in
-                   (JC_19: (sum jessie_<num>))))) in void); void;
+                   (JC_19: (sum jessie_<num>))))) in void);
           (C_8:
           begin
-            (let jessie_<num> =
-            (__retres := (C_7:
-                         (safe_int32_of_integer_ (C_6:
-                                                 ((add_int (integer_of_int32 
-                                                            (C_5: x_0))) 
-                                                  (integer_of_int32 !tmp)))))) in
-            void); (raise (Return_label_exc void)) end) end));
+            void;
+           (let jessie_<num> =
+           (__retres := (C_7:
+                        (safe_int32_of_integer_ (C_6:
+                                                ((add_int (integer_of_int32 
+                                                           (C_5: x_0))) 
+                                                 (integer_of_int32 !tmp)))))) in
+           void); (raise (Return_label_exc void)) end) end));
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -1715,16 +1705,17 @@ let sum_safety =
                    (check
                    { zwf_zero(integer_of_int32((JC_16 : jessie_<num>)),
                      integer_of_int32((JC_15 : x_0))) };
-                   (JC_14: (sum_requires jessie_<num>))))))) in void); void;
+                   (JC_14: (sum_requires jessie_<num>))))))) in void);
           (C_8:
           begin
-            (let jessie_<num> =
-            (__retres := (C_7:
-                         (JC_18:
-                         (int32_of_integer_ (C_6:
-                                            ((add_int (integer_of_int32 
-                                                       (C_5: x_0))) (integer_of_int32 !tmp))))))) in
-            void); (raise (Return_label_exc void)) end) end));
+            void;
+           (let jessie_<num> =
+           (__retres := (C_7:
+                        (JC_18:
+                        (int32_of_integer_ (C_6:
+                                           ((add_int (integer_of_int32 
+                                                      (C_5: x_0))) (integer_of_int32 !tmp))))))) in
+           void); (raise (Return_label_exc void)) end) end));
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -3222,10 +3213,10 @@ goal sum_safety_po_8:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/rec_why.why               : ?............?............ (24/0/2/0/0)
+why/rec_why.why               : ?............?...........# (23/0/2/1/0)
 total   :  26
-valid   :  24 ( 92%)
+valid   :  23 ( 88%)
 invalid :   0 (  0%)
 unknown :   2 (  8%)
-timeout :   0 (  0%)
+timeout :   1 (  4%)
 failure :   0 (  0%)

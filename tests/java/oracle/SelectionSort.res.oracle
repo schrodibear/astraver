@@ -116,7 +116,7 @@ class SelectionSort {
 
 /*
 Local Variables:
-compile-command: "make SelectionSort.why3ml"
+compile-command: "make SelectionSort.why3ide"
 End:
 */
 
@@ -820,10 +820,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs SelectionSort.loc
+USERWHYDEUXOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs SelectionSort.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs SelectionSort.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs SelectionSort.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -968,13 +968,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: SelectionSort.mlw
-	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: SelectionSort.mlw
-	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: SelectionSort.mlw
-	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include SelectionSort.depend
 
@@ -3622,63 +3622,65 @@ let SelectionSort_sort_ensures_permutation =
               (j_3 := (K_40:
                       (safe_int32_of_integer_ ((add_int (integer_of_int32 !i_3)) (1))))) in
               void);
-              try
-               (loop_8:
-               while true do
-               { invariant (JC_150: true)  }
-                begin
-                  [ { } unit reads Object_alloc_table,i_3,j_3,mi
-                    { (JC_148:
-                      ((JC_145:
-                       lt_int(integer_of_int32(i_3), integer_of_int32(j_3)))
-                      and ((JC_146:
-                           le_int(integer_of_int32(i_3),
-                           integer_of_int32(mi)))
-                          and (JC_147:
-                              lt_int(integer_of_int32(mi),
-                              add_int(offset_max(Object_alloc_table, t_0),
-                              (1))))))) } ];
-                 try
-                  begin
-                    (if (K_39:
-                        ((lt_int_ (integer_of_int32 !j_3)) (K_38:
-                                                           (let jessie_<num> =
-                                                           t_0 in
-                                                           (JC_152:
-                                                           (java_array_length_intM jessie_<num>))))))
-                    then
-                     (if (K_36:
-                         ((lt_int_ (integer_of_int32 (K_35:
-                                                     ((safe_acc_ !intM_intP) 
-                                                      ((shift t_0) (integer_of_int32 !j_3)))))) 
-                          (integer_of_int32 !mv)))
-                     then
-                      (let jessie_<num> =
-                      begin
-                        (let jessie_<num> = (mi := !j_3) in void);
-                       (mv := (K_34:
-                              ((safe_acc_ !intM_intP) ((shift t_0) (integer_of_int32 !j_3)))));
-                       !mv end in void) else void)
-                    else (raise (Loop_exit_exc void)));
-                   (raise (Loop_continue_exc void)) end with
-                  Loop_continue_exc jessie_<num> ->
-                  (let jessie_<num> =
-                  (K_37:
-                  (let jessie_<num> = !j_3 in
-                  begin
-                    (let jessie_<num> =
-                    (j_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
-                    void); jessie_<num> end)) in void) end end done) with
-               Loop_exit_exc jessie_<num> -> void end;
               (Before:
               (K_41:
               begin
-                (let jessie_<num> = this_0 in
-                (let jessie_<num> = t_0 in
-                (let jessie_<num> = !i_3 in
-                (let jessie_<num> = !mi in
-                (JC_153:
-                ((((SelectionSort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+                try
+                 (loop_8:
+                 while true do
+                 { invariant (JC_150: true)  }
+                  begin
+                    [ { } unit reads Object_alloc_table,i_3,j_3,mi
+                      { (JC_148:
+                        ((JC_145:
+                         lt_int(integer_of_int32(i_3), integer_of_int32(j_3)))
+                        and ((JC_146:
+                             le_int(integer_of_int32(i_3),
+                             integer_of_int32(mi)))
+                            and (JC_147:
+                                lt_int(integer_of_int32(mi),
+                                add_int(offset_max(Object_alloc_table, t_0),
+                                (1))))))) } ];
+                   try
+                    begin
+                      (if (K_39:
+                          ((lt_int_ (integer_of_int32 !j_3)) (K_38:
+                                                             (let jessie_<num> =
+                                                             t_0 in
+                                                             (JC_152:
+                                                             (java_array_length_intM jessie_<num>))))))
+                      then
+                       (if (K_36:
+                           ((lt_int_ (integer_of_int32 (K_35:
+                                                       ((safe_acc_ !intM_intP) 
+                                                        ((shift t_0) 
+                                                         (integer_of_int32 !j_3)))))) 
+                            (integer_of_int32 !mv)))
+                       then
+                        (let jessie_<num> =
+                        begin
+                          (let jessie_<num> = (mi := !j_3) in void);
+                         (mv := (K_34:
+                                ((safe_acc_ !intM_intP) ((shift t_0) 
+                                                         (integer_of_int32 !j_3)))));
+                         !mv end in void) else void)
+                      else (raise (Loop_exit_exc void)));
+                     (raise (Loop_continue_exc void)) end with
+                    Loop_continue_exc jessie_<num> ->
+                    (let jessie_<num> =
+                    (K_37:
+                    (let jessie_<num> = !j_3 in
+                    begin
+                      (let jessie_<num> =
+                      (j_3 := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
+                      void); jessie_<num> end)) in void) end end done) with
+                 Loop_exit_exc jessie_<num> -> void end;
+               (let jessie_<num> = this_0 in
+               (let jessie_<num> = t_0 in
+               (let jessie_<num> = !i_3 in
+               (let jessie_<num> = !mi in
+               (JC_153:
+               ((((SelectionSort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
                (K_43:
                (assert
                { (JC_154:
@@ -4187,7 +4189,7 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/SelectionSort_po25.why">
-      <location file = "why/SelectionSort.why" line = "1241" begin = "65" end = "316"/>
+      <location file = "why/SelectionSort.why" line = "1243" begin = "65" end = "316"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SelectionSort_po26.why">
@@ -10795,7 +10797,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
 (IMPLIES (>= (integer_of_int32 i_3_0) (integer_of_int32 result1))
 (Sorted t_0 0 (+ (offset_max Object_alloc_table t_0) 1) intM_intP0))))))))))))))))))
 
-;; SelectionSort_sort_safety_po_1, File "why/SelectionSort.why", line 1241, characters 65-316
+;; SelectionSort_sort_safety_po_1, File "why/SelectionSort.why", line 1243, characters 65-316
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)

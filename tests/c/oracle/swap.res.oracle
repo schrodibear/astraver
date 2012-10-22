@@ -155,10 +155,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs swap.loc
+USERWHYDEUXOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs swap.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs swap.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs swap.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -303,13 +303,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: swap.mlw
-	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: swap.mlw
-	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: swap.mlw
-	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include swap.depend
 
@@ -777,14 +777,13 @@ let swap_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      (C_1:
+     (C_2:
+     (C_3:
      begin
        (let jessie_<num> = (tmp := !a) in void);
-      (C_2:
-      begin
-        (let jessie_<num> = (a := !b) in void);
-       (C_3:
-       begin   (let jessie_<num> = (b := !tmp) in void); (raise Return) end) end)
-     end)); (raise Return) end with Return -> void end)
+      (let jessie_<num> = (a := !b) in void);
+      (let jessie_<num> = (b := !tmp) in void); (raise Return) end))));
+    (raise Return) end with Return -> void end)
   { (JC_7:
     ((JC_5: (integer_of_int32(a) = integer_of_int32(b@)))
     and (JC_6: (integer_of_int32(b) = integer_of_int32(a@))))) }
@@ -797,14 +796,13 @@ let swap_safety =
    begin
      (let tmp = ref (any_int32 void) in
      (C_1:
+     (C_2:
+     (C_3:
      begin
        (let jessie_<num> = (tmp := !a) in void);
-      (C_2:
-      begin
-        (let jessie_<num> = (a := !b) in void);
-       (C_3:
-       begin   (let jessie_<num> = (b := !tmp) in void); (raise Return) end) end)
-     end)); (raise Return) end with Return -> void end) { true }
+      (let jessie_<num> = (a := !b) in void);
+      (let jessie_<num> = (b := !tmp) in void); (raise Return) end))));
+    (raise Return) end with Return -> void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========

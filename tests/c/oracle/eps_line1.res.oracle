@@ -39,7 +39,7 @@ int eps_line(double sx, double sy,double vx, double vy){
 
 /*
 Local Variables:
-compile-command: "LC_ALL=C make eps_line1.why3ml"
+compile-command: "LC_ALL=C make eps_line1.why3ide"
 End:
 */
 ========== frama-c -jessie execution ==========
@@ -421,10 +421,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs eps_line1.loc
+USERWHYDEUXOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs eps_line1.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs eps_line1.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs eps_line1.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -569,13 +569,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: eps_line1.mlw
-	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: eps_line1.mlw
-	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: eps_line1.mlw
-	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include eps_line1.depend
 
@@ -1477,6 +1477,8 @@ let eps_line_ensures_default =
      (let s2_1 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      (C_15:
+     (C_21:
+     (C_24:
      begin
        (let jessie_<num> =
        (s1_1 := (C_14:
@@ -1495,34 +1497,30 @@ let eps_line_ensures_default =
                 ((double_of_real_safe nearest_even) 0x1p-45) in
                 (JC_60: (((sign jessie_<num>) jessie_<num>) jessie_<num>))))))) in
        void);
-      (C_21:
-      begin
-        (let jessie_<num> =
-        (s2_1 := (C_20:
-                 (let jessie_<num> =
-                 (C_18:
-                 (JC_64:
-                 (((sub_double_safe nearest_even) (C_17:
-                                                  (JC_62:
-                                                  (((mul_double_safe nearest_even) sx) vy)))) 
-                  (C_16: (JC_63: (((mul_double_safe nearest_even) sy) vx)))))) in
-                 (let jessie_<num> =
-                 (C_19:
-                 (JC_61:
-                 (neg_double ((double_of_real_safe nearest_even) 0x1p-45)))) in
-                 (let jessie_<num> =
-                 ((double_of_real_safe nearest_even) 0x1p-45) in
-                 (JC_65: (((sign jessie_<num>) jessie_<num>) jessie_<num>))))))) in
-        void);
-       (C_24:
-       begin
-         (let jessie_<num> =
-         (__retres_0 := (C_23:
-                        (safe_int32_of_integer_ (C_22:
-                                                ((mul_int (integer_of_int32 !s1_1)) 
-                                                 (integer_of_int32 !s2_1)))))) in
-         void); (return := !__retres_0); (raise Return) end) end) end))));
-    absurd  end with Return -> !return end))
+      (let jessie_<num> =
+      (s2_1 := (C_20:
+               (let jessie_<num> =
+               (C_18:
+               (JC_64:
+               (((sub_double_safe nearest_even) (C_17:
+                                                (JC_62:
+                                                (((mul_double_safe nearest_even) sx) vy)))) 
+                (C_16: (JC_63: (((mul_double_safe nearest_even) sy) vx)))))) in
+               (let jessie_<num> =
+               (C_19:
+               (JC_61:
+               (neg_double ((double_of_real_safe nearest_even) 0x1p-45)))) in
+               (let jessie_<num> =
+               ((double_of_real_safe nearest_even) 0x1p-45) in
+               (JC_65: (((sign jessie_<num>) jessie_<num>) jessie_<num>))))))) in
+      void);
+      (let jessie_<num> =
+      (__retres_0 := (C_23:
+                     (safe_int32_of_integer_ (C_22:
+                                             ((mul_int (integer_of_int32 !s1_1)) 
+                                              (integer_of_int32 !s2_1)))))) in
+      void); (return := !__retres_0); (raise Return) end)))))); absurd  end
+   with Return -> !return end))
   { (JC_37:
     ((integer_of_int32(result) <> (0)) ->
      (integer_of_int32(result) = mul_int(l_sign(add_real(mul_real(double_exact(sx),
@@ -1555,6 +1553,8 @@ let eps_line_safety =
      (let s2_1 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      (C_15:
+     (C_21:
+     (C_24:
      begin
        (let jessie_<num> =
        (s1_1 := (C_14:
@@ -1573,35 +1573,31 @@ let eps_line_safety =
                 (JC_41: ((double_of_real nearest_even) 0x1p-45)) in
                 (JC_47: (((sign_requires jessie_<num>) jessie_<num>) jessie_<num>))))))) in
        void);
-      (C_21:
-      begin
-        (let jessie_<num> =
-        (s2_1 := (C_20:
-                 (let jessie_<num> =
-                 (C_18:
-                 (JC_53:
-                 (((sub_double nearest_even) (C_17:
-                                             (JC_51:
-                                             (((mul_double nearest_even) sx) vy)))) 
-                  (C_16: (JC_52: (((mul_double nearest_even) sy) vx)))))) in
-                 (let jessie_<num> =
-                 (C_19:
-                 (JC_50:
-                 (neg_double (JC_49: ((double_of_real nearest_even) 0x1p-45))))) in
-                 (let jessie_<num> =
-                 (JC_48: ((double_of_real nearest_even) 0x1p-45)) in
-                 (JC_54: (((sign_requires jessie_<num>) jessie_<num>) jessie_<num>))))))) in
-        void);
-       (C_24:
-       begin
-         (let jessie_<num> =
-         (__retres_0 := (C_23:
-                        (JC_55:
-                        (int32_of_integer_ (C_22:
-                                           ((mul_int (integer_of_int32 !s1_1)) 
-                                            (integer_of_int32 !s2_1))))))) in
-         void); (return := !__retres_0); (raise Return) end) end) end))));
-    absurd  end with Return -> !return end)) { true }
+      (let jessie_<num> =
+      (s2_1 := (C_20:
+               (let jessie_<num> =
+               (C_18:
+               (JC_53:
+               (((sub_double nearest_even) (C_17:
+                                           (JC_51:
+                                           (((mul_double nearest_even) sx) vy)))) 
+                (C_16: (JC_52: (((mul_double nearest_even) sy) vx)))))) in
+               (let jessie_<num> =
+               (C_19:
+               (JC_50:
+               (neg_double (JC_49: ((double_of_real nearest_even) 0x1p-45))))) in
+               (let jessie_<num> =
+               (JC_48: ((double_of_real nearest_even) 0x1p-45)) in
+               (JC_54: (((sign_requires jessie_<num>) jessie_<num>) jessie_<num>))))))) in
+      void);
+      (let jessie_<num> =
+      (__retres_0 := (C_23:
+                     (JC_55:
+                     (int32_of_integer_ (C_22:
+                                        ((mul_int (integer_of_int32 !s1_1)) 
+                                         (integer_of_int32 !s2_1))))))) in
+      void); (return := !__retres_0); (raise Return) end)))))); absurd  end
+   with Return -> !return end)) { true }
 
 let sign_ensures_default =
  fun (x_1 : double) (e1 : double) (e2 : double) ->
@@ -1618,6 +1614,7 @@ let sign_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      try
+      (C_3:
       begin
         (if ((gt_double_ x_1) e2)
         then
@@ -1632,11 +1629,8 @@ let sign_ensures_default =
           (let jessie_<num> =
           (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
          (raise (Return_label_exc void)) end) else void);
-       (C_3:
-       begin
-         (let jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc jessie_<num> ->
+       (let jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_11:
@@ -1660,6 +1654,7 @@ let sign_safety =
    begin
      (let __retres = ref (any_int32 void) in
      try
+      (C_3:
       begin
         (if ((gt_double_ x_1) e2)
         then
@@ -1674,11 +1669,8 @@ let sign_safety =
           (let jessie_<num> =
           (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
          (raise (Return_label_exc void)) end) else void);
-       (C_3:
-       begin
-         (let jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc jessie_<num> ->
+       (let jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 
@@ -3914,10 +3906,10 @@ goal sign_ensures_default_po_6:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/eps_line1_why.why         : .??#.#########...... (8/0/2/10/0)
+why/eps_line1_why.why         : .??###########...... (7/0/2/11/0)
 total   :  20
-valid   :   8 ( 40%)
+valid   :   7 ( 35%)
 invalid :   0 (  0%)
 unknown :   2 ( 10%)
-timeout :  10 ( 50%)
+timeout :  11 ( 55%)
 failure :   0 (  0%)

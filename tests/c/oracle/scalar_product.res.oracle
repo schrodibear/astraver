@@ -87,7 +87,7 @@ double scalar_product(double x[], double y[], int n) {
 
 /*
 Local Variables:
-compile-command: "make clock_drift.why3ml"
+compile-command: "make clock_drift.why3ide"
 End:
 */
 
@@ -551,10 +551,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs scalar_product.loc
+USERWHYDEUXOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs scalar_product.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs scalar_product.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs scalar_product.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -699,13 +699,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: scalar_product.mlw
-	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: scalar_product.mlw
-	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: scalar_product.mlw
-	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include scalar_product.depend
 
@@ -1736,146 +1736,143 @@ let scalar_product_ensures_default =
        (let jessie_<num> = (p := (double_of_real_exact 0.0)) in void);
       try
        (C_2:
+       (loop_2:
        begin
          (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
-        (loop_2:
-        begin
-          while true do
-          { invariant
-              ((JC_44:
-               le_real(abs_real(sub_real(double_value(p),
-                                exact_scalar_product(x_1, y_0,
-                                integer_of_int32(i), doubleP_doubleM_y_4,
-                                doubleP_doubleM_x_3))),
-               mul_real(real_of_int(integer_of_int32(i)), 0x1.1p-50)))
-              and ((JC_45:
-                   le_real(abs_real(exact_scalar_product(x_1, y_0,
-                                    integer_of_int32(i), doubleP_doubleM_y_4,
-                                    doubleP_doubleM_x_3)),
-                   real_of_int(integer_of_int32(i))))
-                  and (JC_48:
-                      ((JC_46: le_int((0), integer_of_int32(i)))
-                      and (JC_47:
-                          le_int(integer_of_int32(i), integer_of_int32(n_1)))))))
-             }
+        while true do
+        { invariant
+            ((JC_44:
+             le_real(abs_real(sub_real(double_value(p),
+                              exact_scalar_product(x_1, y_0,
+                              integer_of_int32(i), doubleP_doubleM_y_4,
+                              doubleP_doubleM_x_3))),
+             mul_real(real_of_int(integer_of_int32(i)), 0x1.1p-50)))
+            and ((JC_45:
+                 le_real(abs_real(exact_scalar_product(x_1, y_0,
+                                  integer_of_int32(i), doubleP_doubleM_y_4,
+                                  doubleP_doubleM_x_3)),
+                 real_of_int(integer_of_int32(i))))
+                and (JC_48:
+                    ((JC_46: le_int((0), integer_of_int32(i)))
+                    and (JC_47:
+                        le_int(integer_of_int32(i), integer_of_int32(n_1)))))))
+           }
+         begin
+           [ { } unit { true } ];
+          try
            begin
-             [ { } unit { true } ];
-            try
+             (let jessie_<num> =
              begin
+               (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
+               then void else (raise (Goto_while_0_break_exc void)));
+              (assert
+              { (JC_52:
+                le_real(abs_real(double_value(select(doubleP_doubleM_x_3,
+                                              shift(x_1, integer_of_int32(i))))),
+                1.0)) }; void); void;
+              (assert
+              { (JC_53:
+                le_real(abs_real(double_value(select(doubleP_doubleM_y_4,
+                                              shift(y_0, integer_of_int32(i))))),
+                1.0)) }; void); void;
+              (assert
+              { (JC_54:
+                le_real(abs_real(double_value(p)),
+                mul_real(10.0, add_real(1.0, 0x1.1p-50)))) }; void);
+              (L:
+              begin
+                void;
                (let jessie_<num> =
-               begin
-                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (assert
-                { (JC_52:
-                  le_real(abs_real(double_value(select(doubleP_doubleM_x_3,
+               (C_18:
+               (p := (C_17:
+                     (JC_56:
+                     (((add_double_safe nearest_even) !p) (C_16:
+                                                          (JC_55:
+                                                          (((mul_double_safe nearest_even) 
+                                                            (C_15:
+                                                            ((safe_acc_ doubleP_doubleM_x_3) 
+                                                             (C_14:
+                                                             ((shift x_1) 
+                                                              (integer_of_int32 !i)))))) 
+                                                           (C_13:
+                                                           ((safe_acc_ doubleP_doubleM_y_4) 
+                                                            (C_12:
+                                                            ((shift y_0) 
+                                                             (integer_of_int32 !i))))))))))))) in
+               void);
+               (assert
+               { (JC_57:
+                 le_real(abs_real(sub_real(double_value(p),
+                                  add_real(double_value(p@L),
+                                  mul_real(double_value(select(doubleP_doubleM_x_3,
+                                                        shift(x_1,
+                                                        integer_of_int32(i)))),
+                                  double_value(select(doubleP_doubleM_y_4,
+                                               shift(y_0,
+                                               integer_of_int32(i)))))))),
+                 0x1.1p-50)) }; void); void;
+               (assert
+               { (JC_58:
+                 le_real(abs_real(sub_real(double_value(p),
+                                  exact_scalar_product(x_1, y_0,
+                                  add_int(integer_of_int32(i), (1)),
+                                  doubleP_doubleM_y_4, doubleP_doubleM_x_3))),
+                 add_real(abs_real(sub_real(double_value(p),
+                                   add_real(double_value(p@L),
+                                   mul_real(double_value(select(doubleP_doubleM_x_3,
+                                                         shift(x_1,
+                                                         integer_of_int32(i)))),
+                                   double_value(select(doubleP_doubleM_y_4,
+                                                shift(y_0,
+                                                integer_of_int32(i)))))))),
+                 abs_real(sub_real(add_real(double_value(p@L),
+                                   mul_real(double_value(select(doubleP_doubleM_x_3,
+                                                         shift(x_1,
+                                                         integer_of_int32(i)))),
+                                   double_value(select(doubleP_doubleM_y_4,
+                                                shift(y_0,
+                                                integer_of_int32(i)))))),
+                          add_real(exact_scalar_product(x_1, y_0,
+                                   integer_of_int32(i), doubleP_doubleM_y_4,
+                                   doubleP_doubleM_x_3),
+                          mul_real(double_value(select(doubleP_doubleM_x_3,
+                                                shift(x_1,
+                                                integer_of_int32(i)))),
+                          double_value(select(doubleP_doubleM_y_4,
+                                       shift(y_0, integer_of_int32(i))))))))))) };
+               void); void;
+               (assert
+               { (JC_59:
+                 le_real(abs_real(exact_scalar_product(x_1, y_0,
+                                  add_int(integer_of_int32(i), (1)),
+                                  doubleP_doubleM_y_4, doubleP_doubleM_x_3)),
+                 add_real(abs_real(exact_scalar_product(x_1, y_0,
+                                   integer_of_int32(i), doubleP_doubleM_y_4,
+                                   doubleP_doubleM_x_3)),
+                 mul_real(abs_real(double_value(select(doubleP_doubleM_x_3,
                                                 shift(x_1,
                                                 integer_of_int32(i))))),
-                  1.0)) }; void); void;
-                (assert
-                { (JC_53:
-                  le_real(abs_real(double_value(select(doubleP_doubleM_y_4,
-                                                shift(y_0,
-                                                integer_of_int32(i))))),
-                  1.0)) }; void); void;
-                (assert
-                { (JC_54:
-                  le_real(abs_real(double_value(p)),
-                  mul_real(10.0, add_real(1.0, 0x1.1p-50)))) }; void); void;
-                (L:
-                begin
-                  (let jessie_<num> =
-                  (C_18:
-                  (p := (C_17:
-                        (JC_56:
-                        (((add_double_safe nearest_even) !p) (C_16:
-                                                             (JC_55:
-                                                             (((mul_double_safe nearest_even) 
-                                                               (C_15:
-                                                               ((safe_acc_ doubleP_doubleM_x_3) 
-                                                                (C_14:
-                                                                ((shift x_1) 
-                                                                 (integer_of_int32 !i)))))) 
-                                                              (C_13:
-                                                              ((safe_acc_ doubleP_doubleM_y_4) 
-                                                               (C_12:
-                                                               ((shift y_0) 
-                                                                (integer_of_int32 !i))))))))))))) in
-                  void);
-                 (assert
-                 { (JC_57:
-                   le_real(abs_real(sub_real(double_value(p),
-                                    add_real(double_value(p@L),
-                                    mul_real(double_value(select(doubleP_doubleM_x_3,
-                                                          shift(x_1,
-                                                          integer_of_int32(i)))),
-                                    double_value(select(doubleP_doubleM_y_4,
-                                                 shift(y_0,
-                                                 integer_of_int32(i)))))))),
-                   0x1.1p-50)) }; void); void;
-                 (assert
-                 { (JC_58:
-                   le_real(abs_real(sub_real(double_value(p),
-                                    exact_scalar_product(x_1, y_0,
-                                    add_int(integer_of_int32(i), (1)),
-                                    doubleP_doubleM_y_4, doubleP_doubleM_x_3))),
-                   add_real(abs_real(sub_real(double_value(p),
-                                     add_real(double_value(p@L),
-                                     mul_real(double_value(select(doubleP_doubleM_x_3,
-                                                           shift(x_1,
-                                                           integer_of_int32(i)))),
-                                     double_value(select(doubleP_doubleM_y_4,
-                                                  shift(y_0,
-                                                  integer_of_int32(i)))))))),
-                   abs_real(sub_real(add_real(double_value(p@L),
-                                     mul_real(double_value(select(doubleP_doubleM_x_3,
-                                                           shift(x_1,
-                                                           integer_of_int32(i)))),
-                                     double_value(select(doubleP_doubleM_y_4,
-                                                  shift(y_0,
-                                                  integer_of_int32(i)))))),
-                            add_real(exact_scalar_product(x_1, y_0,
-                                     integer_of_int32(i),
-                                     doubleP_doubleM_y_4,
-                                     doubleP_doubleM_x_3),
-                            mul_real(double_value(select(doubleP_doubleM_x_3,
-                                                  shift(x_1,
-                                                  integer_of_int32(i)))),
-                            double_value(select(doubleP_doubleM_y_4,
-                                         shift(y_0, integer_of_int32(i))))))))))) };
-                 void); void;
-                 (assert
-                 { (JC_59:
-                   le_real(abs_real(exact_scalar_product(x_1, y_0,
-                                    add_int(integer_of_int32(i), (1)),
-                                    doubleP_doubleM_y_4, doubleP_doubleM_x_3)),
-                   add_real(abs_real(exact_scalar_product(x_1, y_0,
-                                     integer_of_int32(i),
-                                     doubleP_doubleM_y_4,
-                                     doubleP_doubleM_x_3)),
-                   mul_real(abs_real(double_value(select(doubleP_doubleM_x_3,
-                                                  shift(x_1,
-                                                  integer_of_int32(i))))),
-                   abs_real(double_value(select(doubleP_doubleM_y_4,
-                                         shift(y_0, integer_of_int32(i))))))))) };
-                 void); void;
-                 (assert
-                 { (JC_60:
-                   le_real(mul_real(abs_real(double_value(select(doubleP_doubleM_x_3,
-                                                          shift(x_1,
-                                                          integer_of_int32(i))))),
-                           abs_real(double_value(select(doubleP_doubleM_y_4,
-                                                 shift(y_0,
-                                                 integer_of_int32(i)))))),
-                   1.0)) }; void); void;
-                 (C_25:
-                 begin
-                   (i := (C_24:
-                         (safe_int32_of_integer_ (C_23:
-                                                 ((add_int (integer_of_int32 !i)) (1))))));
-                  !i end) end) end in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) with
+                 abs_real(double_value(select(doubleP_doubleM_y_4,
+                                       shift(y_0, integer_of_int32(i))))))))) };
+               void); void;
+               (assert
+               { (JC_60:
+                 le_real(mul_real(abs_real(double_value(select(doubleP_doubleM_x_3,
+                                                        shift(x_1,
+                                                        integer_of_int32(i))))),
+                         abs_real(double_value(select(doubleP_doubleM_y_4,
+                                               shift(y_0,
+                                               integer_of_int32(i)))))),
+                 1.0)) }; void);
+               (C_25:
+               begin
+                 void;
+                (i := (C_24:
+                      (safe_int32_of_integer_ (C_23:
+                                              ((add_int (integer_of_int32 !i)) (1))))));
+                !i end) end) end in void); (raise (Loop_continue_exc void))
+           end with Loop_continue_exc jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end)) with
        Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
       (return := !p); (raise Return) end))); absurd  end with Return ->
    !return end))
@@ -1921,150 +1918,148 @@ let scalar_product_safety =
        (let jessie_<num> = (p := (double_of_real_exact 0.0)) in void);
       try
        (C_2:
+       (loop_1:
        begin
          (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
-        (loop_1:
-        begin
-          while true do
-          { invariant (JC_29: true)
-            variant (JC_43 : sub_int(integer_of_int32(n_1),
-                             integer_of_int32(i))) }
+        while true do
+        { invariant (JC_29: true)
+          variant (JC_43 : sub_int(integer_of_int32(n_1),
+                           integer_of_int32(i))) }
+         begin
+           [ { } unit reads i,p
+             { ((JC_23:
+                le_real(abs_real(sub_real(double_value(p),
+                                 exact_scalar_product(x_1, y_0,
+                                 integer_of_int32(i), doubleP_doubleM_y_4,
+                                 doubleP_doubleM_x_3))),
+                mul_real(real_of_int(integer_of_int32(i)), 0x1.1p-50)))
+               and ((JC_24:
+                    le_real(abs_real(exact_scalar_product(x_1, y_0,
+                                     integer_of_int32(i),
+                                     doubleP_doubleM_y_4,
+                                     doubleP_doubleM_x_3)),
+                    real_of_int(integer_of_int32(i))))
+                   and (JC_27:
+                       ((JC_25: le_int((0), integer_of_int32(i)))
+                       and (JC_26:
+                           le_int(integer_of_int32(i), integer_of_int32(n_1))))))) } ];
+          try
            begin
-             [ { } unit reads i,p
-               { ((JC_23:
-                  le_real(abs_real(sub_real(double_value(p),
-                                   exact_scalar_product(x_1, y_0,
-                                   integer_of_int32(i), doubleP_doubleM_y_4,
-                                   doubleP_doubleM_x_3))),
-                  mul_real(real_of_int(integer_of_int32(i)), 0x1.1p-50)))
-                 and ((JC_24:
-                      le_real(abs_real(exact_scalar_product(x_1, y_0,
-                                       integer_of_int32(i),
-                                       doubleP_doubleM_y_4,
-                                       doubleP_doubleM_x_3)),
-                      real_of_int(integer_of_int32(i))))
-                     and (JC_27:
-                         ((JC_25: le_int((0), integer_of_int32(i)))
-                         and (JC_26:
-                             le_int(integer_of_int32(i),
-                             integer_of_int32(n_1))))))) } ];
-            try
+             (let jessie_<num> =
              begin
+               (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
+               then void else (raise (Goto_while_0_break_exc void)));
+              [ { } unit reads i
+                { (JC_31:
+                  le_real(abs_real(double_value(select(doubleP_doubleM_x_3,
+                                                shift(x_1,
+                                                integer_of_int32(i))))),
+                  1.0)) } ]; void;
+              [ { } unit reads i
+                { (JC_32:
+                  le_real(abs_real(double_value(select(doubleP_doubleM_y_4,
+                                                shift(y_0,
+                                                integer_of_int32(i))))),
+                  1.0)) } ]; void;
+              [ { } unit reads p
+                { (JC_33:
+                  le_real(abs_real(double_value(p)),
+                  mul_real(10.0, add_real(1.0, 0x1.1p-50)))) } ];
+              (L:
+              begin
+                void;
                (let jessie_<num> =
-               begin
-                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                [ { } unit reads i
-                  { (JC_31:
-                    le_real(abs_real(double_value(select(doubleP_doubleM_x_3,
+               (C_18:
+               (p := (C_17:
+                     (JC_37:
+                     (((add_double nearest_even) !p) (C_16:
+                                                     (JC_36:
+                                                     (((mul_double nearest_even) 
+                                                       (C_15:
+                                                       (JC_34:
+                                                       ((((offset_acc_ doubleP_x_3_alloc_table) doubleP_doubleM_x_3) x_1) 
+                                                        (integer_of_int32 !i))))) 
+                                                      (C_13:
+                                                      (JC_35:
+                                                      ((((offset_acc_ doubleP_y_4_alloc_table) doubleP_doubleM_y_4) y_0) 
+                                                       (integer_of_int32 !i)))))))))))) in
+               void);
+               [ { } unit reads i,p
+                 { (JC_38:
+                   le_real(abs_real(sub_real(double_value(p),
+                                    add_real(double_value(p@L),
+                                    mul_real(double_value(select(doubleP_doubleM_x_3,
+                                                          shift(x_1,
+                                                          integer_of_int32(i)))),
+                                    double_value(select(doubleP_doubleM_y_4,
+                                                 shift(y_0,
+                                                 integer_of_int32(i)))))))),
+                   0x1.1p-50)) } ]; void;
+               [ { } unit reads i,p
+                 { (JC_39:
+                   le_real(abs_real(sub_real(double_value(p),
+                                    exact_scalar_product(x_1, y_0,
+                                    add_int(integer_of_int32(i), (1)),
+                                    doubleP_doubleM_y_4, doubleP_doubleM_x_3))),
+                   add_real(abs_real(sub_real(double_value(p),
+                                     add_real(double_value(p@L),
+                                     mul_real(double_value(select(doubleP_doubleM_x_3,
+                                                           shift(x_1,
+                                                           integer_of_int32(i)))),
+                                     double_value(select(doubleP_doubleM_y_4,
+                                                  shift(y_0,
+                                                  integer_of_int32(i)))))))),
+                   abs_real(sub_real(add_real(double_value(p@L),
+                                     mul_real(double_value(select(doubleP_doubleM_x_3,
+                                                           shift(x_1,
+                                                           integer_of_int32(i)))),
+                                     double_value(select(doubleP_doubleM_y_4,
+                                                  shift(y_0,
+                                                  integer_of_int32(i)))))),
+                            add_real(exact_scalar_product(x_1, y_0,
+                                     integer_of_int32(i),
+                                     doubleP_doubleM_y_4,
+                                     doubleP_doubleM_x_3),
+                            mul_real(double_value(select(doubleP_doubleM_x_3,
+                                                  shift(x_1,
+                                                  integer_of_int32(i)))),
+                            double_value(select(doubleP_doubleM_y_4,
+                                         shift(y_0, integer_of_int32(i))))))))))) } ];
+               void;
+               [ { } unit reads i
+                 { (JC_40:
+                   le_real(abs_real(exact_scalar_product(x_1, y_0,
+                                    add_int(integer_of_int32(i), (1)),
+                                    doubleP_doubleM_y_4, doubleP_doubleM_x_3)),
+                   add_real(abs_real(exact_scalar_product(x_1, y_0,
+                                     integer_of_int32(i),
+                                     doubleP_doubleM_y_4,
+                                     doubleP_doubleM_x_3)),
+                   mul_real(abs_real(double_value(select(doubleP_doubleM_x_3,
                                                   shift(x_1,
                                                   integer_of_int32(i))))),
-                    1.0)) } ]; void;
-                [ { } unit reads i
-                  { (JC_32:
-                    le_real(abs_real(double_value(select(doubleP_doubleM_y_4,
-                                                  shift(y_0,
-                                                  integer_of_int32(i))))),
-                    1.0)) } ]; void;
-                [ { } unit reads p
-                  { (JC_33:
-                    le_real(abs_real(double_value(p)),
-                    mul_real(10.0, add_real(1.0, 0x1.1p-50)))) } ]; void;
-                (L:
-                begin
-                  (let jessie_<num> =
-                  (C_18:
-                  (p := (C_17:
-                        (JC_37:
-                        (((add_double nearest_even) !p) (C_16:
-                                                        (JC_36:
-                                                        (((mul_double nearest_even) 
-                                                          (C_15:
-                                                          (JC_34:
-                                                          ((((offset_acc_ doubleP_x_3_alloc_table) doubleP_doubleM_x_3) x_1) 
-                                                           (integer_of_int32 !i))))) 
-                                                         (C_13:
-                                                         (JC_35:
-                                                         ((((offset_acc_ doubleP_y_4_alloc_table) doubleP_doubleM_y_4) y_0) 
-                                                          (integer_of_int32 !i)))))))))))) in
-                  void);
-                 [ { } unit reads i,p
-                   { (JC_38:
-                     le_real(abs_real(sub_real(double_value(p),
-                                      add_real(double_value(p@L),
-                                      mul_real(double_value(select(doubleP_doubleM_x_3,
-                                                            shift(x_1,
-                                                            integer_of_int32(i)))),
-                                      double_value(select(doubleP_doubleM_y_4,
-                                                   shift(y_0,
-                                                   integer_of_int32(i)))))))),
-                     0x1.1p-50)) } ]; void;
-                 [ { } unit reads i,p
-                   { (JC_39:
-                     le_real(abs_real(sub_real(double_value(p),
-                                      exact_scalar_product(x_1, y_0,
-                                      add_int(integer_of_int32(i), (1)),
-                                      doubleP_doubleM_y_4,
-                                      doubleP_doubleM_x_3))),
-                     add_real(abs_real(sub_real(double_value(p),
-                                       add_real(double_value(p@L),
-                                       mul_real(double_value(select(doubleP_doubleM_x_3,
-                                                             shift(x_1,
-                                                             integer_of_int32(i)))),
-                                       double_value(select(doubleP_doubleM_y_4,
-                                                    shift(y_0,
-                                                    integer_of_int32(i)))))))),
-                     abs_real(sub_real(add_real(double_value(p@L),
-                                       mul_real(double_value(select(doubleP_doubleM_x_3,
-                                                             shift(x_1,
-                                                             integer_of_int32(i)))),
-                                       double_value(select(doubleP_doubleM_y_4,
-                                                    shift(y_0,
-                                                    integer_of_int32(i)))))),
-                              add_real(exact_scalar_product(x_1, y_0,
-                                       integer_of_int32(i),
-                                       doubleP_doubleM_y_4,
-                                       doubleP_doubleM_x_3),
-                              mul_real(double_value(select(doubleP_doubleM_x_3,
-                                                    shift(x_1,
-                                                    integer_of_int32(i)))),
-                              double_value(select(doubleP_doubleM_y_4,
-                                           shift(y_0, integer_of_int32(i))))))))))) } ];
+                   abs_real(double_value(select(doubleP_doubleM_y_4,
+                                         shift(y_0, integer_of_int32(i))))))))) } ];
+               void;
+               [ { } unit reads i
+                 { (JC_41:
+                   le_real(mul_real(abs_real(double_value(select(doubleP_doubleM_x_3,
+                                                          shift(x_1,
+                                                          integer_of_int32(i))))),
+                           abs_real(double_value(select(doubleP_doubleM_y_4,
+                                                 shift(y_0,
+                                                 integer_of_int32(i)))))),
+                   1.0)) } ];
+               (C_25:
+               begin
                  void;
-                 [ { } unit reads i
-                   { (JC_40:
-                     le_real(abs_real(exact_scalar_product(x_1, y_0,
-                                      add_int(integer_of_int32(i), (1)),
-                                      doubleP_doubleM_y_4,
-                                      doubleP_doubleM_x_3)),
-                     add_real(abs_real(exact_scalar_product(x_1, y_0,
-                                       integer_of_int32(i),
-                                       doubleP_doubleM_y_4,
-                                       doubleP_doubleM_x_3)),
-                     mul_real(abs_real(double_value(select(doubleP_doubleM_x_3,
-                                                    shift(x_1,
-                                                    integer_of_int32(i))))),
-                     abs_real(double_value(select(doubleP_doubleM_y_4,
-                                           shift(y_0, integer_of_int32(i))))))))) } ];
-                 void;
-                 [ { } unit reads i
-                   { (JC_41:
-                     le_real(mul_real(abs_real(double_value(select(doubleP_doubleM_x_3,
-                                                            shift(x_1,
-                                                            integer_of_int32(i))))),
-                             abs_real(double_value(select(doubleP_doubleM_y_4,
-                                                   shift(y_0,
-                                                   integer_of_int32(i)))))),
-                     1.0)) } ]; void;
-                 (C_25:
-                 begin
-                   (i := (C_24:
-                         (JC_42:
-                         (int32_of_integer_ (C_23:
-                                            ((add_int (integer_of_int32 !i)) (1)))))));
-                  !i end) end) end in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) with
+                (i := (C_24:
+                      (JC_42:
+                      (int32_of_integer_ (C_23:
+                                         ((add_int (integer_of_int32 !i)) (1)))))));
+                !i end) end) end in void); (raise (Loop_continue_exc void))
+           end with Loop_continue_exc jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end)) with
        Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
       (return := !p); (raise Return) end))); absurd  end with Return ->
    !return end)) { true }

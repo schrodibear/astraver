@@ -139,10 +139,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs overflow_level.loc
+USERWHYDEUXOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs overflow_level.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs overflow_level.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs overflow_level.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -287,13 +287,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: overflow_level.mlw
-	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: overflow_level.mlw
-	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: overflow_level.mlw
-	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include overflow_level.depend
 
@@ -768,32 +768,29 @@ let f_ensures_default =
    begin
      (let y = ref (any_double void) in
      (C_2:
+     (C_4:
+     (C_6:
+     (C_8:
      begin
        (let jessie_<num> =
        (y := (C_1:
              (JC_16:
              (((add_double_safe nearest_even) x_0) ((double_of_real_safe nearest_even) 1.e291))))) in
        void);
-      (C_4:
-      begin
-        (let jessie_<num> =
-        (y := (C_3:
-              (JC_17:
-              (((add_double_safe nearest_even) x_0) ((double_of_real_safe nearest_even) 1.e292))))) in
-        void);
-       (C_6:
-       begin
-         (let jessie_<num> =
-         (y := (C_5: (JC_18: (((add_double_safe nearest_even) x_0) x_0)))) in
-         void);
-        (C_8:
-        begin
-          (let jessie_<num> =
-          (y := (C_7:
-                (JC_19:
-                (((add_double_safe nearest_even) x_0) ((double_of_real_safe nearest_even) 1e-6))))) in
-          void); (raise Return) end) end) end) end)); (raise Return) end with
-   Return -> void end) { (JC_5: true) }
+      (let jessie_<num> =
+      (y := (C_3:
+            (JC_17:
+            (((add_double_safe nearest_even) x_0) ((double_of_real_safe nearest_even) 1.e292))))) in
+      void);
+      (let jessie_<num> =
+      (y := (C_5: (JC_18: (((add_double_safe nearest_even) x_0) x_0)))) in
+      void);
+      (let jessie_<num> =
+      (y := (C_7:
+            (JC_19:
+            (((add_double_safe nearest_even) x_0) ((double_of_real_safe nearest_even) 1e-6))))) in
+      void); (raise Return) end))))); (raise Return) end with Return ->
+   void end) { (JC_5: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -803,6 +800,9 @@ let f_safety =
    begin
      (let y = ref (any_double void) in
      (C_2:
+     (C_4:
+     (C_6:
+     (C_8:
      begin
        (let jessie_<num> =
        (y := (C_1:
@@ -810,28 +810,21 @@ let f_safety =
              (((add_double nearest_even) x_0) (JC_9:
                                               ((double_of_real nearest_even) 1.e291)))))) in
        void);
-      (C_4:
-      begin
-        (let jessie_<num> =
-        (y := (C_3:
-              (JC_12:
-              (((add_double nearest_even) x_0) (JC_11:
-                                               ((double_of_real nearest_even) 1.e292)))))) in
-        void);
-       (C_6:
-       begin
-         (let jessie_<num> =
-         (y := (C_5: (JC_13: (((add_double nearest_even) x_0) x_0)))) in
-         void);
-        (C_8:
-        begin
-          (let jessie_<num> =
-          (y := (C_7:
-                (JC_15:
-                (((add_double nearest_even) x_0) (JC_14:
-                                                 ((double_of_real nearest_even) 1e-6)))))) in
-          void); (raise Return) end) end) end) end)); (raise Return) end with
-   Return -> void end) { true }
+      (let jessie_<num> =
+      (y := (C_3:
+            (JC_12:
+            (((add_double nearest_even) x_0) (JC_11:
+                                             ((double_of_real nearest_even) 1.e292)))))) in
+      void);
+      (let jessie_<num> =
+      (y := (C_5: (JC_13: (((add_double nearest_even) x_0) x_0)))) in void);
+      (let jessie_<num> =
+      (y := (C_7:
+            (JC_15:
+            (((add_double nearest_even) x_0) (JC_14:
+                                             ((double_of_real nearest_even) 1e-6)))))) in
+      void); (raise Return) end))))); (raise Return) end with Return ->
+   void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========
@@ -2401,10 +2394,10 @@ goal f_safety_po_7:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/overflow_level_why.why    : .?.##.# (3/0/1/3/0)
+why/overflow_level_why.why    : .?.#### (2/0/1/4/0)
 total   :   7
-valid   :   3 ( 43%)
+valid   :   2 ( 29%)
 invalid :   0 (  0%)
 unknown :   1 ( 14%)
-timeout :   3 ( 43%)
+timeout :   4 ( 57%)
 failure :   0 (  0%)

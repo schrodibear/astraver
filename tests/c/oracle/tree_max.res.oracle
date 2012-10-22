@@ -66,6 +66,14 @@ int tree_max(tree t) {
   if (t->right != NULL) m = max(m,tree_max(t->right));
   return m;
   }
+
+
+
+/*
+Local Variables:
+compile-command: "make tree_max.why3ide"
+End:
+*/
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/tree_max.c"
 [jessie] Starting Jessie translation
@@ -437,10 +445,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs tree_max.loc
+USERWHYDEUXOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs tree_max.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs tree_max.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs tree_max.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -585,13 +593,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: tree_max.mlw
-	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: tree_max.mlw
-	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: tree_max.mlw
-	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include tree_max.depend
 
@@ -1574,6 +1582,7 @@ let tree_max_ensures_default =
       then
        (let jessie_<num> =
        (C_6:
+       (C_8:
        begin
          (let jessie_<num> =
          (tmp := (C_5:
@@ -1581,17 +1590,15 @@ let tree_max_ensures_default =
                  (JC_36:
                  (((((tree_max jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
          void);
-        (C_8:
-        begin
-          (m := (C_7:
-                (let jessie_<num> = !m in
-                (let jessie_<num> = !tmp in
-                (JC_37: ((max jessie_<num>) jessie_<num>)))))); !m end) end) in
-       void) else void);
+        (m := (C_7:
+              (let jessie_<num> = !m in
+              (let jessie_<num> = !tmp in (JC_37: ((max jessie_<num>) jessie_<num>))))));
+        !m end)) in void) else void);
       (if ((safe_neq_pointer (C_15: ((safe_acc_ Tree_right_t_6) t_0))) null)
       then
        (let jessie_<num> =
        (C_12:
+       (C_14:
        begin
          (let jessie_<num> =
          (tmp_0 := (C_11:
@@ -1600,14 +1607,12 @@ let tree_max_ensures_default =
                    (JC_38:
                    (((((tree_max jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
          void);
-        (C_14:
-        begin
-          (m := (C_13:
-                (let jessie_<num> = !m in
-                (let jessie_<num> = !tmp_0 in
-                (JC_39: ((max jessie_<num>) jessie_<num>)))))); !m end) end) in
-       void) else void); (return := !m); (raise Return) end)))); absurd  end
-   with Return -> !return end))
+        (m := (C_13:
+              (let jessie_<num> = !m in
+              (let jessie_<num> = !tmp_0 in
+              (JC_39: ((max jessie_<num>) jessie_<num>)))))); !m end)) in void)
+      else void); (return := !m); (raise Return) end)))); absurd  end with
+   Return -> !return end))
   { (JC_21:
     ((JC_19: mem(result, t_0, Tree_right_t_6, Tree_left_t_6, Tree_value_t_6))
     and (JC_20:
@@ -1640,6 +1645,7 @@ let tree_max_safety =
       then
        (let jessie_<num> =
        (C_6:
+       (C_8:
        begin
          (let jessie_<num> =
          (tmp := (C_5:
@@ -1649,12 +1655,10 @@ let tree_max_safety =
                  (JC_30:
                  (((((tree_max_requires jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
          void);
-        (C_8:
-        begin
-          (m := (C_7:
-                (let jessie_<num> = !m in
-                (let jessie_<num> = !tmp in
-                (JC_31: ((max_requires jessie_<num>) jessie_<num>)))))); !m end) end) in
+        (m := (C_7:
+              (let jessie_<num> = !m in
+              (let jessie_<num> = !tmp in
+              (JC_31: ((max_requires jessie_<num>) jessie_<num>)))))); !m end)) in
        void) else void);
       (if ((neq_pointer (C_15:
                         (JC_32:
@@ -1662,6 +1666,7 @@ let tree_max_safety =
       then
        (let jessie_<num> =
        (C_12:
+       (C_14:
        begin
          (let jessie_<num> =
          (tmp_0 := (C_11:
@@ -1672,14 +1677,12 @@ let tree_max_safety =
                    (JC_34:
                    (((((tree_max_requires jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
          void);
-        (C_14:
-        begin
-          (m := (C_13:
-                (let jessie_<num> = !m in
-                (let jessie_<num> = !tmp_0 in
-                (JC_35: ((max_requires jessie_<num>) jessie_<num>)))))); !m end)
-       end) in void) else void); (return := !m); (raise Return) end))));
-    absurd  end with Return -> !return end)) { true }
+        (m := (C_13:
+              (let jessie_<num> = !m in
+              (let jessie_<num> = !tmp_0 in
+              (JC_35: ((max_requires jessie_<num>) jessie_<num>)))))); !m end)) in
+       void) else void); (return := !m); (raise Return) end)))); absurd  end
+   with Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========
@@ -3781,10 +3784,10 @@ goal tree_max_safety_po_11:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/tree_max_why.why          : .#.#.#.#........... (15/0/0/4/0)
+why/tree_max_why.why          : .#.....#........... (17/0/0/2/0)
 total   :  19
-valid   :  15 ( 79%)
+valid   :  17 ( 89%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   4 ( 21%)
+timeout :   2 ( 11%)
 failure :   0 (  0%)

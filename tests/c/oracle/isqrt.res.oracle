@@ -58,7 +58,7 @@ int main () {
 
 /*
 Local Variables:
-compile-command: "make isqrt.why3ml"
+compile-command: "make isqrt.why3ide"
 End:
 */
 
@@ -338,10 +338,10 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs isqrt.loc
+USERWHYDEUXOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs isqrt.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYOPT) -explain -locs isqrt.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs isqrt.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -486,13 +486,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: isqrt.mlw
-	 why3 $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3 --extra-config $(JESSIE3CONF) $<
 
 why3ide: isqrt.mlw
-	 why3ide $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3ide --extra-config $(JESSIE3CONF) $<
 
 why3replay: isqrt.mlw
-	 why3replayer $(USERWHYOPT) --extra-config $(JESSIE3CONF) $<
+	 why3replayer --extra-config $(JESSIE3CONF) $<
 
 -include isqrt.depend
 
@@ -1073,41 +1073,35 @@ let isqrt_ensures_default =
      (let sum = ref (any_int void) in
      try
       (C_1:
+      (C_2:
+      (loop_2:
       begin
         (let jessie_<num> = (count := (0)) in void);
-       (C_2:
-       begin
-         (let jessie_<num> = (sum := (1)) in void);
-        (loop_2:
+       (let jessie_<num> = (sum := (1)) in void);
+       while true do
+       { invariant
+           (JC_26:
+           ((JC_23: ge_int(count, (0)))
+           and ((JC_24: ge_int(x_1, sqr(count)))
+               and (JC_25: (sum = sqr(add_int(count, (1))))))))  }
         begin
-          while true do
-          { invariant
-              (JC_26:
-              ((JC_23: ge_int(count, (0)))
-              and ((JC_24: ge_int(x_1, sqr(count)))
-                  and (JC_25: (sum = sqr(add_int(count, (1))))))))  }
-           begin
-             [ { } unit { true } ];
-            try
-             begin
-               (let jessie_<num> =
-               begin
-                 (if ((le_int_ !sum) x_1) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (C_10:
-                begin
-                  (let jessie_<num> =
-                  (count := (C_9: ((add_int !count) (1)))) in void);
-                 (C_14:
-                 begin
-                   (sum := (C_13:
-                           ((add_int !sum) (C_12:
-                                           ((add_int (C_11:
-                                                     ((mul_int (2)) !count))) (1))))));
-                  !sum end) end) end in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+          [ { } unit { true } ];
+         try
+          begin
+            (let jessie_<num> =
+            (C_10:
+            (C_14:
+            begin
+              (if ((le_int_ !sum) x_1) then void
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<num> = (count := (C_9: ((add_int !count) (1)))) in
+             void);
+             (sum := (C_13:
+                     ((add_int !sum) (C_12:
+                                     ((add_int (C_11: ((mul_int (2)) !count))) (1))))));
+             !sum end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<num> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end))) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (return := !count); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -1127,41 +1121,35 @@ let isqrt_safety =
      (let sum = ref (any_int void) in
      try
       (C_1:
+      (C_2:
+      (loop_1:
       begin
         (let jessie_<num> = (count := (0)) in void);
-       (C_2:
-       begin
-         (let jessie_<num> = (sum := (1)) in void);
-        (loop_1:
+       (let jessie_<num> = (sum := (1)) in void);
+       while true do
+       { invariant (JC_20: true) variant (JC_22 : sub_int(x_1, count)) }
         begin
-          while true do
-          { invariant (JC_20: true) variant (JC_22 : sub_int(x_1, count)) }
-           begin
-             [ { } unit reads count,sum
-               { (JC_18:
-                 ((JC_15: ge_int(count, (0)))
-                 and ((JC_16: ge_int(x_1, sqr(count)))
-                     and (JC_17: (sum = sqr(add_int(count, (1)))))))) } ];
-            try
-             begin
-               (let jessie_<num> =
-               begin
-                 (if ((le_int_ !sum) x_1) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (C_10:
-                begin
-                  (let jessie_<num> = (count := (C_9: ((add_int !count) (1)))) in
-                  void);
-                 (C_14:
-                 begin
-                   (sum := (C_13:
-                           ((add_int !sum) (C_12:
-                                           ((add_int (C_11:
-                                                     ((mul_int (2)) !count))) (1))))));
-                  !sum end) end) end in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+          [ { } unit reads count,sum
+            { (JC_18:
+              ((JC_15: ge_int(count, (0)))
+              and ((JC_16: ge_int(x_1, sqr(count)))
+                  and (JC_17: (sum = sqr(add_int(count, (1)))))))) } ];
+         try
+          begin
+            (let jessie_<num> =
+            (C_10:
+            (C_14:
+            begin
+              (if ((le_int_ !sum) x_1) then void
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<num> = (count := (C_9: ((add_int !count) (1)))) in
+             void);
+             (sum := (C_13:
+                     ((add_int !sum) (C_12:
+                                     ((add_int (C_11: ((mul_int (2)) !count))) (1))))));
+             !sum end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<num> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end))) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (return := !count); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }

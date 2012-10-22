@@ -89,7 +89,7 @@ int main() {
 
 /*
 Local Variables:
-compile-command: "make sparse_array.why3ml"
+compile-command: "make sparse_array.why3ide"
 End:
 */
 
@@ -108,8 +108,8 @@ tests/c/sparse_array.c:47:[kernel] warning: Calling undeclared function malloc. 
          Called from file "interp.ml", line 2640, characters 40-71
          Called from file "list.ml", line 62, characters 22-25
          Called from file "interp.ml", line 2773, characters 27-66
-         Called from file "register.ml", line 176, characters 16-32
-         Called from file "register.ml", line 317, characters 6-12
+         Called from file "register.ml", line 177, characters 16-32
+         Called from file "register.ml", line 318, characters 6-12
          Called from file "queue.ml", line 134, characters 6-20
          Called from file "src/kernel/boot.ml", line 38, characters 4-20
          Called from file "src/kernel/cmdline.ml", line 720, characters 2-9
