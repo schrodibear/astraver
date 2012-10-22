@@ -76,7 +76,7 @@ public class Switch {
 
 /*
 Local Variables:
-compile-command: "make Switch.why3ml"
+compile-command: "make Switch.why3ide"
 End:
 */
 

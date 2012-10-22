@@ -54,7 +54,7 @@ public class Counter {
 
 /*
 Local Variables:
-compile-command: "make Counter.why3ml"
+compile-command: "make Counter.why3ide"
 End:
 */
 

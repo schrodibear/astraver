@@ -115,7 +115,7 @@ public class Arrays {
 
 /*
 Local Variables: 
-compile-command: "make Arrays.why3ml"
+compile-command: "make Arrays.why3ide"
 End: 
 */
 

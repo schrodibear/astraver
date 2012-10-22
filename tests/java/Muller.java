@@ -102,6 +102,6 @@ public class Muller {
 
 /*
 Local Variables:
-compile-command: "make Muller.why3ml"
+compile-command: "make Muller.why3ide"
 End:
 */

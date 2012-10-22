@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Arrays/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -12,46 +11,46 @@
   version="2.2"/>
  <prover
   id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.0"/>
  <file
   name="../Arrays.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
-   locfile="Arrays/../Arrays.mlw"
+   locfile="../Arrays.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
-   expanded="true">
+   expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="Arrays/../Arrays.mlw"
+   locfile="../Arrays.mlw"
    loclnum="204" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Arrays_arrayShift_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
+    locfile="../Arrays.java"
     loclnum="98" loccnumb="23" loccnume="33"
-    expl="parameter _Arrays_arrayShift_ensures_default"
+    expl="Method arrayShift, default behavior"
     sum="688dde21af38b44c0ef98e6592f32bfe"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix &gt;V4c0ainfix =aselectV6ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V7V8FAainfix =aselectV6ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V7Aainfix &lt;=c0V9FAainfix &lt;=c0V7Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1Fainfix =aselectV5ashiftV0V10aselectV1ashiftV0ainfix -V10c1Iainfix &lt;V10ainfix +aoffset_maxV2V0c1Aainfix &lt;c0V10FIainfix =aselectV5ashiftV0V11aselectV1ashiftV0ainfix -V11c1Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V11FAainfix =aselectV5ashiftV0V12aselectV1ashiftV0V12Iainfix &lt;=V12V4Aainfix &lt;=c0V12FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FAainfix =aselectV1ashiftV0V13aselectV1ashiftV0ainfix -V13c1Iainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;ainfix -V3c1V13FAainfix &lt;=c0ainfix -V3c1Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;ainfix -V3c1ainfix +aoffset_maxV2V0c1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _Arrays_arrayShift_ensures_default"/>
     <label
      name="expl:Method arrayShift, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.17"/>
-    </proof>
     <proof
      prover="0"
      timelimit="5"
@@ -68,28 +67,211 @@
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.09"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.14"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.11"/>
+    </proof>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="false">
+     <goal
+      name="WP_parameter _Arrays_arrayShift_ensures_default.0"
+      locfile="../Arrays.java"
+      loclnum="98" loccnumb="23" loccnume="33"
+      expl="loop invariant init"
+      sum="288f98d8c033c4d833576c8809080f22"
+      proved="true"
+      expanded="false"
+      shape="ainfix =aselectV1ashiftV0V4aselectV1ashiftV0ainfix -V4c1Iainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;ainfix -V3c1V4FAainfix &lt;=c0ainfix -V3c1Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;ainfix -V3c1ainfix +aoffset_maxV2V0c1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+      <label
+       name="expl:parameter _Arrays_arrayShift_ensures_default"/>
+      <label
+       name="expl:Method arrayShift, default behavior"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Arrays_arrayShift_ensures_default.1"
+      locfile="../Arrays.java"
+      loclnum="98" loccnumb="23" loccnume="33"
+      expl="loop invariant preservation"
+      sum="2730af8999fdb8523d96ff93f38cd1ba"
+      proved="true"
+      expanded="false"
+      shape="ainfix =aselectV6ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V7V8FAainfix =aselectV6ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V7Aainfix &lt;=c0V9FAainfix &lt;=c0V7Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1FIainfix &gt;V4c0Iainfix =aselectV5ashiftV0V10aselectV1ashiftV0ainfix -V10c1Iainfix &lt;V10ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V10FAainfix =aselectV5ashiftV0V11aselectV1ashiftV0V11Iainfix &lt;=V11V4Aainfix &lt;=c0V11FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+      <label
+       name="expl:parameter _Arrays_arrayShift_ensures_default"/>
+      <label
+       name="expl:Method arrayShift, default behavior"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.17"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Arrays_arrayShift_ensures_default.2"
+      locfile="../Arrays.java"
+      loclnum="98" loccnumb="23" loccnume="33"
+      expl="postcondition"
+      sum="d1fe816cb1386e585d0e4376caf3b78a"
+      proved="true"
+      expanded="false"
+      shape="ainfix =aselectV5ashiftV0V6aselectV1ashiftV0ainfix -V6c1Iainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;c0V6FIainfix &gt;V4c0NIainfix =aselectV5ashiftV0V7aselectV1ashiftV0ainfix -V7c1Iainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V7FAainfix =aselectV5ashiftV0V8aselectV1ashiftV0V8Iainfix &lt;=V8V4Aainfix &lt;=c0V8FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+      <label
+       name="expl:parameter _Arrays_arrayShift_ensures_default"/>
+      <label
+       name="expl:Method arrayShift, default behavior"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+    </transf>
    </goal>
    <goal
     name="WP_parameter _Arrays_arrayShift_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
+    locfile="../Arrays.java"
     loclnum="98" loccnumb="23" loccnume="33"
     expl="index bounds"
     sum="4c7c7f65d74ecc8005ecf5d781345456"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix &lt;V7V4Aainfix &lt;=c0V4Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Aainfix &lt;=ainfix -V4c1aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainfix -V4c1Iainfix &gt;V4c0Iainfix =aselectV5ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V8FAainfix =aselectV5ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V4Aainfix &lt;=c0V9FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _Arrays_arrayShift_safety"/>
     <label
      name="expl:Method arrayShift, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
     <proof
      prover="0"
      timelimit="5"
@@ -106,28 +288,44 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _Arrays_findMax2_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
+    locfile="../Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
-    expl="parameter _Arrays_findMax2_ensures_default"
+    expl="Method findMax2, default behavior"
     sum="0d901a37a8906b9afe57eb523470f44c"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix &gt;aselectV1ashiftV0V3V5ais_maxV0V7V9V2V1Aainfix =V8aselectV1ashiftV0V7Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V9Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FIainfix =V7V3Fais_maxV0V4V10V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V10ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V10Iainfix =V10ainfix +V3c1FIainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAais_maxV0c0c1V2V1Aainfix =aselectV1ashiftV0c0aselectV1ashiftV0c0Aainfix &lt;c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1c1Iainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _Arrays_findMax2_ensures_default"/>
     <label
      name="expl:Method findMax2, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.28"/>
-    </proof>
     <proof
      prover="1"
      timelimit="5"
@@ -136,28 +334,44 @@
      archived="false">
      <result status="valid" time="0.14"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.24"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _Arrays_findMax2_ensures_max_found"
-    locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
+    locfile="../Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
-    expl="normal postcondition"
+    expl="postcondition"
     sum="4f17353c325696cf8ce65cf4952bbe53"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ais_maxV0V7ainfix +aoffset_maxV2V0c1V2V1Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7V4FIainfix &lt;V3V6NIainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FIainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _Arrays_findMax2_ensures_max_found"/>
     <label
      name="expl:Method findMax2, Behavior `max_found&apos;"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
     <proof
      prover="0"
      timelimit="5"
@@ -174,28 +388,44 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _Arrays_findMax2_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
+    locfile="../Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
-    expl="parameter _Arrays_findMax2_safety"
+    expl="Method findMax2, Safety"
     sum="6786d62542480a38f56f86aa5bb89053"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V9ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix =V7V3Fainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=c0aoffset_maxV2V0Iainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _Arrays_findMax2_safety"/>
     <label
      name="expl:Method findMax2, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
     <proof
      prover="0"
      timelimit="5"
@@ -206,6 +436,30 @@
     </proof>
     <proof
      prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -215,25 +469,17 @@
    </goal>
    <goal
     name="WP_parameter _Arrays_findMax_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
+    locfile="../Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
-    expl="parameter _Arrays_findMax_ensures_default"
+    expl="Method findMax, default behavior"
     sum="daaa252d1e3d82019f4eefdd85a8fe07"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;=aselectV1ashiftV0V10V8Iainfix &lt;V10V9Aainfix &lt;=c0V10FAainfix =V8aselectV1ashiftV0V7Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V9Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FIainfix =V7V3Fainfix &lt;=aselectV1ashiftV0V12V5Iainfix &lt;V12V11Aainfix &lt;=c0V12FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V11Iainfix =V11ainfix +V3c1FIainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iainfix &lt;=aselectV1ashiftV0V13V5Iainfix &lt;V13V3Aainfix &lt;=c0V13FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=aselectV1ashiftV0V14aselectV1ashiftV0c0Iainfix &lt;V14c1Aainfix &lt;=c0V14FAainfix =aselectV1ashiftV0c0aselectV1ashiftV0c0Aainfix &lt;c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1c1Iainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _Arrays_findMax_ensures_default"/>
     <label
      name="expl:Method findMax, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.12"/>
-    </proof>
     <proof
      prover="0"
      timelimit="5"
@@ -250,28 +496,44 @@
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.12"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _Arrays_findMax_ensures_max_found"
-    locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
+    locfile="../Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
-    expl="normal postcondition"
+    expl="postcondition"
     sum="ca854840fcf1d541d2c711db07865f20"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix &lt;=aselectV1ashiftV0V8aselectV1ashiftV0V7Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V8FAainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7V4FIainfix &lt;V3V6NIainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iainfix &lt;=aselectV1ashiftV0V9V5Iainfix &lt;V9V3Aainfix &lt;=c0V9FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FIainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _Arrays_findMax_ensures_max_found"/>
     <label
      name="expl:Method findMax, Behavior `max_found&apos;"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
     <proof
      prover="0"
      timelimit="5"
@@ -282,6 +544,30 @@
     </proof>
     <proof
      prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -291,64 +577,72 @@
    </goal>
    <goal
     name="WP_parameter _Arrays_findMax_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
+    locfile="../Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
-    expl="parameter _Arrays_findMax_safety"
+    expl="Method findMax, Safety"
     sum="b83d8da7e63b06126b4847a14561209f"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V9ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix =V7V3Fainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix &lt;=aselectV1ashiftV0V11V5Iainfix &lt;V11V3Aainfix &lt;=c0V11FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=c0aoffset_maxV2V0Iainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _Arrays_findMax_safety"/>
     <label
      name="expl:Method findMax, Safety"/>
     <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
      prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Arrays_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Arrays, default behavior"
     sum="eae6717f7d98b5bded0c7dc79be11976"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:parameter cons_Arrays_ensures_default"/>
     <label
      name="expl:Constructor of class Arrays, default behavior"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
@@ -364,28 +658,44 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Arrays_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Arrays, Safety"
     sum="56d4a1199994f5f6560e419cd4f0f016"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:parameter cons_Arrays_safety"/>
     <label
      name="expl:Constructor of class Arrays, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
     <proof
      prover="0"
      timelimit="5"
@@ -401,6 +711,30 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

@@ -60,7 +60,7 @@ public class negate {
 
 /*
 Local Variables:
-compile-command: "make Negate.why3ml"
+compile-command: "make Negate.why3ide"
 End:
 */
 

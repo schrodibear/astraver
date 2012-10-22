@@ -53,7 +53,7 @@ class test {
 
 /*
 Local Variables:
-compile-command: "make SimpleAlloc.why3ml"
+compile-command: "make SimpleAlloc.why3ide"
 End:
 */
 

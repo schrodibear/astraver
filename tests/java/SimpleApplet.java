@@ -123,7 +123,7 @@ public class Card extends Applet {
 
 /*
 Local Variables:
-compile-command: "make SimpleApplet.why3ml"
+compile-command: "make SimpleApplet.why3ide"
 End:
 */
 

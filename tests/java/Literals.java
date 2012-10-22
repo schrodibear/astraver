@@ -45,7 +45,7 @@ class Literals {
 
 /*
 Local Variables:
-compile-command: "make Literals.why3ml"
+compile-command: "make Literals.why3ide"
 End:
 */
 

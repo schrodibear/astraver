@@ -20,7 +20,7 @@ class Fresh {
 
 /*
 Local Variables:
-compile-command: "make Fresh.why3ml"
+compile-command: "make Fresh.why3ide"
 End:
 */
 

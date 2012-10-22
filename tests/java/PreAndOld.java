@@ -56,7 +56,7 @@ class PreAndOld {
 
 /*
 Local Variables:
-compile-command: "make PreAndOld.why3ml"
+compile-command: "make PreAndOld.why3ide"
 End:
 */
 

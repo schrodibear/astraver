@@ -108,7 +108,7 @@ class Duplets {
 
 /*
 Local Variables:
-compile-command: "make Duplets.why3ml"
+compile-command: "make Duplets.why3ide"
 End:
 */
 

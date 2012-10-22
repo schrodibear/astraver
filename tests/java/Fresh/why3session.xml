@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Fresh/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,33 +16,33 @@
  <prover
   id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
  <prover
   id="4"
   name="Z3"
-  version="3.2"/>
+  version="4.0"/>
  <file
   name="../Fresh.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
-   locfile="Fresh/../Fresh.mlw"
+   locfile="../Fresh.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="Fresh/../Fresh.mlw"
+   locfile="../Fresh.mlw"
    loclnum="295" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Fresh_create_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
+    locfile="../Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
-    expl="normal postcondition"
+    expl="postcondition"
     sum="32e0f23987a1e917033ca91bea49f3b7"
     proved="true"
     expanded="true"
@@ -53,51 +52,105 @@
     <label
      name="expl:Method create, default behavior"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.02"/>
-    </proof>
-    <proof
      prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.10"/>
     </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.06"/>
-    </proof>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter _Fresh_create_ensures_default.0"
+      locfile="../Fresh.java"
+      loclnum="8" loccnumb="17" loccnume="23"
+      expl="postcondition"
+      sum="32e0f23987a1e917033ca91bea49f3b7"
+      proved="true"
+      expanded="true"
+      shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
+      <label
+       name="expl:parameter _Fresh_create_ensures_default"/>
+      <label
+       name="expl:Method create, default behavior"/>
+      <transf
+       name="inline_goal"
+       proved="true"
+       expanded="true">
+       <goal
+        name="WP_parameter _Fresh_create_ensures_default.0.0"
+        locfile="../Fresh.java"
+        loclnum="8" loccnumb="17" loccnume="23"
+        expl="postcondition"
+        sum="7ff72f07ed0e99173e76008fbb449266"
+        proved="true"
+        expanded="true"
+        shape="ainfix &gt;=aoffset_maxV0V4c0Aainfix &lt;=aoffset_minV0V4c0NIainfix =V4V3FIasubtagatypeofV1V3a_Fresh_tagAavalidV0ashiftV3V5NIainfix &lt;V5c1Aainfix &lt;=c0V5FAaalloc_extendsV0V2Aastrict_valid_struct_ObjectV3c0ainfix -c1c1V2FFF">
+        <label
+         name="expl:parameter _Fresh_create_ensures_default"/>
+        <label
+         name="expl:Method create, default behavior"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="unknown" time="0.04"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.52"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.79"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.14"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.12"/>
+        </proof>
+       </goal>
+      </transf>
+     </goal>
+    </transf>
    </goal>
    <goal
     name="WP_parameter _Fresh_create_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
+    locfile="../Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
-    expl="parameter _Fresh_create_safety"
+    expl="Method create, Safety"
     sum="de5a02ad3889767590fc41201b44c588"
     proved="true"
     expanded="true"
@@ -107,33 +160,33 @@
     <label
      name="expl:Method create, Safety"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
      prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -141,15 +194,15 @@
     <proof
      prover="4"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Fresh_test_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
+    locfile="../Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="assertion"
     sum="0a1bf23d15afffc327e0ef703efad74e"
@@ -161,33 +214,33 @@
     <label
      name="expl:Method test, default behavior"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
      prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -195,17 +248,17 @@
     <proof
      prover="4"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Fresh_test_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
+    locfile="../Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
-    expl="normal postcondition"
+    expl="Method test, Safety"
     sum="390bfc567cd99b56f02728e96685ff09"
     proved="true"
     expanded="true"
@@ -215,9 +268,9 @@
     <label
      name="expl:Method test, Safety"/>
     <proof
-     prover="3"
+     prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -225,31 +278,31 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -257,9 +310,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Fresh_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Fresh, default behavior"
     sum="2ebc2e1d51c0c1fccae425e1f6e5f5d4"
     proved="true"
     expanded="true"
@@ -269,25 +322,17 @@
     <label
      name="expl:Constructor of class Fresh, default behavior"/>
     <proof
-     prover="3"
+     prover="0"
      timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="0"
+     prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -295,15 +340,23 @@
     <proof
      prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -311,9 +364,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Fresh_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Fresh, Safety"
     sum="171b3bbfcef5b5c1ab7fd9f1c9db536d"
     proved="true"
     expanded="true"
@@ -323,25 +376,17 @@
     <label
      name="expl:Constructor of class Fresh, Safety"/>
     <proof
-     prover="3"
+     prover="0"
      timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="0"
+     prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -349,15 +394,23 @@
     <proof
      prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -365,9 +418,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Object, default behavior"
     sum="e0dd4cf9a0136629b5321866a6ad632d"
     proved="true"
     expanded="true"
@@ -377,25 +430,17 @@
     <label
      name="expl:Constructor of class Object, default behavior"/>
     <proof
-     prover="3"
+     prover="0"
      timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="0"
+     prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -403,15 +448,23 @@
     <proof
      prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -419,9 +472,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Object, Safety"
     sum="2025afd664cb618d328fa4271eb6876c"
     proved="true"
     expanded="true"
@@ -431,25 +484,17 @@
     <label
      name="expl:Constructor of class Object, Safety"/>
     <proof
-     prover="3"
+     prover="0"
      timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="0"
+     prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -457,15 +502,23 @@
     <proof
      prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>

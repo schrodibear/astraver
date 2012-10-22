@@ -100,7 +100,7 @@ class BinarySearch {
 
 /*
 Local Variables:
-compile-command: "make BinarySearch.why3ml"
+compile-command: "make BinarySearch.why3ide"
 End:
 */
 

@@ -54,7 +54,7 @@ class NameConflicts {
 
 /*
 Local Variables:
-compile-command: "make NameConflicts.why3ml"
+compile-command: "make NameConflicts.why3ide"
 End:
 */
 

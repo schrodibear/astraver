@@ -102,7 +102,7 @@ class TestSuperConstructor extends Creation {
 
 /*
 Local Variables:
-compile-command: "make Creation.why3ml"
+compile-command: "make Creation.why3ide"
 End:
 */
 

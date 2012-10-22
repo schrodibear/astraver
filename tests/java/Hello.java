@@ -41,7 +41,7 @@ class Hello {
 
 /*
 Local Variables:
-compile-command: "make Hello.why3ml"
+compile-command: "make Hello.why3ide"
 End:
 */
 

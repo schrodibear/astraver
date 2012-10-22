@@ -71,7 +71,7 @@ public class Fibonacci {
 
 /*
 Local Variables:
-compile-command: "make Fibonacci.why3ml"
+compile-command: "make Fibonacci.why3ide"
 End:
 */
 

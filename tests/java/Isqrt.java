@@ -61,7 +61,7 @@ static int main () {
 
 /*
 Local Variables:
-compile-command: "make Isqrt.why3ml"
+compile-command: "make Isqrt.why3ide"
 End:
 */
 

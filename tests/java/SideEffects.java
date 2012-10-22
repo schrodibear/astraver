@@ -52,7 +52,7 @@ class SideEffects {
 
 /*
 Local Variables:
-compile-command: "make SideEffects.why3ml"
+compile-command: "make SideEffects.why3ide"
 End:
 */
 

@@ -54,7 +54,7 @@ public class MacCarthy {
 
 /*
 Local Variables:
-compile-command: "make MacCarthy.why3ml"
+compile-command: "make MacCarthy.why3ide"
 End:
 */
 

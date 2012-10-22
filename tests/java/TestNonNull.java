@@ -61,7 +61,7 @@ class TestNonNull {
 
 /*
 Local Variables:
-compile-command: "make TestNonNull.why3ml"
+compile-command: "make TestNonNull.why3ide"
 End:
 */
 

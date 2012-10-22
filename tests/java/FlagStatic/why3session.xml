@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="FlagStatic/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -12,33 +11,45 @@
   version="2.2"/>
  <prover
   id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="3.2"/>
+ <prover
+  id="5"
+  name="Z3"
+  version="4.0"/>
  <file
   name="../FlagStatic.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
-   locfile="FlagStatic/../FlagStatic.mlw"
+   locfile="../FlagStatic.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="FlagStatic/../FlagStatic.mlw"
+   locfile="../FlagStatic.mlw"
    loclnum="217" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _FlagStatic_flag_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+    locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
-    expl="parameter _FlagStatic_flag_ensures_default"
+    expl="Method flag, default behavior"
     sum="0fd6f19198e737013114fb180033327d"
     proved="true"
-    expanded="false"
+    expanded="true"
     shape="iainfix =V8a_FlagStatic_BLUEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V12a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V12V4Aainfix &lt;=V6V12Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDais_monochromeV0V13ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV14Aais_monochromeV0V6V5a_FlagStatic_WHITEV14Aais_monochromeV0c0V6a_FlagStatic_BLUEV14Aainfix &lt;=V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V13Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V14Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FIainfix =V13ainfix -V4c1Fais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7LaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FAais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:parameter _FlagStatic_flag_ensures_default"/>
@@ -50,7 +61,7 @@
      expanded="true">
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.1"
-      locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+      locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="loop invariant init"
       sum="84fd1aa49ebc19629b368f682aaf8f91"
@@ -62,17 +73,9 @@
       <label
        name="expl:Method flag, default behavior"/>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
@@ -80,20 +83,52 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="true"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.2"
-      locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+      locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="loop invariant preservation"
       sum="d6a8b2b5a860cc5845f6e4f6b0943eb6"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:parameter _FlagStatic_flag_ensures_default"/>
@@ -105,12 +140,12 @@
        expanded="true">
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.1"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="d1db4595eb2b35ef51bce3b12fcb30d6"
         proved="true"
-        expanded="false"
+        expanded="true"
         shape="ais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
@@ -122,9 +157,9 @@
          expanded="true">
          <goal
           name="WP_parameter _FlagStatic_flag_ensures_default.2.1.1"
-          locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+          locfile="../FlagStatic.java"
           loclnum="87" loccnumb="23" loccnume="27"
-          expl="parameter _FlagStatic_flag_ensures_default"
+          expl="Method flag, default behavior"
           sum="74e4c070edb17d9482226e67a7c0fe04"
           proved="true"
           expanded="false"
@@ -134,21 +169,61 @@
           <label
            name="expl:Method flag, default behavior"/>
           <proof
-           prover="2"
+           prover="0"
            timelimit="5"
-           memlimit="0"
+           memlimit="1000"
            obsolete="false"
            archived="false">
+           <result status="valid" time="1.27"/>
+          </proof>
+          <proof
+           prover="1"
+           timelimit="5"
+           memlimit="1000"
+           obsolete="false"
+           archived="false">
+           <result status="valid" time="1.63"/>
+          </proof>
+          <proof
+           prover="2"
+           timelimit="5"
+           memlimit="1000"
+           obsolete="false"
+           archived="false">
+           <result status="valid" time="1.40"/>
+          </proof>
+          <proof
+           prover="3"
+           timelimit="5"
+           memlimit="0"
+           obsolete="true"
+           archived="false">
            <result status="valid" time="0.62"/>
+          </proof>
+          <proof
+           prover="4"
+           timelimit="5"
+           memlimit="1000"
+           obsolete="false"
+           archived="false">
+           <result status="valid" time="0.09"/>
+          </proof>
+          <proof
+           prover="5"
+           timelimit="5"
+           memlimit="1000"
+           obsolete="false"
+           archived="false">
+           <result status="valid" time="0.08"/>
           </proof>
          </goal>
         </transf>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.2"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="8ed4160ac2a453417372bfb49b6ecf17"
         proved="true"
         expanded="false"
@@ -158,17 +233,9 @@
         <label
          name="expl:Method flag, default behavior"/>
         <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.05"/>
-        </proof>
-        <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.02"/>
@@ -176,17 +243,49 @@
         <proof
          prover="1"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.04"/>
         </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="0"
+         obsolete="true"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.3"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="ace9df66858444331ad250607cf9197f"
         proved="true"
         expanded="false"
@@ -196,17 +295,9 @@
         <label
          name="expl:Method flag, default behavior"/>
         <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.02"/>
@@ -214,17 +305,49 @@
         <proof
          prover="1"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.04"/>
         </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="0"
+         obsolete="true"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
+        </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.4"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="629d679f3275d639c35e25b6b567dd65"
         proved="true"
         expanded="false"
@@ -234,17 +357,9 @@
         <label
          name="expl:Method flag, default behavior"/>
         <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.02"/>
@@ -252,17 +367,49 @@
         <proof
          prover="1"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.04"/>
         </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="0"
+         obsolete="true"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.5"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="7f2532e292f115ffb89c39ee52cd3eee"
         proved="true"
         expanded="false"
@@ -272,17 +419,9 @@
         <label
          name="expl:Method flag, default behavior"/>
         <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.03"/>
-        </proof>
-        <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.02"/>
@@ -290,7 +429,39 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
          memlimit="0"
+         obsolete="true"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.04"/>
@@ -298,9 +469,9 @@
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.6"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="6bd091f3ecd3677e4427e3e0d7925cdf"
         proved="true"
         expanded="false"
@@ -312,17 +483,49 @@
         <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.90"/>
+         <result status="valid" time="1.18"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.17"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="2.41"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.09"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.7"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="a6735e4075f522965bafcbd19c7d5f0d"
         proved="true"
         expanded="false"
@@ -334,17 +537,49 @@
         <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.95"/>
+         <result status="valid" time="1.23"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.18"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="2.06"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.12"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.14"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.8"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="8a4643d68796bb81f621640a42e6355a"
         proved="true"
         expanded="false"
@@ -356,17 +591,49 @@
         <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.70"/>
+         <result status="valid" time="0.93"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="4.91"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="2.39"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.09"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.3"
-      locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+      locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="loop invariant preservation"
       sum="4fcee7663682049790b88fee1e951977"
@@ -378,17 +645,9 @@
       <label
        name="expl:Method flag, default behavior"/>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.07"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
@@ -396,20 +655,52 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.08"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.16"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="true"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.4"
-      locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+      locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="loop invariant preservation"
       sum="da52fadb6d85eba30eb3d8a165be87e2"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Aais_monochromeV0V6V5a_FlagStatic_WHITEV10Aais_monochromeV0c0V6a_FlagStatic_BLUEV10Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V9Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:parameter _FlagStatic_flag_ensures_default"/>
@@ -421,12 +712,12 @@
        expanded="true">
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.1"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="af99dad3d11a823394698b9932ea2f70"
         proved="true"
-        expanded="false"
+        expanded="true"
         shape="ais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:parameter _FlagStatic_flag_ensures_default"/>
@@ -438,9 +729,9 @@
          expanded="true">
          <goal
           name="WP_parameter _FlagStatic_flag_ensures_default.4.1.1"
-          locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+          locfile="../FlagStatic.java"
           loclnum="87" loccnumb="23" loccnume="27"
-          expl="parameter _FlagStatic_flag_ensures_default"
+          expl="Method flag, default behavior"
           sum="5c56d50662ef522ffcb75fee998b207a"
           proved="true"
           expanded="false"
@@ -450,21 +741,61 @@
           <label
            name="expl:Method flag, default behavior"/>
           <proof
-           prover="2"
+           prover="0"
            timelimit="5"
-           memlimit="0"
+           memlimit="1000"
            obsolete="false"
            archived="false">
+           <result status="valid" time="4.14"/>
+          </proof>
+          <proof
+           prover="1"
+           timelimit="5"
+           memlimit="1000"
+           obsolete="false"
+           archived="false">
+           <result status="valid" time="2.64"/>
+          </proof>
+          <proof
+           prover="2"
+           timelimit="5"
+           memlimit="1000"
+           obsolete="false"
+           archived="false">
+           <result status="valid" time="1.87"/>
+          </proof>
+          <proof
+           prover="3"
+           timelimit="5"
+           memlimit="0"
+           obsolete="true"
+           archived="false">
            <result status="valid" time="1.19"/>
+          </proof>
+          <proof
+           prover="4"
+           timelimit="5"
+           memlimit="1000"
+           obsolete="false"
+           archived="false">
+           <result status="valid" time="0.08"/>
+          </proof>
+          <proof
+           prover="5"
+           timelimit="5"
+           memlimit="1000"
+           obsolete="false"
+           archived="false">
+           <result status="valid" time="0.08"/>
           </proof>
          </goal>
         </transf>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.2"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="39f6fc19dcf55f9bc5b7627583a1bd31"
         proved="true"
         expanded="false"
@@ -474,17 +805,9 @@
         <label
          name="expl:Method flag, default behavior"/>
         <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.03"/>
-        </proof>
-        <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.02"/>
@@ -492,17 +815,49 @@
         <proof
          prover="1"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.04"/>
         </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="0"
+         obsolete="true"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.3"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="cb44330388ccc7a53aa568b78522ecea"
         proved="true"
         expanded="false"
@@ -512,17 +867,9 @@
         <label
          name="expl:Method flag, default behavior"/>
         <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.03"/>
-        </proof>
-        <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.02"/>
@@ -530,7 +877,39 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
          memlimit="0"
+         obsolete="true"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.04"/>
@@ -538,9 +917,9 @@
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.4"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="33dea114f968ee2a12de12e4ddad8248"
         proved="true"
         expanded="false"
@@ -550,17 +929,9 @@
         <label
          name="expl:Method flag, default behavior"/>
         <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.02"/>
@@ -568,17 +939,49 @@
         <proof
          prover="1"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.04"/>
         </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="0"
+         obsolete="true"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.5"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="b8cfaaf8b5281c0e6f439d505a3ded97"
         proved="true"
         expanded="false"
@@ -588,17 +991,9 @@
         <label
          name="expl:Method flag, default behavior"/>
         <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.02"/>
@@ -606,17 +1001,49 @@
         <proof
          prover="1"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.05"/>
         </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="0"
+         obsolete="true"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.6"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="4b68fb0864bb8118e5239a8feaf9a2dd"
         proved="true"
         expanded="false"
@@ -628,21 +1055,49 @@
         <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
-<<<<<<< .working
-         <result status="valid" time="0.85"/>
-=======
-         <result status="valid" time="0.80"/>
->>>>>>> .merge-right.r4939
+         <result status="valid" time="1.04"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.18"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="3.03"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.7"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="b082924182c5cccdc310d90f6e2d4497"
         proved="true"
         expanded="false"
@@ -654,17 +1109,49 @@
         <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.94"/>
+         <result status="valid" time="1.24"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.14"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="2.58"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.8"
-        locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+        locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="parameter _FlagStatic_flag_ensures_default"
+        expl="Method flag, default behavior"
         sum="28b592b56a2a40650ffb5b9b915f1bbb"
         proved="true"
         expanded="false"
@@ -676,17 +1163,49 @@
         <proof
          prover="0"
          timelimit="5"
-         memlimit="0"
+         memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.04"/>
+         <result status="valid" time="1.36"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.15"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="2.85"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.10"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.5"
-      locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+      locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="loop invariant preservation"
       sum="30d39fe91824fd6fe15d908564d7698e"
@@ -698,17 +1217,9 @@
       <label
        name="expl:Method flag, default behavior"/>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
@@ -716,19 +1227,51 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="true"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_flag_ensures_sorts"
-    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+    locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
-    expl="normal postcondition"
+    expl="postcondition"
     sum="c4b1db7198cfda076b3740ee0e63216f"
     proved="true"
     expanded="false"
@@ -738,17 +1281,9 @@
     <label
      name="expl:Method flag, Behavior `sorts&apos;"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -756,15 +1291,47 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_flag_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+    locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
     expl="index bounds"
     sum="95fdfb4d3214d716b5669395b87dc3de"
@@ -776,17 +1343,9 @@
     <label
      name="expl:Method flag, Safety"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -794,17 +1353,49 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.12"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.18"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"
-    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+    locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
-    expl="parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"
+    expl="Method isMonochrome, Behavior `decides_monochromatic&apos;"
     sum="e38794d639fe41a508b841aa4c97c6c4"
     proved="true"
     expanded="false"
@@ -814,17 +1405,9 @@
     <label
      name="expl:Method isMonochrome, Behavior `decides_monochromatic&apos;"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -832,7 +1415,39 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.14"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
      memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
@@ -840,9 +1455,9 @@
    </goal>
    <goal
     name="WP_parameter _FlagStatic_isMonochrome_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+    locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
-    expl="parameter _FlagStatic_isMonochrome_ensures_default"
+    expl="Method isMonochrome, default behavior"
     sum="91f91e5081386976e9877017b7ddb6a5"
     proved="true"
     expanded="false"
@@ -852,17 +1467,9 @@
     <label
      name="expl:Method isMonochrome, default behavior"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.07"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -870,17 +1477,49 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_isMonochrome_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+    locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
-    expl="parameter _FlagStatic_isMonochrome_safety"
+    expl="Method isMonochrome, Safety"
     sum="3dbd03d49385e5703e393152c2df1dc7"
     proved="true"
     expanded="false"
@@ -890,17 +1529,9 @@
     <label
      name="expl:Method isMonochrome, Safety"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -908,17 +1539,49 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_swap_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+    locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
-    expl="normal postcondition"
+    expl="Method swap, default behavior"
     sum="064ecf0c9ea8d1dae688811816c15181"
     proved="true"
     expanded="false"
@@ -928,17 +1591,9 @@
     <label
      name="expl:Method swap, default behavior"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -946,17 +1601,49 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_swap_ensures_i_j_swapped"
-    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+    locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
-    expl="normal postcondition"
+    expl="postcondition"
     sum="c6e218607584c1b169b305f4a92ef297"
     proved="true"
     expanded="false"
@@ -966,27 +1653,59 @@
     <label
      name="expl:Method swap, Behavior `i_j_swapped&apos;"/>
     <proof
-     prover="2"
+     prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.22"/>
     </proof>
     <proof
-     prover="0"
+     prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
+     <result status="valid" time="0.83"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.93"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
      <result status="valid" time="0.22"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_swap_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/FlagStatic.java"
+    locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
-    expl="parameter _FlagStatic_swap_safety"
+    expl="Method swap, Safety"
     sum="d16018da020808dca97f2b45972164d0"
     proved="true"
     expanded="false"
@@ -996,17 +1715,9 @@
     <label
      name="expl:Method swap, Safety"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -1014,17 +1725,49 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_FlagStatic_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class FlagStatic, default behavior"
     sum="390af29317180379e422c138eaeb557d"
     proved="true"
     expanded="false"
@@ -1034,17 +1777,9 @@
     <label
      name="expl:Constructor of class FlagStatic, default behavior"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -1052,17 +1787,49 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_FlagStatic_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class FlagStatic, Safety"
     sum="f96b995a07c3d50185a4b20b5aa61583"
     proved="true"
     expanded="false"
@@ -1072,17 +1839,9 @@
     <label
      name="expl:Constructor of class FlagStatic, Safety"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -1090,17 +1849,49 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Object, default behavior"
     sum="1c9b7a8067cc69d641277502fb756ca4"
     proved="true"
     expanded="false"
@@ -1110,17 +1901,9 @@
     <label
      name="expl:Constructor of class Object, default behavior"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -1128,17 +1911,49 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Object, Safety"
     sum="3d6c5ffa2f5dd4b4e4dbbdcdc76e3705"
     proved="true"
     expanded="false"
@@ -1148,17 +1963,9 @@
     <label
      name="expl:Constructor of class Object, Safety"/>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -1166,10 +1973,42 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

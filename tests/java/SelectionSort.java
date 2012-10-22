@@ -115,7 +115,7 @@ class SelectionSort {
 
 /*
 Local Variables:
-compile-command: "make SelectionSort.why3ml"
+compile-command: "make SelectionSort.why3ide"
 End:
 */
 

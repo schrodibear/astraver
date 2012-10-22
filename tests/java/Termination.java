@@ -58,7 +58,7 @@ class Termination {
 
 /*
 Local Variables:
-compile-command: "make Termination.why3ml"
+compile-command: "make Termination.why3ide"
 End:
 */
 

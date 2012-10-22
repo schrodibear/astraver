@@ -116,6 +116,6 @@ class FlagStatic {
 
 /*
 Local Variables:
-compile-command: "make FlagStatic.why3ml"
+compile-command: "make FlagStatic.why3ide"
 End:
 */

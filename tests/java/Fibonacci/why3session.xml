@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Fibonacci/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -12,25 +11,33 @@
   version="2.2"/>
  <prover
   id="2"
-  name="Coq"
-  version="8.3pl3"/>
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="3"
+  name="Coq"
+  version="8.4"/>
+ <prover
+  id="4"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
+ <prover
+  id="5"
+  name="Z3"
+  version="4.0"/>
  <file
   name="../Fibonacci.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="tests/java/Fibonacci/../Fibonacci.mlw"
+   locfile="../Fibonacci.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
    <goal
     name="isfib_2_1"
-    locfile="/home/cmarche/why2-trunk/tests/java/Fibonacci.java"
+    locfile="../Fibonacci.java"
     loclnum="46" loccnumb="10" loccnume="19"
     expl="Lemma isfib_2_1, lemma"
     sum="dfa5c6f71556f541b1ad0d613bc54847"
@@ -41,25 +48,17 @@
      name="expl:Lemma isfib_2_1, lemma"/>
     <proof
      prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.22"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="3"
      memlimit="1000"
      edited="Fibonacci_Jessie_model_isfib_2_1_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.50"/>
+     <result status="valid" time="1.75"/>
     </proof>
    </goal>
    <goal
     name="isfib_6_8"
-    locfile="/home/cmarche/why2-trunk/tests/java/Fibonacci.java"
+    locfile="../Fibonacci.java"
     loclnum="47" loccnumb="10" loccnume="19"
     expl="Lemma isfib_6_8, lemma"
     sum="f54a4eb4e0d587541e7015847f7a53b6"
@@ -69,18 +68,18 @@
     <label
      name="expl:Lemma isfib_6_8, lemma"/>
     <proof
-     prover="2"
+     prover="3"
      timelimit="5"
      memlimit="0"
      edited="Fibonacci_Jessie_model_isfib_6_8_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.49"/>
+     <result status="valid" time="1.80"/>
     </proof>
    </goal>
    <goal
     name="not_isfib_2_2"
-    locfile="/home/cmarche/why2-trunk/tests/java/Fibonacci.java"
+    locfile="../Fibonacci.java"
     loclnum="50" loccnumb="10" loccnume="23"
     expl="Lemma not_isfib_2_2, lemma"
     sum="3bb3ea52dbf7f5048077e653e2ee6c5e"
@@ -90,17 +89,9 @@
     <label
      name="expl:Lemma not_isfib_2_2, lemma"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
@@ -108,24 +99,48 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.11"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="Jessie_program"
-   locfile="tests/java/Fibonacci/../Fibonacci.mlw"
+   locfile="../Fibonacci.mlw"
    loclnum="196" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Fibonacci_Fib_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/java/Fibonacci.java"
+    locfile="../Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
-    expl="parameter _Fibonacci_Fib_ensures_default"
+    expl="Method Fib, default behavior"
     sum="cb2b837fd8bfa20dc9891da949f5a6dc"
     proved="true"
     expanded="true"
@@ -137,17 +152,405 @@
     <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
     </proof>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter _Fibonacci_Fib_ensures_default.0"
+      locfile="../Fibonacci.java"
+      loclnum="57" loccnumb="23" loccnume="26"
+      expl="loop invariant init"
+      sum="d19d0b6201302f2fa82fd11e9c1cd45b"
+      proved="true"
+      expanded="true"
+      shape="aisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
+      <label
+       name="expl:parameter _Fibonacci_Fib_ensures_default"/>
+      <label
+       name="expl:Method Fib, default behavior"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Fibonacci_Fib_ensures_default.1"
+      locfile="../Fibonacci.java"
+      loclnum="57" loccnumb="23" loccnume="26"
+      expl="loop invariant preservation"
+      sum="e1066a161fbc5077044bbe798533e68f"
+      proved="true"
+      expanded="true"
+      shape="aisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+      <label
+       name="expl:parameter _Fibonacci_Fib_ensures_default"/>
+      <label
+       name="expl:Method Fib, default behavior"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="4.14"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.12"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.17"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.11"/>
+      </proof>
+      <transf
+       name="split_goal_wp"
+       proved="true"
+       expanded="true">
+       <goal
+        name="WP_parameter _Fibonacci_Fib_ensures_default.1.0"
+        locfile="../Fibonacci.java"
+        loclnum="57" loccnumb="23" loccnume="26"
+        expl="Method Fib, default behavior"
+        sum="e21e211049bf45007e10c8957778ebc1"
+        proved="true"
+        expanded="false"
+        shape="ainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+        <label
+         name="expl:parameter _Fibonacci_Fib_ensures_default"/>
+        <label
+         name="expl:Method Fib, default behavior"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _Fibonacci_Fib_ensures_default.1.1"
+        locfile="../Fibonacci.java"
+        loclnum="57" loccnumb="23" loccnume="26"
+        expl="Method Fib, default behavior"
+        sum="a4e9e66453e2b81b9116bef9cb944332"
+        proved="true"
+        expanded="false"
+        shape="ainfix &lt;=V7V0Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+        <label
+         name="expl:parameter _Fibonacci_Fib_ensures_default"/>
+        <label
+         name="expl:Method Fib, default behavior"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _Fibonacci_Fib_ensures_default.1.2"
+        locfile="../Fibonacci.java"
+        loclnum="57" loccnumb="23" loccnume="26"
+        expl="Method Fib, default behavior"
+        sum="895d41fc4c06bd9529692b4af7ae08ec"
+        proved="true"
+        expanded="true"
+        shape="aisfibainfix +V7c1V6Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+        <label
+         name="expl:parameter _Fibonacci_Fib_ensures_default"/>
+        <label
+         name="expl:Method Fib, default behavior"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="unknown" time="4.12"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.13"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.14"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.17"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _Fibonacci_Fib_ensures_default.1.3"
+        locfile="../Fibonacci.java"
+        loclnum="57" loccnumb="23" loccnume="26"
+        expl="Method Fib, default behavior"
+        sum="293cecb9d34cdb37506471cd09882b0d"
+        proved="true"
+        expanded="false"
+        shape="aisfibV7V5Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+        <label
+         name="expl:parameter _Fibonacci_Fib_ensures_default"/>
+        <label
+         name="expl:Method Fib, default behavior"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="5"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+      </transf>
+     </goal>
+     <goal
+      name="WP_parameter _Fibonacci_Fib_ensures_default.2"
+      locfile="../Fibonacci.java"
+      loclnum="57" loccnumb="23" loccnume="26"
+      expl="postcondition"
+      sum="83f1e3ac16628650013dee27eb038f38"
+      proved="true"
+      expanded="true"
+      shape="aisfibV0V4Iainfix =V4V3FIainfix &lt;V1V0NIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+      <label
+       name="expl:parameter _Fibonacci_Fib_ensures_default"/>
+      <label
+       name="expl:Method Fib, default behavior"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+     </goal>
+    </transf>
    </goal>
    <goal
     name="WP_parameter _Fibonacci_Fib_safety"
-    locfile="/home/cmarche/why2-trunk/tests/java/Fibonacci.java"
+    locfile="../Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
-    expl="loop variant decreases"
+    expl="loop variant decrease"
     sum="a7f63a7212ae3bdec0c4616e483fe067"
     proved="true"
     expanded="true"
@@ -157,17 +560,9 @@
     <label
      name="expl:Method Fib, Safety"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.10"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
@@ -175,7 +570,31 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -183,9 +602,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Fibonacci, default behavior"
     sum="362a088fa3dd4d9d8cea40c4cace26d0"
     proved="true"
     expanded="true"
@@ -195,17 +614,9 @@
     <label
      name="expl:Constructor of class Fibonacci, default behavior"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -213,17 +624,41 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_safety"
-    locfile="/home/cmarche/why2-trunk/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Fibonacci, Safety"
     sum="282a6789fa10d123d33e9f34ee615a10"
     proved="true"
     expanded="true"
@@ -233,17 +668,9 @@
     <label
      name="expl:Constructor of class Fibonacci, Safety"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -251,10 +678,34 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

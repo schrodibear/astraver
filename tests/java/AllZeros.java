@@ -56,7 +56,7 @@ class AllZeros {
 
 /*
 Local Variables:
-compile-command: "make AllZeros.why3ml"
+compile-command: "make AllZeros.why3ide"
 End:
 */
 
