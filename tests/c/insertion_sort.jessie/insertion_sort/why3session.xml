@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="insertion_sort.jessie/insertion_sort/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -12,55 +11,55 @@
   version="2.2"/>
  <prover
   id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.0"/>
  <file
   name="../insertion_sort.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
-   locfile="insertion_sort.jessie/insertion_sort/../insertion_sort.mlw"
+   locfile="../insertion_sort.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="insertion_sort.jessie/insertion_sort/../insertion_sort.mlw"
+   locfile="../insertion_sort.mlw"
    loclnum="260" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter insert_sort_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
+    locfile="../../insertion_sort.c"
     loclnum="41" loccnumb="5" loccnume="16"
-    expl="parameter insert_sort_ensures_default"
+    expl="Function insert_sort, default behavior"
     sum="458d5b8a0095bd3ada09ffa46880dad9"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix &lt;=V1c1a_SortedV0c0ainfix -V1c1V3iainfix &lt;V5V1iainfix &gt;V9c0iainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7ainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7Fainfix &lt;=V14V5Aainfix &lt;=c0V14Aa_SortedV0c0V5V13Iainfix =V14V5Aa_SortedV0c0ainfix +V5c1V13Iainfix &lt;V14V5Aainfix &gt;aselectV13ashiftV0V15V7Iainfix &lt;V15V5Aainfix &lt;=V14V15FIainfix =V14ainfix -V9c1FIainfix =V13astoreV10ashiftV0V9aselectV10ashiftV0ainfix -V9c1Fainfix &lt;=V17V1Aainfix &lt;=c0V17Aa_SortedV0c0V17V16Iainfix =V17ainfix +V5c1FIainfix =V16astoreV10ashiftV0V9V7FIainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V18V7Iainfix &lt;V18V5Aainfix &lt;=V9V18FFAainfix &lt;=V8V5Aainfix &lt;=c0V8Aa_SortedV0c0V5V6Iainfix =V8V5Aa_SortedV0c0ainfix +V5c1V6Iainfix &lt;V8V5Aainfix &gt;aselectV6ashiftV0V19V7Iainfix &lt;V19V5Aainfix &lt;=V8V19FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_SortedV0c0ainfix -V1c1V6Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FAainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V3Iainfix =V4c1FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
     <label
      name="expl:parameter insert_sort_ensures_default"/>
     <label
      name="expl:Function insert_sort, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="1.03"/>
-    </proof>
     <transf
      name="split_goal"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter insert_sort_ensures_default.1"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
+      locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
-      expl="normal postcondition"
+      expl="postcondition"
       sum="779a8bb3cc041a4f0c34072777026529"
       proved="true"
       expanded="false"
@@ -72,23 +71,39 @@
       <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
@@ -96,7 +111,7 @@
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.2"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
+      locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="loop invariant init"
       sum="59b1a38da49e09369719162c39c7219c"
@@ -110,31 +125,47 @@
       <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.3"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
+      locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="loop invariant init"
       sum="6a431cb7cee762d43847ba3730cf2a77"
@@ -148,31 +179,47 @@
       <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.4"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
+      locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="loop invariant preservation"
       sum="76ed7dff1d8f266e00b01ee9218678a9"
@@ -186,23 +233,47 @@
       <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.33"/>
+       <result status="valid" time="1.94"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.21"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.12"/>
+       <result status="timeout" time="9.70"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.5"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
+      locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="loop invariant preservation"
       sum="2d0ece0c9ce9145a8f4bc40f3484e7b7"
@@ -214,17 +285,49 @@
       <label
        name="expl:Function insert_sort, default behavior"/>
       <proof
-       prover="2"
+       prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.59"/>
+       <result status="timeout" time="11.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.27"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="10.75"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.6"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
+      locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="loop invariant preservation"
       sum="50a5d937a5268a9b758a41245881c953"
@@ -238,25 +341,49 @@
       <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.48"/>
+       <result status="valid" time="0.70"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.22"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="timeout" time="10.17"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="6.59"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.7"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
+      locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
-      expl="normal postcondition"
+      expl="postcondition"
       sum="ed61fa08a0094278a59b687d32748ada"
       proved="true"
       expanded="false"
@@ -268,23 +395,39 @@
       <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
@@ -294,9 +437,9 @@
    </goal>
    <goal
     name="WP_parameter insert_sort_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/insertion_sort.c"
+    locfile="../../insertion_sort.c"
     loclnum="41" loccnumb="5" loccnume="16"
-    expl="parameter insert_sort_safety"
+    expl="Function insert_sort, Safety"
     sum="87ebd4f181b688f46d7ddae769e97a52"
     proved="true"
     expanded="false"
@@ -308,23 +451,39 @@
     <proof
      prover="0"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="1"
+     prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.10"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>

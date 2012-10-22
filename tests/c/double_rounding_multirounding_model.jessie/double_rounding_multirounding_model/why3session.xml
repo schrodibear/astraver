@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="double_rounding_multirounding_model.jessie/double_rounding_multirounding_model/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Gappa"
@@ -13,7 +12,7 @@
  <prover
   id="2"
   name="Gappa"
-  version="0.16.0"/>
+  version="0.16.1"/>
  <prover
   id="3"
   name="Gappa+dev"
@@ -24,23 +23,23 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="double_rounding_multirounding_model.jessie/double_rounding_multirounding_model/../double_rounding_multirounding_model.mlw"
+   locfile="../double_rounding_multirounding_model.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="double_rounding_multirounding_model.jessie/double_rounding_multirounding_model/../double_rounding_multirounding_model.mlw"
-   loclnum="133" loccnumb="7" loccnume="21"
+   locfile="../double_rounding_multirounding_model.mlw"
+   loclnum="204" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter doublerounding_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
+    locfile="../../double_rounding_multirounding_model.c"
     loclnum="11" loccnumb="7" loccnume="21"
     expl="assertion"
-    sum="8d92ba128c377e7d80d1eefb0a55c622"
+    sum="7cbc4699c21fe0ccaf9d823546ae3496"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=avalueV7ainfix +ainfix +c1.0c0x1.p-52c0x1.p-62Aainfix &lt;=ainfix -c1.0c0x1.p-63avalueV7Iainfix =V7V6FIaadd_postaNearestTiesToEvenV1V5V6FIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -48,6 +47,14 @@
      name="expl:Function doublerounding, default behavior"/>
     <label
      name="expl:parameter doublerounding_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
     <proof
      prover="1"
      timelimit="5"
@@ -62,15 +69,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="3"
@@ -83,10 +82,10 @@
    </goal>
    <goal
     name="WP_parameter doublerounding_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
+    locfile="../../double_rounding_multirounding_model.c"
     loclnum="11" loccnumb="7" loccnume="21"
-    expl="Function doublerounding, Safety"
-    sum="14f63b2355bcea566fbb026dc728ec8d"
+    expl="parameter doublerounding_safety"
+    sum="d14dd49d8284b5c6308456298919a284"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -100,10 +99,10 @@
      expanded="true">
      <goal
       name="WP_parameter doublerounding_safety.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
+      locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="precondition"
-      sum="eddc67bb8c51e1e9a6d94dbcbfbf5231"
+      expl="floating-point overflow"
+      sum="59d9284d8dc04eb64b5021d2dacc1a14"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -111,6 +110,14 @@
        name="expl:Function doublerounding, Safety"/>
       <label
        name="expl:parameter doublerounding_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
       <proof
        prover="1"
        timelimit="5"
@@ -121,14 +128,6 @@
       </proof>
       <proof
        prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="0"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -146,10 +145,10 @@
      </goal>
      <goal
       name="WP_parameter doublerounding_safety.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
+      locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="precondition"
-      sum="3fb9166a26817e2e37d7591278ffd3b7"
+      expl="floating-point overflow"
+      sum="3163a78af271c90971a15eb807427645"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -157,6 +156,14 @@
        name="expl:Function doublerounding, Safety"/>
       <label
        name="expl:parameter doublerounding_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
       <proof
        prover="1"
        timelimit="5"
@@ -167,14 +174,6 @@
       </proof>
       <proof
        prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="0"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -192,10 +191,10 @@
      </goal>
      <goal
       name="WP_parameter doublerounding_safety.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
+      locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="precondition"
-      sum="c234180efbb09415aff5f4deb9d9ad1e"
+      expl="floating-point overflow"
+      sum="279c7642967758d1b7f92d141313de4f"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -203,6 +202,14 @@
        name="expl:Function doublerounding, Safety"/>
       <label
        name="expl:parameter doublerounding_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
       <proof
        prover="1"
        timelimit="5"
@@ -213,14 +220,6 @@
       </proof>
       <proof
        prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="0"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -238,10 +237,10 @@
      </goal>
      <goal
       name="WP_parameter doublerounding_safety.4"
-      locfile="/home/marche/why2-nitrogen/tests/c/double_rounding_multirounding_model.c"
+      locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="precondition"
-      sum="518ebc6b3e412c5178ad9c7fa54338bd"
+      expl="floating-point overflow"
+      sum="fba83e8cb19a1bfcbe8921c42b527147"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -249,6 +248,14 @@
        name="expl:Function doublerounding, Safety"/>
       <label
        name="expl:parameter doublerounding_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
       <proof
        prover="1"
        timelimit="5"
@@ -259,14 +266,6 @@
       </proof>
       <proof
        prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="0"
        timelimit="5"
        memlimit="1000"
        obsolete="false"

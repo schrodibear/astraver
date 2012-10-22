@@ -81,7 +81,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.14"/>
+     <result status="timeout" time="7.27"/>
     </proof>
     <proof
      prover="4"
@@ -89,14 +89,14 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.15"/>
+     <result status="timeout" time="5.78"/>
     </proof>
     <transf
      name="split_goal_wp"
      proved="true"
      expanded="true">
      <goal
-      name="WP_parameter _Isqrt_isqrt_ensures_default.0"
+      name="WP_parameter _Isqrt_isqrt_ensures_default.1"
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="loop invariant init"
@@ -150,7 +150,7 @@
       </proof>
      </goal>
      <goal
-      name="WP_parameter _Isqrt_isqrt_ensures_default.1"
+      name="WP_parameter _Isqrt_isqrt_ensures_default.2"
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="loop invariant preservation"
@@ -192,7 +192,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.16"/>
+       <result status="timeout" time="7.65"/>
       </proof>
       <proof
        prover="4"
@@ -200,14 +200,14 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.22"/>
+       <result status="timeout" time="6.91"/>
       </proof>
       <transf
        name="split_goal_wp"
        proved="true"
        expanded="true">
        <goal
-        name="WP_parameter _Isqrt_isqrt_ensures_default.1.0"
+        name="WP_parameter _Isqrt_isqrt_ensures_default.2.1"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="Method isqrt, default behavior"
@@ -261,7 +261,7 @@
         </proof>
        </goal>
        <goal
-        name="WP_parameter _Isqrt_isqrt_ensures_default.1.1"
+        name="WP_parameter _Isqrt_isqrt_ensures_default.2.2"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="Method isqrt, default behavior"
@@ -303,7 +303,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.19"/>
+         <result status="timeout" time="7.03"/>
         </proof>
         <proof
          prover="4"
@@ -311,11 +311,11 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.22"/>
+         <result status="timeout" time="6.71"/>
         </proof>
        </goal>
        <goal
-        name="WP_parameter _Isqrt_isqrt_ensures_default.1.2"
+        name="WP_parameter _Isqrt_isqrt_ensures_default.2.3"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="Method isqrt, default behavior"
@@ -357,7 +357,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.19"/>
+         <result status="timeout" time="7.02"/>
         </proof>
         <proof
          prover="4"
@@ -365,13 +365,13 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.45"/>
+         <result status="timeout" time="6.31"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
-      name="WP_parameter _Isqrt_isqrt_ensures_default.2"
+      name="WP_parameter _Isqrt_isqrt_ensures_default.3"
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="postcondition"
@@ -413,7 +413,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.15"/>
+       <result status="timeout" time="7.04"/>
       </proof>
       <proof
        prover="4"
@@ -421,14 +421,14 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.58"/>
+       <result status="timeout" time="6.72"/>
       </proof>
       <transf
        name="split_goal_wp"
        proved="true"
        expanded="true">
        <goal
-        name="WP_parameter _Isqrt_isqrt_ensures_default.2.0"
+        name="WP_parameter _Isqrt_isqrt_ensures_default.3.1"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="Method isqrt, default behavior"
@@ -482,7 +482,7 @@
         </proof>
        </goal>
        <goal
-        name="WP_parameter _Isqrt_isqrt_ensures_default.2.1"
+        name="WP_parameter _Isqrt_isqrt_ensures_default.3.2"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="Method isqrt, default behavior"
@@ -532,11 +532,11 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.17"/>
+         <result status="timeout" time="6.91"/>
         </proof>
        </goal>
        <goal
-        name="WP_parameter _Isqrt_isqrt_ensures_default.2.2"
+        name="WP_parameter _Isqrt_isqrt_ensures_default.3.3"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="Method isqrt, default behavior"
@@ -578,7 +578,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.17"/>
+         <result status="timeout" time="7.15"/>
         </proof>
         <proof
          prover="4"
@@ -586,7 +586,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.39"/>
+         <result status="timeout" time="7.34"/>
         </proof>
        </goal>
       </transf>
@@ -682,7 +682,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.13"/>
+     <result status="timeout" time="6.55"/>
     </proof>
     <proof
      prover="3"
@@ -705,7 +705,7 @@
      proved="true"
      expanded="true">
      <goal
-      name="WP_parameter _Isqrt_main_ensures_default.0"
+      name="WP_parameter _Isqrt_main_ensures_default.1"
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="assertion"
@@ -739,7 +739,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.12"/>
+       <result status="timeout" time="5.87"/>
       </proof>
       <proof
        prover="3"
@@ -759,7 +759,7 @@
       </proof>
      </goal>
      <goal
-      name="WP_parameter _Isqrt_main_ensures_default.1"
+      name="WP_parameter _Isqrt_main_ensures_default.2"
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="assertion"
@@ -793,7 +793,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.22"/>
+       <result status="unknown" time="5.22"/>
       </proof>
       <proof
        prover="3"
@@ -813,7 +813,7 @@
       </proof>
      </goal>
      <goal
-      name="WP_parameter _Isqrt_main_ensures_default.2"
+      name="WP_parameter _Isqrt_main_ensures_default.3"
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="postcondition"

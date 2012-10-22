@@ -35,7 +35,7 @@
 
 #include "sorting.h"
 
-/*@ requires \valid_range(t,0,n-1);
+/*@ requires \valid(t+(0..n-1));
   @ ensures Sorted(t,0,n-1);
   @*/
 void insert_sort(int t[], int n) {

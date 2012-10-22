@@ -29,6 +29,10 @@
 /*                                                                        */
 /**************************************************************************/
 
+typedef unsigned int size_t;
+void *malloc(size_t size);
+void *calloc(size_t nmemb, size_t size);
+
 /*@ axiomatic NumOfPos {
   @  logic integer num_of_pos{L}(integer i,integer j,int *t);
   @  axiom num_of_pos_empty{L} :

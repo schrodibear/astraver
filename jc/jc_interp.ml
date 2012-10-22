@@ -3278,23 +3278,31 @@ let rec finalize e =
     | And (e1, e2) ->
         {e with expr_node = And(finalize e1, finalize e2) }
     | MultiAssign(mark,pos,lets,isrefalloc,talloc,alloc,tmpe,_e,mem,l) ->
+(*
         eprintf "finalizing a MultiAssign@.";
+*)
         match l with
           | [] -> assert false
           | [(i,b1,b2,e')] ->
+(*
             eprintf "MultiAssign is only for one update@.";
+*)
               if i=0 then
                  make_lets lets
                    (make_old_style_update_no_shift ~mark ~pos alloc tmpe mem b1 b2 e')
               else
                 let tmpshift = tmp_var_name () in
+(*
                 eprintf "Jc_interp.finalize: tmp_var_name for tmpshift is %s@." tmpshift;
+*)
                 let i = Prim_int (string_of_int i) in
                 make_lets lets
                   (make_lets [tmpshift,make_app "shift" [mk_var tmpe; mk_expr (Cte i)]]
                      (make_old_style_update ~mark ~pos alloc tmpe tmpshift mem i b1 b2 e'))
          | _ ->
+(*
             eprintf "MultiAssign is for several updates !@.";
+*)
               let pre =
                 if safety_checking() then
                   make_and_list
