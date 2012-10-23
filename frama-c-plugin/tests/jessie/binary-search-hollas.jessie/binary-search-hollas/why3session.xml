@@ -1,0 +1,1427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session shape_version="2">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="1"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
+  name="Z3"
+  version="3.2"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.0"/>
+ <file
+  name="../binary-search-hollas.mlw"
+  verified="false"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="../binary-search-hollas.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Jessie_program"
+   locfile="../binary-search-hollas.mlw"
+   loclnum="278" loccnumb="7" loccnume="21"
+   verified="false"
+   expanded="true">
+   <goal
+    name="WP_parameter binary_search_ensures_default"
+    locfile="../../binary-search-hollas.c"
+    loclnum="18" loccnumb="4" loccnume="17"
+    expl="parameter binary_search_ensures_default"
+    sum="444b570e4f6a39b5ed6901f346e6a91e"
+    proved="true"
+    expanded="false"
+    shape="iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0ainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V13Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V13Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V11c1Fainfix &lt;=ainteger_of_int32V17ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V18ainteger_of_int32V0Iainfix &lt;V18ainteger_of_int32V10Aainfix &lt;=c0V18FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V19ainteger_of_int32V0Iainfix &gt;V19ainteger_of_int32V17Aainfix &gt;=ainfix -ainteger_of_int32V2c1V19FIainfix =V17V16FIainfix =ainteger_of_int32V16ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FAainfix &lt;=ainteger_of_int32V22ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V22Iainfix =V22V21FIainfix =ainteger_of_int32V21adivainteger_of_int32V20c2FIainfix =ainteger_of_int32V20ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V23ainteger_of_int32V0Iainfix &lt;V23ainteger_of_int32V10Aainfix &lt;=c0V23FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V24ainteger_of_int32V0Iainfix &gt;V24ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V24FFAainfix &lt;=ainteger_of_int32V8ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V6Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V25ainteger_of_int32V0Iainfix &lt;V25ainteger_of_int32V6Aainfix &lt;=c0V25FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V26ainteger_of_int32V0Iainfix &gt;V26ainteger_of_int32V8Aainfix &gt;=ainfix -ainteger_of_int32V2c1V26FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FAainfix =ainteger_of_int32aselectV4ashiftV1V27ainteger_of_int32V0Aainfix &lt;=V27ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V27EOainfix =ainteger_of_int32aselectV4ashiftV1V28ainteger_of_int32V0Aainfix &lt;=V28ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V28ENAainfix =ainteger_of_int32aselectV4ashiftV1V29ainteger_of_int32V0Aainfix &lt;=V29ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V29ENAainfix =ainteger_of_int32aselectV4ashiftV1V30ainteger_of_int32V0Aainfix &lt;=V30ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V30ENIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+    <label
+     name="expl:Function binary_search, default behavior"/>
+    <label
+     name="expl:parameter binary_search_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="6.65"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.13"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="6.54"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="false">
+     <goal
+      name="WP_parameter binary_search_ensures_default.1"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="check"
+      sum="a0a885e62eb979cff6e84e556eb5e48a"
+      proved="true"
+      expanded="false"
+      shape="ainfix =ainteger_of_int32aselectV4ashiftV1V5ainteger_of_int32V0Aainfix &lt;=V5ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V5ENAainfix =ainteger_of_int32aselectV4ashiftV1V6ainteger_of_int32V0Aainfix &lt;=V6ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V6ENIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, default behavior"/>
+      <label
+       name="expl:parameter binary_search_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_ensures_default.2"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="check"
+      sum="806ae9868bcf1243887e6087d165288c"
+      proved="true"
+      expanded="false"
+      shape="ainfix =ainteger_of_int32aselectV4ashiftV1V5ainteger_of_int32V0Aainfix &lt;=V5ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V5EOainfix =ainteger_of_int32aselectV4ashiftV1V6ainteger_of_int32V0Aainfix &lt;=V6ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V6ENIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, default behavior"/>
+      <label
+       name="expl:parameter binary_search_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_ensures_default.3"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="loop invariant init"
+      sum="da0e5946c36cebbd9cd2e004fa6653f8"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainteger_of_int32V8ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V6Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V9ainteger_of_int32V0Iainfix &lt;V9ainteger_of_int32V6Aainfix &lt;=c0V9FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V10ainteger_of_int32V0Iainfix &gt;V10ainteger_of_int32V8Aainfix &gt;=ainfix -ainteger_of_int32V2c1V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, default behavior"/>
+      <label
+       name="expl:parameter binary_search_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.16"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_ensures_default.4"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="parameter binary_search_ensures_default"
+      sum="5551b7d5e9c340bba1593eb782454819"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainteger_of_int32V13ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, default behavior"/>
+      <label
+       name="expl:parameter binary_search_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="6.22"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="1.48"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="1.27"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <transf
+       name="split_goal_wp"
+       proved="true"
+       expanded="false">
+       <goal
+        name="WP_parameter binary_search_ensures_default.4.1"
+        locfile="../../binary-search-hollas.c"
+        loclnum="18" loccnumb="4" loccnume="17"
+        expl="parameter binary_search_ensures_default"
+        sum="16d8e63ab9d7ae7288a4a4b306aab9ad"
+        proved="true"
+        expanded="false"
+        shape="ainfix &lt;=ainteger_of_int32V10ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+        <label
+         name="expl:Function binary_search, default behavior"/>
+        <label
+         name="expl:parameter binary_search_ensures_default"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="1.82"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="1.22"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.95"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter binary_search_ensures_default.4.2"
+        locfile="../../binary-search-hollas.c"
+        loclnum="18" loccnumb="4" loccnume="17"
+        expl="parameter binary_search_ensures_default"
+        sum="39f61dc2872d21336108d2552e814d40"
+        proved="true"
+        expanded="false"
+        shape="ainfix &lt;=ainteger_of_int32V13ainteger_of_int32V9Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+        <label
+         name="expl:Function binary_search, default behavior"/>
+        <label
+         name="expl:parameter binary_search_ensures_default"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="3.17"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.16"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.19"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+       </goal>
+      </transf>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_ensures_default.5"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="loop invariant preservation"
+      sum="44b1b979e148902b0bdb3343c4959a8a"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V13Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V13Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V11c1FIainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &lt;V16ainteger_of_int32V10Aainfix &lt;=c0V16FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &gt;V17ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V17FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, default behavior"/>
+      <label
+       name="expl:parameter binary_search_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.18"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.28"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.88"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_ensures_default.6"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="loop invariant preservation"
+      sum="27f39525b8ba6666bf24f0f1d912c5f3"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainteger_of_int32V13ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V13Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &lt;V16ainteger_of_int32V10Aainfix &lt;=c0V16FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &gt;V17ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V17FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, default behavior"/>
+      <label
+       name="expl:parameter binary_search_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.20"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="2.28"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.79"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <transf
+       name="split_goal_wp"
+       proved="true"
+       expanded="false">
+       <goal
+        name="WP_parameter binary_search_ensures_default.6.1"
+        locfile="../../binary-search-hollas.c"
+        loclnum="18" loccnumb="4" loccnume="17"
+        expl="parameter binary_search_ensures_default"
+        sum="27026c42bd6e4cfc461c219ffe4a2cf0"
+        proved="true"
+        expanded="false"
+        shape="ainfix &gt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &gt;V14ainteger_of_int32V13Aainfix &gt;=ainfix -ainteger_of_int32V2c1V14FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &lt;V15ainteger_of_int32V10Aainfix &lt;=c0V15FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &gt;V16ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V16FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+        <label
+         name="expl:Function binary_search, default behavior"/>
+        <label
+         name="expl:parameter binary_search_ensures_default"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="unknown" time="1.63"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.30"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.08"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter binary_search_ensures_default.6.2"
+        locfile="../../binary-search-hollas.c"
+        loclnum="18" loccnumb="4" loccnume="17"
+        expl="parameter binary_search_ensures_default"
+        sum="84f0474772ba1da17355fa29513b03da"
+        proved="true"
+        expanded="false"
+        shape="ainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &lt;V15ainteger_of_int32V10Aainfix &lt;=c0V15FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &gt;V16ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V16FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+        <label
+         name="expl:Function binary_search, default behavior"/>
+        <label
+         name="expl:parameter binary_search_ensures_default"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.10"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter binary_search_ensures_default.6.3"
+        locfile="../../binary-search-hollas.c"
+        loclnum="18" loccnumb="4" loccnume="17"
+        expl="parameter binary_search_ensures_default"
+        sum="6b69803f038f5766377a33cc946c9fdc"
+        proved="true"
+        expanded="false"
+        shape="ainfix &lt;=c0ainteger_of_int32V10Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+        <label
+         name="expl:Function binary_search, default behavior"/>
+        <label
+         name="expl:parameter binary_search_ensures_default"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.10"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter binary_search_ensures_default.6.4"
+        locfile="../../binary-search-hollas.c"
+        loclnum="18" loccnumb="4" loccnume="17"
+        expl="parameter binary_search_ensures_default"
+        sum="c3ee0ab49d646f86cdf410a6c0d0e1d2"
+        proved="true"
+        expanded="false"
+        shape="ainfix &lt;=ainteger_of_int32V13ainfix -ainteger_of_int32V2c1Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+        <label
+         name="expl:Function binary_search, default behavior"/>
+        <label
+         name="expl:parameter binary_search_ensures_default"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.09"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.07"/>
+        </proof>
+       </goal>
+      </transf>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter binary_search_ensures_failure"
+    locfile="../../binary-search-hollas.c"
+    loclnum="18" loccnumb="4" loccnume="17"
+    expl="parameter binary_search_ensures_failure"
+    sum="c7dafdb6f0f941faa0ccb76641bbcea4"
+    proved="true"
+    expanded="false"
+    shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9ainfix =ainteger_of_int32V15aprefix -c1Iainfix =V15V14FIainfix =V14V13FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V13ainteger_of_int32V0NIainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V13ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V13ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10Fainfix =ainteger_of_int32V18aprefix -c1Iainfix =V18V17FIainfix =V17V16FIainfix =ainteger_of_int32V16aprefix -c1FIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V19ainteger_of_int32V0Iainfix &lt;V19ainteger_of_int32V10Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V20ainteger_of_int32V0Iainfix &gt;V20ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V20FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0Aainfix =ainteger_of_int32aselectV4ashiftV1V21ainteger_of_int32V0Aainfix &lt;=V21ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V21ENF">
+    <label
+     name="expl:Function binary_search, Behavior `failure&apos;"/>
+    <label
+     name="expl:parameter binary_search_ensures_failure"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.16"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter binary_search_ensures_success"
+    locfile="../../binary-search-hollas.c"
+    loclnum="18" loccnumb="4" loccnume="17"
+    expl="parameter binary_search_ensures_success"
+    sum="d438e6ef20646e067794a87043516681"
+    proved="true"
+    expanded="false"
+    shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9ainfix =ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V15ainteger_of_int32V0Aainfix &gt;=ainteger_of_int32V15c0Iainfix =V15V14FIainfix =V14V13FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V13ainteger_of_int32V0NIainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V13ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V13ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10Fainfix =ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V18ainteger_of_int32V0Aainfix &gt;=ainteger_of_int32V18c0Iainfix =V18V17FIainfix =V17V16FIainfix =ainteger_of_int32V16aprefix -c1FIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V19ainteger_of_int32V0Iainfix &lt;V19ainteger_of_int32V10Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V20ainteger_of_int32V0Iainfix &gt;V20ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V20FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0Aainfix =ainteger_of_int32aselectV4ashiftV1V21ainteger_of_int32V0Aainfix &lt;=V21ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V21EF">
+    <label
+     name="expl:Function binary_search, Behavior `success&apos;"/>
+    <label
+     name="expl:parameter binary_search_ensures_success"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter binary_search_safety"
+    locfile="../../binary-search-hollas.c"
+    loclnum="18" loccnumb="4" loccnume="17"
+    expl="parameter binary_search_safety"
+    sum="0f074efad5d3845e97a3aa15d55bd36d"
+    proved="false"
+    expanded="true"
+    shape="iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V14ainteger_of_int32V0ainfix &lt;ainfix -ainteger_of_int32V9ainteger_of_int32V16ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1FAainfix &lt;=ainfix +ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V14c1ainfix &lt;ainfix -ainteger_of_int32V18ainteger_of_int32V10ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V18V17FIainfix =ainteger_of_int32V17ainfix -ainteger_of_int32V14c1FAainfix &lt;=ainfix -ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V14c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V14ainteger_of_int32V0Aainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Aainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FAainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Aainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FAainfix &lt;=ainfix +ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V19ainteger_of_int32V0Iainfix &lt;V19ainteger_of_int32V10Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V20ainteger_of_int32V0Iainfix &gt;V20ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V20FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FAainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+    <label
+     name="expl:Function binary_search, Safety"/>
+    <label
+     name="expl:parameter binary_search_safety"/>
+    <transf
+     name="split_goal_wp"
+     proved="false"
+     expanded="true">
+     <goal
+      name="WP_parameter binary_search_safety.1"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="arithmetic overflow"
+      sum="b023b34bfa6028e439405a02ece0af8c"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:parameter binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.2"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="arithmetic overflow"
+      sum="2901eca83cb427f4f34910a3dc3f6dcd"
+      proved="false"
+      expanded="true"
+      shape="ainfix &lt;=ainfix +ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V11ainteger_of_int32V0Iainfix &lt;V11ainteger_of_int32V10Aainfix &lt;=c0V11FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V12ainteger_of_int32V0Iainfix &gt;V12ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V12FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:parameter binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.08"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.79"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.24"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.15"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.16"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.3"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="division by zero"
+      sum="b864fd620f62bff53ac268339481904a"
+      proved="true"
+      expanded="false"
+      shape="ainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainfix +ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V12ainteger_of_int32V0Iainfix &lt;V12ainteger_of_int32V10Aainfix &lt;=c0V12FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V13ainteger_of_int32V0Iainfix &gt;V13ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V13FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:parameter binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.4"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="arithmetic overflow"
+      sum="b033a731b949b7133664042350a025eb"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainfix +ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V13ainteger_of_int32V0Iainfix &lt;V13ainteger_of_int32V10Aainfix &lt;=c0V13FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &gt;V14ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V14FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:parameter binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.5"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="pointer dereference"
+      sum="2239fbed24bf68fd3563d3f705db62af"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainfix +ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &lt;V15ainteger_of_int32V10Aainfix &lt;=c0V15FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &gt;V16ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V16FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:parameter binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.12"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.6"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="arithmetic overflow"
+      sum="7c58ec9e4e3c466deb80083362a1f012"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainfix +ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V14c1Iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V14ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainfix +ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &lt;V15ainteger_of_int32V10Aainfix &lt;=c0V15FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &gt;V16ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V16FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:parameter binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.20"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.11"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.7"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="loop variant decrease"
+      sum="4d2ced96b17c520f0bed198d274aa0aa"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;ainfix -ainteger_of_int32V9ainteger_of_int32V16ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1FIainfix &lt;=ainfix +ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V14c1Iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V14ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainfix +ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V18ainteger_of_int32V0Iainfix &gt;V18ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V18FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:parameter binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.8"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="pointer dereference"
+      sum="4ba7b4f2f88ddeeeaeb6dba78ddde5a8"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V14ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainfix +ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &lt;V15ainteger_of_int32V10Aainfix &lt;=c0V15FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &gt;V16ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V16FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:parameter binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.9"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="arithmetic overflow"
+      sum="a7a376f0889ff264ce80cd834e9441e1"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=ainfix -ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V14c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V14ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V14ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainfix +ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &lt;V15ainteger_of_int32V10Aainfix &lt;=c0V15FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &gt;V16ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V16FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:parameter binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.11"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.12"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.10"
+      locfile="../../binary-search-hollas.c"
+      loclnum="18" loccnumb="4" loccnume="17"
+      expl="loop variant decrease"
+      sum="1711359f52494d60eec2883a6bc4faea"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;ainfix -ainteger_of_int32V16ainteger_of_int32V10ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix &lt;=ainfix -ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V14c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V14ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Iainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V14ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V14aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainfix +ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &lt;V17ainteger_of_int32V10Aainfix &lt;=c0V17FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V18ainteger_of_int32V0Iainfix &gt;V18ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V18FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix &lt;=ainfix -ainteger_of_int32V2c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:parameter binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.11"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+  </theory>
+ </file>
+</why3session>

@@ -422,7 +422,7 @@ let why3loc ~prog fmt lab =
   with
       Not_found ->
         if prog then
-          fprintf fmt "'%s:" (why3constr lab)
+          fprintf fmt "'%s: " (why3constr lab)
         else
           fprintf fmt "\"%s\"" lab
 
@@ -1170,14 +1170,13 @@ let rec fprintf_expr_node form e =
       if !why3syntax then
         if o then
           begin
-            fprintf form "abstract %a@ { %a@ "
+            fprintf form "abstract %a@ ensures {@ %a }@ "
               fprintf_expr e
 	      fprintf_assertion post;
             List.iter
               (fun (e,r) ->
-                fprintf form "@[<hov 2>| %s =>@ %a@]" e fprintf_assertion r)
+                fprintf form "@[<hov 2>raises { %s ->@ %a }@]" e fprintf_assertion r)
               exceps;
-            fprintf form "}"
           end
         else
           begin

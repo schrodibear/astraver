@@ -30,9 +30,14 @@ int binary_search(int val, int a[], int a_length) {
     mid = (high + low) / 2;
     if (a[mid] < val) low = mid+1;
     else if(a[mid] > val) high = mid-1;
-    else //@ assert \false;
-        return mid;
+    else return mid;
   }
-  //@ assert \false;
   return -1;
 }
+
+
+/* 
+Local Variables:
+compile-command: "LC_ALL=C make binary-search-hollas.why3ide"
+End:
+*/
