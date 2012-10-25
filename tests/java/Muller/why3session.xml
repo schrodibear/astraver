@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Muller/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -13,24 +12,24 @@
  <prover
   id="2"
   name="Coq"
-  version="8.3pl4"/>
+  version="8.4"/>
  <prover
   id="3"
   name="Z3"
-  version="2.19"/>
+  version="4.0"/>
  <file
   name="../Muller.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="Muller/../Muller.mlw"
+   locfile="../Muller.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
    <goal
     name="num_of_pos_non_negative"
-    locfile="/home/marche/why2-nitrogen/tests/java/Muller.java"
+    locfile="../Muller.java"
     loclnum="51" loccnumb="10" loccnume="33"
     expl="Lemma num_of_pos_non_negative, lemma"
     sum="c6c5f1ce0f2c9e5f82eb3c55810dc832"
@@ -46,12 +45,12 @@
      edited="Muller_Jessie_model_num_of_pos_non_negative_1.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.57"/>
+     <result status="valid" time="2.27"/>
     </proof>
    </goal>
    <goal
     name="num_of_pos_additive"
-    locfile="/home/marche/why2-nitrogen/tests/java/Muller.java"
+    locfile="../Muller.java"
     loclnum="55" loccnumb="10" loccnume="29"
     expl="Lemma num_of_pos_additive, lemma"
     sum="d74a90a6b599914fb90c79686d5dab50"
@@ -67,12 +66,12 @@
      edited="Muller_Jessie_model_num_of_pos_additive_1.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.64"/>
+     <result status="valid" time="2.51"/>
     </proof>
    </goal>
    <goal
     name="num_of_pos_increasing"
-    locfile="/home/marche/why2-nitrogen/tests/java/Muller.java"
+    locfile="../Muller.java"
     loclnum="60" loccnumb="10" loccnume="31"
     expl="Lemma num_of_pos_increasing, lemma"
     sum="ed7a3e799cae8677773583f9ce800793"
@@ -92,7 +91,7 @@
    </goal>
    <goal
     name="num_of_pos_strictly_increasing"
-    locfile="/home/marche/why2-nitrogen/tests/java/Muller.java"
+    locfile="../Muller.java"
     loclnum="65" loccnumb="10" loccnume="40"
     expl="Lemma num_of_pos_strictly_increasing, lemma"
     sum="4056512662de8b2923c5070fb351e90e"
@@ -108,21 +107,21 @@
      edited="Muller_Jessie_model_num_of_pos_strictly_increasing_1.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.55"/>
+     <result status="valid" time="2.24"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="Jessie_program"
-   locfile="Muller/../Muller.mlw"
+   locfile="../Muller.mlw"
    loclnum="408" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Muller_m_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Muller.java"
+    locfile="../Muller.java"
     loclnum="75" loccnumb="24" loccnume="25"
-    expl="parameter _Muller_m_ensures_default"
+    expl="Method m, default behavior"
     sum="fef5f3efe57faab9a34389f890783138"
     proved="true"
     expanded="true"
@@ -132,14 +131,6 @@
     <label
      name="expl:Method m, default behavior"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.20"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
@@ -147,10 +138,18 @@
      archived="false">
      <result status="valid" time="0.08"/>
     </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.20"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _Muller_m_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Muller.java"
+    locfile="../Muller.java"
     loclnum="75" loccnumb="24" loccnume="25"
     expl="index bounds"
     sum="57c6b37e13b698e87ebdd51df8a6cf8d"
@@ -162,6 +161,14 @@
     <label
      name="expl:Method m, Safety"/>
     <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.84"/>
+    </proof>
+    <proof
      prover="3"
      timelimit="5"
      memlimit="0"
@@ -169,20 +176,12 @@
      archived="false">
      <result status="valid" time="0.07"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.61"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Muller_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Muller, default behavior"
     sum="6bcd9963d09978b70702eaee9a3b2495"
     proved="true"
     expanded="true"
@@ -192,14 +191,6 @@
     <label
      name="expl:Constructor of class Muller, default behavior"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
@@ -215,12 +206,20 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Muller_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="Constructor of class Muller, Safety"
     sum="a015433022d615e0918f6f437a91581e"
     proved="true"
     expanded="true"
@@ -230,14 +229,6 @@
     <label
      name="expl:Constructor of class Muller, Safety"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
@@ -252,6 +243,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

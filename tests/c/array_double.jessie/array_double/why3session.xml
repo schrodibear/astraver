@@ -16,15 +16,7 @@
  <prover
   id="3"
   name="Gappa"
-  version="0.16.0"/>
- <prover
-  id="4"
-  name="Gappa"
   version="0.16.1"/>
- <prover
-  id="5"
-  name="Gappa+dev"
-  version="0.16.0"/>
  <file
   name="../array_double.mlw"
   verified="true"
@@ -72,16 +64,7 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     edited="array_double-Jessie_program-WP_parameter_test_ensures_default_1.gappa"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="5"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -120,12 +103,28 @@
       <label
        name="expl:parameter test_safety"/>
       <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
@@ -142,12 +141,28 @@
       <label
        name="expl:parameter test_safety"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
