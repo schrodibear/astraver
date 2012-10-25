@@ -47,12 +47,12 @@ behavior default:
 {  
    {  
       {  
-         (assert for default: (C_1 : (jessie : (i >= (- 128)))));
+         (assert for default: (C_1 : (i >= (- 128))));
          ()
       };
       
       {  
-         (assert for default: (C_2 : (jessie : (i <= 127))));
+         (assert for default: (C_2 : (i <= 127)));
          ()
       };
       
@@ -68,12 +68,12 @@ behavior default:
 {  
    {  
       {  
-         (assert for default: (C_4 : (jessie : (i_0 >= (- 128)))));
+         (assert for default: (C_4 : (i_0 >= (- 128))));
          ()
       };
       
       {  
-         (assert for default: (C_5 : (jessie : (i_0 <= 127))));
+         (assert for default: (C_5 : (i_0 <= 127)));
          ()
       };
       
@@ -89,12 +89,12 @@ behavior default:
 {  
    {  
       {  
-         (assert for default: (C_7 : (jessie : (i_2 >= 0))));
+         (assert for default: (C_7 : (i_2 >= 0)));
          ()
       };
       
       {  
-         (assert for default: (C_8 : (jessie : (i_2 <= 255))));
+         (assert for default: (C_8 : (i_2 <= 255)));
          ()
       };
       
@@ -110,12 +110,12 @@ behavior default:
 {  
    {  
       {  
-         (assert for default: (C_10 : (jessie : (i_1 >= (- 32768)))));
+         (assert for default: (C_10 : (i_1 >= (- 32768))));
          ()
       };
       
       {  
-         (assert for default: (C_11 : (jessie : (i_1 <= 32767))));
+         (assert for default: (C_11 : (i_1 <= 32767)));
          ()
       };
       
@@ -131,12 +131,12 @@ behavior default:
 {  
    {  
       {  
-         (assert for default: (C_13 : (jessie : (i_3 >= 0))));
+         (assert for default: (C_13 : (i_3 >= 0)));
          ()
       };
       
       {  
-         (assert for default: (C_14 : (jessie : (i_3 <= 65535))));
+         (assert for default: (C_14 : (i_3 <= 65535)));
          ()
       };
       

@@ -65,23 +65,23 @@ behavior default:
 }
 
 uint32 umean(uint32 l_0, uint32 r_0)
-  requires (C_21 : (l_0 <= r_0));
+  requires (C_23 : (l_0 <= r_0));
 behavior default:
-  ensures (C_20 : true);
+  ensures (C_22 : true);
 {  
    (var uint32 __retres_0);
    
    {  
       {  
-         (assert for default: (C_12 : (jessie : ((0 <= ((r_0 - l_0) / 2)) &&
-                                                  (((r_0 - l_0) / 2) <=
-                                                    (r_0 - l_0))))));
+         (assert for default: (C_12 : ((C_13 : (0 <= ((r_0 - l_0) / 2))) &&
+                                        (C_14 : (((r_0 - l_0) / 2) <=
+                                                  (r_0 - l_0))))));
          ()
       };
       
-      {  (C_19 : (__retres_0 = (C_18 : ((C_17 : (l_0 +
-                                                  (C_16 : ((C_15 : ((C_14 : (
-                                                                    (C_13 : 
+      {  (C_21 : (__retres_0 = (C_20 : ((C_19 : (l_0 +
+                                                  (C_18 : ((C_17 : ((C_16 : (
+                                                                    (C_15 : 
                                                                     (r_0 -
                                                                     l_0)) :> uint32)) /
                                                                     2)) :> uint32)))) :> uint32))));
@@ -94,7 +94,7 @@ behavior default:
 int32 min_int(int32 x_1, int32 y_1)
 behavior default:
   assigns \nothing;
-  ensures (C_22 : (((\result == \at(x_1,Old)) &&
+  ensures (C_24 : (((\result == \at(x_1,Old)) &&
                      (\at(x_1,Old) <= \at(y_1,Old))) ||
                     ((\result == \at(y_1,Old)) &&
                       (\at(y_1,Old) <= \at(x_1,Old)))));
@@ -103,14 +103,14 @@ behavior default:
 int32 max_int(int32 x, int32 y)
 behavior default:
   assigns \nothing;
-  ensures (C_23 : (((\result == \at(x,Old)) && (\at(x,Old) >= \at(y,Old))) ||
+  ensures (C_25 : (((\result == \at(x,Old)) && (\at(x,Old) >= \at(y,Old))) ||
                     ((\result == \at(y,Old)) && (\at(y,Old) >= \at(x,Old)))));
 ;
 
 int32 mean2(int32 x_0, int32 y_0)
-  requires (C_36 : ((C_37 : (0 <= x_0)) && (C_38 : (0 <= y_0))));
+  requires (C_38 : ((C_39 : (0 <= x_0)) && (C_40 : (0 <= y_0))));
 behavior default:
-  ensures (C_35 : true);
+  ensures (C_37 : true);
 {  
    (var int32 min);
    
@@ -118,11 +118,11 @@ behavior default:
    
    (var int32 __retres_1);
    
-   {  (C_25 : (min = (C_24 : min_int(x_0, y_0))));
-      (C_27 : (max = (C_26 : max_int(x_0, y_0))));
-      (C_34 : (__retres_1 = (C_33 : ((C_32 : (min +
-                                               (C_31 : ((C_30 : ((C_29 : (
-                                                                 (C_28 : 
+   {  (C_27 : (min = (C_26 : min_int(x_0, y_0))));
+      (C_29 : (max = (C_28 : max_int(x_0, y_0))));
+      (C_36 : (__retres_1 = (C_35 : ((C_34 : (min +
+                                               (C_33 : ((C_32 : ((C_31 : (
+                                                                 (C_30 : 
                                                                  (max -
                                                                    min)) :> int32)) /
                                                                   2)) :> int32)))) :> int32))));
@@ -594,40 +594,38 @@ let mean2_ensures_default =
      (let min = ref (any_int32 void) in
      (let max = ref (any_int32 void) in
      (let __retres_1 = ref (any_int32 void) in
-     (C_25:
+     (C_27:
+     (C_29:
+     (C_36:
      begin
        (let jessie_<somenum> =
-       (min := (C_24:
+       (min := (C_26:
                (let jessie_<somenum> = x_0_0 in
                (let jessie_<somenum> = y_0 in
                (JC_<somenum>: ((min_int jessie_<somenum>) jessie_<somenum>)))))) in void);
-      (C_27:
-      begin
-        (let jessie_<somenum> =
-        (max := (C_26:
-                (let jessie_<somenum> = x_0_0 in
-                (let jessie_<somenum> = y_0 in
-                (JC_<somenum>: ((max_int jessie_<somenum>) jessie_<somenum>)))))) in void);
-       (C_34:
-       begin
-         (let jessie_<somenum> =
-         (__retres_1 := (C_33:
-                        (safe_int32_of_integer_ (C_32:
-                                                ((add_int (integer_of_int32 !min)) 
-                                                 (integer_of_int32 (C_31:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_30:
-                                                                    (JC_<somenum>:
-                                                                    ((computer_div 
-                                                                    (integer_of_int32 
-                                                                    (C_29:
+      (let jessie_<somenum> =
+      (max := (C_28:
+              (let jessie_<somenum> = x_0_0 in
+              (let jessie_<somenum> = y_0 in
+              (JC_<somenum>: ((max_int jessie_<somenum>) jessie_<somenum>)))))) in void);
+      (let jessie_<somenum> =
+      (__retres_1 := (C_35:
+                     (safe_int32_of_integer_ (C_34:
+                                             ((add_int (integer_of_int32 !min)) 
+                                              (integer_of_int32 (C_33:
+                                                                (safe_int32_of_integer_ 
+                                                                 (C_32:
+                                                                 (JC_<somenum>:
+                                                                 ((computer_div 
+                                                                   (integer_of_int32 
+                                                                    (C_31:
                                                                     (safe_int32_of_integer_ 
-                                                                    (C_28:
+                                                                    (C_30:
                                                                     ((sub_int 
                                                                     (integer_of_int32 !max)) 
                                                                     (integer_of_int32 !min))))))) (2)))))))))))) in
-         void); (return := !__retres_1); (raise Return) end) end) end))));
-    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
+      void); (return := !__retres_1); (raise Return) end)))))); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: true) }
 
 let mean2_safety =
  fun (x_0_0 : int32) (y_0 : int32) ->
@@ -641,44 +639,41 @@ let mean2_safety =
      (let min = ref (any_int32 void) in
      (let max = ref (any_int32 void) in
      (let __retres_1 = ref (any_int32 void) in
-     (C_25:
+     (C_27:
+     (C_29:
+     (C_36:
      begin
        (let jessie_<somenum> =
-       (min := (C_24:
+       (min := (C_26:
                (let jessie_<somenum> = x_0_0 in
                (let jessie_<somenum> = y_0 in
                (JC_<somenum>: ((min_int_requires jessie_<somenum>) jessie_<somenum>)))))) in void);
-      (C_27:
-      begin
-        (let jessie_<somenum> =
-        (max := (C_26:
-                (let jessie_<somenum> = x_0_0 in
-                (let jessie_<somenum> = y_0 in
-                (JC_<somenum>: ((max_int_requires jessie_<somenum>) jessie_<somenum>)))))) in
-        void);
-       (C_34:
-       begin
-         (let jessie_<somenum> =
-         (__retres_1 := (C_33:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_32:
-                                           ((add_int (integer_of_int32 !min)) 
-                                            (integer_of_int32 (C_31:
-                                                              (JC_<somenum>:
-                                                              (int32_of_integer_ 
-                                                               (C_30:
+      (let jessie_<somenum> =
+      (max := (C_28:
+              (let jessie_<somenum> = x_0_0 in
+              (let jessie_<somenum> = y_0 in
+              (JC_<somenum>: ((max_int_requires jessie_<somenum>) jessie_<somenum>)))))) in void);
+      (let jessie_<somenum> =
+      (__retres_1 := (C_35:
+                     (JC_<somenum>:
+                     (int32_of_integer_ (C_34:
+                                        ((add_int (integer_of_int32 !min)) 
+                                         (integer_of_int32 (C_33:
+                                                           (JC_<somenum>:
+                                                           (int32_of_integer_ 
+                                                            (C_32:
+                                                            (JC_<somenum>:
+                                                            ((computer_div_ 
+                                                              (integer_of_int32 
+                                                               (C_31:
                                                                (JC_<somenum>:
-                                                               ((computer_div_ 
-                                                                 (integer_of_int32 
-                                                                  (C_29:
-                                                                  (JC_<somenum>:
-                                                                  (int32_of_integer_ 
-                                                                   (C_28:
-                                                                   ((sub_int 
-                                                                    (integer_of_int32 !max)) 
-                                                                    (integer_of_int32 !min)))))))) (2)))))))))))))) in
-         void); (return := !__retres_1); (raise Return) end) end) end))));
-    absurd  end with Return -> !return end)) { true }
+                                                               (int32_of_integer_ 
+                                                                (C_30:
+                                                                ((sub_int 
+                                                                  (integer_of_int32 !max)) 
+                                                                 (integer_of_int32 !min)))))))) (2)))))))))))))) in
+      void); (return := !__retres_1); (raise Return) end)))))); absurd  end
+   with Return -> !return end)) { true }
 
 let mean_ensures_default =
  fun (l : int32) (r : int32) ->
@@ -756,34 +751,37 @@ let umean_ensures_default =
      begin
        (assert
        { (JC_<somenum>:
-         (le_int((0),
+         ((JC_<somenum>:
+          le_int((0),
           computer_div(sub_int(integer_of_uint32(r_0),
                        integer_of_uint32(l_0)),
-          (2)))
-         and le_int(computer_div(sub_int(integer_of_uint32(r_0),
+          (2))))
+         and (JC_<somenum>:
+             le_int(computer_div(sub_int(integer_of_uint32(r_0),
                                  integer_of_uint32(l_0)),
                     (2)),
-             sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0))))) };
-       void); void;
-      (C_19:
+             sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)))))) };
+       void);
+      (C_21:
       begin
-        (let jessie_<somenum> =
-        (__retres_0 := (C_18:
-                       (safe_uint32_of_integer_ (C_17:
-                                                ((add_int (integer_of_uint32 l_0)) 
-                                                 (integer_of_uint32 (C_16:
-                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_15:
+        void;
+       (let jessie_<somenum> =
+       (__retres_0 := (C_20:
+                      (safe_uint32_of_integer_ (C_19:
+                                               ((add_int (integer_of_uint32 l_0)) 
+                                                (integer_of_uint32 (C_18:
+                                                                   (safe_uint32_of_integer_ 
+                                                                    (C_17:
                                                                     (JC_<somenum>:
                                                                     ((computer_div 
                                                                     (integer_of_uint32 
-                                                                    (C_14:
+                                                                    (C_16:
                                                                     (safe_uint32_of_integer_ 
-                                                                    (C_13:
+                                                                    (C_15:
                                                                     ((sub_int 
                                                                     (integer_of_uint32 r_0)) 
                                                                     (integer_of_uint32 l_0))))))) (2)))))))))))) in
-        void); (return := !__retres_0); (raise Return) end) end); absurd  end
+       void); (return := !__retres_0); (raise Return) end) end); absurd  end
    with Return -> !return end)) { (JC_<somenum>: true) }
 
 let umean_safety =
@@ -797,37 +795,39 @@ let umean_safety =
      begin
        [ { } unit
          { (JC_<somenum>:
-           (le_int((0),
+           ((JC_<somenum>:
+            le_int((0),
             computer_div(sub_int(integer_of_uint32(r_0),
                          integer_of_uint32(l_0)),
-            (2)))
-           and le_int(computer_div(sub_int(integer_of_uint32(r_0),
+            (2))))
+           and (JC_<somenum>:
+               le_int(computer_div(sub_int(integer_of_uint32(r_0),
                                    integer_of_uint32(l_0)),
                       (2)),
-               sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0))))) } ];
-      void;
-      (C_19:
+               sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)))))) } ];
+      (C_21:
       begin
-        (let jessie_<somenum> =
-        (__retres_0 := (C_18:
-                       (JC_<somenum>:
-                       (uint32_of_integer_ (C_17:
-                                           ((add_int (integer_of_uint32 l_0)) 
-                                            (integer_of_uint32 (C_16:
+        void;
+       (let jessie_<somenum> =
+       (__retres_0 := (C_20:
+                      (JC_<somenum>:
+                      (uint32_of_integer_ (C_19:
+                                          ((add_int (integer_of_uint32 l_0)) 
+                                           (integer_of_uint32 (C_18:
+                                                              (JC_<somenum>:
+                                                              (uint32_of_integer_ 
+                                                               (C_17:
                                                                (JC_<somenum>:
-                                                               (uint32_of_integer_ 
-                                                                (C_15:
-                                                                (JC_<somenum>:
-                                                                ((computer_div_ 
-                                                                  (integer_of_uint32 
-                                                                   (C_14:
-                                                                   (JC_<somenum>:
-                                                                   (uint32_of_integer_ 
-                                                                    (C_13:
-                                                                    ((sub_int 
+                                                               ((computer_div_ 
+                                                                 (integer_of_uint32 
+                                                                  (C_16:
+                                                                  (JC_<somenum>:
+                                                                  (uint32_of_integer_ 
+                                                                   (C_15:
+                                                                   ((sub_int 
                                                                     (integer_of_uint32 r_0)) 
                                                                     (integer_of_uint32 l_0)))))))) (2)))))))))))))) in
-        void); (return := !__retres_0); (raise Return) end) end); absurd  end
+       void); (return := !__retres_0); (raise Return) end) end); absurd  end
    with Return -> !return end)) { true }
 
 
@@ -848,11 +848,11 @@ why --project [...] why/mean.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/mean_po16.why">
-      <location file = "PPCHOME/tests/jessie/mean.c" line = "14" begin = "13" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/mean.c" line = "14" begin = "13" end = "25"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/mean_po17.why">
-      <location file = "PPCHOME/tests/jessie/mean.c" line = "14" begin = "13" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/mean.c" line = "14" begin = "18" end = "32"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

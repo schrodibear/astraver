@@ -69,7 +69,7 @@ behavior default:
    {  (C_2 : ((C_1 : b.next) = null));
       
       {  
-         (assert for default: (C_3 : (jessie : (\at(b.next,Pre) == b.next))));
+         (assert for default: (C_3 : (\at(b.next,Pre) == b.next)));
          ()
       };
       

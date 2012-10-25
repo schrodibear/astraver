@@ -69,14 +69,14 @@ behavior default:
    {  (C_3 : ((C_2 : (C_1 : (x :> iP[0])).iM) = 0));
       
       {  
-         (assert for default: (C_4 : (jessie : ((x :> iP[0]).iM == 0))));
+         (assert for default: (C_4 : ((x :> iP[0]).iM == 0)));
          ()
       };
       (C_8 : ((C_7 : (C_6 : (x :> pP[0])).pM) = (C_5 : (new intP[1]))));
       (C_12 : ((C_11 : (C_10 : (C_9 : (x :> pP[0])).pM).intM) = 1));
       
       {  
-         (assert for default: (C_13 : (jessie : ((x :> pP[0]).pM.intM == 1))));
+         (assert for default: (C_13 : ((x :> pP[0]).pM.intM == 1)));
          ()
       };
       

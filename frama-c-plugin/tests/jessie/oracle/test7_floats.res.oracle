@@ -48,14 +48,14 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_1 : (jessie : (\real_abs((((0.9890365552 +
-                                                              (1.130258690 *
-                                                                (x :> real))) +
-                                                             ((0.5540440796 *
-                                                                (x :> real)) *
-                                                               (x :> real))) -
-                                                            \exp((x :> real)))) <=
-                                                 0x0.FFFFp-4))));
+         (assert for default: (C_1 : (\real_abs((((0.9890365552 +
+                                                    (1.130258690 *
+                                                      (x :> real))) +
+                                                   ((0.5540440796 *
+                                                      (x :> real)) *
+                                                     (x :> real))) -
+                                                  \exp((x :> real)))) <=
+                                       0x0.FFFFp-4)));
          ()
       };
       
@@ -411,27 +411,28 @@ let my_exp_ensures_default =
                                             double_value(x_0)),
                                    double_value(x_0))),
                           exp(double_value(x_0)))),
-         0x0.FFFFp-4)) }; void); void;
+         0x0.FFFFp-4)) }; void);
       (C_7:
       begin
-        (let jessie_<somenum> =
-        (__retres := (C_6:
-                     (JC_<somenum>:
-                     (((add_double_safe nearest_even) (C_5:
+        void;
+       (let jessie_<somenum> =
+       (__retres := (C_6:
+                    (JC_<somenum>:
+                    (((add_double_safe nearest_even) (C_5:
+                                                     (JC_<somenum>:
+                                                     (((add_double_safe nearest_even) 
+                                                       ((double_of_real_safe nearest_even) 0.9890365552)) 
+                                                      (C_4:
                                                       (JC_<somenum>:
-                                                      (((add_double_safe nearest_even) 
-                                                        ((double_of_real_safe nearest_even) 0.9890365552)) 
-                                                       (C_4:
-                                                       (JC_<somenum>:
-                                                       (((mul_double_safe nearest_even) 
-                                                         ((double_of_real_safe nearest_even) 1.130258690)) x_0))))))) 
-                      (C_3:
-                      (JC_<somenum>:
-                      (((mul_double_safe nearest_even) (C_2:
-                                                       (JC_<somenum>:
-                                                       (((mul_double_safe nearest_even) 
-                                                         ((double_of_real_safe nearest_even) 0.5540440796)) x_0)))) x_0))))))) in
-        void); (return := !__retres); (raise Return) end) end); absurd  end
+                                                      (((mul_double_safe nearest_even) 
+                                                        ((double_of_real_safe nearest_even) 1.130258690)) x_0))))))) 
+                     (C_3:
+                     (JC_<somenum>:
+                     (((mul_double_safe nearest_even) (C_2:
+                                                      (JC_<somenum>:
+                                                      (((mul_double_safe nearest_even) 
+                                                        ((double_of_real_safe nearest_even) 0.5540440796)) x_0)))) x_0))))))) in
+       void); (return := !__retres); (raise Return) end) end); absurd  end
    with Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(double_value(result), exp(double_value(x_0)))),
@@ -455,30 +456,31 @@ let my_exp_safety =
                                               double_value(x_0)),
                                      double_value(x_0))),
                             exp(double_value(x_0)))),
-           0x0.FFFFp-4)) } ]; void;
+           0x0.FFFFp-4)) } ];
       (C_7:
       begin
-        (let jessie_<somenum> =
-        (__retres := (C_6:
-                     (JC_<somenum>:
-                     (((add_double nearest_even) (C_5:
+        void;
+       (let jessie_<somenum> =
+       (__retres := (C_6:
+                    (JC_<somenum>:
+                    (((add_double nearest_even) (C_5:
+                                                (JC_<somenum>:
+                                                (((add_double nearest_even) 
+                                                  (JC_<somenum>:
+                                                  ((double_of_real nearest_even) 0.9890365552))) 
+                                                 (C_4:
                                                  (JC_<somenum>:
-                                                 (((add_double nearest_even) 
+                                                 (((mul_double nearest_even) 
                                                    (JC_<somenum>:
-                                                   ((double_of_real nearest_even) 0.9890365552))) 
-                                                  (C_4:
-                                                  (JC_<somenum>:
-                                                  (((mul_double nearest_even) 
-                                                    (JC_<somenum>:
-                                                    ((double_of_real nearest_even) 1.130258690))) x_0))))))) 
-                      (C_3:
-                      (JC_<somenum>:
-                      (((mul_double nearest_even) (C_2:
-                                                  (JC_<somenum>:
-                                                  (((mul_double nearest_even) 
-                                                    (JC_<somenum>:
-                                                    ((double_of_real nearest_even) 0.5540440796))) x_0)))) x_0))))))) in
-        void); (return := !__retres); (raise Return) end) end); absurd  end
+                                                   ((double_of_real nearest_even) 1.130258690))) x_0))))))) 
+                     (C_3:
+                     (JC_<somenum>:
+                     (((mul_double nearest_even) (C_2:
+                                                 (JC_<somenum>:
+                                                 (((mul_double nearest_even) 
+                                                   (JC_<somenum>:
+                                                   ((double_of_real nearest_even) 0.5540440796))) x_0)))) x_0))))))) in
+       void); (return := !__retres); (raise Return) end) end); absurd  end
    with Return -> !return end)) { true }
 
 

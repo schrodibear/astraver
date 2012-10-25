@@ -606,29 +606,23 @@ let my_main_ensures_default =
      (let t = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_9:
+     (C_11:
+     (C_12:
+     (C_14:
+     (C_15:
      begin
        (let jessie_<somenum> =
        (t := (C_8:
              (JC_<somenum>:
              (((alloc_struct__my_type (1)) _my_type_alloc_table) _my_type_tag_table)))) in
        void);
-      (C_11:
-      begin
-        (let jessie_<somenum> = n_1 in
-        (let jessie_<somenum> = !t in
-        (((safe_upd_ _my_type_j) jessie_<somenum>) jessie_<somenum>)));
-       (C_12:
-       begin
-         (let jessie_<somenum> = !t in (JC_<somenum>: (my_changes jessie_<somenum>)));
-        (C_14:
-        begin
-          (let jessie_<somenum> =
-          (__retres := (C_13: ((safe_acc_ !_my_type_i) !t))) in void);
-         (C_15:
-         begin
-           ((safe_free_parameter _my_type_alloc_table) !t);
-          (return := !__retres); (raise Return) end) end) end) end) end)));
-    absurd  end with Return -> !return end))
+      (let jessie_<somenum> = n_1 in
+      (let jessie_<somenum> = !t in (((safe_upd_ _my_type_j) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = !t in (JC_<somenum>: (my_changes jessie_<somenum>)));
+      (let jessie_<somenum> = (__retres := (C_13: ((safe_acc_ !_my_type_i) !t))) in
+      void); ((safe_free_parameter _my_type_alloc_table) !t);
+      (return := !__retres); (raise Return) end))))))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_int32(result) = integer_of_int32(n_1)))
     and (JC_<somenum>:
@@ -649,6 +643,10 @@ let my_main_safety =
      (let t = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_9:
+     (C_11:
+     (C_12:
+     (C_14:
+     (C_15:
      begin
        (let jessie_<somenum> =
        (t := (let jessie_<somenum> =
@@ -659,22 +657,12 @@ let my_main_safety =
              (assert
              { ge_int(offset_max(_my_type_alloc_table, jessie_<somenum>), (0)) };
              jessie_<somenum>)))) in void);
-      (C_11:
-      begin
-        (let jessie_<somenum> = n_1 in
-        (let jessie_<somenum> = !t in
-        (((safe_upd_ _my_type_j) jessie_<somenum>) jessie_<somenum>)));
-       (C_12:
-       begin
-         (let jessie_<somenum> = !t in (JC_<somenum>: (my_changes_requires jessie_<somenum>)));
-        (C_14:
-        begin
-          (let jessie_<somenum> =
-          (__retres := (C_13: ((safe_acc_ !_my_type_i) !t))) in void);
-         (C_15:
-         begin
-           ((free_parameter _my_type_alloc_table) !t); (return := !__retres);
-          (raise Return) end) end) end) end) end))); absurd  end with
+      (let jessie_<somenum> = n_1 in
+      (let jessie_<somenum> = !t in (((safe_upd_ _my_type_j) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = !t in (JC_<somenum>: (my_changes_requires jessie_<somenum>)));
+      (let jessie_<somenum> = (__retres := (C_13: ((safe_acc_ !_my_type_i) !t))) in
+      void); ((free_parameter _my_type_alloc_table) !t);
+      (return := !__retres); (raise Return) end))))))); absurd  end with
    Return -> !return end)) { true }
 
 
@@ -704,7 +692,7 @@ why --project [...] why/local_assigns.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/local_assigns_po11.why">
-      <location file = "why/local_assigns.why" line = "578" begin = "15" end = "71"/>
+      <location file = "why/local_assigns.why" line = "576" begin = "15" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/local_assigns_po12.why">
@@ -718,7 +706,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/local_assigns_po14.why">
-      <location file = "why/local_assigns.why" line = "594" begin = "12" end = "52"/>
+      <location file = "why/local_assigns.why" line = "582" begin = "14" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

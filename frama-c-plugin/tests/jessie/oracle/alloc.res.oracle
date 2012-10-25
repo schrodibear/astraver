@@ -425,19 +425,17 @@ let f_ensures_default =
   (init:
   try
    (C_3:
+   (C_5:
    begin
      (let jessie_<somenum> =
      (ptr1 := (C_2:
               (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
               (JC_<somenum>: (alloc jessie_<somenum>))))) in void);
-    (C_5:
-    begin
-      (let jessie_<somenum> =
-      (ptr2 := (C_4:
-               (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
-               (JC_<somenum>: (alloc jessie_<somenum>))))) in void); (raise Return);
-     (raise Return) end) end) with Return -> void end)
-  { (JC_<somenum>: (ptr1 <> ptr2)) }
+    (let jessie_<somenum> =
+    (ptr2 := (C_4:
+             (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+             (JC_<somenum>: (alloc jessie_<somenum>))))) in void); (raise Return);
+    (raise Return) end)) with Return -> void end) { (JC_<somenum>: (ptr1 <> ptr2)) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -445,19 +443,17 @@ let f_safety =
   (init:
   try
    (C_3:
+   (C_5:
    begin
      (let jessie_<somenum> =
      (ptr1 := (C_2:
               (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
               (JC_<somenum>: (alloc_requires jessie_<somenum>))))) in void);
-    (C_5:
-    begin
-      (let jessie_<somenum> =
-      (ptr2 := (C_4:
-               (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
-               (JC_<somenum>: (alloc_requires jessie_<somenum>))))) in void);
-     (raise Return); (raise Return) end) end) with Return -> void end)
-  { true }
+    (let jessie_<somenum> =
+    (ptr2 := (C_4:
+             (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+             (JC_<somenum>: (alloc_requires jessie_<somenum>))))) in void); (raise Return);
+    (raise Return) end)) with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C alloc.jessie --quiet -f alloc.makefile project

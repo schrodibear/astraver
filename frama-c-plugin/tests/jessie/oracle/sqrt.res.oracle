@@ -72,47 +72,42 @@ behavior default:
                                        (C_8 : ((C_7 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_14 : (jessie : (\real_abs(((u :> real) -
-                                                             ((0.5 *
-                                                                (t :> real)) *
-                                                               (3 -
-                                                                 (((t :> real) *
-                                                                    (t :> real)) *
-                                                                   (x :> real)))))) <=
-                                                  1))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_15 : (jessie : (((((0.5 * (t :> real)) *
+         (assert for default: (C_14 : (\real_abs(((u :> real) -
+                                                   ((0.5 * (t :> real)) *
                                                      (3 -
                                                        (((t :> real) *
                                                           (t :> real)) *
-                                                         (x :> real)))) -
-                                                    invsqrt((x :> real))) /
-                                                   invsqrt((x :> real))) ==
-                                                  ((- (1.5 +
-                                                        (0.5 *
-                                                          (((t :> real) -
-                                                             invsqrt(
-                                                             (x :> real))) /
-                                                            invsqrt((x :> real)))))) *
-                                                    ((((t :> real) -
-                                                        invsqrt((x :> real))) /
-                                                       invsqrt((x :> real))) *
-                                                      (((t :> real) -
-                                                         invsqrt((x :> real))) /
-                                                        invsqrt((x :> real)))))))));
+                                                         (x :> real)))))) <=
+                                        1)));
          ()
       };
       
       {  
-         (assert for default: (C_16 : (jessie : (\real_abs(((u :> real) -
-                                                             invsqrt(
-                                                             (x :> real)))) <=
-                                                  (0x1p-10 *
-                                                    \real_abs(invsqrt(
-                                                              (x :> real))))))));
+         (assert for default: (C_15 : (((((0.5 * (t :> real)) *
+                                           (3 -
+                                             (((t :> real) * (t :> real)) *
+                                               (x :> real)))) -
+                                          invsqrt((x :> real))) /
+                                         invsqrt((x :> real))) ==
+                                        ((- (1.5 +
+                                              (0.5 *
+                                                (((t :> real) -
+                                                   invsqrt((x :> real))) /
+                                                  invsqrt((x :> real)))))) *
+                                          ((((t :> real) -
+                                              invsqrt((x :> real))) /
+                                             invsqrt((x :> real))) *
+                                            (((t :> real) -
+                                               invsqrt((x :> real))) /
+                                              invsqrt((x :> real))))))));
+         ()
+      };
+      
+      {  
+         (assert for default: (C_16 : (\real_abs(((u :> real) -
+                                                   invsqrt((x :> real)))) <=
+                                        (0x1p-10 *
+                                          \real_abs(invsqrt((x :> real)))))));
          ()
       };
       (C_17 : (t = u));
@@ -121,47 +116,42 @@ behavior default:
                                        (C_19 : ((C_18 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_25 : (jessie : (\real_abs(((u :> real) -
-                                                             ((0.5 *
-                                                                (t :> real)) *
-                                                               (3 -
-                                                                 (((t :> real) *
-                                                                    (t :> real)) *
-                                                                   (x :> real)))))) <=
-                                                  1))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_26 : (jessie : (((((0.5 * (t :> real)) *
+         (assert for default: (C_25 : (\real_abs(((u :> real) -
+                                                   ((0.5 * (t :> real)) *
                                                      (3 -
                                                        (((t :> real) *
                                                           (t :> real)) *
-                                                         (x :> real)))) -
-                                                    invsqrt((x :> real))) /
-                                                   invsqrt((x :> real))) ==
-                                                  ((- (1.5 +
-                                                        (0.5 *
-                                                          (((t :> real) -
-                                                             invsqrt(
-                                                             (x :> real))) /
-                                                            invsqrt((x :> real)))))) *
-                                                    ((((t :> real) -
-                                                        invsqrt((x :> real))) /
-                                                       invsqrt((x :> real))) *
-                                                      (((t :> real) -
-                                                         invsqrt((x :> real))) /
-                                                        invsqrt((x :> real)))))))));
+                                                         (x :> real)))))) <=
+                                        1)));
          ()
       };
       
       {  
-         (assert for default: (C_27 : (jessie : (\real_abs(((u :> real) -
-                                                             invsqrt(
-                                                             (x :> real)))) <=
-                                                  (0x1p-10 *
-                                                    \real_abs(invsqrt(
-                                                              (x :> real))))))));
+         (assert for default: (C_26 : (((((0.5 * (t :> real)) *
+                                           (3 -
+                                             (((t :> real) * (t :> real)) *
+                                               (x :> real)))) -
+                                          invsqrt((x :> real))) /
+                                         invsqrt((x :> real))) ==
+                                        ((- (1.5 +
+                                              (0.5 *
+                                                (((t :> real) -
+                                                   invsqrt((x :> real))) /
+                                                  invsqrt((x :> real)))))) *
+                                          ((((t :> real) -
+                                              invsqrt((x :> real))) /
+                                             invsqrt((x :> real))) *
+                                            (((t :> real) -
+                                               invsqrt((x :> real))) /
+                                              invsqrt((x :> real))))))));
+         ()
+      };
+      
+      {  
+         (assert for default: (C_27 : (\real_abs(((u :> real) -
+                                                   invsqrt((x :> real)))) <=
+                                        (0x1p-10 *
+                                          \real_abs(invsqrt((x :> real)))))));
          ()
       };
       (C_28 : (t = u));
@@ -170,55 +160,49 @@ behavior default:
                                        (C_30 : ((C_29 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_36 : (jessie : (\real_abs(((u :> real) -
-                                                             ((0.5 *
-                                                                (t :> real)) *
-                                                               (3 -
-                                                                 (((t :> real) *
-                                                                    (t :> real)) *
-                                                                   (x :> real)))))) <=
-                                                  1))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_37 : (jessie : (((((0.5 * (t :> real)) *
+         (assert for default: (C_36 : (\real_abs(((u :> real) -
+                                                   ((0.5 * (t :> real)) *
                                                      (3 -
                                                        (((t :> real) *
                                                           (t :> real)) *
-                                                         (x :> real)))) -
-                                                    invsqrt((x :> real))) /
-                                                   invsqrt((x :> real))) ==
-                                                  ((- (1.5 +
-                                                        (0.5 *
-                                                          (((t :> real) -
-                                                             invsqrt(
-                                                             (x :> real))) /
-                                                            invsqrt((x :> real)))))) *
-                                                    ((((t :> real) -
-                                                        invsqrt((x :> real))) /
-                                                       invsqrt((x :> real))) *
-                                                      (((t :> real) -
-                                                         invsqrt((x :> real))) /
-                                                        invsqrt((x :> real)))))))));
+                                                         (x :> real)))))) <=
+                                        1)));
          ()
       };
       
       {  
-         (assert for default: (C_38 : (jessie : (\real_abs(((u :> real) -
-                                                             invsqrt(
-                                                             (x :> real)))) <=
-                                                  (0x1p-10 *
-                                                    \real_abs(invsqrt(
-                                                              (x :> real))))))));
+         (assert for default: (C_37 : (((((0.5 * (t :> real)) *
+                                           (3 -
+                                             (((t :> real) * (t :> real)) *
+                                               (x :> real)))) -
+                                          invsqrt((x :> real))) /
+                                         invsqrt((x :> real))) ==
+                                        ((- (1.5 +
+                                              (0.5 *
+                                                (((t :> real) -
+                                                   invsqrt((x :> real))) /
+                                                  invsqrt((x :> real)))))) *
+                                          ((((t :> real) -
+                                              invsqrt((x :> real))) /
+                                             invsqrt((x :> real))) *
+                                            (((t :> real) -
+                                               invsqrt((x :> real))) /
+                                              invsqrt((x :> real))))))));
+         ()
+      };
+      
+      {  
+         (assert for default: (C_38 : (\real_abs(((u :> real) -
+                                                   invsqrt((x :> real)))) <=
+                                        (0x1p-10 *
+                                          \real_abs(invsqrt((x :> real)))))));
          ()
       };
       (C_39 : (t = u));
       
       {  
-         (assert for default: (C_40 : (jessie : (((x :> real) *
-                                                   invsqrt((x :> real))) ==
-                                                  \real_sqrt((x :> real))))));
+         (assert for default: (C_40 : (((x :> real) * invsqrt((x :> real))) ==
+                                        \real_sqrt((x :> real)))));
          ()
       };
       
@@ -590,29 +574,84 @@ let sqrt_ensures_default =
      (let u = ref (any_double void) in
      (let __retres = ref (any_double void) in
      (C_6:
+     (C_13:
      begin
        (let jessie_<somenum> =
        (t := (C_5: (let jessie_<somenum> = x_1 in (JC_<somenum>: (sqrt_init jessie_<somenum>))))) in
        void);
-      (C_13:
-      begin
-        (let jessie_<somenum> =
-        (u := (C_12:
+      (let jessie_<somenum> =
+      (u := (C_12:
+            (JC_<somenum>:
+            (((mul_double_safe nearest_even) (C_11:
+                                             (JC_<somenum>:
+                                             (((mul_double_safe nearest_even) 
+                                               (double_of_real_exact 0.5)) !t)))) 
+             (C_10:
+             (JC_<somenum>:
+             (((sub_double_safe nearest_even) (C_9:
+                                              (double_of_real_exact 3.0))) 
+              (C_8:
               (JC_<somenum>:
-              (((mul_double_safe nearest_even) (C_11:
+              (((mul_double_safe nearest_even) (C_7:
                                                (JC_<somenum>:
-                                               (((mul_double_safe nearest_even) 
-                                                 (double_of_real_exact 0.5)) !t)))) 
-               (C_10:
+                                               (((mul_double_safe nearest_even) !t) !t)))) x_1)))))))))) in
+      void);
+      (assert
+      { (JC_<somenum>:
+        le_real(abs_real(sub_real(double_value(u),
+                         mul_real(mul_real(0.5, double_value(t)),
+                         sub_real(3.0,
+                         mul_real(mul_real(double_value(t), double_value(t)),
+                         double_value(x_1)))))),
+        1.0)) }; void); void;
+      (assert
+      { (JC_<somenum>:
+        (div_real(sub_real(mul_real(mul_real(0.5, double_value(t)),
+                           sub_real(3.0,
+                           mul_real(mul_real(double_value(t),
+                                    double_value(t)),
+                           double_value(x_1)))),
+                  invsqrt(double_value(x_1))),
+         invsqrt(double_value(x_1))) = mul_real(neg_real(add_real(1.5,
+                                                         mul_real(0.5,
+                                                         div_real(sub_real(
+                                                                  double_value(t),
+                                                                  invsqrt(
+                                                                  double_value(x_1))),
+                                                         invsqrt(double_value(x_1)))))),
+                                       mul_real(div_real(sub_real(double_value(t),
+                                                         invsqrt(double_value(x_1))),
+                                                invsqrt(double_value(x_1))),
+                                       div_real(sub_real(double_value(t),
+                                                invsqrt(double_value(x_1))),
+                                       invsqrt(double_value(x_1))))))) };
+      void); void;
+      (assert
+      { (JC_<somenum>:
+        le_real(abs_real(sub_real(double_value(u),
+                         invsqrt(double_value(x_1)))),
+        mul_real(0x1p-10, abs_real(invsqrt(double_value(x_1)))))) }; void);
+      (C_17:
+      (C_24:
+      begin
+        void; (let jessie_<somenum> = (t := !u) in void);
+       (let jessie_<somenum> =
+       (u := (C_23:
+             (JC_<somenum>:
+             (((mul_double_safe nearest_even) (C_22:
+                                              (JC_<somenum>:
+                                              (((mul_double_safe nearest_even) 
+                                                (double_of_real_exact 0.5)) !t)))) 
+              (C_21:
+              (JC_<somenum>:
+              (((sub_double_safe nearest_even) (C_20:
+                                               (double_of_real_exact 3.0))) 
+               (C_19:
                (JC_<somenum>:
-               (((sub_double_safe nearest_even) (C_9:
-                                                (double_of_real_exact 3.0))) 
-                (C_8:
-                (JC_<somenum>:
-                (((mul_double_safe nearest_even) (C_7:
-                                                 (JC_<somenum>:
-                                                 (((mul_double_safe nearest_even) !t) !t)))) x_1)))))))))) in
-        void);
+               (((mul_double_safe nearest_even) (C_18:
+                                                (JC_<somenum>:
+                                                (((mul_double_safe nearest_even) !t) !t)))) x_1)))))))))) in
+       void);
        (assert
        { (JC_<somenum>:
          le_real(abs_real(sub_real(double_value(u),
@@ -648,144 +687,78 @@ let sqrt_ensures_default =
          le_real(abs_real(sub_real(double_value(u),
                           invsqrt(double_value(x_1)))),
          mul_real(0x1p-10, abs_real(invsqrt(double_value(x_1)))))) }; void);
-       void;
-       (C_17:
+       (C_28:
+       (C_35:
        begin
-         (let jessie_<somenum> = (t := !u) in void);
-        (C_24:
-        begin
-          (let jessie_<somenum> =
-          (u := (C_23:
+         void; (let jessie_<somenum> = (t := !u) in void);
+        (let jessie_<somenum> =
+        (u := (C_34:
+              (JC_<somenum>:
+              (((mul_double_safe nearest_even) (C_33:
+                                               (JC_<somenum>:
+                                               (((mul_double_safe nearest_even) 
+                                                 (double_of_real_exact 0.5)) !t)))) 
+               (C_32:
+               (JC_<somenum>:
+               (((sub_double_safe nearest_even) (C_31:
+                                                (double_of_real_exact 3.0))) 
+                (C_30:
                 (JC_<somenum>:
-                (((mul_double_safe nearest_even) (C_22:
+                (((mul_double_safe nearest_even) (C_29:
                                                  (JC_<somenum>:
-                                                 (((mul_double_safe nearest_even) 
-                                                   (double_of_real_exact 0.5)) !t)))) 
-                 (C_21:
-                 (JC_<somenum>:
-                 (((sub_double_safe nearest_even) (C_20:
-                                                  (double_of_real_exact 3.0))) 
-                  (C_19:
-                  (JC_<somenum>:
-                  (((mul_double_safe nearest_even) (C_18:
-                                                   (JC_<somenum>:
-                                                   (((mul_double_safe nearest_even) !t) !t)))) x_1)))))))))) in
-          void);
+                                                 (((mul_double_safe nearest_even) !t) !t)))) x_1)))))))))) in
+        void);
+        (assert
+        { (JC_<somenum>:
+          le_real(abs_real(sub_real(double_value(u),
+                           mul_real(mul_real(0.5, double_value(t)),
+                           sub_real(3.0,
+                           mul_real(mul_real(double_value(t),
+                                    double_value(t)),
+                           double_value(x_1)))))),
+          1.0)) }; void); void;
+        (assert
+        { (JC_<somenum>:
+          (div_real(sub_real(mul_real(mul_real(0.5, double_value(t)),
+                             sub_real(3.0,
+                             mul_real(mul_real(double_value(t),
+                                      double_value(t)),
+                             double_value(x_1)))),
+                    invsqrt(double_value(x_1))),
+           invsqrt(double_value(x_1))) = mul_real(neg_real(add_real(1.5,
+                                                           mul_real(0.5,
+                                                           div_real(sub_real(
+                                                                    double_value(t),
+                                                                    invsqrt(
+                                                                    double_value(x_1))),
+                                                           invsqrt(double_value(x_1)))))),
+                                         mul_real(div_real(sub_real(double_value(t),
+                                                           invsqrt(double_value(x_1))),
+                                                  invsqrt(double_value(x_1))),
+                                         div_real(sub_real(double_value(t),
+                                                  invsqrt(double_value(x_1))),
+                                         invsqrt(double_value(x_1))))))) };
+        void); void;
+        (assert
+        { (JC_<somenum>:
+          le_real(abs_real(sub_real(double_value(u),
+                           invsqrt(double_value(x_1)))),
+          mul_real(0x1p-10, abs_real(invsqrt(double_value(x_1)))))) }; void);
+        (C_39:
+        begin
+          void; (let jessie_<somenum> = (t := !u) in void);
          (assert
          { (JC_<somenum>:
-           le_real(abs_real(sub_real(double_value(u),
-                            mul_real(mul_real(0.5, double_value(t)),
-                            sub_real(3.0,
-                            mul_real(mul_real(double_value(t),
-                                     double_value(t)),
-                            double_value(x_1)))))),
-           1.0)) }; void); void;
-         (assert
-         { (JC_<somenum>:
-           (div_real(sub_real(mul_real(mul_real(0.5, double_value(t)),
-                              sub_real(3.0,
-                              mul_real(mul_real(double_value(t),
-                                       double_value(t)),
-                              double_value(x_1)))),
-                     invsqrt(double_value(x_1))),
-            invsqrt(double_value(x_1))) = mul_real(neg_real(add_real(1.5,
-                                                            mul_real(0.5,
-                                                            div_real(
-                                                            sub_real(
-                                                            double_value(t),
-                                                            invsqrt(double_value(x_1))),
-                                                            invsqrt(double_value(x_1)))))),
-                                          mul_real(div_real(sub_real(
-                                                            double_value(t),
-                                                            invsqrt(double_value(x_1))),
-                                                   invsqrt(double_value(x_1))),
-                                          div_real(sub_real(double_value(t),
-                                                   invsqrt(double_value(x_1))),
-                                          invsqrt(double_value(x_1))))))) };
-         void); void;
-         (assert
-         { (JC_<somenum>:
-           le_real(abs_real(sub_real(double_value(u),
-                            invsqrt(double_value(x_1)))),
-           mul_real(0x1p-10, abs_real(invsqrt(double_value(x_1)))))) }; void);
-         void;
-         (C_28:
+           (mul_real(double_value(x_1), invsqrt(double_value(x_1))) = 
+           sqrt_real(double_value(x_1)))) }; void);
+         (C_42:
          begin
-           (let jessie_<somenum> = (t := !u) in void);
-          (C_35:
-          begin
-            (let jessie_<somenum> =
-            (u := (C_34:
-                  (JC_<somenum>:
-                  (((mul_double_safe nearest_even) (C_33:
-                                                   (JC_<somenum>:
-                                                   (((mul_double_safe nearest_even) 
-                                                     (double_of_real_exact 0.5)) !t)))) 
-                   (C_32:
-                   (JC_<somenum>:
-                   (((sub_double_safe nearest_even) (C_31:
-                                                    (double_of_real_exact 3.0))) 
-                    (C_30:
-                    (JC_<somenum>:
-                    (((mul_double_safe nearest_even) (C_29:
-                                                     (JC_<somenum>:
-                                                     (((mul_double_safe nearest_even) !t) !t)))) x_1)))))))))) in
-            void);
-           (assert
-           { (JC_<somenum>:
-             le_real(abs_real(sub_real(double_value(u),
-                              mul_real(mul_real(0.5, double_value(t)),
-                              sub_real(3.0,
-                              mul_real(mul_real(double_value(t),
-                                       double_value(t)),
-                              double_value(x_1)))))),
-             1.0)) }; void); void;
-           (assert
-           { (JC_<somenum>:
-             (div_real(sub_real(mul_real(mul_real(0.5, double_value(t)),
-                                sub_real(3.0,
-                                mul_real(mul_real(double_value(t),
-                                         double_value(t)),
-                                double_value(x_1)))),
-                       invsqrt(double_value(x_1))),
-              invsqrt(double_value(x_1))) = mul_real(neg_real(add_real(1.5,
-                                                              mul_real(0.5,
-                                                              div_real(
-                                                              sub_real(
-                                                              double_value(t),
-                                                              invsqrt(
-                                                              double_value(x_1))),
-                                                              invsqrt(
-                                                              double_value(x_1)))))),
-                                            mul_real(div_real(sub_real(
-                                                              double_value(t),
-                                                              invsqrt(
-                                                              double_value(x_1))),
-                                                     invsqrt(double_value(x_1))),
-                                            div_real(sub_real(double_value(t),
-                                                     invsqrt(double_value(x_1))),
-                                            invsqrt(double_value(x_1))))))) };
-           void); void;
-           (assert
-           { (JC_<somenum>:
-             le_real(abs_real(sub_real(double_value(u),
-                              invsqrt(double_value(x_1)))),
-             mul_real(0x1p-10, abs_real(invsqrt(double_value(x_1)))))) };
-           void); void;
-           (C_39:
-           begin
-             (let jessie_<somenum> = (t := !u) in void);
-            (assert
-            { (JC_<somenum>:
-              (mul_real(double_value(x_1), invsqrt(double_value(x_1))) = 
-              sqrt_real(double_value(x_1)))) }; void); void;
-            (C_42:
-            begin
-              (let jessie_<somenum> =
-              (__retres := (C_41:
-                           (JC_<somenum>: (((mul_double_safe nearest_even) x_1) !t)))) in
-              void); (return := !__retres); (raise Return) end) end) end) end)
-        end) end) end) end)))); absurd  end with Return -> !return end))
+           void;
+          (let jessie_<somenum> =
+          (__retres := (C_41:
+                       (JC_<somenum>: (((mul_double_safe nearest_even) x_1) !t)))) in
+          void); (return := !__retres); (raise Return) end) end) end)) end))
+     end))))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(double_value(result),
                      sqrt_real(double_value(x_1)))),
@@ -804,29 +777,83 @@ let sqrt_safety =
      (let u = ref (any_double void) in
      (let __retres = ref (any_double void) in
      (C_6:
+     (C_13:
      begin
        (let jessie_<somenum> =
        (t := (C_5:
              (let jessie_<somenum> = x_1 in (JC_<somenum>: (sqrt_init_requires jessie_<somenum>))))) in
        void);
-      (C_13:
-      begin
-        (let jessie_<somenum> =
-        (u := (C_12:
+      (let jessie_<somenum> =
+      (u := (C_12:
+            (JC_<somenum>:
+            (((mul_double nearest_even) (C_11:
+                                        (JC_<somenum>:
+                                        (((mul_double nearest_even) (double_of_real_exact 0.5)) !t)))) 
+             (C_10:
+             (JC_<somenum>:
+             (((sub_double nearest_even) (C_9: (double_of_real_exact 3.0))) 
+              (C_8:
               (JC_<somenum>:
-              (((mul_double nearest_even) (C_11:
+              (((mul_double nearest_even) (C_7:
                                           (JC_<somenum>:
-                                          (((mul_double nearest_even) 
-                                            (double_of_real_exact 0.5)) !t)))) 
-               (C_10:
+                                          (((mul_double nearest_even) !t) !t)))) x_1)))))))))) in
+      void);
+      [ { } unit reads t,u
+        { (JC_<somenum>:
+          le_real(abs_real(sub_real(double_value(u),
+                           mul_real(mul_real(0.5, double_value(t)),
+                           sub_real(3.0,
+                           mul_real(mul_real(double_value(t),
+                                    double_value(t)),
+                           double_value(x_1)))))),
+          1.0)) } ]; void;
+      [ { } unit reads t
+        { (JC_<somenum>:
+          (div_real(sub_real(mul_real(mul_real(0.5, double_value(t)),
+                             sub_real(3.0,
+                             mul_real(mul_real(double_value(t),
+                                      double_value(t)),
+                             double_value(x_1)))),
+                    invsqrt(double_value(x_1))),
+           invsqrt(double_value(x_1))) = mul_real(neg_real(add_real(1.5,
+                                                           mul_real(0.5,
+                                                           div_real(sub_real(
+                                                                    double_value(t),
+                                                                    invsqrt(
+                                                                    double_value(x_1))),
+                                                           invsqrt(double_value(x_1)))))),
+                                         mul_real(div_real(sub_real(double_value(t),
+                                                           invsqrt(double_value(x_1))),
+                                                  invsqrt(double_value(x_1))),
+                                         div_real(sub_real(double_value(t),
+                                                  invsqrt(double_value(x_1))),
+                                         invsqrt(double_value(x_1))))))) } ];
+      void;
+      [ { } unit reads u
+        { (JC_<somenum>:
+          le_real(abs_real(sub_real(double_value(u),
+                           invsqrt(double_value(x_1)))),
+          mul_real(0x1p-10, abs_real(invsqrt(double_value(x_1)))))) } ];
+      (C_17:
+      (C_24:
+      begin
+        void; (let jessie_<somenum> = (t := !u) in void);
+       (let jessie_<somenum> =
+       (u := (C_23:
+             (JC_<somenum>:
+             (((mul_double nearest_even) (C_22:
+                                         (JC_<somenum>:
+                                         (((mul_double nearest_even) 
+                                           (double_of_real_exact 0.5)) !t)))) 
+              (C_21:
+              (JC_<somenum>:
+              (((sub_double nearest_even) (C_20: (double_of_real_exact 3.0))) 
+               (C_19:
                (JC_<somenum>:
-               (((sub_double nearest_even) (C_9: (double_of_real_exact 3.0))) 
-                (C_8:
-                (JC_<somenum>:
-                (((mul_double nearest_even) (C_7:
-                                            (JC_<somenum>:
-                                            (((mul_double nearest_even) !t) !t)))) x_1)))))))))) in
-        void);
+               (((mul_double nearest_even) (C_18:
+                                           (JC_<somenum>:
+                                           (((mul_double nearest_even) !t) !t)))) x_1)))))))))) in
+       void);
        [ { } unit reads t,u
          { (JC_<somenum>:
            le_real(abs_real(sub_real(double_value(u),
@@ -864,148 +891,80 @@ let sqrt_safety =
            le_real(abs_real(sub_real(double_value(u),
                             invsqrt(double_value(x_1)))),
            mul_real(0x1p-10, abs_real(invsqrt(double_value(x_1)))))) } ];
-       void;
-       (C_17:
+       (C_28:
+       (C_35:
        begin
-         (let jessie_<somenum> = (t := !u) in void);
-        (C_24:
-        begin
-          (let jessie_<somenum> =
-          (u := (C_23:
+         void; (let jessie_<somenum> = (t := !u) in void);
+        (let jessie_<somenum> =
+        (u := (C_34:
+              (JC_<somenum>:
+              (((mul_double nearest_even) (C_33:
+                                          (JC_<somenum>:
+                                          (((mul_double nearest_even) 
+                                            (double_of_real_exact 0.5)) !t)))) 
+               (C_32:
+               (JC_<somenum>:
+               (((sub_double nearest_even) (C_31: (double_of_real_exact 3.0))) 
+                (C_30:
                 (JC_<somenum>:
-                (((mul_double nearest_even) (C_22:
+                (((mul_double nearest_even) (C_29:
                                             (JC_<somenum>:
-                                            (((mul_double nearest_even) 
-                                              (double_of_real_exact 0.5)) !t)))) 
-                 (C_21:
-                 (JC_<somenum>:
-                 (((sub_double nearest_even) (C_20:
-                                             (double_of_real_exact 3.0))) 
-                  (C_19:
-                  (JC_<somenum>:
-                  (((mul_double nearest_even) (C_18:
-                                              (JC_<somenum>:
-                                              (((mul_double nearest_even) !t) !t)))) x_1)))))))))) in
-          void);
-         [ { } unit reads t,u
+                                            (((mul_double nearest_even) !t) !t)))) x_1)))))))))) in
+        void);
+        [ { } unit reads t,u
+          { (JC_<somenum>:
+            le_real(abs_real(sub_real(double_value(u),
+                             mul_real(mul_real(0.5, double_value(t)),
+                             sub_real(3.0,
+                             mul_real(mul_real(double_value(t),
+                                      double_value(t)),
+                             double_value(x_1)))))),
+            1.0)) } ]; void;
+        [ { } unit reads t
+          { (JC_<somenum>:
+            (div_real(sub_real(mul_real(mul_real(0.5, double_value(t)),
+                               sub_real(3.0,
+                               mul_real(mul_real(double_value(t),
+                                        double_value(t)),
+                               double_value(x_1)))),
+                      invsqrt(double_value(x_1))),
+             invsqrt(double_value(x_1))) = mul_real(neg_real(add_real(1.5,
+                                                             mul_real(0.5,
+                                                             div_real(
+                                                             sub_real(
+                                                             double_value(t),
+                                                             invsqrt(
+                                                             double_value(x_1))),
+                                                             invsqrt(
+                                                             double_value(x_1)))))),
+                                           mul_real(div_real(sub_real(
+                                                             double_value(t),
+                                                             invsqrt(
+                                                             double_value(x_1))),
+                                                    invsqrt(double_value(x_1))),
+                                           div_real(sub_real(double_value(t),
+                                                    invsqrt(double_value(x_1))),
+                                           invsqrt(double_value(x_1))))))) } ];
+        void;
+        [ { } unit reads u
+          { (JC_<somenum>:
+            le_real(abs_real(sub_real(double_value(u),
+                             invsqrt(double_value(x_1)))),
+            mul_real(0x1p-10, abs_real(invsqrt(double_value(x_1)))))) } ];
+        (C_39:
+        begin
+          void; (let jessie_<somenum> = (t := !u) in void);
+         [ { } unit
            { (JC_<somenum>:
-             le_real(abs_real(sub_real(double_value(u),
-                              mul_real(mul_real(0.5, double_value(t)),
-                              sub_real(3.0,
-                              mul_real(mul_real(double_value(t),
-                                       double_value(t)),
-                              double_value(x_1)))))),
-             1.0)) } ]; void;
-         [ { } unit reads t
-           { (JC_<somenum>:
-             (div_real(sub_real(mul_real(mul_real(0.5, double_value(t)),
-                                sub_real(3.0,
-                                mul_real(mul_real(double_value(t),
-                                         double_value(t)),
-                                double_value(x_1)))),
-                       invsqrt(double_value(x_1))),
-              invsqrt(double_value(x_1))) = mul_real(neg_real(add_real(1.5,
-                                                              mul_real(0.5,
-                                                              div_real(
-                                                              sub_real(
-                                                              double_value(t),
-                                                              invsqrt(
-                                                              double_value(x_1))),
-                                                              invsqrt(
-                                                              double_value(x_1)))))),
-                                            mul_real(div_real(sub_real(
-                                                              double_value(t),
-                                                              invsqrt(
-                                                              double_value(x_1))),
-                                                     invsqrt(double_value(x_1))),
-                                            div_real(sub_real(double_value(t),
-                                                     invsqrt(double_value(x_1))),
-                                            invsqrt(double_value(x_1))))))) } ];
-         void;
-         [ { } unit reads u
-           { (JC_<somenum>:
-             le_real(abs_real(sub_real(double_value(u),
-                              invsqrt(double_value(x_1)))),
-             mul_real(0x1p-10, abs_real(invsqrt(double_value(x_1)))))) } ];
-         void;
-         (C_28:
+             (mul_real(double_value(x_1), invsqrt(double_value(x_1))) = 
+             sqrt_real(double_value(x_1)))) } ];
+         (C_42:
          begin
-           (let jessie_<somenum> = (t := !u) in void);
-          (C_35:
-          begin
-            (let jessie_<somenum> =
-            (u := (C_34:
-                  (JC_<somenum>:
-                  (((mul_double nearest_even) (C_33:
-                                              (JC_<somenum>:
-                                              (((mul_double nearest_even) 
-                                                (double_of_real_exact 0.5)) !t)))) 
-                   (C_32:
-                   (JC_<somenum>:
-                   (((sub_double nearest_even) (C_31:
-                                               (double_of_real_exact 3.0))) 
-                    (C_30:
-                    (JC_<somenum>:
-                    (((mul_double nearest_even) (C_29:
-                                                (JC_<somenum>:
-                                                (((mul_double nearest_even) !t) !t)))) x_1)))))))))) in
-            void);
-           [ { } unit reads t,u
-             { (JC_<somenum>:
-               le_real(abs_real(sub_real(double_value(u),
-                                mul_real(mul_real(0.5, double_value(t)),
-                                sub_real(3.0,
-                                mul_real(mul_real(double_value(t),
-                                         double_value(t)),
-                                double_value(x_1)))))),
-               1.0)) } ]; void;
-           [ { } unit reads t
-             { (JC_<somenum>:
-               (div_real(sub_real(mul_real(mul_real(0.5, double_value(t)),
-                                  sub_real(3.0,
-                                  mul_real(mul_real(double_value(t),
-                                           double_value(t)),
-                                  double_value(x_1)))),
-                         invsqrt(double_value(x_1))),
-                invsqrt(double_value(x_1))) = mul_real(neg_real(add_real(1.5,
-                                                                mul_real(0.5,
-                                                                div_real(
-                                                                sub_real(
-                                                                double_value(t),
-                                                                invsqrt(
-                                                                double_value(x_1))),
-                                                                invsqrt(
-                                                                double_value(x_1)))))),
-                                              mul_real(div_real(sub_real(
-                                                                double_value(t),
-                                                                invsqrt(
-                                                                double_value(x_1))),
-                                                       invsqrt(double_value(x_1))),
-                                              div_real(sub_real(double_value(t),
-                                                       invsqrt(double_value(x_1))),
-                                              invsqrt(double_value(x_1))))))) } ];
            void;
-           [ { } unit reads u
-             { (JC_<somenum>:
-               le_real(abs_real(sub_real(double_value(u),
-                                invsqrt(double_value(x_1)))),
-               mul_real(0x1p-10, abs_real(invsqrt(double_value(x_1)))))) } ];
-           void;
-           (C_39:
-           begin
-             (let jessie_<somenum> = (t := !u) in void);
-            [ { } unit
-              { (JC_<somenum>:
-                (mul_real(double_value(x_1), invsqrt(double_value(x_1))) = 
-                sqrt_real(double_value(x_1)))) } ]; void;
-            (C_42:
-            begin
-              (let jessie_<somenum> =
-              (__retres := (C_41:
-                           (JC_<somenum>: (((mul_double nearest_even) x_1) !t)))) in
-              void); (return := !__retres); (raise Return) end) end) end) end)
-        end) end) end) end)))); absurd  end with Return -> !return end))
-  { true }
+          (let jessie_<somenum> =
+          (__retres := (C_41: (JC_<somenum>: (((mul_double nearest_even) x_1) !t)))) in
+          void); (return := !__retres); (raise Return) end) end) end)) end))
+     end))))); absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C sqrt.jessie --quiet -f sqrt.makefile project

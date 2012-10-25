@@ -455,14 +455,15 @@ let f_ensures_default =
        (tmp := (C_7:
                (let jessie_<somenum> = x_0_0 in
                (let jessie_<somenum> = (single_of_real_exact 1.) in
-               (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>)))))) in void); void;
+               (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>)))))) in void);
       (C_10:
       begin
-        (let jessie_<somenum> =
-        (tmp_0 := (C_9:
-                  (let jessie_<somenum> = x_0_0 in
-                  (let jessie_<somenum> = !tmp in
-                  (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>)))))) in void);
+        void;
+       (let jessie_<somenum> =
+       (tmp_0 := (C_9:
+                 (let jessie_<somenum> = x_0_0 in
+                 (let jessie_<somenum> = !tmp in
+                 (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>)))))) in void);
        (return := !tmp_0); (raise Return) end) end))); absurd  end with
    Return -> !return end)) { (JC_<somenum>: (single_value(result) = 1.0)) }
 
@@ -482,15 +483,15 @@ let f_safety =
                (let jessie_<somenum> = x_0_0 in
                (let jessie_<somenum> = (single_of_real_exact 1.) in
                (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>)))))) in void);
-      void;
       (C_10:
       begin
-        (let jessie_<somenum> =
-        (tmp_0 := (C_9:
-                  (let jessie_<somenum> = x_0_0 in
-                  (let jessie_<somenum> = !tmp in
-                  (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>)))))) in
-        void); (return := !tmp_0); (raise Return) end) end))); absurd  end
+        void;
+       (let jessie_<somenum> =
+       (tmp_0 := (C_9:
+                 (let jessie_<somenum> = x_0_0 in
+                 (let jessie_<somenum> = !tmp in
+                 (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>)))))) in
+       void); (return := !tmp_0); (raise Return) end) end))); absurd  end
    with Return -> !return end)) { true }
 
 

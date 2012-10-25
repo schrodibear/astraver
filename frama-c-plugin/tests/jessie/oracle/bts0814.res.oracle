@@ -48,33 +48,33 @@ type voidP = [voidP]
 intP[..] asg;
 
 unit ftest(intP[..] src, intP[..] eql)
-  requires (C_8 : ((C_9 : (\offset_min(src) <= 0)) &&
-                    (C_10 : (\offset_max(src) >= 0))));
-  requires (C_7 : (src == eql));
+  requires (C_12 : ((C_13 : (\offset_min(src) <= 0)) &&
+                     (C_14 : (\offset_max(src) >= 0))));
+  requires (C_11 : (src == eql));
 behavior default:
-  ensures (C_6 : true);
+  ensures (C_10 : true);
 {  
    {  (C_1 : (asg = src));
       
       {  
-         (assert for default: (C_2 : (jessie : ((\offset_min(asg) <= 0) &&
-                                                 (\offset_max(asg) >= 0)))));
+         (assert for default: (C_2 : ((C_3 : (\offset_min(asg) <= 0)) &&
+                                       (C_4 : (\offset_max(asg) >= 0)))));
          ()
       };
       
       {  
-         (assert for default: (C_3 : (jessie : ((\offset_min(eql) <= 0) &&
-                                                 (\offset_max(eql) >= 0)))));
+         (assert for default: (C_5 : ((C_6 : (\offset_min(eql) <= 0)) &&
+                                       (C_7 : (\offset_max(eql) >= 0)))));
          ()
       };
       
       {  
-         (assert for default: (C_4 : (jessie : (src.intM == asg.intM))));
+         (assert for default: (C_8 : (src.intM == asg.intM)));
          ()
       };
       
       {  
-         (assert for default: (C_5 : (jessie : (src.intM == eql.intM))));
+         (assert for default: (C_9 : (src.intM == eql.intM)));
          ()
       };
       
@@ -533,14 +533,14 @@ let ftest_ensures_default =
      (let jessie_<somenum> = (asg := src) in void);
     (assert
     { (JC_<somenum>:
-      (le_int(offset_min(intP_asg_1_alloc_table, asg), (0))
-      and ge_int(offset_max(intP_asg_1_alloc_table, asg), (0)))) }; void);
-    void;
+      ((JC_<somenum>: le_int(offset_min(intP_asg_1_alloc_table, asg), (0)))
+      and (JC_<somenum>: ge_int(offset_max(intP_asg_1_alloc_table, asg), (0))))) };
+    void); void;
     (assert
     { (JC_<somenum>:
-      (le_int(offset_min(intP_asg_1_alloc_table, eql), (0))
-      and ge_int(offset_max(intP_asg_1_alloc_table, eql), (0)))) }; void);
-    void;
+      ((JC_<somenum>: le_int(offset_min(intP_asg_1_alloc_table, eql), (0)))
+      and (JC_<somenum>: ge_int(offset_max(intP_asg_1_alloc_table, eql), (0))))) };
+    void); void;
     (assert
     { (JC_<somenum>:
       (integer_of_int32(select(intP_intM_asg_1, src)) = integer_of_int32(
@@ -568,12 +568,14 @@ let ftest_safety =
      (let jessie_<somenum> = (asg := src) in void);
     [ { } unit reads asg,intP_asg_1_alloc_table
       { (JC_<somenum>:
-        (le_int(offset_min(intP_asg_1_alloc_table, asg), (0))
-        and ge_int(offset_max(intP_asg_1_alloc_table, asg), (0)))) } ]; void;
+        ((JC_<somenum>: le_int(offset_min(intP_asg_1_alloc_table, asg), (0)))
+        and (JC_<somenum>: ge_int(offset_max(intP_asg_1_alloc_table, asg), (0))))) } ];
+    void;
     [ { } unit reads intP_asg_1_alloc_table
       { (JC_<somenum>:
-        (le_int(offset_min(intP_asg_1_alloc_table, eql), (0))
-        and ge_int(offset_max(intP_asg_1_alloc_table, eql), (0)))) } ]; void;
+        ((JC_<somenum>: le_int(offset_min(intP_asg_1_alloc_table, eql), (0)))
+        and (JC_<somenum>: ge_int(offset_max(intP_asg_1_alloc_table, eql), (0))))) } ];
+    void;
     [ { } unit reads asg,intP_intM_asg_1
       { (JC_<somenum>:
         (integer_of_int32(select(intP_intM_asg_1, src)) = integer_of_int32(

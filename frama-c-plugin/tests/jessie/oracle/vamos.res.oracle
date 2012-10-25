@@ -795,180 +795,157 @@ let process_kill_ensures_default =
      (let __retres = ref (any_int32 void) in
      try
       (C_4:
+      (C_7:
+      (C_9:
+      (C_10:
+      (C_11:
+      (C_12:
+      (loop_3:
       begin
         (let jessie_<somenum> = (found := (safe_int32_of_integer_ (0))) in void);
-       (C_7:
-       begin
-         (let jessie_<somenum> =
-         (proc_id := (C_6:
-                     (safe_uint32_of_integer_ (C_5:
-                                              ((bw_and (integer_of_uint32 pid)) (127)))))) in
-         void);
-        (C_9:
-        begin
-          (let jessie_<somenum> =
-          (process := (C_8:
-                      (let jessie_<somenum> = !proc_id in
-                      (JC_<somenum>:
-                      ((pid2pcb jessie_<somenum>) Proc_process_19_alloc_table))))) in
-          void);
-         (C_10:
-         begin
-           (let jessie_<somenum> = (prev_elem := null) in void);
-          (C_11:
-          begin
-            (let jessie_<somenum> = (ready_list_elem := !ready_list) in void);
-           (C_12:
-           begin
-             (let jessie_<somenum> = (highest_search := null) in void);
-            (loop_3:
-            begin
-              while true do
-              { invariant
-                  (JC_<somenum>:
-                  ((JC_<somenum>:
-                   ge_int(integer_of_int32(list_length(ready_list,
-                                           Proc_next_ready_list_1)),
-                   (0)))
-                  and ((JC_<somenum>:
-                       ge_int(integer_of_int32(list_length(ready_list_elem,
+       (let jessie_<somenum> =
+       (proc_id := (C_6:
+                   (safe_uint32_of_integer_ (C_5:
+                                            ((bw_and (integer_of_uint32 pid)) (127)))))) in
+       void);
+       (let jessie_<somenum> =
+       (process := (C_8:
+                   (let jessie_<somenum> = !proc_id in
+                   (JC_<somenum>: ((pid2pcb jessie_<somenum>) Proc_process_19_alloc_table))))) in
+       void); (let jessie_<somenum> = (prev_elem := null) in void);
+       (let jessie_<somenum> = (ready_list_elem := !ready_list) in void);
+       (let jessie_<somenum> = (highest_search := null) in void);
+       while true do
+       { invariant
+           (JC_<somenum>:
+           ((JC_<somenum>:
+            ge_int(integer_of_int32(list_length(ready_list,
+                                    Proc_next_ready_list_1)),
+            (0)))
+           and ((JC_<somenum>:
+                ge_int(integer_of_int32(list_length(ready_list_elem,
+                                        Proc_next_ready_list_1)),
+                (0)))
+               and ((JC_<somenum>:
+                    ge_int(integer_of_int32(list_length(prev_elem,
+                                            Proc_next_ready_list_1)),
+                    (0)))
+                   and (JC_<somenum>:
+                       ge_int(integer_of_int32(list_length(highest_search,
                                                Proc_next_ready_list_1)),
-                       (0)))
-                      and ((JC_<somenum>:
-                           ge_int(integer_of_int32(list_length(prev_elem,
-                                                   Proc_next_ready_list_1)),
-                           (0)))
-                          and (JC_<somenum>:
-                              ge_int(integer_of_int32(list_length(highest_search,
-                                                      Proc_next_ready_list_1)),
-                              (0)))))))  }
-               begin
-                 [ { } unit { true } ];
+                       (0)))))))  }
+        begin
+          [ { } unit { true } ];
+         try
+          begin
+            (let jessie_<somenum> =
+            (C_22:
+            (C_41:
+            (C_43:
+            begin
+              (if ((safe_neq_pointer !ready_list_elem) null)
+              then
+               (if ((eq_int_ (integer_of_int32 !found)) (0)) then void
+               else (raise (Goto_while_0_break_exc void)))
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<somenum> =
+             (proc_id2 := (C_21:
+                          (safe_uint32_of_integer_ (integer_of_int32 
+                                                    (C_20:
+                                                    ((safe_acc_ !Proc_pid_0_ready_list_1) !ready_list_elem)))))) in
+             void);
+             (if ((eq_int_ (integer_of_uint32 !proc_id)) (integer_of_uint32 !proc_id2))
+             then
+              (let jessie_<somenum> =
+              (C_29:
+              (C_40:
+              begin
+                (let jessie_<somenum> =
+                (if ((safe_neq_pointer !prev_elem) null)
+                then
+                 (C_27:
+                 (let jessie_<somenum> =
+                 (C_25:
+                 ((safe_acc_ !Proc_next_ready_list_1) !ready_list_elem)) in
+                 begin
+                   (let jessie_<somenum> = !prev_elem in
+                   (((safe_upd_ Proc_next_ready_list_1) jessie_<somenum>) jessie_<somenum>));
+                  jessie_<somenum> end))
+                else
+                 (C_24:
+                 begin
+                   (ready_list := (C_23:
+                                  ((safe_acc_ !Proc_next_ready_list_1) !ready_list_elem)));
+                  !ready_list end)) in void);
+               (let jessie_<somenum> = null in
+               (let jessie_<somenum> = !ready_list_elem in
+               (((safe_upd_ Proc_next_ready_list_1) jessie_<somenum>) jessie_<somenum>)));
+               (if ((eq_int_ (integer_of_int32 (C_39:
+                                               ((safe_acc_ Proc_priority_process_19) !process)))) 
+                    (integer_of_int32 !max_prio))
+               then
                 try
+                 (C_30:
+                 (C_31:
+                 (loop_4:
                  begin
                    (let jessie_<somenum> =
+                   (highest_prio := (safe_int32_of_integer_ (0))) in void);
+                  (let jessie_<somenum> = (highest_search := !ready_list) in void);
+                  while true do
+                  { invariant
+                      (JC_<somenum>:
+                      ge_int(integer_of_int32(list_length(highest_search,
+                                              Proc_next_ready_list_1)),
+                      (0)))  }
                    begin
-                     (if ((safe_neq_pointer !ready_list_elem) null)
-                     then
-                      (if ((eq_int_ (integer_of_int32 !found)) (0)) then void
-                      else (raise (Goto_while_0_break_exc void)))
-                     else (raise (Goto_while_0_break_exc void)));
-                    (C_22:
-                    begin
-                      (let jessie_<somenum> =
-                      (proc_id2 := (C_21:
-                                   (safe_uint32_of_integer_ (integer_of_int32 
-                                                             (C_20:
-                                                             ((safe_acc_ !Proc_pid_0_ready_list_1) !ready_list_elem)))))) in
-                      void);
-                     (if ((eq_int_ (integer_of_uint32 !proc_id)) (integer_of_uint32 !proc_id2))
-                     then
-                      (let jessie_<somenum> =
-                      begin
-                        (let jessie_<somenum> =
-                        (if ((safe_neq_pointer !prev_elem) null)
-                        then
-                         (C_27:
-                         (let jessie_<somenum> =
-                         (C_25:
-                         ((safe_acc_ !Proc_next_ready_list_1) !ready_list_elem)) in
-                         begin
-                           (let jessie_<somenum> = !prev_elem in
-                           (((safe_upd_ Proc_next_ready_list_1) jessie_<somenum>) jessie_<somenum>));
-                          jessie_<somenum> end))
-                        else
-                         (C_24:
-                         begin
-                           (ready_list := (C_23:
-                                          ((safe_acc_ !Proc_next_ready_list_1) !ready_list_elem)));
-                          !ready_list end)) in void);
-                       (C_29:
-                       begin
-                         (let jessie_<somenum> = null in
-                         (let jessie_<somenum> = !ready_list_elem in
-                         (((safe_upd_ Proc_next_ready_list_1) jessie_<somenum>) jessie_<somenum>)));
-                        (if ((eq_int_ (integer_of_int32 (C_39:
-                                                        ((safe_acc_ Proc_priority_process_19) !process)))) 
-                             (integer_of_int32 !max_prio))
-                        then
-                         try
-                          (C_30:
-                          begin
-                            (let jessie_<somenum> =
-                            (highest_prio := (safe_int32_of_integer_ (0))) in
-                            void);
-                           (C_31:
-                           begin
-                             (let jessie_<somenum> =
-                             (highest_search := !ready_list) in void);
-                            (loop_4:
-                            begin
-                              while true do
-                              { invariant
-                                  (JC_<somenum>:
-                                  ge_int(integer_of_int32(list_length(highest_search,
-                                                          Proc_next_ready_list_1)),
-                                  (0)))  }
-                               begin
-                                 [ { } unit { true } ];
-                                try
-                                 begin
-                                   (let jessie_<somenum> =
-                                   begin
-                                     (if ((safe_neq_pointer !highest_search) null)
-                                     then void
-                                     else
-                                      (raise (Goto_while_1_break_exc void)));
-                                    (if ((gt_int_ (integer_of_int32 (C_35:
-                                                                    ((safe_acc_ !Proc_priority_ready_list_1) !highest_search)))) 
-                                         (integer_of_int32 !highest_prio))
-                                    then
-                                     (let jessie_<somenum> =
-                                     (C_34:
-                                     (highest_prio := (C_33:
-                                                      ((safe_acc_ !Proc_priority_ready_list_1) !highest_search)))) in
-                                     void) else void);
-                                    (C_37:
-                                    begin
-                                      (highest_search := (C_36:
-                                                         ((safe_acc_ !Proc_next_ready_list_1) !highest_search)));
-                                     !highest_search end) end in void);
-                                  (raise (Loop_continue_exc void)) end with
-                                 Loop_continue_exc jessie_<somenum> -> void end end
-                              done; (raise (Goto_while_1_break_exc void)) end)
-                           end) end) with Goto_while_1_break_exc jessie_<somenum> ->
-                          (let jessie_<somenum> =
-                          (while_1_break:
-                          begin
-                            void;
-                           (C_38:
-                           begin   (max_prio := !highest_prio); !max_prio end)
-                          end) in void) end else void);
-                        (C_40:
-                        begin
-                          (found := (safe_int32_of_integer_ (1))); !found end)
-                       end) end in void) else void);
-                     (C_41:
+                     [ { } unit { true } ];
+                    try
                      begin
-                       (let jessie_<somenum> = (prev_elem := !ready_list_elem) in
-                       void);
-                      (C_43:
-                      begin
-                        (ready_list_elem := (C_42:
-                                            ((safe_acc_ !Proc_next_ready_list_1) !ready_list_elem)));
-                       !ready_list_elem end) end) end) end in void);
-                  (raise (Loop_continue_exc void)) end with
-                 Loop_continue_exc jessie_<somenum> -> void end end done;
-             (raise (Goto_while_0_break_exc void)) end) end) end) end) end)
-       end) end) with Goto_while_0_break_exc jessie_<somenum> ->
+                       (let jessie_<somenum> =
+                       (C_37:
+                       begin
+                         (if ((safe_neq_pointer !highest_search) null)
+                         then void
+                         else (raise (Goto_while_1_break_exc void)));
+                        (if ((gt_int_ (integer_of_int32 (C_35:
+                                                        ((safe_acc_ !Proc_priority_ready_list_1) !highest_search)))) 
+                             (integer_of_int32 !highest_prio))
+                        then
+                         (let jessie_<somenum> =
+                         (C_34:
+                         (highest_prio := (C_33:
+                                          ((safe_acc_ !Proc_priority_ready_list_1) !highest_search)))) in
+                         void) else void);
+                        (highest_search := (C_36:
+                                           ((safe_acc_ !Proc_next_ready_list_1) !highest_search)));
+                        !highest_search end) in void);
+                      (raise (Loop_continue_exc void)) end with
+                     Loop_continue_exc jessie_<somenum> -> void end end done;
+                  (raise (Goto_while_1_break_exc void)) end))) with
+                 Goto_while_1_break_exc jessie_<somenum> ->
+                 (let jessie_<somenum> =
+                 (while_1_break:
+                 (C_38:
+                 begin   void; (max_prio := !highest_prio); !max_prio end)) in
+                 void) end else void);
+               (found := (safe_int32_of_integer_ (1))); !found end)) in void)
+             else void);
+             (let jessie_<somenum> = (prev_elem := !ready_list_elem) in void);
+             (ready_list_elem := (C_42:
+                                 ((safe_acc_ !Proc_next_ready_list_1) !ready_list_elem)));
+             !ready_list_elem end))) in void);
+           (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end))))))) with
+      Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
+      (C_44:
       begin
         void;
-       (C_44:
-       begin
-         (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (return := !__retres); (raise Return) end) end) end)))))))))));
-    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end)) end))))))))))); absurd 
+   end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let process_kill_safety =
  fun (pid : uint32) ->
@@ -992,194 +969,169 @@ let process_kill_safety =
      (let __retres = ref (any_int32 void) in
      try
       (C_4:
+      (C_7:
+      (C_9:
+      (C_10:
+      (C_11:
+      (C_12:
+      (loop_1:
       begin
         (let jessie_<somenum> = (found := (safe_int32_of_integer_ (0))) in void);
-       (C_7:
-       begin
-         (let jessie_<somenum> =
-         (proc_id := (C_6:
-                     (JC_<somenum>:
-                     (uint32_of_integer_ (C_5:
-                                         ((bw_and (integer_of_uint32 pid)) (127))))))) in
-         void);
-        (C_9:
+       (let jessie_<somenum> =
+       (proc_id := (C_6:
+                   (JC_<somenum>:
+                   (uint32_of_integer_ (C_5:
+                                       ((bw_and (integer_of_uint32 pid)) (127))))))) in
+       void);
+       (let jessie_<somenum> =
+       (process := (C_8:
+                   (let jessie_<somenum> = !proc_id in
+                   (JC_<somenum>:
+                   ((pid2pcb_requires jessie_<somenum>) Proc_process_19_alloc_table))))) in
+       void); (let jessie_<somenum> = (prev_elem := null) in void);
+       (let jessie_<somenum> = (ready_list_elem := !ready_list) in void);
+       (let jessie_<somenum> = (highest_search := null) in void);
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
         begin
-          (let jessie_<somenum> =
-          (process := (C_8:
-                      (let jessie_<somenum> = !proc_id in
-                      (JC_<somenum>:
-                      ((pid2pcb_requires jessie_<somenum>) Proc_process_19_alloc_table))))) in
-          void);
-         (C_10:
-         begin
-           (let jessie_<somenum> = (prev_elem := null) in void);
-          (C_11:
-          begin
-            (let jessie_<somenum> = (ready_list_elem := !ready_list) in void);
-           (C_12:
-           begin
-             (let jessie_<somenum> = (highest_search := null) in void);
-            (loop_1:
-            begin
-              while true do
-              { invariant (JC_<somenum>: true) variant (0) }
-               begin
-                 [ { } unit
-                   reads Proc_next_ready_list_1,highest_search,prev_elem,ready_list,ready_list_elem
-                   { (JC_<somenum>:
-                     ((JC_<somenum>:
-                      ge_int(integer_of_int32(list_length(ready_list,
-                                              Proc_next_ready_list_1)),
-                      (0)))
-                     and ((JC_<somenum>:
-                          ge_int(integer_of_int32(list_length(ready_list_elem,
+          [ { } unit
+            reads Proc_next_ready_list_1,highest_search,prev_elem,ready_list,ready_list_elem
+            { (JC_<somenum>:
+              ((JC_<somenum>:
+               ge_int(integer_of_int32(list_length(ready_list,
+                                       Proc_next_ready_list_1)),
+               (0)))
+              and ((JC_<somenum>:
+                   ge_int(integer_of_int32(list_length(ready_list_elem,
+                                           Proc_next_ready_list_1)),
+                   (0)))
+                  and ((JC_<somenum>:
+                       ge_int(integer_of_int32(list_length(prev_elem,
+                                               Proc_next_ready_list_1)),
+                       (0)))
+                      and (JC_<somenum>:
+                          ge_int(integer_of_int32(list_length(highest_search,
                                                   Proc_next_ready_list_1)),
-                          (0)))
-                         and ((JC_<somenum>:
-                              ge_int(integer_of_int32(list_length(prev_elem,
-                                                      Proc_next_ready_list_1)),
-                              (0)))
-                             and (JC_<somenum>:
-                                 ge_int(integer_of_int32(list_length(highest_search,
-                                                         Proc_next_ready_list_1)),
-                                 (0))))))) } ];
+                          (0))))))) } ];
+         try
+          begin
+            (let jessie_<somenum> =
+            (C_22:
+            (C_41:
+            (C_43:
+            begin
+              (if ((neq_pointer !ready_list_elem) null)
+              then
+               (if ((eq_int_ (integer_of_int32 !found)) (0)) then void
+               else (raise (Goto_while_0_break_exc void)))
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<somenum> =
+             (proc_id2 := (C_21:
+                          (JC_<somenum>:
+                          (uint32_of_integer_ (integer_of_int32 (C_20:
+                                                                (JC_<somenum>:
+                                                                (((acc_ !Proc_ready_list_1_alloc_table) !Proc_pid_0_ready_list_1) !ready_list_elem)))))))) in
+             void);
+             (if ((eq_int_ (integer_of_uint32 !proc_id)) (integer_of_uint32 !proc_id2))
+             then
+              (let jessie_<somenum> =
+              (C_29:
+              (C_40:
+              begin
+                (let jessie_<somenum> =
+                (if ((neq_pointer !prev_elem) null)
+                then
+                 (C_27:
+                 (let jessie_<somenum> =
+                 (C_25:
+                 (JC_<somenum>:
+                 (((acc_ !Proc_ready_list_1_alloc_table) !Proc_next_ready_list_1) !ready_list_elem))) in
+                 begin
+                   (let jessie_<somenum> = !prev_elem in
+                   (JC_<somenum>:
+                   ((((upd_ !Proc_ready_list_1_alloc_table) Proc_next_ready_list_1) jessie_<somenum>) jessie_<somenum>)));
+                  jessie_<somenum> end))
+                else
+                 (C_24:
+                 begin
+                   (ready_list := (C_23:
+                                  (JC_<somenum>:
+                                  (((acc_ !Proc_ready_list_1_alloc_table) !Proc_next_ready_list_1) !ready_list_elem))));
+                  !ready_list end)) in void);
+               (let jessie_<somenum> = null in
+               (let jessie_<somenum> = !ready_list_elem in
+               (JC_<somenum>:
+               ((((upd_ !Proc_ready_list_1_alloc_table) Proc_next_ready_list_1) jessie_<somenum>) jessie_<somenum>))));
+               (if ((eq_int_ (integer_of_int32 (C_39:
+                                               (JC_<somenum>:
+                                               (((acc_ Proc_process_19_alloc_table) Proc_priority_process_19) !process))))) 
+                    (integer_of_int32 !max_prio))
+               then
                 try
+                 (C_30:
+                 (C_31:
+                 (loop_2:
                  begin
                    (let jessie_<somenum> =
+                   (highest_prio := (safe_int32_of_integer_ (0))) in void);
+                  (let jessie_<somenum> = (highest_search := !ready_list) in void);
+                  while true do
+                  { invariant (JC_<somenum>: true) variant (0) }
                    begin
-                     (if ((neq_pointer !ready_list_elem) null)
-                     then
-                      (if ((eq_int_ (integer_of_int32 !found)) (0)) then void
-                      else (raise (Goto_while_0_break_exc void)))
-                     else (raise (Goto_while_0_break_exc void)));
-                    (C_22:
-                    begin
-                      (let jessie_<somenum> =
-                      (proc_id2 := (C_21:
-                                   (JC_<somenum>:
-                                   (uint32_of_integer_ (integer_of_int32 
-                                                        (C_20:
-                                                        (JC_<somenum>:
-                                                        (((acc_ !Proc_ready_list_1_alloc_table) !Proc_pid_0_ready_list_1) !ready_list_elem)))))))) in
-                      void);
-                     (if ((eq_int_ (integer_of_uint32 !proc_id)) (integer_of_uint32 !proc_id2))
-                     then
-                      (let jessie_<somenum> =
-                      begin
-                        (let jessie_<somenum> =
-                        (if ((neq_pointer !prev_elem) null)
-                        then
-                         (C_27:
-                         (let jessie_<somenum> =
-                         (C_25:
-                         (JC_<somenum>:
-                         (((acc_ !Proc_ready_list_1_alloc_table) !Proc_next_ready_list_1) !ready_list_elem))) in
-                         begin
-                           (let jessie_<somenum> = !prev_elem in
-                           (JC_<somenum>:
-                           ((((upd_ !Proc_ready_list_1_alloc_table) Proc_next_ready_list_1) jessie_<somenum>) jessie_<somenum>)));
-                          jessie_<somenum> end))
-                        else
-                         (C_24:
-                         begin
-                           (ready_list := (C_23:
-                                          (JC_<somenum>:
-                                          (((acc_ !Proc_ready_list_1_alloc_table) !Proc_next_ready_list_1) !ready_list_elem))));
-                          !ready_list end)) in void);
-                       (C_29:
-                       begin
-                         (let jessie_<somenum> = null in
-                         (let jessie_<somenum> = !ready_list_elem in
-                         (JC_<somenum>:
-                         ((((upd_ !Proc_ready_list_1_alloc_table) Proc_next_ready_list_1) jessie_<somenum>) jessie_<somenum>))));
-                        (if ((eq_int_ (integer_of_int32 (C_39:
-                                                        (JC_<somenum>:
-                                                        (((acc_ Proc_process_19_alloc_table) Proc_priority_process_19) !process))))) 
-                             (integer_of_int32 !max_prio))
-                        then
-                         try
-                          (C_30:
-                          begin
-                            (let jessie_<somenum> =
-                            (highest_prio := (safe_int32_of_integer_ (0))) in
-                            void);
-                           (C_31:
-                           begin
-                             (let jessie_<somenum> =
-                             (highest_search := !ready_list) in void);
-                            (loop_2:
-                            begin
-                              while true do
-                              { invariant (JC_<somenum>: true) variant (0) }
-                               begin
-                                 [ { } unit
-                                   reads Proc_next_ready_list_1,highest_search
-                                   { (JC_<somenum>:
-                                     ge_int(integer_of_int32(list_length(highest_search,
-                                                             Proc_next_ready_list_1)),
-                                     (0))) } ];
-                                try
-                                 begin
-                                   (let jessie_<somenum> =
-                                   begin
-                                     (if ((neq_pointer !highest_search) null)
-                                     then void
-                                     else
-                                      (raise (Goto_while_1_break_exc void)));
-                                    (if ((gt_int_ (integer_of_int32 (C_35:
-                                                                    (JC_<somenum>:
-                                                                    (((acc_ !Proc_ready_list_1_alloc_table) !Proc_priority_ready_list_1) !highest_search))))) 
-                                         (integer_of_int32 !highest_prio))
-                                    then
-                                     (let jessie_<somenum> =
-                                     (C_34:
-                                     (highest_prio := (C_33:
-                                                      (JC_<somenum>:
-                                                      (((acc_ !Proc_ready_list_1_alloc_table) !Proc_priority_ready_list_1) !highest_search))))) in
-                                     void) else void);
-                                    (C_37:
-                                    begin
-                                      (highest_search := (C_36:
-                                                         (JC_<somenum>:
-                                                         (((acc_ !Proc_ready_list_1_alloc_table) !Proc_next_ready_list_1) !highest_search))));
-                                     !highest_search end) end in void);
-                                  (raise (Loop_continue_exc void)) end with
-                                 Loop_continue_exc jessie_<somenum> -> void end end
-                              done; (raise (Goto_while_1_break_exc void)) end)
-                           end) end) with Goto_while_1_break_exc jessie_<somenum> ->
-                          (let jessie_<somenum> =
-                          (while_1_break:
-                          begin
-                            void;
-                           (C_38:
-                           begin   (max_prio := !highest_prio); !max_prio end)
-                          end) in void) end else void);
-                        (C_40:
-                        begin
-                          (found := (safe_int32_of_integer_ (1))); !found end)
-                       end) end in void) else void);
-                     (C_41:
+                     [ { } unit reads Proc_next_ready_list_1,highest_search
+                       { (JC_<somenum>:
+                         ge_int(integer_of_int32(list_length(highest_search,
+                                                 Proc_next_ready_list_1)),
+                         (0))) } ];
+                    try
                      begin
-                       (let jessie_<somenum> = (prev_elem := !ready_list_elem) in
-                       void);
-                      (C_43:
-                      begin
-                        (ready_list_elem := (C_42:
-                                            (JC_<somenum>:
-                                            (((acc_ !Proc_ready_list_1_alloc_table) !Proc_next_ready_list_1) !ready_list_elem))));
-                       !ready_list_elem end) end) end) end in void);
-                  (raise (Loop_continue_exc void)) end with
-                 Loop_continue_exc jessie_<somenum> -> void end end done;
-             (raise (Goto_while_0_break_exc void)) end) end) end) end) end)
-       end) end) with Goto_while_0_break_exc jessie_<somenum> ->
+                       (let jessie_<somenum> =
+                       (C_37:
+                       begin
+                         (if ((neq_pointer !highest_search) null) then void
+                         else (raise (Goto_while_1_break_exc void)));
+                        (if ((gt_int_ (integer_of_int32 (C_35:
+                                                        (JC_<somenum>:
+                                                        (((acc_ !Proc_ready_list_1_alloc_table) !Proc_priority_ready_list_1) !highest_search))))) 
+                             (integer_of_int32 !highest_prio))
+                        then
+                         (let jessie_<somenum> =
+                         (C_34:
+                         (highest_prio := (C_33:
+                                          (JC_<somenum>:
+                                          (((acc_ !Proc_ready_list_1_alloc_table) !Proc_priority_ready_list_1) !highest_search))))) in
+                         void) else void);
+                        (highest_search := (C_36:
+                                           (JC_<somenum>:
+                                           (((acc_ !Proc_ready_list_1_alloc_table) !Proc_next_ready_list_1) !highest_search))));
+                        !highest_search end) in void);
+                      (raise (Loop_continue_exc void)) end with
+                     Loop_continue_exc jessie_<somenum> -> void end end done;
+                  (raise (Goto_while_1_break_exc void)) end))) with
+                 Goto_while_1_break_exc jessie_<somenum> ->
+                 (let jessie_<somenum> =
+                 (while_1_break:
+                 (C_38:
+                 begin   void; (max_prio := !highest_prio); !max_prio end)) in
+                 void) end else void);
+               (found := (safe_int32_of_integer_ (1))); !found end)) in void)
+             else void);
+             (let jessie_<somenum> = (prev_elem := !ready_list_elem) in void);
+             (ready_list_elem := (C_42:
+                                 (JC_<somenum>:
+                                 (((acc_ !Proc_ready_list_1_alloc_table) !Proc_next_ready_list_1) !ready_list_elem))));
+             !ready_list_elem end))) in void);
+           (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end))))))) with
+      Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
+      (C_44:
       begin
         void;
-       (C_44:
-       begin
-         (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (return := !__retres); (raise Return) end) end) end)))))))))));
-    absurd  end with Return -> !return end)) { true }
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end)) end))))))))))); absurd 
+   end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C vamos.jessie --quiet -f vamos.makefile project
@@ -1237,7 +1189,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vamos_po12.why">
-      <location file = "why/vamos.why" line = "867" begin = "26" end = "61"/>
+      <location file = "why/vamos.why" line = "840" begin = "19" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1262,7 +1214,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vamos_po17.why">
-      <location file = "why/vamos.why" line = "887" begin = "29" end = "58"/>
+      <location file = "why/vamos.why" line = "859" begin = "21" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1317,7 +1269,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po28.why">
-      <location file = "why/vamos.why" line = "942" begin = "42" end = "76"/>
+      <location file = "why/vamos.why" line = "908" begin = "30" end = "64"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1352,11 +1304,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po35.why">
-      <location file = "why/vamos.why" line = "930" begin = "65" end = "66"/>
+      <location file = "why/vamos.why" line = "896" begin = "53" end = "54"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vamos_po36.why">
-      <location file = "why/vamos.why" line = "930" begin = "65" end = "66"/>
+      <location file = "why/vamos.why" line = "896" begin = "53" end = "54"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vamos_po37.why">
@@ -1370,11 +1322,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po39.why">
-      <location file = "why/vamos.why" line = "842" begin = "49" end = "50"/>
+      <location file = "why/vamos.why" line = "812" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vamos_po40.why">
-      <location file = "why/vamos.why" line = "842" begin = "49" end = "50"/>
+      <location file = "why/vamos.why" line = "812" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

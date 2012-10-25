@@ -924,21 +924,19 @@ let stack_init_ensures_default =
   (init:
   try
    (C_15:
+   (C_17:
+   (C_19:
    begin
      (let jessie_<somenum> = data in
      (let jessie_<somenum> = stack in
      (((safe_upd_ stack_t_data_0_stack_5) jessie_<somenum>) jessie_<somenum>)));
-    (C_17:
-    begin
-      (let jessie_<somenum> = size_1 in
-      (let jessie_<somenum> = stack in
-      (((safe_upd_ stack_t_size_2_stack_5) jessie_<somenum>) jessie_<somenum>)));
-     (C_19:
-     begin
-       (let jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
-       (let jessie_<somenum> = stack in
-       (((safe_upd_ stack_t_used_stack_5) jessie_<somenum>) jessie_<somenum>)));
-      (raise Return); (raise Return) end) end) end) with Return -> void end)
+    (let jessie_<somenum> = size_1 in
+    (let jessie_<somenum> = stack in
+    (((safe_upd_ stack_t_size_2_stack_5) jessie_<somenum>) jessie_<somenum>)));
+    (let jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
+    (let jessie_<somenum> = stack in
+    (((safe_upd_ stack_t_used_stack_5) jessie_<somenum>) jessie_<somenum>)));
+    (raise Return); (raise Return) end))) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      stack_initialized(stack, intP_data_6_alloc_table,
@@ -963,25 +961,22 @@ let stack_init_safety =
   (init:
   try
    (C_15:
+   (C_17:
+   (C_19:
    begin
      (let jessie_<somenum> = data in
      (let jessie_<somenum> = stack in
      (JC_<somenum>:
      ((((upd_ stack_t_stack_5_alloc_table) stack_t_data_0_stack_5) jessie_<somenum>) jessie_<somenum>))));
-    (C_17:
-    begin
-      (let jessie_<somenum> = size_1 in
-      (let jessie_<somenum> = stack in
-      (JC_<somenum>:
-      ((((upd_ stack_t_stack_5_alloc_table) stack_t_size_2_stack_5) jessie_<somenum>) jessie_<somenum>))));
-     (C_19:
-     begin
-       (let jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
-       (let jessie_<somenum> = stack in
-       (JC_<somenum>:
-       ((((upd_ stack_t_stack_5_alloc_table) stack_t_used_stack_5) jessie_<somenum>) jessie_<somenum>))));
-      (raise Return); (raise Return) end) end) end) with Return -> void end)
-  { true }
+    (let jessie_<somenum> = size_1 in
+    (let jessie_<somenum> = stack in
+    (JC_<somenum>:
+    ((((upd_ stack_t_stack_5_alloc_table) stack_t_size_2_stack_5) jessie_<somenum>) jessie_<somenum>))));
+    (let jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
+    (let jessie_<somenum> = stack in
+    (JC_<somenum>:
+    ((((upd_ stack_t_stack_5_alloc_table) stack_t_used_stack_5) jessie_<somenum>) jessie_<somenum>))));
+    (raise Return); (raise Return) end))) with Return -> void end) { true }
 
 let stack_pop_ensures_default =
  fun (stack_0 : stack_t pointer) (item : intP pointer) (intP_intM_item_9 : (intP, int32) memory ref) (stack_t_used_stack_0_8 : (stack_t, uint32) memory ref) (intP_item_9_alloc_table : intP alloc_table) (intP_data_0_15_alloc_table : intP alloc_table) (stack_t_stack_0_8_alloc_table : stack_t alloc_table) (intP_intM_data_0_15 : (intP, int32) memory) (stack_t_data_0_stack_0_8 : (stack_t, intP pointer) memory) (stack_t_size_2_stack_0_8 : (stack_t, uint32) memory) ->
@@ -1007,6 +1002,8 @@ let stack_pop_ensures_default =
                                          ((safe_acc_ !stack_t_used_stack_0_8) stack_0)))) (0))
         then
          (C_58:
+         (C_63:
+         (C_64:
          begin
            (let jessie_<somenum> =
            (C_56:
@@ -1017,20 +1014,15 @@ let stack_pop_ensures_default =
                                                                 ((safe_acc_ !stack_t_used_stack_0_8) stack_0))))))) in
            (let jessie_<somenum> = item in
            (((safe_upd_ intP_intM_item_9) jessie_<somenum>) jessie_<somenum>)));
-          (C_63:
-          begin
-            (let jessie_<somenum> =
-            (C_61:
-            (safe_uint32_of_integer_ (C_60:
-                                     ((sub_int (integer_of_uint32 (C_59:
-                                                                  ((safe_acc_ !stack_t_used_stack_0_8) stack_0)))) (1))))) in
-            (let jessie_<somenum> = stack_0 in
-            (((safe_upd_ stack_t_used_stack_0_8) jessie_<somenum>) jessie_<somenum>)));
-           (C_64:
-           begin
-             (let jessie_<somenum> =
-             (__retres_0 := (safe_int32_of_integer_ (1))) in void);
-            (raise (Return_label_exc void)) end) end) end)
+          (let jessie_<somenum> =
+          (C_61:
+          (safe_uint32_of_integer_ (C_60:
+                                   ((sub_int (integer_of_uint32 (C_59:
+                                                                ((safe_acc_ !stack_t_used_stack_0_8) stack_0)))) (1))))) in
+          (let jessie_<somenum> = stack_0 in
+          (((safe_upd_ stack_t_used_stack_0_8) jessie_<somenum>) jessie_<somenum>)));
+          (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
+          void); (raise (Return_label_exc void)) end)))
         else
          (C_52:
          begin
@@ -1065,6 +1057,8 @@ let stack_pop_safety =
                                          (((acc_ stack_t_stack_0_8_alloc_table) !stack_t_used_stack_0_8) stack_0))))) (0))
         then
          (C_58:
+         (C_63:
+         (C_64:
          begin
            (let jessie_<somenum> =
            (C_56:
@@ -1079,22 +1073,18 @@ let stack_pop_safety =
            (let jessie_<somenum> = item in
            (JC_<somenum>:
            ((((upd_ intP_item_9_alloc_table) intP_intM_item_9) jessie_<somenum>) jessie_<somenum>))));
-          (C_63:
-          begin
-            (let jessie_<somenum> =
-            (C_61:
-            (JC_<somenum>:
-            (uint32_of_integer_ (C_60:
-                                ((sub_int (integer_of_uint32 (C_59:
-                                                             (JC_<somenum>:
-                                                             (((acc_ stack_t_stack_0_8_alloc_table) !stack_t_used_stack_0_8) stack_0))))) (1)))))) in
-            (let jessie_<somenum> = stack_0 in
-            (JC_<somenum>:
-            ((((upd_ stack_t_stack_0_8_alloc_table) stack_t_used_stack_0_8) jessie_<somenum>) jessie_<somenum>))));
-           (C_64:
-           begin
-             (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
-             void); (raise (Return_label_exc void)) end) end) end)
+          (let jessie_<somenum> =
+          (C_61:
+          (JC_<somenum>:
+          (uint32_of_integer_ (C_60:
+                              ((sub_int (integer_of_uint32 (C_59:
+                                                           (JC_<somenum>:
+                                                           (((acc_ stack_t_stack_0_8_alloc_table) !stack_t_used_stack_0_8) stack_0))))) (1)))))) in
+          (let jessie_<somenum> = stack_0 in
+          (JC_<somenum>:
+          ((((upd_ stack_t_stack_0_8_alloc_table) stack_t_used_stack_0_8) jessie_<somenum>) jessie_<somenum>))));
+          (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
+          void); (raise (Return_label_exc void)) end)))
         else
          (C_52:
          begin
@@ -1126,6 +1116,8 @@ let stack_push_ensures_default =
                                 ((safe_acc_ stack_t_size_2_stack_1_7) stack_1))))
         then
          (C_38:
+         (C_43:
+         (C_44:
          begin
            (let jessie_<somenum> =
            (C_36:
@@ -1134,22 +1126,18 @@ let stack_push_ensures_default =
                                                                  ((safe_acc_ !stack_t_used_stack_1_7) stack_1)))) (1))))) in
            (let jessie_<somenum> = stack_1 in
            (((safe_upd_ stack_t_used_stack_1_7) jessie_<somenum>) jessie_<somenum>)));
-          (C_43:
-          begin
-            (let jessie_<somenum> =
-            (let jessie_<somenum> = item_0 in
-            (let jessie_<somenum> =
-            (C_40: ((safe_acc_ stack_t_data_0_stack_1_7) stack_1)) in
-            (let jessie_<somenum> =
-            (integer_of_uint32 (C_39:
-                               ((safe_acc_ !stack_t_used_stack_1_7) stack_1))) in
-            (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-            (((safe_upd_ intP_intM_data_0_14) jessie_<somenum>) jessie_<somenum>))))) in
-            void);
-           (C_44:
-           begin
-             (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-             void); (raise (Return_label_exc void)) end) end) end)
+          (let jessie_<somenum> =
+          (let jessie_<somenum> = item_0 in
+          (let jessie_<somenum> =
+          (C_40: ((safe_acc_ stack_t_data_0_stack_1_7) stack_1)) in
+          (let jessie_<somenum> =
+          (integer_of_uint32 (C_39:
+                             ((safe_acc_ !stack_t_used_stack_1_7) stack_1))) in
+          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+          (((safe_upd_ intP_intM_data_0_14) jessie_<somenum>) jessie_<somenum>))))) in
+          void);
+          (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+          void); (raise (Return_label_exc void)) end)))
         else
          (C_33:
          begin
@@ -1189,6 +1177,8 @@ let stack_push_safety =
                                 (((acc_ stack_t_stack_1_7_alloc_table) stack_t_size_2_stack_1_7) stack_1)))))
         then
          (C_38:
+         (C_43:
+         (C_44:
          begin
            (let jessie_<somenum> =
            (C_36:
@@ -1200,26 +1190,22 @@ let stack_push_safety =
            (let jessie_<somenum> = stack_1 in
            (JC_<somenum>:
            ((((upd_ stack_t_stack_1_7_alloc_table) stack_t_used_stack_1_7) jessie_<somenum>) jessie_<somenum>))));
-          (C_43:
-          begin
-            (let jessie_<somenum> =
-            (let jessie_<somenum> = item_0 in
-            (let jessie_<somenum> =
-            (C_40:
-            (JC_<somenum>:
-            (((acc_ stack_t_stack_1_7_alloc_table) stack_t_data_0_stack_1_7) stack_1))) in
-            (let jessie_<somenum> =
-            (integer_of_uint32 (C_39:
-                               (JC_<somenum>:
-                               (((acc_ stack_t_stack_1_7_alloc_table) !stack_t_used_stack_1_7) stack_1)))) in
-            (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-            (JC_<somenum>:
-            (((((offset_upd_ intP_data_0_14_alloc_table) intP_intM_data_0_14) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-            void);
-           (C_44:
-           begin
-             (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-             void); (raise (Return_label_exc void)) end) end) end)
+          (let jessie_<somenum> =
+          (let jessie_<somenum> = item_0 in
+          (let jessie_<somenum> =
+          (C_40:
+          (JC_<somenum>:
+          (((acc_ stack_t_stack_1_7_alloc_table) stack_t_data_0_stack_1_7) stack_1))) in
+          (let jessie_<somenum> =
+          (integer_of_uint32 (C_39:
+                             (JC_<somenum>:
+                             (((acc_ stack_t_stack_1_7_alloc_table) !stack_t_used_stack_1_7) stack_1)))) in
+          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+          (JC_<somenum>:
+          (((((offset_upd_ intP_data_0_14_alloc_table) intP_intM_data_0_14) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+          void);
+          (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+          void); (raise (Return_label_exc void)) end)))
         else
          (C_33:
          begin
@@ -1318,7 +1304,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po47.why">
-      <location file = "why/bts0427.why" line = "1112" begin = "12" end = "170"/>
+      <location file = "why/bts0427.why" line = "1098" begin = "12" end = "170"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

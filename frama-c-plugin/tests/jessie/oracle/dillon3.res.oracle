@@ -523,38 +523,37 @@ let f4_ensures_default =
      (let tab = ref (any_pointer void) in
      (let r = ref (any_double void) in
      (C_14:
+     (C_16:
+     (C_18:
+     (C_20:
+     (C_21:
      begin
        (let jessie_<somenum> =
        (tab := (C_13:
                (JC_<somenum>:
                (((alloc_struct_doubleP (2)) doubleP_tab_2_alloc_table) doubleP_tab_2_tag_table)))) in
        void);
-      (C_16:
-      begin
-        (let jessie_<somenum> = (double_of_real_exact 1.0) in
-        (let jessie_<somenum> = !tab in
-        (((safe_upd_ doubleP_doubleM_tab_2) jessie_<somenum>) jessie_<somenum>)));
-       (C_18:
-       begin
-         (let jessie_<somenum> = (double_of_real_exact 2.0) in
-         (let jessie_<somenum> = !tab in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ doubleP_doubleM_tab_2) jessie_<somenum>) jessie_<somenum>))))));
-        (C_20:
-        begin
-          (let jessie_<somenum> =
-          (r := (C_19:
-                (let jessie_<somenum> = !tab in
-                (JC_<somenum>:
-                (((g4 jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2))))) in
-          void);
-         (C_21:
-         begin
-           ((safe_free_parameter doubleP_tab_2_alloc_table) !tab);
-          (return := !r); (raise Return) end) end) end) end) end))))));
-    absurd  end with Return -> !return end))
+      (let jessie_<somenum> = (double_of_real_exact 1.0) in
+      (let jessie_<somenum> = !tab in
+      (let jessie_<somenum> = (double_of_real_exact 2.0) in
+      (let jessie_<somenum> = !tab in
+      (let jessie_<somenum> = (1) in
+      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+      [ { } unit reads doubleP_doubleM_tab_2,doubleP_tab_2_alloc_table
+        writes doubleP_doubleM_tab_2
+        { (not_assigns(doubleP_tab_2_alloc_table, doubleP_doubleM_tab_2@,
+           doubleP_doubleM_tab_2,
+           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
+          and ((select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+              and (select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
+      (r := (C_19:
+            (let jessie_<somenum> = !tab in
+            (JC_<somenum>:
+            (((g4 jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2))))) in
+      void); ((safe_free_parameter doubleP_tab_2_alloc_table) !tab);
+      (return := !r); (raise Return) end)))))))))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     not_assigns(doubleP_tab_2_alloc_table@, doubleP_doubleM_tab_2@,
     doubleP_doubleM_tab_2, pset_empty)) }
@@ -572,6 +571,10 @@ let f4_safety =
      (let tab = ref (any_pointer void) in
      (let r = ref (any_double void) in
      (C_14:
+     (C_16:
+     (C_18:
+     (C_20:
+     (C_21:
      begin
        (let jessie_<somenum> =
        (tab := (let jessie_<somenum> =
@@ -582,31 +585,26 @@ let f4_safety =
                (assert
                { ge_int(offset_max(doubleP_tab_2_alloc_table, jessie_<somenum>), (1)) };
                jessie_<somenum>)))) in void);
-      (C_16:
-      begin
-        (let jessie_<somenum> = (double_of_real_exact 1.0) in
-        (let jessie_<somenum> = !tab in
-        (((safe_upd_ doubleP_doubleM_tab_2) jessie_<somenum>) jessie_<somenum>)));
-       (C_18:
-       begin
-         (let jessie_<somenum> = (double_of_real_exact 2.0) in
-         (let jessie_<somenum> = !tab in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ doubleP_doubleM_tab_2) jessie_<somenum>) jessie_<somenum>))))));
-        (C_20:
-        begin
-          (let jessie_<somenum> =
-          (r := (C_19:
-                (let jessie_<somenum> = !tab in
-                (JC_<somenum>:
-                (((g4_requires jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2))))) in
-          void);
-         (C_21:
-         begin
-           ((free_parameter doubleP_tab_2_alloc_table) !tab); (return := !r);
-          (raise Return) end) end) end) end) end)))))); absurd  end with
+      (let jessie_<somenum> = (double_of_real_exact 1.0) in
+      (let jessie_<somenum> = !tab in
+      (let jessie_<somenum> = (double_of_real_exact 2.0) in
+      (let jessie_<somenum> = !tab in
+      (let jessie_<somenum> = (1) in
+      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+      [ { } unit reads doubleP_doubleM_tab_2,doubleP_tab_2_alloc_table
+        writes doubleP_doubleM_tab_2
+        { (not_assigns(doubleP_tab_2_alloc_table, doubleP_doubleM_tab_2@,
+           doubleP_doubleM_tab_2,
+           pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
+          and ((select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+              and (select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
+      (r := (C_19:
+            (let jessie_<somenum> = !tab in
+            (JC_<somenum>:
+            (((g4_requires jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2))))) in
+      void); ((free_parameter doubleP_tab_2_alloc_table) !tab);
+      (return := !r); (raise Return) end)))))))))); absurd  end with
    Return -> !return end)) { true }
 
 let g4_ensures_default =

@@ -649,19 +649,18 @@ let f_ensures_default =
   (init:
   try
    (C_3:
+   (C_6:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let jessie_<somenum> = (C_1: ((safe_acc_ !S_b_x_1) x_0)) in
      (((safe_upd_ intP_intM_x_1) jessie_<somenum>) jessie_<somenum>)));
-    (C_6:
-    begin
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = (C_4: ((safe_acc_ !S_b_y_2) y)) in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_y_2) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
-     (raise Return) end) end) with Return -> void end)
+    (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+    (let jessie_<somenum> = (C_4: ((safe_acc_ !S_b_y_2) y)) in
+    (let jessie_<somenum> = (1) in
+    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+    (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+    (((safe_upd_ intP_intM_y_2) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
+    (raise Return) end)) with Return -> void end)
   { (JC_<somenum>: p(x_0, S_b_x_1, intP_intM_x_1)) }
 
 let f_safety =
@@ -673,19 +672,18 @@ let f_safety =
   (init:
   try
    (C_3:
+   (C_6:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let jessie_<somenum> = (C_1: ((safe_acc_ !S_b_x_1) x_0)) in
      (((safe_upd_ intP_intM_x_1) jessie_<somenum>) jessie_<somenum>)));
-    (C_6:
-    begin
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = (C_4: ((safe_acc_ !S_b_y_2) y)) in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_y_2) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
-     (raise Return) end) end) with Return -> void end)
+    (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+    (let jessie_<somenum> = (C_4: ((safe_acc_ !S_b_y_2) y)) in
+    (let jessie_<somenum> = (1) in
+    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+    (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+    (((safe_upd_ intP_intM_y_2) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
+    (raise Return) end)) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_y(S_y_2_alloc_table))
     and (JC_<somenum>: valid_x(S_x_1_alloc_table)))) }

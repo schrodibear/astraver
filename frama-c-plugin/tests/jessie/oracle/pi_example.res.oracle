@@ -95,19 +95,18 @@ behavior default:
    {  (C_16 : (r = (C_15 : ((6.28 :> float) * radius_1))));
       
       {  
-         (assert for default: (C_17 : (jessie : (\real_abs(((r :> real) -
-                                                             (6.28 *
-                                                               (radius_1 :> real)))) <=
-                                                  0x1p-19))));
+         (assert for default: (C_17 : (\real_abs(((r :> real) -
+                                                   (6.28 *
+                                                     (radius_1 :> real)))) <=
+                                        0x1p-19)));
          ()
       };
       
       {  
-         (assert for default: (C_18 : (jessie : (\real_abs(((6.28 *
-                                                              (radius_1 :> real)) -
-                                                             ((\pi * 2.0) *
-                                                               (radius_1 :> real)))) <=
-                                                  0x1p-4))));
+         (assert for default: (C_18 : (\real_abs(((6.28 * (radius_1 :> real)) -
+                                                   ((\pi * 2.0) *
+                                                     (radius_1 :> real)))) <=
+                                        0x1p-4)));
          ()
       };
       

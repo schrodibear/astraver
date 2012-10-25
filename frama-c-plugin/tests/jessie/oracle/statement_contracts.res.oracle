@@ -63,7 +63,7 @@ behavior default:
         });
       
       {  
-         (assert for b: (C_5 : (jessie : false)));
+         (assert for b: (C_5 : false));
          ()
       };
       

@@ -409,14 +409,13 @@ let func1_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
+     (C_2:
      begin
        (if ((lt_double_ (C_1: (double_of_single x_0))) ((double_of_real_safe nearest_even) 1E-6))
        then void else void);
-      (C_2:
-      begin
-        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
 
 let func1_safety =
  fun (x_0 : single) ->
@@ -426,15 +425,14 @@ let func1_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
+     (C_2:
      begin
        (if ((lt_double_ (C_1: (double_of_single x_0))) (JC_<somenum>:
                                                        ((double_of_real nearest_even) 1E-6)))
        then void else void);
-      (C_2:
-      begin
-        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { true }
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0367.jessie --quiet -f bts0367.makefile project

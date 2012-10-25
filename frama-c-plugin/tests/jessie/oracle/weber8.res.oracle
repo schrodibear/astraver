@@ -556,45 +556,42 @@ let fill_ensures_default =
      (let tmp = ref (any_pointer void) in
      try
       (C_1:
+      (loop_2:
       begin
         (let jessie_<somenum> = (it := first) in void);
-       (loop_2:
-       begin
-         while true do
-         { invariant
-             ((JC_<somenum>:
-              (forall k:int.
-               ((le_int((0), k) and lt_int(k, sub_pointer(it, first))) ->
-                (integer_of_int32(select(intP_intM_first_1, shift(first, k))) = 
-                integer_of_int32(value)))))
-             and (JC_<somenum>:
-                 ((JC_<somenum>: le_int(sub_pointer(first, it), (0)))
-                 and ((JC_<somenum>: le_int(sub_pointer(it, last), (0)))
-                     and ((JC_<somenum>: same_block(first, it))
-                         and (JC_<somenum>: same_block(last, it)))))))  }
+       while true do
+       { invariant
+           ((JC_<somenum>:
+            (forall k:int.
+             ((le_int((0), k) and lt_int(k, sub_pointer(it, first))) ->
+              (integer_of_int32(select(intP_intM_first_1, shift(first, k))) = 
+              integer_of_int32(value)))))
+           and (JC_<somenum>:
+               ((JC_<somenum>: le_int(sub_pointer(first, it), (0)))
+               and ((JC_<somenum>: le_int(sub_pointer(it, last), (0)))
+                   and ((JC_<somenum>: same_block(first, it))
+                       and (JC_<somenum>: same_block(last, it)))))))  }
+        begin
+          [ { } unit { true } ];
+         try
           begin
-            [ { } unit { true } ];
-           try
+            (let jessie_<somenum> =
+            (C_10:
+            (C_12:
             begin
-              (let jessie_<somenum> =
-              begin
-                (if ((safe_neq_pointer !it) last) then void
-                else (raise (Goto_while_0_break_exc void)));
-               (C_10:
-               begin
-                 (let jessie_<somenum> = (tmp := !it) in void);
-                (C_12:
-                begin
-                  (let jessie_<somenum> = (it := (C_11: ((shift !it) (1)))) in void);
-                 (C_14:
-                 (let jessie_<somenum> = value in
-                 begin
-                   (let jessie_<somenum> = !tmp in
-                   (((safe_upd_ intP_intM_first_1) jessie_<somenum>) jessie_<somenum>));
-                  jessie_<somenum> end)) end) end) end in void);
-             (raise (Loop_continue_exc void)) end with
-            Loop_continue_exc jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+              (if ((safe_neq_pointer !it) last) then void
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<somenum> = (tmp := !it) in void);
+             (let jessie_<somenum> = (it := (C_11: ((shift !it) (1)))) in void);
+             (C_14:
+             (let jessie_<somenum> = value in
+             begin
+               (let jessie_<somenum> = !tmp in
+               (((safe_upd_ intP_intM_first_1) jessie_<somenum>) jessie_<somenum>));
+              jessie_<somenum> end)) end)) in void);
+           (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end) { (JC_<somenum>: true) }
@@ -615,45 +612,42 @@ let fill_ensures_is_not_empty =
      (let tmp = ref (any_pointer void) in
      try
       (C_1:
+      (loop_3:
       begin
         (let jessie_<somenum> = (it := first) in void);
-       (loop_3:
-       begin
-         while true do
-         { invariant (JC_<somenum>: true)  }
+       while true do
+       { invariant (JC_<somenum>: true)  }
+        begin
+          [ { } unit reads intP_intM_first_1,it
+            { ((JC_<somenum>:
+               (forall k:int.
+                ((le_int((0), k) and lt_int(k, sub_pointer(it, first))) ->
+                 (integer_of_int32(select(intP_intM_first_1, shift(first, k))) = 
+                 integer_of_int32(value)))))
+              and (JC_<somenum>:
+                  ((JC_<somenum>: le_int(sub_pointer(first, it), (0)))
+                  and ((JC_<somenum>: le_int(sub_pointer(it, last), (0)))
+                      and ((JC_<somenum>: same_block(first, it))
+                          and (JC_<somenum>: same_block(last, it))))))) } ];
+         try
           begin
-            [ { } unit reads intP_intM_first_1,it
-              { ((JC_<somenum>:
-                 (forall k:int.
-                  ((le_int((0), k) and lt_int(k, sub_pointer(it, first))) ->
-                   (integer_of_int32(select(intP_intM_first_1,
-                                     shift(first, k))) = integer_of_int32(value)))))
-                and (JC_<somenum>:
-                    ((JC_<somenum>: le_int(sub_pointer(first, it), (0)))
-                    and ((JC_<somenum>: le_int(sub_pointer(it, last), (0)))
-                        and ((JC_<somenum>: same_block(first, it))
-                            and (JC_<somenum>: same_block(last, it))))))) } ];
-           try
+            (let jessie_<somenum> =
+            (C_10:
+            (C_12:
             begin
-              (let jessie_<somenum> =
-              begin
-                (if ((safe_neq_pointer !it) last) then void
-                else (raise (Goto_while_0_break_exc void)));
-               (C_10:
-               begin
-                 (let jessie_<somenum> = (tmp := !it) in void);
-                (C_12:
-                begin
-                  (let jessie_<somenum> = (it := (C_11: ((shift !it) (1)))) in void);
-                 (C_14:
-                 (let jessie_<somenum> = value in
-                 begin
-                   (let jessie_<somenum> = !tmp in
-                   (((safe_upd_ intP_intM_first_1) jessie_<somenum>) jessie_<somenum>));
-                  jessie_<somenum> end)) end) end) end in void);
-             (raise (Loop_continue_exc void)) end with
-            Loop_continue_exc jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+              (if ((safe_neq_pointer !it) last) then void
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<somenum> = (tmp := !it) in void);
+             (let jessie_<somenum> = (it := (C_11: ((shift !it) (1)))) in void);
+             (C_14:
+             (let jessie_<somenum> = value in
+             begin
+               (let jessie_<somenum> = !tmp in
+               (((safe_upd_ intP_intM_first_1) jessie_<somenum>) jessie_<somenum>));
+              jessie_<somenum> end)) end)) in void);
+           (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end)
@@ -679,46 +673,43 @@ let fill_safety =
      (let tmp = ref (any_pointer void) in
      try
       (C_1:
+      (loop_1:
       begin
         (let jessie_<somenum> = (it := first) in void);
-       (loop_1:
-       begin
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit reads intP_intM_first_1,it
+            { ((JC_<somenum>:
+               (forall k:int.
+                ((le_int((0), k) and lt_int(k, sub_pointer(it, first))) ->
+                 (integer_of_int32(select(intP_intM_first_1, shift(first, k))) = 
+                 integer_of_int32(value)))))
+              and (JC_<somenum>:
+                  ((JC_<somenum>: le_int(sub_pointer(first, it), (0)))
+                  and ((JC_<somenum>: le_int(sub_pointer(it, last), (0)))
+                      and ((JC_<somenum>: same_block(first, it))
+                          and (JC_<somenum>: same_block(last, it))))))) } ];
+         try
           begin
-            [ { } unit reads intP_intM_first_1,it
-              { ((JC_<somenum>:
-                 (forall k:int.
-                  ((le_int((0), k) and lt_int(k, sub_pointer(it, first))) ->
-                   (integer_of_int32(select(intP_intM_first_1,
-                                     shift(first, k))) = integer_of_int32(value)))))
-                and (JC_<somenum>:
-                    ((JC_<somenum>: le_int(sub_pointer(first, it), (0)))
-                    and ((JC_<somenum>: le_int(sub_pointer(it, last), (0)))
-                        and ((JC_<somenum>: same_block(first, it))
-                            and (JC_<somenum>: same_block(last, it))))))) } ];
-           try
+            (let jessie_<somenum> =
+            (C_10:
+            (C_12:
             begin
-              (let jessie_<somenum> =
-              begin
-                (if ((neq_pointer !it) last) then void
-                else (raise (Goto_while_0_break_exc void)));
-               (C_10:
-               begin
-                 (let jessie_<somenum> = (tmp := !it) in void);
-                (C_12:
-                begin
-                  (let jessie_<somenum> = (it := (C_11: ((shift !it) (1)))) in void);
-                 (C_14:
-                 (let jessie_<somenum> = value in
-                 begin
-                   (let jessie_<somenum> = !tmp in
-                   (JC_<somenum>:
-                   ((((upd_ intP_first_1_alloc_table) intP_intM_first_1) jessie_<somenum>) jessie_<somenum>)));
-                  jessie_<somenum> end)) end) end) end in void);
-             (raise (Loop_continue_exc void)) end with
-            Loop_continue_exc jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+              (if ((neq_pointer !it) last) then void
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<somenum> = (tmp := !it) in void);
+             (let jessie_<somenum> = (it := (C_11: ((shift !it) (1)))) in void);
+             (C_14:
+             (let jessie_<somenum> = value in
+             begin
+               (let jessie_<somenum> = !tmp in
+               (JC_<somenum>:
+               ((((upd_ intP_first_1_alloc_table) intP_intM_first_1) jessie_<somenum>) jessie_<somenum>)));
+              jessie_<somenum> end)) end)) in void);
+           (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end) { true }
@@ -773,7 +764,7 @@ why --project [...] why/weber8.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/weber8_po12.why">
-      <location file = "why/weber8.why" line = "612" begin = "21" end = "43"/>
+      <location file = "why/weber8.why" line = "607" begin = "19" end = "41"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -788,11 +779,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber8_po15.why">
-      <location file = "why/weber8.why" line = "595" begin = "44" end = "45"/>
+      <location file = "why/weber8.why" line = "588" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber8_po16.why">
-      <location file = "why/weber8.why" line = "595" begin = "44" end = "45"/>
+      <location file = "why/weber8.why" line = "588" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

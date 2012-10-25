@@ -47,12 +47,12 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_1 : (jessie : (\real_abs(((1.0 -
-                                                             (((x :> real) *
-                                                                (x :> real)) *
-                                                               0.5)) -
-                                                            \cos((x :> real)))) <=
-                                                 0x1p-24))));
+         (assert for default: (C_1 : (\real_abs(((1.0 -
+                                                   (((x :> real) *
+                                                      (x :> real)) *
+                                                     0.5)) -
+                                                  \cos((x :> real)))) <=
+                                       0x1p-24)));
          ()
       };
       
@@ -403,19 +403,20 @@ let my_cos1_ensures_default =
                                             single_value(x_0)),
                                    0.5)),
                           cos(single_value(x_0)))),
-         0x1p-24)) }; void); void;
+         0x1p-24)) }; void);
       (C_5:
       begin
-        (let jessie_<somenum> =
-        (__retres := (C_4:
+        void;
+       (let jessie_<somenum> =
+       (__retres := (C_4:
+                    (JC_<somenum>:
+                    (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+                     (C_3:
                      (JC_<somenum>:
-                     (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                      (C_3:
-                      (JC_<somenum>:
-                      (((mul_single_safe nearest_even) (C_2:
-                                                       (JC_<somenum>:
-                                                       (((mul_single_safe nearest_even) x_0) x_0)))) 
-                       (single_of_real_exact 0.5)))))))) in void);
+                     (((mul_single_safe nearest_even) (C_2:
+                                                      (JC_<somenum>:
+                                                      (((mul_single_safe nearest_even) x_0) x_0)))) 
+                      (single_of_real_exact 0.5)))))))) in void);
        (return := !__retres); (raise Return) end) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
@@ -438,19 +439,20 @@ let my_cos1_safety =
                                               single_value(x_0)),
                                      0.5)),
                             cos(single_value(x_0)))),
-           0x1p-24)) } ]; void;
+           0x1p-24)) } ];
       (C_5:
       begin
-        (let jessie_<somenum> =
-        (__retres := (C_4:
+        void;
+       (let jessie_<somenum> =
+       (__retres := (C_4:
+                    (JC_<somenum>:
+                    (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+                     (C_3:
                      (JC_<somenum>:
-                     (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                      (C_3:
-                      (JC_<somenum>:
-                      (((mul_single nearest_even) (C_2:
-                                                  (JC_<somenum>:
-                                                  (((mul_single nearest_even) x_0) x_0)))) 
-                       (single_of_real_exact 0.5)))))))) in void);
+                     (((mul_single nearest_even) (C_2:
+                                                 (JC_<somenum>:
+                                                 (((mul_single nearest_even) x_0) x_0)))) 
+                      (single_of_real_exact 0.5)))))))) in void);
        (return := !__retres); (raise Return) end) end); absurd  end with
    Return -> !return end)) { true }
 

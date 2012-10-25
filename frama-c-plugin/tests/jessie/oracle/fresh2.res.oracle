@@ -72,7 +72,7 @@ behavior default:
    {  (C_9 : (f = (C_8 : create())));
       
       {  
-         (assert for default: (C_10 : (jessie : (this != f))));
+         (assert for default: (C_10 : (this != f)));
          ()
       };
       
@@ -92,7 +92,7 @@ behavior default:
       (C_18 : (s2 = (C_17 : create())));
       
       {  
-         (assert for default: (C_19 : (jessie : (0 == 1))));
+         (assert for default: (C_19 : (0 == 1)));
          ()
       };
       
@@ -603,12 +603,11 @@ let smoke_detector_ensures_default =
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
      (C_16:
+     (C_18:
      begin
        (let jessie_<somenum> = (s1_1 := (C_15: (JC_<somenum>: (create void)))) in void);
-      (C_18:
-      begin
-        (let jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create void)))) in void);
-       (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return) end) end)));
+      (let jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create void)))) in void);
+      (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return) end))));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let smoke_detector_safety =
@@ -620,14 +619,13 @@ let smoke_detector_safety =
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
      (C_16:
+     (C_18:
      begin
        (let jessie_<somenum> = (s1_1 := (C_15: (JC_<somenum>: (create_requires void)))) in
        void);
-      (C_18:
-      begin
-        (let jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create_requires void)))) in
-        void); [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return)
-      end) end))); (raise Return) end with Return -> void end) { true }
+      (let jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create_requires void)))) in
+      void); [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return) end))));
+    (raise Return) end with Return -> void end) { true }
 
 let test_ensures_default =
  fun (this : Str pointer) ->

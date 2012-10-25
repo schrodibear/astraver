@@ -885,7 +885,7 @@ behavior default:
       (C_263 : memcpy(y, x, len));
       
       {  
-         (assert for default: (C_264 : (jessie : valid_string{Here}(y))));
+         (assert for default: (C_264 : valid_string{Here}(y)));
          ()
       };
       
@@ -4123,6 +4123,8 @@ let f_ensures_default =
      (let len = ref (any_uint32 void) in
      (let y = ref (any_pointer void) in
      (C_258:
+     (C_262:
+     (C_263:
      begin
        (let jessie_<somenum> =
        (len := (C_257:
@@ -4130,30 +4132,25 @@ let f_ensures_default =
                (JC_<somenum>:
                (((strlen_0 jessie_<somenum>) charP_x_124_alloc_table) charP_charM_x_124))))) in
        void);
-      (C_262:
-      begin
-        (let jessie_<somenum> =
-        (y := (C_261:
-              (JC_<somenum>:
-              (((alloc_struct_charP (integer_of_uint32 (C_260:
-                                                       (safe_uint32_of_integer_ 
-                                                        (C_259:
-                                                        ((add_int (integer_of_uint32 !len)) (1))))))) charP_y_183_alloc_table) charP_y_183_tag_table)))) in
-        void);
-       (C_263:
-       begin
-         (let jessie_<somenum> =
-         (let jessie_<somenum> = !y in
-         (let jessie_<somenum> = x_0 in
-         (let jessie_<somenum> = !len in
-         (JC_<somenum>:
-         (((((((memcpy jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) charP_charM_y_183) charP_x_124_alloc_table) !charP_y_183_alloc_table) charP_charM_x_124))))) in
-         void);
-        (assert
-        { (JC_<somenum>:
-          valid_string(y, charP_y_183_alloc_table, charP_charM_y_183)) };
-        void); void; (raise Return) end) end) end)))))); (raise Return) end
-   with Return -> void end) { (JC_<somenum>: true) }
+      (let jessie_<somenum> =
+      (y := (C_261:
+            (JC_<somenum>:
+            (((alloc_struct_charP (integer_of_uint32 (C_260:
+                                                     (safe_uint32_of_integer_ 
+                                                      (C_259:
+                                                      ((add_int (integer_of_uint32 !len)) (1))))))) charP_y_183_alloc_table) charP_y_183_tag_table)))) in
+      void);
+      (let jessie_<somenum> =
+      (let jessie_<somenum> = !y in
+      (let jessie_<somenum> = x_0 in
+      (let jessie_<somenum> = !len in
+      (JC_<somenum>:
+      (((((((memcpy jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) charP_charM_y_183) charP_x_124_alloc_table) !charP_y_183_alloc_table) charP_charM_x_124))))) in
+      void);
+      (assert
+      { (JC_<somenum>: valid_string(y, charP_y_183_alloc_table, charP_charM_y_183)) };
+      void); void; (raise Return) end)))))))); (raise Return) end with
+   Return -> void end) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (x_0 : charP pointer) (charP_x_124_alloc_table : charP alloc_table) (charP_charM_x_124 : (charP, int8) memory) ->
@@ -4167,6 +4164,8 @@ let f_safety =
      (let len = ref (any_uint32 void) in
      (let y = ref (any_pointer void) in
      (C_258:
+     (C_262:
+     (C_263:
      begin
        (let jessie_<somenum> =
        (len := (C_257:
@@ -4174,32 +4173,28 @@ let f_safety =
                (JC_<somenum>:
                (((strlen_0_requires jessie_<somenum>) charP_x_124_alloc_table) charP_charM_x_124))))) in
        void);
-      (C_262:
-      begin
-        (let jessie_<somenum> =
-        (y := (C_261:
-              (JC_<somenum>:
-              (((alloc_struct_charP_requires (integer_of_uint32 (C_260:
-                                                                (JC_<somenum>:
-                                                                (uint32_of_integer_ 
-                                                                 (C_259:
-                                                                 ((add_int 
-                                                                   (integer_of_uint32 !len)) (1)))))))) charP_y_183_alloc_table) charP_y_183_tag_table)))) in
-        void);
-       (C_263:
-       begin
-         (let jessie_<somenum> =
-         (let jessie_<somenum> = !y in
-         (let jessie_<somenum> = x_0 in
-         (let jessie_<somenum> = !len in
-         (JC_<somenum>:
-         (((((((memcpy_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) charP_charM_y_183) charP_x_124_alloc_table) !charP_y_183_alloc_table) charP_charM_x_124))))) in
-         void);
-        [ { } unit reads charP_charM_y_183,charP_y_183_alloc_table,y
-          { (JC_<somenum>:
-            valid_string(y, charP_y_183_alloc_table, charP_charM_y_183)) } ];
-        void; (raise Return) end) end) end)))))); (raise Return) end with
-   Return -> void end) { true }
+      (let jessie_<somenum> =
+      (y := (C_261:
+            (JC_<somenum>:
+            (((alloc_struct_charP_requires (integer_of_uint32 (C_260:
+                                                              (JC_<somenum>:
+                                                              (uint32_of_integer_ 
+                                                               (C_259:
+                                                               ((add_int 
+                                                                 (integer_of_uint32 !len)) (1)))))))) charP_y_183_alloc_table) charP_y_183_tag_table)))) in
+      void);
+      (let jessie_<somenum> =
+      (let jessie_<somenum> = !y in
+      (let jessie_<somenum> = x_0 in
+      (let jessie_<somenum> = !len in
+      (JC_<somenum>:
+      (((((((memcpy_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) charP_charM_y_183) charP_x_124_alloc_table) !charP_y_183_alloc_table) charP_charM_x_124))))) in
+      void);
+      [ { } unit reads charP_charM_y_183,charP_y_183_alloc_table,y
+        { (JC_<somenum>:
+          valid_string(y, charP_y_183_alloc_table, charP_charM_y_183)) } ];
+      void; (raise Return) end)))))))); (raise Return) end with Return ->
+   void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C calloc.jessie --quiet -f calloc.makefile project

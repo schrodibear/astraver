@@ -787,18 +787,16 @@ let f1_ensures_default =
    begin
      (let __retres_1 = ref (any_int32 void) in
      (C_18:
+     (C_20:
+     (C_21:
      begin
        (let jessie_<somenum> = (mutable_p := q) in void);
-      (C_20:
-      begin
-        (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-        (let jessie_<somenum> = !mutable_p in
-        (((safe_upd_ intP_intM_p_2) jessie_<somenum>) jessie_<somenum>)));
-       (C_21:
-       begin
-         (let jessie_<somenum> = (__retres_1 := (safe_int32_of_integer_ (1))) in
-         void); (return := !__retres_1); (raise Return) end) end) end));
-    absurd  end with Return -> !return end)))
+      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let jessie_<somenum> = !mutable_p in
+      (((safe_upd_ intP_intM_p_2) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (__retres_1 := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres_1); (raise Return) end)))); absurd  end with
+   Return -> !return end)))
   { (JC_<somenum>:
     not_assigns(intP_p_2_alloc_table, intP_intM_p_2@, intP_intM_p_2,
     pset_singleton(q))) }
@@ -819,20 +817,17 @@ let f1_safety =
    begin
      (let __retres_1 = ref (any_int32 void) in
      (C_18:
+     (C_20:
+     (C_21:
      begin
        (let jessie_<somenum> = (mutable_p := q) in void);
-      (C_20:
-      begin
-        (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-        (let jessie_<somenum> = !mutable_p in
-        (JC_<somenum>:
-        ((((upd_ intP_p_2_alloc_table) intP_intM_p_2) jessie_<somenum>) jessie_<somenum>))));
-       (C_21:
-       begin
-         (let jessie_<somenum> = (__retres_1 := (safe_int32_of_integer_ (1))) in
-         void); (return := !__retres_1); (raise Return) end) end) end));
-    absurd  end with Return -> !return end)))
-  { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
+      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let jessie_<somenum> = !mutable_p in
+      (JC_<somenum>:
+      ((((upd_ intP_p_2_alloc_table) intP_intM_p_2) jessie_<somenum>) jessie_<somenum>))));
+      (let jessie_<somenum> = (__retres_1 := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres_1); (raise Return) end)))); absurd  end with
+   Return -> !return end))) { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
 
 let f2_ensures_default =
  fun (p_0 : __anonstruct_S_1 pointer) (r : intP pointer) (intP_intM_r_5 : (intP, int32) memory ref) (__anonstruct_S_1_rc_p_0_4 : (__anonstruct_S_1, intP pointer) memory ref) (__anonstruct_S_1_p_0_4_alloc_table : __anonstruct_S_1 alloc_table) (intP_r_5_alloc_table : intP alloc_table) ->
@@ -861,21 +856,19 @@ let f2_ensures_default =
    begin
      (let __retres_2 = ref (any_int32 void) in
      (C_31:
+     (C_34:
+     (C_35:
      begin
        (let jessie_<somenum> = r in
        (let jessie_<somenum> = p_0 in
        (((safe_upd_ __anonstruct_S_1_rc_p_0_4) jessie_<somenum>) jessie_<somenum>)));
-      (C_34:
-      begin
-        (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
-        (let jessie_<somenum> =
-        (C_32: ((safe_acc_ !__anonstruct_S_1_rc_p_0_4) p_0)) in
-        (((safe_upd_ intP_intM_r_5) jessie_<somenum>) jessie_<somenum>)));
-       (C_35:
-       begin
-         (let jessie_<somenum> = (__retres_2 := (safe_int32_of_integer_ (1))) in
-         void); (return := !__retres_2); (raise Return) end) end) end));
-    absurd  end with Return -> !return end))
+      (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
+      (let jessie_<somenum> =
+      (C_32: ((safe_acc_ !__anonstruct_S_1_rc_p_0_4) p_0)) in
+      (((safe_upd_ intP_intM_r_5) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (__retres_2 := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres_2); (raise Return) end)))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      not_assigns(intP_r_5_alloc_table, intP_intM_r_5@, intP_intM_r_5,
@@ -912,26 +905,23 @@ let f2_safety =
    begin
      (let __retres_2 = ref (any_int32 void) in
      (C_31:
+     (C_34:
+     (C_35:
      begin
        (let jessie_<somenum> = r in
        (let jessie_<somenum> = p_0 in
        (JC_<somenum>:
        ((((upd_ __anonstruct_S_1_p_0_4_alloc_table) __anonstruct_S_1_rc_p_0_4) jessie_<somenum>) jessie_<somenum>))));
-      (C_34:
-      begin
-        (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
-        (let jessie_<somenum> =
-        (C_32:
-        (JC_<somenum>:
-        (((acc_ __anonstruct_S_1_p_0_4_alloc_table) !__anonstruct_S_1_rc_p_0_4) p_0))) in
-        (JC_<somenum>:
-        ((((upd_ intP_r_5_alloc_table) intP_intM_r_5) jessie_<somenum>) jessie_<somenum>))));
-       (C_35:
-       begin
-         (let jessie_<somenum> = (__retres_2 := (safe_int32_of_integer_ (1))) in
-         void); (return := !__retres_2); (raise Return) end) end) end));
-    absurd  end with Return -> !return end))
-  { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
+      (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
+      (let jessie_<somenum> =
+      (C_32:
+      (JC_<somenum>:
+      (((acc_ __anonstruct_S_1_p_0_4_alloc_table) !__anonstruct_S_1_rc_p_0_4) p_0))) in
+      (JC_<somenum>:
+      ((((upd_ intP_r_5_alloc_table) intP_intM_r_5) jessie_<somenum>) jessie_<somenum>))));
+      (let jessie_<somenum> = (__retres_2 := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres_2); (raise Return) end)))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
 
 let f_ensures_default =
  fun (tt : unit) ->
@@ -941,6 +931,7 @@ let f_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
+     (C_12:
      begin
        (let jessie_<somenum> =
        begin
@@ -982,11 +973,9 @@ let f_ensures_default =
           (let jessie_<somenum> = t in
           (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
        end in void);
-      (C_12:
-      begin
-        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end))
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     not_assigns(intP_t_1_alloc_table@, intP_intM_t_1@, intP_intM_t_1,
     pset_range(pset_singleton(t), (0), (3)))) }
@@ -999,6 +988,7 @@ let f_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
+     (C_12:
      begin
        (let jessie_<somenum> =
        begin
@@ -1040,11 +1030,9 @@ let f_safety =
           (let jessie_<somenum> = t in
           (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
        end in void);
-      (C_12:
-      begin
-        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
 
 let g_ensures_default =
  fun (tt : unit) ->
@@ -1055,6 +1043,7 @@ let g_ensures_default =
    begin
      (let __retres_0 = ref (any_int32 void) in
      (C_15:
+     (C_16:
      begin
        (let jessie_<somenum> = (safe_int32_of_integer_ (9)) in
        (let jessie_<somenum> = t in
@@ -1062,11 +1051,9 @@ let g_ensures_default =
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
        (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>))))));
-      (C_16:
-      begin
-        (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (2))) in
-        void); (return := !__retres_0); (raise Return) end) end)); absurd 
-   end with Return -> !return end))
+      (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (2))) in void);
+      (return := !__retres_0); (raise Return) end))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     not_assigns(intP_t_1_alloc_table@, intP_intM_t_1@, intP_intM_t_1,
     pset_range(pset_singleton(t), integer_of_int32(result),
@@ -1081,6 +1068,7 @@ let g_safety =
    begin
      (let __retres_0 = ref (any_int32 void) in
      (C_15:
+     (C_16:
      begin
        (let jessie_<somenum> = (safe_int32_of_integer_ (9)) in
        (let jessie_<somenum> = t in
@@ -1088,12 +1076,9 @@ let g_safety =
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
        (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>))))));
-      (C_16:
-      begin
-        (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (2))) in
-        void); (return := !__retres_0); (raise Return) end) end)); absurd 
-   end with Return -> !return end))
-  { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
+      (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (2))) in void);
+      (return := !__retres_0); (raise Return) end))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C assigns_range.jessie --quiet -f assigns_range.makefile project

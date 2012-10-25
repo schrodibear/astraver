@@ -1893,46 +1893,38 @@ let strcpy_ensures_default =
      (let tmp_1 = ref (any_pointer void) in
      try
       (C_1:
+      (loop_2:
       begin
         (let jessie_<somenum> = (s1_15 := ret) in void);
-       (loop_2:
-       begin
-         while true do
-         { invariant (JC_<somenum>: true)  }
+       while true do
+       { invariant (JC_<somenum>: true)  }
+        begin
+          [ { } unit { true } ];
+         try
+          (C_11:
           begin
-            [ { } unit { true } ];
-           try
+            (let jessie_<somenum> =
+            (C_2:
+            (C_4:
+            (C_5:
+            (C_7:
+            (C_9:
             begin
-              (let jessie_<somenum> =
-              (C_2:
-              begin
-                (let jessie_<somenum> = (tmp := !s1_15) in void);
-               (C_4:
-               begin
-                 (let jessie_<somenum> = (s1_15 := (C_3: ((shift !s1_15) (1)))) in
-                 void);
-                (C_5:
-                begin
-                  (let jessie_<somenum> = (tmp_1 := !mutable_s2_2) in void);
-                 (C_7:
-                 begin
-                   (let jessie_<somenum> =
-                   (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in
-                   void);
-                  (C_9:
-                  begin
-                    (tmp_0 := (C_8: ((safe_acc_ charP_charM_s2_21) !tmp_1)));
-                   !tmp_0 end) end) end) end) end) in void);
-             (C_11:
-             begin
-               (let jessie_<somenum> = !tmp_0 in
-               (let jessie_<somenum> = !tmp in
-               (((safe_upd_ charP_charM_ret_20) jessie_<somenum>) jessie_<somenum>)));
-              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
-              else (raise (Goto_while_0_break_exc void)));
-              (raise (Loop_continue_exc void)) end) end with
-            Loop_continue_exc jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+              (let jessie_<somenum> = (tmp := !s1_15) in void);
+             (let jessie_<somenum> = (s1_15 := (C_3: ((shift !s1_15) (1)))) in void);
+             (let jessie_<somenum> = (tmp_1 := !mutable_s2_2) in void);
+             (let jessie_<somenum> =
+             (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in void);
+             (tmp_0 := (C_8: ((safe_acc_ charP_charM_s2_21) !tmp_1))); !tmp_0
+            end))))) in void);
+           (let jessie_<somenum> = !tmp_0 in
+           (let jessie_<somenum> = !tmp in
+           (((safe_upd_ charP_charM_ret_20) jessie_<somenum>) jessie_<somenum>)));
+           (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
+           else (raise (Goto_while_0_break_exc void)));
+           (raise (Loop_continue_exc void)) end) with
+          Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := ret); (raise Return) end) end))));
     absurd  end with Return -> !return end))) { (JC_<somenum>: true) }
@@ -1951,49 +1943,41 @@ let strcpy_safety =
      (let tmp_1 = ref (any_pointer void) in
      try
       (C_1:
+      (loop_1:
       begin
         (let jessie_<somenum> = (s1_15 := ret) in void);
-       (loop_1:
-       begin
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit { true } ];
+         try
+          (C_11:
           begin
-            [ { } unit { true } ];
-           try
+            (let jessie_<somenum> =
+            (C_2:
+            (C_4:
+            (C_5:
+            (C_7:
+            (C_9:
             begin
-              (let jessie_<somenum> =
-              (C_2:
-              begin
-                (let jessie_<somenum> = (tmp := !s1_15) in void);
-               (C_4:
-               begin
-                 (let jessie_<somenum> = (s1_15 := (C_3: ((shift !s1_15) (1)))) in
-                 void);
-                (C_5:
-                begin
-                  (let jessie_<somenum> = (tmp_1 := !mutable_s2_2) in void);
-                 (C_7:
-                 begin
-                   (let jessie_<somenum> =
-                   (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in
-                   void);
-                  (C_9:
-                  begin
-                    (tmp_0 := (C_8:
-                              (JC_<somenum>:
-                              (((acc_ charP_s2_21_alloc_table) charP_charM_s2_21) !tmp_1))));
-                   !tmp_0 end) end) end) end) end) in void);
-             (C_11:
-             begin
-               (let jessie_<somenum> = !tmp_0 in
-               (let jessie_<somenum> = !tmp in
-               (JC_<somenum>:
-               ((((upd_ charP_ret_20_alloc_table) charP_charM_ret_20) jessie_<somenum>) jessie_<somenum>))));
-              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
-              else (raise (Goto_while_0_break_exc void)));
-              (raise (Loop_continue_exc void)) end) end with
-            Loop_continue_exc jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+              (let jessie_<somenum> = (tmp := !s1_15) in void);
+             (let jessie_<somenum> = (s1_15 := (C_3: ((shift !s1_15) (1)))) in void);
+             (let jessie_<somenum> = (tmp_1 := !mutable_s2_2) in void);
+             (let jessie_<somenum> =
+             (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in void);
+             (tmp_0 := (C_8:
+                       (JC_<somenum>:
+                       (((acc_ charP_s2_21_alloc_table) charP_charM_s2_21) !tmp_1))));
+             !tmp_0 end))))) in void);
+           (let jessie_<somenum> = !tmp_0 in
+           (let jessie_<somenum> = !tmp in
+           (JC_<somenum>:
+           ((((upd_ charP_ret_20_alloc_table) charP_charM_ret_20) jessie_<somenum>) jessie_<somenum>))));
+           (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
+           else (raise (Goto_while_0_break_exc void)));
+           (raise (Loop_continue_exc void)) end) with
+          Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := ret); (raise Return) end) end))));
     absurd  end with Return -> !return end))) { true }
@@ -2026,11 +2010,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po5.why">
-      <location file = "why/minix3_strcpy.why" line = "1525" begin = "44" end = "45"/>
+      <location file = "why/minix3_strcpy.why" line = "1516" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po6.why">
-      <location file = "why/minix3_strcpy.why" line = "1525" begin = "44" end = "45"/>
+      <location file = "why/minix3_strcpy.why" line = "1516" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

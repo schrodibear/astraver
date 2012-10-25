@@ -225,7 +225,7 @@ behavior default:
       (C_167 : ((C_166 : (C_165 : (C_164 : (u :> s1P[0])).s1M).c_1) = 2));
       
       {  
-         (assert for default: (C_168 : (jessie : ((u :> s2P[0]).s2M.c_2 == 2))));
+         (assert for default: (C_168 : ((u :> s2P[0]).s2M.c_2 == 2)));
          ()
       };
       

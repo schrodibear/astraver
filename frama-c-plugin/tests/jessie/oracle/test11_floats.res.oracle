@@ -458,18 +458,19 @@ let f_ensures_default =
                (let jessie_<somenum> =
                (C_7: ((single_of_double_safe nearest_even) x_0_0)) in
                (let jessie_<somenum> = (single_of_real_exact 1.0) in
-               (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>)))))) in void); void;
+               (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>)))))) in void);
       (C_14:
       begin
-        (let jessie_<somenum> =
-        (let __cil_tmp =
-        (C_11:
-        (let jessie_<somenum> =
-        (C_10: ((single_of_double_safe nearest_even) x_0_0)) in
-        (let jessie_<somenum> = !tmp in (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>))))) in
-        (C_13:
-        begin   (tmp_0 := (C_12: (double_of_single __cil_tmp))); !tmp_0 end)) in
-        void); (return := !tmp_0); (raise Return) end) end))); absurd  end
+        void;
+       (let jessie_<somenum> =
+       (let __cil_tmp =
+       (C_11:
+       (let jessie_<somenum> =
+       (C_10: ((single_of_double_safe nearest_even) x_0_0)) in
+       (let jessie_<somenum> = !tmp in (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>))))) in
+       (C_13:
+       begin   (tmp_0 := (C_12: (double_of_single __cil_tmp))); !tmp_0 end)) in
+       void); (return := !tmp_0); (raise Return) end) end))); absurd  end
    with Return -> !return end)) { (JC_<somenum>: (double_value(result) = 1.0)) }
 
 let f_safety =
@@ -489,19 +490,19 @@ let f_safety =
                (C_7: (JC_<somenum>: ((single_of_double nearest_even) x_0_0))) in
                (let jessie_<somenum> = (single_of_real_exact 1.0) in
                (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>)))))) in void);
-      void;
       (C_14:
       begin
-        (let jessie_<somenum> =
-        (let __cil_tmp =
-        (C_11:
-        (let jessie_<somenum> =
-        (C_10: (JC_<somenum>: ((single_of_double nearest_even) x_0_0))) in
-        (let jessie_<somenum> = !tmp in
-        (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>))))) in
-        (C_13:
-        begin   (tmp_0 := (C_12: (double_of_single __cil_tmp))); !tmp_0 end)) in
-        void); (return := !tmp_0); (raise Return) end) end))); absurd  end
+        void;
+       (let jessie_<somenum> =
+       (let __cil_tmp =
+       (C_11:
+       (let jessie_<somenum> =
+       (C_10: (JC_<somenum>: ((single_of_double nearest_even) x_0_0))) in
+       (let jessie_<somenum> = !tmp in
+       (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>))))) in
+       (C_13:
+       begin   (tmp_0 := (C_12: (double_of_single __cil_tmp))); !tmp_0 end)) in
+       void); (return := !tmp_0); (raise Return) end) end))); absurd  end
    with Return -> !return end)) { true }
 
 

@@ -744,12 +744,11 @@ let f1_ensures_default =
                                                                 (integer_of_int32 jessie_<somenum>)) (0)))
           then
            (C_1:
+           (C_2:
            begin
              (let jessie_<somenum> = (y := (safe_int32_of_integer_ (1))) in void);
-            (C_2:
-            begin
-              (let jessie_<somenum> = (y := (safe_int32_of_integer_ (4))) in void);
-             (raise (Goto_switch_0_break_exc void)) end) end) else void);
+            (let jessie_<somenum> = (y := (safe_int32_of_integer_ (4))) in void);
+            (raise (Goto_switch_0_break_exc void)) end)) else void);
          (if (((eq_int_ (integer_of_int32 jessie_<somenum>)) (4)) || (((eq_int_ 
                                                                 (integer_of_int32 jessie_<somenum>)) (2)) || 
                                                              (((eq_int_ 
@@ -777,14 +776,13 @@ let f1_ensures_default =
          (if true
          then
           (let jessie_<somenum> =
+          (C_5:
+          (C_6:
           begin
             void;
-           (C_5:
-           begin
-             (let jessie_<somenum> = (y := (safe_int32_of_integer_ (4))) in void);
-            (C_6: begin   (y := (safe_int32_of_integer_ (5))); !y end) end)
-          end in void) else void) end);
-       (raise (Goto_switch_0_break_exc void)) end with
+           (let jessie_<somenum> = (y := (safe_int32_of_integer_ (4))) in void);
+           (y := (safe_int32_of_integer_ (5))); !y end)) in void) else void)
+        end); (raise (Goto_switch_0_break_exc void)) end with
       Goto_switch_0_break_exc jessie_<somenum> ->
       (switch_0_break: begin   void; (return := !y); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -807,12 +805,11 @@ let f1_safety =
                                                                 (integer_of_int32 jessie_<somenum>)) (0)))
           then
            (C_1:
+           (C_2:
            begin
              (let jessie_<somenum> = (y := (safe_int32_of_integer_ (1))) in void);
-            (C_2:
-            begin
-              (let jessie_<somenum> = (y := (safe_int32_of_integer_ (4))) in void);
-             (raise (Goto_switch_0_break_exc void)) end) end) else void);
+            (let jessie_<somenum> = (y := (safe_int32_of_integer_ (4))) in void);
+            (raise (Goto_switch_0_break_exc void)) end)) else void);
          (if (((eq_int_ (integer_of_int32 jessie_<somenum>)) (4)) || (((eq_int_ 
                                                                 (integer_of_int32 jessie_<somenum>)) (2)) || 
                                                              (((eq_int_ 
@@ -840,14 +837,13 @@ let f1_safety =
          (if true
          then
           (let jessie_<somenum> =
+          (C_5:
+          (C_6:
           begin
             void;
-           (C_5:
-           begin
-             (let jessie_<somenum> = (y := (safe_int32_of_integer_ (4))) in void);
-            (C_6: begin   (y := (safe_int32_of_integer_ (5))); !y end) end)
-          end in void) else void) end);
-       (raise (Goto_switch_0_break_exc void)) end with
+           (let jessie_<somenum> = (y := (safe_int32_of_integer_ (4))) in void);
+           (y := (safe_int32_of_integer_ (5))); !y end)) in void) else void)
+        end); (raise (Goto_switch_0_break_exc void)) end with
       Goto_switch_0_break_exc jessie_<somenum> ->
       (switch_0_break: begin   void; (return := !y); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
@@ -871,14 +867,12 @@ let f1a_ensures_default =
                                                                    (integer_of_int32 jessie_<somenum>)) (0)))
              then
               (C_8:
+              (C_9:
               begin
                 (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (1))) in
                 void);
-               (C_9:
-               begin
-                 (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (4))) in
-                 void); (raise (Goto_switch_0_break_exc void)) end) end)
-             else void);
+               (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (4))) in
+               void); (raise (Goto_switch_0_break_exc void)) end)) else void);
             (if (((eq_int_ (integer_of_int32 jessie_<somenum>)) (4)) || (((eq_int_ 
                                                                    (integer_of_int32 jessie_<somenum>)) (2)) || 
                                                                 (((eq_int_ 
@@ -887,13 +881,11 @@ let f1a_ensures_default =
                                                                   (integer_of_int32 jessie_<somenum>)) (0)))))
             then
              (C_10:
+             (C_11:
              begin
                (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (2))) in
-               void);
-              (C_11:
-              begin
-                (let jessie_<somenum> = (__retres := !y_0) in void);
-               (raise (Return_label_exc void)) end) end) else void);
+               void); (let jessie_<somenum> = (__retres := !y_0) in void);
+              (raise (Return_label_exc void)) end)) else void);
             (if (((eq_int_ (integer_of_int32 jessie_<somenum>)) (3)) || (((eq_int_ 
                                                                    (integer_of_int32 jessie_<somenum>)) (4)) || 
                                                                 (((eq_int_ 
@@ -904,32 +896,27 @@ let f1a_ensures_default =
                                                                   (integer_of_int32 jessie_<somenum>)) (0))))))
             then
              (C_12:
+             (C_13:
              begin
                (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (3))) in
-               void);
-              (C_13:
-              begin
-                (let jessie_<somenum> = (__retres := !y_0) in void);
-               (raise (Return_label_exc void)) end) end) else void);
+               void); (let jessie_<somenum> = (__retres := !y_0) in void);
+              (raise (Return_label_exc void)) end)) else void);
             (if true
             then
              (let jessie_<somenum> =
-             begin
-               void;
-              (C_14: begin   (y_0 := (safe_int32_of_integer_ (4))); !y_0 end)
-             end in void) else void) end);
-          (raise (Goto_switch_0_break_exc void)) end with
-         Goto_switch_0_break_exc jessie_<somenum> ->
+             (C_14:
+             begin   void; (y_0 := (safe_int32_of_integer_ (4))); !y_0 end) in
+             void) else void) end); (raise (Goto_switch_0_break_exc void))
+         end with Goto_switch_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (switch_0_break:
+         (C_15:
+         (C_16:
          begin
            void;
-          (C_15:
-          begin
-            (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (5))) in void);
-           (C_16: begin   (__retres := !y_0); !__retres end) end) end) in
-         void) end; (raise (Return_label_exc void)) end with
-      Return_label_exc jessie_<somenum> ->
+          (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (5))) in void);
+          (__retres := !y_0); !__retres end))) in void) end;
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -954,14 +941,12 @@ let f1a_safety =
                                                                    (integer_of_int32 jessie_<somenum>)) (0)))
              then
               (C_8:
+              (C_9:
               begin
                 (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (1))) in
                 void);
-               (C_9:
-               begin
-                 (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (4))) in
-                 void); (raise (Goto_switch_0_break_exc void)) end) end)
-             else void);
+               (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (4))) in
+               void); (raise (Goto_switch_0_break_exc void)) end)) else void);
             (if (((eq_int_ (integer_of_int32 jessie_<somenum>)) (4)) || (((eq_int_ 
                                                                    (integer_of_int32 jessie_<somenum>)) (2)) || 
                                                                 (((eq_int_ 
@@ -970,13 +955,11 @@ let f1a_safety =
                                                                   (integer_of_int32 jessie_<somenum>)) (0)))))
             then
              (C_10:
+             (C_11:
              begin
                (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (2))) in
-               void);
-              (C_11:
-              begin
-                (let jessie_<somenum> = (__retres := !y_0) in void);
-               (raise (Return_label_exc void)) end) end) else void);
+               void); (let jessie_<somenum> = (__retres := !y_0) in void);
+              (raise (Return_label_exc void)) end)) else void);
             (if (((eq_int_ (integer_of_int32 jessie_<somenum>)) (3)) || (((eq_int_ 
                                                                    (integer_of_int32 jessie_<somenum>)) (4)) || 
                                                                 (((eq_int_ 
@@ -987,32 +970,27 @@ let f1a_safety =
                                                                   (integer_of_int32 jessie_<somenum>)) (0))))))
             then
              (C_12:
+             (C_13:
              begin
                (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (3))) in
-               void);
-              (C_13:
-              begin
-                (let jessie_<somenum> = (__retres := !y_0) in void);
-               (raise (Return_label_exc void)) end) end) else void);
+               void); (let jessie_<somenum> = (__retres := !y_0) in void);
+              (raise (Return_label_exc void)) end)) else void);
             (if true
             then
              (let jessie_<somenum> =
-             begin
-               void;
-              (C_14: begin   (y_0 := (safe_int32_of_integer_ (4))); !y_0 end)
-             end in void) else void) end);
-          (raise (Goto_switch_0_break_exc void)) end with
-         Goto_switch_0_break_exc jessie_<somenum> ->
+             (C_14:
+             begin   void; (y_0 := (safe_int32_of_integer_ (4))); !y_0 end) in
+             void) else void) end); (raise (Goto_switch_0_break_exc void))
+         end with Goto_switch_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (switch_0_break:
+         (C_15:
+         (C_16:
          begin
            void;
-          (C_15:
-          begin
-            (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (5))) in void);
-           (C_16: begin   (__retres := !y_0); !__retres end) end) end) in
-         void) end; (raise (Return_label_exc void)) end with
-      Return_label_exc jessie_<somenum> ->
+          (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (5))) in void);
+          (__retres := !y_0); !__retres end))) in void) end;
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -1058,9 +1036,8 @@ let f2_ensures_default =
         (if true
         then
          (let jessie_<somenum> =
-         begin
-           void;
-          (C_21: begin   (y_1 := (safe_int32_of_integer_ (4))); !y_1 end) end in
+         (C_21:
+         begin   void; (y_1 := (safe_int32_of_integer_ (4))); !y_1 end) in
          void) else void) end); (return := !y_1); (raise Return) end); 
     absurd  end with Return -> !return end))
   { (JC_<somenum>: (integer_of_int32(result) = (4))) }
@@ -1107,9 +1084,8 @@ let f2_safety =
         (if true
         then
          (let jessie_<somenum> =
-         begin
-           void;
-          (C_21: begin   (y_1 := (safe_int32_of_integer_ (4))); !y_1 end) end in
+         (C_21:
+         begin   void; (y_1 := (safe_int32_of_integer_ (4))); !y_1 end) in
          void) else void) end); (return := !y_1); (raise Return) end); 
     absurd  end with Return -> !return end)) { true }
 
@@ -1134,9 +1110,8 @@ let f3_ensures_default =
                                                                 (integer_of_int32 jessie_<somenum>)) (2)))
         then
          (let jessie_<somenum> =
-         begin
-           void;
-          (C_24: begin   (y_2 := (safe_int32_of_integer_ (2))); !y_2 end) end in
+         (C_24:
+         begin   void; (y_2 := (safe_int32_of_integer_ (2))); !y_2 end) in
          void) else void);
         (if (((eq_int_ (integer_of_int32 jessie_<somenum>)) (3)) || (((neq_int_ 
                                                                 (integer_of_int32 jessie_<somenum>)) (3)) && 
@@ -1180,9 +1155,8 @@ let f3_safety =
                                                                 (integer_of_int32 jessie_<somenum>)) (2)))
         then
          (let jessie_<somenum> =
-         begin
-           void;
-          (C_24: begin   (y_2 := (safe_int32_of_integer_ (2))); !y_2 end) end in
+         (C_24:
+         begin   void; (y_2 := (safe_int32_of_integer_ (2))); !y_2 end) in
          void) else void);
         (if (((eq_int_ (integer_of_int32 jessie_<somenum>)) (3)) || (((neq_int_ 
                                                                 (integer_of_int32 jessie_<somenum>)) (3)) && 
@@ -1220,12 +1194,13 @@ let f4_ensures_default =
        (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (0))
        then
         (let jessie_<somenum> =
+        (C_29:
         begin
           void;
          (if ((eq_int_ (integer_of_int32 x_3)) (0))
          then (raise (Goto_switch_0_break_exc void)) else void);
-         (C_29: begin   (y_3 := (safe_int32_of_integer_ (1))); !y_3 end) end in
-        void) else void)); (raise (Goto_switch_0_break_exc void)) end) with
+         (y_3 := (safe_int32_of_integer_ (1))); !y_3 end) in void) else void));
+       (raise (Goto_switch_0_break_exc void)) end) with
       Goto_switch_0_break_exc jessie_<somenum> ->
       (switch_0_break: begin   void; (return := !y_3); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -1247,12 +1222,13 @@ let f4_safety =
        (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (0))
        then
         (let jessie_<somenum> =
+        (C_29:
         begin
           void;
          (if ((eq_int_ (integer_of_int32 x_3)) (0))
          then (raise (Goto_switch_0_break_exc void)) else void);
-         (C_29: begin   (y_3 := (safe_int32_of_integer_ (1))); !y_3 end) end in
-        void) else void)); (raise (Goto_switch_0_break_exc void)) end) with
+         (y_3 := (safe_int32_of_integer_ (1))); !y_3 end) in void) else void));
+       (raise (Goto_switch_0_break_exc void)) end) with
       Goto_switch_0_break_exc jessie_<somenum> ->
       (switch_0_break: begin   void; (return := !y_3); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
@@ -1289,9 +1265,7 @@ let f5_ensures_default =
         Goto_while_1_break_exc jessie_<somenum> ->
         (let jessie_<somenum> =
         (while_1_break:
-        begin
-          void;
-         (C_32: begin   (y_4 := (safe_int32_of_integer_ (1))); !y_4 end) end) in
+        (C_32: begin   void; (y_4 := (safe_int32_of_integer_ (1))); !y_4 end)) in
         void) end else void)); (return := !y_4); (raise Return) end)); 
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -1329,9 +1303,7 @@ let f5_safety =
         Goto_while_1_break_exc jessie_<somenum> ->
         (let jessie_<somenum> =
         (while_1_break:
-        begin
-          void;
-         (C_32: begin   (y_4 := (safe_int32_of_integer_ (1))); !y_4 end) end) in
+        (C_32: begin   void; (y_4 := (safe_int32_of_integer_ (1))); !y_4 end)) in
         void) end else void)); (return := !y_4); (raise Return) end)); 
     absurd  end with Return -> !return end)) { true }
 

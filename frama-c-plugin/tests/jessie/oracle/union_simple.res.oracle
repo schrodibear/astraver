@@ -61,13 +61,13 @@ behavior default:
    {  (C_3 : ((C_2 : (C_1 : (x :> iP[0])).iM) = 1));
       
       {  
-         (assert for default: (C_4 : (jessie : ((x :> iP[0]).iM == 1))));
+         (assert for default: (C_4 : ((x :> iP[0]).iM == 1)));
          ()
       };
       (C_7 : ((C_6 : (C_5 : (x :> cP[0])).cM) = 1));
       
       {  
-         (assert for default: (C_8 : (jessie : ((x :> cP[0]).cM == 1))));
+         (assert for default: (C_8 : ((x :> cP[0]).cM == 1)));
          ()
       };
       

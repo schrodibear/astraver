@@ -660,31 +660,26 @@ let main1_ensures_default =
      (let x_0 = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_2:
+     (C_4:
+     (C_7:
+     (C_8:
+     (C_9:
      begin
        (let jessie_<somenum> =
        (x_0 := (C_1:
                (JC_<somenum>:
                (((alloc_struct_intP (1)) intP_rc_3_alloc_table) intP_rc_3_tag_table)))) in
        void);
-      (C_4:
-      begin
-        (let jessie_<somenum> = !x_0 in
-        (let jessie_<somenum> = p in
-        (((safe_upd_ __anonstruct_S_1_rc_p_1) jessie_<somenum>) jessie_<somenum>)));
-       (C_7:
-       begin
-         (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
-         (let jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_S_1_rc_p_1) p)) in
-         (((safe_upd_ intP_intM_rc_3) jessie_<somenum>) jessie_<somenum>)));
-        (C_8:
-        begin
-          (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-          void);
-         (C_9:
-         begin
-           ((safe_free_parameter intP_rc_3_alloc_table) !x_0);
-          (return := !__retres); (raise Return) end) end) end) end) end)));
-    absurd  end with Return -> !return end))
+      (let jessie_<somenum> = !x_0 in
+      (let jessie_<somenum> = p in
+      (((safe_upd_ __anonstruct_S_1_rc_p_1) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
+      (let jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_S_1_rc_p_1) p)) in
+      (((safe_upd_ intP_intM_rc_3) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      ((safe_free_parameter intP_rc_3_alloc_table) !x_0);
+      (return := !__retres); (raise Return) end))))))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      not_assigns(intP_rc_3_alloc_table@, intP_intM_rc_3@, intP_intM_rc_3,
@@ -718,6 +713,10 @@ let main1_safety =
      (let x_0 = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_2:
+     (C_4:
+     (C_7:
+     (C_8:
+     (C_9:
      begin
        (let jessie_<somenum> =
        (x_0 := (let jessie_<somenum> =
@@ -728,30 +727,21 @@ let main1_safety =
                (assert
                { ge_int(offset_max(intP_rc_3_alloc_table, jessie_<somenum>), (0)) };
                jessie_<somenum>)))) in void);
-      (C_4:
-      begin
-        (let jessie_<somenum> = !x_0 in
-        (let jessie_<somenum> = p in
-        (JC_<somenum>:
-        ((((upd_ __anonstruct_S_1_p_1_alloc_table) __anonstruct_S_1_rc_p_1) jessie_<somenum>) jessie_<somenum>))));
-       (C_7:
-       begin
-         (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
-         (let jessie_<somenum> =
-         (C_5:
-         (JC_<somenum>:
-         (((acc_ __anonstruct_S_1_p_1_alloc_table) !__anonstruct_S_1_rc_p_1) p))) in
-         (JC_<somenum>:
-         ((((upd_ !intP_rc_3_alloc_table) intP_intM_rc_3) jessie_<somenum>) jessie_<somenum>))));
-        (C_8:
-        begin
-          (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-          void);
-         (C_9:
-         begin
-           ((free_parameter intP_rc_3_alloc_table) !x_0);
-          (return := !__retres); (raise Return) end) end) end) end) end)));
-    absurd  end with Return -> !return end)) { true }
+      (let jessie_<somenum> = !x_0 in
+      (let jessie_<somenum> = p in
+      (JC_<somenum>:
+      ((((upd_ __anonstruct_S_1_p_1_alloc_table) __anonstruct_S_1_rc_p_1) jessie_<somenum>) jessie_<somenum>))));
+      (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
+      (let jessie_<somenum> =
+      (C_5:
+      (JC_<somenum>:
+      (((acc_ __anonstruct_S_1_p_1_alloc_table) !__anonstruct_S_1_rc_p_1) p))) in
+      (JC_<somenum>:
+      ((((upd_ !intP_rc_3_alloc_table) intP_intM_rc_3) jessie_<somenum>) jessie_<somenum>))));
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      ((free_parameter intP_rc_3_alloc_table) !x_0); (return := !__retres);
+      (raise Return) end))))))); absurd  end with Return -> !return end))
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C dillon9.jessie --quiet -f dillon9.makefile project
@@ -776,7 +766,7 @@ why --project [...] why/dillon9.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/dillon9_po4.why">
-      <location file = "why/dillon9.why" line = "649" begin = "17" end = "73"/>
+      <location file = "why/dillon9.why" line = "648" begin = "17" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/dillon9_po5.why">
@@ -810,7 +800,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/dillon9_po11.why">
-      <location file = "why/dillon9.why" line = "672" begin = "12" end = "55"/>
+      <location file = "why/dillon9.why" line = "662" begin = "7" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

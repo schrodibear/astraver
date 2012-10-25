@@ -103,7 +103,7 @@ behavior default:
    {  (C_32 : gp(p, (C_31 : p.int_xM)));
       
       {  
-         (assert for default: (C_33 : (jessie : (i.intM == 0))));
+         (assert for default: (C_33 : (i.intM == 0)));
          ()
       };
       (C_36 : ((C_35 : (C_34 : p.int_xM).intM) = 0));
@@ -766,12 +766,13 @@ let fp_ensures_default =
      (JC_<somenum>:
      ((((((gp jessie_<somenum>) jessie_<somenum>) intP_intM_p_7) int_xP_int_xM_p_2) !int_xP_p_2_alloc_table) !intP_p_7_alloc_table))));
     (assert { (JC_<somenum>: (integer_of_int32(select(intP_intM_i_1, i)) = (0))) };
-    void); void;
+    void);
     (C_36:
     begin
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = (C_34: ((safe_acc_ !int_xP_int_xM_p_2) p)) in
-      (((safe_upd_ intP_intM_p_7) jessie_<somenum>) jessie_<somenum>)));
+      void;
+     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let jessie_<somenum> = (C_34: ((safe_acc_ !int_xP_int_xM_p_2) p)) in
+     (((safe_upd_ intP_intM_p_7) jessie_<somenum>) jessie_<somenum>)));
      (return := (C_37: ((safe_acc_ !intP_intM_i_1) i))); (raise Return);
      absurd  end) end) with Return -> !return end))
   { (JC_<somenum>: (integer_of_int32(result) = (0))) }
@@ -790,13 +791,13 @@ let fp_safety =
      ((((((gp_requires jessie_<somenum>) jessie_<somenum>) intP_intM_p_7) int_xP_int_xM_p_2) !int_xP_p_2_alloc_table) !intP_p_7_alloc_table))));
     [ { } unit reads intP_intM_i_1
       { (JC_<somenum>: (integer_of_int32(select(intP_intM_i_1, i)) = (0))) } ];
-    void;
     (C_36:
     begin
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = (C_34: ((safe_acc_ !int_xP_int_xM_p_2) p)) in
-      (JC_<somenum>:
-      ((((upd_ !intP_p_7_alloc_table) intP_intM_p_7) jessie_<somenum>) jessie_<somenum>))));
+      void;
+     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let jessie_<somenum> = (C_34: ((safe_acc_ !int_xP_int_xM_p_2) p)) in
+     (JC_<somenum>:
+     ((((upd_ !intP_p_7_alloc_table) intP_intM_p_7) jessie_<somenum>) jessie_<somenum>))));
      (return := (C_37: ((safe_acc_ !intP_intM_i_1) i))); (raise Return);
      absurd  end) end) with Return -> !return end)) { true }
 
@@ -852,16 +853,15 @@ let gp_ensures_default =
   (init:
   try
    (C_14:
+   (C_16:
    begin
      (let jessie_<somenum> = (C_11: ((safe_acc_ !intP_intM_i_0_0_5) i_0_0)) in
      (let jessie_<somenum> = (C_12: ((safe_acc_ !int_xP_int_xM_p_0_0_4) p_0_0)) in
      (((safe_upd_ intP_intM_i_0_0_5) jessie_<somenum>) jessie_<somenum>)));
-    (C_16:
-    begin
-      (let jessie_<somenum> = i_0_0 in
-      (let jessie_<somenum> = p_0_0 in
-      (((safe_upd_ int_xP_int_xM_p_0_0_4) jessie_<somenum>) jessie_<somenum>)));
-     (raise Return); (raise Return) end) end) with Return -> void end)
+    (let jessie_<somenum> = i_0_0 in
+    (let jessie_<somenum> = p_0_0 in
+    (((safe_upd_ int_xP_int_xM_p_0_0_4) jessie_<somenum>) jessie_<somenum>)));
+    (raise Return); (raise Return) end)) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      (integer_of_int32(select(intP_intM_i_0_0_5,
@@ -891,6 +891,7 @@ let gp_safety =
   (init:
   try
    (C_14:
+   (C_16:
    begin
      (let jessie_<somenum> =
      (C_11:
@@ -901,14 +902,11 @@ let gp_safety =
      (((acc_ int_xP_p_0_0_4_alloc_table) !int_xP_int_xM_p_0_0_4) p_0_0))) in
      (JC_<somenum>:
      ((((upd_ intP_i_0_0_5_alloc_table) intP_intM_i_0_0_5) jessie_<somenum>) jessie_<somenum>))));
-    (C_16:
-    begin
-      (let jessie_<somenum> = i_0_0 in
-      (let jessie_<somenum> = p_0_0 in
-      (JC_<somenum>:
-      ((((upd_ int_xP_p_0_0_4_alloc_table) int_xP_int_xM_p_0_0_4) jessie_<somenum>) jessie_<somenum>))));
-     (raise Return); (raise Return) end) end) with Return -> void end)
-  { true }
+    (let jessie_<somenum> = i_0_0 in
+    (let jessie_<somenum> = p_0_0 in
+    (JC_<somenum>:
+    ((((upd_ int_xP_p_0_0_4_alloc_table) int_xP_int_xM_p_0_0_4) jessie_<somenum>) jessie_<somenum>))));
+    (raise Return); (raise Return) end)) with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C addrof_global.jessie --quiet -f addrof_global.makefile project

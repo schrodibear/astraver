@@ -55,7 +55,7 @@ behavior default:
 {  
    {  (if (p == q) then 
       {  
-         (assert for default: (C_1 : (jessie : (0 == 1))));
+         (assert for default: (C_1 : (0 == 1)));
          ()
       } else ());
       

@@ -80,7 +80,7 @@ behavior default:
    {  (C_9 : g((C_8 : ((C_7 : a.tab) + 0))));
       
       {  
-         (assert for default: (C_10 : (jessie : ((a.tab + 0).intM == 1))));
+         (assert for default: (C_10 : ((a.tab + 0).intM == 1)));
          ()
       };
       

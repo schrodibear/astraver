@@ -45,7 +45,7 @@ behavior default:
 {  
    {  (if (n_1 < 1024) then 
       {  
-         (assert for default: (C_1 : (jessie : (n_1 < (1024 :> int32)))));
+         (assert for default: (C_1 : (n_1 < (1024 :> int32))));
          ()
       } else ());
       

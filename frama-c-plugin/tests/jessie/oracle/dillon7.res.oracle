@@ -740,37 +740,33 @@ let main_ensures_default =
      (let x_0_0 = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      (C_10:
+     (C_13:
+     (C_15:
+     (C_16:
+     (C_17:
      begin
        (let jessie_<somenum> =
        (x_0_0 := (C_9:
                  (JC_<somenum>:
                  (((alloc_struct___anonstruct_ts_1 (1)) __anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_x_0_11_tag_table)))) in
        void);
-      (C_13:
-      begin
-        (let jessie_<somenum> =
-        (C_11:
-        ((single_of_double_safe nearest_even) (double_of_real_exact 9.0))) in
-        (let jessie_<somenum> = !x_0_0 in
-        (((safe_upd_ __anonstruct_ts_1_f1_x_0_11) jessie_<somenum>) jessie_<somenum>)));
-       (C_15:
-       begin
-         (let jessie_<somenum> =
-         (tmp := (C_14:
-                 (let jessie_<somenum> = !x_0_0 in
-                 (JC_<somenum>:
-                 (((((((simulated_cast_to_float_ptr jessie_<somenum>) floatP_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) floatP_floatM_tmp_12))))) in
-         void);
-        (C_16:
-        begin
-          (let jessie_<somenum> = !tmp in
-          (JC_<somenum>:
-          (((f jessie_<somenum>) floatP_tmp_12_alloc_table) floatP_floatM_tmp_12)));
-         (C_17:
-         begin
-           ((safe_free_parameter __anonstruct_ts_1_x_0_11_alloc_table) !x_0_0);
-          (raise Return) end) end) end) end) end)))))))))); (raise Return)
-   end with Return -> void end) { (JC_<somenum>: (single_value(v) = 9.0)) }
+      (let jessie_<somenum> =
+      (C_11:
+      ((single_of_double_safe nearest_even) (double_of_real_exact 9.0))) in
+      (let jessie_<somenum> = !x_0_0 in
+      (((safe_upd_ __anonstruct_ts_1_f1_x_0_11) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> =
+      (tmp := (C_14:
+              (let jessie_<somenum> = !x_0_0 in
+              (JC_<somenum>:
+              (((((((simulated_cast_to_float_ptr jessie_<somenum>) floatP_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) floatP_floatM_tmp_12))))) in
+      void);
+      (let jessie_<somenum> = !tmp in
+      (JC_<somenum>:
+      (((f jessie_<somenum>) floatP_tmp_12_alloc_table) floatP_floatM_tmp_12)));
+      ((safe_free_parameter __anonstruct_ts_1_x_0_11_alloc_table) !x_0_0);
+      (raise Return) end)))))))))))))); (raise Return) end with Return ->
+   void end) { (JC_<somenum>: (single_value(v) = 9.0)) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -789,6 +785,10 @@ let main_safety =
      (let x_0_0 = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      (C_10:
+     (C_13:
+     (C_15:
+     (C_16:
+     (C_17:
      begin
        (let jessie_<somenum> =
        (x_0_0 := (let jessie_<somenum> =
@@ -800,31 +800,23 @@ let main_safety =
                  { ge_int(offset_max(__anonstruct_ts_1_x_0_11_alloc_table,
                           jessie_<somenum>),
                    (0)) }; jessie_<somenum>)))) in void);
-      (C_13:
-      begin
-        (let jessie_<somenum> =
-        (C_11:
-        (JC_<somenum>: ((single_of_double nearest_even) (double_of_real_exact 9.0)))) in
-        (let jessie_<somenum> = !x_0_0 in
-        (((safe_upd_ __anonstruct_ts_1_f1_x_0_11) jessie_<somenum>) jessie_<somenum>)));
-       (C_15:
-       begin
-         (let jessie_<somenum> =
-         (tmp := (C_14:
-                 (let jessie_<somenum> = !x_0_0 in
-                 (JC_<somenum>:
-                 (((((((simulated_cast_to_float_ptr_requires jessie_<somenum>) floatP_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) floatP_floatM_tmp_12))))) in
-         void);
-        (C_16:
-        begin
-          (let jessie_<somenum> = !tmp in
-          (JC_<somenum>:
-          (((f_requires jessie_<somenum>) floatP_tmp_12_alloc_table) floatP_floatM_tmp_12)));
-         (C_17:
-         begin
-           ((free_parameter __anonstruct_ts_1_x_0_11_alloc_table) !x_0_0);
-          (raise Return) end) end) end) end) end)))))))))); (raise Return)
-   end with Return -> void end) { true }
+      (let jessie_<somenum> =
+      (C_11:
+      (JC_<somenum>: ((single_of_double nearest_even) (double_of_real_exact 9.0)))) in
+      (let jessie_<somenum> = !x_0_0 in
+      (((safe_upd_ __anonstruct_ts_1_f1_x_0_11) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> =
+      (tmp := (C_14:
+              (let jessie_<somenum> = !x_0_0 in
+              (JC_<somenum>:
+              (((((((simulated_cast_to_float_ptr_requires jessie_<somenum>) floatP_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) floatP_floatM_tmp_12))))) in
+      void);
+      (let jessie_<somenum> = !tmp in
+      (JC_<somenum>:
+      (((f_requires jessie_<somenum>) floatP_tmp_12_alloc_table) floatP_floatM_tmp_12)));
+      ((free_parameter __anonstruct_ts_1_x_0_11_alloc_table) !x_0_0);
+      (raise Return) end)))))))))))))); (raise Return) end with Return ->
+   void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C dillon7.jessie --quiet -f dillon7.makefile project
@@ -864,7 +856,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon7_po10.why">
-      <location file = "why/dillon7.why" line = "710" begin = "12" end = "72"/>
+      <location file = "why/dillon7.why" line = "702" begin = "7" end = "67"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

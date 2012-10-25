@@ -436,6 +436,8 @@ let eps_line_ensures_default =
      (let s2_1 = ref (any_int void) in
      (let __retres_0 = ref (any_int void) in
      (C_15:
+     (C_21:
+     (C_23:
      begin
        (let jessie_<somenum> =
        (s1_1 := (C_14:
@@ -454,30 +456,26 @@ let eps_line_ensures_default =
                 ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
                 (JC_<somenum>: (((sign jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
        void);
-      (C_21:
-      begin
-        (let jessie_<somenum> =
-        (s2_1 := (C_20:
-                 (let jessie_<somenum> =
-                 (C_18:
-                 (JC_<somenum>:
-                 (((sub_double_safe nearest_even) (C_17:
-                                                  (JC_<somenum>:
-                                                  (((mul_double_safe nearest_even) sx) vy)))) 
-                  (C_16: (JC_<somenum>: (((mul_double_safe nearest_even) sy) vx)))))) in
-                 (let jessie_<somenum> =
-                 (C_19:
-                 (JC_<somenum>:
-                 ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.9000000001ap-45)))) in
-                 (let jessie_<somenum> =
-                 ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
-                 (JC_<somenum>: (((sign jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
-        void);
-       (C_23:
-       begin
-         (let jessie_<somenum> = (__retres_0 := (C_22: ((mul_int !s1_1) !s2_1))) in
-         void); (return := !__retres_0); (raise Return) end) end) end))));
-    absurd  end with Return -> !return end))
+      (let jessie_<somenum> =
+      (s2_1 := (C_20:
+               (let jessie_<somenum> =
+               (C_18:
+               (JC_<somenum>:
+               (((sub_double_safe nearest_even) (C_17:
+                                                (JC_<somenum>:
+                                                (((mul_double_safe nearest_even) sx) vy)))) 
+                (C_16: (JC_<somenum>: (((mul_double_safe nearest_even) sy) vx)))))) in
+               (let jessie_<somenum> =
+               (C_19:
+               (JC_<somenum>:
+               ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.9000000001ap-45)))) in
+               (let jessie_<somenum> =
+               ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
+               (JC_<somenum>: (((sign jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
+      void);
+      (let jessie_<somenum> = (__retres_0 := (C_22: ((mul_int !s1_1) !s2_1))) in
+      void); (return := !__retres_0); (raise Return) end)))))); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>:
     ((result <> (0)) ->
      (result = mul_int(l_sign(add_real(mul_real(double_exact(sx),
@@ -507,6 +505,8 @@ let eps_line_safety =
      (let s2_1 = ref (any_int void) in
      (let __retres_0 = ref (any_int void) in
      (C_15:
+     (C_21:
+     (C_23:
      begin
        (let jessie_<somenum> =
        (s1_1 := (C_14:
@@ -526,31 +526,27 @@ let eps_line_safety =
                 (JC_<somenum>: ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
                 (JC_<somenum>: (((sign_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
        void);
-      (C_21:
-      begin
-        (let jessie_<somenum> =
-        (s2_1 := (C_20:
-                 (let jessie_<somenum> =
-                 (C_18:
-                 (JC_<somenum>:
-                 (((sub_double nearest_even) (C_17:
-                                             (JC_<somenum>:
-                                             (((mul_double nearest_even) sx) vy)))) 
-                  (C_16: (JC_<somenum>: (((mul_double nearest_even) sy) vx)))))) in
-                 (let jessie_<somenum> =
-                 (C_19:
-                 (JC_<somenum>:
-                 ((neg_double nearest_even) (JC_<somenum>:
-                                            ((double_of_real nearest_even) 0x1.9000000001ap-45))))) in
-                 (let jessie_<somenum> =
-                 (JC_<somenum>: ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
-                 (JC_<somenum>: (((sign_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
-        void);
-       (C_23:
-       begin
-         (let jessie_<somenum> = (__retres_0 := (C_22: ((mul_int !s1_1) !s2_1))) in
-         void); (return := !__retres_0); (raise Return) end) end) end))));
-    absurd  end with Return -> !return end)) { true }
+      (let jessie_<somenum> =
+      (s2_1 := (C_20:
+               (let jessie_<somenum> =
+               (C_18:
+               (JC_<somenum>:
+               (((sub_double nearest_even) (C_17:
+                                           (JC_<somenum>:
+                                           (((mul_double nearest_even) sx) vy)))) 
+                (C_16: (JC_<somenum>: (((mul_double nearest_even) sy) vx)))))) in
+               (let jessie_<somenum> =
+               (C_19:
+               (JC_<somenum>:
+               ((neg_double nearest_even) (JC_<somenum>:
+                                          ((double_of_real nearest_even) 0x1.9000000001ap-45))))) in
+               (let jessie_<somenum> =
+               (JC_<somenum>: ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
+               (JC_<somenum>: (((sign_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
+      void);
+      (let jessie_<somenum> = (__retres_0 := (C_22: ((mul_int !s1_1) !s2_1))) in
+      void); (return := !__retres_0); (raise Return) end)))))); absurd  end
+   with Return -> !return end)) { true }
 
 let sign_ensures_default =
  fun (x_1 : double) (e1 : double) (e2 : double) ->
@@ -567,6 +563,7 @@ let sign_ensures_default =
    begin
      (let __retres = ref (any_int void) in
      try
+      (C_3:
       begin
         (if ((gt_double_ x_1) e2)
         then
@@ -580,11 +577,8 @@ let sign_ensures_default =
         begin
           (let jessie_<somenum> = (__retres := (neg_int (1))) in void);
          (raise (Return_label_exc void)) end) else void);
-       (C_3:
-       begin
-         (let jessie_<somenum> = (__retres := (0)) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc jessie_<somenum> ->
+       (let jessie_<somenum> = (__retres := (0)) in void);
+       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -606,6 +600,7 @@ let sign_safety =
    begin
      (let __retres = ref (any_int void) in
      try
+      (C_3:
       begin
         (if ((gt_double_ x_1) e2)
         then
@@ -619,11 +614,8 @@ let sign_safety =
         begin
           (let jessie_<somenum> = (__retres := (neg_int (1))) in void);
          (raise (Return_label_exc void)) end) else void);
-       (C_3:
-       begin
-         (let jessie_<somenum> = (__retres := (0)) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc jessie_<somenum> ->
+       (let jessie_<somenum> = (__retres := (0)) in void);
+       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 

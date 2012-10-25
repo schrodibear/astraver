@@ -588,15 +588,14 @@ let foo_ensures_default =
    begin
      (let i = ref (any_int32 void) in
      (C_5:
+     (C_8:
      begin
        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (1))) in void);
-      (C_8:
-      begin
-        (let jessie_<somenum> = (C_6: ((shift a) (0))) in
-        (let jessie_<somenum> = (C_7: ((shift a) (integer_of_int32 !i))) in
-        (JC_<somenum>:
-        (((((Copy_specialized jessie_<somenum>) jessie_<somenum>) intP_intM_a_3) intP_a_3_alloc_table) intP_a_3_alloc_table))));
-       (return := !i); (raise Return) end) end)); absurd  end with Return ->
+      (let jessie_<somenum> = (C_6: ((shift a) (0))) in
+      (let jessie_<somenum> = (C_7: ((shift a) (integer_of_int32 !i))) in
+      (JC_<somenum>:
+      (((((Copy_specialized jessie_<somenum>) jessie_<somenum>) intP_intM_a_3) intP_a_3_alloc_table) intP_a_3_alloc_table))));
+      (return := !i); (raise Return) end))); absurd  end with Return ->
    !return end)) { (JC_<somenum>: true) }
 
 let foo_safety =
@@ -608,19 +607,18 @@ let foo_safety =
    begin
      (let i = ref (any_int32 void) in
      (C_5:
+     (C_8:
      begin
        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (1))) in void);
-      (C_8:
-      begin
-        (let jessie_<somenum> = (C_6: ((shift a) (0))) in
-        (let jessie_<somenum> = (C_7: ((shift a) (integer_of_int32 !i))) in
-        (JC_<somenum>:
-        (assert
-        { pset_disjoint(pset_range(pset_singleton(a), (0), (0)),
-          pset_range(pset_singleton(a), i, i)) };
-        (JC_<somenum>:
-        (((((Copy_requires_specialized jessie_<somenum>) jessie_<somenum>) intP_intM_a_3) intP_a_3_alloc_table) intP_a_3_alloc_table))))));
-       (return := !i); (raise Return) end) end)); absurd  end with Return ->
+      (let jessie_<somenum> = (C_6: ((shift a) (0))) in
+      (let jessie_<somenum> = (C_7: ((shift a) (integer_of_int32 !i))) in
+      (JC_<somenum>:
+      (assert
+      { pset_disjoint(pset_range(pset_singleton(a), (0), (0)),
+        pset_range(pset_singleton(a), i, i)) };
+      (JC_<somenum>:
+      (((((Copy_requires_specialized jessie_<somenum>) jessie_<somenum>) intP_intM_a_3) intP_a_3_alloc_table) intP_a_3_alloc_table))))));
+      (return := !i); (raise Return) end))); absurd  end with Return ->
    !return end)) { true }
 
 let main_ensures_default =
@@ -636,38 +634,36 @@ let main_ensures_default =
      (let a_0 = ref (any_pointer void) in
      (let tmp = ref (any_int32 void) in
      (C_11:
+     (C_13:
+     (C_15:
+     (C_17:
+     (C_18:
      begin
        (let jessie_<somenum> =
        (a_0 := (C_10:
                (JC_<somenum>:
                (((alloc_struct_intP (2)) intP_a_0_4_alloc_table) intP_a_0_4_tag_table)))) in
        void);
-      (C_13:
-      begin
-        (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-        (let jessie_<somenum> = !a_0 in
-        (((safe_upd_ intP_intM_a_0_4) jessie_<somenum>) jessie_<somenum>)));
-       (C_15:
-       begin
-         (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-         (let jessie_<somenum> = !a_0 in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_a_0_4) jessie_<somenum>) jessie_<somenum>))))));
-        (C_17:
-        begin
-          (let jessie_<somenum> =
-          (tmp := (C_16:
-                  (let jessie_<somenum> = !a_0 in
-                  (JC_<somenum>:
-                  (((foo jessie_<somenum>) intP_intM_a_0_4) !intP_a_0_4_alloc_table))))) in
-          void);
-         (C_18:
-         begin
-           ((safe_free_parameter intP_a_0_4_alloc_table) !a_0);
-          (return := !tmp); (raise Return) end) end) end) end) end))))));
-    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
+      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let jessie_<somenum> = !a_0 in
+      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+      (let jessie_<somenum> = !a_0 in
+      (let jessie_<somenum> = (1) in
+      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+      [ { } unit reads intP_a_0_4_alloc_table,intP_intM_a_0_4
+        writes intP_intM_a_0_4
+        { (not_assigns(intP_a_0_4_alloc_table, intP_intM_a_0_4@,
+           intP_intM_a_0_4, pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
+          and ((select(intP_intM_a_0_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+              and (select(intP_intM_a_0_4, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
+      (tmp := (C_16:
+              (let jessie_<somenum> = !a_0 in
+              (JC_<somenum>:
+              (((foo jessie_<somenum>) intP_intM_a_0_4) !intP_a_0_4_alloc_table))))) in
+      void); ((safe_free_parameter intP_a_0_4_alloc_table) !a_0);
+      (return := !tmp); (raise Return) end)))))))))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -682,6 +678,10 @@ let main_safety =
      (let a_0 = ref (any_pointer void) in
      (let tmp = ref (any_int32 void) in
      (C_11:
+     (C_13:
+     (C_15:
+     (C_17:
+     (C_18:
      begin
        (let jessie_<somenum> =
        (a_0 := (let jessie_<somenum> =
@@ -692,31 +692,25 @@ let main_safety =
                (assert
                { ge_int(offset_max(intP_a_0_4_alloc_table, jessie_<somenum>), (1)) };
                jessie_<somenum>)))) in void);
-      (C_13:
-      begin
-        (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-        (let jessie_<somenum> = !a_0 in
-        (((safe_upd_ intP_intM_a_0_4) jessie_<somenum>) jessie_<somenum>)));
-       (C_15:
-       begin
-         (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-         (let jessie_<somenum> = !a_0 in
-         (let jessie_<somenum> = (1) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-         (((safe_upd_ intP_intM_a_0_4) jessie_<somenum>) jessie_<somenum>))))));
-        (C_17:
-        begin
-          (let jessie_<somenum> =
-          (tmp := (C_16:
-                  (let jessie_<somenum> = !a_0 in
-                  (JC_<somenum>:
-                  (((foo_requires jessie_<somenum>) intP_intM_a_0_4) !intP_a_0_4_alloc_table))))) in
-          void);
-         (C_18:
-         begin
-           ((free_parameter intP_a_0_4_alloc_table) !a_0); (return := !tmp);
-          (raise Return) end) end) end) end) end)))))); absurd  end with
+      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let jessie_<somenum> = !a_0 in
+      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+      (let jessie_<somenum> = !a_0 in
+      (let jessie_<somenum> = (1) in
+      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+      [ { } unit reads intP_a_0_4_alloc_table,intP_intM_a_0_4
+        writes intP_intM_a_0_4
+        { (not_assigns(intP_a_0_4_alloc_table, intP_intM_a_0_4@,
+           intP_intM_a_0_4, pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
+          and ((select(intP_intM_a_0_4, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+              and (select(intP_intM_a_0_4, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
+      (tmp := (C_16:
+              (let jessie_<somenum> = !a_0 in
+              (JC_<somenum>:
+              (((foo_requires jessie_<somenum>) intP_intM_a_0_4) !intP_a_0_4_alloc_table))))) in
+      void); ((free_parameter intP_a_0_4_alloc_table) !a_0);
+      (return := !tmp); (raise Return) end)))))))))); absurd  end with
    Return -> !return end)) { true }
 
 

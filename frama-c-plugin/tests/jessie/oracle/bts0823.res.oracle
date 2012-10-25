@@ -731,13 +731,12 @@ let main_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_10:
+     (C_11:
      begin
        (let jessie_<somenum> = p in
        (let jessie_<somenum> = q in (JC_<somenum>: ((ftest jessie_<somenum>) jessie_<somenum>))));
-      (C_11:
-      begin
-        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end)); absurd  end with
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM, p)) = integer_of_int32(select(intP_intM@,
@@ -757,13 +756,12 @@ let main_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_10:
+     (C_11:
      begin
        (let jessie_<somenum> = p in
        (let jessie_<somenum> = q in (JC_<somenum>: ((ftest_requires jessie_<somenum>) jessie_<somenum>))));
-      (C_11:
-      begin
-        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end)); absurd  end with
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end))); absurd  end with
    Return -> !return end)) { true }
 
 

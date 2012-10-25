@@ -492,41 +492,36 @@ let test_ensures_default =
      (let l = ref (any_int32 void) in
      (let m = ref (any_int32 void) in
      (C_1:
+     (C_2:
+     (C_5:
+     (C_8:
+     (C_19:
      begin
        (let jessie_<somenum> = (l := (safe_int32_of_integer_ (1))) in void);
-      (C_2:
-      begin
-        (let jessie_<somenum> = (m := (safe_int32_of_integer_ (12))) in void);
-       (C_5:
-       begin
-         (let jessie_<somenum> =
-         (i := (C_4:
-               (safe_int32_of_integer_ (C_3:
-                                       ((add_int (integer_of_int32 !j)) 
-                                        (integer_of_int32 k)))))) in void);
-        (C_8:
-        begin
-          (let jessie_<somenum> =
-          (l := (C_7:
-                (safe_int32_of_integer_ (C_6:
-                                        ((mul_int (integer_of_int32 !l)) 
-                                         (integer_of_int32 !j)))))) in void);
-         (C_19:
-         begin
-           (let jessie_<somenum> =
-           (j := (C_18:
-                 (safe_int32_of_integer_ (C_17:
-                                         ((add_int (integer_of_int32 !j)) 
-                                          (integer_of_int32 (C_16:
-                                                            (safe_int32_of_integer_ 
-                                                             (C_15:
-                                                             ((add_int 
-                                                               (integer_of_int32 
-                                                                (C_14:
-                                                                (safe_int32_of_integer_ 
-                                                                 (C_13:
-                                                                 ((add_int 
-                                                                   (integer_of_int32 
+      (let jessie_<somenum> = (m := (safe_int32_of_integer_ (12))) in void);
+      (let jessie_<somenum> =
+      (i := (C_4:
+            (safe_int32_of_integer_ (C_3:
+                                    ((add_int (integer_of_int32 !j)) 
+                                     (integer_of_int32 k)))))) in void);
+      (let jessie_<somenum> =
+      (l := (C_7:
+            (safe_int32_of_integer_ (C_6:
+                                    ((mul_int (integer_of_int32 !l)) 
+                                     (integer_of_int32 !j)))))) in void);
+      (let jessie_<somenum> =
+      (j := (C_18:
+            (safe_int32_of_integer_ (C_17:
+                                    ((add_int (integer_of_int32 !j)) 
+                                     (integer_of_int32 (C_16:
+                                                       (safe_int32_of_integer_ 
+                                                        (C_15:
+                                                        ((add_int (integer_of_int32 
+                                                                   (C_14:
+                                                                   (safe_int32_of_integer_ 
+                                                                    (C_13:
+                                                                    ((add_int 
+                                                                    (integer_of_int32 
                                                                     (C_12:
                                                                     (safe_int32_of_integer_ 
                                                                     (C_11:
@@ -538,10 +533,10 @@ let test_ensures_default =
                                                                     (C_9:
                                                                     ((mul_int (10)) 
                                                                     (integer_of_int32 k)))))))))))) 
-                                                                  (integer_of_int32 !i))))))) 
-                                                              (integer_of_int32 !m))))))))))) in
-           void); (raise Return) end) end) end) end) end))); (raise Return)
-   end with Return -> void end)
+                                                                    (integer_of_int32 !i))))))) 
+                                                         (integer_of_int32 !m))))))))))) in
+      void); (raise Return) end))))))); (raise Return) end with Return ->
+   void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      (integer_of_int32(i) = add_int(integer_of_int32(j@),
@@ -561,42 +556,39 @@ let test_safety =
      (let l = ref (any_int32 void) in
      (let m = ref (any_int32 void) in
      (C_1:
+     (C_2:
+     (C_5:
+     (C_8:
+     (C_19:
      begin
        (let jessie_<somenum> = (l := (safe_int32_of_integer_ (1))) in void);
-      (C_2:
-      begin
-        (let jessie_<somenum> = (m := (safe_int32_of_integer_ (12))) in void);
-       (C_5:
-       begin
-         (let jessie_<somenum> =
-         (i := (C_4:
-               (JC_<somenum>:
-               (int32_of_integer_ (C_3:
-                                  ((add_int (integer_of_int32 !j)) (integer_of_int32 k))))))) in
-         void);
-        (C_8:
-        begin
-          (let jessie_<somenum> =
-          (l := (C_7:
-                (JC_<somenum>:
-                (int32_of_integer_ (C_6:
-                                   ((mul_int (integer_of_int32 !l)) (integer_of_int32 !j))))))) in
-          void);
-         (C_19:
-         begin
-           (let jessie_<somenum> =
-           (j := (C_18:
-                 (JC_<somenum>:
-                 (int32_of_integer_ (C_17:
-                                    ((add_int (integer_of_int32 !j)) 
-                                     (integer_of_int32 (C_16:
-                                                       (JC_<somenum>:
-                                                       (int32_of_integer_ 
-                                                        (C_15:
-                                                        ((add_int (integer_of_int32 
-                                                                   (C_14:
-                                                                   (JC_<somenum>:
-                                                                   (int32_of_integer_ 
+      (let jessie_<somenum> = (m := (safe_int32_of_integer_ (12))) in void);
+      (let jessie_<somenum> =
+      (i := (C_4:
+            (JC_<somenum>:
+            (int32_of_integer_ (C_3:
+                               ((add_int (integer_of_int32 !j)) (integer_of_int32 k))))))) in
+      void);
+      (let jessie_<somenum> =
+      (l := (C_7:
+            (JC_<somenum>:
+            (int32_of_integer_ (C_6:
+                               ((mul_int (integer_of_int32 !l)) (integer_of_int32 !j))))))) in
+      void);
+      (let jessie_<somenum> =
+      (j := (C_18:
+            (JC_<somenum>:
+            (int32_of_integer_ (C_17:
+                               ((add_int (integer_of_int32 !j)) (integer_of_int32 
+                                                                 (C_16:
+                                                                 (JC_<somenum>:
+                                                                 (int32_of_integer_ 
+                                                                  (C_15:
+                                                                  ((add_int 
+                                                                    (integer_of_int32 
+                                                                    (C_14:
+                                                                    (JC_<somenum>:
+                                                                    (int32_of_integer_ 
                                                                     (C_13:
                                                                     ((add_int 
                                                                     (integer_of_int32 
@@ -614,9 +606,9 @@ let test_safety =
                                                                     ((mul_int (10)) 
                                                                     (integer_of_int32 k)))))))))))))) 
                                                                     (integer_of_int32 !i)))))))) 
-                                                         (integer_of_int32 !m))))))))))))) in
-           void); (raise Return) end) end) end) end) end))); (raise Return)
-   end with Return -> void end) { true }
+                                                                   (integer_of_int32 !m))))))))))))) in
+      void); (raise Return) end))))))); (raise Return) end with Return ->
+   void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C arith.jessie --quiet -f arith.makefile project

@@ -71,14 +71,13 @@ behavior default:
    {  (M : (C_3 : ((C_2 : (C_1 : (b + 4)).intM) = 5)));
       
       {  
-         (assert for default: (C_4 : (jessie : (\forall intP[..] c;
-                                                 (s{Here}(c, 8) ==
-                                                   s{M}(c, 8))))));
+         (assert for default: (C_4 : (\forall intP[..] c;
+                                       (s{Here}(c, 8) == s{M}(c, 8)))));
          ()
       };
       
       {  
-         (assert for default: (C_5 : (jessie : (s{Here}(b, 8) == s{M}(b, 8)))));
+         (assert for default: (C_5 : (s{Here}(b, 8) == s{M}(b, 8))));
          ()
       };
       

@@ -559,55 +559,53 @@ let permut_search_ensures_default =
      (let __retres = ref (any_int32 void) in
      try
       (C_1:
+      (loop_2:
       begin
         (let jessie_<somenum> = (idx := (safe_int32_of_integer_ (0))) in void);
-       (loop_2:
-       begin
-         while true do
-         { invariant
-             (JC_<somenum>:
-             (exists n:int32.
-              (le_int(offset_min(intP_arr_1_alloc_table, arr), (0))
-              and (ge_int(offset_max(intP_arr_1_alloc_table, arr),
-                   integer_of_int32(n))
-                  and (le_int((0), integer_of_int32(idx))
-                      and (le_int(integer_of_int32(idx), integer_of_int32(n))
-                          and (forall i_1:int32.
-                               ((le_int((0), integer_of_int32(i_1))
-                                and le_int(integer_of_int32(i_1),
-                                    integer_of_int32(n))) ->
-                                (le_int((0),
-                                 integer_of_int32(select(intP_intM_arr_1,
-                                                  shift(arr,
-                                                  integer_of_int32(i_1)))))
-                                and le_int(integer_of_int32(select(intP_intM_arr_1,
-                                                            shift(arr,
-                                                            integer_of_int32(i_1)))),
-                                    integer_of_int32(n)))))))))))  }
+       while true do
+       { invariant
+           (JC_<somenum>:
+           (exists n:int32.
+            (le_int(offset_min(intP_arr_1_alloc_table, arr), (0))
+            and (ge_int(offset_max(intP_arr_1_alloc_table, arr),
+                 integer_of_int32(n))
+                and (le_int((0), integer_of_int32(idx))
+                    and (le_int(integer_of_int32(idx), integer_of_int32(n))
+                        and (forall i_1:int32.
+                             ((le_int((0), integer_of_int32(i_1))
+                              and le_int(integer_of_int32(i_1),
+                                  integer_of_int32(n))) ->
+                              (le_int((0),
+                               integer_of_int32(select(intP_intM_arr_1,
+                                                shift(arr,
+                                                integer_of_int32(i_1)))))
+                              and le_int(integer_of_int32(select(intP_intM_arr_1,
+                                                          shift(arr,
+                                                          integer_of_int32(i_1)))),
+                                  integer_of_int32(n)))))))))))  }
+        begin
+          [ { } unit { true } ];
+         try
           begin
-            [ { } unit { true } ];
-           try
+            (let jessie_<somenum> =
+            (C_8:
             begin
-              (let jessie_<somenum> =
-              begin
-                (if ((eq_int_ (integer_of_int32 (C_5:
-                                                ((safe_acc_ intP_intM_arr_1) 
-                                                 (C_4:
-                                                 ((shift arr) (integer_of_int32 !idx))))))) 
-                     (integer_of_int32 v))
-                then
-                 (C_3:
-                 begin
-                   (let jessie_<somenum> = (__retres := !idx) in void);
-                  (raise (Return_label_exc void)) end) else void);
-               (C_8:
+              (if ((eq_int_ (integer_of_int32 (C_5:
+                                              ((safe_acc_ intP_intM_arr_1) 
+                                               (C_4:
+                                               ((shift arr) (integer_of_int32 !idx))))))) 
+                   (integer_of_int32 v))
+              then
+               (C_3:
                begin
-                 (idx := (C_7:
-                         ((safe_acc_ intP_intM_arr_1) (C_6:
-                                                      ((shift arr) (integer_of_int32 !idx))))));
-                !idx end) end in void); (raise (Loop_continue_exc void)) end
-            with Loop_continue_exc jessie_<somenum> -> void end end done;
-        (raise (Return_label_exc void)) end) end) with
+                 (let jessie_<somenum> = (__retres := !idx) in void);
+                (raise (Return_label_exc void)) end) else void);
+             (idx := (C_7:
+                     ((safe_acc_ intP_intM_arr_1) (C_6:
+                                                  ((shift arr) (integer_of_int32 !idx))))));
+             !idx end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Return_label_exc void)) end)) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -638,57 +636,55 @@ let permut_search_safety =
      (let __retres = ref (any_int32 void) in
      try
       (C_1:
+      (loop_1:
       begin
         (let jessie_<somenum> = (idx := (safe_int32_of_integer_ (0))) in void);
-       (loop_1:
-       begin
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit reads idx
+            { (JC_<somenum>:
+              (exists n:int32.
+               (le_int(offset_min(intP_arr_1_alloc_table, arr), (0))
+               and (ge_int(offset_max(intP_arr_1_alloc_table, arr),
+                    integer_of_int32(n))
+                   and (le_int((0), integer_of_int32(idx))
+                       and (le_int(integer_of_int32(idx),
+                            integer_of_int32(n))
+                           and (forall i_1:int32.
+                                ((le_int((0), integer_of_int32(i_1))
+                                 and le_int(integer_of_int32(i_1),
+                                     integer_of_int32(n))) ->
+                                 (le_int((0),
+                                  integer_of_int32(select(intP_intM_arr_1,
+                                                   shift(arr,
+                                                   integer_of_int32(i_1)))))
+                                 and le_int(integer_of_int32(select(intP_intM_arr_1,
+                                                             shift(arr,
+                                                             integer_of_int32(i_1)))),
+                                     integer_of_int32(n))))))))))) } ];
+         try
           begin
-            [ { } unit reads idx
-              { (JC_<somenum>:
-                (exists n:int32.
-                 (le_int(offset_min(intP_arr_1_alloc_table, arr), (0))
-                 and (ge_int(offset_max(intP_arr_1_alloc_table, arr),
-                      integer_of_int32(n))
-                     and (le_int((0), integer_of_int32(idx))
-                         and (le_int(integer_of_int32(idx),
-                              integer_of_int32(n))
-                             and (forall i_1:int32.
-                                  ((le_int((0), integer_of_int32(i_1))
-                                   and le_int(integer_of_int32(i_1),
-                                       integer_of_int32(n))) ->
-                                   (le_int((0),
-                                    integer_of_int32(select(intP_intM_arr_1,
-                                                     shift(arr,
-                                                     integer_of_int32(i_1)))))
-                                   and le_int(integer_of_int32(select(intP_intM_arr_1,
-                                                               shift(arr,
-                                                               integer_of_int32(i_1)))),
-                                       integer_of_int32(n))))))))))) } ];
-           try
+            (let jessie_<somenum> =
+            (C_8:
             begin
-              (let jessie_<somenum> =
-              begin
-                (if ((eq_int_ (integer_of_int32 (C_5:
-                                                (JC_<somenum>:
-                                                ((((offset_acc_ intP_arr_1_alloc_table) intP_intM_arr_1) arr) 
-                                                 (integer_of_int32 !idx)))))) 
-                     (integer_of_int32 v))
-                then
-                 (C_3:
-                 begin
-                   (let jessie_<somenum> = (__retres := !idx) in void);
-                  (raise (Return_label_exc void)) end) else void);
-               (C_8:
+              (if ((eq_int_ (integer_of_int32 (C_5:
+                                              (JC_<somenum>:
+                                              ((((offset_acc_ intP_arr_1_alloc_table) intP_intM_arr_1) arr) 
+                                               (integer_of_int32 !idx)))))) 
+                   (integer_of_int32 v))
+              then
+               (C_3:
                begin
-                 (idx := (C_7:
-                         (JC_<somenum>:
-                         ((((offset_acc_ intP_arr_1_alloc_table) intP_intM_arr_1) arr) 
-                          (integer_of_int32 !idx))))); !idx end) end in void);
-             (raise (Loop_continue_exc void)) end with
-            Loop_continue_exc jessie_<somenum> -> void end end done;
-        (raise (Return_label_exc void)) end) end) with
+                 (let jessie_<somenum> = (__retres := !idx) in void);
+                (raise (Return_label_exc void)) end) else void);
+             (idx := (C_7:
+                     (JC_<somenum>:
+                     ((((offset_acc_ intP_arr_1_alloc_table) intP_intM_arr_1) arr) 
+                      (integer_of_int32 !idx))))); !idx end) in void);
+           (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done;
+       (raise (Return_label_exc void)) end)) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -731,11 +727,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/permut_search_po7.why">
-      <location file = "why/permut_search.why" line = "556" begin = "44" end = "45"/>
+      <location file = "why/permut_search.why" line = "553" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/permut_search_po8.why">
-      <location file = "why/permut_search.why" line = "556" begin = "44" end = "45"/>
+      <location file = "why/permut_search.why" line = "553" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
