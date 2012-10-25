@@ -1,0 +1,780 @@
+
+axiomatic integer_theory {
+
+  predicate is_prime(integer x)
+   
+  axiom prime_gcd :
+  (\forall integer x;
+    (\forall integer p;
+      ((is_prime(p) && (x != 0)) ==> (gcd(x, p) == 1))))
+   
+  logic integer gcd(integer p1, integer p2)
+  
+}
+
+type mod_2_ref = {
+  mod_2 contents;
+}
+
+axiomatic mod_2 {
+
+  logic type mod_2
+   
+  logic mod_2 mod_2_of_int(integer x)
+   
+  logic integer int_of_mod_2(mod_2 x)
+   
+  logic integer mod_2_mod_2(integer x)
+   
+  logic mod_2 mod_2_add(mod_2 x1, mod_2 x2)
+   
+  logic mod_2 mod_2_subt(mod_2 x1, mod_2 x2)
+   
+  logic mod_2 mod_2_div(mod_2 x1, mod_2 x2)
+   
+  logic mod_2 mod_2_mult(mod_2 x1, mod_2 x2)
+   
+  axiom mod_2_bounds :
+  (\forall mod_2 x;
+    ((0 <= int_of_mod_2(x)) && (int_of_mod_2(x) <= 1)))
+   
+  axiom mod_2_eq :
+  (\forall integer x;
+    (((0 <= x) && (x <= 1)) ==> (mod_2_mod_2(x) == x)))
+   
+  axiom mod_2_of_int_congruent :
+  (\forall integer x;
+    (mod_2_mod_2(int_of_mod_2(mod_2_of_int(x))) == mod_2_mod_2(x)))
+   
+  axiom mod_2_int_lower :
+  (\forall integer x;
+    ((x < 0) ==> (mod_2_mod_2(x) == mod_2_mod_2((x + 2)))))
+   
+  axiom mod_2_int_greater :
+  (\forall integer x;
+    ((x > 2) ==> (mod_2_mod_2(x) == mod_2_mod_2((x - 2)))))
+   
+  axiom mod_2_add_congruent :
+  (\forall mod_2 p1;
+    (\forall mod_2 p2;
+      (mod_2_mod_2(int_of_mod_2(mod_2_add(p1, p2))) ==
+        mod_2_mod_2((int_of_mod_2(p1) + int_of_mod_2(p2))))))
+   
+  axiom mod_2_mult_congruent :
+  (\forall mod_2 p1;
+    (\forall mod_2 p2;
+      (mod_2_mod_2(int_of_mod_2(mod_2_mult(p1, p2))) ==
+        mod_2_mod_2((int_of_mod_2(p1) * int_of_mod_2(p2))))))
+   
+  axiom mod_2_subt_congruent :
+  (\forall mod_2 p1;
+    (\forall mod_2 p2;
+      (mod_2_mod_2(int_of_mod_2(mod_2_subt(p1, p2))) ==
+        mod_2_mod_2((int_of_mod_2(p1) - int_of_mod_2(p2))))))
+   
+  axiom mod_2_div_congruent :
+  (\forall mod_2 p1;
+    (\forall mod_2 p2;
+      ((gcd(int_of_mod_2(p2), 2) == 1) ==>
+        (mod_2_mod_2(int_of_mod_2(mod_2_div(p1, p2))) ==
+          mod_2_mod_2((int_of_mod_2(p1) / int_of_mod_2(p2)))))))
+  
+}
+
+axiomatic vector_1_mod_2 {
+
+  logic type vector_1_mod_2
+   
+  logic vector_1_mod_2 vector_1_mod_2_any()
+   
+  logic mod_2 vector_1_mod_2_get(vector_1_mod_2 v, integer x)
+   
+  logic vector_1_mod_2 vector_1_mod_2_set(vector_1_mod_2 v, integer x,
+                                          mod_2 y)
+   
+  logic boolean vector_1_mod_2_neq(vector_1_mod_2 p1, vector_1_mod_2 p2)
+   
+  logic boolean vector_1_mod_2_eq(vector_1_mod_2 p1, vector_1_mod_2 p2)
+   
+  axiom vector_1_mod_2_eq_ax :
+  (\forall vector_1_mod_2 v1;
+    (\forall vector_1_mod_2 v2;
+      (\forall integer i;
+        ((vector_1_mod_2_eq(v1, v2) == true) ==>
+          (vector_1_mod_2_get(v1, i) == vector_1_mod_2_get(v2, i))))))
+   
+  axiom vector_1_mod_2_neq_ax :
+  (\forall vector_1_mod_2 v1;
+    (\forall vector_1_mod_2 v2;
+      (\forall integer i;
+        ((vector_1_mod_2_neq(v1, v2) == true) ==>
+          (vector_1_mod_2_get(v1, i) != vector_1_mod_2_get(v2, i))))))
+   
+  axiom vector_1_mod_2_get_set_eq :
+  (\forall vector_1_mod_2 v;
+    (\forall integer i;
+      (\forall mod_2 x;
+        (vector_1_mod_2_get(vector_1_mod_2_set(v, i, x), i) == x))))
+   
+  axiom vector_1_mod_2_set_neq :
+  (\forall vector_1_mod_2 v;
+    (\forall integer i;
+      (\forall integer j;
+        (\forall mod_2 x;
+          ((i != j) ==>
+            (vector_1_mod_2_get(vector_1_mod_2_set(v, i, x), j) ==
+              vector_1_mod_2_get(v, j)))))))
+   
+  axiom vector_1_mod_2_extensionality :
+  (\forall vector_1_mod_2 v1;
+    (\forall vector_1_mod_2 v2;
+      (\forall integer i;
+        ((vector_1_mod_2_get(v1, i) == vector_1_mod_2_get(v2, i)) ==>
+          (v1 == v2)))))
+   
+  logic vector_1_mod_2 vector_1_mod_2_shift(vector_1_mod_2 v, integer ofs)
+   
+  axiom vector_1_mod_2_shift_def :
+  (\forall vector_1_mod_2 v;
+    (\forall integer ofs;
+      (\forall integer i;
+        (vector_1_mod_2_get(vector_1_mod_2_shift(v, ofs), i) ==
+          vector_1_mod_2_get(v, (ofs + i))))))
+   
+  logic vector_1_mod_2 vector_1_mod_2_blit(vector_1_mod_2 src,
+                                           vector_1_mod_2 dst, integer ofs,
+                                           integer len)
+   
+  axiom vector_1_mod_2_get_blit_eq :
+  (\forall vector_1_mod_2 src;
+    (\forall vector_1_mod_2 dst;
+      (\forall integer ofs;
+        (\forall integer len;
+          (\forall integer i;
+            (((i >= ofs) && (i < (ofs + len))) ==>
+              (vector_1_mod_2_get(vector_1_mod_2_blit(src, dst, ofs, len), i) ==
+                vector_1_mod_2_get(src, (i - ofs)))))))))
+   
+  axiom vector_1_mod_2_get_blit_neq :
+  (\forall vector_1_mod_2 src;
+    (\forall vector_1_mod_2 dst;
+      (\forall integer ofs;
+        (\forall integer len;
+          (\forall integer i;
+            (((i < ofs) || (i >= (ofs + len))) ==>
+              (vector_1_mod_2_get(vector_1_mod_2_blit(src, dst, ofs, len), i) ==
+                vector_1_mod_2_get(dst, i))))))))
+   
+  logic vector_1_mod_2 vector_1_mod_2_of_matrix_mod_2(matrix_mod_2 v1)
+   
+  logic matrix_mod_2 matrix_mod_2_of_vector_1_mod_2(vector_1_mod_2 v1)
+  
+}
+
+type matrix_mod_2_ref = {
+  matrix_mod_2 contents;
+}
+
+axiomatic matrix_mod_2 {
+
+  logic type matrix_mod_2
+   
+  logic matrix_mod_2 matrix_mod_2_any()
+   
+  logic boolean matrix_mod_2_neq(matrix_mod_2 p1, matrix_mod_2 p2)
+   
+  logic boolean matrix_mod_2_eq(matrix_mod_2 p1, matrix_mod_2 p2)
+   
+  logic mod_2 matrix_mod_2_get(matrix_mod_2 v, integer m, integer n)
+   
+  logic matrix_mod_2 matrix_mod_2_set(matrix_mod_2 v, integer m, integer n,
+                                      mod_2 y)
+   
+  logic matrix_mod_2 matrix_mod_2_shift(matrix_mod_2 v, integer ofs1,
+                                        integer ofs2)
+   
+  logic matrix_mod_2 matrix_mod_2_blit(matrix_mod_2 src, matrix_mod_2 dst,
+                                       integer ofs1, integer ofs2,
+                                       integer len1, integer len2)
+   
+  logic matrix_mod_2 matrix_mod_2_add(matrix_mod_2 m, matrix_mod_2 n)
+   
+  logic matrix_mod_2 matrix_mod_2_mult(matrix_mod_2 m, matrix_mod_2 n)
+   
+  logic matrix_mod_2 matrix_mod_2_mult_by_scalar(mod_2 scalar, matrix_mod_2 m)
+   
+  logic matrix_mod_2 matrix_mod_2_of_vector_1_mod_2(vector_1_mod_2 v)
+   
+  logic vector_1_mod_2 vector_1_mod_2_of_matrix_mod_2(matrix_mod_2 v)
+   
+  axiom matrix_mod_2_add_ax :
+  (\forall matrix_mod_2 m1;
+    (\forall matrix_mod_2 m2;
+      (\forall integer i;
+        (\forall integer j;
+          (matrix_mod_2_get(matrix_mod_2_add(m1, m2), i, j) ==
+            mod_2_add(matrix_mod_2_get(m1, i, j), matrix_mod_2_get(m2, i, j)))))))
+   
+  axiom matrix_mod_2_mult_by_scalar_ax :
+  (\forall matrix_mod_2 m;
+    (\forall mod_2 alpha;
+      (\forall integer i;
+        (\forall integer j;
+          (matrix_mod_2_get(matrix_mod_2_mult_by_scalar(alpha, m), i, j) ==
+            mod_2_mult(matrix_mod_2_get(m, i, j), alpha))))))
+   
+  axiom matrix_mod_2_eq_ax :
+  (\forall matrix_mod_2 v1;
+    (\forall matrix_mod_2 v2;
+      (\forall integer i;
+        (\forall integer j;
+          ((matrix_mod_2_eq(v1, v2) == true) ==>
+            (matrix_mod_2_get(v1, i, j) == matrix_mod_2_get(v2, i, j)))))))
+   
+  axiom matrix_mod_2_neq_ax :
+  (\forall matrix_mod_2 v1;
+    (\forall matrix_mod_2 v2;
+      (\forall integer i;
+        (\forall integer j;
+          ((matrix_mod_2_neq(v1, v2) == true) ==>
+            (matrix_mod_2_get(v1, i, j) != matrix_mod_2_get(v2, i, j)))))))
+   
+  axiom matrix_mod_2_get_set_eq :
+  (\forall matrix_mod_2 v;
+    (\forall integer m;
+      (\forall integer n;
+        (\forall mod_2 x;
+          (matrix_mod_2_get(matrix_mod_2_set(v, m, n, x), m, n) == x)))))
+   
+  axiom matrix_mod_2_set_neq :
+  (\forall matrix_mod_2 v;
+    (\forall integer m1;
+      (\forall integer n1;
+        (\forall integer m2;
+          (\forall integer n2;
+            (\forall mod_2 x;
+              (((m1 != m2) || (n1 != n2)) ==>
+                (matrix_mod_2_get(matrix_mod_2_set(v, m1, n1, x), m2, n2) ==
+                  matrix_mod_2_get(v, m2, n2)))))))))
+   
+  axiom matrix_mod_2_extensionality :
+  (\forall matrix_mod_2 m1;
+    (\forall matrix_mod_2 m2;
+      (\forall integer i;
+        (\forall integer j;
+          ((matrix_mod_2_get(m1, i, j) == matrix_mod_2_get(m2, i, j)) ==>
+            (m1 == m2))))))
+   
+  axiom matrix_mod_2_shift_def :
+  (\forall matrix_mod_2 v;
+    (\forall integer ofs1;
+      (\forall integer ofs2;
+        (\forall integer i;
+          (\forall integer j;
+            (matrix_mod_2_get(matrix_mod_2_shift(v, ofs1, ofs2), i, j) ==
+              matrix_mod_2_get(v, (ofs1 + i), (ofs2 + j))))))))
+   
+  axiom matrix_mod_2_get_blit_eq :
+  (\forall matrix_mod_2 src;
+    (\forall matrix_mod_2 dst;
+      (\forall integer ofs1;
+        (\forall integer len1;
+          (\forall integer i;
+            (\forall integer ofs2;
+              (\forall integer len2;
+                (\forall integer j;
+                  ((((i >= ofs1) && (i < (ofs1 + len1))) &&
+                     ((j >= ofs2) && (j < (ofs2 + len2)))) ==>
+                    (matrix_mod_2_get(matrix_mod_2_blit(src, dst, ofs1, len1,
+                                                        ofs2, len2),
+                                      i, j) ==
+                      matrix_mod_2_get(src, (i - ofs1), (j - ofs2))))))))))))
+   
+  axiom matrix_mod_2_get_blit_neq :
+  (\forall matrix_mod_2 src;
+    (\forall matrix_mod_2 dst;
+      (\forall integer ofs1;
+        (\forall integer len1;
+          (\forall integer i;
+            (\forall integer ofs2;
+              (\forall integer len2;
+                (\forall integer j;
+                  ((((i < ofs1) || (i >= (ofs1 + len1))) ||
+                     ((j < ofs2) || (j >= (ofs2 + len2)))) ==>
+                    (matrix_mod_2_get(matrix_mod_2_blit(src, dst, ofs1, len1,
+                                                        ofs2, len2),
+                                      i, j) ==
+                      matrix_mod_2_get(dst, i, j)))))))))))
+  
+}
+
+axiomatic ring_mod_2 {
+
+  logic type ring_mod_2
+   
+  logic ring_mod_2 ring_mod_2_zero =
+  ring_mod_2_monomial(mod_2_of_int(0), 0)
+   
+  logic ring_mod_2 ring_mod_2_unit =
+  ring_mod_2_monomial(mod_2_of_int(1), 0)
+   
+  logic ring_mod_2 ring_mod_2_monomial(mod_2 ring, integer x)
+   
+  logic ring_mod_2 ring_mod_2_add(ring_mod_2 x1, ring_mod_2 x2)
+   
+  logic ring_mod_2 ring_mod_2_subt(ring_mod_2 x1, ring_mod_2 x2)
+   
+  logic ring_mod_2 ring_mod_2_div(ring_mod_2 x1, ring_mod_2 x2)
+   
+  logic ring_mod_2 ring_mod_2_mult(ring_mod_2 x1, ring_mod_2 x2)
+   
+  logic ring_mod_2 ring_mod_2_exp(ring_mod_2 p1, integer p2)
+   
+  logic ring_mod_2 ring_mod_2_uminus(ring_mod_2 p1)
+   
+  logic ring_mod_2 ring_mod_2_uplus(ring_mod_2 p1)
+   
+  logic boolean ring_mod_2_neq(ring_mod_2 p1, ring_mod_2 p2)
+   
+  logic boolean ring_mod_2_eq(ring_mod_2 p1, ring_mod_2 p2)
+   
+  logic boolean ring_mod_2_congruent(ring_mod_2 p1, ring_mod_2 p2,
+                                     ring_mod_2 p3)
+   
+  axiom ring_mod_2_mult_ax :
+  (\forall ring_mod_2 A;
+    (\forall ring_mod_2 B;
+      (((A != ring_mod_2_zero) && (B != ring_mod_2_zero)) ==>
+        (ring_mod_2_mult(A, B) != ring_mod_2_zero))))
+   
+  axiom ring_mod_2_subt_ax :
+  (\forall ring_mod_2 A;
+    (\forall ring_mod_2 B;
+      ((A != B) ==> (ring_mod_2_subt(A, B) != ring_mod_2_zero))))
+   
+  axiom ring_mod_2_div_ax :
+  (\forall ring_mod_2 A;
+    (\forall ring_mod_2 B;
+      ((A != ring_mod_2_zero) ==> (ring_mod_2_div(A, B) != ring_mod_2_zero))))
+   
+  axiom ring_mod_2_div_ax :
+  (\forall ring_mod_2 A;
+    (\forall ring_mod_2 B;
+      ((A != ring_mod_2_uminus(B)) ==>
+        (ring_mod_2_add(A, B) != ring_mod_2_zero))))
+   
+  axiom ring_mod_2_exp_ax :
+  (\forall ring_mod_2 A;
+    (\forall integer B;
+      ((A != ring_mod_2_zero) ==> (ring_mod_2_exp(A, B) != ring_mod_2_zero))))
+   
+  axiom ring_mod_2_uminus_ax :
+  (\forall ring_mod_2 A;
+    ((A != ring_mod_2_zero) ==> (ring_mod_2_uminus(A) != ring_mod_2_zero)))
+   
+  predicate ring_mod_2_is_irreducible(ring_mod_2 x)
+  
+}
+
+axiomatic field_mod_2_poly_1 {
+
+  logic type field_mod_2_poly_1
+   
+  logic ring_mod_2 field_mod_2_poly_1_generator =
+  ring_mod_2_add(ring_mod_2_monomial(mod_2_of_int(1), 8),
+                 ring_mod_2_add(ring_mod_2_monomial(mod_2_of_int(1), 4),
+                                ring_mod_2_add(ring_mod_2_monomial(mod_2_of_int(
+                                                                   1), 3),
+                                               ring_mod_2_add(ring_mod_2_monomial(
+                                                              mod_2_of_int(
+                                                              1), 1),
+                                                              ring_mod_2_monomial(
+                                                              mod_2_of_int(
+                                                              1), 0)))))
+   
+  logic ring_mod_2 field_mod_2_poly_1_zero =
+  ring_mod_2_monomial(mod_2_of_int(0), 0)
+   
+  logic ring_mod_2 field_mod_2_poly_1_unit =
+  ring_mod_2_monomial(mod_2_of_int(1), 0)
+   
+  logic mod_2 field_mod_2_poly_1_get_coef(field_mod_2_poly_1 poly,
+                                          integer power)
+   
+  logic field_mod_2_poly_1 field_mod_2_poly_1_set_coef(field_mod_2_poly_1 poly,
+                                                       integer power,
+                                                       mod_2 coef)
+   
+  logic ring_mod_2 ring_mod_2_of_field_mod_2_poly_1(field_mod_2_poly_1 x)
+   
+  logic field_mod_2_poly_1 field_mod_2_poly_1_of_ring_mod_2(ring_mod_2 x)
+   
+  logic ring_mod_2 field_mod_2_poly_1_congruence(ring_mod_2 x)
+   
+  logic field_mod_2_poly_1 field_mod_2_poly_1_of_mod_2(mod_2 x)
+   
+  logic boolean field_mod_2_poly_1_neq(field_mod_2_poly_1 p1,
+                                       field_mod_2_poly_1 p2)
+   
+  predicate field_mod_2_poly_1_eq(field_mod_2_poly_1 p1,
+                                      field_mod_2_poly_1 p2)
+   
+  axiom field_mod_2_poly_1_cong :
+  (\forall ring_mod_2 v;
+    (field_mod_2_poly_1_congruence(ring_mod_2_of_field_mod_2_poly_1(field_mod_2_poly_1_of_ring_mod_2(
+                                                                    v))) ==
+      field_mod_2_poly_1_congruence(v)))
+   
+  logic vector_1_mod_2 vector_1_mod_2_of_field_mod_2_poly_1(field_mod_2_poly_1 x)
+   
+  logic field_mod_2_poly_1 field_mod_2_poly_1_of_vector_1_mod_2(vector_1_mod_2 x)
+   
+  axiom field_mod_2_poly_1_mult_ax :
+  (\forall field_mod_2_poly_1 A;
+    (\forall field_mod_2_poly_1 B;
+      (((A != field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero)) &&
+         (B != field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero))) ==>
+        (field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_mult(ring_mod_2_of_field_mod_2_poly_1(
+                                                          A),
+                                                          ring_mod_2_of_field_mod_2_poly_1(
+                                                          B))) !=
+          field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero)))))
+   
+  axiom field_mod_2_poly_1_subt_ax :
+  (\forall field_mod_2_poly_1 A;
+    (\forall field_mod_2_poly_1 B;
+      ((A != B) ==>
+        (field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_subt(ring_mod_2_of_field_mod_2_poly_1(
+                                                          A),
+                                                          ring_mod_2_of_field_mod_2_poly_1(
+                                                          B))) !=
+          field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero)))))
+   
+  axiom field_mod_2_poly_1_div_ax :
+  (\forall field_mod_2_poly_1 A;
+    (\forall field_mod_2_poly_1 B;
+      ((A != field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero)) ==>
+        (field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_div(ring_mod_2_of_field_mod_2_poly_1(
+                                                         A),
+                                                         ring_mod_2_of_field_mod_2_poly_1(
+                                                         B))) !=
+          field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero)))))
+   
+  axiom field_mod_2_poly_1_add_ax :
+  (\forall field_mod_2_poly_1 A;
+    (\forall field_mod_2_poly_1 B;
+      ((A !=
+         field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_uminus(ring_mod_2_of_field_mod_2_poly_1(
+                                                            B)))) ==>
+        (field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_add(ring_mod_2_of_field_mod_2_poly_1(
+                                                         A),
+                                                         ring_mod_2_of_field_mod_2_poly_1(
+                                                         B))) !=
+          field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero)))))
+   
+  axiom field_mod_2_poly_1_exp_ax :
+  (\forall field_mod_2_poly_1 A;
+    (\forall integer B;
+      ((A != field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero)) ==>
+        (field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_exp(ring_mod_2_of_field_mod_2_poly_1(
+                                                         A), B)) !=
+          field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero)))))
+   
+  axiom field_mod_2_poly_1_uminus_ax :
+  (\forall field_mod_2_poly_1 A;
+    ((A != field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero)) ==>
+      (field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_uminus(ring_mod_2_of_field_mod_2_poly_1(
+                                                          A))) !=
+        field_mod_2_poly_1_of_ring_mod_2(field_mod_2_poly_1_zero))))
+   
+  axiom field_mod_2_poly_1_get_set_eq :
+  (\forall field_mod_2_poly_1 v;
+    (\forall integer i;
+      (\forall mod_2 x;
+        (field_mod_2_poly_1_get_coef(field_mod_2_poly_1_set_coef(v, i, x), i) ==
+          x))))
+   
+  axiom field_mod_2_poly_1_set_neq :
+  (\forall field_mod_2_poly_1 v;
+    (\forall integer i;
+      (\forall integer j;
+        (\forall mod_2 x;
+          ((i != j) ==>
+            (field_mod_2_poly_1_get_coef(field_mod_2_poly_1_set_coef(
+                                         v, i, x), j) ==
+              field_mod_2_poly_1_get_coef(v, j)))))))
+  
+}
+
+lemma ring_mod_2_is_irreducible_po :
+ring_mod_2_is_irreducible(field_mod_2_poly_1_generator)
+
+lemma field_mod_2_poly_1_is_prime_po :
+is_prime(2)
+
+boolean field_mod_2_poly_1_eq_param(field_mod_2_poly_1 x,field_mod_2_poly_1 y)
+  behavior default:
+    assigns \nothing;
+    ensures if \result then field_mod_2_poly_1_eq(x,y) else !field_mod_2_poly_1_eq(x,y);
+;
+
+matrix_mod_2 M = matrix_mod_2_any();
+
+vector_1_mod_2 C = vector_1_mod_2_any();
+
+field_mod_2_poly_1 SBox(field_mod_2_poly_1 input_e)
+{  
+   (var field_mod_2_poly_1 e = input_e);
+   
+   {  
+        
+        (var field_mod_2_poly_1 x)
+      ;
+      (if field_mod_2_poly_1_eq_param(e,
+                                field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_monomial(
+                                                                 mod_2_of_int(
+                                                                 0), 0))) then 
+      {  (x = field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_monomial(mod_2_of_int(
+                                                                   0), 0)))
+      } else 
+      {  
+         (assert (!field_mod_2_poly_1_eq(e,
+                   field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_monomial(
+                                                    mod_2_of_int(0), 0)))));
+         (x = (let cao_var_1 = e
+              in 
+              {  
+                 (assert for safety: (!field_mod_2_poly_1_eq(cao_var_1,
+                                       field_mod_2_poly_1_of_ring_mod_2(
+                                       field_mod_2_poly_1_zero))));
+                 field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_div(ring_mod_2_of_field_mod_2_poly_1(
+                                                                 field_mod_2_poly_1_of_ring_mod_2(
+                                                                 ring_mod_2_monomial(
+                                                                 mod_2_of_int(
+                                                                 1), 0))),
+                                                                 ring_mod_2_of_field_mod_2_poly_1(
+                                                                 cao_var_1)))
+              }))
+      });
+      
+        
+        (var matrix_mod_2 A = (let cao_var_2 = matrix_mod_2_any()
+                              in (let cao_var_3 =
+                                 (let cao_var_4 = vector_1_mod_2_any(
+                                 )
+                                 in (let cao_var_5 = x
+                                    in (let cao_var_6 =
+                                       vector_1_mod_2_set(cao_var_4, 7,
+                                                          field_mod_2_poly_1_get_coef(
+                                                          cao_var_5, 7))
+                                       in (let cao_var_7 =
+                                          vector_1_mod_2_set(cao_var_4, 6,
+                                                             field_mod_2_poly_1_get_coef(
+                                                             cao_var_5, 6))
+                                          in (let cao_var_8 =
+                                             vector_1_mod_2_set(cao_var_4, 5,
+                                                                field_mod_2_poly_1_get_coef(
+                                                                cao_var_5, 5))
+                                             in (let cao_var_9 =
+                                                vector_1_mod_2_set(cao_var_4,
+                                                                   4,
+                                                                   field_mod_2_poly_1_get_coef(
+                                                                   cao_var_5,
+                                                                   4))
+                                                in (let cao_var_10 =
+                                                   vector_1_mod_2_set(
+                                                   cao_var_4, 3,
+                                                   field_mod_2_poly_1_get_coef(
+                                                   cao_var_5, 3))
+                                                   in (let cao_var_11 =
+                                                      vector_1_mod_2_set(
+                                                      cao_var_4, 2,
+                                                      field_mod_2_poly_1_get_coef(
+                                                      cao_var_5, 2))
+                                                      in (let cao_var_12 =
+                                                         vector_1_mod_2_set(
+                                                         cao_var_4, 1,
+                                                         field_mod_2_poly_1_get_coef(
+                                                         cao_var_5, 1))
+                                                         in (let cao_var_13 =
+                                                            vector_1_mod_2_set(
+                                                            cao_var_4, 0,
+                                                            field_mod_2_poly_1_get_coef(
+                                                            cao_var_5, 0))
+                                                            in cao_var_4))))))))))
+                                 in (let cao_var_2 =
+                                    matrix_mod_2_set(cao_var_2, 7, 0,
+                                                     vector_1_mod_2_get(
+                                                     cao_var_3, 7))
+                                    in (let cao_var_2 =
+                                       matrix_mod_2_set(cao_var_2, 6, 0,
+                                                        vector_1_mod_2_get(
+                                                        cao_var_3, 6))
+                                       in (let cao_var_2 =
+                                          matrix_mod_2_set(cao_var_2, 5, 0,
+                                                           vector_1_mod_2_get(
+                                                           cao_var_3, 5))
+                                          in (let cao_var_2 =
+                                             matrix_mod_2_set(cao_var_2, 4,
+                                                              0,
+                                                              vector_1_mod_2_get(
+                                                              cao_var_3, 4))
+                                             in (let cao_var_2 =
+                                                matrix_mod_2_set(cao_var_2,
+                                                                 3, 0,
+                                                                 vector_1_mod_2_get(
+                                                                 cao_var_3, 3))
+                                                in (let cao_var_2 =
+                                                   matrix_mod_2_set(cao_var_2,
+                                                                    2, 0,
+                                                                    vector_1_mod_2_get(
+                                                                    cao_var_3,
+                                                                    2))
+                                                   in (let cao_var_2 =
+                                                      matrix_mod_2_set(
+                                                      cao_var_2, 1, 0,
+                                                      vector_1_mod_2_get(
+                                                      cao_var_3, 1))
+                                                      in (let cao_var_2 =
+                                                         matrix_mod_2_set(
+                                                         cao_var_2, 0, 0,
+                                                         vector_1_mod_2_get(
+                                                         cao_var_3, 0))
+                                                         in cao_var_2)))))))))))
+      ;
+      
+        
+        (var vector_1_mod_2 B = (let cao_var_14 = vector_1_mod_2_any(
+                                )
+                                in (let cao_var_15 = matrix_mod_2_mult(
+                                   M, A)
+                                   in (let cao_var_14 =
+                                      vector_1_mod_2_set(cao_var_14, 7,
+                                                         matrix_mod_2_get(
+                                                         cao_var_15, 7, 0))
+                                      in (let cao_var_14 =
+                                         vector_1_mod_2_set(cao_var_14, 6,
+                                                            matrix_mod_2_get(
+                                                            cao_var_15, 6, 0))
+                                         in (let cao_var_14 =
+                                            vector_1_mod_2_set(cao_var_14, 5,
+                                                               matrix_mod_2_get(
+                                                               cao_var_15, 5,
+                                                               0))
+                                            in (let cao_var_14 =
+                                               vector_1_mod_2_set(cao_var_14,
+                                                                  4,
+                                                                  matrix_mod_2_get(
+                                                                  cao_var_15,
+                                                                  4, 0))
+                                               in (let cao_var_14 =
+                                                  vector_1_mod_2_set(
+                                                  cao_var_14, 3,
+                                                  matrix_mod_2_get(cao_var_15,
+                                                                   3, 0))
+                                                  in (let cao_var_14 =
+                                                     vector_1_mod_2_set(
+                                                     cao_var_14, 2,
+                                                     matrix_mod_2_get(
+                                                     cao_var_15, 2, 0))
+                                                     in (let cao_var_14 =
+                                                        vector_1_mod_2_set(
+                                                        cao_var_14, 1,
+                                                        matrix_mod_2_get(
+                                                        cao_var_15, 1, 0))
+                                                        in (let cao_var_14 =
+                                                           vector_1_mod_2_set(
+                                                           cao_var_14, 0,
+                                                           matrix_mod_2_get(
+                                                           cao_var_15, 0, 0))
+                                                           in cao_var_14)))))))))))
+      ;
+      
+      (return field_mod_2_poly_1_of_ring_mod_2(ring_mod_2_add(ring_mod_2_of_field_mod_2_poly_1(
+                                                              field_mod_2_poly_1_of_ring_mod_2(
+                                                              (let cao_var_16 =
+                                                              B
+                                                              in ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_16, 7),
+                                                              7),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_16, 6),
+                                                              6),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_16, 5),
+                                                              5),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_16, 4),
+                                                              4),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_16, 3),
+                                                              3),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_16, 2),
+                                                              2),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_16, 1),
+                                                              1),
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_16, 0),
+                                                              0))))))))))),
+                                                              ring_mod_2_of_field_mod_2_poly_1(
+                                                              field_mod_2_poly_1_of_ring_mod_2(
+                                                              (let cao_var_17 =
+                                                              C
+                                                              in ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_17, 7),
+                                                              7),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_17, 6),
+                                                              6),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_17, 5),
+                                                              5),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_17, 4),
+                                                              4),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_17, 3),
+                                                              3),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_17, 2),
+                                                              2),
+                                                              ring_mod_2_add(
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_17, 1),
+                                                              1),
+                                                              ring_mod_2_monomial(
+                                                              vector_1_mod_2_get(
+                                                              cao_var_17, 0),
+                                                              0))))))))))))))
+   }
+}
