@@ -468,7 +468,7 @@ object
                     Hashtbl.replace model_fields_table ci.ckey (mi::l)
                   end
               | _ -> 
-              Common.notimplemented "model field only on structures"
+              Common.unsupported "model field only on structures"
           end;
           DoChildren (* FIXME: correct ? *)
       | Dcustom_annot _ -> DoChildren (* FIXME: correct ? *)
@@ -1214,7 +1214,7 @@ class retypeAddressTaken =
           | TField(fi,_) ->
               if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then assert false
               else t
-          | TModel _ -> Common.notimplemented "Model field"
+          | TModel _ -> Common.unsupported "Model field"
           | TIndex _ -> t
           | TNoOffset -> assert false (*unreachable*)
         end

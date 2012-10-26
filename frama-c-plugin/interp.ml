@@ -543,9 +543,9 @@ let ltype t =
   | Ltype (s,[]) -> mktype (JCPTidentifier (s.lt_name,[]))
   | Linteger -> mktype (JCPTnative Tinteger)
   | Lreal -> mktype (JCPTnative Treal)
-  | Ltype(_,_) | Lvar _ | Larrow _ ->
-      (* TODO *)
-      notimplemented "Interp.ltype (Ltype |Lvar | Larrow)"
+  | Ltype(_,_)  -> unsupported "polymorphic logic type"
+  | Lvar _  -> unsupported "logic type variable"
+  | Larrow _ -> unsupported "function type in logic"
 
 
 (*****************************************************************************)
@@ -568,7 +568,8 @@ let strip_float_suffix s =
 let logic_const pos = function
   | Integer(_,Some s) -> JCPEconst (JCCinteger s)
   | Integer(n,None) -> JCPEconst (JCCinteger (My_bigint.to_string n))
-  | LStr _ | LWStr _ -> assert false (* Should have been rewritten *)
+  | LStr _ | LWStr _ -> 
+    Common.unsupported "string literals in logic"
   | LChr c -> JCPEconst (JCCinteger(string_of_int (Char.code c)))
   | LReal (_,s) -> JCPEconst (JCCreal (strip_float_suffix s))
   | LEnum ei ->
@@ -628,7 +629,7 @@ and boolean_const = function
   | CReal(f,_fk,_text) ->
       if f = 0.0 then JCCboolean false else JCCboolean true
 
-  | CEnum {eival = e} -> boolean_const_of_expr e
+  | CEnum {eival = e; _ } -> boolean_const_of_expr e
 
 and boolean_const_of_expr e =
   match (stripInfo e).enode with Const c -> boolean_const c | _ -> assert false
@@ -704,7 +705,7 @@ and terms t =
   let enode = match constFoldTermNodeAtTop t.term_node with
     | TConst c -> [logic_const t.term_loc c]
 
-    | TDataCons({ctor_type = {lt_name = name}} as d,_args)
+    | TDataCons({ctor_type = {lt_name = name; _ }; _ } as d,_args)
         when name = Utf8_logic.boolean ->
         [JCPEconst (JCCboolean (d.ctor_name = "\\true"))]
 
@@ -715,13 +716,9 @@ and terms t =
         in
         List.map (fun x -> JCPEapp(ctor.ctor_name,[],x)) args
 
-    | TUpdate _ ->
-	(* TODO *)
-        Common.notimplemented "Interp.terms TUpdate"
+    | TUpdate _ -> Common.unsupported "logic update"
 
-    | Toffset _ ->
-	(* TODO *)
-        Common.notimplemented "Interp.terms TOffset"
+    | Toffset _ -> Common.unsupported "logic offset"
 
     | TLval lv ->
         List.map (fun x -> x#node) (terms_lval t.term_loc lv)
@@ -858,7 +855,7 @@ and terms t =
         (* TODO: support other casts in Jessie as well, through low-level
          * memory model
          *)
-	notimplemented "Casting from type %a to type %a not allowed"
+	unsupported "Casting from type %a to type %a not allowed"
           !Ast_printer.d_logic_type t.term_type !Ast_printer.d_type ty
 
     | TAddrOf _tlv -> assert false (* Should have been rewritten *)
@@ -906,9 +903,7 @@ and terms t =
 
     | Tbase_addr (_lab,t) -> List.map (fun x -> JCPEbase_block x) (terms t)
 
-    | Tblock_length (_lab,_t) ->
-	(* TODO: memory model for Jessie *)
-	Common.notimplemented "Interp.terms Tblock_length"
+    | Tblock_length (_lab,_t) -> Common.unsupported "\\block_length operator"
 
     | Tnull -> [JCPEconst JCCnull]
 
@@ -926,17 +921,13 @@ and terms t =
                 let jc_body = term body in
                 [JCPElet(None,v.lv_name, Some jc_def, jc_body)]
             | (LBterm _ | LBpred _), _::_ ->
-                Common.notimplemented "local function definition"
+                Common.unsupported "local function definition"
             | (LBnone | LBreads _ | LBinductive _), _ ->
                 Jessie_options.fatal "Unexpected definition for local variable"
         end
-    | TCoerce(_t,_typ) ->
-	(* TODO: see if useful *)
-	Common.notimplemented "Interp.terms TCoerce"
+    | TCoerce(_t,_typ) -> Common.unsupported "term coercion"
 
-    | TCoerceE(_t1,_t2) ->
-	(* TODO: see if useful *)
-	Common.notimplemented "Interp.terms TCoerceE"
+    | TCoerceE(_t1,_t2) -> Common.unsupported "term coercion"
 
     | Tlambda _ ->
 	unsupported "Jessie plugin does not support lambda abstraction"
@@ -946,8 +937,8 @@ and terms t =
     | Trange(low,high) -> [JCPErange(opt_map term low,opt_map term high)]
     | Tunion l ->
         List.map (fun x -> x#node) (List.flatten (List.map terms l))
-    | Tcomprehension _ -> Common.notimplemented "Interp.terms Tcomprehension" (* TODO: does not exist in Jessie *)
-    | Tinter _ -> Common.notimplemented "Interp.terms Tinter" (* TODO: does not exist in Jessie *)
+    | Tcomprehension _ -> Common.unsupported "sets by comprehension" 
+    | Tinter _ -> Common.unsupported " set intersection" 
     | Tempty_set -> []
   in
   List.map (swap mkexpr t.term_loc) enode
@@ -1133,7 +1124,7 @@ and pred p =
                 let jc_body = pred body in
                 JCPElet(None,v.lv_name, Some jc_def, jc_body)
             | (LBterm _ | LBpred _), _::_ ->
-                Common.notimplemented "local function definition"
+                Common.unsupported "local function definition"
             | (LBnone | LBreads _ | LBinductive _), _ ->
                 Jessie_options.fatal "Unexpected definition for local variable"
         end
@@ -1163,7 +1154,8 @@ and pred p =
     | Pat(p,lab) -> JCPEat(pred p,logic_label lab)
 
     | Pvalid(_lab,
-             { term_node = TBinOp(PlusPI,t1,{term_node = Trange (t2,t3)})}) ->
+             { term_node = TBinOp(PlusPI,t1,
+                                  {term_node = Trange (t2,t3);_});_}) ->
         let e1 = terms t1 in
         let mk_one_pred e1 =
           match t2,t3 with
@@ -1186,7 +1178,7 @@ and pred p =
                 mkconjunct [emin; emax] p.loc
         in (mkconjunct (List.map mk_one_pred e1) p.loc)#node
 
-    | Pvalid(_lab,{ term_node = TBinOp(PlusPI,t1,t2)}) ->
+    | Pvalid(_lab,{ term_node = TBinOp(PlusPI,t1,t2); _}) ->
         let e1 = terms t1 in
         let e2 = term t2 in
         (mkconjunct
@@ -1211,30 +1203,25 @@ and pred p =
         in
         (mkconjunct elist p.loc)#node
 
-    | Pvalid_read _ ->
-      (* TODO *)
-      Common.notimplemented "Interp.pred Pvalid_read"
+    | Pvalid_read _ -> Common.unsupported "\\valid_read operator"
 
     | Pfresh (_lab1,_lab2,t,_) ->
       (* TODO: take into account size *)
       JCPEfresh(term t)
 
-    | Pallocable _ | Pfreeable _ ->
-	(* TODO *)
-	Common.notimplemented "Interp.pred Pallocable|Pfreeable"
+    | Pallocable _ -> Common.unsupported "\\allocable operator"
 
-    | Psubtype({term_node = Ttypeof t},{term_node = Ttype ty}) ->
+    | Pfreeable _ -> Common.unsupported "\\freeable operator"
+
+
+    | Psubtype({term_node = Ttypeof t; _},{term_node = Ttype ty; _}) ->
         JCPEinstanceof(term t,get_struct_name (pointed_type ty))
 
-    | Psubtype(_t1,_t2) ->
-	(* TODO *)
-	Common.notimplemented "Interp.pred Psubtype"
+    | Psubtype(_t1,_t2) -> Common.unsupported "subtype"
 
-    | Pseparated(_seps) ->
-	(* TODO *)
-	Common.notimplemented "Interp.pred Pseparated"
-    | Pinitialized _ ->
-      Common.notimplemented "Interp.pred Pinitialized"
+    | Pseparated(_seps) -> Common.unsupported "\\separated operator"
+
+    | Pinitialized _ -> Common.unsupported "\\initialized operator"
 
   in
   mkexpr enode p.loc
@@ -1632,7 +1619,7 @@ let rec expr e =
         (* TODO: support other casts in Jessie as well, through low-level
          * memory model
          *)
-        notimplemented "Casting from type %a to type %a not allowed in %a with size %Ld and %Ld"
+        unsupported "Casting from type %a to type %a not allowed in %a with size %Ld and %Ld"
           !Ast_printer.d_type (typeOf e') !Ast_printer.d_type ty !Ast_printer.d_exp e
           ( bits_sizeof ty) ( bits_sizeof (typeOf e'))
 
@@ -1856,7 +1843,7 @@ let instruction = function
       let enode = JCPEassign(lval pos lv,expr e) in
       (locate (mkexpr enode pos))#node
 
-  | Call(None,{enode = Lval(Var v,NoOffset)},eargs,pos) ->
+  | Call(None,{enode = Lval(Var v,NoOffset);_},eargs,pos) ->
       if is_assert_function v then
         JCPEassert([new identifier name_of_default_behavior],
                    Aassert,locate (boolean_expr (as_singleton eargs)))
@@ -1875,7 +1862,7 @@ let instruction = function
         in
         (locate (mkexpr enode pos))#node
 
-  | Call(Some lv,{enode = Lval(Var v,NoOffset)},eargs,pos) ->
+  | Call(Some lv,{enode = Lval(Var v,NoOffset); _},eargs,pos) ->
       let enode =
         if is_malloc_function v || is_realloc_function v then
           let lvtyp = pointed_type (typeOfLval lv) in
@@ -1896,8 +1883,8 @@ let instruction = function
                   JCPEconst(JCCinteger(My_bigint.to_string allocsiz))
                 in
                 lvtyp, mkexpr siznode pos
-            | BinOp(Mult,({enode = Const c} as arg),nelem,_ty)
-            | BinOp(Mult,nelem,({enode = Const c} as arg),_ty)
+            | BinOp(Mult,({enode = Const c; _} as arg),nelem,_ty)
+            | BinOp(Mult,nelem,({enode = Const c;_} as arg),_ty)
                 when is_integral_const c ->
                 let factor = My_bigint.div (value_of_integral_expr arg) lvsiz in
                 let siz =
@@ -1983,13 +1970,13 @@ let instruction = function
       in
       (locate (mkexpr enode pos))#node
 
-  | Call _ -> assert false
+  | Call _ -> Common.unsupported ~current:true "function pointers"
 
-  | Asm _ -> assert false
+  | Asm _ -> Common.unsupported ~current:true "inline assembly"
 
   | Skip _pos -> JCPEconst JCCvoid
 
-  | Code_annot _ -> assert false
+  | Code_annot _ -> Common.unsupported ~current:true "code annotation"
 
 let rec statement s =
   let pos = Stmt.loc s in
@@ -2161,12 +2148,12 @@ let rec statement s =
                    | JCCrequires p ->
                        begin match r with
                          | None -> (Some p,d,b)
-                         | Some _ -> notimplemented "multiple requires on statement contract"
+                         | Some _ -> unsupported "multiple requires on statement contract"
                        end
                    | JCCdecreases(v,p) ->
                        begin match d with
                          | None -> (r,Some(v,p),b)
-                         | Some _ -> notimplemented "multiple decreases on statement contract"
+                         | Some _ -> unsupported "multiple decreases on statement contract"
                        end
                    | JCCbehavior be -> (r,d,be::b))
               (None,None,[])
@@ -2410,18 +2397,12 @@ let rec annotation is_axiomatic annot =
              [JCDaxiomatic (info.lt_name ^ "_axiomatic",
                             List.map (fun x -> mkdecl x pos) axiomatic)])
 
-  | Dtype _ ->
-      (* TODO *)
-      Common.notimplemented "Interp.annotation Dtype"
-  | Dvolatile _ ->
-    (* TODO *)
-    Common.notimplemented "Interp.annotation Dvolatile"
+  | Dtype _ -> unsupported "type definitions"
+  | Dvolatile _ -> Common.unsupported "volatile variables"
   | Dmodel_annot _ ->
       (* already handled in norm.ml *)
       []
-  | Dcustom_annot _ ->
-    (* TODO *)
-    Common.notimplemented "Interp.annotation Dcustom_annot"
+  | Dcustom_annot _ -> Common.unsupported "custom annotation"
   | Daxiomatic(id,l,pos) ->
       CurrentLoc.set pos;
       (*
@@ -2560,7 +2541,7 @@ let global vardefs g =
         assert (not (enuminfo.eitems = []));
         let enums =
           List.map
-            (fun {eival = enum} -> value_of_integral_expr enum) enuminfo.eitems
+            (fun {eival = enum; _} -> value_of_integral_expr enum) enuminfo.eitems
         in
         let emin =
           List.fold_left (fun acc enum ->

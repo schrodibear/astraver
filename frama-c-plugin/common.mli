@@ -35,7 +35,6 @@ exception Unsupported of string
 val jessie_emitter: Emitter.emitter
 
 val fatal          : ('a,Format.formatter,unit,'b) format4 -> 'a
-val notimplemented : ('a,Format.formatter,unit,'b) format4 -> 'a
 val unsupported    : ('a,Format.formatter,unit,'b) format4 -> 'a
 val warning        : ('a,Format.formatter,unit) format -> 'a
 val warn_general   : ('a,Format.formatter,unit) format -> 'a

@@ -317,16 +317,11 @@ let run () =
 let run_and_catch_error () =
   try run ()
   with
-    | Unsupported _ as e ->
-	warn_general
-          "Unsupported feature(s).@\n\
-           Jessie plugin can not be used on your code.";
-	if Jessie_options.debug_atleast 1 then raise e else ()
-    | Log.FeatureRequest (_,s) as e ->
-	warn_general 
-          "Unimplemented feature: %s. \
-           Please submit `feature request' report." s;
-          if Jessie_options.debug_atleast 1 then raise e else ()
+    | Unsupported _ ->
+	Jessie_options.error "Unsupported feature(s).@\n\
+           Jessie plugin can not be used on your code."
+    | Log.FeatureRequest (_,s) ->
+	Jessie_options.error "Unimplemented feature: %s." s
 
 let run_and_catch_error =
   Dynamic.register
