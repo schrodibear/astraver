@@ -705,7 +705,7 @@
      proved="true"
      expanded="true">
      <goal
-      name="WP_parameter _Isqrt_main_ensures_default.0"
+      name="WP_parameter _Isqrt_main_ensures_default.1"
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="assertion"
@@ -735,11 +735,11 @@
       </proof>
       <proof
        prover="2"
-       timelimit="5"
+       timelimit="10"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.16"/>
+       <result status="unknown" time="5.81"/>
       </proof>
       <proof
        prover="3"
@@ -759,7 +759,7 @@
       </proof>
      </goal>
      <goal
-      name="WP_parameter _Isqrt_main_ensures_default.1"
+      name="WP_parameter _Isqrt_main_ensures_default.2"
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="assertion"
@@ -813,7 +813,7 @@
       </proof>
      </goal>
      <goal
-      name="WP_parameter _Isqrt_main_ensures_default.2"
+      name="WP_parameter _Isqrt_main_ensures_default.3"
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="postcondition"

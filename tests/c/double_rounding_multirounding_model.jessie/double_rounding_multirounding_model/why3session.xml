@@ -13,10 +13,6 @@
   id="2"
   name="Gappa"
   version="0.16.1"/>
- <prover
-  id="3"
-  name="Gappa+dev"
-  version="0.16.0"/>
  <file
   name="../double_rounding_multirounding_model.mlw"
   verified="true"
@@ -61,18 +57,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.00"/>
+     <result status="unknown" time="0.01"/>
     </proof>
     <proof
      prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -134,14 +122,6 @@
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter doublerounding_safety.2"
@@ -174,14 +154,6 @@
       </proof>
       <proof
        prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="3"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -226,14 +198,6 @@
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter doublerounding_safety.4"
@@ -266,14 +230,6 @@
       </proof>
       <proof
        prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="3"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
