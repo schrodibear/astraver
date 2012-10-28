@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session shape_version="2">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="1"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
+  name="Z3"
+  version="3.2"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.0"/>
+ <file
+  name="../Power.mlw"
+  verified="false"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="../Power.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="false"
+   expanded="true">
+   <goal
+    name="power_mul"
+    locfile="../Power.java"
+    loclnum="14" loccnumb="10" loccnume="19"
+    expl="Lemma power_mul, lemma"
+    sum="4384f503a284820e18aa869c3d44108d"
+    proved="false"
+    expanded="true"
+    shape="ainfix =apowerainfix *V0V1V2ainfix *apowerV0V2apowerV1V2Iainfix &gt;=V2c0FFF">
+    <label
+     name="expl:Lemma power_mul, lemma"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.12"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.13"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.79"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.13"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.14"/>
+    </proof>
+   </goal>
+   <goal
+    name="power_even"
+    locfile="../Power.java"
+    loclnum="18" loccnumb="10" loccnume="20"
+    expl="Lemma power_even, lemma"
+    sum="86e20158a207873a1fc5dfbb27066181"
+    proved="false"
+    expanded="true"
+    shape="ainfix =apowerV0V1apowerainfix *V0V0adivV1c2Iainfix =amodV1c2c0Aainfix &gt;=V1c0FF">
+    <label
+     name="expl:Lemma power_even, lemma"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.10"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.18"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.52"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.18"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.20"/>
+    </proof>
+   </goal>
+   <goal
+    name="power_odd"
+    locfile="../Power.java"
+    loclnum="22" loccnumb="10" loccnume="19"
+    expl="Lemma power_odd, lemma"
+    sum="670a3f21fe304d474f5a59e1be73c18b"
+    proved="false"
+    expanded="true"
+    shape="ainfix =apowerV0V1ainfix *V0apowerainfix *V0V0adivV1c2Iainfix =amodV1c2c0NAainfix &gt;=V1c0FF">
+    <label
+     name="expl:Lemma power_odd, lemma"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.13"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.13"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.13"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.09"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.19"/>
+    </proof>
+   </goal>
+  </theory>
+  <theory
+   name="Jessie_program"
+   locfile="../Power.mlw"
+   loclnum="214" loccnumb="7" loccnume="21"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter _Power_imp_ensures_default"
+    locfile="../Power.java"
+    loclnum="48" loccnumb="16" loccnume="19"
+    expl="parameter _Power_imp_ensures_default"
+    sum="8313af8e387fc86f06b4bf80d48febc8"
+    proved="true"
+    expanded="false"
+    shape="iainfix &gt;V2c0iainfix =amodV2c2c0Nainfix =ainfix *V5apowerV6V7apowerV0V1Aainfix &lt;=c0V7Iainfix =V7adivV2c2FIainfix =V6ainfix *V3V3FIainfix =V5ainfix *V4V3Fainfix =ainfix *V4apowerV8V9apowerV0V1Aainfix &lt;=c0V9Iainfix =V9adivV2c2FIainfix =V8ainfix *V3V3Fainfix =V10apowerV0V1Iainfix =V10V4FIainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FAainfix =ainfix *c1apowerV0V1apowerV0V1Aainfix &lt;=c0V1Iainfix &lt;=c0V1F">
+    <label
+     name="expl:Method imp, default behavior"/>
+    <label
+     name="expl:parameter _Power_imp_ensures_default"/>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.11"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.13"/>
+    </proof>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="false">
+     <goal
+      name="WP_parameter _Power_imp_ensures_default.1"
+      locfile="../Power.java"
+      loclnum="48" loccnumb="16" loccnume="19"
+      expl="loop invariant init"
+      sum="e2f6951ccc2de860d49b81cff1704a14"
+      proved="true"
+      expanded="false"
+      shape="ainfix =ainfix *c1apowerV0V1apowerV0V1Aainfix &lt;=c0V1Iainfix &lt;=c0V1F">
+      <label
+       name="expl:Method imp, default behavior"/>
+      <label
+       name="expl:parameter _Power_imp_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Power_imp_ensures_default.2"
+      locfile="../Power.java"
+      loclnum="48" loccnumb="16" loccnume="19"
+      expl="loop invariant preservation"
+      sum="539c0a984284a938968b3f80f54e6fa4"
+      proved="true"
+      expanded="false"
+      shape="ainfix =ainfix *V5apowerV6V7apowerV0V1Aainfix &lt;=c0V7Iainfix =V7adivV2c2FIainfix =V6ainfix *V3V3FIainfix =V5ainfix *V4V3FIainfix =amodV2c2c0NIainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
+      <label
+       name="expl:Method imp, default behavior"/>
+      <label
+       name="expl:parameter _Power_imp_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.31"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Power_imp_ensures_default.3"
+      locfile="../Power.java"
+      loclnum="48" loccnumb="16" loccnume="19"
+      expl="loop invariant preservation"
+      sum="c1568d0b32f81a1502f724647031a670"
+      proved="true"
+      expanded="false"
+      shape="ainfix =ainfix *V4apowerV5V6apowerV0V1Aainfix &lt;=c0V6Iainfix =V6adivV2c2FIainfix =V5ainfix *V3V3FIainfix =amodV2c2c0NNIainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
+      <label
+       name="expl:Method imp, default behavior"/>
+      <label
+       name="expl:parameter _Power_imp_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Power_imp_ensures_default.4"
+      locfile="../Power.java"
+      loclnum="48" loccnumb="16" loccnume="19"
+      expl="postcondition"
+      sum="78679931416f8530e160e873e6041361"
+      proved="true"
+      expanded="false"
+      shape="ainfix =V5apowerV0V1Iainfix =V5V4FIainfix &gt;V2c0NIainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
+      <label
+       name="expl:Method imp, default behavior"/>
+      <label
+       name="expl:parameter _Power_imp_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter _Power_imp_safety"
+    locfile="../Power.java"
+    loclnum="48" loccnumb="16" loccnume="19"
+    expl="parameter _Power_imp_safety"
+    sum="5b5ba8b5d214a1849ca9e7b875e329a3"
+    proved="true"
+    expanded="false"
+    shape="iainfix =amodV2c2c0Nainfix &lt;V7V2Aainfix &lt;=c0V2Iainfix =V7adivV2c2FAainfix =c2c0NIainfix =V6ainfix *V3V3FIainfix =V5ainfix *V4V3Fainfix &lt;V9V2Aainfix &lt;=c0V2Iainfix =V9adivV2c2FAainfix =c2c0NIainfix =V8ainfix *V3V3FAainfix =c2c0NIainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
+    <label
+     name="expl:Method imp, Safety"/>
+    <label
+     name="expl:parameter _Power_imp_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Power_rec_ensures_default"
+    locfile="../Power.java"
+    loclnum="35" loccnumb="16" loccnume="19"
+    expl="parameter _Power_rec_ensures_default"
+    sum="fd9bc5bf1e7ae3c59af767c05ccb199c"
+    proved="true"
+    expanded="false"
+    shape="iainfix =V1c0ainfix =V2apowerV0V1Iainfix =V2c1Fiainfix =amodV1c2c0ainfix =V4apowerV0V1Iainfix =V4ainfix *V3V3Fainfix =V5apowerV0V1Iainfix =V5ainfix *ainfix *V3V3V0FLapowerV0adivV1c2Iainfix &lt;=c0V1F">
+    <label
+     name="expl:Method rec, default behavior"/>
+    <label
+     name="expl:parameter _Power_rec_ensures_default"/>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="false">
+     <goal
+      name="WP_parameter _Power_rec_ensures_default.1"
+      locfile="../Power.java"
+      loclnum="35" loccnumb="16" loccnume="19"
+      expl="postcondition"
+      sum="8baf9ae5f0f05960820a30482ecc8c82"
+      proved="true"
+      expanded="false"
+      shape="ainfix =V2apowerV0V1Iainfix =V2c1FIainfix =V1c0Iainfix &lt;=c0V1F">
+      <label
+       name="expl:Method rec, default behavior"/>
+      <label
+       name="expl:parameter _Power_rec_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Power_rec_ensures_default.2"
+      locfile="../Power.java"
+      loclnum="35" loccnumb="16" loccnume="19"
+      expl="postcondition"
+      sum="25ec98d667a4d66a82ec11a5788cdfec"
+      proved="true"
+      expanded="false"
+      shape="ainfix =V3apowerV0V1Iainfix =V3ainfix *V2V2FIainfix =amodV1c2c0LapowerV0adivV1c2Iainfix =V1c0NIainfix &lt;=c0V1F">
+      <label
+       name="expl:Method rec, default behavior"/>
+      <label
+       name="expl:parameter _Power_rec_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.16"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _Power_rec_ensures_default.3"
+      locfile="../Power.java"
+      loclnum="35" loccnumb="16" loccnume="19"
+      expl="postcondition"
+      sum="5449938db9800fa5a1b87a6e0433e31e"
+      proved="true"
+      expanded="false"
+      shape="ainfix =V3apowerV0V1Iainfix =V3ainfix *ainfix *V2V2V0FIainfix =amodV1c2c0NLapowerV0adivV1c2Iainfix =V1c0NIainfix &lt;=c0V1F">
+      <label
+       name="expl:Method rec, default behavior"/>
+      <label
+       name="expl:parameter _Power_rec_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.14"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter _Power_rec_safety"
+    locfile="../Power.java"
+    loclnum="35" loccnumb="16" loccnume="19"
+    expl="parameter _Power_rec_safety"
+    sum="17d3a74fb24d9f8877363c35bd08db20"
+    proved="true"
+    expanded="false"
+    shape="ainfix =c2c0NAainfix &lt;=c0V1Aazwf_zeroV1V0LadivV0c2Aainfix =c2c0NIainfix =V0c0NIainfix &lt;=c0V0F">
+    <label
+     name="expl:Method rec, Safety"/>
+    <label
+     name="expl:parameter _Power_rec_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Object_ensures_default"
+    locfile=".."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="postcondition"
+    sum="cc5f61d0e8bc9ab7ad9ff31854dcf997"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Object, default behavior"/>
+    <label
+     name="expl:parameter cons_Object_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Object_safety"
+    locfile=".."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="postcondition"
+    sum="5bb0cde2baa7beac6457c4a0c9cc6adb"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Object, Safety"/>
+    <label
+     name="expl:parameter cons_Object_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Power_ensures_default"
+    locfile=".."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="postcondition"
+    sum="93599058dfcd02b8d74291ee1e433eec"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Power, default behavior"/>
+    <label
+     name="expl:parameter cons_Power_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Power_safety"
+    locfile=".."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="postcondition"
+    sum="4a7fbd7eb6b6c07efb2fcd07f7b8dbea"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Power, Safety"/>
+    <label
+     name="expl:parameter cons_Power_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>

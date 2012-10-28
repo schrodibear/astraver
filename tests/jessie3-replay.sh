@@ -3,7 +3,7 @@
 JAVA="AllZeros ArrayMax Arrays BinarySearch Counter Creation
       Fact Fibonacci FlagStatic Fresh Gcd Hello \
       Isqrt Literals MacCarthy Muller NameConflicts Negate \
-      PreAndOld Purse SelectionSort \
+      Power PreAndOld Purse SelectionSort \
       SideEffects SimpleAlloc Switch \
       Termination TestNonNull TreeMax"
 
