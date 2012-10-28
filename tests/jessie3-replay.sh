@@ -1,7 +1,7 @@
 #!/bin/bash
 
 JAVA="AllZeros ArrayMax Arrays BinarySearch Counter Creation
-      Fibonacci FlagStatic Fresh Gcd Hello \
+      Fact Fibonacci FlagStatic Fresh Gcd Hello \
       Isqrt Literals MacCarthy Muller NameConflicts Negate \
       PreAndOld Purse SelectionSort \
       SideEffects SimpleAlloc Switch \

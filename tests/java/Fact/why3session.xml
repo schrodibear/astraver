@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session shape_version="2">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <file
+  name="../Fact.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="../Fact.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Jessie_program"
+   locfile="../Fact.mlw"
+   loclnum="181" loccnumb="7" loccnume="21"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter _Fact_fact_ensures_default"
+    locfile="../Fact.java"
+    loclnum="18" loccnumb="22" loccnume="26"
+    expl="parameter _Fact_fact_ensures_default"
+    sum="ec5e7b7bf51f263f4af005d9a3ecb8ad"
+    proved="true"
+    expanded="true"
+    shape="iainfix &lt;V2V0aisfactV3V4Aainfix &lt;=V3V0Aainfix &lt;=c0V3Iainfix =V4ainfix *V1V3FIainfix =V3ainfix +V2c1FaisfactV0V5Iainfix =V5V1FIaisfactV2V1Aainfix &lt;=V2V0Aainfix &lt;=c0V2FAaisfactc0c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
+    <label
+     name="expl:Method fact, default behavior"/>
+    <label
+     name="expl:parameter _Fact_fact_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Fact_fact_safety"
+    locfile="../Fact.java"
+    loclnum="18" loccnumb="22" loccnume="26"
+    expl="loop variant decrease"
+    sum="9ea0761038d7de3ef1d8b4911afd961b"
+    proved="true"
+    expanded="true"
+    shape="ainfix &lt;ainfix -V0V3ainfix -V0V2Aainfix &lt;=c0ainfix -V0V2Iainfix =V4ainfix *V1V3FIainfix =V3ainfix +V2c1FIainfix &lt;V2V0IaisfactV2V1Aainfix &lt;=V2V0Aainfix &lt;=c0V2FIainfix &gt;=V0c0F">
+    <label
+     name="expl:Method fact, Safety"/>
+    <label
+     name="expl:parameter _Fact_fact_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Fact_ensures_default"
+    locfile=".."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="postcondition"
+    sum="89ba889d523615509386f7604986394a"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Fact, default behavior"/>
+    <label
+     name="expl:parameter cons_Fact_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Fact_safety"
+    locfile=".."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="postcondition"
+    sum="841bafb496959db9f1916bab9ff1d803"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Fact, Safety"/>
+    <label
+     name="expl:parameter cons_Fact_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>
