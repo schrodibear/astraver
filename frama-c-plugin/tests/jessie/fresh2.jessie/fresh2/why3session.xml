@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="fresh2/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -29,29 +28,29 @@
  <prover
   id="6"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../fresh2.mlw"
   verified="false"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="fresh2/../fresh2.mlw"
+   locfile="../fresh2.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="fresh2/../fresh2.mlw"
+   locfile="../fresh2.mlw"
    loclnum="269" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
    <goal
     name="WP_parameter create_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/fresh2.c"
-    loclnum="15" loccnumb="4" loccnume="10"
-    expl="normal postcondition"
+    locfile="../../fresh2.c"
+    loclnum="19" loccnumb="4" loccnume="10"
+    expl="VC for create_ensures_default"
     sum="a7611513d7e10d0c393bb360ce49231d"
     proved="true"
     expanded="false"
@@ -59,7 +58,15 @@
     <label
      name="expl:Function create, default behavior"/>
     <label
-     name="expl:parameter create_ensures_default"/>
+     name="expl:VC for create_ensures_default"/>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
     <proof
      prover="4"
      timelimit="5"
@@ -76,20 +83,12 @@
      archived="false">
      <result status="valid" time="1.09"/>
     </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter create_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/fresh2.c"
-    loclnum="15" loccnumb="4" loccnume="10"
-    expl="precondition"
+    locfile="../../fresh2.c"
+    loclnum="19" loccnumb="4" loccnume="10"
+    expl="VC for create_safety"
     sum="72a70da641425ba2a958a80faeced8f9"
     proved="true"
     expanded="false"
@@ -97,15 +96,7 @@
     <label
      name="expl:Function create, Safety"/>
     <label
-     name="expl:parameter create_safety"/>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
+     name="expl:VC for create_safety"/>
     <proof
      prover="1"
      timelimit="5"
@@ -115,15 +106,15 @@
      <result status="valid" time="0.01"/>
     </proof>
     <proof
-     prover="6"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="3"
+     prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -138,12 +129,20 @@
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
+    <proof
+     prover="6"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter smoke_detector_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/fresh2.c"
-    loclnum="29" loccnumb="5" loccnume="19"
-    expl="assertion"
+    locfile="../../fresh2.c"
+    loclnum="33" loccnumb="5" loccnume="19"
+    expl="VC for smoke_detector_ensures_default"
     sum="1cfb0c388e15ded5ca92a12756f8b9d2"
     proved="false"
     expanded="true"
@@ -151,7 +150,15 @@
     <label
      name="expl:Function smoke_detector, default behavior"/>
     <label
-     name="expl:parameter smoke_detector_ensures_default"/>
+     name="expl:VC for smoke_detector_ensures_default"/>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.03"/>
+    </proof>
     <proof
      prover="2"
      timelimit="3"
@@ -159,6 +166,14 @@
      obsolete="false"
      archived="false">
      <result status="unknown" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="1.07"/>
     </proof>
     <proof
      prover="4"
@@ -169,12 +184,12 @@
      <result status="timeout" time="5.09"/>
     </proof>
     <proof
-     prover="1"
+     prover="5"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.03"/>
+     <result status="timeout" time="5.02"/>
     </proof>
     <proof
      prover="6"
@@ -184,28 +199,12 @@
      archived="false">
      <result status="timeout" time="5.06"/>
     </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.58"/>
-    </proof>
-    <proof
-     prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.02"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter smoke_detector_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/fresh2.c"
-    loclnum="29" loccnumb="5" loccnume="19"
-    expl="normal postcondition"
+    locfile="../../fresh2.c"
+    loclnum="33" loccnumb="5" loccnume="19"
+    expl="VC for smoke_detector_safety"
     sum="1220773bbfdb7f42db229c22b5415deb"
     proved="true"
     expanded="false"
@@ -213,7 +212,23 @@
     <label
      name="expl:Function smoke_detector, Safety"/>
     <label
-     name="expl:parameter smoke_detector_safety"/>
+     name="expl:VC for smoke_detector_safety"/>
+    <proof
+     prover="0"
+     timelimit="20"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
     <proof
      prover="2"
      timelimit="3"
@@ -223,30 +238,6 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="6"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
      prover="3"
      timelimit="5"
      memlimit="1000"
@@ -255,15 +246,23 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="20"
-     memlimit="0"
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="6"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -273,9 +272,9 @@
    </goal>
    <goal
     name="WP_parameter test_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/fresh2.c"
-    loclnum="23" loccnumb="5" loccnume="9"
-    expl="assertion"
+    locfile="../../fresh2.c"
+    loclnum="27" loccnumb="5" loccnume="9"
+    expl="VC for test_ensures_default"
     sum="82b0a236846e972367f33b01dc223484"
     proved="true"
     expanded="false"
@@ -283,23 +282,7 @@
     <label
      name="expl:Function test, default behavior"/>
     <label
-     name="expl:parameter test_ensures_default"/>
-    <proof
-     prover="2"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
+     name="expl:VC for test_ensures_default"/>
     <proof
      prover="1"
      timelimit="3"
@@ -309,12 +292,12 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
-     timelimit="5"
+     prover="2"
+     timelimit="3"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="3"
@@ -323,6 +306,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="5"
@@ -332,12 +323,20 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="6"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter test_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/fresh2.c"
-    loclnum="23" loccnumb="5" loccnume="9"
-    expl="normal postcondition"
+    locfile="../../fresh2.c"
+    loclnum="27" loccnumb="5" loccnume="9"
+    expl="VC for test_safety"
     sum="d7c6b2cb43466f5505c817febd751f05"
     proved="true"
     expanded="false"
@@ -345,47 +344,7 @@
     <label
      name="expl:Function test, Safety"/>
     <label
-     name="expl:parameter test_safety"/>
-    <proof
-     prover="2"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="6"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
+     name="expl:VC for test_safety"/>
     <proof
      prover="0"
      timelimit="20"
@@ -395,7 +354,47 @@
      <result status="valid" time="0.05"/>
     </proof>
     <proof
+     prover="1"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
      prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="6"
      timelimit="5"
      memlimit="1000"
      obsolete="false"

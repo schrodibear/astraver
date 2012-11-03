@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Literals/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -13,45 +12,37 @@
  <prover
   id="2"
   name="Z3"
-  version="2.19"/>
+  version="4.2"/>
  <file
   name="../Literals.mlw"
   verified="true"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="tests/java/Literals/../Literals.mlw"
+   locfile="../Literals.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="tests/java/Literals/../Literals.mlw"
+   locfile="../Literals.mlw"
    loclnum="297" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Literals_f_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/java/Literals.java"
+    locfile="../Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
-    expl="normal postcondition"
+    expl="VC for _Literals_f_ensures_default"
     sum="ad6aa90bc7a4a4f03949654549c258bd"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c13Iainfix =V4V3FIainfix =ainteger_of_int32V3c13FIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
     <label
-     name="expl:parameter _Literals_f_ensures_default"/>
-    <label
      name="expl:Method f, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.12"/>
-    </proof>
+    <label
+     name="expl:VC for _Literals_f_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -68,28 +59,28 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Literals_f_safety"
-    locfile="/home/cmarche/why2-trunk/tests/java/Literals.java"
-    loclnum="38" loccnumb="8" loccnume="9"
-    expl="normal postcondition"
-    sum="64099fc5b7989ddd3288948844daf6d9"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter _Literals_f_safety"/>
-    <label
-     name="expl:Method f, Safety"/>
     <proof
      prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.12"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Literals_f_safety"
+    locfile="../Literals.java"
+    loclnum="38" loccnumb="8" loccnume="9"
+    expl="VC for _Literals_f_safety"
+    sum="64099fc5b7989ddd3288948844daf6d9"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Method f, Safety"/>
+    <label
+     name="expl:VC for _Literals_f_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -106,58 +97,6 @@
      archived="false">
      <result status="valid" time="0.08"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Literals_ensures_default"
-    locfile="/home/cmarche/why2-trunk/tests/java/"
-    loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="8e5656e49dfcede50e1d5091833685fd"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter cons_Literals_ensures_default"/>
-    <label
-     name="expl:Constructor of class Literals, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.08"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Literals_safety"
-    locfile="/home/cmarche/why2-trunk/tests/java/"
-    loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="4a102a68e1eca0953f6ba1de7288fbdc"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter cons_Literals_safety"/>
-    <label
-     name="expl:Constructor of class Literals, Safety"/>
     <proof
      prover="2"
      timelimit="5"
@@ -166,6 +105,20 @@
      archived="false">
      <result status="valid" time="0.01"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Literals_ensures_default"
+    locfile="../."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="VC for cons_Literals_ensures_default"
+    sum="8e5656e49dfcede50e1d5091833685fd"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Literals, default behavior"/>
+    <label
+     name="expl:VC for cons_Literals_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -181,6 +134,52 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Literals_safety"
+    locfile="../."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="VC for cons_Literals_safety"
+    sum="4a102a68e1eca0953f6ba1de7288fbdc"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Literals, Safety"/>
+    <label
+     name="expl:VC for cons_Literals_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
   </theory>

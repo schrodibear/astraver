@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../Creation.mlw"
   verified="true"
@@ -42,15 +42,15 @@
     name="WP_parameter _Creation_test1_ensures_default"
     locfile="../Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
-    expl="Method test1, default behavior"
+    expl="VC for _Creation_test1_ensures_default"
     sum="524ea38f5de5a50e625b901322beea1d"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter _Creation_test1_ensures_default"/>
-    <label
      name="expl:Method test1, default behavior"/>
+    <label
+     name="expl:VC for _Creation_test1_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -96,15 +96,15 @@
     name="WP_parameter _Creation_test1_ensures_normal"
     locfile="../Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
-    expl="postcondition"
+    expl="VC for _Creation_test1_ensures_normal"
     sum="74ce3008c3196dda6cee0afd2ed4b6ea"
     proved="true"
     expanded="false"
     shape="ainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
     <label
-     name="expl:parameter _Creation_test1_ensures_normal"/>
-    <label
      name="expl:Method test1, Behavior `normal&apos;"/>
+    <label
+     name="expl:VC for _Creation_test1_ensures_normal"/>
     <proof
      prover="0"
      timelimit="5"
@@ -150,15 +150,15 @@
     name="WP_parameter _Creation_test1_safety"
     locfile="../Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
-    expl="Method test1, Safety"
+    expl="VC for _Creation_test1_safety"
     sum="d0ba34fd38057a6ac22ff4f04d2583ac"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FAainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFAainfix &gt;=c1c0F">
     <label
-     name="expl:parameter _Creation_test1_safety"/>
-    <label
      name="expl:Method test1, Safety"/>
+    <label
+     name="expl:VC for _Creation_test1_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -204,15 +204,15 @@
     name="WP_parameter _Creation_test2_ensures_default"
     locfile="../Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
-    expl="Method test2, default behavior"
+    expl="VC for _Creation_test2_ensures_default"
     sum="37e5a629a0f96dc06d7acfc25a202081"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter _Creation_test2_ensures_default"/>
-    <label
      name="expl:Method test2, default behavior"/>
+    <label
+     name="expl:VC for _Creation_test2_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -258,15 +258,15 @@
     name="WP_parameter _Creation_test2_ensures_normal"
     locfile="../Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
-    expl="postcondition"
+    expl="VC for _Creation_test2_ensures_normal"
     sum="f1fe4ee8e73d450a364d4bcffa921497"
     proved="true"
     expanded="false"
     shape="ainfix =V6c0Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
     <label
-     name="expl:parameter _Creation_test2_ensures_normal"/>
-    <label
      name="expl:Method test2, Behavior `normal&apos;"/>
+    <label
+     name="expl:VC for _Creation_test2_ensures_normal"/>
     <proof
      prover="0"
      timelimit="5"
@@ -312,15 +312,15 @@
     name="WP_parameter _Creation_test2_safety"
     locfile="../Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
-    expl="Method test2, Safety"
+    expl="VC for _Creation_test2_safety"
     sum="001ab97d95cbb40ac934570ad9b7176e"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FAainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFAainfix &gt;=c1c0F">
     <label
-     name="expl:parameter _Creation_test2_safety"/>
-    <label
      name="expl:Method test2, Safety"/>
+    <label
+     name="expl:VC for _Creation_test2_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -366,15 +366,15 @@
     name="WP_parameter _Creation_test3_ensures_default"
     locfile="../Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
-    expl="Method test3, default behavior"
+    expl="VC for _Creation_test3_ensures_default"
     sum="7f9e399396159485ab984307ff64068b"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter _Creation_test3_ensures_default"/>
-    <label
      name="expl:Method test3, default behavior"/>
+    <label
+     name="expl:VC for _Creation_test3_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -420,15 +420,15 @@
     name="WP_parameter _Creation_test3_ensures_normal"
     locfile="../Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
-    expl="postcondition"
+    expl="VC for _Creation_test3_ensures_normal"
     sum="5ef80b3a1f4d4cda7b50fd8142a681a1"
     proved="true"
     expanded="false"
     shape="anot_assignsV0V1V5apset_emptyAainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
     <label
-     name="expl:parameter _Creation_test3_ensures_normal"/>
-    <label
      name="expl:Method test3, Behavior `normal&apos;"/>
+    <label
+     name="expl:VC for _Creation_test3_ensures_normal"/>
     <proof
      prover="1"
      timelimit="5"
@@ -450,35 +450,35 @@
      proved="true"
      expanded="false">
      <goal
-      name="WP_parameter _Creation_test3_ensures_normal.0"
+      name="WP_parameter _Creation_test3_ensures_normal.1"
       locfile="../Creation.java"
       loclnum="82" loccnumb="22" loccnume="27"
-      expl="postcondition"
+      expl="1. postcondition"
       sum="5ef80b3a1f4d4cda7b50fd8142a681a1"
       proved="true"
       expanded="false"
       shape="anot_assignsV0V1V5apset_emptyAainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
       <label
-       name="expl:parameter _Creation_test3_ensures_normal"/>
-      <label
        name="expl:Method test3, Behavior `normal&apos;"/>
+      <label
+       name="expl:VC for _Creation_test3_ensures_normal"/>
       <transf
        name="split_goal_wp"
        proved="true"
        expanded="false">
        <goal
-        name="WP_parameter _Creation_test3_ensures_normal.0.0"
+        name="WP_parameter _Creation_test3_ensures_normal.1.1"
         locfile="../Creation.java"
         loclnum="82" loccnumb="22" loccnume="27"
-        expl="Method test3, Behavior `normal&apos;"
+        expl="1."
         sum="e8979df4f9390ad57a335e04a853db64"
         proved="true"
         expanded="false"
         shape="ainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
         <label
-         name="expl:parameter _Creation_test3_ensures_normal"/>
-        <label
          name="expl:Method test3, Behavior `normal&apos;"/>
+        <label
+         name="expl:VC for _Creation_test3_ensures_normal"/>
         <proof
          prover="0"
          timelimit="5"
@@ -521,18 +521,18 @@
         </proof>
        </goal>
        <goal
-        name="WP_parameter _Creation_test3_ensures_normal.0.1"
+        name="WP_parameter _Creation_test3_ensures_normal.1.2"
         locfile="../Creation.java"
         loclnum="82" loccnumb="22" loccnume="27"
-        expl="Method test3, Behavior `normal&apos;"
+        expl="2."
         sum="553cd0b46284e4c20fae81bae9324584"
         proved="true"
         expanded="false"
         shape="anot_assignsV0V1V5apset_emptyIainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
         <label
-         name="expl:parameter _Creation_test3_ensures_normal"/>
-        <label
          name="expl:Method test3, Behavior `normal&apos;"/>
+        <label
+         name="expl:VC for _Creation_test3_ensures_normal"/>
         <proof
          prover="0"
          timelimit="5"
@@ -582,15 +582,15 @@
     name="WP_parameter _Creation_test3_safety"
     locfile="../Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
-    expl="Method test3, Safety"
+    expl="VC for _Creation_test3_safety"
     sum="d661dec0a230fe6d2c118cf625b80a66"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FAainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFAainfix &gt;=c1c0F">
     <label
-     name="expl:parameter _Creation_test3_safety"/>
-    <label
      name="expl:Method test3, Safety"/>
+    <label
+     name="expl:VC for _Creation_test3_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -636,15 +636,15 @@
     name="WP_parameter cons_Creation_ensures_default"
     locfile="../Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
-    expl="Constructor of class Creation, default behavior"
+    expl="VC for cons_Creation_ensures_default"
     sum="c7186e9a9a1cd5e74336ebd5e04948b5"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Creation_ensures_default"/>
-    <label
      name="expl:Constructor of class Creation, default behavior"/>
+    <label
+     name="expl:VC for cons_Creation_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -690,15 +690,15 @@
     name="WP_parameter cons_Creation_ensures_normal"
     locfile="../Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
-    expl="postcondition"
+    expl="VC for cons_Creation_ensures_normal"
     sum="20bcbf4049b54ba65cef56feeedb5be1"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V4apset_singletonV0Aainfix =aselectV4V0c0Ianot_assignsV1V3V4apset_singletonV0Aainfix =aselectV4V0c0FIainfix =V3astoreV2V0c0FIavalid_struct_CreationV0c0c0V1FF">
     <label
-     name="expl:parameter cons_Creation_ensures_normal"/>
-    <label
      name="expl:Constructor of class Creation, Behavior `normal&apos;"/>
+    <label
+     name="expl:VC for cons_Creation_ensures_normal"/>
     <proof
      prover="0"
      timelimit="5"
@@ -744,7 +744,7 @@
     name="WP_parameter cons_Creation_int_ensures_default"
     locfile="../Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
-    expl="parameter cons_Creation_int_ensures_default"
+    expl="VC for cons_Creation_int_ensures_default"
     sum="5da10d07905701d463bc7622c3ef0784"
     proved="true"
     expanded="false"
@@ -752,7 +752,7 @@
     <label
      name="expl:Constructor of class Creation, default behavior"/>
     <label
-     name="expl:parameter cons_Creation_int_ensures_default"/>
+     name="expl:VC for cons_Creation_int_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -798,7 +798,7 @@
     name="WP_parameter cons_Creation_int_ensures_normal"
     locfile="../Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
-    expl="postcondition"
+    expl="VC for cons_Creation_int_ensures_normal"
     sum="99c23232d6b8d2831a99db2931d39a1b"
     proved="true"
     expanded="false"
@@ -806,7 +806,7 @@
     <label
      name="expl:Constructor of class Creation, Behavior `normal&apos;"/>
     <label
-     name="expl:parameter cons_Creation_int_ensures_normal"/>
+     name="expl:VC for cons_Creation_int_ensures_normal"/>
     <proof
      prover="0"
      timelimit="5"
@@ -852,7 +852,7 @@
     name="WP_parameter cons_Creation_int_int_ensures_default"
     locfile="../Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
-    expl="parameter cons_Creation_int_int_ensures_default"
+    expl="VC for cons_Creation_int_int_ensures_default"
     sum="c26a5f2c5bf87316b7308a9ce1126656"
     proved="true"
     expanded="false"
@@ -860,7 +860,7 @@
     <label
      name="expl:Constructor of class Creation, default behavior"/>
     <label
-     name="expl:parameter cons_Creation_int_int_ensures_default"/>
+     name="expl:VC for cons_Creation_int_int_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -906,7 +906,7 @@
     name="WP_parameter cons_Creation_int_int_ensures_normal"
     locfile="../Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
-    expl="postcondition"
+    expl="VC for cons_Creation_int_int_ensures_normal"
     sum="4f38a4939af5a7563c49a027b798d2de"
     proved="true"
     expanded="false"
@@ -914,7 +914,7 @@
     <label
      name="expl:Constructor of class Creation, Behavior `normal&apos;"/>
     <label
-     name="expl:parameter cons_Creation_int_int_ensures_normal"/>
+     name="expl:VC for cons_Creation_int_int_ensures_normal"/>
     <proof
      prover="0"
      timelimit="5"
@@ -960,15 +960,15 @@
     name="WP_parameter cons_Creation_int_int_safety"
     locfile="../Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
-    expl="Constructor of class Creation, Safety"
+    expl="VC for cons_Creation_int_int_safety"
     sum="34d48748f43c1848948aab4e27b0499f"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Creation_int_int_safety"/>
-    <label
      name="expl:Constructor of class Creation, Safety"/>
+    <label
+     name="expl:VC for cons_Creation_int_int_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1014,7 +1014,7 @@
     name="WP_parameter cons_Creation_int_safety"
     locfile="../Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
-    expl="parameter cons_Creation_int_safety"
+    expl="VC for cons_Creation_int_safety"
     sum="d21cbeab2909098e3f110f30726eddfc"
     proved="true"
     expanded="false"
@@ -1022,7 +1022,7 @@
     <label
      name="expl:Constructor of class Creation, Safety"/>
     <label
-     name="expl:parameter cons_Creation_int_safety"/>
+     name="expl:VC for cons_Creation_int_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1068,7 +1068,7 @@
     name="WP_parameter cons_Creation_safety"
     locfile="../Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
-    expl="parameter cons_Creation_safety"
+    expl="VC for cons_Creation_safety"
     sum="63a815a550ea5b69f26804262dd1bb10"
     proved="true"
     expanded="false"
@@ -1076,7 +1076,7 @@
     <label
      name="expl:Constructor of class Creation, Safety"/>
     <label
-     name="expl:parameter cons_Creation_safety"/>
+     name="expl:VC for cons_Creation_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1122,15 +1122,15 @@
     name="WP_parameter cons_TestSuperConstructor_ensures_default"
     locfile="../Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
-    expl="Constructor of class TestSuperConstructor, default behavior"
+    expl="VC for cons_TestSuperConstructor_ensures_default"
     sum="b985f61da09b042206bcdecf026767d6"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_TestSuperConstructor_ensures_default"/>
-    <label
      name="expl:Constructor of class TestSuperConstructor, default behavior"/>
+    <label
+     name="expl:VC for cons_TestSuperConstructor_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1176,15 +1176,15 @@
     name="WP_parameter cons_TestSuperConstructor_ensures_normal"
     locfile="../Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
-    expl="postcondition"
+    expl="VC for cons_TestSuperConstructor_ensures_normal"
     sum="3052edc8bf85bb0755729b5ab6b10b95"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12Ianot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12FIavalid_struct_TestSuperConstructorV0c0c0V1FF">
     <label
-     name="expl:parameter cons_TestSuperConstructor_ensures_normal"/>
-    <label
      name="expl:Constructor of class TestSuperConstructor, Behavior `normal&apos;"/>
+    <label
+     name="expl:VC for cons_TestSuperConstructor_ensures_normal"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1230,15 +1230,15 @@
     name="WP_parameter cons_TestSuperConstructor_safety"
     locfile="../Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
-    expl="Constructor of class TestSuperConstructor, Safety"
+    expl="VC for cons_TestSuperConstructor_safety"
     sum="460ac4e9949c90695df08804efa6eaf7"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_TestSuperConstructor_safety"/>
-    <label
      name="expl:Constructor of class TestSuperConstructor, Safety"/>
+    <label
+     name="expl:VC for cons_TestSuperConstructor_safety"/>
     <proof
      prover="0"
      timelimit="5"

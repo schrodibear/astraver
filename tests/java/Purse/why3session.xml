@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Purse/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -13,37 +12,53 @@
  <prover
   id="2"
   name="Z3"
-  version="2.19"/>
+  version="4.2"/>
  <file
   name="../Purse.mlw"
   verified="true"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="Purse/../Purse.mlw"
+   locfile="../Purse.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="Purse/../Purse.mlw"
+   locfile="../Purse.mlw"
    loclnum="215" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Purse_credit_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
+    locfile="../Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
-    expl="normal postcondition"
+    expl="VC for _Purse_credit_ensures_default"
     sum="2a5622451bee17b107436ac05f4e9bd3"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix +aselectV2V0V1Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
     <label
-     name="expl:parameter _Purse_credit_ensures_default"/>
-    <label
      name="expl:Method credit, default behavior"/>
+    <label
+     name="expl:VC for _Purse_credit_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
     <proof
      prover="2"
      timelimit="5"
@@ -52,44 +67,20 @@
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.08"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter _Purse_credit_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
+    locfile="../Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
-    expl="normal postcondition"
+    expl="VC for _Purse_credit_safety"
     sum="f7c858b1f13e2f04a06f74d5e6a0eb52"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
     <label
-     name="expl:parameter _Purse_credit_safety"/>
-    <label
      name="expl:Method credit, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
+    <label
+     name="expl:VC for _Purse_credit_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -106,20 +97,44 @@
      archived="false">
      <result status="valid" time="0.08"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _Purse_getBalance_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
+    locfile="../Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
-    expl="normal postcondition"
+    expl="VC for _Purse_getBalance_ensures_default"
     sum="f89b8cf8bd1797404e289ac0d491da6e"
     proved="true"
     expanded="false"
     shape="ainfix =V3aselectV1V0Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FF">
     <label
-     name="expl:parameter _Purse_getBalance_ensures_default"/>
-    <label
      name="expl:Method getBalance, default behavior"/>
+    <label
+     name="expl:VC for _Purse_getBalance_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
     <proof
      prover="2"
      timelimit="5"
@@ -128,44 +143,20 @@
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter _Purse_getBalance_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
+    locfile="../Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
-    expl="normal postcondition"
+    expl="VC for _Purse_getBalance_safety"
     sum="f0793992b53ede9515b1ad13b5c3ab54"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V1Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FF">
     <label
-     name="expl:parameter _Purse_getBalance_safety"/>
-    <label
      name="expl:Method getBalance, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
+    <label
+     name="expl:VC for _Purse_getBalance_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -182,20 +173,6 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Purse_withdraw_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
-    loclnum="69" loccnumb="16" loccnume="24"
-    expl="parameter _Purse_withdraw_ensures_default"
-    sum="0266bd2085e5eaaa17bb241d564c9c89"
-    proved="true"
-    expanded="false"
-    shape="iainfix &gt;=aselectV2V0V1anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix -aselectV2V0V1Aainfix &lt;=V1aselectV2V0Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fa_Non_null_ObjectV7V6IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
-    <label
-     name="expl:parameter _Purse_withdraw_ensures_default"/>
-    <label
-     name="expl:Method withdraw, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
@@ -204,6 +181,20 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Purse_withdraw_ensures_default"
+    locfile="../Purse.java"
+    loclnum="69" loccnumb="16" loccnume="24"
+    expl="VC for _Purse_withdraw_ensures_default"
+    sum="0266bd2085e5eaaa17bb241d564c9c89"
+    proved="true"
+    expanded="false"
+    shape="iainfix &gt;=aselectV2V0V1anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix -aselectV2V0V1Aainfix &lt;=V1aselectV2V0Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fa_Non_null_ObjectV7V6IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
+    <label
+     name="expl:Method withdraw, default behavior"/>
+    <label
+     name="expl:VC for _Purse_withdraw_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -220,20 +211,6 @@
      archived="false">
      <result status="valid" time="0.09"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Purse_withdraw_exsures_amount_too_large"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
-    loclnum="69" loccnumb="16" loccnume="24"
-    expl="exceptional postcondition"
-    sum="11e74018e892b95ea15568b796612b18"
-    proved="true"
-    expanded="false"
-    shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix &gt;V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFIainfix &gt;=aselectV2V0V1NIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
-    <label
-     name="expl:parameter _Purse_withdraw_exsures_amount_too_large"/>
-    <label
-     name="expl:Method withdraw, Behavior `amount_too_large&apos;"/>
     <proof
      prover="2"
      timelimit="5"
@@ -242,6 +219,20 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Purse_withdraw_exsures_amount_too_large"
+    locfile="../Purse.java"
+    loclnum="69" loccnumb="16" loccnume="24"
+    expl="VC for _Purse_withdraw_exsures_amount_too_large"
+    sum="11e74018e892b95ea15568b796612b18"
+    proved="true"
+    expanded="false"
+    shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix &gt;V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFIainfix &gt;=aselectV2V0V1NIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
+    <label
+     name="expl:Method withdraw, Behavior `amount_too_large&apos;"/>
+    <label
+     name="expl:VC for _Purse_withdraw_exsures_amount_too_large"/>
     <proof
      prover="0"
      timelimit="5"
@@ -252,6 +243,14 @@
     </proof>
     <proof
      prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -261,25 +260,17 @@
    </goal>
    <goal
     name="WP_parameter _Purse_withdraw_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
+    locfile="../Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
-    expl="parameter _Purse_withdraw_safety"
+    expl="VC for _Purse_withdraw_safety"
     sum="bda18086faf8007a16a62c3281a45b3b"
     proved="true"
     expanded="false"
     shape="iainfix &gt;=aselectV2V0V1abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fainfix &gt;=aoffset_maxV6V7c0IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFAainfix &gt;=c1c0Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
     <label
-     name="expl:parameter _Purse_withdraw_safety"/>
-    <label
      name="expl:Method withdraw, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
+    <label
+     name="expl:VC for _Purse_withdraw_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -296,400 +287,6 @@
      archived="false">
      <result status="valid" time="0.09"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_String_Throwable_ensures_default"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
-    loclnum="58" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="50777b4ee2c1d28c493c7fd96a0fb20f"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:parameter cons_Exception_String_Throwable_ensures_default"/>
-    <label
-     name="expl:Constructor of class Exception, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_String_Throwable_safety"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
-    loclnum="58" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="9b1989e112a141c10e104e94161de117"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:parameter cons_Exception_String_Throwable_safety"/>
-    <label
-     name="expl:Constructor of class Exception, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_String_ensures_default"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
-    loclnum="40" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="b8e90ec974bb59b3fa12fde99f84aae7"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:Constructor of class Exception, default behavior"/>
-    <label
-     name="expl:parameter cons_Exception_String_ensures_default"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_String_safety"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
-    loclnum="40" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="a5f9a1c6c40d37ac8c5be4908eb335ee"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:Constructor of class Exception, Safety"/>
-    <label
-     name="expl:parameter cons_Exception_String_safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_Throwable_ensures_default"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
-    loclnum="76" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="fef8c06650e5892784a783e4a564a2bd"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:Constructor of class Exception, default behavior"/>
-    <label
-     name="expl:parameter cons_Exception_Throwable_ensures_default"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_Throwable_safety"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
-    loclnum="76" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="5d2c62ea3883faef42085c56ea9d0d1b"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:Constructor of class Exception, Safety"/>
-    <label
-     name="expl:parameter cons_Exception_Throwable_safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_ensures_default"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
-    loclnum="28" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="551fcb56956ef5dd1686cb62199a5817"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:Constructor of class Exception, default behavior"/>
-    <label
-     name="expl:parameter cons_Exception_ensures_default"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_safety"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
-    loclnum="28" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="5fb8f3debee740877a3589ade3dc7e88"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:Constructor of class Exception, Safety"/>
-    <label
-     name="expl:parameter cons_Exception_safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_NoCreditException_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
-    loclnum="37" loccnumb="11" loccnume="28"
-    expl="normal postcondition"
-    sum="b728bda6ec9696aa0edba383399e9b88"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:parameter cons_NoCreditException_ensures_default"/>
-    <label
-     name="expl:Constructor of class NoCreditException, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_NoCreditException_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
-    loclnum="37" loccnumb="11" loccnume="28"
-    expl="normal postcondition"
-    sum="6e208a82e6b4c276c280fffdb813477c"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:parameter cons_NoCreditException_safety"/>
-    <label
-     name="expl:Constructor of class NoCreditException, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Purse_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
-    loclnum="50" loccnumb="11" loccnume="16"
-    expl="normal postcondition"
-    sum="d0d8e259b656c040c583a7402d37f94a"
-    proved="true"
-    expanded="false"
-    shape="anot_assignsV2V1V4apset_singletonV0Aainfix =aselectV4V0c0Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
-    <label
-     name="expl:parameter cons_Purse_ensures_default"/>
-    <label
-     name="expl:Constructor of class Purse, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
@@ -698,6 +295,400 @@
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Exception_String_Throwable_ensures_default"
+    locfile="../../../lib/java_api/java/lang/Exception.java"
+    loclnum="58" loccnumb="11" loccnume="20"
+    expl="VC for cons_Exception_String_Throwable_ensures_default"
+    sum="50777b4ee2c1d28c493c7fd96a0fb20f"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Exception, default behavior"/>
+    <label
+     name="expl:VC for cons_Exception_String_Throwable_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Exception_String_Throwable_safety"
+    locfile="../../../lib/java_api/java/lang/Exception.java"
+    loclnum="58" loccnumb="11" loccnume="20"
+    expl="VC for cons_Exception_String_Throwable_safety"
+    sum="9b1989e112a141c10e104e94161de117"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Exception, Safety"/>
+    <label
+     name="expl:VC for cons_Exception_String_Throwable_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Exception_String_ensures_default"
+    locfile="../../../lib/java_api/java/lang/Exception.java"
+    loclnum="40" loccnumb="11" loccnume="20"
+    expl="VC for cons_Exception_String_ensures_default"
+    sum="b8e90ec974bb59b3fa12fde99f84aae7"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Exception, default behavior"/>
+    <label
+     name="expl:VC for cons_Exception_String_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Exception_String_safety"
+    locfile="../../../lib/java_api/java/lang/Exception.java"
+    loclnum="40" loccnumb="11" loccnume="20"
+    expl="VC for cons_Exception_String_safety"
+    sum="a5f9a1c6c40d37ac8c5be4908eb335ee"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Exception, Safety"/>
+    <label
+     name="expl:VC for cons_Exception_String_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Exception_Throwable_ensures_default"
+    locfile="../../../lib/java_api/java/lang/Exception.java"
+    loclnum="76" loccnumb="11" loccnume="20"
+    expl="VC for cons_Exception_Throwable_ensures_default"
+    sum="fef8c06650e5892784a783e4a564a2bd"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Exception, default behavior"/>
+    <label
+     name="expl:VC for cons_Exception_Throwable_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Exception_Throwable_safety"
+    locfile="../../../lib/java_api/java/lang/Exception.java"
+    loclnum="76" loccnumb="11" loccnume="20"
+    expl="VC for cons_Exception_Throwable_safety"
+    sum="5d2c62ea3883faef42085c56ea9d0d1b"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Exception, Safety"/>
+    <label
+     name="expl:VC for cons_Exception_Throwable_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Exception_ensures_default"
+    locfile="../../../lib/java_api/java/lang/Exception.java"
+    loclnum="28" loccnumb="11" loccnume="20"
+    expl="VC for cons_Exception_ensures_default"
+    sum="551fcb56956ef5dd1686cb62199a5817"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Exception, default behavior"/>
+    <label
+     name="expl:VC for cons_Exception_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Exception_safety"
+    locfile="../../../lib/java_api/java/lang/Exception.java"
+    loclnum="28" loccnumb="11" loccnume="20"
+    expl="VC for cons_Exception_safety"
+    sum="5fb8f3debee740877a3589ade3dc7e88"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Exception, Safety"/>
+    <label
+     name="expl:VC for cons_Exception_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_NoCreditException_ensures_default"
+    locfile="../Purse.java"
+    loclnum="37" loccnumb="11" loccnume="28"
+    expl="VC for cons_NoCreditException_ensures_default"
+    sum="b728bda6ec9696aa0edba383399e9b88"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class NoCreditException, default behavior"/>
+    <label
+     name="expl:VC for cons_NoCreditException_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_NoCreditException_safety"
+    locfile="../Purse.java"
+    loclnum="37" loccnumb="11" loccnume="28"
+    expl="VC for cons_NoCreditException_safety"
+    sum="6e208a82e6b4c276c280fffdb813477c"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class NoCreditException, Safety"/>
+    <label
+     name="expl:VC for cons_NoCreditException_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Purse_ensures_default"
+    locfile="../Purse.java"
+    loclnum="50" loccnumb="11" loccnume="16"
+    expl="VC for cons_Purse_ensures_default"
+    sum="d0d8e259b656c040c583a7402d37f94a"
+    proved="true"
+    expanded="false"
+    shape="anot_assignsV2V1V4apset_singletonV0Aainfix =aselectV4V0c0Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
+    <label
+     name="expl:Constructor of class Purse, default behavior"/>
+    <label
+     name="expl:VC for cons_Purse_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -714,28 +705,28 @@
      archived="false">
      <result status="valid" time="0.10"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Purse_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
-    loclnum="50" loccnumb="11" loccnume="16"
-    expl="normal postcondition"
-    sum="74ea8e7f1845eba5f623ccb555dcb275"
-    proved="true"
-    expanded="false"
-    shape="abalance_non_negativeV0V4Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
-    <label
-     name="expl:parameter cons_Purse_safety"/>
-    <label
-     name="expl:Constructor of class Purse, Safety"/>
     <proof
      prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Purse_safety"
+    locfile="../Purse.java"
+    loclnum="50" loccnumb="11" loccnume="16"
+    expl="VC for cons_Purse_safety"
+    sum="74ea8e7f1845eba5f623ccb555dcb275"
+    proved="true"
+    expanded="false"
+    shape="abalance_non_negativeV0V4Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
+    <label
+     name="expl:Constructor of class Purse, Safety"/>
+    <label
+     name="expl:VC for cons_Purse_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -752,28 +743,28 @@
      archived="false">
      <result status="valid" time="0.08"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Throwable_String_Throwable_ensures_default"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
-    loclnum="216" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="df250632112a7407d4b9604ba63e2506"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:parameter cons_Throwable_String_Throwable_ensures_default"/>
-    <label
-     name="expl:Constructor of class Throwable, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.04"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Throwable_String_Throwable_ensures_default"
+    locfile="../../../lib/java_api/java/lang/Throwable.java"
+    loclnum="216" loccnumb="11" loccnume="20"
+    expl="VC for cons_Throwable_String_Throwable_ensures_default"
+    sum="df250632112a7407d4b9604ba63e2506"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Throwable, default behavior"/>
+    <label
+     name="expl:VC for cons_Throwable_String_Throwable_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -790,20 +781,6 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Throwable_String_Throwable_safety"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
-    loclnum="216" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="fd5ddb22dcdb9c0702465f767cd78484"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:parameter cons_Throwable_String_Throwable_safety"/>
-    <label
-     name="expl:Constructor of class Throwable, Safety"/>
     <proof
      prover="2"
      timelimit="5"
@@ -812,6 +789,20 @@
      archived="false">
      <result status="valid" time="0.01"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Throwable_String_Throwable_safety"
+    locfile="../../../lib/java_api/java/lang/Throwable.java"
+    loclnum="216" loccnumb="11" loccnume="20"
+    expl="VC for cons_Throwable_String_Throwable_safety"
+    sum="fd5ddb22dcdb9c0702465f767cd78484"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Throwable, Safety"/>
+    <label
+     name="expl:VC for cons_Throwable_String_Throwable_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -828,12 +819,20 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Throwable_String_ensures_default"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
+    locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
+    expl="VC for cons_Throwable_String_ensures_default"
     sum="e49e7e64a05984246ab3c05c6441df33"
     proved="true"
     expanded="false"
@@ -841,15 +840,7 @@
     <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label
-     name="expl:parameter cons_Throwable_String_ensures_default"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+     name="expl:VC for cons_Throwable_String_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -866,12 +857,20 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Throwable_String_safety"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
+    locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
+    expl="VC for cons_Throwable_String_safety"
     sum="32339714b71bf1890848295ad79c9225"
     proved="true"
     expanded="false"
@@ -879,15 +878,7 @@
     <label
      name="expl:Constructor of class Throwable, Safety"/>
     <label
-     name="expl:parameter cons_Throwable_String_safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+     name="expl:VC for cons_Throwable_String_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -904,12 +895,20 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Throwable_Throwable_ensures_default"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
+    locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
+    expl="VC for cons_Throwable_Throwable_ensures_default"
     sum="a0959d57c424a9db351faca4f9421e7f"
     proved="true"
     expanded="false"
@@ -917,15 +916,7 @@
     <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label
-     name="expl:parameter cons_Throwable_Throwable_ensures_default"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+     name="expl:VC for cons_Throwable_Throwable_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -942,20 +933,6 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Throwable_Throwable_safety"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
-    loclnum="239" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
-    sum="f0f4514c2b35992e6bf734dc2b34fc42"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:Constructor of class Throwable, Safety"/>
-    <label
-     name="expl:parameter cons_Throwable_Throwable_safety"/>
     <proof
      prover="2"
      timelimit="5"
@@ -964,6 +941,20 @@
      archived="false">
      <result status="valid" time="0.01"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Throwable_Throwable_safety"
+    locfile="../../../lib/java_api/java/lang/Throwable.java"
+    loclnum="239" loccnumb="11" loccnume="20"
+    expl="VC for cons_Throwable_Throwable_safety"
+    sum="f0f4514c2b35992e6bf734dc2b34fc42"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Throwable, Safety"/>
+    <label
+     name="expl:VC for cons_Throwable_Throwable_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -980,12 +971,20 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Throwable_ensures_default"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
+    locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
+    expl="VC for cons_Throwable_ensures_default"
     sum="3ad1b98d4a2932391f63f2296bc77808"
     proved="true"
     expanded="false"
@@ -993,7 +992,23 @@
     <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label
-     name="expl:parameter cons_Throwable_ensures_default"/>
+     name="expl:VC for cons_Throwable_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
     <proof
      prover="2"
      timelimit="5"
@@ -1002,28 +1017,12 @@
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Throwable_safety"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
+    locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
-    expl="normal postcondition"
+    expl="VC for cons_Throwable_safety"
     sum="eda7a5989fff05e2b35139ec3d395822"
     proved="true"
     expanded="false"
@@ -1031,15 +1030,7 @@
     <label
      name="expl:Constructor of class Throwable, Safety"/>
     <label
-     name="expl:parameter cons_Throwable_safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+     name="expl:VC for cons_Throwable_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1055,6 +1046,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
   </theory>

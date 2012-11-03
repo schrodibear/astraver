@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../insertion_sort.mlw"
   verified="true"
@@ -42,15 +42,15 @@
     name="WP_parameter insert_sort_ensures_default"
     locfile="../../insertion_sort.c"
     loclnum="41" loccnumb="5" loccnume="16"
-    expl="Function insert_sort, default behavior"
+    expl="VC for insert_sort_ensures_default"
     sum="458d5b8a0095bd3ada09ffa46880dad9"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=V1c1a_SortedV0c0ainfix -V1c1V3iainfix &lt;V5V1iainfix &gt;V9c0iainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7ainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7Fainfix &lt;=V14V5Aainfix &lt;=c0V14Aa_SortedV0c0V5V13Iainfix =V14V5Aa_SortedV0c0ainfix +V5c1V13Iainfix &lt;V14V5Aainfix &gt;aselectV13ashiftV0V15V7Iainfix &lt;V15V5Aainfix &lt;=V14V15FIainfix =V14ainfix -V9c1FIainfix =V13astoreV10ashiftV0V9aselectV10ashiftV0ainfix -V9c1Fainfix &lt;=V17V1Aainfix &lt;=c0V17Aa_SortedV0c0V17V16Iainfix =V17ainfix +V5c1FIainfix =V16astoreV10ashiftV0V9V7FIainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V18V7Iainfix &lt;V18V5Aainfix &lt;=V9V18FFAainfix &lt;=V8V5Aainfix &lt;=c0V8Aa_SortedV0c0V5V6Iainfix =V8V5Aa_SortedV0c0ainfix +V5c1V6Iainfix &lt;V8V5Aainfix &gt;aselectV6ashiftV0V19V7Iainfix &lt;V19V5Aainfix &lt;=V8V19FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_SortedV0c0ainfix -V1c1V6Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FAainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V3Iainfix =V4c1FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
     <label
-     name="expl:parameter insert_sort_ensures_default"/>
-    <label
      name="expl:Function insert_sort, default behavior"/>
+    <label
+     name="expl:VC for insert_sort_ensures_default"/>
     <transf
      name="split_goal"
      proved="true"
@@ -59,15 +59,15 @@
       name="WP_parameter insert_sort_ensures_default.1"
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
-      expl="postcondition"
+      expl="1. postcondition"
       sum="779a8bb3cc041a4f0c34072777026529"
       proved="true"
       expanded="false"
       shape="a_SortedV0c0ainfix -V1c1V3Iainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter insert_sort_ensures_default"/>
-      <label
        name="expl:Function insert_sort, default behavior"/>
+      <label
+       name="expl:VC for insert_sort_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -113,15 +113,15 @@
       name="WP_parameter insert_sort_ensures_default.2"
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
-      expl="loop invariant init"
+      expl="2. loop invariant init"
       sum="59b1a38da49e09369719162c39c7219c"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V3Iainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter insert_sort_ensures_default"/>
-      <label
        name="expl:Function insert_sort, default behavior"/>
+      <label
+       name="expl:VC for insert_sort_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -160,22 +160,22 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="1.42"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.3"
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
-      expl="loop invariant init"
+      expl="3. loop invariant init"
       sum="6a431cb7cee762d43847ba3730cf2a77"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V8V5Aainfix &lt;=c0V8Aa_SortedV0c0V5V6Iainfix =V8V5Aa_SortedV0c0ainfix +V5c1V6Iainfix &lt;V8V5Aainfix &gt;aselectV6ashiftV0V9V7Iainfix &lt;V9V5Aainfix &lt;=V8V9FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter insert_sort_ensures_default"/>
-      <label
        name="expl:Function insert_sort, default behavior"/>
+      <label
+       name="expl:VC for insert_sort_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -221,15 +221,15 @@
       name="WP_parameter insert_sort_ensures_default.4"
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
-      expl="loop invariant preservation"
+      expl="4. loop invariant preservation"
       sum="76ed7dff1d8f266e00b01ee9218678a9"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7FIainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7Iainfix &gt;V9c0Iainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V9V13FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter insert_sort_ensures_default"/>
-      <label
        name="expl:Function insert_sort, default behavior"/>
+      <label
+       name="expl:VC for insert_sort_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -252,7 +252,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="9.70"/>
+       <result status="timeout" time="5.13"/>
       </proof>
       <proof
        prover="3"
@@ -268,29 +268,29 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.23"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.5"
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
-      expl="loop invariant preservation"
+      expl="5. loop invariant preservation"
       sum="2d0ece0c9ce9145a8f4bc40f3484e7b7"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V12V5Aainfix &lt;=c0V12Aa_SortedV0c0V5V11Iainfix =V12V5Aa_SortedV0c0ainfix +V5c1V11Iainfix &lt;V12V5Aainfix &gt;aselectV11ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V12V13FIainfix =V12ainfix -V9c1FIainfix =V11astoreV10ashiftV0V9aselectV10ashiftV0ainfix -V9c1FIainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7NIainfix &gt;V9c0Iainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V14V7Iainfix &lt;V14V5Aainfix &lt;=V9V14FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter insert_sort_ensures_default"/>
-      <label
        name="expl:Function insert_sort, default behavior"/>
+      <label
+       name="expl:VC for insert_sort_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="11.02"/>
+       <result status="timeout" time="5.12"/>
       </proof>
       <proof
        prover="1"
@@ -306,7 +306,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="10.75"/>
+       <result status="timeout" time="5.13"/>
       </proof>
       <proof
        prover="3"
@@ -322,22 +322,22 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.39"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.6"
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
-      expl="loop invariant preservation"
+      expl="6. loop invariant preservation"
       sum="50a5d937a5268a9b758a41245881c953"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7FIainfix &gt;V9c0NIainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V9V13FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter insert_sort_ensures_default"/>
-      <label
        name="expl:Function insert_sort, default behavior"/>
+      <label
+       name="expl:VC for insert_sort_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -360,7 +360,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="10.17"/>
+       <result status="timeout" time="5.17"/>
       </proof>
       <proof
        prover="3"
@@ -376,22 +376,22 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="6.59"/>
+       <result status="timeout" time="5.16"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter insert_sort_ensures_default.7"
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
-      expl="postcondition"
+      expl="7. postcondition"
       sum="ed61fa08a0094278a59b687d32748ada"
       proved="true"
       expanded="false"
       shape="a_SortedV0c0ainfix -V1c1V6Iainfix &lt;V5V1NIainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter insert_sort_ensures_default"/>
-      <label
        name="expl:Function insert_sort, default behavior"/>
+      <label
+       name="expl:VC for insert_sort_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -439,15 +439,15 @@
     name="WP_parameter insert_sort_safety"
     locfile="../../insertion_sort.c"
     loclnum="41" loccnumb="5" loccnume="16"
-    expl="Function insert_sort, Safety"
+    expl="VC for insert_sort_safety"
     sum="87ebd4f181b688f46d7ddae769e97a52"
     proved="true"
     expanded="false"
     shape="iainfix &gt;V8c0iainfix &lt;=aselectV9ashiftV0ainfix -V8c1V6ainfix &lt;ainfix -V1V11ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V11ainfix +V4c1FIainfix =V10astoreV9ashiftV0V8V6FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8ainfix &lt;V13V8Aainfix &lt;=c0V8Iainfix =V13ainfix -V8c1FIainfix =V12astoreV9ashiftV0V8aselectV9ashiftV0ainfix -V8c1FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Aainfix &lt;=ainfix -V8c1aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainfix -V8c1Aainfix &lt;=ainfix -V8c1aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainfix -V8c1ainfix &lt;ainfix -V1V15ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V15ainfix +V4c1FIainfix =V14astoreV9ashiftV0V8V6FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Iainfix &lt;=V8V4Aainfix &lt;=c0V8Aa_SortedV0c0V4V9Iainfix =V8V4Aa_SortedV0c0ainfix +V4c1V9Iainfix &lt;V8V4Aainfix &gt;aselectV9ashiftV0V16V6Iainfix &lt;V16V4Aainfix &lt;=V8V16FFIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Iainfix &lt;V4V1Iainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V5FIainfix =V3c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0F">
     <label
-     name="expl:parameter insert_sort_safety"/>
-    <label
      name="expl:Function insert_sort, Safety"/>
+    <label
+     name="expl:VC for insert_sort_safety"/>
     <proof
      prover="0"
      timelimit="5"

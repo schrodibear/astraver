@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Counter/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -13,37 +12,53 @@
  <prover
   id="2"
   name="Z3"
-  version="2.19"/>
+  version="4.2"/>
  <file
   name="../Counter.mlw"
   verified="true"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="Counter/../Counter.mlw"
+   locfile="../Counter.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="Counter/../Counter.mlw"
+   locfile="../Counter.mlw"
    loclnum="178" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Counter_decrement_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
+    locfile="../Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
-    expl="normal postcondition"
+    expl="VC for _Counter_decrement_ensures_default"
     sum="e9a7149e8487f31d9575827e8734dc68"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V4V1ainfix -avalueV0V2V1c1Iainfix =V4astoreV2V0ainfix +aselectV2V0c1FIavalid_struct_CounterV0c0c0V3FF">
     <label
-     name="expl:parameter _Counter_decrement_ensures_default"/>
-    <label
      name="expl:Method decrement, default behavior"/>
+    <label
+     name="expl:VC for _Counter_decrement_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
     <proof
      prover="2"
      timelimit="5"
@@ -52,6 +67,20 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Counter_decrement_safety"
+    locfile="../Counter.java"
+    loclnum="49" loccnumb="16" loccnume="25"
+    expl="VC for _Counter_decrement_safety"
+    sum="491d7d0717357d6c61a06c0da89742d0"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Method decrement, Safety"/>
+    <label
+     name="expl:VC for _Counter_decrement_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -68,20 +97,6 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Counter_decrement_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
-    loclnum="49" loccnumb="16" loccnume="25"
-    expl="normal postcondition"
-    sum="491d7d0717357d6c61a06c0da89742d0"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter _Counter_decrement_safety"/>
-    <label
-     name="expl:Method decrement, Safety"/>
     <proof
      prover="2"
      timelimit="5"
@@ -90,13 +105,27 @@
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Counter_increment_ensures_default"
+    locfile="../Counter.java"
+    loclnum="44" loccnumb="16" loccnume="25"
+    expl="VC for _Counter_increment_ensures_default"
+    sum="55723f7bb3fb5712bd5de7471b7c0bb1"
+    proved="true"
+    expanded="true"
+    shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FF">
+    <label
+     name="expl:Method increment, default behavior"/>
+    <label
+     name="expl:VC for _Counter_increment_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -104,22 +133,8 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Counter_increment_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
-    loclnum="44" loccnumb="16" loccnume="25"
-    expl="normal postcondition"
-    sum="55723f7bb3fb5712bd5de7471b7c0bb1"
-    proved="true"
-    expanded="true"
-    shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FF">
-    <label
-     name="expl:parameter _Counter_increment_ensures_default"/>
-    <label
-     name="expl:Method increment, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
@@ -128,13 +143,27 @@
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Counter_increment_safety"
+    locfile="../Counter.java"
+    loclnum="44" loccnumb="16" loccnume="25"
+    expl="VC for _Counter_increment_safety"
+    sum="c35c3bb7969610548bc1d20c7d32b351"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Method increment, Safety"/>
+    <label
+     name="expl:VC for _Counter_increment_safety"/>
     <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -142,22 +171,8 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.02"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Counter_increment_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
-    loclnum="44" loccnumb="16" loccnume="25"
-    expl="normal postcondition"
-    sum="c35c3bb7969610548bc1d20c7d32b351"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter _Counter_increment_safety"/>
-    <label
-     name="expl:Method increment, Safety"/>
     <proof
      prover="2"
      timelimit="5"
@@ -166,44 +181,20 @@
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Counter_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_Counter_ensures_default"
     sum="28cc03667b39be3bae52a650d95e71c0"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Counter_ensures_default"/>
-    <label
      name="expl:Constructor of class Counter, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for cons_Counter_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -220,20 +211,6 @@
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Counter_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
-    loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="7d58b898be901cc8371396126681f4a1"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter cons_Counter_safety"/>
-    <label
-     name="expl:Constructor of class Counter, Safety"/>
     <proof
      prover="2"
      timelimit="5"
@@ -242,6 +219,20 @@
      archived="false">
      <result status="valid" time="0.01"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Counter_safety"
+    locfile="../."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="VC for cons_Counter_safety"
+    sum="7d58b898be901cc8371396126681f4a1"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class Counter, Safety"/>
+    <label
+     name="expl:VC for cons_Counter_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -257,6 +248,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
   </theory>

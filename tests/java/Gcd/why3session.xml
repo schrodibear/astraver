@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Gcd/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,24 +16,20 @@
  <prover
   id="3"
   name="Z3"
-  version="2.19"/>
- <prover
-  id="4"
-  name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../Gcd.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="Gcd/../Gcd.mlw"
+   locfile="../Gcd.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
    <goal
     name="distr_right"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="36" loccnumb="10" loccnume="21"
     expl="Lemma distr_right, lemma"
     sum="015bc08440ec20534de75345e2a972b8"
@@ -44,14 +39,6 @@
     <label
      name="expl:Lemma distr_right, lemma"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
@@ -67,10 +54,18 @@
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="distr_left"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="40" loccnumb="10" loccnume="20"
     expl="Lemma distr_left, lemma"
     sum="f89e1aa5a92fffa412711791dc00740b"
@@ -80,14 +75,6 @@
     <label
      name="expl:Lemma distr_left, lemma"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
@@ -103,10 +90,18 @@
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="distr_right_minus"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="44" loccnumb="10" loccnume="27"
     expl="Lemma distr_right_minus, lemma"
     sum="b09d773d84c186edb71c3480c5227f1c"
@@ -116,14 +111,6 @@
     <label
      name="expl:Lemma distr_right_minus, lemma"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
@@ -139,10 +126,18 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="distr_left_minus"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="48" loccnumb="10" loccnume="26"
     expl="Lemma distr_left_minus, lemma"
     sum="a780d86d44914527ecb0702143966a73"
@@ -152,14 +147,6 @@
     <label
      name="expl:Lemma distr_left_minus, lemma"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
@@ -175,10 +162,18 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="mul_comm"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="52" loccnumb="10" loccnume="18"
     expl="Lemma mul_comm, lemma"
     sum="9c0f1c973602c8694f1bdbdd253b9c10"
@@ -188,14 +183,6 @@
     <label
      name="expl:Lemma mul_comm, lemma"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
@@ -211,10 +198,18 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="mul_assoc"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="56" loccnumb="10" loccnume="19"
     expl="Lemma mul_assoc, lemma"
     sum="d1ae9642deb0456dac25ac001eae542c"
@@ -224,14 +219,6 @@
     <label
      name="expl:Lemma mul_assoc, lemma"/>
     <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
      prover="0"
      timelimit="5"
      memlimit="0"
@@ -247,10 +234,18 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="div_mod_property"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="64" loccnumb="10" loccnume="26"
     expl="Lemma div_mod_property, lemma"
     sum="88afc1376bd3d32cbb441235983250e1"
@@ -259,14 +254,6 @@
     shape="ainfix =amodV0V1ainfix -V0ainfix *V1adivV0V1Iainfix &gt;V1c0Aainfix &gt;=V0c0FF">
     <label
      name="expl:Lemma div_mod_property, lemma"/>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
     <proof
      prover="0"
      timelimit="5"
@@ -283,18 +270,6 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
-   </goal>
-   <goal
-    name="mod_property"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
-    loclnum="69" loccnumb="10" loccnume="22"
-    expl="Lemma mod_property, lemma"
-    sum="9fe03e8ebf1fb5386ea6eb71346bad35"
-    proved="true"
-    expanded="false"
-    shape="ainfix &lt;amodV0V1V1Aainfix &lt;=c0amodV0V1Iainfix &gt;V1c0Aainfix &gt;=V0c0FF">
-    <label
-     name="expl:Lemma mod_property, lemma"/>
     <proof
      prover="3"
      timelimit="5"
@@ -303,6 +278,18 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+   </goal>
+   <goal
+    name="mod_property"
+    locfile="../Gcd.java"
+    loclnum="69" loccnumb="10" loccnume="22"
+    expl="Lemma mod_property, lemma"
+    sum="9fe03e8ebf1fb5386ea6eb71346bad35"
+    proved="true"
+    expanded="false"
+    shape="ainfix &lt;amodV0V1V1Aainfix &lt;=c0amodV0V1Iainfix &gt;V1c0Aainfix &gt;=V0c0FF">
+    <label
+     name="expl:Lemma mod_property, lemma"/>
     <proof
      prover="0"
      timelimit="5"
@@ -319,10 +306,18 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
    </goal>
    <goal
     name="gcd_zero"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="80" loccnumb="10" loccnume="18"
     expl="Lemma gcd_zero, lemma"
     sum="820aa7a44c1c80501fce8333e3616ffd"
@@ -343,7 +338,7 @@
    </goal>
    <goal
     name="gcd_property"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="84" loccnumb="10" loccnume="22"
     expl="Lemma gcd_property, lemma"
     sum="6778fa4b3f7d9a868e8a15dbb96bb4a7"
@@ -365,23 +360,23 @@
   </theory>
   <theory
    name="Jessie_program"
-   locfile="Gcd/../Gcd.mlw"
+   locfile="../Gcd.mlw"
    loclnum="257" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Gcd_gcd_ensures_bezoutProperty"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
-    expl="normal postcondition"
+    expl="VC for _Gcd_gcd_ensures_bezoutProperty"
     sum="501c77abcdbfed06d167bb561ec2bc8b"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix +ainfix *V9V0ainfix *V10V1V8EEIainfix =V8V7FIainfix &gt;V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V11IaisGcdV7V6V11FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
     <label
-     name="expl:parameter _Gcd_gcd_ensures_bezoutProperty"/>
-    <label
      name="expl:Method gcd, Behavior `bezoutProperty&apos;"/>
+    <label
+     name="expl:VC for _Gcd_gcd_ensures_bezoutProperty"/>
     <proof
      prover="0"
      timelimit="5"
@@ -393,17 +388,17 @@
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
-    expl="parameter _Gcd_gcd_ensures_default"
+    expl="VC for _Gcd_gcd_ensures_default"
     sum="20e8db4aab28b0db9ae5c294bb25d0a5"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix +ainfix *V12V0ainfix *V13V1V9Aainfix =ainfix +ainfix *V10V0ainfix *V11V1V8AaisGcdV0V1V14IaisGcdV8V9V14FAainfix &gt;=V9c0Aainfix &gt;=V8c0Iainfix =V13ainfix -V4ainfix *V2adivV7V6FIainfix =V12ainfix -V5ainfix *V3adivV7V6FIainfix =V11V2FIainfix =V10V3FIainfix =V9amodV7V6FIainfix =V8V6FIainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix &gt;=V6c0Aainfix &gt;=V7c0FAainfix =ainfix +ainfix *c0V0ainfix *c1V1V1Aainfix =ainfix +ainfix *c1V0ainfix *c0V1V0Aainfix &gt;=V1c0Aainfix &gt;=V0c0Iainfix &gt;=V1c0Aainfix &gt;=V0c0F">
     <label
-     name="expl:parameter _Gcd_gcd_ensures_default"/>
-    <label
      name="expl:Method gcd, default behavior"/>
+    <label
+     name="expl:VC for _Gcd_gcd_ensures_default"/>
     <proof
      prover="1"
      timelimit="5"
@@ -415,17 +410,17 @@
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_ensures_resultIsGcd"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
-    expl="normal postcondition"
+    expl="VC for _Gcd_gcd_ensures_resultIsGcd"
     sum="563c52c2db366bbb8740a813622c3c99"
     proved="true"
     expanded="false"
     shape="aisGcdV0V1V8Iainfix =V8V7FIainfix &gt;V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V9IaisGcdV7V6V9FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
     <label
-     name="expl:parameter _Gcd_gcd_ensures_resultIsGcd"/>
-    <label
      name="expl:Method gcd, Behavior `resultIsGcd&apos;"/>
+    <label
+     name="expl:VC for _Gcd_gcd_ensures_resultIsGcd"/>
     <proof
      prover="0"
      timelimit="5"
@@ -445,17 +440,17 @@
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/Gcd.java"
+    locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
-    expl="parameter _Gcd_gcd_safety"
+    expl="VC for _Gcd_gcd_safety"
     sum="735d2af51f131ac7c460dc2f71b35106"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V10V6Aainfix &lt;=c0V6Iainfix =V14ainfix -V4ainfix *V2V8FIainfix =V13ainfix -V5ainfix *V3V8FIainfix =V12V2FIainfix =V11V3FIainfix =V10amodV7V6FIainfix =V9V6FLadivV7V6Aainfix =V6c0NAainfix =V6c0NIainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
     <label
-     name="expl:parameter _Gcd_gcd_safety"/>
-    <label
      name="expl:Method gcd, Safety"/>
+    <label
+     name="expl:VC for _Gcd_gcd_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -473,7 +468,7 @@
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -483,17 +478,17 @@
    </goal>
    <goal
     name="WP_parameter cons_Gcd_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_Gcd_ensures_default"
     sum="76e37fb2b741e55d04b42436c8b30881"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Gcd_ensures_default"/>
-    <label
      name="expl:Constructor of class Gcd, default behavior"/>
+    <label
+     name="expl:VC for cons_Gcd_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -511,7 +506,7 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -521,17 +516,17 @@
    </goal>
    <goal
     name="WP_parameter cons_Gcd_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_Gcd_safety"
     sum="0d2468eca48e55c357f2edbc40e6c465"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Gcd_safety"/>
-    <label
      name="expl:Constructor of class Gcd, Safety"/>
+    <label
+     name="expl:VC for cons_Gcd_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -549,7 +544,7 @@
      <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"

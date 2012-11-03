@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="NameConflicts/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -13,45 +12,37 @@
  <prover
   id="2"
   name="Z3"
-  version="2.19"/>
+  version="4.2"/>
  <file
   name="../NameConflicts.mlw"
   verified="true"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="NameConflicts/../NameConflicts.mlw"
+   locfile="../NameConflicts.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="NameConflicts/../NameConflicts.mlw"
+   locfile="../NameConflicts.mlw"
    loclnum="295" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _NameConflicts_field_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
+    locfile="../NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
-    expl="normal postcondition"
+    expl="VC for _NameConflicts_field_ensures_default"
     sum="508c398a60164dab3b521c51e9228fa9"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_field_ensures_default"/>
-    <label
      name="expl:Method field, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for _NameConflicts_field_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -68,28 +59,28 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _NameConflicts_field_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
+    locfile="../NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
-    expl="normal postcondition"
+    expl="VC for _NameConflicts_field_safety"
     sum="b2fdda03bd17cca286272bbb8b1d115c"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_field_safety"/>
-    <label
      name="expl:Method field, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for _NameConflicts_field_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -106,28 +97,28 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _NameConflicts_m_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
+    locfile="../NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
-    expl="normal postcondition"
+    expl="VC for _NameConflicts_m_ensures_default"
     sum="62df29de3e63d6501b9512e4ce88c1a1"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_m_ensures_default"/>
-    <label
      name="expl:Method m, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for _NameConflicts_m_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -144,20 +135,44 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _NameConflicts_m_ensures_normal"
-    locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
+    locfile="../NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
-    expl="normal postcondition"
+    expl="VC for _NameConflicts_m_ensures_normal"
     sum="812f3c831338f95a5af28c5b41358351"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c0Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
     <label
-     name="expl:parameter _NameConflicts_m_ensures_normal"/>
-    <label
      name="expl:Method m, Behavior `normal&apos;"/>
+    <label
+     name="expl:VC for _NameConflicts_m_ensures_normal"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
     <proof
      prover="2"
      timelimit="5"
@@ -166,44 +181,20 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter _NameConflicts_m_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
+    locfile="../NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
-    expl="normal postcondition"
+    expl="VC for _NameConflicts_m_safety"
     sum="9833d8b3490dd4213e10164b92ad5946"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_m_safety"/>
-    <label
      name="expl:Method m, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for _NameConflicts_m_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -220,28 +211,28 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _NameConflicts_setI_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
+    locfile="../NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
-    expl="normal postcondition"
+    expl="VC for _NameConflicts_setI_ensures_default"
     sum="1b2f032b557f3326d53c004e10fc8dda"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_setI_ensures_default"/>
-    <label
      name="expl:Method setI, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for _NameConflicts_setI_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -258,20 +249,44 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _NameConflicts_setI_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
+    locfile="../NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
-    expl="normal postcondition"
+    expl="VC for _NameConflicts_setI_safety"
     sum="17900041530f4c410e08ec97c8847066"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_setI_safety"/>
-    <label
      name="expl:Method setI, Safety"/>
+    <label
+     name="expl:VC for _NameConflicts_setI_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
     <proof
      prover="2"
      timelimit="5"
@@ -280,44 +295,20 @@
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter cons_NameConflicts_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_NameConflicts_ensures_default"
     sum="eaef38a7bc2f7758ab8a32135e3fe605"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_NameConflicts_ensures_default"/>
-    <label
      name="expl:Constructor of class NameConflicts, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for cons_NameConflicts_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -334,20 +325,6 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_NameConflicts_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
-    loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="108c0f756714473db318c8eaaed3d7ef"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter cons_NameConflicts_safety"/>
-    <label
-     name="expl:Constructor of class NameConflicts, Safety"/>
     <proof
      prover="2"
      timelimit="5"
@@ -356,6 +333,20 @@
      archived="false">
      <result status="valid" time="0.01"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_NameConflicts_safety"
+    locfile="../."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="VC for cons_NameConflicts_safety"
+    sum="108c0f756714473db318c8eaaed3d7ef"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class NameConflicts, Safety"/>
+    <label
+     name="expl:VC for cons_NameConflicts_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -371,6 +362,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
   </theory>

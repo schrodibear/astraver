@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="array_max.jessie/array_max/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -13,47 +12,47 @@
  <prover
   id="2"
   name="Z3"
-  version="2.19"/>
+  version="4.2"/>
  <file
   name="../array_max.mlw"
   verified="true"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="array_max.jessie/array_max/../array_max.mlw"
+   locfile="../array_max.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="array_max.jessie/array_max/../array_max.mlw"
+   locfile="../array_max.mlw"
    loclnum="271" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter max_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/array_max.c"
+    locfile="../../array_max.c"
     loclnum="17" loccnumb="4" loccnume="7"
-    expl="parameter max_ensures_default"
+    expl="VC for max_ensures_default"
     sum="330ba48262e47e3e180244400158bc87"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V9ainteger_of_int32V8Niainfix &lt;=ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8ainfix &lt;=ainteger_of_int32aselectV3ashiftV0V12amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V11ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8Iainfix &lt;V12ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V8V12Oainfix &lt;V12ainteger_of_int32V11Aainfix &lt;=c0V12FAainfix &lt;ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V8Aainfix &lt;=c0ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V9c1Fainfix &lt;=ainteger_of_int32aselectV3ashiftV0V15amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V14Iainfix &lt;V15ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V14V15Oainfix &lt;V15ainteger_of_int32V9Aainfix &lt;=c0V15FAainfix &lt;ainteger_of_int32V14ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V9ainteger_of_int32V14Aainfix &lt;=c0ainteger_of_int32V9Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix -ainteger_of_int32V8c1Fainfix &lt;=ainteger_of_int32aselectV3ashiftV0V17ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V16Iainfix &lt;V17ainteger_of_int32V1Aainfix &lt;=c0V17FAainfix &lt;ainteger_of_int32V16ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V16Iainfix =V16V9FIainfix &lt;=ainteger_of_int32aselectV3ashiftV0V18amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V8V18Oainfix &lt;V18ainteger_of_int32V9Aainfix &lt;=c0V18FAainfix &lt;ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V9ainteger_of_int32V8Aainfix &lt;=c0ainteger_of_int32V9FAainfix &lt;=ainteger_of_int32aselectV3ashiftV0V19amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V5ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V7Iainfix &lt;V19ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V7V19Oainfix &lt;V19ainteger_of_int32V5Aainfix &lt;=c0V19FAainfix &lt;ainteger_of_int32V7ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V7Aainfix &lt;=c0ainteger_of_int32V5Iainfix =V7V6FIainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V1c1FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;ainteger_of_int32V1c0F">
     <label
-     name="expl:parameter max_ensures_default"/>
-    <label
      name="expl:Function max, default behavior"/>
+    <label
+     name="expl:VC for max_ensures_default"/>
     <proof
-     prover="2"
+     prover="1"
      timelimit="10"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.52"/>
     </proof>
     <proof
-     prover="1"
+     prover="2"
      timelimit="10"
      memlimit="0"
      obsolete="false"
@@ -63,17 +62,17 @@
    </goal>
    <goal
     name="WP_parameter max_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/array_max.c"
+    locfile="../../array_max.c"
     loclnum="17" loccnumb="4" loccnume="7"
-    expl="parameter max_safety"
+    expl="VC for max_safety"
     sum="9a2fbc0d61166e5980951891d2c2bc12"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8ainfix &lt;ainfix -ainteger_of_int32V8ainteger_of_int32V11ainfix -ainteger_of_int32V8ainteger_of_int32V9Aainfix &lt;=c0ainfix -ainteger_of_int32V8ainteger_of_int32V9Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V9c1FAainfix &lt;=ainfix +ainteger_of_int32V9c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9c1ainfix &lt;ainfix -ainteger_of_int32V13ainteger_of_int32V9ainfix -ainteger_of_int32V8ainteger_of_int32V9Aainfix &lt;=c0ainfix -ainteger_of_int32V8ainteger_of_int32V9Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V8c1FAainfix &lt;=ainfix -ainteger_of_int32V8c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V8c1Aainfix &lt;=ainteger_of_int32V9aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainteger_of_int32V8Iainfix =ainteger_of_int32V9ainteger_of_int32V8NIainfix &lt;=ainteger_of_int32aselectV3ashiftV0V14amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8Iainfix &lt;V14ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V8V14Oainfix &lt;V14ainteger_of_int32V9Aainfix &lt;=c0V14FAainfix &lt;ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V9ainteger_of_int32V8Aainfix &lt;=c0ainteger_of_int32V9FIainfix =V7V6FIainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V1c1FAainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;ainteger_of_int32V1c0F">
     <label
-     name="expl:parameter max_safety"/>
-    <label
      name="expl:Function max, Safety"/>
+    <label
+     name="expl:VC for max_safety"/>
     <proof
      prover="0"
      timelimit="10"
@@ -83,20 +82,20 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="10"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
   </theory>

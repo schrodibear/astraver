@@ -26,7 +26,7 @@
     name="WP_parameter _Fact_fact_ensures_default"
     locfile="../Fact.java"
     loclnum="18" loccnumb="22" loccnume="26"
-    expl="parameter _Fact_fact_ensures_default"
+    expl="VC for _Fact_fact_ensures_default"
     sum="ec5e7b7bf51f263f4af005d9a3ecb8ad"
     proved="true"
     expanded="true"
@@ -34,7 +34,7 @@
     <label
      name="expl:Method fact, default behavior"/>
     <label
-     name="expl:parameter _Fact_fact_ensures_default"/>
+     name="expl:VC for _Fact_fact_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -48,7 +48,7 @@
     name="WP_parameter _Fact_fact_safety"
     locfile="../Fact.java"
     loclnum="18" loccnumb="22" loccnume="26"
-    expl="loop variant decrease"
+    expl="VC for _Fact_fact_safety"
     sum="9ea0761038d7de3ef1d8b4911afd961b"
     proved="true"
     expanded="true"
@@ -56,7 +56,7 @@
     <label
      name="expl:Method fact, Safety"/>
     <label
-     name="expl:parameter _Fact_fact_safety"/>
+     name="expl:VC for _Fact_fact_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -68,9 +68,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Fact_ensures_default"
-    locfile=".."
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="postcondition"
+    expl="VC for cons_Fact_ensures_default"
     sum="89ba889d523615509386f7604986394a"
     proved="true"
     expanded="true"
@@ -78,7 +78,7 @@
     <label
      name="expl:Constructor of class Fact, default behavior"/>
     <label
-     name="expl:parameter cons_Fact_ensures_default"/>
+     name="expl:VC for cons_Fact_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -90,9 +90,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Fact_safety"
-    locfile=".."
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="postcondition"
+    expl="VC for cons_Fact_safety"
     sum="841bafb496959db9f1916bab9ff1d803"
     proved="true"
     expanded="true"
@@ -100,7 +100,7 @@
     <label
      name="expl:Constructor of class Fact, Safety"/>
     <label
-     name="expl:parameter cons_Fact_safety"/>
+     name="expl:VC for cons_Fact_safety"/>
     <proof
      prover="0"
      timelimit="5"

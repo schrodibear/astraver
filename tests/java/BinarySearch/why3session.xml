@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="BinarySearch/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,79 +16,71 @@
  <prover
   id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
  <prover
   id="4"
   name="Z3"
-  version="3.2"/>
+  version="4.2"/>
  <file
   name="../BinarySearch.mlw"
   verified="false"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="BinarySearch/../BinarySearch.mlw"
+   locfile="../BinarySearch.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="BinarySearch/../BinarySearch.mlw"
+   locfile="../BinarySearch.mlw"
    loclnum="328" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
    <goal
     name="WP_parameter _BinarySearch_binary_search_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+    locfile="../BinarySearch.java"
     loclnum="76" loccnumb="15" loccnume="28"
-    expl="parameter _BinarySearch_binary_search_ensures_default"
+    expl="VC for _BinarySearch_binary_search_ensures_default"
     sum="5d2b7bd03ffda256b117d8dc71b162a6"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V11c1Fiainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix &lt;=ainteger_of_int32V15ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8Iainfix =V15V14FIainfix =ainteger_of_int32V14ainfix -ainteger_of_int32V11c1Fainfix &lt;ainteger_of_int32V16ainfix +aoffset_maxV3V0c1Aainfix &lt;=aprefix -c1ainteger_of_int32V16Iainfix =V16V11FAainfix &lt;=ainteger_of_int32V11ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10adivainteger_of_int32V9c2FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8Fainfix &lt;ainteger_of_int32V18ainfix +aoffset_maxV3V0c1Aainfix &lt;=aprefix -c1ainteger_of_int32V18Iainfix =V18V17FIainfix =ainteger_of_int32V17aprefix -c1FIainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FAainfix &lt;=ainteger_of_int32V6ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V4Iainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
     <label
-     name="expl:parameter _BinarySearch_binary_search_ensures_default"/>
-    <label
      name="expl:Method binary_search, default behavior"/>
-    <proof
-     prover="3"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
+    <label
+     name="expl:VC for _BinarySearch_binary_search_ensures_default"/>
     <proof
      prover="1"
      timelimit="10"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.63"/>
+     <result status="valid" time="0.88"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _BinarySearch_binary_search_ensures_failure"
-    locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+    locfile="../BinarySearch.java"
     loclnum="76" loccnumb="15" loccnume="28"
-    expl="parameter _BinarySearch_binary_search_ensures_failure"
+    expl="VC for _BinarySearch_binary_search_ensures_failure"
     sum="2c24aa7964a14d2ac86da3e112b0e6e3"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix &lt;=V14ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V13V14Iainfix =ainteger_of_int32aselectV2ashiftV0V14ainteger_of_int32V1Iainfix &lt;V14ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V14FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V11c1Fiainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix &lt;=V17ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V8V17Iainfix =ainteger_of_int32aselectV2ashiftV0V17ainteger_of_int32V1Iainfix &lt;V17ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V17FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V11c1Fainfix =ainteger_of_int32aselectV2ashiftV0V19ainteger_of_int32V1NIainfix &lt;V19ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V19FIainfix =ainteger_of_int32V18aprefix -c1Iainfix =V18V11FIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10adivainteger_of_int32V9c2FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8Fainfix =ainteger_of_int32aselectV2ashiftV0V22ainteger_of_int32V1NIainfix &lt;V22ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V22FIainfix =ainteger_of_int32V21aprefix -c1Iainfix =V21V20FIainfix =ainteger_of_int32V20aprefix -c1FIainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8Iainfix &lt;=V23ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8V23Iainfix =ainteger_of_int32aselectV2ashiftV0V23ainteger_of_int32V1Iainfix &lt;V23ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V23FFAainfix &lt;=V24ainteger_of_int32V6Aainfix &lt;=ainteger_of_int32V4V24Iainfix =ainteger_of_int32aselectV2ashiftV0V24ainteger_of_int32V1Iainfix &lt;V24ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V24FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3Aais_sortedV0V3V2FF">
     <label
-     name="expl:parameter _BinarySearch_binary_search_ensures_failure"/>
-    <label
      name="expl:Method binary_search, Behavior `failure&apos;"/>
-    <proof
-     prover="3"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.08"/>
-    </proof>
+    <label
+     name="expl:VC for _BinarySearch_binary_search_ensures_failure"/>
     <proof
      prover="0"
      timelimit="10"
@@ -98,28 +89,28 @@
      archived="false">
      <result status="valid" time="0.26"/>
     </proof>
+    <proof
+     prover="4"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _BinarySearch_binary_search_ensures_success"
-    locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+    locfile="../BinarySearch.java"
     loclnum="76" loccnumb="15" loccnume="28"
-    expl="parameter _BinarySearch_binary_search_ensures_success"
+    expl="VC for _BinarySearch_binary_search_ensures_success"
     sum="21531022a799d5cb96d03a8c73a9c1e5"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7ainfix =ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &gt;=ainteger_of_int32V12c0Iainfix =V12V11FIainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1NIainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1NIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10adivainteger_of_int32V9c2FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8Fainfix =ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V14ainteger_of_int32V1Iainfix &gt;=ainteger_of_int32V14c0Iainfix =V14V13FIainfix =ainteger_of_int32V13aprefix -c1FIainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
     <label
-     name="expl:parameter _BinarySearch_binary_search_ensures_success"/>
-    <label
      name="expl:Method binary_search, Behavior `success&apos;"/>
-    <proof
-     prover="3"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
+    <label
+     name="expl:VC for _BinarySearch_binary_search_ensures_success"/>
     <proof
      prover="0"
      timelimit="10"
@@ -136,10 +127,18 @@
      archived="false">
      <result status="valid" time="0.07"/>
     </proof>
+    <proof
+     prover="4"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _BinarySearch_binary_search_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+    locfile="../BinarySearch.java"
     loclnum="76" loccnumb="15" loccnume="28"
     expl="index bounds"
     sum="aa24b93bf81950f33a815938a2117a05"
@@ -147,34 +146,26 @@
     expanded="true"
     shape="iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1ainfix &lt;ainfix -ainteger_of_int32V7ainteger_of_int32V14ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V12c1FAainfix &lt;=ainfix +ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V12c1ainfix &lt;ainfix -ainteger_of_int32V16ainteger_of_int32V8ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V12c1FAainfix &lt;=ainfix -ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V12c1Iainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Aainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FAainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Aainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FAainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FAainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Aainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
     <label
-     name="expl:parameter _BinarySearch_binary_search_safety"/>
-    <label
      name="expl:Method binary_search, Safety"/>
+    <label
+     name="expl:VC for _BinarySearch_binary_search_safety"/>
     <transf
      name="split_goal"
      proved="false"
      expanded="true">
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.1"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+      locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
-      expl="assertion"
+      expl="1. assertion"
       sum="5cd5912ca12e2c91ca450e1f6ad335fe"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
       <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
        name="expl:Method binary_search, Safety"/>
-      <proof
-       prover="3"
-       timelimit="10"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <proof
        prover="0"
        timelimit="10"
@@ -191,28 +182,28 @@
        archived="false">
        <result status="valid" time="0.03"/>
       </proof>
+      <proof
+       prover="4"
+       timelimit="10"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.2"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+      locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
-      expl="precondition"
+      expl="2. arithmetic overflow"
       sum="5a62090d333f8a7ab5df9240cf645f6a"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
       <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
        name="expl:Method binary_search, Safety"/>
-      <proof
-       prover="3"
-       timelimit="10"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <proof
        prover="0"
        timelimit="10"
@@ -229,45 +220,45 @@
        archived="false">
        <result status="valid" time="0.03"/>
       </proof>
+      <proof
+       prover="4"
+       timelimit="10"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.3"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+      locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
-      expl="precondition"
+      expl="3. arithmetic overflow"
       sum="537fa0a3aa3fa5012363ae38c86a84bf"
       proved="false"
       expanded="true"
       shape="ainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
       <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
        name="expl:Method binary_search, Safety"/>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <transf
        name="split_goal"
        proved="false"
        expanded="true">
        <goal
         name="WP_parameter _BinarySearch_binary_search_safety.3.1"
-        locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+        locfile="../BinarySearch.java"
         loclnum="76" loccnumb="15" loccnume="28"
-        expl="parameter _BinarySearch_binary_search_safety"
+        expl="1."
         sum="d573c405d64dabffdc9fa4538e390a45"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
         <label
-         name="expl:parameter _BinarySearch_binary_search_safety"/>
-        <label
          name="expl:Method binary_search, Safety"/>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.04"/>
-        </proof>
+        <label
+         name="expl:VC for _BinarySearch_binary_search_safety"/>
         <proof
          prover="0"
          timelimit="5"
@@ -284,28 +275,28 @@
          archived="false">
          <result status="valid" time="0.04"/>
         </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
        </goal>
        <goal
         name="WP_parameter _BinarySearch_binary_search_safety.3.2"
-        locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+        locfile="../BinarySearch.java"
         loclnum="76" loccnumb="15" loccnume="28"
-        expl="parameter _BinarySearch_binary_search_safety"
+        expl="2."
         sum="38cd2288fe286d32958129c5c8bb9314"
         proved="false"
         expanded="true"
         shape="ainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
         <label
-         name="expl:parameter _BinarySearch_binary_search_safety"/>
-        <label
          name="expl:Method binary_search, Safety"/>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.06"/>
-        </proof>
+        <label
+         name="expl:VC for _BinarySearch_binary_search_safety"/>
         <proof
          prover="0"
          timelimit="5"
@@ -320,7 +311,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="unknown" time="0.71"/>
+         <result status="unknown" time="1.16"/>
         </proof>
         <proof
          prover="2"
@@ -328,7 +319,15 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="unknown" time="6.19"/>
+         <result status="unknown" time="11.77"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.04"/>
         </proof>
         <proof
          prover="4"
@@ -336,32 +335,24 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.04"/>
+         <result status="timeout" time="5.06"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.4"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+      locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
-      expl="precondition"
+      expl="4. division by zero"
       sum="0d0b46eb6b0ac0beb794ccd5317ead22"
       proved="true"
       expanded="false"
       shape="ainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
       <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
        name="expl:Method binary_search, Safety"/>
-      <proof
-       prover="3"
-       timelimit="10"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <proof
        prover="0"
        timelimit="10"
@@ -378,28 +369,28 @@
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
+      <proof
+       prover="4"
+       timelimit="10"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.5"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+      locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
-      expl="precondition"
+      expl="5. arithmetic overflow"
       sum="6aa94442d3d5fdc4e5ead994e83b5ac5"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
       <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
        name="expl:Method binary_search, Safety"/>
-      <proof
-       prover="3"
-       timelimit="10"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <proof
        prover="0"
        timelimit="10"
@@ -416,28 +407,28 @@
        archived="false">
        <result status="valid" time="0.07"/>
       </proof>
+      <proof
+       prover="4"
+       timelimit="10"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.6"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+      locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
-      expl="precondition"
+      expl="6. pointer dereference"
       sum="bbc82f58ad0bcc0ba158cb0f65cdcc67"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
       <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
        name="expl:Method binary_search, Safety"/>
-      <proof
-       prover="3"
-       timelimit="10"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <proof
        prover="0"
        timelimit="10"
@@ -454,28 +445,28 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
+      <proof
+       prover="4"
+       timelimit="10"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.7"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+      locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
-      expl="precondition"
+      expl="7. arithmetic overflow"
       sum="52af94758d2b75c3d24e6a4214e5178c"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix +ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V12c1Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
       <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
        name="expl:Method binary_search, Safety"/>
-      <proof
-       prover="3"
-       timelimit="10"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <proof
        prover="0"
        timelimit="10"
@@ -492,28 +483,28 @@
        archived="false">
        <result status="valid" time="0.06"/>
       </proof>
+      <proof
+       prover="4"
+       timelimit="10"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.8"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+      locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
-      expl="loop variant decreases"
+      expl="8. loop variant decrease"
       sum="c925ee7e3a739044e0f90b5b68e9dcf0"
       proved="true"
       expanded="false"
       shape="ainfix &lt;ainfix -ainteger_of_int32V7ainteger_of_int32V14ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V12c1FIainfix &lt;=ainfix +ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V12c1Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
       <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
        name="expl:Method binary_search, Safety"/>
-      <proof
-       prover="3"
-       timelimit="10"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <proof
        prover="0"
        timelimit="10"
@@ -524,6 +515,14 @@
       </proof>
       <proof
        prover="1"
+       timelimit="10"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="10"
        memlimit="0"
        obsolete="false"
@@ -533,25 +532,17 @@
      </goal>
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.9"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+      locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
-      expl="precondition"
+      expl="9. pointer dereference"
       sum="b65e6f33a400165fa8ada122df2c7392"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1NIainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
       <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
        name="expl:Method binary_search, Safety"/>
-      <proof
-       prover="3"
-       timelimit="10"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <proof
        prover="0"
        timelimit="10"
@@ -568,28 +559,28 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
+      <proof
+       prover="4"
+       timelimit="10"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.10"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
+      locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
-      expl="precondition"
+      expl="10. arithmetic overflow"
       sum="ccec3050cd2986b2108fd83fa61403d2"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix -ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V12c1Iainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1NIainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
       <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
        name="expl:Method binary_search, Safety"/>
-      <proof
-       prover="3"
-       timelimit="10"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <proof
        prover="0"
        timelimit="10"
@@ -606,28 +597,28 @@
        archived="false">
        <result status="valid" time="0.07"/>
       </proof>
-     </goal>
-     <goal
-      name="WP_parameter _BinarySearch_binary_search_safety.11"
-      locfile="/home/marche/why2-nitrogen/tests/java/BinarySearch.java"
-      loclnum="76" loccnumb="15" loccnume="28"
-      expl="loop variant decreases"
-      sum="394f139e275b818813d8f9bbe23db7cf"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;ainfix -ainteger_of_int32V14ainteger_of_int32V8ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix -ainteger_of_int32V12c1FIainfix &lt;=ainfix -ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V12c1Iainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1NIainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
-      <label
-       name="expl:parameter _BinarySearch_binary_search_safety"/>
-      <label
-       name="expl:Method binary_search, Safety"/>
       <proof
-       prover="3"
+       prover="4"
        timelimit="10"
        memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
       </proof>
+     </goal>
+     <goal
+      name="WP_parameter _BinarySearch_binary_search_safety.11"
+      locfile="../BinarySearch.java"
+      loclnum="76" loccnumb="15" loccnume="28"
+      expl="11. loop variant decrease"
+      sum="394f139e275b818813d8f9bbe23db7cf"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;ainfix -ainteger_of_int32V14ainteger_of_int32V8ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix -ainteger_of_int32V12c1FIainfix &lt;=ainfix -ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V12c1Iainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1NIainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
+      <label
+       name="expl:Method binary_search, Safety"/>
+      <label
+       name="expl:VC for _BinarySearch_binary_search_safety"/>
       <proof
        prover="0"
        timelimit="10"
@@ -638,6 +629,14 @@
       </proof>
       <proof
        prover="1"
+       timelimit="10"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
        timelimit="10"
        memlimit="0"
        obsolete="false"
@@ -649,25 +648,17 @@
    </goal>
    <goal
     name="WP_parameter cons_BinarySearch_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_BinarySearch_ensures_default"
     sum="1b6eed8ec7ae16c19e8b1538e8e54729"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_BinarySearch_ensures_default"/>
-    <label
      name="expl:Constructor of class BinarySearch, default behavior"/>
-    <proof
-     prover="3"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for cons_BinarySearch_ensures_default"/>
     <proof
      prover="0"
      timelimit="10"
@@ -684,28 +675,28 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="4"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_BinarySearch_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_BinarySearch_safety"
     sum="e33fb7230d48272f176b200db764b3bd"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_BinarySearch_safety"/>
-    <label
      name="expl:Constructor of class BinarySearch, Safety"/>
-    <proof
-     prover="3"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for cons_BinarySearch_safety"/>
     <proof
      prover="0"
      timelimit="10"
@@ -721,6 +712,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
   </theory>

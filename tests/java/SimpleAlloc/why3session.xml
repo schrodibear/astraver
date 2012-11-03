@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="SimpleAlloc/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,49 +16,41 @@
  <prover
   id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
  <prover
   id="4"
   name="Z3"
-  version="3.2"/>
+  version="4.2"/>
  <file
   name="../SimpleAlloc.mlw"
   verified="false"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="SimpleAlloc/../SimpleAlloc.mlw"
+   locfile="../SimpleAlloc.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="SimpleAlloc/../SimpleAlloc.mlw"
+   locfile="../SimpleAlloc.mlw"
    loclnum="332" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
    <goal
     name="WP_parameter cons_Node_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+    locfile="../SimpleAlloc.java"
     loclnum="36" loccnumb="4" loccnume="8"
-    expl="normal postcondition"
+    expl="VC for cons_Node_ensures_default"
     sum="7fd9615763f2e3c9c3a6737c0f22cc0f"
     proved="true"
     expanded="true"
     shape="anot_assignsV1V2V4apset_singletonV0Iainfix =V4astoreV2V0V3FIainfix =ainteger_of_int32V3c0FIavalid_struct_NodeV0c0c0V1FF">
     <label
-     name="expl:parameter cons_Node_ensures_default"/>
-    <label
      name="expl:Constructor of class Node, default behavior"/>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
+    <label
+     name="expl:VC for cons_Node_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -76,28 +67,28 @@
      archived="false">
      <result status="valid" time="0.09"/>
     </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Node_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+    locfile="../SimpleAlloc.java"
     loclnum="36" loccnumb="4" loccnume="8"
-    expl="normal postcondition"
+    expl="VC for cons_Node_safety"
     sum="690f2696efb1319b5cd08ccfa6e1cb57"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Node_safety"/>
-    <label
      name="expl:Constructor of class Node, Safety"/>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for cons_Node_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -114,28 +105,28 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_test_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
-    loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="c6928ec86c182fd678bd170f51d31fe3"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter cons_test_ensures_default"/>
-    <label
-     name="expl:Constructor of class test, default behavior"/>
     <proof
-     prover="3"
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_test_ensures_default"
+    locfile="../."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="VC for cons_test_ensures_default"
+    sum="c6928ec86c182fd678bd170f51d31fe3"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Constructor of class test, default behavior"/>
+    <label
+     name="expl:VC for cons_test_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -152,28 +143,28 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_test_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_test_safety"
     sum="04cf2f4dcf4aac077c73cd5051cb72f1"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_test_safety"/>
-    <label
      name="expl:Constructor of class test, Safety"/>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for cons_test_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -190,59 +181,59 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter test_test_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+    locfile="../SimpleAlloc.java"
     loclnum="46" loccnumb="9" loccnume="13"
-    expl="normal postcondition"
+    expl="VC for test_test_ensures_default"
     sum="7959657b5cb4da32c3a386367189c87f"
     proved="false"
     expanded="true"
     shape="anot_assignsV2V4V9apset_rangeapset_derefV1apset_singletonV0c0c0Aanot_assignsV2V3V8apset_emptyAa_Non_null_NodeMaselectV1V0V6Iainfix =V9astoreV4aselectV1V0V7FIanot_assignsV6V3V8apset_singletonV7FIainstanceofV5V7a_Node_tagAaalloc_freshV2V7c1Aaalloc_extendsV2V6Aastrict_valid_struct_NodeV7c0ainfix -c1c1V6FFIainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FF">
     <label
-     name="expl:parameter test_test_ensures_default"/>
-    <label
      name="expl:Method test, default behavior"/>
+    <label
+     name="expl:VC for test_test_ensures_default"/>
    </goal>
    <goal
     name="WP_parameter test_test_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+    locfile="../SimpleAlloc.java"
     loclnum="46" loccnumb="9" loccnume="13"
-    expl="parameter test_test_safety"
+    expl="VC for test_test_safety"
     sum="68f0959c83e05265b86086bb2e8d42e1"
     proved="false"
     expanded="true"
     shape="ainfix &lt;=c0aoffset_maxV5aselectV1V0Ianot_assignsV5V3V7apset_singletonV6FAainfix &gt;=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFAainfix &gt;=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FF">
     <label
-     name="expl:parameter test_test_safety"/>
-    <label
      name="expl:Method test, Safety"/>
+    <label
+     name="expl:VC for test_test_safety"/>
     <transf
      name="split_goal"
      proved="false"
      expanded="true">
      <goal
       name="WP_parameter test_test_safety.1"
-      locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+      locfile="../SimpleAlloc.java"
       loclnum="46" loccnumb="9" loccnume="13"
-      expl="precondition"
+      expl="1. allocation size"
       sum="7f73c974cb888862a3733db6aa3db64f"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FF">
       <label
-       name="expl:parameter test_test_safety"/>
-      <label
        name="expl:Method test, Safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
+      <label
+       name="expl:VC for test_test_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -259,28 +250,28 @@
        archived="false">
        <result status="valid" time="0.03"/>
       </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter test_test_safety.2"
-      locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+      locfile="../SimpleAlloc.java"
       loclnum="46" loccnumb="9" loccnume="13"
-      expl="assertion"
+      expl="2. assertion"
       sum="18e647355fe06301c9fc326268e7c312"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFIainfix &gt;=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FF">
       <label
-       name="expl:parameter test_test_safety"/>
-      <label
        name="expl:Method test, Safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
+      <label
+       name="expl:VC for test_test_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -297,27 +288,35 @@
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter test_test_safety.3"
-      locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+      locfile="../SimpleAlloc.java"
       loclnum="46" loccnumb="9" loccnume="13"
-      expl="precondition"
+      expl="3. index bounds"
       sum="b57c99aa765d2ab1fe5855252cc9c5e1"
       proved="false"
       expanded="true"
       shape="ainfix &lt;=c0aoffset_maxV5aselectV1V0Ianot_assignsV5V3V7apset_singletonV6FIainfix &gt;=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFIainfix &gt;=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FF">
       <label
-       name="expl:parameter test_test_safety"/>
-      <label
        name="expl:Method test, Safety"/>
+      <label
+       name="expl:VC for test_test_safety"/>
       <proof
-       prover="3"
+       prover="0"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.02"/>
+       <result status="unknown" time="0.04"/>
       </proof>
       <proof
        prover="1"
@@ -328,15 +327,15 @@
        <result status="timeout" time="5.02"/>
       </proof>
       <proof
-       prover="0"
+       prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="0.04"/>
+       <result status="timeout" time="5.01"/>
       </proof>
       <proof
-       prover="2"
+       prover="3"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -349,7 +348,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.01"/>
+       <result status="timeout" time="5.02"/>
       </proof>
      </goal>
     </transf>

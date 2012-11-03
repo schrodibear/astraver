@@ -38,7 +38,7 @@
     name="WP_parameter test_ensures_default"
     locfile="../../array_double.c"
     loclnum="18" loccnumb="5" loccnume="9"
-    expl="assertion"
+    expl="VC for test_ensures_default"
     sum="bff99ce8bb4f1b1f385d0ffdbc3c76b4"
     proved="true"
     expanded="true"
@@ -46,7 +46,7 @@
     <label
      name="expl:Function test, default behavior"/>
     <label
-     name="expl:parameter test_ensures_default"/>
+     name="expl:VC for test_ensures_default"/>
     <proof
      prover="1"
      timelimit="5"
@@ -76,7 +76,7 @@
     name="WP_parameter test_safety"
     locfile="../../array_double.c"
     loclnum="18" loccnumb="5" loccnume="9"
-    expl="parameter test_safety"
+    expl="VC for test_safety"
     sum="2a22fad76bdfe168d87a97d6f3c49f32"
     proved="true"
     expanded="true"
@@ -84,7 +84,7 @@
     <label
      name="expl:Function test, Safety"/>
     <label
-     name="expl:parameter test_safety"/>
+     name="expl:VC for test_safety"/>
     <transf
      name="split_goal"
      proved="true"
@@ -93,7 +93,7 @@
       name="WP_parameter test_safety.1"
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
-      expl="floating-point overflow"
+      expl="1. floating-point overflow"
       sum="c5fb78d023344e4079b91887ed5e2d9d"
       proved="true"
       expanded="true"
@@ -101,7 +101,7 @@
       <label
        name="expl:Function test, Safety"/>
       <label
-       name="expl:parameter test_safety"/>
+       name="expl:VC for test_safety"/>
       <proof
        prover="1"
        timelimit="5"
@@ -131,7 +131,7 @@
       name="WP_parameter test_safety.2"
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
-      expl="floating-point overflow"
+      expl="2. floating-point overflow"
       sum="70d8c7b62c35c1429f353b7ba121fbe9"
       proved="true"
       expanded="true"
@@ -139,7 +139,7 @@
       <label
        name="expl:Function test, Safety"/>
       <label
-       name="expl:parameter test_safety"/>
+       name="expl:VC for test_safety"/>
       <proof
        prover="1"
        timelimit="5"
@@ -169,7 +169,7 @@
       name="WP_parameter test_safety.3"
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
-      expl="postcondition"
+      expl="3. postcondition"
       sum="ce5420f130f8e9c096b59dd9b74b0a19"
       proved="true"
       expanded="true"
@@ -177,7 +177,7 @@
       <label
        name="expl:Function test, Safety"/>
       <label
-       name="expl:parameter test_safety"/>
+       name="expl:VC for test_safety"/>
       <proof
        prover="0"
        timelimit="5"

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="MacCarthy/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -13,45 +12,37 @@
  <prover
   id="2"
   name="Z3"
-  version="2.19"/>
+  version="4.2"/>
  <file
   name="../MacCarthy.mlw"
   verified="true"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="MacCarthy/../MacCarthy.mlw"
+   locfile="../MacCarthy.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="MacCarthy/../MacCarthy.mlw"
+   locfile="../MacCarthy.mlw"
    loclnum="295" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _MacCarthy_f91_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
+    locfile="../MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
-    expl="normal postcondition"
+    expl="VC for _MacCarthy_f91_ensures_default"
     sum="4d5ecbaf2bae4a6103aa4c4faf057a6f"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter _MacCarthy_f91_ensures_default"/>
-    <label
      name="expl:Method f91, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for _MacCarthy_f91_ensures_default"/>
     <proof
      prover="0"
      timelimit="10"
@@ -68,28 +59,28 @@
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _MacCarthy_f91_ensures_greater_than_100"
-    locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
-    loclnum="45" loccnumb="22" loccnume="25"
-    expl="parameter _MacCarthy_f91_ensures_greater_than_100"
-    sum="29b187fbb4a45091165b3c39ef66f041"
-    proved="true"
-    expanded="false"
-    shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c10Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix &lt;=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix &gt;=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V0c10Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix &gt;=ainteger_of_int32V0c101F">
-    <label
-     name="expl:parameter _MacCarthy_f91_ensures_greater_than_100"/>
-    <label
-     name="expl:Method f91, Behavior `greater_than_100&apos;"/>
     <proof
      prover="2"
      timelimit="10"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.00"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _MacCarthy_f91_ensures_greater_than_100"
+    locfile="../MacCarthy.java"
+    loclnum="45" loccnumb="22" loccnume="25"
+    expl="VC for _MacCarthy_f91_ensures_greater_than_100"
+    sum="29b187fbb4a45091165b3c39ef66f041"
+    proved="true"
+    expanded="false"
+    shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c10Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix &lt;=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix &gt;=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V0c10Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix &gt;=ainteger_of_int32V0c101F">
+    <label
+     name="expl:Method f91, Behavior `greater_than_100&apos;"/>
+    <label
+     name="expl:VC for _MacCarthy_f91_ensures_greater_than_100"/>
     <proof
      prover="0"
      timelimit="10"
@@ -100,6 +91,14 @@
     </proof>
     <proof
      prover="1"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
      timelimit="10"
      memlimit="0"
      obsolete="false"
@@ -109,25 +108,17 @@
    </goal>
    <goal
     name="WP_parameter _MacCarthy_f91_ensures_less_than_101"
-    locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
+    locfile="../MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
-    expl="parameter _MacCarthy_f91_ensures_less_than_101"
+    expl="VC for _MacCarthy_f91_ensures_less_than_101"
     sum="f7409c4f56e8fd700de6f5dd7682c547"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4c91Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix &lt;=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix &gt;=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6c91Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix &lt;=ainteger_of_int32V0c100F">
     <label
-     name="expl:parameter _MacCarthy_f91_ensures_less_than_101"/>
-    <label
      name="expl:Method f91, Behavior `less_than_101&apos;"/>
-    <proof
-     prover="2"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
+    <label
+     name="expl:VC for _MacCarthy_f91_ensures_less_than_101"/>
     <proof
      prover="0"
      timelimit="10"
@@ -138,6 +129,14 @@
     </proof>
     <proof
      prover="1"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
      timelimit="10"
      memlimit="0"
      obsolete="false"
@@ -147,25 +146,17 @@
    </goal>
    <goal
     name="WP_parameter _MacCarthy_f91_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
+    locfile="../MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
-    expl="parameter _MacCarthy_f91_safety"
+    expl="VC for _MacCarthy_f91_safety"
     sum="fff9f8f6f2d5616d5931e3ffb80ca939"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V2ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix &lt;=ainfix +ainteger_of_int32V0c11c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix &lt;=ainfix -ainteger_of_int32V0c10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
     <label
-     name="expl:parameter _MacCarthy_f91_safety"/>
-    <label
      name="expl:Method f91, Safety"/>
-    <proof
-     prover="2"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
+    <label
+     name="expl:VC for _MacCarthy_f91_safety"/>
     <proof
      prover="0"
      timelimit="10"
@@ -176,6 +167,14 @@
     </proof>
     <proof
      prover="1"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
      timelimit="10"
      memlimit="0"
      obsolete="false"
@@ -185,25 +184,17 @@
    </goal>
    <goal
     name="WP_parameter cons_MacCarthy_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_MacCarthy_ensures_default"
     sum="d2a43fbcddfc8884472b99d622e03ab0"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_MacCarthy_ensures_default"/>
-    <label
      name="expl:Constructor of class MacCarthy, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for cons_MacCarthy_ensures_default"/>
     <proof
      prover="0"
      timelimit="10"
@@ -220,28 +211,28 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_MacCarthy_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_MacCarthy_safety"
     sum="d2bbff4a23a64448145186f667c12c2e"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_MacCarthy_safety"/>
-    <label
      name="expl:Constructor of class MacCarthy, Safety"/>
-    <proof
-     prover="2"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for cons_MacCarthy_safety"/>
     <proof
      prover="0"
      timelimit="10"
@@ -258,28 +249,28 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_Object_ensures_default"
     sum="50d69136614384f209ef531f73d48748"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Object_ensures_default"/>
-    <label
      name="expl:Constructor of class Object, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for cons_Object_ensures_default"/>
     <proof
      prover="0"
      timelimit="10"
@@ -296,20 +287,6 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Object_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
-    loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="2a9b702383e1d06a54fc0291fdddeb25"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:parameter cons_Object_safety"/>
-    <label
-     name="expl:Constructor of class Object, Safety"/>
     <proof
      prover="2"
      timelimit="10"
@@ -318,6 +295,20 @@
      archived="false">
      <result status="valid" time="0.01"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Object_safety"
+    locfile="../."
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="VC for cons_Object_safety"
+    sum="2a9b702383e1d06a54fc0291fdddeb25"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Object, Safety"/>
+    <label
+     name="expl:VC for cons_Object_safety"/>
     <proof
      prover="0"
      timelimit="10"
@@ -333,6 +324,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="10"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
   </theory>

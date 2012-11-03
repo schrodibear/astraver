@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="hollas_floats.jessie/hollas_floats/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -21,24 +20,24 @@
  <prover
   id="4"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
  <prover
   id="5"
   name="Z3"
-  version="3.2"/>
+  version="4.2"/>
  <file
   name="../hollas_floats.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="hollas_floats.jessie/hollas_floats/../hollas_floats.mlw"
+   locfile="../hollas_floats.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
    <goal
     name="rp"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/hollas_floats.c"
+    locfile="../../hollas_floats.c"
     loclnum="3" loccnumb="4" loccnume="54"
     expl="Lemma rp, lemma"
     sum="7c2b77b556defa603370e2469d17ae36"
@@ -53,7 +52,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="5"
@@ -61,21 +60,21 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="Jessie_program"
-   locfile="hollas_floats.jessie/hollas_floats/../hollas_floats.mlw"
+   locfile="../hollas_floats.mlw"
    loclnum="230" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter main_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/hollas_floats.c"
+    locfile="../../hollas_floats.c"
     loclnum="21" loccnumb="4" loccnume="8"
-    expl="Function main, default behavior"
+    expl="VC for main_ensures_default"
     sum="94aec91f7b022271f34e31f7dd570360"
     proved="true"
     expanded="true"
@@ -83,7 +82,7 @@
     <label
      name="expl:Function main, default behavior"/>
     <label
-     name="expl:parameter main_ensures_default"/>
+     name="expl:VC for main_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -91,6 +90,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="3"
@@ -107,14 +114,6 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="5"
@@ -127,9 +126,9 @@
    </goal>
    <goal
     name="WP_parameter main_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/hollas_floats.c"
+    locfile="../../hollas_floats.c"
     loclnum="21" loccnumb="4" loccnume="8"
-    expl="Function main, Safety"
+    expl="VC for main_safety"
     sum="5d2d206f84906dbb609bf18f9a20af4e"
     proved="true"
     expanded="true"
@@ -137,7 +136,7 @@
     <label
      name="expl:Function main, Safety"/>
     <label
-     name="expl:parameter main_safety"/>
+     name="expl:VC for main_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -145,6 +144,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="3"
@@ -160,15 +167,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="5"
@@ -176,14 +175,14 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter r_par_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/hollas_floats.c"
+    locfile="../../hollas_floats.c"
     loclnum="16" loccnumb="6" loccnume="11"
-    expl="normal postcondition"
+    expl="VC for r_par_ensures_default"
     sum="bde93b47bf7352513022fe50da548182"
     proved="true"
     expanded="true"
@@ -191,9 +190,9 @@
     <label
      name="expl:Function r_par, default behavior"/>
     <label
-     name="expl:parameter r_par_ensures_default"/>
+     name="expl:VC for r_par_ensures_default"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -201,7 +200,7 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="0"
+     prover="1"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -214,7 +213,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="5"
@@ -222,14 +221,14 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter r_par_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/hollas_floats.c"
+    locfile="../../hollas_floats.c"
     loclnum="16" loccnumb="6" loccnume="11"
-    expl="Function r_par, Safety"
+    expl="VC for r_par_safety"
     sum="69a6bea6b82e99017bf868a3a95b3a71"
     proved="true"
     expanded="true"
@@ -237,15 +236,7 @@
     <label
      name="expl:Function r_par, Safety"/>
     <label
-     name="expl:parameter r_par_safety"/>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
+     name="expl:VC for r_par_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -255,12 +246,20 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="5"
@@ -268,14 +267,14 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter r_seq_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/hollas_floats.c"
+    locfile="../../hollas_floats.c"
     loclnum="8" loccnumb="6" loccnume="11"
-    expl="normal postcondition"
+    expl="VC for r_seq_ensures_default"
     sum="36ed6a1ec24ed410ee789b922d57e8c4"
     proved="true"
     expanded="true"
@@ -283,7 +282,15 @@
     <label
      name="expl:Function r_seq, default behavior"/>
     <label
-     name="expl:parameter r_seq_ensures_default"/>
+     name="expl:VC for r_seq_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
     <proof
      prover="1"
      timelimit="5"
@@ -293,12 +300,12 @@
      <result status="valid" time="0.01"/>
     </proof>
     <proof
-     prover="0"
+     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="3"
@@ -314,14 +321,6 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.05"/>
     </proof>
     <proof
@@ -330,14 +329,14 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter r_seq_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/hollas_floats.c"
+    locfile="../../hollas_floats.c"
     loclnum="8" loccnumb="6" loccnume="11"
-    expl="normal postcondition"
+    expl="VC for r_seq_safety"
     sum="8e493ca0c0cf4a27a2295a05252d76b9"
     proved="true"
     expanded="true"
@@ -345,7 +344,15 @@
     <label
      name="expl:Function r_seq, Safety"/>
     <label
-     name="expl:parameter r_seq_safety"/>
+     name="expl:VC for r_seq_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
     <proof
      prover="1"
      timelimit="5"
@@ -355,12 +362,12 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="0"
+     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="3"
@@ -376,15 +383,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="5"
@@ -392,7 +391,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
   </theory>

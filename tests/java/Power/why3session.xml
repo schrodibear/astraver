@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../Power.mlw"
   verified="false"
@@ -64,7 +64,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.79"/>
+     <result status="unknown" time="1.24"/>
     </proof>
     <proof
      prover="3"
@@ -116,7 +116,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.52"/>
+     <result status="unknown" time="0.73"/>
     </proof>
     <proof
      prover="3"
@@ -198,7 +198,7 @@
     name="WP_parameter _Power_imp_ensures_default"
     locfile="../Power.java"
     loclnum="48" loccnumb="16" loccnume="19"
-    expl="parameter _Power_imp_ensures_default"
+    expl="VC for _Power_imp_ensures_default"
     sum="8313af8e387fc86f06b4bf80d48febc8"
     proved="true"
     expanded="false"
@@ -206,7 +206,7 @@
     <label
      name="expl:Method imp, default behavior"/>
     <label
-     name="expl:parameter _Power_imp_ensures_default"/>
+     name="expl:VC for _Power_imp_ensures_default"/>
     <proof
      prover="1"
      timelimit="5"
@@ -231,7 +231,7 @@
       name="WP_parameter _Power_imp_ensures_default.1"
       locfile="../Power.java"
       loclnum="48" loccnumb="16" loccnume="19"
-      expl="loop invariant init"
+      expl="1. loop invariant init"
       sum="e2f6951ccc2de860d49b81cff1704a14"
       proved="true"
       expanded="false"
@@ -239,7 +239,7 @@
       <label
        name="expl:Method imp, default behavior"/>
       <label
-       name="expl:parameter _Power_imp_ensures_default"/>
+       name="expl:VC for _Power_imp_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -285,7 +285,7 @@
       name="WP_parameter _Power_imp_ensures_default.2"
       locfile="../Power.java"
       loclnum="48" loccnumb="16" loccnume="19"
-      expl="loop invariant preservation"
+      expl="2. loop invariant preservation"
       sum="539c0a984284a938968b3f80f54e6fa4"
       proved="true"
       expanded="false"
@@ -293,7 +293,7 @@
       <label
        name="expl:Method imp, default behavior"/>
       <label
-       name="expl:parameter _Power_imp_ensures_default"/>
+       name="expl:VC for _Power_imp_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -323,7 +323,7 @@
       name="WP_parameter _Power_imp_ensures_default.3"
       locfile="../Power.java"
       loclnum="48" loccnumb="16" loccnume="19"
-      expl="loop invariant preservation"
+      expl="3. loop invariant preservation"
       sum="c1568d0b32f81a1502f724647031a670"
       proved="true"
       expanded="false"
@@ -331,7 +331,7 @@
       <label
        name="expl:Method imp, default behavior"/>
       <label
-       name="expl:parameter _Power_imp_ensures_default"/>
+       name="expl:VC for _Power_imp_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -361,7 +361,7 @@
       name="WP_parameter _Power_imp_ensures_default.4"
       locfile="../Power.java"
       loclnum="48" loccnumb="16" loccnume="19"
-      expl="postcondition"
+      expl="4. postcondition"
       sum="78679931416f8530e160e873e6041361"
       proved="true"
       expanded="false"
@@ -369,7 +369,7 @@
       <label
        name="expl:Method imp, default behavior"/>
       <label
-       name="expl:parameter _Power_imp_ensures_default"/>
+       name="expl:VC for _Power_imp_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -385,7 +385,7 @@
     name="WP_parameter _Power_imp_safety"
     locfile="../Power.java"
     loclnum="48" loccnumb="16" loccnume="19"
-    expl="parameter _Power_imp_safety"
+    expl="VC for _Power_imp_safety"
     sum="5b5ba8b5d214a1849ca9e7b875e329a3"
     proved="true"
     expanded="false"
@@ -393,7 +393,7 @@
     <label
      name="expl:Method imp, Safety"/>
     <label
-     name="expl:parameter _Power_imp_safety"/>
+     name="expl:VC for _Power_imp_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -407,7 +407,7 @@
     name="WP_parameter _Power_rec_ensures_default"
     locfile="../Power.java"
     loclnum="35" loccnumb="16" loccnume="19"
-    expl="parameter _Power_rec_ensures_default"
+    expl="VC for _Power_rec_ensures_default"
     sum="fd9bc5bf1e7ae3c59af767c05ccb199c"
     proved="true"
     expanded="false"
@@ -415,7 +415,7 @@
     <label
      name="expl:Method rec, default behavior"/>
     <label
-     name="expl:parameter _Power_rec_ensures_default"/>
+     name="expl:VC for _Power_rec_ensures_default"/>
     <transf
      name="split_goal_wp"
      proved="true"
@@ -424,7 +424,7 @@
       name="WP_parameter _Power_rec_ensures_default.1"
       locfile="../Power.java"
       loclnum="35" loccnumb="16" loccnume="19"
-      expl="postcondition"
+      expl="1. postcondition"
       sum="8baf9ae5f0f05960820a30482ecc8c82"
       proved="true"
       expanded="false"
@@ -432,7 +432,7 @@
       <label
        name="expl:Method rec, default behavior"/>
       <label
-       name="expl:parameter _Power_rec_ensures_default"/>
+       name="expl:VC for _Power_rec_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -446,7 +446,7 @@
       name="WP_parameter _Power_rec_ensures_default.2"
       locfile="../Power.java"
       loclnum="35" loccnumb="16" loccnume="19"
-      expl="postcondition"
+      expl="2. postcondition"
       sum="25ec98d667a4d66a82ec11a5788cdfec"
       proved="true"
       expanded="false"
@@ -454,7 +454,7 @@
       <label
        name="expl:Method rec, default behavior"/>
       <label
-       name="expl:parameter _Power_rec_ensures_default"/>
+       name="expl:VC for _Power_rec_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -484,7 +484,7 @@
       name="WP_parameter _Power_rec_ensures_default.3"
       locfile="../Power.java"
       loclnum="35" loccnumb="16" loccnume="19"
-      expl="postcondition"
+      expl="3. postcondition"
       sum="5449938db9800fa5a1b87a6e0433e31e"
       proved="true"
       expanded="false"
@@ -492,14 +492,14 @@
       <label
        name="expl:Method rec, default behavior"/>
       <label
-       name="expl:parameter _Power_rec_ensures_default"/>
+       name="expl:VC for _Power_rec_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.14"/>
+       <result status="valid" time="0.32"/>
       </proof>
      </goal>
     </transf>
@@ -508,7 +508,7 @@
     name="WP_parameter _Power_rec_safety"
     locfile="../Power.java"
     loclnum="35" loccnumb="16" loccnume="19"
-    expl="parameter _Power_rec_safety"
+    expl="VC for _Power_rec_safety"
     sum="17d3a74fb24d9f8877363c35bd08db20"
     proved="true"
     expanded="false"
@@ -516,7 +516,7 @@
     <label
      name="expl:Method rec, Safety"/>
     <label
-     name="expl:parameter _Power_rec_safety"/>
+     name="expl:VC for _Power_rec_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -528,9 +528,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile=".."
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="postcondition"
+    expl="VC for cons_Object_ensures_default"
     sum="cc5f61d0e8bc9ab7ad9ff31854dcf997"
     proved="true"
     expanded="false"
@@ -538,7 +538,7 @@
     <label
      name="expl:Constructor of class Object, default behavior"/>
     <label
-     name="expl:parameter cons_Object_ensures_default"/>
+     name="expl:VC for cons_Object_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -550,9 +550,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile=".."
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="postcondition"
+    expl="VC for cons_Object_safety"
     sum="5bb0cde2baa7beac6457c4a0c9cc6adb"
     proved="true"
     expanded="false"
@@ -560,7 +560,7 @@
     <label
      name="expl:Constructor of class Object, Safety"/>
     <label
-     name="expl:parameter cons_Object_safety"/>
+     name="expl:VC for cons_Object_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -572,9 +572,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Power_ensures_default"
-    locfile=".."
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="postcondition"
+    expl="VC for cons_Power_ensures_default"
     sum="93599058dfcd02b8d74291ee1e433eec"
     proved="true"
     expanded="false"
@@ -582,7 +582,7 @@
     <label
      name="expl:Constructor of class Power, default behavior"/>
     <label
-     name="expl:parameter cons_Power_ensures_default"/>
+     name="expl:VC for cons_Power_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -594,9 +594,9 @@
    </goal>
    <goal
     name="WP_parameter cons_Power_safety"
-    locfile=".."
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="postcondition"
+    expl="VC for cons_Power_safety"
     sum="4a7fbd7eb6b6c07efb2fcd07f7b8dbea"
     proved="true"
     expanded="false"
@@ -604,7 +604,7 @@
     <label
      name="expl:Constructor of class Power, Safety"/>
     <label
-     name="expl:parameter cons_Power_safety"/>
+     name="expl:VC for cons_Power_safety"/>
     <proof
      prover="0"
      timelimit="5"

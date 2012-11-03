@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../fresh2_sep.mlw"
   verified="false"
@@ -42,7 +42,7 @@
     name="WP_parameter create_ensures_default"
     locfile="../../fresh2_sep.c"
     loclnum="15" loccnumb="4" loccnume="10"
-    expl="postcondition"
+    expl="VC for create_ensures_default"
     sum="a7611513d7e10d0c393bb360ce49231d"
     proved="true"
     expanded="true"
@@ -50,7 +50,7 @@
     <label
      name="expl:Function create, default behavior"/>
     <label
-     name="expl:parameter create_ensures_default"/>
+     name="expl:VC for create_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -96,7 +96,7 @@
     name="WP_parameter create_safety"
     locfile="../../fresh2_sep.c"
     loclnum="15" loccnumb="4" loccnume="10"
-    expl="allocation size"
+    expl="VC for create_safety"
     sum="72a70da641425ba2a958a80faeced8f9"
     proved="true"
     expanded="true"
@@ -104,7 +104,7 @@
     <label
      name="expl:Function create, Safety"/>
     <label
-     name="expl:parameter create_safety"/>
+     name="expl:VC for create_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -150,7 +150,7 @@
     name="WP_parameter smoke_detector_ensures_default"
     locfile="../../fresh2_sep.c"
     loclnum="29" loccnumb="5" loccnume="19"
-    expl="assertion"
+    expl="VC for smoke_detector_ensures_default"
     sum="1cfb0c388e15ded5ca92a12756f8b9d2"
     proved="false"
     expanded="true"
@@ -158,7 +158,7 @@
     <label
      name="expl:Function smoke_detector, default behavior"/>
     <label
-     name="expl:parameter smoke_detector_ensures_default"/>
+     name="expl:VC for smoke_detector_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -173,7 +173,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.93"/>
+     <result status="unknown" time="1.17"/>
     </proof>
     <proof
      prover="2"
@@ -204,7 +204,7 @@
     name="WP_parameter smoke_detector_safety"
     locfile="../../fresh2_sep.c"
     loclnum="29" loccnumb="5" loccnume="19"
-    expl="parameter smoke_detector_safety"
+    expl="VC for smoke_detector_safety"
     sum="1220773bbfdb7f42db229c22b5415deb"
     proved="true"
     expanded="true"
@@ -212,7 +212,7 @@
     <label
      name="expl:Function smoke_detector, Safety"/>
     <label
-     name="expl:parameter smoke_detector_safety"/>
+     name="expl:VC for smoke_detector_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -258,7 +258,7 @@
     name="WP_parameter test_ensures_default"
     locfile="../../fresh2_sep.c"
     loclnum="23" loccnumb="5" loccnume="9"
-    expl="assertion"
+    expl="VC for test_ensures_default"
     sum="82b0a236846e972367f33b01dc223484"
     proved="true"
     expanded="true"
@@ -266,7 +266,7 @@
     <label
      name="expl:Function test, default behavior"/>
     <label
-     name="expl:parameter test_ensures_default"/>
+     name="expl:VC for test_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -312,7 +312,7 @@
     name="WP_parameter test_safety"
     locfile="../../fresh2_sep.c"
     loclnum="23" loccnumb="5" loccnume="9"
-    expl="parameter test_safety"
+    expl="VC for test_safety"
     sum="d7c6b2cb43466f5505c817febd751f05"
     proved="true"
     expanded="true"
@@ -320,7 +320,7 @@
     <label
      name="expl:Function test, Safety"/>
     <label
-     name="expl:parameter test_safety"/>
+     name="expl:VC for test_safety"/>
     <proof
      prover="0"
      timelimit="5"

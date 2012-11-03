@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Sterbenz.jessie/Sterbenz/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,62 +16,62 @@
  <prover
   id="3"
   name="Gappa"
-  version="0.16.0"/>
+  version="0.16.1"/>
  <prover
   id="4"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
  <prover
   id="5"
   name="Z3"
-  version="3.2"/>
+  version="4.2"/>
  <file
   name="../Sterbenz.mlw"
   verified="false"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="Sterbenz.jessie/Sterbenz/../Sterbenz.mlw"
+   locfile="../Sterbenz.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="Sterbenz.jessie/Sterbenz/../Sterbenz.mlw"
+   locfile="../Sterbenz.mlw"
    loclnum="205" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
    <goal
     name="WP_parameter _Sterbenz_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/Sterbenz.c"
+    locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
-    expl="parameter _Sterbenz_ensures_default"
+    expl="VC for _Sterbenz_ensures_default"
     sum="5769a522855f0785ad5b83395afb5799"
     proved="false"
     expanded="true"
     shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FAainfix &lt;=c0.0avalueV0Aainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
     <label
-     name="expl:parameter _Sterbenz_ensures_default"/>
-    <label
      name="expl:Function Sterbenz, default behavior"/>
+    <label
+     name="expl:VC for _Sterbenz_ensures_default"/>
     <transf
      name="split_goal"
      proved="false"
      expanded="true">
      <goal
       name="WP_parameter _Sterbenz_ensures_default.1"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/Sterbenz.c"
+      locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
-      expl="assertion"
+      expl="1. assertion"
       sum="a1eda3d47f0827412dd0c800d0fa34ae"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
       <label
-       name="expl:parameter _Sterbenz_ensures_default"/>
-      <label
        name="expl:Function Sterbenz, default behavior"/>
+      <label
+       name="expl:VC for _Sterbenz_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -82,14 +81,6 @@
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="4"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
@@ -97,20 +88,36 @@
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
+      <proof
+       prover="5"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _Sterbenz_ensures_default.2"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/Sterbenz.c"
+      locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
-      expl="assertion"
+      expl="2. assertion"
       sum="9a62e811e643aec69ca10337005b6aed"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
       <label
-       name="expl:parameter _Sterbenz_ensures_default"/>
-      <label
        name="expl:Function Sterbenz, default behavior"/>
+      <label
+       name="expl:VC for _Sterbenz_ensures_default"/>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
       <proof
        prover="3"
        timelimit="5"
@@ -120,35 +127,27 @@
        <result status="valid" time="0.00"/>
       </proof>
       <proof
-       prover="4"
+       prover="5"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.07"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter _Sterbenz_ensures_default.3"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/Sterbenz.c"
+      locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
-      expl="normal postcondition"
+      expl="3. postcondition"
       sum="00a79628f0443f944ca5d6f2e763a0e4"
       proved="false"
       expanded="true"
       shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
       <label
-       name="expl:parameter _Sterbenz_ensures_default"/>
-      <label
        name="expl:Function Sterbenz, default behavior"/>
+      <label
+       name="expl:VC for _Sterbenz_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -156,6 +155,14 @@
        obsolete="false"
        archived="false">
        <result status="unknown" time="0.05"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.27"/>
       </proof>
       <proof
        prover="2"
@@ -174,14 +181,6 @@
        <result status="timeout" time="5.11"/>
       </proof>
       <proof
-       prover="1"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.27"/>
-      </proof>
-      <proof
        prover="5"
        timelimit="5"
        memlimit="0"
@@ -194,17 +193,17 @@
    </goal>
    <goal
     name="WP_parameter _Sterbenz_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/Sterbenz.c"
+    locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
-    expl="precondition"
+    expl="VC for _Sterbenz_safety"
     sum="0c3642785f7042358ca0720b1242dbc1"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
     <label
-     name="expl:parameter _Sterbenz_safety"/>
-    <label
      name="expl:Function Sterbenz, Safety"/>
+    <label
+     name="expl:VC for _Sterbenz_safety"/>
     <proof
      prover="3"
      timelimit="5"

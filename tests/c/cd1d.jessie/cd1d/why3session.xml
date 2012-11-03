@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="cd1d.jessie/cd1d/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -13,20 +12,20 @@
  <prover
   id="2"
   name="Gappa"
-  version="0.16.0"/>
+  version="0.16.1"/>
  <file
   name="../cd1d.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="cd1d.jessie/cd1d/../cd1d.mlw"
+   locfile="../cd1d.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
    <goal
     name="completeness"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/cd1d.c"
+    locfile="../../cd1d.c"
     loclnum="10" loccnumb="4" loccnume="97"
     expl="Lemma completeness, lemma"
     sum="02dc59d5a18e3df6cf10ebdc30a1054a"
@@ -36,7 +35,7 @@
     <label
      name="expl:Lemma completeness, lemma"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
@@ -44,7 +43,7 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="0"
+     prover="1"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
@@ -55,15 +54,15 @@
   </theory>
   <theory
    name="Jessie_program"
-   locfile="cd1d.jessie/cd1d/../cd1d.mlw"
+   locfile="../cd1d.mlw"
    loclnum="243" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter cd1d_double_ensures_completeness"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/cd1d.c"
+    locfile="../../cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
-    expl="Function cd1d_double, Behavior `completeness&apos;"
+    expl="VC for cd1d_double_ensures_completeness"
     sum="7e0eacc73237cabf3f72b2e2e1e02a2d"
     proved="true"
     expanded="true"
@@ -71,16 +70,16 @@
     <label
      name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
     <label
-     name="expl:parameter cd1d_double_ensures_completeness"/>
+     name="expl:VC for cd1d_double_ensures_completeness"/>
     <transf
      name="split_goal"
      proved="true"
      expanded="true">
      <goal
       name="WP_parameter cd1d_double_ensures_completeness.1"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/cd1d.c"
+      locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
-      expl="normal postcondition"
+      expl="1. postcondition"
       sum="f65f7dd6f912f99fbdf195bcaaf4ad81"
       proved="true"
       expanded="false"
@@ -88,7 +87,7 @@
       <label
        name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
       <label
-       name="expl:parameter cd1d_double_ensures_completeness"/>
+       name="expl:VC for cd1d_double_ensures_completeness"/>
       <proof
        prover="2"
        timelimit="3"
@@ -100,9 +99,9 @@
      </goal>
      <goal
       name="WP_parameter cd1d_double_ensures_completeness.2"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/cd1d.c"
+      locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
-      expl="normal postcondition"
+      expl="2. postcondition"
       sum="001d326f57a3b7aaf01c1d4ac204ff90"
       proved="true"
       expanded="true"
@@ -110,7 +109,7 @@
       <label
        name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
       <label
-       name="expl:parameter cd1d_double_ensures_completeness"/>
+       name="expl:VC for cd1d_double_ensures_completeness"/>
       <proof
        prover="2"
        timelimit="3"
@@ -124,9 +123,9 @@
    </goal>
    <goal
     name="WP_parameter cd1d_double_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/cd1d.c"
+    locfile="../../cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
-    expl="normal postcondition"
+    expl="VC for cd1d_double_ensures_default"
     sum="8666c570c8c571d290bf8d333a93d655"
     proved="true"
     expanded="true"
@@ -134,7 +133,7 @@
     <label
      name="expl:Function cd1d_double, default behavior"/>
     <label
-     name="expl:parameter cd1d_double_ensures_default"/>
+     name="expl:VC for cd1d_double_ensures_default"/>
     <proof
      prover="2"
      timelimit="3"
@@ -146,9 +145,9 @@
    </goal>
    <goal
     name="WP_parameter cd1d_double_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/cd1d.c"
+    locfile="../../cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
-    expl="Function cd1d_double, Safety"
+    expl="VC for cd1d_double_safety"
     sum="9b29e9cf42dbfcd8e84162aa7ccf73c5"
     proved="true"
     expanded="true"
@@ -156,16 +155,16 @@
     <label
      name="expl:Function cd1d_double, Safety"/>
     <label
-     name="expl:parameter cd1d_double_safety"/>
+     name="expl:VC for cd1d_double_safety"/>
     <transf
      name="split_goal"
      proved="true"
      expanded="true">
      <goal
       name="WP_parameter cd1d_double_safety.1"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/cd1d.c"
+      locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
-      expl="precondition"
+      expl="1. floating-point overflow"
       sum="10ab4229f53ad06ed41119546e3a0883"
       proved="true"
       expanded="false"
@@ -173,7 +172,7 @@
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
-       name="expl:parameter cd1d_double_safety"/>
+       name="expl:VC for cd1d_double_safety"/>
       <proof
        prover="2"
        timelimit="3"
@@ -185,9 +184,9 @@
      </goal>
      <goal
       name="WP_parameter cd1d_double_safety.2"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/cd1d.c"
+      locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
-      expl="precondition"
+      expl="2. floating-point overflow"
       sum="1401c2b2a0f1ffeae8c71b4d591f0185"
       proved="true"
       expanded="false"
@@ -195,7 +194,7 @@
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
-       name="expl:parameter cd1d_double_safety"/>
+       name="expl:VC for cd1d_double_safety"/>
       <proof
        prover="2"
        timelimit="3"
@@ -207,9 +206,9 @@
      </goal>
      <goal
       name="WP_parameter cd1d_double_safety.3"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/cd1d.c"
+      locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
-      expl="precondition"
+      expl="3. floating-point overflow"
       sum="a1d3464e8e44ac20ead8d6374335d612"
       proved="true"
       expanded="false"
@@ -217,7 +216,7 @@
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
-       name="expl:parameter cd1d_double_safety"/>
+       name="expl:VC for cd1d_double_safety"/>
       <proof
        prover="2"
        timelimit="3"
@@ -229,9 +228,9 @@
      </goal>
      <goal
       name="WP_parameter cd1d_double_safety.4"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/cd1d.c"
+      locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
-      expl="precondition"
+      expl="4. floating-point overflow"
       sum="14fc4e816527decb302d8ee70368d944"
       proved="true"
       expanded="false"
@@ -239,7 +238,7 @@
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
-       name="expl:parameter cd1d_double_safety"/>
+       name="expl:VC for cd1d_double_safety"/>
       <proof
        prover="2"
        timelimit="3"

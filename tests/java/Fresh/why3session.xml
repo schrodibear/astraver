@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../Fresh.mlw"
   verified="true"
@@ -42,15 +42,15 @@
     name="WP_parameter _Fresh_create_ensures_default"
     locfile="../Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
-    expl="postcondition"
+    expl="VC for _Fresh_create_ensures_default"
     sum="32e0f23987a1e917033ca91bea49f3b7"
     proved="true"
     expanded="true"
     shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
     <label
-     name="expl:parameter _Fresh_create_ensures_default"/>
-    <label
      name="expl:Method create, default behavior"/>
+    <label
+     name="expl:VC for _Fresh_create_ensures_default"/>
     <proof
      prover="1"
      timelimit="5"
@@ -72,35 +72,35 @@
      proved="true"
      expanded="true">
      <goal
-      name="WP_parameter _Fresh_create_ensures_default.0"
+      name="WP_parameter _Fresh_create_ensures_default.1"
       locfile="../Fresh.java"
       loclnum="8" loccnumb="17" loccnume="23"
-      expl="postcondition"
+      expl="1. postcondition"
       sum="32e0f23987a1e917033ca91bea49f3b7"
       proved="true"
       expanded="true"
       shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
       <label
-       name="expl:parameter _Fresh_create_ensures_default"/>
-      <label
        name="expl:Method create, default behavior"/>
+      <label
+       name="expl:VC for _Fresh_create_ensures_default"/>
       <transf
        name="inline_goal"
        proved="true"
        expanded="true">
        <goal
-        name="WP_parameter _Fresh_create_ensures_default.0.0"
+        name="WP_parameter _Fresh_create_ensures_default.1.1"
         locfile="../Fresh.java"
         loclnum="8" loccnumb="17" loccnume="23"
-        expl="postcondition"
+        expl="1. postcondition"
         sum="7ff72f07ed0e99173e76008fbb449266"
         proved="true"
         expanded="true"
         shape="ainfix &gt;=aoffset_maxV0V4c0Aainfix &lt;=aoffset_minV0V4c0NIainfix =V4V3FIasubtagatypeofV1V3a_Fresh_tagAavalidV0ashiftV3V5NIainfix &lt;V5c1Aainfix &lt;=c0V5FAaalloc_extendsV0V2Aastrict_valid_struct_ObjectV3c0ainfix -c1c1V2FFF">
         <label
-         name="expl:parameter _Fresh_create_ensures_default"/>
-        <label
          name="expl:Method create, default behavior"/>
+        <label
+         name="expl:VC for _Fresh_create_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -150,15 +150,15 @@
     name="WP_parameter _Fresh_create_safety"
     locfile="../Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
-    expl="Method create, Safety"
+    expl="VC for _Fresh_create_safety"
     sum="de5a02ad3889767590fc41201b44c588"
     proved="true"
     expanded="true"
     shape="ainfix &gt;=aoffset_maxV2V3c0IainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFAainfix &gt;=c1c0F">
     <label
-     name="expl:parameter _Fresh_create_safety"/>
-    <label
      name="expl:Method create, Safety"/>
+    <label
+     name="expl:VC for _Fresh_create_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -204,15 +204,15 @@
     name="WP_parameter _Fresh_test_ensures_default"
     locfile="../Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
-    expl="assertion"
+    expl="VC for _Fresh_test_ensures_default"
     sum="0a1bf23d15afffc327e0ef703efad74e"
     proved="true"
     expanded="true"
     shape="ainfix =V0V2NIavalidV1V2NFIavalid_struct_FreshV0c0c0V1FF">
     <label
-     name="expl:parameter _Fresh_test_ensures_default"/>
-    <label
      name="expl:Method test, default behavior"/>
+    <label
+     name="expl:VC for _Fresh_test_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -258,15 +258,15 @@
     name="WP_parameter _Fresh_test_safety"
     locfile="../Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
-    expl="Method test, Safety"
+    expl="VC for _Fresh_test_safety"
     sum="390bfc567cd99b56f02728e96685ff09"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _Fresh_test_safety"/>
-    <label
      name="expl:Method test, Safety"/>
+    <label
+     name="expl:VC for _Fresh_test_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -312,15 +312,15 @@
     name="WP_parameter cons_Fresh_ensures_default"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Fresh, default behavior"
+    expl="VC for cons_Fresh_ensures_default"
     sum="2ebc2e1d51c0c1fccae425e1f6e5f5d4"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Fresh_ensures_default"/>
-    <label
      name="expl:Constructor of class Fresh, default behavior"/>
+    <label
+     name="expl:VC for cons_Fresh_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -366,15 +366,15 @@
     name="WP_parameter cons_Fresh_safety"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Fresh, Safety"
+    expl="VC for cons_Fresh_safety"
     sum="171b3bbfcef5b5c1ab7fd9f1c9db536d"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Fresh_safety"/>
-    <label
      name="expl:Constructor of class Fresh, Safety"/>
+    <label
+     name="expl:VC for cons_Fresh_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -420,15 +420,15 @@
     name="WP_parameter cons_Object_ensures_default"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Object, default behavior"
+    expl="VC for cons_Object_ensures_default"
     sum="e0dd4cf9a0136629b5321866a6ad632d"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Object_ensures_default"/>
-    <label
      name="expl:Constructor of class Object, default behavior"/>
+    <label
+     name="expl:VC for cons_Object_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -474,15 +474,15 @@
     name="WP_parameter cons_Object_safety"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Object, Safety"
+    expl="VC for cons_Object_safety"
     sum="2025afd664cb618d328fa4271eb6876c"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Object_safety"/>
-    <label
      name="expl:Constructor of class Object, Safety"/>
+    <label
+     name="expl:VC for cons_Object_safety"/>
     <proof
      prover="0"
      timelimit="5"

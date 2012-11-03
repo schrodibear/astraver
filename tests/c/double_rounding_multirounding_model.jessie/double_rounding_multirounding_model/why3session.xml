@@ -34,7 +34,7 @@
     name="WP_parameter doublerounding_ensures_default"
     locfile="../../double_rounding_multirounding_model.c"
     loclnum="11" loccnumb="7" loccnume="21"
-    expl="assertion"
+    expl="VC for doublerounding_ensures_default"
     sum="7cbc4699c21fe0ccaf9d823546ae3496"
     proved="true"
     expanded="true"
@@ -42,7 +42,7 @@
     <label
      name="expl:Function doublerounding, default behavior"/>
     <label
-     name="expl:parameter doublerounding_ensures_default"/>
+     name="expl:VC for doublerounding_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -72,7 +72,7 @@
     name="WP_parameter doublerounding_safety"
     locfile="../../double_rounding_multirounding_model.c"
     loclnum="11" loccnumb="7" loccnume="21"
-    expl="parameter doublerounding_safety"
+    expl="VC for doublerounding_safety"
     sum="d14dd49d8284b5c6308456298919a284"
     proved="true"
     expanded="true"
@@ -80,7 +80,7 @@
     <label
      name="expl:Function doublerounding, Safety"/>
     <label
-     name="expl:parameter doublerounding_safety"/>
+     name="expl:VC for doublerounding_safety"/>
     <transf
      name="split_goal"
      proved="true"
@@ -89,7 +89,7 @@
       name="WP_parameter doublerounding_safety.1"
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="floating-point overflow"
+      expl="1. floating-point overflow"
       sum="59d9284d8dc04eb64b5021d2dacc1a14"
       proved="true"
       expanded="true"
@@ -97,7 +97,7 @@
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
-       name="expl:parameter doublerounding_safety"/>
+       name="expl:VC for doublerounding_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -127,7 +127,7 @@
       name="WP_parameter doublerounding_safety.2"
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="floating-point overflow"
+      expl="2. floating-point overflow"
       sum="3163a78af271c90971a15eb807427645"
       proved="true"
       expanded="true"
@@ -135,7 +135,7 @@
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
-       name="expl:parameter doublerounding_safety"/>
+       name="expl:VC for doublerounding_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -165,7 +165,7 @@
       name="WP_parameter doublerounding_safety.3"
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="floating-point overflow"
+      expl="3. floating-point overflow"
       sum="279c7642967758d1b7f92d141313de4f"
       proved="true"
       expanded="true"
@@ -173,7 +173,7 @@
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
-       name="expl:parameter doublerounding_safety"/>
+       name="expl:VC for doublerounding_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -203,7 +203,7 @@
       name="WP_parameter doublerounding_safety.4"
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
-      expl="floating-point overflow"
+      expl="4. floating-point overflow"
       sum="fba83e8cb19a1bfcbe8921c42b527147"
       proved="true"
       expanded="true"
@@ -211,7 +211,7 @@
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
-       name="expl:parameter doublerounding_safety"/>
+       name="expl:VC for doublerounding_safety"/>
       <proof
        prover="0"
        timelimit="5"

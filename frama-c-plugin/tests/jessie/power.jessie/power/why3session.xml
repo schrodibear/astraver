@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="power.jessie/power/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -16,13 +15,13 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="power.jessie/power/../power.mlw"
+   locfile="../power.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
    <goal
     name="_L"
-    locfile="/home/cmarche/recherche/why2-trunk/frama-c-plugin/tests/jessie/power.c"
+    locfile="../../power.c"
     loclnum="10" loccnumb="4" loccnume="33"
     expl="Lemma L, lemma"
     sum="54ce782086e3d0de5b23556cddba980b"
@@ -46,13 +45,13 @@
      edited="power_Jessie_model__L_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.18"/>
+     <result status="valid" time="1.83"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="Jessie_program"
-   locfile="power.jessie/power/../power.mlw"
+   locfile="../power.mlw"
    loclnum="208" loccnumb="7" loccnume="21"
    verified="true"
    expanded="false">

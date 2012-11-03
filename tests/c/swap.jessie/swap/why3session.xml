@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="swap.jessie/swap/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -13,37 +12,37 @@
  <prover
   id="2"
   name="Z3"
-  version="2.19"/>
+  version="4.2"/>
  <file
   name="../swap.mlw"
   verified="true"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="swap.jessie/swap/../swap.mlw"
+   locfile="../swap.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="swap.jessie/swap/../swap.mlw"
+   locfile="../swap.mlw"
    loclnum="224" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter swap_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/swap.c"
+    locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
-    expl="normal postcondition"
+    expl="VC for swap_ensures_default"
     sum="e08c8ba4f01abb5ddc84319d41b6551d"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FF">
     <label
-     name="expl:parameter swap_ensures_default"/>
-    <label
      name="expl:Function swap, default behavior"/>
+    <label
+     name="expl:VC for swap_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -53,7 +52,7 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -61,7 +60,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="1"
+     prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -71,27 +70,19 @@
    </goal>
    <goal
     name="WP_parameter swap_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/swap.c"
+    locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
-    expl="normal postcondition"
+    expl="VC for swap_safety"
     sum="e48abe753cb45ecc46c8c0d7c8749bb9"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter swap_safety"/>
-    <label
      name="expl:Function swap, Safety"/>
+    <label
+     name="expl:VC for swap_safety"/>
     <proof
      prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -105,6 +96,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>

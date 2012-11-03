@@ -24,7 +24,7 @@
  <prover
   id="5"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../muller.mlw"
   verified="true"
@@ -161,15 +161,15 @@
     name="WP_parameter m_ensures_default"
     locfile="../../muller.c"
     loclnum="75" loccnumb="3" loccnume="4"
-    expl="Function m, default behavior"
+    expl="VC for m_ensures_default"
     sum="dc44937f6f5d3b669aeb6a422c5c9140"
     proved="true"
     expanded="true"
     shape="iainfix &lt;ainteger_of_int32V10ainteger_of_int32V1iainfix &gt;ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V10c0ainfix =ainteger_of_int32V12anum_of_posc0ainteger_of_int32V14V0V3Aainfix &lt;=ainteger_of_int32V12ainteger_of_int32V14Aainfix &lt;=c0ainteger_of_int32V12Aainfix &lt;=ainteger_of_int32V14ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10c1FIainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9c1Fainfix =ainteger_of_int32V9anum_of_posc0ainteger_of_int32V16V0V3Aainfix &lt;=ainteger_of_int32V9ainteger_of_int32V16Aainfix &lt;=c0ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V16ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V10c1Fiainfix &gt;ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V26c0ainfix =ainteger_of_int32V31anum_of_posc0ainteger_of_int32V34V0V3Aainfix &lt;=ainteger_of_int32V31ainteger_of_int32V34Aainfix &lt;=c0ainteger_of_int32V31Aainfix &lt;=ainteger_of_int32V34ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V34Iainfix =V34V33FIainfix =ainteger_of_int32V33ainfix +ainteger_of_int32V26c1FIainfix =V32astoreV28ashiftV21ainteger_of_int32V29aselectV3ashiftV0ainteger_of_int32V26FIainfix =V31V30FIainfix =ainteger_of_int32V30ainfix +ainteger_of_int32V27c1FIainfix =V29V27Fainfix =ainteger_of_int32V27anum_of_posc0ainteger_of_int32V36V0V3Aainfix &lt;=ainteger_of_int32V27ainteger_of_int32V36Aainfix &lt;=c0ainteger_of_int32V27Aainfix &lt;=ainteger_of_int32V36ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V36Iainfix =V36V35FIainfix =ainteger_of_int32V35ainfix +ainteger_of_int32V26c1FIainfix &lt;ainteger_of_int32V26ainteger_of_int32V1Iainfix =ainteger_of_int32V27anum_of_posc0ainteger_of_int32V26V0V3Aainfix &lt;=ainteger_of_int32V27ainteger_of_int32V26Aainfix &lt;=c0ainteger_of_int32V27Aainfix &lt;=ainteger_of_int32V26ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V26FAainfix =ainteger_of_int32V23anum_of_posc0ainteger_of_int32V25V0V3Aainfix &lt;=ainteger_of_int32V23ainteger_of_int32V25Aainfix &lt;=c0ainteger_of_int32V23Aainfix &lt;=ainteger_of_int32V25ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V25Iainfix =V25V24FIainfix =ainteger_of_int32V24c0FIainfix =V23V22FIainfix =ainteger_of_int32V22c0FIainfix =V21V20FIainstanceofV18V20aintP_tagAaalloc_freshV4V20ainteger_of_uint32V17Aaalloc_extendsV4V19Aastrict_valid_struct_intPV20c0ainfix -ainteger_of_uint32V17c1V19FFIainfix =ainteger_of_uint32V17ainteger_of_int32V9FIainfix =ainteger_of_int32V9anum_of_posc0ainteger_of_int32V10V0V3Aainfix &lt;=ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V10FAainfix =ainteger_of_int32V6anum_of_posc0ainteger_of_int32V8V0V3Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V8Aainfix &lt;=c0ainteger_of_int32V6Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V8Iainfix =V8V7FIainfix =ainteger_of_int32V7c0FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV2V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=ainteger_of_int32V1c0FF">
     <label
-     name="expl:parameter m_ensures_default"/>
-    <label
      name="expl:Function m, default behavior"/>
+    <label
+     name="expl:VC for m_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -215,15 +215,15 @@
     name="WP_parameter m_safety"
     locfile="../../muller.c"
     loclnum="75" loccnumb="3" loccnume="4"
-    expl="Function m, Safety"
+    expl="VC for m_safety"
     sum="2f2953ba609aa8187fd91800180587f5"
     proved="true"
     expanded="true"
     shape="iainfix &lt;ainteger_of_int32V10ainteger_of_int32V1iainfix &gt;ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V10c0ainfix &lt;ainfix -ainteger_of_int32V1ainteger_of_int32V14ainfix -ainteger_of_int32V1ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V1ainteger_of_int32V10Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10c1FAainfix &lt;=ainfix +ainteger_of_int32V10c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10c1Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9c1FAainfix &lt;=ainfix +ainteger_of_int32V9c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9c1ainfix &lt;ainfix -ainteger_of_int32V1ainteger_of_int32V16ainfix -ainteger_of_int32V1ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V1ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V10c1FAainfix &lt;=ainfix +ainteger_of_int32V10c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10c1Aainfix &lt;=ainteger_of_int32V10aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainteger_of_int32V10iainfix &gt;ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V26c0ainfix &lt;ainfix -ainteger_of_int32V1ainteger_of_int32V34ainfix -ainteger_of_int32V1ainteger_of_int32V26Aainfix &lt;=c0ainfix -ainteger_of_int32V1ainteger_of_int32V26Iainfix =V34V33FIainfix =ainteger_of_int32V33ainfix +ainteger_of_int32V26c1FAainfix &lt;=ainfix +ainteger_of_int32V26c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V26c1Iainfix =V32astoreV28ashiftV21ainteger_of_int32V29aselectV3ashiftV0ainteger_of_int32V26FAainfix &lt;=ainteger_of_int32V29aoffset_maxV19V21Aainfix &lt;=aoffset_minV19V21ainteger_of_int32V29Aainfix &lt;=ainteger_of_int32V26aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainteger_of_int32V26Iainfix =V31V30FIainfix =ainteger_of_int32V30ainfix +ainteger_of_int32V27c1FAainfix &lt;=ainfix +ainteger_of_int32V27c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V27c1Iainfix =V29V27Fainfix &lt;ainfix -ainteger_of_int32V1ainteger_of_int32V36ainfix -ainteger_of_int32V1ainteger_of_int32V26Aainfix &lt;=c0ainfix -ainteger_of_int32V1ainteger_of_int32V26Iainfix =V36V35FIainfix =ainteger_of_int32V35ainfix +ainteger_of_int32V26c1FAainfix &lt;=ainfix +ainteger_of_int32V26c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V26c1Aainfix &lt;=ainteger_of_int32V26aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainteger_of_int32V26Iainfix &lt;ainteger_of_int32V26ainteger_of_int32V1Iainfix =ainteger_of_int32V27anum_of_posc0ainteger_of_int32V26V0V3Aainfix &lt;=ainteger_of_int32V27ainteger_of_int32V26Aainfix &lt;=c0ainteger_of_int32V27Aainfix &lt;=ainteger_of_int32V26ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V26FIainfix =V25V24FIainfix =ainteger_of_int32V24c0FIainfix =V23V22FIainfix =ainteger_of_int32V22c0FIainfix =V21V20FIainstanceofV18V20aintP_tagAaalloc_freshV4V20ainteger_of_uint32V17Aaalloc_extendsV4V19Aastrict_valid_struct_intPV20c0ainfix -ainteger_of_uint32V17c1V19FFAainfix &gt;=ainteger_of_uint32V17c0Iainfix =ainteger_of_uint32V17ainteger_of_int32V9FAainfix &lt;=ainteger_of_int32V9c4294967295Aainfix &lt;=c0ainteger_of_int32V9Iainfix =ainteger_of_int32V9anum_of_posc0ainteger_of_int32V10V0V3Aainfix &lt;=ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7c0FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV2V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=ainteger_of_int32V1c0FF">
     <label
-     name="expl:parameter m_safety"/>
-    <label
      name="expl:Function m, Safety"/>
+    <label
+     name="expl:VC for m_safety"/>
     <proof
      prover="0"
      timelimit="5"

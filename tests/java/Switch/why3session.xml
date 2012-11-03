@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Switch/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -13,45 +12,37 @@
  <prover
   id="2"
   name="Z3"
-  version="2.19"/>
+  version="4.2"/>
  <file
   name="../Switch.mlw"
   verified="true"
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="Switch/../Switch.mlw"
+   locfile="../Switch.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="Switch/../Switch.mlw"
+   locfile="../Switch.mlw"
    loclnum="295" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Switch_test1_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
+    locfile="../Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
-    expl="normal postcondition"
+    expl="VC for _Switch_test1_ensures_default"
     sum="1acd59b170321a674649fc73ed1ae7c0"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _Switch_test1_ensures_default"/>
-    <label
      name="expl:Method test1, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for _Switch_test1_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -68,20 +59,44 @@
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _Switch_test1_ensures_normal"
-    locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
+    locfile="../Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
-    expl="parameter _Switch_test1_ensures_normal"
+    expl="VC for _Switch_test1_ensures_normal"
     sum="ab8069c97165730689139bb7aeca372c"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c2FF">
     <label
-     name="expl:parameter _Switch_test1_ensures_normal"/>
-    <label
      name="expl:Method test1, Behavior `normal&apos;"/>
+    <label
+     name="expl:VC for _Switch_test1_ensures_normal"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
     <proof
      prover="2"
      timelimit="5"
@@ -90,44 +105,20 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter _Switch_test1_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
+    locfile="../Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
-    expl="normal postcondition"
+    expl="VC for _Switch_test1_safety"
     sum="c6e78ccb93914635bc7513cc7123ab24"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _Switch_test1_safety"/>
-    <label
      name="expl:Method test1, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for _Switch_test1_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -144,20 +135,6 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Switch_test2_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
-    loclnum="56" loccnumb="22" loccnume="27"
-    expl="normal postcondition"
-    sum="227f7dff48bd4d2e588b82bffd0177af"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter _Switch_test2_ensures_default"/>
-    <label
-     name="expl:Method test2, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
@@ -166,6 +143,20 @@
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Switch_test2_ensures_default"
+    locfile="../Switch.java"
+    loclnum="56" loccnumb="22" loccnume="27"
+    expl="VC for _Switch_test2_ensures_default"
+    sum="227f7dff48bd4d2e588b82bffd0177af"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Method test2, default behavior"/>
+    <label
+     name="expl:VC for _Switch_test2_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -182,28 +173,28 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Switch_test2_ensures_normal"
-    locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
-    loclnum="56" loccnumb="22" loccnume="27"
-    expl="parameter _Switch_test2_ensures_normal"
-    sum="93d67ae4df1208e672453cdf031770dc"
-    proved="true"
-    expanded="true"
-    shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V3c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fiainfix =ainteger_of_int32V0c4Oainfix =ainteger_of_int32V0c7ainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V6c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fainfix =ainteger_of_int32V9c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V9c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c2FF">
-    <label
-     name="expl:parameter _Switch_test2_ensures_normal"/>
-    <label
-     name="expl:Method test2, Behavior `normal&apos;"/>
     <proof
      prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.00"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Switch_test2_ensures_normal"
+    locfile="../Switch.java"
+    loclnum="56" loccnumb="22" loccnume="27"
+    expl="VC for _Switch_test2_ensures_normal"
+    sum="93d67ae4df1208e672453cdf031770dc"
+    proved="true"
+    expanded="true"
+    shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V3c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fiainfix =ainteger_of_int32V0c4Oainfix =ainteger_of_int32V0c7ainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V6c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fainfix =ainteger_of_int32V9c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V9c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c2FF">
+    <label
+     name="expl:Method test2, Behavior `normal&apos;"/>
+    <label
+     name="expl:VC for _Switch_test2_ensures_normal"/>
     <proof
      prover="0"
      timelimit="5"
@@ -214,6 +205,14 @@
     </proof>
     <proof
      prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -223,25 +222,17 @@
    </goal>
    <goal
     name="WP_parameter _Switch_test2_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
+    locfile="../Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
-    expl="normal postcondition"
+    expl="VC for _Switch_test2_safety"
     sum="b52e55a8a9e970b215a749140b2841aa"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _Switch_test2_safety"/>
-    <label
      name="expl:Method test2, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.01"/>
-    </proof>
+    <label
+     name="expl:VC for _Switch_test2_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -258,28 +249,28 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Switch_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_Switch_ensures_default"
     sum="f4f1f90212209e9c2c94edd8f62ac8da"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Switch_ensures_default"/>
-    <label
      name="expl:Constructor of class Switch, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for cons_Switch_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -296,28 +287,28 @@
      archived="false">
      <result status="valid" time="0.03"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_Switch_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
+    expl="VC for cons_Switch_safety"
     sum="9186aa0718990a0d10133729f50c4797"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Switch_safety"/>
-    <label
      name="expl:Constructor of class Switch, Safety"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for cons_Switch_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -333,6 +324,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

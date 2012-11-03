@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../Isqrt.mlw"
   verified="true"
@@ -42,15 +42,15 @@
     name="WP_parameter _Isqrt_isqrt_ensures_default"
     locfile="../Isqrt.java"
     loclnum="42" loccnumb="11" loccnume="16"
-    expl="Method isqrt, default behavior"
+    expl="VC for _Isqrt_isqrt_ensures_default"
     sum="460e89de91d06b563c9890b5e33fb4b8"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=V1V0ainfix =V4asqrainfix +V3c1Aainfix &gt;=V0asqrV3Aainfix &gt;=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1Fainfix &lt;V0asqrainfix +V5c1Aainfix &lt;=asqrV5V0Aainfix &gt;=V5c0Iainfix =V5V2FIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FAainfix =c1asqrainfix +c0c1Aainfix &gt;=V0asqrc0Aainfix &gt;=c0c0Iainfix &gt;=V0c0F">
     <label
-     name="expl:parameter _Isqrt_isqrt_ensures_default"/>
-    <label
      name="expl:Method isqrt, default behavior"/>
+    <label
+     name="expl:VC for _Isqrt_isqrt_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -81,7 +81,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="7.27"/>
+     <result status="timeout" time="5.15"/>
     </proof>
     <proof
      prover="4"
@@ -99,15 +99,15 @@
       name="WP_parameter _Isqrt_isqrt_ensures_default.1"
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
-      expl="loop invariant init"
+      expl="1. loop invariant init"
       sum="76c6d2249091089c11c9dd75597b4304"
       proved="true"
       expanded="false"
       shape="ainfix =c1asqrainfix +c0c1Aainfix &gt;=V0asqrc0Aainfix &gt;=c0c0Iainfix &gt;=V0c0F">
       <label
-       name="expl:parameter _Isqrt_isqrt_ensures_default"/>
-      <label
        name="expl:Method isqrt, default behavior"/>
+      <label
+       name="expl:VC for _Isqrt_isqrt_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -153,15 +153,15 @@
       name="WP_parameter _Isqrt_isqrt_ensures_default.2"
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
-      expl="loop invariant preservation"
+      expl="2. loop invariant preservation"
       sum="971e873acb5da1856a3123290cf15064"
       proved="true"
       expanded="false"
       shape="ainfix =V4asqrainfix +V3c1Aainfix &gt;=V0asqrV3Aainfix &gt;=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
       <label
-       name="expl:parameter _Isqrt_isqrt_ensures_default"/>
-      <label
        name="expl:Method isqrt, default behavior"/>
+      <label
+       name="expl:VC for _Isqrt_isqrt_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -192,7 +192,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="7.65"/>
+       <result status="timeout" time="5.14"/>
       </proof>
       <proof
        prover="4"
@@ -200,7 +200,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="6.91"/>
+       <result status="timeout" time="5.12"/>
       </proof>
       <transf
        name="split_goal_wp"
@@ -210,15 +210,15 @@
         name="WP_parameter _Isqrt_isqrt_ensures_default.2.1"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
-        expl="Method isqrt, default behavior"
+        expl="1."
         sum="553affec16e8a5668149315a258a6c6c"
         proved="true"
         expanded="false"
         shape="ainfix &gt;=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
         <label
-         name="expl:parameter _Isqrt_isqrt_ensures_default"/>
-        <label
          name="expl:Method isqrt, default behavior"/>
+        <label
+         name="expl:VC for _Isqrt_isqrt_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -264,15 +264,15 @@
         name="WP_parameter _Isqrt_isqrt_ensures_default.2.2"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
-        expl="Method isqrt, default behavior"
+        expl="2."
         sum="cb5254f071c62078602870f6b746c4aa"
         proved="true"
         expanded="false"
         shape="ainfix &gt;=V0asqrV3Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
         <label
-         name="expl:parameter _Isqrt_isqrt_ensures_default"/>
-        <label
          name="expl:Method isqrt, default behavior"/>
+        <label
+         name="expl:VC for _Isqrt_isqrt_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -303,7 +303,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="7.03"/>
+         <result status="timeout" time="5.13"/>
         </proof>
         <proof
          prover="4"
@@ -311,22 +311,22 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="6.71"/>
+         <result status="timeout" time="5.13"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _Isqrt_isqrt_ensures_default.2.3"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
-        expl="Method isqrt, default behavior"
+        expl="3."
         sum="05e890f90ed0b87ea15d4deff1e585c6"
         proved="true"
         expanded="false"
         shape="ainfix =V4asqrainfix +V3c1Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
         <label
-         name="expl:parameter _Isqrt_isqrt_ensures_default"/>
-        <label
          name="expl:Method isqrt, default behavior"/>
+        <label
+         name="expl:VC for _Isqrt_isqrt_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -357,7 +357,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="7.02"/>
+         <result status="timeout" time="5.12"/>
         </proof>
         <proof
          prover="4"
@@ -365,7 +365,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="6.31"/>
+         <result status="timeout" time="5.12"/>
         </proof>
        </goal>
       </transf>
@@ -374,15 +374,15 @@
       name="WP_parameter _Isqrt_isqrt_ensures_default.3"
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
-      expl="postcondition"
+      expl="3. postcondition"
       sum="c6d72f5f349b9457430b66bbd9009432"
       proved="true"
       expanded="false"
       shape="ainfix &lt;V0asqrainfix +V3c1Aainfix &lt;=asqrV3V0Aainfix &gt;=V3c0Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
       <label
-       name="expl:parameter _Isqrt_isqrt_ensures_default"/>
-      <label
        name="expl:Method isqrt, default behavior"/>
+      <label
+       name="expl:VC for _Isqrt_isqrt_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -413,7 +413,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="7.04"/>
+       <result status="timeout" time="5.12"/>
       </proof>
       <proof
        prover="4"
@@ -421,7 +421,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="6.72"/>
+       <result status="timeout" time="5.20"/>
       </proof>
       <transf
        name="split_goal_wp"
@@ -431,15 +431,15 @@
         name="WP_parameter _Isqrt_isqrt_ensures_default.3.1"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
-        expl="Method isqrt, default behavior"
+        expl="1."
         sum="871abfe93dd5430986aa45a959ddf075"
         proved="true"
         expanded="false"
         shape="ainfix &gt;=V3c0Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
         <label
-         name="expl:parameter _Isqrt_isqrt_ensures_default"/>
-        <label
          name="expl:Method isqrt, default behavior"/>
+        <label
+         name="expl:VC for _Isqrt_isqrt_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -485,15 +485,15 @@
         name="WP_parameter _Isqrt_isqrt_ensures_default.3.2"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
-        expl="Method isqrt, default behavior"
+        expl="2."
         sum="7941e6ccd37bd077b235864925241017"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=asqrV3V0Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
         <label
-         name="expl:parameter _Isqrt_isqrt_ensures_default"/>
-        <label
          name="expl:Method isqrt, default behavior"/>
+        <label
+         name="expl:VC for _Isqrt_isqrt_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -532,22 +532,22 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="6.91"/>
+         <result status="timeout" time="5.13"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _Isqrt_isqrt_ensures_default.3.3"
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
-        expl="Method isqrt, default behavior"
+        expl="3."
         sum="56e2debcb59e53f8501959e8f3e778d8"
         proved="true"
         expanded="false"
         shape="ainfix &lt;V0asqrainfix +V3c1Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
         <label
-         name="expl:parameter _Isqrt_isqrt_ensures_default"/>
-        <label
          name="expl:Method isqrt, default behavior"/>
+        <label
+         name="expl:VC for _Isqrt_isqrt_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -578,7 +578,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="7.15"/>
+         <result status="timeout" time="5.13"/>
         </proof>
         <proof
          prover="4"
@@ -586,7 +586,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="7.34"/>
+         <result status="timeout" time="5.13"/>
         </proof>
        </goal>
       </transf>
@@ -597,15 +597,15 @@
     name="WP_parameter _Isqrt_isqrt_safety"
     locfile="../Isqrt.java"
     loclnum="42" loccnumb="11" loccnume="16"
-    expl="loop variant decrease"
+    expl="VC for _Isqrt_isqrt_safety"
     sum="7c2f4b78bec52c8fdf01254a019ba948"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -V0V3ainfix -V0V2Aainfix &lt;=c0ainfix -V0V2Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
     <label
-     name="expl:parameter _Isqrt_isqrt_safety"/>
-    <label
      name="expl:Method isqrt, Safety"/>
+    <label
+     name="expl:VC for _Isqrt_isqrt_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -651,15 +651,15 @@
     name="WP_parameter _Isqrt_main_ensures_default"
     locfile="../Isqrt.java"
     loclnum="52" loccnumb="11" loccnume="15"
-    expl="Method main, default behavior"
+    expl="VC for _Isqrt_main_ensures_default"
     sum="b58c3610a1f1ba1131c87ace3cae9973"
     proved="true"
     expanded="true"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix &gt;V1c4NAainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
     <label
-     name="expl:parameter _Isqrt_main_ensures_default"/>
-    <label
      name="expl:Method main, default behavior"/>
+    <label
+     name="expl:VC for _Isqrt_main_ensures_default"/>
     <proof
      prover="0"
      timelimit="30"
@@ -682,7 +682,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="4.10"/>
+     <result status="unknown" time="6.81"/>
     </proof>
     <proof
      prover="3"
@@ -708,15 +708,15 @@
       name="WP_parameter _Isqrt_main_ensures_default.1"
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
-      expl="assertion"
+      expl="1. assertion"
       sum="09bb1db28657240d17d9043f7c1b59fb"
       proved="true"
       expanded="true"
       shape="ainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
       <label
-       name="expl:parameter _Isqrt_main_ensures_default"/>
-      <label
        name="expl:Method main, default behavior"/>
+      <label
+       name="expl:VC for _Isqrt_main_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -762,15 +762,15 @@
       name="WP_parameter _Isqrt_main_ensures_default.2"
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
-      expl="assertion"
+      expl="2. assertion"
       sum="508100cad90c651aa4e489e22c188873"
       proved="true"
       expanded="true"
       shape="ainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
       <label
-       name="expl:parameter _Isqrt_main_ensures_default"/>
-      <label
        name="expl:Method main, default behavior"/>
+      <label
+       name="expl:VC for _Isqrt_main_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -793,7 +793,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="4.44"/>
+       <result status="unknown" time="5.93"/>
       </proof>
       <proof
        prover="3"
@@ -816,15 +816,15 @@
       name="WP_parameter _Isqrt_main_ensures_default.3"
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
-      expl="postcondition"
+      expl="3. postcondition"
       sum="3ee98d3a232d5fb7d730e325a8bcb842"
       proved="true"
       expanded="true"
       shape="ainfix =V2c4Iainfix =V2V1FIainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
       <label
-       name="expl:parameter _Isqrt_main_ensures_default"/>
-      <label
        name="expl:Method main, default behavior"/>
+      <label
+       name="expl:VC for _Isqrt_main_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -872,15 +872,15 @@
     name="WP_parameter _Isqrt_main_safety"
     locfile="../Isqrt.java"
     loclnum="52" loccnumb="11" loccnume="15"
-    expl="precondition for call"
+    expl="VC for _Isqrt_main_safety"
     sum="7e55613f84dc1d6948b9143112e4a7d0"
     proved="true"
     expanded="false"
     shape="ainfix &gt;=c17c0">
     <label
-     name="expl:parameter _Isqrt_main_safety"/>
-    <label
      name="expl:Method main, Safety"/>
+    <label
+     name="expl:VC for _Isqrt_main_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -926,15 +926,15 @@
     name="WP_parameter cons_Isqrt_ensures_default"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Isqrt, default behavior"
+    expl="VC for cons_Isqrt_ensures_default"
     sum="5ff6ef0b6f26ac9efdc2fa2d90cefa5e"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Isqrt_ensures_default"/>
-    <label
      name="expl:Constructor of class Isqrt, default behavior"/>
+    <label
+     name="expl:VC for cons_Isqrt_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -980,15 +980,15 @@
     name="WP_parameter cons_Isqrt_safety"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Isqrt, Safety"
+    expl="VC for cons_Isqrt_safety"
     sum="1e434a479aa96cb9b2ae13ad329084b6"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Isqrt_safety"/>
-    <label
      name="expl:Constructor of class Isqrt, Safety"/>
+    <label
+     name="expl:VC for cons_Isqrt_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1034,15 +1034,15 @@
     name="WP_parameter cons_Object_ensures_default"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Object, default behavior"
+    expl="VC for cons_Object_ensures_default"
     sum="3c46c04d761316f9723df30bcf2f7dd3"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Object_ensures_default"/>
-    <label
      name="expl:Constructor of class Object, default behavior"/>
+    <label
+     name="expl:VC for cons_Object_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1088,15 +1088,15 @@
     name="WP_parameter cons_Object_safety"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Object, Safety"
+    expl="VC for cons_Object_safety"
     sum="5e139a48714a356c86797c8e1236b747"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Object_safety"/>
-    <label
      name="expl:Constructor of class Object, Safety"/>
+    <label
+     name="expl:VC for cons_Object_safety"/>
     <proof
      prover="0"
      timelimit="5"

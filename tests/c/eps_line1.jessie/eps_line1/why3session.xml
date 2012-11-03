@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="eps_line1.jessie/eps_line1/why3session.xml" shape_version="2">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,29 +16,29 @@
  <prover
   id="3"
   name="Gappa"
-  version="0.16.0"/>
+  version="0.16.1"/>
  <file
   name="../eps_line1.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="eps_line1.jessie/eps_line1/../eps_line1.mlw"
+   locfile="../eps_line1.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="eps_line1.jessie/eps_line1/../eps_line1.mlw"
+   locfile="../eps_line1.mlw"
    loclnum="236" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter eps_line_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+    locfile="../../eps_line1.c"
     loclnum="30" loccnumb="4" loccnume="12"
-    expl="normal postcondition"
+    expl="VC for eps_line_ensures_default"
     sum="56588c34be75e2a7d082090a1a112f4c"
     proved="true"
     expanded="true"
@@ -47,7 +46,7 @@
     <label
      name="expl:Function eps_line, default behavior"/>
     <label
-     name="expl:parameter eps_line_ensures_default"/>
+     name="expl:VC for eps_line_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -59,9 +58,9 @@
    </goal>
    <goal
     name="WP_parameter eps_line_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+    locfile="../../eps_line1.c"
     loclnum="30" loccnumb="4" loccnume="12"
-    expl="Function eps_line, Safety"
+    expl="VC for eps_line_safety"
     sum="012bd153aa69ddf0458dcf46f0e4b7a7"
     proved="true"
     expanded="true"
@@ -69,16 +68,16 @@
     <label
      name="expl:Function eps_line, Safety"/>
     <label
-     name="expl:parameter eps_line_safety"/>
+     name="expl:VC for eps_line_safety"/>
     <transf
      name="split_goal"
      proved="true"
      expanded="true">
      <goal
       name="WP_parameter eps_line_safety.1"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="1. floating-point overflow"
       sum="f559d507b7ec1e18ca10b5abadad2504"
       proved="true"
       expanded="true"
@@ -86,7 +85,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -98,9 +97,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.2"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="2. floating-point overflow"
       sum="4d751ea86fbdd56a90665c82afbce519"
       proved="true"
       expanded="true"
@@ -108,7 +107,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -120,9 +119,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.3"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="3. floating-point overflow"
       sum="80e0e2902d87c076357f6313b005c735"
       proved="true"
       expanded="true"
@@ -130,7 +129,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -142,9 +141,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.4"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="4. floating-point overflow"
       sum="0fd5825c572b5ca8beabcb5ae61d3fc4"
       proved="true"
       expanded="true"
@@ -152,7 +151,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -164,9 +163,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.5"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="5. floating-point overflow"
       sum="c6c2778a34019c44cd3ff57926c8b25c"
       proved="true"
       expanded="true"
@@ -174,7 +173,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -186,9 +185,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.6"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="6. precondition for call"
       sum="bc6792a6d782dc8ac84ce7112b387e09"
       proved="true"
       expanded="true"
@@ -196,7 +195,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -208,9 +207,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.7"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="7. floating-point overflow"
       sum="0ebab36f64695c74dae4099a8d32d36d"
       proved="true"
       expanded="true"
@@ -218,7 +217,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -230,9 +229,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.8"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="8. floating-point overflow"
       sum="a797c8252e05525c54b51f81a1685546"
       proved="true"
       expanded="true"
@@ -240,7 +239,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -252,9 +251,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.9"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="9. floating-point overflow"
       sum="469919bc49270d673a76c741a15a212d"
       proved="true"
       expanded="true"
@@ -262,7 +261,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -274,9 +273,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.10"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="10. floating-point overflow"
       sum="43df3cce0181a2c885ccec7318c37afa"
       proved="true"
       expanded="true"
@@ -284,7 +283,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -296,9 +295,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.11"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="11. floating-point overflow"
       sum="6abbb1a548b6afb54dbb23b4a7bea00e"
       proved="true"
       expanded="true"
@@ -306,7 +305,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -318,9 +317,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.12"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="12. precondition for call"
       sum="5fa81af528fa08a50bc524d09dac80e5"
       proved="true"
       expanded="true"
@@ -328,7 +327,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="5"
@@ -340,9 +339,9 @@
      </goal>
      <goal
       name="WP_parameter eps_line_safety.13"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+      locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
-      expl="precondition"
+      expl="13. arithmetic overflow"
       sum="72a371b68bb216ddd01063ef3007c55f"
       proved="true"
       expanded="true"
@@ -350,7 +349,7 @@
       <label
        name="expl:Function eps_line, Safety"/>
       <label
-       name="expl:parameter eps_line_safety"/>
+       name="expl:VC for eps_line_safety"/>
       <proof
        prover="3"
        timelimit="30"
@@ -364,9 +363,9 @@
    </goal>
    <goal
     name="WP_parameter sign_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+    locfile="../../eps_line1.c"
     loclnum="11" loccnumb="4" loccnume="8"
-    expl="Function sign, default behavior"
+    expl="VC for sign_ensures_default"
     sum="a4f3259a54a424f5dc5e2a978f4583c4"
     proved="true"
     expanded="true"
@@ -374,7 +373,7 @@
     <label
      name="expl:Function sign, default behavior"/>
     <label
-     name="expl:parameter sign_ensures_default"/>
+     name="expl:VC for sign_ensures_default"/>
     <proof
      prover="0"
      timelimit="30"
@@ -384,14 +383,6 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="30"
-     memlimit="100"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.07"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="30"
      memlimit="100"
@@ -399,12 +390,20 @@
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="30"
+     memlimit="100"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter sign_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/eps_line1.c"
+    locfile="../../eps_line1.c"
     loclnum="11" loccnumb="4" loccnume="8"
-    expl="normal postcondition"
+    expl="VC for sign_safety"
     sum="51220a7c469f8ca165c22af5899558fd"
     proved="true"
     expanded="true"
@@ -412,15 +411,7 @@
     <label
      name="expl:Function sign, Safety"/>
     <label
-     name="expl:parameter sign_safety"/>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+     name="expl:VC for sign_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -428,6 +419,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>
