@@ -72,7 +72,7 @@ behavior default:
    {  (C_9 : (f = (C_8 : create())));
       
       {  
-         (assert for default: (C_10 : (this != f)));
+         (assert for default: (C_10 : (jessie : (this != f))));
          ()
       };
       
@@ -92,7 +92,7 @@ behavior default:
       (C_18 : (s2 = (C_17 : create())));
       
       {  
-         (assert for default: (C_19 : (0 == 1)));
+         (assert for default: (C_19 : (jessie : (0 == 1))));
          ()
       };
       

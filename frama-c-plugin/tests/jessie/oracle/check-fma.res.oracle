@@ -57,7 +57,8 @@ behavior default:
       (C_4 : (x = (C_3 : (tmp * (C_2 : (tmp - (2.0 :> double)))))));
       
       {  
-         (assert for default: (C_5 : ((x :> real) == \double_exact(x))));
+         (assert for default: (C_5 : (jessie : ((x :> real) ==
+                                                 \double_exact(x)))));
          ()
       };
       
@@ -65,7 +66,8 @@ behavior default:
       };
       
       {  
-         (assert for default: (C_8 : ((y :> real) == \double_exact(y))));
+         (assert for default: (C_8 : (jessie : ((y :> real) ==
+                                                 \double_exact(y)))));
          ()
       };
       
@@ -73,7 +75,7 @@ behavior default:
       };
       
       {  
-         (assert for default: (C_12 : ((res :> real) == 0.0)));
+         (assert for default: (C_12 : (jessie : ((res :> real) == 0.0))));
          ()
       };
       (C_13 : (__retres = 0));

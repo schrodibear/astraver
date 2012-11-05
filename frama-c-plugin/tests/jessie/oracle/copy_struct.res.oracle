@@ -144,10 +144,10 @@ behavior default:
 }
 
 unit g(T[..] p_0)
-  requires (C_210 : ((C_211 : (\offset_min(p_0) <= 0)) &&
-                      (C_212 : (\offset_max(p_0) >= 0))));
+  requires (C_208 : ((C_209 : (\offset_min(p_0) <= 0)) &&
+                      (C_210 : (\offset_max(p_0) >= 0))));
 behavior default:
-  ensures (C_209 : true);
+  ensures (C_207 : true);
 {  
    (var T[0] copy);
    
@@ -182,30 +182,30 @@ behavior default:
       (C_194 : ((C_193 : (C_192 : copy2.a).i) = 0));
       
       {  
-         (assert for default: (C_195 : (p_0.a.i == copy.a.i)));
+         (assert for default: (C_195 : (jessie : (p_0.a.i == copy.a.i))));
          ()
       };
       (C_198 : ((C_197 : (C_196 : copy.a).j) = 1));
       
       {  
-         (assert for default: (C_199 : (p_0.a.j == copy2.a.j)));
+         (assert for default: (C_199 : (jessie : (p_0.a.j == copy2.a.j))));
          ()
       };
       (C_202 : ((C_201 : (C_200 : p_0.b).i) = 0));
       
       {  
-         (assert for default: (C_203 : (copy.b.i == copy2.b.i)));
+         (assert for default: (C_203 : (jessie : (copy.b.i == copy2.b.i))));
          ()
       };
       
       {  
-         (assert for default: (C_204 : ((C_205 : (p_0.b.j == copy.b.j)) &&
-                                         (C_206 : (copy.b.j == copy2.b.j)))));
+         (assert for default: (C_204 : (jessie : ((p_0.b.j == copy.b.j) &&
+                                                   (copy.b.j == copy2.b.j)))));
          ()
       };
       
-      {  (C_207 : (free(copy)));
-         (C_208 : (free(copy2)));
+      {  (C_205 : (free(copy)));
+         (C_206 : (free(copy2)));
          
          (return ())
       }
@@ -1254,18 +1254,16 @@ let g_ensures_default =
                              select(T_b_copy2_19, copy2))))) }; void); void;
           (assert
           { (JC_<somenum>:
-            ((JC_<somenum>:
-             (integer_of_int32(select(S_j_p_0_9, select(T_b_p_0_9, p_0))) = 
-             integer_of_int32(select(S_j_copy_18, select(T_b_copy_18, copy)))))
-            and (JC_<somenum>:
-                (integer_of_int32(select(S_j_copy_18,
+            ((integer_of_int32(select(S_j_p_0_9, select(T_b_p_0_9, p_0))) = 
+             integer_of_int32(select(S_j_copy_18, select(T_b_copy_18, copy))))
+            and (integer_of_int32(select(S_j_copy_18,
                                   select(T_b_copy_18, copy))) = integer_of_int32(
                                                                 select(S_j_copy2_19,
                                                                 select(T_b_copy2_19,
-                                                                copy2))))))) };
+                                                                copy2)))))) };
           void);
-          (C_207:
-          (C_208:
+          (C_205:
+          (C_206:
           begin
             void; ((safe_free_parameter T_copy_18_alloc_table) !copy);
            ((safe_free_parameter T_copy2_19_alloc_table) !copy2);
@@ -1466,18 +1464,16 @@ let g_safety =
           [ { } unit
             reads S_j_copy2_19,S_j_copy_18,T_b_copy2_19,T_b_copy_18,copy,copy2
             { (JC_<somenum>:
-              ((JC_<somenum>:
-               (integer_of_int32(select(S_j_p_0_9, select(T_b_p_0_9, p_0))) = 
+              ((integer_of_int32(select(S_j_p_0_9, select(T_b_p_0_9, p_0))) = 
                integer_of_int32(select(S_j_copy_18,
-                                select(T_b_copy_18, copy)))))
-              and (JC_<somenum>:
-                  (integer_of_int32(select(S_j_copy_18,
+                                select(T_b_copy_18, copy))))
+              and (integer_of_int32(select(S_j_copy_18,
                                     select(T_b_copy_18, copy))) = integer_of_int32(
                                                                   select(S_j_copy2_19,
                                                                   select(T_b_copy2_19,
-                                                                  copy2))))))) } ];
-          (C_207:
-          (C_208:
+                                                                  copy2)))))) } ];
+          (C_205:
+          (C_206:
           begin
             void; ((free_parameter T_copy_18_alloc_table) !copy);
            ((free_parameter T_copy2_19_alloc_table) !copy2); (raise Return)
@@ -1938,7 +1934,7 @@ why --project [...] why/copy_struct.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po54.why">
-      <location file = "why/copy_struct.why" line = "1619" begin = "22" end = "135"/>
+      <location file = "why/copy_struct.why" line = "1615" begin = "22" end = "135"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po55.why">
@@ -1947,7 +1943,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po56.why">
-      <location file = "why/copy_struct.why" line = "1629" begin = "24" end = "107"/>
+      <location file = "why/copy_struct.why" line = "1625" begin = "24" end = "107"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po57.why">
@@ -1991,7 +1987,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_struct_po65.why">
-      <location file = "why/copy_struct.why" line = "1692" begin = "7" end = "59"/>
+      <location file = "why/copy_struct.why" line = "1688" begin = "7" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2024,7 +2020,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po45.why">
-      <location file = "why/copy_struct.why" line = "1413" begin = "17" end = "73"/>
+      <location file = "why/copy_struct.why" line = "1409" begin = "17" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po46.why">
@@ -2033,11 +2029,11 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po47.why">
-      <location file = "why/copy_struct.why" line = "1422" begin = "22" end = "102"/>
+      <location file = "why/copy_struct.why" line = "1418" begin = "22" end = "102"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po48.why">
-      <location file = "why/copy_struct.why" line = "1472" begin = "7" end = "49"/>
+      <location file = "why/copy_struct.why" line = "1468" begin = "7" end = "49"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2059,11 +2055,11 @@ text = ""/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po24.why">
-      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "47" begin = "13" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "47" begin = "13" end = "44"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po25.why">
-      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "47" begin = "23" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "47" begin = "13" end = "44"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -2074,7 +2070,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po27.why">
-      <location file = "why/copy_struct.why" line = "1116" begin = "18" end = "76"/>
+      <location file = "why/copy_struct.why" line = "1114" begin = "18" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po28.why">
@@ -2083,19 +2079,19 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po29.why">
-      <location file = "why/copy_struct.why" line = "1125" begin = "18" end = "77"/>
+      <location file = "why/copy_struct.why" line = "1123" begin = "18" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po30.why">
-      <location file = "why/copy_struct.why" line = "1132" begin = "24" end = "255"/>
+      <location file = "why/copy_struct.why" line = "1130" begin = "24" end = "255"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po31.why">
-      <location file = "why/copy_struct.why" line = "1132" begin = "24" end = "255"/>
+      <location file = "why/copy_struct.why" line = "1130" begin = "24" end = "255"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po32.why">
-      <location file = "why/copy_struct.why" line = "1175" begin = "9" end = "65"/>
+      <location file = "why/copy_struct.why" line = "1173" begin = "9" end = "65"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2110,7 +2106,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/copy_struct_po35.why">
-      <location file = "why/copy_struct.why" line = "1217" begin = "10" end = "68"/>
+      <location file = "why/copy_struct.why" line = "1215" begin = "10" end = "68"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2125,12 +2121,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_struct_po38.why">
-      <location file = "why/copy_struct.why" line = "1268" begin = "19" end = "63"/>
+      <location file = "why/copy_struct.why" line = "1264" begin = "19" end = "63"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/copy_struct_po39.why">
-      <location file = "why/copy_struct.why" line = "1269" begin = "12" end = "58"/>
+      <location file = "why/copy_struct.why" line = "1265" begin = "12" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

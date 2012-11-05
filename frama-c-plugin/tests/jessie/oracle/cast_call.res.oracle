@@ -69,7 +69,7 @@ behavior default:
       (C_11 : ((C_10 : c_0.charM) = 0));
       
       {  
-         (assert for default: (C_12 : (i.intM == 0)));
+         (assert for default: (C_12 : (jessie : (i.intM == 0))));
          ()
       };
       

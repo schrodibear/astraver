@@ -672,7 +672,6 @@ object
 
   (* Methods introduced by the Frama-C visitor *)
   method vfile = visitor#vfile
-  method vrooted_code_annotation = visitor#vrooted_code_annotation
   method vglob_aux = visitor#vglob_aux
   method vstmt_aux = visitor#vstmt_aux
 
@@ -761,7 +760,6 @@ object
 
   (* Methods introduced by the Frama-C visitor *)
   method vfile = visitor#vfile
-  method vrooted_code_annotation = visitor#vrooted_code_annotation
   method vglob_aux g =
     Jessie_options.feedback "%a" !Ast_printer.d_global g;
     visitor#vglob_aux g

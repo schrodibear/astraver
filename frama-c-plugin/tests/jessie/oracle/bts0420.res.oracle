@@ -101,10 +101,12 @@ behavior default:
       (L2 : 
       {  
          {  
-            (assert for default: (C_24 : (((e{L1}(a, b) && p{L1, L2}(a)) &&
-                                            e{L2}(a, b)) ==>
-                                           p{L1,
-                                           L2}(b))));
+            (assert for default: (C_24 : (jessie : (((e{L1}(a, b) &&
+                                                       p{L1,
+                                                       L2}(a)) &&
+                                                      e{L2}(a, b)) ==>
+                                                     p{L1,
+                                                     L2}(b)))));
             ()
          };
          

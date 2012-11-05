@@ -1,4 +1,6 @@
-
+/* run.config
+DONTRUN: VP 2012-10-26: there's no point in having an assert failure in an _oracle_
+ */
 int ga1[1][1];
 int ga2[2][2];
 int ga3[3][3] = { 0, 0 };

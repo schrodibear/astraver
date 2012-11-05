@@ -48,7 +48,7 @@ behavior default:
       (C_2 : (p = 2));
       
       {  
-         (assert for default: (C_3 : (\at(p,Mylabel) == (p - 1))));
+         (assert for default: (C_3 : (jessie : (\at(p,Mylabel) == (p - 1)))));
          ()
       };
       

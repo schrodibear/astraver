@@ -190,12 +190,13 @@ behavior aligned_data:
                                  (C_49 : ((C_48 : (align - 1)) :> uint32))));
             
             {  
-               (assert for misaligned_data: (C_51 : (\forall integer k_3;
-                                                      (((0 <= k_3) &&
-                                                         (k_3 <=
-                                                           (3 - addr_mod4))) ==>
-                                                        ((s + k_3).unsigned_charM ==
-                                                          ValOct)))));
+               (assert for misaligned_data: (C_51 : (jessie : (\forall integer k_3;
+                                                                (((0 <= k_3) &&
+                                                                   (k_3 <=
+                                                                    (3 -
+                                                                    addr_mod4))) ==>
+                                                                  ((s + k_3).unsigned_charM ==
+                                                                    ValOct))))));
                ()
             };
             (C_54 : (index_oct = (C_53 : ((C_52 : (index_oct + align)) :> uint32))))

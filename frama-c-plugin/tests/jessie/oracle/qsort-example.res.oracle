@@ -4,5 +4,5 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_S
 [kernel] warning: Neither code nor specification for function assert, generating default assigns from the prototype
 [kernel] warning: Neither code nor specification for function qsort, generating default assigns from the prototype
 qsort-example.c:39:[jessie] failure: cannot take address of a function
-[jessie] warning: Unsupported feature(s).
-                  Jessie plugin can not be used on your code.
+[jessie] user error: Unsupported feature(s).
+                     Jessie plugin can not be used on your code.

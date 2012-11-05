@@ -99,7 +99,7 @@ let reg_position ?id ?kind ?name pos =
 (* [locate] should be called on every Jessie expression which we would like to
  * locate in the original source program.
  *)
-let locate ?alarm ?pos e =
+let locate ?pos e =
   (* Recursively label conjuncts so that splitting conjuncts in Why still
    * allows to locate the resulting VC.
    *)
@@ -110,22 +110,7 @@ let locate ?alarm ?pos e =
       | Some pos ->
           if is_unknown_location e#pos then pos else e#pos
     in
-    let lab = match alarm with
-      | None ->
-          reg_position pos
-      | Some Division_alarm ->
-          reg_position ~kind:Output.DivByZero pos
-      | Some Memory_alarm | Some Index_alarm ->
-          reg_position ~kind:Output.PointerDeref pos
-      | Some (Shift_alarm|Signed_overflow_alarm|Float_overflow_alarm) ->
-          reg_position ~kind:Output.ArithOverflow pos
-      | Some Pointer_compare_alarm
-      | Some Using_nan_or_infinite_alarm
-      | Some Result_is_nan_or_infinite_alarm ->
-          reg_position pos
-      | Some Separation_alarm -> reg_position pos
-      | Some Other_alarm -> reg_position pos
-    in
+    let lab = reg_position pos in
     let e = match e#node with
       | JCPEbinary(e1,`Bland,e2) ->
           begin match e1#node,e2#node with
@@ -1440,68 +1425,35 @@ let built_behavior_ids = function
 
 let code_annot pos ((acc_assert_before,contract) as acc) a =
   let push s = s::acc_assert_before,contract in
-  match a with
-     | User annot ->
-         begin
-           match annot.annot_content with
-             | AAssert (behav,p) ->
-                 let behav = built_behavior_ids behav in
-                 let asrt = Aassert in (* [VP] Needs to retrieve exact status *)
-                 push
-                   (mkexpr
-                      (JCPEassert (behav,asrt,locate ~pos (named_pred p))) pos)
-             | AInvariant(_behav,is_loop_inv,_p) ->
-                 if is_loop_inv then acc (* should be handled elsewhere *)
-                 else unsupported "general code invariant"
-(*
-                let behav = built_behavior_ids behav in
-                push
-                  (mkexpr
-                     (JCPEassert
-                        (behav,Aassert,locate ~pos (named_pred p))) pos)
-*)
-            | APragma _ -> acc (* just ignored *)
-            | AAssigns (_, _) -> acc (* should be handled elsewhere *)
-            | AAllocation _ -> acc (* should be handled elsewhere *)
-            | AVariant _ -> acc (* should be handled elsewhere *)
-            | AStmtSpec ([],s) -> (* TODO: handle case of for *)
-                begin
-                  match contract with
-                    | None -> (acc_assert_before,Some s)
-                    | Some _ -> assert false
-                end
-            | AStmtSpec _ ->
-              unsupported "statement contract for a specific behavior"
-        end
-    | AI(alarm,annot) ->
-        begin match annot.annot_content with
-          | AAssert (behav,p) ->
-              let asrt =
-                if pred_has_name p name_of_hint_assertion then Ahint
-                else Aassert (* [VP] needs to retrieve exact status *)
-              in
-              let p = remove_pred_name p name_of_hint_assertion in
+  match a.annot_content with
+    | AAssert (behav,p) ->
+        let behav = built_behavior_ids behav in
+        let asrt = Aassert in (* [VP] Needs to retrieve exact status *)
+        push
+          (mkexpr
+             (JCPEassert (behav,asrt,locate ~pos (named_pred p))) pos)
+    | AInvariant(_behav,is_loop_inv,_p) ->
+        if is_loop_inv then acc (* should be handled elsewhere *)
+        else unsupported "general code invariant"
+            (*
               let behav = built_behavior_ids behav in
               push
-                (mkexpr
-                   (JCPEassert
-                      (behav,asrt,locate ~alarm ~pos (named_pred p))) pos)
-          | AInvariant(_behav,is_loop_inv,_p) ->
-              if is_loop_inv then acc (* should be handled elsewhere *)
-              else unsupported "general code invariant"
-                (*
-              let behav = built_behavior_ids behav in
-              push
-                (mkexpr
-                   (JCPEassert
-                      (behav,Aassert,locate ~alarm ~pos (named_pred p))) pos)
-                *)
-          | APragma _ -> assert false
-          | AAssigns (_, _) -> assert false
-          | AAllocation _ -> assert false
-          | AVariant _ -> assert false
-          | AStmtSpec _ -> assert false
+              (mkexpr
+              (JCPEassert
+              (behav,Aassert,locate ~pos (named_pred p))) pos)
+            *)
+    | APragma _ -> acc (* just ignored *)
+    | AAssigns (_, _) -> acc (* should be handled elsewhere *)
+    | AAllocation _ -> acc (* should be handled elsewhere *)
+    | AVariant _ -> acc (* should be handled elsewhere *)
+    | AStmtSpec ([],s) -> (* TODO: handle case of for *)
+        begin
+          match contract with
+            | None -> (acc_assert_before,Some s)
+            | Some _ -> assert false
         end
+    | AStmtSpec _ ->
+        unsupported "statement contract for a specific behavior"
 
 (*****************************************************************************)
 (* Cil to Jessie translation of coding constructs                            *)
@@ -2075,7 +2027,6 @@ let rec statement s =
 
     | Loop (_,bl,_pos,_continue_stmt,_break_stmt) ->
 	let treat_loop_annot _ annot (beh,var as acc) =
-          let annot = Annotations.code_annotation_of_rooted annot in
 	  match annot.annot_content with
 	    | AVariant(v,rel) ->
 		begin

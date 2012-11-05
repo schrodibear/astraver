@@ -584,7 +584,7 @@ behavior default:
       (if (N_2 <= tmp_0) then 
       {  
          {  
-            (assert for default: (C_241 : (N_2 <= 55)));
+            (assert for default: (C_241 : (jessie : (N_2 <= 55))));
             ()
          };
          (C_242 : DTRSM(N_2, K_2, A_1, LDA_1, B, LDB));

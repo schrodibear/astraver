@@ -83,7 +83,7 @@ behavior default:
    {  (C_12 : create(f));
       
       {  
-         (assert for default: (C_13 : (this.x != f.x)));
+         (assert for default: (C_13 : (jessie : (this.x != f.x))));
          ()
       };
       
@@ -107,7 +107,7 @@ behavior default:
       (C_28 : create(s2));
       
       {  
-         (assert for default: (C_29 : (0 == 1)));
+         (assert for default: (C_29 : (jessie : (0 == 1))));
          ()
       };
       

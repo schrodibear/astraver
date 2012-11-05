@@ -28,8 +28,6 @@ axiomatic Padding {
 
 type uint8 = 0..255
 
-type uint32 = 0..4294967295
-
 type int8 = -128..127
 
 type int32 = -2147483648..2147483647
@@ -82,15 +80,14 @@ predicate tempomat_lever_get_spec{P, H}(__anonenum_tempomat_lever_t_1 result) =
 
 __anonenum_tempomat_lever_t_1 tempomat_lever_get()
 behavior default:
-  ensures (C_7 : tempomat_lever_get_spec{Old, Here}(\result));
+  ensures (C_5 : tempomat_lever_get_spec{Old, Here}(\result));
 {  
    (var __anonenum_tempomat_lever_t_1 val);
    
    (var __anonenum_tempomat_lever_t_1 __retres);
    
    {  (C_1 : (val = tempomat_lever_port));
-      (if ((C_6 : (val :> uint32)) !=
-            (C_5 : (tempomat_lever_previous_value :> uint32))) then 
+      (if (val != tempomat_lever_previous_value) then 
       {  (C_3 : (tempomat_lever_previous_value = val));
          (C_4 : (__retres = val));
          
@@ -110,8 +107,8 @@ int32 sensor_speed_result;
 int32 sensor_speed()
 behavior default:
   assigns sensor_speed_result;
-  ensures (C_8 : ((C_9 : (\result == sensor_speed_result)) &&
-                   ((C_11 : (0 <= \result)) && (C_12 : (\result <= 250)))));
+  ensures (C_6 : ((C_7 : (\result == sensor_speed_result)) &&
+                   ((C_9 : (0 <= \result)) && (C_10 : (\result <= 250)))));
 ;
 
 int32 sensor_brake_pedal_pressed_result;
@@ -119,7 +116,7 @@ int32 sensor_brake_pedal_pressed_result;
 int32 sensor_brake_pedal_pressed()
 behavior default:
   assigns sensor_brake_pedal_pressed_result;
-  ensures (C_13 : (\result == sensor_brake_pedal_pressed_result));
+  ensures (C_11 : (\result == sensor_brake_pedal_pressed_result));
 ;
 
 int32 sensor_engine_rpm_low_result;
@@ -127,19 +124,19 @@ int32 sensor_engine_rpm_low_result;
 int32 sensor_engine_rpm_low()
 behavior default:
   assigns sensor_engine_rpm_low_result;
-  ensures (C_14 : (\result == sensor_engine_rpm_low_result));
+  ensures (C_12 : (\result == sensor_engine_rpm_low_result));
 ;
 
 int32 sensor_driver_input_accelerate()
 behavior default:
   assigns \nothing;
-  ensures (C_15 : true);
+  ensures (C_13 : true);
 ;
 
 int32 sensor_accelerator_position()
 behavior default:
   assigns \nothing;
-  ensures (C_16 : true);
+  ensures (C_14 : true);
 ;
 
 int32 tempomat_previous_speed;
@@ -162,13 +159,13 @@ predicate tempomat_active_no_temp_override{L}(__anonstruct_tempomat_t_2[..] this
 \at(((this_2.active != 0) && (this_2.temp_override == 0)),L)
 
 unit tempomat_init(__anonstruct_tempomat_t_2[..] this_8)
-  requires (C_22 : ((C_23 : (\offset_min(this_8) <= 0)) &&
-                     (C_24 : (\offset_max(this_8) >= 0))));
+  requires (C_20 : ((C_21 : (\offset_min(this_8) <= 0)) &&
+                     (C_22 : (\offset_max(this_8) >= 0))));
 behavior default:
-  ensures (C_21 : tempomat_inv0{Here}(\at(this_8,Old)));
+  ensures (C_19 : tempomat_inv0{Here}(\at(this_8,Old)));
 {  
-   {  (C_18 : ((C_17 : this_8.active) = 0));
-      (C_20 : ((C_19 : this_8.previously_active) = 0));
+   {  (C_16 : ((C_15 : this_8.active) = 0));
+      (C_18 : ((C_17 : this_8.previously_active) = 0));
       
       (return ())
    }
@@ -183,18 +180,18 @@ predicate tempomat_set_spec{P, H}(__anonstruct_tempomat_t_2[..] this_3,
       (\at(this_3.target_speed,P) == \at(this_3.target_speed,H)))))
 
 unit tempomat_set(__anonstruct_tempomat_t_2[..] this_10, int32 speed)
-  requires (C_37 : tempomat_inv0{Here}(this_10));
-  requires (C_34 : ((C_35 : (\offset_min(this_10) <= 0)) &&
-                     (C_36 : (\offset_max(this_10) >= 0))));
+  requires (C_35 : tempomat_inv0{Here}(this_10));
+  requires (C_32 : ((C_33 : (\offset_min(this_10) <= 0)) &&
+                     (C_34 : (\offset_max(this_10) >= 0))));
 behavior default:
-  ensures (C_31 : ((C_32 : tempomat_inv0{Here}(\at(this_10,Old))) &&
-                    (C_33 : tempomat_set_spec{Old,
+  ensures (C_29 : ((C_30 : tempomat_inv0{Here}(\at(this_10,Old))) &&
+                    (C_31 : tempomat_set_spec{Old,
                     Here}(\at(this_10,Old), \at(speed,Old)))));
 {  
    {  (if (30 <= speed) then (if (speed <= 250) then 
-                             {  (C_26 : ((C_25 : this_10.active) = 1));
-                                (C_28 : ((C_27 : this_10.temp_override) = 0));
-                                (C_30 : ((C_29 : this_10.target_speed) = speed))
+                             {  (C_24 : ((C_23 : this_10.active) = 1));
+                                (C_26 : ((C_25 : this_10.temp_override) = 0));
+                                (C_28 : ((C_27 : this_10.target_speed) = speed))
                              } else ()) else ());
       
       (return ())
@@ -205,18 +202,18 @@ predicate tempomat_deactivate_spec{L}(__anonstruct_tempomat_t_2[..] this_4) =
 \at((this_4.active == 0),L)
 
 unit tempomat_deactivate(__anonstruct_tempomat_t_2[..] this_6)
-  requires (C_53 : (this_6.active != 0));
-  requires (C_52 : tempomat_inv0{Here}(this_6));
-  requires (C_49 : ((C_50 : (\offset_min(this_6) <= 0)) &&
-                     (C_51 : (\offset_max(this_6) >= 0))));
+  requires (C_51 : (this_6.active != 0));
+  requires (C_50 : tempomat_inv0{Here}(this_6));
+  requires (C_47 : ((C_48 : (\offset_min(this_6) <= 0)) &&
+                     (C_49 : (\offset_max(this_6) >= 0))));
 behavior default:
-  ensures (C_46 : ((C_47 : tempomat_inv0{Here}(\at(this_6,Old))) &&
-                    (C_48 : tempomat_deactivate_spec{Here}(\at(this_6,Old)))));
+  ensures (C_44 : ((C_45 : tempomat_inv0{Here}(\at(this_6,Old))) &&
+                    (C_46 : tempomat_deactivate_spec{Here}(\at(this_6,Old)))));
 {  
-   {  (C_39 : ((C_38 : this_6.active) = 0));
-      (C_41 : ((C_40 : this_6.temp_override) = 0));
-      (C_43 : ((C_42 : this_6.previously_active) = 1));
-      (C_45 : (tempomat_previous_speed = (C_44 : this_6.target_speed)));
+   {  (C_37 : ((C_36 : this_6.active) = 0));
+      (C_39 : ((C_38 : this_6.temp_override) = 0));
+      (C_41 : ((C_40 : this_6.previously_active) = 1));
+      (C_43 : (tempomat_previous_speed = (C_42 : this_6.target_speed)));
       
       (return ())
    }
@@ -233,23 +230,23 @@ predicate tempomat_resume_spec{P, H}(__anonstruct_tempomat_t_2[..] this_5) =
         H}(this_5, tempomat_resume_speed))),H)
 
 unit tempomat_resume(__anonstruct_tempomat_t_2[..] this_9)
-  requires (C_68 : (this_9.active == 0));
-  requires (C_67 : tempomat_inv0{Here}(this_9));
-  requires (C_64 : ((C_65 : (\offset_min(this_9) <= 0)) &&
-                     (C_66 : (\offset_max(this_9) >= 0))));
+  requires (C_66 : (this_9.active == 0));
+  requires (C_65 : tempomat_inv0{Here}(this_9));
+  requires (C_62 : ((C_63 : (\offset_min(this_9) <= 0)) &&
+                     (C_64 : (\offset_max(this_9) >= 0))));
 behavior default:
-  ensures (C_61 : ((C_62 : tempomat_inv0{Here}(\at(this_9,Old))) &&
-                    (C_63 : tempomat_resume_spec{Old, Here}(\at(this_9,Old)))));
+  ensures (C_59 : ((C_60 : tempomat_inv0{Here}(\at(this_9,Old))) &&
+                    (C_61 : tempomat_resume_spec{Old, Here}(\at(this_9,Old)))));
 {  
    (var int32 tmp);
    
-   {  (if ((C_60 : this_9.previously_active) != 0) then (C_59 : ((C_58 : this_9.active) = 1)) else 
+   {  (if ((C_58 : this_9.previously_active) != 0) then (C_57 : ((C_56 : this_9.active) = 1)) else 
       {  
-         {  (C_55 : (tmp = (C_54 : sensor_speed())));
+         {  (C_53 : (tmp = (C_52 : sensor_speed())));
             ()
          };
-         (C_56 : tempomat_set(this_9, tmp));
-         (C_57 : (tempomat_resume_speed = sensor_speed_result))
+         (C_54 : tempomat_set(this_9, tmp));
+         (C_55 : (tempomat_resume_speed = sensor_speed_result))
       });
       
       (return ())
@@ -261,18 +258,18 @@ predicate tempomat_change_speed_spec{P, H}(__anonstruct_tempomat_t_2[..] this_6,
 tempomat_set_spec{P, H}(this_6, (\at(this_6.target_speed,P) + delta))
 
 unit tempomat_change_speed(__anonstruct_tempomat_t_2[..] this_5, int32 delta)
-  requires (C_81 : ((C_82 : ((- 20) <= delta)) && (C_83 : (delta <= 20))));
-  requires (C_80 : (this_5.active != 0));
-  requires (C_79 : tempomat_inv0{Here}(this_5));
-  requires (C_76 : ((C_77 : (\offset_min(this_5) <= 0)) &&
-                     (C_78 : (\offset_max(this_5) >= 0))));
+  requires (C_79 : ((C_80 : ((- 20) <= delta)) && (C_81 : (delta <= 20))));
+  requires (C_78 : (this_5.active != 0));
+  requires (C_77 : tempomat_inv0{Here}(this_5));
+  requires (C_74 : ((C_75 : (\offset_min(this_5) <= 0)) &&
+                     (C_76 : (\offset_max(this_5) >= 0))));
 behavior default:
-  ensures (C_73 : ((C_74 : tempomat_inv0{Here}(\at(this_5,Old))) &&
-                    (C_75 : tempomat_change_speed_spec{Old,
+  ensures (C_71 : ((C_72 : tempomat_inv0{Here}(\at(this_5,Old))) &&
+                    (C_73 : tempomat_change_speed_spec{Old,
                     Here}(\at(this_5,Old), \at(delta,Old)))));
 {  
-   {  (C_72 : tempomat_set(this_5,
-                           (C_71 : ((C_70 : ((C_69 : this_5.target_speed) +
+   {  (C_70 : tempomat_set(this_5,
+                           (C_69 : ((C_68 : ((C_67 : this_5.target_speed) +
                                               delta)) :> int32))));
       
       (return ())
@@ -348,12 +345,12 @@ predicate tempomat_handler_spec{P, H}(__anonstruct_tempomat_t_2[..] this_7) =
             (this_7.active == 0))))),H)
 
 unit tempomat_handler(__anonstruct_tempomat_t_2[..] this_7)
-  requires (C_123 : tempomat_inv0{Here}(this_7));
-  requires (C_120 : ((C_121 : (\offset_min(this_7) <= 0)) &&
-                      (C_122 : (\offset_max(this_7) >= 0))));
+  requires (C_127 : tempomat_inv0{Here}(this_7));
+  requires (C_124 : ((C_125 : (\offset_min(this_7) <= 0)) &&
+                      (C_126 : (\offset_max(this_7) >= 0))));
 behavior default:
-  ensures (C_117 : ((C_118 : tempomat_inv0{Here}(\at(this_7,Old))) &&
-                     (C_119 : tempomat_handler_spec{Old,
+  ensures (C_121 : ((C_122 : tempomat_inv0{Here}(\at(this_7,Old))) &&
+                     (C_123 : tempomat_handler_spec{Old,
                      Here}(\at(this_7,Old)))));
 {  
    (var __anonenum_tempomat_lever_t_1 button_0);
@@ -366,28 +363,28 @@ behavior default:
    
    (var int32 tmp_3);
    
-   {  (C_85 : (button_0 = (C_84 : tempomat_lever_get())));
-      (C_86 : (tempomat_handler_button = button_0));
-      (if ((C_116 : this_7.active) != 0) then 
+   {  (C_83 : (button_0 = (C_82 : tempomat_lever_get())));
+      (C_84 : (tempomat_handler_button = button_0));
+      (if ((C_120 : this_7.active) != 0) then 
       {  
-         switch ((C_97 : (button_0 :> uint32))) {
-           case 2:
-           {  (C_93 : tempomat_change_speed(this_7, 1));
+         switch (button_0) {
+           case (C_95 : (2 :> __anonenum_tempomat_lever_t_1)):
+           {  (C_96 : tempomat_change_speed(this_7, 1));
               
               (goto switch_0_break)
            }
-           case 3:
-           {  (C_94 : tempomat_change_speed(this_7, 10));
+           case (C_97 : (3 :> __anonenum_tempomat_lever_t_1)):
+           {  (C_98 : tempomat_change_speed(this_7, 10));
               
               (goto switch_0_break)
            }
-           case 4:
-           {  (C_95 : tempomat_change_speed(this_7, -1));
+           case (C_99 : (4 :> __anonenum_tempomat_lever_t_1)):
+           {  (C_100 : tempomat_change_speed(this_7, -1));
               
               (goto switch_0_break)
            }
-           case 5:
-           {  (C_96 : tempomat_change_speed(this_7, -10));
+           case (C_101 : (5 :> __anonenum_tempomat_lever_t_1)):
+           {  (C_102 : tempomat_change_speed(this_7, -10));
               
               (goto switch_0_break)
            }
@@ -398,27 +395,27 @@ behavior default:
            }
          };
          (switch_0_break : ());
-         (C_100 : ((C_99 : this_7.temp_override) = (C_98 : sensor_driver_input_accelerate(
-                                                   ))));
-         (C_102 : (tempomat_handler_driver_input_accelerate = (C_101 : this_7.temp_override)));
+         (C_105 : ((C_104 : this_7.temp_override) = (C_103 : sensor_driver_input_accelerate(
+                                                    ))));
+         (C_107 : (tempomat_handler_driver_input_accelerate = (C_106 : this_7.temp_override)));
          
          {  
-            (assert for default: (C_103 : ((tempomat_handler_driver_input_accelerate !=
-                                             0) ==>
-                                            (! tempomat_active_no_temp_override{Here}(
-                                            this_7)))));
+            (assert for default: (C_108 : (jessie : ((tempomat_handler_driver_input_accelerate !=
+                                                       0) ==>
+                                                      (! tempomat_active_no_temp_override{Here}(
+                                                      this_7))))));
             ()
          };
          
-         {  (if ((C_110 : (button_0 :> uint32)) == 1) then 
+         {  (if (button_0 == 1) then 
             (goto _LOR) else 
-            {  (C_105 : (tmp_0 = (C_104 : sensor_brake_pedal_pressed())));
+            {  (C_110 : (tmp_0 = (C_109 : sensor_brake_pedal_pressed())));
                (if (tmp_0 != 0) then 
                (goto _LOR) else 
-               {  (C_107 : (tmp_1 = (C_106 : sensor_engine_rpm_low())));
+               {  (C_112 : (tmp_1 = (C_111 : sensor_engine_rpm_low())));
                   (if (tmp_1 != 0) then 
                   (goto _LOR) else 
-                  {  (C_109 : (tmp_2 = (C_108 : sensor_speed())));
+                  {  (C_114 : (tmp_2 = (C_113 : sensor_speed())));
                      (if (tmp_2 < 30) then 
                      (goto _LOR) else ())
                   })
@@ -427,14 +424,14 @@ behavior default:
             
             (goto _LOR_0);
             (_LOR : 
-            {  (C_111 : (tempomat_handler_brake_pedal_pressed = sensor_brake_pedal_pressed_result));
-               (C_112 : (tempomat_handler_engine_rpm_low = sensor_engine_rpm_low_result));
-               (C_113 : (tempomat_handler_speed = sensor_speed_result));
-               (C_114 : tempomat_deactivate(this_7));
+            {  (C_115 : (tempomat_handler_brake_pedal_pressed = sensor_brake_pedal_pressed_result));
+               (C_116 : (tempomat_handler_engine_rpm_low = sensor_engine_rpm_low_result));
+               (C_117 : (tempomat_handler_speed = sensor_speed_result));
+               (C_118 : tempomat_deactivate(this_7));
                
                {  
-                  (assert for default: (C_115 : (! tempomat_active_no_temp_override{Here}(
-                                                this_7))));
+                  (assert for default: (C_119 : (jessie : (! tempomat_active_no_temp_override{Here}(
+                                                          this_7)))));
                   ()
                }
             });
@@ -442,22 +439,22 @@ behavior default:
          }
       } else 
       {  
-         switch ((C_92 : (button_0 :> uint32))) {
-           case 2:
-           case 3:
-           case 4:
-           case 5:
+         switch (button_0) {
+           case (C_85 : (2 :> __anonenum_tempomat_lever_t_1)):
+           case (C_86 : (3 :> __anonenum_tempomat_lever_t_1)):
+           case (C_87 : (4 :> __anonenum_tempomat_lever_t_1)):
+           case (C_88 : (5 :> __anonenum_tempomat_lever_t_1)):
            {  
-              {  (C_88 : (tmp_3 = (C_87 : sensor_speed())));
+              {  (C_90 : (tmp_3 = (C_89 : sensor_speed())));
                  ()
               };
-              (C_89 : tempomat_set(this_7, tmp_3));
-              (C_90 : (tempomat_handler_speed = sensor_speed_result));
+              (C_91 : tempomat_set(this_7, tmp_3));
+              (C_92 : (tempomat_handler_speed = sensor_speed_result));
               
               (goto switch_0_break_0)
            }
-           case 6:
-           {  (C_91 : tempomat_resume(this_7));
+           case (C_93 : (6 :> __anonenum_tempomat_lever_t_1)):
+           {  (C_94 : tempomat_resume(this_7));
               
               (goto switch_0_break_0)
            }
@@ -479,27 +476,27 @@ __anonenum_epc_input_mode_t_3 epc_input_mode;
 unit epc_input_tempomat(int32 error)
 behavior default:
   assigns epc_input_mode;
-  ensures (C_124 : (epc_input_mode == (0 :> __anonenum_epc_input_mode_t_3)));
+  ensures (C_128 : (epc_input_mode == (0 :> __anonenum_epc_input_mode_t_3)));
 ;
 
 unit epc_input_manual(int32 ap)
 behavior default:
   assigns epc_input_mode;
-  ensures (C_125 : (epc_input_mode == (1 :> __anonenum_epc_input_mode_t_3)));
+  ensures (C_129 : (epc_input_mode == (1 :> __anonenum_epc_input_mode_t_3)));
 ;
 
 predicate speed_controller_inv0{L}(__anonstruct_speed_controller_t_4[..] this_8) =
 \at(tempomat_inv0{L}(this_8.tempomat),L)
 
 unit speed_controller_init(__anonstruct_speed_controller_t_4[..] this)
-  requires (C_129 : (((C_131 : (\offset_min(this) <= 0)) &&
-                       (C_132 : (\offset_max(this) >= 0))) &&
-                      ((C_134 : (\offset_min(this.tempomat) <= 0)) &&
-                        (C_135 : (\offset_max(this.tempomat) >= 0)))));
+  requires (C_133 : (((C_135 : (\offset_min(this) <= 0)) &&
+                       (C_136 : (\offset_max(this) >= 0))) &&
+                      ((C_138 : (\offset_min(this.tempomat) <= 0)) &&
+                        (C_139 : (\offset_max(this.tempomat) >= 0)))));
 behavior default:
-  ensures (C_128 : speed_controller_inv0{Here}(\at(this,Old)));
+  ensures (C_132 : speed_controller_inv0{Here}(\at(this,Old)));
 {  
-   {  (C_127 : tempomat_init((C_126 : this.tempomat)));
+   {  (C_131 : tempomat_init((C_130 : this.tempomat)));
       
       (return ())
    }
@@ -514,47 +511,48 @@ predicate speed_controller_run_spec{P, H}(__anonstruct_speed_controller_t_4[..] 
         (epc_input_mode == (1 :> __anonenum_epc_input_mode_t_3)))),H)
 
 unit speed_controller_run(__anonstruct_speed_controller_t_4[..] this_0)
-  requires (C_163 : speed_controller_inv0{Here}(this_0));
-  requires (C_156 : (((C_158 : (\offset_min(this_0) <= 0)) &&
-                       (C_159 : (\offset_max(this_0) >= 0))) &&
-                      ((C_161 : (\offset_min(this_0.tempomat) <= 0)) &&
-                        (C_162 : (\offset_max(this_0.tempomat) >= 0)))));
+  requires (C_167 : speed_controller_inv0{Here}(this_0));
+  requires (C_160 : (((C_162 : (\offset_min(this_0) <= 0)) &&
+                       (C_163 : (\offset_max(this_0) >= 0))) &&
+                      ((C_165 : (\offset_min(this_0.tempomat) <= 0)) &&
+                        (C_166 : (\offset_max(this_0.tempomat) >= 0)))));
 behavior default:
-  ensures (C_153 : ((C_154 : speed_controller_inv0{Here}(\at(this_0,Old))) &&
-                     (C_155 : speed_controller_run_spec{Old,
+  ensures (C_157 : ((C_158 : speed_controller_inv0{Here}(\at(this_0,Old))) &&
+                     (C_159 : speed_controller_run_spec{Old,
                      Here}(\at(this_0,Old)))));
 {  
    (var int32 tmp_0_0);
    
    (var int32 tmp_0_1);
    
-   {  (C_137 : tempomat_handler((C_136 : this_0.tempomat)));
-      (if ((C_149 : (C_148 : this_0.tempomat).active) != 0) then (if 
-                                                                 (! ((C_147 : 
-                                                                    (C_146 : this_0.tempomat).temp_override) !=
+   {  (C_141 : tempomat_handler((C_140 : this_0.tempomat)));
+      (if ((C_153 : (C_152 : this_0.tempomat).active) != 0) then (if 
+                                                                 (! ((C_151 : 
+                                                                    (C_150 : this_0.tempomat).temp_override) !=
                                                                     0)) then 
                                                                  {  
                                                                     {
                                                                       
                                                                     (assert for default: 
-                                                                    (C_138 : tempomat_speed_range(
-                                                                    this_0.tempomat.target_speed)));
+                                                                    (C_142 : 
+                                                                    (jessie : tempomat_speed_range(
+                                                                    this_0.tempomat.target_speed))));
                                                                     ()
                                                                     };
                                                                     
                                                                     {
                                                                       
                                                                     {
-                                                                      (C_140 : (tmp_0_0 = 
-                                                                    (C_139 : sensor_speed(
+                                                                      (C_144 : (tmp_0_0 = 
+                                                                    (C_143 : sensor_speed(
                                                                     ))));
                                                                     ()
                                                                     };
-                                                                    (C_145 : epc_input_tempomat(
-                                                                    (C_144 : (
-                                                                    (C_143 : 
-                                                                    ((C_142 : 
-                                                                    (C_141 : this_0.tempomat).target_speed) -
+                                                                    (C_149 : epc_input_tempomat(
+                                                                    (C_148 : (
+                                                                    (C_147 : 
+                                                                    ((C_146 : 
+                                                                    (C_145 : this_0.tempomat).target_speed) -
                                                                     tmp_0_0)) :> int32))))
                                                                     }
                                                                  } else 
@@ -563,8 +561,8 @@ behavior default:
       
       (goto _LAND_0);
       (_LAND : 
-      {  (C_151 : (tmp_0_1 = (C_150 : sensor_accelerator_position())));
-         (C_152 : epc_input_manual(tmp_0_1))
+      {  (C_155 : (tmp_0_1 = (C_154 : sensor_accelerator_position())));
+         (C_156 : epc_input_manual(tmp_0_1))
       });
       (_LAND_0 : ());
       
@@ -574,16 +572,16 @@ behavior default:
 
 unit speed_controller_verify_tempomat_lever_actions(__anonstruct_speed_controller_t_4[..] this_4,
                                                     __anonenum_tempomat_lever_t_1 button)
-  requires (C_182 : speed_controller_inv0{Here}(this_4));
-  requires (C_175 : (((C_177 : (\offset_min(this_4) <= 0)) &&
-                       (C_178 : (\offset_max(this_4) >= 0))) &&
-                      ((C_180 : (\offset_min(this_4.tempomat) <= 0)) &&
-                        (C_181 : (\offset_max(this_4.tempomat) >= 0)))));
+  requires (C_186 : speed_controller_inv0{Here}(this_4));
+  requires (C_179 : (((C_181 : (\offset_min(this_4) <= 0)) &&
+                       (C_182 : (\offset_max(this_4) >= 0))) &&
+                      ((C_184 : (\offset_min(this_4.tempomat) <= 0)) &&
+                        (C_185 : (\offset_max(this_4.tempomat) >= 0)))));
 behavior default:
-  ensures (C_167 : speed_controller_inv0{Here}(\at(this_4,Old)));
+  ensures (C_171 : speed_controller_inv0{Here}(\at(this_4,Old)));
 behavior acc_dec:
   assumes (this_4.tempomat.active != 0);
-  ensures (C_168 : ((! deactivation_event{Here}()) ==>
+  ensures (C_172 : ((! deactivation_event{Here}()) ==>
                      (((((\at(button,Old) ==
                            (2 :> __anonenum_tempomat_lever_t_1)) ==>
                           tempomat_change_speed_spec{Old,
@@ -602,7 +600,7 @@ behavior acc_dec:
                          Here}(\at(this_4,Old).tempomat, (- 10))))));
 behavior set:
   assumes (this_4.tempomat.active == 0);
-  ensures (C_169 : (((((\at(button,Old) ==
+  ensures (C_173 : (((((\at(button,Old) ==
                          (2 :> __anonenum_tempomat_lever_t_1)) ||
                         (\at(button,Old) ==
                           (3 :> __anonenum_tempomat_lever_t_1))) ||
@@ -615,22 +613,22 @@ behavior set:
 behavior set_resume:
   assumes ((this_4.tempomat.active == 0) &&
             (this_4.tempomat.previously_active == 0));
-  ensures (C_170 : ((\at(button,Old) == (6 :> __anonenum_tempomat_lever_t_1)) ==>
+  ensures (C_174 : ((\at(button,Old) == (6 :> __anonenum_tempomat_lever_t_1)) ==>
                      tempomat_set_spec{Old,
                      Here}(\at(this_4,Old).tempomat, tempomat_resume_speed)));
 behavior resume:
   assumes ((this_4.tempomat.active == 0) &&
             (this_4.tempomat.previously_active != 0));
-  ensures (C_171 : ((\at(button,Old) == (6 :> __anonenum_tempomat_lever_t_1)) ==>
+  ensures (C_175 : ((\at(button,Old) == (6 :> __anonenum_tempomat_lever_t_1)) ==>
                      ((\at(this_4,Old).tempomat.active != 0) &&
                        (\at(this_4,Old).tempomat.target_speed ==
                          tempomat_previous_speed))));
 behavior off:
   assumes (button == (1 :> __anonenum_tempomat_lever_t_1));
-  ensures (C_172 : deactivation_event{Here}());
+  ensures (C_176 : deactivation_event{Here}());
 behavior remains_off:
   assumes (this_4.tempomat.active == 0);
-  ensures (C_173 : ((((((\at(button,Old) !=
+  ensures (C_177 : ((((((\at(button,Old) !=
                           (2 :> __anonenum_tempomat_lever_t_1)) &&
                          (\at(button,Old) !=
                            (3 :> __anonenum_tempomat_lever_t_1))) &&
@@ -643,73 +641,73 @@ behavior remains_off:
                      (\at(this_4,Old).tempomat.active == 0)));
 behavior remains_on:
   assumes (this_4.tempomat.active != 0);
-  ensures (C_174 : ((! deactivation_event{Here}()) ==>
+  ensures (C_178 : ((! deactivation_event{Here}()) ==>
                      (\at(this_4,Old).tempomat.active != 0)));
 {  
-   {  (C_164 : (tempomat_lever_previous_value = 0));
-      (C_165 : (tempomat_lever_port = button));
-      (C_166 : speed_controller_run(this_4));
+   {  (C_168 : (tempomat_lever_previous_value = 0));
+      (C_169 : (tempomat_lever_port = button));
+      (C_170 : speed_controller_run(this_4));
       
       (return ())
    }
 }
 
 unit speed_controller_verify_deactivation(__anonstruct_speed_controller_t_4[..] this_1)
-  requires (C_193 : speed_controller_inv0{Here}(this_1));
-  requires (C_186 : (((C_188 : (\offset_min(this_1) <= 0)) &&
-                       (C_189 : (\offset_max(this_1) >= 0))) &&
-                      ((C_191 : (\offset_min(this_1.tempomat) <= 0)) &&
-                        (C_192 : (\offset_max(this_1.tempomat) >= 0)))));
+  requires (C_197 : speed_controller_inv0{Here}(this_1));
+  requires (C_190 : (((C_192 : (\offset_min(this_1) <= 0)) &&
+                       (C_193 : (\offset_max(this_1) >= 0))) &&
+                      ((C_195 : (\offset_min(this_1.tempomat) <= 0)) &&
+                        (C_196 : (\offset_max(this_1.tempomat) >= 0)))));
 behavior default:
-  ensures (C_184 : speed_controller_inv0{Here}(\at(this_1,Old)));
+  ensures (C_188 : speed_controller_inv0{Here}(\at(this_1,Old)));
 behavior deactivate:
   assumes (! deactivation_event{Here}());
-  ensures (C_185 : (deactivation_event{Here}() ==>
+  ensures (C_189 : (deactivation_event{Here}() ==>
                      (\at(this_1,Old).tempomat.active == 0)));
 {  
-   {  (C_183 : speed_controller_run(this_1));
+   {  (C_187 : speed_controller_run(this_1));
       
       (return ())
    }
 }
 
 unit speed_controller_verify_epc_input_mode(__anonstruct_speed_controller_t_4[..] this_2)
-  requires (C_207 : speed_controller_inv0{Here}(this_2));
-  requires (C_200 : (((C_202 : (\offset_min(this_2) <= 0)) &&
-                       (C_203 : (\offset_max(this_2) >= 0))) &&
-                      ((C_205 : (\offset_min(this_2.tempomat) <= 0)) &&
-                        (C_206 : (\offset_max(this_2.tempomat) >= 0)))));
+  requires (C_211 : speed_controller_inv0{Here}(this_2));
+  requires (C_204 : (((C_206 : (\offset_min(this_2) <= 0)) &&
+                       (C_207 : (\offset_max(this_2) >= 0))) &&
+                      ((C_209 : (\offset_min(this_2.tempomat) <= 0)) &&
+                        (C_210 : (\offset_max(this_2.tempomat) >= 0)))));
 behavior default:
-  ensures (C_195 : ((C_196 : speed_controller_inv0{Here}(\at(this_2,Old))) &&
-                     ((C_198 : (tempomat_active_no_temp_override{Here}(
+  ensures (C_199 : ((C_200 : speed_controller_inv0{Here}(\at(this_2,Old))) &&
+                     ((C_202 : (tempomat_active_no_temp_override{Here}(
                                  \at(this_2,Old).tempomat) ==>
                                  (epc_input_mode ==
                                    (0 :> __anonenum_epc_input_mode_t_3)))) &&
-                       (C_199 : ((! tempomat_active_no_temp_override{Here}(
+                       (C_203 : ((! tempomat_active_no_temp_override{Here}(
                                  \at(this_2,Old).tempomat)) ==>
                                   (epc_input_mode ==
                                     (1 :> __anonenum_epc_input_mode_t_3)))))));
 {  
-   {  (C_194 : speed_controller_run(this_2));
+   {  (C_198 : speed_controller_run(this_2));
       
       (return ())
    }
 }
 
 unit speed_controller_verify_override(__anonstruct_speed_controller_t_4[..] this_3)
-  requires (C_218 : speed_controller_inv0{Here}(this_3));
-  requires (C_211 : (((C_213 : (\offset_min(this_3) <= 0)) &&
-                       (C_214 : (\offset_max(this_3) >= 0))) &&
-                      ((C_216 : (\offset_min(this_3.tempomat) <= 0)) &&
-                        (C_217 : (\offset_max(this_3.tempomat) >= 0)))));
+  requires (C_222 : speed_controller_inv0{Here}(this_3));
+  requires (C_215 : (((C_217 : (\offset_min(this_3) <= 0)) &&
+                       (C_218 : (\offset_max(this_3) >= 0))) &&
+                      ((C_220 : (\offset_min(this_3.tempomat) <= 0)) &&
+                        (C_221 : (\offset_max(this_3.tempomat) >= 0)))));
 behavior default:
-  ensures (C_209 : speed_controller_inv0{Here}(\at(this_3,Old)));
+  ensures (C_213 : speed_controller_inv0{Here}(\at(this_3,Old)));
 behavior override:
   assumes (this_3.tempomat.active != 0);
-  ensures (C_210 : ((tempomat_handler_driver_input_accelerate != 0) ==>
+  ensures (C_214 : ((tempomat_handler_driver_input_accelerate != 0) ==>
                      (epc_input_mode == (1 :> __anonenum_epc_input_mode_t_3))));
 {  
-   {  (C_208 : speed_controller_run(this_3));
+   {  (C_212 : speed_controller_run(this_3));
       
       (return ())
    }
@@ -730,8 +728,6 @@ type int32
 type int8
 
 type padding
-
-type uint32
 
 type uint8
 
@@ -872,11 +868,6 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
-
-logic integer_of_uint32: uint32 -> int
-
-predicate eq_uint32(x:uint32, y:uint32) =
- eq_int(integer_of_uint32(x), integer_of_uint32(y))
 
 logic integer_of_uint8: uint8 -> int
 
@@ -1346,23 +1337,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-logic uint32_of_integer: int -> uint32
-
-axiom uint32_coerce :
- (forall x:int.
-  ((le_int((0), x) and le_int(x, (4294967295))) ->
-   eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
-
-axiom uint32_extensionality :
- (forall x:uint32.
-  (forall y:uint32[eq_int(integer_of_uint32(x), integer_of_uint32(y))].
-   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
-
-axiom uint32_range :
- (forall x:uint32.
-  (le_int((0), integer_of_uint32(x))
-  and le_int(integer_of_uint32(x), (4294967295))))
-
 logic uint8_of_integer: int -> uint8
 
 axiom uint8_coerce :
@@ -1668,8 +1642,6 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
-parameter any_uint32 : unit -> { } uint32 { true }
-
 parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter epc_input_mode : __anonenum_epc_input_mode_t_3 ref
@@ -1727,9 +1699,6 @@ parameter safe_int32_of_integer_ :
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
-
-parameter safe_uint32_of_integer_ :
- x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
 
 parameter safe_uint8_of_integer_ :
  x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
@@ -2986,11 +2955,6 @@ parameter tempomat_set_requires :
               __anonstruct_tempomat_t_2_active_this_10_7@,
               __anonstruct_tempomat_t_2_active_this_10_7)))) }
 
-parameter uint32_of_integer_ :
- x:int ->
-  { (le_int((0), x) and le_int(x, (4294967295)))} uint32
-  { eq_int(integer_of_uint32(result), x) }
-
 parameter uint8_of_integer_ :
  x:int ->
   { (le_int((0), x) and le_int(x, (255)))} uint8
@@ -3019,10 +2983,10 @@ let speed_controller_init_ensures_default =
                 (0))))))) }
   (init:
   try
-   (C_127:
+   (C_131:
    begin
      (let jessie_<somenum> =
-     (C_126:
+     (C_130:
      ((safe_acc_ __anonstruct_speed_controller_t_4_tempomat_this_17) this_11)) in
      (JC_<somenum>:
      (((((tempomat_init jessie_<somenum>) __anonstruct_tempomat_t_2_previously_active_this_17) __anonstruct_tempomat_t_2_active_this_17) __anonstruct_tempomat_t_2_this_17_alloc_table) __anonstruct_tempomat_t_2_target_speed_this_17)));
@@ -3057,10 +3021,10 @@ let speed_controller_init_safety =
                 (0))))))) }
   (init:
   try
-   (C_127:
+   (C_131:
    begin
      (let jessie_<somenum> =
-     (C_126:
+     (C_130:
      (JC_<somenum>:
      (((acc_ __anonstruct_speed_controller_t_4_this_17_alloc_table) __anonstruct_speed_controller_t_4_tempomat_this_17) this_11))) in
      (JC_<somenum>:
@@ -3102,21 +3066,21 @@ let speed_controller_run_ensures_default =
      try
       begin
         try
-         (C_137:
+         (C_141:
          begin
            (let jessie_<somenum> =
-           (C_136:
+           (C_140:
            ((safe_acc_ __anonstruct_speed_controller_t_4_tempomat_this_0_19) this_0_0)) in
            (JC_<somenum>:
            ((((((tempomat_handler jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_0_19) __anonstruct_tempomat_t_2_previously_active_this_0_19) __anonstruct_tempomat_t_2_temp_override_this_0_19) __anonstruct_tempomat_t_2_active_this_0_19) __anonstruct_tempomat_t_2_this_0_19_alloc_table)));
-          (if ((neq_int_ (integer_of_int32 (C_149:
+          (if ((neq_int_ (integer_of_int32 (C_153:
                                            ((safe_acc_ !__anonstruct_tempomat_t_2_active_this_0_19) 
-                                            (C_148:
+                                            (C_152:
                                             ((safe_acc_ __anonstruct_speed_controller_t_4_tempomat_this_0_19) this_0_0)))))) (0))
           then
-           (if (not ((neq_int_ (integer_of_int32 (C_147:
+           (if (not ((neq_int_ (integer_of_int32 (C_151:
                                                  ((safe_acc_ !__anonstruct_tempomat_t_2_temp_override_this_0_19) 
-                                                  (C_146:
+                                                  (C_150:
                                                   ((safe_acc_ __anonstruct_speed_controller_t_4_tempomat_this_0_19) this_0_0)))))) (0)))
            then
             begin
@@ -3125,19 +3089,19 @@ let speed_controller_run_ensures_default =
                 tempomat_speed_range(integer_of_int32(select(__anonstruct_tempomat_t_2_target_speed_this_0_19,
                                                       select(__anonstruct_speed_controller_t_4_tempomat_this_0_19,
                                                       this_0_0))))) }; void);
-             (C_140:
+             (C_144:
              begin
                void;
               (let jessie_<somenum> =
-              (tmp_0_0 := (C_139: (JC_<somenum>: (sensor_speed void)))) in void);
+              (tmp_0_0 := (C_143: (JC_<somenum>: (sensor_speed void)))) in void);
               void;
-              (C_145:
+              (C_149:
               (let jessie_<somenum> =
-              (C_144:
-              (safe_int32_of_integer_ (C_143:
-                                      ((sub_int (integer_of_int32 (C_142:
+              (C_148:
+              (safe_int32_of_integer_ (C_147:
+                                      ((sub_int (integer_of_int32 (C_146:
                                                                   ((safe_acc_ !__anonstruct_tempomat_t_2_target_speed_this_0_19) 
-                                                                   (C_141:
+                                                                   (C_145:
                                                                    ((safe_acc_ __anonstruct_speed_controller_t_4_tempomat_this_0_19) this_0_0)))))) 
                                        (integer_of_int32 !tmp_0_0))))) in
               (JC_<somenum>: (epc_input_tempomat jessie_<somenum>)))) end) end
@@ -3146,12 +3110,12 @@ let speed_controller_run_ensures_default =
           (raise (Goto__LAND_0_exc void)); (raise (Goto__LAND_exc void)) end)
          with Goto__LAND_exc jessie_<somenum> ->
          (_LAND:
-         (C_151:
+         (C_155:
          begin
            (let jessie_<somenum> =
-           (tmp_0_1 := (C_150: (JC_<somenum>: (sensor_accelerator_position void)))) in
+           (tmp_0_1 := (C_154: (JC_<somenum>: (sensor_accelerator_position void)))) in
            void);
-          (C_152:
+          (C_156:
           (let jessie_<somenum> = !tmp_0_1 in
           (JC_<somenum>: (epc_input_manual jessie_<somenum>)))) end)) end;
        (raise (Goto__LAND_0_exc void)) end with Goto__LAND_0_exc jessie_<somenum> ->
@@ -3217,23 +3181,23 @@ let speed_controller_run_safety =
      try
       begin
         try
-         (C_137:
+         (C_141:
          begin
            (let jessie_<somenum> =
-           (C_136:
+           (C_140:
            (JC_<somenum>:
            (((acc_ __anonstruct_speed_controller_t_4_this_0_19_alloc_table) __anonstruct_speed_controller_t_4_tempomat_this_0_19) this_0_0))) in
            (JC_<somenum>:
            ((((((tempomat_handler_requires jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_0_19) __anonstruct_tempomat_t_2_previously_active_this_0_19) __anonstruct_tempomat_t_2_temp_override_this_0_19) __anonstruct_tempomat_t_2_active_this_0_19) __anonstruct_tempomat_t_2_this_0_19_alloc_table)));
-          (if ((neq_int_ (integer_of_int32 (C_149:
+          (if ((neq_int_ (integer_of_int32 (C_153:
                                            ((safe_acc_ !__anonstruct_tempomat_t_2_active_this_0_19) 
-                                            (C_148:
+                                            (C_152:
                                             (JC_<somenum>:
                                             (((acc_ __anonstruct_speed_controller_t_4_this_0_19_alloc_table) __anonstruct_speed_controller_t_4_tempomat_this_0_19) this_0_0))))))) (0))
           then
-           (if (not ((neq_int_ (integer_of_int32 (C_147:
+           (if (not ((neq_int_ (integer_of_int32 (C_151:
                                                  ((safe_acc_ !__anonstruct_tempomat_t_2_temp_override_this_0_19) 
-                                                  (C_146:
+                                                  (C_150:
                                                   (JC_<somenum>:
                                                   (((acc_ __anonstruct_speed_controller_t_4_this_0_19_alloc_table) __anonstruct_speed_controller_t_4_tempomat_this_0_19) this_0_0))))))) (0)))
            then
@@ -3244,20 +3208,20 @@ let speed_controller_run_safety =
                   tempomat_speed_range(integer_of_int32(select(__anonstruct_tempomat_t_2_target_speed_this_0_19,
                                                         select(__anonstruct_speed_controller_t_4_tempomat_this_0_19,
                                                         this_0_0))))) } ];
-             (C_140:
+             (C_144:
              begin
                void;
               (let jessie_<somenum> =
-              (tmp_0_0 := (C_139: (JC_<somenum>: (sensor_speed_requires void)))) in
+              (tmp_0_0 := (C_143: (JC_<somenum>: (sensor_speed_requires void)))) in
               void); void;
-              (C_145:
+              (C_149:
               (let jessie_<somenum> =
-              (C_144:
+              (C_148:
               (JC_<somenum>:
-              (int32_of_integer_ (C_143:
-                                 ((sub_int (integer_of_int32 (C_142:
+              (int32_of_integer_ (C_147:
+                                 ((sub_int (integer_of_int32 (C_146:
                                                              ((safe_acc_ !__anonstruct_tempomat_t_2_target_speed_this_0_19) 
-                                                              (C_141:
+                                                              (C_145:
                                                               (JC_<somenum>:
                                                               (((acc_ __anonstruct_speed_controller_t_4_this_0_19_alloc_table) __anonstruct_speed_controller_t_4_tempomat_this_0_19) this_0_0))))))) 
                                   (integer_of_int32 !tmp_0_0)))))) in
@@ -3267,13 +3231,13 @@ let speed_controller_run_safety =
           (raise (Goto__LAND_0_exc void)); (raise (Goto__LAND_exc void)) end)
          with Goto__LAND_exc jessie_<somenum> ->
          (_LAND:
-         (C_151:
+         (C_155:
          begin
            (let jessie_<somenum> =
-           (tmp_0_1 := (C_150:
+           (tmp_0_1 := (C_154:
                        (JC_<somenum>: (sensor_accelerator_position_requires void)))) in
            void);
-          (C_152:
+          (C_156:
           (let jessie_<somenum> = !tmp_0_1 in
           (JC_<somenum>: (epc_input_manual_requires jessie_<somenum>)))) end)) end;
        (raise (Goto__LAND_0_exc void)) end with Goto__LAND_0_exc jessie_<somenum> ->
@@ -3312,7 +3276,7 @@ let speed_controller_verify_deactivation_ensures_deactivate =
                         (0))))))))) }
   (init:
   try
-   (C_183:
+   (C_187:
    begin
      (let jessie_<somenum> = this_1_0 in
      (JC_<somenum>:
@@ -3355,7 +3319,7 @@ let speed_controller_verify_deactivation_ensures_default =
                     (0)))))))) }
   (init:
   try
-   (C_183:
+   (C_187:
    begin
      (let jessie_<somenum> = this_1_0 in
      (JC_<somenum>:
@@ -3397,7 +3361,7 @@ let speed_controller_verify_deactivation_safety =
                     (0)))))))) }
   (init:
   try
-   (C_183:
+   (C_187:
    begin
      (let jessie_<somenum> = this_1_0 in
      (JC_<somenum>:
@@ -3433,7 +3397,7 @@ let speed_controller_verify_epc_input_mode_ensures_default =
                     (0)))))))) }
   (init:
   try
-   (C_194:
+   (C_198:
    begin
      (let jessie_<somenum> = this_2_0 in
      (JC_<somenum>:
@@ -3490,7 +3454,7 @@ let speed_controller_verify_epc_input_mode_safety =
                     (0)))))))) }
   (init:
   try
-   (C_194:
+   (C_198:
    begin
      (let jessie_<somenum> = this_2_0 in
      (JC_<somenum>:
@@ -3526,7 +3490,7 @@ let speed_controller_verify_override_ensures_default =
                     (0)))))))) }
   (init:
   try
-   (C_208:
+   (C_212:
    begin
      (let jessie_<somenum> = this_3_0 in
      (JC_<somenum>:
@@ -3571,7 +3535,7 @@ let speed_controller_verify_override_ensures_override =
                         (0))))))))) }
   (init:
   try
-   (C_208:
+   (C_212:
    begin
      (let jessie_<somenum> = this_3_0 in
      (JC_<somenum>:
@@ -3611,7 +3575,7 @@ let speed_controller_verify_override_safety =
                     (0)))))))) }
   (init:
   try
-   (C_208:
+   (C_212:
    begin
      (let jessie_<somenum> = this_3_0 in
      (JC_<somenum>:
@@ -3650,9 +3614,9 @@ let speed_controller_verify_tempomat_lever_actions_ensures_acc_dec =
                         (0))))))))) }
   (init:
   try
-   (C_164:
-   (C_165:
-   (C_166:
+   (C_168:
+   (C_169:
+   (C_170:
    begin
      (let jessie_<somenum> =
      (tempomat_lever_previous_value := (safe___anonenum_tempomat_lever_t_1_of_integer_ (0))) in
@@ -3729,9 +3693,9 @@ let speed_controller_verify_tempomat_lever_actions_ensures_default =
                     (0)))))))) }
   (init:
   try
-   (C_164:
-   (C_165:
-   (C_166:
+   (C_168:
+   (C_169:
+   (C_170:
    begin
      (let jessie_<somenum> =
      (tempomat_lever_previous_value := (safe___anonenum_tempomat_lever_t_1_of_integer_ (0))) in
@@ -3778,9 +3742,9 @@ let speed_controller_verify_tempomat_lever_actions_ensures_off =
                         (0))))))))) }
   (init:
   try
-   (C_164:
-   (C_165:
-   (C_166:
+   (C_168:
+   (C_169:
+   (C_170:
    begin
      (let jessie_<somenum> =
      (tempomat_lever_previous_value := (safe___anonenum_tempomat_lever_t_1_of_integer_ (0))) in
@@ -3826,9 +3790,9 @@ let speed_controller_verify_tempomat_lever_actions_ensures_remains_off =
                         (0))))))))) }
   (init:
   try
-   (C_164:
-   (C_165:
-   (C_166:
+   (C_168:
+   (C_169:
+   (C_170:
    begin
      (let jessie_<somenum> =
      (tempomat_lever_previous_value := (safe___anonenum_tempomat_lever_t_1_of_integer_ (0))) in
@@ -3884,9 +3848,9 @@ let speed_controller_verify_tempomat_lever_actions_ensures_remains_on =
                         (0))))))))) }
   (init:
   try
-   (C_164:
-   (C_165:
-   (C_166:
+   (C_168:
+   (C_169:
+   (C_170:
    begin
      (let jessie_<somenum> =
      (tempomat_lever_previous_value := (safe___anonenum_tempomat_lever_t_1_of_integer_ (0))) in
@@ -3938,9 +3902,9 @@ let speed_controller_verify_tempomat_lever_actions_ensures_resume =
                         (0))))))))) }
   (init:
   try
-   (C_164:
-   (C_165:
-   (C_166:
+   (C_168:
+   (C_169:
+   (C_170:
    begin
      (let jessie_<somenum> =
      (tempomat_lever_previous_value := (safe___anonenum_tempomat_lever_t_1_of_integer_ (0))) in
@@ -3991,9 +3955,9 @@ let speed_controller_verify_tempomat_lever_actions_ensures_set =
                         (0))))))))) }
   (init:
   try
-   (C_164:
-   (C_165:
-   (C_166:
+   (C_168:
+   (C_169:
+   (C_170:
    begin
      (let jessie_<somenum> =
      (tempomat_lever_previous_value := (safe___anonenum_tempomat_lever_t_1_of_integer_ (0))) in
@@ -4054,9 +4018,9 @@ let speed_controller_verify_tempomat_lever_actions_ensures_set_resume =
                         (0))))))))) }
   (init:
   try
-   (C_164:
-   (C_165:
-   (C_166:
+   (C_168:
+   (C_169:
+   (C_170:
    begin
      (let jessie_<somenum> =
      (tempomat_lever_previous_value := (safe___anonenum_tempomat_lever_t_1_of_integer_ (0))) in
@@ -4105,9 +4069,9 @@ let speed_controller_verify_tempomat_lever_actions_safety =
                     (0)))))))) }
   (init:
   try
-   (C_164:
-   (C_165:
-   (C_166:
+   (C_168:
+   (C_169:
+   (C_170:
    begin
      (let jessie_<somenum> =
      (tempomat_lever_previous_value := (safe___anonenum_tempomat_lever_t_1_of_integer_ (0))) in
@@ -4141,13 +4105,13 @@ let tempomat_change_speed_ensures_default =
                         (0))))))))) }
   (init:
   try
-   (C_72:
+   (C_70:
    begin
      (let jessie_<somenum> = this_5_0 in
      (let jessie_<somenum> =
-     (C_71:
-     (safe_int32_of_integer_ (C_70:
-                             ((add_int (integer_of_int32 (C_69:
+     (C_69:
+     (safe_int32_of_integer_ (C_68:
+                             ((add_int (integer_of_int32 (C_67:
                                                          ((safe_acc_ !__anonstruct_tempomat_t_2_target_speed_this_5_13) this_5_0)))) 
                               (integer_of_int32 delta_0))))) in
      (JC_<somenum>:
@@ -4190,14 +4154,14 @@ let tempomat_change_speed_safety =
                         (0))))))))) }
   (init:
   try
-   (C_72:
+   (C_70:
    begin
      (let jessie_<somenum> = this_5_0 in
      (let jessie_<somenum> =
-     (C_71:
+     (C_69:
      (JC_<somenum>:
-     (int32_of_integer_ (C_70:
-                        ((add_int (integer_of_int32 (C_69:
+     (int32_of_integer_ (C_68:
+                        ((add_int (integer_of_int32 (C_67:
                                                     (JC_<somenum>:
                                                     (((acc_ __anonstruct_tempomat_t_2_this_5_13_alloc_table) !__anonstruct_tempomat_t_2_target_speed_this_5_13) this_5_0))))) 
                          (integer_of_int32 delta_0)))))) in
@@ -4226,10 +4190,10 @@ let tempomat_deactivate_ensures_default =
                 (0))))))) }
   (init:
   try
+   (C_37:
    (C_39:
    (C_41:
    (C_43:
-   (C_45:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let jessie_<somenum> = this_6 in
@@ -4241,7 +4205,7 @@ let tempomat_deactivate_ensures_default =
     (let jessie_<somenum> = this_6 in
     (((safe_upd_ __anonstruct_tempomat_t_2_previously_active_this_6_9) jessie_<somenum>) jessie_<somenum>)));
     (let jessie_<somenum> =
-    (tempomat_previous_speed := (C_44:
+    (tempomat_previous_speed := (C_42:
                                 ((safe_acc_ __anonstruct_tempomat_t_2_target_speed_this_6_9) this_6))) in
     void); (raise Return); (raise Return) end)))) with Return -> void end)
   { (JC_<somenum>:
@@ -4274,10 +4238,10 @@ let tempomat_deactivate_safety =
                 (0))))))) }
   (init:
   try
+   (C_37:
    (C_39:
    (C_41:
    (C_43:
-   (C_45:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let jessie_<somenum> = this_6 in
@@ -4292,7 +4256,7 @@ let tempomat_deactivate_safety =
     (JC_<somenum>:
     ((((upd_ __anonstruct_tempomat_t_2_this_6_9_alloc_table) __anonstruct_tempomat_t_2_previously_active_this_6_9) jessie_<somenum>) jessie_<somenum>))));
     (let jessie_<somenum> =
-    (tempomat_previous_speed := (C_44:
+    (tempomat_previous_speed := (C_42:
                                 (JC_<somenum>:
                                 (((acc_ __anonstruct_tempomat_t_2_this_6_9_alloc_table) __anonstruct_tempomat_t_2_target_speed_this_6_9) this_6)))) in
     void); (raise Return); (raise Return) end)))) with Return -> void end)
@@ -4322,60 +4286,75 @@ let tempomat_handler_ensures_default =
      (let tmp_1 = ref (any_int32 void) in
      (let tmp_2 = ref (any_int32 void) in
      (let tmp_3 = ref (any_int32 void) in
-     (C_85:
-     (C_86:
+     (C_83:
+     (C_84:
      begin
        (let jessie_<somenum> =
-       (button_0 := (C_84: (JC_<somenum>: (tempomat_lever_get void)))) in void);
+       (button_0 := (C_82: (JC_<somenum>: (tempomat_lever_get void)))) in void);
       (let jessie_<somenum> = (tempomat_handler_button := !button_0) in void);
-      (if ((neq_int_ (integer_of_int32 (C_116:
+      (if ((neq_int_ (integer_of_int32 (C_120:
                                        ((safe_acc_ !__anonstruct_tempomat_t_2_active_this_7_15) this_7_0)))) (0))
       then
        try
         begin
-          (let jessie_<somenum> =
-          (C_97:
-          (safe_uint32_of_integer_ (integer_of___anonenum_tempomat_lever_t_1 !button_0))) in
+          (let jessie_<somenum> = !button_0 in
           begin
-            (if ((eq_int_ (integer_of_uint32 jessie_<somenum>)) (2))
+            (if ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_95:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (2)))))
             then
-             (C_93:
+             (C_96:
              begin
                (let jessie_<somenum> = this_7_0 in
                (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
                (JC_<somenum>:
                (((((((tempomat_change_speed jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_7_15) __anonstruct_tempomat_t_2_temp_override_this_7_15) __anonstruct_tempomat_t_2_active_this_7_15) __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_previously_active_this_7_15))));
               (raise (Goto_switch_0_break_exc void)) end) else void);
-           (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (3)) || ((eq_int_ 
-                                                                  (integer_of_uint32 jessie_<somenum>)) (2)))
+           (if (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_97:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (3))))) || 
+               ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                (integer_of___anonenum_tempomat_lever_t_1 (C_95:
+                                                          (safe___anonenum_tempomat_lever_t_1_of_integer_ (2))))))
            then
-            (C_94:
+            (C_98:
             begin
               (let jessie_<somenum> = this_7_0 in
               (let jessie_<somenum> = (safe_int32_of_integer_ (10)) in
               (JC_<somenum>:
               (((((((tempomat_change_speed jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_7_15) __anonstruct_tempomat_t_2_temp_override_this_7_15) __anonstruct_tempomat_t_2_active_this_7_15) __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_previously_active_this_7_15))));
              (raise (Goto_switch_0_break_exc void)) end) else void);
-           (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (4)) || (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (3)) || 
-                                                                ((eq_int_ 
-                                                                  (integer_of_uint32 jessie_<somenum>)) (2))))
+           (if (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_99:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (4))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_97:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (3))))) || 
+               ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                (integer_of___anonenum_tempomat_lever_t_1 (C_95:
+                                                          (safe___anonenum_tempomat_lever_t_1_of_integer_ (2)))))))
            then
-            (C_95:
+            (C_100:
             begin
               (let jessie_<somenum> = this_7_0 in
               (let jessie_<somenum> = (safe_int32_of_integer_ (neg_int (1))) in
               (JC_<somenum>:
               (((((((tempomat_change_speed jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_7_15) __anonstruct_tempomat_t_2_temp_override_this_7_15) __anonstruct_tempomat_t_2_active_this_7_15) __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_previously_active_this_7_15))));
              (raise (Goto_switch_0_break_exc void)) end) else void);
-           (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (5)) || (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (4)) || 
-                                                                (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (3)) || 
-                                                                ((eq_int_ 
-                                                                  (integer_of_uint32 jessie_<somenum>)) (2)))))
+           (if (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_101:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (5))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_99:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (4))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_97:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (3))))) || 
+               ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                (integer_of___anonenum_tempomat_lever_t_1 (C_95:
+                                                          (safe___anonenum_tempomat_lever_t_1_of_integer_ (2))))))))
            then
-            (C_96:
+            (C_102:
             begin
               (let jessie_<somenum> = this_7_0 in
               (let jessie_<somenum> = (safe_int32_of_integer_ (neg_int (10))) in
@@ -4387,16 +4366,16 @@ let tempomat_handler_ensures_default =
            else void) end); (raise (Goto_switch_0_break_exc void)) end with
         Goto_switch_0_break_exc jessie_<somenum> ->
         (switch_0_break:
-        (C_100:
-        (C_102:
+        (C_105:
+        (C_107:
         begin
           void;
          (let jessie_<somenum> =
-         (C_98: (JC_<somenum>: (sensor_driver_input_accelerate void))) in
+         (C_103: (JC_<somenum>: (sensor_driver_input_accelerate void))) in
          (let jessie_<somenum> = this_7_0 in
          (((safe_upd_ __anonstruct_tempomat_t_2_temp_override_this_7_15) jessie_<somenum>) jessie_<somenum>)));
          (let jessie_<somenum> =
-         (tempomat_handler_driver_input_accelerate := (C_101:
+         (tempomat_handler_driver_input_accelerate := (C_106:
                                                       ((safe_acc_ !__anonstruct_tempomat_t_2_temp_override_this_7_15) this_7_0))) in
          void);
          (assert
@@ -4410,42 +4389,40 @@ let tempomat_handler_ensures_default =
           begin
             try
              begin
-               (if ((eq_int_ (integer_of_uint32 (C_110:
-                                                (safe_uint32_of_integer_ 
-                                                 (integer_of___anonenum_tempomat_lever_t_1 !button_0))))) (1))
+               (if ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 !button_0)) (1))
                then (raise (Goto__LOR_exc void))
                else
-                (C_105:
+                (C_110:
                 begin
                   (let jessie_<somenum> =
-                  (tmp_0 := (C_104:
+                  (tmp_0 := (C_109:
                             (JC_<somenum>: (sensor_brake_pedal_pressed void)))) in
                   void);
                  (if ((neq_int_ (integer_of_int32 !tmp_0)) (0))
                  then (raise (Goto__LOR_exc void))
                  else
-                  (C_107:
+                  (C_112:
                   begin
                     (let jessie_<somenum> =
-                    (tmp_1 := (C_106: (JC_<somenum>: (sensor_engine_rpm_low void)))) in
+                    (tmp_1 := (C_111: (JC_<somenum>: (sensor_engine_rpm_low void)))) in
                     void);
                    (if ((neq_int_ (integer_of_int32 !tmp_1)) (0))
                    then (raise (Goto__LOR_exc void))
                    else
-                    (C_109:
+                    (C_114:
                     begin
                       (let jessie_<somenum> =
-                      (tmp_2 := (C_108: (JC_<somenum>: (sensor_speed void)))) in
+                      (tmp_2 := (C_113: (JC_<somenum>: (sensor_speed void)))) in
                       void);
                      (if ((lt_int_ (integer_of_int32 !tmp_2)) (30))
                      then (raise (Goto__LOR_exc void)) else void) end)) end))
                 end)); (raise (Goto__LOR_0_exc void));
               (raise (Goto__LOR_exc void)) end with Goto__LOR_exc jessie_<somenum> ->
              (_LOR:
-             (C_111:
-             (C_112:
-             (C_113:
-             (C_114:
+             (C_115:
+             (C_116:
+             (C_117:
+             (C_118:
              begin
                (let jessie_<somenum> =
                (tempomat_handler_brake_pedal_pressed := !sensor_brake_pedal_pressed_result) in
@@ -4468,23 +4445,27 @@ let tempomat_handler_ensures_default =
       else
        try
         begin
-          (let jessie_<somenum> =
-          (C_92:
-          (safe_uint32_of_integer_ (integer_of___anonenum_tempomat_lever_t_1 !button_0))) in
+          (let jessie_<somenum> = !button_0 in
           begin
-            (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (5)) || (((eq_int_ 
-                                                                    (integer_of_uint32 jessie_<somenum>)) (4)) || 
-                                                                 (((eq_int_ 
-                                                                    (integer_of_uint32 jessie_<somenum>)) (3)) || 
-                                                                 ((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (2)))))
+            (if (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                  (integer_of___anonenum_tempomat_lever_t_1 (C_88:
+                                                            (safe___anonenum_tempomat_lever_t_1_of_integer_ (5))))) || 
+                (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                  (integer_of___anonenum_tempomat_lever_t_1 (C_87:
+                                                            (safe___anonenum_tempomat_lever_t_1_of_integer_ (4))))) || 
+                (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                  (integer_of___anonenum_tempomat_lever_t_1 (C_86:
+                                                            (safe___anonenum_tempomat_lever_t_1_of_integer_ (3))))) || 
+                ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_85:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (2))))))))
             then
-             (C_88:
+             (C_90:
              begin
                (let jessie_<somenum> =
-               (tmp_3 := (C_87: (JC_<somenum>: (sensor_speed void)))) in void);
-              (C_89:
-              (C_90:
+               (tmp_3 := (C_89: (JC_<somenum>: (sensor_speed void)))) in void);
+              (C_91:
+              (C_92:
               begin
                 void;
                (let jessie_<somenum> = this_7_0 in
@@ -4494,16 +4475,23 @@ let tempomat_handler_ensures_default =
                (let jessie_<somenum> =
                (tempomat_handler_speed := !sensor_speed_result) in void);
                (raise (Goto_switch_0_break_0_exc void)) end)) end) else void);
-           (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (6)) || (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (5)) || 
-                                                                (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (4)) || 
-                                                                (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (3)) || 
-                                                                ((eq_int_ 
-                                                                  (integer_of_uint32 jessie_<somenum>)) (2))))))
+           (if (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_93:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (6))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_88:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (5))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_87:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (4))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_86:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (3))))) || 
+               ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                (integer_of___anonenum_tempomat_lever_t_1 (C_85:
+                                                          (safe___anonenum_tempomat_lever_t_1_of_integer_ (2)))))))))
            then
-            (C_91:
+            (C_94:
             begin
               (let jessie_<somenum> = this_7_0 in
               (JC_<somenum>:
@@ -4561,63 +4549,77 @@ let tempomat_handler_safety =
      (let tmp_1 = ref (any_int32 void) in
      (let tmp_2 = ref (any_int32 void) in
      (let tmp_3 = ref (any_int32 void) in
-     (C_85:
-     (C_86:
+     (C_83:
+     (C_84:
      begin
        (let jessie_<somenum> =
-       (button_0 := (C_84: (JC_<somenum>: (tempomat_lever_get_requires void)))) in
+       (button_0 := (C_82: (JC_<somenum>: (tempomat_lever_get_requires void)))) in
        void);
       (let jessie_<somenum> = (tempomat_handler_button := !button_0) in void);
-      (if ((neq_int_ (integer_of_int32 (C_116:
+      (if ((neq_int_ (integer_of_int32 (C_120:
                                        (JC_<somenum>:
                                        (((acc_ __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_active_this_7_15) this_7_0))))) (0))
       then
        try
         begin
-          (let jessie_<somenum> =
-          (C_97:
-          (JC_<somenum>:
-          (uint32_of_integer_ (integer_of___anonenum_tempomat_lever_t_1 !button_0)))) in
+          (let jessie_<somenum> = !button_0 in
           begin
-            (if ((eq_int_ (integer_of_uint32 jessie_<somenum>)) (2))
+            (if ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_95:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (2)))))
             then
-             (C_93:
+             (C_96:
              begin
                (let jessie_<somenum> = this_7_0 in
                (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
                (JC_<somenum>:
                (((((((tempomat_change_speed_requires jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_7_15) __anonstruct_tempomat_t_2_temp_override_this_7_15) __anonstruct_tempomat_t_2_active_this_7_15) __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_previously_active_this_7_15))));
               (raise (Goto_switch_0_break_exc void)) end) else void);
-           (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (3)) || ((eq_int_ 
-                                                                  (integer_of_uint32 jessie_<somenum>)) (2)))
+           (if (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_97:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (3))))) || 
+               ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                (integer_of___anonenum_tempomat_lever_t_1 (C_95:
+                                                          (safe___anonenum_tempomat_lever_t_1_of_integer_ (2))))))
            then
-            (C_94:
+            (C_98:
             begin
               (let jessie_<somenum> = this_7_0 in
               (let jessie_<somenum> = (safe_int32_of_integer_ (10)) in
               (JC_<somenum>:
               (((((((tempomat_change_speed_requires jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_7_15) __anonstruct_tempomat_t_2_temp_override_this_7_15) __anonstruct_tempomat_t_2_active_this_7_15) __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_previously_active_this_7_15))));
              (raise (Goto_switch_0_break_exc void)) end) else void);
-           (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (4)) || (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (3)) || 
-                                                                ((eq_int_ 
-                                                                  (integer_of_uint32 jessie_<somenum>)) (2))))
+           (if (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_99:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (4))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_97:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (3))))) || 
+               ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                (integer_of___anonenum_tempomat_lever_t_1 (C_95:
+                                                          (safe___anonenum_tempomat_lever_t_1_of_integer_ (2)))))))
            then
-            (C_95:
+            (C_100:
             begin
               (let jessie_<somenum> = this_7_0 in
               (let jessie_<somenum> = (safe_int32_of_integer_ (neg_int (1))) in
               (JC_<somenum>:
               (((((((tempomat_change_speed_requires jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_7_15) __anonstruct_tempomat_t_2_temp_override_this_7_15) __anonstruct_tempomat_t_2_active_this_7_15) __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_previously_active_this_7_15))));
              (raise (Goto_switch_0_break_exc void)) end) else void);
-           (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (5)) || (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (4)) || 
-                                                                (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (3)) || 
-                                                                ((eq_int_ 
-                                                                  (integer_of_uint32 jessie_<somenum>)) (2)))))
+           (if (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_101:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (5))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_99:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (4))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_97:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (3))))) || 
+               ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                (integer_of___anonenum_tempomat_lever_t_1 (C_95:
+                                                          (safe___anonenum_tempomat_lever_t_1_of_integer_ (2))))))))
            then
-            (C_96:
+            (C_102:
             begin
               (let jessie_<somenum> = this_7_0 in
               (let jessie_<somenum> = (safe_int32_of_integer_ (neg_int (10))) in
@@ -4629,17 +4631,17 @@ let tempomat_handler_safety =
            else void) end); (raise (Goto_switch_0_break_exc void)) end with
         Goto_switch_0_break_exc jessie_<somenum> ->
         (switch_0_break:
-        (C_100:
-        (C_102:
+        (C_105:
+        (C_107:
         begin
           void;
          (let jessie_<somenum> =
-         (C_98: (JC_<somenum>: (sensor_driver_input_accelerate_requires void))) in
+         (C_103: (JC_<somenum>: (sensor_driver_input_accelerate_requires void))) in
          (let jessie_<somenum> = this_7_0 in
          (JC_<somenum>:
          ((((upd_ __anonstruct_tempomat_t_2_this_7_15_alloc_table) __anonstruct_tempomat_t_2_temp_override_this_7_15) jessie_<somenum>) jessie_<somenum>))));
          (let jessie_<somenum> =
-         (tempomat_handler_driver_input_accelerate := (C_101:
+         (tempomat_handler_driver_input_accelerate := (C_106:
                                                       (JC_<somenum>:
                                                       (((acc_ __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_temp_override_this_7_15) this_7_0)))) in
          void);
@@ -4654,34 +4656,32 @@ let tempomat_handler_safety =
           begin
             try
              begin
-               (if ((eq_int_ (integer_of_uint32 (C_110:
-                                                (JC_<somenum>:
-                                                (uint32_of_integer_ (integer_of___anonenum_tempomat_lever_t_1 !button_0)))))) (1))
+               (if ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 !button_0)) (1))
                then (raise (Goto__LOR_exc void))
                else
-                (C_105:
+                (C_110:
                 begin
                   (let jessie_<somenum> =
-                  (tmp_0 := (C_104:
+                  (tmp_0 := (C_109:
                             (JC_<somenum>:
                             (sensor_brake_pedal_pressed_requires void)))) in
                   void);
                  (if ((neq_int_ (integer_of_int32 !tmp_0)) (0))
                  then (raise (Goto__LOR_exc void))
                  else
-                  (C_107:
+                  (C_112:
                   begin
                     (let jessie_<somenum> =
-                    (tmp_1 := (C_106:
+                    (tmp_1 := (C_111:
                               (JC_<somenum>: (sensor_engine_rpm_low_requires void)))) in
                     void);
                    (if ((neq_int_ (integer_of_int32 !tmp_1)) (0))
                    then (raise (Goto__LOR_exc void))
                    else
-                    (C_109:
+                    (C_114:
                     begin
                       (let jessie_<somenum> =
-                      (tmp_2 := (C_108:
+                      (tmp_2 := (C_113:
                                 (JC_<somenum>: (sensor_speed_requires void)))) in
                       void);
                      (if ((lt_int_ (integer_of_int32 !tmp_2)) (30))
@@ -4689,10 +4689,10 @@ let tempomat_handler_safety =
                 end)); (raise (Goto__LOR_0_exc void));
               (raise (Goto__LOR_exc void)) end with Goto__LOR_exc jessie_<somenum> ->
              (_LOR:
-             (C_111:
-             (C_112:
-             (C_113:
-             (C_114:
+             (C_115:
+             (C_116:
+             (C_117:
+             (C_118:
              begin
                (let jessie_<somenum> =
                (tempomat_handler_brake_pedal_pressed := !sensor_brake_pedal_pressed_result) in
@@ -4716,25 +4716,28 @@ let tempomat_handler_safety =
       else
        try
         begin
-          (let jessie_<somenum> =
-          (C_92:
-          (JC_<somenum>:
-          (uint32_of_integer_ (integer_of___anonenum_tempomat_lever_t_1 !button_0)))) in
+          (let jessie_<somenum> = !button_0 in
           begin
-            (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (5)) || (((eq_int_ 
-                                                                    (integer_of_uint32 jessie_<somenum>)) (4)) || 
-                                                                 (((eq_int_ 
-                                                                    (integer_of_uint32 jessie_<somenum>)) (3)) || 
-                                                                 ((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (2)))))
+            (if (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                  (integer_of___anonenum_tempomat_lever_t_1 (C_88:
+                                                            (safe___anonenum_tempomat_lever_t_1_of_integer_ (5))))) || 
+                (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                  (integer_of___anonenum_tempomat_lever_t_1 (C_87:
+                                                            (safe___anonenum_tempomat_lever_t_1_of_integer_ (4))))) || 
+                (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                  (integer_of___anonenum_tempomat_lever_t_1 (C_86:
+                                                            (safe___anonenum_tempomat_lever_t_1_of_integer_ (3))))) || 
+                ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_85:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (2))))))))
             then
-             (C_88:
+             (C_90:
              begin
                (let jessie_<somenum> =
-               (tmp_3 := (C_87: (JC_<somenum>: (sensor_speed_requires void)))) in
+               (tmp_3 := (C_89: (JC_<somenum>: (sensor_speed_requires void)))) in
                void);
-              (C_89:
-              (C_90:
+              (C_91:
+              (C_92:
               begin
                 void;
                (let jessie_<somenum> = this_7_0 in
@@ -4744,16 +4747,23 @@ let tempomat_handler_safety =
                (let jessie_<somenum> =
                (tempomat_handler_speed := !sensor_speed_result) in void);
                (raise (Goto_switch_0_break_0_exc void)) end)) end) else void);
-           (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (6)) || (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (5)) || 
-                                                                (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (4)) || 
-                                                                (((eq_int_ 
-                                                                   (integer_of_uint32 jessie_<somenum>)) (3)) || 
-                                                                ((eq_int_ 
-                                                                  (integer_of_uint32 jessie_<somenum>)) (2))))))
+           (if (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_93:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (6))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_88:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (5))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_87:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (4))))) || 
+               (((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                 (integer_of___anonenum_tempomat_lever_t_1 (C_86:
+                                                           (safe___anonenum_tempomat_lever_t_1_of_integer_ (3))))) || 
+               ((eq_int_ (integer_of___anonenum_tempomat_lever_t_1 jessie_<somenum>)) 
+                (integer_of___anonenum_tempomat_lever_t_1 (C_85:
+                                                          (safe___anonenum_tempomat_lever_t_1_of_integer_ (2)))))))))
            then
-            (C_91:
+            (C_94:
             begin
               (let jessie_<somenum> = this_7_0 in
               (JC_<somenum>:
@@ -4779,8 +4789,8 @@ let tempomat_init_ensures_default =
         (0))))) }
   (init:
   try
+   (C_16:
    (C_18:
-   (C_20:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let jessie_<somenum> = this_8 in
@@ -4807,8 +4817,8 @@ let tempomat_init_safety =
         (0))))) }
   (init:
   try
+   (C_16:
    (C_18:
-   (C_20:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let jessie_<somenum> = this_8 in
@@ -4833,10 +4843,8 @@ let tempomat_lever_get_ensures_default =
       (C_1:
       begin
         (let jessie_<somenum> = (val := !tempomat_lever_port) in void);
-       (if ((neq_int_ (integer_of_uint32 (C_6:
-                                         (safe_uint32_of_integer_ (integer_of___anonenum_tempomat_lever_t_1 !val))))) 
-            (integer_of_uint32 (C_5:
-                               (safe_uint32_of_integer_ (integer_of___anonenum_tempomat_lever_t_1 !tempomat_lever_previous_value)))))
+       (if ((neq_int_ (integer_of___anonenum_tempomat_lever_t_1 !val)) 
+            (integer_of___anonenum_tempomat_lever_t_1 !tempomat_lever_previous_value))
        then
         (C_3:
         (C_4:
@@ -4870,12 +4878,8 @@ let tempomat_lever_get_safety =
       (C_1:
       begin
         (let jessie_<somenum> = (val := !tempomat_lever_port) in void);
-       (if ((neq_int_ (integer_of_uint32 (C_6:
-                                         (JC_<somenum>:
-                                         (uint32_of_integer_ (integer_of___anonenum_tempomat_lever_t_1 !val)))))) 
-            (integer_of_uint32 (C_5:
-                               (JC_<somenum>:
-                               (uint32_of_integer_ (integer_of___anonenum_tempomat_lever_t_1 !tempomat_lever_previous_value))))))
+       (if ((neq_int_ (integer_of___anonenum_tempomat_lever_t_1 !val)) 
+            (integer_of___anonenum_tempomat_lever_t_1 !tempomat_lever_previous_value))
        then
         (C_3:
         (C_4:
@@ -4918,22 +4922,22 @@ let tempomat_resume_ensures_default =
      (let tmp = ref (any_int32 void) in
      begin
        (let jessie_<somenum> =
-       (if ((neq_int_ (integer_of_int32 (C_60:
+       (if ((neq_int_ (integer_of_int32 (C_58:
                                         ((safe_acc_ __anonstruct_tempomat_t_2_previously_active_this_9_11) this_9)))) (0))
        then
-        (C_59:
+        (C_57:
         (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
         begin
           (let jessie_<somenum> = this_9 in
           (((safe_upd_ __anonstruct_tempomat_t_2_active_this_9_11) jessie_<somenum>) jessie_<somenum>));
          jessie_<somenum> end))
        else
-        (C_55:
+        (C_53:
         begin
-          (let jessie_<somenum> = (tmp := (C_54: (JC_<somenum>: (sensor_speed void)))) in
+          (let jessie_<somenum> = (tmp := (C_52: (JC_<somenum>: (sensor_speed void)))) in
           void);
-         (C_56:
-         (C_57:
+         (C_54:
+         (C_55:
          begin
            void;
           (let jessie_<somenum> = this_9 in
@@ -4982,11 +4986,11 @@ let tempomat_resume_safety =
      (let tmp = ref (any_int32 void) in
      begin
        (let jessie_<somenum> =
-       (if ((neq_int_ (integer_of_int32 (C_60:
+       (if ((neq_int_ (integer_of_int32 (C_58:
                                         (JC_<somenum>:
                                         (((acc_ __anonstruct_tempomat_t_2_this_9_11_alloc_table) __anonstruct_tempomat_t_2_previously_active_this_9_11) this_9))))) (0))
        then
-        (C_59:
+        (C_57:
         (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
         begin
           (let jessie_<somenum> = this_9 in
@@ -4994,12 +4998,12 @@ let tempomat_resume_safety =
           ((((upd_ __anonstruct_tempomat_t_2_this_9_11_alloc_table) __anonstruct_tempomat_t_2_active_this_9_11) jessie_<somenum>) jessie_<somenum>)));
          jessie_<somenum> end))
        else
-        (C_55:
+        (C_53:
         begin
           (let jessie_<somenum> =
-          (tmp := (C_54: (JC_<somenum>: (sensor_speed_requires void)))) in void);
-         (C_56:
-         (C_57:
+          (tmp := (C_52: (JC_<somenum>: (sensor_speed_requires void)))) in void);
+         (C_54:
+         (C_55:
          begin
            void;
           (let jessie_<somenum> = this_9 in
@@ -5033,8 +5037,8 @@ let tempomat_set_ensures_default =
       (if ((le_int_ (integer_of_int32 speed_1)) (250))
       then
        (let jessie_<somenum> =
+       (C_24:
        (C_26:
-       (C_28:
        begin
          (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
          (let jessie_<somenum> = this_10 in
@@ -5042,7 +5046,7 @@ let tempomat_set_ensures_default =
         (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
         (let jessie_<somenum> = this_10 in
         (((safe_upd_ __anonstruct_tempomat_t_2_temp_override_this_10_7) jessie_<somenum>) jessie_<somenum>)));
-        (C_30:
+        (C_28:
         (let jessie_<somenum> = speed_1 in
         begin
           (let jessie_<somenum> = this_10 in
@@ -5084,8 +5088,8 @@ let tempomat_set_safety =
       (if ((le_int_ (integer_of_int32 speed_1)) (250))
       then
        (let jessie_<somenum> =
+       (C_24:
        (C_26:
-       (C_28:
        begin
          (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
          (let jessie_<somenum> = this_10 in
@@ -5095,7 +5099,7 @@ let tempomat_set_safety =
         (let jessie_<somenum> = this_10 in
         (JC_<somenum>:
         ((((upd_ __anonstruct_tempomat_t_2_this_10_7_alloc_table) __anonstruct_tempomat_t_2_temp_override_this_10_7) jessie_<somenum>) jessie_<somenum>))));
-        (C_30:
+        (C_28:
         (let jessie_<somenum> = speed_1 in
         begin
           (let jessie_<somenum> = this_10 in
@@ -5111,43 +5115,43 @@ why --project [...] why/bts1004.why
   <function name="Function tempomat_set">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
-    <goal why_file="why/bts1004_po150.why">
+    <goal why_file="why/bts1004_po140.why">
       <location file = "PPCHOME/tests/jessie/bts1004.c" line = "104" begin = "65" end = "84"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/bts1004_po151.why">
+    <goal why_file="why/bts1004_po141.why">
       <location file = "PPCHOME/tests/jessie/bts1004.c" line = "105" begin = "9" end = "49"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Safety">
-    <goal why_file="why/bts1004_po152.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "179" begin = "41" end = "68"/>
+    <goal why_file="why/bts1004_po142.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "176" begin = "41" end = "68"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po153.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "179" begin = "41" end = "68"/>
+    <goal why_file="why/bts1004_po143.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "176" begin = "41" end = "68"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po154.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "180" begin = "41" end = "75"/>
+    <goal why_file="why/bts1004_po144.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "177" begin = "41" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po155.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "180" begin = "41" end = "75"/>
+    <goal why_file="why/bts1004_po145.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "177" begin = "41" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po156.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "181" begin = "41" end = "78"/>
+    <goal why_file="why/bts1004_po146.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "178" begin = "41" end = "78"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po157.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "181" begin = "41" end = "78"/>
+    <goal why_file="why/bts1004_po147.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "178" begin = "41" end = "78"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -5156,48 +5160,48 @@ text = "PointerDeref"/>
   <function name="Function tempomat_resume">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
-    <goal why_file="why/bts1004_po141.why">
+    <goal why_file="why/bts1004_po131.why">
       <location file = "PPCHOME/tests/jessie/bts1004.c" line = "138" begin = "65" end = "84"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/bts1004_po142.why">
+    <goal why_file="why/bts1004_po132.why">
       <location file = "PPCHOME/tests/jessie/bts1004.c" line = "139" begin = "9" end = "45"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Safety">
-    <goal why_file="why/bts1004_po143.why">
+    <goal why_file="why/bts1004_po133.why">
       <location file = "PPCHOME/tests/jessie/bts1004.c" line = "143" begin = "4" end = "27"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po144.why">
+    <goal why_file="why/bts1004_po134.why">
       <location file = "PPCHOME/tests/jessie/bts1004.c" line = "143" begin = "4" end = "27"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po145.why">
+    <goal why_file="why/bts1004_po135.why">
       <location file = "PPCHOME/tests/jessie/bts1004.c" line = "143" begin = "44" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po146.why">
+    <goal why_file="why/bts1004_po136.why">
       <location file = "PPCHOME/tests/jessie/bts1004.c" line = "143" begin = "44" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po147.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "235" begin = "17" end = "42"/>
+    <goal why_file="why/bts1004_po137.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "232" begin = "17" end = "42"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
-    <goal why_file="why/bts1004_po148.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "235" begin = "17" end = "42"/>
+    <goal why_file="why/bts1004_po138.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "232" begin = "17" end = "42"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
-    <goal why_file="why/bts1004_po149.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "235" begin = "17" end = "42"/>
+    <goal why_file="why/bts1004_po139.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "232" begin = "17" end = "42"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5206,60 +5210,38 @@ text = "UserCall"/>
   <function name="Function tempomat_lever_get">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
-    <goal why_file="why/bts1004_po136.why">
+    <goal why_file="why/bts1004_po130.why">
       <location file = "PPCHOME/tests/jessie/bts1004.c" line = "23" begin = "12" end = "54"/>
       <explain kind = "Post"/>
-    </goal>
-    </behavior>
-    <behavior name="Safety">
-    <goal why_file="why/bts1004_po137.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "30" begin = "4" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts1004_po138.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "30" begin = "4" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts1004_po139.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "30" begin = "11" end = "40"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts1004_po140.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "30" begin = "11" end = "40"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
     </goal>
     </behavior>
   </function>
   <function name="Function tempomat_init">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
-    <goal why_file="why/bts1004_po131.why">
+    <goal why_file="why/bts1004_po125.why">
       <location file = "PPCHOME/tests/jessie/bts1004.c" line = "92" begin = "35" end = "54"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Safety">
-    <goal why_file="why/bts1004_po132.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "154" begin = "15" end = "41"/>
+    <goal why_file="why/bts1004_po126.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "151" begin = "15" end = "41"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po133.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "154" begin = "15" end = "41"/>
+    <goal why_file="why/bts1004_po127.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "151" begin = "15" end = "41"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po134.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "155" begin = "15" end = "52"/>
+    <goal why_file="why/bts1004_po128.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "152" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bts1004_po135.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "155" begin = "15" end = "52"/>
+    <goal why_file="why/bts1004_po129.why">
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "152" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -5297,227 +5279,197 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po86.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "210" begin = "9" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "356" begin = "22" end = "54"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po87.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "210" begin = "9" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "356" begin = "22" end = "54"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po88.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "359" begin = "22" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "356" begin = "22" end = "54"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po89.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "359" begin = "22" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "356" begin = "22" end = "54"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po90.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "359" begin = "22" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "356" begin = "22" end = "54"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po91.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "359" begin = "22" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "356" begin = "22" end = "54"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po92.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "359" begin = "22" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "361" begin = "22" end = "55"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po93.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "359" begin = "22" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "361" begin = "22" end = "55"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po94.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "364" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "361" begin = "22" end = "55"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po95.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "364" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "361" begin = "22" end = "55"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po96.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "364" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "361" begin = "22" end = "55"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po97.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "364" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "361" begin = "22" end = "55"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po98.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "364" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "366" begin = "23" end = "56"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po99.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "364" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "366" begin = "23" end = "56"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po100.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "369" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "366" begin = "23" end = "56"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po101.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "369" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "366" begin = "23" end = "56"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po102.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "369" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "366" begin = "23" end = "56"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po103.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "369" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "366" begin = "23" end = "56"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po104.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "369" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "371" begin = "23" end = "57"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po105.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "369" begin = "22" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "371" begin = "23" end = "57"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po106.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "374" begin = "22" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "371" begin = "23" end = "57"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po107.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "374" begin = "22" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "371" begin = "23" end = "57"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po108.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "374" begin = "22" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "371" begin = "23" end = "57"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po109.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "374" begin = "22" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "371" begin = "23" end = "57"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po110.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "374" begin = "22" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "382" begin = "19" end = "147"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po111.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "374" begin = "22" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "382" begin = "19" end = "147"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po112.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "385" begin = "19" end = "144"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "218" begin = "55" end = "74"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po113.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "385" begin = "19" end = "144"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "218" begin = "55" end = "74"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po114.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "218" begin = "55" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "414" begin = "24" end = "51"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po115.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "218" begin = "55" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "414" begin = "24" end = "51"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po116.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "220" begin = "5" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "414" begin = "24" end = "51"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po117.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "220" begin = "5" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "414" begin = "24" end = "51"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po118.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "417" begin = "24" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "435" begin = "22" end = "49"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po119.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "417" begin = "24" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "435" begin = "22" end = "49"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po120.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "417" begin = "24" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "435" begin = "22" end = "49"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po121.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "417" begin = "24" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "441" begin = "22" end = "45"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po122.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "229" begin = "9" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "441" begin = "22" end = "45"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po123.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.c" line = "229" begin = "9" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "441" begin = "22" end = "45"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po124.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "438" begin = "22" end = "49"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/bts1004_po125.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "438" begin = "22" end = "49"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/bts1004_po126.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "438" begin = "22" end = "49"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/bts1004_po127.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "444" begin = "22" end = "45"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/bts1004_po128.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "444" begin = "22" end = "45"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/bts1004_po129.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "444" begin = "22" end = "45"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/bts1004_po130.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "444" begin = "22" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "441" begin = "22" end = "45"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5537,32 +5489,32 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts1004_po72.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "200" begin = "15" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "197" begin = "15" end = "41"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po73.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "200" begin = "15" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "197" begin = "15" end = "41"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po74.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "201" begin = "15" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "198" begin = "15" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po75.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "201" begin = "15" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "198" begin = "15" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po76.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "202" begin = "15" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "199" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po77.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "202" begin = "15" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "199" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -5612,17 +5564,17 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts1004_po67.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "258" begin = "14" end = "176"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "255" begin = "14" end = "176"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po68.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "258" begin = "14" end = "176"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "255" begin = "14" end = "176"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po69.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "258" begin = "14" end = "176"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "255" begin = "14" end = "176"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5638,27 +5590,27 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts1004_po56.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "635" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "633" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po57.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "635" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "633" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po58.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "635" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "633" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po59.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "635" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "633" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po60.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "635" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "633" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5732,27 +5684,27 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts1004_po39.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "696" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "694" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po40.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "696" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "694" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po41.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "696" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "694" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po42.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "696" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "694" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po43.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "696" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "694" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5782,27 +5734,27 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts1004_po32.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "677" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "675" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po33.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "677" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "675" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po34.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "677" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "675" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po35.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "677" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "675" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "677" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "675" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5818,27 +5770,27 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts1004_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "654" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "652" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po25.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "654" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "652" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po26.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "654" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "652" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po27.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "654" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "652" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po28.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "654" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "652" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5878,17 +5830,17 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po11.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "515" begin = "15" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "512" begin = "15" end = "58"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po12.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "515" begin = "15" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "512" begin = "15" end = "58"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po13.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "515" begin = "15" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "512" begin = "15" end = "58"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5954,12 +5906,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "486" begin = "15" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "483" begin = "15" end = "53"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "486" begin = "15" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "483" begin = "15" end = "53"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -6920,8 +6872,6 @@ type int8
 
 type padding
 
-type uint32
-
 type uint8
 
 type unsigned_charP
@@ -7051,11 +7001,6 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
-
-logic integer_of_uint32 : uint32 -> int
-
-predicate eq_uint32(x: uint32, y: uint32) =
-  (integer_of_uint32(x) = integer_of_uint32(y))
 
 logic integer_of_uint8 : uint8 -> int
 
@@ -7532,22 +7477,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-logic uint32_of_integer : int -> uint32
-
-axiom uint32_coerce:
-  (forall x:int.
-    (((0 <= x) and (x <= 4294967295)) ->
-     (integer_of_uint32(uint32_of_integer(x)) = x)))
-
-axiom uint32_extensionality:
-  (forall x:uint32.
-    (forall y:uint32 [(integer_of_uint32(x) = integer_of_uint32(y))].
-      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
-
-axiom uint32_range:
-  (forall x:uint32.
-    ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
 logic uint8_of_integer : int -> uint8
 

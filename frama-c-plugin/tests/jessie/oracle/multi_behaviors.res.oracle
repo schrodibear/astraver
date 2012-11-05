@@ -54,14 +54,14 @@ behavior two:
    {  
       {  
          (assert for one,
-         two: (C_1 : ((x == 1) || (x == 2))));
+         two: (C_1 : (jessie : ((x == 1) || (x == 2)))));
          ()
       };
       
       {  (if (x == 1) then 
          {  
             {  
-               (assert for one: (C_2 : (x == 1)));
+               (assert for one: (C_2 : (jessie : (x == 1))));
                ()
             };
             (C_5 : (x = (C_4 : ((C_3 : (x + 1)) :> int32))))
@@ -70,7 +70,7 @@ behavior two:
       
       {  
          (assert for one,
-         two: (C_6 : (x == 2)));
+         two: (C_6 : (jessie : (x == 2))));
          ()
       };
       

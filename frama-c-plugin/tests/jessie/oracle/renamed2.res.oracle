@@ -1,4 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only renamed2.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD renamed2.c"
 [jessie] Starting Jessie translation
-[jessie] warning: Unimplemented feature: Casting from type 𝔹 to type int not allowed. Please submit `feature request' report.
+renamed2.c:10:[jessie] failure: Casting from type 𝔹 to type int not allowed
+[jessie] user error: Unsupported feature(s).
+                     Jessie plugin can not be used on your code.

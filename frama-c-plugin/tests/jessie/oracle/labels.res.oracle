@@ -58,7 +58,7 @@ behavior default:
    {  (C_1 : (free(x)));
       
       {  
-         (assert for default: (C_2 : val{Pre, Here}(x)));
+         (assert for default: (C_2 : (jessie : val{Pre, Here}(x))));
          ()
       };
       
@@ -79,7 +79,7 @@ behavior default:
    {  (C_7 : (g = 1));
       
       {  
-         (assert for default: (C_8 : valg{Pre, Here}()));
+         (assert for default: (C_8 : (jessie : valg{Pre, Here}())));
          ()
       };
       

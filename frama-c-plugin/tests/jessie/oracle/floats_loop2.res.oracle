@@ -58,9 +58,9 @@ lemma round01 :
 (\real_abs((((0.1 :> float) :> real) - 0.1)) <= 1.49012e-09)
 
 float f_single(int32 n_1)
-  requires (C_18 : ((C_19 : (0 <= n_1)) && (C_20 : (n_1 <= 1000000))));
+  requires (C_16 : ((C_17 : (0 <= n_1)) && (C_18 : (n_1 <= 1000000))));
 behavior default:
-  ensures (C_17 : (\real_abs(((\result :> real) - (\at(n_1,Old) * 0.1))) <=
+  ensures (C_15 : (\real_abs(((\result :> real) - (\at(n_1,Old) * 0.1))) <=
                     (\at(n_1,Old) * (0x1p-8 + 1.49012e-09))));
 {  
    (var float t);
@@ -85,26 +85,27 @@ behavior default:
             {  (L : 
                {  
                   {  
-                     (assert for default: (C_8 : ((C_9 : (0.0 <= (t :> real))) &&
-                                                   (C_10 : ((t :> real) <=
-                                                             (1000000.0 *
-                                                               (0.1 +
-                                                                 (0x1p-8 +
-                                                                   1.49012e-09))))))));
+                     (assert for default: (C_8 : (jessie : ((0.0 <=
+                                                              (t :> real)) &&
+                                                             ((t :> real) <=
+                                                               (1000000.0 *
+                                                                 (0.1 +
+                                                                   (0x1p-8 +
+                                                                    1.49012e-09))))))));
                      ()
                   };
-                  (C_12 : (t = (C_11 : (t + (0.1 :> float)))))
+                  (C_10 : (t = (C_9 : (t + (0.1 :> float)))))
                });
                
                {  
-                  (assert for default: (C_13 : (\real_abs(((t :> real) -
-                                                            ((\at(t,L) :> real) +
-                                                              ((0.1 :> float) :> real)))) <=
-                                                 0x1p-8)));
+                  (assert for default: (C_11 : (jessie : (\real_abs(((t :> real) -
+                                                                    ((\at(t,L) :> real) +
+                                                                    ((0.1 :> float) :> real)))) <=
+                                                           0x1p-8))));
                   ()
                }
             };
-            (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
+            (C_14 : (i = (C_13 : ((C_12 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -115,12 +116,12 @@ behavior default:
 
 int32 main()
 behavior default:
-  ensures (C_23 : true);
+  ensures (C_21 : true);
 {  
    (var int32 __retres);
    
-   {  (C_21 : f_single(100));
-      (C_22 : (__retres = 0));
+   {  (C_19 : f_single(100));
+      (C_20 : (__retres = 0));
       
       (return __retres)
    }
@@ -555,16 +556,15 @@ let f_single_ensures_default =
              begin
                (assert
                { (JC_<somenum>:
-                 ((JC_<somenum>: le_real(0.0, single_value(t)))
-                 and (JC_<somenum>:
-                     le_real(single_value(t),
+                 (le_real(0.0, single_value(t))
+                 and le_real(single_value(t),
                      mul_real(1000000.0,
-                     add_real(0.1, add_real(0x1p-8, 1.49012e-09))))))) };
+                     add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) };
                void);
-              (C_12:
+              (C_10:
               begin
                 void;
-               (t := (C_11:
+               (t := (C_9:
                      (JC_<somenum>:
                      (((add_single_safe nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
                !t end) end in void);
@@ -573,11 +573,11 @@ let f_single_ensures_default =
                le_real(abs_real(sub_real(single_value(t),
                                 add_real(single_value(t@L), 0x1.99999ap-4))),
                0x1p-8)) }; void);
-             (C_16:
+             (C_14:
              begin
                void;
-              (i := (C_15:
-                    (safe_int32_of_integer_ (C_14:
+              (i := (C_13:
+                    (safe_int32_of_integer_ (C_12:
                                             ((add_int (integer_of_int32 !i)) (1))))));
               !i end) end) in void); (raise (Loop_continue_exc void)) end
           with Loop_continue_exc jessie_<somenum> -> void end end done;
@@ -635,15 +635,14 @@ let f_single_safety =
              begin
                [ { } unit reads t
                  { (JC_<somenum>:
-                   ((JC_<somenum>: le_real(0.0, single_value(t)))
-                   and (JC_<somenum>:
-                       le_real(single_value(t),
+                   (le_real(0.0, single_value(t))
+                   and le_real(single_value(t),
                        mul_real(1000000.0,
-                       add_real(0.1, add_real(0x1p-8, 1.49012e-09))))))) } ];
-              (C_12:
+                       add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) } ];
+              (C_10:
               begin
                 void;
-               (t := (C_11:
+               (t := (C_9:
                      (JC_<somenum>:
                      (((add_single nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
                !t end) end in void);
@@ -652,12 +651,12 @@ let f_single_safety =
                  le_real(abs_real(sub_real(single_value(t),
                                   add_real(single_value(t@L), 0x1.99999ap-4))),
                  0x1p-8)) } ];
-             (C_16:
+             (C_14:
              begin
                void;
-              (i := (C_15:
+              (i := (C_13:
                     (JC_<somenum>:
-                    (int32_of_integer_ (C_14:
+                    (int32_of_integer_ (C_12:
                                        ((add_int (integer_of_int32 !i)) (1)))))));
               !i end) end) in void); (raise (Loop_continue_exc void)) end
           with Loop_continue_exc jessie_<somenum> -> void end end done;
@@ -674,8 +673,8 @@ let main_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_21:
-     (C_22:
+     (C_19:
+     (C_20:
      begin
        (let jessie_<somenum> =
        (let jessie_<somenum> = (safe_int32_of_integer_ (100)) in
@@ -692,8 +691,8 @@ let main_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_21:
-     (C_22:
+     (C_19:
+     (C_20:
      begin
        (let jessie_<somenum> =
        (let jessie_<somenum> = (safe_int32_of_integer_ (100)) in
@@ -750,12 +749,12 @@ why --project [...] why/floats_loop2.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/floats_loop2_po20.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop2.jessie/floats_loop2.jc" line = "115" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop2.jessie/floats_loop2.jc" line = "116" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/floats_loop2_po21.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop2.jessie/floats_loop2.jc" line = "115" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop2.jessie/floats_loop2.jc" line = "116" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -777,11 +776,11 @@ text = "UserCall"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_loop2_po8.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop2.c" line = "49" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop2.c" line = "49" begin = "15" end = "65"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_loop2_po9.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop2.c" line = "49" begin = "22" end = "65"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop2.c" line = "49" begin = "15" end = "65"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_loop2_po10.why">

@@ -73,13 +73,13 @@ behavior default:
       {  (C_9 : (y = 5));
          
          {  
-            (assert for default: (C_10 : false));
+            (assert for default: (C_10 : (jessie : false)));
             ()
          }
       });
       
       {  
-         (assert for default: (C_12 : (y == 1)));
+         (assert for default: (C_12 : (jessie : (y == 1))));
          ()
       };
       (C_13 : (__retres = 0));

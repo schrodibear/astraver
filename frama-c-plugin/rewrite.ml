@@ -568,12 +568,9 @@ object
   inherit Visitor.frama_c_inplace
   val mutable my_globals = []
   method vstmt_aux s =
-    let filter = Ast_info.lift_annot_func Logic_utils.is_contract in
-    match Annotations.code_annot ~filter s with
+    match Annotations.code_annot ~filter:Logic_utils.is_contract s with
       | [ annot ] ->
-          (match 
-              (Annotations.code_annotation_of_rooted annot).annot_content
-           with
+          (match annot.annot_content with
              | AStmtSpec
                 (_,({ spec_behavior =
                     [ { b_name = "Frama_C_implicit_init";_ }]} as spec))

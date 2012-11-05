@@ -51,16 +51,16 @@ lemma mean_1 :
     ((x <= y) ==> ((x <= (x + ((y - x) / 2))) && ((x + ((y - x) / 2)) <= y)))))
 
 int32 binary_search(intP[..] t, int32 n_1, int32 v)
-  requires (C_40 : (((C_42 : (n_1 >= 0)) &&
-                      ((C_44 : (\offset_min(t) <= 0)) &&
-                        (C_45 : (\offset_max(t) >= (n_1 - 1))))) &&
-                     (C_46 : (\forall integer k1;
+  requires (C_38 : (((C_40 : (n_1 >= 0)) &&
+                      ((C_42 : (\offset_min(t) <= 0)) &&
+                        (C_43 : (\offset_max(t) >= (n_1 - 1))))) &&
+                     (C_44 : (\forall integer k1;
                                (\forall integer k2;
                                  (((0 <= k1) &&
                                     ((k1 <= k2) && (k2 <= (n_1 - 1)))) ==>
                                    ((t + k1).intM <= (t + k2).intM)))))));
 behavior default:
-  ensures (C_39 : (((\result >= 0) &&
+  ensures (C_37 : (((\result >= 0) &&
                      ((\at(t,Old) + \result).intM == \at(v,Old))) ||
                     ((\result == (- 1)) &&
                       (\forall integer k_0;
@@ -104,22 +104,22 @@ behavior default:
                                                                   2)) :> int32)))) :> int32))));
                
                {  
-                  (assert for default: (C_25 : ((C_26 : (l <= m)) &&
-                                                 (C_27 : (m <= u)))));
+                  (assert for default: (C_25 : (jessie : ((l <= m) &&
+                                                           (m <= u)))));
                   ()
                };
                
-               {  (if ((C_38 : (C_37 : (t + m)).intM) < v) then (C_36 : (l = 
-                                                                (C_35 : (
-                                                                (C_34 : 
+               {  (if ((C_36 : (C_35 : (t + m)).intM) < v) then (C_34 : (l = 
+                                                                (C_33 : (
+                                                                (C_32 : 
                                                                 (m +
                                                                   1)) :> int32)))) else 
-                  (if ((C_33 : (C_32 : (t + m)).intM) > v) then (C_31 : (u = 
-                                                                (C_30 : (
-                                                                (C_29 : 
+                  (if ((C_31 : (C_30 : (t + m)).intM) > v) then (C_29 : (u = 
+                                                                (C_28 : (
+                                                                (C_27 : 
                                                                 (m -
                                                                   1)) :> int32)))) else 
-                  {  (C_28 : (p = m));
+                  {  (C_26 : (p = m));
                      
                      (goto while_0_break)
                   }))
@@ -700,36 +700,36 @@ let binary_search_ensures_default =
            void);
            (assert
            { (JC_<somenum>:
-             ((JC_<somenum>: le_int(integer_of_int32(l), integer_of_int32(m)))
-             and (JC_<somenum>: le_int(integer_of_int32(m), integer_of_int32(u))))) };
-           void); void;
-           (if ((lt_int_ (integer_of_int32 (C_38:
+             (le_int(integer_of_int32(l), integer_of_int32(m))
+             and le_int(integer_of_int32(m), integer_of_int32(u)))) }; void);
+           void;
+           (if ((lt_int_ (integer_of_int32 (C_36:
                                            ((safe_acc_ intP_intM_t_1) 
-                                            (C_37:
+                                            (C_35:
                                             ((shift t) (integer_of_int32 !m))))))) 
                 (integer_of_int32 v))
            then
             (let jessie_<somenum> =
-            (C_36:
-            (l := (C_35:
-                  (safe_int32_of_integer_ (C_34:
+            (C_34:
+            (l := (C_33:
+                  (safe_int32_of_integer_ (C_32:
                                           ((add_int (integer_of_int32 !m)) (1))))))) in
             void)
            else
-            (if ((gt_int_ (integer_of_int32 (C_33:
+            (if ((gt_int_ (integer_of_int32 (C_31:
                                             ((safe_acc_ intP_intM_t_1) 
-                                             (C_32:
+                                             (C_30:
                                              ((shift t) (integer_of_int32 !m))))))) 
                  (integer_of_int32 v))
             then
              (let jessie_<somenum> =
-             (C_31:
-             (u := (C_30:
-                   (safe_int32_of_integer_ (C_29:
+             (C_29:
+             (u := (C_28:
+                   (safe_int32_of_integer_ (C_27:
                                            ((sub_int (integer_of_int32 !m)) (1))))))) in
              void)
             else
-             (C_28:
+             (C_26:
              begin
                (let jessie_<somenum> = (p := !m) in void);
               (raise (Goto_while_0_break_exc void)) end)));
@@ -844,38 +844,38 @@ let binary_search_safety =
            void);
            [ { } unit reads l,m,u
              { (JC_<somenum>:
-               ((JC_<somenum>: le_int(integer_of_int32(l), integer_of_int32(m)))
-               and (JC_<somenum>: le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
+               (le_int(integer_of_int32(l), integer_of_int32(m))
+               and le_int(integer_of_int32(m), integer_of_int32(u)))) } ];
            void;
-           (if ((lt_int_ (integer_of_int32 (C_38:
+           (if ((lt_int_ (integer_of_int32 (C_36:
                                            (JC_<somenum>:
                                            ((((offset_acc_ intP_t_1_alloc_table) intP_intM_t_1) t) 
                                             (integer_of_int32 !m)))))) 
                 (integer_of_int32 v))
            then
             (let jessie_<somenum> =
-            (C_36:
-            (l := (C_35:
+            (C_34:
+            (l := (C_33:
                   (JC_<somenum>:
-                  (int32_of_integer_ (C_34:
+                  (int32_of_integer_ (C_32:
                                      ((add_int (integer_of_int32 !m)) (1)))))))) in
             void)
            else
-            (if ((gt_int_ (integer_of_int32 (C_33:
+            (if ((gt_int_ (integer_of_int32 (C_31:
                                             (JC_<somenum>:
                                             ((((offset_acc_ intP_t_1_alloc_table) intP_intM_t_1) t) 
                                              (integer_of_int32 !m)))))) 
                  (integer_of_int32 v))
             then
              (let jessie_<somenum> =
-             (C_31:
-             (u := (C_30:
+             (C_29:
+             (u := (C_28:
                    (JC_<somenum>:
-                   (int32_of_integer_ (C_29:
+                   (int32_of_integer_ (C_27:
                                       ((sub_int (integer_of_int32 !m)) (1)))))))) in
              void)
             else
-             (C_28:
+             (C_26:
              begin
                (let jessie_<somenum> = (p := !m) in void);
               (raise (Goto_while_0_break_exc void)) end)));
@@ -932,11 +932,11 @@ why --project [...] why/binary_search_overflows.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po9.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "25" begin = "15" end = "21"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "25" begin = "15" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po10.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "25" begin = "20" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "25" begin = "15" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po11.why">

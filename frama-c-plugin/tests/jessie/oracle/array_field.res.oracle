@@ -95,14 +95,14 @@ behavior default:
                                                                1)) :> int32))));
       
       {  
-         (assert for default: (C_34 : ((lg.aj + 0).intM ==
-                                        ((lg.ai + 0).intM - 1))));
+         (assert for default: (C_34 : (jessie : ((lg.aj + 0).intM ==
+                                                  ((lg.ai + 0).intM - 1)))));
          ()
       };
       
       {  
-         (assert for default: (C_35 : ((lg.aj + 1).intM ==
-                                        ((lg.ai + 0).intM + 1))));
+         (assert for default: (C_35 : (jessie : ((lg.aj + 1).intM ==
+                                                  ((lg.ai + 0).intM + 1)))));
          ()
       };
       

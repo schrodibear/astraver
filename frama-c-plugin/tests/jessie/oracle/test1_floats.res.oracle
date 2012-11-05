@@ -48,12 +48,12 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_1 : (\real_abs(((1.0 -
-                                                   (((x_2 :> real) *
-                                                      (x_2 :> real)) *
-                                                     0.5)) -
-                                                  \cos((x_2 :> real)))) <=
-                                       0x1p-24)));
+         (assert for default: (C_1 : (jessie : (\real_abs(((1.0 -
+                                                             (((x_2 :> real) *
+                                                                (x_2 :> real)) *
+                                                               0.5)) -
+                                                            \cos((x_2 :> real)))) <=
+                                                 0x1p-24))));
          ()
       };
       
@@ -80,9 +80,10 @@ behavior default:
                              (C_9 : ((C_8 : (x_1 * x_1)) * (0.5 :> float)))))));
       
       {  
-         (assert for default: (C_12 : (\real_abs((\single_exact(r) -
-                                                   \cos((x_1 :> real)))) <=
-                                        0x1p-24)));
+         (assert for default: (C_12 : (jessie : (\real_abs((\single_exact(
+                                                             r) -
+                                                             \cos((x_1 :> real)))) <=
+                                                  0x1p-24))));
          ()
       };
       
@@ -117,7 +118,8 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_17 : (\real_abs((x :> real)) <= 0x1.0002p-5)));
+         (assert for default: (C_17 : (jessie : (\real_abs((x :> real)) <=
+                                                  0x1.0002p-5))));
          ()
       };
       
@@ -126,26 +128,28 @@ behavior default:
       };
       
       {  
-         (assert for default: (C_22 : (\real_abs((\single_exact(r_0) -
-                                                   \cos(\single_exact(x)))) <=
-                                        0x1p-24)));
+         (assert for default: (C_22 : (jessie : (\real_abs((\single_exact(
+                                                             r_0) -
+                                                             \cos(\single_exact(
+                                                                  x)))) <=
+                                                  0x1p-24))));
          ()
       };
       
       {  
-         (assert for default: (C_23 : (\real_abs(((1.0 -
-                                                    (((x :> real) *
-                                                       (x :> real)) *
-                                                      0.5)) -
-                                                   \cos((x :> real)))) <=
-                                        0x1p-24)));
+         (assert for default: (C_23 : (jessie : (\real_abs(((1.0 -
+                                                              (((x :> real) *
+                                                                 (x :> real)) *
+                                                                0.5)) -
+                                                             \cos((x :> real)))) <=
+                                                  0x1p-24))));
          ()
       };
       
       {  
-         (assert for default: (C_24 : (\real_abs(((r_0 :> real) -
-                                                   \cos((x :> real)))) <=
-                                        0x1p-23)));
+         (assert for default: (C_24 : (jessie : (\real_abs(((r_0 :> real) -
+                                                             \cos((x :> real)))) <=
+                                                  0x1p-23))));
          ()
       };
       
@@ -166,12 +170,12 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_31 : (\real_abs(((1.0 -
-                                                    (((x_0 :> real) *
-                                                       (x_0 :> real)) *
-                                                      0.5)) -
-                                                   \cos((x_0 :> real)))) <=
-                                        0x0.Fp-20)));
+         (assert for default: (C_31 : (jessie : (\real_abs(((1.0 -
+                                                              (((x_0 :> real) *
+                                                                 (x_0 :> real)) *
+                                                                0.5)) -
+                                                             \cos((x_0 :> real)))) <=
+                                                  0x0.Fp-20))));
          ()
       };
       

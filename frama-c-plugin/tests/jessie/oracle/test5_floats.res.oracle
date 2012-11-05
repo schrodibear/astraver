@@ -45,7 +45,7 @@ axiomatic Truncate {
 
 unit f()
 behavior default:
-  ensures (C_11 : true);
+  ensures (C_9 : true);
 {  
    (var float x);
    
@@ -76,8 +76,8 @@ behavior default:
       (while_0_break : ());
       
       {  
-         (assert for default: (C_8 : ((C_9 : ((x :> real) == (y :> real))) &&
-                                       (C_10 : ((y :> real) == 0x2.0p24)))));
+         (assert for default: (C_8 : (jessie : (((x :> real) == (y :> real)) &&
+                                                 ((y :> real) == 0x2.0p24)))));
          ()
       };
       
@@ -444,9 +444,9 @@ let f_ensures_default =
         void;
        (assert
        { (JC_<somenum>:
-         ((JC_<somenum>: (single_value(x_1) = single_value(y)))
-         and (JC_<somenum>: (single_value(y) = 0x2.0p24)))) }; void); void;
-       (raise Return) end) end)); (raise Return) end with Return -> void end)
+         ((single_value(x_1) = single_value(y))
+         and (single_value(y) = 0x2.0p24))) }; void); void; (raise Return)
+      end) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -493,10 +493,9 @@ let f_safety =
         void;
        [ { } unit reads x_1,y
          { (JC_<somenum>:
-           ((JC_<somenum>: (single_value(x_1) = single_value(y)))
-           and (JC_<somenum>: (single_value(y) = 0x2.0p24)))) } ]; void;
-       (raise Return) end) end)); (raise Return) end with Return -> void end)
-  { true }
+           ((single_value(x_1) = single_value(y))
+           and (single_value(y) = 0x2.0p24))) } ]; void; (raise Return) end) end));
+    (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test5_floats.jessie --quiet -f test5_floats.makefile project
@@ -514,11 +513,11 @@ why --project [...] why/test5_floats.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/test5_floats_po3.why">
-      <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "17" begin = "13" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "17" begin = "13" end = "31"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/test5_floats_po4.why">
-      <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "17" begin = "18" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "17" begin = "13" end = "31"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

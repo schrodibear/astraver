@@ -52,7 +52,7 @@ behavior default:
    {  (C_2 : (y = (C_1 : (x + (0.0 :> double)))));
       
       {  
-         (assert for default: (C_3 : ((y :> real) == (x :> real))));
+         (assert for default: (C_3 : (jessie : ((y :> real) == (x :> real)))));
          ()
       };
       (C_4 : (__retres = 0));

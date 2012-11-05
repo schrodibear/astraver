@@ -80,7 +80,7 @@ behavior default:
    {  (C_4 : ((C_3 : (C_2 : (C_1 : (x :> pP[0])).pM).intM) = 0));
       
       {  
-         (assert for default: (C_5 : ((x :> pP[0]).pM.intM == 0)));
+         (assert for default: (C_5 : (jessie : ((x :> pP[0]).pM.intM == 0))));
          ()
       };
       (C_8 : ((C_7 : (C_6 : (x :> iP[0])).iM) = 0));

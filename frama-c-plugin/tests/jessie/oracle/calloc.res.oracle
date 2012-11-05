@@ -885,7 +885,7 @@ behavior default:
       (C_263 : memcpy(y, x, len));
       
       {  
-         (assert for default: (C_264 : valid_string{Here}(y)));
+         (assert for default: (C_264 : (jessie : valid_string{Here}(y))));
          ()
       };
       

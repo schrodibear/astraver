@@ -56,7 +56,7 @@ behavior default:
       (C_2 : inc(s_3));
       
       {  
-         (assert for default: (C_3 : (s_3.foo > 0)));
+         (assert for default: (C_3 : (jessie : (s_3.foo > 0))));
          ()
       };
       
@@ -73,7 +73,7 @@ behavior default:
       (while_0_break : ());
       
       {  
-         (assert for default: (C_8 : (s_3.foo <= 0)));
+         (assert for default: (C_8 : (jessie : (s_3.foo <= 0))));
          ()
       };
       

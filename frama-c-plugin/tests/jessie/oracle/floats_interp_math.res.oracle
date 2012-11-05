@@ -120,7 +120,7 @@ behavior inter:
       (C_10 : (i0 = i));
       
       {  
-         (assert for small: (C_11 : (i == 0)));
+         (assert for small: (C_11 : (jessie : (i == 0))));
          ()
       };
       
@@ -150,12 +150,12 @@ behavior inter:
       (C_25 : (i_f = i));
       
       {  
-         (assert for small: (C_26 : (i == 0)));
+         (assert for small: (C_26 : (jessie : (i == 0))));
          ()
       };
       
       {  
-         (assert for big: (C_27 : (i == n_1)));
+         (assert for big: (C_27 : (jessie : (i == n_1))));
          ()
       };
       

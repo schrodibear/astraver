@@ -56,7 +56,8 @@ behavior default:
       (C_4 : ((C_3 : (t + 1).doubleM) = (2.0 :> double)));
       
       {  
-         (assert for default: (C_5 : (((t + 0).doubleM :> real) == 1.0)));
+         (assert for default: (C_5 : (jessie : (((t + 0).doubleM :> real) ==
+                                                 1.0))));
          ()
       };
       
@@ -75,7 +76,8 @@ behavior default:
       (C_15 : ((C_14 : (C_13 : (t_0 + 2)).doubleM) = (3.0 :> double)));
       
       {  
-         (assert for default: (C_16 : (((t_0 + 0).doubleM :> real) == 1.0)));
+         (assert for default: (C_16 : (jessie : (((t_0 + 0).doubleM :> real) ==
+                                                  1.0))));
          ()
       };
       

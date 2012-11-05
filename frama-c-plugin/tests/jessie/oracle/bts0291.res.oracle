@@ -73,7 +73,7 @@ behavior default:
       (C_18 : foo(x_0, (C_17 : (x_0 :> charP[..]))));
       
       {  
-         (assert for default: (C_19 : (2 == (- 1))));
+         (assert for default: (C_19 : (jessie : (2 == (- 1)))));
          ()
       };
       

@@ -1,4 +1,6 @@
-
+/* run.config
+DONTRUN: VP 2012-10-26: there's no point in having an assert failure in an oracle
+*/
 struct S {
   int ii;
   int jj;

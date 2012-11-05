@@ -3,5 +3,5 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_S
 [jessie] Starting Jessie translation
 fs248.c:15:[jessie] warning: skipping all arguments of implicit prototype Frama_C_dump_each
 fs248.c:222:[jessie] failure: Casting from type unsigned int to type struct intP * not allowed
-[jessie] warning: Unsupported feature(s).
-                  Jessie plugin can not be used on your code.
+[jessie] user error: Unsupported feature(s).
+                     Jessie plugin can not be used on your code.

@@ -47,12 +47,12 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_1 : (\real_abs(((1.0 -
-                                                   (((x :> real) *
-                                                      (x :> real)) *
-                                                     0.5)) -
-                                                  \cos((x :> real)))) <=
-                                       0x1p-24)));
+         (assert for default: (C_1 : (jessie : (\real_abs(((1.0 -
+                                                             (((x :> real) *
+                                                                (x :> real)) *
+                                                               0.5)) -
+                                                            \cos((x :> real)))) <=
+                                                 0x1p-24))));
          ()
       };
       
