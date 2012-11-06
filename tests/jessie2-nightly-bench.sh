@@ -13,13 +13,13 @@ case "$1" in
 esac
 
 REPORTDIR=$PWD/..
-OUT=$REPORTDIR/jessie3.out
-PREVIOUS=$REPORTDIR/jessie3.previous
-DIFF=$REPORTDIR/jessie3.diff
-REPORT=$REPORTDIR/jessie3.report
+OUT=$REPORTDIR/jessie2.out
+PREVIOUS=$REPORTDIR/jessie2.previous
+DIFF=$REPORTDIR/jessie2.diff
+REPORT=$REPORTDIR/jessie2.report
 DATE=`date --utc +%Y-%m-%d`
 
-SUBJECT="Jessie3 nightly bench:"
+SUBJECT="Jessie2 nightly bench:"
 
 notify() {
     if test "$REPORTBYMAIL" = "yes"; then
@@ -33,7 +33,7 @@ notify() {
 }
 
 
-echo "== Jessie3 bench on $DATE ==" > $REPORT
+echo "== Jessie2 bench on $DATE ==" > $REPORT
 
 # configuration
 autoconf
@@ -92,7 +92,7 @@ else
 fi
 
 # replay proofs
-tests/jessie3-replay.sh &> $OUT
+tests/jessie2-replay.sh &> $OUT
 if test "$?" != "0" ; then
     SUBJECT="$SUBJECT failed"
     echo "Proof replay failed" >> $REPORT
@@ -102,7 +102,7 @@ else
 fi
 
 # store the state for this day
-cp $OUT $REPORTDIR/jessie3-bench-$DATE
+cp $OUT $REPORTDIR/jessie2-bench-$DATE
 
 # output the diff against previous run
 diff -u $PREVIOUS $OUT &> $DIFF

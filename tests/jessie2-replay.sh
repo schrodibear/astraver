@@ -39,8 +39,8 @@ esac
 
 
 DIR=$PWD
-TMP=$DIR/jessie3-regtests.out
-TMPERR=$DIR/jessie3-regtests.err
+TMP=$DIR/jessie2-regtests.out
+TMPERR=$DIR/jessie2-regtests.err
 export WHYLIB=$DIR/lib
 export KRAKATOALIB=$DIR/lib
 
