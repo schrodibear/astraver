@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../FlagStatic.mlw"
   verified="true"
@@ -30,7 +30,7 @@
    locfile="../FlagStatic.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
-   expanded="true">
+   expanded="false">
   </theory>
   <theory
    name="Jessie_program"
@@ -42,32 +42,32 @@
     name="WP_parameter _FlagStatic_flag_ensures_default"
     locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
-    expl="Method flag, default behavior"
+    expl="VC for _FlagStatic_flag_ensures_default"
     sum="0fd6f19198e737013114fb180033327d"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix =V8a_FlagStatic_BLUEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V12a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V12V4Aainfix &lt;=V6V12Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDais_monochromeV0V13ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV14Aais_monochromeV0V6V5a_FlagStatic_WHITEV14Aais_monochromeV0c0V6a_FlagStatic_BLUEV14Aainfix &lt;=V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V13Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V14Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FIainfix =V13ainfix -V4c1Fais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7LaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FAais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
     <label
-     name="expl:parameter _FlagStatic_flag_ensures_default"/>
-    <label
      name="expl:Method flag, default behavior"/>
+    <label
+     name="expl:VC for _FlagStatic_flag_ensures_default"/>
     <transf
      name="split_goal"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.1"
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
-      expl="loop invariant init"
+      expl="1. loop invariant init"
       sum="84fd1aa49ebc19629b368f682aaf8f91"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
-       name="expl:parameter _FlagStatic_flag_ensures_default"/>
-      <label
        name="expl:Method flag, default behavior"/>
+      <label
+       name="expl:VC for _FlagStatic_flag_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -113,49 +113,49 @@
       name="WP_parameter _FlagStatic_flag_ensures_default.2"
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
-      expl="loop invariant preservation"
+      expl="2. loop invariant preservation"
       sum="d6a8b2b5a860cc5845f6e4f6b0943eb6"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
-       name="expl:parameter _FlagStatic_flag_ensures_default"/>
-      <label
        name="expl:Method flag, default behavior"/>
+      <label
+       name="expl:VC for _FlagStatic_flag_ensures_default"/>
       <transf
        name="split_goal"
        proved="true"
-       expanded="true">
+       expanded="false">
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.1"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="1."
         sum="d1db4595eb2b35ef51bce3b12fcb30d6"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <transf
          name="inline_goal"
          proved="true"
-         expanded="true">
+         expanded="false">
          <goal
           name="WP_parameter _FlagStatic_flag_ensures_default.2.1.1"
           locfile="../FlagStatic.java"
           loclnum="87" loccnumb="23" loccnume="27"
-          expl="Method flag, default behavior"
+          expl="1."
           sum="74e4c070edb17d9482226e67a7c0fe04"
           proved="true"
-          expanded="true"
+          expanded="false"
           shape="ais_coloraselectV11ashiftV0V12Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V12FAa_Non_null_intMV0V2Iainfix =aselectV11V13aselectV7V13Iain_psetV13apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6NAavalidV2V13FAainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8c1LaselectV7ashiftV0V5Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V14a_FlagStatic_REDIainfix &lt;V14ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_WHITEIainfix &lt;V15V5Aainfix &lt;=V6V15FAainfix =aselectV7ashiftV0V16a_FlagStatic_BLUEIainfix &lt;V16V6Aainfix &lt;=c0V16FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2FIainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_coloraselectV1ashiftV0V18Iainfix &lt;V18ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V18FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FF">
           <label
-           name="expl:parameter _FlagStatic_flag_ensures_default"/>
-          <label
            name="expl:Method flag, default behavior"/>
+          <label
+           name="expl:VC for _FlagStatic_flag_ensures_default"/>
           <proof
            prover="0"
            timelimit="5"
@@ -203,15 +203,15 @@
         name="WP_parameter _FlagStatic_flag_ensures_default.2.2"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="2."
         sum="8ed4160ac2a453417372bfb49b6ecf17"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ainfix &lt;=c0V9Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -257,15 +257,15 @@
         name="WP_parameter _FlagStatic_flag_ensures_default.2.3"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="3."
         sum="ace9df66858444331ad250607cf9197f"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ainfix &lt;=V9V10Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -311,15 +311,15 @@
         name="WP_parameter _FlagStatic_flag_ensures_default.2.4"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="4."
         sum="629d679f3275d639c35e25b6b567dd65"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ainfix &lt;=V10V4Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -365,15 +365,15 @@
         name="WP_parameter _FlagStatic_flag_ensures_default.2.5"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="5."
         sum="7f2532e292f115ffb89c39ee52cd3eee"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ainfix &lt;=V4ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -419,15 +419,15 @@
         name="WP_parameter _FlagStatic_flag_ensures_default.2.6"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="6."
         sum="6bd091f3ecd3677e4427e3e0d7925cdf"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ais_monochromeV0c0V9a_FlagStatic_BLUEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -458,22 +458,22 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
+         <result status="timeout" time="6.22"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.7"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="7."
         sum="a6735e4075f522965bafcbd19c7d5f0d"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ais_monochromeV0V9V10a_FlagStatic_WHITEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -504,22 +504,22 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.14"/>
+         <result status="timeout" time="6.63"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.8"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="8."
         sum="8a4643d68796bb81f621640a42e6355a"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -534,7 +534,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="4.91"/>
+         <result status="valid" time="5.61"/>
         </proof>
         <proof
          prover="2"
@@ -558,7 +558,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="timeout" time="6.19"/>
         </proof>
        </goal>
       </transf>
@@ -567,15 +567,15 @@
       name="WP_parameter _FlagStatic_flag_ensures_default.3"
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
-      expl="loop invariant preservation"
+      expl="3. loop invariant preservation"
       sum="4fcee7663682049790b88fee1e951977"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V9V4Aainfix &lt;=V6V9Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V9ainfix +V5c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
-       name="expl:parameter _FlagStatic_flag_ensures_default"/>
-      <label
        name="expl:Method flag, default behavior"/>
+      <label
+       name="expl:VC for _FlagStatic_flag_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -621,49 +621,49 @@
       name="WP_parameter _FlagStatic_flag_ensures_default.4"
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
-      expl="loop invariant preservation"
+      expl="4. loop invariant preservation"
       sum="da52fadb6d85eba30eb3d8a165be87e2"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Aais_monochromeV0V6V5a_FlagStatic_WHITEV10Aais_monochromeV0c0V6a_FlagStatic_BLUEV10Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V9Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
-       name="expl:parameter _FlagStatic_flag_ensures_default"/>
-      <label
        name="expl:Method flag, default behavior"/>
+      <label
+       name="expl:VC for _FlagStatic_flag_ensures_default"/>
       <transf
        name="split_goal"
        proved="true"
-       expanded="true">
+       expanded="false">
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.1"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="1."
         sum="af99dad3d11a823394698b9932ea2f70"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <transf
          name="inline_goal"
          proved="true"
-         expanded="true">
+         expanded="false">
          <goal
           name="WP_parameter _FlagStatic_flag_ensures_default.4.1.1"
           locfile="../FlagStatic.java"
           loclnum="87" loccnumb="23" loccnume="27"
-          expl="Method flag, default behavior"
+          expl="1."
           sum="5c56d50662ef522ffcb75fee998b207a"
           proved="true"
-          expanded="true"
+          expanded="false"
           shape="ais_coloraselectV10ashiftV0V11Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V11FAa_Non_null_intMV0V2Iainfix =aselectV10V12aselectV7V12Iain_psetV12apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9NAavalidV2V12FAainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix +V4aprefix -c1FIainfix =V8c1Oainfix =V8c2Oainfix =V8c3Iainfix =V8c1Oainfix =V8c2NIainfix =V8c1NLaselectV7ashiftV0V5Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V13a_FlagStatic_REDIainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V13FAainfix =aselectV7ashiftV0V14a_FlagStatic_WHITEIainfix &lt;V14V5Aainfix &lt;=V6V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_BLUEIainfix &lt;V15V6Aainfix &lt;=c0V15FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V16Iainfix &lt;V16ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V16FAa_Non_null_intMV0V2FIainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_coloraselectV1ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FF">
           <label
-           name="expl:parameter _FlagStatic_flag_ensures_default"/>
-          <label
            name="expl:Method flag, default behavior"/>
+          <label
+           name="expl:VC for _FlagStatic_flag_ensures_default"/>
           <proof
            prover="0"
            timelimit="5"
@@ -702,7 +702,7 @@
            memlimit="1000"
            obsolete="false"
            archived="false">
-           <result status="valid" time="0.08"/>
+           <result status="timeout" time="5.68"/>
           </proof>
          </goal>
         </transf>
@@ -711,15 +711,15 @@
         name="WP_parameter _FlagStatic_flag_ensures_default.4.2"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="2."
         sum="39f6fc19dcf55f9bc5b7627583a1bd31"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ainfix &lt;=c0V6Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -765,15 +765,15 @@
         name="WP_parameter _FlagStatic_flag_ensures_default.4.3"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="3."
         sum="cb44330388ccc7a53aa568b78522ecea"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ainfix &lt;=V6V5Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -819,15 +819,15 @@
         name="WP_parameter _FlagStatic_flag_ensures_default.4.4"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="4."
         sum="33dea114f968ee2a12de12e4ddad8248"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ainfix &lt;=V5V9Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -873,15 +873,15 @@
         name="WP_parameter _FlagStatic_flag_ensures_default.4.5"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="5."
         sum="b8cfaaf8b5281c0e6f439d505a3ded97"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ainfix &lt;=V9ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -927,15 +927,15 @@
         name="WP_parameter _FlagStatic_flag_ensures_default.4.6"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="6."
         sum="4b68fb0864bb8118e5239a8feaf9a2dd"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ais_monochromeV0c0V6a_FlagStatic_BLUEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -966,22 +966,22 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="timeout" time="5.40"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.7"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="7."
         sum="b082924182c5cccdc310d90f6e2d4497"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ais_monochromeV0V6V5a_FlagStatic_WHITEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -1012,22 +1012,22 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="timeout" time="5.18"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.8"
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
-        expl="Method flag, default behavior"
+        expl="8."
         sum="28b592b56a2a40650ffb5b9b915f1bbb"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
-         name="expl:parameter _FlagStatic_flag_ensures_default"/>
-        <label
          name="expl:Method flag, default behavior"/>
+        <label
+         name="expl:VC for _FlagStatic_flag_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -1058,7 +1058,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.10"/>
+         <result status="timeout" time="5.16"/>
         </proof>
        </goal>
       </transf>
@@ -1067,15 +1067,15 @@
       name="WP_parameter _FlagStatic_flag_ensures_default.5"
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
-      expl="loop invariant preservation"
+      expl="5. loop invariant preservation"
       sum="30d39fe91824fd6fe15d908564d7698e"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDNIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
-       name="expl:parameter _FlagStatic_flag_ensures_default"/>
-      <label
        name="expl:Method flag, default behavior"/>
+      <label
+       name="expl:VC for _FlagStatic_flag_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -1123,15 +1123,15 @@
     name="WP_parameter _FlagStatic_flag_ensures_sorts"
     locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
-    expl="postcondition"
+    expl="VC for _FlagStatic_flag_ensures_sorts"
     sum="c4b1db7198cfda076b3740ee0e63216f"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V8V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V8a_FlagStatic_BLUEV7EEIainfix &lt;V5V4NIais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
     <label
-     name="expl:parameter _FlagStatic_flag_ensures_sorts"/>
-    <label
      name="expl:Method flag, Behavior `sorts&apos;"/>
+    <label
+     name="expl:VC for _FlagStatic_flag_ensures_sorts"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1180,12 +1180,12 @@
     expl="index bounds"
     sum="95fdfb4d3214d716b5669395b87dc3de"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix =V8a_FlagStatic_BLUEainfix &lt;ainfix -V4V10ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V6Iainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEainfix &lt;ainfix -V4V12ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDainfix &lt;ainfix -V13V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V13Iainfix =V13ainfix -V4c1Fainfix &lt;ainfix -V4V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5LaselectV7ashiftV0V5Aainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
     <label
-     name="expl:parameter _FlagStatic_flag_safety"/>
-    <label
      name="expl:Method flag, Safety"/>
+    <label
+     name="expl:VC for _FlagStatic_flag_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1231,15 +1231,15 @@
     name="WP_parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"
     locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
-    expl="Method isMonochrome, Behavior `decides_monochromatic&apos;"
+    expl="VC for _FlagStatic_isMonochrome_ensures_decides_monochromatic"
     sum="e38794d639fe41a508b841aa4c97c6c4"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix &lt;V6V2ais_monochromeV0V1V2V3V4qainfix =V7aTrueIainfix =V7aFalseFIainfix =aselectV4ashiftV0V6V3Nais_monochromeV0V1V2V3V4qainfix =V8aTrueIainfix =V8aTrueFIainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
     <label
-     name="expl:parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"/>
-    <label
      name="expl:Method isMonochrome, Behavior `decides_monochromatic&apos;"/>
+    <label
+     name="expl:VC for _FlagStatic_isMonochrome_ensures_decides_monochromatic"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1285,15 +1285,15 @@
     name="WP_parameter _FlagStatic_isMonochrome_ensures_default"
     locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
-    expl="Method isMonochrome, default behavior"
+    expl="VC for _FlagStatic_isMonochrome_ensures_default"
     sum="91f91e5081386976e9877017b7ddb6a5"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =aselectV4ashiftV0V8V3Iainfix &lt;V8V7Aainfix &lt;=V1V8FAainfix &lt;=V1V7Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Iainfix &lt;V6V2Iainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FAainfix =aselectV4ashiftV0V10V3Iainfix &lt;V10V1Aainfix &lt;=V1V10FAainfix &lt;=V1V1Iainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
     <label
-     name="expl:parameter _FlagStatic_isMonochrome_ensures_default"/>
-    <label
      name="expl:Method isMonochrome, default behavior"/>
+    <label
+     name="expl:VC for _FlagStatic_isMonochrome_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1332,22 +1332,22 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="timeout" time="5.19"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_isMonochrome_safety"
     locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
-    expl="Method isMonochrome, Safety"
+    expl="VC for _FlagStatic_isMonochrome_safety"
     sum="3dbd03d49385e5703e393152c2df1dc7"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix &lt;ainfix -V2V7ainfix -V2V6Aainfix &lt;=c0ainfix -V2V6Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Aainfix &lt;=V6aoffset_maxV5V0Aainfix &lt;=aoffset_minV5V0V6Iainfix &lt;V6V2Iainfix =aselectV4ashiftV0V8V3Iainfix &lt;V8V6Aainfix &lt;=V1V8FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
     <label
-     name="expl:parameter _FlagStatic_isMonochrome_safety"/>
-    <label
      name="expl:Method isMonochrome, Safety"/>
+    <label
+     name="expl:VC for _FlagStatic_isMonochrome_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1393,15 +1393,15 @@
     name="WP_parameter _FlagStatic_swap_ensures_default"
     locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
-    expl="Method swap, default behavior"
+    expl="VC for _FlagStatic_swap_ensures_default"
     sum="064ecf0c9ea8d1dae688811816c15181"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
-     name="expl:parameter _FlagStatic_swap_ensures_default"/>
-    <label
      name="expl:Method swap, default behavior"/>
+    <label
+     name="expl:VC for _FlagStatic_swap_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1447,15 +1447,15 @@
     name="WP_parameter _FlagStatic_swap_ensures_i_j_swapped"
     locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
-    expl="postcondition"
+    expl="VC for _FlagStatic_swap_ensures_i_j_swapped"
     sum="c6e218607584c1b169b305f4a92ef297"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="anot_assignsV4V3V6apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV6ashiftV0V2aselectV3ashiftV0V1Aainfix =aselectV6ashiftV0V1aselectV3ashiftV0V2Iainfix =V6astoreV5ashiftV0V2aselectV3ashiftV0V1FIainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FIainfix &lt;V2ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V2Aainfix &lt;V1ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V1Aaleft_valid_struct_intMV0c0V4FF">
     <label
-     name="expl:parameter _FlagStatic_swap_ensures_i_j_swapped"/>
-    <label
      name="expl:Method swap, Behavior `i_j_swapped&apos;"/>
+    <label
+     name="expl:VC for _FlagStatic_swap_ensures_i_j_swapped"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1501,15 +1501,15 @@
     name="WP_parameter _FlagStatic_swap_safety"
     locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
-    expl="Method swap, Safety"
+    expl="VC for _FlagStatic_swap_safety"
     sum="d16018da020808dca97f2b45972164d0"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Iainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FAainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Aainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Aainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Iainfix &lt;V2ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V2Aainfix &lt;V1ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V1Aaleft_valid_struct_intMV0c0V4FF">
     <label
-     name="expl:parameter _FlagStatic_swap_safety"/>
-    <label
      name="expl:Method swap, Safety"/>
+    <label
+     name="expl:VC for _FlagStatic_swap_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1555,15 +1555,15 @@
     name="WP_parameter cons_FlagStatic_ensures_default"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class FlagStatic, default behavior"
+    expl="VC for cons_FlagStatic_ensures_default"
     sum="390af29317180379e422c138eaeb557d"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_FlagStatic_ensures_default"/>
-    <label
      name="expl:Constructor of class FlagStatic, default behavior"/>
+    <label
+     name="expl:VC for cons_FlagStatic_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1609,15 +1609,15 @@
     name="WP_parameter cons_FlagStatic_safety"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class FlagStatic, Safety"
+    expl="VC for cons_FlagStatic_safety"
     sum="f96b995a07c3d50185a4b20b5aa61583"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_FlagStatic_safety"/>
-    <label
      name="expl:Constructor of class FlagStatic, Safety"/>
+    <label
+     name="expl:VC for cons_FlagStatic_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1663,15 +1663,15 @@
     name="WP_parameter cons_Object_ensures_default"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Object, default behavior"
+    expl="VC for cons_Object_ensures_default"
     sum="1c9b7a8067cc69d641277502fb756ca4"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Object_ensures_default"/>
-    <label
      name="expl:Constructor of class Object, default behavior"/>
+    <label
+     name="expl:VC for cons_Object_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -1717,15 +1717,15 @@
     name="WP_parameter cons_Object_safety"
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Object, Safety"
+    expl="VC for cons_Object_safety"
     sum="3d6c5ffa2f5dd4b4e4dbbdcdc76e3705"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Object_safety"/>
-    <label
      name="expl:Constructor of class Object, Safety"/>
+    <label
+     name="expl:VC for cons_Object_safety"/>
     <proof
      prover="0"
      timelimit="5"

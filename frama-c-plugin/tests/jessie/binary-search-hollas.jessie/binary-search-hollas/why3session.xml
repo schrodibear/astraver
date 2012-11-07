@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../binary-search-hollas.mlw"
   verified="false"
@@ -42,7 +42,7 @@
     name="WP_parameter binary_search_ensures_default"
     locfile="../../binary-search-hollas.c"
     loclnum="18" loccnumb="4" loccnume="17"
-    expl="parameter binary_search_ensures_default"
+    expl="VC for binary_search_ensures_default"
     sum="444b570e4f6a39b5ed6901f346e6a91e"
     proved="true"
     expanded="false"
@@ -50,14 +50,14 @@
     <label
      name="expl:Function binary_search, default behavior"/>
     <label
-     name="expl:parameter binary_search_ensures_default"/>
+     name="expl:VC for binary_search_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="6.65"/>
+     <result status="timeout" time="5.73"/>
     </proof>
     <proof
      prover="1"
@@ -73,7 +73,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="6.54"/>
+     <result status="timeout" time="5.66"/>
     </proof>
     <proof
      prover="3"
@@ -89,7 +89,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.47"/>
     </proof>
     <transf
      name="split_goal_wp"
@@ -99,7 +99,7 @@
       name="WP_parameter binary_search_ensures_default.1"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="check"
+      expl="1. check"
       sum="a0a885e62eb979cff6e84e556eb5e48a"
       proved="true"
       expanded="false"
@@ -107,7 +107,7 @@
       <label
        name="expl:Function binary_search, default behavior"/>
       <label
-       name="expl:parameter binary_search_ensures_default"/>
+       name="expl:VC for binary_search_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -153,7 +153,7 @@
       name="WP_parameter binary_search_ensures_default.2"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="check"
+      expl="2. check"
       sum="806ae9868bcf1243887e6087d165288c"
       proved="true"
       expanded="false"
@@ -161,7 +161,7 @@
       <label
        name="expl:Function binary_search, default behavior"/>
       <label
-       name="expl:parameter binary_search_ensures_default"/>
+       name="expl:VC for binary_search_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -207,7 +207,7 @@
       name="WP_parameter binary_search_ensures_default.3"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="loop invariant init"
+      expl="3. loop invariant init"
       sum="da0e5946c36cebbd9cd2e004fa6653f8"
       proved="true"
       expanded="false"
@@ -215,7 +215,7 @@
       <label
        name="expl:Function binary_search, default behavior"/>
       <label
-       name="expl:parameter binary_search_ensures_default"/>
+       name="expl:VC for binary_search_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -261,7 +261,7 @@
       name="WP_parameter binary_search_ensures_default.4"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="parameter binary_search_ensures_default"
+      expl="4."
       sum="5551b7d5e9c340bba1593eb782454819"
       proved="true"
       expanded="false"
@@ -269,7 +269,7 @@
       <label
        name="expl:Function binary_search, default behavior"/>
       <label
-       name="expl:parameter binary_search_ensures_default"/>
+       name="expl:VC for binary_search_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -318,7 +318,7 @@
         name="WP_parameter binary_search_ensures_default.4.1"
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
-        expl="parameter binary_search_ensures_default"
+        expl="1."
         sum="16d8e63ab9d7ae7288a4a4b306aab9ad"
         proved="true"
         expanded="false"
@@ -326,7 +326,7 @@
         <label
          name="expl:Function binary_search, default behavior"/>
         <label
-         name="expl:parameter binary_search_ensures_default"/>
+         name="expl:VC for binary_search_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -372,7 +372,7 @@
         name="WP_parameter binary_search_ensures_default.4.2"
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
-        expl="parameter binary_search_ensures_default"
+        expl="2."
         sum="39f61dc2872d21336108d2552e814d40"
         proved="true"
         expanded="false"
@@ -380,7 +380,7 @@
         <label
          name="expl:Function binary_search, default behavior"/>
         <label
-         name="expl:parameter binary_search_ensures_default"/>
+         name="expl:VC for binary_search_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -428,7 +428,7 @@
       name="WP_parameter binary_search_ensures_default.5"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="loop invariant preservation"
+      expl="5. loop invariant preservation"
       sum="44b1b979e148902b0bdb3343c4959a8a"
       proved="true"
       expanded="false"
@@ -436,7 +436,7 @@
       <label
        name="expl:Function binary_search, default behavior"/>
       <label
-       name="expl:parameter binary_search_ensures_default"/>
+       name="expl:VC for binary_search_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -475,14 +475,14 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.74"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter binary_search_ensures_default.6"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="loop invariant preservation"
+      expl="6. loop invariant preservation"
       sum="27f39525b8ba6666bf24f0f1d912c5f3"
       proved="true"
       expanded="false"
@@ -490,7 +490,7 @@
       <label
        name="expl:Function binary_search, default behavior"/>
       <label
-       name="expl:parameter binary_search_ensures_default"/>
+       name="expl:VC for binary_search_ensures_default"/>
       <proof
        prover="0"
        timelimit="5"
@@ -529,7 +529,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="timeout" time="5.78"/>
       </proof>
       <transf
        name="split_goal_wp"
@@ -539,7 +539,7 @@
         name="WP_parameter binary_search_ensures_default.6.1"
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
-        expl="parameter binary_search_ensures_default"
+        expl="1."
         sum="27026c42bd6e4cfc461c219ffe4a2cf0"
         proved="true"
         expanded="false"
@@ -547,7 +547,7 @@
         <label
          name="expl:Function binary_search, default behavior"/>
         <label
-         name="expl:parameter binary_search_ensures_default"/>
+         name="expl:VC for binary_search_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -586,14 +586,14 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.07"/>
+         <result status="timeout" time="5.26"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter binary_search_ensures_default.6.2"
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
-        expl="parameter binary_search_ensures_default"
+        expl="2."
         sum="84f0474772ba1da17355fa29513b03da"
         proved="true"
         expanded="false"
@@ -601,7 +601,7 @@
         <label
          name="expl:Function binary_search, default behavior"/>
         <label
-         name="expl:parameter binary_search_ensures_default"/>
+         name="expl:VC for binary_search_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -647,7 +647,7 @@
         name="WP_parameter binary_search_ensures_default.6.3"
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
-        expl="parameter binary_search_ensures_default"
+        expl="3."
         sum="6b69803f038f5766377a33cc946c9fdc"
         proved="true"
         expanded="false"
@@ -655,7 +655,7 @@
         <label
          name="expl:Function binary_search, default behavior"/>
         <label
-         name="expl:parameter binary_search_ensures_default"/>
+         name="expl:VC for binary_search_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -701,7 +701,7 @@
         name="WP_parameter binary_search_ensures_default.6.4"
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
-        expl="parameter binary_search_ensures_default"
+        expl="4."
         sum="c3ee0ab49d646f86cdf410a6c0d0e1d2"
         proved="true"
         expanded="false"
@@ -709,7 +709,7 @@
         <label
          name="expl:Function binary_search, default behavior"/>
         <label
-         name="expl:parameter binary_search_ensures_default"/>
+         name="expl:VC for binary_search_ensures_default"/>
         <proof
          prover="0"
          timelimit="5"
@@ -759,7 +759,7 @@
     name="WP_parameter binary_search_ensures_failure"
     locfile="../../binary-search-hollas.c"
     loclnum="18" loccnumb="4" loccnume="17"
-    expl="parameter binary_search_ensures_failure"
+    expl="VC for binary_search_ensures_failure"
     sum="c7dafdb6f0f941faa0ccb76641bbcea4"
     proved="true"
     expanded="false"
@@ -767,7 +767,7 @@
     <label
      name="expl:Function binary_search, Behavior `failure&apos;"/>
     <label
-     name="expl:parameter binary_search_ensures_failure"/>
+     name="expl:VC for binary_search_ensures_failure"/>
     <proof
      prover="0"
      timelimit="5"
@@ -813,7 +813,7 @@
     name="WP_parameter binary_search_ensures_success"
     locfile="../../binary-search-hollas.c"
     loclnum="18" loccnumb="4" loccnume="17"
-    expl="parameter binary_search_ensures_success"
+    expl="VC for binary_search_ensures_success"
     sum="d438e6ef20646e067794a87043516681"
     proved="true"
     expanded="false"
@@ -821,7 +821,7 @@
     <label
      name="expl:Function binary_search, Behavior `success&apos;"/>
     <label
-     name="expl:parameter binary_search_ensures_success"/>
+     name="expl:VC for binary_search_ensures_success"/>
     <proof
      prover="0"
      timelimit="5"
@@ -867,7 +867,7 @@
     name="WP_parameter binary_search_safety"
     locfile="../../binary-search-hollas.c"
     loclnum="18" loccnumb="4" loccnume="17"
-    expl="parameter binary_search_safety"
+    expl="VC for binary_search_safety"
     sum="0f074efad5d3845e97a3aa15d55bd36d"
     proved="false"
     expanded="true"
@@ -875,7 +875,7 @@
     <label
      name="expl:Function binary_search, Safety"/>
     <label
-     name="expl:parameter binary_search_safety"/>
+     name="expl:VC for binary_search_safety"/>
     <transf
      name="split_goal_wp"
      proved="false"
@@ -884,7 +884,7 @@
       name="WP_parameter binary_search_safety.1"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="arithmetic overflow"
+      expl="1. arithmetic overflow"
       sum="b023b34bfa6028e439405a02ece0af8c"
       proved="true"
       expanded="false"
@@ -892,7 +892,7 @@
       <label
        name="expl:Function binary_search, Safety"/>
       <label
-       name="expl:parameter binary_search_safety"/>
+       name="expl:VC for binary_search_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -938,7 +938,7 @@
       name="WP_parameter binary_search_safety.2"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="arithmetic overflow"
+      expl="2. arithmetic overflow"
       sum="2901eca83cb427f4f34910a3dc3f6dcd"
       proved="false"
       expanded="true"
@@ -946,7 +946,7 @@
       <label
        name="expl:Function binary_search, Safety"/>
       <label
-       name="expl:parameter binary_search_safety"/>
+       name="expl:VC for binary_search_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -992,7 +992,7 @@
       name="WP_parameter binary_search_safety.3"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="division by zero"
+      expl="3. division by zero"
       sum="b864fd620f62bff53ac268339481904a"
       proved="true"
       expanded="false"
@@ -1000,7 +1000,7 @@
       <label
        name="expl:Function binary_search, Safety"/>
       <label
-       name="expl:parameter binary_search_safety"/>
+       name="expl:VC for binary_search_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -1046,7 +1046,7 @@
       name="WP_parameter binary_search_safety.4"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="arithmetic overflow"
+      expl="4. arithmetic overflow"
       sum="b033a731b949b7133664042350a025eb"
       proved="true"
       expanded="false"
@@ -1054,7 +1054,7 @@
       <label
        name="expl:Function binary_search, Safety"/>
       <label
-       name="expl:parameter binary_search_safety"/>
+       name="expl:VC for binary_search_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -1100,7 +1100,7 @@
       name="WP_parameter binary_search_safety.5"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="pointer dereference"
+      expl="5. pointer dereference"
       sum="2239fbed24bf68fd3563d3f705db62af"
       proved="true"
       expanded="false"
@@ -1108,7 +1108,7 @@
       <label
        name="expl:Function binary_search, Safety"/>
       <label
-       name="expl:parameter binary_search_safety"/>
+       name="expl:VC for binary_search_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -1154,7 +1154,7 @@
       name="WP_parameter binary_search_safety.6"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="arithmetic overflow"
+      expl="6. arithmetic overflow"
       sum="7c58ec9e4e3c466deb80083362a1f012"
       proved="true"
       expanded="false"
@@ -1162,7 +1162,7 @@
       <label
        name="expl:Function binary_search, Safety"/>
       <label
-       name="expl:parameter binary_search_safety"/>
+       name="expl:VC for binary_search_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -1208,7 +1208,7 @@
       name="WP_parameter binary_search_safety.7"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="loop variant decrease"
+      expl="7. loop variant decrease"
       sum="4d2ced96b17c520f0bed198d274aa0aa"
       proved="true"
       expanded="false"
@@ -1216,7 +1216,7 @@
       <label
        name="expl:Function binary_search, Safety"/>
       <label
-       name="expl:parameter binary_search_safety"/>
+       name="expl:VC for binary_search_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -1262,7 +1262,7 @@
       name="WP_parameter binary_search_safety.8"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="pointer dereference"
+      expl="8. pointer dereference"
       sum="4ba7b4f2f88ddeeeaeb6dba78ddde5a8"
       proved="true"
       expanded="false"
@@ -1270,7 +1270,7 @@
       <label
        name="expl:Function binary_search, Safety"/>
       <label
-       name="expl:parameter binary_search_safety"/>
+       name="expl:VC for binary_search_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -1316,7 +1316,7 @@
       name="WP_parameter binary_search_safety.9"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="arithmetic overflow"
+      expl="9. arithmetic overflow"
       sum="a7a376f0889ff264ce80cd834e9441e1"
       proved="true"
       expanded="false"
@@ -1324,7 +1324,7 @@
       <label
        name="expl:Function binary_search, Safety"/>
       <label
-       name="expl:parameter binary_search_safety"/>
+       name="expl:VC for binary_search_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -1370,7 +1370,7 @@
       name="WP_parameter binary_search_safety.10"
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
-      expl="loop variant decrease"
+      expl="10. loop variant decrease"
       sum="1711359f52494d60eec2883a6bc4faea"
       proved="true"
       expanded="false"
@@ -1378,7 +1378,7 @@
       <label
        name="expl:Function binary_search, Safety"/>
       <label
-       name="expl:parameter binary_search_safety"/>
+       name="expl:VC for binary_search_safety"/>
       <proof
        prover="0"
        timelimit="5"
