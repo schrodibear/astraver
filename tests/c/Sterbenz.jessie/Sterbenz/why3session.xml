@@ -11,8 +11,8 @@
   version="2.2"/>
  <prover
   id="2"
-  name="CVC3"
-  version="2.4.1"/>
+  name="Coq"
+  version="8.4"/>
  <prover
   id="3"
   name="Gappa"
@@ -20,15 +20,11 @@
  <prover
   id="4"
   name="Z3"
-  version="3.2"/>
- <prover
-  id="5"
-  name="Z3"
   version="4.2"/>
  <file
   name="../Sterbenz.mlw"
   verified="false"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
    locfile="../Sterbenz.mlw"
@@ -89,7 +85,7 @@
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -127,7 +123,7 @@
        <result status="valid" time="0.00"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -149,44 +145,13 @@
       <label
        name="expl:VC for _Sterbenz_ensures_default"/>
       <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.05"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.27"/>
-      </proof>
-      <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
+       edited="Sterbenz_Jessie_program_WP_parameter__Sterbenz_ensures_default_1.v"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.01"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.11"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.11"/>
+       <result status="unknown" time="3.04"/>
       </proof>
      </goal>
     </transf>
