@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.0"/>
+  version="4.2"/>
  <file
   name="../bts1251.mlw"
   verified="true"
@@ -42,7 +42,7 @@
     name="WP_parameter bsearch_ensures_default"
     locfile="../../bts1251.c"
     loclnum="17" loccnumb="4" loccnume="11"
-    expl="parameter bsearch_ensures_default"
+    expl="VC for bsearch_ensures_default"
     sum="af12b183ee3d121895afdfe2cbc8377a"
     proved="true"
     expanded="true"
@@ -50,7 +50,7 @@
     <label
      name="expl:Function bsearch, default behavior"/>
     <label
-     name="expl:parameter bsearch_ensures_default"/>
+     name="expl:VC for bsearch_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -89,14 +89,14 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.36"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter bsearch_ensures_failure"
     locfile="../../bts1251.c"
     loclnum="17" loccnumb="4" loccnume="11"
-    expl="parameter bsearch_ensures_failure"
+    expl="VC for bsearch_ensures_failure"
     sum="8a5494ce49e5ab4182ec95a680ec5404"
     proved="true"
     expanded="true"
@@ -104,14 +104,14 @@
     <label
      name="expl:Function bsearch, Behavior `failure&apos;"/>
     <label
-     name="expl:parameter bsearch_ensures_failure"/>
+     name="expl:VC for bsearch_ensures_failure"/>
     <proof
      prover="0"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.18"/>
+     <result status="timeout" time="5.86"/>
     </proof>
     <proof
      prover="1"
@@ -150,7 +150,7 @@
     name="WP_parameter bsearch_ensures_success"
     locfile="../../bts1251.c"
     loclnum="17" loccnumb="4" loccnume="11"
-    expl="parameter bsearch_ensures_success"
+    expl="VC for bsearch_ensures_success"
     sum="635fc275a0800ec7329c5a612e3b95ea"
     proved="true"
     expanded="true"
@@ -158,7 +158,7 @@
     <label
      name="expl:Function bsearch, Behavior `success&apos;"/>
     <label
-     name="expl:parameter bsearch_ensures_success"/>
+     name="expl:VC for bsearch_ensures_success"/>
     <proof
      prover="0"
      timelimit="5"
@@ -204,7 +204,7 @@
     name="WP_parameter bsearch_safety"
     locfile="../../bts1251.c"
     loclnum="17" loccnumb="4" loccnume="11"
-    expl="parameter bsearch_safety"
+    expl="VC for bsearch_safety"
     sum="8cfc65ed0004c81ccace97132ce6adfb"
     proved="true"
     expanded="true"
@@ -212,7 +212,7 @@
     <label
      name="expl:Function bsearch, Safety"/>
     <label
-     name="expl:parameter bsearch_safety"/>
+     name="expl:VC for bsearch_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -258,7 +258,7 @@
     name="WP_parameter main_ensures_default"
     locfile="../../bts1251.c"
     loclnum="39" loccnumb="4" loccnume="8"
-    expl="parameter main_ensures_default"
+    expl="VC for main_ensures_default"
     sum="a8a6ea9721ec646c4521d8aa2c531542"
     proved="true"
     expanded="true"
@@ -266,7 +266,7 @@
     <label
      name="expl:Function main, default behavior"/>
     <label
-     name="expl:parameter main_ensures_default"/>
+     name="expl:VC for main_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -312,7 +312,7 @@
     name="WP_parameter main_safety"
     locfile="../../bts1251.c"
     loclnum="39" loccnumb="4" loccnume="8"
-    expl="parameter main_safety"
+    expl="VC for main_safety"
     sum="bdd5c5091076e47a72478e1059ce0c2c"
     proved="true"
     expanded="true"
@@ -320,7 +320,7 @@
     <label
      name="expl:Function main, Safety"/>
     <label
-     name="expl:parameter main_safety"/>
+     name="expl:VC for main_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -359,7 +359,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="timeout" time="3.25"/>
     </proof>
    </goal>
   </theory>
