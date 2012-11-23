@@ -681,7 +681,7 @@ let rec coerce_floats t =
         if isLogicFloatType t.term_type then
           List.map
             (fun e ->
-               mkexpr (JCPEcast(e, mktype (JCPTnative Treal))) t.term_loc)
+              mkexpr (JCPEcast(e, mktype (JCPTnative Treal))) t.term_loc)
             (terms t)
         else terms t
 
@@ -760,8 +760,8 @@ and terms t =
     | TBinOp(op,t1,t2) ->
         product
           (fun x y -> JCPEbinary(x,binop op,y))
-             (coerce_floats t1)
-             (coerce_floats t2)
+          (coerce_floats t1)
+          (coerce_floats t2)
 
     | TCastE(ty,t)
         when isIntegralType ty && isLogicRealType t.term_type ->
@@ -925,6 +925,9 @@ and terms t =
     | Tcomprehension _ -> Common.unsupported "sets by comprehension" 
     | Tinter _ -> Common.unsupported " set intersection" 
     | Tempty_set -> []
+    | TLogic_coerce(Lreal,t) -> List.map (fun x -> x#node) (coerce_floats t)
+    | TLogic_coerce(_,t) -> List.map (fun x -> x#node) (terms t)
+
   in
   List.map (swap mkexpr t.term_loc) enode
 
@@ -1071,7 +1074,6 @@ and pred p =
           product (fun t1 t2 -> mkexpr (JCPEbinary(t1,relation rel,t2)) p.loc)
             (coerce_floats t1) (coerce_floats t2)
         in (mkconjunct res p.loc)#node
-
     | Pand(p1,p2) ->
         JCPEbinary(pred p1,`Bland,pred p2)
 
@@ -1215,12 +1217,6 @@ and pred p =
 let named_pred p =
   List.fold_right
     (fun lab p -> mkexpr (JCPElabel(lab,p)) p#pos) p.name (pred p)
-
-let pred_has_name p n =
-  List.exists (fun n2 -> n = n2) p.name
-
-let remove_pred_name p n =
-  { p with name = List.filter (fun n2 -> not (n = n2)) p.name }
 
 let conjunct pos pl =
   mkconjunct (List.map (pred $ Logic_const.pred_of_id_pred) pl) pos

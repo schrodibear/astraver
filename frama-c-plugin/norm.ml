@@ -754,6 +754,7 @@ object(self)
       | TStartOf _
       | TConst _
       | TCastE _
+      | TLogic_coerce _
       | Tat _
       | TAddrOf _
       | Tapp _
