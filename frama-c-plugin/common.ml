@@ -157,16 +157,16 @@ let min_value_of_integral_type ?bitsize ty =
       match bitsize with Some siz -> siz | None -> size_in_bytes * 8
     in
     if signed then
-      My_bigint.neg
-	(My_bigint.power_int_positive_int 2
+      Integer.neg
+	(Integer.power_int_positive_int 2
 	  (numbits - 1))
-    else My_bigint.zero
+    else Integer.zero
   in
   match unrollType ty with
-    | TInt(IBool,_attr) -> My_bigint.zero
+    | TInt(IBool,_attr) -> Integer.zero
     | TInt(ik,_attr) ->
 	min_of (isSigned ik) (size_in_bytes ik)
-    | TEnum ({ ekind = IBool;_},_) -> My_bigint.zero
+    | TEnum ({ ekind = IBool;_},_) -> Integer.zero
     | TEnum ({ekind=ik;_},_) ->
 	min_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
@@ -177,19 +177,19 @@ let max_value_of_integral_type ?bitsize ty =
       match bitsize with Some siz -> siz | None -> size_in_bytes * 8
     in
     if signed then
-      My_bigint.pred
-	(My_bigint.power_int_positive_int 2
+      Integer.pred
+	(Integer.power_int_positive_int 2
 	  (numbits - 1))
     else
-      My_bigint.pred
-	(My_bigint.power_int_positive_int 2
+      Integer.pred
+	(Integer.power_int_positive_int 2
 	  numbits)
   in
   match unrollType ty with
-    | TInt(IBool,_attr) -> My_bigint.one
+    | TInt(IBool,_attr) -> Integer.one
     | TInt(ik,_attr) ->
 	max_of (isSigned ik) (size_in_bytes ik)
-    | TEnum ({ekind=IBool;_},_) -> My_bigint.one
+    | TEnum ({ekind=IBool;_},_) -> Integer.one
     | TEnum ({ekind=ik;_},_) -> max_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
@@ -268,7 +268,7 @@ let mkTRef elemty _msg =
 (*
   Format.eprintf "mkTRef, coming from %s@." msg;
 *)
-  let size = constant_expr My_bigint.one and attr = [] in
+  let size = constant_expr Integer.one and attr = [] in
   (* Do the same as in [mkTRefArray] *)
   let siz = expToAttrParam size in
   let attr = addAttribute (Attr(arraylen_attr_name,[siz])) attr in
@@ -288,7 +288,7 @@ let mkTRefArray (elemty,size,attr) =
 
 let reference_size ty =
   match findAttribute arraylen_attr_name (typeAttrs ty) with
-    | [AInt i] -> My_bigint.to_int64 i
+    | [AInt i] -> Integer.to_int64 i
     | _ -> assert false
 
 let is_reference_type ty =
@@ -329,14 +329,14 @@ let mkStructSingleton ?(padding=0) stname finame fitype =
   compinfo
 
 (* Locally use 64 bits integers *)
-open Integer
+open Jessie_integer
 
 let bits_sizeof ty =
   let rec rec_size ?(top_size=false) ty =
     match unrollType ty with
       | TPtr _ ->
 	  if is_reference_type ty && not top_size then
-	    rec_size (pointed_type ty) * (reference_size ty)
+            rec_size (pointed_type ty) * (reference_size ty)
 	  else
 	    Int64.of_int (bitsSizeOf ty)
       | TArray _ -> assert false (* Removed by translation *)
@@ -1163,7 +1163,7 @@ let rec lift_offset ty = function
           let siz = array_size subty in
           TIndex(change_idx
                    idx1
-                   (constant_term Cil_datatype.Location.unknown My_bigint.zero)
+                   (constant_term Cil_datatype.Location.unknown Integer.zero)
                    siz,
                  TNoOffset)
         else off
@@ -1262,7 +1262,7 @@ let mkalloc_statement v ty loc = mkStmt (Instr(mkalloc v ty loc))
 let mkalloc_array v ty num loc =
   let callee = new_exp ~loc (Lval(Var(malloc_function ()),NoOffset)) in
   let arg = constant_expr
-    (My_bigint.of_int64 (Int64.mul num (Int64.of_int (sizeOf_int ty))))
+    (Integer.of_int64 (Int64.mul num (Int64.of_int (sizeOf_int ty))))
   in
   Call(Some(Var v,NoOffset),callee,[arg],loc)
 

@@ -47,7 +47,7 @@ open Jc_pervasives
 
 (* Utility functions *)
 open Common
-open Integer
+open Jessie_integer
 
 (*****************************************************************************)
 (* Smart constructors.                                                       *)
@@ -552,7 +552,7 @@ let strip_float_suffix s =
 
 let logic_const pos = function
   | Integer(_,Some s) -> JCPEconst (JCCinteger s)
-  | Integer(n,None) -> JCPEconst (JCCinteger (My_bigint.to_string n))
+  | Integer(n,None) -> JCPEconst (JCCinteger (Integer.to_string n))
   | LStr _ | LWStr _ -> 
     Common.unsupported "string literals in logic"
   | LChr c -> JCPEconst (JCCinteger(string_of_int (Char.code c)))
@@ -561,7 +561,7 @@ let logic_const pos = function
       (match Cil.isInteger (ei.eival) with
         | Some n ->
             let e =
-              mkexpr (JCPEconst (JCCinteger (My_bigint.to_string n))) pos
+              mkexpr (JCPEconst (JCCinteger (Integer.to_string n))) pos
             in
             JCPEcast(e,ctype(TEnum(ei.eihost,[])))
         | None -> assert false)
@@ -572,7 +572,7 @@ let rec const pos = function
       JCPEconst(JCCinteger s)
 
   | CInt64(i,_ik,None) ->
-      JCPEconst(JCCinteger(My_bigint.to_string i))
+      JCPEconst(JCCinteger(Integer.to_string i))
 
   | CStr _ | CWStr _ -> assert false (* Should have been rewritten *)
 
@@ -603,7 +603,7 @@ and const_of_expr pos e =
 
 and boolean_const = function
   | CInt64(i,_ik,_text) ->
-    if My_bigint.equal i My_bigint.zero then JCCboolean false
+    if Integer.equal i Integer.zero then JCCboolean false
     else JCCboolean true
 
   | CStr _ | CWStr _ -> JCCboolean true
@@ -726,10 +726,10 @@ and terms t =
 
     | TBinOp(Shiftrt,t1,t2) ->
         begin match possible_value_of_integral_term t2 with
-          | Some i when My_bigint.ge i My_bigint.zero
-              && My_bigint.lt i (My_bigint.of_int 63)  ->
+          | Some i when Integer.ge i Integer.zero
+              && Integer.lt i (Integer.of_int 63)  ->
               (* Right shift by constant is division by constant *)
-              let pow = constant_term t2.term_loc (My_bigint.two_power i) in
+              let pow = constant_term t2.term_loc (Integer.two_power i) in
               List.map (fun x ->JCPEbinary(x,`Bdiv,term pow)) (terms t1)
           | _ ->
               let op = match t1.term_type with
@@ -744,10 +744,10 @@ and terms t =
 
     | TBinOp(Shiftlt as op,t1,t2) ->
         begin match possible_value_of_integral_term t2 with
-          | Some i when My_bigint.ge i My_bigint.zero &&
-              My_bigint.lt i (My_bigint.of_int 63) ->
+          | Some i when Integer.ge i Integer.zero &&
+              Integer.lt i (Integer.of_int 63) ->
               (* Left shift by constant is multiplication by constant *)
-              let pow = constant_term t2.term_loc (My_bigint.two_power i) in
+              let pow = constant_term t2.term_loc (Integer.two_power i) in
               List.map (fun x -> JCPEbinary(x,`Bmul,term pow)) (terms t1)
           | _ ->
               product (fun x y -> JCPEbinary(x,binop op,y))
@@ -790,8 +790,8 @@ and terms t =
               [JCPEconst JCCnull]
           | TConst c
               when is_integral_logic_const c &&
-                My_bigint.equal
-                (value_of_integral_logic_const c) My_bigint.zero ->
+                Integer.equal
+                (value_of_integral_logic_const c) Integer.zero ->
               [JCPEconst JCCnull]
           | _ ->
 (*               if isLogicIntegralType t.term_type then *)
@@ -1525,7 +1525,7 @@ let rec expr e =
           match e.enode with
           | Const c
               when is_integral_const c
-                && My_bigint.equal (value_of_integral_const c) My_bigint.zero ->
+                && Integer.equal (value_of_integral_const c) Integer.zero ->
               JCPEconst JCCnull
           | _ ->
               let ety = typeOf e in
@@ -1664,10 +1664,10 @@ and integral_expr e =
 
       | BinOp(Shiftrt,e1,e2,_ty) ->
           let e = match possible_value_of_integral_expr e2 with
-            | Some i when My_bigint.ge i My_bigint.zero &&
-                My_bigint.lt i (My_bigint.of_int 63) ->
+            | Some i when Integer.ge i Integer.zero &&
+                Integer.lt i (Integer.of_int 63) ->
                 (* Right shift by constant is division by constant *)
-                let pow = constant_expr (My_bigint.two_power i) in
+                let pow = constant_expr (Integer.two_power i) in
                 locate (mkexpr (JCPEbinary(expr e1,`Bdiv,expr pow)) e.eloc)
             | _ ->
                 let op =
@@ -1680,10 +1680,10 @@ and integral_expr e =
 
       | BinOp(Shiftlt as op,e1,e2,_ty) ->
           let e = match possible_value_of_integral_expr e2 with
-            | Some i when My_bigint.ge i My_bigint.zero &&
-                My_bigint.lt i (My_bigint.of_int 63) ->
+            | Some i when Integer.ge i Integer.zero &&
+                Integer.lt i (Integer.of_int 63) ->
                 (* Left shift by constant is multiplication by constant *)
-                let pow = constant_expr (My_bigint.two_power i) in
+                let pow = constant_expr (Integer.two_power i) in
                 locate (mkexpr (JCPEbinary(expr e1,`Bmul,expr pow)) e.eloc)
             | _ ->
                 locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc)
@@ -1814,7 +1814,7 @@ let instruction = function
       let enode =
         if is_malloc_function v || is_realloc_function v then
           let lvtyp = pointed_type (typeOfLval lv) in
-          let lvsiz = My_bigint.of_int64 ((bits_sizeof lvtyp) lsr 3) in
+          let lvsiz = Integer.of_int64 ((bits_sizeof lvtyp) lsr 3) in
           let arg =
             if is_malloc_function v then as_singleton eargs
             else (* realloc *)
@@ -1825,18 +1825,18 @@ let instruction = function
           let ty,arg = match arg.enode with
             | Info _ -> assert false
             | Const c when is_integral_const c ->
-                let allocsiz = My_bigint.div (value_of_integral_expr arg) lvsiz
+                let allocsiz = Integer.div (value_of_integral_expr arg) lvsiz
                 in
                 let siznode =
-                  JCPEconst(JCCinteger(My_bigint.to_string allocsiz))
+                  JCPEconst(JCCinteger(Integer.to_string allocsiz))
                 in
                 lvtyp, mkexpr siznode pos
             | BinOp(Mult,({enode = Const c; _} as arg),nelem,_ty)
             | BinOp(Mult,nelem,({enode = Const c;_} as arg),_ty)
                 when is_integral_const c ->
-                let factor = My_bigint.div (value_of_integral_expr arg) lvsiz in
+                let factor = Integer.div (value_of_integral_expr arg) lvsiz in
                 let siz =
-                  if My_bigint.equal factor My_bigint.one then expr nelem
+                  if Integer.equal factor Integer.one then expr nelem
                   else
                     let factor = constant_expr factor in
                     expr
@@ -1844,7 +1844,7 @@ let instruction = function
                 in
                 lvtyp, siz
             | _ ->
-                if My_bigint.equal lvsiz My_bigint.one then lvtyp, expr arg
+                if Integer.equal lvsiz Integer.one then lvtyp, expr arg
                 else
                   let esiz = constant_expr ~loc lvsiz in
                   lvtyp, expr (new_exp ~loc (BinOp(Div,arg,esiz,typeOf arg)))
@@ -1865,10 +1865,10 @@ let instruction = function
             | Info _ -> assert false
             | Const c when is_integral_const c ->
                 let lvtyp = pointed_type (typeOfLval lv) in
-                let lvsiz = My_bigint.of_int64 ((bits_sizeof lvtyp) lsr 3) in
-                let factor = My_bigint.div (value_of_integral_expr arg) lvsiz in
+                let lvsiz = Integer.of_int64 ((bits_sizeof lvtyp) lsr 3) in
+                let factor = Integer.div (value_of_integral_expr arg) lvsiz in
                 let siz =
-                  if My_bigint.equal factor My_bigint.one then
+                  if Integer.equal factor Integer.one then
                     expr nelem
                   else
                     let factor = constant_expr ~loc factor in
@@ -1877,7 +1877,7 @@ let instruction = function
                 lvtyp, siz
             | _ ->
                 let lvtyp = pointed_type (typeOfLval lv) in
-                let lvsiz = My_bigint.of_int64 ((bits_sizeof lvtyp) lsr 3) in
+                let lvsiz = Integer.of_int64 ((bits_sizeof lvtyp) lsr 3) in
                 let esiz = constant_expr ~loc lvsiz in
                 lvtyp,
                 expr
@@ -2492,18 +2492,18 @@ let global vardefs g =
         in
         let emin =
           List.fold_left (fun acc enum ->
-                            if My_bigint.lt acc enum then acc else enum)
+                            if Integer.lt acc enum then acc else enum)
             (List.hd enums)
             enums
         in
-        let min = Num.num_of_string (My_bigint.to_string emin) in
+        let min = Num.num_of_string (Integer.to_string emin) in
         let emax =
           List.fold_left (fun acc enum ->
-                            if My_bigint.gt acc enum then acc else enum)
+                            if Integer.gt acc enum then acc else enum)
             (List.hd enums)
             enums
         in
-        let max = Num.num_of_string (My_bigint.to_string emax) in
+        let max = Num.num_of_string (Integer.to_string emax) in
         [JCDenum_type(enuminfo.ename,min,max)]
 
     | GEnumTagDecl _ -> [] (* No enumeration declaration in Jessie *)
@@ -2618,8 +2618,8 @@ let global vardefs g =
   List.map (fun dnode -> mkdecl dnode pos) dnodes
 
 let integral_type name ty bitsize =
-  let min = My_bigint.to_num (min_value_of_integral_type ~bitsize ty) in
-  let max = My_bigint.to_num (max_value_of_integral_type ~bitsize ty) in
+  let min = Integer.to_num (min_value_of_integral_type ~bitsize ty) in
+  let max = Integer.to_num (max_value_of_integral_type ~bitsize ty) in
   mkdecl (JCDenum_type(name,min,max)) Loc.dummy_position
 
 (* let all_integral_kinds = *)

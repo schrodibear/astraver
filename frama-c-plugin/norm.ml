@@ -208,7 +208,7 @@ object(self)
         varset := Cil_datatype.Varinfo.Set.add v !varset;
         (* Change the variable type *)
         let newty =
-          if My_bigint.gt (array_size v.vtype) My_bigint.zero then
+          if Integer.gt (array_size v.vtype) Integer.zero then
             begin
               (* Change the type into "reference" type, that behaves almost like
                * a pointer, except validity is ensured.
@@ -239,9 +239,9 @@ object(self)
         let elemty = force_app_term_type element_type lv.lv_type in
         lvarset := Cil_datatype.Logic_var.Set.add lv !lvarset;
         let newty =
-          if My_bigint.gt 
+          if Integer.gt 
             (force_app_term_type array_size lv.lv_type) 
-            My_bigint.zero 
+            Integer.zero 
           then
             begin
               let size =
@@ -280,8 +280,8 @@ object(self)
               ~loc:v.vdecl
               (label_here,
                variable_term v.vdecl (cvar_to_lvar v),
-               constant_term v.vdecl My_bigint.zero,
-               constant_term v.vdecl (My_bigint.pred size))
+               constant_term v.vdecl Integer.zero,
+               constant_term v.vdecl (Integer.pred size))
           in
           let globinv =
 	    Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname)) in
@@ -304,7 +304,7 @@ object(self)
         let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
         let elemty = element_type ty in
         let ast = mkalloc_array_statement v elemty 
-          (My_bigint.to_int64 (array_size ty)) v.vdecl 
+          (Integer.to_int64 (array_size ty)) v.vdecl 
         in
         add_pending_statement ~beginning:true ast;
         let fst = mkfree_statement v v.vdecl in
@@ -627,12 +627,12 @@ class expandStructAssign () =
             expand_assign newlv newe (direct_element_type ty) loc
           in
           let rec all_elem acc i =
-            if My_bigint.ge i My_bigint.zero
-            then all_elem (elem i @ acc) (My_bigint.pred i) 
+            if Integer.ge i Integer.zero
+            then all_elem (elem i @ acc) (Integer.pred i) 
             else acc
           in
           assert (not (is_reference_type ty));
-          all_elem [] (My_bigint.pred (direct_array_size ty))
+          all_elem [] (Integer.pred (direct_array_size ty))
       | _ -> [Set (lv, e, loc)]
   in
 
@@ -651,12 +651,12 @@ class expandStructAssign () =
             expand newlv (direct_element_type ty) loc
           in
           let rec all_elem acc i =
-            if My_bigint.ge i My_bigint.zero then
-              all_elem (elem i @ acc) (My_bigint.pred i)
+            if Integer.ge i Integer.zero then
+              all_elem (elem i @ acc) (Integer.pred i)
             else acc
           in
           assert (not (is_reference_type ty));
-          all_elem [] (My_bigint.pred (direct_array_size ty))
+          all_elem [] (Integer.pred (direct_array_size ty))
       | _ -> [ lv ]
   in
 
@@ -999,8 +999,8 @@ object(self)
                     ~loc:v.vdecl
                     (label_here,
                      variable_term v.vdecl (cvar_to_lvar v),
-                     constant_term v.vdecl My_bigint.zero,
-                     constant_term v.vdecl My_bigint.zero)
+                     constant_term v.vdecl Integer.zero,
+                     constant_term v.vdecl Integer.zero)
                 in
                 let globinv =
 		  Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname))
@@ -1568,7 +1568,7 @@ object(self)
             None (* Already in a suitable form for Jessie translation. *)
           else if is_array_reference_type ty then
             (* Do not lose the information that this type is a reference *)
-            let size = constant_expr (My_bigint.of_int64 (reference_size ty)) in
+            let size = constant_expr (Integer.of_int64 (reference_size ty)) in
             assert (not (!flatten_multi_dim_array && is_reference_type elemty));
             Some(mkTRefArray(self#new_wrapper_for_type elemty,size,[]))
           else if is_reference_type ty then
