@@ -85,7 +85,7 @@ let () =
 	 Cabs2cil.setDoTransformWhile ();
 	 Cabs2cil.setDoAlternateConditional ();
        end);
-  State_dependency_graph.Static.add_dependencies
+  State_dependency_graph.add_dependencies
     ~from:ForceAdHocNormalization.self
     [ Kernel.SimplifyCfg.self;
       Kernel.KeepSwitch.self;
@@ -94,7 +94,7 @@ let () =
 
 let () =
   Analysis.add_set_hook (fun _ b -> ForceAdHocNormalization.set b);
-  State_dependency_graph.Static.add_dependencies
+  State_dependency_graph.add_dependencies
     ~from:Analysis.self [ ForceAdHocNormalization.self ]
 
 module JcOpt =
