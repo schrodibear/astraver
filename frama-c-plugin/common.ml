@@ -106,14 +106,14 @@ let rec force_app_term_type f = function
   | Ctype typ -> f typ
   | Ltype ({ lt_name = "set";_},[t]) -> force_app_term_type f t
   | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ as ty ->
-      Jessie_options.fatal "Unexpected non-C type %a" !Ast_printer.d_logic_type ty
+      Jessie_options.fatal "Unexpected non-C type %a" Printer.pp_logic_type ty
 
 let get_unique_field ty = match unrollType ty with
   | TComp(compinfo,_,_) ->
       begin match compinfo.cfields with
 	| [content_fi] -> content_fi
 	| _ ->
-	    Jessie_options.fatal "Type %a has no unique field" !Ast_printer.d_type ty
+	    Jessie_options.fatal "Type %a has no unique field" Printer.pp_typ ty
       end
   | _ -> Jessie_options.fatal "non-struct (unique field)"
 
@@ -340,7 +340,7 @@ let bits_sizeof ty =
 	  else
 	    Int64.of_int (bitsSizeOf ty)
       | TArray _ -> assert false (* Removed by translation *)
-      | TFun _ -> unsupported "Function pointer type %a not allowed" !Ast_printer.d_type ty
+      | TFun _ -> unsupported "Function pointer type %a not allowed" Printer.pp_typ ty
       | TNamed _ -> assert false (* Removed by call to [unrollType] *)
       | TComp(compinfo,_,_) ->
 	  let size_from_field fi =
@@ -497,7 +497,7 @@ let filter_alphanumeric s assoc default =
 
 let type_name ty =
   ignore (flush_str_formatter ());
-  fprintf str_formatter "%a" !Ast_printer.d_type ty;
+  fprintf str_formatter "%a" Printer.pp_typ ty;
   let name = flush_str_formatter () in
   filter_alphanumeric name [('*','x')] '_'
 
@@ -505,7 +505,7 @@ let logic_type_name ty =
   ignore (flush_str_formatter ());
   let old_mode = Kernel.Unicode.get() in
   Kernel.Unicode.set false;
-  fprintf str_formatter "%a" !Ast_printer.d_logic_type ty;
+  fprintf str_formatter "%a" Printer.pp_logic_type ty;
   let name = flush_str_formatter () in
   Kernel.Unicode.set old_mode;
   filter_alphanumeric name [('*','x')] '_'
@@ -761,16 +761,16 @@ object
   (* Methods introduced by the Frama-C visitor *)
   method vfile = visitor#vfile
   method vglob_aux g =
-    Jessie_options.feedback "%a" !Ast_printer.d_global g;
+    Jessie_options.feedback "%a" Printer.pp_global g;
     visitor#vglob_aux g
   method vstmt_aux s =
-    Jessie_options.feedback "%a" !Ast_printer.d_stmt s;
+    Jessie_options.feedback "%a" Printer.pp_stmt s;
     visitor#vstmt_aux s
 
   (* Methods from Cil visitor for coding constructs *)
   method vfunc = visitor#vfunc
   method vblock b =
-    Jessie_options.feedback "%a" !Ast_printer.d_block b;
+    Jessie_options.feedback "%a" Printer.pp_block b;
     visitor#vblock b
   method vvrbl v =
     Jessie_options.feedback "%s" v.vname;
@@ -779,10 +779,10 @@ object
     Jessie_options.feedback "%s" v.vname;
     visitor#vvdec v
   method vexpr e =
-    Jessie_options.feedback "%a" !Ast_printer.d_exp e;
+    Jessie_options.feedback "%a" Printer.pp_exp e;
     visitor#vexpr e
   method vlval lv =
-    Jessie_options.feedback "%a" !Ast_printer.d_lval lv;
+    Jessie_options.feedback "%a" Printer.pp_lval lv;
     visitor#vlval lv
   method voffs off =
     Jessie_options.feedback "%a" !Ast_printer.d_offset off;
@@ -791,11 +791,11 @@ object
     Jessie_options.feedback "%a" !Ast_printer.d_offset off;
     visitor#vinitoffs off
   method vinst i =
-    Jessie_options.feedback "%a" !Ast_printer.d_instr i;
+    Jessie_options.feedback "%a" Printer.pp_instr i;
     visitor#vinst i
   method vinit = visitor#vinit
   method vtype ty =
-    Jessie_options.feedback "%a" !Ast_printer.d_type ty;
+    Jessie_options.feedback "%a" Printer.pp_typ ty;
     visitor#vtype ty
   method vattr attr =
     Jessie_options.feedback "%a" !Ast_printer.d_attr attr;
@@ -806,29 +806,29 @@ object
 
   (* Methods from Cil visitor for logic constructs *)
   method vlogic_type lty =
-    Jessie_options.feedback "%a" !Ast_printer.d_logic_type lty;
+    Jessie_options.feedback "%a" Printer.pp_logic_type lty;
     visitor#vlogic_type lty
   method vterm t =
-    Jessie_options.feedback "%a" !Ast_printer.d_term t;
+    Jessie_options.feedback "%a" Printer.pp_term t;
     visitor#vterm t
   method vterm_node = visitor#vterm_node
   method vterm_lval tlv =
-    Jessie_options.feedback "%a" !Ast_printer.d_term_lval tlv;
+    Jessie_options.feedback "%a" Printer.pp_term_lval tlv;
     visitor#vterm_lval tlv
   method vterm_lhost = visitor#vterm_lhost
   method vterm_offset = visitor#vterm_offset
   method vlogic_info_decl = visitor#vlogic_info_decl
   method vlogic_info_use = visitor#vlogic_info_use
   method vlogic_var_decl lv =
-    Jessie_options.feedback "%a" !Ast_printer.d_logic_var lv;
+    Jessie_options.feedback "%a" Printer.pp_logic_var lv;
     visitor#vlogic_var_decl lv
   method vlogic_var_use lv =
-    Jessie_options.feedback "%a" !Ast_printer.d_logic_var lv;
+    Jessie_options.feedback "%a" Printer.pp_logic_var lv;
     visitor#vlogic_var_use lv
   method vquantifiers = visitor#vquantifiers
   method vpredicate = visitor#vpredicate
   method vpredicate_named p =
-    Jessie_options.feedback "%a" !Ast_printer.d_predicate_named p;
+    Jessie_options.feedback "%a" Printer.pp_predicate_named p;
     visitor#vpredicate_named p
 (*
   method vpredicate_info_decl = visitor#vpredicate_info_decl
@@ -836,14 +836,14 @@ object
 *)
   method vbehavior = visitor#vbehavior
   method vspec funspec =
-    Jessie_options.feedback "%a" !Ast_printer.d_funspec funspec;
+    Jessie_options.feedback "%a" Printer.pp_funspec funspec;
     visitor#vspec funspec
   method vassigns = visitor#vassigns
   method vloop_pragma = visitor#vloop_pragma
   method vslice_pragma = visitor#vslice_pragma
   method vdeps = visitor#vdeps
   method vcode_annot annot =
-    Jessie_options.feedback "%a" !Ast_printer.d_code_annotation annot;
+    Jessie_options.feedback "%a" Printer.pp_code_annotation annot;
     visitor#vcode_annot annot
   method vannotation annot =
     Jessie_options.feedback "%a" !Ast_printer.d_annotation annot;
@@ -940,9 +940,7 @@ let do_on_term (preaction_expr,postaction_expr) t =
 let checking = true
 
 let print_to_stdout file =
-  (* Printer takes into account annotations *)
-  let printer = new Printer.print () in
-  Log.print_on_output (Extlib.swap (Cil.printFile printer) file)
+  Log.print_on_output (Extlib.swap Printer.pp_file file)
 
 class checkTypes =
   let preaction_expr e = ignore (typeOf e); e in
@@ -966,7 +964,7 @@ let check_types file =
   (* check types *)
   let visitor = new checkTypes in
   visitFramacFile visitor file;
-  Jessie_options.debug ~level:2 "%a@." !Ast_printer.d_file file
+  Jessie_options.debug ~level:2 "%a@." Printer.pp_file file
   (* check general consistency *)
 (*   Cil.visitCilFile (new File.check_file :> Cil.cilVisitor) file *)
 
@@ -986,7 +984,7 @@ object(self)
 	  begin match t.term_type with
 	    | Ctype ty when isVoidType ty ->
 		Jessie_options.fatal
-                  ~current:true "Term %a has void type" !Ast_printer.d_term t
+                  ~current:true "Term %a has void type" Printer.pp_term t
 	    | _ -> DoChildren
 	  end
       | _ -> DoChildren

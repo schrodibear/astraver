@@ -507,7 +507,7 @@ let ctype ?bitsize ty =
 
     | TFun _ ->
 	unsupported "Function pointer type %a not allowed"
-	  !Ast_printer.d_type ty
+	  Printer.pp_typ ty
 
     | TNamed _ -> assert false (* Removed by call to [unrollType] *)
 
@@ -665,7 +665,7 @@ let term_lhost pos = function
   | TResult _ -> mkexpr (JCPEvar "\\result") pos
   | TMem t ->
       unsupported "this kind of memory access is not currently supported: *%a"
-        !Ast_printer.d_term t
+        Printer.pp_term t
 (*
          Loc.report_position pos
 *)
@@ -781,7 +781,7 @@ and terms t =
     | TCastE(ty,t)
         when isIntegralType ty && app_term_type isPointerType false t.term_type ->
 	unsupported "Casting from type %a to type %a not allowed"
-          !Ast_printer.d_logic_type t.term_type !Ast_printer.d_type ty
+          Printer.pp_logic_type t.term_type Printer.pp_typ ty
 
     | TCastE(ptrty,_t1) when isPointerType ptrty ->
         let t = stripTermCasts t in
@@ -833,7 +833,7 @@ and terms t =
 (*                     JCPEcast(term t,compinfo.cname) *)
 (*                 | _ -> assert false *)
               unsupported "Casting from type %a to type %a not allowed in logic"
-                !Ast_printer.d_logic_type t.term_type !Ast_printer.d_type ptrty
+                Printer.pp_logic_type t.term_type Printer.pp_typ ptrty
         end
 
     | TCastE(ty,t) ->
@@ -841,7 +841,7 @@ and terms t =
          * memory model
          *)
 	unsupported "Casting from type %a to type %a not allowed"
-          !Ast_printer.d_logic_type t.term_type !Ast_printer.d_type ty
+          Printer.pp_logic_type t.term_type Printer.pp_typ ty
 
     | TAddrOf _tlv -> assert false (* Should have been rewritten *)
 
@@ -1004,20 +1004,20 @@ and terms_lval pos lv =
           List.map (fun e -> mkexpr (JCPEderef(e,fi.fname)) pos) e
     | TMem _e, TIndex _ ->
         unsupported "cannot interpret this lvalue: %a"
-          !Ast_printer.d_term_lval lv
+          Printer.pp_term_lval lv
 
 and term t =
   match terms t with [ t ] -> t
     | _ ->
 	unsupported "Expecting a single term, not a set:@ %a@."
-          !Ast_printer.d_term t
+          Printer.pp_term t
 
 (* VP: unused function *)
 (* and term_lval pos lv  =
   match terms_lval pos lv with [ lv ] -> lv
     | _ ->
 	unsupported "Expecting a single lval, not a set:@ %a@."
-          !Ast_printer.d_term_lval lv
+          Printer.pp_term_lval lv
 *)
 and pred p =
   CurrentLoc.set p.loc;
@@ -1517,7 +1517,7 @@ let rec expr e =
 (*         let _,ptr_to_int = type_conversion ty (typeOf e') in *)
 (*         JCPEapp(ptr_to_int,[],[expr e']) *)
         unsupported "Casting from type %a to type %a not allowed"
-          !Ast_printer.d_type (typeOf e') !Ast_printer.d_type ty
+          Printer.pp_typ (typeOf e') Printer.pp_typ ty
 
     | CastE(ptrty,_e1) when isPointerType ptrty ->
         begin
@@ -1533,7 +1533,7 @@ let rec expr e =
 (*                 let _,int_to_ptr = type_conversion ptrty ety in *)
 (*                 JCPEapp(int_to_ptr,[],[integral_expr e]) *)
 		unsupported "Casting from type %a to type %a not allowed"
-                  !Ast_printer.d_type (typeOf e) !Ast_printer.d_type ptrty
+                  Printer.pp_typ (typeOf e) Printer.pp_typ ptrty
               else if isPointerType ety then
 (*                 let destty = pointed_type ptrty in *)
 (*                 let srcty = pointed_type ety in *)
@@ -1560,7 +1560,7 @@ let rec expr e =
 (*                     JCPEcast(expr (stripCasts e),compinfo.cname) *)
 (*                 | _ -> assert false *)
                 unsupported "Casting from type %a to type %a not allowed"
-                  !Ast_printer.d_type (typeOf e) !Ast_printer.d_type ptrty
+                  Printer.pp_typ (typeOf e) Printer.pp_typ ptrty
         end
 
     | CastE(ty,e') ->
@@ -1568,7 +1568,7 @@ let rec expr e =
          * memory model
          *)
         unsupported "Casting from type %a to type %a not allowed in %a with size %Ld and %Ld"
-          !Ast_printer.d_type (typeOf e') !Ast_printer.d_type ty !Ast_printer.d_exp e
+          Printer.pp_typ (typeOf e') Printer.pp_typ ty Printer.pp_exp e
           ( bits_sizeof ty) ( bits_sizeof (typeOf e'))
 
 
@@ -1776,7 +1776,7 @@ and lval pos = function
 
   | Mem _e, Index _ as lv ->
       Jessie_options.fatal
-        ~current:true "Unexpected lval %a" !Ast_printer.d_lval lv
+        ~current:true "Unexpected lval %a" Printer.pp_lval lv
 
 let keep_only_declared_nb_of_arguments vi l =
   let _,args,is_variadic, _ = splitFunctionTypeVI vi in
@@ -2473,7 +2473,7 @@ let global vardefs g =
             | TArray _ -> assert false (* Removed by translation *)
             | TFun _ ->
                 unsupported "Function pointer type %a not allowed"
-                  !Ast_printer.d_type ty
+                  Printer.pp_typ ty
             | TNamed _ -> assert false
             | TBuiltin_va_list _ -> assert false (* not supported *)
         in

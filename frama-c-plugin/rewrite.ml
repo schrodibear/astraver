@@ -33,7 +33,6 @@
 open Cabs
 open Cil_types
 open Cil
-open Cilutil
 open Cil_datatype
 open Ast_info
 open Extlib
@@ -287,8 +286,8 @@ let replace_addrof_array file =
 
 class replaceStringConstants =
 
-  let string_to_var = Hashtbl.create 17 in
-  let wstring_to_var = Hashtbl.create 17 in
+  let string_to_var = Datatype.String.Hashtbl.create 17 in
+  let wstring_to_var = Cil_datatype.Wide_string.Hashtbl.create 17 in
 
   (* Use the Cil translation on initializers. First translate to primitive
    * AST to later apply translation in [blockInitializer].
@@ -392,7 +391,7 @@ object
   method vexpr e = match e.enode with
     | Const(CStr s) ->
 	let v =
-	  findOrAdd string_to_var s
+	  Datatype.String.Hashtbl.memo string_to_var s
 	    (fun s ->
 	       make_glob ~wstring:false (string_var s) (String.length s)
 		 (string_cabs_init s))
@@ -400,7 +399,7 @@ object
 	ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v,NoOffset)))
     | Const(CWStr ws) ->
 	let v =
-	  findOrAdd wstring_to_var ws
+	  Cil_datatype.Wide_string.Hashtbl.memo wstring_to_var ws
 	    (fun ws ->
 	       make_glob ~wstring:true (wstring_var ()) (List.length ws - 1)
 		 (wstring_cabs_init ws))
