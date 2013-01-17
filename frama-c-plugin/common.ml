@@ -99,12 +99,12 @@ let struct_type_for_void = ref voidType
 
 let rec app_term_type f default = function
   | Ctype typ -> f typ
-  | Ltype ({lt_name = "set";_},[t]) -> app_term_type f default t
+  | Ltype ({lt_name = "set"},[t]) -> app_term_type f default t
   | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> default
 
 let rec force_app_term_type f = function
   | Ctype typ -> f typ
-  | Ltype ({ lt_name = "set";_},[t]) -> force_app_term_type f t
+  | Ltype ({ lt_name = "set"},[t]) -> force_app_term_type f t
   | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ as ty ->
       Jessie_options.fatal "Unexpected non-C type %a" !Ast_printer.d_logic_type ty
 
@@ -143,7 +143,7 @@ let integral_type_size_in_bytes ty =
   | TInt(IBool,_attr) -> (* TODO *)
       unsupported "Common.integral_type_size_in_bytes IBool"
   | TInt(ik,_attr) -> size_in_bytes ik
-  | TEnum ({ekind = IBool;_},_) ->
+  | TEnum ({ekind = IBool},_) ->
       unsupported "Common.integral_type_size_in_bytes IBool"
   | TEnum (ei,_) -> size_in_bytes ei.ekind
   | _ -> assert false
@@ -166,8 +166,8 @@ let min_value_of_integral_type ?bitsize ty =
     | TInt(IBool,_attr) -> My_bigint.zero
     | TInt(ik,_attr) ->
 	min_of (isSigned ik) (size_in_bytes ik)
-    | TEnum ({ ekind = IBool;_},_) -> My_bigint.zero
-    | TEnum ({ekind=ik;_},_) ->
+    | TEnum ({ ekind = IBool},_) -> My_bigint.zero
+    | TEnum ({ekind=ik},_) ->
 	min_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
@@ -189,8 +189,8 @@ let max_value_of_integral_type ?bitsize ty =
     | TInt(IBool,_attr) -> My_bigint.one
     | TInt(ik,_attr) ->
 	max_of (isSigned ik) (size_in_bytes ik)
-    | TEnum ({ekind=IBool;_},_) -> My_bigint.one
-    | TEnum ({ekind=ik;_},_) -> max_of (isSigned ik) (size_in_bytes ik)
+    | TEnum ({ekind=IBool},_) -> My_bigint.one
+    | TEnum ({ekind=ik},_) -> max_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
 (*TODO: projectify this *)
@@ -219,8 +219,8 @@ let name_of_integral_type ?bitsize ty =
     | TInt(IBool,_attr) -> "_bool"
     | TInt(ik,_attr) ->
 	name_it (isSigned ik) (size_in_bytes ik)
-    | TEnum ({ekind= IBool;_},_) -> "_bool"
-    | TEnum ({ekind = ik;_},_) -> name_it (isSigned ik) (size_in_bytes ik)
+    | TEnum ({ekind= IBool},_) -> "_bool"
+    | TEnum ({ekind = ik},_) -> name_it (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
 let iter_integral_types f =
