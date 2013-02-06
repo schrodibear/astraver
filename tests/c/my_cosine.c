@@ -45,6 +45,7 @@ float my_cos1(float x) {
   return 1.0f - x * x * 0.5f;
 }
 
+
 /*@ requires \abs(x) <= 0x1p-5 && \round_error(x) == 0.0;
   @ ensures \abs(\result - \cos(x)) <= 0x1p-23;
   @*/

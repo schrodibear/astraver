@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -23,13 +23,13 @@
   version="4.2"/>
  <file
   name="../my_cosine.mlw"
-  verified="false"
+  verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
    locfile="../my_cosine.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
-   verified="false"
+   verified="true"
    expanded="true">
    <goal
     name="method_error"
@@ -37,19 +37,19 @@
     loclnum="36" loccnumb="4" loccnume="111"
     expl="Lemma method_error, lemma"
     sum="c9c302ed64715c5ebbe73ea6de989205"
-    proved="false"
+    proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.p-24Iainfix &lt;=aabsV0c0x1.p-5F">
     <label
      name="expl:Lemma method_error, lemma"/>
     <proof
      prover="2"
-     timelimit="14"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      edited="my_cosine_Jessie_model_method_error_2.v"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="3.20"/>
+     <result status="valid" time="5.87"/>
     </proof>
    </goal>
   </theory>
@@ -57,7 +57,7 @@
    name="Jessie_program"
    locfile="../my_cosine.mlw"
    loclnum="218" loccnumb="7" loccnume="21"
-   verified="false"
+   verified="true"
    expanded="true">
    <goal
     name="WP_parameter my_cos1_ensures_default"
@@ -218,7 +218,7 @@
    <goal
     name="WP_parameter my_cos2_ensures_default"
     locfile="../../my_cosine.c"
-    loclnum="51" loccnumb="6" loccnume="13"
+    loclnum="52" loccnumb="6" loccnume="13"
     expl="VC for my_cos2_ensures_default"
     sum="e60939fddd1bf871a2652328141cd5f3"
     proved="true"
@@ -235,7 +235,7 @@
      <goal
       name="WP_parameter my_cos2_ensures_default.1"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="1. assertion"
       sum="53a673c24d3ade4753476c9b98502575"
       proved="true"
@@ -257,7 +257,7 @@
      <goal
       name="WP_parameter my_cos2_ensures_default.2"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="2. assertion"
       sum="36aa92a9c42ad7160119601c2983c0a7"
       proved="true"
@@ -287,7 +287,7 @@
      <goal
       name="WP_parameter my_cos2_ensures_default.3"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="3. postcondition"
       sum="b4b3fde725a306be3cfa7a74cfd38923"
       proved="true"
@@ -311,7 +311,7 @@
    <goal
     name="WP_parameter my_cos2_safety"
     locfile="../../my_cosine.c"
-    loclnum="51" loccnumb="6" loccnume="13"
+    loclnum="52" loccnumb="6" loccnume="13"
     expl="VC for my_cos2_safety"
     sum="f827bd7718d77fe0bdf83c9078751b31"
     proved="true"
@@ -328,7 +328,7 @@
      <goal
       name="WP_parameter my_cos2_safety.1"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="1. floating-point overflow"
       sum="e13626a0ffe362a2b4f450ee87190d1d"
       proved="true"
@@ -350,7 +350,7 @@
      <goal
       name="WP_parameter my_cos2_safety.2"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="2. floating-point overflow"
       sum="8544fb6d54bb8ea05baccd4a1391f40d"
       proved="true"
@@ -372,7 +372,7 @@
      <goal
       name="WP_parameter my_cos2_safety.3"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="3. floating-point overflow"
       sum="933c18d18c813c9d218cd6262557b0ae"
       proved="true"
@@ -396,7 +396,7 @@
    <goal
     name="WP_parameter my_cos3_ensures_default"
     locfile="../../my_cosine.c"
-    loclnum="64" loccnumb="6" loccnume="13"
+    loclnum="65" loccnumb="6" loccnume="13"
     expl="VC for my_cos3_ensures_default"
     sum="afd6eab0161c5f6aa348f36b7824b33f"
     proved="true"
@@ -413,7 +413,7 @@
      <goal
       name="WP_parameter my_cos3_ensures_default.1"
       locfile="../../my_cosine.c"
-      loclnum="64" loccnumb="6" loccnume="13"
+      loclnum="65" loccnumb="6" loccnume="13"
       expl="1. assertion"
       sum="4ccaf36a7b698926ab442b7e76c8acea"
       proved="true"
@@ -443,7 +443,7 @@
      <goal
       name="WP_parameter my_cos3_ensures_default.2"
       locfile="../../my_cosine.c"
-      loclnum="64" loccnumb="6" loccnume="13"
+      loclnum="65" loccnumb="6" loccnume="13"
       expl="2. postcondition"
       sum="f10f4937cfbffffb76800fe39c15d186"
       proved="true"
@@ -467,7 +467,7 @@
    <goal
     name="WP_parameter my_cos3_safety"
     locfile="../../my_cosine.c"
-    loclnum="64" loccnumb="6" loccnume="13"
+    loclnum="65" loccnumb="6" loccnume="13"
     expl="VC for my_cos3_safety"
     sum="2388498c84cdaaea56cba331ce1b99cd"
     proved="true"
@@ -484,7 +484,7 @@
      <goal
       name="WP_parameter my_cos3_safety.1"
       locfile="../../my_cosine.c"
-      loclnum="64" loccnumb="6" loccnume="13"
+      loclnum="65" loccnumb="6" loccnume="13"
       expl="1. floating-point overflow"
       sum="aa9ff5d294b6013acf74a2f39c19713a"
       proved="true"
@@ -506,7 +506,7 @@
      <goal
       name="WP_parameter my_cos3_safety.2"
       locfile="../../my_cosine.c"
-      loclnum="64" loccnumb="6" loccnume="13"
+      loclnum="65" loccnumb="6" loccnume="13"
       expl="2. floating-point overflow"
       sum="3063f521212603f8f912c483bc79783a"
       proved="true"
@@ -528,7 +528,7 @@
      <goal
       name="WP_parameter my_cos3_safety.3"
       locfile="../../my_cosine.c"
-      loclnum="64" loccnumb="6" loccnume="13"
+      loclnum="65" loccnumb="6" loccnume="13"
       expl="3. floating-point overflow"
       sum="d65a8df50b4307bbde168787b267dd3c"
       proved="true"
@@ -552,10 +552,10 @@
    <goal
     name="WP_parameter my_cos4_ensures_default"
     locfile="../../my_cosine.c"
-    loclnum="73" loccnumb="6" loccnume="13"
+    loclnum="74" loccnumb="6" loccnume="13"
     expl="VC for my_cos4_ensures_default"
     sum="d72ad3df72341c7aa3c1e38de40efbdc"
-    proved="false"
+    proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FAainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
     <label
@@ -564,15 +564,15 @@
      name="expl:VC for my_cos4_ensures_default"/>
     <transf
      name="split_goal"
-     proved="false"
+     proved="true"
      expanded="true">
      <goal
       name="WP_parameter my_cos4_ensures_default.1"
       locfile="../../my_cosine.c"
-      loclnum="73" loccnumb="6" loccnume="13"
+      loclnum="74" loccnumb="6" loccnume="13"
       expl="1. assertion"
       sum="a75b5ce05b4ea19d471deafef6ff0f2a"
-      proved="false"
+      proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
       <label
@@ -581,18 +581,18 @@
        name="expl:VC for my_cos4_ensures_default"/>
       <proof
        prover="2"
-       timelimit="13"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        edited="my_cosine_WP_Jessie_program_WP_parameter_my_cos4_ensures_default_2.v"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="3.20"/>
+       <result status="valid" time="5.51"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos4_ensures_default.2"
       locfile="../../my_cosine.c"
-      loclnum="73" loccnumb="6" loccnume="13"
+      loclnum="74" loccnumb="6" loccnume="13"
       expl="2. postcondition"
       sum="6e626a1518f4ac9cdcffc9fcc845ef12"
       proved="true"
@@ -616,7 +616,7 @@
    <goal
     name="WP_parameter my_cos4_safety"
     locfile="../../my_cosine.c"
-    loclnum="73" loccnumb="6" loccnume="13"
+    loclnum="74" loccnumb="6" loccnume="13"
     expl="VC for my_cos4_safety"
     sum="e4ecc0bed4fe86d3217fe5d2a57ae68c"
     proved="true"
@@ -633,7 +633,7 @@
      <goal
       name="WP_parameter my_cos4_safety.1"
       locfile="../../my_cosine.c"
-      loclnum="73" loccnumb="6" loccnume="13"
+      loclnum="74" loccnumb="6" loccnume="13"
       expl="1. floating-point overflow"
       sum="eda412ea1d45197afabeca475cb50af8"
       proved="true"
@@ -655,7 +655,7 @@
      <goal
       name="WP_parameter my_cos4_safety.2"
       locfile="../../my_cosine.c"
-      loclnum="73" loccnumb="6" loccnume="13"
+      loclnum="74" loccnumb="6" loccnume="13"
       expl="2. floating-point overflow"
       sum="8dc3724db80a5294ab6511358e64320e"
       proved="true"
@@ -677,7 +677,7 @@
      <goal
       name="WP_parameter my_cos4_safety.3"
       locfile="../../my_cosine.c"
-      loclnum="73" loccnumb="6" loccnume="13"
+      loclnum="74" loccnumb="6" loccnume="13"
       expl="3. floating-point overflow"
       sum="d50f048a5ab160bd3cb1fb147db4bc55"
       proved="true"
