@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
   id="1"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95"/>
  <prover
   id="2"
-  name="Alt-Ergo"
-  version="0.95-dev"/>
- <prover
-  id="3"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="4"
+  id="3"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="5"
+  id="4"
   name="Z3"
   version="3.2"/>
  <prover
-  id="6"
+  id="5"
   name="Z3"
   version="4.2"/>
  <file
@@ -53,7 +49,7 @@
     expl="VC for strprevchr_ensures_absent"
     sum="6c0f021f7e3b8101c1bf557ab9fa02d5"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix &gt;=ainteger_of_int32V5c0ainfix =ainteger_of_int32V8aprefix -c1Iainfix =V8V5FIainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1Fainfix =ainteger_of_int32V9aprefix -c1Iainfix =V9V5FIa_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V10ainteger_of_int8V1NIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V10FF">
     <label
      name="expl:Function strprevchr, Behavior `absent&apos;"/>
@@ -62,7 +58,7 @@
     <transf
      name="split_goal_wp"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter strprevchr_ensures_absent.1"
       locfile="../../strprevchr.c"
@@ -70,7 +66,7 @@
       expl="1. postcondition"
       sum="68c63a84cf84cddf3915f3edebb74eda"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ainfix =ainteger_of_int32V8aprefix -c1Iainfix =V8V5FIainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V9ainteger_of_int8V1NIainfix &lt;=ainteger_of_int32V9ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V9FF">
       <label
        name="expl:Function strprevchr, Behavior `absent&apos;"/>
@@ -90,7 +86,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="2"
@@ -98,7 +94,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="3"
@@ -122,14 +118,6 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="3"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.05"/>
       </proof>
      </goal>
@@ -140,7 +128,7 @@
       expl="2. postcondition"
       sum="daffde365e25022d73ee3244d0cc352c"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ainfix =ainteger_of_int32V6aprefix -c1Iainfix =V6V5FIainfix &gt;=ainteger_of_int32V5c0NIa_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V7ainteger_of_int8V1NIainfix &lt;=ainteger_of_int32V7ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V7FF">
       <label
        name="expl:Function strprevchr, Behavior `absent&apos;"/>
@@ -164,7 +152,7 @@
     expl="VC for strprevchr_ensures_default"
     sum="1b2246bd0017168b555a025327eb7768"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="a_AbsentTailV0V9V1V2V4Aainfix &gt;=ainteger_of_int32V9aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V5c1FIainfix =ainteger_of_int32V7ainteger_of_int32V6NIainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FAa_AbsentTailV0V0V1V2V4Aainfix &gt;=ainteger_of_int32V0aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V0Iainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
     <label
      name="expl:Function strprevchr, default behavior"/>
@@ -173,7 +161,7 @@
     <transf
      name="split_goal_wp"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter strprevchr_ensures_default.1"
       locfile="../../strprevchr.c"
@@ -181,7 +169,7 @@
       expl="1. loop invariant init"
       sum="8ed18899f5046316631b3cdca223acd7"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="a_AbsentTailV0V0V1V2V4Aainfix &gt;=ainteger_of_int32V0aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V0Iainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
       <label
        name="expl:Function strprevchr, default behavior"/>
@@ -193,7 +181,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="1"
@@ -201,7 +189,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="2"
@@ -209,7 +197,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="3"
@@ -217,7 +205,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="4"
@@ -225,18 +213,10 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="3"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="3"
        memlimit="1000"
        obsolete="false"
@@ -251,7 +231,7 @@
       expl="2. loop invariant preservation"
       sum="f75277d4885235046e101ea9909e623a"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="a_AbsentTailV0V9V1V2V4Aainfix &gt;=ainteger_of_int32V9aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V5c1FIainfix =ainteger_of_int32V7ainteger_of_int32V6NIainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
       <label
        name="expl:Function strprevchr, default behavior"/>
@@ -263,7 +243,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="1"
@@ -271,7 +251,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="2"
@@ -279,7 +259,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.12"/>
       </proof>
       <proof
        prover="3"
@@ -287,7 +267,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.12"/>
+       <result status="valid" time="0.13"/>
       </proof>
       <proof
        prover="4"
@@ -295,18 +275,10 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.13"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="3"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="3"
        memlimit="1000"
        obsolete="false"
@@ -340,7 +312,7 @@
       expl="1. postcondition"
       sum="8c39e4c8e2dc0557786ee228c88c2368"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V8ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V8Iainfix =V8V5FIainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V9ainteger_of_int8V1Iainfix &lt;=ainteger_of_int32V9ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V9EF">
       <label
        name="expl:Function strprevchr, Behavior `present&apos;"/>
@@ -399,14 +371,6 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="unknown" time="0.05"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="3"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="unknown" time="0.02"/>
         </proof>
        </goal>
@@ -417,7 +381,7 @@
         expl="2."
         sum="6757d87a400702aa5e59e443f17d1b8a"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ainfix &lt;=ainteger_of_int32V6ainteger_of_int32V0Iainfix =V6V5FIainfix &gt;=ainteger_of_int32V5c0NIa_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V7ainteger_of_int8V1Iainfix &lt;=ainteger_of_int32V7ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V7EF">
         <label
          name="expl:Function strprevchr, Behavior `present&apos;"/>
@@ -425,14 +389,6 @@
          name="expl:VC for strprevchr_ensures_present"/>
         <proof
          prover="0"
-         timelimit="3"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.03"/>
-        </proof>
-        <proof
-         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -451,7 +407,7 @@
     expl="VC for strprevchr_safety"
     sum="77ad30d98e1939b7190da945cc789bc7"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix &lt;ainteger_of_int32V10ainteger_of_int32V5Aainfix &lt;=c0ainteger_of_int32V5Iainfix =V10V9FIainfix =ainteger_of_int32V9ainfix -ainteger_of_int32V5c1FAainfix &lt;=ainfix -ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V5c1Iainfix =ainteger_of_int32V8ainteger_of_int32V6NIainfix =ainteger_of_int32V8ainteger_of_int8V7FAainfix &lt;=ainteger_of_int8V7c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V7LaselectV4ashiftV2ainteger_of_int32V5Aainfix &lt;=ainteger_of_int32V5aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2ainteger_of_int32V5Iainfix =ainteger_of_int32V6ainteger_of_int8V1FAainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
     <label
      name="expl:Function strprevchr, Safety"/>
@@ -460,7 +416,7 @@
     <transf
      name="split_goal_wp"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter strprevchr_safety.1"
       locfile="../../strprevchr.c"
@@ -468,14 +424,14 @@
       expl="1. arithmetic overflow"
       sum="9f26898ac5ba59bffb7e13d348fcc138"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
       <label
        name="expl:Function strprevchr, Safety"/>
       <label
        name="expl:VC for strprevchr_safety"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="3"
        memlimit="1000"
        obsolete="false"
@@ -490,14 +446,14 @@
       expl="2. pointer dereference"
       sum="6c4c4a48c06917a9f6e6e6a14adcaf8f"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V5aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2ainteger_of_int32V5Iainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
       <label
        name="expl:Function strprevchr, Safety"/>
       <label
        name="expl:VC for strprevchr_safety"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="3"
        memlimit="1000"
        obsolete="false"
@@ -512,14 +468,14 @@
       expl="3. arithmetic overflow"
       sum="05a72acc25fa554151b0a23a04021081"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ainfix &lt;=ainteger_of_int8V7c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V7LaselectV4ashiftV2ainteger_of_int32V5Iainfix &lt;=ainteger_of_int32V5aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2ainteger_of_int32V5Iainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
       <label
        name="expl:Function strprevchr, Safety"/>
       <label
        name="expl:VC for strprevchr_safety"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="3"
        memlimit="1000"
        obsolete="false"
@@ -534,14 +490,14 @@
       expl="4. arithmetic overflow"
       sum="5d636e588ce1c48278264eb6cdd11d70"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ainfix &lt;=ainfix -ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V5c1Iainfix =ainteger_of_int32V8ainteger_of_int32V6NIainfix =ainteger_of_int32V8ainteger_of_int8V7FIainfix &lt;=ainteger_of_int8V7c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V7LaselectV4ashiftV2ainteger_of_int32V5Iainfix &lt;=ainteger_of_int32V5aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2ainteger_of_int32V5Iainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
       <label
        name="expl:Function strprevchr, Safety"/>
       <label
        name="expl:VC for strprevchr_safety"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="3"
        memlimit="1000"
        obsolete="false"
@@ -556,14 +512,14 @@
       expl="5. loop variant decrease"
       sum="f4c084a3e32cbcf2fe1a4d94cb9fc90a"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ainfix &lt;ainteger_of_int32V10ainteger_of_int32V5Aainfix &lt;=c0ainteger_of_int32V5Iainfix =V10V9FIainfix =ainteger_of_int32V9ainfix -ainteger_of_int32V5c1FIainfix &lt;=ainfix -ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V5c1Iainfix =ainteger_of_int32V8ainteger_of_int32V6NIainfix =ainteger_of_int32V8ainteger_of_int8V7FIainfix &lt;=ainteger_of_int8V7c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V7LaselectV4ashiftV2ainteger_of_int32V5Iainfix &lt;=ainteger_of_int32V5aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2ainteger_of_int32V5Iainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &lt;=ainteger_of_int8V1c2147483647Aainfix &lt;=aprefix -c2147483648ainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
       <label
        name="expl:Function strprevchr, Safety"/>
       <label
        name="expl:VC for strprevchr_safety"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="3"
        memlimit="1000"
        obsolete="false"

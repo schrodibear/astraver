@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
   id="1"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95"/>
  <prover
   id="2"
-  name="Alt-Ergo"
-  version="0.95-dev"/>
- <prover
-  id="3"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="4"
+  id="3"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="5"
+  id="4"
   name="Z3"
   version="3.2"/>
  <prover
-  id="6"
+  id="5"
   name="Z3"
   version="4.2"/>
  <file
@@ -60,7 +56,7 @@
     <label
      name="expl:VC for create_ensures_default"/>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -68,7 +64,7 @@
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -76,7 +72,7 @@
      <result status="valid" time="0.07"/>
     </proof>
     <proof
-     prover="6"
+     prover="5"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -98,12 +94,20 @@
     <label
      name="expl:VC for create_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="3"
@@ -119,18 +123,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="5"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -152,7 +148,7 @@
     <label
      name="expl:VC for smoke_detector_ensures_default"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -160,7 +156,7 @@
      <result status="unknown" time="0.03"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
@@ -168,7 +164,7 @@
      <result status="unknown" time="0.04"/>
     </proof>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -176,7 +172,7 @@
      <result status="unknown" time="1.07"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -184,7 +180,7 @@
      <result status="timeout" time="5.09"/>
     </proof>
     <proof
-     prover="5"
+     prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -192,7 +188,7 @@
      <result status="timeout" time="5.02"/>
     </proof>
     <proof
-     prover="6"
+     prover="5"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -215,14 +211,6 @@
      name="expl:VC for smoke_detector_safety"/>
     <proof
      prover="0"
-     timelimit="20"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
-     prover="1"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
@@ -230,12 +218,20 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="3"
@@ -251,18 +247,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="5"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -284,6 +272,14 @@
     <label
      name="expl:VC for test_ensures_default"/>
     <proof
+     prover="0"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
      prover="1"
      timelimit="3"
      memlimit="1000"
@@ -293,11 +289,11 @@
     </proof>
     <proof
      prover="2"
-     timelimit="3"
+     timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="3"
@@ -305,7 +301,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="4"
@@ -317,14 +313,6 @@
     </proof>
     <proof
      prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="6"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -347,11 +335,11 @@
      name="expl:VC for test_safety"/>
     <proof
      prover="0"
-     timelimit="20"
-     memlimit="0"
+     timelimit="3"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -363,7 +351,7 @@
     </proof>
     <proof
      prover="2"
-     timelimit="3"
+     timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
@@ -383,18 +371,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="5"
      timelimit="5"
      memlimit="1000"
      obsolete="false"

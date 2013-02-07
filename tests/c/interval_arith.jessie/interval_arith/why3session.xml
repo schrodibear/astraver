@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
   id="1"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95"/>
  <prover
   id="2"
-  name="Alt-Ergo"
-  version="0.95-dev"/>
- <prover
-  id="3"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="4"
+  id="3"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="5"
+  id="4"
   name="Gappa"
   version="0.16.1"/>
  <prover
-  id="6"
+  id="5"
   name="Z3"
   version="3.2"/>
  <prover
-  id="7"
+  id="6"
   name="Z3"
   version="4.2"/>
  <file
@@ -98,7 +94,7 @@
         <label
          name="expl:VC for add_ensures_default"/>
         <proof
-         prover="3"
+         prover="2"
          timelimit="5"
          memlimit="50"
          obsolete="false"
@@ -106,7 +102,7 @@
          <result status="valid" time="1.19"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          memlimit="50"
          obsolete="false"
@@ -128,7 +124,7 @@
         <label
          name="expl:VC for add_ensures_default"/>
         <proof
-         prover="3"
+         prover="2"
          timelimit="120"
          memlimit="1000"
          obsolete="false"
@@ -136,7 +132,7 @@
          <result status="valid" time="19.02"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="120"
          memlimit="1000"
          obsolete="false"
@@ -162,7 +158,7 @@
     <label
      name="expl:VC for add_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -170,7 +166,7 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -178,7 +174,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -186,12 +182,20 @@
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="50"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="5"
@@ -203,14 +207,6 @@
     </proof>
     <proof
      prover="6"
-     timelimit="5"
-     memlimit="50"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="7"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -232,7 +228,7 @@
     <label
      name="expl:VC for max_ensures_default"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -240,7 +236,7 @@
      <result status="valid" time="0.86"/>
     </proof>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -248,7 +244,7 @@
      <result status="valid" time="0.32"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -270,7 +266,7 @@
     <label
      name="expl:VC for max_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -278,12 +274,20 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="50"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="3"
@@ -299,7 +303,7 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="5"
@@ -311,14 +315,6 @@
     </proof>
     <proof
      prover="6"
-     timelimit="5"
-     memlimit="50"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="7"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -340,7 +336,7 @@
     <label
      name="expl:VC for min_ensures_default"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -348,7 +344,7 @@
      <result status="valid" time="0.67"/>
     </proof>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -356,7 +352,7 @@
      <result status="valid" time="0.33"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -378,7 +374,7 @@
     <label
      name="expl:VC for min_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -386,7 +382,7 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -394,7 +390,7 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -402,12 +398,20 @@
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="50"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="5"
@@ -419,14 +423,6 @@
     </proof>
     <proof
      prover="6"
-     timelimit="5"
-     memlimit="50"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="7"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -499,7 +495,7 @@
           <label
            name="expl:VC for mul_dn_ensures_default"/>
           <proof
-           prover="3"
+           prover="2"
            timelimit="5"
            memlimit="50"
            obsolete="false"
@@ -507,7 +503,7 @@
            <result status="valid" time="0.31"/>
           </proof>
           <proof
-           prover="4"
+           prover="3"
            timelimit="5"
            memlimit="50"
            obsolete="false"
@@ -535,7 +531,7 @@
     <label
      name="expl:VC for mul_dn_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -543,12 +539,20 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="50"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="3"
@@ -564,7 +568,7 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="5"
@@ -580,14 +584,6 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="7"
-     timelimit="5"
-     memlimit="50"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.01"/>
     </proof>
    </goal>
@@ -598,7 +594,7 @@
     expl="VC for mul_ensures_default"
     sum="92ad9cd6174145756232da90affb4666"
     proved="false"
-    expanded="false"
+    expanded="true"
     shape="iainfix =V5aTrueiainfix =V7aTrueiainfix =V9aTrueiainfix =V11aTrueain_intervalainfix *V24V25V17V23Iain_intervalV25V2V3Aain_intervalV24V0V1FFAais_intervalV17V23Iainfix =V23V22FIaeqV22V19OaeqV22V21AaleV19V22AaleV21V22FIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2Fain_intervalainfix *V30V31V27V29Iain_intervalV31V2V3Aain_intervalV30V0V1FFAais_intervalV27V29Iainfix =V29V28FIareal_le_doubleainfix *avalueV0avalueV2V28FIainfix =V27V26FIadouble_le_realV26ainfix *avalueV1avalueV2FIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10Fiainfix =V33aTrueain_intervalainfix *V38V39V35V37Iain_intervalV39V2V3Aain_intervalV38V0V1FFAais_intervalV35V37Iainfix =V37V36FIareal_le_doubleainfix *avalueV1avalueV3V36FIainfix =V35V34FIadouble_le_realV34ainfix *avalueV0avalueV3Fain_intervalainfix *V44V45V41V43Iain_intervalV45V2V3Aain_intervalV44V0V1FFAais_intervalV41V43Iainfix =V43V42FIaof_real_exact_postc0.0V42FIainfix =V41V40FIaof_real_exact_postc0.0V40FIiainfix =V33aTrueagtV3V32agtV3V32NFIaof_real_exact_postc0.0V32FIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8Fiainfix =V47aTrueiainfix =V49aTrueain_intervalainfix *V54V55V51V53Iain_intervalV55V2V3Aain_intervalV54V0V1FFAais_intervalV51V53Iainfix =V53V52FIareal_le_doubleainfix *avalueV0avalueV2V52FIainfix =V51V50FIadouble_le_realV50ainfix *avalueV0avalueV3Fain_intervalainfix *V60V61V57V59Iain_intervalV61V2V3Aain_intervalV60V0V1FFAais_intervalV57V59Iainfix =V59V58FIareal_le_doubleainfix *avalueV0avalueV2V58FIainfix =V57V56FIadouble_le_realV56ainfix *avalueV1avalueV3FIiainfix =V49aTrueagtV3V48agtV3V48NFIaof_real_exact_postc0.0V48Fiainfix =V63aTrueain_intervalainfix *V68V69V65V67Iain_intervalV69V2V3Aain_intervalV68V0V1FFAais_intervalV65V67Iainfix =V67V66FIareal_le_doubleainfix *avalueV1avalueV2V66FIainfix =V65V64FIadouble_le_realV64ainfix *avalueV0avalueV3Fain_intervalainfix *V74V75V71V73Iain_intervalV75V2V3Aain_intervalV74V0V1FFAais_intervalV71V73Iainfix =V73V72FIaof_real_exact_postc0.0V72FIainfix =V71V70FIaof_real_exact_postc0.0V70FIiainfix =V63aTrueagtV3V62agtV3V62NFIaof_real_exact_postc0.0V62FIiainfix =V47aTruealtV2V46altV2V46NFIaof_real_exact_postc0.0V46FIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6Fiainfix =V77aTrueiainfix =V79aTrueiainfix =V81aTrueain_intervalainfix *V86V87V83V85Iain_intervalV87V2V3Aain_intervalV86V0V1FFAais_intervalV83V85Iainfix =V85V84FIareal_le_doubleainfix *avalueV1avalueV3V84FIainfix =V83V82FIadouble_le_realV82ainfix *avalueV1avalueV2Fain_intervalainfix *V92V93V89V91Iain_intervalV93V2V3Aain_intervalV92V0V1FFAais_intervalV89V91Iainfix =V91V90FIareal_le_doubleainfix *avalueV0avalueV3V90FIainfix =V89V88FIadouble_le_realV88ainfix *avalueV1avalueV2FIiainfix =V81aTrueagtV3V80agtV3V80NFIaof_real_exact_postc0.0V80Fiainfix =V95aTrueain_intervalainfix *V100V101V97V99Iain_intervalV101V2V3Aain_intervalV100V0V1FFAais_intervalV97V99Iainfix =V99V98FIareal_le_doubleainfix *avalueV1avalueV3V98FIainfix =V97V96FIadouble_le_realV96ainfix *avalueV0avalueV2Fain_intervalainfix *V106V107V103V105Iain_intervalV107V2V3Aain_intervalV106V0V1FFAais_intervalV103V105Iainfix =V105V104FIaof_real_exact_postc0.0V104FIainfix =V103V102FIaof_real_exact_postc0.0V102FIiainfix =V95aTrueagtV3V94agtV3V94NFIaof_real_exact_postc0.0V94FIiainfix =V79aTruealtV2V78altV2V78NFIaof_real_exact_postc0.0V78Fain_intervalainfix *V112V113V109V111Iain_intervalV113V2V3Aain_intervalV112V0V1FFAais_intervalV109V111Iainfix =V111V110FIaof_real_exact_postc0.0V110FIainfix =V109V108FIaof_real_exact_postc0.0V108FIiainfix =V77aTrueagtV1V76agtV1V76NFIaof_real_exact_postc0.0V76FIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
     <label
      name="expl:Function mul, default behavior"/>
@@ -607,7 +603,7 @@
     <transf
      name="split_goal"
      proved="false"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter mul_ensures_default.1"
       locfile="../../interval_arith.c"
@@ -615,7 +611,7 @@
       expl="1. postcondition"
       sum="5dd5a4028b3fa718cccc720a0a61b8b1"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V24V25V17V23Iain_intervalV25V2V3Aain_intervalV24V0V1FFAais_intervalV17V23Iainfix =V23V22FIaeqV22V19OaeqV22V21AaleV19V22AaleV21V22FIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -624,7 +620,7 @@
       <transf
        name="split_goal"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.1.1"
         locfile="../../interval_arith.c"
@@ -639,7 +635,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="3"
+         prover="2"
          timelimit="5"
          memlimit="50"
          obsolete="false"
@@ -647,7 +643,7 @@
          <result status="valid" time="0.29"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          memlimit="50"
          obsolete="false"
@@ -662,259 +658,12 @@
         expl="2."
         sum="2f483465d44989e037f823c7adb29a7c"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V24V25V17V23Iain_intervalV25V2V3Aain_intervalV24V0V1FFIainfix =V23V22FIaeqV22V19OaeqV22V21AaleV19V22AaleV21V22FIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
-        <transf
-         name="inline_goal"
-         proved="false"
-         expanded="false">
-         <goal
-          name="WP_parameter mul_ensures_default.1.2.1"
-          locfile="../../interval_arith.c"
-          loclnum="202" loccnumb="5" loccnume="8"
-          expl="1."
-          sum="328f8ca6c2844c6df9794a2c64706fbb"
-          proved="false"
-          expanded="false"
-          shape="areal_le_doubleainfix *V24V25V23Aadouble_le_realV17ainfix *V24V25Iareal_le_doubleV25V3Aadouble_le_realV2V25Aareal_le_doubleV24V1Aadouble_le_realV0V24FFIainfix =V23V22FIasame_signV22V19Aais_infiniteV19Aais_infiniteV22Oainfix =avalueV22avalueV19Aais_finiteV19Aais_finiteV22Aais_not_NaNV19Aais_not_NaNV22Oasame_signV22V21Aais_infiniteV21Aais_infiniteV22Oainfix =avalueV22avalueV21Aais_finiteV21Aais_finiteV22Aais_not_NaNV21Aais_not_NaNV22Aais_plus_infinityV22Aais_not_NaNV19Oais_not_NaNV22Aais_minus_infinityV19Oainfix &lt;=avalueV19avalueV22Aais_finiteV22Aais_finiteV19Aais_plus_infinityV22Aais_not_NaNV21Oais_not_NaNV22Aais_minus_infinityV21Oainfix &lt;=avalueV21avalueV22Aais_finiteV22Aais_finiteV21FIainfix =V21V20FIais_plus_infinityV20Oainfix &lt;=ainfix *avalueV0avalueV2avalueV20Aais_finiteV20FIainfix =V19V18FIais_plus_infinityV18Oainfix &lt;=ainfix *avalueV1avalueV3avalueV18Aais_finiteV18FIainfix =V17V16FIasame_signV16V13Aais_infiniteV13Aais_infiniteV16Oainfix =avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_not_NaNV13Aais_not_NaNV16Oasame_signV16V15Aais_infiniteV15Aais_infiniteV16Oainfix =avalueV16avalueV15Aais_finiteV15Aais_finiteV16Aais_not_NaNV15Aais_not_NaNV16Aais_plus_infinityV13Aais_not_NaNV16Oais_not_NaNV13Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_plus_infinityV15Aais_not_NaNV16Oais_not_NaNV15Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV15Aais_finiteV15Aais_finiteV16FIainfix =V15V14FIais_minus_infinityV14Oainfix &lt;=avalueV14ainfix *avalueV0avalueV3Aais_finiteV14FIainfix =V13V12FIais_minus_infinityV12Oainfix &lt;=avalueV12ainfix *avalueV1avalueV2Aais_finiteV12FIainfix =V11aTrueIiainfix =V11aTruealtV10V3altV10V3NFIainfix =amodelV10c0.0Aainfix =aexactV10c0.0Aainfix =avalueV10c0.0Aais_finiteV10FIainfix =V9aTrueIiainfix =V9aTrueais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2ais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2NFIainfix =amodelV8c0.0Aainfix =aexactV8c0.0Aainfix =avalueV8c0.0Aais_finiteV8FIainfix =V7aTrueIiainfix =V7aTruealtV6V1altV6V1NFIainfix =amodelV6c0.0Aainfix =aexactV6c0.0Aainfix =avalueV6c0.0Aais_finiteV6FIainfix =V5aTrueIiainfix =V5aTrueais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0ais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0NFIainfix =amodelV4c0.0Aainfix =aexactV4c0.0Aainfix =avalueV4c0.0Aais_finiteV4FIais_plus_infinityV3Oais_finiteV3Aais_minus_infinityV2Oais_finiteV2Aais_plus_infinityV1Oais_finiteV1Aais_minus_infinityV0Oais_finiteV0F">
-          <label
-           name="expl:Function mul, default behavior"/>
-          <label
-           name="expl:VC for mul_ensures_default"/>
-          <transf
-           name="split_goal"
-           proved="false"
-           expanded="false">
-           <goal
-            name="WP_parameter mul_ensures_default.1.2.1.1"
-            locfile="../../interval_arith.c"
-            loclnum="202" loccnumb="5" loccnume="8"
-            expl="1."
-            sum="ec91f2e1c87df427925e529f13343ef2"
-            proved="false"
-            expanded="false"
-            shape="adouble_le_realV17ainfix *V24V25Iareal_le_doubleV25V3Aadouble_le_realV2V25Aareal_le_doubleV24V1Aadouble_le_realV0V24FFIainfix =V23V22FIasame_signV22V19Aais_infiniteV19Aais_infiniteV22Oainfix =avalueV22avalueV19Aais_finiteV19Aais_finiteV22Aais_not_NaNV19Aais_not_NaNV22Oasame_signV22V21Aais_infiniteV21Aais_infiniteV22Oainfix =avalueV22avalueV21Aais_finiteV21Aais_finiteV22Aais_not_NaNV21Aais_not_NaNV22Aais_plus_infinityV22Aais_not_NaNV19Oais_not_NaNV22Aais_minus_infinityV19Oainfix &lt;=avalueV19avalueV22Aais_finiteV22Aais_finiteV19Aais_plus_infinityV22Aais_not_NaNV21Oais_not_NaNV22Aais_minus_infinityV21Oainfix &lt;=avalueV21avalueV22Aais_finiteV22Aais_finiteV21FIainfix =V21V20FIais_plus_infinityV20Oainfix &lt;=ainfix *avalueV0avalueV2avalueV20Aais_finiteV20FIainfix =V19V18FIais_plus_infinityV18Oainfix &lt;=ainfix *avalueV1avalueV3avalueV18Aais_finiteV18FIainfix =V17V16FIasame_signV16V13Aais_infiniteV13Aais_infiniteV16Oainfix =avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_not_NaNV13Aais_not_NaNV16Oasame_signV16V15Aais_infiniteV15Aais_infiniteV16Oainfix =avalueV16avalueV15Aais_finiteV15Aais_finiteV16Aais_not_NaNV15Aais_not_NaNV16Aais_plus_infinityV13Aais_not_NaNV16Oais_not_NaNV13Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_plus_infinityV15Aais_not_NaNV16Oais_not_NaNV15Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV15Aais_finiteV15Aais_finiteV16FIainfix =V15V14FIais_minus_infinityV14Oainfix &lt;=avalueV14ainfix *avalueV0avalueV3Aais_finiteV14FIainfix =V13V12FIais_minus_infinityV12Oainfix &lt;=avalueV12ainfix *avalueV1avalueV2Aais_finiteV12FIainfix =V11aTrueIiainfix =V11aTruealtV10V3altV10V3NFIainfix =amodelV10c0.0Aainfix =aexactV10c0.0Aainfix =avalueV10c0.0Aais_finiteV10FIainfix =V9aTrueIiainfix =V9aTrueais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2ais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2NFIainfix =amodelV8c0.0Aainfix =aexactV8c0.0Aainfix =avalueV8c0.0Aais_finiteV8FIainfix =V7aTrueIiainfix =V7aTruealtV6V1altV6V1NFIainfix =amodelV6c0.0Aainfix =aexactV6c0.0Aainfix =avalueV6c0.0Aais_finiteV6FIainfix =V5aTrueIiainfix =V5aTrueais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0ais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0NFIainfix =amodelV4c0.0Aainfix =aexactV4c0.0Aainfix =avalueV4c0.0Aais_finiteV4FIais_plus_infinityV3Oais_finiteV3Aais_minus_infinityV2Oais_finiteV2Aais_plus_infinityV1Oais_finiteV1Aais_minus_infinityV0Oais_finiteV0F">
-            <label
-             name="expl:Function mul, default behavior"/>
-            <label
-             name="expl:VC for mul_ensures_default"/>
-            <proof
-             prover="0"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.50"/>
-            </proof>
-            <proof
-             prover="1"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.31"/>
-            </proof>
-            <proof
-             prover="2"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.00"/>
-            </proof>
-            <proof
-             prover="3"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.06"/>
-            </proof>
-            <proof
-             prover="4"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.22"/>
-            </proof>
-            <proof
-             prover="6"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.22"/>
-            </proof>
-            <proof
-             prover="7"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.22"/>
-            </proof>
-            <transf
-             name="inline_goal"
-             proved="false"
-             expanded="false">
-             <goal
-              name="WP_parameter mul_ensures_default.1.2.1.1.1"
-              locfile="../../interval_arith.c"
-              loclnum="202" loccnumb="5" loccnume="8"
-              expl="1."
-              sum="d54b054108a69966a68be7261a85b27a"
-              proved="false"
-              expanded="false"
-              shape="ais_minus_infinityV17Oainfix &lt;=avalueV17ainfix *V24V25Aais_finiteV17Iais_plus_infinityV3Oainfix &lt;=V25avalueV3Aais_finiteV3Aais_minus_infinityV2Oainfix &lt;=avalueV2V25Aais_finiteV2Aais_plus_infinityV1Oainfix &lt;=V24avalueV1Aais_finiteV1Aais_minus_infinityV0Oainfix &lt;=avalueV0V24Aais_finiteV0FFIainfix =V23V22FIainfix =asignV22asignV19Aainfix =aclassV19aInfiniteAainfix =aclassV22aInfiniteOainfix =avalueV22avalueV19Aainfix =aclassV19aFiniteAainfix =aclassV22aFiniteAais_infiniteV19Oais_finiteV19Aais_infiniteV22Oais_finiteV22Oainfix =asignV22asignV21Aainfix =aclassV21aInfiniteAainfix =aclassV22aInfiniteOainfix =avalueV22avalueV21Aainfix =aclassV21aFiniteAainfix =aclassV22aFiniteAais_infiniteV21Oais_finiteV21Aais_infiniteV22Oais_finiteV22Aainfix =asignV22aPosAais_infiniteV22Aais_infiniteV19Oais_finiteV19Oais_infiniteV22Oais_finiteV22Aainfix =asignV19aNegAais_infiniteV19Oainfix =avalueV19avalueV22Oainfix &lt;avalueV19avalueV22Aainfix =aclassV22aFiniteAainfix =aclassV19aFiniteAainfix =asignV22aPosAais_infiniteV22Aais_infiniteV21Oais_finiteV21Oais_infiniteV22Oais_finiteV22Aainfix =asignV21aNegAais_infiniteV21Oainfix =avalueV21avalueV22Oainfix &lt;avalueV21avalueV22Aainfix =aclassV22aFiniteAainfix =aclassV21aFiniteFIainfix =V21V20FIainfix =asignV20aPosAais_infiniteV20Oainfix =ainfix *avalueV0avalueV2avalueV20Oainfix &lt;ainfix *avalueV0avalueV2avalueV20Aainfix =aclassV20aFiniteFIainfix =V19V18FIainfix =asignV18aPosAais_infiniteV18Oainfix =ainfix *avalueV1avalueV3avalueV18Oainfix &lt;ainfix *avalueV1avalueV3avalueV18Aainfix =aclassV18aFiniteFIainfix =V17V16FIainfix =asignV16asignV13Aainfix =aclassV13aInfiniteAainfix =aclassV16aInfiniteOainfix =avalueV16avalueV13Aainfix =aclassV13aFiniteAainfix =aclassV16aFiniteAais_infiniteV13Oais_finiteV13Aais_infiniteV16Oais_finiteV16Oainfix =asignV16asignV15Aainfix =aclassV15aInfiniteAainfix =aclassV16aInfiniteOainfix =avalueV16avalueV15Aainfix =aclassV15aFiniteAainfix =aclassV16aFiniteAais_infiniteV15Oais_finiteV15Aais_infiniteV16Oais_finiteV16Aainfix =asignV13aPosAais_infiniteV13Aais_infiniteV16Oais_finiteV16Oais_infiniteV13Oais_finiteV13Aainfix =asignV16aNegAais_infiniteV16Oainfix =avalueV16avalueV13Oainfix &lt;avalueV16avalueV13Aainfix =aclassV13aFiniteAainfix =aclassV16aFiniteAainfix =asignV15aPosAais_infiniteV15Aais_infiniteV16Oais_finiteV16Oais_infiniteV15Oais_finiteV15Aainfix =asignV16aNegAais_infiniteV16Oainfix =avalueV16avalueV15Oainfix &lt;avalueV16avalueV15Aainfix =aclassV15aFiniteAainfix =aclassV16aFiniteFIainfix =V15V14FIainfix =asignV14aNegAais_infiniteV14Oainfix =avalueV14ainfix *avalueV0avalueV3Oainfix &lt;avalueV14ainfix *avalueV0avalueV3Aainfix =aclassV14aFiniteFIainfix =V13V12FIainfix =asignV12aNegAais_infiniteV12Oainfix =avalueV12ainfix *avalueV1avalueV2Oainfix &lt;avalueV12ainfix *avalueV1avalueV2Aainfix =aclassV12aFiniteFIainfix =V11aTrueIiainfix =V11aTrueais_plus_infinityV3Aais_plus_infinityV10NAais_not_NaNV10Oais_minus_infinityV3NAais_not_NaNV3Aais_minus_infinityV10Oainfix &lt;avalueV10avalueV3Aais_finiteV3Aais_finiteV10ais_plus_infinityV3Aais_plus_infinityV10NAais_not_NaNV10Oais_minus_infinityV3NAais_not_NaNV3Aais_minus_infinityV10Oainfix &lt;avalueV10avalueV3Aais_finiteV3Aais_finiteV10NFIainfix =amodelV10c0.0Aainfix =aexactV10c0.0Aainfix =avalueV10c0.0Aainfix =aclassV10aFiniteFIainfix =V9aTrueIiainfix =V9aTrueainfix =asignV8aPosAais_infiniteV8Aainfix =asignV2aPosAais_infiniteV2NAais_infiniteV2Oais_finiteV2Oainfix =asignV8aNegAais_infiniteV8NAais_infiniteV8Oais_finiteV8Aainfix =asignV2aNegAais_infiniteV2Oainfix &lt;avalueV2avalueV8Aainfix =aclassV8aFiniteAainfix =aclassV2aFiniteainfix =asignV8aPosAais_infiniteV8Aainfix =asignV2aPosAais_infiniteV2NAais_infiniteV2Oais_finiteV2Oainfix =asignV8aNegAais_infiniteV8NAais_infiniteV8Oais_finiteV8Aainfix =asignV2aNegAais_infiniteV2Oainfix &lt;avalueV2avalueV8Aainfix =aclassV8aFiniteAainfix =aclassV2aFiniteNFIainfix =amodelV8c0.0Aainfix =aexactV8c0.0Aainfix =avalueV8c0.0Aainfix =aclassV8aFiniteFIainfix =V7aTrueIiainfix =V7aTrueais_plus_infinityV1Aais_plus_infinityV6NAais_not_NaNV6Oais_minus_infinityV1NAais_not_NaNV1Aais_minus_infinityV6Oainfix &lt;avalueV6avalueV1Aais_finiteV1Aais_finiteV6ais_plus_infinityV1Aais_plus_infinityV6NAais_not_NaNV6Oais_minus_infinityV1NAais_not_NaNV1Aais_minus_infinityV6Oainfix &lt;avalueV6avalueV1Aais_finiteV1Aais_finiteV6NFIainfix =amodelV6c0.0Aainfix =aexactV6c0.0Aainfix =avalueV6c0.0Aainfix =aclassV6aFiniteFIainfix =V5aTrueIiainfix =V5aTrueainfix =asignV4aPosAais_infiniteV4Aainfix =asignV0aPosAais_infiniteV0NAais_infiniteV0Oais_finiteV0Oainfix =asignV4aNegAais_infiniteV4NAais_infiniteV4Oais_finiteV4Aainfix =asignV0aNegAais_infiniteV0Oainfix &lt;avalueV0avalueV4Aainfix =aclassV4aFiniteAainfix =aclassV0aFiniteainfix =asignV4aPosAais_infiniteV4Aainfix =asignV0aPosAais_infiniteV0NAais_infiniteV0Oais_finiteV0Oainfix =asignV4aNegAais_infiniteV4NAais_infiniteV4Oais_finiteV4Aainfix =asignV0aNegAais_infiniteV0Oainfix &lt;avalueV0avalueV4Aainfix =aclassV4aFiniteAainfix =aclassV0aFiniteNFIainfix =amodelV4c0.0Aainfix =aexactV4c0.0Aainfix =avalueV4c0.0Aainfix =aclassV4aFiniteFIainfix =asignV3aPosAais_infiniteV3Oainfix =aclassV3aFiniteAainfix =asignV2aNegAais_infiniteV2Oainfix =aclassV2aFiniteAainfix =asignV1aPosAais_infiniteV1Oainfix =aclassV1aFiniteAainfix =asignV0aNegAais_infiniteV0Oainfix =aclassV0aFiniteF">
-              <label
-               name="expl:Function mul, default behavior"/>
-              <label
-               name="expl:VC for mul_ensures_default"/>
-              <proof
-               prover="0"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="timeout" time="121.34"/>
-              </proof>
-              <proof
-               prover="1"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="timeout" time="120.19"/>
-              </proof>
-              <proof
-               prover="2"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="timeout" time="119.81"/>
-              </proof>
-              <proof
-               prover="3"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="timeout" time="120.07"/>
-              </proof>
-              <proof
-               prover="4"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="timeout" time="120.09"/>
-              </proof>
-              <proof
-               prover="5"
-               timelimit="5"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="unknown" time="0.25"/>
-              </proof>
-              <proof
-               prover="6"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="outofmemory" time="20.43"/>
-              </proof>
-              <proof
-               prover="7"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="outofmemory" time="18.75"/>
-              </proof>
-             </goal>
-            </transf>
-           </goal>
-           <goal
-            name="WP_parameter mul_ensures_default.1.2.1.2"
-            locfile="../../interval_arith.c"
-            loclnum="202" loccnumb="5" loccnume="8"
-            expl="2."
-            sum="5bcea1e360a1dde9a830b9f2723ed9ab"
-            proved="false"
-            expanded="false"
-            shape="areal_le_doubleainfix *V24V25V23Iareal_le_doubleV25V3Aadouble_le_realV2V25Aareal_le_doubleV24V1Aadouble_le_realV0V24FFIainfix =V23V22FIasame_signV22V19Aais_infiniteV19Aais_infiniteV22Oainfix =avalueV22avalueV19Aais_finiteV19Aais_finiteV22Aais_not_NaNV19Aais_not_NaNV22Oasame_signV22V21Aais_infiniteV21Aais_infiniteV22Oainfix =avalueV22avalueV21Aais_finiteV21Aais_finiteV22Aais_not_NaNV21Aais_not_NaNV22Aais_plus_infinityV22Aais_not_NaNV19Oais_not_NaNV22Aais_minus_infinityV19Oainfix &lt;=avalueV19avalueV22Aais_finiteV22Aais_finiteV19Aais_plus_infinityV22Aais_not_NaNV21Oais_not_NaNV22Aais_minus_infinityV21Oainfix &lt;=avalueV21avalueV22Aais_finiteV22Aais_finiteV21FIainfix =V21V20FIais_plus_infinityV20Oainfix &lt;=ainfix *avalueV0avalueV2avalueV20Aais_finiteV20FIainfix =V19V18FIais_plus_infinityV18Oainfix &lt;=ainfix *avalueV1avalueV3avalueV18Aais_finiteV18FIainfix =V17V16FIasame_signV16V13Aais_infiniteV13Aais_infiniteV16Oainfix =avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_not_NaNV13Aais_not_NaNV16Oasame_signV16V15Aais_infiniteV15Aais_infiniteV16Oainfix =avalueV16avalueV15Aais_finiteV15Aais_finiteV16Aais_not_NaNV15Aais_not_NaNV16Aais_plus_infinityV13Aais_not_NaNV16Oais_not_NaNV13Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_plus_infinityV15Aais_not_NaNV16Oais_not_NaNV15Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV15Aais_finiteV15Aais_finiteV16FIainfix =V15V14FIais_minus_infinityV14Oainfix &lt;=avalueV14ainfix *avalueV0avalueV3Aais_finiteV14FIainfix =V13V12FIais_minus_infinityV12Oainfix &lt;=avalueV12ainfix *avalueV1avalueV2Aais_finiteV12FIainfix =V11aTrueIiainfix =V11aTruealtV10V3altV10V3NFIainfix =amodelV10c0.0Aainfix =aexactV10c0.0Aainfix =avalueV10c0.0Aais_finiteV10FIainfix =V9aTrueIiainfix =V9aTrueais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2ais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2NFIainfix =amodelV8c0.0Aainfix =aexactV8c0.0Aainfix =avalueV8c0.0Aais_finiteV8FIainfix =V7aTrueIiainfix =V7aTruealtV6V1altV6V1NFIainfix =amodelV6c0.0Aainfix =aexactV6c0.0Aainfix =avalueV6c0.0Aais_finiteV6FIainfix =V5aTrueIiainfix =V5aTrueais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0ais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0NFIainfix =amodelV4c0.0Aainfix =aexactV4c0.0Aainfix =avalueV4c0.0Aais_finiteV4FIais_plus_infinityV3Oais_finiteV3Aais_minus_infinityV2Oais_finiteV2Aais_plus_infinityV1Oais_finiteV1Aais_minus_infinityV0Oais_finiteV0F">
-            <label
-             name="expl:Function mul, default behavior"/>
-            <label
-             name="expl:VC for mul_ensures_default"/>
-            <proof
-             prover="0"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.05"/>
-            </proof>
-            <proof
-             prover="1"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.05"/>
-            </proof>
-            <proof
-             prover="2"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="4.97"/>
-            </proof>
-            <proof
-             prover="3"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.11"/>
-            </proof>
-            <proof
-             prover="4"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.02"/>
-            </proof>
-            <proof
-             prover="6"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.04"/>
-            </proof>
-            <proof
-             prover="7"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.22"/>
-            </proof>
-           </goal>
-          </transf>
-         </goal>
-        </transf>
        </goal>
       </transf>
      </goal>
@@ -925,7 +674,7 @@
       expl="2. postcondition"
       sum="ef9a738a51294da2786d76e64f6e0bc0"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -934,7 +683,7 @@
       <transf
        name="split_goal"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.2.1"
         locfile="../../interval_arith.c"
@@ -942,14 +691,14 @@
         expl="1."
         sum="545f4eb9904ac0e5964a90f62e1c4a7f"
         proved="true"
-        expanded="false"
+        expanded="true"
         shape="ais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -957,7 +706,7 @@
          <result status="valid" time="0.06"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -965,7 +714,7 @@
          <result status="valid" time="0.05"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -973,7 +722,7 @@
          <result status="valid" time="0.11"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -988,14 +737,14 @@
         expl="2."
         sum="acfb126bfe0c58a6d9d41534000a98da"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1003,7 +752,7 @@
          <result status="timeout" time="10.21"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1011,7 +760,7 @@
          <result status="timeout" time="9.97"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1019,7 +768,7 @@
          <result status="timeout" time="10.26"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1027,7 +776,7 @@
          <result status="timeout" time="10.25"/>
         </proof>
         <proof
-         prover="5"
+         prover="4"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1035,7 +784,7 @@
          <result status="unknown" time="0.09"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1043,7 +792,7 @@
          <result status="timeout" time="11.01"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1084,7 +833,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1092,7 +841,7 @@
          <result status="valid" time="0.06"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1100,7 +849,7 @@
          <result status="valid" time="0.05"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1108,7 +857,7 @@
          <result status="valid" time="0.12"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1130,7 +879,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1138,7 +887,7 @@
          <result status="timeout" time="10.01"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1146,7 +895,7 @@
          <result status="timeout" time="9.96"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1154,7 +903,7 @@
          <result status="timeout" time="10.04"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1162,7 +911,7 @@
          <result status="timeout" time="10.01"/>
         </proof>
         <proof
-         prover="5"
+         prover="4"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1170,7 +919,7 @@
          <result status="unknown" time="0.08"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1178,7 +927,7 @@
          <result status="timeout" time="10.07"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1219,7 +968,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1227,7 +976,7 @@
          <result status="valid" time="0.05"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1235,7 +984,7 @@
          <result status="valid" time="0.04"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1243,7 +992,7 @@
          <result status="valid" time="0.10"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1251,7 +1000,7 @@
          <result status="valid" time="0.13"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1259,7 +1008,7 @@
          <result status="valid" time="0.08"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1281,7 +1030,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1289,12 +1038,20 @@
          <result status="timeout" time="3.50"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="timeout" time="2.98"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="3.02"/>
         </proof>
         <proof
          prover="3"
@@ -1305,7 +1062,7 @@
          <result status="timeout" time="3.02"/>
         </proof>
         <proof
-         prover="4"
+         prover="5"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1314,14 +1071,6 @@
         </proof>
         <proof
          prover="6"
-         timelimit="3"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="3.02"/>
-        </proof>
-        <proof
-         prover="7"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1362,6 +1111,14 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
+         prover="0"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
          prover="1"
          timelimit="3"
          memlimit="1000"
@@ -1375,18 +1132,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="3"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.11"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1408,7 +1157,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1416,7 +1165,7 @@
          <result status="timeout" time="3.28"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1424,7 +1173,7 @@
          <result status="timeout" time="2.98"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1432,7 +1181,7 @@
          <result status="timeout" time="3.30"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1440,7 +1189,7 @@
          <result status="timeout" time="3.13"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1448,7 +1197,7 @@
          <result status="timeout" time="3.52"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1489,7 +1238,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1497,7 +1246,7 @@
          <result status="valid" time="0.06"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1505,7 +1254,7 @@
          <result status="valid" time="0.05"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1513,7 +1262,7 @@
          <result status="valid" time="0.12"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1535,7 +1284,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1543,7 +1292,7 @@
          <result status="timeout" time="3.10"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1551,7 +1300,7 @@
          <result status="timeout" time="2.98"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1559,7 +1308,7 @@
          <result status="timeout" time="3.17"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1567,7 +1316,7 @@
          <result status="timeout" time="3.06"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1575,7 +1324,7 @@
          <result status="timeout" time="3.03"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1599,7 +1348,7 @@
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1607,7 +1356,7 @@
        <result status="timeout" time="5.14"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1615,7 +1364,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1623,7 +1372,7 @@
        <result status="timeout" time="5.14"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1631,7 +1380,7 @@
        <result status="outofmemory" time="2.42"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1639,7 +1388,7 @@
        <result status="unknown" time="0.07"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1647,7 +1396,7 @@
        <result status="outofmemory" time="0.53"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="3"
        memlimit="1000"
        obsolete="false"
@@ -1669,7 +1418,7 @@
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1677,7 +1426,7 @@
        <result status="timeout" time="5.22"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1685,7 +1434,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1693,7 +1442,7 @@
        <result status="timeout" time="5.18"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1701,7 +1450,7 @@
        <result status="outofmemory" time="2.49"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1709,7 +1458,7 @@
        <result status="unknown" time="0.07"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1717,7 +1466,7 @@
        <result status="outofmemory" time="0.52"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="3"
        memlimit="1000"
        obsolete="false"
@@ -1739,7 +1488,7 @@
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1747,7 +1496,7 @@
        <result status="timeout" time="5.04"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1755,7 +1504,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1763,7 +1512,7 @@
        <result status="timeout" time="5.06"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1771,7 +1520,7 @@
        <result status="outofmemory" time="1.15"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1779,7 +1528,7 @@
        <result status="unknown" time="0.08"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1801,7 +1550,7 @@
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1809,7 +1558,7 @@
        <result status="timeout" time="5.06"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1817,7 +1566,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1825,7 +1574,7 @@
        <result status="timeout" time="5.06"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1833,7 +1582,7 @@
        <result status="outofmemory" time="1.21"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1841,7 +1590,7 @@
        <result status="unknown" time="0.08"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1863,7 +1612,7 @@
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1871,7 +1620,7 @@
        <result status="timeout" time="5.21"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1879,7 +1628,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1887,7 +1636,7 @@
        <result status="timeout" time="5.18"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1895,7 +1644,7 @@
        <result status="outofmemory" time="1.27"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1903,7 +1652,7 @@
        <result status="unknown" time="0.07"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1925,7 +1674,7 @@
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1933,7 +1682,7 @@
        <result status="timeout" time="5.39"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1941,7 +1690,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1949,7 +1698,7 @@
        <result status="timeout" time="5.48"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -1957,7 +1706,7 @@
        <result status="timeout" time="5.03"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1965,12 +1714,12 @@
        <result status="unknown" time="0.07"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="0.34"/>
+       <result status="outofmemory" time="0.49"/>
       </proof>
      </goal>
      <goal
@@ -2004,6 +1753,14 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
+         prover="0"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
          prover="1"
          timelimit="3"
          memlimit="1000"
@@ -2017,7 +1774,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.09"/>
         </proof>
         <proof
          prover="3"
@@ -2025,18 +1782,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="3"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.11"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -2044,7 +1793,7 @@
          <result status="valid" time="0.08"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -2066,7 +1815,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="3"
+         prover="2"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -2074,7 +1823,7 @@
          <result status="valid" time="3.98"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -2117,7 +1866,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2125,7 +1874,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2147,7 +1896,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2155,7 +1904,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2177,7 +1926,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2185,7 +1934,7 @@
        <result status="valid" time="0.14"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2193,7 +1942,7 @@
        <result status="valid" time="0.13"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2201,7 +1950,7 @@
        <result status="valid" time="0.11"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2223,7 +1972,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2231,7 +1980,7 @@
        <result status="valid" time="1.60"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2253,7 +2002,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2261,7 +2010,7 @@
        <result status="valid" time="1.90"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2283,7 +2032,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2291,7 +2040,7 @@
        <result status="valid" time="0.48"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2313,7 +2062,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2321,7 +2070,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2343,7 +2092,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2351,7 +2100,7 @@
        <result status="valid" time="2.13"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2373,7 +2122,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2381,7 +2130,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2403,7 +2152,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2411,7 +2160,7 @@
        <result status="valid" time="2.03"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2433,7 +2182,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2441,7 +2190,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2463,7 +2212,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2471,7 +2220,7 @@
        <result status="valid" time="2.14"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2493,7 +2242,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2501,7 +2250,7 @@
        <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2523,7 +2272,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2531,7 +2280,7 @@
        <result status="valid" time="0.12"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2553,7 +2302,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2561,7 +2310,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2583,7 +2332,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2591,7 +2340,7 @@
        <result status="valid" time="3.50"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="11"
        memlimit="1000"
        obsolete="false"
@@ -2613,7 +2362,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2621,7 +2370,7 @@
        <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2643,7 +2392,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2651,7 +2400,7 @@
        <result status="valid" time="1.36"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2673,7 +2422,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2681,7 +2430,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2703,7 +2452,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="6"
        memlimit="50"
        obsolete="false"
@@ -2711,7 +2460,7 @@
        <result status="valid" time="0.11"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="6"
        memlimit="50"
        obsolete="false"
@@ -2733,7 +2482,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2741,7 +2490,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2763,7 +2512,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2771,7 +2520,7 @@
        <result status="valid" time="0.12"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2812,7 +2561,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="120"
        memlimit="1000"
        obsolete="false"
@@ -2820,7 +2569,7 @@
        <result status="valid" time="6.65"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="120"
        memlimit="1000"
        obsolete="false"
@@ -2828,20 +2577,20 @@
        <result status="valid" time="5.96"/>
       </proof>
       <proof
+       prover="2"
+       timelimit="120"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="3.97"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="120"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="4.79"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="120"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="7.47"/>
+       <result status="valid" time="9.83"/>
       </proof>
      </goal>
      <goal
@@ -2858,6 +2607,14 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
+       prover="0"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="5"
        memlimit="50"
@@ -2871,7 +2628,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="3"
@@ -2879,18 +2636,10 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2898,7 +2647,7 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2920,7 +2669,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2928,7 +2677,7 @@
        <result status="valid" time="0.03"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2936,7 +2685,7 @@
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2944,7 +2693,7 @@
        <result status="valid" time="0.08"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2952,7 +2701,7 @@
        <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2960,7 +2709,7 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2982,6 +2731,14 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
+       prover="0"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="5"
        memlimit="50"
@@ -2995,7 +2752,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="3"
@@ -3003,18 +2760,10 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3022,7 +2771,7 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3044,6 +2793,14 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
+       prover="0"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="5"
        memlimit="50"
@@ -3057,7 +2814,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="3"
@@ -3065,18 +2822,10 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3084,7 +2833,7 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3106,7 +2855,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="15"
        memlimit="50"
        obsolete="false"
@@ -3114,7 +2863,7 @@
        <result status="valid" time="5.32"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3122,7 +2871,7 @@
        <result status="valid" time="0.43"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3144,7 +2893,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="226"
        memlimit="1000"
        obsolete="false"
@@ -3152,7 +2901,7 @@
        <result status="valid" time="63.19"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="120"
        memlimit="1000"
        obsolete="false"
@@ -3160,7 +2909,7 @@
        <result status="valid" time="4.72"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="120"
        memlimit="1000"
        obsolete="false"
@@ -3182,7 +2931,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3190,7 +2939,7 @@
        <result status="valid" time="0.45"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3212,7 +2961,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="7"
        memlimit="50"
        obsolete="false"
@@ -3220,15 +2969,15 @@
        <result status="valid" time="2.68"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.53"/>
+       <result status="timeout" time="5.90"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3236,7 +2985,7 @@
        <result status="valid" time="0.15"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3258,7 +3007,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="14"
        memlimit="50"
        obsolete="false"
@@ -3266,15 +3015,15 @@
        <result status="valid" time="5.02"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="4.72"/>
+       <result status="timeout" time="9.99"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3282,12 +3031,12 @@
        <result status="valid" time="0.15"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.18"/>
+       <result status="valid" time="0.30"/>
       </proof>
      </goal>
      <goal
@@ -3304,7 +3053,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="14"
        memlimit="50"
        obsolete="false"
@@ -3312,15 +3061,15 @@
        <result status="valid" time="5.13"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="4.52"/>
+       <result status="valid" time="9.86"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3328,12 +3077,12 @@
        <result status="valid" time="0.15"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.17"/>
+       <result status="valid" time="0.29"/>
       </proof>
      </goal>
      <goal
@@ -3350,7 +3099,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3358,7 +3107,7 @@
        <result status="valid" time="0.54"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3380,7 +3129,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3388,7 +3137,7 @@
        <result status="valid" time="0.55"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3410,7 +3159,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3418,7 +3167,7 @@
        <result status="valid" time="0.37"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3442,7 +3191,7 @@
     <label
      name="expl:VC for mul_up_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -3450,12 +3199,20 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="50"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="3"
@@ -3471,7 +3228,7 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="5"
@@ -3483,14 +3240,6 @@
     </proof>
     <proof
      prover="6"
-     timelimit="5"
-     memlimit="50"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="7"
      timelimit="5"
      memlimit="50"
      obsolete="false"
