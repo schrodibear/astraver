@@ -3,6 +3,7 @@
 Require Import BuiltIn.
 Require BuiltIn.
 Require int.Int.
+Require bool.Bool.
 Require Jessie_memory_model.
 
 Axiom charP : Type.
@@ -62,25 +63,25 @@ Axiom charP_tags : forall (x:(Jessie_memory_model.pointer charP)),
 Parameter integer_of_int32: int32 -> Z.
 
 (* Why3 assumption *)
-Definition eq_int32(x:int32) (y:int32): Prop :=
+Definition eq_int32 (x:int32) (y:int32): Prop :=
   ((integer_of_int32 x) = (integer_of_int32 y)).
 
 Parameter integer_of_int8: int8 -> Z.
 
 (* Why3 assumption *)
-Definition eq_int8(x:int8) (y:int8): Prop :=
+Definition eq_int8 (x:int8) (y:int8): Prop :=
   ((integer_of_int8 x) = (integer_of_int8 y)).
 
 Parameter integer_of_uint32: uint32 -> Z.
 
 (* Why3 assumption *)
-Definition eq_uint32(x:uint32) (y:uint32): Prop :=
+Definition eq_uint32 (x:uint32) (y:uint32): Prop :=
   ((integer_of_uint32 x) = (integer_of_uint32 y)).
 
 Parameter integer_of_uint8: uint8 -> Z.
 
 (* Why3 assumption *)
-Definition eq_uint8(x:uint8) (y:uint8): Prop :=
+Definition eq_uint8 (x:uint8) (y:uint8): Prop :=
   ((integer_of_uint8 x) = (integer_of_uint8 y)).
 
 Parameter int32_of_integer: Z -> int32.
@@ -125,24 +126,24 @@ Axiom intP_tags : forall (x:(Jessie_memory_model.pointer intP)),
   (Jessie_memory_model.instanceof intP_tag_table x intP_tag).
 
 (* Why3 assumption *)
-Definition left_valid_struct_charP(p:(Jessie_memory_model.pointer charP))
+Definition left_valid_struct_charP (p:(Jessie_memory_model.pointer charP))
   (a:Z) (charP_alloc_table:(Jessie_memory_model.alloc_table charP)): Prop :=
   ((Jessie_memory_model.offset_min charP_alloc_table p) <= a)%Z.
 
 (* Why3 assumption *)
-Definition left_valid_struct_intP(p:(Jessie_memory_model.pointer intP)) (a:Z)
-  (intP_alloc_table:(Jessie_memory_model.alloc_table intP)): Prop :=
+Definition left_valid_struct_intP (p:(Jessie_memory_model.pointer intP))
+  (a:Z) (intP_alloc_table:(Jessie_memory_model.alloc_table intP)): Prop :=
   ((Jessie_memory_model.offset_min intP_alloc_table p) <= a)%Z.
 
 (* Why3 assumption *)
-Definition left_valid_struct_unsigned_charP(p:(Jessie_memory_model.pointer
+Definition left_valid_struct_unsigned_charP (p:(Jessie_memory_model.pointer
   unsigned_charP)) (a:Z)
   (unsigned_charP_alloc_table:(Jessie_memory_model.alloc_table
   unsigned_charP)): Prop :=
   ((Jessie_memory_model.offset_min unsigned_charP_alloc_table p) <= a)%Z.
 
 (* Why3 assumption *)
-Definition left_valid_struct_voidP(p:(Jessie_memory_model.pointer voidP))
+Definition left_valid_struct_voidP (p:(Jessie_memory_model.pointer voidP))
   (a:Z) (voidP_alloc_table:(Jessie_memory_model.alloc_table voidP)): Prop :=
   ((Jessie_memory_model.offset_min voidP_alloc_table p) <= a)%Z.
 
@@ -172,67 +173,41 @@ Axiom pointer_addr_of_voidP_of_pointer_address : forall (p:(Jessie_memory_model.
   (p = (Jessie_memory_model.pointer_address (voidP_of_pointer_address p))).
 
 (* Why3 assumption *)
-Definition right_valid_struct_charP(p:(Jessie_memory_model.pointer charP))
+Definition right_valid_struct_charP (p:(Jessie_memory_model.pointer charP))
   (b:Z) (charP_alloc_table:(Jessie_memory_model.alloc_table charP)): Prop :=
   (b <= (Jessie_memory_model.offset_max charP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition right_valid_struct_intP(p:(Jessie_memory_model.pointer intP))
+Definition right_valid_struct_intP (p:(Jessie_memory_model.pointer intP))
   (b:Z) (intP_alloc_table:(Jessie_memory_model.alloc_table intP)): Prop :=
   (b <= (Jessie_memory_model.offset_max intP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition right_valid_struct_unsigned_charP(p:(Jessie_memory_model.pointer
+Definition right_valid_struct_unsigned_charP (p:(Jessie_memory_model.pointer
   unsigned_charP)) (b:Z)
   (unsigned_charP_alloc_table:(Jessie_memory_model.alloc_table
   unsigned_charP)): Prop :=
   (b <= (Jessie_memory_model.offset_max unsigned_charP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition right_valid_struct_voidP(p:(Jessie_memory_model.pointer voidP))
+Definition right_valid_struct_voidP (p:(Jessie_memory_model.pointer voidP))
   (b:Z) (voidP_alloc_table:(Jessie_memory_model.alloc_table voidP)): Prop :=
   (b <= (Jessie_memory_model.offset_max voidP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition strict_valid_root_charP(p:(Jessie_memory_model.pointer charP))
+Definition strict_valid_root_charP (p:(Jessie_memory_model.pointer charP))
   (a:Z) (b:Z) (charP_alloc_table:(Jessie_memory_model.alloc_table
   charP)): Prop := ((Jessie_memory_model.offset_min charP_alloc_table
   p) = a) /\ ((Jessie_memory_model.offset_max charP_alloc_table p) = b).
 
 (* Why3 assumption *)
-Definition strict_valid_root_intP(p:(Jessie_memory_model.pointer intP)) (a:Z)
-  (b:Z) (intP_alloc_table:(Jessie_memory_model.alloc_table intP)): Prop :=
-  ((Jessie_memory_model.offset_min intP_alloc_table p) = a) /\
-  ((Jessie_memory_model.offset_max intP_alloc_table p) = b).
-
-(* Why3 assumption *)
-Definition strict_valid_root_unsigned_charP(p:(Jessie_memory_model.pointer
-  unsigned_charP)) (a:Z) (b:Z)
-  (unsigned_charP_alloc_table:(Jessie_memory_model.alloc_table
-  unsigned_charP)): Prop :=
-  ((Jessie_memory_model.offset_min unsigned_charP_alloc_table p) = a) /\
-  ((Jessie_memory_model.offset_max unsigned_charP_alloc_table p) = b).
-
-(* Why3 assumption *)
-Definition strict_valid_root_voidP(p:(Jessie_memory_model.pointer voidP))
-  (a:Z) (b:Z) (voidP_alloc_table:(Jessie_memory_model.alloc_table
-  voidP)): Prop := ((Jessie_memory_model.offset_min voidP_alloc_table
-  p) = a) /\ ((Jessie_memory_model.offset_max voidP_alloc_table p) = b).
-
-(* Why3 assumption *)
-Definition strict_valid_struct_charP(p:(Jessie_memory_model.pointer charP))
-  (a:Z) (b:Z) (charP_alloc_table:(Jessie_memory_model.alloc_table
-  charP)): Prop := ((Jessie_memory_model.offset_min charP_alloc_table
-  p) = a) /\ ((Jessie_memory_model.offset_max charP_alloc_table p) = b).
-
-(* Why3 assumption *)
-Definition strict_valid_struct_intP(p:(Jessie_memory_model.pointer intP))
+Definition strict_valid_root_intP (p:(Jessie_memory_model.pointer intP))
   (a:Z) (b:Z) (intP_alloc_table:(Jessie_memory_model.alloc_table
   intP)): Prop := ((Jessie_memory_model.offset_min intP_alloc_table
   p) = a) /\ ((Jessie_memory_model.offset_max intP_alloc_table p) = b).
 
 (* Why3 assumption *)
-Definition strict_valid_struct_unsigned_charP(p:(Jessie_memory_model.pointer
+Definition strict_valid_root_unsigned_charP (p:(Jessie_memory_model.pointer
   unsigned_charP)) (a:Z) (b:Z)
   (unsigned_charP_alloc_table:(Jessie_memory_model.alloc_table
   unsigned_charP)): Prop :=
@@ -240,7 +215,33 @@ Definition strict_valid_struct_unsigned_charP(p:(Jessie_memory_model.pointer
   ((Jessie_memory_model.offset_max unsigned_charP_alloc_table p) = b).
 
 (* Why3 assumption *)
-Definition strict_valid_struct_voidP(p:(Jessie_memory_model.pointer voidP))
+Definition strict_valid_root_voidP (p:(Jessie_memory_model.pointer voidP))
+  (a:Z) (b:Z) (voidP_alloc_table:(Jessie_memory_model.alloc_table
+  voidP)): Prop := ((Jessie_memory_model.offset_min voidP_alloc_table
+  p) = a) /\ ((Jessie_memory_model.offset_max voidP_alloc_table p) = b).
+
+(* Why3 assumption *)
+Definition strict_valid_struct_charP (p:(Jessie_memory_model.pointer charP))
+  (a:Z) (b:Z) (charP_alloc_table:(Jessie_memory_model.alloc_table
+  charP)): Prop := ((Jessie_memory_model.offset_min charP_alloc_table
+  p) = a) /\ ((Jessie_memory_model.offset_max charP_alloc_table p) = b).
+
+(* Why3 assumption *)
+Definition strict_valid_struct_intP (p:(Jessie_memory_model.pointer intP))
+  (a:Z) (b:Z) (intP_alloc_table:(Jessie_memory_model.alloc_table
+  intP)): Prop := ((Jessie_memory_model.offset_min intP_alloc_table
+  p) = a) /\ ((Jessie_memory_model.offset_max intP_alloc_table p) = b).
+
+(* Why3 assumption *)
+Definition strict_valid_struct_unsigned_charP (p:(Jessie_memory_model.pointer
+  unsigned_charP)) (a:Z) (b:Z)
+  (unsigned_charP_alloc_table:(Jessie_memory_model.alloc_table
+  unsigned_charP)): Prop :=
+  ((Jessie_memory_model.offset_min unsigned_charP_alloc_table p) = a) /\
+  ((Jessie_memory_model.offset_max unsigned_charP_alloc_table p) = b).
+
+(* Why3 assumption *)
+Definition strict_valid_struct_voidP (p:(Jessie_memory_model.pointer voidP))
   (a:Z) (b:Z) (voidP_alloc_table:(Jessie_memory_model.alloc_table
   voidP)): Prop := ((Jessie_memory_model.offset_min voidP_alloc_table
   p) = a) /\ ((Jessie_memory_model.offset_max voidP_alloc_table p) = b).
@@ -275,7 +276,8 @@ Axiom unsigned_charP_of_pointer_address_of_pointer_addr : forall (p:(Jessie_memo
   unsigned_charP)),
   (p = (unsigned_charP_of_pointer_address (Jessie_memory_model.pointer_address p))).
 
-Axiom unsigned_charP_parenttag_bottom : (Jessie_memory_model.parenttag unsigned_charP_tag
+Axiom unsigned_charP_parenttag_bottom : (Jessie_memory_model.parenttag
+  unsigned_charP_tag
   (Jessie_memory_model.bottom_tag :(Jessie_memory_model.tag_id
   unsigned_charP))).
 
@@ -286,19 +288,19 @@ Axiom unsigned_charP_tags : forall (x:(Jessie_memory_model.pointer
   x unsigned_charP_tag).
 
 (* Why3 assumption *)
-Definition valid_root_charP(p:(Jessie_memory_model.pointer charP)) (a:Z)
+Definition valid_root_charP (p:(Jessie_memory_model.pointer charP)) (a:Z)
   (b:Z) (charP_alloc_table:(Jessie_memory_model.alloc_table charP)): Prop :=
   ((Jessie_memory_model.offset_min charP_alloc_table p) <= a)%Z /\
   (b <= (Jessie_memory_model.offset_max charP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition valid_root_intP(p:(Jessie_memory_model.pointer intP)) (a:Z) (b:Z)
+Definition valid_root_intP (p:(Jessie_memory_model.pointer intP)) (a:Z) (b:Z)
   (intP_alloc_table:(Jessie_memory_model.alloc_table intP)): Prop :=
   ((Jessie_memory_model.offset_min intP_alloc_table p) <= a)%Z /\
   (b <= (Jessie_memory_model.offset_max intP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition valid_root_unsigned_charP(p:(Jessie_memory_model.pointer
+Definition valid_root_unsigned_charP (p:(Jessie_memory_model.pointer
   unsigned_charP)) (a:Z) (b:Z)
   (unsigned_charP_alloc_table:(Jessie_memory_model.alloc_table
   unsigned_charP)): Prop :=
@@ -306,25 +308,25 @@ Definition valid_root_unsigned_charP(p:(Jessie_memory_model.pointer
   (b <= (Jessie_memory_model.offset_max unsigned_charP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition valid_root_voidP(p:(Jessie_memory_model.pointer voidP)) (a:Z)
+Definition valid_root_voidP (p:(Jessie_memory_model.pointer voidP)) (a:Z)
   (b:Z) (voidP_alloc_table:(Jessie_memory_model.alloc_table voidP)): Prop :=
   ((Jessie_memory_model.offset_min voidP_alloc_table p) <= a)%Z /\
   (b <= (Jessie_memory_model.offset_max voidP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition valid_struct_charP(p:(Jessie_memory_model.pointer charP)) (a:Z)
+Definition valid_struct_charP (p:(Jessie_memory_model.pointer charP)) (a:Z)
   (b:Z) (charP_alloc_table:(Jessie_memory_model.alloc_table charP)): Prop :=
   ((Jessie_memory_model.offset_min charP_alloc_table p) <= a)%Z /\
   (b <= (Jessie_memory_model.offset_max charP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition valid_struct_intP(p:(Jessie_memory_model.pointer intP)) (a:Z)
+Definition valid_struct_intP (p:(Jessie_memory_model.pointer intP)) (a:Z)
   (b:Z) (intP_alloc_table:(Jessie_memory_model.alloc_table intP)): Prop :=
   ((Jessie_memory_model.offset_min intP_alloc_table p) <= a)%Z /\
   (b <= (Jessie_memory_model.offset_max intP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition valid_struct_unsigned_charP(p:(Jessie_memory_model.pointer
+Definition valid_struct_unsigned_charP (p:(Jessie_memory_model.pointer
   unsigned_charP)) (a:Z) (b:Z)
   (unsigned_charP_alloc_table:(Jessie_memory_model.alloc_table
   unsigned_charP)): Prop :=
@@ -332,7 +334,7 @@ Definition valid_struct_unsigned_charP(p:(Jessie_memory_model.pointer
   (b <= (Jessie_memory_model.offset_max unsigned_charP_alloc_table p))%Z.
 
 (* Why3 assumption *)
-Definition valid_struct_voidP(p:(Jessie_memory_model.pointer voidP)) (a:Z)
+Definition valid_struct_voidP (p:(Jessie_memory_model.pointer voidP)) (a:Z)
   (b:Z) (voidP_alloc_table:(Jessie_memory_model.alloc_table voidP)): Prop :=
   ((Jessie_memory_model.offset_min voidP_alloc_table p) <= a)%Z /\
   (b <= (Jessie_memory_model.offset_max voidP_alloc_table p))%Z.
@@ -379,17 +381,16 @@ Axiom num_of_pos_non_negative : forall (intP_intM_t_3_10_at_L:(Jessie_memory_mod
   j_4 t_3 intP_intM_t_3_10_at_L))%Z.
 
 Axiom num_of_pos_additive : forall (intP_intM_t_4_11_at_L:(Jessie_memory_model.memory
-  intP int32)), forall (i_6:Z), forall (j_5:Z), forall (k_1:Z),
+  intP int32)), forall (i_6:Z), forall (j_5:Z), forall (k:Z),
   forall (t_4:(Jessie_memory_model.pointer intP)), ((i_6 <= j_5)%Z /\
-  (j_5 <= k_1)%Z) -> ((num_of_pos i_6 k_1 t_4
+  (j_5 <= k)%Z) -> ((num_of_pos i_6 k t_4
   intP_intM_t_4_11_at_L) = ((num_of_pos i_6 j_5 t_4
-  intP_intM_t_4_11_at_L) + (num_of_pos j_5 k_1 t_4
-  intP_intM_t_4_11_at_L))%Z).
+  intP_intM_t_4_11_at_L) + (num_of_pos j_5 k t_4 intP_intM_t_4_11_at_L))%Z).
 
 Axiom num_of_pos_increasing : forall (intP_intM_t_5_12_at_L:(Jessie_memory_model.memory
-  intP int32)), forall (i_7:Z), forall (j_6:Z), forall (k_2:Z),
-  forall (t_5:(Jessie_memory_model.pointer intP)), (j_6 <= k_2)%Z ->
-  ((num_of_pos i_7 j_6 t_5 intP_intM_t_5_12_at_L) <= (num_of_pos i_7 k_2 t_5
+  intP int32)), forall (i_7:Z), forall (j_6:Z), forall (k_0:Z),
+  forall (t_5:(Jessie_memory_model.pointer intP)), (j_6 <= k_0)%Z ->
+  ((num_of_pos i_7 j_6 t_5 intP_intM_t_5_12_at_L) <= (num_of_pos i_7 k_0 t_5
   intP_intM_t_5_12_at_L))%Z.
 
 Open Scope Z_scope.
@@ -402,10 +403,11 @@ Theorem num_of_pos_strictly_increasing : forall (intP_intM_t_6_13_at_L:(Jessie_m
   (0%Z < (integer_of_int32 (Jessie_memory_model.select intP_intM_t_6_13_at_L
   (Jessie_memory_model.shift t_6 i_8))))%Z)) -> ((num_of_pos 0%Z i_8 t_6
   intP_intM_t_6_13_at_L) < (num_of_pos 0%Z n t_6 intP_intM_t_6_13_at_L))%Z.
+(* intros intP_intM_t_6_13_at_L i_8 n t_6 (h1,(h2,h3)). *)
 (* YOU MAY EDIT THE PROOF BELOW *)
 intros tMem i n t (Hi, (Hin, H)).
-rewrite num_of_pos_additive with (k_1:=n) (j_5:= i); auto with zarith.
-rewrite num_of_pos_additive with (k_1:=n) (j_5:= i+1); auto with zarith.
+rewrite num_of_pos_additive with (k:=n) (j_5:= i); auto with zarith.
+rewrite num_of_pos_additive with (k:=n) (j_5:= i+1); auto with zarith.
 rewrite num_of_pos_true_case with (i_3:=i); 
   replace ((i + 1) - 1) with i by omega; 
   intuition.
