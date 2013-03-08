@@ -47,7 +47,7 @@
     locfile="../../floats_bsearch.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="VC for binary_search_ensures_default"
-    sum="2fec31e8451da8cb296fe395db614b65"
+    sum="c6c2e8b0577cad17fe936bdb344b224e"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9iainfix =V16aTrueainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V18Iainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V14c1Fiainfix =V20aTrueainfix &lt;=ainteger_of_int32V22ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Iainfix =V22V21FIainfix =ainteger_of_int32V21ainfix -ainteger_of_int32V14c1Fainfix &lt;ainteger_of_int32V24ainteger_of_int32V1Aainfix &lt;=aprefix -c1ainteger_of_int32V24Iainfix =V24V23FIainfix =V23V14FIiainfix =V20aTrueagtV19V2agtV19V2NFLaselectV4ashiftV0ainteger_of_int32V14Iiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Aainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix &lt;ainteger_of_int32V27ainteger_of_int32V1Aainfix &lt;=aprefix -c1ainteger_of_int32V27Iainfix =V27V26FIainfix =V26V25FIainfix =ainteger_of_int32V25aprefix -c1FIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FAainfix &lt;=ainteger_of_int32V8ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V6Iainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V28NIainfix &lt;=V28ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V28FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
@@ -69,7 +69,7 @@
     locfile="../../floats_bsearch.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="VC for binary_search_ensures_failure"
-    sum="858ce0b1478108ecba62a6e6b72cc771"
+    sum="a2877ef59b32a60d3408a52c54601e71"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9iainfix =V16aTruealtaselectV4ashiftV0V19V2Iainfix &lt;V19ainteger_of_int32V18Aainfix &lt;=c0V19FAaltV2aselectV4ashiftV0V20Iainfix &lt;=V20ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V20FIainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V14c1Fiainfix =V22aTruealtaselectV4ashiftV0V25V2Iainfix &lt;V25ainteger_of_int32V10Aainfix &lt;=c0V25FAaltV2aselectV4ashiftV0V26Iainfix &lt;=V26ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V24V26FIainfix =V24V23FIainfix =ainteger_of_int32V23ainfix -ainteger_of_int32V14c1FaneaselectV4ashiftV0V29V2Iainfix &lt;V29ainteger_of_int32V1Aainfix &lt;=c0V29FIainfix =ainteger_of_int32V28aprefix -c1Iainfix =V28V27FIainfix =V27V14FIiainfix =V22aTrueagtV21V2agtV21V2NFLaselectV4ashiftV0ainteger_of_int32V14Iiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FaneaselectV4ashiftV0V33V2Iainfix &lt;V33ainteger_of_int32V1Aainfix &lt;=c0V33FIainfix =ainteger_of_int32V32aprefix -c1Iainfix =V32V31FIainfix =V31V30FIainfix =ainteger_of_int32V30aprefix -c1FIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10IaltaselectV4ashiftV0V34V2Iainfix &lt;V34ainteger_of_int32V10Aainfix &lt;=c0V34FAaltV2aselectV4ashiftV0V35Iainfix &lt;=V35ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V35FFAaltaselectV4ashiftV0V36V2Iainfix &lt;V36ainteger_of_int32V6Aainfix &lt;=c0V36FAaltV2aselectV4ashiftV0V37Iainfix &lt;=V37ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V8V37FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V38NIainfix &lt;=V38ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V38FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
@@ -86,7 +86,7 @@
       locfile="../../floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="1. loop invariant init"
-      sum="43b80c208e2c7bbcad2d427666fd5e08"
+      sum="27e11f0101b04f3bbef37040d3a4afc2"
       proved="true"
       expanded="true"
       shape="altaselectV4ashiftV0V9V2Iainfix &lt;V9ainteger_of_int32V6Aainfix &lt;=c0V9FAaltV2aselectV4ashiftV0V10Iainfix &lt;=V10ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V8V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V11NIainfix &lt;=V11ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V11FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
@@ -116,7 +116,7 @@
       locfile="../../floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="2. loop invariant preservation"
-      sum="ca12e9d5a7b716230d0f3d0124e31886"
+      sum="a935d2e95bbdf8922e3f4ab8ebe9e1d2"
       proved="true"
       expanded="true"
       shape="altaselectV4ashiftV0V19V2Iainfix &lt;V19ainteger_of_int32V18Aainfix &lt;=c0V19FAaltV2aselectV4ashiftV0V20Iainfix &lt;=V20ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V20FIainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V14c1FIainfix =V16aTrueIiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10IaltaselectV4ashiftV0V21V2Iainfix &lt;V21ainteger_of_int32V10Aainfix &lt;=c0V21FAaltV2aselectV4ashiftV0V22Iainfix &lt;=V22ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V22FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V23NIainfix &lt;=V23ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V23FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
@@ -133,7 +133,7 @@
         locfile="../../floats_bsearch.c"
         loclnum="49" loccnumb="4" loccnume="17"
         expl="1."
-        sum="94b6d93fe0ec0cbd667795b12080dd76"
+        sum="e6361f9fda3c228d70989d7f710f9cf2"
         proved="true"
         expanded="true"
         shape="altV2aselectV4ashiftV0V19Iainfix &lt;=V19ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V19FIainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V14c1FIainfix =V16aTrueIiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10IaltaselectV4ashiftV0V20V2Iainfix &lt;V20ainteger_of_int32V10Aainfix &lt;=c0V20FAaltV2aselectV4ashiftV0V21Iainfix &lt;=V21ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V21FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V22NIainfix &lt;=V22ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V22FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
@@ -179,7 +179,7 @@
         locfile="../../floats_bsearch.c"
         loclnum="49" loccnumb="4" loccnume="17"
         expl="2."
-        sum="6b24d666a866aa89ead63b5411ed482c"
+        sum="7ceb052dc538ab746a0c255646a8ec53"
         proved="true"
         expanded="true"
         shape="altaselectV4ashiftV0V19V2Iainfix &lt;V19ainteger_of_int32V18Aainfix &lt;=c0V19FIainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V14c1FIainfix =V16aTrueIiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10IaltaselectV4ashiftV0V20V2Iainfix &lt;V20ainteger_of_int32V10Aainfix &lt;=c0V20FAaltV2aselectV4ashiftV0V21Iainfix &lt;=V21ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V21FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V22NIainfix &lt;=V22ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V22FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
@@ -188,29 +188,13 @@
         <label
          name="expl:VC for binary_search_ensures_failure"/>
         <proof
-         prover="0"
-         timelimit="88"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="50.66"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="85"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="49.90"/>
-        </proof>
-        <proof
          prover="4"
          timelimit="5"
          memlimit="1000"
          edited="floats_bsearch_WP_Jessie_program_WP_parameter_binary_search_ensures_failure_2.v"
          obsolete="false"
          archived="false">
-         <result status="valid" time="4.86"/>
+         <result status="valid" time="5.71"/>
         </proof>
        </goal>
       </transf>
@@ -220,7 +204,7 @@
       locfile="../../floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="3. loop invariant preservation"
-      sum="96b015ea57975275e105403e273ae5b1"
+      sum="03073c53f390d4aa0c652c2a0bf0f228"
       proved="true"
       expanded="true"
       shape="altaselectV4ashiftV0V21V2Iainfix &lt;V21ainteger_of_int32V10Aainfix &lt;=c0V21FAaltV2aselectV4ashiftV0V22Iainfix &lt;=V22ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V20V22FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V14c1FIainfix =V18aTrueIiainfix =V18aTrueagtV17V2agtV17V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix =V16aTrueNIiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10IaltaselectV4ashiftV0V23V2Iainfix &lt;V23ainteger_of_int32V10Aainfix &lt;=c0V23FAaltV2aselectV4ashiftV0V24Iainfix &lt;=V24ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V24FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V25NIainfix &lt;=V25ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V25FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
@@ -237,7 +221,7 @@
         locfile="../../floats_bsearch.c"
         loclnum="49" loccnumb="4" loccnume="17"
         expl="1."
-        sum="dc770d5bfe975482402586863f090cc6"
+        sum="5fac7ea80eeec9094afb41c2c75bbfd3"
         proved="true"
         expanded="true"
         shape="altV2aselectV4ashiftV0V21Iainfix &lt;=V21ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V20V21FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V14c1FIainfix =V18aTrueIiainfix =V18aTrueagtV17V2agtV17V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix =V16aTrueNIiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10IaltaselectV4ashiftV0V22V2Iainfix &lt;V22ainteger_of_int32V10Aainfix &lt;=c0V22FAaltV2aselectV4ashiftV0V23Iainfix &lt;=V23ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V23FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V24NIainfix &lt;=V24ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V24FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
@@ -260,7 +244,7 @@
         locfile="../../floats_bsearch.c"
         loclnum="49" loccnumb="4" loccnume="17"
         expl="2."
-        sum="6b9b024ccc3c9a4f6d7465f7da3d237b"
+        sum="1c9ab8c63d17c31674e973815c3c55e9"
         proved="true"
         expanded="true"
         shape="altaselectV4ashiftV0V21V2Iainfix &lt;V21ainteger_of_int32V10Aainfix &lt;=c0V21FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V14c1FIainfix =V18aTrueIiainfix =V18aTrueagtV17V2agtV17V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix =V16aTrueNIiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10IaltaselectV4ashiftV0V22V2Iainfix &lt;V22ainteger_of_int32V10Aainfix &lt;=c0V22FAaltV2aselectV4ashiftV0V23Iainfix &lt;=V23ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V23FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V24NIainfix &lt;=V24ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V24FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
@@ -308,7 +292,7 @@
       locfile="../../floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="4. postcondition"
-      sum="478261570a1f405d9567574bb2328bc6"
+      sum="2bed480318f4625d271558b98b03544f"
       proved="true"
       expanded="true"
       shape="aneaselectV4ashiftV0V21V2Iainfix &lt;V21ainteger_of_int32V1Aainfix &lt;=c0V21FIainfix =ainteger_of_int32V20aprefix -c1Iainfix =V20V19FIainfix =V19V14FIainfix =V18aTrueNIiainfix =V18aTrueagtV17V2agtV17V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix =V16aTrueNIiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10IaltaselectV4ashiftV0V22V2Iainfix &lt;V22ainteger_of_int32V10Aainfix &lt;=c0V22FAaltV2aselectV4ashiftV0V23Iainfix &lt;=V23ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V23FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V24NIainfix &lt;=V24ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V24FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
@@ -346,7 +330,7 @@
       locfile="../../floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="5. postcondition"
-      sum="83f9415489ff88837be9ce721f79ae92"
+      sum="e5141bd869d34e4da15eace9f61088b8"
       proved="true"
       expanded="true"
       shape="aneaselectV4ashiftV0V14V2Iainfix &lt;V14ainteger_of_int32V1Aainfix &lt;=c0V14FIainfix =ainteger_of_int32V13aprefix -c1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9NIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10IaltaselectV4ashiftV0V15V2Iainfix &lt;V15ainteger_of_int32V10Aainfix &lt;=c0V15FAaltV2aselectV4ashiftV0V16Iainfix &lt;=V16ainfix -ainteger_of_int32V1c1Aainfix &lt;ainteger_of_int32V9V16FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V17NIainfix &lt;=V17ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V17FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
@@ -370,7 +354,7 @@
     locfile="../../floats_bsearch.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="VC for binary_search_ensures_success"
-    sum="62d942499eaf25f2ac3cddfb9356590f"
+    sum="68b9fd6e4153530e80b1ff343d8c8787"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9aeqaselectV4ashiftV0ainteger_of_int32V20V2Iainfix &gt;=ainteger_of_int32V20c0Iainfix =V20V19FIainfix =V19V14FIainfix =V18aTrueNIiainfix =V18aTrueagtV17V2agtV17V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix =V16aTrueNIiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FaeqaselectV4ashiftV0ainteger_of_int32V23V2Iainfix &gt;=ainteger_of_int32V23c0Iainfix =V23V22FIainfix =V22V21FIainfix =ainteger_of_int32V21aprefix -c1FIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V24NIainfix &lt;=V24ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V24FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
@@ -387,7 +371,7 @@
       locfile="../../floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="1. postcondition"
-      sum="4e9c97bd30ecb6a577e8fad1eee97a5a"
+      sum="f1f4e09a71c3592a3cb8aaa6df9208d5"
       proved="true"
       expanded="true"
       shape="aeqaselectV4ashiftV0ainteger_of_int32V20V2Iainfix &gt;=ainteger_of_int32V20c0Iainfix =V20V19FIainfix =V19V14FIainfix =V18aTrueNIiainfix =V18aTrueagtV17V2agtV17V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix =V16aTrueNIiainfix =V16aTruealtV15V2altV15V2NFLaselectV4ashiftV0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V21NIainfix &lt;=V21ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V21FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
@@ -417,7 +401,7 @@
       locfile="../../floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="2. postcondition"
-      sum="c15ddb02228aaad50004c538f95d6b0e"
+      sum="e372dbaa0895b891d246f967885633ab"
       proved="true"
       expanded="true"
       shape="aeqaselectV4ashiftV0ainteger_of_int32V13V2Iainfix &gt;=ainteger_of_int32V13c0Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9NIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V14NIainfix &lt;=V14ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V14FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
@@ -457,7 +441,7 @@
     locfile="../../floats_bsearch.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="VC for binary_search_safety"
-    sum="c457ce794d56c6bf9959d15c91055c9a"
+    sum="d7248adebea1960b5d1e6de74dcfdca9"
     proved="true"
     expanded="true"
     shape="iainfix =V17aTrueainfix &lt;ainfix -ainteger_of_int32V9ainteger_of_int32V19ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V15c1FAainfix &lt;=ainfix +ainteger_of_int32V15c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V15c1ainfix &lt;ainfix -ainteger_of_int32V23ainteger_of_int32V10ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V23V22FIainfix =ainteger_of_int32V22ainfix -ainteger_of_int32V15c1FAainfix &lt;=ainfix -ainteger_of_int32V15c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V15c1Iainfix =V21aTrueIiainfix =V21aTrueagtV20V2agtV20V2NFLaselectV4ashiftV0ainteger_of_int32V15Aainfix &lt;=ainteger_of_int32V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V15Iiainfix =V17aTruealtV16V2altV16V2NFLaselectV4ashiftV0ainteger_of_int32V15Aainfix &lt;=ainteger_of_int32V15aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V15Iainfix &lt;=ainteger_of_int32V15ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V15Iainfix =V15V14FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V10ainteger_of_int32V13FAainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V13c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V13Iainfix =ainteger_of_int32V13V12FAainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Aainfix =c2c0NIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FAainfix &lt;=ainfix -ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FAainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V24NIainfix &lt;=V24ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0V24FAais_NaNV2NAainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
@@ -471,7 +455,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.90"/>
+     <result status="valid" time="2.26"/>
     </proof>
     <proof
      prover="2"
