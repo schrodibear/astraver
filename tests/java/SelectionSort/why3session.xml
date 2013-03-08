@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -43,7 +43,7 @@
     locfile="../SelectionSort.java"
     loclnum="78" loccnumb="9" loccnume="13"
     expl="VC for _SelectionSort_sort_ensures_default"
-    sum="60ab5b7343575f0b46c5a31c31d2466b"
+    sum="2fb1cf287c8948e6174c0da72b9a8fa7"
     proved="true"
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V15V16iainfix &lt;ainteger_of_int32aselectV6ashiftV1ainteger_of_int32V15ainteger_of_int32V13ainfix &lt;ainteger_of_int32V17ainfix +aoffset_maxV2V1c1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V17Aainfix &lt;ainteger_of_int32V5ainteger_of_int32V20Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V15c1FIainfix =V18aselectV6ashiftV1ainteger_of_int32V15FIainfix =V17V15Fainfix &lt;ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V14Aainfix &lt;ainteger_of_int32V5ainteger_of_int32V22Iainfix =V22V21FIainfix =ainteger_of_int32V21ainfix +ainteger_of_int32V15c1Fainfix &lt;=c0ainteger_of_int32V25Iainfix =V25V24FIainfix =ainteger_of_int32V24ainfix +ainteger_of_int32V5c1FIanot_assignsV2V6V23apset_unionapset_rangeapset_singletonV1ainteger_of_int32V14ainteger_of_int32V14apset_rangeapset_singletonV1ainteger_of_int32V5ainteger_of_int32V5Aa_SwapV1ainteger_of_int32V5ainteger_of_int32V14V23V6FIainfix &gt;=V16c0Aainfix &lt;=V16c2147483647Lainfix +aoffset_maxV2V1c1Iainfix &lt;ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V14Aainfix &lt;ainteger_of_int32V5ainteger_of_int32V15FAainfix &lt;ainteger_of_int32V10ainfix +aoffset_maxV2V1c1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V5ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V5c1FIainfix =V10V5FIainfix =V9aselectV6ashiftV1ainteger_of_int32V5FIainfix &lt;ainteger_of_int32V5ainteger_of_int32V8Iainfix =ainteger_of_int32V8ainfix -V7c1FIainfix &gt;=V7c0Aainfix &lt;=V7c2147483647Lainfix +aoffset_maxV2V1c1Iainfix &lt;=c0ainteger_of_int32V5FAainfix &lt;=c0ainteger_of_int32V4Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV1V2Aavalid_struct_SelectionSortV0c0c0V2Aaleft_valid_struct_intMV1c0V2FF">
@@ -97,7 +97,7 @@
     locfile="../SelectionSort.java"
     loclnum="78" loccnumb="9" loccnume="13"
     expl="VC for _SelectionSort_sort_ensures_permutation"
-    sum="4050af7d03835cd6ca4c327f520e1b15"
+    sum="81f392e2f5132adccd46dedcc304087c"
     proved="true"
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V6ainteger_of_int32V9a_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V17V2Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V6c1FAa_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V17V7Ianot_assignsV3V7V17apset_unionapset_rangeapset_singletonV1ainteger_of_int32V14ainteger_of_int32V14apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V14V17V7FIainfix &lt;ainteger_of_int32V15V16NIainfix &gt;=V16c0Aainfix &lt;=V16c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V14ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V14Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6Fa_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V7V2Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Ia_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V7V2FAa_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V2V2Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -151,7 +151,7 @@
     locfile="../SelectionSort.java"
     loclnum="78" loccnumb="9" loccnume="13"
     expl="VC for _SelectionSort_sort_ensures_sorted"
-    sum="cf24045670f44fd850f55b0978466ad0"
+    sum="5fc3618620e709d94f304a9de1bdd676"
     proved="true"
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V6ainteger_of_int32V9iainfix &lt;ainteger_of_int32V16V17iainfix &lt;ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V16ainteger_of_int32V14ainfix &gt;=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32V19Iainfix &lt;V22ainteger_of_int32V21Aainfix &lt;=ainteger_of_int32V6V22FAainfix =ainteger_of_int32V19ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V18Iainfix =V21V20FIainfix =ainteger_of_int32V20ainfix +ainteger_of_int32V16c1FIainfix =V19aselectV7ashiftV1ainteger_of_int32V16FIainfix =V18V16Fainfix &gt;=ainteger_of_int32aselectV7ashiftV1V25ainteger_of_int32V14Iainfix &lt;V25ainteger_of_int32V24Aainfix &lt;=ainteger_of_int32V6V25FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15Iainfix =V24V23FIainfix =ainteger_of_int32V23ainfix +ainteger_of_int32V16c1Fainfix &lt;=ainteger_of_int32aselectV26ashiftV1V29ainteger_of_int32aselectV26ashiftV1V30Iainfix &lt;V30ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V28V30Aainfix &lt;V29ainteger_of_int32V28Aainfix &lt;=c0V29FFAa_SortedV1c0ainteger_of_int32V28V26Iainfix =V28V27FIainfix =ainteger_of_int32V27ainfix +ainteger_of_int32V6c1FIanot_assignsV3V7V26apset_unionapset_rangeapset_singletonV1ainteger_of_int32V15ainteger_of_int32V15apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V15V26V7FIainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V31ainteger_of_int32V14Iainfix &lt;V31ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V31FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FAainfix &gt;=ainteger_of_int32aselectV7ashiftV1V32ainteger_of_int32V10Iainfix &lt;V32ainteger_of_int32V13Aainfix &lt;=ainteger_of_int32V6V32FAainfix =ainteger_of_int32V10ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V11Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6Fa_SortedV1c0ainfix +aoffset_maxV3V1c1V7Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V33ainteger_of_int32aselectV7ashiftV1V34Iainfix &lt;V34ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V34Aainfix &lt;V33ainteger_of_int32V6Aainfix &lt;=c0V33FFAa_SortedV1c0ainteger_of_int32V6V7FAainfix &lt;=ainteger_of_int32aselectV2ashiftV1V35ainteger_of_int32aselectV2ashiftV1V36Iainfix &lt;V36ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V5V36Aainfix &lt;V35ainteger_of_int32V5Aainfix &lt;=c0V35FFAa_SortedV1c0ainteger_of_int32V5V2Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -168,7 +168,7 @@
       locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
       expl="1. loop invariant init"
-      sum="55f8e82520be8edefa2461df11508c7d"
+      sum="bc59504badc3786d6f3571fba04d8bba"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32aselectV2ashiftV1V6ainteger_of_int32aselectV2ashiftV1V7Iainfix &lt;V7ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V5V7Aainfix &lt;V6ainteger_of_int32V5Aainfix &lt;=c0V6FFAa_SortedV1c0ainteger_of_int32V5V2Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -222,7 +222,7 @@
       locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
       expl="2. loop invariant init"
-      sum="57bfe266f191fc42c8773ac800327e29"
+      sum="9420738e541840e6b50d61792766c4f1"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32aselectV7ashiftV1V14ainteger_of_int32V10Iainfix &lt;V14ainteger_of_int32V13Aainfix &lt;=ainteger_of_int32V6V14FAainfix =ainteger_of_int32V10ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V11Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V15ainteger_of_int32aselectV7ashiftV1V16Iainfix &lt;V16ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V16Aainfix &lt;V15ainteger_of_int32V6Aainfix &lt;=c0V15FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -276,7 +276,7 @@
       locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
       expl="3. loop invariant preservation"
-      sum="7b621819cc8007f22112319b0e08b742"
+      sum="1476ec27560f992a4f8dff29d6e070b4"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32V19Iainfix &lt;V22ainteger_of_int32V21Aainfix &lt;=ainteger_of_int32V6V22FAainfix =ainteger_of_int32V19ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V18Iainfix =V21V20FIainfix =ainteger_of_int32V20ainfix +ainteger_of_int32V16c1FIainfix =V19aselectV7ashiftV1ainteger_of_int32V16FIainfix =V18V16FIainfix &lt;ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V16ainteger_of_int32V14Iainfix &lt;ainteger_of_int32V16V17Iainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V23ainteger_of_int32V14Iainfix &lt;V23ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V23FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V24ainteger_of_int32aselectV7ashiftV1V25Iainfix &lt;V25ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V25Aainfix &lt;V24ainteger_of_int32V6Aainfix &lt;=c0V24FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -330,7 +330,7 @@
       locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
       expl="4. loop invariant preservation"
-      sum="c0bcfaec8f77d2770b2d77c7c1b7cc6f"
+      sum="a8c700bf3bf9d34fc02efa2162bd1c6f"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32aselectV7ashiftV1V20ainteger_of_int32V14Iainfix &lt;V20ainteger_of_int32V19Aainfix &lt;=ainteger_of_int32V6V20FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V16c1FIainfix &lt;ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V16ainteger_of_int32V14NIainfix &lt;ainteger_of_int32V16V17Iainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V21ainteger_of_int32V14Iainfix &lt;V21ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V21FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32aselectV7ashiftV1V23Iainfix &lt;V23ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V23Aainfix &lt;V22ainteger_of_int32V6Aainfix &lt;=c0V22FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -384,7 +384,7 @@
       locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
       expl="5. loop invariant preservation"
-      sum="48f8e95e2f17c7011efc6f537b42457d"
+      sum="2ea3ab09d16c1e8e1947b76a72c30d8b"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32aselectV18ashiftV1V21ainteger_of_int32aselectV18ashiftV1V22Iainfix &lt;V22ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V20V22Aainfix &lt;V21ainteger_of_int32V20Aainfix &lt;=c0V21FFAa_SortedV1c0ainteger_of_int32V20V18Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V6c1FIanot_assignsV3V7V18apset_unionapset_rangeapset_singletonV1ainteger_of_int32V15ainteger_of_int32V15apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V15V18V7FIainfix &lt;ainteger_of_int32V16V17NIainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V23ainteger_of_int32V14Iainfix &lt;V23ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V23FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V24ainteger_of_int32aselectV7ashiftV1V25Iainfix &lt;V25ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V25Aainfix &lt;V24ainteger_of_int32V6Aainfix &lt;=c0V24FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -441,7 +441,7 @@
         locfile="../SelectionSort.java"
         loclnum="78" loccnumb="9" loccnume="13"
         expl="1."
-        sum="26c174afd77158ba50c956bd75212f52"
+        sum="642df2036a9c1e8f3a9bd8f237bc9e5a"
         proved="true"
         expanded="false"
         shape="a_SortedV1c0ainteger_of_int32V20V18Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V6c1FIanot_assignsV3V7V18apset_unionapset_rangeapset_singletonV1ainteger_of_int32V15ainteger_of_int32V15apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V15V18V7FIainfix &lt;ainteger_of_int32V16V17NIainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V21ainteger_of_int32V14Iainfix &lt;V21ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V21FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32aselectV7ashiftV1V23Iainfix &lt;V23ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V23Aainfix &lt;V22ainteger_of_int32V6Aainfix &lt;=c0V22FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -495,7 +495,7 @@
         locfile="../SelectionSort.java"
         loclnum="78" loccnumb="9" loccnume="13"
         expl="2."
-        sum="fd801dcf0b64176abc98e8d8779acc80"
+        sum="0c667d62ab34b44823cac290e89048cb"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=ainteger_of_int32aselectV18ashiftV1V21ainteger_of_int32aselectV18ashiftV1V22Iainfix &lt;V22ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V20V22Aainfix &lt;V21ainteger_of_int32V20Aainfix &lt;=c0V21FFIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V6c1FIanot_assignsV3V7V18apset_unionapset_rangeapset_singletonV1ainteger_of_int32V15ainteger_of_int32V15apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V15V18V7FIainfix &lt;ainteger_of_int32V16V17NIainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V23ainteger_of_int32V14Iainfix &lt;V23ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V23FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V24ainteger_of_int32aselectV7ashiftV1V25Iainfix &lt;V25ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V25Aainfix &lt;V24ainteger_of_int32V6Aainfix &lt;=c0V24FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -551,7 +551,7 @@
       locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
       expl="6. postcondition"
-      sum="7582a72f2b59fd2ef081a9688493e30a"
+      sum="7de870c35d4123ec3d2a9aff29622980"
       proved="true"
       expanded="false"
       shape="a_SortedV1c0ainfix +aoffset_maxV3V1c1V7Iainfix &lt;ainteger_of_int32V6ainteger_of_int32V9NIainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V10ainteger_of_int32aselectV7ashiftV1V11Iainfix &lt;V11ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V11Aainfix &lt;V10ainteger_of_int32V6Aainfix &lt;=c0V10FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -573,7 +573,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.61"/>
+       <result status="valid" time="0.44"/>
       </proof>
       <proof
        prover="2"
@@ -607,7 +607,7 @@
     locfile="../SelectionSort.java"
     loclnum="78" loccnumb="9" loccnume="13"
     expl="index bounds"
-    sum="ca1897a412fc4c61d72689a0fecb819f"
+    sum="9aa41b7c28353bfebbdff7a670c96d26"
     proved="true"
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V15V16iainfix &lt;ainteger_of_int32aselectV6ashiftV1ainteger_of_int32V15ainteger_of_int32V13ainfix &lt;ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V20ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V15c1FAainfix &lt;=ainfix +ainteger_of_int32V15c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V15c1Iainfix =V18aselectV6ashiftV1ainteger_of_int32V15FAainfix &lt;=ainteger_of_int32V15aoffset_maxV2V1Aainfix &lt;=aoffset_minV2V1ainteger_of_int32V15Iainfix =V17V15Fainfix &lt;ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V22ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Iainfix =V22V21FIainfix =ainteger_of_int32V21ainfix +ainteger_of_int32V15c1FAainfix &lt;=ainfix +ainteger_of_int32V15c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V15c1Aainfix &lt;=ainteger_of_int32V15aoffset_maxV2V1Aainfix &lt;=aoffset_minV2V1ainteger_of_int32V15ainfix &lt;ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V25ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V5Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V5Iainfix =V25V24FIainfix =ainteger_of_int32V24ainfix +ainteger_of_int32V5c1FAainfix &lt;=ainfix +ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Ianot_assignsV2V6V23apset_unionapset_rangeapset_singletonV1ainteger_of_int32V14ainteger_of_int32V14apset_rangeapset_singletonV1ainteger_of_int32V5ainteger_of_int32V5Aa_SwapV1ainteger_of_int32V5ainteger_of_int32V14V23V6FAainfix &lt;ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix &lt;=c0ainteger_of_int32V14Aainfix &lt;ainteger_of_int32V5ainfix +aoffset_maxV2V1c1Aainfix &lt;=c0ainteger_of_int32V5Aa_Non_null_intMV1V2Iainfix &gt;=V16c0Aainfix &lt;=V16c2147483647Lainfix +aoffset_maxV2V1c1Aainfix &gt;=aoffset_maxV2V1aprefix -c1Iainfix &lt;ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V14Aainfix &lt;ainteger_of_int32V5ainteger_of_int32V15FIainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V5c1FAainfix &lt;=ainfix +ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix =V10V5FIainfix =V9aselectV6ashiftV1ainteger_of_int32V5FAainfix &lt;=ainteger_of_int32V5aoffset_maxV2V1Aainfix &lt;=aoffset_minV2V1ainteger_of_int32V5Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V8Iainfix =ainteger_of_int32V8ainfix -V7c1FAainfix &lt;=ainfix -V7c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V7c1Iainfix &gt;=V7c0Aainfix &lt;=V7c2147483647Lainfix +aoffset_maxV2V1c1Aainfix &gt;=aoffset_maxV2V1aprefix -c1Iainfix &lt;=c0ainteger_of_int32V5FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV1V2Aavalid_struct_SelectionSortV0c0c0V2Aaleft_valid_struct_intMV1c0V2FF">
@@ -661,7 +661,7 @@
     locfile="../SelectionSort.java"
     loclnum="66" loccnumb="9" loccnume="13"
     expl="VC for _SelectionSort_swap_ensures_default"
-    sum="70d6e5dc7c4df684b84ba7141646c60f"
+    sum="6aafb78ac39c3ee75654f0fe9f58d36f"
     proved="true"
     expanded="false"
     shape="anot_assignsV5V4V7apset_unionapset_rangeapset_singletonV1ainteger_of_int32V3ainteger_of_int32V3apset_rangeapset_singletonV1ainteger_of_int32V2ainteger_of_int32V2Aa_SwapV1ainteger_of_int32V2ainteger_of_int32V3V7V4Iainfix =V7astoreV6ashiftV1ainteger_of_int32V3aselectV4ashiftV1ainteger_of_int32V2FIainfix =V6astoreV4ashiftV1ainteger_of_int32V2aselectV4ashiftV1ainteger_of_int32V3FIainfix &lt;ainteger_of_int32V3ainfix +aoffset_maxV5V1c1Aainfix &lt;=c0ainteger_of_int32V3Aainfix &lt;ainteger_of_int32V2ainfix +aoffset_maxV5V1c1Aainfix &lt;=c0ainteger_of_int32V2Aa_Non_null_intMV1V5Aavalid_struct_SelectionSortV0c0c0V5Aaleft_valid_struct_intMV1c0V5FF">
@@ -715,7 +715,7 @@
     locfile="../SelectionSort.java"
     loclnum="66" loccnumb="9" loccnume="13"
     expl="VC for _SelectionSort_swap_safety"
-    sum="3ebc50d1b39dd95e16546223e1fd1a04"
+    sum="03dea6aef95192c08705ba9dc9c9c554"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=ainteger_of_int32V3aoffset_maxV5V1Aainfix &lt;=aoffset_minV5V1ainteger_of_int32V3Iainfix =V6astoreV4ashiftV1ainteger_of_int32V2aselectV4ashiftV1ainteger_of_int32V3FAainfix &lt;=ainteger_of_int32V2aoffset_maxV5V1Aainfix &lt;=aoffset_minV5V1ainteger_of_int32V2Aainfix &lt;=ainteger_of_int32V3aoffset_maxV5V1Aainfix &lt;=aoffset_minV5V1ainteger_of_int32V3Aainfix &lt;=ainteger_of_int32V2aoffset_maxV5V1Aainfix &lt;=aoffset_minV5V1ainteger_of_int32V2Iainfix &lt;ainteger_of_int32V3ainfix +aoffset_maxV5V1c1Aainfix &lt;=c0ainteger_of_int32V3Aainfix &lt;ainteger_of_int32V2ainfix +aoffset_maxV5V1c1Aainfix &lt;=c0ainteger_of_int32V2Aa_Non_null_intMV1V5Aavalid_struct_SelectionSortV0c0c0V5Aaleft_valid_struct_intMV1c0V5FF">
@@ -769,7 +769,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="274dec615b191ed479c621fe725cae33"
+    sum="c9c9be3912fae8b1e7ff81dac54fb15e"
     proved="true"
     expanded="false"
     shape="t">
@@ -823,7 +823,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="396c7c3c02087f61ba74fa1ddd5502bd"
+    sum="adcbd989fc3f1302713ec0461aa28c82"
     proved="true"
     expanded="false"
     shape="t">
@@ -877,7 +877,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_SelectionSort_ensures_default"
-    sum="1d7a398cebe0655ec0578e02ff01c2e0"
+    sum="4a417808fd30cf6d879287d4d42dd7aa"
     proved="true"
     expanded="false"
     shape="t">
@@ -931,7 +931,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_SelectionSort_safety"
-    sum="71ce0760a7b1907ad77ed84d4b753eb8"
+    sum="4735c3fd543bf9af86ff76468e43a804"
     proved="true"
     expanded="false"
     shape="t">

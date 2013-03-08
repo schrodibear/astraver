@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -40,7 +40,7 @@
     locfile="../../clock_drift.c"
     loclnum="38" loccnumb="4" loccnume="89"
     expl="Lemma real_of_int_inf_NMAX, lemma"
-    sum="cc100804df0564b018ce7a4ba4123014"
+    sum="998bef088d173a85bf204635dc97eeca"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=afrom_intV0c1000000.0Iainfix &lt;=V0c1000000F">
@@ -60,7 +60,7 @@
     locfile="../../clock_drift.c"
     loclnum="45" loccnumb="4" loccnume="62"
     expl="Lemma real_of_int_succ, lemma"
-    sum="176c827585316ef1cb6caca6b51eb3e5"
+    sum="9de421fccd1da7b51cee9e4b3e21dcb5"
     proved="true"
     expanded="false"
     shape="ainfix =afrom_intainfix +V0c1ainfix +afrom_intV0c1.0F">
@@ -111,7 +111,7 @@
     locfile="../../clock_drift.c"
     loclnum="69" loccnumb="6" loccnume="14"
     expl="VC for f_single_ensures_default"
-    sum="f92dc16843fea1aadf565d71706a33ba"
+    sum="dedc6a4004eb672aa6287da5097f5650"
     proved="true"
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0ainfix &lt;=ainteger_of_int32V11ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FAainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FAainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6ainfix &lt;=aabsainfix -avalueV12ainfix *afrom_intainteger_of_int32V0c0.1ainfix *afrom_intainteger_of_int32V0ainfix +c0x1.p-8c1.49012e-09Iainfix =V12V6FIainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FAainfix &lt;=ainteger_of_int32V4ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V4Aainfix &lt;=aabsainfix -avalueV2ainfix *afrom_intainteger_of_int32V4c0.1ainfix *afrom_intainteger_of_int32V4ainfix +c0x1.p-8c1.49012e-09Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -128,7 +128,7 @@
       locfile="../../clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="1. loop invariant init"
-      sum="e838c7dc3b17bf77ce89cc06ce68de13"
+      sum="6fd74c4142840f5e214fea7486164ea8"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V4ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V4Aainfix &lt;=aabsainfix -avalueV2ainfix *afrom_intainteger_of_int32V4c0.1ainfix *afrom_intainteger_of_int32V4ainfix +c0x1.p-8c1.49012e-09Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -190,7 +190,7 @@
       locfile="../../clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="2. assertion"
-      sum="6cbf1d3e8c19c266d1af7bea1b08b06d"
+      sum="8c877e10bab41c752921829b8f9e73f6"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -228,7 +228,7 @@
       locfile="../../clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="3. assertion"
-      sum="4a7c8c6868ce0ba295139bfb0156b8a0"
+      sum="1f4040e036677a5a725ef0ccefa5d3e7"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -250,7 +250,7 @@
       locfile="../../clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="4. loop invariant preservation"
-      sum="9ac5ccb07e2f21b60b3e3c31aa1f0e2d"
+      sum="a6d608b0e09438cee9bb018cd377aedf"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V11ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -280,7 +280,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.19"/>
       </proof>
       <transf
        name="split_goal"
@@ -291,7 +291,7 @@
         locfile="../../clock_drift.c"
         loclnum="69" loccnumb="6" loccnume="14"
         expl="1."
-        sum="1f49745cd7b69bce18420b94cd5960da"
+        sum="46dfe1f7380c1b56b7645b34ae61a77d"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -329,7 +329,7 @@
         locfile="../../clock_drift.c"
         loclnum="69" loccnumb="6" loccnume="14"
         expl="2."
-        sum="61a10a3336afe2cace4fc971b735c07a"
+        sum="85d4466f2125e4352bca5d3c91ba2943"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -383,7 +383,7 @@
         locfile="../../clock_drift.c"
         loclnum="69" loccnumb="6" loccnume="14"
         expl="3."
-        sum="eeab882b2e773fbcdddf01b88f4f3c88"
+        sum="04f435431c6045d6dceaaf5d57e706d5"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=ainteger_of_int32V11ainteger_of_int32V0Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -439,7 +439,7 @@
       locfile="../../clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="5. postcondition"
-      sum="f778caf955b154cb314cebced301cfb1"
+      sum="02325abd7013725b3f63efe4ba0e68a7"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsainfix -avalueV7ainfix *afrom_intainteger_of_int32V0c0.1ainfix *afrom_intainteger_of_int32V0ainfix +c0x1.p-8c1.49012e-09Iainfix =V7V6FIainfix &lt;ainteger_of_int32V5ainteger_of_int32V0NIainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -479,7 +479,7 @@
     locfile="../../clock_drift.c"
     loclnum="69" loccnumb="6" loccnume="14"
     expl="VC for f_single_safety"
-    sum="79f3a9847f3d186efabd3559515c6fc5"
+    sum="63dbaacee15fd6e17ebe2e1cb4a490fc"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -ainteger_of_int32V0ainteger_of_int32V11ainfix -ainteger_of_int32V0ainteger_of_int32V5Aainfix &lt;=c0ainfix -ainteger_of_int32V0ainteger_of_int32V5Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FAainfix &lt;=ainfix +ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -496,7 +496,7 @@
       locfile="../../clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="1. floating-point overflow"
-      sum="ed3d418e091c4582a4674dec2ffb340b"
+      sum="6016f2bfb16976f4cbbe3cc7ec736b4e"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -518,7 +518,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.35"/>
+       <result status="valid" time="0.54"/>
       </proof>
       <proof
        prover="3"
@@ -534,7 +534,7 @@
       locfile="../../clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="2. arithmetic overflow"
-      sum="4162863ee4ef6665520279402a49d5b6"
+      sum="d02f1f62da260abeb41988a184b7a4ff"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix +ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">
@@ -588,7 +588,7 @@
       locfile="../../clock_drift.c"
       loclnum="69" loccnumb="6" loccnume="14"
       expl="3. loop variant decrease"
-      sum="c7170c953bfc95e885f932ee1b484a28"
+      sum="ce0d042f8f73d5e95df1ed263e0a9dd5"
       proved="true"
       expanded="false"
       shape="ainfix &lt;ainfix -ainteger_of_int32V0ainteger_of_int32V11ainfix -ainteger_of_int32V0ainteger_of_int32V5Aainfix &lt;=c0ainfix -ainteger_of_int32V0ainteger_of_int32V5Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix &lt;=ainfix +ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix &lt;=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_postaNearestTiesToEvenV6V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix &lt;=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix &lt;=c0.0avalueV6Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V5ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V5Aainfix &lt;=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix &lt;=ainteger_of_int32V0c1000000Aainfix &lt;=c0ainteger_of_int32V0F">

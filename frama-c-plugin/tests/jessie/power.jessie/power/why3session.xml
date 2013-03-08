@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -24,7 +24,7 @@
     locfile="../../power.c"
     loclnum="10" loccnumb="4" loccnume="33"
     expl="Lemma L, lemma"
-    sum="54ce782086e3d0de5b23556cddba980b"
+    sum="593a47650990663e1146b07b100ec207"
     proved="true"
     expanded="true"
     shape="ainfix =apowerc2.0c2c4.0">

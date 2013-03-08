@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -36,7 +36,7 @@
     locfile="../../sum_array.c"
     loclnum="16" loccnumb="4" loccnume="137"
     expl="Lemma sum3, lemma"
-    sum="0de56516ad4cee4084ad11db37049d6e"
+    sum="a1e7c8a91d6cdeedd6e1ecc7999a6099"
     proved="false"
     expanded="false"
     shape="ainfix =asumV1V2V4V0ainfix +asumV1V2V3V0asumV1V3V4V0Iainfix &lt;=V3V4Aainfix &lt;=V2V3FFFFF">
@@ -64,7 +64,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.03"/>
+     <result status="timeout" time="4.77"/>
     </proof>
     <proof
      prover="3"
@@ -72,7 +72,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.01"/>
+     <result status="timeout" time="3.68"/>
     </proof>
     <proof
      prover="4"
@@ -80,7 +80,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.04"/>
+     <result status="timeout" time="3.78"/>
     </proof>
    </goal>
    <goal
@@ -88,7 +88,7 @@
     locfile="../../sum_array.c"
     loclnum="22" loccnumb="4" loccnume="170"
     expl="Lemma sum_footprint, lemma"
-    sum="38dce19f8d136e955eece8f9b69939b7"
+    sum="4f368c9281651a6004ef30b8b8ffda75"
     proved="false"
     expanded="false"
     shape="ainfix =asumV2V4V5V1asumV3V4V5V0Iainfix =aselectV1ashiftV2V6aselectV0ashiftV3V6Iainfix &lt;V6V5Aainfix &lt;=V4V6FFFFFFF">
@@ -116,7 +116,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.11"/>
+     <result status="timeout" time="3.99"/>
     </proof>
     <proof
      prover="3"
@@ -132,7 +132,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.01"/>
+     <result status="timeout" time="3.56"/>
     </proof>
    </goal>
   </theory>
@@ -147,7 +147,7 @@
     locfile="../../sum_array.c"
     loclnum="31" loccnumb="4" loccnume="9"
     expl="VC for test1_ensures_default"
-    sum="3c3cdda6f18b9753dd14e02ac5a7afd5"
+    sum="a97fb97a24d612531b6c4562ddf9e1b0"
     proved="true"
     expanded="false"
     shape="iainfix &lt;V7V1ainfix =V8asumV0c0V9V3Aainfix &lt;=V9V1Aainfix &lt;=c0V9Iainfix =V9ainfix +V7c1FIainfix =V8ainfix +V6aselectV3ashiftV0V7Fainfix =V10asumV0c0V1V3Iainfix =V10V6FIainfix =V6asumV0c0V7V3Aainfix &lt;=V7V1Aainfix &lt;=c0V7FAainfix =V4asumV0c0V5V3Aainfix &lt;=V5V1Aainfix &lt;=c0V5Iainfix =V5c0FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1F">
@@ -201,7 +201,7 @@
     locfile="../../sum_array.c"
     loclnum="31" loccnumb="4" loccnume="9"
     expl="VC for test1_safety"
-    sum="ca41155224c188d7bdd87f57d4bc5374"
+    sum="70f6462b113726857c471a14b7bd9434"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -V1V9ainfix -V1V7Aainfix &lt;=c0ainfix -V1V7Iainfix =V9ainfix +V7c1FIainfix =V8ainfix +V6aselectV3ashiftV0V7FAainfix &lt;=V7aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V7Iainfix &lt;V7V1Iainfix =V6asumV0c0V7V3Aainfix &lt;=V7V1Aainfix &lt;=c0V7FIainfix =V5c0FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1F">
@@ -255,7 +255,7 @@
     locfile="../../sum_array.c"
     loclnum="49" loccnumb="5" loccnume="10"
     expl="VC for test2_ensures_default"
-    sum="29d1c6d852f931aa72da916e3da7df0b"
+    sum="1175c8057b71c1893e099c1194eb4684"
     proved="true"
     expanded="true"
     shape="iainfix &lt;V5V1anot_assignsV2V3V7apset_allapset_singletonV0Aainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Aainfix &lt;=V8V1Aainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FAainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FAainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6anot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FAanot_assignsV2V3V3apset_allapset_singletonV0Aainfix =asumV0c0V1V3ainfix +asumV0c0V1V3V4Aainfix &lt;=V4V1Aainfix &lt;=c0V4Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -272,7 +272,7 @@
       locfile="../../sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="1. loop invariant init"
-      sum="2fe5269fa3e2239737bfcacc49ffa30b"
+      sum="d436d9b9da3b18842a01ae125f7cd384"
       proved="true"
       expanded="false"
       shape="anot_assignsV2V3V3apset_allapset_singletonV0Aainfix =asumV0c0V1V3ainfix +asumV0c0V1V3V4Aainfix &lt;=V4V1Aainfix &lt;=c0V4Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -326,7 +326,7 @@
       locfile="../../sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="2. assertion"
-      sum="85e6bad17e11640e2eb38fee7fd6b4c5"
+      sum="1dfe2ad9612c0b6f52de51fa1db9b917"
       proved="true"
       expanded="false"
       shape="ainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -380,7 +380,7 @@
       locfile="../../sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="3. assertion"
-      sum="20f8f9a3def4224e86e4066f480ab5c1"
+      sum="8980013fc4e128860a45c5104951dcb7"
       proved="true"
       expanded="false"
       shape="ainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -434,7 +434,7 @@
       locfile="../../sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="4. loop invariant preservation"
-      sum="4387398fc834330849869ea3397c8b80"
+      sum="1c2fe5e441687abe602d84131773fcf2"
       proved="true"
       expanded="true"
       shape="anot_assignsV2V3V7apset_allapset_singletonV0Aainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Aainfix &lt;=V8V1Aainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -451,7 +451,7 @@
         locfile="../../sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="1."
-        sum="3ba1701fbf68a6cca1a43eadd5385ce8"
+        sum="c7ba137435cc3cc9b4ebdc271bcf5521"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -505,7 +505,7 @@
         locfile="../../sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="2."
-        sum="6f1da093fd2e9e52b16e824efe82982c"
+        sum="abdd20de814623bac9803346ab24b691"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V8V1Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -559,7 +559,7 @@
         locfile="../../sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="3."
-        sum="d2a92bf8738439a3e6a23ae6f0933b79"
+        sum="ef4f52b0faa107edf79ba0bcc6ff343b"
         proved="true"
         expanded="true"
         shape="ainfix =asumV0c0V1V7ainfix +asumV0c0V1V3V8Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -613,7 +613,7 @@
         locfile="../../sum_array.c"
         loclnum="49" loccnumb="5" loccnume="10"
         expl="4."
-        sum="ba5fe5c5111cf0dc5dfbd469c57bae0c"
+        sum="ab6c39ff34e6b03c8b8aaef987554521"
         proved="true"
         expanded="false"
         shape="anot_assignsV2V3V7apset_allapset_singletonV0Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FIainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Ianot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -669,7 +669,7 @@
       locfile="../../sum_array.c"
       loclnum="49" loccnumb="5" loccnume="10"
       expl="5. postcondition"
-      sum="4652ec26bc4363e4c7a3912d0211bb0e"
+      sum="71c94d31d3fcde8a5177f21e0ca71c89"
       proved="true"
       expanded="false"
       shape="anot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V1Iainfix &lt;V5V1NIanot_assignsV2V3V6apset_allapset_singletonV0Aainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">
@@ -725,7 +725,7 @@
     locfile="../../sum_array.c"
     loclnum="49" loccnumb="5" loccnume="10"
     expl="VC for test2_safety"
-    sum="1af8dde7703cc1d49c3df03ae68d265f"
+    sum="dda2d78e57c038bb9bc03e43e58ecf17"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -V1V8ainfix -V1V5Aainfix &lt;=c0ainfix -V1V5Iainfix =V8ainfix +V5c1FIainfix =asumV0c0V1V7ainfix +ainfix +asumV0c0V5V7aselectV7ashiftV0V5asumV0ainfix +V5c1V1V7Iainfix =V7astoreV6ashiftV0V5ainfix +aselectV6ashiftV0V5c1FAainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Aainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Iainfix =asumV0c0V1V6ainfix +ainfix +asumV0c0V5V6aselectV6ashiftV0V5asumV0ainfix +V5c1V1V6Iainfix &lt;V5V1Iainfix =asumV0c0V1V6ainfix +asumV0c0V1V3V5Aainfix &lt;=V5V1Aainfix &lt;=c0V5FIainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;=V1c1FF">

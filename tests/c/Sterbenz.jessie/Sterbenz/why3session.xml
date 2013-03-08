@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -43,7 +43,7 @@
     locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="VC for _Sterbenz_ensures_default"
-    sum="5769a522855f0785ad5b83395afb5799"
+    sum="ad900b9e8b06e72dab77617389fc5cec"
     proved="false"
     expanded="true"
     shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FAainfix &lt;=c0.0avalueV0Aainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -60,7 +60,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="1. assertion"
-      sum="a1eda3d47f0827412dd0c800d0fa34ae"
+      sum="d2cad63017bd50867f524876f54e698f"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -98,7 +98,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="2. assertion"
-      sum="9a62e811e643aec69ca10337005b6aed"
+      sum="c74f7e30fc8ed3e7ae85917f74f28764"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -136,7 +136,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="3. postcondition"
-      sum="00a79628f0443f944ca5d6f2e763a0e4"
+      sum="6502b90cf6116dbc5076db7e7d382efd"
       proved="false"
       expanded="true"
       shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -161,7 +161,7 @@
     locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="VC for _Sterbenz_safety"
-    sum="0c3642785f7042358ca0720b1242dbc1"
+    sum="e5cb00d9c46582205f514e302682359c"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">

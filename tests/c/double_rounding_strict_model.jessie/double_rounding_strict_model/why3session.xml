@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -35,7 +35,7 @@
     locfile="../../double_rounding_strict_model.c"
     loclnum="3" loccnumb="7" loccnume="21"
     expl="VC for doublerounding_ensures_default"
-    sum="5c01fb190d61be9bd16b26a39b34f3df"
+    sum="5fa919d349f549e92863642015032ec9"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV7ainfix +c1.0c0x1.p-52Iainfix =V7V6FIaadd_postaNearestTiesToEvenV1V5V6FIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -73,7 +73,7 @@
     locfile="../../double_rounding_strict_model.c"
     loclnum="3" loccnumb="7" loccnume="21"
     expl="VC for doublerounding_safety"
-    sum="dd7a2d212e574fc6e74fe2a6414fe4a5"
+    sum="38f9dd565c11f777997ed106baa53050"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -90,7 +90,7 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="1. floating-point overflow"
-      sum="21f52c1d24b2f30c686339b57d5bb08d"
+      sum="71c65021385cacd0602e6fe5e4086c0b"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -128,7 +128,7 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="2. floating-point overflow"
-      sum="15e0433851d4a95cb17581e139dc9e36"
+      sum="2d19c5c0ebfe61d9c58a434113d2ca86"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -166,7 +166,7 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="3. floating-point overflow"
-      sum="1a86ee73802f10001aa9032604f677da"
+      sum="b68e9b686e8a4ecd2cc6e858dbe70dc4"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -204,7 +204,7 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="4. floating-point overflow"
-      sum="ed6d3ba4f0bf307c1559368ef2c3d25f"
+      sum="08ea3d5d220434f3a1432f7ff3db415b"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">

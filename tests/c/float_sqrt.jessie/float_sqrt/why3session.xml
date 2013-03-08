@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -28,7 +28,7 @@
     locfile="../../float_sqrt.c"
     loclnum="68" loccnumb="1" loccnume="187"
     expl="Lemma newton, lemma"
-    sum="e5396a69c617ebe94f4af12a199ad174"
+    sum="efb0c44793df957c6cb607341d678ebf"
     proved="true"
     expanded="false"
     shape="anewton_relV0V1Iainfix &gt;V1c0.FF">
@@ -56,7 +56,7 @@
     locfile="../../float_sqrt.c"
     loclnum="85" loccnumb="7" loccnume="11"
     expl="VC for sqrt_ensures_default"
-    sum="7e07c2c675a82ced069dadf019c6feba"
+    sum="02057d1b0542c24bb61089a27501cd2b"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=aabsainfix -avalueV32asqrtavalueV0ainfix *c0x1.p-43aabsasqrtavalueV0Iainfix =V32V31FIainfix =V31V30FIamul_postaNearestTiesToEvenV0V29V30FAainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FAaclosenessavalueV28avalueV20avalueV0Aanewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV26V24V27FIamul_postaNearestTiesToEvenV25V20V26FIainfix =amodelV25c0.5Aainfix =aexactV25c0.5Aainfix =avalueV25c0.5FIasub_postaNearestTiesToEvenV23V22V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V0V22FIamul_postaNearestTiesToEvenV20V20V21FIainfix =V20V19FAaclosenessavalueV19avalueV11avalueV0Aanewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIamul_postaNearestTiesToEvenV16V11V17FIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIamul_postaNearestTiesToEvenV11V11V12FIainfix =V11V10FAaclosenessavalueV10avalueV2avalueV0Aanewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIamul_postaNearestTiesToEvenV7V2V8FIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIamul_postaNearestTiesToEvenV2V2V3FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -73,7 +73,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="1. assertion"
-      sum="3967b0db421bc4246b8f6ca55b6b7165"
+      sum="129c6f8579313137b45190dd8bf9d7e0"
       proved="true"
       expanded="false"
       shape="anewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIamul_postaNearestTiesToEvenV7V2V8FIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIamul_postaNearestTiesToEvenV2V2V3FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -95,7 +95,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="2. assertion"
-      sum="39e657ab0d933a0c8dec19f420511482"
+      sum="53fac88bc18db48413f3093dda6f2a55"
       proved="true"
       expanded="false"
       shape="aclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIamul_postaNearestTiesToEvenV7V2V8FIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIamul_postaNearestTiesToEvenV2V2V3FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -117,7 +117,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="3. assertion"
-      sum="3a4a1030ad6fa747c16dd6ff5edd4f55"
+      sum="c1b80163b3b17a8dd1a0738d2defb237"
       proved="true"
       expanded="false"
       shape="anewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIamul_postaNearestTiesToEvenV16V11V17FIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIamul_postaNearestTiesToEvenV11V11V12FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIamul_postaNearestTiesToEvenV7V2V8FIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIamul_postaNearestTiesToEvenV2V2V3FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -139,7 +139,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="4. assertion"
-      sum="c2ae9ebde7c8a4af1a19c0209179c781"
+      sum="22cbbf6a339bcfcc249918c965f91a26"
       proved="true"
       expanded="false"
       shape="aclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIamul_postaNearestTiesToEvenV16V11V17FIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIamul_postaNearestTiesToEvenV11V11V12FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIamul_postaNearestTiesToEvenV7V2V8FIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIamul_postaNearestTiesToEvenV2V2V3FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -161,7 +161,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="5. assertion"
-      sum="93917749eec7c557c333502daf174767"
+      sum="29ebfbf748b170a297bf78eac2ebe390"
       proved="true"
       expanded="false"
       shape="anewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV26V24V27FIamul_postaNearestTiesToEvenV25V20V26FIainfix =amodelV25c0.5Aainfix =aexactV25c0.5Aainfix =avalueV25c0.5FIasub_postaNearestTiesToEvenV23V22V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V0V22FIamul_postaNearestTiesToEvenV20V20V21FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIamul_postaNearestTiesToEvenV16V11V17FIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIamul_postaNearestTiesToEvenV11V11V12FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIamul_postaNearestTiesToEvenV7V2V8FIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIamul_postaNearestTiesToEvenV2V2V3FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -183,7 +183,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="6. assertion"
-      sum="694c81c55bf353d179214101bfe3f79f"
+      sum="6955705842f1d904d539704b23b0cbbc"
       proved="true"
       expanded="false"
       shape="aclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV26V24V27FIamul_postaNearestTiesToEvenV25V20V26FIainfix =amodelV25c0.5Aainfix =aexactV25c0.5Aainfix =avalueV25c0.5FIasub_postaNearestTiesToEvenV23V22V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V0V22FIamul_postaNearestTiesToEvenV20V20V21FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIamul_postaNearestTiesToEvenV16V11V17FIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIamul_postaNearestTiesToEvenV11V11V12FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIamul_postaNearestTiesToEvenV7V2V8FIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIamul_postaNearestTiesToEvenV2V2V3FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -205,7 +205,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="7. assertion"
-      sum="7c541b5ac721135b45cc30b0adcc3a65"
+      sum="fcfd773f41e5b5e84ef6f4fa07fc283e"
       proved="true"
       expanded="false"
       shape="ainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV26V24V27FIamul_postaNearestTiesToEvenV25V20V26FIainfix =amodelV25c0.5Aainfix =aexactV25c0.5Aainfix =avalueV25c0.5FIasub_postaNearestTiesToEvenV23V22V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V0V22FIamul_postaNearestTiesToEvenV20V20V21FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIamul_postaNearestTiesToEvenV16V11V17FIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIamul_postaNearestTiesToEvenV11V11V12FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIamul_postaNearestTiesToEvenV7V2V8FIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIamul_postaNearestTiesToEvenV2V2V3FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -228,7 +228,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="8. postcondition"
-      sum="25c5aadc7e53d6477e0b76e6300b0031"
+      sum="7863b3121e16cbfc82c825656fcd5b0c"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsainfix -avalueV32asqrtavalueV0ainfix *c0x1.p-43aabsasqrtavalueV0Iainfix =V32V31FIainfix =V31V30FIamul_postaNearestTiesToEvenV0V29V30FIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV26V24V27FIamul_postaNearestTiesToEvenV25V20V26FIainfix =amodelV25c0.5Aainfix =aexactV25c0.5Aainfix =avalueV25c0.5FIasub_postaNearestTiesToEvenV23V22V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V0V22FIamul_postaNearestTiesToEvenV20V20V21FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIamul_postaNearestTiesToEvenV16V11V17FIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIamul_postaNearestTiesToEvenV11V11V12FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIamul_postaNearestTiesToEvenV7V2V8FIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIamul_postaNearestTiesToEvenV2V2V3FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -252,7 +252,7 @@
     locfile="../../float_sqrt.c"
     loclnum="85" loccnumb="7" loccnume="11"
     expl="VC for sqrt_safety"
-    sum="c4c16fde25fb86e693a644b2949c2c21"
+    sum="48f5109e160d47f9b0bd9118a6f90d9f"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV29amax_doubleIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV26V24V27FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV26avalueV24amax_doubleIamul_postaNearestTiesToEvenV25V20V26FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV25avalueV20amax_doubleIainfix =amodelV25c0.5Aainfix =aexactV25c0.5Aainfix =avalueV25c0.5FIasub_postaNearestTiesToEvenV23V22V24FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV22amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V0V22FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V21FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV17avalueV15amax_doubleIamul_postaNearestTiesToEvenV16V11V17FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV16avalueV11amax_doubleIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV13amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FAainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -269,7 +269,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="1. precondition for call"
-      sum="b91e5c799f4f9050cd36c988c0939a3f"
+      sum="6d3ae543829c82bdf6fbd421b6b02874"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -291,7 +291,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="2. floating-point overflow"
-      sum="97bb5e160c2cf96fc2bac104aafeeffe"
+      sum="546fcec5977d505cd652fd52b1f0a0ea"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -313,7 +313,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="3. floating-point overflow"
-      sum="dfe1407df33b1b8bfd1b333ef2f22fa4"
+      sum="5c42055b1719aea60779c7d0b7f46be1"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -335,7 +335,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="4. floating-point overflow"
-      sum="dcdae825c20ea40a17953b7d989ce675"
+      sum="7fdc0e486374b9a662d3c73c7d9ccb73"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -357,7 +357,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="5. floating-point overflow"
-      sum="e07978ceb04a554e26dafd3247a57c3c"
+      sum="decc9350fbc99354f0c82335b95e5bc7"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -379,7 +379,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="6. floating-point overflow"
-      sum="e293da520710be4f0afc5625a4d065b6"
+      sum="a8cfe18b8fa3b37bf70f761c8bfec5b6"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -401,7 +401,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="7. floating-point overflow"
-      sum="a4ae8fcde16b5f223331322ffeae5c4b"
+      sum="b5a3dd9e5457ba40929fd4b86751b0cc"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -423,7 +423,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="8. floating-point overflow"
-      sum="c2e918abd2a0b744637c580c77cab88a"
+      sum="2af16bf331fc32201f289ac690fa1dec"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -445,7 +445,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="9. floating-point overflow"
-      sum="24bc5ae2d94a8f96aaed5bd2637cc8a6"
+      sum="349a7546de5fd897785b43bb190c1c0a"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV13amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -467,7 +467,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="10. floating-point overflow"
-      sum="7fd0e64f57a2fea0bf9178297dc3cef3"
+      sum="7821e34983bd2894cd58a33cf5be42ea"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV16avalueV11amax_doubleIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV13amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -489,7 +489,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="11. floating-point overflow"
-      sum="938aec93cab7e37ac97b03a5d20032f0"
+      sum="e4c09862f3651dc9704d43d9732ab807"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV17avalueV15amax_doubleIamul_postaNearestTiesToEvenV16V11V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV16avalueV11amax_doubleIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV13amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -511,7 +511,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="12. floating-point overflow"
-      sum="4f3b459f5a09e3639cb59703eb86afdb"
+      sum="29bd2b182061cef7f54ff52f98b81da4"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV17avalueV15amax_doubleIamul_postaNearestTiesToEvenV16V11V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV16avalueV11amax_doubleIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV13amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -533,7 +533,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="13. floating-point overflow"
-      sum="fedc28fbd004612fb5fb39b8b3f99faf"
+      sum="2034844e8cf0ac7316c72f7b6076c2cc"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V21FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV17avalueV15amax_doubleIamul_postaNearestTiesToEvenV16V11V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV16avalueV11amax_doubleIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV13amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -555,7 +555,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="14. floating-point overflow"
-      sum="d607fb02c3d105f8ba3af52c2c1e0754"
+      sum="05f98aa34448c022523341996a442a0d"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV22amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V0V22FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V21FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV17avalueV15amax_doubleIamul_postaNearestTiesToEvenV16V11V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV16avalueV11amax_doubleIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV13amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -577,7 +577,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="15. floating-point overflow"
-      sum="82c1c7265117ac53466e51dc49898c0a"
+      sum="8bd4a6a5499258335b4744f7ebd737a2"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV25avalueV20amax_doubleIainfix =amodelV25c0.5Aainfix =aexactV25c0.5Aainfix =avalueV25c0.5FIasub_postaNearestTiesToEvenV23V22V24FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV22amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V0V22FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V21FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV17avalueV15amax_doubleIamul_postaNearestTiesToEvenV16V11V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV16avalueV11amax_doubleIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV13amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -599,7 +599,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="16. floating-point overflow"
-      sum="bd6a353272b1901e976afb94062f0021"
+      sum="1916190d72b0cd2af7c2125f6a4b3708"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV26avalueV24amax_doubleIamul_postaNearestTiesToEvenV25V20V26FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV25avalueV20amax_doubleIainfix =amodelV25c0.5Aainfix =aexactV25c0.5Aainfix =avalueV25c0.5FIasub_postaNearestTiesToEvenV23V22V24FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV22amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V0V22FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V21FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV17avalueV15amax_doubleIamul_postaNearestTiesToEvenV16V11V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV16avalueV11amax_doubleIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV13amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
@@ -621,7 +621,7 @@
       locfile="../../float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="17. floating-point overflow"
-      sum="21508d8d2c0dffa005b954b313ad5a33"
+      sum="7904f50bbf29934ae477db03203691f8"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV29amax_doubleIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV26V24V27FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV26avalueV24amax_doubleIamul_postaNearestTiesToEvenV25V20V26FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV25avalueV20amax_doubleIainfix =amodelV25c0.5Aainfix =aexactV25c0.5Aainfix =avalueV25c0.5FIasub_postaNearestTiesToEvenV23V22V24FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV22amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V0V22FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V21FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV17V15V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV17avalueV15amax_doubleIamul_postaNearestTiesToEvenV16V11V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV16avalueV11amax_doubleIainfix =amodelV16c0.5Aainfix =aexactV16c0.5Aainfix =avalueV16c0.5FIasub_postaNearestTiesToEvenV14V13V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV13amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V0V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV8V6V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV8avalueV6amax_doubleIamul_postaNearestTiesToEvenV7V2V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV7avalueV2amax_doubleIainfix =amodelV7c0.5Aainfix =aexactV7c0.5Aainfix =avalueV7c0.5FIasub_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV4amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V0V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">

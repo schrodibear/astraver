@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -43,7 +43,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="15" loccnumb="4" loccnume="10"
     expl="VC for create_ensures_default"
-    sum="a7611513d7e10d0c393bb360ce49231d"
+    sum="f8c0d23102c91d8594709b6b5ee2a110"
     proved="true"
     expanded="true"
     shape="avalidV0V5NAainfix &gt;=aoffset_maxV2V5c0Aainfix &lt;=aoffset_minV2V5c0Iainfix =V5V4FIainfix =V4V3FIainstanceofV1V3a_Str_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_StrV3c0ainfix -c1c1V2FFF">
@@ -97,7 +97,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="15" loccnumb="4" loccnume="10"
     expl="VC for create_safety"
-    sum="72a70da641425ba2a958a80faeced8f9"
+    sum="82fec09e827c6033c7fdb46b4ce0fe47"
     proved="true"
     expanded="true"
     shape="ainfix &gt;=c1c0">
@@ -151,7 +151,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="29" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_ensures_default"
-    sum="1cfb0c388e15ded5ca92a12756f8b9d2"
+    sum="9c41ab9b5bfdc2d9af9c34fd14f7b290"
     proved="false"
     expanded="true"
     shape="ainfix =c0c1Iainfix =V6V5FIavalidV1V5NAainfix &gt;=aoffset_maxV4V5c0Aainfix &lt;=aoffset_minV4V5c0FFIainfix =V3V2FIavalidV0V2NAainfix &gt;=aoffset_maxV1V2c0Aainfix &lt;=aoffset_minV1V2c0FFF">
@@ -205,7 +205,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="29" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_safety"
-    sum="1220773bbfdb7f42db229c22b5415deb"
+    sum="39bf345372ef9a4672e984890ac4bf3f"
     proved="true"
     expanded="true"
     shape="t">
@@ -259,7 +259,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="23" loccnumb="5" loccnume="9"
     expl="VC for test_ensures_default"
-    sum="82b0a236846e972367f33b01dc223484"
+    sum="9456c6f1062214cbcd27d55d75d63e9a"
     proved="true"
     expanded="true"
     shape="ainfix =V0V4NIainfix =V4V3FIavalidV1V3NAainfix &gt;=aoffset_maxV2V3c0Aainfix &lt;=aoffset_minV2V3c0FFIainfix &gt;=aoffset_maxV1V0c0Aainfix &lt;=aoffset_minV1V0c0FF">
@@ -313,7 +313,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="23" loccnumb="5" loccnume="9"
     expl="VC for test_safety"
-    sum="d7c6b2cb43466f5505c817febd751f05"
+    sum="ef143f74efae3663faa277724614c65f"
     proved="true"
     expanded="true"
     shape="t">

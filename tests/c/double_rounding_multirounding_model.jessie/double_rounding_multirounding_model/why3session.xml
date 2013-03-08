@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -35,7 +35,7 @@
     locfile="../../double_rounding_multirounding_model.c"
     loclnum="11" loccnumb="7" loccnume="21"
     expl="VC for doublerounding_ensures_default"
-    sum="7cbc4699c21fe0ccaf9d823546ae3496"
+    sum="2eaa7c8166446d475174a1952b1d985b"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=avalueV7ainfix +ainfix +c1.0c0x1.p-52c0x1.p-62Aainfix &lt;=ainfix -c1.0c0x1.p-63avalueV7Iainfix =V7V6FIaadd_postaNearestTiesToEvenV1V5V6FIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -73,7 +73,7 @@
     locfile="../../double_rounding_multirounding_model.c"
     loclnum="11" loccnumb="7" loccnume="21"
     expl="VC for doublerounding_safety"
-    sum="d14dd49d8284b5c6308456298919a284"
+    sum="299034e50e2700ecc06060f28d52fcd7"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -90,7 +90,7 @@
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
       expl="1. floating-point overflow"
-      sum="59d9284d8dc04eb64b5021d2dacc1a14"
+      sum="8b0843f1fac048830827533f6ab36d21"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -128,7 +128,7 @@
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
       expl="2. floating-point overflow"
-      sum="3163a78af271c90971a15eb807427645"
+      sum="a9162f73a8d4328713a9c5eac667b9b2"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -166,7 +166,7 @@
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
       expl="3. floating-point overflow"
-      sum="279c7642967758d1b7f92d141313de4f"
+      sum="8950ec87e9039ac892f8441155f17255"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -204,7 +204,7 @@
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
       expl="4. floating-point overflow"
-      sum="fba83e8cb19a1bfcbe8921c42b527147"
+      sum="2511b9b7ebacadba925ebe67b9ec5473"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">

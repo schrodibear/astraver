@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -43,7 +43,7 @@
     locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
     expl="VC for _FlagStatic_flag_ensures_default"
-    sum="0fd6f19198e737013114fb180033327d"
+    sum="0d14ff2ac862cfbaea9beca75be4787d"
     proved="true"
     expanded="false"
     shape="iainfix =V8a_FlagStatic_BLUEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V12a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V12V4Aainfix &lt;=V6V12Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDais_monochromeV0V13ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV14Aais_monochromeV0V6V5a_FlagStatic_WHITEV14Aais_monochromeV0c0V6a_FlagStatic_BLUEV14Aainfix &lt;=V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V13Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V14Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FIainfix =V13ainfix -V4c1Fais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7LaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FAais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -60,7 +60,7 @@
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="1. loop invariant init"
-      sum="84fd1aa49ebc19629b368f682aaf8f91"
+      sum="0e836d907d3edcc6e0da2ffe5f366f39"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -114,7 +114,7 @@
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="2. loop invariant preservation"
-      sum="d6a8b2b5a860cc5845f6e4f6b0943eb6"
+      sum="9f2391de8a72e7bb591c5dee23e21d52"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -131,7 +131,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="1."
-        sum="d1db4595eb2b35ef51bce3b12fcb30d6"
+        sum="7a16ff986360ee24db7060d0052b4db0"
         proved="true"
         expanded="false"
         shape="ais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -148,7 +148,7 @@
           locfile="../FlagStatic.java"
           loclnum="87" loccnumb="23" loccnume="27"
           expl="1."
-          sum="74e4c070edb17d9482226e67a7c0fe04"
+          sum="698375606ec5fa3a077a1324f3ec235a"
           proved="true"
           expanded="false"
           shape="ais_coloraselectV11ashiftV0V12Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V12FAa_Non_null_intMV0V2Iainfix =aselectV11V13aselectV7V13Iain_psetV13apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6NAavalidV2V13FAainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8c1LaselectV7ashiftV0V5Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V14a_FlagStatic_REDIainfix &lt;V14ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_WHITEIainfix &lt;V15V5Aainfix &lt;=V6V15FAainfix =aselectV7ashiftV0V16a_FlagStatic_BLUEIainfix &lt;V16V6Aainfix &lt;=c0V16FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2FIainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_coloraselectV1ashiftV0V18Iainfix &lt;V18ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V18FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FF">
@@ -204,7 +204,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="2."
-        sum="8ed4160ac2a453417372bfb49b6ecf17"
+        sum="9225bae130e62f9629193e2f9158e66a"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0V9Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -258,7 +258,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="3."
-        sum="ace9df66858444331ad250607cf9197f"
+        sum="8be45dce3f69323d5a9bc9fe962e04df"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V9V10Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -312,7 +312,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="4."
-        sum="629d679f3275d639c35e25b6b567dd65"
+        sum="9bf04f5c39b0d96a6624eb05c01de54f"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V10V4Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -366,7 +366,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="5."
-        sum="7f2532e292f115ffb89c39ee52cd3eee"
+        sum="5772fc074a8dcf91b17b94c5df424d58"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V4ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -420,7 +420,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="6."
-        sum="6bd091f3ecd3677e4427e3e0d7925cdf"
+        sum="49cc81b3ddd09efb8926815533bb2d5d"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0c0V9a_FlagStatic_BLUEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -466,7 +466,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="7."
-        sum="a6735e4075f522965bafcbd19c7d5f0d"
+        sum="cc4db19c07f9d61b5daf87f8f6821925"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V9V10a_FlagStatic_WHITEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -504,7 +504,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="6.63"/>
+         <result status="timeout" time="5.64"/>
         </proof>
        </goal>
        <goal
@@ -512,7 +512,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="8."
-        sum="8a4643d68796bb81f621640a42e6355a"
+        sum="7f4c4695f928089044a5322b23417aff"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -568,7 +568,7 @@
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="3. loop invariant preservation"
-      sum="4fcee7663682049790b88fee1e951977"
+      sum="9f992e6c3f1f5b107960a4e4c7d10f65"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V9V4Aainfix &lt;=V6V9Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V9ainfix +V5c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -622,7 +622,7 @@
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="4. loop invariant preservation"
-      sum="da52fadb6d85eba30eb3d8a165be87e2"
+      sum="1d8303d6f138d40d239a78426851e7fd"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Aais_monochromeV0V6V5a_FlagStatic_WHITEV10Aais_monochromeV0c0V6a_FlagStatic_BLUEV10Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V9Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -639,7 +639,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="1."
-        sum="af99dad3d11a823394698b9932ea2f70"
+        sum="08506c90180a6de40436e0cd024304ec"
         proved="true"
         expanded="false"
         shape="ais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -656,7 +656,7 @@
           locfile="../FlagStatic.java"
           loclnum="87" loccnumb="23" loccnume="27"
           expl="1."
-          sum="5c56d50662ef522ffcb75fee998b207a"
+          sum="b495b4b89c6dea14ee59e1ec46c8ffbc"
           proved="true"
           expanded="false"
           shape="ais_coloraselectV10ashiftV0V11Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V11FAa_Non_null_intMV0V2Iainfix =aselectV10V12aselectV7V12Iain_psetV12apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9NAavalidV2V12FAainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix +V4aprefix -c1FIainfix =V8c1Oainfix =V8c2Oainfix =V8c3Iainfix =V8c1Oainfix =V8c2NIainfix =V8c1NLaselectV7ashiftV0V5Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V13a_FlagStatic_REDIainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V13FAainfix =aselectV7ashiftV0V14a_FlagStatic_WHITEIainfix &lt;V14V5Aainfix &lt;=V6V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_BLUEIainfix &lt;V15V6Aainfix &lt;=c0V15FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V16Iainfix &lt;V16ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V16FAa_Non_null_intMV0V2FIainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_coloraselectV1ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FF">
@@ -712,7 +712,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="2."
-        sum="39f6fc19dcf55f9bc5b7627583a1bd31"
+        sum="b6fc42cff414378245fe86992722a14c"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0V6Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -766,7 +766,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="3."
-        sum="cb44330388ccc7a53aa568b78522ecea"
+        sum="94f486740cbcde43b91f44ef6a498639"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V6V5Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -820,7 +820,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="4."
-        sum="33dea114f968ee2a12de12e4ddad8248"
+        sum="d3c5346a93dd2f4038c11a2f56dec436"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V5V9Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -874,7 +874,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="5."
-        sum="b8cfaaf8b5281c0e6f439d505a3ded97"
+        sum="984de93490d228088fd88b7bdbb0ce1d"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V9ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -928,7 +928,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="6."
-        sum="4b68fb0864bb8118e5239a8feaf9a2dd"
+        sum="7a92ab6ea0c4fed68cf974178fea6718"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0c0V6a_FlagStatic_BLUEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -974,7 +974,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="7."
-        sum="b082924182c5cccdc310d90f6e2d4497"
+        sum="181bc9d3d820f898fd1094ac88845bd5"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V6V5a_FlagStatic_WHITEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -1020,7 +1020,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="8."
-        sum="28b592b56a2a40650ffb5b9b915f1bbb"
+        sum="2f17d135c80b550af69208d9a6b7906f"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -1068,7 +1068,7 @@
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="5. loop invariant preservation"
-      sum="30d39fe91824fd6fe15d908564d7698e"
+      sum="64366cd33df0241290995d45b8ee4912"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDNIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -1124,7 +1124,7 @@
     locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
     expl="VC for _FlagStatic_flag_ensures_sorts"
-    sum="c4b1db7198cfda076b3740ee0e63216f"
+    sum="8e5007e7eb0413837247a8e3b1d38918"
     proved="true"
     expanded="false"
     shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V8V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V8a_FlagStatic_BLUEV7EEIainfix &lt;V5V4NIais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -1178,7 +1178,7 @@
     locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
     expl="index bounds"
-    sum="95fdfb4d3214d716b5669395b87dc3de"
+    sum="7ddf0efab4857576e8178e38d26f29a0"
     proved="true"
     expanded="false"
     shape="iainfix =V8a_FlagStatic_BLUEainfix &lt;ainfix -V4V10ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V6Iainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEainfix &lt;ainfix -V4V12ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDainfix &lt;ainfix -V13V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V13Iainfix =V13ainfix -V4c1Fainfix &lt;ainfix -V4V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5LaselectV7ashiftV0V5Aainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -1232,7 +1232,7 @@
     locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
     expl="VC for _FlagStatic_isMonochrome_ensures_decides_monochromatic"
-    sum="e38794d639fe41a508b841aa4c97c6c4"
+    sum="d737091621d7cd8bebfa2270eb732530"
     proved="true"
     expanded="false"
     shape="iainfix &lt;V6V2ais_monochromeV0V1V2V3V4qainfix =V7aTrueIainfix =V7aFalseFIainfix =aselectV4ashiftV0V6V3Nais_monochromeV0V1V2V3V4qainfix =V8aTrueIainfix =V8aTrueFIainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
@@ -1286,7 +1286,7 @@
     locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
     expl="VC for _FlagStatic_isMonochrome_ensures_default"
-    sum="91f91e5081386976e9877017b7ddb6a5"
+    sum="d5d411646e02015fc59e1f68c9da1f35"
     proved="true"
     expanded="false"
     shape="ainfix =aselectV4ashiftV0V8V3Iainfix &lt;V8V7Aainfix &lt;=V1V8FAainfix &lt;=V1V7Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Iainfix &lt;V6V2Iainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FAainfix =aselectV4ashiftV0V10V3Iainfix &lt;V10V1Aainfix &lt;=V1V10FAainfix &lt;=V1V1Iainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
@@ -1340,7 +1340,7 @@
     locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
     expl="VC for _FlagStatic_isMonochrome_safety"
-    sum="3dbd03d49385e5703e393152c2df1dc7"
+    sum="3415fea02b9980adbd58a2fe3003883c"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -V2V7ainfix -V2V6Aainfix &lt;=c0ainfix -V2V6Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Aainfix &lt;=V6aoffset_maxV5V0Aainfix &lt;=aoffset_minV5V0V6Iainfix &lt;V6V2Iainfix =aselectV4ashiftV0V8V3Iainfix &lt;V8V6Aainfix &lt;=V1V8FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
@@ -1394,7 +1394,7 @@
     locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
     expl="VC for _FlagStatic_swap_ensures_default"
-    sum="064ecf0c9ea8d1dae688811816c15181"
+    sum="bd2c51fae300f5196ea8f5772d611f8e"
     proved="true"
     expanded="false"
     shape="t">
@@ -1448,7 +1448,7 @@
     locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
     expl="VC for _FlagStatic_swap_ensures_i_j_swapped"
-    sum="c6e218607584c1b169b305f4a92ef297"
+    sum="e259597e162ea47842f7bdd5363a0322"
     proved="true"
     expanded="false"
     shape="anot_assignsV4V3V6apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV6ashiftV0V2aselectV3ashiftV0V1Aainfix =aselectV6ashiftV0V1aselectV3ashiftV0V2Iainfix =V6astoreV5ashiftV0V2aselectV3ashiftV0V1FIainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FIainfix &lt;V2ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V2Aainfix &lt;V1ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V1Aaleft_valid_struct_intMV0c0V4FF">
@@ -1502,7 +1502,7 @@
     locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
     expl="VC for _FlagStatic_swap_safety"
-    sum="d16018da020808dca97f2b45972164d0"
+    sum="da0ba63c71b09647ce5e540c7c9794ba"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Iainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FAainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Aainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Aainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Iainfix &lt;V2ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V2Aainfix &lt;V1ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V1Aaleft_valid_struct_intMV0c0V4FF">
@@ -1556,7 +1556,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_FlagStatic_ensures_default"
-    sum="390af29317180379e422c138eaeb557d"
+    sum="283517531e98300ba9039788ea8e1cd4"
     proved="true"
     expanded="false"
     shape="t">
@@ -1610,7 +1610,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_FlagStatic_safety"
-    sum="f96b995a07c3d50185a4b20b5aa61583"
+    sum="c0b0e823e9d23ffd651a332d27a61626"
     proved="true"
     expanded="false"
     shape="t">
@@ -1664,7 +1664,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="1c9b7a8067cc69d641277502fb756ca4"
+    sum="6c0029193c256666325075b47c4cdd81"
     proved="true"
     expanded="false"
     shape="t">
@@ -1718,7 +1718,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="3d6c5ffa2f5dd4b4e4dbbdcdc76e3705"
+    sum="3a63618694028fbfaef7482cf4370326"
     proved="true"
     expanded="false"
     shape="t">

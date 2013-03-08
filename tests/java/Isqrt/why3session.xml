@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -43,7 +43,7 @@
     locfile="../Isqrt.java"
     loclnum="42" loccnumb="11" loccnume="16"
     expl="VC for _Isqrt_isqrt_ensures_default"
-    sum="460e89de91d06b563c9890b5e33fb4b8"
+    sum="c53cc381451eec899aa89019e78a7341"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=V1V0ainfix =V4asqrainfix +V3c1Aainfix &gt;=V0asqrV3Aainfix &gt;=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1Fainfix &lt;V0asqrainfix +V5c1Aainfix &lt;=asqrV5V0Aainfix &gt;=V5c0Iainfix =V5V2FIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FAainfix =c1asqrainfix +c0c1Aainfix &gt;=V0asqrc0Aainfix &gt;=c0c0Iainfix &gt;=V0c0F">
@@ -100,7 +100,7 @@
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="1. loop invariant init"
-      sum="76c6d2249091089c11c9dd75597b4304"
+      sum="cb8084fa446aef251db32ffeb7b2c35b"
       proved="true"
       expanded="false"
       shape="ainfix =c1asqrainfix +c0c1Aainfix &gt;=V0asqrc0Aainfix &gt;=c0c0Iainfix &gt;=V0c0F">
@@ -154,7 +154,7 @@
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="2. loop invariant preservation"
-      sum="971e873acb5da1856a3123290cf15064"
+      sum="20f53fcccef16a0e48dea1ef9bedf69a"
       proved="true"
       expanded="false"
       shape="ainfix =V4asqrainfix +V3c1Aainfix &gt;=V0asqrV3Aainfix &gt;=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
@@ -211,7 +211,7 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="1."
-        sum="553affec16e8a5668149315a258a6c6c"
+        sum="2d2df55f61a53f019545b4899d5428aa"
         proved="true"
         expanded="false"
         shape="ainfix &gt;=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
@@ -265,7 +265,7 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="2."
-        sum="cb5254f071c62078602870f6b746c4aa"
+        sum="4981b12d20b93a0987e4f98b62de5963"
         proved="true"
         expanded="false"
         shape="ainfix &gt;=V0asqrV3Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
@@ -319,7 +319,7 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="3."
-        sum="05e890f90ed0b87ea15d4deff1e585c6"
+        sum="8ac3ead23323cb18215344818213763d"
         proved="true"
         expanded="false"
         shape="ainfix =V4asqrainfix +V3c1Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
@@ -375,7 +375,7 @@
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="3. postcondition"
-      sum="c6d72f5f349b9457430b66bbd9009432"
+      sum="d991a4bd5d137fe49c7f5cf6ac33a2e8"
       proved="true"
       expanded="false"
       shape="ainfix &lt;V0asqrainfix +V3c1Aainfix &lt;=asqrV3V0Aainfix &gt;=V3c0Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
@@ -432,7 +432,7 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="1."
-        sum="871abfe93dd5430986aa45a959ddf075"
+        sum="30c1dea6f712163cf7e8e811e90e0287"
         proved="true"
         expanded="false"
         shape="ainfix &gt;=V3c0Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
@@ -486,7 +486,7 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="2."
-        sum="7941e6ccd37bd077b235864925241017"
+        sum="cc417438ef0d00694ce559d6f2ebb782"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=asqrV3V0Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
@@ -540,7 +540,7 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="3."
-        sum="56e2debcb59e53f8501959e8f3e778d8"
+        sum="288b17a981247d4939dd349b5b39deb7"
         proved="true"
         expanded="false"
         shape="ainfix &lt;V0asqrainfix +V3c1Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
@@ -598,7 +598,7 @@
     locfile="../Isqrt.java"
     loclnum="42" loccnumb="11" loccnume="16"
     expl="VC for _Isqrt_isqrt_safety"
-    sum="7c2f4b78bec52c8fdf01254a019ba948"
+    sum="56ab232044ac178545424b96f3cfeb18"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -V0V3ainfix -V0V2Aainfix &lt;=c0ainfix -V0V2Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
@@ -652,7 +652,7 @@
     locfile="../Isqrt.java"
     loclnum="52" loccnumb="11" loccnume="15"
     expl="VC for _Isqrt_main_ensures_default"
-    sum="b58c3610a1f1ba1131c87ace3cae9973"
+    sum="a715cadd2a2a9f5432bf65bbb98f9a46"
     proved="true"
     expanded="true"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix &gt;V1c4NAainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -682,7 +682,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="6.81"/>
+     <result status="unknown" time="4.61"/>
     </proof>
     <proof
      prover="3"
@@ -709,7 +709,7 @@
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="1. assertion"
-      sum="09bb1db28657240d17d9043f7c1b59fb"
+      sum="838a5b0f2d53a2f9ea0bceb75f3fe4af"
       proved="true"
       expanded="true"
       shape="ainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -763,7 +763,7 @@
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="2. assertion"
-      sum="508100cad90c651aa4e489e22c188873"
+      sum="714cee4bd97bce9b02f6d8cf14d1c068"
       proved="true"
       expanded="true"
       shape="ainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -817,7 +817,7 @@
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="3. postcondition"
-      sum="3ee98d3a232d5fb7d730e325a8bcb842"
+      sum="4c771c7cfe158ccbb040a686609b294b"
       proved="true"
       expanded="true"
       shape="ainfix =V2c4Iainfix =V2V1FIainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -873,7 +873,7 @@
     locfile="../Isqrt.java"
     loclnum="52" loccnumb="11" loccnume="15"
     expl="VC for _Isqrt_main_safety"
-    sum="7e55613f84dc1d6948b9143112e4a7d0"
+    sum="b0118a0e9a44747718bdcd3acf207d8c"
     proved="true"
     expanded="false"
     shape="ainfix &gt;=c17c0">
@@ -927,7 +927,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Isqrt_ensures_default"
-    sum="5ff6ef0b6f26ac9efdc2fa2d90cefa5e"
+    sum="894946441b47631981a4a0bde333e0d3"
     proved="true"
     expanded="false"
     shape="t">
@@ -981,7 +981,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Isqrt_safety"
-    sum="1e434a479aa96cb9b2ae13ad329084b6"
+    sum="132feb44f6b25f87509c3327809bb306"
     proved="true"
     expanded="false"
     shape="t">
@@ -1035,7 +1035,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="3c46c04d761316f9723df30bcf2f7dd3"
+    sum="c24681235512d517aa7396e492f12972"
     proved="true"
     expanded="false"
     shape="t">
@@ -1089,7 +1089,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="5e139a48714a356c86797c8e1236b747"
+    sum="566bdfa54978abd7930c20bd691a1da8"
     proved="true"
     expanded="false"
     shape="t">

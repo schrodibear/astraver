@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -43,7 +43,7 @@
     locfile="../../flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="VC for flag_ensures_default"
-    sum="5e1242bb2cc7da83de6af9594a8d539d"
+    sum="f675c97d6da1aee9dffcbe48cbf681a5"
     proved="true"
     expanded="false"
     shape="iainfix =V11c1ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c1Oainfix =V11c2ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V17c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V17V7Aainfix &lt;=V9V17Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V17ainfix +V8c1Fiainfix =V11c1Oainfix =V11c2Oainfix =V11c3ais_monochromeV0V18V1c3V19Aais_monochromeV0V9V8c2V19Aais_monochromeV0c0V9c1V19Aainfix &lt;=V18V1Aainfix &lt;=V8V18Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V19Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FIainfix =V18ainfix -V7c1Fais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FAais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -60,7 +60,7 @@
       locfile="../../flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="1. loop invariant init"
-      sum="ec3a9a92675e6bf4aa20e910d92eda2d"
+      sum="ebcb32e6535ca57b78f24cdbf065be04"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -114,7 +114,7 @@
       locfile="../../flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="2. loop invariant preservation"
-      sum="0ecaa67556d8c2adc3055438108451a0"
+      sum="c2b3ac8497666c63c33639d9dbb1244d"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -131,7 +131,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="1."
-        sum="a42f1a602d6e57c8d7ffdd64a95cb5d7"
+        sum="233b15bd65ab9d6ce3485de267b0940f"
         proved="true"
         expanded="false"
         shape="ais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -153,7 +153,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.55"/>
+         <result status="valid" time="1.82"/>
         </proof>
         <proof
          prover="2"
@@ -185,7 +185,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="2."
-        sum="42ec64a4da1bd36e38f33ac3b58c24b4"
+        sum="f427c3c3e4435a0a728f43af39a6b5a8"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0V15Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -239,7 +239,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="3."
-        sum="b7e9b977e3ff536ad441b6d146a0f4e9"
+        sum="6df47c02c5510b5551328c695b6e41c1"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V15V13Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -293,7 +293,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="4."
-        sum="96896794788e89f926a283d0c29cb906"
+        sum="af805c183e3d0479f984d00e0316262f"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V13V7Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -347,7 +347,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="5."
-        sum="d0e7b6ce1281939ea42c22ffdea01643"
+        sum="f6c381bd7b163667ebaef372fe0060bd"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V7V1Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -401,7 +401,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="6."
-        sum="b3574b15978db7a2e9b47aed2f16f6f4"
+        sum="ca37034e4398328b1fa87b99c6c48c6e"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0c0V15c1V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -455,7 +455,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="7."
-        sum="010eb514222f632ea24237ff89fdc1fc"
+        sum="e780672fb989902559292d69cba7db68"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V15V13c2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -501,7 +501,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.21"/>
+         <result status="timeout" time="5.98"/>
         </proof>
        </goal>
        <goal
@@ -509,7 +509,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="8."
-        sum="df057ede609b64bdf301673a841ef31e"
+        sum="8d8525766992de86fd1fbf2c86bb14cd"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V7V1c3V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -565,7 +565,7 @@
       locfile="../../flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="3. loop invariant preservation"
-      sum="4d20040c9ca9534cccd967d66332377d"
+      sum="5d4e2528216aa37a294ac89edfdc6f07"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V12c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V12V7Aainfix &lt;=V9V12Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V12ainfix +V8c1FIainfix =V11c1Oainfix =V11c2Iainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -619,7 +619,7 @@
       locfile="../../flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="4. loop invariant preservation"
-      sum="6c0c1b7c2c5694aaf695017f8ba480e9"
+      sum="f2dea131e93e6587ba6abd333b68dbac"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V12V1c3V13Aais_monochromeV0V9V8c2V13Aais_monochromeV0c0V9c1V13Aainfix &lt;=V12V1Aainfix &lt;=V8V12Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -636,7 +636,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="1."
-        sum="a93e86bfd64e8dd57342c185b723005d"
+        sum="7aa900354689da92ccdcd2013bab150e"
         proved="true"
         expanded="false"
         shape="ais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -690,7 +690,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="2."
-        sum="421479e314ce17fb740926697fa31cc8"
+        sum="3ba7fff88723a630dfde0a32e7c2b7e9"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0V9Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -744,7 +744,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="3."
-        sum="64d91a511ef75ebe7220d689119ed6fc"
+        sum="4776689c29c7b0f860a00ae17969b61a"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V9V8Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -798,7 +798,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="4."
-        sum="27059b725b468636aa986f232d0a67ed"
+        sum="451d35ee22bdeec9a6cf0eca71063252"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V8V12Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -852,7 +852,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="5."
-        sum="5cee64f9b7fec8f088b6966f2cae7054"
+        sum="adef97739542c7bbbc998567ff039467"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V12V1Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -906,7 +906,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="6."
-        sum="ae4756f53d0956ca65ff4f2da3183639"
+        sum="3dd6b766ec14afb46bc42ff3b9b842ae"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0c0V9c1V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -960,7 +960,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="7."
-        sum="d25ae6dcb8b5488cb6597f0383d911cc"
+        sum="425c72912dd6cf891d97280c3f8d1716"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V9V8c2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -1014,7 +1014,7 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="8."
-        sum="58c56d6fc90e8db505cb04b1289bbc02"
+        sum="655e721cf0f0ef82b3ca459f5d56febe"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V12V1c3V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -1044,7 +1044,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.89"/>
+         <result status="valid" time="2.19"/>
         </proof>
         <proof
          prover="3"
@@ -1070,7 +1070,7 @@
       locfile="../../flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="5. loop invariant preservation"
-      sum="3027ebe90c5de0fdb4385888469030c0"
+      sum="6acb30708cc9fdeb40f3c69bdca6169e"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V11c1Oainfix =V11c2Oainfix =V11c3NIainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -1126,7 +1126,7 @@
     locfile="../../flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="VC for flag_ensures_sorts"
-    sum="0e4aa986993dfd0665b9b1e9afb748e8"
+    sum="1c6a6245c099d860cd2afcb864d0c2d2"
     proved="true"
     expanded="false"
     shape="ais_monochromeV0V12V1c3V10Aais_monochromeV0V11V12c2V10Aais_monochromeV0c0V11c1V10EEIainfix &lt;V8V7NIais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -1180,7 +1180,7 @@
     locfile="../../flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="VC for flag_safety"
-    sum="d420fab8f1d21665fff16ac2c57c74de"
+    sum="c4ec8616f690b5928f1e0e59560ceee4"
     proved="true"
     expanded="false"
     shape="iainfix =V11c1ainfix &lt;ainfix -V7V13ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FAainfix &gt;=aoffset_maxV2V0V12Aainfix &lt;=aoffset_minV2V0V12Aainfix &gt;=aoffset_maxV2V0V14Aainfix &lt;=aoffset_minV2V0V14Iainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c1Oainfix =V11c2ainfix &lt;ainfix -V7V17ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Iainfix =V17ainfix +V8c1Fiainfix =V11c1Oainfix =V11c2Oainfix =V11c3ainfix &lt;ainfix -V18V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FAainfix &gt;=aoffset_maxV2V0V8Aainfix &lt;=aoffset_minV2V0V8Aainfix &gt;=aoffset_maxV2V0V18Aainfix &lt;=aoffset_minV2V0V18Iainfix =V18ainfix -V7c1Fainfix &lt;ainfix -V7V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8LaselectV10ashiftV0V8Aainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
@@ -1234,7 +1234,7 @@
     locfile="../../flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="VC for isMonochrome_ensures_decides_monochromatic"
-    sum="95d6ca791f73796e0f81630b1c050e42"
+    sum="29438ba46c6eaa880afac9d9d01b01f8"
     proved="true"
     expanded="false"
     shape="iainfix &lt;V7V2ais_monochromeV0V1V2V3V5qainfix =V9c0NIainfix =V9V8FIainfix =V8c0FIainfix =aselectV5ashiftV0V7V3Nais_monochromeV0V1V2V3V5qainfix =V11c0NIainfix =V11V10FIainfix =V10c1FIainfix =aselectV5ashiftV0V12V3Iainfix &lt;V12V7Aainfix &lt;=V1V12FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
@@ -1288,7 +1288,7 @@
     locfile="../../flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="VC for isMonochrome_ensures_default"
-    sum="896abf5ce930b9c659afd63e657f86cf"
+    sum="33f7f8edcbf34fa9e1f81f44541b2711"
     proved="true"
     expanded="false"
     shape="ainfix =aselectV5ashiftV0V9V3Iainfix &lt;V9V8Aainfix &lt;=V1V9FAainfix &lt;=V1V8Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Iainfix &lt;V7V2Iainfix =aselectV5ashiftV0V10V3Iainfix &lt;V10V7Aainfix &lt;=V1V10FAainfix &lt;=V1V7FAainfix =aselectV5ashiftV0V11V3Iainfix &lt;V11V6Aainfix &lt;=V1V11FAainfix &lt;=V1V6Iainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
@@ -1342,7 +1342,7 @@
     locfile="../../flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="VC for isMonochrome_safety"
-    sum="2094e564883c8e749b68af989a9a0181"
+    sum="b62215d0dff7174d029e1bfbced1b616"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -V2V8ainfix -V2V7Aainfix &lt;=c0ainfix -V2V7Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Aainfix &lt;=V7aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V7Iainfix &lt;V7V2Iainfix =aselectV5ashiftV0V9V3Iainfix &lt;V9V7Aainfix &lt;=V1V9FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
@@ -1396,7 +1396,7 @@
     locfile="../../flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
     expl="VC for swap_ensures_default"
-    sum="7e2c5b455cb7a46a815a7f78947a3e5a"
+    sum="0456c976938910cac085b5bb7abf6fe5"
     proved="true"
     expanded="false"
     shape="t">
@@ -1450,7 +1450,7 @@
     locfile="../../flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
     expl="VC for swap_ensures_i_j_swapped"
-    sum="02093b7d87401fb675f179a9d01914b8"
+    sum="a5b1c285b94cb5e9cc94f6197e992935"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV7ashiftV0V2aselectV4ashiftV0V1Aainfix =aselectV7ashiftV0V1aselectV4ashiftV0V2Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -1504,7 +1504,7 @@
     locfile="../../flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
     expl="VC for swap_safety"
-    sum="5b3be53fca2237e9970a0d6da28c3e31"
+    sum="40798e544501528019568ec717afe410"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">

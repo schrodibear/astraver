@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -35,7 +35,7 @@
     locfile="../TestNonNull.java"
     loclnum="52" loccnumb="9" loccnume="13"
     expl="VC for _TestNonNull_test_ensures_default"
-    sum="71360cd0e88264e0c857229af53ac4eb"
+    sum="c699dc0db245895c594a74331fa8fc73"
     proved="true"
     expanded="true"
     shape="t">
@@ -73,7 +73,7 @@
     locfile="../TestNonNull.java"
     loclnum="52" loccnumb="9" loccnume="13"
     expl="VC for _TestNonNull_test_safety"
-    sum="b109610e8c89196f16faab9089002d43"
+    sum="d41e751aaf71265afdefa6303f632e2a"
     proved="true"
     expanded="true"
     shape="at_lengthV0V4V3Aast_lengthV4Aainfix &lt;=c3aoffset_maxV4a_TestNonNull_stIainfix =V8astoreV6ashiftV1c3V7FAainfix &lt;=c3aoffset_maxV4V1Iainfix =ainteger_of_int32V7c1FAainfix &lt;=c2aoffset_maxV4V1Iainfix =V6astoreV2ashiftV1c2V5FAainfix &lt;=c2aoffset_maxV4V1Iainfix =ainteger_of_int32V5c1FAainfix &lt;=c3aoffset_maxV4V1Iat_lengthV0V4V3Aast_lengthV4Aainfix &gt;=ainfix +aoffset_maxV4V1c1c4Aavalid_struct_TestNonNullV0c0c0V4V3Aavalid_struct_intMV1c0aprefix -c1V4FF">
@@ -111,7 +111,7 @@
     locfile="../TestNonNull.java"
     loclnum="45" loccnumb="4" loccnume="15"
     expl="VC for cons_TestNonNull_ensures_default"
-    sum="e14a2864771402c15f2135af7318440c"
+    sum="6b9be66edda4314bd3a2902061462fae"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFIainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
@@ -149,7 +149,7 @@
     locfile="../TestNonNull.java"
     loclnum="45" loccnumb="4" loccnume="15"
     expl="VC for cons_TestNonNull_safety"
-    sum="ce9a3d1a3c2a8f6680d3914f1b17c25e"
+    sum="2a7cea1135bd4a4e8c762880a95ee3ee"
     proved="false"
     expanded="true"
     shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FAainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFAainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
@@ -166,7 +166,7 @@
       locfile="../TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="1. allocation size"
-      sum="0ae9cd1d528740842fd7e0066c8e6171"
+      sum="52fd8ea4d348a51ed4fa90be5fc5a401"
       proved="true"
       expanded="true"
       shape="ainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
@@ -204,7 +204,7 @@
       locfile="../TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="2. assertion"
-      sum="5ee304cbea19d9df30c5d9d62e45f269"
+      sum="6abc85128be972c503880beb7e972dac"
       proved="true"
       expanded="true"
       shape="ainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
@@ -242,7 +242,7 @@
       locfile="../TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="3. postcondition"
-      sum="bc5088857a3eae329c030f2d6c6d0fb9"
+      sum="16e5d1194e9f0e89a4a71247da154e53"
       proved="false"
       expanded="true"
       shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
@@ -259,7 +259,7 @@
         locfile="../TestNonNull.java"
         loclnum="45" loccnumb="4" loccnume="15"
         expl="1."
-        sum="d96fbb6ba64b9c98a5ec3d47d81adcdf"
+        sum="58638adf0812e675096b77e32df81ba9"
         proved="false"
         expanded="true"
         shape="ast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">
@@ -297,7 +297,7 @@
         locfile="../TestNonNull.java"
         loclnum="45" loccnumb="4" loccnume="15"
         expl="2."
-        sum="79ec8c7954f8cb553380c232b71732ec"
+        sum="fe36f0406c21f5c8fe641c8aea671789"
         proved="true"
         expanded="true"
         shape="at_lengthV0V5V7Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FF">

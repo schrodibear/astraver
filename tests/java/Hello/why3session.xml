@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -35,7 +35,7 @@
     locfile="../Hello.java"
     loclnum="34" loccnumb="23" loccnume="27"
     expl="VC for _Hello_main_ensures_default"
-    sum="dfb0e57b70ccf0a231d99c08ea0bbe5b"
+    sum="951b538ae6344174e8d73866081d45bb"
     proved="true"
     expanded="true"
     shape="t">
@@ -57,7 +57,7 @@
     locfile="../Hello.java"
     loclnum="34" loccnumb="23" loccnume="27"
     expl="VC for _Hello_main_safety"
-    sum="361283b8a24dbb74f640e603e03a4737"
+    sum="67207457648edde61798b4ad1bba9c39"
     proved="false"
     expanded="true"
     shape="ainfix &gt;=aoffset_maxV1a_System_outc0Ialeft_valid_struct_StringMV0c0V1FF">
@@ -95,7 +95,7 @@
     locfile="../../../lib/java_api/java/io/FilterOutputStream.java"
     loclnum="43" loccnumb="11" loccnume="29"
     expl="VC for cons_FilterOutputStream_OutputStream_ensures_default"
-    sum="c28cda959867eab2bb509b5fb792d97d"
+    sum="c1882e589c990fba44566e0f24133b23"
     proved="true"
     expanded="true"
     shape="t">
@@ -117,7 +117,7 @@
     locfile="../../../lib/java_api/java/io/FilterOutputStream.java"
     loclnum="43" loccnumb="11" loccnume="29"
     expl="VC for cons_FilterOutputStream_OutputStream_safety"
-    sum="a9c7773994a3bb34dbe4fc4b046349e3"
+    sum="d1a9a2bc13b64ad5eb2680ad535b9af1"
     proved="true"
     expanded="true"
     shape="t">
@@ -139,7 +139,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Hello_ensures_default"
-    sum="7a01edbd34263f3a0fbcc9efe9e142e9"
+    sum="911610f0222a9a10abbe9cb51a23d4db"
     proved="true"
     expanded="true"
     shape="t">
@@ -161,7 +161,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Hello_safety"
-    sum="9a0cf9c758a83e7a095c33b3b916d7a3"
+    sum="40f32784567d6a87b4a57c163c55efb9"
     proved="true"
     expanded="true"
     shape="t">
@@ -183,7 +183,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="5234f32f31e6a9df5200477df1c14d14"
+    sum="410ae54e5cfca8c5fb55bd78e3c0afc7"
     proved="true"
     expanded="true"
     shape="t">
@@ -205,7 +205,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="24c204f093537a050856b331111cc3d3"
+    sum="e652d91b4972c90eb0e9a88ba57cd0fc"
     proved="true"
     expanded="true"
     shape="t">
@@ -227,7 +227,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_OutputStream_ensures_default"
-    sum="fba80d29294accb36bf0da86040cd0c4"
+    sum="8516a239e6df3997e75b62a4bb0cb810"
     proved="true"
     expanded="true"
     shape="t">
@@ -249,7 +249,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_OutputStream_safety"
-    sum="055b3bdcd4376140c2b22e36adfbbbcb"
+    sum="1230e6a418bd940affd8b4330ca350f6"
     proved="true"
     expanded="true"
     shape="t">
@@ -271,7 +271,7 @@
     locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="113" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_boolean_String_ensures_default"
-    sum="d98feb3cdae61bfc01b2f8bb27a2b840"
+    sum="83e8cf9ad2a6c1063d1bdd7e71a82ddd"
     proved="true"
     expanded="true"
     shape="t">
@@ -293,7 +293,7 @@
     locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="113" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_boolean_String_safety"
-    sum="e248d37e4dc46e3876d215a4b471fbeb"
+    sum="1885d36ae38949c64ecf4a723ce7551b"
     proved="true"
     expanded="true"
     shape="t">
@@ -315,7 +315,7 @@
     locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="92" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_boolean_ensures_default"
-    sum="b6a924a21961a1605abf9bb0d6726e6b"
+    sum="07e66e4768569ed82424d91e6e3d6811"
     proved="true"
     expanded="true"
     shape="t">
@@ -337,7 +337,7 @@
     locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="92" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_boolean_safety"
-    sum="e6a86fdb63fbcf85738eb74556f42ed2"
+    sum="a9bfceb2ce889dec03aa2c91ba242ae3"
     proved="true"
     expanded="true"
     shape="t">
@@ -359,7 +359,7 @@
     locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="55" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_ensures_default"
-    sum="d967a1b897bedfa7a4fc7d4e3d8dc094"
+    sum="6f644e359a528fdb1c0684b594e922a7"
     proved="true"
     expanded="true"
     shape="t">
@@ -381,7 +381,7 @@
     locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="55" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_safety"
-    sum="213d1b0d2aa78f25f8654e980376c465"
+    sum="b72b3f5a2cf1c2da53db51a41a1db517"
     proved="true"
     expanded="true"
     shape="t">
@@ -403,7 +403,7 @@
     locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="67" loccnumb="12" loccnume="23"
     expl="VC for cons_PrintStream_boolean_OutputStream_ensures_default"
-    sum="385a9454496ba68f7a6ef69e3b3862b1"
+    sum="a098ca643d4f65a27e0911b906ed741f"
     proved="true"
     expanded="true"
     shape="t">
@@ -425,7 +425,7 @@
     locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="67" loccnumb="12" loccnume="23"
     expl="VC for cons_PrintStream_boolean_OutputStream_safety"
-    sum="c0e6e479c2754f303a7337a1fa673296"
+    sum="4de199f25ddc69f644f643aca0200059"
     proved="true"
     expanded="true"
     shape="t">
@@ -447,7 +447,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="403" loccnumb="11" loccnume="17"
     expl="VC for cons_String_StringBuffer_ensures_default"
-    sum="af114a9bf0b6d50e0e218af30439ffea"
+    sum="78787f3a6f00250fb7bf0a6de5112ab4"
     proved="true"
     expanded="true"
     shape="t">
@@ -469,7 +469,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="403" loccnumb="11" loccnume="17"
     expl="VC for cons_String_StringBuffer_safety"
-    sum="afb9504dc86e254709fd9464fe775435"
+    sum="1ed15b900d2bdbf510481adf1a31bbb5"
     proved="true"
     expanded="true"
     shape="t">
@@ -491,7 +491,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="142" loccnumb="11" loccnume="17"
     expl="VC for cons_String_String_ensures_default"
-    sum="1526e5977f84bdbcb13b51eb814601ce"
+    sum="86ad3dfff300b43ecd63cc5b86d80500"
     proved="true"
     expanded="true"
     shape="t">
@@ -513,7 +513,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="142" loccnumb="11" loccnume="17"
     expl="VC for cons_String_String_safety"
-    sum="82bf7445322c252864c8ed61fbdb03c9"
+    sum="af00285f83b2fe9b751f11590b32b55f"
     proved="true"
     expanded="true"
     shape="t">
@@ -535,7 +535,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="345" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_String_ensures_default"
-    sum="f015139b2c846ff250f6735c3fb411af"
+    sum="46fbc87866268075d4acbe9b3d63e8a2"
     proved="true"
     expanded="true"
     shape="t">
@@ -557,7 +557,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="345" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_String_safety"
-    sum="e6bd8ccbeafde7c919378a469dd120a2"
+    sum="1f6ee0993fd38530e176154ab159caf4"
     proved="true"
     expanded="true"
     shape="t">
@@ -579,7 +579,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="391" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_ensures_default"
-    sum="d0450c8f14913fe165faf86a38df87b4"
+    sum="b66b37451225067bc186b3010e64a32e"
     proved="true"
     expanded="true"
     shape="t">
@@ -601,7 +601,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="275" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_ensures_default"
-    sum="aa970dcc07e823c3ff326fe9666220dc"
+    sum="eb5b02cef245a0a24086653e6e792946"
     proved="true"
     expanded="true"
     shape="t">
@@ -623,7 +623,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="316" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_String_ensures_default"
-    sum="ae986b08bb92db7b8a53e1b1628e5ee7"
+    sum="494a198aed8274aa2c53803bb3269892"
     proved="true"
     expanded="true"
     shape="t">
@@ -645,7 +645,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="316" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_String_safety"
-    sum="2f9fa5c5a5b54d5224a041a2429bba83"
+    sum="4652171022dab8aa990bae8d3b3ef905"
     proved="true"
     expanded="true"
     shape="t">
@@ -667,7 +667,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="371" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_ensures_default"
-    sum="66329945cfe7b151435882cf93545ff2"
+    sum="ee49dd5013d319ec6ce9724727ccfdd2"
     proved="true"
     expanded="true"
     shape="t">
@@ -689,7 +689,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="234" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_int_ensures_default"
-    sum="aa3eefbaf82b14df5f71a3678487445f"
+    sum="2eed0e11a8118318c5d75ba70bd75c18"
     proved="true"
     expanded="true"
     shape="t">
@@ -711,7 +711,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="234" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_int_safety"
-    sum="653364fe761186a4c7afd4a0843f4f05"
+    sum="73c8124b8e460cdfa1a8fac3c918868e"
     proved="true"
     expanded="true"
     shape="t">
@@ -733,7 +733,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="371" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_safety"
-    sum="3a7d8962b70c3c2cf0aea71bb145b5d6"
+    sum="cc6d6a522c9a89d294080cccc3c482e2"
     proved="true"
     expanded="true"
     shape="t">
@@ -755,7 +755,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="275" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_safety"
-    sum="5c32591f8eaf4bdf83dc858c4e762a06"
+    sum="ad6ba10715497c1e42b21747950fb520"
     proved="true"
     expanded="true"
     shape="t">
@@ -777,7 +777,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="391" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_safety"
-    sum="b8fc4ff82d1ee94269e37850f68d7e67"
+    sum="f29ac28552a931db87f9c05b41d1830e"
     proved="true"
     expanded="true"
     shape="t">
@@ -799,7 +799,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="167" loccnumb="11" loccnume="17"
     expl="VC for cons_String_charA_ensures_default"
-    sum="4ec4ec123d3ae0e70b0334dc30ef1a51"
+    sum="a19d750667c3fe918aebd1fe3554907a"
     proved="true"
     expanded="true"
     shape="t">
@@ -821,7 +821,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="189" loccnumb="11" loccnume="17"
     expl="VC for cons_String_charA_int_int_ensures_default"
-    sum="b231fe17db66f00ab5028d153baa6e89"
+    sum="1a1f2794ffea35bdf15710fa36c4eee5"
     proved="true"
     expanded="true"
     shape="t">
@@ -843,7 +843,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="189" loccnumb="11" loccnume="17"
     expl="VC for cons_String_charA_int_int_safety"
-    sum="c26d01b4da4000c89756dba147e78db9"
+    sum="53032823c35c43a4a4d6094c19093f86"
     proved="true"
     expanded="true"
     shape="t">
@@ -865,7 +865,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="167" loccnumb="11" loccnume="17"
     expl="VC for cons_String_charA_safety"
-    sum="53d78fb2490bf09e1b088e2a1e3ca10e"
+    sum="31e75ded9ac11dfc8bbe10ab23b5c2c2"
     proved="true"
     expanded="true"
     shape="t">
@@ -887,7 +887,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="129" loccnumb="11" loccnume="17"
     expl="VC for cons_String_ensures_default"
-    sum="89baff618dd6fe670c968ca38e1574ca"
+    sum="dd5a417a6c5e4f201b6092540b80202f"
     proved="true"
     expanded="true"
     shape="t">
@@ -909,7 +909,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="413" loccnumb="4" loccnume="10"
     expl="VC for cons_String_int_int_charA_ensures_default"
-    sum="e76849a4351b8fcb806d4d6d3f314fcd"
+    sum="9b68d2c517c7513d9737c4ae97b63d4c"
     proved="true"
     expanded="true"
     shape="t">
@@ -931,7 +931,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="413" loccnumb="4" loccnume="10"
     expl="VC for cons_String_int_int_charA_safety"
-    sum="017c6548e788b9c6672c2afd91e1bb09"
+    sum="54894bde4720b4b7541226e777770574"
     proved="true"
     expanded="true"
     shape="t">
@@ -953,7 +953,7 @@
     locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="129" loccnumb="11" loccnume="17"
     expl="VC for cons_String_safety"
-    sum="8c052547da682dd3d1e19d631b134892"
+    sum="af6379ac579431ceee69288fb009e805"
     proved="true"
     expanded="true"
     shape="t">
@@ -975,7 +975,7 @@
     locfile="../../../lib/java_api/java/lang/System.java"
     loclnum="44" loccnumb="12" loccnume="18"
     expl="VC for cons_System_ensures_default"
-    sum="08555e4aee706612cc41f5a7fc241389"
+    sum="1c81797bb30c8f7801bc11d49f83c403"
     proved="true"
     expanded="true"
     shape="t">
@@ -997,7 +997,7 @@
     locfile="../../../lib/java_api/java/lang/System.java"
     loclnum="44" loccnumb="12" loccnume="18"
     expl="VC for cons_System_safety"
-    sum="1db9fcf177171025f972c472128c5140"
+    sum="d6cfa8143a6fa21dfb85b7c8e4c6195b"
     proved="true"
     expanded="true"
     shape="t">

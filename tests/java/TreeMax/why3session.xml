@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -35,7 +35,7 @@
     locfile="../TreeMax.java"
     loclnum="63" loccnumb="8" loccnume="16"
     expl="VC for _Tree_tree_max_ensures_default"
-    sum="ba430d47cd30ffcbc42d5e637cc3c3ab"
+    sum="d013cd7e5fbfdf2753e3e002cbf9f107"
     proved="true"
     expanded="true"
     shape="iainfix =V6aTrueiainfix =V12aTrueainfix &gt;=ainteger_of_int32V17ainteger_of_int32V18IamemV18V0V4V2V3V1FAamemV17V0V4V2V3V1Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15amaxainteger_of_int32V10ainteger_of_int32V14FIainfix &gt;=ainteger_of_int32V14ainteger_of_int32V19IamemV19V13V4V2V3V1FAamemV14V13V4V2V3V1FLaselectV2V0ainfix &gt;=ainteger_of_int32V20ainteger_of_int32V21IamemV21V0V4V2V3V1FAamemV20V0V4V2V3V1Iainfix =V20V10FIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFLaselectV2V0Iainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix &gt;=ainteger_of_int32V8ainteger_of_int32V22IamemV22V7V4V2V3V1FAamemV8V7V4V2V3V1FLaselectV3V0iainfix =V24aTrueainfix &gt;=ainteger_of_int32V29ainteger_of_int32V30IamemV30V0V4V2V3V1FAamemV29V0V4V2V3V1Iainfix =V29V28FIainfix =V28V27FIainfix =ainteger_of_int32V27amaxainteger_of_int32aselectV1V0ainteger_of_int32V26FIainfix &gt;=ainteger_of_int32V26ainteger_of_int32V31IamemV31V25V4V2V3V1FAamemV26V25V4V2V3V1FLaselectV2V0ainfix &gt;=ainteger_of_int32V32ainteger_of_int32V33IamemV33V0V4V2V3V1FAamemV32V0V4V2V3V1Iainfix =V32aselectV1V0FIiainfix =V24aTrueainfix =aoffset_maxV4V23c0ainfix =V23anullFLaselectV2V0Iiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
@@ -52,7 +52,7 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="1. postcondition"
-      sum="a0523cd54de223a83df07673d1ac4612"
+      sum="cdf24d3748a298bed0112339d4f43453"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32V17ainteger_of_int32V18IamemV18V0V4V2V3V1FAamemV17V0V4V2V3V1Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15amaxainteger_of_int32V10ainteger_of_int32V14FIainfix &gt;=ainteger_of_int32V14ainteger_of_int32V19IamemV19V13V4V2V3V1FAamemV14V13V4V2V3V1FLaselectV2V0Iainfix =V12aTrueIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFLaselectV2V0Iainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix &gt;=ainteger_of_int32V8ainteger_of_int32V20IamemV20V7V4V2V3V1FAamemV8V7V4V2V3V1FLaselectV3V0Iainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
@@ -90,7 +90,7 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="2. postcondition"
-      sum="32c9652c986c4b4d53462890c197c2fe"
+      sum="f9f1e3a8d3b8376d7f5a8b2d8df878d1"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32V13ainteger_of_int32V14IamemV14V0V4V2V3V1FAamemV13V0V4V2V3V1Iainfix =V13V10FIainfix =V12aTrueNIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFLaselectV2V0Iainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix &gt;=ainteger_of_int32V8ainteger_of_int32V15IamemV15V7V4V2V3V1FAamemV8V7V4V2V3V1FLaselectV3V0Iainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
@@ -104,7 +104,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.23"/>
+       <result status="valid" time="0.36"/>
       </proof>
       <proof
        prover="1"
@@ -128,7 +128,7 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="3. postcondition"
-      sum="eba737763a267ab61de567a1e204ab3f"
+      sum="a0cb87db265568014d7169e4fcfdf15c"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32V13ainteger_of_int32V14IamemV14V0V4V2V3V1FAamemV13V0V4V2V3V1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32aselectV1V0ainteger_of_int32V10FIainfix &gt;=ainteger_of_int32V10ainteger_of_int32V15IamemV15V9V4V2V3V1FAamemV10V9V4V2V3V1FLaselectV2V0Iainfix =V8aTrueIiainfix =V8aTrueainfix =aoffset_maxV4V7c0ainfix =V7anullFLaselectV2V0Iainfix =V6aTrueNIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
@@ -142,7 +142,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.22"/>
+       <result status="valid" time="0.35"/>
       </proof>
       <proof
        prover="1"
@@ -166,7 +166,7 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="4. postcondition"
-      sum="6643db696f00c39a6475b5d1819e0b62"
+      sum="ce316325ceeb7f1f6e2569b9873d20c8"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32V9ainteger_of_int32V10IamemV10V0V4V2V3V1FAamemV9V0V4V2V3V1Iainfix =V9aselectV1V0FIainfix =V8aTrueNIiainfix =V8aTrueainfix =aoffset_maxV4V7c0ainfix =V7anullFLaselectV2V0Iainfix =V6aTrueNIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
@@ -190,7 +190,7 @@
     locfile="../TreeMax.java"
     loclnum="63" loccnumb="8" loccnume="16"
     expl="VC for _Tree_tree_max_safety"
-    sum="a3415e3207279284070a081d6097d1fb"
+    sum="0676ed6da6273753976c1cffa4c16e89"
     proved="true"
     expanded="true"
     shape="iainfix =V6aTrueainfix &gt;=aoffset_maxV4aselectV2V0c0Iainfix =V12aTrueIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFLaselectV2V0Iainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix &gt;=ainteger_of_int32V8ainteger_of_int32V13IamemV13V7V4V2V3V1FAamemV8V7V4V2V3V1FAainfix &gt;=aoffset_maxV4V7c0LaselectV3V0ainfix &gt;=aoffset_maxV4aselectV2V0c0Iainfix =V15aTrueIiainfix =V15aTrueainfix =aoffset_maxV4V14c0ainfix =V14anullFLaselectV2V0Iiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
@@ -207,7 +207,7 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="1. assertion"
-      sum="4e50408671e6c48e26d532980d9c8d34"
+      sum="0a6d9d4d20bca54b0b1727b56b731b11"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=aoffset_maxV4V7c0LaselectV3V0Iainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
@@ -229,7 +229,7 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="2. index bounds"
-      sum="21d3ab45ad5275fb74a3cb0bbe5017c0"
+      sum="43305034ca31595ad4614e63dd9e1308"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=aoffset_maxV4aselectV2V0c0Iainfix =V12aTrueIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFLaselectV2V0Iainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix &gt;=ainteger_of_int32V8ainteger_of_int32V13IamemV13V7V4V2V3V1FAamemV8V7V4V2V3V1FIainfix &gt;=aoffset_maxV4V7c0LaselectV3V0Iainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
@@ -251,7 +251,7 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="3. index bounds"
-      sum="de9e6d518dcb5ce5ca8b3889ea41f8a3"
+      sum="b7d2d7293b4332ff10e6f8d2885347d5"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=aoffset_maxV4aselectV2V0c0Iainfix =V8aTrueIiainfix =V8aTrueainfix =aoffset_maxV4V7c0ainfix =V7anullFLaselectV2V0Iainfix =V6aTrueNIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
@@ -275,7 +275,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Int_ensures_default"
-    sum="86e67f4f0dc883a03f442725d6862b5d"
+    sum="55a7e2c94a09934ce62efc4fee068700"
     proved="true"
     expanded="false"
     shape="t">
@@ -297,7 +297,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Int_safety"
-    sum="a980cad22aab48f133baeedc81d8acbd"
+    sum="178bcc3cee6640c8929305cd0c91ec4f"
     proved="true"
     expanded="false"
     shape="t">
@@ -319,7 +319,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="85a2464fda9f117e8a93078bbb8c2f7f"
+    sum="931726b880e25c16dbdb177bb00fbb6b"
     proved="true"
     expanded="false"
     shape="t">
@@ -341,7 +341,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="f51733490b6d8825d48bd531a8d2bb20"
+    sum="c32ad84f1a2b1beee107d01e10e57e63"
     proved="true"
     expanded="false"
     shape="t">
@@ -363,7 +363,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Tree_ensures_default"
-    sum="9ef8931fddfc4065ddfd60f9f9524963"
+    sum="f065f44e179b1e57f662ef78d7748630"
     proved="true"
     expanded="false"
     shape="t">
@@ -385,7 +385,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Tree_safety"
-    sum="b0ecb618616088167d3bfae85e26dd59"
+    sum="81bda1268a7263ee7c278016c05c76fd"
     proved="true"
     expanded="false"
     shape="t">

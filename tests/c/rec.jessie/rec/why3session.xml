@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -36,7 +36,7 @@
     locfile="../../rec.c"
     loclnum="34" loccnumb="4" loccnume="89"
     expl="Lemma sum_rec, lemma"
-    sum="0868d3b061a9614f3b1b3b1793db6ee2"
+    sum="43e5e5decc485b4814566c11eb0f7d68"
     proved="true"
     expanded="true"
     shape="ainfix =asum_uptoainfix +V0c1ainfix +ainfix +asum_uptoV0V0c1Iainfix &gt;=V0c0F">
@@ -48,7 +48,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.35"/>
+     <result status="valid" time="0.53"/>
     </proof>
     <proof
      prover="1"
@@ -95,7 +95,7 @@
     locfile="../../rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="VC for f91_ensures_default"
-    sum="7ffe254720a98ca256e4798474e6dd2e"
+    sum="59d18fe8c8d9b5ed2b9085c18c136f67"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,7 +149,7 @@
     locfile="../../rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="VC for f91_ensures_greater_than_100"
-    sum="4d1efa0648c3a6b497b4435f3f49dd07"
+    sum="0c395b0adb68e9a0652c2ae76377755a"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V0c10Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix &lt;=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix &gt;=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10ainfix -ainteger_of_int32V0c10Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix &gt;=ainteger_of_int32V0c101F">
@@ -203,7 +203,7 @@
     locfile="../../rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="VC for f91_ensures_less_than_101"
-    sum="5fdbcd19f96cb478ab97ee935c47459e"
+    sum="1957776976bd5aa54848249f4e3fc6e2"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7c91Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix &lt;=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix &gt;=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10c91Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix &lt;=ainteger_of_int32V0c100F">
@@ -257,7 +257,7 @@
     locfile="../../rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="VC for f91_safety"
-    sum="185398f769ef3701299671526d453c33"
+    sum="449ca520568a0e7483c6fb8e57067345"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V3ainfix -c101ainteger_of_int32V0Iainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix &lt;=ainfix +ainteger_of_int32V0c11c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix &lt;=ainfix -ainteger_of_int32V0c10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
@@ -311,7 +311,7 @@
     locfile="../../rec.c"
     loclnum="51" loccnumb="5" loccnume="9"
     expl="VC for main_ensures_default"
-    sum="96d9bb5afadb153e8881b910d89d63c5"
+    sum="1ef4c4dc8b868821aa1be4b465b3939a"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V3c36Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1asum_uptoainteger_of_int32V0FIainfix =ainteger_of_int32V0c8F">
@@ -325,7 +325,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
@@ -365,7 +365,7 @@
     locfile="../../rec.c"
     loclnum="51" loccnumb="5" loccnume="9"
     expl="VC for main_safety"
-    sum="91d82356677e1ccbab586a120885a7ab"
+    sum="9875964a41b801e9cd2cb6e7bcdcd934"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=ainteger_of_int32V0c1000Aainfix &gt;=ainteger_of_int32V0c0Iainfix =ainteger_of_int32V0c8F">
@@ -419,7 +419,7 @@
     locfile="../../rec.c"
     loclnum="43" loccnumb="5" loccnume="8"
     expl="VC for sum_ensures_default"
-    sum="0129cafa50e0eb0f1f67978751168e50"
+    sum="b409c6d0d742b3c58b4a68596873f44b"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0ainfix =ainteger_of_int32V3asum_uptoainteger_of_int32V0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V9asum_uptoainteger_of_int32V0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix +ainteger_of_int32V0ainteger_of_int32V6FIainfix =V6V5FIainfix =ainteger_of_int32V5asum_uptoainteger_of_int32V4FIainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c1FIainfix &lt;=ainteger_of_int32V0c1000Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -465,7 +465,7 @@
     locfile="../../rec.c"
     loclnum="43" loccnumb="5" loccnume="8"
     expl="VC for sum_safety"
-    sum="ac2fc7098049ca7c1971cd44ee5bc6a9"
+    sum="c8fc2ba83d5df5641c249e5531c0301e"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=ainfix +ainteger_of_int32V0ainteger_of_int32V3c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V0ainteger_of_int32V3Iainfix =V3V2FIainfix =ainteger_of_int32V2asum_uptoainteger_of_int32V1FAainfix &lt;=ainteger_of_int32V1c1000Aainfix &gt;=ainteger_of_int32V1c0Aazwf_zeroainteger_of_int32V1ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix -ainteger_of_int32V0c1FAainfix &lt;=ainfix -ainteger_of_int32V0c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V0c1Iainfix =ainteger_of_int32V0c0NIainfix &lt;=ainteger_of_int32V0c1000Aainfix &gt;=ainteger_of_int32V0c0F">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -35,7 +35,7 @@
     locfile="../Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="VC for _Literals_f_ensures_default"
-    sum="ad6aa90bc7a4a4f03949654549c258bd"
+    sum="475bd2ee000672a08cc7397a59f4bd05"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c13Iainfix =V4V3FIainfix =ainteger_of_int32V3c13FIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
@@ -73,7 +73,7 @@
     locfile="../Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="VC for _Literals_f_safety"
-    sum="64099fc5b7989ddd3288948844daf6d9"
+    sum="5eb7cf1ac9c1d1abe0b42a5574dd1ef4"
     proved="true"
     expanded="true"
     shape="t">
@@ -111,7 +111,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Literals_ensures_default"
-    sum="8e5656e49dfcede50e1d5091833685fd"
+    sum="396e95aab0f41740ad19046525a52458"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,7 +149,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Literals_safety"
-    sum="4a102a68e1eca0953f6ba1de7288fbdc"
+    sum="9ba0485525f82d98f3421f7375d9fbe6"
     proved="true"
     expanded="true"
     shape="t">

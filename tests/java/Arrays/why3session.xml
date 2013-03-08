@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -43,7 +43,7 @@
     locfile="../Arrays.java"
     loclnum="98" loccnumb="23" loccnume="33"
     expl="VC for _Arrays_arrayShift_ensures_default"
-    sum="688dde21af38b44c0ef98e6592f32bfe"
+    sum="523408b1b30c856116031268c1e58dbd"
     proved="true"
     expanded="true"
     shape="iainfix &gt;V4c0ainfix =aselectV6ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V7V8FAainfix =aselectV6ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V7Aainfix &lt;=c0V9FAainfix &lt;=c0V7Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1Fainfix =aselectV5ashiftV0V10aselectV1ashiftV0ainfix -V10c1Iainfix &lt;V10ainfix +aoffset_maxV2V0c1Aainfix &lt;c0V10FIainfix =aselectV5ashiftV0V11aselectV1ashiftV0ainfix -V11c1Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V11FAainfix =aselectV5ashiftV0V12aselectV1ashiftV0V12Iainfix &lt;=V12V4Aainfix &lt;=c0V12FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FAainfix =aselectV1ashiftV0V13aselectV1ashiftV0ainfix -V13c1Iainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;ainfix -V3c1V13FAainfix &lt;=c0ainfix -V3c1Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;ainfix -V3c1ainfix +aoffset_maxV2V0c1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -100,7 +100,7 @@
       locfile="../Arrays.java"
       loclnum="98" loccnumb="23" loccnume="33"
       expl="1. loop invariant init"
-      sum="288f98d8c033c4d833576c8809080f22"
+      sum="7036ed9574fe5d8c3e6d3a72fed0926a"
       proved="true"
       expanded="true"
       shape="ainfix =aselectV1ashiftV0V4aselectV1ashiftV0ainfix -V4c1Iainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;ainfix -V3c1V4FAainfix &lt;=c0ainfix -V3c1Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;ainfix -V3c1ainfix +aoffset_maxV2V0c1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -154,7 +154,7 @@
       locfile="../Arrays.java"
       loclnum="98" loccnumb="23" loccnume="33"
       expl="2. loop invariant preservation"
-      sum="2730af8999fdb8523d96ff93f38cd1ba"
+      sum="fa3e089b55aa282fad998aa645a85e3c"
       proved="true"
       expanded="true"
       shape="ainfix =aselectV6ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V7V8FAainfix =aselectV6ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V7Aainfix &lt;=c0V9FAainfix &lt;=c0V7Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1FIainfix &gt;V4c0Iainfix =aselectV5ashiftV0V10aselectV1ashiftV0ainfix -V10c1Iainfix &lt;V10ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V10FAainfix =aselectV5ashiftV0V11aselectV1ashiftV0V11Iainfix &lt;=V11V4Aainfix &lt;=c0V11FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -208,7 +208,7 @@
       locfile="../Arrays.java"
       loclnum="98" loccnumb="23" loccnume="33"
       expl="3. postcondition"
-      sum="d1fe816cb1386e585d0e4376caf3b78a"
+      sum="8bc0f50d18dc5d9117ea804390f26100"
       proved="true"
       expanded="true"
       shape="ainfix =aselectV5ashiftV0V6aselectV1ashiftV0ainfix -V6c1Iainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;c0V6FIainfix &gt;V4c0NIainfix =aselectV5ashiftV0V7aselectV1ashiftV0ainfix -V7c1Iainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V7FAainfix =aselectV5ashiftV0V8aselectV1ashiftV0V8Iainfix &lt;=V8V4Aainfix &lt;=c0V8FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -264,7 +264,7 @@
     locfile="../Arrays.java"
     loclnum="98" loccnumb="23" loccnume="33"
     expl="index bounds"
-    sum="4c7c7f65d74ecc8005ecf5d781345456"
+    sum="0fc9369e4b3cb2904f735e26b2f5fff6"
     proved="true"
     expanded="true"
     shape="ainfix &lt;V7V4Aainfix &lt;=c0V4Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Aainfix &lt;=ainfix -V4c1aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainfix -V4c1Iainfix &gt;V4c0Iainfix =aselectV5ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V8FAainfix =aselectV5ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V4Aainfix &lt;=c0V9FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -318,7 +318,7 @@
     locfile="../Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
     expl="VC for _Arrays_findMax2_ensures_default"
-    sum="0d901a37a8906b9afe57eb523470f44c"
+    sum="c4a6e83770664a9d5d5f1e3dd6589bde"
     proved="true"
     expanded="true"
     shape="iainfix &gt;aselectV1ashiftV0V3V5ais_maxV0V7V9V2V1Aainfix =V8aselectV1ashiftV0V7Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V9Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FIainfix =V7V3Fais_maxV0V4V10V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V10ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V10Iainfix =V10ainfix +V3c1FIainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAais_maxV0c0c1V2V1Aainfix =aselectV1ashiftV0c0aselectV1ashiftV0c0Aainfix &lt;c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1c1Iainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -364,7 +364,7 @@
     locfile="../Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
     expl="VC for _Arrays_findMax2_ensures_max_found"
-    sum="4f17353c325696cf8ce65cf4952bbe53"
+    sum="68ddd70da87e65f78510043d530b32cb"
     proved="true"
     expanded="true"
     shape="ais_maxV0V7ainfix +aoffset_maxV2V0c1V2V1Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7V4FIainfix &lt;V3V6NIainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FIainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -418,7 +418,7 @@
     locfile="../Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
     expl="VC for _Arrays_findMax2_safety"
-    sum="6786d62542480a38f56f86aa5bb89053"
+    sum="5052e43b7af883fffa39beea1358587f"
     proved="true"
     expanded="true"
     shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V9ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix =V7V3Fainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=c0aoffset_maxV2V0Iainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -472,7 +472,7 @@
     locfile="../Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
     expl="VC for _Arrays_findMax_ensures_default"
-    sum="daaa252d1e3d82019f4eefdd85a8fe07"
+    sum="f106c48c1809d24643bbcffcef99e977"
     proved="true"
     expanded="true"
     shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;=aselectV1ashiftV0V10V8Iainfix &lt;V10V9Aainfix &lt;=c0V10FAainfix =V8aselectV1ashiftV0V7Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V9Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FIainfix =V7V3Fainfix &lt;=aselectV1ashiftV0V12V5Iainfix &lt;V12V11Aainfix &lt;=c0V12FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V11Iainfix =V11ainfix +V3c1FIainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iainfix &lt;=aselectV1ashiftV0V13V5Iainfix &lt;V13V3Aainfix &lt;=c0V13FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=aselectV1ashiftV0V14aselectV1ashiftV0c0Iainfix &lt;V14c1Aainfix &lt;=c0V14FAainfix =aselectV1ashiftV0c0aselectV1ashiftV0c0Aainfix &lt;c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1c1Iainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -526,7 +526,7 @@
     locfile="../Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
     expl="VC for _Arrays_findMax_ensures_max_found"
-    sum="ca854840fcf1d541d2c711db07865f20"
+    sum="5b55e0ed54fe273f03ee50a98a699ebc"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aselectV1ashiftV0V8aselectV1ashiftV0V7Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V8FAainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7V4FIainfix &lt;V3V6NIainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iainfix &lt;=aselectV1ashiftV0V9V5Iainfix &lt;V9V3Aainfix &lt;=c0V9FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FIainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -580,7 +580,7 @@
     locfile="../Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
     expl="VC for _Arrays_findMax_safety"
-    sum="b83d8da7e63b06126b4847a14561209f"
+    sum="37105fb8f34a3dbe0bc7e0cd75d3780f"
     proved="true"
     expanded="true"
     shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V9ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix =V7V3Fainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix &lt;=aselectV1ashiftV0V11V5Iainfix &lt;V11V3Aainfix &lt;=c0V11FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=c0aoffset_maxV2V0Iainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -634,7 +634,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Arrays_ensures_default"
-    sum="eae6717f7d98b5bded0c7dc79be11976"
+    sum="b974ba808fa1078c2920fa5574525e52"
     proved="true"
     expanded="true"
     shape="t">
@@ -688,7 +688,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Arrays_safety"
-    sum="56d4a1199994f5f6560e419cd4f0f016"
+    sum="cecc465f7215df614e911cecd0c02439"
     proved="true"
     expanded="true"
     shape="t">

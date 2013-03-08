@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -43,7 +43,7 @@
     locfile="../Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
     expl="VC for _Fresh_create_ensures_default"
-    sum="32e0f23987a1e917033ca91bea49f3b7"
+    sum="01821558678cff3e54add2dd79953f75"
     proved="true"
     expanded="true"
     shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
@@ -76,7 +76,7 @@
       locfile="../Fresh.java"
       loclnum="8" loccnumb="17" loccnume="23"
       expl="1. postcondition"
-      sum="32e0f23987a1e917033ca91bea49f3b7"
+      sum="027c0b96387f714b6b228e43ae5ec5ba"
       proved="true"
       expanded="true"
       shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
@@ -93,7 +93,7 @@
         locfile="../Fresh.java"
         loclnum="8" loccnumb="17" loccnume="23"
         expl="1. postcondition"
-        sum="7ff72f07ed0e99173e76008fbb449266"
+        sum="686da84863c8808e86ca6c63c2791a34"
         proved="true"
         expanded="true"
         shape="ainfix &gt;=aoffset_maxV0V4c0Aainfix &lt;=aoffset_minV0V4c0NIainfix =V4V3FIasubtagatypeofV1V3a_Fresh_tagAavalidV0ashiftV3V5NIainfix &lt;V5c1Aainfix &lt;=c0V5FAaalloc_extendsV0V2Aastrict_valid_struct_ObjectV3c0ainfix -c1c1V2FFF">
@@ -151,7 +151,7 @@
     locfile="../Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
     expl="VC for _Fresh_create_safety"
-    sum="de5a02ad3889767590fc41201b44c588"
+    sum="82e231c69fa00297f8f6b83f56c043a0"
     proved="true"
     expanded="true"
     shape="ainfix &gt;=aoffset_maxV2V3c0IainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFAainfix &gt;=c1c0F">
@@ -205,7 +205,7 @@
     locfile="../Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="VC for _Fresh_test_ensures_default"
-    sum="0a1bf23d15afffc327e0ef703efad74e"
+    sum="4e47034fc721338f7e42895de286b6ed"
     proved="true"
     expanded="true"
     shape="ainfix =V0V2NIavalidV1V2NFIavalid_struct_FreshV0c0c0V1FF">
@@ -259,7 +259,7 @@
     locfile="../Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="VC for _Fresh_test_safety"
-    sum="390bfc567cd99b56f02728e96685ff09"
+    sum="4282e88a619f36df002a652f7ab89a69"
     proved="true"
     expanded="true"
     shape="t">
@@ -313,7 +313,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fresh_ensures_default"
-    sum="2ebc2e1d51c0c1fccae425e1f6e5f5d4"
+    sum="4f79b9b4fc151a7fe98edf1158d78752"
     proved="true"
     expanded="true"
     shape="t">
@@ -367,7 +367,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fresh_safety"
-    sum="171b3bbfcef5b5c1ab7fd9f1c9db536d"
+    sum="17be9eec0b4995161158f365d7828aa8"
     proved="true"
     expanded="true"
     shape="t">
@@ -421,7 +421,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="e0dd4cf9a0136629b5321866a6ad632d"
+    sum="96faa24ef4d95e59c572842968318359"
     proved="true"
     expanded="true"
     shape="t">
@@ -475,7 +475,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="2025afd664cb618d328fa4271eb6876c"
+    sum="e14f88cb72688abe2dce95280d1912d8"
     proved="true"
     expanded="true"
     shape="t">

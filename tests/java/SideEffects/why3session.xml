@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -43,7 +43,7 @@
     locfile="../SideEffects.java"
     loclnum="38" loccnumb="9" loccnume="11"
     expl="VC for _SideEffects_m1_ensures_default"
-    sum="10d3f560d77e4ce84bec8aea7ba7c426"
+    sum="94daaec10d7932217c4472f42a81c5dd"
     proved="true"
     expanded="true"
     shape="ainfix =V10c0Aainfix =aselectV11ashiftV1c1c4Aainfix =aselectV11ashiftV1c2c2Aainfix =aselectV11ashiftV1c0c1Iainfix =V11astoreV9ashiftV1V8c4FIainfix =V10ainfix -V8c1FAainfix =V8c1Aainfix =aselectV9ashiftV1c1c3Aainfix =aselectV9ashiftV1c2c2Aainfix =aselectV9ashiftV1c0c1Iainfix =V9astoreV7ashiftV1V8c3FIainfix =V8ainfix -V6c1FAainfix =V6c2Aainfix =aselectV7ashiftV1c2c2Aainfix =aselectV7ashiftV1c0c1Iainfix =V7astoreV5ashiftV1V6c2FIainfix =V6ainfix +V4c1FAainfix =V4c1Aainfix =aselectV5ashiftV1c0c1Iainfix =V5astoreV2ashiftV1c0c1FIainfix =V4ainfix +c0c1FIainfix &gt;ainfix +aoffset_maxV3V1c1c10Aavalid_struct_SideEffectsV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -97,7 +97,7 @@
     locfile="../SideEffects.java"
     loclnum="38" loccnumb="9" loccnume="11"
     expl="VC for _SideEffects_m1_safety"
-    sum="22d5c8d4306f744ed4299bf20007ee20"
+    sum="243384ea59486b87d1ad80d84feec3f8"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=V8aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V8Iainfix =V10ainfix -V8c1FIainfix =V8c1Aainfix =aselectV9ashiftV1c1c3Aainfix =aselectV9ashiftV1c2c2Aainfix =aselectV9ashiftV1c0c1Iainfix =V9astoreV7ashiftV1V8c3FAainfix &lt;=V8aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V8Iainfix =V8ainfix -V6c1FIainfix =V6c2Aainfix =aselectV7ashiftV1c2c2Aainfix =aselectV7ashiftV1c0c1Iainfix =V7astoreV5ashiftV1V6c2FAainfix &lt;=V6aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V6Iainfix =V6ainfix +V4c1FIainfix =V4c1Aainfix =aselectV5ashiftV1c0c1Iainfix =V5astoreV2ashiftV1c0c1FAainfix &lt;=c0aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1c0Iainfix =V4ainfix +c0c1FIainfix &gt;ainfix +aoffset_maxV3V1c1c10Aavalid_struct_SideEffectsV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -151,7 +151,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_SideEffects_ensures_default"
-    sum="379c1af09261e10c21e9fd76ac5a1cb7"
+    sum="e92fa33fc282d73cbe1b82a0a01486a7"
     proved="true"
     expanded="true"
     shape="t">
@@ -205,7 +205,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_SideEffects_safety"
-    sum="5623dfc6fae7e5b085c1735b65bb5e33"
+    sum="0f6f5dfb22b0e33de01ccfeb8936006a"
     proved="true"
     expanded="true"
     shape="t">

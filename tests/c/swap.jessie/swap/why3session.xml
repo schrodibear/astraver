@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -35,7 +35,7 @@
     locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="VC for swap_ensures_default"
-    sum="e08c8ba4f01abb5ddc84319d41b6551d"
+    sum="8a810da30705484c45f912205aad5bb7"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FF">
@@ -73,7 +73,7 @@
     locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="VC for swap_safety"
-    sum="e48abe753cb45ecc46c8c0d7c8749bb9"
+    sum="0e162144e848d76b5e714392d73c9157"
     proved="true"
     expanded="true"
     shape="t">

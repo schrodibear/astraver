@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -43,7 +43,7 @@
     locfile="../BinarySearch.java"
     loclnum="76" loccnumb="15" loccnume="28"
     expl="VC for _BinarySearch_binary_search_ensures_default"
-    sum="5d2b7bd03ffda256b117d8dc71b162a6"
+    sum="9bcb7629f18b575b478487a56f2fd842"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V11c1Fiainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix &lt;=ainteger_of_int32V15ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8Iainfix =V15V14FIainfix =ainteger_of_int32V14ainfix -ainteger_of_int32V11c1Fainfix &lt;ainteger_of_int32V16ainfix +aoffset_maxV3V0c1Aainfix &lt;=aprefix -c1ainteger_of_int32V16Iainfix =V16V11FAainfix &lt;=ainteger_of_int32V11ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10adivainteger_of_int32V9c2FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8Fainfix &lt;ainteger_of_int32V18ainfix +aoffset_maxV3V0c1Aainfix &lt;=aprefix -c1ainteger_of_int32V18Iainfix =V18V17FIainfix =ainteger_of_int32V17aprefix -c1FIainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FAainfix &lt;=ainteger_of_int32V6ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V4Iainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -73,7 +73,7 @@
     locfile="../BinarySearch.java"
     loclnum="76" loccnumb="15" loccnume="28"
     expl="VC for _BinarySearch_binary_search_ensures_failure"
-    sum="2c24aa7964a14d2ac86da3e112b0e6e3"
+    sum="78e7237427c70f76ebc2e62e82863e17"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix &lt;=V14ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V13V14Iainfix =ainteger_of_int32aselectV2ashiftV0V14ainteger_of_int32V1Iainfix &lt;V14ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V14FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V11c1Fiainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix &lt;=V17ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V8V17Iainfix =ainteger_of_int32aselectV2ashiftV0V17ainteger_of_int32V1Iainfix &lt;V17ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V17FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V11c1Fainfix =ainteger_of_int32aselectV2ashiftV0V19ainteger_of_int32V1NIainfix &lt;V19ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V19FIainfix =ainteger_of_int32V18aprefix -c1Iainfix =V18V11FIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10adivainteger_of_int32V9c2FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8Fainfix =ainteger_of_int32aselectV2ashiftV0V22ainteger_of_int32V1NIainfix &lt;V22ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V22FIainfix =ainteger_of_int32V21aprefix -c1Iainfix =V21V20FIainfix =ainteger_of_int32V20aprefix -c1FIainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8Iainfix &lt;=V23ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8V23Iainfix =ainteger_of_int32aselectV2ashiftV0V23ainteger_of_int32V1Iainfix &lt;V23ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V23FFAainfix &lt;=V24ainteger_of_int32V6Aainfix &lt;=ainteger_of_int32V4V24Iainfix =ainteger_of_int32aselectV2ashiftV0V24ainteger_of_int32V1Iainfix &lt;V24ainfix +aoffset_maxV3V0c1Aainfix &lt;=c0V24FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3Aais_sortedV0V3V2FF">
@@ -103,7 +103,7 @@
     locfile="../BinarySearch.java"
     loclnum="76" loccnumb="15" loccnume="28"
     expl="VC for _BinarySearch_binary_search_ensures_success"
-    sum="21531022a799d5cb96d03a8c73a9c1e5"
+    sum="e7492efa4ae0eaf97773eb07830a6b83"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7ainfix =ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &gt;=ainteger_of_int32V12c0Iainfix =V12V11FIainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1NIainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1NIainfix &lt;=ainteger_of_int32V11ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10adivainteger_of_int32V9c2FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8Fainfix =ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V14ainteger_of_int32V1Iainfix &gt;=ainteger_of_int32V14c0Iainfix =V14V13FIainfix =ainteger_of_int32V13aprefix -c1FIainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -141,7 +141,7 @@
     locfile="../BinarySearch.java"
     loclnum="76" loccnumb="15" loccnume="28"
     expl="index bounds"
-    sum="aa24b93bf81950f33a815938a2117a05"
+    sum="22567ab82d62733412b69d6292727a0e"
     proved="false"
     expanded="true"
     shape="iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1ainfix &lt;ainfix -ainteger_of_int32V7ainteger_of_int32V14ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V12c1FAainfix &lt;=ainfix +ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V12c1ainfix &lt;ainfix -ainteger_of_int32V16ainteger_of_int32V8ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V12c1FAainfix &lt;=ainfix -ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V12c1Iainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Aainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FAainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Aainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FAainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FAainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Aainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -158,7 +158,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="1. assertion"
-      sum="5cd5912ca12e2c91ca450e1f6ad335fe"
+      sum="2e1bc543ac0b758ac00c23d4dfcec547"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -196,7 +196,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="2. arithmetic overflow"
-      sum="5a62090d333f8a7ab5df9240cf645f6a"
+      sum="f9bc476e6fabc7fe6a44274e6cceb619"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -234,7 +234,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="3. arithmetic overflow"
-      sum="537fa0a3aa3fa5012363ae38c86a84bf"
+      sum="35bfe7af5a2994527edab35f2ebf69a6"
       proved="false"
       expanded="true"
       shape="ainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -251,7 +251,7 @@
         locfile="../BinarySearch.java"
         loclnum="76" loccnumb="15" loccnume="28"
         expl="1."
-        sum="d573c405d64dabffdc9fa4538e390a45"
+        sum="c7e45542b2e615a4d7790e56dfc2c47e"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -289,7 +289,7 @@
         locfile="../BinarySearch.java"
         loclnum="76" loccnumb="15" loccnume="28"
         expl="2."
-        sum="38cd2288fe286d32958129c5c8bb9314"
+        sum="8b0df0345bd9c893e3fba54dc0c3752d"
         proved="false"
         expanded="true"
         shape="ainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -319,7 +319,7 @@
          memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="unknown" time="11.77"/>
+         <result status="unknown" time="9.99"/>
         </proof>
         <proof
          prover="3"
@@ -345,7 +345,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="4. division by zero"
-      sum="0d0b46eb6b0ac0beb794ccd5317ead22"
+      sum="fdc5b842556a54015b199a26f03fbb0a"
       proved="true"
       expanded="false"
       shape="ainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -383,7 +383,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="5. arithmetic overflow"
-      sum="6aa94442d3d5fdc4e5ead994e83b5ac5"
+      sum="81749add2a318d7990a67fd08895bb38"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -421,7 +421,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="6. pointer dereference"
-      sum="bbc82f58ad0bcc0ba158cb0f65cdcc67"
+      sum="382a7714b1492050c3592d6336455618"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -459,7 +459,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="7. arithmetic overflow"
-      sum="52af94758d2b75c3d24e6a4214e5178c"
+      sum="fc040e30b9d4591754b1b5e9ad0c7ab8"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix +ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V12c1Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -497,7 +497,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="8. loop variant decrease"
-      sum="c925ee7e3a739044e0f90b5b68e9dcf0"
+      sum="29cb67aa954e1cfef5e3cac961d21ffb"
       proved="true"
       expanded="false"
       shape="ainfix &lt;ainfix -ainteger_of_int32V7ainteger_of_int32V14ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V12c1FIainfix &lt;=ainfix +ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V12c1Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -535,7 +535,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="9. pointer dereference"
-      sum="b65e6f33a400165fa8ada122df2c7392"
+      sum="42cf76fb9d9643e31241935be6b8f9ea"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1NIainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -573,7 +573,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="10. arithmetic overflow"
-      sum="ccec3050cd2986b2108fd83fa61403d2"
+      sum="a5350072a1c3597741d67445a9290973"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix -ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V12c1Iainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1NIainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -611,7 +611,7 @@
       locfile="../BinarySearch.java"
       loclnum="76" loccnumb="15" loccnume="28"
       expl="11. loop variant decrease"
-      sum="394f139e275b818813d8f9bbe23db7cf"
+      sum="dcce4eb1c444c98706427fc2be40f7a4"
       proved="true"
       expanded="false"
       shape="ainfix &lt;ainfix -ainteger_of_int32V14ainteger_of_int32V8ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix -ainteger_of_int32V12c1FIainfix &lt;=ainfix -ainteger_of_int32V12c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V12c1Iainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1NIainfix &lt;=ainteger_of_int32V12aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V12Iainfix &lt;=ainteger_of_int32V12ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix &lt;=V10c2147483647Aainfix &lt;=aprefix -c2147483648V10Ladivainteger_of_int32V9c2Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix &lt;=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix &lt;=ainfix -V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V5c1Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV3V0c1Iainfix &gt;=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FF">
@@ -651,7 +651,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_BinarySearch_ensures_default"
-    sum="1b6eed8ec7ae16c19e8b1538e8e54729"
+    sum="165d842207300a1d80433a9bf575b03d"
     proved="true"
     expanded="false"
     shape="t">
@@ -689,7 +689,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_BinarySearch_safety"
-    sum="e33fb7230d48272f176b200db764b3bd"
+    sum="afb08fdb66b45ef251f4f43e4bc5b4c1"
     proved="true"
     expanded="false"
     shape="t">

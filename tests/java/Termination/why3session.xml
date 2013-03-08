@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -35,7 +35,7 @@
     locfile="../Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop1_ensures_default"
-    sum="fbf24cb31da4013e9622605c65f211c8"
+    sum="acd4b1eafb772c42f210e0da7600f104"
     proved="true"
     expanded="false"
     shape="t">
@@ -73,7 +73,7 @@
     locfile="../Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop1_safety"
-    sum="b6038eddef7d851ed99ab3f9789f4d2c"
+    sum="af8afc699a21cbd5c0005386c22e6f37"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V3V2Aainfix &lt;=c0V2Iainfix =V3ainfix -V2c1FIainfix &gt;V2c0FIavalid_struct_TerminationV0c0c0V1FF">
@@ -111,7 +111,7 @@
     locfile="../Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop2_ensures_default"
-    sum="818392abb658a86602591e856dec3c60"
+    sum="c05ac59e7ce82a5509c110df427c1076"
     proved="true"
     expanded="false"
     shape="t">
@@ -149,7 +149,7 @@
     locfile="../Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop2_safety"
-    sum="cb590645edf3d1515798fd37a03658ab"
+    sum="d6789ba05e05daccb18120821e432d69"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -c100V3ainfix -c100V2Aainfix &lt;=c0ainfix -c100V2Iainfix =V3ainfix +V2c1FIainfix &lt;V2c100FIavalid_struct_TerminationV0c0c0V1FF">
@@ -187,7 +187,7 @@
     locfile="../Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="VC for _Termination_loop3_ensures_default"
-    sum="265616a1d50ad993e91d48e7147b28dd"
+    sum="06b957c14e9d2f580a114ffb2f484aa4"
     proved="true"
     expanded="false"
     shape="iainfix &gt;V2c0ainfix &lt;=V3c100Aainfix &lt;=c0V3Iainfix =V3ainfix -V2c1Fainfix =V4c0Iainfix =V4V2FIainfix &lt;=V2c100Aainfix &lt;=c0V2FAainfix &lt;=c100c100Aainfix &lt;=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
@@ -225,7 +225,7 @@
     locfile="../Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="VC for _Termination_loop3_safety"
-    sum="7a95aa0f503be1a63ff694930eca8de8"
+    sum="719bea2aa043254cb59e035c4b6741c0"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V3V2Aainfix &lt;=c0V2Iainfix =V3ainfix -V2c1FIainfix &gt;V2c0Iainfix &lt;=V2c100Aainfix &lt;=c0V2FIavalid_struct_TerminationV0c0c0V1FF">
@@ -263,7 +263,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Termination_ensures_default"
-    sum="cfc7c6336e0462e0d49809420452ba83"
+    sum="b876de4334362bbd86412cdc83b014ce"
     proved="true"
     expanded="false"
     shape="t">
@@ -301,7 +301,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Termination_safety"
-    sum="2c71479e666e6e704091710aea586888"
+    sum="b2fab1bc870938ab6b9bfdb4e3e5b99e"
     proved="true"
     expanded="false"
     shape="t">
