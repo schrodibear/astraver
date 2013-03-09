@@ -199,8 +199,7 @@
       <proof
        prover="3"
        timelimit="5"
-       memlimit="0"
-       edited="eps_line1-Jessie_program-WP_parameter_eps_line_safety_1.gappa"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
