@@ -166,6 +166,8 @@ let why3ident s =
     | "sqrt_real" -> "Square.sqrt"
     | "pow_real" -> "PowerReal.pow"
     | "pow_real_int" -> "PowerInt.power"
+    | "exp" -> "ExpLog.exp"
+    | "log" -> "ExpLog.log"
     | "cos" -> "Trigonometry.cos"
     | "sin" -> "Trigonometry.sin"
     | "tan" -> "Trigonometry.tan"
@@ -229,6 +231,7 @@ let why3_PowerReal = ref false
 let why3_RealMinMax = ref false
 let why3_AbsInt = ref false
 let why3_AbsReal = ref false
+let why3_ExpLog = ref false
 let why3_Trigonometry = ref false
 
 let compute_why3_dependencies f =
@@ -251,6 +254,7 @@ let compute_why3_dependencies f =
     | "real_max" -> why3_RealMinMax := true
     | "abs_int" -> why3_AbsInt := true
     | "abs_real" -> why3_AbsReal := true
+    | "exp" | "log" -> why3_ExpLog := true
     | "cos"
     | "sin"
     | "tan"
@@ -1686,6 +1690,8 @@ let output_why3_imports form use_floats float_model =
     fprintf form "use int.Abs as AbsInt@\n@\n";
   if !why3_AbsReal then
     fprintf form "use real.Abs as AbsReal@\n@\n";
+  if !why3_ExpLog then
+    fprintf form "use real.ExpLog@\n@\n";
   if !why3_Trigonometry then
     fprintf form "use real.Trigonometry@\n@\n";
   if use_floats then

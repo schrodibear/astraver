@@ -66,7 +66,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.03"/>
+       <result status="valid" time="1.28"/>
       </proof>
       <proof
        prover="1"
@@ -272,7 +272,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Int_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Int_ensures_default"
     sum="55a7e2c94a09934ce62efc4fee068700"
@@ -294,7 +294,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Int_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Int_safety"
     sum="178bcc3cee6640c8929305cd0c91ec4f"
@@ -316,7 +316,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
     sum="931726b880e25c16dbdb177bb00fbb6b"
@@ -338,7 +338,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
     sum="c32ad84f1a2b1beee107d01e10e57e63"
@@ -360,7 +360,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Tree_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Tree_ensures_default"
     sum="f065f44e179b1e57f662ef78d7748630"
@@ -382,7 +382,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Tree_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Tree_safety"
     sum="81bda1268a7263ee7c278016c05c76fd"
