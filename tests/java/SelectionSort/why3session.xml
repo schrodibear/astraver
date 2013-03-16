@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../SelectionSort.mlw"
   verified="true"
@@ -455,7 +455,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.13"/>
+         <result status="timeout" time="6.76"/>
         </proof>
         <proof
          prover="1"
@@ -471,7 +471,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.29"/>
+         <result status="timeout" time="6.76"/>
         </proof>
         <proof
          prover="3"
@@ -597,7 +597,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.19"/>
+       <result status="timeout" time="6.39"/>
       </proof>
      </goal>
     </transf>

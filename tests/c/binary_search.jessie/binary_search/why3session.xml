@@ -8,7 +8,7 @@
  <prover
   id="1"
   name="Alt-Ergo"
-  version="0.95"/>
+  version="0.95.1"/>
  <prover
   id="2"
   name="CVC3"
@@ -24,7 +24,7 @@
  <prover
   id="5"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../binary_search.mlw"
   verified="false"
@@ -321,7 +321,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="4.99"/>
+         <result status="timeout" time="4.28"/>
         </proof>
         <proof
          prover="2"

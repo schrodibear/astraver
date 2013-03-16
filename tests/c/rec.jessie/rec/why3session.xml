@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../rec.mlw"
   verified="true"
@@ -457,7 +457,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.11"/>
+     <result status="timeout" time="5.73"/>
     </proof>
    </goal>
    <goal

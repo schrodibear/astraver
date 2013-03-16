@@ -16,11 +16,11 @@
  <prover
   id="3"
   name="Gappa"
-  version="0.16.1"/>
+  version="0.16.6"/>
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../Sterbenz.mlw"
   verified="false"
@@ -151,7 +151,7 @@
        edited="Sterbenz_Jessie_program_WP_parameter__Sterbenz_ensures_default_1.v"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="3.04"/>
+       <result status="unknown" time="3.66"/>
       </proof>
      </goal>
     </transf>

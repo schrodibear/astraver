@@ -8,7 +8,7 @@
  <prover
   id="1"
   name="Alt-Ergo"
-  version="0.95"/>
+  version="0.95.1"/>
  <prover
   id="2"
   name="CVC3"
@@ -24,7 +24,7 @@
  <prover
   id="5"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../binary-search-hollas.mlw"
   verified="false"
@@ -329,7 +329,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="4.08"/>
+         <result status="valid" time="0.47"/>
         </proof>
         <proof
          prover="2"
@@ -439,7 +439,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.17"/>
+       <result status="valid" time="0.64"/>
       </proof>
       <proof
        prover="4"

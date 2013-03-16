@@ -16,7 +16,7 @@
  <prover
   id="3"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../Muller.mlw"
   verified="true"
@@ -107,7 +107,7 @@
      edited="Muller_Jessie_model_num_of_pos_strictly_increasing_1.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.88"/>
+     <result status="valid" time="2.19"/>
     </proof>
    </goal>
   </theory>

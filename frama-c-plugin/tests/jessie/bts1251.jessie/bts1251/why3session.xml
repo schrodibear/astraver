@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../bts1251.mlw"
   verified="true"
@@ -57,7 +57,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.49"/>
+     <result status="timeout" time="10.02"/>
     </proof>
     <proof
      prover="1"
@@ -73,7 +73,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.11"/>
+     <result status="timeout" time="11.02"/>
     </proof>
     <proof
      prover="3"
@@ -111,7 +111,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.86"/>
+     <result status="timeout" time="10.16"/>
     </proof>
     <proof
      prover="1"
@@ -343,7 +343,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.17"/>
+     <result status="timeout" time="7.53"/>
     </proof>
     <proof
      prover="3"
@@ -359,7 +359,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.25"/>
+     <result status="timeout" time="4.72"/>
     </proof>
    </goal>
   </theory>

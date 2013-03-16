@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../sparse_array2.mlw"
   verified="false"
@@ -559,7 +559,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.92"/>
+     <result status="timeout" time="8.51"/>
     </proof>
     <proof
      prover="1"
@@ -567,7 +567,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.57"/>
+     <result status="valid" time="1.53"/>
     </proof>
     <proof
      prover="2"
@@ -613,7 +613,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="6.87"/>
+     <result status="timeout" time="8.95"/>
     </proof>
     <proof
      prover="1"
@@ -716,7 +716,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.56"/>
+       <result status="timeout" time="8.24"/>
       </proof>
      </goal>
      <goal
@@ -738,7 +738,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.25"/>
+       <result status="timeout" time="7.89"/>
       </proof>
       <proof
        prover="1"
@@ -746,7 +746,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.23"/>
+       <result status="timeout" time="6.68"/>
       </proof>
       <proof
        prover="2"
@@ -754,7 +754,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.50"/>
+       <result status="timeout" time="9.42"/>
       </proof>
       <proof
        prover="3"
@@ -762,7 +762,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.20"/>
+       <result status="timeout" time="9.81"/>
       </proof>
       <proof
        prover="4"
@@ -770,7 +770,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.17"/>
+       <result status="timeout" time="10.89"/>
       </proof>
      </goal>
      <goal
@@ -792,7 +792,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.19"/>
+       <result status="timeout" time="11.62"/>
       </proof>
       <proof
        prover="1"
@@ -808,7 +808,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.32"/>
+       <result status="timeout" time="9.54"/>
       </proof>
       <proof
        prover="3"
@@ -824,7 +824,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.30"/>
+       <result status="timeout" time="10.62"/>
       </proof>
      </goal>
      <goal
@@ -862,7 +862,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.23"/>
+       <result status="timeout" time="10.44"/>
       </proof>
       <proof
        prover="3"
@@ -870,7 +870,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.22"/>
+       <result status="timeout" time="10.13"/>
       </proof>
       <proof
        prover="4"
@@ -878,7 +878,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.23"/>
+       <result status="timeout" time="9.91"/>
       </proof>
      </goal>
      <goal
@@ -1009,7 +1009,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.20"/>
+         <result status="timeout" time="9.54"/>
         </proof>
        </goal>
        <goal
@@ -1031,7 +1031,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="3.16"/>
+         <result status="valid" time="5.09"/>
         </proof>
         <proof
          prover="3"

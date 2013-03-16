@@ -8,7 +8,7 @@
  <prover
   id="1"
   name="Gappa"
-  version="0.16.1"/>
+  version="0.16.6"/>
  <file
   name="../scalar_product.mlw"
   verified="true"
@@ -82,7 +82,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.18"/>
+       <result status="valid" time="0.30"/>
       </proof>
      </goal>
      <goal

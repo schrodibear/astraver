@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../sum_array.mlw"
   verified="false"
@@ -72,7 +72,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.68"/>
+     <result status="timeout" time="5.57"/>
     </proof>
     <proof
      prover="4"
@@ -80,7 +80,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.78"/>
+     <result status="timeout" time="5.48"/>
     </proof>
    </goal>
    <goal
@@ -124,7 +124,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.02"/>
+     <result status="timeout" time="4.88"/>
     </proof>
     <proof
      prover="4"
@@ -132,7 +132,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.56"/>
+     <result status="timeout" time="5.70"/>
     </proof>
    </goal>
   </theory>
@@ -356,7 +356,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.13"/>
+       <result status="timeout" time="5.98"/>
       </proof>
       <proof
        prover="3"
@@ -573,7 +573,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.47"/>
+         <result status="timeout" time="6.88"/>
         </proof>
         <proof
          prover="1"
@@ -589,7 +589,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.51"/>
+         <result status="timeout" time="7.31"/>
         </proof>
         <proof
          prover="3"
@@ -605,7 +605,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.16"/>
+         <result status="timeout" time="5.94"/>
         </proof>
        </goal>
        <goal

@@ -8,7 +8,7 @@
  <prover
   id="1"
   name="Alt-Ergo"
-  version="0.95"/>
+  version="0.95.1"/>
  <prover
   id="2"
   name="CVC3"
@@ -24,7 +24,7 @@
  <prover
   id="5"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../fresh2.mlw"
   verified="false"
@@ -77,7 +77,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.09"/>
+     <result status="valid" time="1.53"/>
     </proof>
    </goal>
    <goal
@@ -177,7 +177,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.09"/>
+     <result status="timeout" time="7.31"/>
     </proof>
     <proof
      prover="4"
@@ -185,7 +185,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.02"/>
+     <result status="timeout" time="7.68"/>
     </proof>
     <proof
      prover="5"
@@ -193,7 +193,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.06"/>
+     <result status="timeout" time="5.98"/>
     </proof>
    </goal>
    <goal

@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../flag.mlw"
   verified="true"
@@ -447,7 +447,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.23"/>
+         <result status="timeout" time="6.41"/>
         </proof>
        </goal>
        <goal
@@ -666,7 +666,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.89"/>
+         <result status="valid" time="2.49"/>
         </proof>
         <proof
          prover="3"

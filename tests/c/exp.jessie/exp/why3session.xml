@@ -3,32 +3,12 @@
 <why3session shape_version="2">
  <prover
   id="0"
-  name="Alt-Ergo"
-  version="0.95.1"/>
- <prover
-  id="1"
-  name="CVC3"
-  version="2.4.1"/>
- <prover
-  id="2"
-  name="CVC4"
-  version="1.0"/>
- <prover
-  id="3"
   name="Coq"
   version="8.4"/>
  <prover
-  id="4"
+  id="1"
   name="Gappa"
-  version="0.16.4"/>
- <prover
-  id="5"
-  name="Z3"
-  version="3.2"/>
- <prover
-  id="6"
-  name="Z3"
-  version="4.3.1"/>
+  version="0.16.1"/>
  <file
   name="../exp.mlw"
   verified="true"
@@ -80,58 +60,10 @@
        prover="0"
        timelimit="5"
        memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.15"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="highfailure" time="0.08"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.18"/>
-      </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="1000"
        edited="exp_Jessie_program_WP_parameter_my_exp_ensures_default_1.v"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.93"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.00"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.12"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.22"/>
+       <result status="valid" time="5.02"/>
       </proof>
      </goal>
      <goal
@@ -148,7 +80,7 @@
       <label
        name="expl:VC for my_exp_ensures_default"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -189,7 +121,7 @@
       <label
        name="expl:VC for my_exp_safety"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -211,7 +143,7 @@
       <label
        name="expl:VC for my_exp_safety"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -233,7 +165,7 @@
       <label
        name="expl:VC for my_exp_safety"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -255,7 +187,7 @@
       <label
        name="expl:VC for my_exp_safety"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -277,7 +209,7 @@
       <label
        name="expl:VC for my_exp_safety"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -299,7 +231,7 @@
       <label
        name="expl:VC for my_exp_safety"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -321,7 +253,7 @@
       <label
        name="expl:VC for my_exp_safety"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -343,7 +275,7 @@
       <label
        name="expl:VC for my_exp_safety"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"

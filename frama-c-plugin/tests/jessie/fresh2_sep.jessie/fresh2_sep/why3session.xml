@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../fresh2_sep.mlw"
   verified="false"
@@ -81,7 +81,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.19"/>
+     <result status="timeout" time="7.00"/>
     </proof>
     <proof
      prover="4"
@@ -181,7 +181,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.26"/>
+     <result status="timeout" time="6.03"/>
     </proof>
     <proof
      prover="3"
@@ -189,7 +189,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.21"/>
+     <result status="timeout" time="5.85"/>
     </proof>
     <proof
      prover="4"
@@ -197,7 +197,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.27"/>
+     <result status="timeout" time="6.76"/>
     </proof>
    </goal>
    <goal

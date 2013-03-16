@@ -16,11 +16,11 @@
  <prover
   id="3"
   name="Gappa"
-  version="0.16.1"/>
+  version="0.16.6"/>
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../my_cosine.mlw"
   verified="true"
@@ -586,7 +586,7 @@
        edited="my_cosine_WP_Jessie_program_WP_parameter_my_cos4_ensures_default_2.v"
        obsolete="false"
        archived="false">
-       <result status="valid" time="5.51"/>
+       <result status="valid" time="6.23"/>
       </proof>
      </goal>
      <goal

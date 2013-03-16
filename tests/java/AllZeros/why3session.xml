@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../AllZeros.mlw"
   verified="false"
@@ -244,7 +244,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="0.94"/>
+       <result status="unknown" time="1.16"/>
       </proof>
       <proof
        prover="2"

@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../quick_sort.mlw"
   verified="false"
@@ -324,7 +324,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.55"/>
+       <result status="valid" time="0.80"/>
       </proof>
      </goal>
     </transf>
@@ -403,7 +403,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="8.82"/>
+       <result status="timeout" time="10.81"/>
       </proof>
       <proof
        prover="1"
@@ -419,7 +419,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.96"/>
+       <result status="timeout" time="11.16"/>
       </proof>
       <proof
        prover="3"
@@ -427,7 +427,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.03"/>
+       <result status="timeout" time="11.86"/>
       </proof>
       <proof
        prover="4"
@@ -435,7 +435,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="6.29"/>
+       <result status="timeout" time="11.18"/>
       </proof>
      </goal>
     </transf>
@@ -492,7 +492,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.24"/>
+       <result status="timeout" time="10.79"/>
       </proof>
      </goal>
      <goal
@@ -514,7 +514,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.02"/>
+       <result status="timeout" time="9.07"/>
       </proof>
       <proof
        prover="1"
@@ -530,7 +530,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.02"/>
+       <result status="timeout" time="8.48"/>
       </proof>
       <proof
        prover="3"
@@ -538,7 +538,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.07"/>
+       <result status="timeout" time="6.36"/>
       </proof>
       <proof
        prover="4"
@@ -546,7 +546,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.02"/>
+       <result status="timeout" time="7.51"/>
       </proof>
      </goal>
     </transf>

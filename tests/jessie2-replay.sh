@@ -12,7 +12,7 @@ JAVATODO="Duplets SimpleApplet Sort2 Sort"
 C="array_double array_max binary_search cd1d clock_drift \
    double_rounding_strict_model double_rounding_multirounding_model \
    duplets \
-   eps_line1 eps_line2 \
+   eps_line1 eps_line2 exp \
    find_array flag floats_bsearch float_sqrt \
    insertion_sort interval_arith isqrt minmax muller my_cosine quick_sort \
    rec scalar_product selection_sort sparse_array2 \

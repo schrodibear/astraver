@@ -24,7 +24,7 @@
  <prover
   id="5"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../Fibonacci.mlw"
   verified="true"
