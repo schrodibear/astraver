@@ -8,7 +8,7 @@
  <prover
   id="1"
   name="Alt-Ergo"
-  version="0.95"/>
+  version="0.95.1"/>
  <prover
   id="2"
   name="CVC3"
@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Gappa"
-  version="0.16.1"/>
+  version="0.16.6"/>
  <prover
   id="5"
   name="Z3"
@@ -28,7 +28,7 @@
  <prover
   id="6"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../interval_arith.mlw"
   verified="false"
@@ -99,7 +99,7 @@
          memlimit="50"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.19"/>
+         <result status="valid" time="0.83"/>
         </proof>
         <proof
          prover="3"
@@ -107,7 +107,7 @@
          memlimit="50"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.35"/>
+         <result status="valid" time="0.93"/>
         </proof>
        </goal>
        <goal
@@ -129,7 +129,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="19.02"/>
+         <result status="valid" time="20.28"/>
         </proof>
         <proof
          prover="3"
@@ -137,7 +137,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="36.68"/>
+         <result status="valid" time="28.05"/>
         </proof>
        </goal>
       </transf>
@@ -233,7 +233,7 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.86"/>
+     <result status="valid" time="0.64"/>
     </proof>
     <proof
      prover="2"
@@ -341,7 +341,7 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.67"/>
+     <result status="valid" time="0.46"/>
     </proof>
     <proof
      prover="2"
@@ -508,7 +508,7 @@
            memlimit="50"
            obsolete="false"
            archived="false">
-           <result status="valid" time="0.37"/>
+           <result status="valid" time="0.23"/>
           </proof>
          </goal>
         </transf>
@@ -648,7 +648,7 @@
          memlimit="50"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.35"/>
+         <result status="valid" time="0.21"/>
         </proof>
        </goal>
        <goal
@@ -691,7 +691,7 @@
         expl="1."
         sum="c78ff3873133fb8e16e3a84697f25f3d"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="ais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
@@ -749,7 +749,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="11.97"/>
+         <result status="timeout" time="10.16"/>
         </proof>
         <proof
          prover="1"
@@ -757,7 +757,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="8.02"/>
+         <result status="timeout" time="9.98"/>
         </proof>
         <proof
          prover="2"
@@ -773,7 +773,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="12.65"/>
+         <result status="timeout" time="10.14"/>
         </proof>
         <proof
          prover="4"
@@ -809,7 +809,7 @@
       expl="3. postcondition"
       sum="a0cd15aab85cb36f624a0a0bf044f049"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -818,7 +818,7 @@
       <transf
        name="split_goal"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.3.1"
         locfile="../../interval_arith.c"
@@ -872,7 +872,7 @@
         expl="2."
         sum="f1b18a0e5975b4800cb0b162c27e02ac"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
@@ -884,7 +884,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="18.55"/>
+         <result status="timeout" time="10.13"/>
         </proof>
         <proof
          prover="1"
@@ -908,7 +908,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="16.13"/>
+         <result status="timeout" time="10.14"/>
         </proof>
         <proof
          prover="4"
@@ -932,7 +932,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.46"/>
+         <result status="timeout" time="3.15"/>
         </proof>
        </goal>
       </transf>
@@ -944,7 +944,7 @@
       expl="4. postcondition"
       sum="f81553ed8e191af891a7333c27292151"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -953,7 +953,7 @@
       <transf
        name="split_goal"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.4.1"
         locfile="../../interval_arith.c"
@@ -1023,7 +1023,7 @@
         expl="2."
         sum="036ba133c4f1ab33701a6d553a6559f3"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
@@ -1087,7 +1087,7 @@
       expl="5. postcondition"
       sum="f88284df44b9870230dc65df87ca1907"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1096,7 +1096,7 @@
       <transf
        name="split_goal"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.5.1"
         locfile="../../interval_arith.c"
@@ -1150,7 +1150,7 @@
         expl="2."
         sum="098dec844b5d4a9721e704f821ac1eac"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
@@ -1214,7 +1214,7 @@
       expl="6. postcondition"
       sum="7090b3cb79c29ba239cf32ff3ec50d1d"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV3FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1223,7 +1223,7 @@
       <transf
        name="split_goal_wp"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.6.1"
         locfile="../../interval_arith.c"
@@ -1277,7 +1277,7 @@
         expl="2."
         sum="31073296b2229675eee058d4701e6234"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV3FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
@@ -1341,7 +1341,7 @@
       expl="7. postcondition"
       sum="fa591e5760a034e842a664fbacf9f747"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1377,7 +1377,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="2.42"/>
+       <result status="outofmemory" time="2.12"/>
       </proof>
       <proof
        prover="4"
@@ -1411,7 +1411,7 @@
       expl="8. postcondition"
       sum="182cfc14cc2563dee58ca65e1f0a312e"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1447,7 +1447,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="2.49"/>
+       <result status="outofmemory" time="1.70"/>
       </proof>
       <proof
        prover="4"
@@ -1463,7 +1463,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="0.52"/>
+       <result status="outofmemory" time="0.36"/>
       </proof>
       <proof
        prover="6"
@@ -1481,7 +1481,7 @@
       expl="9. postcondition"
       sum="ce58896e0d6e5da80f9ad4ac7f878220"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1517,7 +1517,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="1.15"/>
+       <result status="outofmemory" time="0.80"/>
       </proof>
       <proof
        prover="4"
@@ -1543,7 +1543,7 @@
       expl="10. postcondition"
       sum="3f43e315fa5fb0b1095552c9a8d139da"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1579,7 +1579,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="1.21"/>
+       <result status="outofmemory" time="0.90"/>
       </proof>
       <proof
        prover="4"
@@ -1605,7 +1605,7 @@
       expl="11. postcondition"
       sum="57c62dde2d0041101b03a7c39a6a79a4"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV2FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1641,7 +1641,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="1.27"/>
+       <result status="outofmemory" time="0.87"/>
       </proof>
       <proof
        prover="4"
@@ -1667,7 +1667,7 @@
       expl="12. postcondition"
       sum="6dc4ebdfaf2911a6b331886d25649aac"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1719,7 +1719,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="0.49"/>
+       <result status="outofmemory" time="0.34"/>
       </proof>
      </goal>
      <goal
@@ -1820,7 +1820,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="3.98"/>
+         <result status="valid" time="2.80"/>
         </proof>
         <proof
          prover="3"
@@ -1828,7 +1828,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="4.36"/>
+         <result status="valid" time="2.93"/>
         </proof>
        </goal>
       </transf>
@@ -1939,7 +1939,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.13"/>
+       <result status="valid" time="0.47"/>
       </proof>
       <proof
        prover="2"
@@ -1977,7 +1977,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.60"/>
+       <result status="valid" time="1.07"/>
       </proof>
       <proof
        prover="3"
@@ -1985,7 +1985,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.90"/>
+       <result status="valid" time="1.68"/>
       </proof>
      </goal>
      <goal
@@ -2007,7 +2007,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.90"/>
+       <result status="valid" time="1.30"/>
       </proof>
       <proof
        prover="3"
@@ -2015,7 +2015,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.21"/>
+       <result status="valid" time="1.43"/>
       </proof>
      </goal>
      <goal
@@ -2037,7 +2037,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.48"/>
+       <result status="valid" time="0.31"/>
       </proof>
       <proof
        prover="1"
@@ -2045,7 +2045,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.47"/>
+       <result status="valid" time="2.12"/>
       </proof>
      </goal>
      <goal
@@ -2097,7 +2097,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.13"/>
+       <result status="valid" time="1.56"/>
       </proof>
       <proof
        prover="3"
@@ -2105,7 +2105,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.48"/>
+       <result status="valid" time="1.68"/>
       </proof>
      </goal>
      <goal
@@ -2157,7 +2157,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.03"/>
+       <result status="valid" time="1.39"/>
       </proof>
       <proof
        prover="3"
@@ -2165,7 +2165,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.34"/>
+       <result status="valid" time="1.57"/>
       </proof>
      </goal>
      <goal
@@ -2217,7 +2217,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.14"/>
+       <result status="valid" time="1.50"/>
       </proof>
       <proof
        prover="3"
@@ -2225,7 +2225,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.49"/>
+       <result status="valid" time="1.62"/>
       </proof>
      </goal>
      <goal
@@ -2337,7 +2337,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="3.50"/>
+       <result status="valid" time="2.46"/>
       </proof>
       <proof
        prover="3"
@@ -2345,7 +2345,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="3.93"/>
+       <result status="valid" time="2.57"/>
       </proof>
      </goal>
      <goal
@@ -2397,7 +2397,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.36"/>
+       <result status="valid" time="0.95"/>
       </proof>
       <proof
        prover="3"
@@ -2405,7 +2405,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.61"/>
+       <result status="valid" time="1.03"/>
       </proof>
      </goal>
      <goal
@@ -2566,7 +2566,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="6.65"/>
+       <result status="valid" time="5.10"/>
       </proof>
       <proof
        prover="1"
@@ -2574,7 +2574,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="5.96"/>
+       <result status="valid" time="2.32"/>
       </proof>
       <proof
        prover="2"
@@ -2582,7 +2582,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="3.97"/>
+       <result status="valid" time="3.10"/>
       </proof>
       <proof
        prover="3"
@@ -2590,7 +2590,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="9.83"/>
+       <result status="valid" time="6.77"/>
       </proof>
      </goal>
      <goal
@@ -2860,7 +2860,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="5.32"/>
+       <result status="valid" time="4.19"/>
       </proof>
       <proof
        prover="2"
@@ -2876,7 +2876,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.51"/>
+       <result status="valid" time="0.34"/>
       </proof>
      </goal>
      <goal
@@ -2898,7 +2898,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="63.19"/>
+       <result status="valid" time="53.07"/>
       </proof>
       <proof
        prover="2"
@@ -2906,7 +2906,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="4.72"/>
+       <result status="valid" time="3.54"/>
       </proof>
       <proof
        prover="3"
@@ -2914,7 +2914,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="8.90"/>
+       <result status="valid" time="6.52"/>
       </proof>
      </goal>
      <goal
@@ -2944,7 +2944,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.54"/>
+       <result status="valid" time="0.38"/>
       </proof>
      </goal>
      <goal
@@ -2966,7 +2966,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.68"/>
+       <result status="valid" time="2.08"/>
       </proof>
       <proof
        prover="1"
@@ -2974,7 +2974,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="4.99"/>
+       <result status="valid" time="0.26"/>
       </proof>
       <proof
        prover="2"
@@ -3012,7 +3012,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="5.02"/>
+       <result status="valid" time="3.90"/>
       </proof>
       <proof
        prover="1"
@@ -3020,7 +3020,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.00"/>
+       <result status="valid" time="0.21"/>
       </proof>
       <proof
        prover="2"
@@ -3058,7 +3058,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="5.13"/>
+       <result status="valid" time="3.90"/>
       </proof>
       <proof
        prover="1"
@@ -3066,7 +3066,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="9.86"/>
+       <result status="valid" time="0.21"/>
       </proof>
       <proof
        prover="2"
@@ -3104,7 +3104,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.54"/>
+       <result status="valid" time="0.38"/>
       </proof>
       <proof
        prover="3"
@@ -3112,7 +3112,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.62"/>
+       <result status="valid" time="0.44"/>
       </proof>
      </goal>
      <goal
@@ -3134,7 +3134,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.55"/>
+       <result status="valid" time="0.38"/>
       </proof>
       <proof
        prover="3"
@@ -3142,7 +3142,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.63"/>
+       <result status="valid" time="0.44"/>
       </proof>
      </goal>
      <goal

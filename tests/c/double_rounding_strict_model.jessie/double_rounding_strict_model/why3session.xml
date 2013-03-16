@@ -4,15 +4,7 @@
  <prover
   id="0"
   name="Gappa"
-  version="0.14.1"/>
- <prover
-  id="1"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="2"
-  name="Gappa"
-  version="0.16.1"/>
+  version="0.16.6"/>
  <file
   name="../double_rounding_strict_model.mlw"
   verified="true"
@@ -45,22 +37,6 @@
      name="expl:VC for doublerounding_ensures_default"/>
     <proof
      prover="0"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -106,22 +82,6 @@
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter doublerounding_safety.2"
@@ -138,22 +98,6 @@
        name="expl:VC for doublerounding_safety"/>
       <proof
        prover="0"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="2"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -182,22 +126,6 @@
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter doublerounding_safety.4"
@@ -214,22 +142,6 @@
        name="expl:VC for doublerounding_safety"/>
       <proof
        prover="0"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="2"
        timelimit="5"
        memlimit="1000"
        obsolete="false"

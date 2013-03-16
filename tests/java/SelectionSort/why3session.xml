@@ -455,7 +455,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="6.76"/>
+         <result status="valid" time="4.14"/>
         </proof>
         <proof
          prover="1"
@@ -471,7 +471,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="6.76"/>
+         <result status="timeout" time="5.13"/>
         </proof>
         <proof
          prover="3"
@@ -509,7 +509,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="3.70"/>
+         <result status="valid" time="2.75"/>
         </proof>
         <proof
          prover="1"
@@ -581,7 +581,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.46"/>
+       <result status="valid" time="0.25"/>
       </proof>
       <proof
        prover="3"
@@ -597,7 +597,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="6.39"/>
+       <result status="timeout" time="5.19"/>
       </proof>
      </goal>
     </transf>
@@ -675,7 +675,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.32"/>
+     <result status="valid" time="1.00"/>
     </proof>
     <proof
      prover="1"
@@ -683,7 +683,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="3.41"/>
+     <result status="valid" time="2.26"/>
     </proof>
     <proof
      prover="2"
@@ -691,7 +691,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.46"/>
+     <result status="valid" time="0.87"/>
     </proof>
     <proof
      prover="3"
@@ -766,7 +766,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
     sum="c9c9be3912fae8b1e7ff81dac54fb15e"
@@ -820,7 +820,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
     sum="adcbd989fc3f1302713ec0461aa28c82"
@@ -874,7 +874,7 @@
    </goal>
    <goal
     name="WP_parameter cons_SelectionSort_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_SelectionSort_ensures_default"
     sum="4a417808fd30cf6d879287d4d42dd7aa"
@@ -928,7 +928,7 @@
    </goal>
    <goal
     name="WP_parameter cons_SelectionSort_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_SelectionSort_safety"
     sum="4735c3fd543bf9af86ff76468e43a804"

@@ -8,7 +8,7 @@
  <prover
   id="1"
   name="Alt-Ergo"
-  version="0.95"/>
+  version="0.95.1"/>
  <prover
   id="2"
   name="CVC3"
@@ -20,15 +20,7 @@
  <prover
   id="4"
   name="Gappa"
-  version="0.14.1"/>
- <prover
-  id="5"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="6"
-  name="Gappa"
-  version="0.16.1"/>
+  version="0.16.6"/>
  <file
   name="../eps_line2.mlw"
   verified="true"
@@ -81,7 +73,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.37"/>
+     <result status="valid" time="0.23"/>
     </proof>
     <proof
      prover="3"
@@ -89,7 +81,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.71"/>
+     <result status="valid" time="0.45"/>
     </proof>
    </goal>
    <goal
@@ -130,22 +122,6 @@
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter eps_line_safety.2"
@@ -168,22 +144,6 @@
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter eps_line_safety.3"
@@ -200,14 +160,6 @@
        name="expl:VC for eps_line_safety"/>
       <proof
        prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="6"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -236,22 +188,6 @@
        archived="false">
        <result status="valid" time="0.01"/>
       </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter eps_line_safety.5"
@@ -268,22 +204,6 @@
        name="expl:VC for eps_line_safety"/>
       <proof
        prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="6"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -320,22 +240,6 @@
        archived="false">
        <result status="valid" time="0.01"/>
       </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter eps_line_safety.7"
@@ -352,14 +256,6 @@
        name="expl:VC for eps_line_safety"/>
       <proof
        prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="6"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -388,22 +284,6 @@
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter eps_line_safety.9"
@@ -426,22 +306,6 @@
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter eps_line_safety.10"
@@ -458,14 +322,6 @@
        name="expl:VC for eps_line_safety"/>
       <proof
        prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.35"/>
-      </proof>
-      <proof
-       prover="6"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -502,22 +358,6 @@
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter eps_line_safety.12"
@@ -542,22 +382,6 @@
       </proof>
       <proof
        prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="6"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -594,22 +418,6 @@
        archived="false">
        <result status="valid" time="0.03"/>
       </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter eps_line_safety.14"
@@ -630,23 +438,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="11.39"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.10"/>
-      </proof>
-      <proof
-       prover="6"
-       timelimit="20"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="15.74"/>
+       <result status="valid" time="7.73"/>
       </proof>
      </goal>
      <goal
@@ -664,22 +456,6 @@
        name="expl:VC for eps_line_safety"/>
       <proof
        prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="6"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -725,7 +501,7 @@
     <label
      name="expl:VC for sign_safety"/>
     <proof
-     prover="6"
+     prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
