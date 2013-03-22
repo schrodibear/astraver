@@ -437,7 +437,9 @@ let gather_initialization file =
       Globals.Vars.iter (fun v iinfo ->
 	let _s = match iinfo.init with
 	  | Some ie ->
-	      let b = Cabs2cil.blockInit (Var v, NoOffset) ie v.vtype in
+	      let b =
+                Cabs2cil.blockInit
+                  ~ghost:v.vghost (Var v, NoOffset) ie v.vtype in
 	      b.bstmts
 	  | None ->
 	      if bitsSizeOf v.vtype lsr 3 < 100 then
@@ -445,7 +447,10 @@ let gather_initialization file =
 		let ie = 
                   makeZeroInit ~loc:Cil_datatype.Location.unknown v.vtype 
                 in
-		let b = Cabs2cil.blockInit (Var v, NoOffset) ie v.vtype in
+		let b =
+                  Cabs2cil.blockInit
+                    ~ghost:v.vghost (Var v, NoOffset) ie v.vtype
+                in
 		b.bstmts
 	      else
 		(* FS#253: Big data structure, do not initialize individually.

@@ -556,7 +556,7 @@ let logic_const pos = function
   | LStr _ | LWStr _ -> 
     Common.unsupported "string literals in logic"
   | LChr c -> JCPEconst (JCCinteger(string_of_int (Char.code c)))
-  | LReal (_,s) -> JCPEconst (JCCreal (strip_float_suffix s))
+  | LReal { r_literal = s } -> JCPEconst (JCCreal (strip_float_suffix s))
   | LEnum ei ->
       (match Cil.isInteger (ei.eival) with
         | Some n ->
