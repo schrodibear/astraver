@@ -48,7 +48,7 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="1. assertion"
-      sum="672a149e9966e0f3afb16b9c3e5c08c7"
+      sum="fcabc9ad049b4d2138fcb56ab0e0c536"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
@@ -71,7 +71,7 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="2. postcondition"
-      sum="4e38b903c8291ee90a5fa9139cdd4388"
+      sum="1584a972187667d9c72f6d04417c2f45"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsainfix -avalueV10aexpavalueV0c0x1.p-4Iainfix =V10V9FIainfix =V9V8FIaadd_postaNearestTiesToEvenV7V3V8FIaadd_postaNearestTiesToEvenV6V5V7FIaof_real_postaNearestTiesToEvenc0.9890365552V6FIamul_postaNearestTiesToEvenV4V0V5FIaof_real_postaNearestTiesToEvenc1.130258690V4FIamul_postaNearestTiesToEvenV2V0V3FIamul_postaNearestTiesToEvenV1V0V2FIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
@@ -95,7 +95,7 @@
     locfile="../../exp.c"
     loclnum="3" loccnumb="7" loccnume="13"
     expl="VC for my_exp_safety"
-    sum="938d6bec7eeff00260526873a21b92fd"
+    sum="0135787ca5c64d214b69de0e3a6e6d3e"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV3amax_doubleIaadd_postaNearestTiesToEvenV6V5V7FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV5amax_doubleIaof_real_postaNearestTiesToEvenc0.9890365552V6FAainfix &lt;=aabsaroundaNearestTiesToEvenc0.9890365552amax_doubleIamul_postaNearestTiesToEvenV4V0V5FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.130258690V4FAainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FAainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
@@ -112,7 +112,7 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="1. floating-point overflow"
-      sum="e0874c66b921714ac7c7f2bc2ea17fec"
+      sum="09cb604dda0e4b6f3de85cb1a2db544d"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
@@ -134,7 +134,7 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="2. floating-point overflow"
-      sum="7e10a9ffc533d8f2500ba21c1ed6c337"
+      sum="8f6a59ebb377eaf8be22a224d312c462"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
@@ -156,7 +156,7 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="3. floating-point overflow"
-      sum="b90322f5cc20b370caa70436d26573af"
+      sum="0730383b386f377ea35f8b32500060f9"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
@@ -178,7 +178,7 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="4. floating-point overflow"
-      sum="8eae9a2a7066ab836b7c0a091e893be4"
+      sum="0a8f29ac02bdf2a1953123f5197b26d5"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
@@ -200,7 +200,7 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="5. floating-point overflow"
-      sum="c8a9f876e430ef79da1a4bdb57f8586d"
+      sum="48533162bcffc857a6ac97abbdca8c2f"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.130258690V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
@@ -222,7 +222,7 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="6. floating-point overflow"
-      sum="c294a0cccb8362565f9a8f5888c742e2"
+      sum="4745b0069a4107420990043cc8dbc8ee"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0.9890365552amax_doubleIamul_postaNearestTiesToEvenV4V0V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.130258690V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
@@ -244,7 +244,7 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="7. floating-point overflow"
-      sum="5e74d61aa8a4d3e540b987441276e948"
+      sum="329642421c13edbac69216d3e5135257"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV5amax_doubleIaof_real_postaNearestTiesToEvenc0.9890365552V6FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.9890365552amax_doubleIamul_postaNearestTiesToEvenV4V0V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.130258690V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">
@@ -266,7 +266,7 @@
       locfile="../../exp.c"
       loclnum="3" loccnumb="7" loccnume="13"
       expl="8. floating-point overflow"
-      sum="e9cc8a63e56042cabd0c6a75396c45e6"
+      sum="1220089d05f98367159df4c5c4c873b1"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV3amax_doubleIaadd_postaNearestTiesToEvenV6V5V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV5amax_doubleIaof_real_postaNearestTiesToEvenc0.9890365552V6FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.9890365552amax_doubleIamul_postaNearestTiesToEvenV4V0V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.130258690V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.130258690amax_doubleIamul_postaNearestTiesToEvenV2V0V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV0amax_doubleIamul_postaNearestTiesToEvenV1V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc0.5540440796V1FIainfix &lt;=aabsaroundaNearestTiesToEvenc0.5540440796amax_doubleIainfix &lt;=aabsainfix -ainfix +ainfix +c0.9890365552ainfix *c1.130258690avalueV0ainfix *ainfix *c0.5540440796avalueV0avalueV0aexpavalueV0c0x0.FFFFp-4Iainfix &lt;=aabsavalueV0c1.0F">

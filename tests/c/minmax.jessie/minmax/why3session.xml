@@ -65,7 +65,7 @@
     locfile="../../minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="VC for dmax_safety"
-    sum="38686a4da83f441a9951af4ff19ec249"
+    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
     proved="true"
     expanded="true"
     shape="t">
@@ -103,7 +103,7 @@
     locfile="../../minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="VC for dmin_ensures_default"
-    sum="bd20269a673ebb2fe6de3deda5ab3495"
+    sum="72e3bdee58611100dc6f7b90b5c76de9"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
@@ -133,7 +133,7 @@
     locfile="../../minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="VC for dmin_safety"
-    sum="c2e84bc45d6c24083ef00a1eb9711851"
+    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
     proved="true"
     expanded="true"
     shape="t">
@@ -171,7 +171,7 @@
     locfile="../../minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="VC for fmax_ensures_default"
-    sum="fa972a1ebf07c0fb415ce4e90f88fcdc"
+    sum="31e855ed4cd0d49182d83708c59e478c"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
@@ -201,7 +201,7 @@
     locfile="../../minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="VC for fmax_safety"
-    sum="bd0a10277fb54dca355c20b8e7d39e72"
+    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
     proved="true"
     expanded="true"
     shape="t">
@@ -239,7 +239,7 @@
     locfile="../../minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="VC for fmin_ensures_default"
-    sum="ceeb468bab30cbb8f8b18a36da39b4ba"
+    sum="ed92707278d6fb374e2aed8aa18a0eec"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FF">
@@ -269,7 +269,7 @@
     locfile="../../minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="VC for fmin_safety"
-    sum="3630df2fe0b927a1cb63228d2b2a6ddf"
+    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
     proved="true"
     expanded="true"
     shape="t">
@@ -307,7 +307,7 @@
     locfile="../../minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="VC for max_ensures_default"
-    sum="081aba41273c8920f7822b4066732ba3"
+    sum="e8eb0b823540dc08e27585665ba4b8b4"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FF">
@@ -337,7 +337,7 @@
     locfile="../../minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="VC for max_safety"
-    sum="6eca7faef71ec7041e08bc1aa7f10bb7"
+    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
     proved="true"
     expanded="true"
     shape="t">
@@ -375,7 +375,7 @@
     locfile="../../minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="VC for min_ensures_default"
-    sum="0f1d522726b9416732e89a1b652919c9"
+    sum="c790fad98e6d895c4cbdbdcab19b70bc"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FF">
@@ -405,7 +405,7 @@
     locfile="../../minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="VC for min_safety"
-    sum="a83df89b7aee65d71b62454945ffee34"
+    sum="98cb4108ba654afb6f1a9d0f864cb7ec"
     proved="true"
     expanded="true"
     shape="t">

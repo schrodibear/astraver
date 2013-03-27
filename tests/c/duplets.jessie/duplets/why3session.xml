@@ -57,7 +57,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="8.37"/>
+     <result status="timeout" time="5.38"/>
     </proof>
     <proof
      prover="1"
@@ -89,7 +89,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="9.05"/>
+     <result status="timeout" time="5.49"/>
     </proof>
    </goal>
    <goal
@@ -97,7 +97,7 @@
     locfile="../../duplets.c"
     loclnum="42" loccnumb="5" loccnume="11"
     expl="VC for duplet_safety"
-    sum="2ac119c31cd7a58ab6ecf84fd7818b0b"
+    sum="bef4615a6a5e5af7b3727da0941df1a8"
     proved="true"
     expanded="true"
     shape="iainfix =V16aTrueiainfix &lt;ainteger_of_int32V19ainteger_of_int32V1iainfix =ainteger_of_int32aselectV9ashiftV0ainteger_of_int32V19ainteger_of_int32V15ainfix &lt;=c0aoffset_maxV8V4Aainfix &lt;=aoffset_minV8V4c0Iainfix =V21astoreV20V3V13FAainfix &lt;=c0aoffset_maxV7V3Aainfix &lt;=aoffset_minV7V3c0ainfix &lt;ainfix -ainteger_of_int32V1ainteger_of_int32V23ainfix -ainteger_of_int32V1ainteger_of_int32V19Aainfix &lt;=c0ainfix -ainteger_of_int32V1ainteger_of_int32V19Iainfix =V23V22FIainfix =ainteger_of_int32V22ainfix +ainteger_of_int32V19c1FAainfix &lt;=ainfix +ainteger_of_int32V19c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V19c1Aainfix &lt;=ainteger_of_int32V19aoffset_maxV5V0Aainfix &lt;=aoffset_minV5V0ainteger_of_int32V19ainfix &lt;ainfix -ainteger_of_int32V1ainteger_of_int32V25ainfix -ainteger_of_int32V1ainteger_of_int32V13Aainfix &lt;=c0ainfix -ainteger_of_int32V1ainteger_of_int32V13Iainfix =V25V24FIainfix =ainteger_of_int32V24ainfix +ainteger_of_int32V13c1FAainfix &lt;=ainfix +ainteger_of_int32V13c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V13c1Iais_dupletV0ainteger_of_int32V1ainteger_of_int32V13V26V9NIainfix &lt;V26ainteger_of_int32V19Aainfix &lt;ainteger_of_int32V13V26FAainfix &lt;=ainteger_of_int32V19ainteger_of_int32V1Aainfix &lt;=ainfix +ainteger_of_int32V13c1ainteger_of_int32V19FIainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V13c1FAainfix &lt;=ainfix +ainteger_of_int32V13c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V13c1iainfix =ainteger_of_int32aselectV10V2ainteger_of_int32V15Niainfix &lt;ainteger_of_int32V29ainteger_of_int32V1iainfix =ainteger_of_int32aselectV9ashiftV0ainteger_of_int32V29ainteger_of_int32V15ainfix &lt;=c0aoffset_maxV8V4Aainfix &lt;=aoffset_minV8V4c0Iainfix =V31astoreV30V3V13FAainfix &lt;=c0aoffset_maxV7V3Aainfix &lt;=aoffset_minV7V3c0ainfix &lt;ainfix -ainteger_of_int32V1ainteger_of_int32V33ainfix -ainteger_of_int32V1ainteger_of_int32V29Aainfix &lt;=c0ainfix -ainteger_of_int32V1ainteger_of_int32V29Iainfix =V33V32FIainfix =ainteger_of_int32V32ainfix +ainteger_of_int32V29c1FAainfix &lt;=ainfix +ainteger_of_int32V29c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V29c1Aainfix &lt;=ainteger_of_int32V29aoffset_maxV5V0Aainfix &lt;=aoffset_minV5V0ainteger_of_int32V29ainfix &lt;ainfix -ainteger_of_int32V1ainteger_of_int32V35ainfix -ainteger_of_int32V1ainteger_of_int32V13Aainfix &lt;=c0ainfix -ainteger_of_int32V1ainteger_of_int32V13Iainfix =V35V34FIainfix =ainteger_of_int32V34ainfix +ainteger_of_int32V13c1FAainfix &lt;=ainfix +ainteger_of_int32V13c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V13c1Iais_dupletV0ainteger_of_int32V1ainteger_of_int32V13V36V9NIainfix &lt;V36ainteger_of_int32V29Aainfix &lt;ainteger_of_int32V13V36FAainfix &lt;=ainteger_of_int32V29ainteger_of_int32V1Aainfix &lt;=ainfix +ainteger_of_int32V13c1ainteger_of_int32V29FIainfix =V28V27FIainfix =ainteger_of_int32V27ainfix +ainteger_of_int32V13c1FAainfix &lt;=ainfix +ainteger_of_int32V13c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V13c1ainfix &lt;ainfix -ainteger_of_int32V1ainteger_of_int32V38ainfix -ainteger_of_int32V1ainteger_of_int32V13Aainfix &lt;=c0ainfix -ainteger_of_int32V1ainteger_of_int32V13Iainfix =V38V37FIainfix =ainteger_of_int32V37ainfix +ainteger_of_int32V13c1FAainfix &lt;=ainfix +ainteger_of_int32V13c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V13c1Aainfix &lt;=c0aoffset_maxV6V2Aainfix &lt;=aoffset_minV6V2c0Iiainfix =V16aTrueainfix =V2anullainfix =V2anullNFAainfix =anullanullOainfix =V2anullOasame_blockV2anullIainfix =V15aselectV9ashiftV0ainteger_of_int32V13FAainfix &lt;=ainteger_of_int32V13aoffset_maxV5V0Aainfix &lt;=aoffset_minV5V0ainteger_of_int32V13Iainfix &lt;=ainteger_of_int32V13ainteger_of_int32V14Iainfix =ainteger_of_int32V14ainfix -ainteger_of_int32V1c2FAainfix &lt;=ainfix -ainteger_of_int32V1c2c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c2Iais_dupletV0ainteger_of_int32V1V39V40V9NIaeq_optainteger_of_int32aselectV9ashiftV0V39V2V10NIainfix &lt;V40ainteger_of_int32V1Aainfix &lt;V39V40Aainfix &lt;V39ainteger_of_int32V13Aainfix &lt;=c0V39FFAainfix &lt;=ainteger_of_int32V13ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V13FIainfix =V12V11FIainfix =ainteger_of_int32V11c0FIaeq_optainteger_of_int32aselectV9ashiftV0V41V2V10NAais_dupletV0ainteger_of_int32V1V41V42V9EEAainfix &gt;=aoffset_maxV6V2c0Aainfix &lt;=aoffset_minV6V2c0Oainfix =V2anullAainfix &gt;=aoffset_maxV8V4c0Aainfix &lt;=aoffset_minV8V4c0Aainfix &gt;=aoffset_maxV7V3c0Aainfix &lt;=aoffset_minV7V3c0Aainfix &gt;=aoffset_maxV5V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV5V0c0Aainfix &lt;=c2ainteger_of_int32V1F">
@@ -111,7 +111,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="6.05"/>
+     <result status="timeout" time="5.15"/>
     </proof>
     <proof
      prover="1"
@@ -151,7 +151,7 @@
     locfile="../../duplets.c"
     loclnum="78" loccnumb="5" loccnume="12"
     expl="VC for duplets_ensures_default"
-    sum="e1c4d5856a9017bcb20bdf45280e1ef5"
+    sum="a1440ff24e3df198c2f05aee400c638c"
     proved="true"
     expanded="true"
     shape="anot_assignsV10V12V19apset_singletonV5Aanot_assignsV9V13V20apset_singletonV4Aanot_assignsV8V14V17apset_singletonV3Aanot_assignsV7V15V18apset_singletonV2Aainfix =ainteger_of_int32aselectV11ashiftV0ainteger_of_int32aselectV18V2ainteger_of_int32aselectV11ashiftV0ainteger_of_int32aselectV20V4NAais_dupletV0ainteger_of_int32V1ainteger_of_int32aselectV20V4ainteger_of_int32aselectV19V5V11Aais_dupletV0ainteger_of_int32V1ainteger_of_int32aselectV18V2ainteger_of_int32aselectV17V3V11Ianot_assignsV10V12V19apset_singletonV5Aanot_assignsV9V13V20apset_singletonV4Aaeq_optainteger_of_int32aselectV11ashiftV0ainteger_of_int32aselectV20V4ashiftV0ainteger_of_int32aselectV18V2V11NAais_dupletV0ainteger_of_int32V1ainteger_of_int32aselectV20V4ainteger_of_int32aselectV19V5V11FIanot_assignsV8V14V17apset_singletonV3Aanot_assignsV7V15V18apset_singletonV2Aaeq_optainteger_of_int32aselectV11ashiftV0ainteger_of_int32aselectV18V2anullV16NAais_dupletV0ainteger_of_int32V1ainteger_of_int32aselectV18V2ainteger_of_int32aselectV17V3V11FFIainfix =ainteger_of_int32aselectV11ashiftV0V21ainteger_of_int32aselectV11ashiftV0V23NAais_dupletV0ainteger_of_int32V1V23V24V11Aais_dupletV0ainteger_of_int32V1V21V22V11EEEEAainfix &gt;=aoffset_maxV10V5c0Aainfix &lt;=aoffset_minV10V5c0Aainfix &gt;=aoffset_maxV9V4c0Aainfix &lt;=aoffset_minV9V4c0Aainfix &gt;=aoffset_maxV8V3c0Aainfix &lt;=aoffset_minV8V3c0Aainfix &gt;=aoffset_maxV7V2c0Aainfix &lt;=aoffset_minV7V2c0Aainfix &gt;=aoffset_maxV6V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV6V0c0Aainfix &lt;=c4ainteger_of_int32V1FF">
@@ -205,7 +205,7 @@
     locfile="../../duplets.c"
     loclnum="78" loccnumb="5" loccnume="12"
     expl="VC for duplets_safety"
-    sum="2a06cb141acc31ae1546e680079c358c"
+    sum="12a1427d1d2c8afc2809de212086f394"
     proved="true"
     expanded="true"
     shape="aeq_optainteger_of_int32aselectV11ashiftV0V19ashiftV0ainteger_of_int32V18V11NAais_dupletV0ainteger_of_int32V1V19V20V11EEAainfix &gt;=aoffset_maxV6ashiftV0ainteger_of_int32V18c0Aainfix &lt;=aoffset_minV6ashiftV0ainteger_of_int32V18c0Oainfix =ashiftV0ainteger_of_int32V18anullAainfix &gt;=aoffset_maxV10V5c0Aainfix &lt;=aoffset_minV10V5c0Aainfix &gt;=aoffset_maxV9V4c0Aainfix &lt;=aoffset_minV9V4c0Aainfix &gt;=aoffset_maxV6V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV6V0c0Aainfix &lt;=c2ainteger_of_int32V1LaselectV17V2Aainfix &lt;=c0aoffset_maxV7V2Aainfix &lt;=aoffset_minV7V2c0Ianot_assignsV8V12V16apset_singletonV3Aanot_assignsV7V13V17apset_singletonV2Aaeq_optainteger_of_int32aselectV11ashiftV0ainteger_of_int32aselectV17V2anullV14NAais_dupletV0ainteger_of_int32V1ainteger_of_int32aselectV17V2ainteger_of_int32aselectV16V3V11FAaeq_optainteger_of_int32aselectV11ashiftV0V21anullV14NAais_dupletV0ainteger_of_int32V1V21V22V11EEAainfix &gt;=aoffset_maxV15anullc0Aainfix &lt;=aoffset_minV15anullc0Oainfix =anullanullAainfix &gt;=aoffset_maxV8V3c0Aainfix &lt;=aoffset_minV8V3c0Aainfix &gt;=aoffset_maxV7V2c0Aainfix &lt;=aoffset_minV7V2c0Aainfix &gt;=aoffset_maxV6V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV6V0c0Aainfix &lt;=c2ainteger_of_int32V1FFIainfix =ainteger_of_int32aselectV11ashiftV0V23ainteger_of_int32aselectV11ashiftV0V25NAais_dupletV0ainteger_of_int32V1V25V26V11Aais_dupletV0ainteger_of_int32V1V23V24V11EEEEAainfix &gt;=aoffset_maxV10V5c0Aainfix &lt;=aoffset_minV10V5c0Aainfix &gt;=aoffset_maxV9V4c0Aainfix &lt;=aoffset_minV9V4c0Aainfix &gt;=aoffset_maxV8V3c0Aainfix &lt;=aoffset_minV8V3c0Aainfix &gt;=aoffset_maxV7V2c0Aainfix &lt;=aoffset_minV7V2c0Aainfix &gt;=aoffset_maxV6V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV6V0c0Aainfix &lt;=c4ainteger_of_int32V1FF">
@@ -219,7 +219,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.83"/>
+     <result status="timeout" time="5.12"/>
     </proof>
     <proof
      prover="1"

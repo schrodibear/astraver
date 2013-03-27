@@ -76,7 +76,7 @@
       locfile="../Fresh.java"
       loclnum="8" loccnumb="17" loccnume="23"
       expl="1. postcondition"
-      sum="027c0b96387f714b6b228e43ae5ec5ba"
+      sum="01821558678cff3e54add2dd79953f75"
       proved="true"
       expanded="true"
       shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
@@ -93,7 +93,7 @@
         locfile="../Fresh.java"
         loclnum="8" loccnumb="17" loccnume="23"
         expl="1. postcondition"
-        sum="686da84863c8808e86ca6c63c2791a34"
+        sum="38ae57538b5689cb8307811bfbea7cf2"
         proved="true"
         expanded="true"
         shape="ainfix &gt;=aoffset_maxV0V4c0Aainfix &lt;=aoffset_minV0V4c0NIainfix =V4V3FIasubtagatypeofV1V3a_Fresh_tagAavalidV0ashiftV3V5NIainfix &lt;V5c1Aainfix &lt;=c0V5FAaalloc_extendsV0V2Aastrict_valid_struct_ObjectV3c0ainfix -c1c1V2FFF">
@@ -151,7 +151,7 @@
     locfile="../Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
     expl="VC for _Fresh_create_safety"
-    sum="82e231c69fa00297f8f6b83f56c043a0"
+    sum="cc9537d6b3f3e1f8a895588c9b583886"
     proved="true"
     expanded="true"
     shape="ainfix &gt;=aoffset_maxV2V3c0IainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFAainfix &gt;=c1c0F">
@@ -205,7 +205,7 @@
     locfile="../Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="VC for _Fresh_test_ensures_default"
-    sum="4e47034fc721338f7e42895de286b6ed"
+    sum="b13543c73ad9cedb77d0274d5ce4ed3e"
     proved="true"
     expanded="true"
     shape="ainfix =V0V2NIavalidV1V2NFIavalid_struct_FreshV0c0c0V1FF">
@@ -259,7 +259,7 @@
     locfile="../Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="VC for _Fresh_test_safety"
-    sum="4282e88a619f36df002a652f7ab89a69"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -313,7 +313,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fresh_ensures_default"
-    sum="4f79b9b4fc151a7fe98edf1158d78752"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -367,7 +367,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fresh_safety"
-    sum="17be9eec0b4995161158f365d7828aa8"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -421,7 +421,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="96faa24ef4d95e59c572842968318359"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -475,7 +475,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="e14f88cb72688abe2dce95280d1912d8"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">

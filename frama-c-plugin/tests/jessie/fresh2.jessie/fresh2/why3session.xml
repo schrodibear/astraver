@@ -77,7 +77,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.53"/>
+     <result status="valid" time="1.24"/>
     </proof>
    </goal>
    <goal
@@ -85,7 +85,7 @@
     locfile="../../fresh2.c"
     loclnum="19" loccnumb="4" loccnume="10"
     expl="VC for create_safety"
-    sum="82fec09e827c6033c7fdb46b4ce0fe47"
+    sum="ec1bbb44bbca6c31f437aed71ad7b2d3"
     proved="true"
     expanded="false"
     shape="ainfix &gt;=c1c0">
@@ -139,7 +139,7 @@
     locfile="../../fresh2.c"
     loclnum="33" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_ensures_default"
-    sum="9c41ab9b5bfdc2d9af9c34fd14f7b290"
+    sum="eb32b7ef4669e23fa88c04392483a9c6"
     proved="false"
     expanded="true"
     shape="ainfix =c0c1Iainfix =V6V5FIavalidV1V5NAainfix &gt;=aoffset_maxV4V5c0Aainfix &lt;=aoffset_minV4V5c0FFIainfix =V3V2FIavalidV0V2NAainfix &gt;=aoffset_maxV1V2c0Aainfix &lt;=aoffset_minV1V2c0FFF">
@@ -177,7 +177,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="7.31"/>
+     <result status="timeout" time="5.17"/>
     </proof>
     <proof
      prover="4"
@@ -185,7 +185,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="7.68"/>
+     <result status="timeout" time="5.17"/>
     </proof>
     <proof
      prover="5"
@@ -193,7 +193,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.98"/>
+     <result status="timeout" time="5.18"/>
     </proof>
    </goal>
    <goal
@@ -201,7 +201,7 @@
     locfile="../../fresh2.c"
     loclnum="33" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_safety"
-    sum="39bf345372ef9a4672e984890ac4bf3f"
+    sum="701d2d09a3c0e820ddf6fbe0c7b2f1c4"
     proved="true"
     expanded="false"
     shape="t">
@@ -263,7 +263,7 @@
     locfile="../../fresh2.c"
     loclnum="27" loccnumb="5" loccnume="9"
     expl="VC for test_ensures_default"
-    sum="9456c6f1062214cbcd27d55d75d63e9a"
+    sum="05a928c5be67388f7011fefd6530fdc3"
     proved="true"
     expanded="false"
     shape="ainfix =V0V4NIainfix =V4V3FIavalidV1V3NAainfix &gt;=aoffset_maxV2V3c0Aainfix &lt;=aoffset_minV2V3c0FFIainfix &gt;=aoffset_maxV1V0c0Aainfix &lt;=aoffset_minV1V0c0FF">
@@ -325,7 +325,7 @@
     locfile="../../fresh2.c"
     loclnum="27" loccnumb="5" loccnume="9"
     expl="VC for test_safety"
-    sum="ef143f74efae3663faa277724614c65f"
+    sum="701d2d09a3c0e820ddf6fbe0c7b2f1c4"
     proved="true"
     expanded="false"
     shape="t">

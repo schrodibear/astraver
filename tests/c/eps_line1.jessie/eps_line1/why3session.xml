@@ -61,7 +61,7 @@
     locfile="../../eps_line1.c"
     loclnum="30" loccnumb="4" loccnume="12"
     expl="VC for eps_line_safety"
-    sum="9772566ccea006b5995d3872aaf0880c"
+    sum="12b88bcc38e03f82c9baa469c882281d"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=ainfix *ainteger_of_int32V11ainteger_of_int32V19c2147483647Aainfix &lt;=aprefix -c2147483648ainfix *ainteger_of_int32V11ainteger_of_int32V19Iainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFAainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_postaNearestTiesToEvenc0x1.p-45V17FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFAainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -78,7 +78,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="1. floating-point overflow"
-      sum="d710200242e47adc3ccf932395cddedb"
+      sum="b6613c60d0b6b4612d123bd02bf6904f"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -100,7 +100,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="2. floating-point overflow"
-      sum="11393d0cb72d2451ac3752055599230f"
+      sum="21ffa2c99f3acee1f954ff49aa24da05"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -122,7 +122,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="3. floating-point overflow"
-      sum="2c55f212a9a7f3f9659570d382b7cb25"
+      sum="d3e169ff8d700c33410b804ed6c584dd"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -144,7 +144,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="4. floating-point overflow"
-      sum="6035ad3a557547d073ac25893f9a1592"
+      sum="3dccd9778f2356b8c5c924b7bd19d3b3"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -166,7 +166,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="5. floating-point overflow"
-      sum="f13bfcfb9781380bf37954ca3645af03"
+      sum="fe09fc0a7e60c8f2f1c5e8e6523ab52a"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -188,7 +188,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="6. precondition for call"
-      sum="893c633c8d45db5b8130545cca0a73b6"
+      sum="536d6ea2f84690f8bb8626990d510819"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -210,7 +210,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="7. floating-point overflow"
-      sum="040aed9021c7db361f362d54b10ca3c5"
+      sum="0ed69e052b264cec4979307ed51efcf3"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -232,7 +232,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="8. floating-point overflow"
-      sum="452fe379a67c17827c2d9ab7d589878c"
+      sum="b78fc5694c749dffa0a04e992e10900f"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -254,7 +254,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="9. floating-point overflow"
-      sum="fa81b0449351213b695e58b4d68fe6c0"
+      sum="98d20f7116a3bb639057e0cb200d1541"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -276,7 +276,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="10. floating-point overflow"
-      sum="c2823bb56fd2fc74f7f7564fd1eedef8"
+      sum="5b9b09eeae9aa62af697e85076a25778"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -298,7 +298,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="11. floating-point overflow"
-      sum="30ac66fb7924854182ef86c0cf0cc548"
+      sum="d6c9748569ad3fd005ffb9bc1dce91ef"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -320,7 +320,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="12. precondition for call"
-      sum="c08b34e2954827b713f0c92a4fb866f8"
+      sum="226557db88e2ffd3f8808a9492e07e5f"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_postaNearestTiesToEvenc0x1.p-45V17FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -342,7 +342,7 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="13. arithmetic overflow"
-      sum="733115cf77a5760aa3370ac687f7b95b"
+      sum="7a247f7b66211cec1850b3814fb7e4ca"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainfix *ainteger_of_int32V11ainteger_of_int32V19c2147483647Aainfix &lt;=aprefix -c2147483648ainfix *ainteger_of_int32V11ainteger_of_int32V19Iainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFIainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_postaNearestTiesToEvenc0x1.p-45V17FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
@@ -366,7 +366,7 @@
     locfile="../../eps_line1.c"
     loclnum="11" loccnumb="4" loccnume="8"
     expl="VC for sign_ensures_default"
-    sum="756a8a0bd3870ac1e548e5ea25551955"
+    sum="9333242ce014f0f09c415db1307c4731"
     proved="true"
     expanded="false"
     shape="iainfix =V3aTrueainfix &lt;=aabsainteger_of_int32V6c1Aainfix =ainteger_of_int32V6al_signaexactV0Iainfix =ainteger_of_int32V6c0NIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fiainfix =V7aTrueainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV0Iainfix =ainteger_of_int32V10c0NIainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8aprefix -c1Fainfix &lt;=aabsainteger_of_int32V13c1Aainfix =ainteger_of_int32V13al_signaexactV0Iainfix =ainteger_of_int32V13c0NIainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11c0FIiainfix =V7aTruealtV0V1altV0V1NFIiainfix =V3aTrueainfix &gt;avalueV0avalueV2ainfix &lt;=avalueV0avalueV2FIainfix &lt;=ainfix -avalueV0aexactV0avalueV2Aainfix &lt;=avalueV1ainfix -avalueV0aexactV0F">
@@ -404,7 +404,7 @@
     locfile="../../eps_line1.c"
     loclnum="11" loccnumb="4" loccnume="8"
     expl="VC for sign_safety"
-    sum="9bee9f66648d7593afab79f45db2d55c"
+    sum="fcac7cc7208c4c7a277f55e5d7868f88"
     proved="true"
     expanded="false"
     shape="t">

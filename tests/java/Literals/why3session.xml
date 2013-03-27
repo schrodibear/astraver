@@ -73,7 +73,7 @@
     locfile="../Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="VC for _Literals_f_safety"
-    sum="5eb7cf1ac9c1d1abe0b42a5574dd1ef4"
+    sum="b5301ce11b620bd25d019ade98a0fab3"
     proved="true"
     expanded="true"
     shape="t">
@@ -111,7 +111,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Literals_ensures_default"
-    sum="396e95aab0f41740ad19046525a52458"
+    sum="b5301ce11b620bd25d019ade98a0fab3"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,7 +149,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Literals_safety"
-    sum="9ba0485525f82d98f3421f7375d9fbe6"
+    sum="b5301ce11b620bd25d019ade98a0fab3"
     proved="true"
     expanded="true"
     shape="t">

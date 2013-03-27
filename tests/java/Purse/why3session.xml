@@ -73,7 +73,7 @@
     locfile="../Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
     expl="VC for _Purse_credit_safety"
-    sum="75e980625acfc2886f689734d6b15a03"
+    sum="746747352471da5a998f2e99227cf139"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
@@ -111,7 +111,7 @@
     locfile="../Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
     expl="VC for _Purse_getBalance_ensures_default"
-    sum="adba4ee6005c78c143fb5995f5d2553c"
+    sum="75e54529e3ab5a98a9f3c342573ec58e"
     proved="true"
     expanded="false"
     shape="ainfix =V3aselectV1V0Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FF">
@@ -149,7 +149,7 @@
     locfile="../Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
     expl="VC for _Purse_getBalance_safety"
-    sum="e066cf0e32e6d85964bdfa9e1305b797"
+    sum="9816c355b6c2c5d84e5416eb053cbd47"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V1Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FF">
@@ -187,7 +187,7 @@
     locfile="../Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="VC for _Purse_withdraw_ensures_default"
-    sum="0e1116bd24cae4a7b9956f991f7f27b6"
+    sum="7fa967a7886e9a6554db527452aa84b6"
     proved="true"
     expanded="false"
     shape="iainfix &gt;=aselectV2V0V1anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix -aselectV2V0V1Aainfix &lt;=V1aselectV2V0Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fa_Non_null_ObjectV7V6IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
@@ -225,7 +225,7 @@
     locfile="../Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="VC for _Purse_withdraw_exsures_amount_too_large"
-    sum="41eb459c8ef3e43d37f4bc3b6423412d"
+    sum="a63046830adaa2ac0e26ccba83c87401"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix &gt;V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFIainfix &gt;=aselectV2V0V1NIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
@@ -263,7 +263,7 @@
     locfile="../Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="VC for _Purse_withdraw_safety"
-    sum="49b0cc497e5751a3e6fb3ad03700348f"
+    sum="a9622204333218e0fc4da363831fd9f1"
     proved="true"
     expanded="false"
     shape="iainfix &gt;=aselectV2V0V1abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fainfix &gt;=aoffset_maxV6V7c0IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFAainfix &gt;=c1c0Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
@@ -301,7 +301,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="58" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_Throwable_ensures_default"
-    sum="86e2a8fd4381eea7901679e7b861c92d"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -339,7 +339,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="58" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_Throwable_safety"
-    sum="60a59c6e4be4220537fdbce5aa4fe788"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -377,7 +377,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="40" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_ensures_default"
-    sum="b8e24e01746ad869489f8dda42e63959"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -415,7 +415,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="40" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_safety"
-    sum="3d7125233825d2fbb322e6a8560a99c2"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -453,7 +453,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="76" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_Throwable_ensures_default"
-    sum="28b9bc30b9a7352ce01c303e9095de79"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -491,7 +491,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="76" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_Throwable_safety"
-    sum="5d87b310386897641cf310f55acf9d97"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -529,7 +529,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="28" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_ensures_default"
-    sum="0824a9802f4a9ffdf8d24d5f57fedd02"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -567,7 +567,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="28" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_safety"
-    sum="1029f2524e8a00ea1b5e471c74a3a749"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -605,7 +605,7 @@
     locfile="../Purse.java"
     loclnum="37" loccnumb="11" loccnume="28"
     expl="VC for cons_NoCreditException_ensures_default"
-    sum="94581a0db65755206c1e985dff74ce3f"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -643,7 +643,7 @@
     locfile="../Purse.java"
     loclnum="37" loccnumb="11" loccnume="28"
     expl="VC for cons_NoCreditException_safety"
-    sum="fe7a3f0106d6a9445a0dbea74f7cfc44"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -681,7 +681,7 @@
     locfile="../Purse.java"
     loclnum="50" loccnumb="11" loccnume="16"
     expl="VC for cons_Purse_ensures_default"
-    sum="c3e32dc6239c8eece08fec25e324517f"
+    sum="bd1742a090d4ba3a50c4e9a219c0547c"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V1V4apset_singletonV0Aainfix =aselectV4V0c0Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
@@ -719,7 +719,7 @@
     locfile="../Purse.java"
     loclnum="50" loccnumb="11" loccnume="16"
     expl="VC for cons_Purse_safety"
-    sum="7bbaabaf28c359f6b3c477793e5dc9d2"
+    sum="9ae2a9584cd8fae11144bae7bcb1ebaf"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
@@ -757,7 +757,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="216" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_Throwable_ensures_default"
-    sum="58bec022cc455ca1364d11a7ffd8441c"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -795,7 +795,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="216" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_Throwable_safety"
-    sum="36836e41ce119910da038a149636cbfd"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -833,7 +833,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_ensures_default"
-    sum="74b1317587929ffe6b7c88484162f312"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -871,7 +871,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_safety"
-    sum="7051080d4d9b292572a30a646189a235"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -909,7 +909,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_Throwable_ensures_default"
-    sum="64b3d88f084ffa56e1c8c8f97de2112b"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -947,7 +947,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_Throwable_safety"
-    sum="7723a6d92d497e06d8a8f80d29046aa1"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -985,7 +985,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_ensures_default"
-    sum="1ffe997eaa92b2072b85b6697c242481"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">
@@ -1023,7 +1023,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_safety"
-    sum="09e95d983ec02ce428136ed3dca6e9b7"
+    sum="65ad2aa56c876c3972ffdcbb08e29b19"
     proved="true"
     expanded="false"
     shape="t">

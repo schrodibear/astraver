@@ -63,7 +63,7 @@
     locfile="../../cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
     expl="VC for cd1d_double_ensures_completeness"
-    sum="334abbb70862c9c684ac6058795a8b1b"
+    sum="548819f01a12fba7412d55433d37d138"
     proved="true"
     expanded="true"
     shape="iainfix =V8aTrueainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1Fainfix =ainteger_of_int32V14c1Iainfix =V14V13FIainfix =V13V12FIainfix =ainteger_of_int32V12c0FIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
@@ -80,7 +80,7 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="1. postcondition"
-      sum="082223c233ed39031d7d641cdb0aae04"
+      sum="c74981e832c9bfb6779b1d5abc13b189"
       proved="true"
       expanded="false"
       shape="ainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1FIainfix =V8aTrueIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
@@ -102,7 +102,7 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="2. postcondition"
-      sum="b5c8aa829e9381b5144da9a7fafc8628"
+      sum="cbdf4262223b72db621ff49b532b07c9"
       proved="true"
       expanded="true"
       shape="ainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8aTrueNIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
@@ -126,7 +126,7 @@
     locfile="../../cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
     expl="VC for cd1d_double_ensures_default"
-    sum="15e0211f34ca244f98ae204b667ad03f"
+    sum="a987d7431cc39a8427091574fe12e963"
     proved="true"
     expanded="true"
     shape="t">
@@ -148,7 +148,7 @@
     locfile="../../cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
     expl="VC for cd1d_double_safety"
-    sum="432a5a897429601c0dc2a92bdb1ef27f"
+    sum="8995c1e4dfe4ee593ba850dd34a8edc0"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV3amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
@@ -165,7 +165,7 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="1. floating-point overflow"
-      sum="437c44f940d7f6f05b1202d823d2ec83"
+      sum="5682b36503354d88f79e054671aa8d88"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
@@ -187,7 +187,7 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="2. floating-point overflow"
-      sum="22e6e3fc7b996cd5fceadae3db61591a"
+      sum="60f6183880036513be531d5d584a80ce"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
@@ -209,7 +209,7 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="3. floating-point overflow"
-      sum="5e0e6c77214f2bdad806ab9eecf549dd"
+      sum="e2724ee5325c4b63f57945b8012e4e3c"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
@@ -231,7 +231,7 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="4. floating-point overflow"
-      sum="ece4ade010f5c648183ff91c73f3c511"
+      sum="a6061a9fbea440aacb26b838bdb67c55"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV3amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">

@@ -60,7 +60,7 @@
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="1. postcondition"
-      sum="363cf36eeb997fd8b256203c55c95d33"
+      sum="47636b5d6c8aab8be3073c5ac50eb021"
       proved="true"
       expanded="false"
       shape="a_SortedV0c0ainfix -V1c1V3Iainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -114,7 +114,7 @@
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="2. loop invariant init"
-      sum="55c18dffbd63ebf499cdea60a89f8230"
+      sum="07601cda818af348d115b2cc215d2730"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V3Iainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -168,7 +168,7 @@
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="3. loop invariant init"
-      sum="47a4e750041b2aaab739a9c08fff3c8a"
+      sum="a8635fbd7a5ba9d7cbebffe55629bb0a"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V8V5Aainfix &lt;=c0V8Aa_SortedV0c0V5V6Iainfix =V8V5Aa_SortedV0c0ainfix +V5c1V6Iainfix &lt;V8V5Aainfix &gt;aselectV6ashiftV0V9V7Iainfix &lt;V9V5Aainfix &lt;=V8V9FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -222,7 +222,7 @@
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="4. loop invariant preservation"
-      sum="8b50b7b7829bbab29936d093af4a1c2b"
+      sum="a51a1c2a16191a7907d57bdbfe18aef2"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7FIainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7Iainfix &gt;V9c0Iainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V9V13FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -276,7 +276,7 @@
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="5. loop invariant preservation"
-      sum="1e7e3f087dc918f979e13546f2510c15"
+      sum="a51f121b57f457ea6503ce7f5a178c6c"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V12V5Aainfix &lt;=c0V12Aa_SortedV0c0V5V11Iainfix =V12V5Aa_SortedV0c0ainfix +V5c1V11Iainfix &lt;V12V5Aainfix &gt;aselectV11ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V12V13FIainfix =V12ainfix -V9c1FIainfix =V11astoreV10ashiftV0V9aselectV10ashiftV0ainfix -V9c1FIainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7NIainfix &gt;V9c0Iainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V14V7Iainfix &lt;V14V5Aainfix &lt;=V9V14FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -330,7 +330,7 @@
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="6. loop invariant preservation"
-      sum="6b0bc3992f4af1f5d9e646baa4c4a23f"
+      sum="a7c2562c386b84d7e5cdfc4f0acfcd02"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7FIainfix &gt;V9c0NIainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V9V13FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -384,7 +384,7 @@
       locfile="../../insertion_sort.c"
       loclnum="41" loccnumb="5" loccnume="16"
       expl="7. postcondition"
-      sum="d70b7481c23e71a3ca94e213e95fb8bc"
+      sum="1b7432a92918d66e012643bfeeb571b2"
       proved="true"
       expanded="false"
       shape="a_SortedV0c0ainfix -V1c1V6Iainfix &lt;V5V1NIainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -440,7 +440,7 @@
     locfile="../../insertion_sort.c"
     loclnum="41" loccnumb="5" loccnume="16"
     expl="VC for insert_sort_safety"
-    sum="c0249b5ce7726cf935402b689f5d33da"
+    sum="a65707946d174d9450ccb4630c52c958"
     proved="true"
     expanded="false"
     shape="iainfix &gt;V8c0iainfix &lt;=aselectV9ashiftV0ainfix -V8c1V6ainfix &lt;ainfix -V1V11ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V11ainfix +V4c1FIainfix =V10astoreV9ashiftV0V8V6FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8ainfix &lt;V13V8Aainfix &lt;=c0V8Iainfix =V13ainfix -V8c1FIainfix =V12astoreV9ashiftV0V8aselectV9ashiftV0ainfix -V8c1FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Aainfix &lt;=ainfix -V8c1aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainfix -V8c1Aainfix &lt;=ainfix -V8c1aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainfix -V8c1ainfix &lt;ainfix -V1V15ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V15ainfix +V4c1FIainfix =V14astoreV9ashiftV0V8V6FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Iainfix &lt;=V8V4Aainfix &lt;=c0V8Aa_SortedV0c0V4V9Iainfix =V8V4Aa_SortedV0c0ainfix +V4c1V9Iainfix &lt;V8V4Aainfix &gt;aselectV9ashiftV0V16V6Iainfix &lt;V16V4Aainfix &lt;=V8V16FFIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Iainfix &lt;V4V1Iainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V5FIainfix =V3c1FIainfix &lt;=V1c1NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0F">

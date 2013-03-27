@@ -60,7 +60,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="1. assertion"
-      sum="d2cad63017bd50867f524876f54e698f"
+      sum="8a03137976c1974f2912e0a08d2c78ce"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -98,7 +98,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="2. assertion"
-      sum="c74f7e30fc8ed3e7ae85917f74f28764"
+      sum="c0489f1364d06a736542725d7efd48f0"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -136,7 +136,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="3. postcondition"
-      sum="6502b90cf6116dbc5076db7e7d382efd"
+      sum="c8363b30abe02b619319b9cd1f638e04"
       proved="false"
       expanded="true"
       shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -151,7 +151,7 @@
        edited="Sterbenz_Jessie_program_WP_parameter__Sterbenz_ensures_default_1.v"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="3.66"/>
+       <result status="unknown" time="3.08"/>
       </proof>
      </goal>
     </transf>
@@ -161,7 +161,7 @@
     locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="VC for _Sterbenz_safety"
-    sum="e5cb00d9c46582205f514e302682359c"
+    sum="95ca1a9e6040694f1c85d24be482da94"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">

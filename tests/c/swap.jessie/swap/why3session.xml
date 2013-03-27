@@ -73,7 +73,7 @@
     locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="VC for swap_safety"
-    sum="0e162144e848d76b5e714392d73c9157"
+    sum="7208bbaa6587562d5373e9459be61588"
     proved="true"
     expanded="true"
     shape="t">

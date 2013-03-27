@@ -53,7 +53,7 @@
     locfile="../../array_double.c"
     loclnum="18" loccnumb="5" loccnume="9"
     expl="VC for test_safety"
-    sum="80c3c0d0388813da08507467916ef531"
+    sum="f29f578abc76c888d2d510368ac4909c"
     proved="true"
     expanded="true"
     shape="avalid_aV5Aavalid_bV4Aavalid_cV3Iainfix &lt;=aabsainfix -avalueaselectV12ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV12ashiftaac1V11Aainfix =aselectV12ashiftaac0V8Aanot_assignsV5V2V12apset_rangeapset_singletonaac0c1FIaadd_postaNearestTiesToEvenV10V9V11FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV10avalueV9amax_doubleLaselectV1ashiftabc1LaselectV0ashiftacc1Iaadd_postaNearestTiesToEvenV7V6V8FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV6amax_doubleLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
@@ -70,7 +70,7 @@
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
       expl="1. floating-point overflow"
-      sum="113919c7e8faed9c256fdcf46a211c92"
+      sum="c0e2c6cf02aec9e11bf0f819ab0bea4f"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV6amax_doubleLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
@@ -92,7 +92,7 @@
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
       expl="2. floating-point overflow"
-      sum="817ba6184c72d168fedc5e8308665644"
+      sum="828b5656e256e92933e9b925adfdc73d"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV10avalueV9amax_doubleLaselectV1ashiftabc1LaselectV0ashiftacc1Iaadd_postaNearestTiesToEvenV7V6V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV6amax_doubleLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
@@ -114,7 +114,7 @@
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
       expl="3. postcondition"
-      sum="035f1c52444f6771c71187c3924c6472"
+      sum="350059389d361eeffebdc844f9d24159"
       proved="true"
       expanded="true"
       shape="avalid_aV5Aavalid_bV4Aavalid_cV3Iainfix &lt;=aabsainfix -avalueaselectV12ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV12ashiftaac1V11Aainfix =aselectV12ashiftaac0V8Aanot_assignsV5V2V12apset_rangeapset_singletonaac0c1FIaadd_postaNearestTiesToEvenV10V9V11FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV10avalueV9amax_doubleLaselectV1ashiftabc1LaselectV0ashiftacc1Iaadd_postaNearestTiesToEvenV7V6V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV6amax_doubleLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">

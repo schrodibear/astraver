@@ -61,7 +61,7 @@
     locfile="../Fibonacci.java"
     loclnum="47" loccnumb="10" loccnume="19"
     expl="Lemma isfib_6_8, lemma"
-    sum="93651f22843a0a5f73799f30fc88a681"
+    sum="d976e10fff40f6ccbfb31b2ada7f800c"
     proved="true"
     expanded="true"
     shape="aisfibc6c8">
@@ -82,7 +82,7 @@
     locfile="../Fibonacci.java"
     loclnum="50" loccnumb="10" loccnume="23"
     expl="Lemma not_isfib_2_2, lemma"
-    sum="c47b8b4d0432ccfd48b86d70e4cd6df9"
+    sum="cae18ccb124a8c294d439e1853a78f0c"
     proved="true"
     expanded="true"
     shape="aisfibc2c2N">
@@ -141,7 +141,7 @@
     locfile="../Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
     expl="VC for _Fibonacci_Fib_ensures_default"
-    sum="8c57a06ca9122f72d74c3841dd8bcc4b"
+    sum="47a815e7cd6590ba353ef5cae71a98a6"
     proved="true"
     expanded="true"
     shape="iainfix &lt;V1V0aisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FaisfibV0V8Iainfix =V8V3FIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
@@ -166,7 +166,7 @@
       locfile="../Fibonacci.java"
       loclnum="57" loccnumb="23" loccnume="26"
       expl="1. loop invariant init"
-      sum="f3c177d944817f79702e5cb2358ebd44"
+      sum="3668560b1435a2af99848364737a06e1"
       proved="true"
       expanded="true"
       shape="aisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
@@ -220,7 +220,7 @@
       locfile="../Fibonacci.java"
       loclnum="57" loccnumb="23" loccnume="26"
       expl="2. loop invariant preservation"
-      sum="808d978d5a9773e528596ca3f52ea800"
+      sum="a81d1a97185829bbc4a5824a6731d347"
       proved="true"
       expanded="true"
       shape="aisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -277,7 +277,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="1."
-        sum="6aba83a385a70d634e602fe8af0c0d61"
+        sum="0f7291488aac359000c8fa743ccbf79f"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -331,7 +331,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="2."
-        sum="637db6464e583bac31ecafd5c25e841f"
+        sum="1b3bf6d2f3654a782c59084b8e8f755d"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V7V0Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -385,7 +385,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="3."
-        sum="53e2f781608d59e8ae8d77f5e264e58a"
+        sum="d1dd8fcb3aa9b59b2f6de0ca2fd4a89c"
         proved="true"
         expanded="true"
         shape="aisfibainfix +V7c1V6Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -439,7 +439,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="4."
-        sum="08f655a8042202644d4ca7f46dea52d8"
+        sum="e1ab8a142aff2ebadd68da33053f68d2"
         proved="true"
         expanded="false"
         shape="aisfibV7V5Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -495,7 +495,7 @@
       locfile="../Fibonacci.java"
       loclnum="57" loccnumb="23" loccnume="26"
       expl="3. postcondition"
-      sum="b43485df04879c47c36d0edd4181e17a"
+      sum="3b4906e5436a39deaabbacb73ff26215"
       proved="true"
       expanded="true"
       shape="aisfibV0V4Iainfix =V4V3FIainfix &lt;V1V0NIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -551,7 +551,7 @@
     locfile="../Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
     expl="VC for _Fibonacci_Fib_safety"
-    sum="a0d0779c71095be63d7a1f5c639da27b"
+    sum="f703fa25e4817b47346309b613a99463"
     proved="true"
     expanded="true"
     shape="ainfix &lt;ainfix -V0V7ainfix -V0V1Aainfix &lt;=c0ainfix -V0V1Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -605,7 +605,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fibonacci_ensures_default"
-    sum="50e0987a795cd86fe6334f8e4ea91c36"
+    sum="74b8278ae6a386b2ccdc6a29f421ec7c"
     proved="true"
     expanded="true"
     shape="t">
@@ -659,7 +659,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fibonacci_safety"
-    sum="cf3730a68aca6749907af2d77e2301ba"
+    sum="74b8278ae6a386b2ccdc6a29f421ec7c"
     proved="true"
     expanded="true"
     shape="t">

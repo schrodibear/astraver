@@ -49,7 +49,7 @@
     locfile="../../double_rounding_strict_model.c"
     loclnum="3" loccnumb="7" loccnume="21"
     expl="VC for doublerounding_safety"
-    sum="38f9dd565c11f777997ed106baa53050"
+    sum="a73d3476740834fba41e9a434f1d0b50"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -66,7 +66,7 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="1. floating-point overflow"
-      sum="71c65021385cacd0602e6fe5e4086c0b"
+      sum="c9cced664b136b40b0793e3b0a3559a5"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -88,7 +88,7 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="2. floating-point overflow"
-      sum="2d19c5c0ebfe61d9c58a434113d2ca86"
+      sum="a2f7086a085204fa7dd981a88346891b"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -110,7 +110,7 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="3. floating-point overflow"
-      sum="b68e9b686e8a4ecd2cc6e858dbe70dc4"
+      sum="ac92a837b5784f18a7e71cafa3ef1470"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">
@@ -132,7 +132,7 @@
       locfile="../../double_rounding_strict_model.c"
       loclnum="3" loccnumb="7" loccnume="21"
       expl="4. floating-point overflow"
-      sum="08ea3d5d220434f3a1432f7ff3db415b"
+      sum="8247ec30fda29a27b9b4f4da3d8b4f6e"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIainfix =amodelV0c1.0Aainfix =aexactV0c1.0Aainfix =avalueV0c1.0F">

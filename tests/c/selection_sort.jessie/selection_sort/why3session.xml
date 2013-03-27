@@ -97,7 +97,7 @@
     locfile="../../selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
     expl="VC for sel_sort_ensures_permutation"
-    sum="4469839f8c8185fd493c098f422ebb35"
+    sum="f4656b22ac724364879c198eb4d7a573"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=V1c0a_PermutV0c0ainfix -V1c1V3V3iainfix &lt;V5ainfix -V1c1iainfix &lt;V12V1iainfix &lt;aselectV6ashiftV0V12V10a_PermutV0c0ainfix -V1c1V6V3Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fa_PermutV0c0ainfix -V1c1V6V3Iainfix =V16ainfix +V12c1Fa_PermutV0c0ainfix -V1c1V17V3Iainfix =V18ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V17V6Ianot_assignsV2V6V17apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V17V6FIainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Ia_PermutV0c0ainfix -V1c1V6V3FAa_PermutV0c0ainfix -V1c1V6V3Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_PermutV0c0ainfix -V1c1V6V3Iainfix &lt;V5V1Aainfix &lt;=c0V5Ia_PermutV0c0ainfix -V1c1V6V3FAa_PermutV0c0ainfix -V1c1V3V3Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -151,7 +151,7 @@
     locfile="../../selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
     expl="VC for sel_sort_ensures_sorted"
-    sum="83ea0a87e76ef4e0fe134b3931310532"
+    sum="ac24b77d1ecaf6555fc59fc42a62cc84"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=V1c0a_SortedV0c0V1V3iainfix &lt;V5ainfix -V1c1iainfix &lt;V12V1iainfix &lt;aselectV6ashiftV0V12V10ainfix &gt;=aselectV6ashiftV0V16V14Iainfix &lt;V16V15Aainfix &lt;=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fainfix &gt;=aselectV6ashiftV0V18V10Iainfix &lt;V18V17Aainfix &lt;=V5V18FAainfix =V10aselectV6ashiftV0V11Iainfix =V17ainfix +V12c1Fainfix &lt;=aselectV19ashiftV0V21aselectV19ashiftV0V22Iainfix &lt;V22V1Aainfix &lt;=V20V22Aainfix &lt;V21V20Aainfix &lt;=c0V21FFAa_SortedV0c0V20V19Iainfix =V20ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V19V6Ianot_assignsV2V6V19apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V19V6FIainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V23V10Iainfix &lt;V23V12Aainfix &lt;=V5V23FAainfix =V10aselectV6ashiftV0V11FAainfix &gt;=aselectV6ashiftV0V24V7Iainfix &lt;V24V9Aainfix &lt;=V5V24FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_SortedV0c0V1V6Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V25aselectV6ashiftV0V26Iainfix &lt;V26V1Aainfix &lt;=V5V26Aainfix &lt;V25V5Aainfix &lt;=c0V25FFAa_SortedV0c0V5V6FAainfix &lt;=aselectV3ashiftV0V27aselectV3ashiftV0V28Iainfix &lt;V28V1Aainfix &lt;=V4V28Aainfix &lt;V27V4Aainfix &lt;=c0V27FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -168,7 +168,7 @@
       locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="1. postcondition"
-      sum="d9b58bd763c6902b4a13009ba8c3bb73"
+      sum="ad7c0334f84bd9954ebbdc1e2ea69002"
       proved="true"
       expanded="true"
       shape="a_SortedV0c0V1V3Iainfix &lt;=V1c0Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -222,7 +222,7 @@
       locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="2. loop invariant init"
-      sum="bca4f22ccb20a15ad214b070d0c8b2d9"
+      sum="6f20ad1497011137169ca3d822749a65"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aselectV3ashiftV0V5aselectV3ashiftV0V6Iainfix &lt;V6V1Aainfix &lt;=V4V6Aainfix &lt;V5V4Aainfix &lt;=c0V5FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -276,7 +276,7 @@
       locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="3. loop invariant init"
-      sum="6fc33baffecaae80230f81c8d87ee291"
+      sum="bcdf4d0c909d107080bf7acd64e50ff3"
       proved="true"
       expanded="true"
       shape="ainfix &gt;=aselectV6ashiftV0V10V7Iainfix &lt;V10V9Aainfix &lt;=V5V10FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V11aselectV6ashiftV0V12Iainfix &lt;V12V1Aainfix &lt;=V5V12Aainfix &lt;V11V5Aainfix &lt;=c0V11FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -322,7 +322,7 @@
       locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="4. loop invariant preservation"
-      sum="882701604384d7a8c20343900dcd7767"
+      sum="d5ef4d6a1124052b95c529497bcc9e61"
       proved="true"
       expanded="true"
       shape="ainfix &gt;=aselectV6ashiftV0V16V14Iainfix &lt;V16V15Aainfix &lt;=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12FIainfix &lt;aselectV6ashiftV0V12V10Iainfix &lt;V12V1Iainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V17V10Iainfix &lt;V17V12Aainfix &lt;=V5V17FAainfix =V10aselectV6ashiftV0V11FIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix &lt;V19V1Aainfix &lt;=V5V19Aainfix &lt;V18V5Aainfix &lt;=c0V18FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -376,7 +376,7 @@
       locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="5. loop invariant preservation"
-      sum="6335fd366e7ca649530726f2fc4a76a5"
+      sum="903e636775444c54ab3de86ec0654129"
       proved="true"
       expanded="true"
       shape="ainfix &gt;=aselectV6ashiftV0V14V10Iainfix &lt;V14V13Aainfix &lt;=V5V14FAainfix =V10aselectV6ashiftV0V11Iainfix =V13ainfix +V12c1FIainfix &lt;aselectV6ashiftV0V12V10NIainfix &lt;V12V1Iainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V15V10Iainfix &lt;V15V12Aainfix &lt;=V5V15FAainfix =V10aselectV6ashiftV0V11FIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V16aselectV6ashiftV0V17Iainfix &lt;V17V1Aainfix &lt;=V5V17Aainfix &lt;V16V5Aainfix &lt;=c0V16FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -430,7 +430,7 @@
       locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="6. loop invariant preservation"
-      sum="1664479649bcd9fbb232ebf58df7e99b"
+      sum="db4d5462ba85572232a5adde422ee80a"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aselectV13ashiftV0V15aselectV13ashiftV0V16Iainfix &lt;V16V1Aainfix &lt;=V14V16Aainfix &lt;V15V14Aainfix &lt;=c0V15FFAa_SortedV0c0V14V13Iainfix =V14ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V13V6Ianot_assignsV2V6V13apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V13V6FIainfix &lt;V12V1NIainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V17V10Iainfix &lt;V17V12Aainfix &lt;=V5V17FAainfix =V10aselectV6ashiftV0V11FIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix &lt;V19V1Aainfix &lt;=V5V19Aainfix &lt;V18V5Aainfix &lt;=c0V18FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -468,7 +468,7 @@
       locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="7. postcondition"
-      sum="bbb819d15e9a5f556635e67797fb2724"
+      sum="229cede5f9706f4d448ec5d2497c028f"
       proved="true"
       expanded="true"
       shape="a_SortedV0c0V1V6Iainfix &lt;V5ainfix -V1c1NIainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V7aselectV6ashiftV0V8Iainfix &lt;V8V1Aainfix &lt;=V5V8Aainfix &lt;V7V5Aainfix &lt;=c0V7FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
@@ -524,7 +524,7 @@
     locfile="../../selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
     expl="VC for sel_sort_safety"
-    sum="32f97929aa667bc6f1547165fe5d90d9"
+    sum="a885d09d2b302a6d2bfb0216e7528b5e"
     proved="true"
     expanded="true"
     shape="iainfix &lt;V11V1iainfix &lt;aselectV5ashiftV0V11V9ainfix &lt;ainfix -V1V14ainfix -V1V11Aainfix &lt;=c0ainfix -V1V11Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FAainfix &lt;=V11aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V11Iainfix =V12V11Fainfix &lt;ainfix -V1V15ainfix -V1V11Aainfix &lt;=c0ainfix -V1V11Iainfix =V15ainfix +V11c1FAainfix &lt;=V11aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V11ainfix &lt;ainfix -V1V17ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V17ainfix +V4c1FIa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FAainfix &gt;=aoffset_maxV2V0V10Aainfix &lt;=aoffset_minV2V0V10Aainfix &gt;=aoffset_maxV2V0V4Aainfix &lt;=aoffset_minV2V0V4Iainfix &lt;V10V1Aainfix &lt;=V4V10Aainfix &lt;V4V11FIainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Iainfix &lt;V4ainfix -V1c1Iainfix &lt;V4V1Aainfix &lt;=c0V4FIainfix =V3c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0F">
@@ -578,7 +578,7 @@
     locfile="../../selection_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="VC for swap_ensures_default"
-    sum="5ccad51c166c267f765ce7baf7ebced4"
+    sum="a3f07b8e1b3bf692c943583e19854410"
     proved="true"
     expanded="true"
     shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
@@ -632,7 +632,7 @@
     locfile="../../selection_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="VC for swap_safety"
-    sum="97fb6299880238abe5b582fa8870ae22"
+    sum="e2e73b55bf034ee705fad1f6e29fa8f8"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
