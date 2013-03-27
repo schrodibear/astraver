@@ -1,7 +1,11 @@
 
-  o [Jessie/Frama-C plugin] experimental support for "allocates" clause in contracts
-  o [Jessie/Frama-C plugin] experimental support for built-in construct \fresh
-  o [Jessie/Frama-C plugin] experimental support for ACSL model fields
+version 2.32, Mar 27, 2013
+==========================
+
+  o [Jessie/Why3ML output] Compatible with release 0.81 of Why3
+  o [Jessie/Frama-C plugin] support for "allocates" clause in contracts
+  o [Jessie/Frama-C plugin] support for built-in construct \fresh
+  o [Jessie/Frama-C plugin] support for ACSL model fields
   o [Jessie memory model] added an axiom for sub_pointer
   o [Jessie memory model] fixed bug in Why3 version (free_parameter)
     see Frama-C BTS 1251
