@@ -1,5 +1,5 @@
 <#def GPL><A href="http://www.gnu.org/licenses/gpl.html">GNU GENERAL PUBLIC LICENSE</a></#def>
-<#def version>2.30</#def>
+<#def version>2.32</#def>
 <#def thisfile>index</#def>
 <#def top>index</#def>
 <#def why><a href="http://why.lri.fr/"><i>Why</i></a></#def>
