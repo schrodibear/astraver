@@ -223,3 +223,25 @@ val visit_and_push_statements :
 val print_to_stdout : Cil_types.file -> unit
 
 val constant_expr : ?loc:Cil_datatype.Location.t -> Integer.t -> Cil_types.exp
+
+
+open Cil_types
+
+type opaque_term_env = {
+  term_lhosts: term_lhost Cil_datatype.Varinfo.Map.t;
+  terms: term Cil_datatype.Varinfo.Map.t;
+  vars: logic_var Cil_datatype.Varinfo.Map.t;
+}
+
+type opaque_exp_env = { exps: exp Cil_datatype.Varinfo.Map.t }
+
+val force_term_to_exp: term -> exp * opaque_term_env
+val force_back_exp_to_term: opaque_term_env -> exp -> term
+val force_exp_to_term: exp -> term
+val force_lval_to_term_lval: lval -> term_lval
+val force_term_offset_to_offset: term_offset -> offset * opaque_term_env
+val force_back_offset_to_term_offset: opaque_term_env -> offset -> term_offset
+val force_exp_to_predicate: exp -> predicate named
+val force_exp_to_assertion: exp -> code_annotation
+val force_term_lval_to_lval: term_lval -> lval * opaque_term_env
+val force_back_lval_to_term_lval: opaque_term_env -> lval -> term_lval

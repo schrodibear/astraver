@@ -141,7 +141,7 @@ let run () =
     if checking then check_types file;
     (* Rewrite ranges in logic annotations by comprehesion *)
     Jessie_options.debug "from range to comprehension";
-    !Db.Properties.Interp.from_range_to_comprehension
+    Rewrite.from_range_to_comprehension
       (Cil.inplace_visit ()) file;
     if checking then check_types file;
 
@@ -163,8 +163,7 @@ let run () =
     (* Phase 4: various postprocessing steps, still on Cil AST *)
 
     (* Rewrite ranges back in logic annotations *)
-    !Db.Properties.Interp.from_comprehension_to_range
-      (Cil.inplace_visit ()) file;
+    Rewrite.from_comprehension_to_range (Cil.inplace_visit ()) file;
 
     if Jessie_options.debug_atleast 1 then print_to_stdout file;
 

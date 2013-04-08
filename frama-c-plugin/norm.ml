@@ -736,12 +736,10 @@ object(self)
     let lval loc lv = expand lv (typeOfLval lv) loc in
     let term t = match t.term_node with
       | TLval tlv ->
-          let lv,env =
-            !Db.Properties.Interp.force_term_lval_to_lval tlv
-          in
+          let lv,env = Common.force_term_lval_to_lval tlv in
           let lvlist = lval t.term_loc lv in
           let tslvlist =
-            List.map (!Db.Properties.Interp.force_back_lval_to_term_lval env)
+            List.map (Common.force_back_lval_to_term_lval env)
               lvlist
           in
           List.map (fun

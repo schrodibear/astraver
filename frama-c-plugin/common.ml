@@ -35,6 +35,7 @@ open Cil
 open Ast_info
 open Extlib
 open Visitor
+open Cil_datatype
 
 (* Utility functions *)
 open Format
@@ -874,25 +875,313 @@ let visit_until_convergence visitor file =
     visitFramacFile visitor file;
   done
 
+(* Force conversion from terms to expressions by returning, along with
+ * the result, a map of the sub-terms that could not be converted as
+ * a map from fresh variables to terms or term left-values. *)
+
+let rec logic_type_to_typ = function
+  | Ctype typ -> typ
+  | Linteger -> TInt(ILongLong,[]) (*TODO: to have an unlimited integer type
+                                    in the logic interpretation*)
+  | Lreal -> TFloat(FLongDouble,[]) (* TODO: handle reals, not floats... *)
+  | Ltype({lt_name = name},[]) when name = Utf8_logic.boolean  ->
+      TInt(ILongLong,[])
+  | Ltype({lt_name = "set"},[t]) -> logic_type_to_typ t
+  | Ltype _ | Lvar _ | Larrow _ -> invalid_arg "logic_type_to_typ"
+
+
+type opaque_term_env = {
+  term_lhosts: term_lhost Cil_datatype.Varinfo.Map.t;
+  terms: term Cil_datatype.Varinfo.Map.t;
+  vars: logic_var Cil_datatype.Varinfo.Map.t;
+}
+type opaque_exp_env = { exps: exp Cil_datatype.Varinfo.Map.t }
+
+let empty_term_env =
+  { term_lhosts = Varinfo.Map.empty;
+    terms = Varinfo.Map.empty;
+    vars = Varinfo.Map.empty }
+
+let merge_term_env env1 env2 =
+  { term_lhosts = Varinfo.Map.fold Varinfo.Map.add env1.term_lhosts 
+	env2.term_lhosts;
+    terms = Varinfo.Map.fold Varinfo.Map.add env1.terms env2.terms;
+    vars = Varinfo.Map.fold Varinfo.Map.add env1.vars env2.vars }
+
+let add_opaque_term t env =
+  (* Precise the type when possible *)
+  let ty = match t.term_type with Ctype ty -> ty | _ -> voidType in
+  let v = makePseudoVar ty in
+  let env = { env with terms = Varinfo.Map.add v t env.terms; } in
+  Lval(Var v,NoOffset), env
+
+let add_opaque_var v env =
+  let ty = match v.lv_type with Ctype ty -> ty | _ -> assert false in
+  let pv = makePseudoVar ty in
+  let env = { env with vars = Varinfo.Map.add pv v env.vars; } in
+  Var pv, env
+
+let add_opaque_term_lhost lhost env =
+  let v = makePseudoVar voidType in
+  let env =
+    { env with term_lhosts = Varinfo.Map.add v lhost env.term_lhosts; }
+  in
+  Var v, env
+
+let add_opaque_result ty env =
+  let pv = makePseudoVar ty in
+  let env =
+    { env with term_lhosts = 
+	Varinfo.Map.add pv (TResult ty) env.term_lhosts; }
+  in
+  Var pv, env
+
+let rec force_term_to_exp t =
+  let loc = t.term_loc in
+  let e,env = match t.term_node with
+    | TLval tlv ->
+        (match Logic_utils.unroll_type t.term_type with
+           | Ctype (TArray _) -> add_opaque_term t empty_term_env
+           | _ -> let lv,env = force_term_lval_to_lval tlv in Lval lv, env)
+    | TAddrOf tlv ->
+        let lv,env = force_term_lval_to_lval tlv in AddrOf lv, env
+    | TStartOf tlv ->
+        let lv,env = force_term_lval_to_lval tlv in StartOf lv, env
+    | TSizeOfE t' ->
+        let e,env = force_term_to_exp t' in SizeOfE e, env
+    | TAlignOfE t' ->
+        let e,env = force_term_to_exp t' in AlignOfE e, env
+    | TUnOp(unop,t') ->
+        let e,env = force_term_to_exp t' in
+        UnOp(unop,e,logic_type_to_typ t.term_type), env
+    | TBinOp(binop,t1,t2) ->
+        let e1,env1 = force_term_to_exp t1 in
+        let e2,env2 = force_term_to_exp t2 in
+        let env = merge_term_env env1 env2 in
+        BinOp(binop,e1,e2,logic_type_to_typ t.term_type), env
+    | TSizeOfStr string -> SizeOfStr string, empty_term_env
+(*    | TConst constant -> Const constant, empty_term_env*)
+    | TLogic_coerce(Linteger,t) ->
+        let e, env = force_term_to_exp t in
+        CastE(TInt(IInt,[Attr ("integer",[])]),e), env
+    | TLogic_coerce(Lreal,t) ->
+        let e, env = force_term_to_exp t in
+        CastE(TFloat(FFloat,[Attr("real",[])]),e), env
+    | TCastE(ty,t') ->
+        let e,env = force_term_to_exp t' in CastE(ty,e), env
+    | TAlignOf ty -> AlignOf ty, empty_term_env
+    | TSizeOf ty -> SizeOf ty, empty_term_env
+    | Tapp _ | TDataCons _ | Tif _ | Tat _ | Tbase_addr _ | Toffset _
+    | Tblock_length _ | Tnull | TCoerce _ | TCoerceE _ | TUpdate _
+    | Tlambda _ | Ttypeof _ | Ttype _ | Tcomprehension _
+    | Tunion _ | Tinter _ | Tempty_set | Trange _ | Tlet _
+    | TConst _ | TLogic_coerce _
+        ->
+        add_opaque_term t empty_term_env
+  in
+  new_exp ~loc (Info(new_exp ~loc e,exp_info_of_term t)), env
+
+and force_term_lval_to_lval (lhost,toff) =
+  let lhost,env1 = force_term_lhost_to_lhost lhost in
+  let off,env2 = force_term_offset_to_offset toff in
+  let env = merge_term_env env1 env2 in
+  (lhost,off), env
+
+and force_term_lhost_to_lhost lhost = match lhost with
+  | TVar v ->
+      begin match v.lv_origin with
+        | Some v -> Var v, empty_term_env
+        | None ->
+            begin match v.lv_type with
+              | Ctype _ty -> add_opaque_var v empty_term_env
+              | _ -> add_opaque_term_lhost lhost empty_term_env
+            end
+      end
+  | TMem t ->
+      let e,env = force_term_to_exp t in
+      Mem e, env
+  | TResult ty -> add_opaque_result ty empty_term_env
+
+and force_term_offset_to_offset = function
+  | TNoOffset -> NoOffset, empty_term_env
+  | TField(fi,toff) ->
+      let off,env = force_term_offset_to_offset toff in
+      Field(fi,off), env
+  | TModel _ ->
+      (*
+        Kernel.fatal 
+        "Logic_interp.force_term_offset_to_offset \
+        does not support model fields"
+      *)
+      raise Exit
+  | TIndex(t,toff) ->
+      let e,env1 = force_term_to_exp t in
+      let off,env2 = force_term_offset_to_offset toff in
+      let env = merge_term_env env1 env2 in
+      Index(e,off), env
+
+(* Force back conversion from expression to term, using the environment
+ * constructed during the conversion from term to expression. It expects
+ * the top-level expression to be wrapped into an Info, as well as every
+ * top-level expression that appears under a left-value. *)
+
+let rec force_back_exp_to_term env e =
+  let rec internal_force_back env e =
+    let einfo = match e.enode with
+      | Info(_e,einfo) -> einfo
+      | _ -> { exp_type = Ctype(typeOf e); exp_name = []; }
+    in
+    let tnode = match (stripInfo e).enode with
+      | Info _ -> assert false
+      | Const c -> TConst (Logic_utils.constant_to_lconstant c)
+      | Lval(Var v,NoOffset as lv) ->
+        begin try (Varinfo.Map.find v env.terms).term_node
+          with Not_found ->
+            TLval(force_back_lval_to_term_lval env lv)
+        end
+      | Lval lv -> TLval(force_back_lval_to_term_lval env lv)
+      | SizeOf ty -> TSizeOf ty
+      | SizeOfE e -> TSizeOfE(internal_force_back env e)
+      | SizeOfStr s -> TSizeOfStr s
+      | AlignOf ty -> TAlignOf ty
+      | AlignOfE e -> TAlignOfE(internal_force_back env e)
+      | UnOp(op,e,_) -> TUnOp(op,internal_force_back env e)
+      | BinOp(op,e1,e2,_) ->
+          TBinOp(op,
+                 internal_force_back env e1, internal_force_back env e2)
+      | CastE(TInt(IInt,[Attr("integer",[])]),e) ->
+          TLogic_coerce(Linteger, internal_force_back env e)
+      | CastE(TFloat(FFloat,[Attr("real",[])]),e) ->
+          TLogic_coerce(Lreal, internal_force_back env e)
+      | CastE(ty,e) -> TCastE(ty,internal_force_back env e)
+      | AddrOf lv -> TAddrOf(force_back_lval_to_term_lval env lv)
+      | StartOf lv -> TStartOf(force_back_lval_to_term_lval env lv)
+    in
+    term_of_exp_info e.eloc tnode einfo
+  in
+  internal_force_back env e
+
+and force_back_offset_to_term_offset env = function
+  | NoOffset -> TNoOffset
+  | Field(fi,off) ->
+    TField(fi,force_back_offset_to_term_offset env off)
+  | Index(idx,off) ->
+    TIndex(
+      force_back_exp_to_term env idx,
+      force_back_offset_to_term_offset env off)
+
+and force_back_lhost_to_term_lhost env = function
+  | Var v ->
+    begin try
+            let logv = Varinfo.Map.find v env.vars in
+            logv.lv_type <- Ctype v.vtype;
+            TVar logv
+      with Not_found ->
+        try Varinfo.Map.find v env.term_lhosts
+        with Not_found -> TVar(cvar_to_lvar v)
+    end
+  | Mem e -> TMem(force_back_exp_to_term env e)
+
+and force_back_lval_to_term_lval env (host,off) =
+  force_back_lhost_to_term_lhost env host,
+  force_back_offset_to_term_offset env off
+
+(* Force conversion from expr to term *)
+
+let rec force_exp_to_term e =
+  let tnode = match (stripInfo e).enode with
+    | Info _ -> assert false
+    | Const c -> TConst (Logic_utils.constant_to_lconstant c)
+    | Lval lv -> TLval(force_lval_to_term_lval lv)
+    | SizeOf ty -> TSizeOf ty
+    | SizeOfE e -> TSizeOfE(force_exp_to_term e)
+    | SizeOfStr s -> TSizeOfStr s
+    | AlignOf ty -> TAlignOf ty
+    | AlignOfE e -> TAlignOfE(force_exp_to_term e)
+    | UnOp(op,e,_) -> TUnOp(op,force_exp_to_term e)
+    | BinOp(op,e1,e2,_) ->
+        TBinOp(op, force_exp_to_term e1, force_exp_to_term e2)
+    | CastE(ty,e) -> TCastE(ty,force_exp_to_term e)
+    | AddrOf lv -> TAddrOf(force_lval_to_term_lval lv)
+    | StartOf lv -> TStartOf(force_lval_to_term_lval lv)
+  in
+  {
+    term_node = tnode;
+    term_loc = e.eloc;
+    term_type = Ctype(typeOf e);
+    term_name = [];
+  }
+
+and force_offset_to_term_offset = function
+  | NoOffset -> TNoOffset
+  | Field(fi,off) ->
+      TField(fi,force_offset_to_term_offset off)
+  | Index(idx,off) ->
+      TIndex(
+        force_exp_to_term idx,
+        force_offset_to_term_offset off)
+
+and force_lhost_to_term_lhost = function
+  | Var v -> TVar(cvar_to_lvar v)
+  | Mem e -> TMem(force_exp_to_term e)
+
+and force_lval_to_term_lval (host,off) =
+  force_lhost_to_term_lhost host,
+  force_offset_to_term_offset off
+
+(* Force conversion from expr to predicate *)
+
+let rec force_exp_to_predicate e =
+  let pnode = match (stripInfo e).enode with
+    | Info _ -> assert false
+    | Const c ->
+        begin match possible_value_of_integral_const c with
+          | Some i -> if Integer.equal i Integer.zero then Pfalse else Ptrue
+          | None -> assert false
+        end
+    | UnOp(LNot,e',_) -> Pnot(force_exp_to_predicate e')
+    | BinOp(LAnd,e1,e2,_) ->
+        Pand(force_exp_to_predicate e1,force_exp_to_predicate e2)
+    | BinOp(LOr,e1,e2,_) ->
+        Por(force_exp_to_predicate e1,force_exp_to_predicate e2)
+    | BinOp(op,e1,e2,_) ->
+        let rel = match op with
+          | Lt -> Rlt
+          | Gt -> Rgt
+          | Le -> Rle
+          | Ge -> Rge
+          | Eq -> Req
+          | Ne -> Rneq
+          | _ -> assert false
+        in
+        Prel(rel,force_exp_to_term e1,force_exp_to_term e2)
+    | Lval _ | CastE _ | AddrOf _ | StartOf _ | UnOp _
+    | SizeOf _ | SizeOfE _ | SizeOfStr _ | AlignOf _ | AlignOfE _ ->
+        assert false
+  in
+  { name = []; loc = e.eloc; content = pnode; }
+
+let force_exp_to_assertion e =
+  Logic_const.new_code_annotation (AAssert([], force_exp_to_predicate e))
+
+
 (* Visitor methods for sharing preaction/postaction between exp/term/tsets *)
 
 let do_on_term_offset (preaction_offset,postaction_offset) tlv =
   let preaction_toffset tlv =
     match preaction_offset with None -> tlv | Some preaction_offset ->
       try
-        let lv,env =
-	  !Db.Properties.Interp.force_term_offset_to_offset tlv
-        in
+        let lv,env = force_term_offset_to_offset tlv in
         let lv = preaction_offset lv in
-        !Db.Properties.Interp.force_back_offset_to_term_offset env lv
+        force_back_offset_to_term_offset env lv
       with Exit -> tlv
   in
   let postaction_toffset tlv =
     match postaction_offset with None -> tlv | Some postaction_offset ->
       try
-        let lv,env = !Db.Properties.Interp.force_term_offset_to_offset tlv in
+        let lv,env = force_term_offset_to_offset tlv in
         let lv = postaction_offset lv in
-        !Db.Properties.Interp.force_back_offset_to_term_offset env lv
+        force_back_offset_to_term_offset env lv
       with Exit -> tlv
   in
   ChangeDoChildrenPost (preaction_toffset tlv, postaction_toffset)
@@ -901,17 +1190,17 @@ let do_on_term_lval (preaction_lval,postaction_lval) tlv =
   let preaction_tlval tlv =
     match preaction_lval with None -> tlv | Some preaction_lval ->
       try
-        let lv,env = !Db.Properties.Interp.force_term_lval_to_lval tlv in
+        let lv,env = force_term_lval_to_lval tlv in
         let lv = preaction_lval lv in
-        !Db.Properties.Interp.force_back_lval_to_term_lval env lv
+        force_back_lval_to_term_lval env lv
       with Exit -> tlv
   in
   let postaction_tlval tlv =
     match postaction_lval with None -> tlv | Some postaction_lval ->
       try
-        let lv,env = !Db.Properties.Interp.force_term_lval_to_lval tlv in
+        let lv,env = force_term_lval_to_lval tlv in
         let lv = postaction_lval lv in
-        !Db.Properties.Interp.force_back_lval_to_term_lval env lv
+        force_back_lval_to_term_lval env lv
       with Exit -> tlv
   in
   ChangeDoChildrenPost (preaction_tlval tlv, postaction_tlval)
@@ -920,17 +1209,17 @@ let do_on_term (preaction_expr,postaction_expr) t =
   let preaction_term t =
     match preaction_expr with None -> t | Some preaction_expr ->
       try
-        let e,env = !Db.Properties.Interp.force_term_to_exp t in
+        let e,env = force_term_to_exp t in
         let e = map_under_info preaction_expr e in
-        !Db.Properties.Interp.force_back_exp_to_term env e
+        force_back_exp_to_term env e
       with Exit -> t
   in
   let postaction_term t =
     match postaction_expr with None -> t | Some postaction_expr ->
       try
-        let e,env = !Db.Properties.Interp.force_term_to_exp t in
+        let e,env = force_term_to_exp t in
         let e = map_under_info postaction_expr e in
-        !Db.Properties.Interp.force_back_exp_to_term env e
+        force_back_exp_to_term env e
       with Exit -> t
   in
   ChangeDoChildrenPost (preaction_term t, postaction_term)
