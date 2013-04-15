@@ -23,7 +23,7 @@
 # Makefile for compiling Jessie independently of Frama-C.
 #
 # To be used independently of Frama-C, a version of Frama-C compatible with
-# Jessie has to be properly installed as long as the Jessie-specific stuff.
+# Jessie has to be properly installed as well as the Jessie-specific stuff.
 
 # Do not use ?= to initialize both below variables
 # (fixed efficiency issue, see GNU Make manual, Section 8.11)

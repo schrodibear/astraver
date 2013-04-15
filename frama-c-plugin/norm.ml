@@ -1723,7 +1723,8 @@ class removeUselessCasts =
                   Ctype tty ->
                     if isPointerType tty then pointed_type tty 
                     else element_type tty
-                | ty -> fatal "Not a pointer type '%a'" d_logic_type ty
+                | ty -> fatal "Not a pointer type '%a'"
+                  Cil_datatype.Logic_type.pretty ty
             in
             if Cil_datatype.Typ.equal pty ptty then
               if Logic_utils.isLogicPointerType t.term_type then t
@@ -1734,7 +1735,7 @@ class removeUselessCasts =
                    | _ ->
                        fatal
                          "Unexpected array expression casted into pointer: %a"
-                         d_term t
+                         Cil_datatype.Term.pretty t
                 )
             else term
           else term
