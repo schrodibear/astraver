@@ -1,0 +1,4815 @@
+========== file tests/java/Fact.java ==========
+
+// int model: unbounded mathematical integers
+//@+ CheckArithOverflow = no
+
+/*@ inductive isfact(integer x, integer r) {
+  @  case isfact0: isfact(0,1);
+  @  case isfactn:
+  @   \forall integer n r;
+  @     n >= 1 && isfact(n-1,r) ==> isfact(n,r*n);
+  @ }
+  @*/
+
+public class Fact {
+
+    /*@ requires x >= 0;
+      @ ensures isfact(x, \result);
+      @*/
+    public static int fact(int x) {
+        int a = 0, y = 1;
+        /*@ loop_invariant 0 <= a <= x && isfact(a,y);
+          @ loop_variant x-a;
+          @*/
+        while (a < x) y = y * ++a;
+        return y;
+    }
+
+}========== krakatoa execution ==========
+Parsing OK.
+Typing OK.
+Generating JC function Fact_fact for method Fact.fact
+Generating JC function cons_Fact for constructor Fact
+Done.
+========== file tests/java/Fact.jc ==========
+# InvariantPolicy = Arguments
+# TerminationPolicy = always
+# SeparationPolicy = None
+# AnnotationPolicy = None
+# AbstractDomain = None
+
+predicate Non_null_Object{Here}(Object[0..] x) =
+(\offset_max(x) >= 0)
+
+String[0..] any_string()
+;
+
+tag Object = {
+}
+
+tag String = Object with {
+}
+
+tag Throwable = Object with {
+}
+
+tag Exception = Object with {
+}
+
+tag Fact = Object with {
+}
+
+type Object = [Object]
+
+type interface = [interface]
+
+tag interface = {
+}
+
+boolean non_null_Object(! Object[0..] x)
+behavior normal:
+  ensures (if \result then (\offset_max(x) == 0) else (x == null));
+;
+
+predicate isfact(integer x, integer r) {
+case isfact0: isfact(0, 1);
+  
+  case isfactn: (\forall integer n;
+                  (\forall integer r_0;
+                    (((n >= 1) && isfact((n - 1), r_0)) ==>
+                      isfact(n, (r_0 * n)))));
+  
+}
+
+exception Throwable of Throwable[0..]
+
+exception Exception of Exception[0..]
+
+integer Fact_fact(integer x_0)
+  requires (K_2 : (x_0 >= 0));
+behavior default:
+  ensures (K_1 : isfact(x_0, \result));
+{  
+   {  
+      (var integer a = (K_13 : 0));
+      
+      {  
+         (var integer y = (K_12 : 1));
+         
+         {  
+            loop 
+            behavior default:
+              invariant (K_7 : ((K_6 : ((K_5 : (0 <= a)) &&
+                                         (K_4 : (a <= x_0)))) &&
+                                 (K_3 : isfact(a, y))));
+            variant (K_8 : (x_0 - a));
+            while ((K_11 : (a < x_0)))
+            {  (y = (K_10 : (y * (K_9 : (++ a)))))
+            };
+            
+            (return y)
+         }
+      }
+   }
+}
+
+unit cons_Fact(! Fact[0] this_0){()}
+
+/*
+Local Variables:
+mode: java
+compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Fact.jloc tests/java/Fact.jc && make -f tests/java/Fact.makefile gui"
+End:
+*/
+========== file tests/java/Fact.jloc ==========
+[K_10]
+file = "HOME/tests/java/Fact.java"
+line = 23
+begin = 26
+end = 33
+
+[K_11]
+file = "HOME/tests/java/Fact.java"
+line = 23
+begin = 15
+end = 20
+
+[K_12]
+file = "HOME/tests/java/Fact.java"
+line = 19
+begin = 23
+end = 24
+
+[K_13]
+file = "HOME/tests/java/Fact.java"
+line = 19
+begin = 16
+end = 17
+
+[K_1]
+file = "HOME/tests/java/Fact.java"
+line = 16
+begin = 16
+end = 34
+
+[K_2]
+file = "HOME/tests/java/Fact.java"
+line = 15
+begin = 17
+end = 23
+
+[K_3]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 42
+end = 53
+
+[K_4]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 32
+end = 38
+
+[K_5]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 27
+end = 33
+
+[K_6]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 27
+end = 38
+
+[K_7]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 27
+end = 53
+
+[K_8]
+file = "HOME/tests/java/Fact.java"
+line = 21
+begin = 25
+end = 28
+
+[K_9]
+file = "HOME/tests/java/Fact.java"
+line = 23
+begin = 30
+end = 33
+
+[cons_Fact]
+name = "Constructor of class Fact"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Fact_fact]
+name = "Method fact"
+file = "HOME/tests/java/Fact.java"
+line = 18
+begin = 22
+end = 26
+
+========== jessie execution ==========
+Generating Why function Fact_fact
+Generating Why function cons_Fact
+========== file tests/java/Fact.makefile ==========
+# this makefile was automatically generated; do not edit 
+
+TIMEOUT ?= 10
+
+DP ?= why-dp -timeout $(TIMEOUT)
+WHYEXEC ?= why
+GWHYEXEC ?= gwhy-bin
+WHYLIB ?= HOME/lib
+
+USERWHYDEUXOPT= -split-user-conj
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Fact.loc
+
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Fact.loc
+
+JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
+
+COQDEP = coqdep
+
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
+
+all: simplify/Fact_why.sx
+
+project: why/Fact.wpr
+
+why/%.wpr:  WHYOPT=--project -dir why
+why/%.wpr: why/%.why
+	@echo 'why --project [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+goals: why/Fact_ctx.why
+
+why/%_ctx.why: WHYOPT=--multi-why -dir why
+why/%_ctx.why: why/%.why
+	@echo 'why --multi-why [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+coq: coq/Fact_why.vo
+
+coq/Fact_why.v: WHYOPT=-coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
+coq/Fact_why.v: why/Fact.why
+	@echo 'why -coq [...] why/Fact.why' && $(WHY) $(JESSIELIBFILES) why/Fact.why && rm -f coq/jessie_why.v
+
+coq-goals: goals coq/Fact_ctx_why.vo
+	for f in why/*_po*.why; do make -f Fact.makefile coq/`basename $$f .why`_why.v ; done
+
+coq/Fact_ctx_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
+coq/Fact_ctx_why.v: why/Fact_ctx.why
+	@echo 'why -coq [...] why/Fact_ctx.why' && $(WHY) why/Fact_ctx.why
+
+coq/%_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export Fact_ctx_why." -coq-tactic "intuition"
+coq/%_why.v: why/%.why
+	@echo 'why -coq [...] why/$*.why' && $(WHY) why/Fact_ctx.why why/$*.why
+
+coq/%.vo: coq/%.v
+	coqc -I coq $<
+coq/%_po_why.vo: coq/Fact_ctx_why.vo
+
+pvs: pvs/Fact_why.pvs
+
+pvs/%_why.pvs: WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@jessie"
+pvs/%_why.pvs: why/%.why
+	$(WHY) $(JESSIELIBFILES) why/$*.why
+
+pvs/jessie_why.pvs:WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@why"
+pvs/jessie_why.pvs:
+	$(WHY) $(JESSIELIBFILES)
+
+isabelle: isabelle/Fact_why.thy
+
+isabelle/%_why.thy: WHYOPT=-isabelle -dir isabelle -isabelle-base-theory jessie_why
+isabelle/%_why.thy: why/%.why
+	$(WHY) $(JESSIELIBFILES) why/$*.why
+	cp -f HOME/lib/isabelle/jessie_why.thy isabelle/
+
+simplify: simplify/Fact_why.sx
+	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
+
+simplify/%_why.sx: WHYOPT=-simplify -dir simplify
+simplify/%_why.sx: why/%.why
+	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/Fact_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+alt-ergo ergo: why/Fact_why.why
+	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
+
+why/%_why.why: WHYOPT=-alt-ergo -dir why
+why/%_why.why: why/%.why
+	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+gappa: gappa/Fact_why.gappa
+	@echo 'Running Gappa on proof obligations' && ($(DP) $^)
+
+gappa/%_why.gappa: WHYOPT=-gappa -dir gappa
+gappa/%_why.gappa: why/%.why
+	@echo 'why -gappa [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+cvcl: cvcl/Fact_why.cvc
+
+	@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)
+
+cvcl/%_why.cvc: WHYOPT=-cvcl -dir cvcl
+cvcl/%_why.cvc: why/%.why
+	@echo 'why -cvcl [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+harvey: harvey/Fact_why.rv
+	@echo 'Running haRVey on proof obligations' && ($(DP) $^)
+
+harvey/%_why.rv: WHYOPT=-harvey -dir harvey
+harvey/%_why.rv: why/%.why
+	@echo 'why -harvey [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+zenon: zenon/Fact_why.znn
+	@echo 'Running Zenon on proof obligations' && ($(DP) $^)
+
+zenon/%_why.znn: WHYOPT=-zenon -dir zenon
+zenon/%_why.znn: why/%.why
+	@echo 'why -zenon [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+smtlib: smtlib/Fact_why.smt
+	@echo 'Running Z3 on proof obligations' && ($(DP) $^)
+
+smtlib/%_why.smt:  WHYOPT=-smtlib --encoding sstrat --exp goal -dir smtlib
+smtlib/%_why.smt: why/%.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+z3: smtlib/Fact_why.smt
+	@echo 'Running Z3 on proof obligations' && ($(DP) -smt-solver z3 $^)
+
+yices: smtlib/Fact_why.smt
+	@echo 'Running Yices on proof obligations' && ($(DP) -smt-solver yices $^)
+
+cvc3: smtlib/Fact_why.smt
+	@echo 'Running CVC3 on proof obligations' && ($(DP) -smt-solver cvc3 $^)
+
+smtlib-v1: smtlib-v1/Fact_why.smt
+smtlib-v1/%_why.smt:  WHYOPT=-smtlib --smtlib-v1 --encoding sstrat --exp goal -dir smtlib-v1
+smtlib-v1/%_why.smt: why/%.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+verit: smtlib-v1/Fact_why.smt
+	@echo 'Running VeriT on proof obligations' && ($(DP) -smt-solver verit $^)
+
+gui stat: Fact.stat
+
+%.stat: why/%.why
+	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
+
+why3: why/Fact_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ml: Fact.mlw
+	 why3 --extra-config $(JESSIE3CONF) $<
+
+why3ide: Fact.mlw
+	 why3ide --extra-config $(JESSIE3CONF) $<
+
+why3replay: Fact.mlw
+	 why3replayer --extra-config $(JESSIE3CONF) $<
+
+-include Fact.depend
+
+depend: coq/Fact_why.v
+	-$(COQDEP) -I coq coq/Fact*_why.v > Fact.depend
+
+clean:
+	rm -f coq/*.vo
+
+========== file tests/java/Fact.loc ==========
+[JC_40]
+file = "HOME/tests/java/Fact.jc"
+line = 66
+begin = 12
+end = 372
+
+[JC_41]
+file = "HOME/tests/java/Fact.jc"
+line = 66
+begin = 12
+end = 372
+
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_43]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_45]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_1]
+file = "HOME/tests/java/Fact.jc"
+line = 10
+begin = 12
+end = 22
+
+[JC_47]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_48]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/java/Fact.jc"
+line = 10
+begin = 12
+end = 22
+
+[JC_49]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_5]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_9]
+file = "HOME/tests/java/Fact.jc"
+line = 35
+begin = 8
+end = 23
+
+[cons_Fact_ensures_default]
+name = "Constructor of class Fact"
+behavior = "default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Fact_safety]
+name = "Constructor of class Fact"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_11]
+file = "HOME/tests/java/Fact.jc"
+line = 35
+begin = 8
+end = 23
+
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_13]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_15]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_17]
+file = "HOME/tests/java/Fact.jc"
+line = 37
+begin = 11
+end = 65
+
+[JC_18]
+file = "HOME/tests/java/Fact.jc"
+line = 37
+begin = 11
+end = 65
+
+[JC_19]
+file = "HOME/tests/java/Fact.java"
+line = 15
+begin = 17
+end = 23
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_21]
+file = "HOME/tests/java/Fact.java"
+line = 15
+begin = 17
+end = 23
+
+[JC_22]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_23]
+file = "HOME/tests/java/Fact.java"
+line = 16
+begin = 16
+end = 34
+
+[JC_24]
+file = "HOME/tests/java/Fact.java"
+line = 16
+begin = 16
+end = 34
+
+[JC_25]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_26]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Fact_fact_ensures_default]
+name = "Method fact"
+behavior = "default behavior"
+file = "HOME/tests/java/Fact.java"
+line = 18
+begin = 22
+end = 26
+
+[JC_27]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 27
+end = 33
+
+[JC_28]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 32
+end = 38
+
+[JC_29]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 42
+end = 53
+
+[Fact_fact_safety]
+name = "Method fact"
+behavior = "Safety"
+file = "HOME/tests/java/Fact.java"
+line = 18
+begin = 22
+end = 26
+
+[JC_30]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 27
+end = 53
+
+[JC_31]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_32]
+file = "HOME/tests/java/Fact.jc"
+line = 66
+begin = 12
+end = 372
+
+[JC_33]
+file = "HOME/tests/java/Fact.jc"
+line = 66
+begin = 12
+end = 372
+
+[JC_34]
+file = "HOME/tests/java/Fact.java"
+line = 21
+begin = 25
+end = 28
+
+[JC_35]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 27
+end = 33
+
+[JC_36]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 32
+end = 38
+
+[JC_37]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 42
+end = 53
+
+[JC_38]
+file = "HOME/tests/java/Fact.java"
+line = 20
+begin = 27
+end = 53
+
+[JC_39]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+========== file tests/java/why/Fact.why ==========
+type Object
+
+type interface
+
+logic Exception_tag:  -> Object tag_id
+
+logic Object_tag:  -> Object tag_id
+
+axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
+
+logic Fact_tag:  -> Object tag_id
+
+axiom Fact_parenttag_Object : parenttag(Fact_tag, Object_tag)
+
+predicate Non_null_Object(x_0:Object pointer,
+ Object_alloc_table:Object alloc_table) =
+ ge_int(offset_max(Object_alloc_table, x_0), (0))
+
+axiom Object_int : (int_of_tag(Object_tag) = (1))
+
+logic Object_of_pointer_address: unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr :
+ (forall p:Object pointer.
+  (p = Object_of_pointer_address(pointer_address(p))))
+
+axiom Object_parenttag_bottom : parenttag(Object_tag, bottom_tag)
+
+axiom Object_tags :
+ (forall x:Object pointer.
+  (forall Object_tag_table:Object tag_table.
+   instanceof(Object_tag_table, x, Object_tag)))
+
+logic String_tag:  -> Object tag_id
+
+axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
+
+logic Throwable_tag:  -> Object tag_id
+
+axiom Throwable_parenttag_Object : parenttag(Throwable_tag, Object_tag)
+
+logic interface_tag:  -> interface tag_id
+
+axiom interface_int : (int_of_tag(interface_tag) = (1))
+
+logic interface_of_pointer_address: unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr :
+ (forall p:interface pointer.
+  (p = interface_of_pointer_address(pointer_address(p))))
+
+axiom interface_parenttag_bottom : parenttag(interface_tag, bottom_tag)
+
+axiom interface_tags :
+ (forall x:interface pointer.
+  (forall interface_tag_table:interface tag_table.
+   instanceof(interface_tag_table, x, interface_tag)))
+
+inductive isfact: int, int -> prop =
+ | isfact0: isfact((0), (1))
+ | isfactn: (forall n:int.
+             (forall r_0:int.
+              ((ge_int(n, (1)) and isfact(sub_int(n, (1)), r_0)) ->
+               isfact(n, mul_int(r_0, n)))))
+ 
+predicate left_valid_struct_Object(p:Object pointer, a:int,
+ Object_alloc_table:Object alloc_table) =
+ (offset_min(Object_alloc_table, p) <= a)
+
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_Fact(p:Object pointer, a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_String(p:Object pointer, a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_interface(p:interface pointer, a:int,
+ interface_alloc_table:interface alloc_table) =
+ (offset_min(interface_alloc_table, p) <= a)
+
+axiom pointer_addr_of_Object_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(interface_of_pointer_address(p))))
+
+predicate right_valid_struct_Object(p:Object pointer, b:int,
+ Object_alloc_table:Object alloc_table) =
+ (offset_max(Object_alloc_table, p) >= b)
+
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_Fact(p:Object pointer, b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_String(p:Object pointer, b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_interface(p:interface pointer, b:int,
+ interface_alloc_table:interface alloc_table) =
+ (offset_max(interface_alloc_table, p) >= b)
+
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) = a)
+ and (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) = a)
+ and (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) = a)
+ and (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_Fact(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) = a)
+ and (offset_max(interface_alloc_table, p) = b))
+
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) <= a)
+ and (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) <= a)
+ and (offset_max(interface_alloc_table, p) >= b))
+
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) <= a)
+ and (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate valid_struct_Fact(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
+ Object_alloc_table:Object alloc_table) =
+ valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) <= a)
+ and (offset_max(interface_alloc_table, p) >= b))
+
+exception Exception_exc of Object pointer
+
+parameter Fact_fact : x_0_0:int -> { } int { (JC_24: isfact(x_0_0, result)) }
+
+parameter Fact_fact_requires :
+ x_0_0:int ->
+  { (JC_19: ge_int(x_0_0, (0)))} int { (JC_24: isfact(x_0_0, result)) }
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+parameter Object_alloc_table : Object alloc_table ref
+
+parameter Object_tag_table : Object tag_table ref
+
+exception Return_label_exc of unit
+
+exception Throwable_exc of Object pointer
+
+parameter alloc_struct_Exception :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Exception(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Exception_tag)))) }
+
+parameter alloc_struct_Exception_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Exception(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Exception_tag)))) }
+
+parameter alloc_struct_Fact :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Fact(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Fact_tag)))) }
+
+parameter alloc_struct_Fact_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Fact(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Fact_tag)))) }
+
+parameter alloc_struct_Object :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Object(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Object_tag)))) }
+
+parameter alloc_struct_Object_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Object(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Object_tag)))) }
+
+parameter alloc_struct_String :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_String(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, String_tag)))) }
+
+parameter alloc_struct_String_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_String(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, String_tag)))) }
+
+parameter alloc_struct_Throwable :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Throwable(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Throwable_tag)))) }
+
+parameter alloc_struct_Throwable_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Throwable(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Throwable_tag)))) }
+
+parameter interface_alloc_table : interface alloc_table ref
+
+parameter interface_tag_table : interface tag_table ref
+
+parameter alloc_struct_interface :
+ n:int ->
+  interface_alloc_table:interface alloc_table ref ->
+   interface_tag_table:interface tag_table ref ->
+    { } interface pointer writes interface_alloc_table,interface_tag_table
+    { (strict_valid_struct_interface(result, (0), sub_int(n, (1)),
+       interface_alloc_table)
+      and (alloc_extends(interface_alloc_table@, interface_alloc_table)
+          and (alloc_fresh(interface_alloc_table@, result, n)
+              and instanceof(interface_tag_table, result, interface_tag)))) }
+
+parameter alloc_struct_interface_requires :
+ n:int ->
+  interface_alloc_table:interface alloc_table ref ->
+   interface_tag_table:interface tag_table ref ->
+    { ge_int(n, (0))} interface pointer
+    writes interface_alloc_table,interface_tag_table
+    { (strict_valid_struct_interface(result, (0), sub_int(n, (1)),
+       interface_alloc_table)
+      and (alloc_extends(interface_alloc_table@, interface_alloc_table)
+          and (alloc_fresh(interface_alloc_table@, result, n)
+              and instanceof(interface_tag_table, result, interface_tag)))) }
+
+parameter any_string_0 : tt:unit -> { } Object pointer { true }
+
+parameter any_string_0_requires : tt:unit -> { } Object pointer { true }
+
+parameter cons_Fact :
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
+
+parameter cons_Fact_requires :
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
+
+parameter non_null_Object :
+ x_1:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_18:
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
+     else (x_1 = null))) }
+
+parameter non_null_Object_requires :
+ x_1:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_18:
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
+     else (x_1 = null))) }
+
+let Fact_fact_ensures_default =
+ fun (x_0_0 : int) ->
+  { (JC_21: ge_int(x_0_0, (0))) }
+  (init:
+  (let return = ref (any_int void) in
+  try
+   begin
+     (let a = ref (K_13: (0)) in
+     (let y = ref (K_12: (1)) in
+     begin
+       try
+        (loop_2:
+        while true do
+        { invariant
+            (JC_38:
+            ((JC_35: le_int((0), a))
+            and ((JC_36: le_int(a, x_0_0)) and (JC_37: isfact(a, y))))) 
+           }
+         begin
+           [ { } unit { true } ];
+          try
+           begin
+             (if (K_11: ((lt_int_ !a) x_0_0))
+             then
+              (let jessie_<num> =
+              begin
+                (y := (K_10:
+                      ((mul_int !y) (K_9:
+                                    begin   (a := ((add_int !a) (1))); !a end))));
+               !y end in void) else (raise (Loop_exit_exc void)));
+            (raise (Loop_continue_exc void)) end with
+           Loop_continue_exc jessie_<num> -> void end end done) with
+        Loop_exit_exc jessie_<num> -> void end; (return := !y); (raise Return)
+     end)); absurd  end with Return -> !return end))
+  { (JC_23: isfact(x_0_0, result)) }
+
+let Fact_fact_safety =
+ fun (x_0_0 : int) ->
+  { (JC_21: ge_int(x_0_0, (0))) }
+  (init:
+  (let return = ref (any_int void) in
+  try
+   begin
+     (let a = ref (K_13: (0)) in
+     (let y = ref (K_12: (1)) in
+     begin
+       try
+        (loop_1:
+        while true do
+        { invariant (JC_32: true) variant (JC_34 : sub_int(x_0_0, a)) }
+         begin
+           [ { } unit reads a,y
+             { (JC_30:
+               ((JC_27: le_int((0), a))
+               and ((JC_28: le_int(a, x_0_0)) and (JC_29: isfact(a, y))))) } ];
+          try
+           begin
+             (if (K_11: ((lt_int_ !a) x_0_0))
+             then
+              (let jessie_<num> =
+              begin
+                (y := (K_10:
+                      ((mul_int !y) (K_9:
+                                    begin   (a := ((add_int !a) (1))); !a end))));
+               !y end in void) else (raise (Loop_exit_exc void)));
+            (raise (Loop_continue_exc void)) end with
+           Loop_continue_exc jessie_<num> -> void end end done) with
+        Loop_exit_exc jessie_<num> -> void end; (return := !y); (raise Return)
+     end)); absurd  end with Return -> !return end)) { true }
+
+let cons_Fact_ensures_default =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_Fact(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_46: true) }
+
+let cons_Fact_safety =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_Fact(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
+
+========== make project execution ==========
+why --project [...] why/Fact.why
+========== file tests/java/why/Fact.wpr ==========
+<project name="Fact" context="why/Fact_ctx.why">
+  <function name="Method fact">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/Fact_po1.why">
+      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "27" end = "33"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Fact_po2.why">
+      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "32" end = "38"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Fact_po3.why">
+      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "42" end = "53"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Fact_po4.why">
+      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "27" end = "33"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Fact_po5.why">
+      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "32" end = "38"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Fact_po6.why">
+      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "42" end = "53"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Fact_po7.why">
+      <location file = "HOME/tests/java/Fact.java" line = "16" begin = "16" end = "34"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/Fact_po8.why">
+      <location file = "HOME/tests/java/Fact.java" line = "21" begin = "25" end = "28"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/Fact_po9.why">
+      <location file = "HOME/tests/java/Fact.java" line = "21" begin = "25" end = "28"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    </behavior>
+  </function>
+  <function name="Constructor of class Fact">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+</project>
+========== file tests/java/why/Fact_ctx.why ==========
+logic eq_unit : unit, unit -> prop
+
+logic neq_unit : unit, unit -> prop
+
+logic eq_bool : bool, bool -> prop
+
+logic neq_bool : bool, bool -> prop
+
+logic lt_int : int, int -> prop
+
+logic le_int : int, int -> prop
+
+logic gt_int : int, int -> prop
+
+logic ge_int : int, int -> prop
+
+logic eq_int : int, int -> prop
+
+logic neq_int : int, int -> prop
+
+logic add_int : int, int -> int
+
+logic sub_int : int, int -> int
+
+logic mul_int : int, int -> int
+
+logic neg_int : int -> int
+
+predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
+
+logic bool_and : bool, bool -> bool
+
+logic bool_or : bool, bool -> bool
+
+logic bool_xor : bool, bool -> bool
+
+logic bool_not : bool -> bool
+
+axiom bool_and_def:
+  (forall a:bool.
+    (forall b:bool.
+      ((bool_and(a, b) = true) <-> ((a = true) and (b = true)))))
+
+axiom bool_or_def:
+  (forall a:bool.
+    (forall b:bool. ((bool_or(a, b) = true) <-> ((a = true) or (b = true)))))
+
+axiom bool_xor_def:
+  (forall a:bool. (forall b:bool. ((bool_xor(a, b) = true) <-> (a <> b))))
+
+axiom bool_not_def: (forall a:bool. ((bool_not(a) = true) <-> (a = false)))
+
+logic ite : bool, 'a1, 'a1 -> 'a1
+
+axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
+
+axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
+
+logic lt_int_bool : int, int -> bool
+
+logic le_int_bool : int, int -> bool
+
+logic gt_int_bool : int, int -> bool
+
+logic ge_int_bool : int, int -> bool
+
+logic eq_int_bool : int, int -> bool
+
+logic neq_int_bool : int, int -> bool
+
+axiom lt_int_bool_axiom:
+  (forall x:int. (forall y:int. ((lt_int_bool(x, y) = true) <-> (x < y))))
+
+axiom le_int_bool_axiom:
+  (forall x:int. (forall y:int. ((le_int_bool(x, y) = true) <-> (x <= y))))
+
+axiom gt_int_bool_axiom:
+  (forall x:int. (forall y:int. ((gt_int_bool(x, y) = true) <-> (x > y))))
+
+axiom ge_int_bool_axiom:
+  (forall x:int. (forall y:int. ((ge_int_bool(x, y) = true) <-> (x >= y))))
+
+axiom eq_int_bool_axiom:
+  (forall x:int. (forall y:int. ((eq_int_bool(x, y) = true) <-> (x = y))))
+
+axiom neq_int_bool_axiom:
+  (forall x:int. (forall y:int. ((neq_int_bool(x, y) = true) <-> (x <> y))))
+
+logic abs_int : int -> int
+
+axiom abs_int_pos: (forall x:int. ((x >= 0) -> (abs_int(x) = x)))
+
+axiom abs_int_neg: (forall x:int. ((x <= 0) -> (abs_int(x) = (-x))))
+
+logic int_max : int, int -> int
+
+logic int_min : int, int -> int
+
+axiom int_max_is_ge:
+  (forall x:int.
+    (forall y:int. ((int_max(x, y) >= x) and (int_max(x, y) >= y))))
+
+axiom int_max_is_some:
+  (forall x:int.
+    (forall y:int. ((int_max(x, y) = x) or (int_max(x, y) = y))))
+
+axiom int_min_is_le:
+  (forall x:int.
+    (forall y:int. ((int_min(x, y) <= x) and (int_min(x, y) <= y))))
+
+axiom int_min_is_some:
+  (forall x:int.
+    (forall y:int. ((int_min(x, y) = x) or (int_min(x, y) = y))))
+
+logic lt_real : real, real -> prop
+
+logic le_real : real, real -> prop
+
+logic gt_real : real, real -> prop
+
+logic ge_real : real, real -> prop
+
+logic eq_real : real, real -> prop
+
+logic neq_real : real, real -> prop
+
+logic add_real : real, real -> real
+
+logic sub_real : real, real -> real
+
+logic mul_real : real, real -> real
+
+logic div_real : real, real -> real
+
+logic neg_real : real -> real
+
+logic real_of_int : int -> real
+
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
+
+logic lt_real_bool : real, real -> bool
+
+logic le_real_bool : real, real -> bool
+
+logic gt_real_bool : real, real -> bool
+
+logic ge_real_bool : real, real -> bool
+
+logic eq_real_bool : real, real -> bool
+
+logic neq_real_bool : real, real -> bool
+
+axiom lt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((lt_real_bool(x, y) = true) <-> (x < y))))
+
+axiom le_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((le_real_bool(x, y) = true) <-> (x <= y))))
+
+axiom gt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((gt_real_bool(x, y) = true) <-> (x > y))))
+
+axiom ge_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((ge_real_bool(x, y) = true) <-> (x >= y))))
+
+axiom eq_real_bool_axiom:
+  (forall x:real. (forall y:real. ((eq_real_bool(x, y) = true) <-> (x = y))))
+
+axiom neq_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
+
+logic real_max : real, real -> real
+
+logic real_min : real, real -> real
+
+axiom real_max_is_ge:
+  (forall x:real.
+    (forall y:real. ((real_max(x, y) >= x) and (real_max(x, y) >= y))))
+
+axiom real_max_is_some:
+  (forall x:real.
+    (forall y:real. ((real_max(x, y) = x) or (real_max(x, y) = y))))
+
+axiom real_min_is_le:
+  (forall x:real.
+    (forall y:real. ((real_min(x, y) <= x) and (real_min(x, y) <= y))))
+
+axiom real_min_is_some:
+  (forall x:real.
+    (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
+
+function sqr_real(x: real) : real = (x * x)
+
+logic sqrt_real : real -> real
+
+axiom sqrt_pos: (forall x:real. ((x >= 0.0) -> (sqrt_real(x) >= 0.0)))
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
+
+axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
+
+logic abs_real : real -> real
+
+axiom abs_real_pos:
+  (forall x:real [abs_real(x)]. ((x >= 0.0) -> (abs_real(x) = x)))
+
+axiom abs_real_neg:
+  (forall x:real [abs_real(x)]. ((x <= 0.0) -> (abs_real(x) = (-x))))
+
+logic exp : real -> real
+
+logic log : real -> real
+
+logic log10 : real -> real
+
+axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
+
+logic pow_real_int : real, int -> real
+
+logic pow_real : real, real -> real
+
+logic cos : real -> real
+
+logic sin : real -> real
+
+logic tan : real -> real
+
+logic pi : real
+
+logic cosh : real -> real
+
+logic sinh : real -> real
+
+logic tanh : real -> real
+
+logic acos : real -> real
+
+logic asin : real -> real
+
+logic atan : real -> real
+
+logic atan2 : real, real -> real
+
+logic hypot : real, real -> real
+
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int [computer_div(x, y), computer_mod(x, y)].
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_div_bound:
+  (forall x:int.
+    (forall y:int.
+      (((x >= 0) and (y > 0)) ->
+       ((0 <= computer_div(x, y)) and (computer_div(x, y) <= x)))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
+
+type 't alloc_table
+
+type 't pointer
+
+type 't block
+
+logic base_block : 'a1 pointer -> 'a1 block
+
+logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
+
+logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
+
+predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
+  ((offset_min(a, p) <= 0) and (offset_max(a, p) >= 0))
+
+predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
+  (base_block(p) = base_block(q))
+
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
+logic shift : 'a1 pointer, int -> 'a1 pointer
+
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
+
+axiom address_injective:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
+
+axiom address_null: (address(null) = 0)
+
+axiom address_shift_lt:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) < address(shift(p, j))) <-> (i < j)))))
+
+axiom address_shift_le:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
+
+axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
+
+axiom shift_shift:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [shift(shift(p, i), j)]. (shift(shift(p, i),
+        j) = shift(p, (i + j))))))
+
+axiom offset_max_shift:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (forall i:int. (offset_max(a, shift(p, i)) = (offset_max(a, p) - i)))))
+
+axiom offset_min_shift:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (forall i:int. (offset_min(a, shift(p, i)) = (offset_min(a, p) - i)))))
+
+axiom neq_shift:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [shift(p, i), shift(p, j)].
+        ((i <> j) -> (shift(p, i) <> shift(p, j))))))
+
+axiom null_not_valid: (forall a:'a1 alloc_table. (not valid(a, null)))
+
+axiom null_pointer:
+  (forall a:'a1 alloc_table.
+    ((offset_min(a, null) >= 0) and (offset_max(a, null) <= (-2))))
+
+logic eq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
+
+logic neq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
+
+axiom eq_pointer_bool_def:
+  (forall p1:'a1 pointer.
+    (forall p2:'a1 pointer. ((eq_pointer_bool(p1, p2) = true) <-> (p1 = p2))))
+
+axiom neq_pointer_bool_def:
+  (forall p1:'a1 pointer.
+    (forall p2:'a1 pointer.
+      ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
+
+axiom same_block_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(p, shift(q, i))].
+        (same_block(p, q) -> same_block(p, shift(q, i))))))
+
+axiom same_block_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(shift(q, i), p)].
+        (same_block(q, p) -> same_block(shift(q, i), p)))))
+
+axiom sub_pointer_shift:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
+
+axiom sub_pointer_self:
+  (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
+
+axiom sub_pointer_zero:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
+
+axiom sub_pointer_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(shift(p, i), q)]. (sub_pointer(shift(p, i),
+        q) = (sub_pointer(p, q) + i)))))
+
+axiom sub_pointer_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(p, shift(q, i))]. (sub_pointer(p, shift(q,
+        i)) = (sub_pointer(p, q) - i)))))
+
+type ('t, 'v) memory
+
+logic select : ('a2, 'a1) memory, 'a2 pointer -> 'a1
+
+logic store : ('a1, 'a2) memory, 'a1 pointer, 'a2 -> ('a1, 'a2) memory
+
+axiom select_store_eq:
+  (forall m:('a1, 'a2) memory.
+    (forall p1:'a1 pointer.
+      (forall p2:'a1 pointer.
+        (forall a:'a2 [store(m, p1, a), p2].
+          ((p1 = p2) -> (select(store(m, p1, a), p2) = a))))))
+
+axiom select_store_neq:
+  (forall m:('a1, 'a2) memory.
+    (forall p1:'a1 pointer.
+      (forall p2:'a1 pointer.
+        (forall a:'a2 [store(m, p1, a), p2].
+          ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
+
+type 't pset
+
+logic pset_empty : 'a1 pset
+
+logic pset_singleton : 'a1 pointer -> 'a1 pset
+
+logic pset_deref : ('a2, 'a1 pointer) memory, 'a2 pset -> 'a1 pset
+
+logic pset_union : 'a1 pset, 'a1 pset -> 'a1 pset
+
+logic pset_all : 'a1 pset -> 'a1 pset
+
+logic pset_range : 'a1 pset, int, int -> 'a1 pset
+
+logic pset_range_left : 'a1 pset, int -> 'a1 pset
+
+logic pset_range_right : 'a1 pset, int -> 'a1 pset
+
+logic in_pset : 'a1 pointer, 'a1 pset -> prop
+
+logic valid_pset : 'a1 alloc_table, 'a1 pset -> prop
+
+predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
+predicate pset_included(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (in_pset(p, ps1) -> in_pset(p, ps2)))
+
+axiom pset_included_self: (forall ps:'a1 pset. pset_included(ps, ps))
+
+axiom pset_included_range:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))].
+            (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
+             pset_range(ps, c, d))))))))
+
+axiom pset_included_range_all:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))]. pset_included(pset_range(ps, a, b), pset_all(ps)))))))
+
+axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
+
+axiom in_pset_singleton:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer. (in_pset(p, pset_singleton(q)) <-> (p = q))))
+
+axiom in_pset_deref:
+  (forall p:'a1 pointer.
+    (forall m:('a2, 'a1 pointer) memory.
+      (forall q:'a2 pset.
+        (in_pset(p, pset_deref(m, q)) <->
+         (exists r:'a2 pointer. (in_pset(r, q) and (p = select(m, r))))))))
+
+axiom in_pset_all:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (in_pset(p, pset_all(q)) <->
+       (exists i:int.
+         (exists r:'a1 pointer. (in_pset(r, q) and (p = shift(r, i))))))))
+
+axiom in_pset_range:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall a:int.
+        (forall b:int.
+          (in_pset(p, pset_range(q, a, b)) <->
+           (exists i:int.
+             (exists r:'a1 pointer.
+               ((a <= i) and
+                ((i <= b) and (in_pset(r, q) and (p = shift(r, i))))))))))))
+
+axiom in_pset_range_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall b:int.
+        (in_pset(p, pset_range_left(q, b)) <->
+         (exists i:int.
+           (exists r:'a1 pointer.
+             ((i <= b) and (in_pset(r, q) and (p = shift(r, i))))))))))
+
+axiom in_pset_range_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall a:int.
+        (in_pset(p, pset_range_right(q, a)) <->
+         (exists i:int.
+           (exists r:'a1 pointer.
+             ((a <= i) and (in_pset(r, q) and (p = shift(r, i))))))))))
+
+axiom in_pset_union:
+  (forall p:'a1 pointer.
+    (forall s1:'a1 pset.
+      (forall s2:'a1 pset.
+        (in_pset(p, pset_union(s1, s2)) <->
+         (in_pset(p, s1) or in_pset(p, s2))))))
+
+axiom valid_pset_empty: (forall a:'a1 alloc_table. valid_pset(a, pset_empty))
+
+axiom valid_pset_singleton:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (valid_pset(a, pset_singleton(p)) <-> valid(a, p))))
+
+axiom valid_pset_deref:
+  (forall a:'a1 alloc_table.
+    (forall m:('a2, 'a1 pointer) memory.
+      (forall q:'a2 pset.
+        (valid_pset(a, pset_deref(m, q)) <->
+         (forall r:'a2 pointer.
+           (forall p:'a1 pointer.
+             ((in_pset(r, q) and (p = select(m, r))) -> valid(a, p))))))))
+
+axiom valid_pset_range:
+  (forall a:'a1 alloc_table.
+    (forall q:'a1 pset.
+      (forall c:int.
+        (forall d:int.
+          (valid_pset(a, pset_range(q, c, d)) <->
+           (forall i:int.
+             (forall r:'a1 pointer.
+               ((in_pset(r, q) and ((c <= i) and (i <= d))) -> valid(a,
+                shift(r, i))))))))))
+
+axiom valid_pset_union:
+  (forall a:'a1 alloc_table.
+    (forall s1:'a1 pset.
+      (forall s2:'a1 pset.
+        (valid_pset(a, pset_union(s1, s2)) <->
+         (valid_pset(a, s1) and valid_pset(a, s2))))))
+
+predicate not_assigns(a: 'a1 alloc_table, m1: ('a1, 'a2) memory, m2: ('a1,
+  'a2) memory, l: 'a1 pset) =
+  (forall p:'a1 pointer.
+    ((valid(a, p) and (not in_pset(p, l))) -> (select(m2, p) = select(m1, p))))
+
+axiom not_assigns_refl:
+  (forall a:'a1 alloc_table.
+    (forall m:('a1, 'a2) memory.
+      (forall l:'a1 pset. not_assigns(a, m, m, l))))
+
+axiom not_assigns_trans:
+  (forall a:'a1 alloc_table.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory.
+          (forall l:'a1 pset [not_assigns(a, m1, m2, l), not_assigns(a, m1,
+            m3, l)].
+            (not_assigns(a, m1, m2, l) ->
+             (not_assigns(a, m2, m3, l) -> not_assigns(a, m1, m3, l))))))))
+
+logic full_separated : 'a1 pointer, 'a2 pointer -> prop
+
+axiom full_separated_shift1:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(p, q), shift(q, i)].
+        (full_separated(p, q) -> full_separated(p, shift(q, i))))))
+
+axiom full_separated_shift2:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(p, q), shift(q, i)].
+        (full_separated(p, q) -> full_separated(shift(q, i), p)))))
+
+axiom full_separated_shift3:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(q, p), shift(q, i)].
+        (full_separated(q, p) -> full_separated(shift(q, i), p)))))
+
+axiom full_separated_shift4:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(q, p), shift(q, i)].
+        (full_separated(q, p) -> full_separated(p, shift(q, i))))))
+
+type 't tag_table
+
+type 't tag_id
+
+logic int_of_tag : 'a1 tag_id -> int
+
+logic typeof : 'a1 tag_table, 'a1 pointer -> 'a1 tag_id
+
+logic parenttag : 'a1 tag_id, 'a1 tag_id -> prop
+
+logic subtag : 'a1 tag_id, 'a1 tag_id -> prop
+
+logic subtag_bool : 'a1 tag_id, 'a1 tag_id -> bool
+
+axiom subtag_bool_def:
+  (forall t1:'a1 tag_id.
+    (forall t2:'a1 tag_id. ((subtag_bool(t1, t2) = true) <-> subtag(t1, t2))))
+
+axiom subtag_refl: (forall t:'a1 tag_id. subtag(t, t))
+
+axiom subtag_parent:
+  (forall t1:'a1 tag_id.
+    (forall t2:'a1 tag_id.
+      (forall t3:'a1 tag_id.
+        (subtag(t1, t2) -> (parenttag(t2, t3) -> subtag(t1, t3))))))
+
+predicate instanceof(a: 'a1 tag_table, p: 'a1 pointer, t: 'a1 tag_id) =
+  subtag(typeof(a, p), t)
+
+logic downcast : 'a1 tag_table, 'a1 pointer, 'a1 tag_id -> 'a1 pointer
+
+axiom downcast_instanceof:
+  (forall a:'a1 tag_table.
+    (forall p:'a1 pointer.
+      (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
+
+logic bottom_tag : 'a1 tag_id
+
+axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
+
+predicate root_tag(t: 'a1 tag_id) = parenttag(t, bottom_tag)
+
+axiom root_subtag:
+  (forall a:'a1 tag_id.
+    (forall b:'a1 tag_id.
+      (forall c:'a1 tag_id.
+        (root_tag(a) ->
+         (root_tag(b) -> ((a <> b) -> (subtag(c, a) -> (not subtag(c, b)))))))))
+
+predicate fully_packed(tag_table: 'a1 tag_table, mutable: ('a1,
+  'a1 tag_id) memory, this: 'a1 pointer) = (select(mutable,
+  this) = typeof(tag_table, this))
+
+logic bw_compl : int -> int
+
+logic bw_and : int, int -> int
+
+axiom bw_and_not_null:
+  (forall a:int.
+    (forall b:int. ((bw_and(a, b) <> 0) -> ((a <> 0) and (b <> 0)))))
+
+logic bw_xor : int, int -> int
+
+logic bw_or : int, int -> int
+
+logic lsl : int, int -> int
+
+axiom lsl_left_positive_returns_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= lsl(a, b)))))
+
+axiom lsl_left_positive_monotone:
+  (forall a1:int.
+    (forall a2:int.
+      (forall b:int.
+        (((0 <= a1) and ((a1 <= a2) and (0 <= b))) -> (lsl(a1, b) <= lsl(a2,
+         b))))))
+
+logic lsr : int, int -> int
+
+axiom lsr_left_positive_returns_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= lsr(a, b)))))
+
+axiom lsr_left_positive_decreases:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsr(a, b) <= a))))
+
+logic asr : int, int -> int
+
+axiom asr_positive_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= asr(a, b)))))
+
+axiom asr_decreases_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (asr(a, b) <= a))))
+
+axiom asr_lsr_same_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (asr(a, b) = lsr(a, b)))))
+
+axiom lsl_of_lsr_decreases_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsl(lsr(a, b), b) <= a))))
+
+axiom lsr_of_lsl_identity_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsr(lsl(a, b), b) = a))))
+
+logic alloc_extends : 'a1 alloc_table, 'a1 alloc_table -> prop
+
+predicate alloc_fresh(a: 'a1 alloc_table, p: 'a1 pointer, n: int) =
+  (forall i:int. (((0 <= i) and (i < n)) -> (not valid(a, shift(p, i)))))
+
+axiom alloc_extends_offset_min:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table [alloc_extends(a1, a2)].
+      (alloc_extends(a1, a2) ->
+       (forall p:'a1 pointer.
+         (valid(a1, p) -> (offset_min(a1, p) = offset_min(a2, p)))))))
+
+axiom alloc_extends_offset_max:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table [alloc_extends(a1, a2)].
+      (alloc_extends(a1, a2) ->
+       (forall p:'a1 pointer.
+         (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
+
+axiom alloc_extends_not_assigns_empty:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory.
+          (forall l:'a1 pset.
+            (forall p:'a1 pointer.
+              (forall n:int [alloc_extends(a1, a2), alloc_fresh(a1, p, n),
+                not_assigns(a2, m1, m2, l)].
+                ((alloc_extends(a1, a2) and
+                  (alloc_fresh(a1, p, n) and
+                   (not_assigns(a2, m1, m2, l) and pset_included(l,
+                    pset_all(pset_singleton(p)))))) ->
+                 not_assigns(a1, m1, m2, pset_empty)))))))))
+
+logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
+'a1 pset -> prop
+
+axiom alloc_extends_except_offset_min:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall l:'a1 pset [alloc_extends_except(a1, a2, l)].
+        (alloc_extends_except(a1, a2, l) ->
+         (forall p:'a1 pointer.
+           ((valid(a1, p) and (not in_pset(p, l))) -> (offset_min(a1,
+            p) = offset_min(a2, p))))))))
+
+axiom alloc_extends_except_offset_max:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall l:'a1 pset [alloc_extends_except(a1, a2, l)].
+        (alloc_extends_except(a1, a2, l) ->
+         (forall p:'a1 pointer.
+           ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
+            p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
+type Object
+
+type interface
+
+logic Exception_tag : Object tag_id
+
+logic Object_tag : Object tag_id
+
+axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
+
+logic Fact_tag : Object tag_id
+
+axiom Fact_parenttag_Object: parenttag(Fact_tag, Object_tag)
+
+predicate Non_null_Object(x_0: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x_0) >= 0)
+
+axiom Object_int: (int_of_tag(Object_tag) = 1)
+
+logic Object_of_pointer_address : unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr:
+  (forall p:Object pointer.
+    (p = Object_of_pointer_address(pointer_address(p))))
+
+axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
+
+axiom Object_tags:
+  (forall x:Object pointer.
+    (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
+      x, Object_tag)))
+
+logic String_tag : Object tag_id
+
+axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
+
+logic Throwable_tag : Object tag_id
+
+axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
+
+logic interface_tag : interface tag_id
+
+axiom interface_int: (int_of_tag(interface_tag) = 1)
+
+logic interface_of_pointer_address : unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr:
+  (forall p:interface pointer.
+    (p = interface_of_pointer_address(pointer_address(p))))
+
+axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
+
+axiom interface_tags:
+  (forall x:interface pointer.
+    (forall interface_tag_table:interface tag_table.
+      instanceof(interface_tag_table, x, interface_tag)))
+
+inductive isfact: int, int -> prop =
+  | isfact0: isfact(0, 1)
+  | isfactn: (forall n:int.
+               (forall r_0:int.
+                 (((n >= 1) and isfact((n - 1), r_0)) -> isfact(n, (r_0 * n)))))
+
+
+
+predicate left_valid_struct_Object(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_Exception(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_Fact(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_String(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_interface(p: interface pointer, a: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_min(interface_alloc_table, p) <= a)
+
+axiom pointer_addr_of_Object_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(interface_of_pointer_address(p))))
+
+predicate right_valid_struct_Object(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  p) >= b)
+
+predicate right_valid_struct_Exception(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_Fact(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_String(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_interface(p: interface pointer, b: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_max(interface_alloc_table, p) >= b)
+
+predicate strict_valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_Fact(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
+
+predicate valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_Fact(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
+
+========== file tests/java/why/Fact_po1.why ==========
+goal Fact_fact_ensures_default_po_1:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  ("JC_38": ("JC_35": (0 <= 0)))
+
+========== file tests/java/why/Fact_po2.why ==========
+goal Fact_fact_ensures_default_po_2:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  ("JC_38": ("JC_36": (0 <= x_0_0)))
+
+========== file tests/java/why/Fact_po3.why ==========
+goal Fact_fact_ensures_default_po_3:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  ("JC_38": ("JC_37": isfact(0, 1)))
+
+========== file tests/java/why/Fact_po4.why ==========
+goal Fact_fact_ensures_default_po_4:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_38":
+  (("JC_35": (0 <= a)) and
+   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
+  (a < x_0_0) ->
+  forall a0:int.
+  (a0 = (a + 1)) ->
+  forall y0:int.
+  (y0 = (y * a0)) ->
+  ("JC_38": ("JC_35": (0 <= a0)))
+
+========== file tests/java/why/Fact_po5.why ==========
+goal Fact_fact_ensures_default_po_5:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_38":
+  (("JC_35": (0 <= a)) and
+   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
+  (a < x_0_0) ->
+  forall a0:int.
+  (a0 = (a + 1)) ->
+  forall y0:int.
+  (y0 = (y * a0)) ->
+  ("JC_38": ("JC_36": (a0 <= x_0_0)))
+
+========== file tests/java/why/Fact_po6.why ==========
+goal Fact_fact_ensures_default_po_6:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_38":
+  (("JC_35": (0 <= a)) and
+   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
+  (a < x_0_0) ->
+  forall a0:int.
+  (a0 = (a + 1)) ->
+  forall y0:int.
+  (y0 = (y * a0)) ->
+  ("JC_38": ("JC_37": isfact(a0, y0)))
+
+========== file tests/java/why/Fact_po7.why ==========
+goal Fact_fact_ensures_default_po_7:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_38":
+  (("JC_35": (0 <= a)) and
+   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
+  (a >= x_0_0) ->
+  forall return:int.
+  (return = y) ->
+  ("JC_23": isfact(x_0_0, return))
+
+========== file tests/java/why/Fact_po8.why ==========
+goal Fact_fact_safety_po_1:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_32": true) ->
+  ("JC_30":
+  (("JC_27": (0 <= a)) and
+   (("JC_28": (a <= x_0_0)) and ("JC_29": isfact(a, y))))) ->
+  (a < x_0_0) ->
+  forall a0:int.
+  (a0 = (a + 1)) ->
+  forall y0:int.
+  (y0 = (y * a0)) ->
+  (0 <= ("JC_34": (x_0_0 - a)))
+
+========== file tests/java/why/Fact_po9.why ==========
+goal Fact_fact_safety_po_2:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_32": true) ->
+  ("JC_30":
+  (("JC_27": (0 <= a)) and
+   (("JC_28": (a <= x_0_0)) and ("JC_29": isfact(a, y))))) ->
+  (a < x_0_0) ->
+  forall a0:int.
+  (a0 = (a + 1)) ->
+  forall y0:int.
+  (y0 = (y * a0)) ->
+  (("JC_34": (x_0_0 - a0)) < ("JC_34": (x_0_0 - a)))
+
+========== generation of Simplify VC output ==========
+why -simplify [...] why/Fact.why
+========== file tests/java/simplify/Fact_why.sx ==========
+
+;; DO NOT EDIT BELOW THIS LINE
+
+(BG_PUSH (NEQ |@true| |@false|))
+
+(DEFPRED (zwf_zero a b) (AND (<= 0 b) (< a b)))
+
+(BG_PUSH
+ ;; Why axiom bool_and_def
+ (FORALL (a b)
+ (IFF (EQ (bool_and a b) |@true|) (AND (EQ a |@true|) (EQ b |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom bool_or_def
+ (FORALL (a b)
+ (IFF (EQ (bool_or a b) |@true|) (OR (EQ a |@true|) (EQ b |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom bool_xor_def
+ (FORALL (a b) (IFF (EQ (bool_xor a b) |@true|) (NEQ a b))))
+
+(BG_PUSH
+ ;; Why axiom bool_not_def
+ (FORALL (a) (IFF (EQ (bool_not a) |@true|) (EQ a |@false|))))
+
+(BG_PUSH
+ ;; Why axiom ite_true
+ (FORALL (x y) (EQ (ite |@true| x y) x)))
+
+(BG_PUSH
+ ;; Why axiom ite_false
+ (FORALL (x y) (EQ (ite |@false| x y) y)))
+
+(BG_PUSH
+ ;; Why axiom lt_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (lt_int_bool x y) |@true|) (< x y))))
+
+(BG_PUSH
+ ;; Why axiom le_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (le_int_bool x y) |@true|) (<= x y))))
+
+(BG_PUSH
+ ;; Why axiom gt_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (gt_int_bool x y) |@true|) (> x y))))
+
+(BG_PUSH
+ ;; Why axiom ge_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (ge_int_bool x y) |@true|) (>= x y))))
+
+(BG_PUSH
+ ;; Why axiom eq_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (eq_int_bool x y) |@true|) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom neq_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y))))
+
+(BG_PUSH
+ ;; Why axiom abs_int_pos
+ (FORALL (x) (IMPLIES (>= x 0) (EQ (abs_int x) x))))
+
+(BG_PUSH
+ ;; Why axiom abs_int_neg
+ (FORALL (x) (IMPLIES (<= x 0) (EQ (abs_int x) (- 0 x)))))
+
+(BG_PUSH
+ ;; Why axiom int_max_is_ge
+ (FORALL (x y) (AND (>= (int_max x y) x) (>= (int_max x y) y))))
+
+(BG_PUSH
+ ;; Why axiom int_max_is_some
+ (FORALL (x y) (OR (EQ (int_max x y) x) (EQ (int_max x y) y))))
+
+(BG_PUSH
+ ;; Why axiom int_min_is_le
+ (FORALL (x y) (AND (<= (int_min x y) x) (<= (int_min x y) y))))
+
+(BG_PUSH
+ ;; Why axiom int_min_is_some
+ (FORALL (x y) (OR (EQ (int_min x y) x) (EQ (int_min x y) y))))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_zero
+ (EQ (real_of_int 0) real_constant_0_0e))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_one
+ (EQ (real_of_int 1) real_constant_1_0e))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_add
+ (FORALL (x y)
+ (EQ (real_of_int (+ x y)) (real_add (real_of_int x) (real_of_int y)))))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_sub
+ (FORALL (x y)
+ (EQ (real_of_int (- x y)) (real_sub (real_of_int x) (real_of_int y)))))
+
+(BG_PUSH
+ ;; Why axiom truncate_down_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (AND (EQ (le_real (real_of_int (truncate_real_to_int x)) x) |@true|)
+ (EQ (lt_real x (real_of_int (+ (truncate_real_to_int x) 1))) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom truncate_up_neg
+ (FORALL (x)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
+ (AND (EQ (lt_real (real_of_int (- (truncate_real_to_int x) 1)) x) |@true|)
+ (EQ (le_real x (real_of_int (truncate_real_to_int x))) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom lt_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (lt_real_bool x y) |@true|) (EQ (lt_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom le_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (le_real_bool x y) |@true|) (EQ (le_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom gt_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (gt_real_bool x y) |@true|) (EQ (gt_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom ge_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (ge_real_bool x y) |@true|) (EQ (ge_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom eq_real_bool_axiom
+ (FORALL (x y) (IFF (EQ (eq_real_bool x y) |@true|) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom neq_real_bool_axiom
+ (FORALL (x y) (IFF (EQ (neq_real_bool x y) |@true|) (NEQ x y))))
+
+(BG_PUSH
+ ;; Why axiom real_max_is_ge
+ (FORALL (x y)
+ (AND (EQ (ge_real (real_max x y) x) |@true|)
+ (EQ (ge_real (real_max x y) y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom real_max_is_some
+ (FORALL (x y) (OR (EQ (real_max x y) x) (EQ (real_max x y) y))))
+
+(BG_PUSH
+ ;; Why axiom real_min_is_le
+ (FORALL (x y)
+ (AND (EQ (le_real (real_min x y) x) |@true|)
+ (EQ (le_real (real_min x y) y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom real_min_is_some
+ (FORALL (x y) (OR (EQ (real_min x y) x) (EQ (real_min x y) y))))
+
+(BG_PUSH
+ ;; Why axiom sqr_real_def
+ (FORALL (x) (EQ (sqr_real x) (real_mul x x))))
+
+(BG_PUSH
+ ;; Why axiom sqrt_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (ge_real (real_sqrt x) real_constant_0_0e) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom sqrt_sqr
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (sqr_real (real_sqrt x)) x))))
+
+(BG_PUSH
+ ;; Why axiom sqr_sqrt
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (real_sqrt (real_mul x x)) x))))
+
+(BG_PUSH
+ ;; Why axiom abs_real_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
+
+(BG_PUSH
+ ;; Why axiom abs_real_neg
+ (FORALL (x)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
+ (EQ (real_abs x) (real_neg x)))))
+
+(BG_PUSH
+ ;; Why axiom log_exp
+ (FORALL (x) (EQ (log (exp x)) x)))
+
+(BG_PUSH
+ ;; Why axiom exp_log
+ (FORALL (x)
+ (IMPLIES (EQ (gt_real x real_constant_0_0e) |@true|) (EQ (exp (log x)) x))))
+
+(BG_PUSH
+ ;; Why axiom prod_pos
+ (FORALL (x y)
+ (AND
+ (IMPLIES
+ (AND (EQ (gt_real x real_constant_0_0e) |@true|)
+ (EQ (gt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|))
+ (IMPLIES
+ (AND (EQ (lt_real x real_constant_0_0e) |@true|)
+ (EQ (lt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom abs_minus
+ (FORALL (x) (EQ (real_abs (real_neg x)) (real_abs x))))
+
+(BG_PUSH
+ ;; Why axiom math_div_mod
+ (FORALL (x y)
+ (IMPLIES (NEQ y 0) (EQ x (+ (* y (math_div x y)) (math_mod x y)))))
+
+ (FORALL (y)
+ (IMPLIES (NEQ y 0)
+ (FORALL (x) (EQ x (+ (* y (math_div x y)) (math_mod x y)))))))
+
+(BG_PUSH
+ ;; Why axiom math_mod_bound
+ (FORALL (x y)
+ (IMPLIES (NEQ y 0)
+ (AND (<= 0 (math_mod x y)) (< (math_mod x y) (abs_int y)))))
+
+ (FORALL (y)
+ (IMPLIES (NEQ y 0)
+ (FORALL (x) (AND (<= 0 (math_mod x y)) (< (math_mod x y) (abs_int y)))))))
+
+(BG_PUSH
+ ;; Why axiom computer_div_mod
+ (FORALL (x y)
+ (IMPLIES (NEQ y 0) (EQ x (+ (* y (computer_div x y)) (computer_mod x y)))))
+
+ (FORALL (y)
+ (IMPLIES (NEQ y 0)
+ (FORALL (x) (EQ x (+ (* y (computer_div x y)) (computer_mod x y)))))))
+
+(BG_PUSH
+ ;; Why axiom computer_div_bound
+ (FORALL (x y)
+ (IMPLIES (AND (>= x 0) (> y 0))
+ (AND (<= 0 (computer_div x y)) (<= (computer_div x y) x)))))
+
+(BG_PUSH
+ ;; Why axiom computer_mod_bound
+ (FORALL (x y)
+ (IMPLIES (NEQ y 0) (< (abs_int (computer_mod x y)) (abs_int y))))
+
+ (FORALL (y)
+ (IMPLIES (NEQ y 0)
+ (FORALL (x) (< (abs_int (computer_mod x y)) (abs_int y))))))
+
+(BG_PUSH
+ ;; Why axiom computer_mod_sign_pos
+ (FORALL (x y) (IMPLIES (AND (>= x 0) (NEQ y 0)) (>= (computer_mod x y) 0))))
+
+(BG_PUSH
+ ;; Why axiom computer_mod_sign_neg
+ (FORALL (x y) (IMPLIES (AND (<= x 0) (NEQ y 0)) (<= (computer_mod x y) 0))))
+
+(BG_PUSH
+ ;; Why axiom computer_rounds_toward_zero
+ (FORALL (x y)
+ (IMPLIES (NEQ y 0) (<= (abs_int (* (computer_div x y) y)) (abs_int x))))
+
+ (FORALL (y)
+ (IMPLIES (NEQ y 0)
+ (FORALL (x) (<= (abs_int (* (computer_div x y) y)) (abs_int x))))))
+
+(DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
+
+(DEFPRED (same_block p q) (EQ (base_block p) (base_block q)))
+
+(BG_PUSH
+ ;; Why axiom address_injective
+ (FORALL (p q) (IFF (EQ p q) (EQ (address p) (address q)))))
+
+(BG_PUSH
+ ;; Why axiom address_null
+ (EQ (address null) 0))
+
+(BG_PUSH
+ ;; Why axiom address_shift_lt
+ (FORALL (p i j)
+ (IFF (< (address (shift p i)) (address (shift p j))) (< i j))))
+
+(BG_PUSH
+ ;; Why axiom address_shift_le
+ (FORALL (p i j)
+ (IFF (<= (address (shift p i)) (address (shift p j))) (<= i j))))
+
+(BG_PUSH
+ ;; Why axiom shift_zero
+ (FORALL (p) (EQ (shift p 0) p)))
+
+(BG_PUSH
+ ;; Why axiom shift_shift
+ (FORALL (p i j) (EQ (shift (shift p i) j) (shift p (+ i j)))))
+
+(BG_PUSH
+ ;; Why axiom offset_max_shift
+ (FORALL (a p i) (EQ (offset_max a (shift p i)) (- (offset_max a p) i))))
+
+(BG_PUSH
+ ;; Why axiom offset_min_shift
+ (FORALL (a p i) (EQ (offset_min a (shift p i)) (- (offset_min a p) i))))
+
+(BG_PUSH
+ ;; Why axiom neq_shift
+ (FORALL (p i j) (IMPLIES (NEQ i j) (NEQ (shift p i) (shift p j))))
+
+ (FORALL (i j)
+ (IMPLIES (NEQ i j) (FORALL (p) (NEQ (shift p i) (shift p j))))))
+
+(BG_PUSH
+ ;; Why axiom null_not_valid
+ (FORALL (a) (NOT (valid a null))))
+
+(BG_PUSH
+ ;; Why axiom null_pointer
+ (FORALL (a)
+ (AND (>= (offset_min a null) 0) (<= (offset_max a null) (- 0 2)))))
+
+(BG_PUSH
+ ;; Why axiom eq_pointer_bool_def
+ (FORALL (p1 p2) (IFF (EQ (eq_pointer_bool p1 p2) |@true|) (EQ p1 p2))))
+
+(BG_PUSH
+ ;; Why axiom neq_pointer_bool_def
+ (FORALL (p1 p2) (IFF (EQ (neq_pointer_bool p1 p2) |@true|) (NEQ p1 p2))))
+
+(BG_PUSH
+ ;; Why axiom same_block_shift_right
+ (FORALL (p q i) (IMPLIES (same_block p q) (same_block p (shift q i))))
+
+ (FORALL (p q)
+ (IMPLIES (same_block p q) (FORALL (i) (same_block p (shift q i))))))
+
+(BG_PUSH
+ ;; Why axiom same_block_shift_left
+ (FORALL (p q i) (IMPLIES (same_block q p) (same_block (shift q i) p)))
+
+ (FORALL (p q)
+ (IMPLIES (same_block q p) (FORALL (i) (same_block (shift q i) p)))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift
+ (FORALL (p q) (IMPLIES (same_block p q) (EQ p (shift q (sub_pointer p q))))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_self
+ (FORALL (p) (EQ (sub_pointer p p) 0)))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_zero
+ (FORALL (p q)
+ (IMPLIES (same_block p q) (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q)))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift_left
+ (FORALL (p q i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift_right
+ (FORALL (p q i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
+
+(BG_PUSH
+ ;; Why axiom select_store_eq
+ (FORALL (m p1 p2 a)
+ (IMPLIES (EQ p1 p2) (EQ (select (|why__store| m p1 a) p2) a)))
+
+ (FORALL (p1 p2)
+ (IMPLIES (EQ p1 p2) (FORALL (m a) (EQ (select (|why__store| m p1 a) p2) a)))))
+
+(BG_PUSH
+ ;; Why axiom select_store_neq
+ (FORALL (m p1 p2 a)
+ (IMPLIES (NEQ p1 p2) (EQ (select (|why__store| m p1 a) p2) (select m p2))))
+
+ (FORALL (p1 p2)
+ (IMPLIES (NEQ p1 p2)
+ (FORALL (m a) (EQ (select (|why__store| m p1 a) p2) (select m p2))))))
+
+(DEFPRED (pset_disjoint ps1 ps2)
+  (FORALL (p)
+  (NOT (AND (EQ (in_pset p ps1) |@true|) (EQ (in_pset p ps2) |@true|)))))
+
+(DEFPRED (pset_included ps1 ps2)
+  (FORALL (p)
+  (IMPLIES (EQ (in_pset p ps1) |@true|) (EQ (in_pset p ps2) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom pset_included_self
+ (FORALL (ps) (pset_included ps ps)))
+
+(BG_PUSH
+ ;; Why axiom pset_included_range
+ (FORALL (ps a b c d)
+ (IMPLIES (AND (<= c a) (<= b d))
+ (pset_included (pset_range ps a b) (pset_range ps c d))))
+
+ (FORALL (a b c d)
+ (IMPLIES (AND (<= c a) (<= b d))
+ (FORALL (ps) (pset_included (pset_range ps a b) (pset_range ps c d))))))
+
+(BG_PUSH
+ ;; Why axiom pset_included_range_all
+ (FORALL (ps a b c d) (pset_included (pset_range ps a b) (pset_all ps))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_empty
+ (FORALL (p) (NOT (EQ (in_pset p pset_empty) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_singleton
+ (FORALL (p q) (IFF (EQ (in_pset p (pset_singleton q)) |@true|) (EQ p q))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_deref
+ (FORALL (p m q)
+ (IFF (EQ (in_pset p (pset_deref m q)) |@true|)
+ (EXISTS (r) (AND (EQ (in_pset r q) |@true|) (EQ p (select m r)))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_all
+ (FORALL (p q)
+ (IFF (EQ (in_pset p (pset_all q)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_range
+ (FORALL (p q a b)
+ (IFF (EQ (in_pset p (pset_range q a b)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r)
+ (AND (<= a i)
+ (AND (<= i b) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i))))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_range_left
+ (FORALL (p q b)
+ (IFF (EQ (in_pset p (pset_range_left q b)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r)
+ (AND (<= i b) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i)))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_range_right
+ (FORALL (p q a)
+ (IFF (EQ (in_pset p (pset_range_right q a)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r)
+ (AND (<= a i) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i)))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_union
+ (FORALL (p s1 s2)
+ (IFF (EQ (in_pset p (pset_union s1 s2)) |@true|)
+ (OR (EQ (in_pset p s1) |@true|) (EQ (in_pset p s2) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_empty
+ (FORALL (a) (EQ (valid_pset a pset_empty) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_singleton
+ (FORALL (a p)
+ (IFF (EQ (valid_pset a (pset_singleton p)) |@true|) (valid a p))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_deref
+ (FORALL (a m q)
+ (IFF (EQ (valid_pset a (pset_deref m q)) |@true|)
+ (FORALL (r p)
+ (IMPLIES (AND (EQ (in_pset r q) |@true|) (EQ p (select m r))) (valid a p))))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_range
+ (FORALL (a q c d)
+ (IFF (EQ (valid_pset a (pset_range q c d)) |@true|)
+ (FORALL (i r)
+ (IMPLIES (AND (EQ (in_pset r q) |@true|) (AND (<= c i) (<= i d)))
+ (valid a (shift r i)))))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_union
+ (FORALL (a s1 s2)
+ (IFF (EQ (valid_pset a (pset_union s1 s2)) |@true|)
+ (AND (EQ (valid_pset a s1) |@true|) (EQ (valid_pset a s2) |@true|)))))
+
+(DEFPRED (not_assigns a m1 m2 l)
+  (FORALL (p)
+  (IMPLIES (AND (valid a p) (NOT (EQ (in_pset p l) |@true|)))
+  (EQ (select m2 p) (select m1 p)))))
+
+(BG_PUSH
+ ;; Why axiom not_assigns_refl
+ (FORALL (a m l) (not_assigns a m m l)))
+
+(BG_PUSH
+ ;; Why axiom not_assigns_trans
+ (FORALL (a m1 m2 m3 l)
+ (IMPLIES (not_assigns a m1 m2 l)
+ (IMPLIES (not_assigns a m2 m3 l) (not_assigns a m1 m3 l))))
+
+ (FORALL (a m1 m2 l)
+ (IMPLIES (not_assigns a m1 m2 l)
+ (FORALL (m3) (IMPLIES (not_assigns a m2 m3 l) (not_assigns a m1 m3 l))))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift1
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (EQ (full_separated p (shift q i)) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (FORALL (i) (EQ (full_separated p (shift q i)) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift2
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (EQ (full_separated (shift q i) p) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (FORALL (i) (EQ (full_separated (shift q i) p) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift3
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (EQ (full_separated (shift q i) p) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (FORALL (i) (EQ (full_separated (shift q i) p) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift4
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (EQ (full_separated p (shift q i)) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (FORALL (i) (EQ (full_separated p (shift q i)) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom subtag_bool_def
+ (FORALL (t1 t2)
+ (IFF (EQ (subtag_bool t1 t2) |@true|) (EQ (subtag t1 t2) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom subtag_refl
+ (FORALL (t) (EQ (subtag t t) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom subtag_parent
+ (FORALL (t1 t2 t3)
+ (IMPLIES (EQ (subtag t1 t2) |@true|)
+ (IMPLIES (EQ (parenttag t2 t3) |@true|) (EQ (subtag t1 t3) |@true|))))
+
+ (FORALL (t1 t2)
+ (IMPLIES (EQ (subtag t1 t2) |@true|)
+ (FORALL (t3)
+ (IMPLIES (EQ (parenttag t2 t3) |@true|) (EQ (subtag t1 t3) |@true|))))))
+
+(DEFPRED (instanceof a p t) (EQ (subtag (typeof a p) t) |@true|))
+
+(BG_PUSH
+ ;; Why axiom downcast_instanceof
+ (FORALL (a p s) (IMPLIES (instanceof a p s) (EQ (downcast a p s) p))))
+
+(BG_PUSH
+ ;; Why axiom bottom_tag_axiom
+ (FORALL (t) (EQ (subtag t bottom_tag) |@true|)))
+
+(DEFPRED (root_tag t) (EQ (parenttag t bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom root_subtag
+ (FORALL (a b c)
+ (IMPLIES (root_tag a)
+ (IMPLIES (root_tag b)
+ (IMPLIES (NEQ a b)
+ (IMPLIES (EQ (subtag c a) |@true|) (NOT (EQ (subtag c b) |@true|)))))))
+
+ (FORALL (a)
+ (IMPLIES (root_tag a)
+ (FORALL (b)
+ (IMPLIES (root_tag b)
+ (IMPLIES (NEQ a b)
+ (FORALL (c)
+ (IMPLIES (EQ (subtag c a) |@true|) (NOT (EQ (subtag c b) |@true|))))))))))
+
+(DEFPRED (fully_packed tag_table mutable this)
+  (EQ (select mutable this) (typeof tag_table this)))
+
+(BG_PUSH
+ ;; Why axiom bw_and_not_null
+ (FORALL (a b) (IMPLIES (NEQ (bw_and a b) 0) (AND (NEQ a 0) (NEQ b 0)))))
+
+(BG_PUSH
+ ;; Why axiom lsl_left_positive_returns_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= 0 (lsl a b)))))
+
+(BG_PUSH
+ ;; Why axiom lsl_left_positive_monotone
+ (FORALL (a1 a2 b)
+ (IMPLIES (AND (<= 0 a1) (AND (<= a1 a2) (<= 0 b)))
+ (<= (lsl a1 b) (lsl a2 b)))))
+
+(BG_PUSH
+ ;; Why axiom lsr_left_positive_returns_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= 0 (lsr a b)))))
+
+(BG_PUSH
+ ;; Why axiom lsr_left_positive_decreases
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= (lsr a b) a))))
+
+(BG_PUSH
+ ;; Why axiom asr_positive_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= 0 (asr a b)))))
+
+(BG_PUSH
+ ;; Why axiom asr_decreases_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= (asr a b) a))))
+
+(BG_PUSH
+ ;; Why axiom asr_lsr_same_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (EQ (asr a b) (lsr a b)))))
+
+(BG_PUSH
+ ;; Why axiom lsl_of_lsr_decreases_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= (lsl (lsr a b) b) a))))
+
+(BG_PUSH
+ ;; Why axiom lsr_of_lsl_identity_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (EQ (lsr (lsl a b) b) a))))
+
+(DEFPRED (alloc_fresh a p n)
+  (FORALL (i) (IMPLIES (AND (<= 0 i) (< i n)) (NOT (valid a (shift p i))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_offset_min
+ (FORALL (a1 a2)
+ (IMPLIES (EQ (alloc_extends a1 a2) |@true|)
+ (FORALL (p) (IMPLIES (valid a1 p) (EQ (offset_min a1 p) (offset_min a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_offset_max
+ (FORALL (a1 a2)
+ (IMPLIES (EQ (alloc_extends a1 a2) |@true|)
+ (FORALL (p) (IMPLIES (valid a1 p) (EQ (offset_max a1 p) (offset_max a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_not_assigns_empty
+ (FORALL (a1 a2 m1 m2 l p n)
+ (IMPLIES
+ (AND (EQ (alloc_extends a1 a2) |@true|)
+ (AND (alloc_fresh a1 p n)
+ (AND (not_assigns a2 m1 m2 l)
+ (pset_included l (pset_all (pset_singleton p))))))
+ (not_assigns a1 m1 m2 pset_empty))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_except_offset_min
+ (FORALL (a1 a2 l)
+ (IMPLIES (EQ (alloc_extends_except a1 a2 l) |@true|)
+ (FORALL (p)
+ (IMPLIES (AND (valid a1 p) (NOT (EQ (in_pset p l) |@true|)))
+ (EQ (offset_min a1 p) (offset_min a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_except_offset_max
+ (FORALL (a1 a2 l)
+ (IMPLIES (EQ (alloc_extends_except a1 a2 l) |@true|)
+ (FORALL (p)
+ (IMPLIES (AND (valid a1 p) (NOT (EQ (in_pset p l) |@true|)))
+ (EQ (offset_max a1 p) (offset_max a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom disj_sym
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (disj_mybag s1 s2) |@true|) (EQ (disj_mybag s2 s1) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom sub_refl
+ (FORALL (sa) (EQ (sub_mybag sa sa) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom sub_disj
+ (FORALL (s1 s2 s3)
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))
+
+ (FORALL (s1 s3)
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (FORALL (s2)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))))
+
+(BG_PUSH
+ ;; Why axiom sub_in
+ (FORALL (s1 s2 p)
+ (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))
+
+ (FORALL (s2 p)
+ (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
+ (FORALL (s1)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom sub_sub
+ (FORALL (s1 s2 s3)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))
+
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (FORALL (s3)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_refl
+ (FORALL (sa m) (EQ (frame_between sa m m) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen
+ (FORALL (sa m1 m2 p v)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (EQ (in_mybag p sa) |@true|)
+ (EQ (frame_between sa (|why__store| m1 p v) m2) |@true|))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (p)
+ (IMPLIES (EQ (in_mybag p sa) |@true|)
+ (FORALL (v) (EQ (frame_between sa (|why__store| m1 p v) m2) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen2
+ (FORALL (sa m1 m2 m3)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (EQ (frame_between sa m2 m3) |@true|)
+ (EQ (frame_between sa m1 m3) |@true|))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (m3)
+ (IMPLIES (EQ (frame_between sa m2 m3) |@true|)
+ (EQ (frame_between sa m1 m3) |@true|))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen_sub1
+ (FORALL (s12 s23 s13 m1 m2 m3)
+ (IMPLIES (EQ (sub_mybag s12 s13) |@true|)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|)))))
+
+ (FORALL (s12 s13)
+ (IMPLIES (EQ (sub_mybag s12 s13) |@true|)
+ (FORALL (m2 m1)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (FORALL (s23 m3)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|))))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen_sub2
+ (FORALL (s12 s23 s13 m1 m2 m3)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (IMPLIES (EQ (sub_mybag s23 s13) |@true|)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|)))))
+
+ (FORALL (s12 m1 m2)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (FORALL (s13 s23)
+ (IMPLIES (EQ (sub_mybag s23 s13) |@true|)
+ (FORALL (m3)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|))))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_pointer
+ (FORALL (sa m1 m2 p v)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (NOT (EQ (in_mybag p sa) |@true|))
+ (EQ (select m1 p) (select m2 p)))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (p)
+ (IMPLIES (NOT (EQ (in_mybag p sa) |@true|))
+ (FORALL (v) (EQ (select m1 p) (select m2 p))))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_sub
+ (FORALL (sa sb m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (EQ (sub_mybag sa sb) |@true|)
+ (EQ (frame_between sb m1 m2) |@true|))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (sb)
+ (IMPLIES (EQ (sub_mybag sa sb) |@true|)
+ (EQ (frame_between sb m1 m2) |@true|))))))
+
+(BG_PUSH
+ ;; Why axiom Exception_parenttag_Object
+ (EQ (parenttag Exception_tag Object_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom Fact_parenttag_Object
+ (EQ (parenttag Fact_tag Object_tag) |@true|))
+
+(DEFPRED (Non_null_Object x_0 Object_alloc_table)
+  (>= (offset_max Object_alloc_table x_0) 0))
+
+(BG_PUSH
+ ;; Why axiom Object_int
+ (EQ (int_of_tag Object_tag) 1))
+
+(BG_PUSH
+ ;; Why axiom Object_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (Object_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom Object_parenttag_bottom
+ (EQ (parenttag Object_tag bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom Object_tags
+ (FORALL (x Object_tag_table) (instanceof Object_tag_table x Object_tag)))
+
+(BG_PUSH
+ ;; Why axiom String_parenttag_Object
+ (EQ (parenttag String_tag Object_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom Throwable_parenttag_Object
+ (EQ (parenttag Throwable_tag Object_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom interface_int
+ (EQ (int_of_tag interface_tag) 1))
+
+(BG_PUSH
+ ;; Why axiom interface_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (interface_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom interface_parenttag_bottom
+ (EQ (parenttag interface_tag bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom interface_tags
+ (FORALL (x interface_tag_table)
+ (instanceof interface_tag_table x interface_tag)))
+
+(BG_PUSH
+ ;; Why axiom isfact_inversion
+ (FORALL (aux_1 aux_2)
+ (IMPLIES (EQ (isfact aux_1 aux_2) |@true|)
+ (OR (AND (EQ aux_1 0) (EQ aux_2 1))
+ (EXISTS (n)
+ (EXISTS (r_0)
+ (AND (AND (>= n 1) (EQ (isfact (- n 1) r_0) |@true|))
+ (AND (EQ aux_1 n) (EQ aux_2 (* r_0 n))))))))))
+
+(BG_PUSH
+ ;; Why axiom isfact0
+ (EQ (isfact 0 1) |@true|))
+
+(BG_PUSH
+ ;; Why axiom isfactn
+ (FORALL (n r_0)
+ (IMPLIES (AND (>= n 1) (EQ (isfact (- n 1) r_0) |@true|))
+ (EQ (isfact n (* r_0 n)) |@true|))))
+
+(DEFPRED (left_valid_struct_Object p a Object_alloc_table)
+  (<= (offset_min Object_alloc_table p) a))
+
+(DEFPRED (left_valid_struct_Exception p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_Fact p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_String p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_Throwable p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_interface p a interface_alloc_table)
+  (<= (offset_min interface_alloc_table p) a))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_Object_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (Object_of_pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_interface_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (interface_of_pointer_address p)))))
+
+(DEFPRED (right_valid_struct_Object p b Object_alloc_table)
+  (>= (offset_max Object_alloc_table p) b))
+
+(DEFPRED (right_valid_struct_Exception p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_Fact p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_String p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_Throwable p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_interface p b interface_alloc_table)
+  (>= (offset_max interface_alloc_table p) b))
+
+(DEFPRED (strict_valid_root_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (strict_valid_root_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_Exception p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_Fact p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_String p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_Throwable p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
+
+(DEFPRED (valid_root_Object p a b Object_alloc_table)
+  (AND (<= (offset_min Object_alloc_table p) a)
+  (>= (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (valid_root_interface p a b interface_alloc_table)
+  (AND (<= (offset_min interface_alloc_table p) a)
+  (>= (offset_max interface_alloc_table p) b)))
+
+(DEFPRED (valid_struct_Object p a b Object_alloc_table)
+  (AND (<= (offset_min Object_alloc_table p) a)
+  (>= (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (valid_struct_Exception p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (valid_struct_Fact p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (valid_struct_String p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (valid_struct_Throwable p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (valid_struct_interface p a b interface_alloc_table)
+  (AND (<= (offset_min interface_alloc_table p) a)
+  (>= (offset_max interface_alloc_table p) b)))
+
+;; Fact_fact_ensures_default_po_1, File "HOME/tests/java/Fact.java", line 20, characters 27-33
+(FORALL (x_0_0) (IMPLIES (>= x_0_0 0) (<= 0 0)))
+
+;; Fact_fact_ensures_default_po_2, File "HOME/tests/java/Fact.java", line 20, characters 32-38
+(FORALL (x_0_0) (IMPLIES (>= x_0_0 0) (<= 0 x_0_0)))
+
+;; Fact_fact_ensures_default_po_3, File "HOME/tests/java/Fact.java", line 20, characters 42-53
+(FORALL (x_0_0) (IMPLIES (>= x_0_0 0) (EQ (isfact 0 1) |@true|)))
+
+;; Fact_fact_ensures_default_po_4, File "HOME/tests/java/Fact.java", line 20, characters 27-33
+(FORALL (x_0_0)
+(IMPLIES (>= x_0_0 0)
+(FORALL (a)
+(FORALL (y)
+(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
+(IMPLIES (< a x_0_0)
+(FORALL (a0)
+(IMPLIES (EQ a0 (+ a 1)) (FORALL (y0) (IMPLIES (EQ y0 (* y a0)) (<= 0 a0)))))))))))
+
+;; Fact_fact_ensures_default_po_5, File "HOME/tests/java/Fact.java", line 20, characters 32-38
+(FORALL (x_0_0)
+(IMPLIES (>= x_0_0 0)
+(FORALL (a)
+(FORALL (y)
+(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
+(IMPLIES (< a x_0_0)
+(FORALL (a0)
+(IMPLIES (EQ a0 (+ a 1))
+(FORALL (y0) (IMPLIES (EQ y0 (* y a0)) (<= a0 x_0_0)))))))))))
+
+;; Fact_fact_ensures_default_po_6, File "HOME/tests/java/Fact.java", line 20, characters 42-53
+(FORALL (x_0_0)
+(IMPLIES (>= x_0_0 0)
+(FORALL (a)
+(FORALL (y)
+(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
+(IMPLIES (< a x_0_0)
+(FORALL (a0)
+(IMPLIES (EQ a0 (+ a 1))
+(FORALL (y0) (IMPLIES (EQ y0 (* y a0)) (EQ (isfact a0 y0) |@true|)))))))))))
+
+;; Fact_fact_ensures_default_po_7, File "HOME/tests/java/Fact.java", line 16, characters 16-34
+(FORALL (x_0_0)
+(IMPLIES (>= x_0_0 0)
+(FORALL (a)
+(FORALL (y)
+(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
+(IMPLIES (>= a x_0_0)
+(FORALL (return) (IMPLIES (EQ return y) (EQ (isfact x_0_0 return) |@true|)))))))))
+
+;; Fact_fact_safety_po_1, File "HOME/tests/java/Fact.java", line 21, characters 25-28
+(FORALL (x_0_0)
+(IMPLIES (>= x_0_0 0)
+(FORALL (a)
+(FORALL (y)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
+(IMPLIES (< a x_0_0)
+(FORALL (a0)
+(IMPLIES (EQ a0 (+ a 1))
+(FORALL (y0) (IMPLIES (EQ y0 (* y a0)) (<= 0 (- x_0_0 a)))))))))))))
+
+;; Fact_fact_safety_po_2, File "HOME/tests/java/Fact.java", line 21, characters 25-28
+(FORALL (x_0_0)
+(IMPLIES (>= x_0_0 0)
+(FORALL (a)
+(FORALL (y)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
+(IMPLIES (< a x_0_0)
+(FORALL (a0)
+(IMPLIES (EQ a0 (+ a 1))
+(FORALL (y0) (IMPLIES (EQ y0 (* y a0)) (< (- x_0_0 a0) (- x_0_0 a)))))))))))))
+
+========== running Simplify ==========
+Running Simplify on proof obligations
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/Fact_why.sx          : ......... (9/0/0/0/0)
+total   :   9
+valid   :   9 (100%)
+invalid :   0 (  0%)
+unknown :   0 (  0%)
+timeout :   0 (  0%)
+failure :   0 (  0%)
+========== generation of alt-ergo VC output ==========
+why -alt-ergo [...] why/Fact.why
+========== file tests/java/why/Fact_why.why ==========
+logic eq_unit : unit, unit -> prop
+
+logic neq_unit : unit, unit -> prop
+
+logic eq_bool : bool, bool -> prop
+
+logic neq_bool : bool, bool -> prop
+
+logic lt_int : int, int -> prop
+
+logic le_int : int, int -> prop
+
+logic gt_int : int, int -> prop
+
+logic ge_int : int, int -> prop
+
+logic eq_int : int, int -> prop
+
+logic neq_int : int, int -> prop
+
+logic add_int : int, int -> int
+
+logic sub_int : int, int -> int
+
+logic mul_int : int, int -> int
+
+logic neg_int : int -> int
+
+predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
+
+logic bool_and : bool, bool -> bool
+
+logic bool_or : bool, bool -> bool
+
+logic bool_xor : bool, bool -> bool
+
+logic bool_not : bool -> bool
+
+axiom bool_and_def:
+  (forall a:bool.
+    (forall b:bool.
+      ((bool_and(a, b) = true) <-> ((a = true) and (b = true)))))
+
+axiom bool_or_def:
+  (forall a:bool.
+    (forall b:bool. ((bool_or(a, b) = true) <-> ((a = true) or (b = true)))))
+
+axiom bool_xor_def:
+  (forall a:bool. (forall b:bool. ((bool_xor(a, b) = true) <-> (a <> b))))
+
+axiom bool_not_def: (forall a:bool. ((bool_not(a) = true) <-> (a = false)))
+
+logic ite : bool, 'a1, 'a1 -> 'a1
+
+axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
+
+axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
+
+logic lt_int_bool : int, int -> bool
+
+logic le_int_bool : int, int -> bool
+
+logic gt_int_bool : int, int -> bool
+
+logic ge_int_bool : int, int -> bool
+
+logic eq_int_bool : int, int -> bool
+
+logic neq_int_bool : int, int -> bool
+
+axiom lt_int_bool_axiom:
+  (forall x:int. (forall y:int. ((lt_int_bool(x, y) = true) <-> (x < y))))
+
+axiom le_int_bool_axiom:
+  (forall x:int. (forall y:int. ((le_int_bool(x, y) = true) <-> (x <= y))))
+
+axiom gt_int_bool_axiom:
+  (forall x:int. (forall y:int. ((gt_int_bool(x, y) = true) <-> (x > y))))
+
+axiom ge_int_bool_axiom:
+  (forall x:int. (forall y:int. ((ge_int_bool(x, y) = true) <-> (x >= y))))
+
+axiom eq_int_bool_axiom:
+  (forall x:int. (forall y:int. ((eq_int_bool(x, y) = true) <-> (x = y))))
+
+axiom neq_int_bool_axiom:
+  (forall x:int. (forall y:int. ((neq_int_bool(x, y) = true) <-> (x <> y))))
+
+logic abs_int : int -> int
+
+axiom abs_int_pos: (forall x:int. ((x >= 0) -> (abs_int(x) = x)))
+
+axiom abs_int_neg: (forall x:int. ((x <= 0) -> (abs_int(x) = (-x))))
+
+logic int_max : int, int -> int
+
+logic int_min : int, int -> int
+
+axiom int_max_is_ge:
+  (forall x:int.
+    (forall y:int. ((int_max(x, y) >= x) and (int_max(x, y) >= y))))
+
+axiom int_max_is_some:
+  (forall x:int.
+    (forall y:int. ((int_max(x, y) = x) or (int_max(x, y) = y))))
+
+axiom int_min_is_le:
+  (forall x:int.
+    (forall y:int. ((int_min(x, y) <= x) and (int_min(x, y) <= y))))
+
+axiom int_min_is_some:
+  (forall x:int.
+    (forall y:int. ((int_min(x, y) = x) or (int_min(x, y) = y))))
+
+logic lt_real : real, real -> prop
+
+logic le_real : real, real -> prop
+
+logic gt_real : real, real -> prop
+
+logic ge_real : real, real -> prop
+
+logic eq_real : real, real -> prop
+
+logic neq_real : real, real -> prop
+
+logic add_real : real, real -> real
+
+logic sub_real : real, real -> real
+
+logic mul_real : real, real -> real
+
+logic div_real : real, real -> real
+
+logic neg_real : real -> real
+
+logic real_of_int : int -> real
+
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
+
+logic lt_real_bool : real, real -> bool
+
+logic le_real_bool : real, real -> bool
+
+logic gt_real_bool : real, real -> bool
+
+logic ge_real_bool : real, real -> bool
+
+logic eq_real_bool : real, real -> bool
+
+logic neq_real_bool : real, real -> bool
+
+axiom lt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((lt_real_bool(x, y) = true) <-> (x < y))))
+
+axiom le_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((le_real_bool(x, y) = true) <-> (x <= y))))
+
+axiom gt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((gt_real_bool(x, y) = true) <-> (x > y))))
+
+axiom ge_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((ge_real_bool(x, y) = true) <-> (x >= y))))
+
+axiom eq_real_bool_axiom:
+  (forall x:real. (forall y:real. ((eq_real_bool(x, y) = true) <-> (x = y))))
+
+axiom neq_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
+
+logic real_max : real, real -> real
+
+logic real_min : real, real -> real
+
+axiom real_max_is_ge:
+  (forall x:real.
+    (forall y:real. ((real_max(x, y) >= x) and (real_max(x, y) >= y))))
+
+axiom real_max_is_some:
+  (forall x:real.
+    (forall y:real. ((real_max(x, y) = x) or (real_max(x, y) = y))))
+
+axiom real_min_is_le:
+  (forall x:real.
+    (forall y:real. ((real_min(x, y) <= x) and (real_min(x, y) <= y))))
+
+axiom real_min_is_some:
+  (forall x:real.
+    (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
+
+function sqr_real(x: real) : real = (x * x)
+
+logic sqrt_real : real -> real
+
+axiom sqrt_pos: (forall x:real. ((x >= 0.0) -> (sqrt_real(x) >= 0.0)))
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
+
+axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
+
+logic abs_real : real -> real
+
+axiom abs_real_pos:
+  (forall x:real [abs_real(x)]. ((x >= 0.0) -> (abs_real(x) = x)))
+
+axiom abs_real_neg:
+  (forall x:real [abs_real(x)]. ((x <= 0.0) -> (abs_real(x) = (-x))))
+
+logic exp : real -> real
+
+logic log : real -> real
+
+logic log10 : real -> real
+
+axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
+
+logic pow_real_int : real, int -> real
+
+logic pow_real : real, real -> real
+
+logic cos : real -> real
+
+logic sin : real -> real
+
+logic tan : real -> real
+
+logic pi : real
+
+logic cosh : real -> real
+
+logic sinh : real -> real
+
+logic tanh : real -> real
+
+logic acos : real -> real
+
+logic asin : real -> real
+
+logic atan : real -> real
+
+logic atan2 : real, real -> real
+
+logic hypot : real, real -> real
+
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int [computer_div(x, y), computer_mod(x, y)].
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_div_bound:
+  (forall x:int.
+    (forall y:int.
+      (((x >= 0) and (y > 0)) ->
+       ((0 <= computer_div(x, y)) and (computer_div(x, y) <= x)))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
+
+type 't alloc_table
+
+type 't pointer
+
+type 't block
+
+logic base_block : 'a1 pointer -> 'a1 block
+
+logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
+
+logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
+
+predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
+  ((offset_min(a, p) <= 0) and (offset_max(a, p) >= 0))
+
+predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
+  (base_block(p) = base_block(q))
+
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
+logic shift : 'a1 pointer, int -> 'a1 pointer
+
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
+
+axiom address_injective:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
+
+axiom address_null: (address(null) = 0)
+
+axiom address_shift_lt:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) < address(shift(p, j))) <-> (i < j)))))
+
+axiom address_shift_le:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
+
+axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
+
+axiom shift_shift:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [shift(shift(p, i), j)]. (shift(shift(p, i),
+        j) = shift(p, (i + j))))))
+
+axiom offset_max_shift:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (forall i:int. (offset_max(a, shift(p, i)) = (offset_max(a, p) - i)))))
+
+axiom offset_min_shift:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (forall i:int. (offset_min(a, shift(p, i)) = (offset_min(a, p) - i)))))
+
+axiom neq_shift:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [shift(p, i), shift(p, j)].
+        ((i <> j) -> (shift(p, i) <> shift(p, j))))))
+
+axiom null_not_valid: (forall a:'a1 alloc_table. (not valid(a, null)))
+
+axiom null_pointer:
+  (forall a:'a1 alloc_table.
+    ((offset_min(a, null) >= 0) and (offset_max(a, null) <= (-2))))
+
+logic eq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
+
+logic neq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
+
+axiom eq_pointer_bool_def:
+  (forall p1:'a1 pointer.
+    (forall p2:'a1 pointer. ((eq_pointer_bool(p1, p2) = true) <-> (p1 = p2))))
+
+axiom neq_pointer_bool_def:
+  (forall p1:'a1 pointer.
+    (forall p2:'a1 pointer.
+      ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
+
+axiom same_block_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(p, shift(q, i))].
+        (same_block(p, q) -> same_block(p, shift(q, i))))))
+
+axiom same_block_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(shift(q, i), p)].
+        (same_block(q, p) -> same_block(shift(q, i), p)))))
+
+axiom sub_pointer_shift:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
+
+axiom sub_pointer_self:
+  (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
+
+axiom sub_pointer_zero:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
+
+axiom sub_pointer_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(shift(p, i), q)]. (sub_pointer(shift(p, i),
+        q) = (sub_pointer(p, q) + i)))))
+
+axiom sub_pointer_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(p, shift(q, i))]. (sub_pointer(p, shift(q,
+        i)) = (sub_pointer(p, q) - i)))))
+
+type ('t, 'v) memory
+
+logic select : ('a2, 'a1) memory, 'a2 pointer -> 'a1
+
+logic store : ('a1, 'a2) memory, 'a1 pointer, 'a2 -> ('a1, 'a2) memory
+
+axiom select_store_eq:
+  (forall m:('a1, 'a2) memory.
+    (forall p1:'a1 pointer.
+      (forall p2:'a1 pointer.
+        (forall a:'a2 [store(m, p1, a), p2].
+          ((p1 = p2) -> (select(store(m, p1, a), p2) = a))))))
+
+axiom select_store_neq:
+  (forall m:('a1, 'a2) memory.
+    (forall p1:'a1 pointer.
+      (forall p2:'a1 pointer.
+        (forall a:'a2 [store(m, p1, a), p2].
+          ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
+
+type 't pset
+
+logic pset_empty : 'a1 pset
+
+logic pset_singleton : 'a1 pointer -> 'a1 pset
+
+logic pset_deref : ('a2, 'a1 pointer) memory, 'a2 pset -> 'a1 pset
+
+logic pset_union : 'a1 pset, 'a1 pset -> 'a1 pset
+
+logic pset_all : 'a1 pset -> 'a1 pset
+
+logic pset_range : 'a1 pset, int, int -> 'a1 pset
+
+logic pset_range_left : 'a1 pset, int -> 'a1 pset
+
+logic pset_range_right : 'a1 pset, int -> 'a1 pset
+
+logic in_pset : 'a1 pointer, 'a1 pset -> prop
+
+logic valid_pset : 'a1 alloc_table, 'a1 pset -> prop
+
+predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
+predicate pset_included(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (in_pset(p, ps1) -> in_pset(p, ps2)))
+
+axiom pset_included_self: (forall ps:'a1 pset. pset_included(ps, ps))
+
+axiom pset_included_range:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))].
+            (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
+             pset_range(ps, c, d))))))))
+
+axiom pset_included_range_all:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))]. pset_included(pset_range(ps, a, b), pset_all(ps)))))))
+
+axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
+
+axiom in_pset_singleton:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer. (in_pset(p, pset_singleton(q)) <-> (p = q))))
+
+axiom in_pset_deref:
+  (forall p:'a1 pointer.
+    (forall m:('a2, 'a1 pointer) memory.
+      (forall q:'a2 pset.
+        (in_pset(p, pset_deref(m, q)) <->
+         (exists r:'a2 pointer. (in_pset(r, q) and (p = select(m, r))))))))
+
+axiom in_pset_all:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (in_pset(p, pset_all(q)) <->
+       (exists i:int.
+         (exists r:'a1 pointer. (in_pset(r, q) and (p = shift(r, i))))))))
+
+axiom in_pset_range:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall a:int.
+        (forall b:int.
+          (in_pset(p, pset_range(q, a, b)) <->
+           (exists i:int.
+             (exists r:'a1 pointer.
+               ((a <= i) and
+                ((i <= b) and (in_pset(r, q) and (p = shift(r, i))))))))))))
+
+axiom in_pset_range_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall b:int.
+        (in_pset(p, pset_range_left(q, b)) <->
+         (exists i:int.
+           (exists r:'a1 pointer.
+             ((i <= b) and (in_pset(r, q) and (p = shift(r, i))))))))))
+
+axiom in_pset_range_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall a:int.
+        (in_pset(p, pset_range_right(q, a)) <->
+         (exists i:int.
+           (exists r:'a1 pointer.
+             ((a <= i) and (in_pset(r, q) and (p = shift(r, i))))))))))
+
+axiom in_pset_union:
+  (forall p:'a1 pointer.
+    (forall s1:'a1 pset.
+      (forall s2:'a1 pset.
+        (in_pset(p, pset_union(s1, s2)) <->
+         (in_pset(p, s1) or in_pset(p, s2))))))
+
+axiom valid_pset_empty: (forall a:'a1 alloc_table. valid_pset(a, pset_empty))
+
+axiom valid_pset_singleton:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (valid_pset(a, pset_singleton(p)) <-> valid(a, p))))
+
+axiom valid_pset_deref:
+  (forall a:'a1 alloc_table.
+    (forall m:('a2, 'a1 pointer) memory.
+      (forall q:'a2 pset.
+        (valid_pset(a, pset_deref(m, q)) <->
+         (forall r:'a2 pointer.
+           (forall p:'a1 pointer.
+             ((in_pset(r, q) and (p = select(m, r))) -> valid(a, p))))))))
+
+axiom valid_pset_range:
+  (forall a:'a1 alloc_table.
+    (forall q:'a1 pset.
+      (forall c:int.
+        (forall d:int.
+          (valid_pset(a, pset_range(q, c, d)) <->
+           (forall i:int.
+             (forall r:'a1 pointer.
+               ((in_pset(r, q) and ((c <= i) and (i <= d))) -> valid(a,
+                shift(r, i))))))))))
+
+axiom valid_pset_union:
+  (forall a:'a1 alloc_table.
+    (forall s1:'a1 pset.
+      (forall s2:'a1 pset.
+        (valid_pset(a, pset_union(s1, s2)) <->
+         (valid_pset(a, s1) and valid_pset(a, s2))))))
+
+predicate not_assigns(a: 'a1 alloc_table, m1: ('a1, 'a2) memory, m2: ('a1,
+  'a2) memory, l: 'a1 pset) =
+  (forall p:'a1 pointer.
+    ((valid(a, p) and (not in_pset(p, l))) -> (select(m2, p) = select(m1, p))))
+
+axiom not_assigns_refl:
+  (forall a:'a1 alloc_table.
+    (forall m:('a1, 'a2) memory.
+      (forall l:'a1 pset. not_assigns(a, m, m, l))))
+
+axiom not_assigns_trans:
+  (forall a:'a1 alloc_table.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory.
+          (forall l:'a1 pset [not_assigns(a, m1, m2, l), not_assigns(a, m1,
+            m3, l)].
+            (not_assigns(a, m1, m2, l) ->
+             (not_assigns(a, m2, m3, l) -> not_assigns(a, m1, m3, l))))))))
+
+logic full_separated : 'a1 pointer, 'a2 pointer -> prop
+
+axiom full_separated_shift1:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(p, q), shift(q, i)].
+        (full_separated(p, q) -> full_separated(p, shift(q, i))))))
+
+axiom full_separated_shift2:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(p, q), shift(q, i)].
+        (full_separated(p, q) -> full_separated(shift(q, i), p)))))
+
+axiom full_separated_shift3:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(q, p), shift(q, i)].
+        (full_separated(q, p) -> full_separated(shift(q, i), p)))))
+
+axiom full_separated_shift4:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(q, p), shift(q, i)].
+        (full_separated(q, p) -> full_separated(p, shift(q, i))))))
+
+type 't tag_table
+
+type 't tag_id
+
+logic int_of_tag : 'a1 tag_id -> int
+
+logic typeof : 'a1 tag_table, 'a1 pointer -> 'a1 tag_id
+
+logic parenttag : 'a1 tag_id, 'a1 tag_id -> prop
+
+logic subtag : 'a1 tag_id, 'a1 tag_id -> prop
+
+logic subtag_bool : 'a1 tag_id, 'a1 tag_id -> bool
+
+axiom subtag_bool_def:
+  (forall t1:'a1 tag_id.
+    (forall t2:'a1 tag_id. ((subtag_bool(t1, t2) = true) <-> subtag(t1, t2))))
+
+axiom subtag_refl: (forall t:'a1 tag_id. subtag(t, t))
+
+axiom subtag_parent:
+  (forall t1:'a1 tag_id.
+    (forall t2:'a1 tag_id.
+      (forall t3:'a1 tag_id.
+        (subtag(t1, t2) -> (parenttag(t2, t3) -> subtag(t1, t3))))))
+
+predicate instanceof(a: 'a1 tag_table, p: 'a1 pointer, t: 'a1 tag_id) =
+  subtag(typeof(a, p), t)
+
+logic downcast : 'a1 tag_table, 'a1 pointer, 'a1 tag_id -> 'a1 pointer
+
+axiom downcast_instanceof:
+  (forall a:'a1 tag_table.
+    (forall p:'a1 pointer.
+      (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
+
+logic bottom_tag : 'a1 tag_id
+
+axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
+
+predicate root_tag(t: 'a1 tag_id) = parenttag(t, bottom_tag)
+
+axiom root_subtag:
+  (forall a:'a1 tag_id.
+    (forall b:'a1 tag_id.
+      (forall c:'a1 tag_id.
+        (root_tag(a) ->
+         (root_tag(b) -> ((a <> b) -> (subtag(c, a) -> (not subtag(c, b)))))))))
+
+predicate fully_packed(tag_table: 'a1 tag_table, mutable: ('a1,
+  'a1 tag_id) memory, this: 'a1 pointer) = (select(mutable,
+  this) = typeof(tag_table, this))
+
+logic bw_compl : int -> int
+
+logic bw_and : int, int -> int
+
+axiom bw_and_not_null:
+  (forall a:int.
+    (forall b:int. ((bw_and(a, b) <> 0) -> ((a <> 0) and (b <> 0)))))
+
+logic bw_xor : int, int -> int
+
+logic bw_or : int, int -> int
+
+logic lsl : int, int -> int
+
+axiom lsl_left_positive_returns_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= lsl(a, b)))))
+
+axiom lsl_left_positive_monotone:
+  (forall a1:int.
+    (forall a2:int.
+      (forall b:int.
+        (((0 <= a1) and ((a1 <= a2) and (0 <= b))) -> (lsl(a1, b) <= lsl(a2,
+         b))))))
+
+logic lsr : int, int -> int
+
+axiom lsr_left_positive_returns_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= lsr(a, b)))))
+
+axiom lsr_left_positive_decreases:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsr(a, b) <= a))))
+
+logic asr : int, int -> int
+
+axiom asr_positive_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= asr(a, b)))))
+
+axiom asr_decreases_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (asr(a, b) <= a))))
+
+axiom asr_lsr_same_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (asr(a, b) = lsr(a, b)))))
+
+axiom lsl_of_lsr_decreases_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsl(lsr(a, b), b) <= a))))
+
+axiom lsr_of_lsl_identity_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsr(lsl(a, b), b) = a))))
+
+logic alloc_extends : 'a1 alloc_table, 'a1 alloc_table -> prop
+
+predicate alloc_fresh(a: 'a1 alloc_table, p: 'a1 pointer, n: int) =
+  (forall i:int. (((0 <= i) and (i < n)) -> (not valid(a, shift(p, i)))))
+
+axiom alloc_extends_offset_min:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table [alloc_extends(a1, a2)].
+      (alloc_extends(a1, a2) ->
+       (forall p:'a1 pointer.
+         (valid(a1, p) -> (offset_min(a1, p) = offset_min(a2, p)))))))
+
+axiom alloc_extends_offset_max:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table [alloc_extends(a1, a2)].
+      (alloc_extends(a1, a2) ->
+       (forall p:'a1 pointer.
+         (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
+
+axiom alloc_extends_not_assigns_empty:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory.
+          (forall l:'a1 pset.
+            (forall p:'a1 pointer.
+              (forall n:int [alloc_extends(a1, a2), alloc_fresh(a1, p, n),
+                not_assigns(a2, m1, m2, l)].
+                ((alloc_extends(a1, a2) and
+                  (alloc_fresh(a1, p, n) and
+                   (not_assigns(a2, m1, m2, l) and pset_included(l,
+                    pset_all(pset_singleton(p)))))) ->
+                 not_assigns(a1, m1, m2, pset_empty)))))))))
+
+logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
+'a1 pset -> prop
+
+axiom alloc_extends_except_offset_min:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall l:'a1 pset [alloc_extends_except(a1, a2, l)].
+        (alloc_extends_except(a1, a2, l) ->
+         (forall p:'a1 pointer.
+           ((valid(a1, p) and (not in_pset(p, l))) -> (offset_min(a1,
+            p) = offset_min(a2, p))))))))
+
+axiom alloc_extends_except_offset_max:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall l:'a1 pset [alloc_extends_except(a1, a2, l)].
+        (alloc_extends_except(a1, a2, l) ->
+         (forall p:'a1 pointer.
+           ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
+            p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
+type Object
+
+type interface
+
+logic Exception_tag : Object tag_id
+
+logic Object_tag : Object tag_id
+
+axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
+
+logic Fact_tag : Object tag_id
+
+axiom Fact_parenttag_Object: parenttag(Fact_tag, Object_tag)
+
+predicate Non_null_Object(x_0: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x_0) >= 0)
+
+axiom Object_int: (int_of_tag(Object_tag) = 1)
+
+logic Object_of_pointer_address : unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr:
+  (forall p:Object pointer.
+    (p = Object_of_pointer_address(pointer_address(p))))
+
+axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
+
+axiom Object_tags:
+  (forall x:Object pointer.
+    (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
+      x, Object_tag)))
+
+logic String_tag : Object tag_id
+
+axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
+
+logic Throwable_tag : Object tag_id
+
+axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
+
+logic interface_tag : interface tag_id
+
+axiom interface_int: (int_of_tag(interface_tag) = 1)
+
+logic interface_of_pointer_address : unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr:
+  (forall p:interface pointer.
+    (p = interface_of_pointer_address(pointer_address(p))))
+
+axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
+
+axiom interface_tags:
+  (forall x:interface pointer.
+    (forall interface_tag_table:interface tag_table.
+      instanceof(interface_tag_table, x, interface_tag)))
+
+logic isfact : int, int -> prop
+
+axiom isfact_inversion:
+  (forall aux_1:int.
+    (forall aux_2:int [isfact(aux_1, aux_2)].
+      (isfact(aux_1, aux_2) ->
+       (((aux_1 = 0) and (aux_2 = 1)) or
+        (exists n:int.
+          (exists r_0:int.
+            (((n >= 1) and isfact((n - 1), r_0)) and
+             ((aux_1 = n) and (aux_2 = (r_0 * n))))))))))
+
+axiom isfact0: isfact(0, 1)
+
+axiom isfactn:
+  (forall n:int.
+    (forall r_0:int.
+      (((n >= 1) and isfact((n - 1), r_0)) -> isfact(n, (r_0 * n)))))
+
+predicate left_valid_struct_Object(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_Exception(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_Fact(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_String(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_interface(p: interface pointer, a: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_min(interface_alloc_table, p) <= a)
+
+axiom pointer_addr_of_Object_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(interface_of_pointer_address(p))))
+
+predicate right_valid_struct_Object(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  p) >= b)
+
+predicate right_valid_struct_Exception(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_Fact(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_String(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_interface(p: interface pointer, b: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_max(interface_alloc_table, p) >= b)
+
+predicate strict_valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_Fact(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
+
+predicate valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_Fact(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
+
+goal Fact_fact_ensures_default_po_1:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  ("JC_38": ("JC_35": (0 <= 0)))
+
+goal Fact_fact_ensures_default_po_2:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  ("JC_38": ("JC_36": (0 <= x_0_0)))
+
+goal Fact_fact_ensures_default_po_3:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  ("JC_38": ("JC_37": isfact(0, 1)))
+
+goal Fact_fact_ensures_default_po_4:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_38":
+  (("JC_35": (0 <= a)) and
+   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
+  (a < x_0_0) ->
+  forall a0:int.
+  (a0 = (a + 1)) ->
+  forall y0:int.
+  (y0 = (y * a0)) ->
+  ("JC_38": ("JC_35": (0 <= a0)))
+
+goal Fact_fact_ensures_default_po_5:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_38":
+  (("JC_35": (0 <= a)) and
+   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
+  (a < x_0_0) ->
+  forall a0:int.
+  (a0 = (a + 1)) ->
+  forall y0:int.
+  (y0 = (y * a0)) ->
+  ("JC_38": ("JC_36": (a0 <= x_0_0)))
+
+goal Fact_fact_ensures_default_po_6:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_38":
+  (("JC_35": (0 <= a)) and
+   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
+  (a < x_0_0) ->
+  forall a0:int.
+  (a0 = (a + 1)) ->
+  forall y0:int.
+  (y0 = (y * a0)) ->
+  ("JC_38": ("JC_37": isfact(a0, y0)))
+
+goal Fact_fact_ensures_default_po_7:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_38":
+  (("JC_35": (0 <= a)) and
+   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
+  (a >= x_0_0) ->
+  forall return:int.
+  (return = y) ->
+  ("JC_23": isfact(x_0_0, return))
+
+goal Fact_fact_safety_po_1:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_32": true) ->
+  ("JC_30":
+  (("JC_27": (0 <= a)) and
+   (("JC_28": (a <= x_0_0)) and ("JC_29": isfact(a, y))))) ->
+  (a < x_0_0) ->
+  forall a0:int.
+  (a0 = (a + 1)) ->
+  forall y0:int.
+  (y0 = (y * a0)) ->
+  (0 <= ("JC_34": (x_0_0 - a)))
+
+goal Fact_fact_safety_po_2:
+  forall x_0_0:int.
+  ("JC_21": (x_0_0 >= 0)) ->
+  forall a:int.
+  forall y:int.
+  ("JC_32": true) ->
+  ("JC_30":
+  (("JC_27": (0 <= a)) and
+   (("JC_28": (a <= x_0_0)) and ("JC_29": isfact(a, y))))) ->
+  (a < x_0_0) ->
+  forall a0:int.
+  (a0 = (a + 1)) ->
+  forall y0:int.
+  (y0 = (y * a0)) ->
+  (("JC_34": (x_0_0 - a0)) < ("JC_34": (x_0_0 - a)))
+
