@@ -23,7 +23,7 @@
   version="4.3.1"/>
  <file
   name="../Sterbenz.mlw"
-  verified="false"
+  verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
@@ -36,7 +36,7 @@
    name="Jessie_program"
    locfile="../Sterbenz.mlw"
    loclnum="205" loccnumb="7" loccnume="21"
-   verified="false"
+   verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Sterbenz_ensures_default"
@@ -44,7 +44,7 @@
     loclnum="37" loccnumb="6" loccnume="14"
     expl="VC for _Sterbenz_ensures_default"
     sum="ad900b9e8b06e72dab77617389fc5cec"
-    proved="false"
+    proved="true"
     expanded="true"
     shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FAainfix &lt;=c0.0avalueV0Aainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
     <label
@@ -53,7 +53,7 @@
      name="expl:VC for _Sterbenz_ensures_default"/>
     <transf
      name="split_goal"
-     proved="false"
+     proved="true"
      expanded="true">
      <goal
       name="WP_parameter _Sterbenz_ensures_default.1"
@@ -137,7 +137,7 @@
       loclnum="37" loccnumb="6" loccnume="14"
       expl="3. postcondition"
       sum="c8363b30abe02b619319b9cd1f638e04"
-      proved="false"
+      proved="true"
       expanded="true"
       shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
       <label
@@ -151,7 +151,7 @@
        edited="Sterbenz_Jessie_program_WP_parameter__Sterbenz_ensures_default_1.v"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="3.08"/>
+       <result status="valid" time="3.06"/>
       </proof>
      </goal>
     </transf>

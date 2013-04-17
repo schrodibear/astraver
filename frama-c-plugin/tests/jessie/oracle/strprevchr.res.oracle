@@ -57,7 +57,7 @@ behavior absent:
   ensures (C_15 : (\result == (- 1)));
 behavior present:
   assumes (\exists int32 i_2;
-            (((0 <= i_2) && (i_2 <= endi)) ==> ((array + i_2).charM == c)));
+            (((0 <= i_2) && (i_2 <= endi)) && ((array + i_2).charM == c)));
   ensures (C_16 : ((C_17 : (0 <= \result)) &&
                     (C_18 : (\result <= \at(endi,Old)))));
 {  
@@ -439,11 +439,11 @@ parameter strprevchr :
      charP_charM_array_2:(charP, int8) memory ->
       { } int32
       { (((exists i_2:int32.
-           ((le_int((0), integer_of_int32(i_2))
-            and le_int(integer_of_int32(i_2), integer_of_int32(endi))) ->
-            (integer_of_int8(select(charP_charM_array_2,
-                             shift(array_1, integer_of_int32(i_2)))) = 
-            integer_of_int8(c_0)))) ->
+           (le_int((0), integer_of_int32(i_2))
+           and (le_int(integer_of_int32(i_2), integer_of_int32(endi))
+               and (integer_of_int8(select(charP_charM_array_2,
+                                    shift(array_1, integer_of_int32(i_2)))) = 
+                   integer_of_int8(c_0))))) ->
           (JC_<somenum>:
           ((JC_<somenum>: le_int((0), integer_of_int32(result)))
           and (JC_<somenum>:
@@ -471,11 +471,11 @@ parameter strprevchr_requires :
                 integer_of_int32(endi))))))}
       int32
       { (((exists i_2:int32.
-           ((le_int((0), integer_of_int32(i_2))
-            and le_int(integer_of_int32(i_2), integer_of_int32(endi))) ->
-            (integer_of_int8(select(charP_charM_array_2,
-                             shift(array_1, integer_of_int32(i_2)))) = 
-            integer_of_int8(c_0)))) ->
+           (le_int((0), integer_of_int32(i_2))
+           and (le_int(integer_of_int32(i_2), integer_of_int32(endi))
+               and (integer_of_int8(select(charP_charM_array_2,
+                                    shift(array_1, integer_of_int32(i_2)))) = 
+                   integer_of_int8(c_0))))) ->
           (JC_<somenum>:
           ((JC_<somenum>: le_int((0), integer_of_int32(result)))
           and (JC_<somenum>:
@@ -619,10 +619,11 @@ let strprevchr_ensures_default =
 let strprevchr_ensures_present =
  fun (endi : int32) (c_0 : int8) (array_1 : charP pointer) (charP_array_2_alloc_table : charP alloc_table) (charP_charM_array_2 : (charP, int8) memory) ->
   { ((exists i_2:int32.
-      ((le_int((0), integer_of_int32(i_2))
-       and le_int(integer_of_int32(i_2), integer_of_int32(endi))) ->
-       (integer_of_int8(select(charP_charM_array_2,
-                        shift(array_1, integer_of_int32(i_2)))) = integer_of_int8(c_0))))
+      (le_int((0), integer_of_int32(i_2))
+      and (le_int(integer_of_int32(i_2), integer_of_int32(endi))
+          and (integer_of_int8(select(charP_charM_array_2,
+                               shift(array_1, integer_of_int32(i_2)))) = 
+              integer_of_int8(c_0)))))
     and (JC_<somenum>:
         ((JC_<somenum>: ge_int(integer_of_int32(endi), (0)))
         and ((JC_<somenum>:
@@ -818,11 +819,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/strprevchr_po18.why">
-      <location file = "why/strprevchr.why" line = "618" begin = "18" end = "58"/>
+      <location file = "why/strprevchr.why" line = "619" begin = "18" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/strprevchr_po19.why">
-      <location file = "why/strprevchr.why" line = "618" begin = "18" end = "58"/>
+      <location file = "why/strprevchr.why" line = "619" begin = "18" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
