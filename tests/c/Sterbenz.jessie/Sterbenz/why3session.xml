@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -11,24 +11,20 @@
   version="2.2"/>
  <prover
   id="2"
-  name="CVC3"
-  version="2.4.1"/>
+  name="Coq"
+  version="8.4"/>
  <prover
   id="3"
   name="Gappa"
-  version="0.16.1"/>
+  version="0.16.6"/>
  <prover
   id="4"
   name="Z3"
-  version="3.2"/>
- <prover
-  id="5"
-  name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../Sterbenz.mlw"
   verified="false"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
    locfile="../Sterbenz.mlw"
@@ -47,7 +43,7 @@
     locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="VC for _Sterbenz_ensures_default"
-    sum="5769a522855f0785ad5b83395afb5799"
+    sum="ad900b9e8b06e72dab77617389fc5cec"
     proved="false"
     expanded="true"
     shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FAainfix &lt;=c0.0avalueV0Aainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -64,7 +60,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="1. assertion"
-      sum="a1eda3d47f0827412dd0c800d0fa34ae"
+      sum="8a03137976c1974f2912e0a08d2c78ce"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -89,7 +85,7 @@
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -102,7 +98,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="2. assertion"
-      sum="9a62e811e643aec69ca10337005b6aed"
+      sum="c0489f1364d06a736542725d7efd48f0"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -127,7 +123,7 @@
        <result status="valid" time="0.00"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -140,7 +136,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="3. postcondition"
-      sum="00a79628f0443f944ca5d6f2e763a0e4"
+      sum="c8363b30abe02b619319b9cd1f638e04"
       proved="false"
       expanded="true"
       shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -149,44 +145,13 @@
       <label
        name="expl:VC for _Sterbenz_ensures_default"/>
       <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.05"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.27"/>
-      </proof>
-      <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
+       edited="Sterbenz_Jessie_program_WP_parameter__Sterbenz_ensures_default_1.v"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.01"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.11"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.11"/>
+       <result status="unknown" time="3.08"/>
       </proof>
      </goal>
     </transf>
@@ -196,7 +161,7 @@
     locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="VC for _Sterbenz_safety"
-    sum="0c3642785f7042358ca0720b1242dbc1"
+    sum="95ca1a9e6040694f1c85d24be482da94"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">

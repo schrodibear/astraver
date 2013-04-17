@@ -408,7 +408,7 @@ Proof.
 admit.
 Save.
 
-(* Why obligation from file "my_cosine.c", line 52, characters 13-27: *)
+(* Why obligation from file "my_cosine.c", line 53, characters 13-27: *)
 (*Why goal*) Lemma my_cos2_ensures_default_po_1 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
@@ -419,7 +419,7 @@ Proof.
 admit.
 Save.
 
-(* Why obligation from file "my_cosine.c", line 54, characters 13-49: *)
+(* Why obligation from file "my_cosine.c", line 55, characters 13-49: *)
 (*Why goal*) Lemma my_cos2_ensures_default_po_2 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
@@ -464,7 +464,7 @@ rewrite Heq.
 interval with (i_bisect_diff (single_value x)).
 Save.
 
-(* Why obligation from file "my_cosine.c", line 49, characters 12-46: *)
+(* Why obligation from file "my_cosine.c", line 50, characters 12-46: *)
 (*Why goal*) Lemma my_cos2_ensures_default_po_3 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
@@ -501,7 +501,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 53, characters 19-24: *)
+(* Why obligation from file "my_cosine.c", line 54, characters 19-24: *)
 (*Why goal*) Lemma my_cos2_safety_po_1 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
@@ -519,7 +519,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 53, characters 19-31: *)
+(* Why obligation from file "my_cosine.c", line 54, characters 19-31: *)
 (*Why goal*) Lemma my_cos2_safety_po_2 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
@@ -546,7 +546,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 53, characters 12-31: *)
+(* Why obligation from file "my_cosine.c", line 54, characters 12-31: *)
 (*Why goal*) Lemma my_cos2_safety_po_3 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
@@ -578,7 +578,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 66, characters 13-57: *)
+(* Why obligation from file "my_cosine.c", line 67, characters 13-57: *)
 (*Why goal*) Lemma my_cos3_ensures_default_po_1 : 
   forall (x_1: single),
   forall (HW_1: (* JC_45 *)
@@ -608,7 +608,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 61, characters 12-62: *)
+(* Why obligation from file "my_cosine.c", line 62, characters 12-62: *)
 (*Why goal*) Lemma my_cos3_ensures_default_po_2 : 
   forall (x_1: single),
   forall (HW_1: (* JC_45 *)
@@ -645,7 +645,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 62, characters 11-61: *)
+(* Why obligation from file "my_cosine.c", line 63, characters 11-61: *)
 (*Why goal*) Lemma my_cos3_ensures_default_po_3 : 
   forall (x_1: single),
   forall (HW_1: (* JC_45 *)
@@ -682,7 +682,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 65, characters 19-24: *)
+(* Why obligation from file "my_cosine.c", line 66, characters 19-24: *)
 (*Why goal*) Lemma my_cos3_safety_po_1 : 
   forall (x_1: single),
   forall (HW_1: (* JC_45 *)
@@ -699,7 +699,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 65, characters 19-31: *)
+(* Why obligation from file "my_cosine.c", line 66, characters 19-31: *)
 (*Why goal*) Lemma my_cos3_safety_po_2 : 
   forall (x_1: single),
   forall (HW_1: (* JC_45 *)
@@ -724,7 +724,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 65, characters 12-31: *)
+(* Why obligation from file "my_cosine.c", line 66, characters 12-31: *)
 (*Why goal*) Lemma my_cos3_safety_po_3 : 
   forall (x_1: single),
   forall (HW_1: (* JC_45 *)
@@ -754,7 +754,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 74, characters 13-55: *)
+(* Why obligation from file "my_cosine.c", line 75, characters 13-55: *)
 (*Why goal*) Lemma my_cos4_ensures_default_po_1 : 
   forall (x_2: single),
   forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
@@ -771,7 +771,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 71, characters 12-48: *)
+(* Why obligation from file "my_cosine.c", line 72, characters 12-48: *)
 (*Why goal*) Lemma my_cos4_ensures_default_po_2 : 
   forall (x_2: single),
   forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
@@ -810,7 +810,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 75, characters 16-21: *)
+(* Why obligation from file "my_cosine.c", line 76, characters 16-21: *)
 (*Why goal*) Lemma my_cos4_safety_po_1 : 
   forall (x_2: single),
   forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
@@ -834,7 +834,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 75, characters 16-28: *)
+(* Why obligation from file "my_cosine.c", line 76, characters 16-28: *)
 (*Why goal*) Lemma my_cos4_safety_po_2 : 
   forall (x_2: single),
   forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
@@ -866,7 +866,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 75, characters 9-28: *)
+(* Why obligation from file "my_cosine.c", line 76, characters 9-28: *)
 (*Why goal*) Lemma my_cos4_safety_po_3 : 
   forall (x_2: single),
   forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),

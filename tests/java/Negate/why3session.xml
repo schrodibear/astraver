@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="Negate/why3session.xml" shape_version="2">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -12,46 +11,46 @@
   version="2.2"/>
  <prover
   id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.3.1"/>
  <file
   name="../Negate.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
-   locfile="Negate/../Negate.mlw"
+   locfile="../Negate.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="Negate/../Negate.mlw"
+   locfile="../Negate.mlw"
    loclnum="194" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter cons_negate_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="ab8b0cc2e49c177e2bc327e5441369fc"
+    expl="VC for cons_negate_ensures_default"
+    sum="1909984e4c72eb61585d32ccccf5fbf1"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_negate_ensures_default"/>
-    <label
      name="expl:Constructor of class negate, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for cons_negate_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -67,74 +66,106 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_negate_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="bd6f43f37e706caed69bc36b62994bb4"
+    expl="VC for cons_negate_safety"
+    sum="1909984e4c72eb61585d32ccccf5fbf1"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_negate_safety"/>
-    <label
      name="expl:Constructor of class negate, Safety"/>
+    <label
+     name="expl:VC for cons_negate_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
     <proof
      prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter negate_negate_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Negate.java"
+    locfile="../Negate.java"
     loclnum="41" loccnumb="16" loccnume="22"
-    expl="parameter negate_negate_ensures_default"
-    sum="6f810d6d83eda4500734e54678950d9a"
+    expl="VC for negate_negate_ensures_default"
+    sum="68f59c4b9a217b61f09fcba2122dfe54"
     proved="true"
     expanded="true"
     shape="iainfix &lt;V3V5anot_assignsV2V1V6apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV6ashiftV0V8aselectV1ashiftV0V8Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;=V7V8FAainfix =aselectV6ashiftV0V9aprefix -aselectV1ashiftV0V9Iainfix &lt;V9V7Aainfix &lt;=c0V9FAainfix &lt;=V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7ainfix +V3c1FIainfix =V6astoreV4ashiftV0V3aprefix -aselectV4ashiftV0V3Fanot_assignsV2V1V4apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV4ashiftV0V10aprefix -aselectV1ashiftV0V10Iainfix &lt;V10ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V10FIainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Ianot_assignsV2V1V4apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV4ashiftV0V11aselectV1ashiftV0V11Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=V3V11FAainfix =aselectV4ashiftV0V12aprefix -aselectV1ashiftV0V12Iainfix &lt;V12V3Aainfix &lt;=c0V12FAainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3FAanot_assignsV2V1V1apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV1ashiftV0V13aprefix -aselectV1ashiftV0V13Iainfix &lt;V13c0Aainfix &lt;=c0V13FAainfix &lt;=c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
-     name="expl:parameter negate_negate_ensures_default"/>
-    <label
      name="expl:Method negate, default behavior"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.18"/>
-    </proof>
+    <label
+     name="expl:VC for negate_negate_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.47"/>
+     <result status="valid" time="0.62"/>
     </proof>
     <proof
      prover="1"
@@ -142,30 +173,46 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.34"/>
+     <result status="valid" time="0.53"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter negate_negate_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Negate.java"
-    loclnum="41" loccnumb="16" loccnume="22"
-    expl="index bounds"
-    sum="f4b0813450bcd40ac4258d30c45fb1b4"
-    proved="true"
-    expanded="true"
-    shape="ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V7ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V7ainfix +V3c1FIainfix =V6astoreV4ashiftV0V3aprefix -aselectV4ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Aainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V5Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix =aselectV4ashiftV0V8aselectV1ashiftV0V8Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;=V3V8FAainfix =aselectV4ashiftV0V9aprefix -aselectV1ashiftV0V9Iainfix &lt;V9V3Aainfix &lt;=c0V9FAainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
-    <label
-     name="expl:parameter negate_negate_safety"/>
-    <label
-     name="expl:Method negate, Safety"/>
     <proof
      prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.87"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="timeout" time="5.13"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter negate_negate_safety"
+    locfile="../Negate.java"
+    loclnum="41" loccnumb="16" loccnume="22"
+    expl="index bounds"
+    sum="cd85c8fb78590add4d9d66886ff121e8"
+    proved="true"
+    expanded="true"
+    shape="ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V7ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V7ainfix +V3c1FIainfix =V6astoreV4ashiftV0V3aprefix -aselectV4ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Aainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V5Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix =aselectV4ashiftV0V8aselectV1ashiftV0V8Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;=V3V8FAainfix =aselectV4ashiftV0V9aprefix -aselectV1ashiftV0V9Iainfix &lt;V9V3Aainfix &lt;=c0V9FAainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    <label
+     name="expl:Method negate, Safety"/>
+    <label
+     name="expl:VC for negate_negate_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -181,6 +228,30 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
   </theory>

@@ -408,7 +408,7 @@ object
     | _ -> DoChildren
 
   method vglob_aux = function
-    | GVar(v,{init=Some(SingleInit({enode = Const _;_}))},_) ->
+    | GVar(v,{init=Some(SingleInit({enode = Const _}))},_) ->
 	if isArrayType v.vtype then
 	  (* Avoid creating an array for holding the initializer for another
 	   * array. This initializer is later cut into individual
@@ -577,7 +577,7 @@ object
           (match annot.annot_content with
              | AStmtSpec
                 (_,({ spec_behavior =
-                    [ { b_name = "Frama_C_implicit_init";_ }]} as spec))
+                    [ { b_name = "Frama_C_implicit_init" }]} as spec))
               ->
                 let loc = Cil_datatype.Stmt.loc s in
                 let mk_actual v =
@@ -1230,7 +1230,7 @@ class rewriteCursorIntegers
     | _ -> e
   in
   let postaction_term t = match t.term_node with
-    | TLval(TVar { lv_origin = Some v;_ },TNoOffset) ->
+    | TLval(TVar { lv_origin = Some v },TNoOffset) ->
 	begin try
 	  let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
 	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in

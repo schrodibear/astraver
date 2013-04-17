@@ -39,11 +39,11 @@ void *calloc(size_t nmemb, size_t size);
   @   \forall integer i, j, int *t;
   @    i >= j ==> num_of_pos(i,j,t) == 0;
   @  axiom num_of_pos_true_case{L} :
-  @   \forall integer i, j, k, int *t;
+  @   \forall integer i, j, int *t;
   @       i < j && t[j-1] > 0 ==>
   @         num_of_pos(i,j,t) == num_of_pos(i,j-1,t) + 1;
   @  axiom num_of_pos_false_case{L} :
-  @   \forall integer i, j, k, int *t;
+  @   \forall integer i, j, int *t;
   @       i < j && ! (t[j-1] > 0) ==>
   @         num_of_pos(i,j,t) == num_of_pos(i,j-1,t);
   @ }

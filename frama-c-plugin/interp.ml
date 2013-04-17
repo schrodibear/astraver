@@ -614,7 +614,7 @@ and boolean_const = function
   | CReal(f,_fk,_text) ->
       if f = 0.0 then JCCboolean false else JCCboolean true
 
-  | CEnum {eival = e; _ } -> boolean_const_of_expr e
+  | CEnum {eival = e } -> boolean_const_of_expr e
 
 and boolean_const_of_expr e =
   match (stripInfo e).enode with Const c -> boolean_const c | _ -> assert false
@@ -690,7 +690,7 @@ and terms t =
   let enode = match constFoldTermNodeAtTop t.term_node with
     | TConst c -> [logic_const t.term_loc c]
 
-    | TDataCons({ctor_type = {lt_name = name; _ }; _ } as d,_args)
+    | TDataCons({ctor_type = {lt_name = name} } as d,_args)
         when name = Utf8_logic.boolean ->
         [JCPEconst (JCCboolean (d.ctor_name = "\\true"))]
 
@@ -1142,7 +1142,7 @@ and pred p =
 
     | Pvalid(_lab,
              { term_node = TBinOp(PlusPI,t1,
-                                  {term_node = Trange (t2,t3);_});_}) ->
+                                  {term_node = Trange (t2,t3)})}) ->
         let e1 = terms t1 in
         let mk_one_pred e1 =
           match t2,t3 with
@@ -1165,7 +1165,7 @@ and pred p =
                 mkconjunct [emin; emax] p.loc
         in (mkconjunct (List.map mk_one_pred e1) p.loc)#node
 
-    | Pvalid(_lab,{ term_node = TBinOp(PlusPI,t1,t2); _}) ->
+    | Pvalid(_lab,{ term_node = TBinOp(PlusPI,t1,t2)}) ->
         let e1 = terms t1 in
         let e2 = term t2 in
         (mkconjunct
@@ -1201,7 +1201,7 @@ and pred p =
     | Pfreeable _ -> Common.unsupported "\\freeable operator"
 
 
-    | Psubtype({term_node = Ttypeof t; _},{term_node = Ttype ty; _}) ->
+    | Psubtype({term_node = Ttypeof t},{term_node = Ttype ty}) ->
         JCPEinstanceof(term t,get_struct_name (pointed_type ty))
 
     | Psubtype(_t1,_t2) -> Common.unsupported "subtype"
@@ -1791,7 +1791,7 @@ let instruction = function
       let enode = JCPEassign(lval pos lv,expr e) in
       (locate (mkexpr enode pos))#node
 
-  | Call(None,{enode = Lval(Var v,NoOffset);_},eargs,pos) ->
+  | Call(None,{enode = Lval(Var v,NoOffset)},eargs,pos) ->
       if is_assert_function v then
         JCPEassert([new identifier name_of_default_behavior],
                    Aassert,locate (boolean_expr (as_singleton eargs)))
@@ -1810,7 +1810,7 @@ let instruction = function
         in
         (locate (mkexpr enode pos))#node
 
-  | Call(Some lv,{enode = Lval(Var v,NoOffset); _},eargs,pos) ->
+  | Call(Some lv,{enode = Lval(Var v,NoOffset)},eargs,pos) ->
       let enode =
         if is_malloc_function v || is_realloc_function v then
           let lvtyp = pointed_type (typeOfLval lv) in
@@ -1831,8 +1831,8 @@ let instruction = function
                   JCPEconst(JCCinteger(Integer.to_string allocsiz))
                 in
                 lvtyp, mkexpr siznode pos
-            | BinOp(Mult,({enode = Const c; _} as arg),nelem,_ty)
-            | BinOp(Mult,nelem,({enode = Const c;_} as arg),_ty)
+            | BinOp(Mult,({enode = Const c} as arg),nelem,_ty)
+            | BinOp(Mult,nelem,({enode = Const c} as arg),_ty)
                 when is_integral_const c ->
                 let factor = Integer.div (value_of_integral_expr arg) lvsiz in
                 let siz =
@@ -2488,7 +2488,7 @@ let global vardefs g =
         assert (not (enuminfo.eitems = []));
         let enums =
           List.map
-            (fun {eival = enum; _} -> value_of_integral_expr enum) enuminfo.eitems
+            (fun {eival = enum} -> value_of_integral_expr enum) enuminfo.eitems
         in
         let emin =
           List.fold_left (fun acc enum ->

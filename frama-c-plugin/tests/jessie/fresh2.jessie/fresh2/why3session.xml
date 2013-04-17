@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
   id="1"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.1"/>
  <prover
   id="2"
-  name="Alt-Ergo"
-  version="0.95-dev"/>
- <prover
-  id="3"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="4"
+  id="3"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="5"
+  id="4"
   name="Z3"
   version="3.2"/>
  <prover
-  id="6"
+  id="5"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../fresh2.mlw"
   verified="false"
@@ -51,7 +47,7 @@
     locfile="../../fresh2.c"
     loclnum="19" loccnumb="4" loccnume="10"
     expl="VC for create_ensures_default"
-    sum="a7611513d7e10d0c393bb360ce49231d"
+    sum="f8c0d23102c91d8594709b6b5ee2a110"
     proved="true"
     expanded="false"
     shape="avalidV0V5NAainfix &gt;=aoffset_maxV2V5c0Aainfix &lt;=aoffset_minV2V5c0Iainfix =V5V4FIainfix =V4V3FIainstanceofV1V3a_Str_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_StrV3c0ainfix -c1c1V2FFF">
@@ -60,7 +56,7 @@
     <label
      name="expl:VC for create_ensures_default"/>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -68,7 +64,7 @@
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -76,12 +72,12 @@
      <result status="valid" time="0.07"/>
     </proof>
     <proof
-     prover="6"
+     prover="5"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.09"/>
+     <result status="valid" time="1.24"/>
     </proof>
    </goal>
    <goal
@@ -89,7 +85,7 @@
     locfile="../../fresh2.c"
     loclnum="19" loccnumb="4" loccnume="10"
     expl="VC for create_safety"
-    sum="72a70da641425ba2a958a80faeced8f9"
+    sum="ec1bbb44bbca6c31f437aed71ad7b2d3"
     proved="true"
     expanded="false"
     shape="ainfix &gt;=c1c0">
@@ -98,12 +94,20 @@
     <label
      name="expl:VC for create_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="3"
@@ -119,18 +123,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="5"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -143,7 +139,7 @@
     locfile="../../fresh2.c"
     loclnum="33" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_ensures_default"
-    sum="1cfb0c388e15ded5ca92a12756f8b9d2"
+    sum="eb32b7ef4669e23fa88c04392483a9c6"
     proved="false"
     expanded="true"
     shape="ainfix =c0c1Iainfix =V6V5FIavalidV1V5NAainfix &gt;=aoffset_maxV4V5c0Aainfix &lt;=aoffset_minV4V5c0FFIainfix =V3V2FIavalidV0V2NAainfix &gt;=aoffset_maxV1V2c0Aainfix &lt;=aoffset_minV1V2c0FFF">
@@ -152,7 +148,7 @@
     <label
      name="expl:VC for smoke_detector_ensures_default"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -160,7 +156,7 @@
      <result status="unknown" time="0.03"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
@@ -168,7 +164,7 @@
      <result status="unknown" time="0.04"/>
     </proof>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -176,12 +172,20 @@
      <result status="unknown" time="1.07"/>
     </proof>
     <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.17"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.09"/>
+     <result status="timeout" time="5.17"/>
     </proof>
     <proof
      prover="5"
@@ -189,15 +193,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.02"/>
-    </proof>
-    <proof
-     prover="6"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.06"/>
+     <result status="timeout" time="5.18"/>
     </proof>
    </goal>
    <goal
@@ -205,7 +201,7 @@
     locfile="../../fresh2.c"
     loclnum="33" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_safety"
-    sum="1220773bbfdb7f42db229c22b5415deb"
+    sum="701d2d09a3c0e820ddf6fbe0c7b2f1c4"
     proved="true"
     expanded="false"
     shape="t">
@@ -215,14 +211,6 @@
      name="expl:VC for smoke_detector_safety"/>
     <proof
      prover="0"
-     timelimit="20"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
-     prover="1"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
@@ -230,12 +218,20 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="3"
      memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="3"
@@ -251,18 +247,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="5"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -275,7 +263,7 @@
     locfile="../../fresh2.c"
     loclnum="27" loccnumb="5" loccnume="9"
     expl="VC for test_ensures_default"
-    sum="82b0a236846e972367f33b01dc223484"
+    sum="05a928c5be67388f7011fefd6530fdc3"
     proved="true"
     expanded="false"
     shape="ainfix =V0V4NIainfix =V4V3FIavalidV1V3NAainfix &gt;=aoffset_maxV2V3c0Aainfix &lt;=aoffset_minV2V3c0FFIainfix &gt;=aoffset_maxV1V0c0Aainfix &lt;=aoffset_minV1V0c0FF">
@@ -283,6 +271,14 @@
      name="expl:Function test, default behavior"/>
     <label
      name="expl:VC for test_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
     <proof
      prover="1"
      timelimit="3"
@@ -293,11 +289,11 @@
     </proof>
     <proof
      prover="2"
-     timelimit="3"
+     timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="3"
@@ -305,7 +301,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="4"
@@ -317,14 +313,6 @@
     </proof>
     <proof
      prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="6"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -337,7 +325,7 @@
     locfile="../../fresh2.c"
     loclnum="27" loccnumb="5" loccnume="9"
     expl="VC for test_safety"
-    sum="d7c6b2cb43466f5505c817febd751f05"
+    sum="701d2d09a3c0e820ddf6fbe0c7b2f1c4"
     proved="true"
     expanded="false"
     shape="t">
@@ -347,11 +335,11 @@
      name="expl:VC for test_safety"/>
     <proof
      prover="0"
-     timelimit="20"
-     memlimit="0"
+     timelimit="3"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -363,7 +351,7 @@
     </proof>
     <proof
      prover="2"
-     timelimit="3"
+     timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
@@ -383,18 +371,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="5"
      timelimit="5"
      memlimit="1000"
      obsolete="false"

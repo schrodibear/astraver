@@ -2,9 +2,6 @@
 (* Beware! Only edit allowed sections below    *)
 Require Import BuiltIn.
 Require Import Rbasic_fun.
-Require Import R_sqrt.
-Require Import Rtrigo.
-Require Import AltSeries. (* for def of pi *)
 Require Import ZOdiv.
 Require BuiltIn.
 Require int.Int.
@@ -14,7 +11,6 @@ Require real.Real.
 Require real.RealInfix.
 Require real.Abs.
 Require real.FromInt.
-Require real.Square.
 Require floating_point.Rounding.
 Require floating_point.SingleFormat.
 Require floating_point.DoubleFormat.
@@ -24,36 +20,6 @@ Require Jessie_memory_model.
 
 (* Why3 assumption *)
 Definition unit  := unit.
-
-Axiom Pi_interval : ((314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196 / 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)%R < PI)%R /\
-  (PI < (314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038197 / 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)%R)%R.
-
-Axiom Cos_plus_pi : forall (x:R),
-  ((Rtrigo_def.cos (x + PI)%R) = (-(Rtrigo_def.cos x))%R).
-
-Axiom Sin_plus_pi : forall (x:R),
-  ((Rtrigo_def.sin (x + PI)%R) = (-(Rtrigo_def.sin x))%R).
-
-Axiom Cos_plus_pi2 : forall (x:R),
-  ((Rtrigo_def.cos (x + ((05 / 10)%R * PI)%R)%R) = (-(Rtrigo_def.sin x))%R).
-
-Axiom Sin_plus_pi2 : forall (x:R),
-  ((Rtrigo_def.sin (x + ((05 / 10)%R * PI)%R)%R) = (Rtrigo_def.cos x)).
-
-Axiom Cos_neg : forall (x:R), ((Rtrigo_def.cos (-x)%R) = (Rtrigo_def.cos x)).
-
-Axiom Sin_neg : forall (x:R),
-  ((Rtrigo_def.sin (-x)%R) = (-(Rtrigo_def.sin x))%R).
-
-Axiom Cos_sum : forall (x:R) (y:R),
-  ((Rtrigo_def.cos (x + y)%R) = (((Rtrigo_def.cos x) * (Rtrigo_def.cos y))%R - ((Rtrigo_def.sin x) * (Rtrigo_def.sin y))%R)%R).
-
-Axiom Sin_sum : forall (x:R) (y:R),
-  ((Rtrigo_def.sin (x + y)%R) = (((Rtrigo_def.sin x) * (Rtrigo_def.cos y))%R + ((Rtrigo_def.cos x) * (Rtrigo_def.sin y))%R)%R).
-
-Parameter atan: R -> R.
-
-Axiom Tan_atan : forall (x:R), ((Rtrigo.tan (atan x)) = x).
 
 Axiom charP : Type.
 Parameter charP_WhyType : WhyType charP.
@@ -296,9 +262,6 @@ Axiom voidP_tags : forall (x:(Jessie_memory_model.pointer voidP)),
   forall (voidP_tag_table:(Jessie_memory_model.tag_table voidP)),
   (Jessie_memory_model.instanceof voidP_tag_table x voidP_tag).
 
-Axiom method_error : forall (x_3:R), ((Rabs x_3) <= (1 / 32)%R)%R ->
-  ((Rabs ((1%R - ((x_3 * x_3)%R * (05 / 10)%R)%R)%R - (Rtrigo_def.cos x_3))%R) <= (1 / 16777216)%R)%R.
-
 (* Why3 assumption *)
 Inductive ref (a:Type) {a_WT:WhyType a} :=
   | mk_ref : a -> ref a.
@@ -411,18 +374,42 @@ Axiom Int_min_is_le : forall (x:Z), forall (y:Z), ((int_min x y) <= x)%Z /\
 Axiom Int_min_is_some : forall (x:Z), forall (y:Z), ((int_min x y) = x) \/
   ((int_min x y) = y).
 
-Require Import Interval_tactic.
-
 (* Why3 goal *)
-Theorem WP_parameter_my_cos4_ensures_default : forall (x_2:floating_point.SingleFormat.single),
-  ((Rabs (floating_point.Single.value x_2)) <= (007 / 100)%R)%R ->
-  ((Rabs ((1%R - (((floating_point.Single.value x_2) * (floating_point.Single.value x_2))%R * (05 / 10)%R)%R)%R - (Rtrigo_def.cos (floating_point.Single.value x_2)))%R) <= (18 / 16777216)%R)%R.
-(* YOU MAY EDIT THE PROOF BELOW *)
-intros x H.
-assert (Rabs (Single.value x) <= 18 / 256)%R.
-  apply Rle_trans with (1:=H).
-  interval.
-interval with (i_bisect_diff (Single.value x)).
+Theorem WP_parameter__Sterbenz_ensures_default : forall (x_0:floating_point.SingleFormat.single)
+  (y:floating_point.SingleFormat.single),
+  (((Rdiv (floating_point.Single.value y) 2%R)%R <= (floating_point.Single.value x_0))%R /\
+  ((floating_point.Single.value x_0) <= (2%R * (floating_point.Single.value y))%R)%R) ->
+  ((0%R <= (floating_point.Single.value y))%R ->
+  ((0%R <= (floating_point.Single.value x_0))%R ->
+  forall (o:floating_point.SingleFormat.single),
+  (floating_point.Single.sub_post floating_point.Rounding.NearestTiesToEven
+  x_0 y o) -> forall (us_retres:floating_point.SingleFormat.single),
+  (us_retres = o) -> forall (return1:floating_point.SingleFormat.single),
+  (return1 = us_retres) ->
+  ((floating_point.Single.value return1) = ((floating_point.Single.value x_0) - (floating_point.Single.value y))%R))).
+intros x_0 y (h1,h2) h3 h4 o (h5a&h5b&h5c) us_retres h6 return1 h7.
+(*
+intros x y (H1,H2) _ _ r (H4,(H5a,H5b)) r' H6 r'' H7.
+*)
+rewrite h7,h6,h5a.
+unfold Single.value in *.
+
+(* TODO: continue *)
+(*
+SearchPattern (_ = _ - _)%R.
+SearchAbout Sterbenz.
+Check Fcore_defs.F2R.
+unfold GenFloat.value.
+unfold GenFloat.B2R_coercion.
+rewrite <- Fcalc_ops.F2R_minus.
+*)
+(* this was the former proof using Reals lib instead of Flocq
+rewrite <- Fminus_correct; auto with zarith.
+elim (mode_single_RoundingMode nearest_even); intros P (H8,H9).
+apply sym_eq; apply RoundedModeProjectorIdemEq with bsingle 24%nat P; try apply psGivesBound; auto with zarith.
+apply Sterbenz; auto with zarith; try apply FcanonicBound with radix; try now destruct x; try now destruct y.
+fold FtoRradix; apply Rle_trans with (2:=H1); unfold Rdiv; simpl; right; ring.
+*)
 Qed.
 
 

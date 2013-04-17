@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -24,7 +24,7 @@
  <prover
   id="5"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../Fibonacci.mlw"
   verified="true"
@@ -40,7 +40,7 @@
     locfile="../Fibonacci.java"
     loclnum="46" loccnumb="10" loccnume="19"
     expl="Lemma isfib_2_1, lemma"
-    sum="dfa5c6f71556f541b1ad0d613bc54847"
+    sum="f32a5cfbf05b258183b43241778dede5"
     proved="true"
     expanded="true"
     shape="aisfibc2c1">
@@ -61,7 +61,7 @@
     locfile="../Fibonacci.java"
     loclnum="47" loccnumb="10" loccnume="19"
     expl="Lemma isfib_6_8, lemma"
-    sum="f54a4eb4e0d587541e7015847f7a53b6"
+    sum="d976e10fff40f6ccbfb31b2ada7f800c"
     proved="true"
     expanded="true"
     shape="aisfibc6c8">
@@ -82,7 +82,7 @@
     locfile="../Fibonacci.java"
     loclnum="50" loccnumb="10" loccnume="23"
     expl="Lemma not_isfib_2_2, lemma"
-    sum="3bb3ea52dbf7f5048077e653e2ee6c5e"
+    sum="cae18ccb124a8c294d439e1853a78f0c"
     proved="true"
     expanded="true"
     shape="aisfibc2c2N">
@@ -141,7 +141,7 @@
     locfile="../Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
     expl="VC for _Fibonacci_Fib_ensures_default"
-    sum="cb2b837fd8bfa20dc9891da949f5a6dc"
+    sum="47a815e7cd6590ba353ef5cae71a98a6"
     proved="true"
     expanded="true"
     shape="iainfix &lt;V1V0aisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FaisfibV0V8Iainfix =V8V3FIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
@@ -166,7 +166,7 @@
       locfile="../Fibonacci.java"
       loclnum="57" loccnumb="23" loccnume="26"
       expl="1. loop invariant init"
-      sum="d19d0b6201302f2fa82fd11e9c1cd45b"
+      sum="3668560b1435a2af99848364737a06e1"
       proved="true"
       expanded="true"
       shape="aisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
@@ -220,7 +220,7 @@
       locfile="../Fibonacci.java"
       loclnum="57" loccnumb="23" loccnume="26"
       expl="2. loop invariant preservation"
-      sum="e1066a161fbc5077044bbe798533e68f"
+      sum="a81d1a97185829bbc4a5824a6731d347"
       proved="true"
       expanded="true"
       shape="aisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -277,7 +277,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="1."
-        sum="e21e211049bf45007e10c8957778ebc1"
+        sum="0f7291488aac359000c8fa743ccbf79f"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -331,7 +331,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="2."
-        sum="a4e9e66453e2b81b9116bef9cb944332"
+        sum="1b3bf6d2f3654a782c59084b8e8f755d"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V7V0Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -385,7 +385,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="3."
-        sum="895d41fc4c06bd9529692b4af7ae08ec"
+        sum="d1dd8fcb3aa9b59b2f6de0ca2fd4a89c"
         proved="true"
         expanded="true"
         shape="aisfibainfix +V7c1V6Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -439,7 +439,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="4."
-        sum="293cecb9d34cdb37506471cd09882b0d"
+        sum="e1ab8a142aff2ebadd68da33053f68d2"
         proved="true"
         expanded="false"
         shape="aisfibV7V5Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -495,7 +495,7 @@
       locfile="../Fibonacci.java"
       loclnum="57" loccnumb="23" loccnume="26"
       expl="3. postcondition"
-      sum="83f1e3ac16628650013dee27eb038f38"
+      sum="3b4906e5436a39deaabbacb73ff26215"
       proved="true"
       expanded="true"
       shape="aisfibV0V4Iainfix =V4V3FIainfix &lt;V1V0NIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -551,7 +551,7 @@
     locfile="../Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
     expl="VC for _Fibonacci_Fib_safety"
-    sum="a7f63a7212ae3bdec0c4616e483fe067"
+    sum="f703fa25e4817b47346309b613a99463"
     proved="true"
     expanded="true"
     shape="ainfix &lt;ainfix -V0V7ainfix -V0V1Aainfix &lt;=c0ainfix -V0V1Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -605,7 +605,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fibonacci_ensures_default"
-    sum="362a088fa3dd4d9d8cea40c4cace26d0"
+    sum="74b8278ae6a386b2ccdc6a29f421ec7c"
     proved="true"
     expanded="true"
     shape="t">
@@ -659,7 +659,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fibonacci_safety"
-    sum="282a6789fa10d123d33e9f34ee615a10"
+    sum="74b8278ae6a386b2ccdc6a29f421ec7c"
     proved="true"
     expanded="true"
     shape="t">

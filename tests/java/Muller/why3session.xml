@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -16,7 +16,7 @@
  <prover
   id="3"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../Muller.mlw"
   verified="true"
@@ -32,7 +32,7 @@
     locfile="../Muller.java"
     loclnum="51" loccnumb="10" loccnume="33"
     expl="Lemma num_of_pos_non_negative, lemma"
-    sum="c6c5f1ce0f2c9e5f82eb3c55810dc832"
+    sum="e836380e2cd31f12c6917862f8851ca1"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=c0anum_of_posV1V2V3V0FFFF">
@@ -53,7 +53,7 @@
     locfile="../Muller.java"
     loclnum="55" loccnumb="10" loccnume="29"
     expl="Lemma num_of_pos_additive, lemma"
-    sum="d74a90a6b599914fb90c79686d5dab50"
+    sum="44466f120f87267061631582b1e2dc1e"
     proved="true"
     expanded="true"
     shape="ainfix =anum_of_posV1V3V4V0ainfix +anum_of_posV1V2V4V0anum_of_posV2V3V4V0Iainfix &lt;=V2V3Aainfix &lt;=V1V2FFFFF">
@@ -74,7 +74,7 @@
     locfile="../Muller.java"
     loclnum="60" loccnumb="10" loccnume="31"
     expl="Lemma num_of_pos_increasing, lemma"
-    sum="ed7a3e799cae8677773583f9ce800793"
+    sum="997fdd5f5944f026f0a26fe8474d58f9"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=anum_of_posV1V2V4V0anum_of_posV1V3V4V0Iainfix &lt;=V2V3FFFFF">
@@ -94,7 +94,7 @@
     locfile="../Muller.java"
     loclnum="65" loccnumb="10" loccnume="40"
     expl="Lemma num_of_pos_strictly_increasing, lemma"
-    sum="4056512662de8b2923c5070fb351e90e"
+    sum="c8d79b6bdfe18ca1600db5f2a2bf2ff5"
     proved="true"
     expanded="true"
     shape="ainfix &lt;anum_of_posc0V1V3V0anum_of_posc0V2V3V0Iainfix &gt;ainteger_of_int32aselectV0ashiftV3V1c0Aainfix &lt;V1V2Aainfix &lt;=c0V1FFFF">
@@ -107,14 +107,14 @@
      edited="Muller_Jessie_model_num_of_pos_strictly_increasing_1.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="2.24"/>
+     <result status="valid" time="2.19"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="Jessie_program"
    locfile="../Muller.mlw"
-   loclnum="408" loccnumb="7" loccnume="21"
+   loclnum="403" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
@@ -122,7 +122,7 @@
     locfile="../Muller.java"
     loclnum="75" loccnumb="24" loccnume="25"
     expl="VC for _Muller_m_ensures_default"
-    sum="fef5f3efe57faab9a34389f890783138"
+    sum="abbf184b85709372e6b44d4405d4af9d"
     proved="true"
     expanded="true"
     shape="iainfix &lt;ainteger_of_int32V6V8iainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V6c0ainfix =ainteger_of_int32V10anum_of_posc0ainteger_of_int32V12V0V2Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V12Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V12ainfix +aoffset_maxV1V0c1Aainfix &lt;=c0ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V6c1FIainfix =V10V9FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7c1Fainfix =ainteger_of_int32V7anum_of_posc0ainteger_of_int32V14V0V2Aainfix &lt;=ainteger_of_int32V7ainteger_of_int32V14Aainfix &lt;=c0ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V14ainfix +aoffset_maxV1V0c1Aainfix &lt;=c0ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V6c1Fiainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V21c0ainfix =ainteger_of_int32V26anum_of_posc0ainteger_of_int32V29V0V2Aainfix &lt;=ainteger_of_int32V26ainteger_of_int32V29Aainfix &lt;=c0ainteger_of_int32V26Aainfix &lt;=ainteger_of_int32V29ainfix +aoffset_maxV1V0c1Aainfix &lt;=c0ainteger_of_int32V29Iainfix =V29V28FIainfix =ainteger_of_int32V28ainfix +ainteger_of_int32V21c1FIainfix =V27astoreV23ashiftV17ainteger_of_int32V22aselectV2ashiftV0ainteger_of_int32V21FIainfix =V26V25FIainfix =ainteger_of_int32V25ainfix +ainteger_of_int32V22c1Fainfix =ainteger_of_int32V22anum_of_posc0ainteger_of_int32V31V0V2Aainfix &lt;=ainteger_of_int32V22ainteger_of_int32V31Aainfix &lt;=c0ainteger_of_int32V22Aainfix &lt;=ainteger_of_int32V31ainfix +aoffset_maxV1V0c1Aainfix &lt;=c0ainteger_of_int32V31Iainfix =V31V30FIainfix =ainteger_of_int32V30ainfix +ainteger_of_int32V21c1FIainfix &lt;ainteger_of_int32V21V24Iainfix &gt;=V24c0Aainfix &lt;=V24c2147483647Lainfix +aoffset_maxV1V0c1Iainfix =ainteger_of_int32V22anum_of_posc0ainteger_of_int32V21V0V2Aainfix &lt;=ainteger_of_int32V22ainteger_of_int32V21Aainfix &lt;=c0ainteger_of_int32V22Aainfix &lt;=ainteger_of_int32V21ainfix +aoffset_maxV1V0c1Aainfix &lt;=c0ainteger_of_int32V21FAainfix =ainteger_of_int32V19anum_of_posc0ainteger_of_int32V20V0V2Aainfix &lt;=ainteger_of_int32V19ainteger_of_int32V20Aainfix &lt;=c0ainteger_of_int32V19Aainfix &lt;=ainteger_of_int32V20ainfix +aoffset_maxV1V0c1Aainfix &lt;=c0ainteger_of_int32V20Iainfix =ainteger_of_int32V20c0FIainfix =V19V18FIainfix =ainteger_of_int32V18c0FIainstanceofV15V17aintM_tagAaalloc_freshV3V17ainteger_of_int32V7Aaalloc_extendsV3V16Aastrict_valid_struct_intMV17c0ainfix -ainteger_of_int32V7c1V16FFIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV1V0c1Iainfix =ainteger_of_int32V7anum_of_posc0ainteger_of_int32V6V0V2Aainfix &lt;=ainteger_of_int32V7ainteger_of_int32V6Aainfix &lt;=c0ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V6ainfix +aoffset_maxV1V0c1Aainfix &lt;=c0ainteger_of_int32V6FAainfix =ainteger_of_int32V4anum_of_posc0ainteger_of_int32V5V0V2Aainfix &lt;=ainteger_of_int32V4ainteger_of_int32V5Aainfix &lt;=c0ainteger_of_int32V4Aainfix &lt;=ainteger_of_int32V5ainfix +aoffset_maxV1V0c1Aainfix &lt;=c0ainteger_of_int32V5Iainfix =ainteger_of_int32V5c0FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V1Aaleft_valid_struct_intMV0c0V1FF">
@@ -152,7 +152,7 @@
     locfile="../Muller.java"
     loclnum="75" loccnumb="24" loccnume="25"
     expl="index bounds"
-    sum="57c6b37e13b698e87ebdd51df8a6cf8d"
+    sum="cf62ab3cf7c0cc9597ff06e08414c0d4"
     proved="true"
     expanded="true"
     shape="iainfix &lt;ainteger_of_int32V6V8iainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V6c0ainfix &lt;ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V12ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V6Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V6Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V6c1FAainfix &lt;=ainfix +ainteger_of_int32V6c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V6c1Iainfix =V10V9FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7c1FAainfix &lt;=ainfix +ainteger_of_int32V7c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V7c1ainfix &lt;ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V14ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V6Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V6Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V6c1FAainfix &lt;=ainfix +ainteger_of_int32V6c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V6c1Aainfix &lt;=ainteger_of_int32V6aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0ainteger_of_int32V6iainfix &gt;ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V21c0ainfix &lt;ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V29ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V21Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V21Iainfix =V29V28FIainfix =ainteger_of_int32V28ainfix +ainteger_of_int32V21c1FAainfix &lt;=ainfix +ainteger_of_int32V21c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V21c1Iainfix =V27astoreV23ashiftV17ainteger_of_int32V22aselectV2ashiftV0ainteger_of_int32V21FAainfix &lt;=ainteger_of_int32V22aoffset_maxV16V17Aainfix &lt;=aoffset_minV16V17ainteger_of_int32V22Iainfix =V26V25FIainfix =ainteger_of_int32V25ainfix +ainteger_of_int32V22c1FAainfix &lt;=ainfix +ainteger_of_int32V22c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V22c1Aainfix &lt;=ainteger_of_int32V21aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0ainteger_of_int32V21ainfix &lt;ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V31ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V21Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V21Iainfix =V31V30FIainfix =ainteger_of_int32V30ainfix +ainteger_of_int32V21c1FAainfix &lt;=ainfix +ainteger_of_int32V21c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V21c1Aainfix &lt;=ainteger_of_int32V21aoffset_maxV1V0Aainfix &lt;=aoffset_minV1V0ainteger_of_int32V21Iainfix &lt;ainteger_of_int32V21V24Iainfix &gt;=V24c0Aainfix &lt;=V24c2147483647Lainfix +aoffset_maxV1V0c1Aainfix &gt;=aoffset_maxV1V0aprefix -c1Iainfix =ainteger_of_int32V22anum_of_posc0ainteger_of_int32V21V0V2Aainfix &lt;=ainteger_of_int32V22ainteger_of_int32V21Aainfix &lt;=c0ainteger_of_int32V22Aainfix &lt;=ainteger_of_int32V21ainfix +aoffset_maxV1V0c1Aainfix &lt;=c0ainteger_of_int32V21FIainfix =ainteger_of_int32V20c0FIainfix =V19V18FIainfix =ainteger_of_int32V18c0FIainstanceofV15V17aintM_tagAaalloc_freshV3V17ainteger_of_int32V7Aaalloc_extendsV3V16Aastrict_valid_struct_intMV17c0ainfix -ainteger_of_int32V7c1V16FFAainfix &gt;=ainteger_of_int32V7c0Iainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV1V0c1Aainfix &gt;=aoffset_maxV1V0aprefix -c1Iainfix =ainteger_of_int32V7anum_of_posc0ainteger_of_int32V6V0V2Aainfix &lt;=ainteger_of_int32V7ainteger_of_int32V6Aainfix &lt;=c0ainteger_of_int32V7Aainfix &lt;=ainteger_of_int32V6ainfix +aoffset_maxV1V0c1Aainfix &lt;=c0ainteger_of_int32V6FIainfix =ainteger_of_int32V5c0FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V1Aaleft_valid_struct_intMV0c0V1FF">
@@ -182,7 +182,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Muller_ensures_default"
-    sum="6bcd9963d09978b70702eaee9a3b2495"
+    sum="2be297eeee2436e5910d62e2c0c145ac"
     proved="true"
     expanded="true"
     shape="t">
@@ -220,7 +220,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Muller_safety"
-    sum="a015433022d615e0918f6f437a91581e"
+    sum="2be297eeee2436e5910d62e2c0c145ac"
     proved="true"
     expanded="true"
     shape="t">

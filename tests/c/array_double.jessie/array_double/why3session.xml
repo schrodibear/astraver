@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -8,15 +8,7 @@
  <prover
   id="1"
   name="Gappa"
-  version="0.14.1"/>
- <prover
-  id="2"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="3"
-  name="Gappa"
-  version="0.16.1"/>
+  version="0.16.6"/>
  <file
   name="../array_double.mlw"
   verified="true"
@@ -39,7 +31,7 @@
     locfile="../../array_double.c"
     loclnum="18" loccnumb="5" loccnume="9"
     expl="VC for test_ensures_default"
-    sum="bff99ce8bb4f1b1f385d0ffdbc3c76b4"
+    sum="6c05ec52b72b52e686cf3d159b91894f"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -avalueaselectV8ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV8ashiftaac1V7Aainfix =aselectV8ashiftaac0V6Aanot_assignsV5V2V8apset_rangeapset_singletonaac0c1FIaadd_postaNearestTiesToEvenaselectV1ashiftabc1aselectV0ashiftacc1V7FIaadd_postaNearestTiesToEvenaselectV1ashiftabc0aselectV0ashiftacc0V6FIavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
@@ -55,29 +47,13 @@
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter test_safety"
     locfile="../../array_double.c"
     loclnum="18" loccnumb="5" loccnume="9"
     expl="VC for test_safety"
-    sum="2a22fad76bdfe168d87a97d6f3c49f32"
+    sum="f29f578abc76c888d2d510368ac4909c"
     proved="true"
     expanded="true"
     shape="avalid_aV5Aavalid_bV4Aavalid_cV3Iainfix &lt;=aabsainfix -avalueaselectV12ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV12ashiftaac1V11Aainfix =aselectV12ashiftaac0V8Aanot_assignsV5V2V12apset_rangeapset_singletonaac0c1FIaadd_postaNearestTiesToEvenV10V9V11FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV10avalueV9amax_doubleLaselectV1ashiftabc1LaselectV0ashiftacc1Iaadd_postaNearestTiesToEvenV7V6V8FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV6amax_doubleLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
@@ -94,7 +70,7 @@
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
       expl="1. floating-point overflow"
-      sum="c5fb78d023344e4079b91887ed5e2d9d"
+      sum="c0e2c6cf02aec9e11bf0f819ab0bea4f"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV6amax_doubleLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
@@ -110,29 +86,13 @@
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter test_safety.2"
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
       expl="2. floating-point overflow"
-      sum="70d8c7b62c35c1429f353b7ba121fbe9"
+      sum="828b5656e256e92933e9b925adfdc73d"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV10avalueV9amax_doubleLaselectV1ashiftabc1LaselectV0ashiftacc1Iaadd_postaNearestTiesToEvenV7V6V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV6amax_doubleLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
@@ -148,29 +108,13 @@
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter test_safety.3"
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
       expl="3. postcondition"
-      sum="ce5420f130f8e9c096b59dd9b74b0a19"
+      sum="350059389d361eeffebdc844f9d24159"
       proved="true"
       expanded="true"
       shape="avalid_aV5Aavalid_bV4Aavalid_cV3Iainfix &lt;=aabsainfix -avalueaselectV12ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV12ashiftaac1V11Aainfix =aselectV12ashiftaac0V8Aanot_assignsV5V2V12apset_rangeapset_singletonaac0c1FIaadd_postaNearestTiesToEvenV10V9V11FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV10avalueV9amax_doubleLaselectV1ashiftabc1LaselectV0ashiftacc1Iaadd_postaNearestTiesToEvenV7V6V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV7avalueV6amax_doubleLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">

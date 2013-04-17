@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -12,7 +12,7 @@
  <prover
   id="2"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../PreAndOld.mlw"
   verified="true"
@@ -35,7 +35,7 @@
     locfile="../PreAndOld.java"
     loclnum="46" loccnumb="8" loccnume="9"
     expl="VC for _PreAndOld_g_ensures_default"
-    sum="5ca0cefd1f34f8d84dd312110f272ab3"
+    sum="509986485fc0a7a0e2df82289544f0ed"
     proved="true"
     expanded="true"
     shape="ainfix =V5afV1V2Aainfix =V5afV1V2Aainfix =V5afV1V2Iainfix =V5ainfix +V1V2FIainfix =V4c12FIavalid_struct_PreAndOldV0c0c0V3FF">
@@ -73,7 +73,7 @@
     locfile="../PreAndOld.java"
     loclnum="46" loccnumb="8" loccnume="9"
     expl="VC for _PreAndOld_g_safety"
-    sum="d43620602047c2f778ecc33c41dc7c3b"
+    sum="53975606997ae606a41aa71102a13708"
     proved="true"
     expanded="true"
     shape="t">
@@ -111,7 +111,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_PreAndOld_ensures_default"
-    sum="483d21a5739152cb1816aaf9df7aa830"
+    sum="53975606997ae606a41aa71102a13708"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,7 +149,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_PreAndOld_safety"
-    sum="40c2ca7129e9ebae165501941b5c4165"
+    sum="53975606997ae606a41aa71102a13708"
     proved="true"
     expanded="true"
     shape="t">

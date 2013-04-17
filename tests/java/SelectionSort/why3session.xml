@@ -1,387 +1,983 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="SelectionSort/why3session.xml" shape_version="2">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
   version="0.94"/>
  <prover
   id="1"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.3.1"/>
  <file
   name="../SelectionSort.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="SelectionSort/../SelectionSort.mlw"
+   locfile="../SelectionSort.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="SelectionSort/../SelectionSort.mlw"
+   locfile="../SelectionSort.mlw"
    loclnum="377" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _SelectionSort_sort_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+    locfile="../SelectionSort.java"
     loclnum="78" loccnumb="9" loccnume="13"
-    expl="parameter _SelectionSort_sort_ensures_default"
-    sum="60ab5b7343575f0b46c5a31c31d2466b"
+    expl="VC for _SelectionSort_sort_ensures_default"
+    sum="2fb1cf287c8948e6174c0da72b9a8fa7"
     proved="true"
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V15V16iainfix &lt;ainteger_of_int32aselectV6ashiftV1ainteger_of_int32V15ainteger_of_int32V13ainfix &lt;ainteger_of_int32V17ainfix +aoffset_maxV2V1c1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V17Aainfix &lt;ainteger_of_int32V5ainteger_of_int32V20Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V15c1FIainfix =V18aselectV6ashiftV1ainteger_of_int32V15FIainfix =V17V15Fainfix &lt;ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V14Aainfix &lt;ainteger_of_int32V5ainteger_of_int32V22Iainfix =V22V21FIainfix =ainteger_of_int32V21ainfix +ainteger_of_int32V15c1Fainfix &lt;=c0ainteger_of_int32V25Iainfix =V25V24FIainfix =ainteger_of_int32V24ainfix +ainteger_of_int32V5c1FIanot_assignsV2V6V23apset_unionapset_rangeapset_singletonV1ainteger_of_int32V14ainteger_of_int32V14apset_rangeapset_singletonV1ainteger_of_int32V5ainteger_of_int32V5Aa_SwapV1ainteger_of_int32V5ainteger_of_int32V14V23V6FIainfix &gt;=V16c0Aainfix &lt;=V16c2147483647Lainfix +aoffset_maxV2V1c1Iainfix &lt;ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V14Aainfix &lt;ainteger_of_int32V5ainteger_of_int32V15FAainfix &lt;ainteger_of_int32V10ainfix +aoffset_maxV2V1c1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V10Aainfix &lt;ainteger_of_int32V5ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V5c1FIainfix =V10V5FIainfix =V9aselectV6ashiftV1ainteger_of_int32V5FIainfix &lt;ainteger_of_int32V5ainteger_of_int32V8Iainfix =ainteger_of_int32V8ainfix -V7c1FIainfix &gt;=V7c0Aainfix &lt;=V7c2147483647Lainfix +aoffset_maxV2V1c1Iainfix &lt;=c0ainteger_of_int32V5FAainfix &lt;=c0ainteger_of_int32V4Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV1V2Aavalid_struct_SelectionSortV0c0c0V2Aaleft_valid_struct_intMV1c0V2FF">
     <label
-     name="expl:parameter _SelectionSort_sort_ensures_default"/>
-    <label
      name="expl:Method sort, default behavior"/>
+    <label
+     name="expl:VC for _SelectionSort_sort_ensures_default"/>
     <proof
      prover="0"
-     timelimit="10"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.66"/>
     </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.09"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _SelectionSort_sort_ensures_permutation"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+    locfile="../SelectionSort.java"
     loclnum="78" loccnumb="9" loccnume="13"
-    expl="parameter _SelectionSort_sort_ensures_permutation"
-    sum="4050af7d03835cd6ca4c327f520e1b15"
+    expl="VC for _SelectionSort_sort_ensures_permutation"
+    sum="f90b74f46db3ff82f4b493eecc9c1beb"
     proved="true"
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V6ainteger_of_int32V9a_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V17V2Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V6c1FAa_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V17V7Ianot_assignsV3V7V17apset_unionapset_rangeapset_singletonV1ainteger_of_int32V14ainteger_of_int32V14apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V14V17V7FIainfix &lt;ainteger_of_int32V15V16NIainfix &gt;=V16c0Aainfix &lt;=V16c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V14ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V14Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6Fa_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V7V2Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Ia_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V7V2FAa_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V2V2Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
     <label
-     name="expl:parameter _SelectionSort_sort_ensures_permutation"/>
-    <label
      name="expl:Method sort, Behavior `permutation&apos;"/>
+    <label
+     name="expl:VC for _SelectionSort_sort_ensures_permutation"/>
     <proof
      prover="0"
-     timelimit="10"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.14"/>
     </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.18"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.23"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.21"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.21"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _SelectionSort_sort_ensures_sorted"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+    locfile="../SelectionSort.java"
     loclnum="78" loccnumb="9" loccnume="13"
-    expl="parameter _SelectionSort_sort_ensures_sorted"
-    sum="cf24045670f44fd850f55b0978466ad0"
+    expl="VC for _SelectionSort_sort_ensures_sorted"
+    sum="cd7de9f09f7b855b863c4350685bd704"
     proved="true"
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V6ainteger_of_int32V9iainfix &lt;ainteger_of_int32V16V17iainfix &lt;ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V16ainteger_of_int32V14ainfix &gt;=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32V19Iainfix &lt;V22ainteger_of_int32V21Aainfix &lt;=ainteger_of_int32V6V22FAainfix =ainteger_of_int32V19ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V18Iainfix =V21V20FIainfix =ainteger_of_int32V20ainfix +ainteger_of_int32V16c1FIainfix =V19aselectV7ashiftV1ainteger_of_int32V16FIainfix =V18V16Fainfix &gt;=ainteger_of_int32aselectV7ashiftV1V25ainteger_of_int32V14Iainfix &lt;V25ainteger_of_int32V24Aainfix &lt;=ainteger_of_int32V6V25FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15Iainfix =V24V23FIainfix =ainteger_of_int32V23ainfix +ainteger_of_int32V16c1Fainfix &lt;=ainteger_of_int32aselectV26ashiftV1V29ainteger_of_int32aselectV26ashiftV1V30Iainfix &lt;V30ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V28V30Aainfix &lt;V29ainteger_of_int32V28Aainfix &lt;=c0V29FFAa_SortedV1c0ainteger_of_int32V28V26Iainfix =V28V27FIainfix =ainteger_of_int32V27ainfix +ainteger_of_int32V6c1FIanot_assignsV3V7V26apset_unionapset_rangeapset_singletonV1ainteger_of_int32V15ainteger_of_int32V15apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V15V26V7FIainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V31ainteger_of_int32V14Iainfix &lt;V31ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V31FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FAainfix &gt;=ainteger_of_int32aselectV7ashiftV1V32ainteger_of_int32V10Iainfix &lt;V32ainteger_of_int32V13Aainfix &lt;=ainteger_of_int32V6V32FAainfix =ainteger_of_int32V10ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V11Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6Fa_SortedV1c0ainfix +aoffset_maxV3V1c1V7Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V33ainteger_of_int32aselectV7ashiftV1V34Iainfix &lt;V34ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V34Aainfix &lt;V33ainteger_of_int32V6Aainfix &lt;=c0V33FFAa_SortedV1c0ainteger_of_int32V6V7FAainfix &lt;=ainteger_of_int32aselectV2ashiftV1V35ainteger_of_int32aselectV2ashiftV1V36Iainfix &lt;V36ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V5V36Aainfix &lt;V35ainteger_of_int32V5Aainfix &lt;=c0V35FFAa_SortedV1c0ainteger_of_int32V5V2Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
     <label
-     name="expl:parameter _SelectionSort_sort_ensures_sorted"/>
-    <label
      name="expl:Method sort, Behavior `sorted&apos;"/>
-    <proof
-     prover="1"
-     timelimit="10"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.28"/>
-    </proof>
+    <label
+     name="expl:VC for _SelectionSort_sort_ensures_sorted"/>
     <transf
      name="split_goal"
      proved="true"
      expanded="false">
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.1"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+      locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
-      expl="loop invariant init"
-      sum="55f8e82520be8edefa2461df11508c7d"
+      expl="1. loop invariant init"
+      sum="ec3d38adb0811aae5608cea6facbc4bf"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32aselectV2ashiftV1V6ainteger_of_int32aselectV2ashiftV1V7Iainfix &lt;V7ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V5V7Aainfix &lt;V6ainteger_of_int32V5Aainfix &lt;=c0V6FFAa_SortedV1c0ainteger_of_int32V5V2Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
       <label
-       name="expl:parameter _SelectionSort_sort_ensures_sorted"/>
-      <label
        name="expl:Method sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for _SelectionSort_sort_ensures_sorted"/>
       <proof
        prover="0"
-       timelimit="10"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.2"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+      locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
-      expl="loop invariant init"
-      sum="57bfe266f191fc42c8773ac800327e29"
+      expl="2. loop invariant init"
+      sum="55e2d888600facfd65a0e3114a96beaa"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32aselectV7ashiftV1V14ainteger_of_int32V10Iainfix &lt;V14ainteger_of_int32V13Aainfix &lt;=ainteger_of_int32V6V14FAainfix =ainteger_of_int32V10ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V11Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V15ainteger_of_int32aselectV7ashiftV1V16Iainfix &lt;V16ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V16Aainfix &lt;V15ainteger_of_int32V6Aainfix &lt;=c0V15FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
       <label
-       name="expl:parameter _SelectionSort_sort_ensures_sorted"/>
-      <label
        name="expl:Method sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for _SelectionSort_sort_ensures_sorted"/>
       <proof
        prover="0"
-       timelimit="10"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.3"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+      locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
-      expl="loop invariant preservation"
-      sum="7b621819cc8007f22112319b0e08b742"
+      expl="3. loop invariant preservation"
+      sum="654db71d777fd7d7bff2302896b6fb63"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32V19Iainfix &lt;V22ainteger_of_int32V21Aainfix &lt;=ainteger_of_int32V6V22FAainfix =ainteger_of_int32V19ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V18Iainfix =V21V20FIainfix =ainteger_of_int32V20ainfix +ainteger_of_int32V16c1FIainfix =V19aselectV7ashiftV1ainteger_of_int32V16FIainfix =V18V16FIainfix &lt;ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V16ainteger_of_int32V14Iainfix &lt;ainteger_of_int32V16V17Iainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V23ainteger_of_int32V14Iainfix &lt;V23ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V23FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V24ainteger_of_int32aselectV7ashiftV1V25Iainfix &lt;V25ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V25Aainfix &lt;V24ainteger_of_int32V6Aainfix &lt;=c0V24FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
       <label
-       name="expl:parameter _SelectionSort_sort_ensures_sorted"/>
-      <label
        name="expl:Method sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for _SelectionSort_sort_ensures_sorted"/>
       <proof
        prover="0"
-       timelimit="10"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.22"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.23"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.26"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.4"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+      locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
-      expl="loop invariant preservation"
-      sum="c0bcfaec8f77d2770b2d77c7c1b7cc6f"
+      expl="4. loop invariant preservation"
+      sum="dc8727b5cdc99c9d9703d93fadb44f90"
       proved="true"
       expanded="false"
       shape="ainfix &gt;=ainteger_of_int32aselectV7ashiftV1V20ainteger_of_int32V14Iainfix &lt;V20ainteger_of_int32V19Aainfix &lt;=ainteger_of_int32V6V20FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V16c1FIainfix &lt;ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V16ainteger_of_int32V14NIainfix &lt;ainteger_of_int32V16V17Iainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V21ainteger_of_int32V14Iainfix &lt;V21ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V21FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32aselectV7ashiftV1V23Iainfix &lt;V23ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V23Aainfix &lt;V22ainteger_of_int32V6Aainfix &lt;=c0V22FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
       <label
-       name="expl:parameter _SelectionSort_sort_ensures_sorted"/>
-      <label
        name="expl:Method sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for _SelectionSort_sort_ensures_sorted"/>
       <proof
        prover="0"
-       timelimit="10"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.15"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.19"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.26"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.5"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+      locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
-      expl="loop invariant preservation"
-      sum="48f8e95e2f17c7011efc6f537b42457d"
+      expl="5. loop invariant preservation"
+      sum="1bdf9b9dac44d050f68ee59ef93118d0"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32aselectV18ashiftV1V21ainteger_of_int32aselectV18ashiftV1V22Iainfix &lt;V22ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V20V22Aainfix &lt;V21ainteger_of_int32V20Aainfix &lt;=c0V21FFAa_SortedV1c0ainteger_of_int32V20V18Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V6c1FIanot_assignsV3V7V18apset_unionapset_rangeapset_singletonV1ainteger_of_int32V15ainteger_of_int32V15apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V15V18V7FIainfix &lt;ainteger_of_int32V16V17NIainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V23ainteger_of_int32V14Iainfix &lt;V23ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V23FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V24ainteger_of_int32aselectV7ashiftV1V25Iainfix &lt;V25ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V25Aainfix &lt;V24ainteger_of_int32V6Aainfix &lt;=c0V24FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
       <label
-       name="expl:parameter _SelectionSort_sort_ensures_sorted"/>
-      <label
        name="expl:Method sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for _SelectionSort_sort_ensures_sorted"/>
       <proof
-       prover="1"
-       timelimit="10"
-       memlimit="0"
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.74"/>
+       <result status="timeout" time="5.25"/>
       </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.15"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.46"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.11"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <transf
+       name="split_goal_wp"
+       proved="true"
+       expanded="false">
+       <goal
+        name="WP_parameter _SelectionSort_sort_ensures_sorted.5.1"
+        locfile="../SelectionSort.java"
+        loclnum="78" loccnumb="9" loccnume="13"
+        expl="1."
+        sum="678ff0c42a56baf70b3fd9891381b4af"
+        proved="true"
+        expanded="false"
+        shape="a_SortedV1c0ainteger_of_int32V20V18Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V6c1FIanot_assignsV3V7V18apset_unionapset_rangeapset_singletonV1ainteger_of_int32V15ainteger_of_int32V15apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V15V18V7FIainfix &lt;ainteger_of_int32V16V17NIainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V21ainteger_of_int32V14Iainfix &lt;V21ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V21FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32aselectV7ashiftV1V23Iainfix &lt;V23ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V23Aainfix &lt;V22ainteger_of_int32V6Aainfix &lt;=c0V22FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
+        <label
+         name="expl:Method sort, Behavior `sorted&apos;"/>
+        <label
+         name="expl:VC for _SelectionSort_sort_ensures_sorted"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="4.14"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.14"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.13"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.09"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.09"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _SelectionSort_sort_ensures_sorted.5.2"
+        locfile="../SelectionSort.java"
+        loclnum="78" loccnumb="9" loccnume="13"
+        expl="2."
+        sum="c9a3e18f3445e4494f5f309eb046a604"
+        proved="true"
+        expanded="false"
+        shape="ainfix &lt;=ainteger_of_int32aselectV18ashiftV1V21ainteger_of_int32aselectV18ashiftV1V22Iainfix &lt;V22ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V20V22Aainfix &lt;V21ainteger_of_int32V20Aainfix &lt;=c0V21FFIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V6c1FIanot_assignsV3V7V18apset_unionapset_rangeapset_singletonV1ainteger_of_int32V15ainteger_of_int32V15apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V15V18V7FIainfix &lt;ainteger_of_int32V16V17NIainfix &gt;=V17c0Aainfix &lt;=V17c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6ainteger_of_int32V15Aainfix &lt;ainteger_of_int32V6ainteger_of_int32V16Iainfix &gt;=ainteger_of_int32aselectV7ashiftV1V23ainteger_of_int32V14Iainfix &lt;V23ainteger_of_int32V16Aainfix &lt;=ainteger_of_int32V6V23FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix &lt;ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V24ainteger_of_int32aselectV7ashiftV1V25Iainfix &lt;V25ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V25Aainfix &lt;V24ainteger_of_int32V6Aainfix &lt;=c0V24FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
+        <label
+         name="expl:Method sort, Behavior `sorted&apos;"/>
+        <label
+         name="expl:VC for _SelectionSort_sort_ensures_sorted"/>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="2.75"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.21"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="5.18"/>
+        </proof>
+        <proof
+         prover="3"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.10"/>
+        </proof>
+        <proof
+         prover="4"
+         timelimit="5"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.09"/>
+        </proof>
+       </goal>
+      </transf>
      </goal>
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.6"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+      locfile="../SelectionSort.java"
       loclnum="78" loccnumb="9" loccnume="13"
-      expl="normal postcondition"
-      sum="7582a72f2b59fd2ef081a9688493e30a"
+      expl="6. postcondition"
+      sum="d09a32809472fe77dd4dc9401fd191fc"
       proved="true"
       expanded="false"
       shape="a_SortedV1c0ainfix +aoffset_maxV3V1c1V7Iainfix &lt;ainteger_of_int32V6ainteger_of_int32V9NIainfix =ainteger_of_int32V9ainfix -V8c1FIainfix &gt;=V8c0Aainfix &lt;=V8c2147483647Lainfix +aoffset_maxV3V1c1Iainfix &lt;=c0ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV7ashiftV1V10ainteger_of_int32aselectV7ashiftV1V11Iainfix &lt;V11ainfix +aoffset_maxV3V1c1Aainfix &lt;=ainteger_of_int32V6V11Aainfix &lt;V10ainteger_of_int32V6Aainfix &lt;=c0V10FFAa_SortedV1c0ainteger_of_int32V6V7FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
       <label
-       name="expl:parameter _SelectionSort_sort_ensures_sorted"/>
-      <label
        name="expl:Method sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for _SelectionSort_sort_ensures_sorted"/>
       <proof
        prover="0"
-       timelimit="10"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.44"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.25"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.19"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter _SelectionSort_sort_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+    locfile="../SelectionSort.java"
     loclnum="78" loccnumb="9" loccnume="13"
     expl="index bounds"
-    sum="ca1897a412fc4c61d72689a0fecb819f"
+    sum="18edfba988c0172908d17c520646d839"
     proved="true"
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V15V16iainfix &lt;ainteger_of_int32aselectV6ashiftV1ainteger_of_int32V15ainteger_of_int32V13ainfix &lt;ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V20ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V15c1FAainfix &lt;=ainfix +ainteger_of_int32V15c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V15c1Iainfix =V18aselectV6ashiftV1ainteger_of_int32V15FAainfix &lt;=ainteger_of_int32V15aoffset_maxV2V1Aainfix &lt;=aoffset_minV2V1ainteger_of_int32V15Iainfix =V17V15Fainfix &lt;ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V22ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Iainfix =V22V21FIainfix =ainteger_of_int32V21ainfix +ainteger_of_int32V15c1FAainfix &lt;=ainfix +ainteger_of_int32V15c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V15c1Aainfix &lt;=ainteger_of_int32V15aoffset_maxV2V1Aainfix &lt;=aoffset_minV2V1ainteger_of_int32V15ainfix &lt;ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V25ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V5Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V5Iainfix =V25V24FIainfix =ainteger_of_int32V24ainfix +ainteger_of_int32V5c1FAainfix &lt;=ainfix +ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Ianot_assignsV2V6V23apset_unionapset_rangeapset_singletonV1ainteger_of_int32V14ainteger_of_int32V14apset_rangeapset_singletonV1ainteger_of_int32V5ainteger_of_int32V5Aa_SwapV1ainteger_of_int32V5ainteger_of_int32V14V23V6FAainfix &lt;ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix &lt;=c0ainteger_of_int32V14Aainfix &lt;ainteger_of_int32V5ainfix +aoffset_maxV2V1c1Aainfix &lt;=c0ainteger_of_int32V5Aa_Non_null_intMV1V2Iainfix &gt;=V16c0Aainfix &lt;=V16c2147483647Lainfix +aoffset_maxV2V1c1Aainfix &gt;=aoffset_maxV2V1aprefix -c1Iainfix &lt;ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V14Aainfix &lt;ainteger_of_int32V5ainteger_of_int32V15FIainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V5c1FAainfix &lt;=ainfix +ainteger_of_int32V5c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix =V10V5FIainfix =V9aselectV6ashiftV1ainteger_of_int32V5FAainfix &lt;=ainteger_of_int32V5aoffset_maxV2V1Aainfix &lt;=aoffset_minV2V1ainteger_of_int32V5Iainfix &lt;ainteger_of_int32V5ainteger_of_int32V8Iainfix =ainteger_of_int32V8ainfix -V7c1FAainfix &lt;=ainfix -V7c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -V7c1Iainfix &gt;=V7c0Aainfix &lt;=V7c2147483647Lainfix +aoffset_maxV2V1c1Aainfix &gt;=aoffset_maxV2V1aprefix -c1Iainfix &lt;=c0ainteger_of_int32V5FIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV1V2Aavalid_struct_SelectionSortV0c0c0V2Aaleft_valid_struct_intMV1c0V2FF">
     <label
-     name="expl:parameter _SelectionSort_sort_safety"/>
-    <label
      name="expl:Method sort, Safety"/>
+    <label
+     name="expl:VC for _SelectionSort_sort_safety"/>
     <proof
      prover="0"
-     timelimit="10"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.10"/>
     </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.10"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.09"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.09"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _SelectionSort_swap_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+    locfile="../SelectionSort.java"
     loclnum="66" loccnumb="9" loccnume="13"
-    expl="normal postcondition"
-    sum="70d6e5dc7c4df684b84ba7141646c60f"
+    expl="VC for _SelectionSort_swap_ensures_default"
+    sum="882030dcbb05a46c6288961a932a738e"
     proved="true"
     expanded="false"
     shape="anot_assignsV5V4V7apset_unionapset_rangeapset_singletonV1ainteger_of_int32V3ainteger_of_int32V3apset_rangeapset_singletonV1ainteger_of_int32V2ainteger_of_int32V2Aa_SwapV1ainteger_of_int32V2ainteger_of_int32V3V7V4Iainfix =V7astoreV6ashiftV1ainteger_of_int32V3aselectV4ashiftV1ainteger_of_int32V2FIainfix =V6astoreV4ashiftV1ainteger_of_int32V2aselectV4ashiftV1ainteger_of_int32V3FIainfix &lt;ainteger_of_int32V3ainfix +aoffset_maxV5V1c1Aainfix &lt;=c0ainteger_of_int32V3Aainfix &lt;ainteger_of_int32V2ainfix +aoffset_maxV5V1c1Aainfix &lt;=c0ainteger_of_int32V2Aa_Non_null_intMV1V5Aavalid_struct_SelectionSortV0c0c0V5Aaleft_valid_struct_intMV1c0V5FF">
     <label
-     name="expl:parameter _SelectionSort_swap_ensures_default"/>
-    <label
      name="expl:Method swap, default behavior"/>
+    <label
+     name="expl:VC for _SelectionSort_swap_ensures_default"/>
     <proof
      prover="0"
-     timelimit="10"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.06"/>
+     <result status="valid" time="1.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="2.26"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.87"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.21"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _SelectionSort_swap_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/java/SelectionSort.java"
+    locfile="../SelectionSort.java"
     loclnum="66" loccnumb="9" loccnume="13"
-    expl="parameter _SelectionSort_swap_safety"
-    sum="3ebc50d1b39dd95e16546223e1fd1a04"
+    expl="VC for _SelectionSort_swap_safety"
+    sum="b005276a6a4875197eb0f32631792ab3"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=ainteger_of_int32V3aoffset_maxV5V1Aainfix &lt;=aoffset_minV5V1ainteger_of_int32V3Iainfix =V6astoreV4ashiftV1ainteger_of_int32V2aselectV4ashiftV1ainteger_of_int32V3FAainfix &lt;=ainteger_of_int32V2aoffset_maxV5V1Aainfix &lt;=aoffset_minV5V1ainteger_of_int32V2Aainfix &lt;=ainteger_of_int32V3aoffset_maxV5V1Aainfix &lt;=aoffset_minV5V1ainteger_of_int32V3Aainfix &lt;=ainteger_of_int32V2aoffset_maxV5V1Aainfix &lt;=aoffset_minV5V1ainteger_of_int32V2Iainfix &lt;ainteger_of_int32V3ainfix +aoffset_maxV5V1c1Aainfix &lt;=c0ainteger_of_int32V3Aainfix &lt;ainteger_of_int32V2ainfix +aoffset_maxV5V1c1Aainfix &lt;=c0ainteger_of_int32V2Aa_Non_null_intMV1V5Aavalid_struct_SelectionSortV0c0c0V5Aaleft_valid_struct_intMV1c0V5FF">
     <label
-     name="expl:parameter _SelectionSort_swap_safety"/>
-    <label
      name="expl:Method swap, Safety"/>
+    <label
+     name="expl:VC for _SelectionSort_swap_safety"/>
     <proof
      prover="0"
-     timelimit="10"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/"
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="274dec615b191ed479c621fe725cae33"
+    expl="VC for cons_Object_ensures_default"
+    sum="19d812a6b8ddaa6b5770519f7dcd0d34"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Object_ensures_default"/>
-    <label
      name="expl:Constructor of class Object, default behavior"/>
+    <label
+     name="expl:VC for cons_Object_ensures_default"/>
     <proof
      prover="0"
-     timelimit="10"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/"
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="396c7c3c02087f61ba74fa1ddd5502bd"
+    expl="VC for cons_Object_safety"
+    sum="19d812a6b8ddaa6b5770519f7dcd0d34"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Object_safety"/>
-    <label
      name="expl:Constructor of class Object, Safety"/>
+    <label
+     name="expl:VC for cons_Object_safety"/>
     <proof
      prover="0"
-     timelimit="10"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
     </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_SelectionSort_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/"
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="1d7a398cebe0655ec0578e02ff01c2e0"
+    expl="VC for cons_SelectionSort_ensures_default"
+    sum="19d812a6b8ddaa6b5770519f7dcd0d34"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_SelectionSort_ensures_default"/>
-    <label
      name="expl:Constructor of class SelectionSort, default behavior"/>
+    <label
+     name="expl:VC for cons_SelectionSort_ensures_default"/>
     <proof
      prover="0"
-     timelimit="10"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter cons_SelectionSort_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/"
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="71ce0760a7b1907ad77ed84d4b753eb8"
+    expl="VC for cons_SelectionSort_safety"
+    sum="19d812a6b8ddaa6b5770519f7dcd0d34"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_SelectionSort_safety"/>
-    <label
      name="expl:Constructor of class SelectionSort, Safety"/>
+    <label
+     name="expl:VC for cons_SelectionSort_safety"/>
     <proof
      prover="0"
-     timelimit="10"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

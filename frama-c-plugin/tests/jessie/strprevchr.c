@@ -11,7 +11,7 @@
   @   assumes \forall int i; 0 <= i <= endi ==> array[i] != c;
   @   ensures \result == -1;
   @ behavior present:
-  @   assumes \exists int i; 0 <= i <= endi ==> array[i] == c;
+  @   assumes \exists int i; 0 <= i <= endi && array[i] == c;
   @   ensures 0 <= \result <= \at(endi, Pre);
   @*/
 int strprevchr(int endi, char c, const char array[]) {

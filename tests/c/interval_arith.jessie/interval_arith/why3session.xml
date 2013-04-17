@@ -1,38 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
   id="1"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.1"/>
  <prover
   id="2"
-  name="Alt-Ergo"
-  version="0.95-dev"/>
- <prover
-  id="3"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="4"
+  id="3"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="5"
+  id="4"
   name="Gappa"
-  version="0.16.1"/>
+  version="0.16.6"/>
  <prover
-  id="6"
+  id="5"
   name="Z3"
   version="3.2"/>
  <prover
-  id="7"
+  id="6"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../interval_arith.mlw"
   verified="false"
@@ -55,7 +51,7 @@
     locfile="../../interval_arith.c"
     loclnum="156" loccnumb="5" loccnume="8"
     expl="VC for add_ensures_default"
-    sum="d673feac32600ace2df8c1a77e451166"
+    sum="24868be9cfa87d8febccfae7621f1ff7"
     proved="true"
     expanded="false"
     shape="ain_intervalainfix +V10V11V5V9Iain_intervalV11V2V3Aain_intervalV10V0V1FFAais_intervalV5V9Iainfix =V9V8FIaneg_postV7V8FIasub_postaDownV6V3V7FIaneg_postV1V6FIainfix =V5V4FIaadd_postaDownV0V2V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -72,7 +68,7 @@
       locfile="../../interval_arith.c"
       loclnum="156" loccnumb="5" loccnume="8"
       expl="1. postcondition"
-      sum="d673feac32600ace2df8c1a77e451166"
+      sum="24868be9cfa87d8febccfae7621f1ff7"
       proved="true"
       expanded="false"
       shape="ain_intervalainfix +V10V11V5V9Iain_intervalV11V2V3Aain_intervalV10V0V1FFAais_intervalV5V9Iainfix =V9V8FIaneg_postV7V8FIasub_postaDownV6V3V7FIaneg_postV1V6FIainfix =V5V4FIaadd_postaDownV0V2V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -89,7 +85,7 @@
         locfile="../../interval_arith.c"
         loclnum="156" loccnumb="5" loccnume="8"
         expl="1."
-        sum="b2bfec02172a871e0e6d867979cca457"
+        sum="2de7fa68e9e7d3ebf9df11b87f42d04c"
         proved="true"
         expanded="false"
         shape="ais_intervalV5V9Iainfix =V9V8FIaneg_postV7V8FIasub_postaDownV6V3V7FIaneg_postV1V6FIainfix =V5V4FIaadd_postaDownV0V2V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -98,20 +94,20 @@
         <label
          name="expl:VC for add_ensures_default"/>
         <proof
+         prover="2"
+         timelimit="5"
+         memlimit="50"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="1.23"/>
+        </proof>
+        <proof
          prover="3"
          timelimit="5"
          memlimit="50"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.19"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="50"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="1.35"/>
+         <result status="valid" time="1.40"/>
         </proof>
        </goal>
        <goal
@@ -119,7 +115,7 @@
         locfile="../../interval_arith.c"
         loclnum="156" loccnumb="5" loccnume="8"
         expl="2."
-        sum="1cb975cfde02805f5234316185d2feac"
+        sum="58f50cdb4be4a7fda3af8d5c9d3a4a3f"
         proved="true"
         expanded="false"
         shape="ain_intervalainfix +V10V11V5V9Iain_intervalV11V2V3Aain_intervalV10V0V1FFIainfix =V9V8FIaneg_postV7V8FIasub_postaDownV6V3V7FIaneg_postV1V6FIainfix =V5V4FIaadd_postaDownV0V2V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -128,20 +124,20 @@
         <label
          name="expl:VC for add_ensures_default"/>
         <proof
+         prover="2"
+         timelimit="120"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="20.28"/>
+        </proof>
+        <proof
          prover="3"
          timelimit="120"
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="19.02"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="120"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="36.68"/>
+         <result status="valid" time="38.11"/>
         </proof>
        </goal>
       </transf>
@@ -153,7 +149,7 @@
     locfile="../../interval_arith.c"
     loclnum="156" loccnumb="5" loccnume="8"
     expl="VC for add_safety"
-    sum="137684bf891f5c64decd917a9fc0ee62"
+    sum="d577fafad8bfe1d6f16e22fdfc0655e8"
     proved="true"
     expanded="false"
     shape="t">
@@ -162,7 +158,7 @@
     <label
      name="expl:VC for add_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -170,7 +166,7 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -178,7 +174,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -186,12 +182,20 @@
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="50"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="5"
@@ -203,14 +207,6 @@
     </proof>
     <proof
      prover="6"
-     timelimit="5"
-     memlimit="50"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="7"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -223,7 +219,7 @@
     locfile="../../interval_arith.c"
     loclnum="19" loccnumb="7" loccnume="10"
     expl="VC for max_ensures_default"
-    sum="b52dfe7d14a08d88c3836f3f190f9e10"
+    sum="70d924bd80d24f71a6c0dafca37c964f"
     proved="true"
     expanded="false"
     shape="iainfix =V2aTrueaeqV4V1OaeqV4V0AaleV1V4AaleV0V4Iainfix =V4V3FIainfix =V3V0FaeqV6V1OaeqV6V0AaleV1V6AaleV0V6Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueagtV0V1agtV0V1NFIais_NaNV1NAais_NaNV0NF">
@@ -232,7 +228,7 @@
     <label
      name="expl:VC for max_ensures_default"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -240,7 +236,7 @@
      <result status="valid" time="0.86"/>
     </proof>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -248,7 +244,7 @@
      <result status="valid" time="0.32"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -261,7 +257,7 @@
     locfile="../../interval_arith.c"
     loclnum="19" loccnumb="7" loccnume="10"
     expl="VC for max_safety"
-    sum="2a294ce55c45038d46d67c2a515b75e3"
+    sum="d577fafad8bfe1d6f16e22fdfc0655e8"
     proved="true"
     expanded="false"
     shape="t">
@@ -270,7 +266,7 @@
     <label
      name="expl:VC for max_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -278,12 +274,20 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="50"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="3"
@@ -299,7 +303,7 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="5"
@@ -311,14 +315,6 @@
     </proof>
     <proof
      prover="6"
-     timelimit="5"
-     memlimit="50"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="7"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -331,7 +327,7 @@
     locfile="../../interval_arith.c"
     loclnum="9" loccnumb="7" loccnume="10"
     expl="VC for min_ensures_default"
-    sum="8c03e3363d4fae16454c5092a65eda66"
+    sum="02f4d47be557e90d49a72f5738d4aef4"
     proved="true"
     expanded="false"
     shape="iainfix =V2aTrueaeqV4V1OaeqV4V0AaleV4V1AaleV4V0Iainfix =V4V3FIainfix =V3V0FaeqV6V1OaeqV6V0AaleV6V1AaleV6V0Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTruealtV0V1altV0V1NFIais_NaNV1NAais_NaNV0NF">
@@ -340,15 +336,15 @@
     <label
      name="expl:VC for min_ensures_default"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.67"/>
+     <result status="valid" time="0.70"/>
     </proof>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -356,7 +352,7 @@
      <result status="valid" time="0.33"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -369,7 +365,7 @@
     locfile="../../interval_arith.c"
     loclnum="9" loccnumb="7" loccnume="10"
     expl="VC for min_safety"
-    sum="0a281389dca7d31a061c2a51f027eaf9"
+    sum="d577fafad8bfe1d6f16e22fdfc0655e8"
     proved="true"
     expanded="false"
     shape="t">
@@ -378,7 +374,7 @@
     <label
      name="expl:VC for min_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -386,7 +382,7 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -394,7 +390,7 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -402,12 +398,20 @@
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="50"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="5"
@@ -423,14 +427,6 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="7"
-     timelimit="5"
-     memlimit="50"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.01"/>
     </proof>
    </goal>
@@ -439,7 +435,7 @@
     locfile="../../interval_arith.c"
     loclnum="49" loccnumb="7" loccnume="13"
     expl="VC for mul_dn_ensures_default"
-    sum="1d071c5b5d644c96650d63b35d74f401"
+    sum="54c0591cb722467a92723bd7f7dbbde9"
     proved="true"
     expanded="false"
     shape="adouble_le_realV4ainfix *avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIamul_postaDownV0V1V2FIainfix =avalueV0c0.0NIais_infiniteV1Aais_finiteV0Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aadif_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -456,7 +452,7 @@
       locfile="../../interval_arith.c"
       loclnum="49" loccnumb="7" loccnume="13"
       expl="1."
-      sum="b9db521112aac285cf622b57d3618593"
+      sum="b932a4e4a079c2bde42ae8e7666c8bbc"
       proved="true"
       expanded="false"
       shape="ais_minus_infinityV4Oainfix &lt;=avalueV4ainfix *avalueV0avalueV1Aais_finiteV4Iainfix =V4V3FIainfix =V3V2FIainfix =amodelV2ainfix *amodelV0amodelV1Aainfix =aexactV2ainfix *aexactV0aexactV1Aaproduct_signV2V0V1Aaoverflow_valueaDownV2Iano_overflowaDownainfix *avalueV0avalueV1NAais_finiteV1Aais_finiteV0Aainfix =avalueV2aroundaDownainfix *avalueV0avalueV1Aais_finiteV2Iano_overflowaDownainfix *avalueV0avalueV1Aais_finiteV1Aais_finiteV0Aais_infiniteV2Iais_infiniteV1Aais_infiniteV0Aais_infiniteV2Iainfix =avalueV1c0.0NAais_finiteV1Aais_infiniteV0Aais_NaNV2Iais_gen_zeroV1Aais_infiniteV0Aais_infiniteV2Iainfix =avalueV0c0.0NAais_infiniteV1Aais_finiteV0Aais_NaNV2Iais_infiniteV1Aais_gen_zeroV0Aais_NaNV2Iais_NaNV1Oais_NaNV0FIainfix =avalueV0c0.0NIainfix =aclassV1aInfiniteAainfix =aclassV0aFiniteAainfix =avalueV1c0.0NIainfix =aclassV1aFiniteAainfix =aclassV0aInfiniteAainfix =asignV0asignV1NIainfix =aclassV1aInfiniteOainfix =aclassV0aInfiniteAainfix =aclassV1aNaNNAainfix =aclassV0aNaNNF">
@@ -473,7 +469,7 @@
         locfile="../../interval_arith.c"
         loclnum="49" loccnumb="7" loccnume="13"
         expl="1."
-        sum="d12c5cf6bcfd19614083abbf4a58cb9b"
+        sum="b81f8aca00821b132ec399eb359c2e47"
         proved="true"
         expanded="false"
         shape="ainfix =asignV4aNegAais_infiniteV4Oainfix =avalueV4ainfix *avalueV0avalueV1Oainfix &lt;avalueV4ainfix *avalueV0avalueV1Aainfix =aclassV4aFiniteIainfix =V4V3FIainfix =V3V2FIainfix =amodelV2ainfix *amodelV0amodelV1Aainfix =aexactV2ainfix *aexactV0aexactV1Aainfix =asignV2aNegIadiff_signV0V1Aainfix =asignV2aPosIasame_signV0V1ACaTuple2aDownasignV2aTuple2aDownaNegais_infiniteV2aTuple2aDownaPosainfix =avalueV2amax_doubleAais_finiteV2aTuple2aUpaNegainfix =avalueV2aprefix -amax_doubleAais_finiteV2aTuple2aUpaPosais_infiniteV2aTuple2aToZeroaNegainfix =avalueV2aprefix -amax_doubleAais_finiteV2aTuple2aToZeroaPosainfix =avalueV2amax_doubleAais_finiteV2aTuple2aNearestTiesToEvenOaNearestTiesToAwaywais_infiniteV2Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV1amax_doubleNAainfix =aclassV1aFiniteAainfix =aclassV0aFiniteAainfix =avalueV2aroundaDownainfix *avalueV0avalueV1Aainfix =aclassV2aFiniteIainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV1amax_doubleAainfix =aclassV1aFiniteAainfix =aclassV0aFiniteAainfix =aclassV2aInfiniteIainfix =aclassV1aInfiniteAainfix =aclassV0aInfiniteAainfix =aclassV2aInfiniteIainfix =avalueV1c0.0NAainfix =aclassV1aFiniteAainfix =aclassV0aInfiniteAainfix =aclassV2aNaNIainfix =avalueV1c0.0Aais_finiteV1Aainfix =aclassV0aInfiniteAainfix =aclassV2aInfiniteIainfix =avalueV0c0.0NAainfix =aclassV1aInfiniteAainfix =aclassV0aFiniteAainfix =aclassV2aNaNIainfix =aclassV1aInfiniteAainfix =avalueV0c0.0Aais_finiteV0Aainfix =aclassV2aNaNIainfix =aclassV1aNaNOainfix =aclassV0aNaNFIainfix =avalueV0c0.0NIainfix =aclassV1aInfiniteAainfix =aclassV0aFiniteAainfix =avalueV1c0.0NIainfix =aclassV1aFiniteAainfix =aclassV0aInfiniteAainfix =asignV0asignV1NIainfix =aclassV1aInfiniteOainfix =aclassV0aInfiniteAainfix =aclassV1aNaNNAainfix =aclassV0aNaNNF">
@@ -490,7 +486,7 @@
           locfile="../../interval_arith.c"
           loclnum="49" loccnumb="7" loccnume="13"
           expl="1. postcondition"
-          sum="d12c5cf6bcfd19614083abbf4a58cb9b"
+          sum="b81f8aca00821b132ec399eb359c2e47"
           proved="true"
           expanded="false"
           shape="ainfix =asignV4aNegAais_infiniteV4Oainfix =avalueV4ainfix *avalueV0avalueV1Oainfix &lt;avalueV4ainfix *avalueV0avalueV1Aainfix =aclassV4aFiniteIainfix =V4V3FIainfix =V3V2FIainfix =amodelV2ainfix *amodelV0amodelV1Aainfix =aexactV2ainfix *aexactV0aexactV1Aainfix =asignV2aNegIadiff_signV0V1Aainfix =asignV2aPosIasame_signV0V1ACaTuple2aDownasignV2aTuple2aDownaNegais_infiniteV2aTuple2aDownaPosainfix =avalueV2amax_doubleAais_finiteV2aTuple2aUpaNegainfix =avalueV2aprefix -amax_doubleAais_finiteV2aTuple2aUpaPosais_infiniteV2aTuple2aToZeroaNegainfix =avalueV2aprefix -amax_doubleAais_finiteV2aTuple2aToZeroaPosainfix =avalueV2amax_doubleAais_finiteV2aTuple2aNearestTiesToEvenOaNearestTiesToAwaywais_infiniteV2Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV1amax_doubleNAainfix =aclassV1aFiniteAainfix =aclassV0aFiniteAainfix =avalueV2aroundaDownainfix *avalueV0avalueV1Aainfix =aclassV2aFiniteIainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV1amax_doubleAainfix =aclassV1aFiniteAainfix =aclassV0aFiniteAainfix =aclassV2aInfiniteIainfix =aclassV1aInfiniteAainfix =aclassV0aInfiniteAainfix =aclassV2aInfiniteIainfix =avalueV1c0.0NAainfix =aclassV1aFiniteAainfix =aclassV0aInfiniteAainfix =aclassV2aNaNIainfix =avalueV1c0.0Aais_finiteV1Aainfix =aclassV0aInfiniteAainfix =aclassV2aInfiniteIainfix =avalueV0c0.0NAainfix =aclassV1aInfiniteAainfix =aclassV0aFiniteAainfix =aclassV2aNaNIainfix =aclassV1aInfiniteAainfix =avalueV0c0.0Aais_finiteV0Aainfix =aclassV2aNaNIainfix =aclassV1aNaNOainfix =aclassV0aNaNFIainfix =avalueV0c0.0NIainfix =aclassV1aInfiniteAainfix =aclassV0aFiniteAainfix =avalueV1c0.0NIainfix =aclassV1aFiniteAainfix =aclassV0aInfiniteAainfix =asignV0asignV1NIainfix =aclassV1aInfiniteOainfix =aclassV0aInfiniteAainfix =aclassV1aNaNNAainfix =aclassV0aNaNNF">
@@ -499,7 +495,7 @@
           <label
            name="expl:VC for mul_dn_ensures_default"/>
           <proof
-           prover="3"
+           prover="2"
            timelimit="5"
            memlimit="50"
            obsolete="false"
@@ -507,12 +503,12 @@
            <result status="valid" time="0.31"/>
           </proof>
           <proof
-           prover="4"
+           prover="3"
            timelimit="5"
            memlimit="50"
            obsolete="false"
            archived="false">
-           <result status="valid" time="0.37"/>
+           <result status="valid" time="0.23"/>
           </proof>
          </goal>
         </transf>
@@ -526,7 +522,7 @@
     locfile="../../interval_arith.c"
     loclnum="49" loccnumb="7" loccnume="13"
     expl="VC for mul_dn_safety"
-    sum="85f2542f6d93887a282c7fe41311874e"
+    sum="d577fafad8bfe1d6f16e22fdfc0655e8"
     proved="true"
     expanded="false"
     shape="t">
@@ -535,7 +531,7 @@
     <label
      name="expl:VC for mul_dn_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -543,12 +539,20 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="50"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="3"
@@ -564,7 +568,7 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="5"
@@ -580,14 +584,6 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="7"
-     timelimit="5"
-     memlimit="50"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.01"/>
     </proof>
    </goal>
@@ -596,9 +592,9 @@
     locfile="../../interval_arith.c"
     loclnum="202" loccnumb="5" loccnume="8"
     expl="VC for mul_ensures_default"
-    sum="92ad9cd6174145756232da90affb4666"
+    sum="a5c53898ae5601ed5a3bece3897d6ffb"
     proved="false"
-    expanded="false"
+    expanded="true"
     shape="iainfix =V5aTrueiainfix =V7aTrueiainfix =V9aTrueiainfix =V11aTrueain_intervalainfix *V24V25V17V23Iain_intervalV25V2V3Aain_intervalV24V0V1FFAais_intervalV17V23Iainfix =V23V22FIaeqV22V19OaeqV22V21AaleV19V22AaleV21V22FIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2Fain_intervalainfix *V30V31V27V29Iain_intervalV31V2V3Aain_intervalV30V0V1FFAais_intervalV27V29Iainfix =V29V28FIareal_le_doubleainfix *avalueV0avalueV2V28FIainfix =V27V26FIadouble_le_realV26ainfix *avalueV1avalueV2FIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10Fiainfix =V33aTrueain_intervalainfix *V38V39V35V37Iain_intervalV39V2V3Aain_intervalV38V0V1FFAais_intervalV35V37Iainfix =V37V36FIareal_le_doubleainfix *avalueV1avalueV3V36FIainfix =V35V34FIadouble_le_realV34ainfix *avalueV0avalueV3Fain_intervalainfix *V44V45V41V43Iain_intervalV45V2V3Aain_intervalV44V0V1FFAais_intervalV41V43Iainfix =V43V42FIaof_real_exact_postc0.0V42FIainfix =V41V40FIaof_real_exact_postc0.0V40FIiainfix =V33aTrueagtV3V32agtV3V32NFIaof_real_exact_postc0.0V32FIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8Fiainfix =V47aTrueiainfix =V49aTrueain_intervalainfix *V54V55V51V53Iain_intervalV55V2V3Aain_intervalV54V0V1FFAais_intervalV51V53Iainfix =V53V52FIareal_le_doubleainfix *avalueV0avalueV2V52FIainfix =V51V50FIadouble_le_realV50ainfix *avalueV0avalueV3Fain_intervalainfix *V60V61V57V59Iain_intervalV61V2V3Aain_intervalV60V0V1FFAais_intervalV57V59Iainfix =V59V58FIareal_le_doubleainfix *avalueV0avalueV2V58FIainfix =V57V56FIadouble_le_realV56ainfix *avalueV1avalueV3FIiainfix =V49aTrueagtV3V48agtV3V48NFIaof_real_exact_postc0.0V48Fiainfix =V63aTrueain_intervalainfix *V68V69V65V67Iain_intervalV69V2V3Aain_intervalV68V0V1FFAais_intervalV65V67Iainfix =V67V66FIareal_le_doubleainfix *avalueV1avalueV2V66FIainfix =V65V64FIadouble_le_realV64ainfix *avalueV0avalueV3Fain_intervalainfix *V74V75V71V73Iain_intervalV75V2V3Aain_intervalV74V0V1FFAais_intervalV71V73Iainfix =V73V72FIaof_real_exact_postc0.0V72FIainfix =V71V70FIaof_real_exact_postc0.0V70FIiainfix =V63aTrueagtV3V62agtV3V62NFIaof_real_exact_postc0.0V62FIiainfix =V47aTruealtV2V46altV2V46NFIaof_real_exact_postc0.0V46FIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6Fiainfix =V77aTrueiainfix =V79aTrueiainfix =V81aTrueain_intervalainfix *V86V87V83V85Iain_intervalV87V2V3Aain_intervalV86V0V1FFAais_intervalV83V85Iainfix =V85V84FIareal_le_doubleainfix *avalueV1avalueV3V84FIainfix =V83V82FIadouble_le_realV82ainfix *avalueV1avalueV2Fain_intervalainfix *V92V93V89V91Iain_intervalV93V2V3Aain_intervalV92V0V1FFAais_intervalV89V91Iainfix =V91V90FIareal_le_doubleainfix *avalueV0avalueV3V90FIainfix =V89V88FIadouble_le_realV88ainfix *avalueV1avalueV2FIiainfix =V81aTrueagtV3V80agtV3V80NFIaof_real_exact_postc0.0V80Fiainfix =V95aTrueain_intervalainfix *V100V101V97V99Iain_intervalV101V2V3Aain_intervalV100V0V1FFAais_intervalV97V99Iainfix =V99V98FIareal_le_doubleainfix *avalueV1avalueV3V98FIainfix =V97V96FIadouble_le_realV96ainfix *avalueV0avalueV2Fain_intervalainfix *V106V107V103V105Iain_intervalV107V2V3Aain_intervalV106V0V1FFAais_intervalV103V105Iainfix =V105V104FIaof_real_exact_postc0.0V104FIainfix =V103V102FIaof_real_exact_postc0.0V102FIiainfix =V95aTrueagtV3V94agtV3V94NFIaof_real_exact_postc0.0V94FIiainfix =V79aTruealtV2V78altV2V78NFIaof_real_exact_postc0.0V78Fain_intervalainfix *V112V113V109V111Iain_intervalV113V2V3Aain_intervalV112V0V1FFAais_intervalV109V111Iainfix =V111V110FIaof_real_exact_postc0.0V110FIainfix =V109V108FIaof_real_exact_postc0.0V108FIiainfix =V77aTrueagtV1V76agtV1V76NFIaof_real_exact_postc0.0V76FIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
     <label
      name="expl:Function mul, default behavior"/>
@@ -607,15 +603,15 @@
     <transf
      name="split_goal"
      proved="false"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter mul_ensures_default.1"
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="1. postcondition"
-      sum="5dd5a4028b3fa718cccc720a0a61b8b1"
+      sum="ddfa8f96869c1b69955d9ec26e6ec35d"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V24V25V17V23Iain_intervalV25V2V3Aain_intervalV24V0V1FFAais_intervalV17V23Iainfix =V23V22FIaeqV22V19OaeqV22V21AaleV19V22AaleV21V22FIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -624,13 +620,13 @@
       <transf
        name="split_goal"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.1.1"
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="1."
-        sum="e8e00051323d1361291e5eeaa0cd9056"
+        sum="6a2ccdf6f9eb05e96da5282b70cf0d52"
         proved="true"
         expanded="false"
         shape="ais_intervalV17V23Iainfix =V23V22FIaeqV22V19OaeqV22V21AaleV19V22AaleV21V22FIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -639,7 +635,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="3"
+         prover="2"
          timelimit="5"
          memlimit="50"
          obsolete="false"
@@ -647,12 +643,12 @@
          <result status="valid" time="0.29"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          memlimit="50"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.35"/>
+         <result status="valid" time="0.21"/>
         </proof>
        </goal>
        <goal
@@ -660,261 +656,14 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="2."
-        sum="2f483465d44989e037f823c7adb29a7c"
+        sum="442f173fcb0a075d2af8d43dea7add08"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V24V25V17V23Iain_intervalV25V2V3Aain_intervalV24V0V1FFIainfix =V23V22FIaeqV22V19OaeqV22V21AaleV19V22AaleV21V22FIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
-        <transf
-         name="inline_goal"
-         proved="false"
-         expanded="false">
-         <goal
-          name="WP_parameter mul_ensures_default.1.2.1"
-          locfile="../../interval_arith.c"
-          loclnum="202" loccnumb="5" loccnume="8"
-          expl="1."
-          sum="328f8ca6c2844c6df9794a2c64706fbb"
-          proved="false"
-          expanded="false"
-          shape="areal_le_doubleainfix *V24V25V23Aadouble_le_realV17ainfix *V24V25Iareal_le_doubleV25V3Aadouble_le_realV2V25Aareal_le_doubleV24V1Aadouble_le_realV0V24FFIainfix =V23V22FIasame_signV22V19Aais_infiniteV19Aais_infiniteV22Oainfix =avalueV22avalueV19Aais_finiteV19Aais_finiteV22Aais_not_NaNV19Aais_not_NaNV22Oasame_signV22V21Aais_infiniteV21Aais_infiniteV22Oainfix =avalueV22avalueV21Aais_finiteV21Aais_finiteV22Aais_not_NaNV21Aais_not_NaNV22Aais_plus_infinityV22Aais_not_NaNV19Oais_not_NaNV22Aais_minus_infinityV19Oainfix &lt;=avalueV19avalueV22Aais_finiteV22Aais_finiteV19Aais_plus_infinityV22Aais_not_NaNV21Oais_not_NaNV22Aais_minus_infinityV21Oainfix &lt;=avalueV21avalueV22Aais_finiteV22Aais_finiteV21FIainfix =V21V20FIais_plus_infinityV20Oainfix &lt;=ainfix *avalueV0avalueV2avalueV20Aais_finiteV20FIainfix =V19V18FIais_plus_infinityV18Oainfix &lt;=ainfix *avalueV1avalueV3avalueV18Aais_finiteV18FIainfix =V17V16FIasame_signV16V13Aais_infiniteV13Aais_infiniteV16Oainfix =avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_not_NaNV13Aais_not_NaNV16Oasame_signV16V15Aais_infiniteV15Aais_infiniteV16Oainfix =avalueV16avalueV15Aais_finiteV15Aais_finiteV16Aais_not_NaNV15Aais_not_NaNV16Aais_plus_infinityV13Aais_not_NaNV16Oais_not_NaNV13Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_plus_infinityV15Aais_not_NaNV16Oais_not_NaNV15Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV15Aais_finiteV15Aais_finiteV16FIainfix =V15V14FIais_minus_infinityV14Oainfix &lt;=avalueV14ainfix *avalueV0avalueV3Aais_finiteV14FIainfix =V13V12FIais_minus_infinityV12Oainfix &lt;=avalueV12ainfix *avalueV1avalueV2Aais_finiteV12FIainfix =V11aTrueIiainfix =V11aTruealtV10V3altV10V3NFIainfix =amodelV10c0.0Aainfix =aexactV10c0.0Aainfix =avalueV10c0.0Aais_finiteV10FIainfix =V9aTrueIiainfix =V9aTrueais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2ais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2NFIainfix =amodelV8c0.0Aainfix =aexactV8c0.0Aainfix =avalueV8c0.0Aais_finiteV8FIainfix =V7aTrueIiainfix =V7aTruealtV6V1altV6V1NFIainfix =amodelV6c0.0Aainfix =aexactV6c0.0Aainfix =avalueV6c0.0Aais_finiteV6FIainfix =V5aTrueIiainfix =V5aTrueais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0ais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0NFIainfix =amodelV4c0.0Aainfix =aexactV4c0.0Aainfix =avalueV4c0.0Aais_finiteV4FIais_plus_infinityV3Oais_finiteV3Aais_minus_infinityV2Oais_finiteV2Aais_plus_infinityV1Oais_finiteV1Aais_minus_infinityV0Oais_finiteV0F">
-          <label
-           name="expl:Function mul, default behavior"/>
-          <label
-           name="expl:VC for mul_ensures_default"/>
-          <transf
-           name="split_goal"
-           proved="false"
-           expanded="false">
-           <goal
-            name="WP_parameter mul_ensures_default.1.2.1.1"
-            locfile="../../interval_arith.c"
-            loclnum="202" loccnumb="5" loccnume="8"
-            expl="1."
-            sum="ec91f2e1c87df427925e529f13343ef2"
-            proved="false"
-            expanded="false"
-            shape="adouble_le_realV17ainfix *V24V25Iareal_le_doubleV25V3Aadouble_le_realV2V25Aareal_le_doubleV24V1Aadouble_le_realV0V24FFIainfix =V23V22FIasame_signV22V19Aais_infiniteV19Aais_infiniteV22Oainfix =avalueV22avalueV19Aais_finiteV19Aais_finiteV22Aais_not_NaNV19Aais_not_NaNV22Oasame_signV22V21Aais_infiniteV21Aais_infiniteV22Oainfix =avalueV22avalueV21Aais_finiteV21Aais_finiteV22Aais_not_NaNV21Aais_not_NaNV22Aais_plus_infinityV22Aais_not_NaNV19Oais_not_NaNV22Aais_minus_infinityV19Oainfix &lt;=avalueV19avalueV22Aais_finiteV22Aais_finiteV19Aais_plus_infinityV22Aais_not_NaNV21Oais_not_NaNV22Aais_minus_infinityV21Oainfix &lt;=avalueV21avalueV22Aais_finiteV22Aais_finiteV21FIainfix =V21V20FIais_plus_infinityV20Oainfix &lt;=ainfix *avalueV0avalueV2avalueV20Aais_finiteV20FIainfix =V19V18FIais_plus_infinityV18Oainfix &lt;=ainfix *avalueV1avalueV3avalueV18Aais_finiteV18FIainfix =V17V16FIasame_signV16V13Aais_infiniteV13Aais_infiniteV16Oainfix =avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_not_NaNV13Aais_not_NaNV16Oasame_signV16V15Aais_infiniteV15Aais_infiniteV16Oainfix =avalueV16avalueV15Aais_finiteV15Aais_finiteV16Aais_not_NaNV15Aais_not_NaNV16Aais_plus_infinityV13Aais_not_NaNV16Oais_not_NaNV13Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_plus_infinityV15Aais_not_NaNV16Oais_not_NaNV15Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV15Aais_finiteV15Aais_finiteV16FIainfix =V15V14FIais_minus_infinityV14Oainfix &lt;=avalueV14ainfix *avalueV0avalueV3Aais_finiteV14FIainfix =V13V12FIais_minus_infinityV12Oainfix &lt;=avalueV12ainfix *avalueV1avalueV2Aais_finiteV12FIainfix =V11aTrueIiainfix =V11aTruealtV10V3altV10V3NFIainfix =amodelV10c0.0Aainfix =aexactV10c0.0Aainfix =avalueV10c0.0Aais_finiteV10FIainfix =V9aTrueIiainfix =V9aTrueais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2ais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2NFIainfix =amodelV8c0.0Aainfix =aexactV8c0.0Aainfix =avalueV8c0.0Aais_finiteV8FIainfix =V7aTrueIiainfix =V7aTruealtV6V1altV6V1NFIainfix =amodelV6c0.0Aainfix =aexactV6c0.0Aainfix =avalueV6c0.0Aais_finiteV6FIainfix =V5aTrueIiainfix =V5aTrueais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0ais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0NFIainfix =amodelV4c0.0Aainfix =aexactV4c0.0Aainfix =avalueV4c0.0Aais_finiteV4FIais_plus_infinityV3Oais_finiteV3Aais_minus_infinityV2Oais_finiteV2Aais_plus_infinityV1Oais_finiteV1Aais_minus_infinityV0Oais_finiteV0F">
-            <label
-             name="expl:Function mul, default behavior"/>
-            <label
-             name="expl:VC for mul_ensures_default"/>
-            <proof
-             prover="0"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.50"/>
-            </proof>
-            <proof
-             prover="1"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.31"/>
-            </proof>
-            <proof
-             prover="2"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.00"/>
-            </proof>
-            <proof
-             prover="3"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.06"/>
-            </proof>
-            <proof
-             prover="4"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.22"/>
-            </proof>
-            <proof
-             prover="6"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.22"/>
-            </proof>
-            <proof
-             prover="7"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.22"/>
-            </proof>
-            <transf
-             name="inline_goal"
-             proved="false"
-             expanded="false">
-             <goal
-              name="WP_parameter mul_ensures_default.1.2.1.1.1"
-              locfile="../../interval_arith.c"
-              loclnum="202" loccnumb="5" loccnume="8"
-              expl="1."
-              sum="d54b054108a69966a68be7261a85b27a"
-              proved="false"
-              expanded="false"
-              shape="ais_minus_infinityV17Oainfix &lt;=avalueV17ainfix *V24V25Aais_finiteV17Iais_plus_infinityV3Oainfix &lt;=V25avalueV3Aais_finiteV3Aais_minus_infinityV2Oainfix &lt;=avalueV2V25Aais_finiteV2Aais_plus_infinityV1Oainfix &lt;=V24avalueV1Aais_finiteV1Aais_minus_infinityV0Oainfix &lt;=avalueV0V24Aais_finiteV0FFIainfix =V23V22FIainfix =asignV22asignV19Aainfix =aclassV19aInfiniteAainfix =aclassV22aInfiniteOainfix =avalueV22avalueV19Aainfix =aclassV19aFiniteAainfix =aclassV22aFiniteAais_infiniteV19Oais_finiteV19Aais_infiniteV22Oais_finiteV22Oainfix =asignV22asignV21Aainfix =aclassV21aInfiniteAainfix =aclassV22aInfiniteOainfix =avalueV22avalueV21Aainfix =aclassV21aFiniteAainfix =aclassV22aFiniteAais_infiniteV21Oais_finiteV21Aais_infiniteV22Oais_finiteV22Aainfix =asignV22aPosAais_infiniteV22Aais_infiniteV19Oais_finiteV19Oais_infiniteV22Oais_finiteV22Aainfix =asignV19aNegAais_infiniteV19Oainfix =avalueV19avalueV22Oainfix &lt;avalueV19avalueV22Aainfix =aclassV22aFiniteAainfix =aclassV19aFiniteAainfix =asignV22aPosAais_infiniteV22Aais_infiniteV21Oais_finiteV21Oais_infiniteV22Oais_finiteV22Aainfix =asignV21aNegAais_infiniteV21Oainfix =avalueV21avalueV22Oainfix &lt;avalueV21avalueV22Aainfix =aclassV22aFiniteAainfix =aclassV21aFiniteFIainfix =V21V20FIainfix =asignV20aPosAais_infiniteV20Oainfix =ainfix *avalueV0avalueV2avalueV20Oainfix &lt;ainfix *avalueV0avalueV2avalueV20Aainfix =aclassV20aFiniteFIainfix =V19V18FIainfix =asignV18aPosAais_infiniteV18Oainfix =ainfix *avalueV1avalueV3avalueV18Oainfix &lt;ainfix *avalueV1avalueV3avalueV18Aainfix =aclassV18aFiniteFIainfix =V17V16FIainfix =asignV16asignV13Aainfix =aclassV13aInfiniteAainfix =aclassV16aInfiniteOainfix =avalueV16avalueV13Aainfix =aclassV13aFiniteAainfix =aclassV16aFiniteAais_infiniteV13Oais_finiteV13Aais_infiniteV16Oais_finiteV16Oainfix =asignV16asignV15Aainfix =aclassV15aInfiniteAainfix =aclassV16aInfiniteOainfix =avalueV16avalueV15Aainfix =aclassV15aFiniteAainfix =aclassV16aFiniteAais_infiniteV15Oais_finiteV15Aais_infiniteV16Oais_finiteV16Aainfix =asignV13aPosAais_infiniteV13Aais_infiniteV16Oais_finiteV16Oais_infiniteV13Oais_finiteV13Aainfix =asignV16aNegAais_infiniteV16Oainfix =avalueV16avalueV13Oainfix &lt;avalueV16avalueV13Aainfix =aclassV13aFiniteAainfix =aclassV16aFiniteAainfix =asignV15aPosAais_infiniteV15Aais_infiniteV16Oais_finiteV16Oais_infiniteV15Oais_finiteV15Aainfix =asignV16aNegAais_infiniteV16Oainfix =avalueV16avalueV15Oainfix &lt;avalueV16avalueV15Aainfix =aclassV15aFiniteAainfix =aclassV16aFiniteFIainfix =V15V14FIainfix =asignV14aNegAais_infiniteV14Oainfix =avalueV14ainfix *avalueV0avalueV3Oainfix &lt;avalueV14ainfix *avalueV0avalueV3Aainfix =aclassV14aFiniteFIainfix =V13V12FIainfix =asignV12aNegAais_infiniteV12Oainfix =avalueV12ainfix *avalueV1avalueV2Oainfix &lt;avalueV12ainfix *avalueV1avalueV2Aainfix =aclassV12aFiniteFIainfix =V11aTrueIiainfix =V11aTrueais_plus_infinityV3Aais_plus_infinityV10NAais_not_NaNV10Oais_minus_infinityV3NAais_not_NaNV3Aais_minus_infinityV10Oainfix &lt;avalueV10avalueV3Aais_finiteV3Aais_finiteV10ais_plus_infinityV3Aais_plus_infinityV10NAais_not_NaNV10Oais_minus_infinityV3NAais_not_NaNV3Aais_minus_infinityV10Oainfix &lt;avalueV10avalueV3Aais_finiteV3Aais_finiteV10NFIainfix =amodelV10c0.0Aainfix =aexactV10c0.0Aainfix =avalueV10c0.0Aainfix =aclassV10aFiniteFIainfix =V9aTrueIiainfix =V9aTrueainfix =asignV8aPosAais_infiniteV8Aainfix =asignV2aPosAais_infiniteV2NAais_infiniteV2Oais_finiteV2Oainfix =asignV8aNegAais_infiniteV8NAais_infiniteV8Oais_finiteV8Aainfix =asignV2aNegAais_infiniteV2Oainfix &lt;avalueV2avalueV8Aainfix =aclassV8aFiniteAainfix =aclassV2aFiniteainfix =asignV8aPosAais_infiniteV8Aainfix =asignV2aPosAais_infiniteV2NAais_infiniteV2Oais_finiteV2Oainfix =asignV8aNegAais_infiniteV8NAais_infiniteV8Oais_finiteV8Aainfix =asignV2aNegAais_infiniteV2Oainfix &lt;avalueV2avalueV8Aainfix =aclassV8aFiniteAainfix =aclassV2aFiniteNFIainfix =amodelV8c0.0Aainfix =aexactV8c0.0Aainfix =avalueV8c0.0Aainfix =aclassV8aFiniteFIainfix =V7aTrueIiainfix =V7aTrueais_plus_infinityV1Aais_plus_infinityV6NAais_not_NaNV6Oais_minus_infinityV1NAais_not_NaNV1Aais_minus_infinityV6Oainfix &lt;avalueV6avalueV1Aais_finiteV1Aais_finiteV6ais_plus_infinityV1Aais_plus_infinityV6NAais_not_NaNV6Oais_minus_infinityV1NAais_not_NaNV1Aais_minus_infinityV6Oainfix &lt;avalueV6avalueV1Aais_finiteV1Aais_finiteV6NFIainfix =amodelV6c0.0Aainfix =aexactV6c0.0Aainfix =avalueV6c0.0Aainfix =aclassV6aFiniteFIainfix =V5aTrueIiainfix =V5aTrueainfix =asignV4aPosAais_infiniteV4Aainfix =asignV0aPosAais_infiniteV0NAais_infiniteV0Oais_finiteV0Oainfix =asignV4aNegAais_infiniteV4NAais_infiniteV4Oais_finiteV4Aainfix =asignV0aNegAais_infiniteV0Oainfix &lt;avalueV0avalueV4Aainfix =aclassV4aFiniteAainfix =aclassV0aFiniteainfix =asignV4aPosAais_infiniteV4Aainfix =asignV0aPosAais_infiniteV0NAais_infiniteV0Oais_finiteV0Oainfix =asignV4aNegAais_infiniteV4NAais_infiniteV4Oais_finiteV4Aainfix =asignV0aNegAais_infiniteV0Oainfix &lt;avalueV0avalueV4Aainfix =aclassV4aFiniteAainfix =aclassV0aFiniteNFIainfix =amodelV4c0.0Aainfix =aexactV4c0.0Aainfix =avalueV4c0.0Aainfix =aclassV4aFiniteFIainfix =asignV3aPosAais_infiniteV3Oainfix =aclassV3aFiniteAainfix =asignV2aNegAais_infiniteV2Oainfix =aclassV2aFiniteAainfix =asignV1aPosAais_infiniteV1Oainfix =aclassV1aFiniteAainfix =asignV0aNegAais_infiniteV0Oainfix =aclassV0aFiniteF">
-              <label
-               name="expl:Function mul, default behavior"/>
-              <label
-               name="expl:VC for mul_ensures_default"/>
-              <proof
-               prover="0"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="timeout" time="121.34"/>
-              </proof>
-              <proof
-               prover="1"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="timeout" time="120.19"/>
-              </proof>
-              <proof
-               prover="2"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="timeout" time="119.81"/>
-              </proof>
-              <proof
-               prover="3"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="timeout" time="120.07"/>
-              </proof>
-              <proof
-               prover="4"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="timeout" time="120.09"/>
-              </proof>
-              <proof
-               prover="5"
-               timelimit="5"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="unknown" time="0.25"/>
-              </proof>
-              <proof
-               prover="6"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="outofmemory" time="20.43"/>
-              </proof>
-              <proof
-               prover="7"
-               timelimit="120"
-               memlimit="1000"
-               obsolete="false"
-               archived="false">
-               <result status="outofmemory" time="18.75"/>
-              </proof>
-             </goal>
-            </transf>
-           </goal>
-           <goal
-            name="WP_parameter mul_ensures_default.1.2.1.2"
-            locfile="../../interval_arith.c"
-            loclnum="202" loccnumb="5" loccnume="8"
-            expl="2."
-            sum="5bcea1e360a1dde9a830b9f2723ed9ab"
-            proved="false"
-            expanded="false"
-            shape="areal_le_doubleainfix *V24V25V23Iareal_le_doubleV25V3Aadouble_le_realV2V25Aareal_le_doubleV24V1Aadouble_le_realV0V24FFIainfix =V23V22FIasame_signV22V19Aais_infiniteV19Aais_infiniteV22Oainfix =avalueV22avalueV19Aais_finiteV19Aais_finiteV22Aais_not_NaNV19Aais_not_NaNV22Oasame_signV22V21Aais_infiniteV21Aais_infiniteV22Oainfix =avalueV22avalueV21Aais_finiteV21Aais_finiteV22Aais_not_NaNV21Aais_not_NaNV22Aais_plus_infinityV22Aais_not_NaNV19Oais_not_NaNV22Aais_minus_infinityV19Oainfix &lt;=avalueV19avalueV22Aais_finiteV22Aais_finiteV19Aais_plus_infinityV22Aais_not_NaNV21Oais_not_NaNV22Aais_minus_infinityV21Oainfix &lt;=avalueV21avalueV22Aais_finiteV22Aais_finiteV21FIainfix =V21V20FIais_plus_infinityV20Oainfix &lt;=ainfix *avalueV0avalueV2avalueV20Aais_finiteV20FIainfix =V19V18FIais_plus_infinityV18Oainfix &lt;=ainfix *avalueV1avalueV3avalueV18Aais_finiteV18FIainfix =V17V16FIasame_signV16V13Aais_infiniteV13Aais_infiniteV16Oainfix =avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_not_NaNV13Aais_not_NaNV16Oasame_signV16V15Aais_infiniteV15Aais_infiniteV16Oainfix =avalueV16avalueV15Aais_finiteV15Aais_finiteV16Aais_not_NaNV15Aais_not_NaNV16Aais_plus_infinityV13Aais_not_NaNV16Oais_not_NaNV13Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV13Aais_finiteV13Aais_finiteV16Aais_plus_infinityV15Aais_not_NaNV16Oais_not_NaNV15Aais_minus_infinityV16Oainfix &lt;=avalueV16avalueV15Aais_finiteV15Aais_finiteV16FIainfix =V15V14FIais_minus_infinityV14Oainfix &lt;=avalueV14ainfix *avalueV0avalueV3Aais_finiteV14FIainfix =V13V12FIais_minus_infinityV12Oainfix &lt;=avalueV12ainfix *avalueV1avalueV2Aais_finiteV12FIainfix =V11aTrueIiainfix =V11aTruealtV10V3altV10V3NFIainfix =amodelV10c0.0Aainfix =aexactV10c0.0Aainfix =avalueV10c0.0Aais_finiteV10FIainfix =V9aTrueIiainfix =V9aTrueais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2ais_plus_infinityV8Aais_plus_infinityV2NAais_not_NaNV2Oais_minus_infinityV8NAais_not_NaNV8Aais_minus_infinityV2Oainfix &lt;avalueV2avalueV8Aais_finiteV8Aais_finiteV2NFIainfix =amodelV8c0.0Aainfix =aexactV8c0.0Aainfix =avalueV8c0.0Aais_finiteV8FIainfix =V7aTrueIiainfix =V7aTruealtV6V1altV6V1NFIainfix =amodelV6c0.0Aainfix =aexactV6c0.0Aainfix =avalueV6c0.0Aais_finiteV6FIainfix =V5aTrueIiainfix =V5aTrueais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0ais_plus_infinityV4Aais_plus_infinityV0NAais_not_NaNV0Oais_minus_infinityV4NAais_not_NaNV4Aais_minus_infinityV0Oainfix &lt;avalueV0avalueV4Aais_finiteV4Aais_finiteV0NFIainfix =amodelV4c0.0Aainfix =aexactV4c0.0Aainfix =avalueV4c0.0Aais_finiteV4FIais_plus_infinityV3Oais_finiteV3Aais_minus_infinityV2Oais_finiteV2Aais_plus_infinityV1Oais_finiteV1Aais_minus_infinityV0Oais_finiteV0F">
-            <label
-             name="expl:Function mul, default behavior"/>
-            <label
-             name="expl:VC for mul_ensures_default"/>
-            <proof
-             prover="0"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.05"/>
-            </proof>
-            <proof
-             prover="1"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.05"/>
-            </proof>
-            <proof
-             prover="2"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="4.97"/>
-            </proof>
-            <proof
-             prover="3"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.11"/>
-            </proof>
-            <proof
-             prover="4"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.02"/>
-            </proof>
-            <proof
-             prover="6"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.04"/>
-            </proof>
-            <proof
-             prover="7"
-             timelimit="5"
-             memlimit="1000"
-             obsolete="false"
-             archived="false">
-             <result status="timeout" time="5.22"/>
-            </proof>
-           </goal>
-          </transf>
-         </goal>
-        </transf>
        </goal>
       </transf>
      </goal>
@@ -923,9 +672,9 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="2. postcondition"
-      sum="ef9a738a51294da2786d76e64f6e0bc0"
+      sum="95fbd16521dbd696103ff03fad9fbdf3"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -934,13 +683,13 @@
       <transf
        name="split_goal"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.2.1"
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="1."
-        sum="545f4eb9904ac0e5964a90f62e1c4a7f"
+        sum="f02dbd2a13ddf076ae9334bf02753894"
         proved="true"
         expanded="false"
         shape="ais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -949,7 +698,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -957,7 +706,7 @@
          <result status="valid" time="0.06"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -965,7 +714,7 @@
          <result status="valid" time="0.05"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -973,7 +722,7 @@
          <result status="valid" time="0.11"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -986,21 +735,29 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="2."
-        sum="acfb126bfe0c58a6d9d41534000a98da"
+        sum="2f4f4169714a12423ef3a5a893dad4dc"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
+         prover="0"
+         timelimit="10"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="12.08"/>
+        </proof>
+        <proof
          prover="1"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="10.21"/>
+         <result status="timeout" time="9.98"/>
         </proof>
         <proof
          prover="2"
@@ -1008,7 +765,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="9.97"/>
+         <result status="timeout" time="10.26"/>
         </proof>
         <proof
          prover="3"
@@ -1016,7 +773,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="10.26"/>
+         <result status="timeout" time="10.14"/>
         </proof>
         <proof
          prover="4"
@@ -1024,7 +781,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="10.25"/>
+         <result status="unknown" time="0.09"/>
         </proof>
         <proof
          prover="5"
@@ -1032,18 +789,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="unknown" time="0.09"/>
-        </proof>
-        <proof
-         prover="6"
-         timelimit="10"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="timeout" time="11.01"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1058,9 +807,9 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="3. postcondition"
-      sum="8196dbbe77f5d62b0a680c08bfb813f2"
+      sum="d96c904de55a0e02f35c720b821fdb82"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1069,13 +818,13 @@
       <transf
        name="split_goal"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.3.1"
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="1."
-        sum="bdf473aaca20489f124eaf412697838b"
+        sum="5f784486cdd9e4f27b40adfb84d244b2"
         proved="true"
         expanded="false"
         shape="ais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1084,7 +833,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1092,7 +841,7 @@
          <result status="valid" time="0.06"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1100,7 +849,7 @@
          <result status="valid" time="0.05"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1108,7 +857,7 @@
          <result status="valid" time="0.12"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1121,24 +870,24 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="2."
-        sum="7820652ca90e21a5d95bf68b24ed86aa"
+        sum="d1fe664da05ada7b601726cf3d3748f4"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="10.01"/>
+         <result status="timeout" time="10.13"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1146,7 +895,7 @@
          <result status="timeout" time="9.96"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1154,15 +903,15 @@
          <result status="timeout" time="10.04"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="10.01"/>
+         <result status="timeout" time="10.14"/>
         </proof>
         <proof
-         prover="5"
+         prover="4"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1170,7 +919,7 @@
          <result status="unknown" time="0.08"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="10"
          memlimit="1000"
          obsolete="false"
@@ -1178,12 +927,12 @@
          <result status="timeout" time="10.07"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="3.06"/>
+         <result status="timeout" time="3.15"/>
         </proof>
        </goal>
       </transf>
@@ -1193,9 +942,9 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="4. postcondition"
-      sum="382f1435927ea0036b458efae3ecc3b2"
+      sum="cea283af46b41f7097c801f9b060b60e"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1204,13 +953,13 @@
       <transf
        name="split_goal"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.4.1"
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="1."
-        sum="22f20383efed49c96c38c9639b2741ed"
+        sum="36033c8d253977e4abdab88e1f7805ae"
         proved="true"
         expanded="false"
         shape="ais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1219,7 +968,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1227,7 +976,7 @@
          <result status="valid" time="0.05"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1235,7 +984,7 @@
          <result status="valid" time="0.04"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1243,7 +992,7 @@
          <result status="valid" time="0.10"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1251,7 +1000,7 @@
          <result status="valid" time="0.13"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1259,7 +1008,7 @@
          <result status="valid" time="0.08"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1272,16 +1021,16 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="2."
-        sum="2e6bd6f2a27e729e50b0d8021a94d6e7"
+        sum="43b2d91a07ee57ce3545bb954cd611fb"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1289,12 +1038,20 @@
          <result status="timeout" time="3.50"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
          archived="false">
          <result status="timeout" time="2.98"/>
+        </proof>
+        <proof
+         prover="2"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="timeout" time="3.02"/>
         </proof>
         <proof
          prover="3"
@@ -1305,7 +1062,7 @@
          <result status="timeout" time="3.02"/>
         </proof>
         <proof
-         prover="4"
+         prover="5"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1314,14 +1071,6 @@
         </proof>
         <proof
          prover="6"
-         timelimit="3"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="3.02"/>
-        </proof>
-        <proof
-         prover="7"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1336,9 +1085,9 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="5. postcondition"
-      sum="82622525ced613c8bf6e027067db9be0"
+      sum="b41d09acf8629a9218ee116121fd3d61"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1347,13 +1096,13 @@
       <transf
        name="split_goal"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.5.1"
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="1."
-        sum="a356c2628091b32eab0ceb2c32a9ddab"
+        sum="c33dc61e6f9a0a7e03e2200374c0cd43"
         proved="true"
         expanded="false"
         shape="ais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1361,6 +1110,14 @@
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
+        <proof
+         prover="0"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
         <proof
          prover="1"
          timelimit="3"
@@ -1375,18 +1132,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="3"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.11"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1399,16 +1148,16 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="2."
-        sum="43c417db050a03667fec30b149fb25f2"
+        sum="ceba6430a0704bddd081740611793f75"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1416,7 +1165,7 @@
          <result status="timeout" time="3.28"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1424,7 +1173,7 @@
          <result status="timeout" time="2.98"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1432,7 +1181,7 @@
          <result status="timeout" time="3.30"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1440,7 +1189,7 @@
          <result status="timeout" time="3.13"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1448,7 +1197,7 @@
          <result status="timeout" time="3.52"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1463,9 +1212,9 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="6. postcondition"
-      sum="95421533350b3de4999c12cac4cc8450"
+      sum="c4fff37db7c97b7135283edacc11e542"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV3FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
@@ -1474,13 +1223,13 @@
       <transf
        name="split_goal_wp"
        proved="false"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter mul_ensures_default.6.1"
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="1."
-        sum="3214a9bd03714e1ec932bfb465cead38"
+        sum="691de0d804d11ea76968ce3757faa2ff"
         proved="true"
         expanded="false"
         shape="ais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV3FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1489,7 +1238,7 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1497,7 +1246,7 @@
          <result status="valid" time="0.06"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1505,7 +1254,7 @@
          <result status="valid" time="0.05"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1513,12 +1262,12 @@
          <result status="valid" time="0.12"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.26"/>
         </proof>
        </goal>
        <goal
@@ -1526,16 +1275,16 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="2."
-        sum="181cd21f3491b4f1d814f4dae1bf1e29"
+        sum="d0cce96954df2d8f6f44339faf92c139"
         proved="false"
-        expanded="false"
+        expanded="true"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV3FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
         <label
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
-         prover="1"
+         prover="0"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1543,7 +1292,7 @@
          <result status="timeout" time="3.10"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1551,7 +1300,7 @@
          <result status="timeout" time="2.98"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1559,7 +1308,7 @@
          <result status="timeout" time="3.17"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1567,15 +1316,15 @@
          <result status="timeout" time="3.06"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="3.03"/>
+         <result status="timeout" time="3.43"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -1590,16 +1339,16 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="7. postcondition"
-      sum="1948766a303f387542b8d444667599d5"
+      sum="bd4be66f9bad9a569e5f361c9e002892"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1607,7 +1356,7 @@
        <result status="timeout" time="5.14"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1615,7 +1364,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1623,15 +1372,15 @@
        <result status="timeout" time="5.14"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="2.42"/>
+       <result status="outofmemory" time="2.52"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1639,7 +1388,7 @@
        <result status="unknown" time="0.07"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1647,7 +1396,7 @@
        <result status="outofmemory" time="0.53"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="3"
        memlimit="1000"
        obsolete="false"
@@ -1660,16 +1409,16 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="8. postcondition"
-      sum="e9ae4e4cbaa85997335c137efd3144dc"
+      sum="866f74cc24cb5b4f115d3a381889cd74"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1677,7 +1426,7 @@
        <result status="timeout" time="5.22"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1685,7 +1434,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1693,15 +1442,15 @@
        <result status="timeout" time="5.18"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="2.49"/>
+       <result status="outofmemory" time="2.28"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1709,15 +1458,15 @@
        <result status="unknown" time="0.07"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="0.52"/>
+       <result status="outofmemory" time="0.36"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="3"
        memlimit="1000"
        obsolete="false"
@@ -1730,16 +1479,16 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="9. postcondition"
-      sum="bd14160c9fd68dfe2ef5abd405735af1"
+      sum="6b99e09162298f597dfd5ef52b0a3bba"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1747,7 +1496,7 @@
        <result status="timeout" time="5.04"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1755,7 +1504,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1763,15 +1512,15 @@
        <result status="timeout" time="5.06"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="1.15"/>
+       <result status="outofmemory" time="0.80"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1779,7 +1528,7 @@
        <result status="unknown" time="0.08"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1792,16 +1541,16 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="10. postcondition"
-      sum="56740411aff70c1c60b3f06478317f25"
+      sum="50a2f42e2bdf37c28129c534103493b9"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1809,7 +1558,7 @@
        <result status="timeout" time="5.06"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1817,7 +1566,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1825,15 +1574,15 @@
        <result status="timeout" time="5.06"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="1.21"/>
+       <result status="outofmemory" time="1.31"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1841,7 +1590,7 @@
        <result status="unknown" time="0.08"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1854,16 +1603,16 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="11. postcondition"
-      sum="9dbce30f31416389c6357b838f4f32a7"
+      sum="d54e118e00549232c8524f7dd5b4774b"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV2FIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1871,7 +1620,7 @@
        <result status="timeout" time="5.21"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1879,7 +1628,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1887,15 +1636,15 @@
        <result status="timeout" time="5.18"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="outofmemory" time="1.27"/>
+       <result status="outofmemory" time="1.17"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1903,7 +1652,7 @@
        <result status="unknown" time="0.07"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1916,16 +1665,16 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="12. postcondition"
-      sum="12fcebb5275e60eb184a5345e8e0d709"
+      sum="e9e9578cf884d138e976f8231161e0af"
       proved="false"
-      expanded="false"
+      expanded="true"
       shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
       <label
        name="expl:Function mul, default behavior"/>
       <label
        name="expl:VC for mul_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1933,7 +1682,7 @@
        <result status="timeout" time="5.39"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1941,7 +1690,7 @@
        <result status="timeout" time="4.98"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1949,7 +1698,7 @@
        <result status="timeout" time="5.48"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -1957,7 +1706,7 @@
        <result status="timeout" time="5.03"/>
       </proof>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1965,7 +1714,7 @@
        <result status="unknown" time="0.07"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -1978,7 +1727,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="13. postcondition"
-      sum="86abc3f9e9d5827b43260dec36990769"
+      sum="34057c3ed05d15e89b0cee58837dc154"
       proved="true"
       expanded="false"
       shape="ain_intervalainfix *V12V13V9V11Iain_intervalV13V2V3Aain_intervalV12V0V1FFAais_intervalV9V11Iainfix =V11V10FIaof_real_exact_postc0.0V10FIainfix =V9V8FIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1995,7 +1744,7 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="1."
-        sum="69a2e17f82db5216fb3037fe2d73edb9"
+        sum="a38fada2fa05bc1d528dcac1ef806e2d"
         proved="true"
         expanded="false"
         shape="ais_intervalV9V11Iainfix =V11V10FIaof_real_exact_postc0.0V10FIainfix =V9V8FIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2003,6 +1752,14 @@
          name="expl:Function mul, default behavior"/>
         <label
          name="expl:VC for mul_ensures_default"/>
+        <proof
+         prover="0"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
         <proof
          prover="1"
          timelimit="3"
@@ -2017,7 +1774,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.09"/>
         </proof>
         <proof
          prover="3"
@@ -2025,18 +1782,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="3"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.11"/>
         </proof>
         <proof
-         prover="6"
+         prover="5"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -2044,7 +1793,7 @@
          <result status="valid" time="0.08"/>
         </proof>
         <proof
-         prover="7"
+         prover="6"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
@@ -2057,7 +1806,7 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="2."
-        sum="1b1183b839293ddb9617b84ffa79b1b5"
+        sum="25e71d9f4119ad6bfbef12482e18ed09"
         proved="true"
         expanded="false"
         shape="ain_intervalainfix *V12V13V9V11Iain_intervalV13V2V3Aain_intervalV12V0V1FFIainfix =V11V10FIaof_real_exact_postc0.0V10FIainfix =V9V8FIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2066,20 +1815,20 @@
         <label
          name="expl:VC for mul_ensures_default"/>
         <proof
+         prover="2"
+         timelimit="3"
+         memlimit="1000"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="3.91"/>
+        </proof>
+        <proof
          prover="3"
          timelimit="3"
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="3.98"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="3"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="4.36"/>
+         <result status="valid" time="4.49"/>
         </proof>
        </goal>
       </transf>
@@ -2091,7 +1840,7 @@
     locfile="../../interval_arith.c"
     loclnum="202" loccnumb="5" loccnume="8"
     expl="VC for mul_safety"
-    sum="6a3032a269de35f3efaca4b1127c98a4"
+    sum="fc8c8eeebdb5b7d0070cd42c9086c7bd"
     proved="true"
     expanded="false"
     shape="iainfix =V5aTrueiainfix =V7aTrueiainfix =V9aTrueiainfix =V11aTrueais_NaNV19NAais_NaNV21NIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FAainfix &gt;avalueV0c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FAainfix &gt;avalueV1c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FAais_NaNV13NAais_NaNV15NIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FAainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FAainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1Nainfix &gt;avalueV0c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V23V22FIadouble_le_realV22ainfix *avalueV1avalueV2FAainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10Fainfix &gt;avalueV1c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V27V26FIadouble_le_realV26ainfix *avalueV0avalueV3FAainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V25aTrueIiainfix =V25aTrueagtV3V24agtV3V24NFIaof_real_exact_postc0.0V24FIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8Fiainfix =V29aTrueiainfix =V31aTrueainfix &gt;avalueV0c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V33V32FIadouble_le_realV32ainfix *avalueV0avalueV3FAainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0Nainfix &gt;avalueV0c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V35V34FIadouble_le_realV34ainfix *avalueV1avalueV3FAainfix =avalueV1c0.0NIais_infiniteV3Aais_finiteV1Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aadif_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIiainfix =V31aTrueagtV3V30agtV3V30NFIaof_real_exact_postc0.0V30Fainfix &gt;avalueV1c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aasam_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V39V38FIadouble_le_realV38ainfix *avalueV0avalueV3FAainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V37aTrueIiainfix =V37aTrueagtV3V36agtV3V36NFIaof_real_exact_postc0.0V36FIiainfix =V29aTruealtV2V28altV2V28NFIaof_real_exact_postc0.0V28FIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6Fiainfix =V43aTrueiainfix =V45aTrueainfix &gt;avalueV1c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V47V46FIadouble_le_realV46ainfix *avalueV1avalueV2FAainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1Nainfix &gt;avalueV0c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aasam_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V49V48FIadouble_le_realV48ainfix *avalueV1avalueV2FAainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIiainfix =V45aTrueagtV3V44agtV3V44NFIaof_real_exact_postc0.0V44Fainfix &gt;avalueV1c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V53V52FIadouble_le_realV52ainfix *avalueV0avalueV2FAainfix =avalueV0c0.0NIais_infiniteV2Aais_finiteV0Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aadif_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V51aTrueIiainfix =V51aTrueagtV3V50agtV3V50NFIaof_real_exact_postc0.0V50FIiainfix =V43aTruealtV2V42altV2V42NFIaof_real_exact_postc0.0V42FIainfix =V41aTrueIiainfix =V41aTrueagtV1V40agtV1V40NFIaof_real_exact_postc0.0V40FIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2108,7 +1857,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="1. precondition for call"
-      sum="07b96b7c71b64eb440be374f8695787b"
+      sum="8a87d46af6b9308764f7d1c4e448fb79"
       proved="true"
       expanded="false"
       shape="ainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2117,7 +1866,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2125,7 +1874,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2138,7 +1887,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="2. precondition for call"
-      sum="695fb55e41a75e01b0c4a56e28511f56"
+      sum="f25091c5338188ea52c3185ad4782c25"
       proved="true"
       expanded="false"
       shape="ainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2147,7 +1896,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2155,7 +1904,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2168,7 +1917,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="3. precondition for call"
-      sum="6f2efbf7b436312fd73c6dbadad62867"
+      sum="9e08887f5de79dc13afe739605857e72"
       proved="true"
       expanded="false"
       shape="ais_NaNV13NAais_NaNV15NIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2177,7 +1926,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2185,15 +1934,15 @@
        <result status="valid" time="0.14"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.13"/>
+       <result status="valid" time="0.69"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2201,7 +1950,7 @@
        <result status="valid" time="0.11"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2214,7 +1963,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="4. precondition for call"
-      sum="4ce5649dee4f1b4ef2c0d8716932435a"
+      sum="2446414af7ed380a535caed2094626e2"
       proved="true"
       expanded="false"
       shape="ainfix &gt;avalueV1c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIais_NaNV13NAais_NaNV15NIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2223,20 +1972,20 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
+       prover="2"
+       timelimit="10"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="1.58"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.60"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="10"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="1.90"/>
+       <result status="valid" time="1.68"/>
       </proof>
      </goal>
      <goal
@@ -2244,7 +1993,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="5. precondition for call"
-      sum="8ba28cbba1bc67f0f31aa30afef42793"
+      sum="0a470e7f5d37e7bd196fc48c8508ff32"
       proved="true"
       expanded="false"
       shape="ainfix &gt;avalueV0c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix &gt;avalueV1c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIais_NaNV13NAais_NaNV15NIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2253,20 +2002,20 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
+       prover="2"
+       timelimit="10"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="1.92"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.90"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="10"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="2.21"/>
+       <result status="valid" time="2.35"/>
       </proof>
      </goal>
      <goal
@@ -2274,7 +2023,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="6. precondition for call"
-      sum="7a1955729eeee65b9fe70e185edfecd5"
+      sum="5b453329d1f388544db83b87206593b2"
       proved="true"
       expanded="false"
       shape="ais_NaNV19NAais_NaNV21NIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix &gt;avalueV0c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix &gt;avalueV1c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIais_NaNV13NAais_NaNV15NIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2283,20 +2032,20 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
+       prover="0"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.31"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.48"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.47"/>
+       <result status="valid" time="3.71"/>
       </proof>
      </goal>
      <goal
@@ -2304,7 +2053,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="7. precondition for call"
-      sum="4a04c126f05535982c11f253a1626ebd"
+      sum="8ef5291c37bb226f1138a909e6e0e231"
       proved="true"
       expanded="false"
       shape="ainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2313,7 +2062,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2321,7 +2070,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2334,7 +2083,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="8. precondition for call"
-      sum="77eeb825243c81b20245802f81f10fb6"
+      sum="0ed9f3b85d3c0c12dc6dd7e25a6d2883"
       proved="true"
       expanded="false"
       shape="ainfix &gt;avalueV0c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2343,20 +2092,20 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
+       prover="2"
+       timelimit="10"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="2.20"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.13"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="10"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="2.48"/>
+       <result status="valid" time="2.61"/>
       </proof>
      </goal>
      <goal
@@ -2364,7 +2113,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="9. precondition for call"
-      sum="22f349840b7a417b986c9e3be860a10a"
+      sum="6a049a8acde4bd8cd834d31ba343156e"
       proved="true"
       expanded="false"
       shape="ainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2373,7 +2122,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2381,7 +2130,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2394,7 +2143,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="10. precondition for call"
-      sum="c1a3f4003d1685f4ae3565e0308a98dd"
+      sum="36221618a45eb0b098c25e3c082cc239"
       proved="true"
       expanded="false"
       shape="ainfix &gt;avalueV1c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2403,20 +2152,20 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
+       prover="2"
+       timelimit="10"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="2.05"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.03"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="10"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="2.34"/>
+       <result status="valid" time="2.31"/>
       </proof>
      </goal>
      <goal
@@ -2424,7 +2173,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="11. precondition for call"
-      sum="daac83e08dae90de8737b76aa633bffb"
+      sum="e22687355554587f430f2d11b93c9561"
       proved="true"
       expanded="false"
       shape="ainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2433,7 +2182,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2441,7 +2190,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2454,7 +2203,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="12. precondition for call"
-      sum="11778b93842df84b4e87195700ae9220"
+      sum="6cb49830498123560693f2d0f2e9e39b"
       proved="true"
       expanded="false"
       shape="ainfix &gt;avalueV0c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2463,20 +2212,20 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
+       prover="2"
+       timelimit="10"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="2.16"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.14"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="10"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="2.49"/>
+       <result status="valid" time="2.46"/>
       </proof>
      </goal>
      <goal
@@ -2484,7 +2233,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="13. precondition for call"
-      sum="03d343bd6ad6c562b8b7b7566876fd81"
+      sum="a5b9b27e23efbac4dba5361fe17bf758"
       proved="true"
       expanded="false"
       shape="ainfix =avalueV1c0.0NIais_infiniteV3Aais_finiteV1Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aadif_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2493,7 +2242,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2501,7 +2250,7 @@
        <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2514,7 +2263,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="14. precondition for call"
-      sum="21997b3990a75a7c8b9c7588914aeb95"
+      sum="17d2313f31f2ce18b6953577a36b94b2"
       proved="true"
       expanded="false"
       shape="ainfix &gt;avalueV0c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV3FIainfix =avalueV1c0.0NIais_infiniteV3Aais_finiteV1Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aadif_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2523,7 +2272,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2531,7 +2280,7 @@
        <result status="valid" time="0.12"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2544,7 +2293,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="15. precondition for call"
-      sum="0f54833a24408ddfc8b7dbe63b8b1143"
+      sum="1e5d80ee153be451cdcca253892c3fcc"
       proved="true"
       expanded="false"
       shape="ainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2553,7 +2302,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2561,7 +2310,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2574,7 +2323,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="16. precondition for call"
-      sum="76fb5db69be585ab444c0340d7f1797e"
+      sum="ef0b318b91075a5500c0384b492773c7"
       proved="true"
       expanded="false"
       shape="ainfix &gt;avalueV1c0.0Iainfix =asignV2aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleNAais_finiteV2Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV2Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aasam_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =avalueV0c0.0NIais_infiniteV3Aais_finiteV0Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueNIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2583,20 +2332,20 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="3.50"/>
+       <result status="valid" time="3.42"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="11"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="3.93"/>
+       <result status="valid" time="3.90"/>
       </proof>
      </goal>
      <goal
@@ -2604,7 +2353,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="17. precondition for call"
-      sum="41d554c7f5b05d6a2782c7e86f9a5264"
+      sum="28b3bd44426a1b3a0495c51b69954797"
       proved="true"
       expanded="false"
       shape="ainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2613,7 +2362,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2621,7 +2370,7 @@
        <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2634,7 +2383,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="18. precondition for call"
-      sum="289150b663482871e692e3847ba31c98"
+      sum="892eca42414838facc875808cc6a339c"
       proved="true"
       expanded="false"
       shape="ainfix &gt;avalueV1c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2643,20 +2392,20 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
+       prover="2"
+       timelimit="10"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="1.33"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.36"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="10"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="1.61"/>
+       <result status="valid" time="1.59"/>
       </proof>
      </goal>
      <goal
@@ -2664,7 +2413,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="19. precondition for call"
-      sum="e9a0cbf424837daf26ec423158cfc2c6"
+      sum="af77022923e8f7f78174bd097a1439ca"
       proved="true"
       expanded="false"
       shape="ainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2673,7 +2422,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2681,7 +2430,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2694,7 +2443,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="20. precondition for call"
-      sum="e490f1a372e4ba028751a75cc475164c"
+      sum="fc3c92a2494e11629dbbc4c200a13474"
       proved="true"
       expanded="false"
       shape="ainfix &gt;avalueV0c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV0Aasam_signV0V3Iais_infiniteV3Oais_infiniteV0Aais_NaNV3NAais_NaNV0NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =avalueV1c0.0NIais_infiniteV2Aais_finiteV1Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1Aais_NaNV2NAais_NaNV1NIainfix =V11aTrueNIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2703,7 +2452,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="6"
        memlimit="50"
        obsolete="false"
@@ -2711,7 +2460,7 @@
        <result status="valid" time="0.11"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="6"
        memlimit="50"
        obsolete="false"
@@ -2724,7 +2473,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="21. precondition for call"
-      sum="4f7a4394c90602821667c6a7de7059f5"
+      sum="5447616591609d0e3656e4103d84a445"
       proved="true"
       expanded="false"
       shape="ainfix =avalueV0c0.0NIais_infiniteV2Aais_finiteV0Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aadif_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2733,7 +2482,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2741,7 +2490,7 @@
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2754,7 +2503,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="22. precondition for call"
-      sum="2ccf00eaea50016ce29a6f3974a1c896"
+      sum="7dc092084427c218559de9620d75f8ec"
       proved="true"
       expanded="false"
       shape="ainfix &gt;avalueV1c0.0Iainfix =asignV3aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleNAais_finiteV3Aais_finiteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV3Aainfix =avalueV3c0.0NIais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1Aais_NaNV3NAais_NaNV1NIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV2FIainfix =avalueV0c0.0NIais_infiniteV2Aais_finiteV0Aainfix =avalueV2c0.0NIais_finiteV2Aais_infiniteV0Aadif_signV0V2Iais_infiniteV2Oais_infiniteV0Aais_NaNV2NAais_NaNV0NIainfix =V11aTrueIiainfix =V11aTrueagtV3V10agtV3V10NFIaof_real_exact_postc0.0V10FIainfix =V9aTrueNIiainfix =V9aTruealtV2V8altV2V8NFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiainfix =V7aTrueagtV1V6agtV1V6NFIaof_real_exact_postc0.0V6FIainfix =V5aTrueNIiainfix =V5aTruealtV0V4altV0V4NFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2763,7 +2512,7 @@
       <label
        name="expl:VC for mul_safety"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
@@ -2771,12 +2520,12 @@
        <result status="valid" time="0.12"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="10"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.12"/>
+       <result status="valid" time="0.24"/>
       </proof>
      </goal>
     </transf>
@@ -2786,7 +2535,7 @@
     locfile="../../interval_arith.c"
     loclnum="77" loccnumb="7" loccnume="13"
     expl="VC for mul_up_ensures_default"
-    sum="6068d82394deac9ce58e381a1175fff1"
+    sum="b364c5ec857be9e0c3e5a33c6e9828c0"
     proved="true"
     expanded="false"
     shape="areal_le_doubleainfix *avalueV0avalueV1V8Iainfix =V8V7FAareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &lt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &gt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -2803,7 +2552,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="1. assertion"
-      sum="89be14cf3290433328260045d38c0082"
+      sum="8e3861c6182b42f8d6a5d3ac7b501542"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -2812,12 +2561,20 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
+       prover="0"
+       timelimit="120"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="6.64"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="120"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="6.65"/>
+       <result status="valid" time="3.65"/>
       </proof>
       <proof
        prover="2"
@@ -2825,7 +2582,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="5.96"/>
+       <result status="valid" time="4.07"/>
       </proof>
       <proof
        prover="3"
@@ -2833,15 +2590,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="4.79"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="120"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="7.47"/>
+       <result status="valid" time="10.01"/>
       </proof>
      </goal>
      <goal
@@ -2849,7 +2598,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="2. assertion"
-      sum="f5e0f530e56a5224f7543a7289e7ef38"
+      sum="d7cf1a81d61d22b319b63b79d985b6ad"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -2858,6 +2607,14 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
+       prover="0"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="5"
        memlimit="50"
@@ -2871,7 +2628,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="3"
@@ -2879,18 +2636,10 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2898,7 +2647,7 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2911,7 +2660,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="3. assertion"
-      sum="250269b702a58a5cda0d5452756802ad"
+      sum="3ee2f60db072ce1780b5d9c643869570"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -2920,7 +2669,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2928,7 +2677,7 @@
        <result status="valid" time="0.03"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2936,7 +2685,7 @@
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2944,7 +2693,7 @@
        <result status="valid" time="0.08"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2952,7 +2701,7 @@
        <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2960,7 +2709,7 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -2973,7 +2722,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="4. assertion"
-      sum="897cc4e812c1c91d446b177da3c5110c"
+      sum="dc58ac61909b6174e1950e8b54da5914"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -2981,6 +2730,14 @@
        name="expl:Function mul_up, default behavior"/>
       <label
        name="expl:VC for mul_up_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
       <proof
        prover="1"
        timelimit="5"
@@ -2995,7 +2752,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="3"
@@ -3003,18 +2760,10 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.10"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3022,7 +2771,7 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3035,7 +2784,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="5. assertion"
-      sum="e9e8c3703fe3259a6d6273303c09bdb4"
+      sum="c74f08b90fdd6e008fc9041fb058d325"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -3043,6 +2792,14 @@
        name="expl:Function mul_up, default behavior"/>
       <label
        name="expl:VC for mul_up_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
       <proof
        prover="1"
        timelimit="5"
@@ -3057,7 +2814,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="3"
@@ -3065,18 +2822,10 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="6"
+       prover="5"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3084,7 +2833,7 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="7"
+       prover="6"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3097,7 +2846,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="6. assertion"
-      sum="66c3c6d9dda6cd73fa2a296d01a3d0d7"
+      sum="14ede4eacbd2b6f32e55619e376623f0"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -3106,15 +2855,15 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="15"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="5.32"/>
+       <result status="valid" time="5.30"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3122,12 +2871,12 @@
        <result status="valid" time="0.43"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.51"/>
+       <result status="valid" time="0.50"/>
       </proof>
      </goal>
      <goal
@@ -3135,7 +2884,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="7. assertion"
-      sum="042350dbc23d8c58ac72c41ba29ce997"
+      sum="48bf21f2212972777596998ad86d5eb1"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -3144,15 +2893,15 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="226"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="63.19"/>
+       <result status="valid" time="63.34"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="120"
        memlimit="1000"
        obsolete="false"
@@ -3160,12 +2909,12 @@
        <result status="valid" time="4.72"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="120"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="8.90"/>
+       <result status="valid" time="8.96"/>
       </proof>
      </goal>
      <goal
@@ -3173,7 +2922,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="8. assertion"
-      sum="1d2d973c59abad2e10b4ce9d27a056d8"
+      sum="c1fb12227c4ec694b848d3b2e0f85c2a"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -3182,7 +2931,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3190,12 +2939,12 @@
        <result status="valid" time="0.45"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.54"/>
+       <result status="valid" time="0.53"/>
       </proof>
      </goal>
      <goal
@@ -3203,7 +2952,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="9. assertion"
-      sum="0d8a8af121c2c2f3455453600985c1c1"
+      sum="a552524b99132122544470d300d8e4c0"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -3212,12 +2961,20 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="7"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.68"/>
+       <result status="valid" time="2.66"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.40"/>
       </proof>
       <proof
        prover="2"
@@ -3225,18 +2982,10 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.53"/>
-      </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.15"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3249,7 +2998,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="10. assertion"
-      sum="44d3c2be12da68f98d6ba460bb92c712"
+      sum="32df5f60617eef6e7cb4466cdbb7d39e"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -3258,12 +3007,20 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="14"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="5.02"/>
+       <result status="valid" time="4.98"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.34"/>
       </proof>
       <proof
        prover="2"
@@ -3271,7 +3028,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="4.72"/>
+       <result status="valid" time="0.15"/>
       </proof>
       <proof
        prover="3"
@@ -3279,15 +3036,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.15"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.18"/>
+       <result status="valid" time="0.30"/>
       </proof>
      </goal>
      <goal
@@ -3295,7 +3044,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="11. assertion"
-      sum="7c111dcdf924902f9081b4ff1450ecc7"
+      sum="15e82b0cb3a0043e63e580cf6ebbfcf2"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -3304,12 +3053,20 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="1"
+       prover="0"
        timelimit="14"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="5.13"/>
+       <result status="valid" time="5.05"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.34"/>
       </proof>
       <proof
        prover="2"
@@ -3317,7 +3074,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="4.52"/>
+       <result status="valid" time="0.15"/>
       </proof>
       <proof
        prover="3"
@@ -3325,15 +3082,7 @@
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.15"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.17"/>
+       <result status="valid" time="0.29"/>
       </proof>
      </goal>
      <goal
@@ -3341,7 +3090,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="12. assertion"
-      sum="003fcbab7b871d89ad2b9b79ab1da4f6"
+      sum="9c5433c27017613c82865538db73cd4d"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &gt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -3350,15 +3099,15 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.54"/>
+       <result status="valid" time="0.55"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3371,7 +3120,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="13. assertion"
-      sum="50c0b683efdb9d8e292cb356b07b55c7"
+      sum="37696e6f7336525501d83816d078e955"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &lt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &gt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -3380,20 +3129,20 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
+       prover="2"
+       timelimit="5"
+       memlimit="50"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.54"/>
+      </proof>
+      <proof
        prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.55"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="50"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.63"/>
+       <result status="valid" time="0.62"/>
       </proof>
      </goal>
      <goal
@@ -3401,7 +3150,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="14. postcondition"
-      sum="1ac52a8e2487f9e1c6ae364a69cffba7"
+      sum="ac2f1ad8e11bb1e7580420e9a0e25f24"
       proved="true"
       expanded="false"
       shape="areal_le_doubleainfix *avalueV0avalueV1V8Iainfix =V8V7FIareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &lt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &gt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix =asignV1aNegAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleNAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleNAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleNAais_finiteV1Aais_finiteV0Aainfix =avalueV0c0.0NIais_finiteV0Aais_infiniteV1Aainfix =avalueV1c0.0NIais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0Aais_NaNV1NAais_NaNV0NF">
@@ -3410,7 +3159,7 @@
       <label
        name="expl:VC for mul_up_ensures_default"/>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3418,7 +3167,7 @@
        <result status="valid" time="0.37"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="50"
        obsolete="false"
@@ -3433,7 +3182,7 @@
     locfile="../../interval_arith.c"
     loclnum="77" loccnumb="7" loccnume="13"
     expl="VC for mul_up_safety"
-    sum="9f9940389c1c71ebc45ed882dbf0b07e"
+    sum="d577fafad8bfe1d6f16e22fdfc0655e8"
     proved="true"
     expanded="false"
     shape="t">
@@ -3442,7 +3191,7 @@
     <label
      name="expl:VC for mul_up_safety"/>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      memlimit="50"
      obsolete="false"
@@ -3450,12 +3199,20 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="50"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="50"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="3"
@@ -3471,7 +3228,7 @@
      memlimit="50"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="5"
@@ -3483,14 +3240,6 @@
     </proof>
     <proof
      prover="6"
-     timelimit="5"
-     memlimit="50"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="7"
      timelimit="5"
      memlimit="50"
      obsolete="false"

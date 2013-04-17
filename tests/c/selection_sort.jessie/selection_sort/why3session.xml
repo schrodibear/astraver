@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="selection_sort.jessie/selection_sort/why3session.xml" shape_version="2">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -12,38 +11,46 @@
   version="2.2"/>
  <prover
   id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.3.1"/>
  <file
   name="../selection_sort.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
-   locfile="selection_sort.jessie/selection_sort/../selection_sort.mlw"
+   locfile="../selection_sort.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="selection_sort.jessie/selection_sort/../selection_sort.mlw"
+   locfile="../selection_sort.mlw"
    loclnum="260" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter sel_sort_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+    locfile="../../selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
-    expl="parameter sel_sort_ensures_default"
-    sum="cf1e3f7ed457989a9775a2cded1380db"
+    expl="VC for sel_sort_ensures_default"
+    sum="79a3d55720a579462bac4a9630f6a13b"
     proved="true"
-    expanded="false"
+    expanded="true"
     shape="iainfix &lt;V11V1iainfix &lt;aselectV5ashiftV0V11V9ainfix &lt;V12V1Aainfix &lt;=V4V12Aainfix &lt;V4V14Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FIainfix =V12V11Fainfix &lt;V10V1Aainfix &lt;=V4V10Aainfix &lt;V4V15Iainfix =V15ainfix +V11c1Fainfix &lt;V17V1Aainfix &lt;=c0V17Iainfix =V17ainfix +V4c1FAa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FIainfix &lt;V10V1Aainfix &lt;=V4V10Aainfix &lt;V4V11FAainfix &lt;V7V1Aainfix &lt;=V4V7Aainfix &lt;V4V8Iainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FIainfix &lt;V4ainfix -V1c1Iainfix &lt;V4V1Aainfix &lt;=c0V4FAainfix &lt;V3V1Aainfix &lt;=c0V3Iainfix =V3c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0F">
     <label
-     name="expl:parameter sel_sort_ensures_default"/>
-    <label
      name="expl:Function sel_sort, default behavior"/>
+    <label
+     name="expl:VC for sel_sort_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -53,14 +60,6 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.19"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
@@ -68,20 +67,44 @@
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.09"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter sel_sort_ensures_permutation"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+    locfile="../../selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
-    expl="parameter sel_sort_ensures_permutation"
-    sum="23934bf80da127bb9c748d67c0b98ec2"
+    expl="VC for sel_sort_ensures_permutation"
+    sum="f4656b22ac724364879c198eb4d7a573"
     proved="true"
-    expanded="false"
+    expanded="true"
     shape="iainfix &lt;=V1c0a_PermutV0c0ainfix -V1c1V3V3iainfix &lt;V5ainfix -V1c1iainfix &lt;V12V1iainfix &lt;aselectV6ashiftV0V12V10a_PermutV0c0ainfix -V1c1V6V3Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fa_PermutV0c0ainfix -V1c1V6V3Iainfix =V16ainfix +V12c1Fa_PermutV0c0ainfix -V1c1V17V3Iainfix =V18ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V17V6Ianot_assignsV2V6V17apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V17V6FIainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Ia_PermutV0c0ainfix -V1c1V6V3FAa_PermutV0c0ainfix -V1c1V6V3Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_PermutV0c0ainfix -V1c1V6V3Iainfix &lt;V5V1Aainfix &lt;=c0V5Ia_PermutV0c0ainfix -V1c1V6V3FAa_PermutV0c0ainfix -V1c1V3V3Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
     <label
-     name="expl:parameter sel_sort_ensures_permutation"/>
-    <label
      name="expl:Function sel_sort, Behavior `permutation&apos;"/>
+    <label
+     name="expl:VC for sel_sort_ensures_permutation"/>
     <proof
      prover="0"
      timelimit="5"
@@ -91,14 +114,6 @@
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
@@ -106,45 +121,61 @@
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.09"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter sel_sort_ensures_sorted"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+    locfile="../../selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
-    expl="parameter sel_sort_ensures_sorted"
-    sum="5c71cf42ba6a0f676d13ca801c30aaa1"
+    expl="VC for sel_sort_ensures_sorted"
+    sum="ac24b77d1ecaf6555fc59fc42a62cc84"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=V1c0a_SortedV0c0V1V3iainfix &lt;V5ainfix -V1c1iainfix &lt;V12V1iainfix &lt;aselectV6ashiftV0V12V10ainfix &gt;=aselectV6ashiftV0V16V14Iainfix &lt;V16V15Aainfix &lt;=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fainfix &gt;=aselectV6ashiftV0V18V10Iainfix &lt;V18V17Aainfix &lt;=V5V18FAainfix =V10aselectV6ashiftV0V11Iainfix =V17ainfix +V12c1Fainfix &lt;=aselectV19ashiftV0V21aselectV19ashiftV0V22Iainfix &lt;V22V1Aainfix &lt;=V20V22Aainfix &lt;V21V20Aainfix &lt;=c0V21FFAa_SortedV0c0V20V19Iainfix =V20ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V19V6Ianot_assignsV2V6V19apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V19V6FIainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V23V10Iainfix &lt;V23V12Aainfix &lt;=V5V23FAainfix =V10aselectV6ashiftV0V11FAainfix &gt;=aselectV6ashiftV0V24V7Iainfix &lt;V24V9Aainfix &lt;=V5V24FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_SortedV0c0V1V6Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V25aselectV6ashiftV0V26Iainfix &lt;V26V1Aainfix &lt;=V5V26Aainfix &lt;V25V5Aainfix &lt;=c0V25FFAa_SortedV0c0V5V6FAainfix &lt;=aselectV3ashiftV0V27aselectV3ashiftV0V28Iainfix &lt;V28V1Aainfix &lt;=V4V28Aainfix &lt;V27V4Aainfix &lt;=c0V27FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
     <label
-     name="expl:parameter sel_sort_ensures_sorted"/>
-    <label
      name="expl:Function sel_sort, Behavior `sorted&apos;"/>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.21"/>
-    </proof>
+    <label
+     name="expl:VC for sel_sort_ensures_sorted"/>
     <transf
      name="split_goal"
      proved="true"
      expanded="true">
      <goal
       name="WP_parameter sel_sort_ensures_sorted.1"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+      locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
-      expl="normal postcondition"
-      sum="b6d5e1fd2eb7cdf2465c63aa51e802ad"
+      expl="1. postcondition"
+      sum="ad7c0334f84bd9954ebbdc1e2ea69002"
       proved="true"
       expanded="true"
       shape="a_SortedV0c0V1V3Iainfix &lt;=V1c0Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted"/>
-      <label
        name="expl:Function sel_sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for sel_sort_ensures_sorted"/>
       <proof
        prover="0"
        timelimit="5"
@@ -154,35 +185,51 @@
        <result status="valid" time="0.01"/>
       </proof>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.2"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+      locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
-      expl="loop invariant init"
-      sum="f936d6f9874b47525373fd72b35b4924"
+      expl="2. loop invariant init"
+      sum="6f20ad1497011137169ca3d822749a65"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aselectV3ashiftV0V5aselectV3ashiftV0V6Iainfix &lt;V6V1Aainfix &lt;=V4V6Aainfix &lt;V5V4Aainfix &lt;=c0V5FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted"/>
-      <label
        name="expl:Function sel_sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for sel_sort_ensures_sorted"/>
       <proof
        prover="0"
        timelimit="5"
@@ -190,14 +237,6 @@
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="1"
@@ -207,37 +246,53 @@
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
-     </goal>
-     <goal
-      name="WP_parameter sel_sort_ensures_sorted.3"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
-      loclnum="54" loccnumb="5" loccnume="13"
-      expl="loop invariant init"
-      sum="fb6d833b2ff29bd992f950d04af25d6b"
-      proved="true"
-      expanded="true"
-      shape="ainfix &gt;=aselectV6ashiftV0V10V7Iainfix &lt;V10V9Aainfix &lt;=V5V10FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V11aselectV6ashiftV0V12Iainfix &lt;V12V1Aainfix &lt;=V5V12Aainfix &lt;V11V5Aainfix &lt;=c0V11FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
-      <label
-       name="expl:parameter sel_sort_ensures_sorted"/>
-      <label
-       name="expl:Function sel_sort, Behavior `sorted&apos;"/>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
       <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
       </proof>
       <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter sel_sort_ensures_sorted.3"
+      locfile="../../selection_sort.c"
+      loclnum="54" loccnumb="5" loccnume="13"
+      expl="3. loop invariant init"
+      sum="bcdf4d0c909d107080bf7acd64e50ff3"
+      proved="true"
+      expanded="true"
+      shape="ainfix &gt;=aselectV6ashiftV0V10V7Iainfix &lt;V10V9Aainfix &lt;=V5V10FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V11aselectV6ashiftV0V12Iainfix &lt;V12V1Aainfix &lt;=V5V12Aainfix &lt;V11V5Aainfix &lt;=c0V11FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
+      <label
+       name="expl:Function sel_sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for sel_sort_ensures_sorted"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
@@ -245,20 +300,36 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.4"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+      locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
-      expl="loop invariant preservation"
-      sum="930bc09d0d3353c7a888f4984ab485c6"
+      expl="4. loop invariant preservation"
+      sum="d5ef4d6a1124052b95c529497bcc9e61"
       proved="true"
       expanded="true"
       shape="ainfix &gt;=aselectV6ashiftV0V16V14Iainfix &lt;V16V15Aainfix &lt;=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12FIainfix &lt;aselectV6ashiftV0V12V10Iainfix &lt;V12V1Iainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V17V10Iainfix &lt;V17V12Aainfix &lt;=V5V17FAainfix =V10aselectV6ashiftV0V11FIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix &lt;V19V1Aainfix &lt;=V5V19Aainfix &lt;V18V5Aainfix &lt;=c0V18FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted"/>
-      <label
        name="expl:Function sel_sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for sel_sort_ensures_sorted"/>
       <proof
        prover="0"
        timelimit="5"
@@ -268,14 +339,6 @@
        <result status="valid" time="0.23"/>
       </proof>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
@@ -283,20 +346,44 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.70"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.5"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+      locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
-      expl="loop invariant preservation"
-      sum="87709005a7d7d19b677761135c2dbb0c"
+      expl="5. loop invariant preservation"
+      sum="903e636775444c54ab3de86ec0654129"
       proved="true"
       expanded="true"
       shape="ainfix &gt;=aselectV6ashiftV0V14V10Iainfix &lt;V14V13Aainfix &lt;=V5V14FAainfix =V10aselectV6ashiftV0V11Iainfix =V13ainfix +V12c1FIainfix &lt;aselectV6ashiftV0V12V10NIainfix &lt;V12V1Iainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V15V10Iainfix &lt;V15V12Aainfix &lt;=V5V15FAainfix =V10aselectV6ashiftV0V11FIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V16aselectV6ashiftV0V17Iainfix &lt;V17V1Aainfix &lt;=V5V17Aainfix &lt;V16V5Aainfix &lt;=c0V16FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted"/>
-      <label
        name="expl:Function sel_sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for sel_sort_ensures_sorted"/>
       <proof
        prover="0"
        timelimit="5"
@@ -306,14 +393,6 @@
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
@@ -321,50 +400,82 @@
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.36"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.6"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+      locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
-      expl="loop invariant preservation"
-      sum="0cdce63115e87c69befc2d660c3852e8"
+      expl="6. loop invariant preservation"
+      sum="db4d5462ba85572232a5adde422ee80a"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aselectV13ashiftV0V15aselectV13ashiftV0V16Iainfix &lt;V16V1Aainfix &lt;=V14V16Aainfix &lt;V15V14Aainfix &lt;=c0V15FFAa_SortedV0c0V14V13Iainfix =V14ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V13V6Ianot_assignsV2V6V13apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V13V6FIainfix &lt;V12V1NIainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V17V10Iainfix &lt;V17V12Aainfix &lt;=V5V17FAainfix =V10aselectV6ashiftV0V11FIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix &lt;V19V1Aainfix &lt;=V5V19Aainfix &lt;V18V5Aainfix &lt;=c0V18FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted"/>
-      <label
        name="expl:Function sel_sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for sel_sort_ensures_sorted"/>
       <proof
        prover="0"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="2.22"/>
+       <result status="valid" time="3.34"/>
       </proof>
       <proof
-       prover="2"
+       prover="3"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.43"/>
+       <result status="valid" time="0.17"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.14"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.7"
-      locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+      locfile="../../selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
-      expl="normal postcondition"
-      sum="bfb7b1d4c7622c65350673f7c8b1fab8"
+      expl="7. postcondition"
+      sum="229cede5f9706f4d448ec5d2497c028f"
       proved="true"
       expanded="true"
       shape="a_SortedV0c0V1V6Iainfix &lt;V5ainfix -V1c1NIainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V7aselectV6ashiftV0V8Iainfix &lt;V8V1Aainfix &lt;=V5V8Aainfix &lt;V7V5Aainfix &lt;=c0V7FFAa_SortedV0c0V5V6FIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted"/>
-      <label
        name="expl:Function sel_sort, Behavior `sorted&apos;"/>
+      <label
+       name="expl:VC for sel_sort_ensures_sorted"/>
       <proof
        prover="0"
        timelimit="5"
@@ -374,14 +485,6 @@
        <result status="valid" time="0.01"/>
       </proof>
       <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
        prover="1"
        timelimit="5"
        memlimit="0"
@@ -389,22 +492,46 @@
        archived="false">
        <result status="valid" time="0.06"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.31"/>
+      </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter sel_sort_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+    locfile="../../selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
-    expl="parameter sel_sort_safety"
-    sum="aa2440e949ba44000776a942eecfa5a5"
+    expl="VC for sel_sort_safety"
+    sum="a885d09d2b302a6d2bfb0216e7528b5e"
     proved="true"
     expanded="true"
     shape="iainfix &lt;V11V1iainfix &lt;aselectV5ashiftV0V11V9ainfix &lt;ainfix -V1V14ainfix -V1V11Aainfix &lt;=c0ainfix -V1V11Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FAainfix &lt;=V11aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V11Iainfix =V12V11Fainfix &lt;ainfix -V1V15ainfix -V1V11Aainfix &lt;=c0ainfix -V1V11Iainfix =V15ainfix +V11c1FAainfix &lt;=V11aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V11ainfix &lt;ainfix -V1V17ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V17ainfix +V4c1FIa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FAainfix &gt;=aoffset_maxV2V0V10Aainfix &lt;=aoffset_minV2V0V10Aainfix &gt;=aoffset_maxV2V0V4Aainfix &lt;=aoffset_minV2V0V4Iainfix &lt;V10V1Aainfix &lt;=V4V10Aainfix &lt;V4V11FIainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Iainfix &lt;V4ainfix -V1c1Iainfix &lt;V4V1Aainfix &lt;=c0V4FIainfix =V3c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0F">
     <label
-     name="expl:parameter sel_sort_safety"/>
-    <label
      name="expl:Function sel_sort, Safety"/>
+    <label
+     name="expl:VC for sel_sort_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -414,14 +541,6 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.07"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
@@ -429,35 +548,51 @@
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter swap_ensures_default"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+    locfile="../../selection_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
-    expl="normal postcondition"
-    sum="b8cd7e74c2e07c7349aa65f15c6293fa"
+    expl="VC for swap_ensures_default"
+    sum="a3f07b8e1b3bf692c943583e19854410"
     proved="true"
     expanded="true"
     shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
     <label
-     name="expl:parameter swap_ensures_default"/>
-    <label
      name="expl:Function swap, default behavior"/>
+    <label
+     name="expl:VC for swap_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.77"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.34"/>
+     <result status="valid" time="1.02"/>
     </proof>
     <proof
      prover="1"
@@ -465,22 +600,46 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.58"/>
+     <result status="valid" time="0.88"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="1.30"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.59"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
-    locfile="/home/cmarche/recherche/why2-trunk/tests/c/selection_sort.c"
+    locfile="../../selection_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
-    expl="parameter swap_safety"
-    sum="1a3464f15313d310ddb8b58f738b4997"
+    expl="VC for swap_safety"
+    sum="e2e73b55bf034ee705fad1f6e29fa8f8"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
     <label
-     name="expl:parameter swap_safety"/>
-    <label
      name="expl:Function swap, Safety"/>
+    <label
+     name="expl:VC for swap_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -490,20 +649,36 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
   </theory>

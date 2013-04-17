@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -27,7 +27,7 @@
     locfile="../Fact.java"
     loclnum="18" loccnumb="22" loccnume="26"
     expl="VC for _Fact_fact_ensures_default"
-    sum="ec5e7b7bf51f263f4af005d9a3ecb8ad"
+    sum="21cb273fbd30a5d266ba5db4c88429a7"
     proved="true"
     expanded="true"
     shape="iainfix &lt;V2V0aisfactV3V4Aainfix &lt;=V3V0Aainfix &lt;=c0V3Iainfix =V4ainfix *V1V3FIainfix =V3ainfix +V2c1FaisfactV0V5Iainfix =V5V1FIaisfactV2V1Aainfix &lt;=V2V0Aainfix &lt;=c0V2FAaisfactc0c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
@@ -49,7 +49,7 @@
     locfile="../Fact.java"
     loclnum="18" loccnumb="22" loccnume="26"
     expl="VC for _Fact_fact_safety"
-    sum="9ea0761038d7de3ef1d8b4911afd961b"
+    sum="18177c70fc8b8f84ba99e799ae8b0a78"
     proved="true"
     expanded="true"
     shape="ainfix &lt;ainfix -V0V3ainfix -V0V2Aainfix &lt;=c0ainfix -V0V2Iainfix =V4ainfix *V1V3FIainfix =V3ainfix +V2c1FIainfix &lt;V2V0IaisfactV2V1Aainfix &lt;=V2V0Aainfix &lt;=c0V2FIainfix &gt;=V0c0F">
@@ -71,7 +71,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fact_ensures_default"
-    sum="89ba889d523615509386f7604986394a"
+    sum="712d58c16c7dc031337c2cfe51b946f4"
     proved="true"
     expanded="true"
     shape="t">
@@ -93,7 +93,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fact_safety"
-    sum="841bafb496959db9f1916bab9ff1d803"
+    sum="712d58c16c7dc031337c2cfe51b946f4"
     proved="true"
     expanded="true"
     shape="t">

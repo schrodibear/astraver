@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -16,40 +16,40 @@
  <prover
   id="3"
   name="Gappa"
-  version="0.16.1"/>
+  version="0.16.6"/>
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../my_cosine.mlw"
-  verified="false"
+  verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
    locfile="../my_cosine.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
-   verified="false"
+   verified="true"
    expanded="true">
    <goal
     name="method_error"
     locfile="../../my_cosine.c"
     loclnum="36" loccnumb="4" loccnume="111"
     expl="Lemma method_error, lemma"
-    sum="c9c302ed64715c5ebbe73ea6de989205"
-    proved="false"
+    sum="a1c8ab89517c5546c10b6bf99fe5dbeb"
+    proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.p-24Iainfix &lt;=aabsV0c0x1.p-5F">
     <label
      name="expl:Lemma method_error, lemma"/>
     <proof
      prover="2"
-     timelimit="14"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      edited="my_cosine_Jessie_model_method_error_2.v"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="3.20"/>
+     <result status="valid" time="6.58"/>
     </proof>
    </goal>
   </theory>
@@ -57,14 +57,14 @@
    name="Jessie_program"
    locfile="../my_cosine.mlw"
    loclnum="218" loccnumb="7" loccnume="21"
-   verified="false"
+   verified="true"
    expanded="true">
    <goal
     name="WP_parameter my_cos1_ensures_default"
     locfile="../../my_cosine.c"
     loclnum="43" loccnumb="6" loccnume="13"
     expl="VC for my_cos1_ensures_default"
-    sum="f9d359291b9668a94bf45313bdcedd27"
+    sum="41c4c79c576fd2d99aceb67fcd507d3b"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FAainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -81,7 +81,7 @@
       locfile="../../my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="1. assertion"
-      sum="85e6687c4cc9a9188d978064b65e27c2"
+      sum="e90f3742b8e475e0189720da9b27025d"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -111,7 +111,7 @@
       locfile="../../my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="2. postcondition"
-      sum="1ec40d072da84eca3e65f6d7c8551930"
+      sum="70c37ff7d014bb2fc764c293ae1dda91"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -135,7 +135,7 @@
     locfile="../../my_cosine.c"
     loclnum="43" loccnumb="6" loccnume="13"
     expl="VC for my_cos1_safety"
-    sum="3f0e9a21c2511c36134cc3f8d1427657"
+    sum="902b5552074917d8666e84c2c4c4bc69"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -152,7 +152,7 @@
       locfile="../../my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="1. floating-point overflow"
-      sum="c50ae5241153d25259612f974944dd13"
+      sum="b750ac3a3d8e4cd63ea7a9bcae7a00d9"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -174,7 +174,7 @@
       locfile="../../my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="2. floating-point overflow"
-      sum="0c0a8fe75b3ab259cc3bdb7b80f63ceb"
+      sum="34fe74e26a552f1fce7af71e3833bbe5"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -196,7 +196,7 @@
       locfile="../../my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="3. floating-point overflow"
-      sum="ac12c459bf8d1fefda04a707679015dc"
+      sum="2a460d1a0f37065709951d2adebd1b07"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -218,9 +218,9 @@
    <goal
     name="WP_parameter my_cos2_ensures_default"
     locfile="../../my_cosine.c"
-    loclnum="51" loccnumb="6" loccnume="13"
+    loclnum="52" loccnumb="6" loccnume="13"
     expl="VC for my_cos2_ensures_default"
-    sum="e60939fddd1bf871a2652328141cd5f3"
+    sum="faa006bc9dc70a227635097493dc1ae1"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FAainfix &lt;=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FAainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -235,9 +235,9 @@
      <goal
       name="WP_parameter my_cos2_ensures_default.1"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="1. assertion"
-      sum="53a673c24d3ade4753476c9b98502575"
+      sum="8c3c9371f968780ee8e4b2146375e591"
       proved="true"
       expanded="true"
       shape="ainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -257,9 +257,9 @@
      <goal
       name="WP_parameter my_cos2_ensures_default.2"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="2. assertion"
-      sum="36aa92a9c42ad7160119601c2983c0a7"
+      sum="37b1f1b71b549d7d505c2c5c013017c7"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -287,9 +287,9 @@
      <goal
       name="WP_parameter my_cos2_ensures_default.3"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="3. postcondition"
-      sum="b4b3fde725a306be3cfa7a74cfd38923"
+      sum="0b414812c5daa827564a10b5d4e5d915"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix &lt;=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -311,9 +311,9 @@
    <goal
     name="WP_parameter my_cos2_safety"
     locfile="../../my_cosine.c"
-    loclnum="51" loccnumb="6" loccnume="13"
+    loclnum="52" loccnumb="6" loccnume="13"
     expl="VC for my_cos2_safety"
-    sum="f827bd7718d77fe0bdf83c9078751b31"
+    sum="f9358e9a30bbaf98e2f3c7839b84ca89"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -328,9 +328,9 @@
      <goal
       name="WP_parameter my_cos2_safety.1"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="1. floating-point overflow"
-      sum="e13626a0ffe362a2b4f450ee87190d1d"
+      sum="0e281ec80a60e5e67132b798daaf7245"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -350,9 +350,9 @@
      <goal
       name="WP_parameter my_cos2_safety.2"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="2. floating-point overflow"
-      sum="8544fb6d54bb8ea05baccd4a1391f40d"
+      sum="77c0f3df7c76b61e2c74d385174dbef3"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -372,9 +372,9 @@
      <goal
       name="WP_parameter my_cos2_safety.3"
       locfile="../../my_cosine.c"
-      loclnum="51" loccnumb="6" loccnume="13"
+      loclnum="52" loccnumb="6" loccnume="13"
       expl="3. floating-point overflow"
-      sum="933c18d18c813c9d218cd6262557b0ae"
+      sum="f745cb938e7b5f3933510c72e8906c43"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
@@ -396,9 +396,9 @@
    <goal
     name="WP_parameter my_cos3_ensures_default"
     locfile="../../my_cosine.c"
-    loclnum="64" loccnumb="6" loccnume="13"
+    loclnum="65" loccnumb="6" loccnume="13"
     expl="VC for my_cos3_ensures_default"
-    sum="afd6eab0161c5f6aa348f36b7824b33f"
+    sum="52ccc070044fdef46b26c13d098eb5dc"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix &lt;=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FAainfix &lt;=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
@@ -413,9 +413,9 @@
      <goal
       name="WP_parameter my_cos3_ensures_default.1"
       locfile="../../my_cosine.c"
-      loclnum="64" loccnumb="6" loccnume="13"
+      loclnum="65" loccnumb="6" loccnume="13"
       expl="1. assertion"
-      sum="4ccaf36a7b698926ab442b7e76c8acea"
+      sum="cdbb87de9e8c8f70264e8f55c9f4787c"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
@@ -443,9 +443,9 @@
      <goal
       name="WP_parameter my_cos3_ensures_default.2"
       locfile="../../my_cosine.c"
-      loclnum="64" loccnumb="6" loccnume="13"
+      loclnum="65" loccnumb="6" loccnume="13"
       expl="2. postcondition"
-      sum="f10f4937cfbffffb76800fe39c15d186"
+      sum="5782f5c29b1fcb0631cbabddae45243c"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix &lt;=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FIainfix &lt;=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
@@ -467,9 +467,9 @@
    <goal
     name="WP_parameter my_cos3_safety"
     locfile="../../my_cosine.c"
-    loclnum="64" loccnumb="6" loccnume="13"
+    loclnum="65" loccnumb="6" loccnume="13"
     expl="VC for my_cos3_safety"
-    sum="2388498c84cdaaea56cba331ce1b99cd"
+    sum="8c90b166e149d750a0ecfef55c057fca"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
@@ -484,9 +484,9 @@
      <goal
       name="WP_parameter my_cos3_safety.1"
       locfile="../../my_cosine.c"
-      loclnum="64" loccnumb="6" loccnume="13"
+      loclnum="65" loccnumb="6" loccnume="13"
       expl="1. floating-point overflow"
-      sum="aa9ff5d294b6013acf74a2f39c19713a"
+      sum="8d376848cf9fe284262c110b49619f8a"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
@@ -506,9 +506,9 @@
      <goal
       name="WP_parameter my_cos3_safety.2"
       locfile="../../my_cosine.c"
-      loclnum="64" loccnumb="6" loccnume="13"
+      loclnum="65" loccnumb="6" loccnume="13"
       expl="2. floating-point overflow"
-      sum="3063f521212603f8f912c483bc79783a"
+      sum="3fecfc58ff1c05aecea9a2345b2c586d"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
@@ -528,9 +528,9 @@
      <goal
       name="WP_parameter my_cos3_safety.3"
       locfile="../../my_cosine.c"
-      loclnum="64" loccnumb="6" loccnume="13"
+      loclnum="65" loccnumb="6" loccnume="13"
       expl="3. floating-point overflow"
-      sum="d65a8df50b4307bbde168787b267dd3c"
+      sum="09aed1236d450b76cec4a7bf0f2bd31b"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
@@ -552,10 +552,10 @@
    <goal
     name="WP_parameter my_cos4_ensures_default"
     locfile="../../my_cosine.c"
-    loclnum="73" loccnumb="6" loccnume="13"
+    loclnum="74" loccnumb="6" loccnume="13"
     expl="VC for my_cos4_ensures_default"
-    sum="d72ad3df72341c7aa3c1e38de40efbdc"
-    proved="false"
+    sum="bd4f79ec787ff0994e21fa0e437b137e"
+    proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FAainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
     <label
@@ -564,15 +564,15 @@
      name="expl:VC for my_cos4_ensures_default"/>
     <transf
      name="split_goal"
-     proved="false"
+     proved="true"
      expanded="true">
      <goal
       name="WP_parameter my_cos4_ensures_default.1"
       locfile="../../my_cosine.c"
-      loclnum="73" loccnumb="6" loccnume="13"
+      loclnum="74" loccnumb="6" loccnume="13"
       expl="1. assertion"
-      sum="a75b5ce05b4ea19d471deafef6ff0f2a"
-      proved="false"
+      sum="f11a68cf2b6e661ce0abcdcde1673c94"
+      proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
       <label
@@ -581,20 +581,20 @@
        name="expl:VC for my_cos4_ensures_default"/>
       <proof
        prover="2"
-       timelimit="13"
-       memlimit="0"
+       timelimit="5"
+       memlimit="1000"
        edited="my_cosine_WP_Jessie_program_WP_parameter_my_cos4_ensures_default_2.v"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="3.20"/>
+       <result status="valid" time="6.23"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos4_ensures_default.2"
       locfile="../../my_cosine.c"
-      loclnum="73" loccnumb="6" loccnume="13"
+      loclnum="74" loccnumb="6" loccnume="13"
       expl="2. postcondition"
-      sum="6e626a1518f4ac9cdcffc9fcc845ef12"
+      sum="2b5ce097c1a3b70441c9f0169fe75f18"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
@@ -616,9 +616,9 @@
    <goal
     name="WP_parameter my_cos4_safety"
     locfile="../../my_cosine.c"
-    loclnum="73" loccnumb="6" loccnume="13"
+    loclnum="74" loccnumb="6" loccnume="13"
     expl="VC for my_cos4_safety"
-    sum="e4ecc0bed4fe86d3217fe5d2a57ae68c"
+    sum="36fa5a3a08a6ccdc366f3b2f5ecfa33d"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
@@ -633,9 +633,9 @@
      <goal
       name="WP_parameter my_cos4_safety.1"
       locfile="../../my_cosine.c"
-      loclnum="73" loccnumb="6" loccnume="13"
+      loclnum="74" loccnumb="6" loccnume="13"
       expl="1. floating-point overflow"
-      sum="eda412ea1d45197afabeca475cb50af8"
+      sum="385fa64f09a276bf194f1cac21ace9f7"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
@@ -655,9 +655,9 @@
      <goal
       name="WP_parameter my_cos4_safety.2"
       locfile="../../my_cosine.c"
-      loclnum="73" loccnumb="6" loccnume="13"
+      loclnum="74" loccnumb="6" loccnume="13"
       expl="2. floating-point overflow"
-      sum="8dc3724db80a5294ab6511358e64320e"
+      sum="1fb7e237c391f45edead0d7ff59dd3f7"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
@@ -677,9 +677,9 @@
      <goal
       name="WP_parameter my_cos4_safety.3"
       locfile="../../my_cosine.c"
-      loclnum="73" loccnumb="6" loccnume="13"
+      loclnum="74" loccnumb="6" loccnume="13"
       expl="3. floating-point overflow"
-      sum="d50f048a5ab160bd3cb1fb147db4bc55"
+      sum="c5ed48b3ed78e4847a72b95864007186"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">

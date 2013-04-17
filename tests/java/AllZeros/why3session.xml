@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="AllZeros/why3session.xml" shape_version="2">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="2">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,49 +16,41 @@
  <prover
   id="3"
   name="Z3"
-  version="2.19"/>
+  version="3.2"/>
  <prover
   id="4"
   name="Z3"
-  version="3.2"/>
+  version="4.3.1"/>
  <file
   name="../AllZeros.mlw"
   verified="false"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
-   locfile="AllZeros/../AllZeros.mlw"
+   locfile="../AllZeros.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="Jessie_program"
-   locfile="AllZeros/../AllZeros.mlw"
+   locfile="../AllZeros.mlw"
    loclnum="315" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
    <goal
     name="WP_parameter _AllZeros_all_zeros_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
+    locfile="../AllZeros.java"
     loclnum="44" loccnumb="19" loccnume="28"
-    expl="parameter _AllZeros_all_zeros_ensures_default"
-    sum="5552d9c34599a899fa4745b25177f056"
+    expl="VC for _AllZeros_all_zeros_ensures_default"
+    sum="a9d71ed757ef64a77d2ee972c13cc3d1"
     proved="true"
     expanded="true"
     shape="iainfix &lt;ainteger_of_int32V4V5iainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0Nainfix =ainteger_of_int32aselectV1ashiftV0V7c0Iainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Fqainfix =V6aTrueIainfix =V6aFalseFainfix =ainteger_of_int32aselectV1ashiftV0V10c0Iainfix &lt;V10ainteger_of_int32V9Aainfix &lt;=c0V10FAainfix &lt;=ainteger_of_int32V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix +ainteger_of_int32V4c1Fainfix =ainteger_of_int32aselectV1ashiftV0V12c0Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V12Fqainfix =V11aTrueIainfix =V11aTrueFIainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Iainfix =ainteger_of_int32aselectV1ashiftV0V13c0Iainfix &lt;V13ainteger_of_int32V4Aainfix &lt;=c0V13FAainfix &lt;=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V4FAainfix =ainteger_of_int32aselectV1ashiftV0V14c0Iainfix &lt;V14ainteger_of_int32V3Aainfix &lt;=c0V14FAainfix &lt;=ainteger_of_int32V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V3Iainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
-     name="expl:parameter _AllZeros_all_zeros_ensures_default"/>
-    <label
      name="expl:Method all_zeros, default behavior"/>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
+    <label
+     name="expl:VC for _AllZeros_all_zeros_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -76,28 +67,44 @@
      archived="false">
      <result status="valid" time="0.10"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _AllZeros_all_zeros_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
-    loclnum="44" loccnumb="19" loccnume="28"
-    expl="index bounds"
-    sum="9f22c6531a1af3cece86609afba67815"
-    proved="true"
-    expanded="true"
-    shape="ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V7ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Iainfix =V7V6FIainfix =ainteger_of_int32V6ainfix +ainteger_of_int32V4c1FAainfix &lt;=ainfix +ainteger_of_int32V4c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V4c1Iainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0Aainfix &lt;=ainteger_of_int32V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainteger_of_int32V4Iainfix &lt;ainteger_of_int32V4V5Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix =ainteger_of_int32aselectV1ashiftV0V8c0Iainfix &lt;V8ainteger_of_int32V4Aainfix &lt;=c0V8FAainfix &lt;=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V4FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
-    <label
-     name="expl:parameter _AllZeros_all_zeros_safety"/>
-    <label
-     name="expl:Method all_zeros, Safety"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.16"/>
+    </proof>
     <proof
      prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="timeout" time="5.19"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _AllZeros_all_zeros_safety"
+    locfile="../AllZeros.java"
+    loclnum="44" loccnumb="19" loccnume="28"
+    expl="index bounds"
+    sum="0d5f6466ce2cb1c5d154c8b561daa39f"
+    proved="true"
+    expanded="true"
+    shape="ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V7ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Iainfix =V7V6FIainfix =ainteger_of_int32V6ainfix +ainteger_of_int32V4c1FAainfix &lt;=ainfix +ainteger_of_int32V4c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V4c1Iainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0Aainfix &lt;=ainteger_of_int32V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainteger_of_int32V4Iainfix &lt;ainteger_of_int32V4V5Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix =ainteger_of_int32aselectV1ashiftV0V8c0Iainfix &lt;V8ainteger_of_int32V4Aainfix &lt;=c0V8FAainfix &lt;=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V4FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    <label
+     name="expl:Method all_zeros, Safety"/>
+    <label
+     name="expl:VC for _AllZeros_all_zeros_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -114,28 +121,44 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
-   </goal>
-   <goal
-    name="WP_parameter _AllZeros_should_not_be_proved_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
-    loclnum="34" loccnumb="15" loccnume="35"
-    expl="normal postcondition"
-    sum="43a04db3dee4d530ee8052cd41185fc0"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter _AllZeros_should_not_be_proved_ensures_default"/>
-    <label
-     name="expl:Method should_not_be_proved, default behavior"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
     <proof
      prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="4"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.05"/>
     </proof>
+   </goal>
+   <goal
+    name="WP_parameter _AllZeros_should_not_be_proved_ensures_default"
+    locfile="../AllZeros.java"
+    loclnum="34" loccnumb="15" loccnume="35"
+    expl="VC for _AllZeros_should_not_be_proved_ensures_default"
+    sum="c93f02bf2618f9921b1b747779476e24"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Method should_not_be_proved, default behavior"/>
+    <label
+     name="expl:VC for _AllZeros_should_not_be_proved_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -152,45 +175,61 @@
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
    </goal>
    <goal
     name="WP_parameter _AllZeros_should_not_be_proved_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
+    locfile="../AllZeros.java"
     loclnum="34" loccnumb="15" loccnume="35"
     expl="index bounds"
-    sum="b09785672c5bc83a7c95086b942da77b"
+    sum="e6b80267e65ce7760dc21b4b11c48c7b"
     proved="false"
     expanded="true"
     shape="ainfix &lt;=V2c2147483647Aainfix &lt;=aprefix -c2147483648V2Iainfix &gt;=V2c0Aainfix &lt;=V2c2147483647Lainfix +aoffset_maxV1V0c1Aainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
     <label
-     name="expl:parameter _AllZeros_should_not_be_proved_safety"/>
-    <label
      name="expl:Method should_not_be_proved, Safety"/>
+    <label
+     name="expl:VC for _AllZeros_should_not_be_proved_safety"/>
     <transf
      name="split_goal"
      proved="false"
      expanded="true">
      <goal
       name="WP_parameter _AllZeros_should_not_be_proved_safety.1"
-      locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
+      locfile="../AllZeros.java"
       loclnum="34" loccnumb="15" loccnume="35"
-      expl="assertion"
-      sum="f5277f682d1bbace70b773ba6ade7431"
+      expl="1. assertion"
+      sum="3b4abdf4da02cd4651212e090b7adddd"
       proved="false"
       expanded="true"
       shape="ainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
       <label
-       name="expl:parameter _AllZeros_should_not_be_proved_safety"/>
-      <label
        name="expl:Method should_not_be_proved, Safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.02"/>
-      </proof>
+      <label
+       name="expl:VC for _AllZeros_should_not_be_proved_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -205,15 +244,23 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="0.63"/>
+       <result status="unknown" time="1.16"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="timeout" time="5.02"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.03"/>
       </proof>
       <proof
        prover="4"
@@ -221,30 +268,22 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.03"/>
+       <result status="timeout" time="5.02"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _AllZeros_should_not_be_proved_safety.2"
-      locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
+      locfile="../AllZeros.java"
       loclnum="34" loccnumb="15" loccnume="35"
-      expl="precondition"
-      sum="96f527752f5d571f7e8e98ae677dc8c5"
+      expl="2. arithmetic overflow"
+      sum="7c095d2e57e1f129afa05b9611ae6aae"
       proved="true"
       expanded="true"
       shape="ainfix &lt;=V2c2147483647Aainfix &lt;=aprefix -c2147483648V2Iainfix &gt;=V2c0Aainfix &lt;=V2c2147483647Lainfix +aoffset_maxV1V0c1Iainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
       <label
-       name="expl:parameter _AllZeros_should_not_be_proved_safety"/>
-      <label
        name="expl:Method should_not_be_proved, Safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
+      <label
+       name="expl:VC for _AllZeros_should_not_be_proved_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -261,30 +300,46 @@
        archived="false">
        <result status="valid" time="0.03"/>
       </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter cons_AllZeros_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="146c039099ed15931c83d0a647babfa0"
+    expl="VC for cons_AllZeros_ensures_default"
+    sum="c93f02bf2618f9921b1b747779476e24"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_AllZeros_ensures_default"/>
-    <label
      name="expl:Constructor of class AllZeros, default behavior"/>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for cons_AllZeros_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
@@ -300,29 +355,45 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_AllZeros_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="normal postcondition"
-    sum="1d08b8b439bf1637c407dd24ae57934f"
+    expl="VC for cons_AllZeros_safety"
+    sum="c93f02bf2618f9921b1b747779476e24"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_AllZeros_safety"/>
-    <label
      name="expl:Constructor of class AllZeros, Safety"/>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
+    <label
+     name="expl:VC for cons_AllZeros_safety"/>
     <proof
      prover="0"
      timelimit="5"
@@ -338,6 +409,30 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

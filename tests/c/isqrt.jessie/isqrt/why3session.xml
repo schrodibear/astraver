@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../isqrt.mlw"
   verified="true"
@@ -43,7 +43,7 @@
     locfile="../../isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="VC for isqrt_ensures_default"
-    sum="0dbaebbbb670556ef5e0c0bae0dedd24"
+    sum="892a19ec03273902c4d9b096ebe5b02e"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=V3V0ainfix =V6asqrainfix +V5c1Aainfix &gt;=V0asqrV5Aainfix &gt;=V5c0Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1Fainfix &lt;V0asqrainfix +V7c1Aainfix &lt;=asqrV7V0Aainfix &gt;=V7c0Iainfix =V7V4FIainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FAainfix =V2asqrainfix +V1c1Aainfix &gt;=V0asqrV1Aainfix &gt;=V1c0Iainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
@@ -73,7 +73,7 @@
     locfile="../../isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="VC for isqrt_safety"
-    sum="8fa0ff56b29ea8e79e642ce3b6b7cd8f"
+    sum="aeb99fabbceffac334286688f494547c"
     proved="true"
     expanded="true"
     shape="ainfix &lt;ainfix -V0V5ainfix -V0V4Aainfix &lt;=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FIainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
@@ -90,7 +90,7 @@
       locfile="../../isqrt.c"
       loclnum="40" loccnumb="4" loccnume="9"
       expl="1. loop variant decrease"
-      sum="8fa0ff56b29ea8e79e642ce3b6b7cd8f"
+      sum="aeb99fabbceffac334286688f494547c"
       proved="true"
       expanded="true"
       shape="ainfix &lt;ainfix -V0V5ainfix -V0V4Aainfix &lt;=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FIainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
@@ -130,7 +130,7 @@
     locfile="../../isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
     expl="VC for main_ensures_default"
-    sum="1365ca032200fe4892c615642f32edeb"
+    sum="04ee3e7ce89a8ffa1d64dea1820de48c"
     proved="true"
     expanded="true"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix &gt;V1c4NAainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -163,7 +163,7 @@
       locfile="../../isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="1. assertion"
-      sum="806bedb58f7c4dfe12f0eb6fc7dcb59a"
+      sum="8776bbdaa331462270cfede3e90e62d7"
       proved="true"
       expanded="false"
       shape="ainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -201,7 +201,7 @@
       locfile="../../isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="2. assertion"
-      sum="c988f4ddbe4270bf8a39a9409c8c7696"
+      sum="c9ee46787227decf28525852ed750ecb"
       proved="true"
       expanded="false"
       shape="ainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -231,7 +231,7 @@
       locfile="../../isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="3. postcondition"
-      sum="3d21b1c2f5954715629754dcf7b7de47"
+      sum="bd5f36e769024d4037c6f9e552bc4fee"
       proved="true"
       expanded="false"
       shape="ainfix =V2c4Iainfix =V2V1FIainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
@@ -287,7 +287,7 @@
     locfile="../../isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
     expl="VC for main_safety"
-    sum="e5f0f010842cb9a86f43ae16ebf9f168"
+    sum="0ac3b8c4dc03dcdd6111ebfa1ca8e34c"
     proved="true"
     expanded="true"
     shape="ainfix &gt;=c17c0">

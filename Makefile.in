@@ -314,7 +314,6 @@ jc/jc_stdlib.ml: jc/jc_stdlib_lt312.ml jc/jc_stdlib_ge312.ml jc/jc_stdlib_ge40.m
 	case $(OCAMLVERSION) in \
          3.0*|3.10*|3.11*) cp jc/jc_stdlib_lt312.ml $@ ;; \
          3.12*) cp jc/jc_stdlib_ge312.ml $@ ;; \
-#	 4.*) cp jc/jc_stdlib_ge400.ml $@ ;; \
          4.0*) cp jc/jc_stdlib_ge40.ml $@ ;; \
         esac
 	chmod -w $@

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -20,7 +20,7 @@
  <prover
   id="4"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../fresh2_sep.mlw"
   verified="false"
@@ -43,7 +43,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="15" loccnumb="4" loccnume="10"
     expl="VC for create_ensures_default"
-    sum="a7611513d7e10d0c393bb360ce49231d"
+    sum="f8c0d23102c91d8594709b6b5ee2a110"
     proved="true"
     expanded="true"
     shape="avalidV0V5NAainfix &gt;=aoffset_maxV2V5c0Aainfix &lt;=aoffset_minV2V5c0Iainfix =V5V4FIainfix =V4V3FIainstanceofV1V3a_Str_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_StrV3c0ainfix -c1c1V2FFF">
@@ -81,7 +81,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.19"/>
+     <result status="timeout" time="5.11"/>
     </proof>
     <proof
      prover="4"
@@ -97,7 +97,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="15" loccnumb="4" loccnume="10"
     expl="VC for create_safety"
-    sum="72a70da641425ba2a958a80faeced8f9"
+    sum="ec1bbb44bbca6c31f437aed71ad7b2d3"
     proved="true"
     expanded="true"
     shape="ainfix &gt;=c1c0">
@@ -151,7 +151,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="29" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_ensures_default"
-    sum="1cfb0c388e15ded5ca92a12756f8b9d2"
+    sum="eb32b7ef4669e23fa88c04392483a9c6"
     proved="false"
     expanded="true"
     shape="ainfix =c0c1Iainfix =V6V5FIavalidV1V5NAainfix &gt;=aoffset_maxV4V5c0Aainfix &lt;=aoffset_minV4V5c0FFIainfix =V3V2FIavalidV0V2NAainfix &gt;=aoffset_maxV1V2c0Aainfix &lt;=aoffset_minV1V2c0FFF">
@@ -181,7 +181,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.26"/>
+     <result status="timeout" time="5.16"/>
     </proof>
     <proof
      prover="3"
@@ -189,7 +189,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.21"/>
+     <result status="timeout" time="5.16"/>
     </proof>
     <proof
      prover="4"
@@ -197,7 +197,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.27"/>
+     <result status="timeout" time="5.17"/>
     </proof>
    </goal>
    <goal
@@ -205,7 +205,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="29" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_safety"
-    sum="1220773bbfdb7f42db229c22b5415deb"
+    sum="701d2d09a3c0e820ddf6fbe0c7b2f1c4"
     proved="true"
     expanded="true"
     shape="t">
@@ -259,7 +259,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="23" loccnumb="5" loccnume="9"
     expl="VC for test_ensures_default"
-    sum="82b0a236846e972367f33b01dc223484"
+    sum="05a928c5be67388f7011fefd6530fdc3"
     proved="true"
     expanded="true"
     shape="ainfix =V0V4NIainfix =V4V3FIavalidV1V3NAainfix &gt;=aoffset_maxV2V3c0Aainfix &lt;=aoffset_minV2V3c0FFIainfix &gt;=aoffset_maxV1V0c0Aainfix &lt;=aoffset_minV1V0c0FF">
@@ -313,7 +313,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="23" loccnumb="5" loccnume="9"
     expl="VC for test_safety"
-    sum="d7c6b2cb43466f5505c817febd751f05"
+    sum="701d2d09a3c0e820ddf6fbe0c7b2f1c4"
     proved="true"
     expanded="true"
     shape="t">

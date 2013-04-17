@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -12,7 +12,7 @@
  <prover
   id="2"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../NameConflicts.mlw"
   verified="true"
@@ -35,7 +35,7 @@
     locfile="../NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
     expl="VC for _NameConflicts_field_ensures_default"
-    sum="508c398a60164dab3b521c51e9228fa9"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -73,7 +73,7 @@
     locfile="../NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
     expl="VC for _NameConflicts_field_safety"
-    sum="b2fdda03bd17cca286272bbb8b1d115c"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -111,7 +111,7 @@
     locfile="../NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="VC for _NameConflicts_m_ensures_default"
-    sum="62df29de3e63d6501b9512e4ce88c1a1"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,7 +149,7 @@
     locfile="../NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="VC for _NameConflicts_m_ensures_normal"
-    sum="812f3c831338f95a5af28c5b41358351"
+    sum="e449ef186f77efeb88543fbba0f96859"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c0Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
@@ -187,7 +187,7 @@
     locfile="../NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="VC for _NameConflicts_m_safety"
-    sum="9833d8b3490dd4213e10164b92ad5946"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -225,7 +225,7 @@
     locfile="../NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
     expl="VC for _NameConflicts_setI_ensures_default"
-    sum="1b2f032b557f3326d53c004e10fc8dda"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -263,7 +263,7 @@
     locfile="../NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
     expl="VC for _NameConflicts_setI_safety"
-    sum="17900041530f4c410e08ec97c8847066"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -301,7 +301,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_NameConflicts_ensures_default"
-    sum="eaef38a7bc2f7758ab8a32135e3fe605"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">
@@ -339,7 +339,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_NameConflicts_safety"
-    sum="108c0f756714473db318c8eaaed3d7ef"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="true"
     shape="t">

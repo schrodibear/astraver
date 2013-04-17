@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -12,7 +12,7 @@
  <prover
   id="2"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../Switch.mlw"
   verified="true"
@@ -35,7 +35,7 @@
     locfile="../Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test1_ensures_default"
-    sum="1acd59b170321a674649fc73ed1ae7c0"
+    sum="fb50f7ecce14ef9ffc77cc0abdef6ceb"
     proved="true"
     expanded="true"
     shape="t">
@@ -73,7 +73,7 @@
     locfile="../Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test1_ensures_normal"
-    sum="ab8069c97165730689139bb7aeca372c"
+    sum="5af0f67b3ea30cafa5e13316fc361eb1"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c2FF">
@@ -111,7 +111,7 @@
     locfile="../Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test1_safety"
-    sum="c6e78ccb93914635bc7513cc7123ab24"
+    sum="fb50f7ecce14ef9ffc77cc0abdef6ceb"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,7 +149,7 @@
     locfile="../Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test2_ensures_default"
-    sum="227f7dff48bd4d2e588b82bffd0177af"
+    sum="fb50f7ecce14ef9ffc77cc0abdef6ceb"
     proved="true"
     expanded="true"
     shape="t">
@@ -187,7 +187,7 @@
     locfile="../Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test2_ensures_normal"
-    sum="93d67ae4df1208e672453cdf031770dc"
+    sum="96e2877e0989e5c2379f764e82fcaaa2"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V3c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fiainfix =ainteger_of_int32V0c4Oainfix =ainteger_of_int32V0c7ainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V6c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fainfix =ainteger_of_int32V9c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V9c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c2FF">
@@ -225,7 +225,7 @@
     locfile="../Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test2_safety"
-    sum="b52e55a8a9e970b215a749140b2841aa"
+    sum="fb50f7ecce14ef9ffc77cc0abdef6ceb"
     proved="true"
     expanded="true"
     shape="t">
@@ -263,7 +263,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Switch_ensures_default"
-    sum="f4f1f90212209e9c2c94edd8f62ac8da"
+    sum="fb50f7ecce14ef9ffc77cc0abdef6ceb"
     proved="true"
     expanded="true"
     shape="t">
@@ -301,7 +301,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Switch_safety"
-    sum="9186aa0718990a0d10133729f50c4797"
+    sum="fb50f7ecce14ef9ffc77cc0abdef6ceb"
     proved="true"
     expanded="true"
     shape="t">

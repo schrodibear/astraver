@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -16,7 +16,7 @@
  <prover
   id="3"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../Gcd.mlw"
   verified="true"
@@ -32,7 +32,7 @@
     locfile="../Gcd.java"
     loclnum="36" loccnumb="10" loccnume="21"
     expl="Lemma distr_right, lemma"
-    sum="015bc08440ec20534de75345e2a972b8"
+    sum="56b6d25403da412a2589cd37960390d9"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix *V0ainfix +V1V2ainfix +ainfix *V0V1ainfix *V0V2FFF">
@@ -68,7 +68,7 @@
     locfile="../Gcd.java"
     loclnum="40" loccnumb="10" loccnume="20"
     expl="Lemma distr_left, lemma"
-    sum="f89e1aa5a92fffa412711791dc00740b"
+    sum="6edaee9e71c711fef16dd00e3b49ed88"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix *ainfix +V0V1V2ainfix +ainfix *V0V2ainfix *V1V2FFF">
@@ -104,7 +104,7 @@
     locfile="../Gcd.java"
     loclnum="44" loccnumb="10" loccnume="27"
     expl="Lemma distr_right_minus, lemma"
-    sum="b09d773d84c186edb71c3480c5227f1c"
+    sum="9ab8d14fa1c56688b57f1fe3b31d1253"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix *V0ainfix -V1V2ainfix -ainfix *V0V1ainfix *V0V2FFF">
@@ -140,7 +140,7 @@
     locfile="../Gcd.java"
     loclnum="48" loccnumb="10" loccnume="26"
     expl="Lemma distr_left_minus, lemma"
-    sum="a780d86d44914527ecb0702143966a73"
+    sum="f67e2d3485bfba9670c77aa2ffed64d7"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix *ainfix -V0V1V2ainfix -ainfix *V0V2ainfix *V1V2FFF">
@@ -176,7 +176,7 @@
     locfile="../Gcd.java"
     loclnum="52" loccnumb="10" loccnume="18"
     expl="Lemma mul_comm, lemma"
-    sum="9c0f1c973602c8694f1bdbdd253b9c10"
+    sum="3cd25d63644fde75b1e16d2796442c99"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix *V0V1ainfix *V1V0FF">
@@ -212,7 +212,7 @@
     locfile="../Gcd.java"
     loclnum="56" loccnumb="10" loccnume="19"
     expl="Lemma mul_assoc, lemma"
-    sum="d1ae9642deb0456dac25ac001eae542c"
+    sum="ae58c69b68b52891c43734993585bc00"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix *V0ainfix *V1V2ainfix *ainfix *V0V1V2FFF">
@@ -248,7 +248,7 @@
     locfile="../Gcd.java"
     loclnum="64" loccnumb="10" loccnume="26"
     expl="Lemma div_mod_property, lemma"
-    sum="88afc1376bd3d32cbb441235983250e1"
+    sum="9fc6701e00ad72a0921e5b849272b3be"
     proved="true"
     expanded="false"
     shape="ainfix =amodV0V1ainfix -V0ainfix *V1adivV0V1Iainfix &gt;V1c0Aainfix &gt;=V0c0FF">
@@ -284,7 +284,7 @@
     locfile="../Gcd.java"
     loclnum="69" loccnumb="10" loccnume="22"
     expl="Lemma mod_property, lemma"
-    sum="9fe03e8ebf1fb5386ea6eb71346bad35"
+    sum="79c547e5fd9976372277b2c942062552"
     proved="true"
     expanded="false"
     shape="ainfix &lt;amodV0V1V1Aainfix &lt;=c0amodV0V1Iainfix &gt;V1c0Aainfix &gt;=V0c0FF">
@@ -320,7 +320,7 @@
     locfile="../Gcd.java"
     loclnum="80" loccnumb="10" loccnume="18"
     expl="Lemma gcd_zero, lemma"
-    sum="820aa7a44c1c80501fce8333e3616ffd"
+    sum="f755fea81499f4a105ab6521489b7920"
     proved="true"
     expanded="false"
     shape="aisGcdV0c0V0F">
@@ -341,7 +341,7 @@
     locfile="../Gcd.java"
     loclnum="84" loccnumb="10" loccnume="22"
     expl="Lemma gcd_property, lemma"
-    sum="6778fa4b3f7d9a868e8a15dbb96bb4a7"
+    sum="c8208200447d65a2efb1d5248c9e73a3"
     proved="true"
     expanded="false"
     shape="aisGcdV0V1V2IaisGcdV1amodV0V1V2Aainfix &gt;V1c0Aainfix &gt;=V0c0FFF">
@@ -369,7 +369,7 @@
     locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="VC for _Gcd_gcd_ensures_bezoutProperty"
-    sum="501c77abcdbfed06d167bb561ec2bc8b"
+    sum="89c259d60e12cffb159bd6f4c62f6c40"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix +ainfix *V9V0ainfix *V10V1V8EEIainfix =V8V7FIainfix &gt;V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V11IaisGcdV7V6V11FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
@@ -391,7 +391,7 @@
     locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="VC for _Gcd_gcd_ensures_default"
-    sum="20e8db4aab28b0db9ae5c294bb25d0a5"
+    sum="199162fc9bd3f895684a4bbdfb7a14ef"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix +ainfix *V12V0ainfix *V13V1V9Aainfix =ainfix +ainfix *V10V0ainfix *V11V1V8AaisGcdV0V1V14IaisGcdV8V9V14FAainfix &gt;=V9c0Aainfix &gt;=V8c0Iainfix =V13ainfix -V4ainfix *V2adivV7V6FIainfix =V12ainfix -V5ainfix *V3adivV7V6FIainfix =V11V2FIainfix =V10V3FIainfix =V9amodV7V6FIainfix =V8V6FIainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix &gt;=V6c0Aainfix &gt;=V7c0FAainfix =ainfix +ainfix *c0V0ainfix *c1V1V1Aainfix =ainfix +ainfix *c1V0ainfix *c0V1V0Aainfix &gt;=V1c0Aainfix &gt;=V0c0Iainfix &gt;=V1c0Aainfix &gt;=V0c0F">
@@ -413,7 +413,7 @@
     locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="VC for _Gcd_gcd_ensures_resultIsGcd"
-    sum="563c52c2db366bbb8740a813622c3c99"
+    sum="4414e535d8461af2f037cd379d32aaf8"
     proved="true"
     expanded="false"
     shape="aisGcdV0V1V8Iainfix =V8V7FIainfix &gt;V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V9IaisGcdV7V6V9FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
@@ -443,7 +443,7 @@
     locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="VC for _Gcd_gcd_safety"
-    sum="735d2af51f131ac7c460dc2f71b35106"
+    sum="ccb9bde16536b58259f03fe010a9576a"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V10V6Aainfix &lt;=c0V6Iainfix =V14ainfix -V4ainfix *V2V8FIainfix =V13ainfix -V5ainfix *V3V8FIainfix =V12V2FIainfix =V11V3FIainfix =V10amodV7V6FIainfix =V9V6FLadivV7V6Aainfix =V6c0NAainfix =V6c0NIainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
@@ -481,7 +481,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Gcd_ensures_default"
-    sum="76e37fb2b741e55d04b42436c8b30881"
+    sum="a2731e5a436a4519bc05515f6f13a5a8"
     proved="true"
     expanded="false"
     shape="t">
@@ -519,7 +519,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Gcd_safety"
-    sum="0d2468eca48e55c357f2edbc40e6c465"
+    sum="a2731e5a436a4519bc05515f6f13a5a8"
     proved="true"
     expanded="false"
     shape="t">

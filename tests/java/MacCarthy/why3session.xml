@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="2">
  <prover
   id="0"
@@ -12,7 +12,7 @@
  <prover
   id="2"
   name="Z3"
-  version="4.2"/>
+  version="4.3.1"/>
  <file
   name="../MacCarthy.mlw"
   verified="true"
@@ -35,7 +35,7 @@
     locfile="../MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="VC for _MacCarthy_f91_ensures_default"
-    sum="4d5ecbaf2bae4a6103aa4c4faf057a6f"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="false"
     shape="t">
@@ -73,7 +73,7 @@
     locfile="../MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="VC for _MacCarthy_f91_ensures_greater_than_100"
-    sum="29b187fbb4a45091165b3c39ef66f041"
+    sum="783007e2f0839385c41703f258ea03b0"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c10Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix &lt;=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix &gt;=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V0c10Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix &gt;=ainteger_of_int32V0c101F">
@@ -111,7 +111,7 @@
     locfile="../MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="VC for _MacCarthy_f91_ensures_less_than_101"
-    sum="f7409c4f56e8fd700de6f5dd7682c547"
+    sum="5eae7e64b47a2280c1f766e61efa700d"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4c91Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix &lt;=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix &gt;=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6c91Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix &lt;=ainteger_of_int32V0c100F">
@@ -149,7 +149,7 @@
     locfile="../MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="VC for _MacCarthy_f91_safety"
-    sum="fff9f8f6f2d5616d5931e3ffb80ca939"
+    sum="f39f918ef2d8472b8a4325c69a45e0a4"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V2ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix &lt;=ainfix +ainteger_of_int32V0c11c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix &lt;=ainfix -ainteger_of_int32V0c10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
@@ -187,7 +187,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_MacCarthy_ensures_default"
-    sum="d2a43fbcddfc8884472b99d622e03ab0"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="false"
     shape="t">
@@ -225,7 +225,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_MacCarthy_safety"
-    sum="d2bbff4a23a64448145186f667c12c2e"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="false"
     shape="t">
@@ -263,7 +263,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="50d69136614384f209ef531f73d48748"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="false"
     shape="t">
@@ -301,7 +301,7 @@
     locfile="../."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="2a9b702383e1d06a54fc0291fdddeb25"
+    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
     proved="true"
     expanded="false"
     shape="t">
