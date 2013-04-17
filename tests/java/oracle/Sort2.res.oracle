@@ -13590,13 +13590,3 @@ goal Sort_swap_safety_po_4:
   (result = select(intM_intP, shift(t, i_2))) ->
   (j_1 <= offset_max(Object_alloc_table, t))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Sort2_why.why             : .........................#............#.... (41/0/0/2/0)
-total   :  43
-valid   :  41 ( 95%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   2 (  5%)
-failure :   0 (  0%)

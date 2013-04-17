@@ -2671,13 +2671,3 @@ goal cd1d_double_safety_po_4:
   no_overflow_double(nearest_even,
   (double_value(result1) + double_value(result3)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/cd1d_why.why              : ?.#.?.# (3/0/2/2/0)
-total   :   7
-valid   :   3 ( 43%)
-invalid :   0 (  0%)
-unknown :   2 ( 29%)
-timeout :   2 ( 29%)
-failure :   0 (  0%)

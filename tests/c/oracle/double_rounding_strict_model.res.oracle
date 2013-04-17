@@ -70,7 +70,8 @@ behavior default:
       (C_5 : (z = (C_4 : (x + y))));
       
       {  
-         (assert for default: (C_6 : ((z :> real) == (1.0 + 0x1p-52))));
+         (assert for default: (C_6 : (jessie : ((z :> real) ==
+                                                 (1.0 + 0x1p-52)))));
          ()
       };
       
@@ -2310,13 +2311,3 @@ goal doublerounding_safety_po_4:
   (y = result2) ->
   no_overflow_double(nearest_even, (double_value(x_0) + double_value(y)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/double_rounding_strict_model_why.why: #..?# (2/0/1/2/0)
-total   :   5
-valid   :   2 ( 40%)
-invalid :   0 (  0%)
-unknown :   1 ( 20%)
-timeout :   2 ( 40%)
-failure :   0 (  0%)

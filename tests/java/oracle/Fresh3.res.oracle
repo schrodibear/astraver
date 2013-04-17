@@ -7545,13 +7545,3 @@ goal Fresh3_test_safety_po_1:
       Object_alloc_table)) and ("JC_59": (this_3 <> f))))))) ->
   (offset_max(Object_alloc_table, f) >= 0)
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Fresh3_why.why            : .##...#....##. (9/0/0/5/0)
-total   :  14
-valid   :   9 ( 64%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   5 ( 36%)
-failure :   0 (  0%)

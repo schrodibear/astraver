@@ -208,11 +208,14 @@ behavior default:
             
             {  
                {  
-                  (assert for default: (C_28 : (sum{Here}(t_0, 0, n_2) ==
-                                                 ((sum{Here}(t_0, 0, i_0) +
-                                                    (t_0 + i_0).intM) +
-                                                   sum{Here}(t_0, (i_0 + 1),
-                                                             n_2)))));
+                  (assert for default: (C_28 : (jessie : (sum{Here}(t_0, 0,
+                                                                    n_2) ==
+                                                           ((sum{Here}(
+                                                              t_0, 0, i_0) +
+                                                              (t_0 + i_0).intM) +
+                                                             sum{Here}(
+                                                             t_0, (i_0 + 1),
+                                                             n_2))))));
                   ()
                };
                (C_34 : ((C_33 : (C_32 : (t_0 + i_0)).intM) = (C_31 : 
@@ -223,11 +226,14 @@ behavior default:
                                                                1))));
                
                {  
-                  (assert for default: (C_35 : (sum{Here}(t_0, 0, n_2) ==
-                                                 ((sum{Here}(t_0, 0, i_0) +
-                                                    (t_0 + i_0).intM) +
-                                                   sum{Here}(t_0, (i_0 + 1),
-                                                             n_2)))));
+                  (assert for default: (C_35 : (jessie : (sum{Here}(t_0, 0,
+                                                                    n_2) ==
+                                                           ((sum{Here}(
+                                                              t_0, 0, i_0) +
+                                                              (t_0 + i_0).intM) +
+                                                             sum{Here}(
+                                                             t_0, (i_0 + 1),
+                                                             n_2))))));
                   ()
                }
             };
@@ -884,13 +890,13 @@ end = -1
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
 line = 121
 begin = 6
-end = 1810
+end = 2278
 
 [JC_55]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
 line = 121
 begin = 6
-end = 1810
+end = 2278
 
 [test2_ensures_default]
 name = "Function test2"
@@ -916,7 +922,7 @@ end = 8
 [JC_58]
 kind = PointerDeref
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 141
+line = 144
 begin = 24
 end = 425
 
@@ -998,7 +1004,7 @@ end = -1
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
 line = 121
 begin = 6
-end = 1810
+end = 2278
 
 [JC_14]
 file = "HOME/"
@@ -1010,7 +1016,7 @@ end = -1
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
 line = 121
 begin = 6
-end = 1810
+end = 2278
 
 [JC_15]
 file = "HOME/tests/c/sum_array.c"
@@ -3870,13 +3876,3 @@ goal test2_safety_po_4:
   (i_0_1 = (i_0_0 + 1)) ->
   (("JC_60": (n_2 - i_0_1)) < ("JC_60": (n_2 - i_0_0)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/sum_array_why.why         : ??...................#...... (25/0/2/1/0)
-total   :  28
-valid   :  25 ( 89%)
-invalid :   0 (  0%)
-unknown :   2 (  7%)
-timeout :   1 (  4%)
-failure :   0 (  0%)

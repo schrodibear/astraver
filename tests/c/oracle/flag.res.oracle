@@ -6785,13 +6785,3 @@ goal swap_safety_po_3:
   (z = result) ->
   (j_0_0 <= offset_max(charP_t_1_4_alloc_table, t_1))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/flag_why.why              : .......#....###.......#....###.......................................#... (64/0/0/9/0)
-total   :  73
-valid   :  64 ( 88%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   9 ( 12%)
-failure :   0 (  0%)

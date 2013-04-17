@@ -6584,13 +6584,3 @@ goal cons_Fresh2_ensures_default_po_2:
   ("JC_25":
   ("JC_24": not_assigns(Object_alloc_table, Fresh2_x, Fresh2_x0, pset_empty)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Fresh2_why.why            : .....#.## (6/0/0/3/0)
-total   :   9
-valid   :   6 ( 67%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   3 ( 33%)
-failure :   0 (  0%)

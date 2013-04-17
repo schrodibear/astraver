@@ -4046,13 +4046,3 @@ goal sign_ensures_default_po_6:
   (return = __retres) ->
   ("JC_11": ("JC_10": (abs_int(integer_of_int32(return)) <= 1)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/eps_line2_why.why         : .??########.####...... (8/0/2/12/0)
-total   :  22
-valid   :   8 ( 36%)
-invalid :   0 (  0%)
-unknown :   2 (  9%)
-timeout :  12 ( 55%)
-failure :   0 (  0%)

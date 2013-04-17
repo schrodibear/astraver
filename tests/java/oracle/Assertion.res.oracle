@@ -4744,13 +4744,3 @@ goal Assertion_max_ensures_default_po_2:
   (return = x_2) ->
   ("JC_23": (integer_of_int32(return) = 5))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Assertion_why.why         : ?. (1/0/1/0/0)
-total   :   2
-valid   :   1 ( 50%)
-invalid :   0 (  0%)
-unknown :   1 ( 50%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

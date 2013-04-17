@@ -110,10 +110,10 @@ behavior default:
                                                   (C_6 : (c + 1).doubleM)))));
       
       {  
-         (assert for default: (C_11 : (\real_abs((((a + 0).doubleM :> real) -
-                                                   (((b + 0).doubleM :> real) +
-                                                     ((c + 0).doubleM :> real)))) <=
-                                        0x1p-53)));
+         (assert for default: (C_11 : (jessie : (\real_abs((((a + 0).doubleM :> real) -
+                                                             (((b + 0).doubleM :> real) +
+                                                               ((c + 0).doubleM :> real)))) <=
+                                                  0x1p-53))));
          ()
       };
       
@@ -3241,13 +3241,3 @@ goal test_safety_po_5:
   0)))))) <= 0x1.p-53)) ->
   ("JC_41": ("JC_40": valid_a(doubleP_a_1_alloc_table)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/array_double_why.why      : #.#... (4/0/0/2/0)
-total   :   6
-valid   :   4 ( 67%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   2 ( 33%)
-failure :   0 (  0%)

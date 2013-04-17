@@ -205,13 +205,15 @@ behavior default:
                                        (C_8 : ((C_7 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_14 : newton_rel((t :> real), (x :> real))));
+         (assert for default: (C_14 : (jessie : newton_rel((t :> real),
+                                                           (x :> real)))));
          ()
       };
       
       {  
-         (assert for default: (C_15 : closeness((u :> real), (t :> real),
-                                                (x :> real))));
+         (assert for default: (C_15 : (jessie : closeness((u :> real),
+                                                          (t :> real),
+                                                          (x :> real)))));
          ()
       };
       (C_16 : (t = u));
@@ -220,13 +222,15 @@ behavior default:
                                        (C_18 : ((C_17 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_24 : newton_rel((t :> real), (x :> real))));
+         (assert for default: (C_24 : (jessie : newton_rel((t :> real),
+                                                           (x :> real)))));
          ()
       };
       
       {  
-         (assert for default: (C_25 : closeness((u :> real), (t :> real),
-                                                (x :> real))));
+         (assert for default: (C_25 : (jessie : closeness((u :> real),
+                                                          (t :> real),
+                                                          (x :> real)))));
          ()
       };
       (C_26 : (t = u));
@@ -235,21 +239,24 @@ behavior default:
                                        (C_28 : ((C_27 : (t * t)) * x))))))));
       
       {  
-         (assert for default: (C_34 : newton_rel((t :> real), (x :> real))));
+         (assert for default: (C_34 : (jessie : newton_rel((t :> real),
+                                                           (x :> real)))));
          ()
       };
       
       {  
-         (assert for default: (C_35 : closeness((u :> real), (t :> real),
-                                                (x :> real))));
+         (assert for default: (C_35 : (jessie : closeness((u :> real),
+                                                          (t :> real),
+                                                          (x :> real)))));
          ()
       };
       (C_36 : (t = u));
       
       {  
-         (assert for default: (C_37 : (((x :> real) *
-                                         (1 / \real_sqrt((x :> real)))) ==
-                                        \real_sqrt((x :> real)))));
+         (assert for default: (C_37 : (jessie : (((x :> real) *
+                                                   (1 /
+                                                     \real_sqrt((x :> real)))) ==
+                                                  \real_sqrt((x :> real))))));
          ()
       };
       
@@ -4850,13 +4857,3 @@ goal sqrt_safety_po_16:
   sqrt_real(double_value(x_2)))) = sqrt_real(double_value(x_2)))) ->
   no_overflow_double(nearest_even, (double_value(x_2) * double_value(t_2_2)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/float_sqrt_why.why        : ?.#.#.###.############### (4/0/1/20/0)
-total   :  25
-valid   :   4 ( 16%)
-invalid :   0 (  0%)
-unknown :   1 (  4%)
-timeout :  20 ( 80%)
-failure :   0 (  0%)

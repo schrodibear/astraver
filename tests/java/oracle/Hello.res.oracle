@@ -18161,13 +18161,3 @@ goal Hello_main_safety_po_1:
   left_valid_struct_StringM(argv, 0, Object_alloc_table) ->
   (offset_max(Object_alloc_table, System_out) >= 0)
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Hello_why.why             : ? (0/0/1/0/0)
-total   :   1
-valid   :   0 (  0%)
-invalid :   0 (  0%)
-unknown :   1 (100%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

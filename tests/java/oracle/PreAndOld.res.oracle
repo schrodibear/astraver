@@ -4462,13 +4462,3 @@ goal PreAndOld_g_ensures_default_po_3:
   (return = (x_2 + PreAndOld_y)) ->
   ("JC_26": ("JC_25": (return = f(x_2, PreAndOld_y))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/PreAndOld_why.why         : ... (3/0/0/0/0)
-total   :   3
-valid   :   3 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

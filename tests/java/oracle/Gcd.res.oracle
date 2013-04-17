@@ -6822,13 +6822,3 @@ goal Gcd_gcd_safety_po_3:
   (d_1_0 = (b_2 - (d_1 * result0))) ->
   (("JC_46": mutable_y_8_0) < ("JC_46": mutable_y_8))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ........?#.......?.... (19/0/2/1/0)
-total   :  22
-valid   :  19 ( 86%)
-invalid :   0 (  0%)
-unknown :   2 (  9%)
-timeout :   1 (  5%)
-failure :   0 (  0%)

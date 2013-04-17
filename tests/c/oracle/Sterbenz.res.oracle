@@ -98,12 +98,12 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_1 : (0.0 <= (y :> real))));
+         (assert for default: (C_1 : (jessie : (0.0 <= (y :> real)))));
          ()
       };
       
       {  
-         (assert for default: (C_2 : (0.0 <= (x :> real))));
+         (assert for default: (C_2 : (jessie : (0.0 <= (x :> real)))));
          ()
       };
       
@@ -2324,16 +2324,6 @@ goal Sterbenz_safety_po_1:
   ("JC_14": (0.0 <= single_value(x_0))) ->
   no_overflow_single(nearest_even, (single_value(x_0) - single_value(y)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Sterbenz_why.why          : ?#?. (1/0/2/1/0)
-total   :   4
-valid   :   1 ( 25%)
-invalid :   0 (  0%)
-unknown :   2 ( 50%)
-timeout :   1 ( 25%)
-failure :   0 (  0%)
 // RUNCOQ: will ask regtests to check Coq proofs of this program
 ========== generation of Coq VC output ==========
 why -coq [...] why/Sterbenz.why

@@ -3150,13 +3150,3 @@ goal min_ensures_default_po_2:
   ("JC_13": (integer_of_int32(return) = int_min(integer_of_int32(x_4),
   integer_of_int32(y_4))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/minmax_why.why            : ............ (12/0/0/0/0)
-total   :  12
-valid   :  12 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

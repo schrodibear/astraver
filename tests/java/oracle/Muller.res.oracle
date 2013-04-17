@@ -38,11 +38,11 @@
   @   \forall integer i j, int t[];
   @    i >= j ==> num_of_pos(i,j,t) == 0;
   @  axiom num_of_pos_true_case{L} :
-  @   \forall integer i j k, int t[];
+  @   \forall integer i j, int t[];
   @       i < j && t[j-1] > 0 ==>
   @         num_of_pos(i,j,t) == num_of_pos(i,j-1,t) + 1;
   @  axiom num_of_pos_false_case{L} :
-  @   \forall integer i j k, int t[];
+  @   \forall integer i j, int t[];
   @       i < j && ! (t[j-1] > 0) ==>
   @         num_of_pos(i,j,t) == num_of_pos(i,j-1,t);
   @ }
@@ -189,20 +189,18 @@ axiomatic NumOfPos {
   axiom num_of_pos_false_case{L} :
   (\forall integer i_2;
     (\forall integer j_2;
-      (\forall integer k_0;
-        (\forall intM[0..] t_2;
-          (((i_2 < j_2) && (! ((t_2 + (j_2 - 1)).intP > 0))) ==>
-            (num_of_pos{L}(i_2, j_2, t_2) ==
-              num_of_pos{L}(i_2, (j_2 - 1), t_2)))))))
+      (\forall intM[0..] t_2;
+        (((i_2 < j_2) && (! ((t_2 + (j_2 - 1)).intP > 0))) ==>
+          (num_of_pos{L}(i_2, j_2, t_2) ==
+            num_of_pos{L}(i_2, (j_2 - 1), t_2))))))
    
   axiom num_of_pos_true_case{L} :
   (\forall integer i_1;
     (\forall integer j_1;
-      (\forall integer k;
-        (\forall intM[0..] t_1;
-          (((i_1 < j_1) && ((t_1 + (j_1 - 1)).intP > 0)) ==>
-            (num_of_pos{L}(i_1, j_1, t_1) ==
-              (num_of_pos{L}(i_1, (j_1 - 1), t_1) + 1)))))))
+      (\forall intM[0..] t_1;
+        (((i_1 < j_1) && ((t_1 + (j_1 - 1)).intP > 0)) ==>
+          (num_of_pos{L}(i_1, j_1, t_1) ==
+            (num_of_pos{L}(i_1, (j_1 - 1), t_1) + 1))))))
    
   axiom num_of_pos_empty{L} :
   (\forall integer i_0;
@@ -221,19 +219,19 @@ lemma num_of_pos_non_negative{L} :
 lemma num_of_pos_additive{L} :
 (\forall integer i_4;
   (\forall integer j_4;
-    (\forall integer k_1;
+    (\forall integer k;
       (\forall intM[0..] t_4;
-        (((i_4 <= j_4) && (j_4 <= k_1)) ==>
-          (num_of_pos{L}(i_4, k_1, t_4) ==
-            (num_of_pos{L}(i_4, j_4, t_4) + num_of_pos{L}(j_4, k_1, t_4))))))))
+        (((i_4 <= j_4) && (j_4 <= k)) ==>
+          (num_of_pos{L}(i_4, k, t_4) ==
+            (num_of_pos{L}(i_4, j_4, t_4) + num_of_pos{L}(j_4, k, t_4))))))))
 
 lemma num_of_pos_increasing{L} :
 (\forall integer i_5;
   (\forall integer j_5;
-    (\forall integer k_2;
+    (\forall integer k_0;
       (\forall intM[0..] t_5;
-        ((j_5 <= k_2) ==>
-          (num_of_pos{L}(i_5, j_5, t_5) <= num_of_pos{L}(i_5, k_2, t_5)))))))
+        ((j_5 <= k_0) ==>
+          (num_of_pos{L}(i_5, j_5, t_5) <= num_of_pos{L}(i_5, k_0, t_5)))))))
 
 lemma num_of_pos_strictly_increasing{L} :
 (\forall integer i_6;
@@ -894,7 +892,7 @@ end = -1
 
 [JC_98]
 file = "HOME/tests/java/Muller.jc"
-line = 174
+line = 172
 begin = 21
 end = 1740
 
@@ -919,7 +917,7 @@ end = 28
 
 [JC_99]
 file = "HOME/tests/java/Muller.jc"
-line = 174
+line = 172
 begin = 21
 end = 1740
 
@@ -1087,13 +1085,13 @@ end = -1
 
 [JC_54]
 file = "HOME/tests/java/Muller.jc"
-line = 145
+line = 143
 begin = 15
 end = 1030
 
 [JC_55]
 file = "HOME/tests/java/Muller.jc"
-line = 145
+line = 143
 begin = 15
 end = 1030
 
@@ -1129,14 +1127,14 @@ end = 25
 [JC_59]
 kind = ArithOverflow
 file = "HOME/tests/java/Muller.jc"
-line = 160
+line = 158
 begin = 69
 end = 77
 
 [JC_60]
 kind = ArithOverflow
 file = "HOME/tests/java/Muller.jc"
-line = 158
+line = 156
 begin = 24
 end = 30
 
@@ -1257,13 +1255,13 @@ end = 30
 
 [JC_70]
 file = "HOME/tests/java/Muller.jc"
-line = 174
+line = 172
 begin = 21
 end = 1740
 
 [JC_71]
 file = "HOME/tests/java/Muller.jc"
-line = 174
+line = 172
 begin = 21
 end = 1740
 
@@ -1322,7 +1320,7 @@ end = 103
 [JC_76]
 kind = ArithOverflow
 file = "HOME/tests/java/Muller.jc"
-line = 197
+line = 195
 begin = 47
 end = 55
 
@@ -1356,7 +1354,7 @@ end = 103
 [JC_78]
 kind = ArithOverflow
 file = "HOME/tests/java/Muller.jc"
-line = 195
+line = 193
 begin = 30
 end = 36
 
@@ -1496,7 +1494,7 @@ end = -1
 
 [JC_87]
 file = "HOME/tests/java/Muller.jc"
-line = 145
+line = 143
 begin = 15
 end = 1030
 
@@ -1508,7 +1506,7 @@ end = -1
 
 [JC_88]
 file = "HOME/tests/java/Muller.jc"
-line = 145
+line = 143
 begin = 15
 end = 1030
 
@@ -1893,32 +1891,30 @@ axiom num_of_pos_false_case :
  (forall intM_intP_t_8_at_L:(Object, int32) memory.
   (forall i_2:int.
    (forall j_2:int.
-    (forall k_0:int.
-     (forall t_2:Object pointer.
-      ((lt_int(i_2, j_2)
-       and (not gt_int(integer_of_int32(select(intM_intP_t_8_at_L,
-                                        shift(t_2, sub_int(j_2, (1))))),
-                (0)))) ->
-       (num_of_pos(i_2, j_2, t_2, intM_intP_t_8_at_L) = num_of_pos(i_2,
-                                                        sub_int(j_2, (1)),
-                                                        t_2,
-                                                        intM_intP_t_8_at_L))))))))
+    (forall t_2:Object pointer.
+     ((lt_int(i_2, j_2)
+      and (not gt_int(integer_of_int32(select(intM_intP_t_8_at_L,
+                                       shift(t_2, sub_int(j_2, (1))))),
+               (0)))) ->
+      (num_of_pos(i_2, j_2, t_2, intM_intP_t_8_at_L) = num_of_pos(i_2,
+                                                       sub_int(j_2, (1)),
+                                                       t_2,
+                                                       intM_intP_t_8_at_L)))))))
 
 axiom num_of_pos_true_case :
  (forall intM_intP_t_8_at_L:(Object, int32) memory.
   (forall i_1:int.
    (forall j_1:int.
-    (forall k:int.
-     (forall t_1:Object pointer.
-      ((lt_int(i_1, j_1)
-       and gt_int(integer_of_int32(select(intM_intP_t_8_at_L,
-                                   shift(t_1, sub_int(j_1, (1))))),
-           (0))) ->
-       (num_of_pos(i_1, j_1, t_1, intM_intP_t_8_at_L) = add_int(num_of_pos(i_1,
-                                                                sub_int(j_1,
-                                                                (1)), t_1,
-                                                                intM_intP_t_8_at_L),
-                                                        (1)))))))))
+    (forall t_1:Object pointer.
+     ((lt_int(i_1, j_1)
+      and gt_int(integer_of_int32(select(intM_intP_t_8_at_L,
+                                  shift(t_1, sub_int(j_1, (1))))),
+          (0))) ->
+      (num_of_pos(i_1, j_1, t_1, intM_intP_t_8_at_L) = add_int(num_of_pos(i_1,
+                                                               sub_int(j_1,
+                                                               (1)), t_1,
+                                                               intM_intP_t_8_at_L),
+                                                       (1))))))))
 
 axiom num_of_pos_empty :
  (forall intM_intP_t_8_at_L:(Object, int32) memory.
@@ -1939,25 +1935,25 @@ lemma num_of_pos_additive :
  (forall intM_intP_t_4_19_at_L:(Object, int32) memory.
   (forall i_4:int.
    (forall j_4:int.
-    (forall k_1:int.
+    (forall k:int.
      (forall t_4:Object pointer.
-      ((le_int(i_4, j_4) and le_int(j_4, k_1)) ->
-       (num_of_pos(i_4, k_1, t_4, intM_intP_t_4_19_at_L) = add_int(num_of_pos(i_4,
-                                                                   j_4, t_4,
-                                                                   intM_intP_t_4_19_at_L),
-                                                           num_of_pos(j_4,
-                                                           k_1, t_4,
-                                                           intM_intP_t_4_19_at_L)))))))))
+      ((le_int(i_4, j_4) and le_int(j_4, k)) ->
+       (num_of_pos(i_4, k, t_4, intM_intP_t_4_19_at_L) = add_int(num_of_pos(i_4,
+                                                                 j_4, t_4,
+                                                                 intM_intP_t_4_19_at_L),
+                                                         num_of_pos(j_4, k,
+                                                         t_4,
+                                                         intM_intP_t_4_19_at_L)))))))))
 
 lemma num_of_pos_increasing :
  (forall intM_intP_t_5_20_at_L:(Object, int32) memory.
   (forall i_5:int.
    (forall j_5:int.
-    (forall k_2:int.
+    (forall k_0:int.
      (forall t_5:Object pointer.
-      (le_int(j_5, k_2) ->
+      (le_int(j_5, k_0) ->
        le_int(num_of_pos(i_5, j_5, t_5, intM_intP_t_5_20_at_L),
-       num_of_pos(i_5, k_2, t_5, intM_intP_t_5_20_at_L))))))))
+       num_of_pos(i_5, k_0, t_5, intM_intP_t_5_20_at_L))))))))
 
 lemma num_of_pos_strictly_increasing :
  (forall intM_intP_t_6_21_at_L:(Object, int32) memory.
@@ -2748,7 +2744,7 @@ why --project [...] why/Muller.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/Muller_po35.why">
-      <location file = "why/Muller.why" line = "902" begin = "54" end = "230"/>
+      <location file = "why/Muller.why" line = "900" begin = "54" end = "230"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Muller_po36.why">
@@ -2762,22 +2758,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Muller_po38.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "160" begin = "69" end = "77"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "158" begin = "69" end = "77"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po39.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "160" begin = "69" end = "77"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "158" begin = "69" end = "77"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po40.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "158" begin = "24" end = "30"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "156" begin = "24" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po41.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "158" begin = "24" end = "30"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "156" begin = "24" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2790,12 +2786,12 @@ text = "ArithOverflow"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po44.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "158" begin = "24" end = "30"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "156" begin = "24" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po45.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "158" begin = "24" end = "30"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "156" begin = "24" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2823,12 +2819,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Muller_po51.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "197" begin = "47" end = "55"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "195" begin = "47" end = "55"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po52.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "197" begin = "47" end = "55"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "195" begin = "47" end = "55"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2843,12 +2839,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Muller_po55.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "195" begin = "30" end = "36"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "193" begin = "30" end = "36"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po56.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "195" begin = "30" end = "36"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "193" begin = "30" end = "36"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2861,12 +2857,12 @@ text = "ArithOverflow"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po59.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "195" begin = "30" end = "36"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "193" begin = "30" end = "36"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po60.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "195" begin = "30" end = "36"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "193" begin = "30" end = "36"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -4167,25 +4163,21 @@ axiom num_of_pos_false_case:
   (forall intM_intP_t_8_at_L:(Object, int32) memory.
     (forall i_2:int.
       (forall j_2:int.
-        (forall k_0:int.
-          (forall t_2:Object pointer.
-            (((i_2 < j_2) and
-              (not (integer_of_int32(select(intM_intP_t_8_at_L, shift(t_2,
-              (j_2 - 1)))) > 0))) ->
-             (num_of_pos(i_2, j_2, t_2, intM_intP_t_8_at_L) = num_of_pos(i_2,
-             (j_2 - 1), t_2, intM_intP_t_8_at_L))))))))
+        (forall t_2:Object pointer.
+          (((i_2 < j_2) and (not (integer_of_int32(select(intM_intP_t_8_at_L,
+            shift(t_2, (j_2 - 1)))) > 0))) ->
+           (num_of_pos(i_2, j_2, t_2, intM_intP_t_8_at_L) = num_of_pos(i_2,
+           (j_2 - 1), t_2, intM_intP_t_8_at_L)))))))
 
 axiom num_of_pos_true_case:
   (forall intM_intP_t_8_at_L:(Object, int32) memory.
     (forall i_1:int.
       (forall j_1:int.
-        (forall k:int.
-          (forall t_1:Object pointer.
-            (((i_1 < j_1) and (integer_of_int32(select(intM_intP_t_8_at_L,
-              shift(t_1, (j_1 - 1)))) > 0)) ->
-             (num_of_pos(i_1, j_1, t_1,
-             intM_intP_t_8_at_L) = (num_of_pos(i_1, (j_1 - 1), t_1,
-             intM_intP_t_8_at_L) + 1))))))))
+        (forall t_1:Object pointer.
+          (((i_1 < j_1) and (integer_of_int32(select(intM_intP_t_8_at_L,
+            shift(t_1, (j_1 - 1)))) > 0)) ->
+           (num_of_pos(i_1, j_1, t_1, intM_intP_t_8_at_L) = (num_of_pos(i_1,
+           (j_1 - 1), t_1, intM_intP_t_8_at_L) + 1)))))))
 
 axiom num_of_pos_empty:
   (forall intM_intP_t_8_at_L:(Object, int32) memory.
@@ -4606,11 +4598,11 @@ lemma num_of_pos_additive:
   (forall intM_intP_t_4_19_at_L:(Object, int32) memory.
     (forall i_4:int.
       (forall j_4:int.
-        (forall k_1:int.
+        (forall k:int.
           (forall t_4:Object pointer.
-            (((i_4 <= j_4) and (j_4 <= k_1)) -> (num_of_pos(i_4, k_1, t_4,
+            (((i_4 <= j_4) and (j_4 <= k)) -> (num_of_pos(i_4, k, t_4,
              intM_intP_t_4_19_at_L) = (num_of_pos(i_4, j_4, t_4,
-             intM_intP_t_4_19_at_L) + num_of_pos(j_4, k_1, t_4,
+             intM_intP_t_4_19_at_L) + num_of_pos(j_4, k, t_4,
              intM_intP_t_4_19_at_L)))))))))
 
 ========== file tests/java/why/Muller_po20.why ==========
@@ -5273,10 +5265,10 @@ lemma num_of_pos_increasing:
   (forall intM_intP_t_5_20_at_L:(Object, int32) memory.
     (forall i_5:int.
       (forall j_5:int.
-        (forall k_2:int.
+        (forall k_0:int.
           (forall t_5:Object pointer.
-            ((j_5 <= k_2) -> (num_of_pos(i_5, j_5, t_5,
-             intM_intP_t_5_20_at_L) <= num_of_pos(i_5, k_2, t_5,
+            ((j_5 <= k_0) -> (num_of_pos(i_5, j_5, t_5,
+             intM_intP_t_5_20_at_L) <= num_of_pos(i_5, k_0, t_5,
              intM_intP_t_5_20_at_L))))))))
 
 ========== file tests/java/why/Muller_po30.why ==========
@@ -8510,39 +8502,22 @@ why -simplify [...] why/Muller.why
 
 (BG_PUSH
  ;; Why axiom num_of_pos_false_case
- (FORALL (intM_intP_t_8_at_L i_2 j_2 k_0 t_2)
- (IMPLIES
- (AND (< i_2 j_2)
- (NOT
- (> (integer_of_int32 (select intM_intP_t_8_at_L (shift t_2 (- j_2 1)))) 0)))
- (EQ (num_of_pos i_2 j_2 t_2 intM_intP_t_8_at_L)
- (num_of_pos i_2 (- j_2 1) t_2 intM_intP_t_8_at_L))))
-
  (FORALL (intM_intP_t_8_at_L i_2 j_2 t_2)
  (IMPLIES
  (AND (< i_2 j_2)
  (NOT
  (> (integer_of_int32 (select intM_intP_t_8_at_L (shift t_2 (- j_2 1)))) 0)))
- (FORALL (k_0)
  (EQ (num_of_pos i_2 j_2 t_2 intM_intP_t_8_at_L)
- (num_of_pos i_2 (- j_2 1) t_2 intM_intP_t_8_at_L))))))
+ (num_of_pos i_2 (- j_2 1) t_2 intM_intP_t_8_at_L)))))
 
 (BG_PUSH
  ;; Why axiom num_of_pos_true_case
- (FORALL (intM_intP_t_8_at_L i_1 j_1 k t_1)
- (IMPLIES
- (AND (< i_1 j_1)
- (> (integer_of_int32 (select intM_intP_t_8_at_L (shift t_1 (- j_1 1)))) 0))
- (EQ (num_of_pos i_1 j_1 t_1 intM_intP_t_8_at_L)
- (+ (num_of_pos i_1 (- j_1 1) t_1 intM_intP_t_8_at_L) 1))))
-
  (FORALL (intM_intP_t_8_at_L i_1 j_1 t_1)
  (IMPLIES
  (AND (< i_1 j_1)
  (> (integer_of_int32 (select intM_intP_t_8_at_L (shift t_1 (- j_1 1)))) 0))
- (FORALL (k)
  (EQ (num_of_pos i_1 j_1 t_1 intM_intP_t_8_at_L)
- (+ (num_of_pos i_1 (- j_1 1) t_1 intM_intP_t_8_at_L) 1))))))
+ (+ (num_of_pos i_1 (- j_1 1) t_1 intM_intP_t_8_at_L) 1)))))
 
 (BG_PUSH
  ;; Why axiom num_of_pos_empty
@@ -8564,32 +8539,32 @@ why -simplify [...] why/Muller.why
 (<= 0 (num_of_pos i_3 j_3 t_3 intM_intP_t_3_18_at_L))))
 
 ;; num_of_pos_additive, File "HOME/tests/java/Muller.java", line 55, characters 10-29
-(FORALL (intM_intP_t_4_19_at_L i_4 j_4 k_1 t_4)
-(IMPLIES (AND (<= i_4 j_4) (<= j_4 k_1))
-(EQ (num_of_pos i_4 k_1 t_4 intM_intP_t_4_19_at_L)
+(FORALL (intM_intP_t_4_19_at_L i_4 j_4 k t_4)
+(IMPLIES (AND (<= i_4 j_4) (<= j_4 k))
+(EQ (num_of_pos i_4 k t_4 intM_intP_t_4_19_at_L)
 (+ (num_of_pos i_4 j_4 t_4 intM_intP_t_4_19_at_L) (num_of_pos
-                                                  j_4 k_1 t_4 intM_intP_t_4_19_at_L)))))
+                                                  j_4 k t_4 intM_intP_t_4_19_at_L)))))
 
 (BG_PUSH
  ;; lemma num_of_pos_additive as axiom
-(FORALL (intM_intP_t_4_19_at_L i_4 j_4 k_1 t_4)
-(IMPLIES (AND (<= i_4 j_4) (<= j_4 k_1))
-(EQ (num_of_pos i_4 k_1 t_4 intM_intP_t_4_19_at_L)
+(FORALL (intM_intP_t_4_19_at_L i_4 j_4 k t_4)
+(IMPLIES (AND (<= i_4 j_4) (<= j_4 k))
+(EQ (num_of_pos i_4 k t_4 intM_intP_t_4_19_at_L)
 (+ (num_of_pos i_4 j_4 t_4 intM_intP_t_4_19_at_L) (num_of_pos
-                                                  j_4 k_1 t_4 intM_intP_t_4_19_at_L))))))
+                                                  j_4 k t_4 intM_intP_t_4_19_at_L))))))
 
 ;; num_of_pos_increasing, File "HOME/tests/java/Muller.java", line 60, characters 10-31
-(FORALL (intM_intP_t_5_20_at_L i_5 j_5 k_2 t_5)
-(IMPLIES (<= j_5 k_2)
+(FORALL (intM_intP_t_5_20_at_L i_5 j_5 k_0 t_5)
+(IMPLIES (<= j_5 k_0)
 (<= (num_of_pos i_5 j_5 t_5 intM_intP_t_5_20_at_L) (num_of_pos
-                                                   i_5 k_2 t_5 intM_intP_t_5_20_at_L))))
+                                                   i_5 k_0 t_5 intM_intP_t_5_20_at_L))))
 
 (BG_PUSH
  ;; lemma num_of_pos_increasing as axiom
-(FORALL (intM_intP_t_5_20_at_L i_5 j_5 k_2 t_5)
-(IMPLIES (<= j_5 k_2)
+(FORALL (intM_intP_t_5_20_at_L i_5 j_5 k_0 t_5)
+(IMPLIES (<= j_5 k_0)
 (<= (num_of_pos i_5 j_5 t_5 intM_intP_t_5_20_at_L) (num_of_pos
-                                                   i_5 k_2 t_5 intM_intP_t_5_20_at_L)))))
+                                                   i_5 k_0 t_5 intM_intP_t_5_20_at_L)))))
 
 ;; num_of_pos_strictly_increasing, File "HOME/tests/java/Muller.java", line 65, characters 10-40
 (FORALL (intM_intP_t_6_21_at_L i_6 n t_6)
@@ -10020,7 +9995,7 @@ why -simplify [...] why/Muller.why
 (EQ (integer_of_int32 count1)
 (num_of_pos 0 (integer_of_int32 i_8_0) t_7 intM_intP_t_7_9))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_1, File "why/Muller.why", line 902, characters 54-230
+;; Muller_m_safety_po_1, File "why/Muller.why", line 900, characters 54-230
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10101,7 +10076,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (< (integer_of_int32 i_7) result1)
 (<= (integer_of_int32 i_7) (offset_max Object_t_7_9_alloc_table t_7))))))))))))))))))
 
-;; Muller_m_safety_po_4, File "HOME/tests/java/Muller.jc", line 160, characters 69-77
+;; Muller_m_safety_po_4, File "HOME/tests/java/Muller.jc", line 158, characters 69-77
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10137,7 +10112,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (> (integer_of_int32 result2) 0)
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 count) 1))))))))))))))))))))))
 
-;; Muller_m_safety_po_5, File "HOME/tests/java/Muller.jc", line 160, characters 69-77
+;; Muller_m_safety_po_5, File "HOME/tests/java/Muller.jc", line 158, characters 69-77
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10173,7 +10148,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (> (integer_of_int32 result2) 0)
 (<= (+ (integer_of_int32 count) 1) constant_too_large_2147483647)))))))))))))))))))))
 
-;; Muller_m_safety_po_6, File "HOME/tests/java/Muller.jc", line 158, characters 24-30
+;; Muller_m_safety_po_6, File "HOME/tests/java/Muller.jc", line 156, characters 24-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10216,7 +10191,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ count0 result3)
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 i_7) 1)))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_7, File "HOME/tests/java/Muller.jc", line 158, characters 24-30
+;; Muller_m_safety_po_7, File "HOME/tests/java/Muller.jc", line 156, characters 24-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10364,7 +10339,7 @@ why -simplify [...] why/Muller.why
                                                               (integer_of_int32
                                                               i_7)))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_10, File "HOME/tests/java/Muller.jc", line 158, characters 24-30
+;; Muller_m_safety_po_10, File "HOME/tests/java/Muller.jc", line 156, characters 24-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10400,7 +10375,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (<= (integer_of_int32 result2) 0)
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 i_7) 1))))))))))))))))))))))
 
-;; Muller_m_safety_po_11, File "HOME/tests/java/Muller.jc", line 158, characters 24-30
+;; Muller_m_safety_po_11, File "HOME/tests/java/Muller.jc", line 156, characters 24-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10689,7 +10664,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (< (integer_of_int32 i_8) result5)
 (<= (integer_of_int32 i_8) (offset_max Object_t_7_9_alloc_table t_7))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_17, File "HOME/tests/java/Muller.jc", line 197, characters 47-55
+;; Muller_m_safety_po_17, File "HOME/tests/java/Muller.jc", line 195, characters 47-55
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10769,7 +10744,7 @@ why -simplify [...] why/Muller.why
          (select intM_intP_t_7_9 (shift t_7 (integer_of_int32 i_8))))
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 count1) 1)))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_18, File "HOME/tests/java/Muller.jc", line 197, characters 47-55
+;; Muller_m_safety_po_18, File "HOME/tests/java/Muller.jc", line 195, characters 47-55
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -11025,7 +11000,7 @@ why -simplify [...] why/Muller.why
 (<= (integer_of_int32 count1) (offset_max
                               Object_Muller_m_11_alloc_table0 result2))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_21, File "HOME/tests/java/Muller.jc", line 195, characters 30-36
+;; Muller_m_safety_po_21, File "HOME/tests/java/Muller.jc", line 193, characters 30-36
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -11122,7 +11097,7 @@ why -simplify [...] why/Muller.why
          intM_intP_Muller_m_11 (shift result2 (integer_of_int32 count1)) result7))
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 i_8) 1))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_22, File "HOME/tests/java/Muller.jc", line 195, characters 30-36
+;; Muller_m_safety_po_22, File "HOME/tests/java/Muller.jc", line 193, characters 30-36
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -11432,7 +11407,7 @@ why -simplify [...] why/Muller.why
                                                               (integer_of_int32
                                                               i_8))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_25, File "HOME/tests/java/Muller.jc", line 195, characters 30-36
+;; Muller_m_safety_po_25, File "HOME/tests/java/Muller.jc", line 193, characters 30-36
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -11506,7 +11481,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (<= (integer_of_int32 result6) 0)
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 i_8) 1))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_26, File "HOME/tests/java/Muller.jc", line 195, characters 30-36
+;; Muller_m_safety_po_26, File "HOME/tests/java/Muller.jc", line 193, characters 30-36
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -13027,25 +13002,21 @@ axiom num_of_pos_false_case:
   (forall intM_intP_t_8_at_L:(Object, int32) memory.
     (forall i_2:int.
       (forall j_2:int.
-        (forall k_0:int.
-          (forall t_2:Object pointer.
-            (((i_2 < j_2) and
-              (not (integer_of_int32(select(intM_intP_t_8_at_L, shift(t_2,
-              (j_2 - 1)))) > 0))) ->
-             (num_of_pos(i_2, j_2, t_2, intM_intP_t_8_at_L) = num_of_pos(i_2,
-             (j_2 - 1), t_2, intM_intP_t_8_at_L))))))))
+        (forall t_2:Object pointer.
+          (((i_2 < j_2) and (not (integer_of_int32(select(intM_intP_t_8_at_L,
+            shift(t_2, (j_2 - 1)))) > 0))) ->
+           (num_of_pos(i_2, j_2, t_2, intM_intP_t_8_at_L) = num_of_pos(i_2,
+           (j_2 - 1), t_2, intM_intP_t_8_at_L)))))))
 
 axiom num_of_pos_true_case:
   (forall intM_intP_t_8_at_L:(Object, int32) memory.
     (forall i_1:int.
       (forall j_1:int.
-        (forall k:int.
-          (forall t_1:Object pointer.
-            (((i_1 < j_1) and (integer_of_int32(select(intM_intP_t_8_at_L,
-              shift(t_1, (j_1 - 1)))) > 0)) ->
-             (num_of_pos(i_1, j_1, t_1,
-             intM_intP_t_8_at_L) = (num_of_pos(i_1, (j_1 - 1), t_1,
-             intM_intP_t_8_at_L) + 1))))))))
+        (forall t_1:Object pointer.
+          (((i_1 < j_1) and (integer_of_int32(select(intM_intP_t_8_at_L,
+            shift(t_1, (j_1 - 1)))) > 0)) ->
+           (num_of_pos(i_1, j_1, t_1, intM_intP_t_8_at_L) = (num_of_pos(i_1,
+           (j_1 - 1), t_1, intM_intP_t_8_at_L) + 1)))))))
 
 axiom num_of_pos_empty:
   (forall intM_intP_t_8_at_L:(Object, int32) memory.
@@ -13073,42 +13044,42 @@ goal num_of_pos_additive:
   (forall intM_intP_t_4_19_at_L:(Object, int32) memory.
     (forall i_4:int.
       (forall j_4:int.
-        (forall k_1:int.
+        (forall k:int.
           (forall t_4:Object pointer.
-            (((i_4 <= j_4) and (j_4 <= k_1)) -> (num_of_pos(i_4, k_1, t_4,
+            (((i_4 <= j_4) and (j_4 <= k)) -> (num_of_pos(i_4, k, t_4,
              intM_intP_t_4_19_at_L) = (num_of_pos(i_4, j_4, t_4,
-             intM_intP_t_4_19_at_L) + num_of_pos(j_4, k_1, t_4,
+             intM_intP_t_4_19_at_L) + num_of_pos(j_4, k, t_4,
              intM_intP_t_4_19_at_L)))))))))
 
 axiom num_of_pos_additive_as_axiom:
   (forall intM_intP_t_4_19_at_L:(Object, int32) memory.
     (forall i_4:int.
       (forall j_4:int.
-        (forall k_1:int.
+        (forall k:int.
           (forall t_4:Object pointer.
-            (((i_4 <= j_4) and (j_4 <= k_1)) -> (num_of_pos(i_4, k_1, t_4,
+            (((i_4 <= j_4) and (j_4 <= k)) -> (num_of_pos(i_4, k, t_4,
              intM_intP_t_4_19_at_L) = (num_of_pos(i_4, j_4, t_4,
-             intM_intP_t_4_19_at_L) + num_of_pos(j_4, k_1, t_4,
+             intM_intP_t_4_19_at_L) + num_of_pos(j_4, k, t_4,
              intM_intP_t_4_19_at_L)))))))))
 
 goal num_of_pos_increasing:
   (forall intM_intP_t_5_20_at_L:(Object, int32) memory.
     (forall i_5:int.
       (forall j_5:int.
-        (forall k_2:int.
+        (forall k_0:int.
           (forall t_5:Object pointer.
-            ((j_5 <= k_2) -> (num_of_pos(i_5, j_5, t_5,
-             intM_intP_t_5_20_at_L) <= num_of_pos(i_5, k_2, t_5,
+            ((j_5 <= k_0) -> (num_of_pos(i_5, j_5, t_5,
+             intM_intP_t_5_20_at_L) <= num_of_pos(i_5, k_0, t_5,
              intM_intP_t_5_20_at_L))))))))
 
 axiom num_of_pos_increasing_as_axiom:
   (forall intM_intP_t_5_20_at_L:(Object, int32) memory.
     (forall i_5:int.
       (forall j_5:int.
-        (forall k_2:int.
+        (forall k_0:int.
           (forall t_5:Object pointer.
-            ((j_5 <= k_2) -> (num_of_pos(i_5, j_5, t_5,
-             intM_intP_t_5_20_at_L) <= num_of_pos(i_5, k_2, t_5,
+            ((j_5 <= k_0) -> (num_of_pos(i_5, j_5, t_5,
+             intM_intP_t_5_20_at_L) <= num_of_pos(i_5, k_0, t_5,
              intM_intP_t_5_20_at_L))))))))
 
 goal num_of_pos_strictly_increasing:
@@ -16251,13 +16222,3 @@ goal Muller_m_safety_po_28:
                                            ((offset_max(Object_t_7_9_alloc_table,
                                            t_7) + 1) - integer_of_int32(i_8))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Muller_why.why            : ?###.......................................................... (58/0/1/3/0)
-total   :  62
-valid   :  58 ( 94%)
-invalid :   0 (  0%)
-unknown :   1 (  2%)
-timeout :   3 (  5%)
-failure :   0 (  0%)

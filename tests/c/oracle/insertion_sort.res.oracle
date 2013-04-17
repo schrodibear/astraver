@@ -4209,16 +4209,6 @@ goal insert_sort_safety_po_16:
   (i1 = (i0 + 1)) ->
   (("JC_35": (n_1 - i1)) < ("JC_35": (n_1 - i0)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/insertion_sort_why.why    : .................................... (36/0/0/0/0)
-total   :  36
-valid   :  36 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)
 // RUNSIMPLIFY: will ask regtests to run Simplify on this program
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/insertion_sort.why

@@ -210,20 +210,25 @@ behavior default:
                
                {  
                   {  
-                     (assert for default: (C_9 : (\real_abs(((x + i).doubleM :> real)) <=
-                                                   1.0)));
+                     (assert for default: (C_9 : (jessie : (\real_abs(
+                                                             ((x + i).doubleM :> real)) <=
+                                                             1.0))));
                      ()
                   };
                   
                   {  
-                     (assert for default: (C_10 : (\real_abs(((y + i).doubleM :> real)) <=
-                                                    1.0)));
+                     (assert for default: (C_10 : (jessie : (\real_abs(
+                                                              ((y + i).doubleM :> real)) <=
+                                                              1.0))));
                      ()
                   };
                   
                   {  
-                     (assert for default: (C_11 : (\real_abs((p :> real)) <=
-                                                    (10.0 * (1 + 0x1.1p-50)))));
+                     (assert for default: (C_11 : (jessie : (\real_abs(
+                                                              (p :> real)) <=
+                                                              (10.0 *
+                                                                (1 +
+                                                                  0x1.1p-50))))));
                      ()
                   };
                   (L : (C_18 : (p = (C_17 : (p +
@@ -235,47 +240,58 @@ behavior default:
                                                                   i)).doubleM))))))));
                   
                   {  
-                     (assert for default: (C_19 : (\real_abs(((p :> real) -
-                                                               ((\at(p,L) :> real) +
-                                                                 (((x + i).doubleM :> real) *
-                                                                   ((y + i).doubleM :> real))))) <=
-                                                    0x1.1p-50)));
+                     (assert for default: (C_19 : (jessie : (\real_abs(
+                                                              ((p :> real) -
+                                                                ((\at(p,L) :> real) +
+                                                                  (((x + i).doubleM :> real) *
+                                                                    (
+                                                                    (y + i).doubleM :> real))))) <=
+                                                              0x1.1p-50))));
                      ()
                   };
                   
                   {  
-                     (assert for default: (C_20 : (\real_abs(((p :> real) -
-                                                               exact_scalar_product{Here}(
-                                                               x, y, 
-                                                               (i + 1)))) <=
-                                                    (\real_abs(((p :> real) -
-                                                                 ((\at(p,L) :> real) +
-                                                                   (((x + i).doubleM :> real) *
+                     (assert for default: (C_20 : (jessie : (\real_abs(
+                                                              ((p :> real) -
+                                                                exact_scalar_product{Here}(
+                                                                x, y, 
+                                                                (i + 1)))) <=
+                                                              (\real_abs(
+                                                                ((p :> real) -
+                                                                  ((\at(p,L) :> real) +
+                                                                    (((x + i).doubleM :> real) *
                                                                     ((y + i).doubleM :> real))))) +
-                                                      \real_abs((((\at(p,L) :> real) +
+                                                                \real_abs(
+                                                                (((\at(p,L) :> real) +
                                                                    (((x + i).doubleM :> real) *
                                                                     ((y + i).doubleM :> real))) -
                                                                   (exact_scalar_product{Here}(
                                                                     x, y, i) +
                                                                     (((x + i).doubleM :> real) *
-                                                                    ((y + i).doubleM :> real)))))))));
+                                                                    ((y + i).doubleM :> real))))))))));
                      ()
                   };
                   
                   {  
-                     (assert for default: (C_21 : (\real_abs(exact_scalar_product{Here}(
-                                                             x, y, (i + 1))) <=
-                                                    (\real_abs(exact_scalar_product{Here}(
-                                                               x, y, i)) +
-                                                      (\real_abs(((x + i).doubleM :> real)) *
-                                                        \real_abs(((y + i).doubleM :> real)))))));
+                     (assert for default: (C_21 : (jessie : (\real_abs(
+                                                              exact_scalar_product{Here}(
+                                                              x, y, (i + 1))) <=
+                                                              (\real_abs(
+                                                                exact_scalar_product{Here}(
+                                                                x, y, i)) +
+                                                                (\real_abs(
+                                                                  ((x + i).doubleM :> real)) *
+                                                                  \real_abs(
+                                                                  ((y + i).doubleM :> real))))))));
                      ()
                   };
                   
                   {  
-                     (assert for default: (C_22 : ((\real_abs(((x + i).doubleM :> real)) *
-                                                     \real_abs(((y + i).doubleM :> real))) <=
-                                                    1.0)));
+                     (assert for default: (C_22 : (jessie : ((\real_abs(
+                                                               ((x + i).doubleM :> real)) *
+                                                               \real_abs(
+                                                               ((y + i).doubleM :> real))) <=
+                                                              1.0))));
                      ()
                   }
                };
@@ -851,7 +867,7 @@ end = 21
 file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
 line = 92
 begin = 9
-end = 4824
+end = 6054
 
 [A1]
 name = "Lemma A1"
@@ -865,7 +881,7 @@ end = 85
 file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
 line = 92
 begin = 9
-end = 4824
+end = 6054
 
 [A2]
 name = "Lemma A2"
@@ -1049,7 +1065,7 @@ end = -1
 file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
 line = 92
 begin = 9
-end = 4824
+end = 6054
 
 [scalar_product_ensures_default]
 name = "Function scalar_product"
@@ -1063,7 +1079,7 @@ end = 21
 file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
 line = 92
 begin = 9
-end = 4824
+end = 6054
 
 [JC_31]
 file = "HOME/tests/c/scalar_product.c"
@@ -5573,13 +5589,3 @@ goal scalar_product_safety_po_10:
   (("JC_43": (integer_of_int32(n_1) - integer_of_int32(i1))) < ("JC_43":
                                                                (integer_of_int32(n_1) - integer_of_int32(i0))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/scalar_product_why.why    : ?.......####.........##.... (20/0/1/6/0)
-total   :  27
-valid   :  20 ( 74%)
-invalid :   0 (  0%)
-unknown :   1 (  4%)
-timeout :   6 ( 22%)
-failure :   0 (  0%)

@@ -63,10 +63,12 @@ case $1 in
 	echo "========== generation of alt-ergo VC output =========="
 	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile why/$b'_why'.why
 	mycat $d/why/$b'_why'.why
-	echo "========== running alt-ergo =========="
-	tmp=$(tempfile -s regtests_ergo)
-	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile ergo 2> $tmp
-	grep -v 'CPU time limit' $tmp >&2
+	if grep RUNALTERGO $1 ; then
+  	    echo "========== running alt-ergo =========="
+	    tmp=$(tempfile -s regtests_ergo)
+	    DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile ergo 2> $tmp
+	    grep -v 'CPU time limit' $tmp >&2
+        fi
 	if grep RUNSIMPLIFY $1 ; then
 	    echo "========== generation of Simplify VC output =========="
 	    WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify/$b'_why'.sx
@@ -107,10 +109,12 @@ case $1 in
 	echo "========== generation of alt-ergo VC output =========="
 	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile why/$b'_why'.why
 	mycat $j/why/$b'_why'.why
-	echo "========== running alt-ergo =========="
-	tmp=$(tempfile -s regtests_ergo)
-	DP="$DIR/bin/why-dp.opt -no-timings -timeout 2" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile ergo 2> $tmp
-	grep -v 'CPU time limit' $tmp >&2
+	if grep RUNALTERGO $1 ; then
+	    echo "========== running alt-ergo =========="
+	    tmp=$(tempfile -s regtests_ergo)
+	    DP="$DIR/bin/why-dp.opt -no-timings -timeout 2" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile ergo 2> $tmp
+	    grep -v 'CPU time limit' $tmp >&2
+        fi
 	if grep RUNGAPPA $1 ; then
 	    echo "========== generation of Gappa VC output =========="
 	    WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile gappa/$b'_why'.gappa

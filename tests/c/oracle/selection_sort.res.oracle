@@ -285,8 +285,8 @@ behavior permutation:
                (L : (C_54 : swap(t, i_0, mi)));
                
                {  
-                  (assert for default: (C_55 : Permut{L,
-                                       Here}(t, 0, (n_1 - 1))));
+                  (assert for default: (C_55 : (jessie : Permut{L,
+                                               Here}(t, 0, (n_1 - 1)))));
                   ()
                }
             };
@@ -952,7 +952,7 @@ end = 47
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
 line = 129
 begin = 6
-end = 2615
+end = 2634
 
 [JC_98]
 file = "HOME/tests/c/selection_sort.c"
@@ -964,7 +964,7 @@ end = 27
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
 line = 129
 begin = 6
-end = 2615
+end = 2634
 
 [JC_1]
 file = "HOME/tests/c/selection_sort.c"
@@ -1019,7 +1019,7 @@ end = 39
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
 line = 129
 begin = 6
-end = 2615
+end = 2634
 
 [JC_49]
 file = "HOME/tests/c/selection_sort.c"
@@ -1037,7 +1037,7 @@ end = 39
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
 line = 129
 begin = 6
-end = 2615
+end = 2634
 
 [JC_5]
 file = "HOME/tests/c/selection_sort.c"
@@ -1269,7 +1269,7 @@ end = -1
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
 line = 129
 begin = 6
-end = 2615
+end = 2634
 
 [JC_13]
 file = "HOME/tests/c/selection_sort.c"
@@ -1281,7 +1281,7 @@ end = 33
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
 line = 129
 begin = 6
-end = 2615
+end = 2634
 
 [JC_14]
 file = "HOME/tests/c/selection_sort.c"
@@ -1514,7 +1514,7 @@ end = 34
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
 line = 129
 begin = 6
-end = 2615
+end = 2634
 
 [JC_31]
 file = "HOME/tests/c/selection_sort.c"
@@ -1526,7 +1526,7 @@ end = 34
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
 line = 129
 begin = 6
-end = 2615
+end = 2634
 
 [JC_32]
 file = "HOME/"
@@ -5403,16 +5403,6 @@ goal swap_safety_po_3:
   (tmp = result) ->
   (j <= offset_max(intP_t_0_4_alloc_table, t_0))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/selection_sort_why.why    : ..........................................#... (45/0/0/1/0)
-total   :  46
-valid   :  45 ( 98%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   1 (  2%)
-failure :   0 (  0%)
 // RUNSIMPLIFY: will ask regtests to run Simplify on this program
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/selection_sort.why

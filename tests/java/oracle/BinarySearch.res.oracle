@@ -10596,16 +10596,6 @@ goal BinarySearch_binary_search_safety_po_18:
   (("JC_74": (integer_of_int32(u0) - integer_of_int32(l))) < ("JC_74":
                                                              (integer_of_int32(u) - integer_of_int32(l))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ..?.....................?............. (36/0/2/0/0)
-total   :  38
-valid   :  36 ( 95%)
-invalid :   0 (  0%)
-unknown :   2 (  5%)
-timeout :   0 (  0%)
-failure :   0 (  0%)
 // RUNSIMPLIFY this tells regtests to run Simplify in this example
 ========== generation of Simplify VC output ==========
 ========== file tests/java/simplify/BinarySearch_why.sx ==========

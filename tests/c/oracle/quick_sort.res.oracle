@@ -215,16 +215,16 @@ behavior default:
 }
 
 unit quick_rec(intP[..] t, integer l, integer r)
-  requires (C_57 : ((C_58 : (\offset_min(t) <= l)) &&
-                     (C_59 : (\offset_max(t) >= r))));
-  decreases (C_60 : (r - l));
+  requires (C_55 : ((C_56 : (\offset_min(t) <= l)) &&
+                     (C_57 : (\offset_max(t) >= r))));
+  decreases (C_58 : (r - l));
 behavior default:
   assigns (t + [l..r]).intM;
-  ensures (C_54 : true);
+  ensures (C_52 : true);
 behavior sorted:
-  ensures (C_55 : Sorted{Here}(\at(t,Old), \at(l,Old), (\at(r,Old) + 1)));
+  ensures (C_53 : Sorted{Here}(\at(t,Old), \at(l,Old), (\at(r,Old) + 1)));
 behavior permutation:
-  ensures (C_56 : Permut{Old, Here}(\at(t,Old), \at(l,Old), \at(r,Old)));
+  ensures (C_54 : Permut{Old, Here}(\at(t,Old), \at(l,Old), \at(r,Old)));
 {  
    (var integer v);
    
@@ -269,7 +269,8 @@ behavior permutation:
                   (C_39 : swap(t, i_0, m));
                   
                   {  
-                     (assert for default: (C_40 : Permut{L1, Here}(t, l, r)));
+                     (assert for default: (C_40 : (jessie : Permut{L1,
+                                                  Here}(t, l, r))));
                      ()
                   }
                } else ())
@@ -280,34 +281,33 @@ behavior permutation:
       (while_0_break : ());
       
       {  
-         (assert for default: (C_45 : ((C_46 : (l <= m)) &&
-                                        (C_47 : (m <= r)))));
+         (assert for default: (C_45 : (jessie : ((l <= m) && (m <= r)))));
          ()
       };
-      (L : (C_48 : swap(t, l, m)));
+      (L : (C_46 : swap(t, l, m)));
       
       {  
-         (assert for default: (C_49 : Permut{L, Here}(t, l, r)));
+         (assert for default: (C_47 : (jessie : Permut{L, Here}(t, l, r))));
          ()
       };
-      (C_51 : quick_rec(t, l, (C_50 : (m - 1))));
-      (C_53 : quick_rec(t, (C_52 : (m + 1)), r));
+      (C_49 : quick_rec(t, l, (C_48 : (m - 1))));
+      (C_51 : quick_rec(t, (C_50 : (m + 1)), r));
       (return_label : 
       (return ()))
    }
 }
 
 unit quick_sort(intP[..] t_0, integer n_1)
-  requires (C_66 : ((C_67 : (\offset_min(t_0) <= 0)) &&
-                     (C_68 : (\offset_max(t_0) >= (n_1 - 1)))));
+  requires (C_64 : ((C_65 : (\offset_min(t_0) <= 0)) &&
+                     (C_66 : (\offset_max(t_0) >= (n_1 - 1)))));
 behavior default:
-  ensures (C_63 : true);
+  ensures (C_61 : true);
 behavior sorted:
-  ensures (C_64 : Sorted{Here}(\at(t_0,Old), 0, \at(n_1,Old)));
+  ensures (C_62 : Sorted{Here}(\at(t_0,Old), 0, \at(n_1,Old)));
 behavior permutation:
-  ensures (C_65 : Permut{Old, Here}(\at(t_0,Old), 0, (\at(n_1,Old) - 1)));
+  ensures (C_63 : Permut{Old, Here}(\at(t_0,Old), 0, (\at(n_1,Old) - 1)));
 {  
-   {  (C_62 : quick_rec(t_0, 0, (C_61 : (n_1 - 1))));
+   {  (C_60 : quick_rec(t_0, 0, (C_59 : (n_1 - 1))));
       
       (return ())
    }
@@ -315,13 +315,13 @@ behavior permutation:
 ========== file tests/c/quick_sort.jessie/quick_sort.cloc ==========
 [C_50]
 file = "HOME/tests/c/quick_sort.c"
-line = 81
-begin = 16
-end = 19
+line = 82
+begin = 14
+end = 17
 
 [C_51]
 file = "HOME/tests/c/quick_sort.c"
-line = 81
+line = 82
 begin = 2
 end = 20
 
@@ -333,34 +333,34 @@ begin = 5
 end = 14
 
 [C_52]
-file = "HOME/tests/c/quick_sort.c"
-line = 82
-begin = 14
-end = 17
-
-[C_53]
-file = "HOME/tests/c/quick_sort.c"
-line = 82
-begin = 2
-end = 20
-
-[C_54]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[C_55]
+[C_53]
 file = "HOME/tests/c/quick_sort.c"
 line = 53
 begin = 14
 end = 29
 
-[C_56]
+[C_54]
 file = "HOME/tests/c/quick_sort.c"
 line = 55
 begin = 14
 end = 37
+
+[C_55]
+file = "HOME/tests/c/quick_sort.c"
+line = 49
+begin = 13
+end = 32
+
+[C_56]
+file = "HOME/tests/c/quick_sort.c"
+line = 49
+begin = 13
+end = 32
 
 [C_57]
 file = "HOME/tests/c/quick_sort.c"
@@ -370,33 +370,33 @@ end = 32
 
 [C_58]
 file = "HOME/tests/c/quick_sort.c"
-line = 49
-begin = 13
-end = 32
-
-[C_59]
-file = "HOME/tests/c/quick_sort.c"
-line = 49
-begin = 13
-end = 32
-
-[C_60]
-file = "HOME/tests/c/quick_sort.c"
 line = 50
 begin = 14
 end = 17
 
-[C_61]
+[C_59]
 file = "HOME/tests/c/quick_sort.c"
 line = 92
 begin = 16
 end = 19
 
-[C_62]
+[C_60]
 file = "HOME/tests/c/quick_sort.c"
 line = 92
 begin = 2
 end = 20
+
+[C_61]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[C_62]
+file = "HOME/tests/c/quick_sort.c"
+line = 87
+begin = 14
+end = 27
 
 [C_10]
 file = "HOME/tests/c/quick_sort.c"
@@ -405,10 +405,10 @@ begin = 9
 end = 12
 
 [C_63]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/quick_sort.c"
+line = 89
+begin = 14
+end = 39
 
 [C_11]
 file = "HOME/tests/c/quick_sort.c"
@@ -418,9 +418,9 @@ end = 12
 
 [C_64]
 file = "HOME/tests/c/quick_sort.c"
-line = 87
-begin = 14
-end = 27
+line = 85
+begin = 13
+end = 34
 
 [C_12]
 file = "HOME/tests/c/quick_sort.c"
@@ -430,9 +430,9 @@ end = 33
 
 [C_65]
 file = "HOME/tests/c/quick_sort.c"
-line = 89
-begin = 14
-end = 39
+line = 85
+begin = 13
+end = 34
 
 [C_13]
 file = "HOME/tests/c/quick_sort.c"
@@ -452,23 +452,11 @@ line = 38
 begin = 13
 end = 24
 
-[C_67]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
-
 [C_15]
 file = "HOME/tests/c/quick_sort.c"
 line = 38
 begin = 13
 end = 24
-
-[C_68]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
 
 [C_16]
 file = "HOME/tests/c/quick_sort.c"
@@ -720,27 +708,27 @@ end = 24
 
 [C_46]
 file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 13
-end = 19
-
-[C_47]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 18
-end = 24
-
-[C_48]
-file = "HOME/tests/c/quick_sort.c"
 line = 79
 begin = 4
 end = 15
 
-[C_49]
+[C_47]
 file = "HOME/tests/c/quick_sort.c"
 line = 80
 begin = 13
 end = 34
+
+[C_48]
+file = "HOME/tests/c/quick_sort.c"
+line = 81
+begin = 16
+end = 19
+
+[C_49]
+file = "HOME/tests/c/quick_sort.c"
+line = 81
+begin = 2
+end = 20
 
 ========== jessie execution ==========
 Generating Why function swap
@@ -922,24 +910,22 @@ clean:
 
 ========== file tests/c/quick_sort.jessie/quick_sort.loc ==========
 [JC_90]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 183
-begin = 14
-end = 47
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 39
+end = 44
 
 [JC_91]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 184
-begin = 14
-end = 47
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 43
+end = 51
 
 [JC_92]
 file = "HOME/tests/c/quick_sort.c"
 line = 68
 begin = 21
-end = 30
+end = 51
 
 [JC_40]
 file = "HOME/tests/c/quick_sort.c"
@@ -949,9 +935,9 @@ end = 29
 
 [JC_93]
 file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 34
-end = 40
+line = 67
+begin = 8
+end = 31
 
 [JC_41]
 file = "HOME/tests/c/quick_sort.c"
@@ -969,9 +955,9 @@ end = 14
 
 [JC_94]
 file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 39
-end = 44
+line = 65
+begin = 8
+end = 50
 
 [JC_42]
 file = "HOME/tests/c/quick_sort.c"
@@ -981,9 +967,9 @@ end = 37
 
 [JC_95]
 file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 43
-end = 51
+line = 63
+begin = 8
+end = 50
 
 [JC_43]
 kind = PointerDeref
@@ -993,10 +979,10 @@ begin = 6
 end = 10
 
 [JC_96]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 21
-end = 51
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_44]
 file = "HOME/tests/c/quick_sort.c"
@@ -1004,18 +990,11 @@ line = 68
 begin = 21
 end = 30
 
-[JC_150]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 200
-begin = 14
-end = 51
-
 [JC_97]
-file = "HOME/tests/c/quick_sort.c"
-line = 67
-begin = 8
-end = 31
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
 
 [JC_45]
 file = "HOME/tests/c/quick_sort.c"
@@ -1023,18 +1002,11 @@ line = 68
 begin = 34
 end = 40
 
-[JC_151]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 200
-begin = 14
-end = 51
-
 [JC_98]
-file = "HOME/tests/c/quick_sort.c"
-line = 65
-begin = 8
-end = 50
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
 
 [JC_46]
 file = "HOME/tests/c/quick_sort.c"
@@ -1049,16 +1021,17 @@ begin = 13
 end = 24
 
 [JC_100]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/quick_sort.c"
+line = 75
+begin = 17
+end = 39
 
 [JC_99]
-file = "HOME/tests/c/quick_sort.c"
-line = 63
-begin = 8
-end = 50
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 159
+begin = 26
+end = 41
 
 [JC_47]
 file = "HOME/tests/c/quick_sort.c"
@@ -1073,10 +1046,10 @@ begin = 13
 end = 24
 
 [JC_101]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1395
+file = "HOME/tests/c/quick_sort.c"
+line = 78
+begin = 13
+end = 24
 
 [JC_48]
 file = "HOME/tests/c/quick_sort.c"
@@ -1091,10 +1064,11 @@ begin = 28
 end = 39
 
 [JC_102]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1395
+kind = UserCall
+file = "HOME/tests/c/quick_sort.c"
+line = 79
+begin = 4
+end = 15
 
 [JC_49]
 file = "HOME/tests/c/quick_sort.c"
@@ -1109,11 +1083,10 @@ begin = 28
 end = 39
 
 [JC_103]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 159
-begin = 26
-end = 41
+file = "HOME/tests/c/quick_sort.c"
+line = 80
+begin = 13
+end = 34
 
 [JC_5]
 file = "HOME/tests/c/quick_sort.c"
@@ -1122,10 +1095,11 @@ begin = 13
 end = 39
 
 [JC_104]
-file = "HOME/tests/c/quick_sort.c"
-line = 75
-begin = 17
-end = 39
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 183
+begin = 14
+end = 47
 
 [JC_6]
 file = "HOME/"
@@ -1142,10 +1116,11 @@ begin = 5
 end = 15
 
 [JC_105]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 13
-end = 19
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 184
+begin = 14
+end = 47
 
 [JC_7]
 file = "HOME/tests/c/quick_sort.c"
@@ -1163,9 +1138,9 @@ end = 15
 
 [JC_106]
 file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 18
-end = 24
+line = 68
+begin = 21
+end = 30
 
 [JC_8]
 file = "HOME/tests/c/quick_sort.c"
@@ -1175,9 +1150,9 @@ end = 24
 
 [JC_107]
 file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 13
-end = 24
+line = 68
+begin = 34
+end = 40
 
 [JC_9]
 file = "HOME/tests/c/quick_sort.c"
@@ -1186,17 +1161,16 @@ begin = 28
 end = 39
 
 [JC_108]
-kind = UserCall
 file = "HOME/tests/c/quick_sort.c"
-line = 79
-begin = 4
-end = 15
+line = 68
+begin = 39
+end = 44
 
 [JC_109]
 file = "HOME/tests/c/quick_sort.c"
-line = 80
-begin = 13
-end = 34
+line = 68
+begin = 43
+end = 51
 
 [JC_50]
 file = "HOME/tests/c/quick_sort.c"
@@ -1220,13 +1194,13 @@ end = -1
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
 line = 131
 begin = 6
-end = 1395
+end = 1456
 
 [JC_54]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
 line = 131
 begin = 6
-end = 1395
+end = 1456
 
 [JC_55]
 kind = PointerDeref
@@ -1243,11 +1217,10 @@ begin = 26
 end = 41
 
 [JC_110]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 183
-begin = 14
-end = 47
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 21
+end = 51
 
 [JC_57]
 file = "HOME/tests/c/quick_sort.c"
@@ -1256,11 +1229,10 @@ begin = 17
 end = 39
 
 [JC_111]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 184
-begin = 14
-end = 47
+file = "HOME/tests/c/quick_sort.c"
+line = 67
+begin = 8
+end = 31
 
 [JC_58]
 file = "HOME/tests/c/quick_sort.c"
@@ -1270,57 +1242,58 @@ end = 22
 
 [JC_112]
 file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 21
-end = 30
+line = 65
+begin = 8
+end = 50
 
 [JC_59]
 file = "HOME/tests/c/quick_sort.c"
 line = 78
 begin = 13
-end = 19
+end = 24
 
 [JC_113]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 34
-end = 40
-
-[JC_114]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 39
-end = 44
-
-[JC_115]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 43
-end = 51
-
-[JC_116]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 21
-end = 51
-
-[JC_117]
-file = "HOME/tests/c/quick_sort.c"
-line = 67
-begin = 8
-end = 31
-
-[JC_118]
-file = "HOME/tests/c/quick_sort.c"
-line = 65
-begin = 8
-end = 50
-
-[JC_119]
 file = "HOME/tests/c/quick_sort.c"
 line = 63
 begin = 8
 end = 50
+
+[JC_114]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_115]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
+
+[JC_116]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
+
+[JC_117]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 159
+begin = 26
+end = 41
+
+[JC_118]
+file = "HOME/tests/c/quick_sort.c"
+line = 75
+begin = 17
+end = 39
+
+[JC_119]
+file = "HOME/tests/c/quick_sort.c"
+line = 78
+begin = 13
+end = 24
 
 [quick_rec_ensures_default]
 name = "Function quick_rec"
@@ -1339,23 +1312,24 @@ begin = 5
 end = 9
 
 [JC_60]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 18
-end = 24
-
-[JC_61]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 13
-end = 24
-
-[JC_62]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.c"
 line = 79
 begin = 4
 end = 15
+
+[JC_61]
+file = "HOME/tests/c/quick_sort.c"
+line = 80
+begin = 13
+end = 34
+
+[JC_62]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 183
+begin = 14
+end = 47
 
 [JC_10]
 file = "HOME/tests/c/quick_sort.c"
@@ -1365,9 +1339,9 @@ end = 39
 
 [JC_63]
 file = "HOME/tests/c/quick_sort.c"
-line = 80
-begin = 13
-end = 34
+line = 50
+begin = 14
+end = 17
 
 [JC_11]
 file = "HOME/tests/c/quick_sort.c"
@@ -1376,11 +1350,10 @@ begin = 13
 end = 39
 
 [JC_64]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 183
+file = "HOME/tests/c/quick_sort.c"
+line = 50
 begin = 14
-end = 47
+end = 17
 
 [JC_12]
 file = "HOME/"
@@ -1389,10 +1362,11 @@ begin = -1
 end = -1
 
 [JC_65]
-file = "HOME/tests/c/quick_sort.c"
-line = 50
+kind = VarDecr
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 183
 begin = 14
-end = 17
+end = 47
 
 [JC_13]
 file = "HOME/tests/c/quick_sort.c"
@@ -1401,10 +1375,11 @@ begin = 12
 end = 33
 
 [JC_66]
-file = "HOME/tests/c/quick_sort.c"
-line = 50
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 184
 begin = 14
-end = 17
+end = 47
 
 [JC_14]
 file = "HOME/tests/c/quick_sort.c"
@@ -1413,17 +1388,17 @@ begin = 5
 end = 9
 
 [JC_120]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/c/quick_sort.c"
+line = 79
+begin = 4
+end = 15
 
 [JC_67]
-kind = VarDecr
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 183
+file = "HOME/tests/c/quick_sort.c"
+line = 50
 begin = 14
-end = 47
+end = 17
 
 [JC_15]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
@@ -1432,10 +1407,10 @@ begin = 9
 end = 16
 
 [JC_121]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1395
+file = "HOME/tests/c/quick_sort.c"
+line = 80
+begin = 13
+end = 34
 
 [quick_rec_safety]
 name = "Function quick_rec"
@@ -1446,11 +1421,10 @@ begin = 5
 end = 14
 
 [JC_68]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 184
+file = "HOME/tests/c/quick_sort.c"
+line = 50
 begin = 14
-end = 47
+end = 17
 
 [JC_16]
 file = "HOME/tests/c/quick_sort.c"
@@ -1459,16 +1433,18 @@ begin = 12
 end = 33
 
 [JC_122]
+kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1395
+line = 183
+begin = 14
+end = 47
 
 [JC_69]
-file = "HOME/tests/c/quick_sort.c"
-line = 50
+kind = VarDecr
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 184
 begin = 14
-end = 17
+end = 47
 
 [JC_17]
 file = "HOME/tests/c/quick_sort.c"
@@ -1479,9 +1455,9 @@ end = 9
 [JC_123]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 159
-begin = 26
-end = 41
+line = 184
+begin = 14
+end = 47
 
 [JC_18]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
@@ -1499,9 +1475,9 @@ end = 15
 
 [JC_124]
 file = "HOME/tests/c/quick_sort.c"
-line = 75
-begin = 17
-end = 39
+line = 85
+begin = 13
+end = 34
 
 [JC_19]
 file = "HOME/"
@@ -1511,53 +1487,51 @@ end = -1
 
 [JC_125]
 file = "HOME/tests/c/quick_sort.c"
-line = 78
+line = 85
 begin = 13
-end = 19
+end = 34
 
 [JC_126]
 file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 18
-end = 24
+line = 85
+begin = 13
+end = 34
 
 [JC_127]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 13
-end = 24
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_128]
-kind = UserCall
 file = "HOME/tests/c/quick_sort.c"
-line = 79
-begin = 4
-end = 15
+line = 85
+begin = 13
+end = 34
 
 [JC_129]
 file = "HOME/tests/c/quick_sort.c"
-line = 80
+line = 85
 begin = 13
 end = 34
 
 [JC_70]
 file = "HOME/tests/c/quick_sort.c"
-line = 50
-begin = 14
-end = 17
+line = 68
+begin = 21
+end = 30
 
 [JC_71]
-kind = VarDecr
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 184
-begin = 14
-end = 47
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 34
+end = 40
 
 [JC_72]
 file = "HOME/tests/c/quick_sort.c"
 line = 68
-begin = 21
-end = 30
+begin = 39
+end = 44
 
 [JC_20]
 file = "HOME/"
@@ -1568,8 +1542,8 @@ end = -1
 [JC_73]
 file = "HOME/tests/c/quick_sort.c"
 line = 68
-begin = 34
-end = 40
+begin = 43
+end = 51
 
 [JC_21]
 kind = PointerDeref
@@ -1581,8 +1555,8 @@ end = 16
 [JC_74]
 file = "HOME/tests/c/quick_sort.c"
 line = 68
-begin = 39
-end = 44
+begin = 21
+end = 51
 
 [JC_22]
 kind = PointerDeref
@@ -1593,9 +1567,9 @@ end = 13
 
 [JC_75]
 file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 43
-end = 51
+line = 67
+begin = 8
+end = 31
 
 [JC_23]
 kind = PointerDeref
@@ -1606,9 +1580,9 @@ end = 77
 
 [JC_76]
 file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 21
-end = 51
+line = 65
+begin = 8
+end = 50
 
 [swap_ensures_default]
 name = "Function swap"
@@ -1626,17 +1600,16 @@ begin = 15
 end = 52
 
 [JC_130]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 183
-begin = 14
-end = 47
+file = "HOME/tests/c/quick_sort.c"
+line = 85
+begin = 13
+end = 34
 
 [JC_77]
 file = "HOME/tests/c/quick_sort.c"
-line = 67
+line = 63
 begin = 8
-end = 31
+end = 50
 
 [JC_25]
 file = "HOME/tests/c/quick_sort.c"
@@ -1645,17 +1618,16 @@ begin = 13
 end = 32
 
 [JC_131]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 184
-begin = 14
-end = 47
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_78]
-file = "HOME/tests/c/quick_sort.c"
-line = 65
-begin = 8
-end = 50
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_26]
 file = "HOME/tests/c/quick_sort.c"
@@ -1664,16 +1636,16 @@ begin = 13
 end = 32
 
 [JC_132]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_79]
-file = "HOME/tests/c/quick_sort.c"
-line = 63
-begin = 8
-end = 50
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
 
 [JC_27]
 file = "HOME/tests/c/quick_sort.c"
@@ -1682,10 +1654,10 @@ begin = 13
 end = 32
 
 [JC_133]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_28]
 file = "HOME/"
@@ -1694,10 +1666,10 @@ begin = -1
 end = -1
 
 [JC_134]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_29]
 file = "HOME/tests/c/quick_sort.c"
@@ -1713,45 +1685,46 @@ end = -1
 
 [JC_136]
 file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
+line = 87
+begin = 14
+end = 27
 
 [JC_137]
 file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
+line = 87
+begin = 14
+end = 27
 
 [JC_138]
 file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
+line = 89
+begin = 14
+end = 39
 
 [JC_139]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/quick_sort.c"
+line = 89
+begin = 14
+end = 39
 
 [JC_80]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
 
 [JC_81]
+kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1395
+line = 159
+begin = 26
+end = 41
 
 [JC_82]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1395
+file = "HOME/tests/c/quick_sort.c"
+line = 75
+begin = 17
+end = 39
 
 [JC_30]
 file = "HOME/tests/c/quick_sort.c"
@@ -1760,11 +1733,10 @@ begin = 13
 end = 32
 
 [JC_83]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 159
-begin = 26
-end = 41
+file = "HOME/tests/c/quick_sort.c"
+line = 78
+begin = 13
+end = 24
 
 [JC_31]
 file = "HOME/tests/c/quick_sort.c"
@@ -1781,10 +1753,11 @@ begin = 5
 end = 15
 
 [JC_84]
+kind = UserCall
 file = "HOME/tests/c/quick_sort.c"
-line = 75
-begin = 17
-end = 39
+line = 79
+begin = 4
+end = 15
 
 [JC_32]
 file = "HOME/"
@@ -1802,9 +1775,9 @@ end = 14
 
 [JC_85]
 file = "HOME/tests/c/quick_sort.c"
-line = 78
+line = 80
 begin = 13
-end = 19
+end = 34
 
 [JC_33]
 file = "HOME/"
@@ -1813,10 +1786,11 @@ begin = -1
 end = -1
 
 [JC_86]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 18
-end = 24
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 183
+begin = 14
+end = 47
 
 [JC_34]
 file = "HOME/tests/c/quick_sort.c"
@@ -1825,16 +1799,18 @@ begin = 5
 end = 14
 
 [JC_140]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 200
+begin = 14
+end = 51
 
 [JC_87]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 13
-end = 24
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 184
+begin = 14
+end = 47
 
 [JC_35]
 file = "HOME/"
@@ -1843,17 +1819,17 @@ begin = -1
 end = -1
 
 [JC_141]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 200
+begin = 14
+end = 51
 
 [JC_88]
-kind = UserCall
 file = "HOME/tests/c/quick_sort.c"
-line = 79
-begin = 4
-end = 15
+line = 68
+begin = 21
+end = 30
 
 [JC_36]
 file = "HOME/tests/c/quick_sort.c"
@@ -1862,16 +1838,17 @@ begin = 5
 end = 14
 
 [JC_142]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 200
+begin = 14
+end = 51
 
 [JC_89]
 file = "HOME/tests/c/quick_sort.c"
-line = 80
-begin = 13
-end = 34
+line = 68
+begin = 34
+end = 40
 
 [JC_37]
 file = "HOME/"
@@ -1880,10 +1857,11 @@ begin = -1
 end = -1
 
 [JC_143]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 200
+begin = 14
+end = 51
 
 [JC_38]
 file = "HOME/"
@@ -1891,49 +1869,11 @@ line = 0
 begin = -1
 end = -1
 
-[JC_144]
-file = "HOME/tests/c/quick_sort.c"
-line = 87
-begin = 14
-end = 27
-
 [JC_39]
 file = "HOME/tests/c/quick_sort.c"
 line = 53
 begin = 14
 end = 29
-
-[JC_145]
-file = "HOME/tests/c/quick_sort.c"
-line = 87
-begin = 14
-end = 27
-
-[JC_146]
-file = "HOME/tests/c/quick_sort.c"
-line = 89
-begin = 14
-end = 39
-
-[JC_147]
-file = "HOME/tests/c/quick_sort.c"
-line = 89
-begin = 14
-end = 39
-
-[JC_148]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 200
-begin = 14
-end = 51
-
-[JC_149]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 200
-begin = 14
-end = 51
 
 ========== file tests/c/quick_sort.jessie/why/quick_sort.why ==========
 type charP
@@ -2354,25 +2294,25 @@ parameter quick_sort :
    intP_intM_t_0_6:(intP, int) memory ref ->
     intP_t_0_6_alloc_table:intP alloc_table ->
      { } unit reads intP_intM_t_0_6 writes intP_intM_t_0_6
-     { ((JC_147:
+     { ((JC_139:
         Permut(t_0, (0), sub_int(n_1, (1)), intP_intM_t_0_6,
         intP_intM_t_0_6@))
-       and (JC_145: Sorted(t_0, (0), n_1, intP_intM_t_0_6))) }
+       and (JC_137: Sorted(t_0, (0), n_1, intP_intM_t_0_6))) }
 
 parameter quick_sort_requires :
  t_0:intP pointer ->
   n_1:int ->
    intP_intM_t_0_6:(intP, int) memory ref ->
     intP_t_0_6_alloc_table:intP alloc_table ->
-     { (JC_134:
-       ((JC_132: le_int(offset_min(intP_t_0_6_alloc_table, t_0), (0)))
-       and (JC_133:
+     { (JC_126:
+       ((JC_124: le_int(offset_min(intP_t_0_6_alloc_table, t_0), (0)))
+       and (JC_125:
            ge_int(offset_max(intP_t_0_6_alloc_table, t_0), sub_int(n_1, (1))))))}
      unit reads intP_intM_t_0_6 writes intP_intM_t_0_6
-     { ((JC_147:
+     { ((JC_139:
         Permut(t_0, (0), sub_int(n_1, (1)), intP_intM_t_0_6,
         intP_intM_t_0_6@))
-       and (JC_145: Sorted(t_0, (0), n_1, intP_intM_t_0_6))) }
+       and (JC_137: Sorted(t_0, (0), n_1, intP_intM_t_0_6))) }
 
 parameter swap :
  t_1:intP pointer ->
@@ -2437,22 +2377,22 @@ let quick_rec_ensures_default =
           (let jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
           while true do
           { invariant
-              (((JC_76:
-                ((JC_72: (select(intP_intM_t_5, shift(t, l_0)) = v))
-                and ((JC_73: le_int(l_0, m))
-                    and ((JC_74: lt_int(m, i_0))
-                        and (JC_75: le_int(i_0, add_int(r, (1))))))))
-               and ((JC_77:
+              (((JC_74:
+                ((JC_70: (select(intP_intM_t_5, shift(t, l_0)) = v))
+                and ((JC_71: le_int(l_0, m))
+                    and ((JC_72: lt_int(m, i_0))
+                        and (JC_73: le_int(i_0, add_int(r, (1))))))))
+               and ((JC_75:
                     Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@init))
-                   and ((JC_78:
+                   and ((JC_76:
                         (forall j_4:int.
                          ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
                           ge_int(select(intP_intM_t_5, shift(t, j_4)), v))))
-                       and (JC_79:
+                       and (JC_77:
                            (forall j_3:int.
                             ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
                              lt_int(select(intP_intM_t_5, shift(t, j_3)), v)))))))
-              and (JC_81:
+              and (JC_79:
                   not_assigns(intP_t_5_alloc_table, intP_intM_t_5@init,
                   intP_intM_t_5, pset_range(pset_singleton(t), l_0, r)))) 
              }
@@ -2480,10 +2420,10 @@ let quick_rec_ensures_default =
                    (let jessie_<num> = t in
                    (let jessie_<num> = !i_0 in
                    (let jessie_<num> = !m in
-                   (JC_83:
+                   (JC_81:
                    (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
                    (assert
-                   { (JC_84:
+                   { (JC_82:
                      Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) };
                    void); void end) end)) else void);
                 (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
@@ -2494,34 +2434,32 @@ let quick_rec_ensures_default =
          (while_0_break:
          begin
            void;
-          (assert
-          { (JC_87: ((JC_85: le_int(l_0, m)) and (JC_86: le_int(m, r)))) };
-          void);
+          (assert { (JC_83: (le_int(l_0, m) and le_int(m, r))) }; void);
           (L:
-          (C_48:
+          (C_46:
           begin
             void;
            (let jessie_<num> = t in
            (let jessie_<num> = l_0 in
            (let jessie_<num> = !m in
-           (JC_88:
+           (JC_84:
            (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
            (assert
-           { (JC_89: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) };
+           { (JC_85: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) };
            void);
-           (C_51:
+           (C_49:
            begin
              void;
             (let jessie_<num> = t in
             (let jessie_<num> = l_0 in
-            (let jessie_<num> = (C_50: ((sub_int !m) (1))) in
-            (JC_90:
+            (let jessie_<num> = (C_48: ((sub_int !m) (1))) in
+            (JC_86:
             (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-            (C_53:
+            (C_51:
             (let jessie_<num> = t in
-            (let jessie_<num> = (C_52: ((add_int !m) (1))) in
+            (let jessie_<num> = (C_50: ((add_int !m) (1))) in
             (let jessie_<num> = r in
-            (JC_91:
+            (JC_87:
             (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
            end) end)) end) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
@@ -2556,21 +2494,21 @@ let quick_rec_ensures_permutation =
           void); (let jessie_<num> = (m := l_0) in void);
           (let jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
           while true do
-          { invariant (JC_121: true)  }
+          { invariant (JC_115: true)  }
            begin
              [ { } unit reads i_0,intP_intM_t_5,m,v
-               { ((JC_116:
-                  ((JC_112: (select(intP_intM_t_5, shift(t, l_0)) = v))
-                  and ((JC_113: le_int(l_0, m))
-                      and ((JC_114: lt_int(m, i_0))
-                          and (JC_115: le_int(i_0, add_int(r, (1))))))))
-                 and ((JC_117:
+               { ((JC_110:
+                  ((JC_106: (select(intP_intM_t_5, shift(t, l_0)) = v))
+                  and ((JC_107: le_int(l_0, m))
+                      and ((JC_108: lt_int(m, i_0))
+                          and (JC_109: le_int(i_0, add_int(r, (1))))))))
+                 and ((JC_111:
                       Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@init))
-                     and ((JC_118:
+                     and ((JC_112:
                           (forall j_4:int.
                            ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
                             ge_int(select(intP_intM_t_5, shift(t, j_4)), v))))
-                         and (JC_119:
+                         and (JC_113:
                              (forall j_3:int.
                               ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
                                lt_int(select(intP_intM_t_5, shift(t, j_3)),
@@ -2597,10 +2535,10 @@ let quick_rec_ensures_permutation =
                    (let jessie_<num> = t in
                    (let jessie_<num> = !i_0 in
                    (let jessie_<num> = !m in
-                   (JC_123:
+                   (JC_117:
                    (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
                    [ { } unit reads intP_intM_t_5
-                     { (JC_124:
+                     { (JC_118:
                        Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
                    void end) end)) else void);
                 (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
@@ -2611,32 +2549,31 @@ let quick_rec_ensures_permutation =
          (while_0_break:
          begin
            void;
-          [ { } unit reads m
-            { (JC_127: ((JC_125: le_int(l_0, m)) and (JC_126: le_int(m, r)))) } ];
+          [ { } unit reads m { (JC_119: (le_int(l_0, m) and le_int(m, r))) } ];
           (L:
-          (C_48:
+          (C_46:
           begin
             void;
            (let jessie_<num> = t in
            (let jessie_<num> = l_0 in
            (let jessie_<num> = !m in
-           (JC_128:
+           (JC_120:
            (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
            [ { } unit reads intP_intM_t_5
-             { (JC_129: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
-           (C_51:
+             { (JC_121: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
+           (C_49:
            begin
              void;
             (let jessie_<num> = t in
             (let jessie_<num> = l_0 in
-            (let jessie_<num> = (C_50: ((sub_int !m) (1))) in
-            (JC_130:
+            (let jessie_<num> = (C_48: ((sub_int !m) (1))) in
+            (JC_122:
             (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-            (C_53:
+            (C_51:
             (let jessie_<num> = t in
-            (let jessie_<num> = (C_52: ((add_int !m) (1))) in
+            (let jessie_<num> = (C_50: ((add_int !m) (1))) in
             (let jessie_<num> = r in
-            (JC_131:
+            (JC_123:
             (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
            end) end)) end) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
@@ -2669,21 +2606,21 @@ let quick_rec_ensures_sorted =
           void); (let jessie_<num> = (m := l_0) in void);
           (let jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
           while true do
-          { invariant (JC_101: true)  }
+          { invariant (JC_97: true)  }
            begin
              [ { } unit reads i_0,intP_intM_t_5,m,v
-               { ((JC_96:
-                  ((JC_92: (select(intP_intM_t_5, shift(t, l_0)) = v))
-                  and ((JC_93: le_int(l_0, m))
-                      and ((JC_94: lt_int(m, i_0))
-                          and (JC_95: le_int(i_0, add_int(r, (1))))))))
-                 and ((JC_97:
+               { ((JC_92:
+                  ((JC_88: (select(intP_intM_t_5, shift(t, l_0)) = v))
+                  and ((JC_89: le_int(l_0, m))
+                      and ((JC_90: lt_int(m, i_0))
+                          and (JC_91: le_int(i_0, add_int(r, (1))))))))
+                 and ((JC_93:
                       Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@init))
-                     and ((JC_98:
+                     and ((JC_94:
                           (forall j_4:int.
                            ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
                             ge_int(select(intP_intM_t_5, shift(t, j_4)), v))))
-                         and (JC_99:
+                         and (JC_95:
                              (forall j_3:int.
                               ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
                                lt_int(select(intP_intM_t_5, shift(t, j_3)),
@@ -2710,10 +2647,10 @@ let quick_rec_ensures_sorted =
                    (let jessie_<num> = t in
                    (let jessie_<num> = !i_0 in
                    (let jessie_<num> = !m in
-                   (JC_103:
+                   (JC_99:
                    (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
                    [ { } unit reads intP_intM_t_5
-                     { (JC_104:
+                     { (JC_100:
                        Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
                    void end) end)) else void);
                 (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
@@ -2724,32 +2661,31 @@ let quick_rec_ensures_sorted =
          (while_0_break:
          begin
            void;
-          [ { } unit reads m
-            { (JC_107: ((JC_105: le_int(l_0, m)) and (JC_106: le_int(m, r)))) } ];
+          [ { } unit reads m { (JC_101: (le_int(l_0, m) and le_int(m, r))) } ];
           (L:
-          (C_48:
+          (C_46:
           begin
             void;
            (let jessie_<num> = t in
            (let jessie_<num> = l_0 in
            (let jessie_<num> = !m in
-           (JC_108:
+           (JC_102:
            (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
            [ { } unit reads intP_intM_t_5
-             { (JC_109: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
-           (C_51:
+             { (JC_103: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
+           (C_49:
            begin
              void;
             (let jessie_<num> = t in
             (let jessie_<num> = l_0 in
-            (let jessie_<num> = (C_50: ((sub_int !m) (1))) in
-            (JC_110:
+            (let jessie_<num> = (C_48: ((sub_int !m) (1))) in
+            (JC_104:
             (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-            (C_53:
+            (C_51:
             (let jessie_<num> = t in
-            (let jessie_<num> = (C_52: ((add_int !m) (1))) in
+            (let jessie_<num> = (C_50: ((add_int !m) (1))) in
             (let jessie_<num> = r in
-            (JC_111:
+            (JC_105:
             (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
            end) end)) end) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
@@ -2839,40 +2775,39 @@ let quick_rec_safety =
          (while_0_break:
          begin
            void;
-          [ { } unit reads m
-            { (JC_61: ((JC_59: le_int(l_0, m)) and (JC_60: le_int(m, r)))) } ];
+          [ { } unit reads m { (JC_59: (le_int(l_0, m) and le_int(m, r))) } ];
           (L:
-          (C_48:
+          (C_46:
           begin
             void;
            (let jessie_<num> = t in
            (let jessie_<num> = l_0 in
            (let jessie_<num> = !m in
-           (JC_62:
+           (JC_60:
            (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
            [ { } unit reads intP_intM_t_5
-             { (JC_63: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
-           (C_51:
+             { (JC_61: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
+           (C_49:
            begin
              void;
             (let jessie_<num> = t in
             (let jessie_<num> = l_0 in
-            (let jessie_<num> = (C_50: ((sub_int !m) (1))) in
-            (JC_67:
+            (let jessie_<num> = (C_48: ((sub_int !m) (1))) in
+            (JC_65:
             (check
-            { zwf_zero((JC_66 : sub_int(jessie_<num>, jessie_<num>)),
-              (JC_65 : sub_int(r, l_0))) };
-            (JC_64:
+            { zwf_zero((JC_64 : sub_int(jessie_<num>, jessie_<num>)),
+              (JC_63 : sub_int(r, l_0))) };
+            (JC_62:
             (((((quick_rec_requires jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))))));
-            (C_53:
+            (C_51:
             (let jessie_<num> = t in
-            (let jessie_<num> = (C_52: ((add_int !m) (1))) in
+            (let jessie_<num> = (C_50: ((add_int !m) (1))) in
             (let jessie_<num> = r in
-            (JC_71:
+            (JC_69:
             (check
-            { zwf_zero((JC_70 : sub_int(jessie_<num>, jessie_<num>)),
-              (JC_69 : sub_int(r, l_0))) };
-            (JC_68:
+            { zwf_zero((JC_68 : sub_int(jessie_<num>, jessie_<num>)),
+              (JC_67 : sub_int(r, l_0))) };
+            (JC_66:
             (((((quick_rec_requires jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))))
            end) end)) end) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
@@ -2880,73 +2815,73 @@ let quick_rec_safety =
 
 let quick_sort_ensures_default =
  fun (t_0 : intP pointer) (n_1 : int) (intP_intM_t_0_6 : (intP, int) memory ref) (intP_t_0_6_alloc_table : intP alloc_table) ->
-  { (JC_138:
-    ((JC_136: le_int(offset_min(intP_t_0_6_alloc_table, t_0), (0)))
-    and (JC_137:
+  { (JC_130:
+    ((JC_128: le_int(offset_min(intP_t_0_6_alloc_table, t_0), (0)))
+    and (JC_129:
         ge_int(offset_max(intP_t_0_6_alloc_table, t_0), sub_int(n_1, (1)))))) }
   (init:
   try
-   (C_62:
+   (C_60:
    begin
      (let jessie_<num> = t_0 in
      (let jessie_<num> = (0) in
-     (let jessie_<num> = (C_61: ((sub_int n_1) (1))) in
-     (JC_149:
+     (let jessie_<num> = (C_59: ((sub_int n_1) (1))) in
+     (JC_141:
      (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
     (raise Return); (raise Return) end) with Return -> void end)
-  { (JC_140: true) }
+  { (JC_132: true) }
 
 let quick_sort_ensures_permutation =
  fun (t_0 : intP pointer) (n_1 : int) (intP_intM_t_0_6 : (intP, int) memory ref) (intP_t_0_6_alloc_table : intP alloc_table) ->
-  { (JC_138:
-    ((JC_136: le_int(offset_min(intP_t_0_6_alloc_table, t_0), (0)))
-    and (JC_137:
+  { (JC_130:
+    ((JC_128: le_int(offset_min(intP_t_0_6_alloc_table, t_0), (0)))
+    and (JC_129:
         ge_int(offset_max(intP_t_0_6_alloc_table, t_0), sub_int(n_1, (1)))))) }
   (init:
   try
-   (C_62:
+   (C_60:
    begin
      (let jessie_<num> = t_0 in
      (let jessie_<num> = (0) in
-     (let jessie_<num> = (C_61: ((sub_int n_1) (1))) in
-     (JC_151:
+     (let jessie_<num> = (C_59: ((sub_int n_1) (1))) in
+     (JC_143:
      (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
     (raise Return); (raise Return) end) with Return -> void end)
-  { (JC_146:
+  { (JC_138:
     Permut(t_0, (0), sub_int(n_1, (1)), intP_intM_t_0_6, intP_intM_t_0_6@)) }
 
 let quick_sort_ensures_sorted =
  fun (t_0 : intP pointer) (n_1 : int) (intP_intM_t_0_6 : (intP, int) memory ref) (intP_t_0_6_alloc_table : intP alloc_table) ->
-  { (JC_138:
-    ((JC_136: le_int(offset_min(intP_t_0_6_alloc_table, t_0), (0)))
-    and (JC_137:
+  { (JC_130:
+    ((JC_128: le_int(offset_min(intP_t_0_6_alloc_table, t_0), (0)))
+    and (JC_129:
         ge_int(offset_max(intP_t_0_6_alloc_table, t_0), sub_int(n_1, (1)))))) }
   (init:
   try
-   (C_62:
+   (C_60:
    begin
      (let jessie_<num> = t_0 in
      (let jessie_<num> = (0) in
-     (let jessie_<num> = (C_61: ((sub_int n_1) (1))) in
-     (JC_150:
+     (let jessie_<num> = (C_59: ((sub_int n_1) (1))) in
+     (JC_142:
      (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
     (raise Return); (raise Return) end) with Return -> void end)
-  { (JC_144: Sorted(t_0, (0), n_1, intP_intM_t_0_6)) }
+  { (JC_136: Sorted(t_0, (0), n_1, intP_intM_t_0_6)) }
 
 let quick_sort_safety =
  fun (t_0 : intP pointer) (n_1 : int) (intP_intM_t_0_6 : (intP, int) memory ref) (intP_t_0_6_alloc_table : intP alloc_table) ->
-  { (JC_138:
-    ((JC_136: le_int(offset_min(intP_t_0_6_alloc_table, t_0), (0)))
-    and (JC_137:
+  { (JC_130:
+    ((JC_128: le_int(offset_min(intP_t_0_6_alloc_table, t_0), (0)))
+    and (JC_129:
         ge_int(offset_max(intP_t_0_6_alloc_table, t_0), sub_int(n_1, (1)))))) }
   (init:
   try
-   (C_62:
+   (C_60:
    begin
      (let jessie_<num> = t_0 in
      (let jessie_<num> = (0) in
-     (let jessie_<num> = (C_61: ((sub_int n_1) (1))) in
-     (JC_148:
+     (let jessie_<num> = (C_59: ((sub_int n_1) (1))) in
+     (JC_140:
      (((((quick_rec_requires jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
@@ -4340,7 +4275,7 @@ goal quick_rec_ensures_default_po_2:
   (m = l_0) ->
   forall i_0:int.
   (i_0 = (l_0 + 1)) ->
-  ("JC_76": ("JC_72": (select(intP_intM_t_5, shift(t, l_0)) = v)))
+  ("JC_74": ("JC_70": (select(intP_intM_t_5, shift(t, l_0)) = v)))
 
 goal quick_rec_ensures_default_po_3:
   forall t:intP pointer.
@@ -4361,7 +4296,7 @@ goal quick_rec_ensures_default_po_3:
   (m = l_0) ->
   forall i_0:int.
   (i_0 = (l_0 + 1)) ->
-  ("JC_76": ("JC_73": (l_0 <= m)))
+  ("JC_74": ("JC_71": (l_0 <= m)))
 
 goal quick_rec_ensures_default_po_4:
   forall t:intP pointer.
@@ -4382,7 +4317,7 @@ goal quick_rec_ensures_default_po_4:
   (m = l_0) ->
   forall i_0:int.
   (i_0 = (l_0 + 1)) ->
-  ("JC_76": ("JC_74": (m < i_0)))
+  ("JC_74": ("JC_72": (m < i_0)))
 
 goal quick_rec_ensures_default_po_5:
   forall t:intP pointer.
@@ -4403,7 +4338,7 @@ goal quick_rec_ensures_default_po_5:
   (m = l_0) ->
   forall i_0:int.
   (i_0 = (l_0 + 1)) ->
-  ("JC_76": ("JC_75": (i_0 <= (r + 1))))
+  ("JC_74": ("JC_73": (i_0 <= (r + 1))))
 
 goal quick_rec_ensures_default_po_6:
   forall t:intP pointer.
@@ -4424,7 +4359,7 @@ goal quick_rec_ensures_default_po_6:
   (m = l_0) ->
   forall i_0:int.
   (i_0 = (l_0 + 1)) ->
-  ("JC_77": Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5))
+  ("JC_75": Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5))
 
 goal quick_rec_ensures_default_po_7:
   forall t:intP pointer.
@@ -4447,7 +4382,7 @@ goal quick_rec_ensures_default_po_7:
   (i_0 = (l_0 + 1)) ->
   forall j_4:int.
   ((m < j_4) and (j_4 < i_0)) ->
-  ("JC_78": (select(intP_intM_t_5, shift(t, j_4)) >= v))
+  ("JC_76": (select(intP_intM_t_5, shift(t, j_4)) >= v))
 
 goal quick_rec_ensures_default_po_8:
   forall t:intP pointer.
@@ -4470,7 +4405,7 @@ goal quick_rec_ensures_default_po_8:
   (i_0 = (l_0 + 1)) ->
   forall j_3:int.
   ((l_0 < j_3) and (j_3 <= m)) ->
-  ("JC_79": (select(intP_intM_t_5, shift(t, j_3)) < v))
+  ("JC_77": (select(intP_intM_t_5, shift(t, j_3)) < v))
 
 goal quick_rec_ensures_default_po_9:
   forall t:intP pointer.
@@ -4491,7 +4426,7 @@ goal quick_rec_ensures_default_po_9:
   (m = l_0) ->
   forall i_0:int.
   (i_0 = (l_0 + 1)) ->
-  ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5, intP_intM_t_5,
+  ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5, intP_intM_t_5,
   pset_range(pset_singleton(t), l_0, r)))
 
 goal quick_rec_ensures_default_po_10:
@@ -4517,20 +4452,20 @@ goal quick_rec_ensures_default_po_10:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -4545,7 +4480,7 @@ goal quick_rec_ensures_default_po_10:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m1, m1),
    pset_range(pset_singleton(t), i_0_0, i_0_0)))))) ->
-  ("JC_84": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0))
+  ("JC_82": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0))
 
 goal quick_rec_ensures_default_po_11:
   forall t:intP pointer.
@@ -4570,20 +4505,20 @@ goal quick_rec_ensures_default_po_11:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -4598,10 +4533,10 @@ goal quick_rec_ensures_default_po_11:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m1, m1),
    pset_range(pset_singleton(t), i_0_0, i_0_0)))))) ->
-  ("JC_84": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_82": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_76": ("JC_72": (select(intP_intM_t_5_1, shift(t, l_0)) = v)))
+  ("JC_74": ("JC_70": (select(intP_intM_t_5_1, shift(t, l_0)) = v)))
 
 goal quick_rec_ensures_default_po_12:
   forall t:intP pointer.
@@ -4626,20 +4561,20 @@ goal quick_rec_ensures_default_po_12:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -4654,10 +4589,10 @@ goal quick_rec_ensures_default_po_12:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m1, m1),
    pset_range(pset_singleton(t), i_0_0, i_0_0)))))) ->
-  ("JC_84": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_82": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_76": ("JC_73": (l_0 <= m1)))
+  ("JC_74": ("JC_71": (l_0 <= m1)))
 
 goal quick_rec_ensures_default_po_13:
   forall t:intP pointer.
@@ -4682,20 +4617,20 @@ goal quick_rec_ensures_default_po_13:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -4710,10 +4645,10 @@ goal quick_rec_ensures_default_po_13:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m1, m1),
    pset_range(pset_singleton(t), i_0_0, i_0_0)))))) ->
-  ("JC_84": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_82": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_76": ("JC_74": (m1 < i_0_1)))
+  ("JC_74": ("JC_72": (m1 < i_0_1)))
 
 goal quick_rec_ensures_default_po_14:
   forall t:intP pointer.
@@ -4738,20 +4673,20 @@ goal quick_rec_ensures_default_po_14:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -4766,10 +4701,10 @@ goal quick_rec_ensures_default_po_14:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m1, m1),
    pset_range(pset_singleton(t), i_0_0, i_0_0)))))) ->
-  ("JC_84": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_82": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_76": ("JC_75": (i_0_1 <= (r + 1))))
+  ("JC_74": ("JC_73": (i_0_1 <= (r + 1))))
 
 goal quick_rec_ensures_default_po_15:
   forall t:intP pointer.
@@ -4794,20 +4729,20 @@ goal quick_rec_ensures_default_po_15:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -4822,10 +4757,10 @@ goal quick_rec_ensures_default_po_15:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m1, m1),
    pset_range(pset_singleton(t), i_0_0, i_0_0)))))) ->
-  ("JC_84": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_82": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_77": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5))
+  ("JC_75": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5))
 
 goal quick_rec_ensures_default_po_16:
   forall t:intP pointer.
@@ -4850,20 +4785,20 @@ goal quick_rec_ensures_default_po_16:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -4878,12 +4813,12 @@ goal quick_rec_ensures_default_po_16:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m1, m1),
    pset_range(pset_singleton(t), i_0_0, i_0_0)))))) ->
-  ("JC_84": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_82": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
   forall j_4:int.
   ((m1 < j_4) and (j_4 < i_0_1)) ->
-  ("JC_78": (select(intP_intM_t_5_1, shift(t, j_4)) >= v))
+  ("JC_76": (select(intP_intM_t_5_1, shift(t, j_4)) >= v))
 
 goal quick_rec_ensures_default_po_17:
   forall t:intP pointer.
@@ -4908,20 +4843,20 @@ goal quick_rec_ensures_default_po_17:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -4936,12 +4871,12 @@ goal quick_rec_ensures_default_po_17:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m1, m1),
    pset_range(pset_singleton(t), i_0_0, i_0_0)))))) ->
-  ("JC_84": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_82": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
   forall j_3:int.
   ((l_0 < j_3) and (j_3 <= m1)) ->
-  ("JC_79": (select(intP_intM_t_5_1, shift(t, j_3)) < v))
+  ("JC_77": (select(intP_intM_t_5_1, shift(t, j_3)) < v))
 
 goal quick_rec_ensures_default_po_18:
   forall t:intP pointer.
@@ -4966,20 +4901,20 @@ goal quick_rec_ensures_default_po_18:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -4994,10 +4929,10 @@ goal quick_rec_ensures_default_po_18:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m1, m1),
    pset_range(pset_singleton(t), i_0_0, i_0_0)))))) ->
-  ("JC_84": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_82": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5, intP_intM_t_5_1,
+  ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5, intP_intM_t_5_1,
   pset_range(pset_singleton(t), l_0, r)))
 
 goal quick_rec_ensures_default_po_19:
@@ -5023,20 +4958,20 @@ goal quick_rec_ensures_default_po_19:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -5044,7 +4979,7 @@ goal quick_rec_ensures_default_po_19:
   (result0 >= v) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_76": ("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)))
+  ("JC_74": ("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)))
 
 goal quick_rec_ensures_default_po_20:
   forall t:intP pointer.
@@ -5069,20 +5004,20 @@ goal quick_rec_ensures_default_po_20:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -5090,7 +5025,7 @@ goal quick_rec_ensures_default_po_20:
   (result0 >= v) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_76": ("JC_73": (l_0 <= m0)))
+  ("JC_74": ("JC_71": (l_0 <= m0)))
 
 goal quick_rec_ensures_default_po_21:
   forall t:intP pointer.
@@ -5115,20 +5050,20 @@ goal quick_rec_ensures_default_po_21:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -5136,7 +5071,7 @@ goal quick_rec_ensures_default_po_21:
   (result0 >= v) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_76": ("JC_74": (m0 < i_0_1)))
+  ("JC_74": ("JC_72": (m0 < i_0_1)))
 
 goal quick_rec_ensures_default_po_22:
   forall t:intP pointer.
@@ -5161,20 +5096,20 @@ goal quick_rec_ensures_default_po_22:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -5182,7 +5117,7 @@ goal quick_rec_ensures_default_po_22:
   (result0 >= v) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_76": ("JC_75": (i_0_1 <= (r + 1))))
+  ("JC_74": ("JC_73": (i_0_1 <= (r + 1))))
 
 goal quick_rec_ensures_default_po_23:
   forall t:intP pointer.
@@ -5207,20 +5142,20 @@ goal quick_rec_ensures_default_po_23:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -5228,7 +5163,7 @@ goal quick_rec_ensures_default_po_23:
   (result0 >= v) ->
   forall i_0_1:int.
   (i_0_1 = (i_0_0 + 1)) ->
-  ("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5))
+  ("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5))
 
 goal quick_rec_ensures_default_po_24:
   forall t:intP pointer.
@@ -5253,20 +5188,20 @@ goal quick_rec_ensures_default_po_24:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -5276,7 +5211,7 @@ goal quick_rec_ensures_default_po_24:
   (i_0_1 = (i_0_0 + 1)) ->
   forall j_4:int.
   ((m0 < j_4) and (j_4 < i_0_1)) ->
-  ("JC_78": (select(intP_intM_t_5_0, shift(t, j_4)) >= v))
+  ("JC_76": (select(intP_intM_t_5_0, shift(t, j_4)) >= v))
 
 goal quick_rec_ensures_default_po_25:
   forall t:intP pointer.
@@ -5301,20 +5236,20 @@ goal quick_rec_ensures_default_po_25:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 <= r) ->
   forall result0:int.
@@ -5324,7 +5259,7 @@ goal quick_rec_ensures_default_po_25:
   (i_0_1 = (i_0_0 + 1)) ->
   forall j_3:int.
   ((l_0 < j_3) and (j_3 <= m0)) ->
-  ("JC_79": (select(intP_intM_t_5_0, shift(t, j_3)) < v))
+  ("JC_77": (select(intP_intM_t_5_0, shift(t, j_3)) < v))
 
 goal quick_rec_ensures_default_po_26:
   forall t:intP pointer.
@@ -5349,23 +5284,23 @@ goal quick_rec_ensures_default_po_26:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 > r) ->
-  ("JC_87": ("JC_85": (l_0 <= m0)))
+  ("JC_83": (l_0 <= m0))
 
 goal quick_rec_ensures_default_po_27:
   forall t:intP pointer.
@@ -5390,23 +5325,23 @@ goal quick_rec_ensures_default_po_27:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 > r) ->
-  ("JC_87": ("JC_86": (m0 <= r)))
+  ("JC_83": (m0 <= r))
 
 goal quick_rec_ensures_default_po_28:
   forall t:intP pointer.
@@ -5431,23 +5366,23 @@ goal quick_rec_ensures_default_po_28:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 > r) ->
-  ("JC_87": (("JC_85": (l_0 <= m0)) and ("JC_86": (m0 <= r)))) ->
+  ("JC_83": ((l_0 <= m0) and (m0 <= r))) ->
   forall intP_intM_t_5_1:(intP,
   int) memory.
   ("JC_18":
@@ -5455,7 +5390,7 @@ goal quick_rec_ensures_default_po_28:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m0, m0),
    pset_range(pset_singleton(t), l_0, l_0)))))) ->
-  ("JC_89": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0))
+  ("JC_85": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0))
 
 goal quick_rec_ensures_default_po_29:
   forall t:intP pointer.
@@ -5480,23 +5415,23 @@ goal quick_rec_ensures_default_po_29:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ((("JC_76":
-    (("JC_72": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-     (("JC_73": (l_0 <= m0)) and
-      (("JC_74": (m0 < i_0_0)) and ("JC_75": (i_0_0 <= (r + 1))))))) and
-    (("JC_77": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-     (("JC_78":
+  ((("JC_74":
+    (("JC_70": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+     (("JC_71": (l_0 <= m0)) and
+      (("JC_72": (m0 < i_0_0)) and ("JC_73": (i_0_0 <= (r + 1))))))) and
+    (("JC_75": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+     (("JC_76":
       (forall j_4:int.
         (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
          j_4)) >= v)))) and
-      ("JC_79":
+      ("JC_77":
       (forall j_3:int.
         (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
          j_3)) < v))))))) and
-   ("JC_81": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
+   ("JC_79": not_assigns(intP_t_5_alloc_table, intP_intM_t_5,
    intP_intM_t_5_0, pset_range(pset_singleton(t), l_0, r)))) ->
   (i_0_0 > r) ->
-  ("JC_87": (("JC_85": (l_0 <= m0)) and ("JC_86": (m0 <= r)))) ->
+  ("JC_83": ((l_0 <= m0) and (m0 <= r))) ->
   forall intP_intM_t_5_1:(intP,
   int) memory.
   ("JC_18":
@@ -5504,7 +5439,7 @@ goal quick_rec_ensures_default_po_29:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m0, m0),
    pset_range(pset_singleton(t), l_0, l_0)))))) ->
-  ("JC_89": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_85": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall intP_intM_t_5_2:(intP,
   int) memory.
   (("JC_42": Permut(t, l_0, (m0 - 1), intP_intM_t_5_2, intP_intM_t_5_1)) and
@@ -5556,22 +5491,22 @@ goal quick_rec_ensures_permutation_po_2:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ("JC_121": true) ->
-  (("JC_116":
-   (("JC_112": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-    (("JC_113": (l_0 <= m0)) and
-     (("JC_114": (m0 < i_0_0)) and ("JC_115": (i_0_0 <= (r + 1))))))) and
-   (("JC_117": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-    (("JC_118":
+  ("JC_115": true) ->
+  (("JC_110":
+   (("JC_106": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+    (("JC_107": (l_0 <= m0)) and
+     (("JC_108": (m0 < i_0_0)) and ("JC_109": (i_0_0 <= (r + 1))))))) and
+   (("JC_111": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+    (("JC_112":
      (forall j_4:int.
        (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
         j_4)) >= v)))) and
-     ("JC_119":
+     ("JC_113":
      (forall j_3:int.
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_127": (("JC_125": (l_0 <= m0)) and ("JC_126": (m0 <= r)))) ->
+  ("JC_119": ((l_0 <= m0) and (m0 <= r))) ->
   forall intP_intM_t_5_1:(intP,
   int) memory.
   ("JC_18":
@@ -5579,7 +5514,7 @@ goal quick_rec_ensures_permutation_po_2:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m0, m0),
    pset_range(pset_singleton(t), l_0, l_0)))))) ->
-  ("JC_129": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_121": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall intP_intM_t_5_2:(intP,
   int) memory.
   (("JC_42": Permut(t, l_0, (m0 - 1), intP_intM_t_5_2, intP_intM_t_5_1)) and
@@ -5630,22 +5565,22 @@ goal quick_rec_ensures_sorted_po_2:
   forall intP_intM_t_5_0:(intP,
   int) memory.
   forall m0:int.
-  ("JC_101": true) ->
-  (("JC_96":
-   (("JC_92": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
-    (("JC_93": (l_0 <= m0)) and
-     (("JC_94": (m0 < i_0_0)) and ("JC_95": (i_0_0 <= (r + 1))))))) and
-   (("JC_97": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
-    (("JC_98":
+  ("JC_97": true) ->
+  (("JC_92":
+   (("JC_88": (select(intP_intM_t_5_0, shift(t, l_0)) = v)) and
+    (("JC_89": (l_0 <= m0)) and
+     (("JC_90": (m0 < i_0_0)) and ("JC_91": (i_0_0 <= (r + 1))))))) and
+   (("JC_93": Permut(t, l_0, r, intP_intM_t_5_0, intP_intM_t_5)) and
+    (("JC_94":
      (forall j_4:int.
        (((m0 < j_4) and (j_4 < i_0_0)) -> (select(intP_intM_t_5_0, shift(t,
         j_4)) >= v)))) and
-     ("JC_99":
+     ("JC_95":
      (forall j_3:int.
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_107": (("JC_105": (l_0 <= m0)) and ("JC_106": (m0 <= r)))) ->
+  ("JC_101": ((l_0 <= m0) and (m0 <= r))) ->
   forall intP_intM_t_5_1:(intP,
   int) memory.
   ("JC_18":
@@ -5653,7 +5588,7 @@ goal quick_rec_ensures_sorted_po_2:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m0, m0),
    pset_range(pset_singleton(t), l_0, l_0)))))) ->
-  ("JC_109": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_103": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   forall intP_intM_t_5_2:(intP,
   int) memory.
   (("JC_42": Permut(t, l_0, (m0 - 1), intP_intM_t_5_2, intP_intM_t_5_1)) and
@@ -6176,7 +6111,7 @@ goal quick_rec_safety_po_11:
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_61": (("JC_59": (l_0 <= m0)) and ("JC_60": (m0 <= r)))) ->
+  ("JC_59": ((l_0 <= m0) and (m0 <= r))) ->
   ("JC_5": ("JC_2": (offset_max(intP_t_5_alloc_table, t) >= l_0)))
 
 goal quick_rec_safety_po_12:
@@ -6219,7 +6154,7 @@ goal quick_rec_safety_po_12:
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_61": (("JC_59": (l_0 <= m0)) and ("JC_60": (m0 <= r)))) ->
+  ("JC_59": ((l_0 <= m0) and (m0 <= r))) ->
   ("JC_5": ("JC_3": (offset_min(intP_t_5_alloc_table, t) <= m0)))
 
 goal quick_rec_safety_po_13:
@@ -6262,7 +6197,7 @@ goal quick_rec_safety_po_13:
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_61": (("JC_59": (l_0 <= m0)) and ("JC_60": (m0 <= r)))) ->
+  ("JC_59": ((l_0 <= m0) and (m0 <= r))) ->
   ("JC_5": ("JC_4": (offset_max(intP_t_5_alloc_table, t) >= m0)))
 
 goal quick_rec_safety_po_14:
@@ -6305,7 +6240,7 @@ goal quick_rec_safety_po_14:
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_61": (("JC_59": (l_0 <= m0)) and ("JC_60": (m0 <= r)))) ->
+  ("JC_59": ((l_0 <= m0) and (m0 <= r))) ->
   ("JC_5":
   (("JC_1": (offset_min(intP_t_5_alloc_table, t) <= l_0)) and
    (("JC_2": (offset_max(intP_t_5_alloc_table, t) >= l_0)) and
@@ -6318,8 +6253,8 @@ goal quick_rec_safety_po_14:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m0, m0),
    pset_range(pset_singleton(t), l_0, l_0)))))) ->
-  ("JC_63": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
-  (0 <= ("JC_65": (r - l_0)))
+  ("JC_61": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  (0 <= ("JC_63": (r - l_0)))
 
 goal quick_rec_safety_po_15:
   forall t:intP pointer.
@@ -6361,7 +6296,7 @@ goal quick_rec_safety_po_15:
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_61": (("JC_59": (l_0 <= m0)) and ("JC_60": (m0 <= r)))) ->
+  ("JC_59": ((l_0 <= m0) and (m0 <= r))) ->
   ("JC_5":
   (("JC_1": (offset_min(intP_t_5_alloc_table, t) <= l_0)) and
    (("JC_2": (offset_max(intP_t_5_alloc_table, t) >= l_0)) and
@@ -6374,8 +6309,8 @@ goal quick_rec_safety_po_15:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m0, m0),
    pset_range(pset_singleton(t), l_0, l_0)))))) ->
-  ("JC_63": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
-  (("JC_66": ((m0 - 1) - l_0)) < ("JC_65": (r - l_0)))
+  ("JC_61": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  (("JC_64": ((m0 - 1) - l_0)) < ("JC_63": (r - l_0)))
 
 goal quick_rec_safety_po_16:
   forall t:intP pointer.
@@ -6417,7 +6352,7 @@ goal quick_rec_safety_po_16:
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_61": (("JC_59": (l_0 <= m0)) and ("JC_60": (m0 <= r)))) ->
+  ("JC_59": ((l_0 <= m0) and (m0 <= r))) ->
   ("JC_5":
   (("JC_1": (offset_min(intP_t_5_alloc_table, t) <= l_0)) and
    (("JC_2": (offset_max(intP_t_5_alloc_table, t) >= l_0)) and
@@ -6430,7 +6365,7 @@ goal quick_rec_safety_po_16:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m0, m0),
    pset_range(pset_singleton(t), l_0, l_0)))))) ->
-  ("JC_63": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_61": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   ("JC_27": ("JC_26": (offset_max(intP_t_5_alloc_table, t) >= (m0 - 1))))
 
 goal quick_rec_safety_po_17:
@@ -6473,7 +6408,7 @@ goal quick_rec_safety_po_17:
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_61": (("JC_59": (l_0 <= m0)) and ("JC_60": (m0 <= r)))) ->
+  ("JC_59": ((l_0 <= m0) and (m0 <= r))) ->
   ("JC_5":
   (("JC_1": (offset_min(intP_t_5_alloc_table, t) <= l_0)) and
    (("JC_2": (offset_max(intP_t_5_alloc_table, t) >= l_0)) and
@@ -6486,7 +6421,7 @@ goal quick_rec_safety_po_17:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m0, m0),
    pset_range(pset_singleton(t), l_0, l_0)))))) ->
-  ("JC_63": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_61": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   ("JC_27":
   (("JC_25": (offset_min(intP_t_5_alloc_table, t) <= l_0)) and
    ("JC_26": (offset_max(intP_t_5_alloc_table, t) >= (m0 - 1))))) ->
@@ -6496,7 +6431,7 @@ goal quick_rec_safety_po_17:
    (("JC_40": Sorted(t, l_0, ((m0 - 1) + 1), intP_intM_t_5_2)) and
     ("JC_36": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_1,
     intP_intM_t_5_2, pset_range(pset_singleton(t), l_0, (m0 - 1)))))) ->
-  (0 <= ("JC_69": (r - l_0)))
+  (0 <= ("JC_67": (r - l_0)))
 
 goal quick_rec_safety_po_18:
   forall t:intP pointer.
@@ -6538,7 +6473,7 @@ goal quick_rec_safety_po_18:
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_61": (("JC_59": (l_0 <= m0)) and ("JC_60": (m0 <= r)))) ->
+  ("JC_59": ((l_0 <= m0) and (m0 <= r))) ->
   ("JC_5":
   (("JC_1": (offset_min(intP_t_5_alloc_table, t) <= l_0)) and
    (("JC_2": (offset_max(intP_t_5_alloc_table, t) >= l_0)) and
@@ -6551,7 +6486,7 @@ goal quick_rec_safety_po_18:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m0, m0),
    pset_range(pset_singleton(t), l_0, l_0)))))) ->
-  ("JC_63": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_61": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   ("JC_27":
   (("JC_25": (offset_min(intP_t_5_alloc_table, t) <= l_0)) and
    ("JC_26": (offset_max(intP_t_5_alloc_table, t) >= (m0 - 1))))) ->
@@ -6561,7 +6496,7 @@ goal quick_rec_safety_po_18:
    (("JC_40": Sorted(t, l_0, ((m0 - 1) + 1), intP_intM_t_5_2)) and
     ("JC_36": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_1,
     intP_intM_t_5_2, pset_range(pset_singleton(t), l_0, (m0 - 1)))))) ->
-  (("JC_70": (r - (m0 + 1))) < ("JC_69": (r - l_0)))
+  (("JC_68": (r - (m0 + 1))) < ("JC_67": (r - l_0)))
 
 goal quick_rec_safety_po_19:
   forall t:intP pointer.
@@ -6603,7 +6538,7 @@ goal quick_rec_safety_po_19:
        (((l_0 < j_3) and (j_3 <= m0)) -> (select(intP_intM_t_5_0, shift(t,
         j_3)) < v))))))) ->
   (i_0_0 > r) ->
-  ("JC_61": (("JC_59": (l_0 <= m0)) and ("JC_60": (m0 <= r)))) ->
+  ("JC_59": ((l_0 <= m0) and (m0 <= r))) ->
   ("JC_5":
   (("JC_1": (offset_min(intP_t_5_alloc_table, t) <= l_0)) and
    (("JC_2": (offset_max(intP_t_5_alloc_table, t) >= l_0)) and
@@ -6616,7 +6551,7 @@ goal quick_rec_safety_po_19:
    ("JC_17": not_assigns(intP_t_5_alloc_table, intP_intM_t_5_0,
    intP_intM_t_5_1, pset_union(pset_range(pset_singleton(t), m0, m0),
    pset_range(pset_singleton(t), l_0, l_0)))))) ->
-  ("JC_63": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
+  ("JC_61": Permut(t, l_0, r, intP_intM_t_5_1, intP_intM_t_5_0)) ->
   ("JC_27":
   (("JC_25": (offset_min(intP_t_5_alloc_table, t) <= l_0)) and
    ("JC_26": (offset_max(intP_t_5_alloc_table, t) >= (m0 - 1))))) ->
@@ -6634,16 +6569,16 @@ goal quick_sort_ensures_sorted_po_1:
   forall intP_t_0_6_alloc_table:intP alloc_table.
   forall intP_intM_t_0_6:(intP,
   int) memory.
-  ("JC_138":
-  (("JC_136": (offset_min(intP_t_0_6_alloc_table, t_0) <= 0)) and
-   ("JC_137": (offset_max(intP_t_0_6_alloc_table, t_0) >= (n_1 - 1))))) ->
+  ("JC_130":
+  (("JC_128": (offset_min(intP_t_0_6_alloc_table, t_0) <= 0)) and
+   ("JC_129": (offset_max(intP_t_0_6_alloc_table, t_0) >= (n_1 - 1))))) ->
   forall intP_intM_t_0_6_0:(intP,
   int) memory.
   (("JC_42": Permut(t_0, 0, (n_1 - 1), intP_intM_t_0_6_0, intP_intM_t_0_6)) and
    (("JC_40": Sorted(t_0, 0, ((n_1 - 1) + 1), intP_intM_t_0_6_0)) and
     ("JC_36": not_assigns(intP_t_0_6_alloc_table, intP_intM_t_0_6,
     intP_intM_t_0_6_0, pset_range(pset_singleton(t_0), 0, (n_1 - 1)))))) ->
-  ("JC_144": Sorted(t_0, 0, n_1, intP_intM_t_0_6_0))
+  ("JC_136": Sorted(t_0, 0, n_1, intP_intM_t_0_6_0))
 
 goal swap_ensures_default_po_1:
   forall t_1:intP pointer.
@@ -6752,16 +6687,6 @@ goal swap_safety_po_3:
   (tmp = result) ->
   (j <= offset_max(intP_t_1_4_alloc_table, t_1))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/quick_sort_why.why        : .................#..........#.#.#.....................#... (53/0/0/5/0)
-total   :  58
-valid   :  53 ( 91%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   5 (  9%)
-failure :   0 (  0%)
 // RUNSIMPLIFY: will ask regtests to run Simplify on this program
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/quick_sort.why
@@ -8020,7 +7945,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (AND (< l_0 j_3) (<= j_3 m))
 (< (select intP_intM_t_5 (shift t j_3)) v))))))))))))))))))
 
-;; quick_rec_ensures_default_po_9, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 131, characters 6-1395
+;; quick_rec_ensures_default_po_9, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 131, characters 6-1456
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8492,7 +8417,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (AND (< l_0 j_3) (<= j_3 m1))
 (< (select intP_intM_t_5_1 (shift t j_3)) v)))))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_18, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 131, characters 6-1395
+;; quick_rec_ensures_default_po_18, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 131, characters 6-1456
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8857,7 +8782,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
 (IMPLIES (AND (< l_0 j_3) (<= j_3 m0))
 (< (select intP_intM_t_5_0 (shift t j_3)) v))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_26, File "HOME/tests/c/quick_sort.c", line 78, characters 13-19
+;; quick_rec_ensures_default_po_26, File "HOME/tests/c/quick_sort.c", line 78, characters 13-24
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8895,7 +8820,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
                                                             t) l_0 r)))
 (IMPLIES (> i_0_0 r) (<= l_0 m0)))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_27, File "HOME/tests/c/quick_sort.c", line 78, characters 18-24
+;; quick_rec_ensures_default_po_27, File "HOME/tests/c/quick_sort.c", line 78, characters 13-24
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9728,7 +9653,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (AND (<= l_0 m0) (<= m0 r))
 (>= (offset_max intP_t_5_alloc_table t) m0))))))))))))))))))))))))
 
-;; quick_rec_safety_po_14, File "why/quick_sort.why", line 925, characters 14-104
+;; quick_rec_safety_po_14, File "why/quick_sort.why", line 920, characters 14-104
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9781,7 +9706,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (<= 0 (- r l_0)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_15, File "why/quick_sort.why", line 925, characters 14-104
+;; quick_rec_safety_po_15, File "why/quick_sort.why", line 920, characters 14-104
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9887,7 +9812,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (>= (offset_max intP_t_5_alloc_table t) (- m0 1)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_17, File "why/quick_sort.why", line 935, characters 14-104
+;; quick_rec_safety_po_17, File "why/quick_sort.why", line 930, characters 14-104
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9951,7 +9876,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
                                                               (- m0 1)))))
 (<= 0 (- r l_0))))))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_18, File "why/quick_sort.why", line 935, characters 14-104
+;; quick_rec_safety_po_18, File "why/quick_sort.why", line 930, characters 14-104
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)

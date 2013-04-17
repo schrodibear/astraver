@@ -189,7 +189,7 @@ behavior default:
 
 unit main()
 behavior default:
-  ensures (C_52 : true);
+  ensures (C_46 : true);
 {  
    (var intP[0..2] arr_0);
    
@@ -200,45 +200,27 @@ behavior default:
       (C_42 : heap_sort(arr_0, 3));
       
       {  
-         (assert for default: (C_43 : ((C_44 : ((arr_0 + 0).intM <=
-                                                 (arr_0 + 1).intM)) &&
-                                        (C_45 : ((arr_0 + 1).intM <=
-                                                  (arr_0 + 2).intM)))));
+         (assert for default: (C_43 : (jessie : (((arr_0 + 0).intM <=
+                                                   (arr_0 + 1).intM) &&
+                                                  ((arr_0 + 1).intM <=
+                                                    (arr_0 + 2).intM)))));
          ()
       };
       
       {  
-         (assert for default: (C_46 : (((C_48 : ((arr_0 + 0).intM == 13)) &&
-                                         (C_49 : ((arr_0 + 1).intM == 42))) &&
-                                        (C_50 : ((arr_0 + 2).intM == 42)))));
+         (assert for default: (C_44 : (jessie : ((((arr_0 + 0).intM == 13) &&
+                                                   ((arr_0 + 1).intM == 42)) &&
+                                                  ((arr_0 + 2).intM == 42)))));
          ()
       };
       
-      {  (C_51 : (free(arr_0)));
+      {  (C_45 : (free(arr_0)));
          
          (return ())
       }
    }
 }
 ========== file tests/c/heap_sort.jessie/heap_sort.cloc ==========
-[C_50]
-file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 45
-end = 57
-
-[C_51]
-file = "HOME/tests/c/heap_sort.c"
-line = 56
-begin = 6
-end = 9
-
-[C_52]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [main]
 name = "Function main"
 file = "HOME/tests/c/heap_sort.c"
@@ -513,39 +495,21 @@ end = 49
 
 [C_44]
 file = "HOME/tests/c/heap_sort.c"
-line = 58
-begin = 13
-end = 29
-
-[C_45]
-file = "HOME/tests/c/heap_sort.c"
-line = 58
-begin = 33
-end = 49
-
-[C_46]
-file = "HOME/tests/c/heap_sort.c"
 line = 59
 begin = 13
 end = 57
 
-[C_47]
+[C_45]
 file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 13
-end = 41
+line = 56
+begin = 6
+end = 9
 
-[C_48]
-file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 13
-end = 25
-
-[C_49]
-file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 29
-end = 41
+[C_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== jessie execution ==========
 Generating Why function heap_sort
@@ -751,7 +715,7 @@ end = 33
 file = "HOME/tests/c/heap_sort.c"
 line = 58
 begin = 13
-end = 29
+end = 49
 
 [JC_40]
 file = "HOME/"
@@ -761,9 +725,9 @@ end = -1
 
 [JC_93]
 file = "HOME/tests/c/heap_sort.c"
-line = 58
-begin = 33
-end = 49
+line = 59
+begin = 13
+end = 57
 
 [JC_41]
 file = "HOME/tests/c/heap_sort.c"
@@ -772,10 +736,11 @@ begin = 12
 end = 71
 
 [JC_94]
+kind = AllocSize
 file = "HOME/tests/c/heap_sort.c"
-line = 58
-begin = 13
-end = 49
+line = 56
+begin = 6
+end = 9
 
 [JC_42]
 file = "HOME/tests/c/heap_sort.c"
@@ -784,10 +749,11 @@ begin = 12
 end = 71
 
 [JC_95]
-file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 13
-end = 25
+kind = UserCall
+file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
+line = 130
+begin = 14
+end = 33
 
 [JC_43]
 file = "HOME/"
@@ -797,9 +763,9 @@ end = -1
 
 [JC_96]
 file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 29
-end = 41
+line = 58
+begin = 13
+end = 49
 
 [JC_44]
 file = "HOME/"
@@ -810,7 +776,7 @@ end = -1
 [JC_97]
 file = "HOME/tests/c/heap_sort.c"
 line = 59
-begin = 45
+begin = 13
 end = 57
 
 [JC_45]
@@ -819,12 +785,6 @@ file = "HOME/tests/c/heap_sort.c"
 line = 42
 begin = 11
 end = 22
-
-[JC_98]
-file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 13
-end = 57
 
 [JC_46]
 file = "HOME/tests/c/heap_sort.c"
@@ -838,20 +798,6 @@ line = 50
 begin = 9
 end = 15
 
-[JC_100]
-kind = UserCall
-file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 130
-begin = 14
-end = 33
-
-[JC_99]
-kind = AllocSize
-file = "HOME/tests/c/heap_sort.c"
-line = 56
-begin = 6
-end = 9
-
 [JC_47]
 file = "HOME/tests/c/heap_sort.c"
 line = 43
@@ -863,12 +809,6 @@ file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_101]
-file = "HOME/tests/c/heap_sort.c"
-line = 58
-begin = 13
-end = 29
 
 [JC_48]
 file = "HOME/tests/c/heap_sort.c"
@@ -882,12 +822,6 @@ line = 50
 begin = 9
 end = 15
 
-[JC_102]
-file = "HOME/tests/c/heap_sort.c"
-line = 58
-begin = 33
-end = 49
-
 [JC_49]
 file = "HOME/"
 line = 0
@@ -900,35 +834,17 @@ line = 0
 begin = -1
 end = -1
 
-[JC_103]
-file = "HOME/tests/c/heap_sort.c"
-line = 58
-begin = 13
-end = 49
-
 [JC_5]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_104]
-file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 13
-end = 25
-
 [JC_6]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
 line = 52
 begin = 10
 end = 18
-
-[JC_105]
-file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 29
-end = 41
 
 [heap_sort_ensures_default]
 name = "Function heap_sort"
@@ -944,23 +860,11 @@ line = 0
 begin = -1
 end = -1
 
-[JC_106]
-file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 45
-end = 57
-
 [JC_8]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
 line = 52
 begin = 10
 end = 18
-
-[JC_107]
-file = "HOME/tests/c/heap_sort.c"
-line = 59
-begin = 13
-end = 57
 
 [JC_9]
 file = "HOME/"
@@ -2238,7 +2142,7 @@ let main_ensures_default =
      begin
        (let jessie_<num> =
        (arr_0 := (C_34:
-                 (JC_99:
+                 (JC_94:
                  (((alloc_struct_intP (3)) intP_arr_0_8_alloc_table) intP_arr_0_8_tag_table)))) in
        void);
       (let jessie_<num> = (safe_int32_of_integer_ (42)) in
@@ -2261,28 +2165,23 @@ let main_ensures_default =
                   and (select(intP_intM_arr_0_8, shift(jessie_<num>, (2))) = jessie_<num>)))) } ]))))))))));
       (let jessie_<num> = !arr_0 in
       (let jessie_<num> = (safe_uint32_of_integer_ (3)) in
-      (JC_100:
+      (JC_95:
       ((((heap_sort jessie_<num>) jessie_<num>) intP_intM_arr_0_8) !intP_arr_0_8_alloc_table))));
       (assert
-      { (JC_103:
-        ((JC_101:
-         le_int(integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (0)))),
-         integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (1))))))
-        and (JC_102:
-            le_int(integer_of_int32(select(intP_intM_arr_0_8,
+      { (JC_96:
+        (le_int(integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (0)))),
+         integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (1)))))
+        and le_int(integer_of_int32(select(intP_intM_arr_0_8,
                                     shift(arr_0, (1)))),
-            integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (2)))))))) };
+            integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (2))))))) };
       void); void;
       (assert
-      { (JC_107:
-        ((JC_104:
-         (integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (0)))) = (13)))
-        and ((JC_105:
-             (integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (1)))) = (42)))
-            and (JC_106:
-                (integer_of_int32(select(intP_intM_arr_0_8,
-                                  shift(arr_0, (2)))) = (42)))))) }; void);
-      (C_51:
+      { (JC_97:
+        ((integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (0)))) = (13))
+        and ((integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (1)))) = (42))
+            and (integer_of_int32(select(intP_intM_arr_0_8,
+                                  shift(arr_0, (2)))) = (42))))) }; void);
+      (C_45:
       begin
         void; ((safe_free_parameter intP_arr_0_8_alloc_table) !arr_0);
        (raise Return) end) end))))))))); (raise Return) end with Return ->
@@ -2336,26 +2235,21 @@ let main_safety =
       (JC_91:
       ((((heap_sort_requires jessie_<num>) jessie_<num>) intP_intM_arr_0_8) !intP_arr_0_8_alloc_table))));
       [ { } unit reads arr_0,intP_intM_arr_0_8
-        { (JC_94:
-          ((JC_92:
-           le_int(integer_of_int32(select(intP_intM_arr_0_8,
+        { (JC_92:
+          (le_int(integer_of_int32(select(intP_intM_arr_0_8,
                                    shift(arr_0, (0)))),
-           integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (1))))))
-          and (JC_93:
-              le_int(integer_of_int32(select(intP_intM_arr_0_8,
+           integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (1)))))
+          and le_int(integer_of_int32(select(intP_intM_arr_0_8,
                                       shift(arr_0, (1)))),
-              integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (2)))))))) } ];
+              integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (2))))))) } ];
       void;
       [ { } unit reads arr_0,intP_intM_arr_0_8
-        { (JC_98:
-          ((JC_95:
-           (integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (0)))) = (13)))
-          and ((JC_96:
-               (integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (1)))) = (42)))
-              and (JC_97:
-                  (integer_of_int32(select(intP_intM_arr_0_8,
-                                    shift(arr_0, (2)))) = (42)))))) } ];
-      (C_51:
+        { (JC_93:
+          ((integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (0)))) = (13))
+          and ((integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (1)))) = (42))
+              and (integer_of_int32(select(intP_intM_arr_0_8,
+                                    shift(arr_0, (2)))) = (42))))) } ];
+      (C_45:
       begin
         void; ((free_parameter intP_arr_0_8_alloc_table) !arr_0);
        (raise Return) end) end))))))))); (raise Return) end with Return ->
@@ -4431,9 +4325,8 @@ goal main_ensures_default_po_1:
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        j_0)))))))) ->
-  ("JC_103":
-  ("JC_101": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-  0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))))))
+  ("JC_96": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+  0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1)))))
 
 goal main_ensures_default_po_2:
   ("JC_84": true) ->
@@ -4474,9 +4367,8 @@ goal main_ensures_default_po_2:
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        j_0)))))))) ->
-  ("JC_103":
-  ("JC_102": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-  1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2))))))
+  ("JC_96": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+  1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2)))))
 
 goal main_ensures_default_po_3:
   ("JC_84": true) ->
@@ -4517,14 +4409,13 @@ goal main_ensures_default_po_3:
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        j_0)))))))) ->
-  ("JC_103":
-  (("JC_101": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-   0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))))) and
-   ("JC_102": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-   1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2))))))) ->
-  ("JC_107":
-  ("JC_104": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-  0))) = 13)))
+  ("JC_96":
+  ((integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   1)))) and (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2)))))) ->
+  ("JC_97": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+  0))) = 13))
 
 goal main_ensures_default_po_4:
   ("JC_84": true) ->
@@ -4565,14 +4456,13 @@ goal main_ensures_default_po_4:
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        j_0)))))))) ->
-  ("JC_103":
-  (("JC_101": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-   0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))))) and
-   ("JC_102": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-   1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2))))))) ->
-  ("JC_107":
-  ("JC_105": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-  1))) = 42)))
+  ("JC_96":
+  ((integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   1)))) and (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2)))))) ->
+  ("JC_97": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+  1))) = 42))
 
 goal main_ensures_default_po_5:
   ("JC_84": true) ->
@@ -4613,14 +4503,13 @@ goal main_ensures_default_po_5:
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        j_0)))))))) ->
-  ("JC_103":
-  (("JC_101": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-   0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))))) and
-   ("JC_102": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-   1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2))))))) ->
-  ("JC_107":
-  ("JC_106": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-  2))) = 42)))
+  ("JC_96":
+  ((integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   1)))) and (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2)))))) ->
+  ("JC_97": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+  2))) = 42))
 
 goal main_safety_po_1:
   ("JC_84": true) ->
@@ -4790,27 +4679,14 @@ goal main_safety_po_6:
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
        j_0)))))))) ->
-  ("JC_94":
-  (("JC_92": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-   0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))))) and
-   ("JC_93": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-   1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2))))))) ->
-  ("JC_98":
-  (("JC_95": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-   0))) = 13)) and
-   (("JC_96": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-    1))) = 42)) and
-    ("JC_97": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-    2))) = 42))))) ->
+  ("JC_92":
+  ((integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   1)))) and (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+   1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2)))))) ->
+  ("JC_93":
+  ((integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 0))) = 13) and
+   ((integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))) = 42) and
+    (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2))) = 42)))) ->
   ((arr_0 = null) or (offset_max(intP_arr_0_8_alloc_table, arr_0) >= 0))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/heap_sort_why.why         : ........?..............###...... (28/0/1/3/0)
-total   :  32
-valid   :  28 ( 88%)
-invalid :   0 (  0%)
-unknown :   1 (  3%)
-timeout :   3 (  9%)
-failure :   0 (  0%)

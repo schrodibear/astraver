@@ -30,7 +30,7 @@
 /**************************************************************************/
 
 // does not work: RUN GAPPA: will ask regtests to run Gappa on this program
-// RUNCOQ: for the first VC
+// does not work anymore: RUN COQ: use why3 instead
 
 
 /*@ lemma method_error: \forall real x;

@@ -3781,13 +3781,3 @@ goal tree_max_safety_po_11:
   ("JC_12": valid_tree(result2, Tree_t_6_alloc_table, Tree_right_t_6,
   Tree_left_t_6)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/tree_max_why.why          : .#.....#........... (17/0/0/2/0)
-total   :  19
-valid   :  17 ( 89%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   2 ( 11%)
-failure :   0 (  0%)

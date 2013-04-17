@@ -5259,13 +5259,3 @@ goal Termination_loop3_safety_po_2:
   (i0 = (i - 1)) ->
   (("JC_67": i0) < ("JC_67": i))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Termination_why.why       : ........... (11/0/0/0/0)
-total   :  11
-valid   :  11 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

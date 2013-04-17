@@ -295,6 +295,7 @@ Require Import Interval_tactic.
 (* Why3 goal *)
 Theorem method_error : forall (x_3:R), ((Rabs x_3) <= (1 / 32)%R)%R ->
   ((Rabs ((1%R - ((x_3 * x_3)%R * (05 / 10)%R)%R)%R - (Rtrigo_def.cos x_3))%R) <= (1 / 16777216)%R)%R.
+(* Why3 intros x_3 h1. *)
 (* intros x_3 h1. *)
 (* YOU MAY EDIT THE PROOF BELOW *)
 intros x H.

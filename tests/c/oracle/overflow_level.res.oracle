@@ -2391,13 +2391,3 @@ goal f_safety_po_7:
   no_overflow_double(nearest_even,
   (double_value(x_0) + double_value(result4)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/overflow_level_why.why    : .?.?### (2/0/2/3/0)
-total   :   7
-valid   :   2 ( 29%)
-invalid :   0 (  0%)
-unknown :   2 ( 29%)
-timeout :   3 ( 43%)
-failure :   0 (  0%)

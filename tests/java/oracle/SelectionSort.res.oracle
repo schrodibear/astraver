@@ -16194,13 +16194,3 @@ goal SelectionSort_swap_safety_po_4:
   (result = select(intM_intP, shift(t, integer_of_int32(i_2)))) ->
   (integer_of_int32(j_2) <= offset_max(Object_alloc_table, t))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/SelectionSort_why.why     : ................................................#.... (52/0/0/1/0)
-total   :  53
-valid   :  52 ( 98%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   1 (  2%)
-failure :   0 (  0%)

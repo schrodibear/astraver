@@ -6028,13 +6028,3 @@ goal test_test_safety_po_3:
   (result0 = select(test_x, this_2)) ->
   (0 <= offset_max(Object_alloc_table0, result0))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/SimpleAlloc_why.why       : .###..# (3/0/0/4/0)
-total   :   7
-valid   :   3 ( 43%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   4 ( 57%)
-failure :   0 (  0%)

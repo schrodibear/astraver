@@ -1992,13 +1992,3 @@ goal swap_ensures_default_po_2:
   (b0 = tmp) ->
   ("JC_7": ("JC_6": (integer_of_int32(b0) = integer_of_int32(a))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/swap_why.why              : .. (2/0/0/0/0)
-total   :   2
-valid   :   2 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

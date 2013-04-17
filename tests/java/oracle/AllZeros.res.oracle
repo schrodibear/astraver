@@ -7049,13 +7049,3 @@ goal AllZeros_should_not_be_proved_safety_po_2:
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t) + 1))))) ->
   ((-2147483648) <= result)
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/AllZeros_why.why          : .................?. (18/0/1/0/0)
-total   :  19
-valid   :  18 ( 95%)
-invalid :   0 (  0%)
-unknown :   1 (  5%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

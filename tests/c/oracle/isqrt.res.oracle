@@ -146,12 +146,12 @@ behavior default:
    {  (C_22 : (r = (C_21 : isqrt(17))));
       
       {  
-         (assert for default: (C_23 : ((r < 4) ==> false)));
+         (assert for default: (C_23 : (jessie : ((r < 4) ==> false))));
          ()
       };
       
       {  
-         (assert for default: (C_24 : ((r > 4) ==> false)));
+         (assert for default: (C_24 : (jessie : ((r > 4) ==> false))));
          ()
       };
       
@@ -2505,13 +2505,3 @@ goal main_safety_po_1:
   ("JC_33": true) ->
   ("JC_1": (17 >= 0))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/isqrt_why.why             : .....?...?..?.. (12/0/3/0/0)
-total   :  15
-valid   :  12 ( 80%)
-invalid :   0 (  0%)
-unknown :   3 ( 20%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

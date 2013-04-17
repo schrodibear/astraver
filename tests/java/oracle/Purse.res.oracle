@@ -8021,13 +8021,3 @@ goal cons_Purse_safety_po_1:
   (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
   ("JC_173": balance_non_negative(this_7, Purse_balance1))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Purse_why.why             : ................. (17/0/0/0/0)
-total   :  17
-valid   :  17 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

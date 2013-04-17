@@ -189,15 +189,17 @@ behavior default:
                                                                (1.0 :> double)))));
       
       {  
-         (assert for default: (C_44 : (((X_0 + 0).doubleM :> real) ==
-                                        (\round_double(\NearestEven(),
-                                                       ((d_0 :> real) + 1.0)) :> real))));
+         (assert for default: (C_44 : (jessie : (((X_0 + 0).doubleM :> real) ==
+                                                  (\round_double(\NearestEven(
+                                                                 ),
+                                                                 ((d_0 :> real) +
+                                                                   1.0)) :> real)))));
          ()
       };
       
       {  
-         (assert for default: (C_45 : (\double_exact((X_0 + 0).doubleM) ==
-                                        ((d_0 :> real) + 1.0))));
+         (assert for default: (C_45 : (jessie : (\double_exact((X_0 + 0).doubleM) ==
+                                                  ((d_0 :> real) + 1.0)))));
          ()
       };
       
@@ -4201,13 +4203,3 @@ goal AffectDoubleDansX_safety_po_1:
   no_overflow_double(nearest_even,
   (double_value(d_2) + double_value(result)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/float_array_why.why       : ..##..##...####......##. (14/0/0/10/0)
-total   :  24
-valid   :  14 ( 58%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :  10 ( 42%)
-failure :   0 (  0%)

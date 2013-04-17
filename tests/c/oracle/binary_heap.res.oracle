@@ -1708,7 +1708,3 @@ axiom voidP_tags:
     (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
       voidP_tag)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/binary_heap_why.why       :  (0/0/0/0/0)

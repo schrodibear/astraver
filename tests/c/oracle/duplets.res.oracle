@@ -238,7 +238,7 @@ behavior default:
       };
       
       {  
-         (assert for default: (C_35 : false));
+         (assert for default: (C_35 : (jessie : false)));
          ()
       };
       (return_label : 
@@ -14083,13 +14083,3 @@ goal duplets_safety_po_19:
        (not eq_opt(integer_of_int32(select(intP_intM_a_0_7, shift(a_0_0,
        i_2))), shift(a_0_0, integer_of_int32(result1)), intP_intM_a_0_7)))))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/duplets_why.why           : ..........#..................#................................................................#......................# (114/0/0/4/0)
-total   : 118
-valid   : 114 ( 97%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   4 (  3%)
-failure :   0 (  0%)

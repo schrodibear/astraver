@@ -3767,13 +3767,3 @@ goal max_safety_po_14:
   (("JC_34": (integer_of_int32(y1) - integer_of_int32(x_0_0))) < ("JC_34":
                                                                  (integer_of_int32(y0) - integer_of_int32(x_0_0))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/array_max_why.why         : .......#.................... (27/0/0/1/0)
-total   :  28
-valid   :  27 ( 96%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   1 (  4%)
-failure :   0 (  0%)

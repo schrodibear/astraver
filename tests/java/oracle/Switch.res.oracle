@@ -6174,13 +6174,3 @@ goal Switch_test2_ensures_normal_po_16:
   ("JC_41":
   ("JC_40": ((integer_of_int32(n_0) = 0) or (integer_of_int32(n_0) = 1))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Switch_why.why            : .................... (20/0/0/0/0)
-total   :  20
-valid   :  20 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

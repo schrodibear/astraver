@@ -5874,13 +5874,3 @@ goal Fresh_test_ensures_default_po_1:
   ("JC_32": (not valid(Object_alloc_table, result))) ->
   ("JC_51": (this_0 <> result))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Fresh_why.why             : #... (3/0/0/1/0)
-total   :   4
-valid   :   3 ( 75%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   1 ( 25%)
-failure :   0 (  0%)

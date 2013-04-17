@@ -11341,13 +11341,3 @@ goal MullerTheory_m_safety_po_16:
   (("JC_75": ((offset_max(Object_t_4_9_alloc_table, t_4) + 1) - i_5_0)) < 
   ("JC_75": ((offset_max(Object_t_4_9_alloc_table, t_4) + 1) - i_5)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/MullerTheory_why.why      : ?.............................................. (46/0/1/0/0)
-total   :  47
-valid   :  46 ( 98%)
-invalid :   0 (  0%)
-unknown :   1 (  2%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

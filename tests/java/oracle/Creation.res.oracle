@@ -6886,13 +6886,3 @@ goal cons_Creation_int_int_ensures_normal_po_1:
   ("JC_59": not_assigns(Object_alloc_table, Creation_simple_val,
   Creation_simple_val1, pset_singleton(this_0))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Creation_why.why          : .........#....... (16/0/0/1/0)
-total   :  17
-valid   :  16 ( 94%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   1 (  6%)
-failure :   0 (  0%)

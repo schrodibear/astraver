@@ -5090,13 +5090,3 @@ goal NameConflicts_m_ensures_normal_po_1:
   (return = result0) ->
   ("JC_35": (integer_of_int32(return) = 0))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/NameConflicts_why.why     : . (1/0/0/0/0)
-total   :   1
-valid   :   1 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

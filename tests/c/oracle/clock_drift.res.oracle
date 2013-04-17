@@ -145,9 +145,9 @@ lemma real_of_int_succ :
   ((n + 1) == (n + 1.0)))
 
 float f_single(int32 n_1)
-  requires (C_18 : ((C_19 : (0 <= n_1)) && (C_20 : (n_1 <= 1000000))));
+  requires (C_16 : ((C_17 : (0 <= n_1)) && (C_18 : (n_1 <= 1000000))));
 behavior default:
-  ensures (C_17 : (\real_abs(((\result :> real) - (\at(n_1,Old) * 0.1))) <=
+  ensures (C_15 : (\real_abs(((\result :> real) - (\at(n_1,Old) * 0.1))) <=
                     (\at(n_1,Old) * (0x1p-8 + 1.49012e-09))));
 {  
    (var float t);
@@ -172,26 +172,27 @@ behavior default:
             {  (L : 
                {  
                   {  
-                     (assert for default: (C_8 : ((C_9 : (0.0 <= (t :> real))) &&
-                                                   (C_10 : ((t :> real) <=
-                                                             (1000000.0 *
-                                                               (0.1 +
-                                                                 (0x1p-8 +
-                                                                   1.49012e-09))))))));
+                     (assert for default: (C_8 : (jessie : ((0.0 <=
+                                                              (t :> real)) &&
+                                                             ((t :> real) <=
+                                                               (1000000.0 *
+                                                                 (0.1 +
+                                                                   (0x1p-8 +
+                                                                    1.49012e-09))))))));
                      ()
                   };
-                  (C_12 : (t = (C_11 : (t + (0.1 :> float)))))
+                  (C_10 : (t = (C_9 : (t + (0.1 :> float)))))
                });
                
                {  
-                  (assert for default: (C_13 : (\real_abs(((t :> real) -
-                                                            ((\at(t,L) :> real) +
-                                                              ((0.1 :> float) :> real)))) <=
-                                                 0x1p-8)));
+                  (assert for default: (C_11 : (jessie : (\real_abs(((t :> real) -
+                                                                    ((\at(t,L) :> real) +
+                                                                    ((0.1 :> float) :> real)))) <=
+                                                           0x1p-8))));
                   ()
                }
             };
-            (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
+            (C_14 : (i = (C_13 : ((C_12 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -202,27 +203,27 @@ behavior default:
 ========== file tests/c/clock_drift.jessie/clock_drift.cloc ==========
 [C_10]
 file = "HOME/tests/c/clock_drift.c"
-line = 80
-begin = 22
-end = 65
+line = 81
+begin = 8
+end = 16
 
 [C_11]
-file = "HOME/tests/c/clock_drift.c"
-line = 81
-begin = 8
-end = 16
-
-[C_12]
-file = "HOME/tests/c/clock_drift.c"
-line = 81
-begin = 8
-end = 16
-
-[C_13]
 file = "HOME/tests/c/clock_drift.c"
 line = 82
 begin = 15
 end = 58
+
+[C_12]
+file = "HOME/tests/c/clock_drift.c"
+line = 78
+begin = 14
+end = 17
+
+[C_13]
+file = "HOME/tests/c/clock_drift.c"
+line = 78
+begin = 14
+end = 17
 
 [C_14]
 file = "HOME/tests/c/clock_drift.c"
@@ -232,33 +233,27 @@ end = 17
 
 [C_15]
 file = "HOME/tests/c/clock_drift.c"
-line = 78
-begin = 14
-end = 17
-
-[C_16]
-file = "HOME/tests/c/clock_drift.c"
-line = 78
-begin = 14
-end = 17
-
-[C_17]
-file = "HOME/tests/c/clock_drift.c"
 line = 67
 begin = 12
 end = 63
 
-[C_18]
+[C_16]
 file = "HOME/tests/c/clock_drift.c"
 line = 66
 begin = 13
 end = 30
 
-[C_19]
+[C_17]
 file = "HOME/tests/c/clock_drift.c"
 line = 66
 begin = 13
 end = 19
+
+[C_18]
+file = "HOME/tests/c/clock_drift.c"
+line = 66
+begin = 18
+end = 30
 
 [C_1]
 file = "HOME/tests/c/clock_drift.c"
@@ -283,12 +278,6 @@ file = "HOME/tests/c/clock_drift.c"
 line = 75
 begin = 21
 end = 68
-
-[C_20]
-file = "HOME/tests/c/clock_drift.c"
-line = 66
-begin = 18
-end = 30
 
 [C_5]
 file = "HOME/tests/c/clock_drift.c"
@@ -316,9 +305,9 @@ end = 65
 
 [C_9]
 file = "HOME/tests/c/clock_drift.c"
-line = 80
-begin = 15
-end = 23
+line = 81
+begin = 8
+end = 16
 
 [f_single]
 name = "Function f_single"
@@ -640,75 +629,75 @@ end = -1
 file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
 line = 57
 begin = 6
-end = 1534
+end = 1641
 
 [JC_19]
 file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
 line = 57
 begin = 6
-end = 1534
+end = 1641
 
 [JC_20]
 file = "HOME/tests/c/clock_drift.c"
 line = 80
 begin = 15
-end = 23
+end = 65
 
 [JC_21]
-file = "HOME/tests/c/clock_drift.c"
-line = 80
-begin = 22
-end = 65
-
-[JC_22]
-file = "HOME/tests/c/clock_drift.c"
-line = 80
-begin = 15
-end = 65
-
-[JC_23]
 kind = FPOverflow
 file = "HOME/tests/c/clock_drift.c"
 line = 81
 begin = 8
 end = 16
 
-[JC_24]
+[JC_22]
 file = "HOME/tests/c/clock_drift.c"
 line = 82
 begin = 15
 end = 58
 
-[JC_25]
+[JC_23]
 kind = ArithOverflow
 file = "HOME/tests/c/clock_drift.c"
 line = 78
 begin = 14
 end = 17
 
-[JC_26]
+[JC_24]
 file = "HOME/tests/c/clock_drift.c"
 line = 76
 begin = 19
 end = 22
 
-[JC_27]
+[JC_25]
 file = "HOME/tests/c/clock_drift.c"
 line = 75
 begin = 21
 end = 68
 
-[JC_28]
+[JC_26]
 file = "HOME/tests/c/clock_drift.c"
 line = 74
 begin = 21
 end = 27
 
-[JC_29]
+[JC_27]
 file = "HOME/tests/c/clock_drift.c"
 line = 74
 begin = 26
 end = 32
+
+[JC_28]
+file = "HOME/tests/c/clock_drift.c"
+line = 74
+begin = 21
+end = 32
+
+[JC_29]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [real_of_int_succ]
 name = "Lemma real_of_int_succ"
@@ -719,55 +708,31 @@ begin = 4
 end = 62
 
 [JC_30]
-file = "HOME/tests/c/clock_drift.c"
-line = 74
-begin = 21
-end = 32
+file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
+line = 57
+begin = 6
+end = 1641
 
 [JC_31]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
+line = 57
+begin = 6
+end = 1641
 
 [JC_32]
-file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
-line = 57
-begin = 6
-end = 1534
+file = "HOME/tests/c/clock_drift.c"
+line = 80
+begin = 15
+end = 65
 
 [JC_33]
-file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
-line = 57
-begin = 6
-end = 1534
-
-[JC_34]
-file = "HOME/tests/c/clock_drift.c"
-line = 80
-begin = 15
-end = 23
-
-[JC_35]
-file = "HOME/tests/c/clock_drift.c"
-line = 80
-begin = 22
-end = 65
-
-[JC_36]
-file = "HOME/tests/c/clock_drift.c"
-line = 80
-begin = 15
-end = 65
-
-[JC_37]
 kind = FPOverflow
 file = "HOME/tests/c/clock_drift.c"
 line = 81
 begin = 8
 end = 16
 
-[JC_38]
+[JC_34]
 file = "HOME/tests/c/clock_drift.c"
 line = 82
 begin = 15
@@ -1175,14 +1140,14 @@ let f_single_ensures_default =
        (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
        while true do
        { invariant
-           ((JC_27:
+           ((JC_25:
             le_real(abs_real(sub_real(single_value(t),
                              mul_real(real_of_int(integer_of_int32(i)), 0.1))),
             mul_real(real_of_int(integer_of_int32(i)),
             add_real(0x1p-8, 1.49012e-09))))
-           and (JC_30:
-               ((JC_28: le_int((0), integer_of_int32(i)))
-               and (JC_29:
+           and (JC_28:
+               ((JC_26: le_int((0), integer_of_int32(i)))
+               and (JC_27:
                    le_int(integer_of_int32(i), integer_of_int32(n_1)))))) 
           }
         begin
@@ -1197,30 +1162,29 @@ let f_single_ensures_default =
              (let jessie_<num> =
              begin
                (assert
-               { (JC_36:
-                 ((JC_34: le_real(0.0, single_value(t)))
-                 and (JC_35:
-                     le_real(single_value(t),
+               { (JC_32:
+                 (le_real(0.0, single_value(t))
+                 and le_real(single_value(t),
                      mul_real(1000000.0,
-                     add_real(0.1, add_real(0x1p-8, 1.49012e-09))))))) };
+                     add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) };
                void);
-              (C_12:
+              (C_10:
               begin
                 void;
-               (t := (C_11:
-                     (JC_37:
+               (t := (C_9:
+                     (JC_33:
                      (((add_single_safe nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
                !t end) end in void);
              (assert
-             { (JC_38:
+             { (JC_34:
                le_real(abs_real(sub_real(single_value(t),
                                 add_real(single_value(t@L), 0x1.99999ap-4))),
                0x1p-8)) }; void);
-             (C_16:
+             (C_14:
              begin
                void;
-              (i := (C_15:
-                    (safe_int32_of_integer_ (C_14:
+              (i := (C_13:
+                    (safe_int32_of_integer_ (C_12:
                                             ((add_int (integer_of_int32 !i)) (1))))));
               !i end) end) in void); (raise (Loop_continue_exc void)) end
           with Loop_continue_exc jessie_<num> -> void end end done;
@@ -1254,7 +1218,7 @@ let f_single_safety =
        (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
        while true do
        { invariant (JC_18: true)
-         variant (JC_26 : sub_int(integer_of_int32(n_1), integer_of_int32(i))) }
+         variant (JC_24 : sub_int(integer_of_int32(n_1), integer_of_int32(i))) }
         begin
           [ { } unit reads i,t
             { ((JC_13:
@@ -1277,30 +1241,29 @@ let f_single_safety =
              (let jessie_<num> =
              begin
                [ { } unit reads t
-                 { (JC_22:
-                   ((JC_20: le_real(0.0, single_value(t)))
-                   and (JC_21:
-                       le_real(single_value(t),
+                 { (JC_20:
+                   (le_real(0.0, single_value(t))
+                   and le_real(single_value(t),
                        mul_real(1000000.0,
-                       add_real(0.1, add_real(0x1p-8, 1.49012e-09))))))) } ];
-              (C_12:
+                       add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) } ];
+              (C_10:
               begin
                 void;
-               (t := (C_11:
-                     (JC_23:
+               (t := (C_9:
+                     (JC_21:
                      (((add_single nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
                !t end) end in void);
              [ { } unit reads t
-               { (JC_24:
+               { (JC_22:
                  le_real(abs_real(sub_real(single_value(t),
                                   add_real(single_value(t@L), 0x1.99999ap-4))),
                  0x1p-8)) } ];
-             (C_16:
+             (C_14:
              begin
                void;
-              (i := (C_15:
-                    (JC_25:
-                    (int32_of_integer_ (C_14:
+              (i := (C_13:
+                    (JC_23:
+                    (int32_of_integer_ (C_12:
                                        ((add_int (integer_of_int32 !i)) (1)))))));
               !i end) end) in void); (raise (Loop_continue_exc void)) end
           with Loop_continue_exc jessie_<num> -> void end end done;
@@ -2798,7 +2761,7 @@ goal f_single_ensures_default_po_1:
   (integer_of_int32(result0) = 0) ->
   forall i:int32.
   (i = result0) ->
-  ("JC_27":
+  ("JC_25":
   (abs_real((single_value(t) - (real_of_int(integer_of_int32(i)) * 0.1))) <= (real_of_int(integer_of_int32(i)) * (0x1.p-8 + 1.49012e-09))))
 
 goal f_single_ensures_default_po_2:
@@ -2815,7 +2778,7 @@ goal f_single_ensures_default_po_2:
   (integer_of_int32(result0) = 0) ->
   forall i:int32.
   (i = result0) ->
-  ("JC_30": ("JC_28": (0 <= integer_of_int32(i))))
+  ("JC_28": ("JC_26": (0 <= integer_of_int32(i))))
 
 goal f_single_ensures_default_po_3:
   forall n_1:int32.
@@ -2831,7 +2794,7 @@ goal f_single_ensures_default_po_3:
   (integer_of_int32(result0) = 0) ->
   forall i:int32.
   (i = result0) ->
-  ("JC_30": ("JC_29": (integer_of_int32(i) <= integer_of_int32(n_1))))
+  ("JC_28": ("JC_27": (integer_of_int32(i) <= integer_of_int32(n_1))))
 
 goal f_single_ensures_default_po_4:
   forall n_1:int32.
@@ -2849,13 +2812,13 @@ goal f_single_ensures_default_po_4:
   (i = result0) ->
   forall i0:int32.
   forall t0:single.
-  (("JC_27":
+  (("JC_25":
    (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
-   ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i0))) and
-    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+   ("JC_28":
+   (("JC_26": (0 <= integer_of_int32(i0))) and
+    ("JC_27": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_36": ("JC_34": (0.0 <= single_value(t0))))
+  ("JC_32": (0.0 <= single_value(t0)))
 
 goal f_single_ensures_default_po_5:
   forall n_1:int32.
@@ -2873,15 +2836,14 @@ goal f_single_ensures_default_po_5:
   (i = result0) ->
   forall i0:int32.
   forall t0:single.
-  (("JC_27":
+  (("JC_25":
    (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
-   ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i0))) and
-    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+   ("JC_28":
+   (("JC_26": (0 <= integer_of_int32(i0))) and
+    ("JC_27": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_36":
-  ("JC_35":
-  (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))
+  ("JC_32":
+  (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))
 
 goal f_single_ensures_default_po_6:
   forall n_1:int32.
@@ -2899,16 +2861,15 @@ goal f_single_ensures_default_po_6:
   (i = result0) ->
   forall i0:int32.
   forall t0:single.
-  (("JC_27":
+  (("JC_25":
    (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
-   ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i0))) and
-    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+   ("JC_28":
+   (("JC_26": (0 <= integer_of_int32(i0))) and
+    ("JC_27": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_36":
-  (("JC_34": (0.0 <= single_value(t0))) and
-   ("JC_35":
-   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
+  ("JC_32":
+  ((0.0 <= single_value(t0)) and
+   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))) ->
   forall result1:single.
   ((single_value(result1) = 0x1.99999ap-4) and
    ((single_exact(result1) = 0x1.99999ap-4) and
@@ -2917,7 +2878,7 @@ goal f_single_ensures_default_po_6:
   add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
-  ("JC_38":
+  ("JC_34":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8))
 
 goal f_single_ensures_default_po_7:
@@ -2936,16 +2897,15 @@ goal f_single_ensures_default_po_7:
   (i = result0) ->
   forall i0:int32.
   forall t0:single.
-  (("JC_27":
+  (("JC_25":
    (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
-   ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i0))) and
-    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+   ("JC_28":
+   (("JC_26": (0 <= integer_of_int32(i0))) and
+    ("JC_27": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_36":
-  (("JC_34": (0.0 <= single_value(t0))) and
-   ("JC_35":
-   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
+  ("JC_32":
+  ((0.0 <= single_value(t0)) and
+   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))) ->
   forall result1:single.
   ((single_value(result1) = 0x1.99999ap-4) and
    ((single_exact(result1) = 0x1.99999ap-4) and
@@ -2954,13 +2914,13 @@ goal f_single_ensures_default_po_7:
   add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
-  ("JC_38":
+  ("JC_34":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   forall result3:int32.
   (integer_of_int32(result3) = (integer_of_int32(i0) + 1)) ->
   forall i1:int32.
   (i1 = result3) ->
-  ("JC_27":
+  ("JC_25":
   (abs_real((single_value(t1) - (real_of_int(integer_of_int32(i1)) * 0.1))) <= (real_of_int(integer_of_int32(i1)) * (0x1.p-8 + 1.49012e-09))))
 
 goal f_single_ensures_default_po_8:
@@ -2979,16 +2939,15 @@ goal f_single_ensures_default_po_8:
   (i = result0) ->
   forall i0:int32.
   forall t0:single.
-  (("JC_27":
+  (("JC_25":
    (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
-   ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i0))) and
-    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+   ("JC_28":
+   (("JC_26": (0 <= integer_of_int32(i0))) and
+    ("JC_27": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_36":
-  (("JC_34": (0.0 <= single_value(t0))) and
-   ("JC_35":
-   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
+  ("JC_32":
+  ((0.0 <= single_value(t0)) and
+   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))) ->
   forall result1:single.
   ((single_value(result1) = 0x1.99999ap-4) and
    ((single_exact(result1) = 0x1.99999ap-4) and
@@ -2997,13 +2956,13 @@ goal f_single_ensures_default_po_8:
   add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
-  ("JC_38":
+  ("JC_34":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   forall result3:int32.
   (integer_of_int32(result3) = (integer_of_int32(i0) + 1)) ->
   forall i1:int32.
   (i1 = result3) ->
-  ("JC_30": ("JC_28": (0 <= integer_of_int32(i1))))
+  ("JC_28": ("JC_26": (0 <= integer_of_int32(i1))))
 
 goal f_single_ensures_default_po_9:
   forall n_1:int32.
@@ -3021,16 +2980,15 @@ goal f_single_ensures_default_po_9:
   (i = result0) ->
   forall i0:int32.
   forall t0:single.
-  (("JC_27":
+  (("JC_25":
    (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
-   ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i0))) and
-    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+   ("JC_28":
+   (("JC_26": (0 <= integer_of_int32(i0))) and
+    ("JC_27": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_36":
-  (("JC_34": (0.0 <= single_value(t0))) and
-   ("JC_35":
-   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
+  ("JC_32":
+  ((0.0 <= single_value(t0)) and
+   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))) ->
   forall result1:single.
   ((single_value(result1) = 0x1.99999ap-4) and
    ((single_exact(result1) = 0x1.99999ap-4) and
@@ -3039,13 +2997,13 @@ goal f_single_ensures_default_po_9:
   add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
-  ("JC_38":
+  ("JC_34":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   forall result3:int32.
   (integer_of_int32(result3) = (integer_of_int32(i0) + 1)) ->
   forall i1:int32.
   (i1 = result3) ->
-  ("JC_30": ("JC_29": (integer_of_int32(i1) <= integer_of_int32(n_1))))
+  ("JC_28": ("JC_27": (integer_of_int32(i1) <= integer_of_int32(n_1))))
 
 goal f_single_ensures_default_po_10:
   forall n_1:int32.
@@ -3063,11 +3021,11 @@ goal f_single_ensures_default_po_10:
   (i = result0) ->
   forall i0:int32.
   forall t0:single.
-  (("JC_27":
+  (("JC_25":
    (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
-   ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i0))) and
-    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+   ("JC_28":
+   (("JC_26": (0 <= integer_of_int32(i0))) and
+    ("JC_27": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) >= integer_of_int32(n_1)) ->
   forall return:single.
   (return = t0) ->
@@ -3097,10 +3055,9 @@ goal f_single_safety_po_1:
    (("JC_14": (0 <= integer_of_int32(i0))) and
     ("JC_15": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_22":
-  (("JC_20": (0.0 <= single_value(t0))) and
-   ("JC_21":
-   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
+  ("JC_20":
+  ((0.0 <= single_value(t0)) and
+   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))) ->
   forall result1:single.
   ((single_value(result1) = 0x1.99999ap-4) and
    ((single_exact(result1) = 0x1.99999ap-4) and
@@ -3131,10 +3088,9 @@ goal f_single_safety_po_2:
    (("JC_14": (0 <= integer_of_int32(i0))) and
     ("JC_15": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_22":
-  (("JC_20": (0.0 <= single_value(t0))) and
-   ("JC_21":
-   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
+  ("JC_20":
+  ((0.0 <= single_value(t0)) and
+   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))) ->
   forall result1:single.
   ((single_value(result1) = 0x1.99999ap-4) and
    ((single_exact(result1) = 0x1.99999ap-4) and
@@ -3145,7 +3101,7 @@ goal f_single_safety_po_2:
   add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
-  ("JC_24":
+  ("JC_22":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   ((-2147483648) <= (integer_of_int32(i0) + 1))
 
@@ -3172,10 +3128,9 @@ goal f_single_safety_po_3:
    (("JC_14": (0 <= integer_of_int32(i0))) and
     ("JC_15": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_22":
-  (("JC_20": (0.0 <= single_value(t0))) and
-   ("JC_21":
-   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
+  ("JC_20":
+  ((0.0 <= single_value(t0)) and
+   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))) ->
   forall result1:single.
   ((single_value(result1) = 0x1.99999ap-4) and
    ((single_exact(result1) = 0x1.99999ap-4) and
@@ -3186,7 +3141,7 @@ goal f_single_safety_po_3:
   add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
-  ("JC_24":
+  ("JC_22":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   ((integer_of_int32(i0) + 1) <= 2147483647)
 
@@ -3213,10 +3168,9 @@ goal f_single_safety_po_4:
    (("JC_14": (0 <= integer_of_int32(i0))) and
     ("JC_15": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_22":
-  (("JC_20": (0.0 <= single_value(t0))) and
-   ("JC_21":
-   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
+  ("JC_20":
+  ((0.0 <= single_value(t0)) and
+   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))) ->
   forall result1:single.
   ((single_value(result1) = 0x1.99999ap-4) and
    ((single_exact(result1) = 0x1.99999ap-4) and
@@ -3227,7 +3181,7 @@ goal f_single_safety_po_4:
   add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
-  ("JC_24":
+  ("JC_22":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   (((-2147483648) <= (integer_of_int32(i0) + 1)) and
    ((integer_of_int32(i0) + 1) <= 2147483647)) ->
@@ -3235,7 +3189,7 @@ goal f_single_safety_po_4:
   (integer_of_int32(result3) = (integer_of_int32(i0) + 1)) ->
   forall i1:int32.
   (i1 = result3) ->
-  (0 <= ("JC_26": (integer_of_int32(n_1) - integer_of_int32(i0))))
+  (0 <= ("JC_24": (integer_of_int32(n_1) - integer_of_int32(i0))))
 
 goal f_single_safety_po_5:
   forall n_1:int32.
@@ -3260,10 +3214,9 @@ goal f_single_safety_po_5:
    (("JC_14": (0 <= integer_of_int32(i0))) and
     ("JC_15": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
   (integer_of_int32(i0) < integer_of_int32(n_1)) ->
-  ("JC_22":
-  (("JC_20": (0.0 <= single_value(t0))) and
-   ("JC_21":
-   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
+  ("JC_20":
+  ((0.0 <= single_value(t0)) and
+   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))) ->
   forall result1:single.
   ((single_value(result1) = 0x1.99999ap-4) and
    ((single_exact(result1) = 0x1.99999ap-4) and
@@ -3274,7 +3227,7 @@ goal f_single_safety_po_5:
   add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
-  ("JC_24":
+  ("JC_22":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   (((-2147483648) <= (integer_of_int32(i0) + 1)) and
    ((integer_of_int32(i0) + 1) <= 2147483647)) ->
@@ -3282,19 +3235,9 @@ goal f_single_safety_po_5:
   (integer_of_int32(result3) = (integer_of_int32(i0) + 1)) ->
   forall i1:int32.
   (i1 = result3) ->
-  (("JC_26": (integer_of_int32(n_1) - integer_of_int32(i1))) < ("JC_26":
+  (("JC_24": (integer_of_int32(n_1) - integer_of_int32(i1))) < ("JC_24":
                                                                (integer_of_int32(n_1) - integer_of_int32(i0))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/clock_drift_why.why       : ?......##........ (14/0/1/2/0)
-total   :  17
-valid   :  14 ( 82%)
-invalid :   0 (  0%)
-unknown :   1 (  6%)
-timeout :   2 ( 12%)
-failure :   0 (  0%)
 // RUNGAPPA: will ask regtests to run gappa on VCs of this program
 ========== generation of Gappa VC output ==========
 why -gappa [...] why/clock_drift.why

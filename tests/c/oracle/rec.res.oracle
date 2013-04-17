@@ -3210,13 +3210,3 @@ goal sum_safety_po_8:
   (tmp = result0) ->
   ((integer_of_int32(x_0) + integer_of_int32(tmp)) <= 2147483647)
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/rec_why.why               : ?............?...........# (23/0/2/1/0)
-total   :  26
-valid   :  23 ( 88%)
-invalid :   0 (  0%)
-unknown :   2 (  8%)
-timeout :   1 (  4%)
-failure :   0 (  0%)

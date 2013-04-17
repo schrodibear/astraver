@@ -5283,16 +5283,6 @@ goal Fibonacci_Fib_safety_po_2:
   (i0 = (i + 1)) ->
   (("JC_35": (n_0 - i0)) < ("JC_35": (n_0 - i)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Fibonacci_why.why         : ?#............ (12/0/1/1/0)
-total   :  14
-valid   :  12 ( 86%)
-invalid :   0 (  0%)
-unknown :   1 (  7%)
-timeout :   1 (  7%)
-failure :   0 (  0%)
 // RUNCOQ: will ask regtests to check Coq proofs of this program
 ========== generation of Coq VC output ==========
 why -coq [...] why/Fibonacci.why

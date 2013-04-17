@@ -4577,13 +4577,3 @@ goal Counter_increment_ensures_default_po_1:
   Counter_increments0) = (value(this_1, Counter_decrements,
   Counter_increments) + 1)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Counter_why.why           : .. (2/0/0/0/0)
-total   :   2
-valid   :   2 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

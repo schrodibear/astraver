@@ -6358,13 +6358,3 @@ goal negate_negate_safety_po_5:
                                                                ((offset_max(Object_alloc_table,
                                                                t) + 1) - i)))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Negate_why.why            : ............... (15/0/0/0/0)
-total   :  15
-valid   :  15 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

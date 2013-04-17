@@ -5019,13 +5019,3 @@ goal find_array_safety_po_19:
   (("JC_39": (integer_of_int32(high1) - integer_of_int32(low0))) < ("JC_39":
                                                                    (integer_of_int32(high0) - integer_of_int32(low0))))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/find_array_why.why        : .....#..#.#...#...............#...# (29/0/0/6/0)
-total   :  35
-valid   :  29 ( 83%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   6 ( 17%)
-failure :   0 (  0%)

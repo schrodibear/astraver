@@ -445,9 +445,11 @@ behavior default:
    {  (C_11 : pop_heap_induction(a, n_1));
       
       {  
-         (assert for default: (C_12 : (\forall integer i_16;
-                                        (((0 < i_16) && (i_16 < n_1)) ==>
-                                          ((a + 0).intM >= (a + i_16).intM)))));
+         (assert for default: (C_12 : (jessie : (\forall integer i_16;
+                                                  (((0 < i_16) &&
+                                                     (i_16 < n_1)) ==>
+                                                    ((a + 0).intM >=
+                                                      (a + i_16).intM))))));
          ()
       };
       
@@ -460,10 +462,10 @@ behavior default:
       (C_23 : (max = (C_22 : (C_21 : (a + 0)).intM)));
       
       {  
-         (assert for default: (C_24 : (\forall int32 x_1;
-                                        (CountWithHole{Here}(a, x_1, 0, hole,
-                                                             n_1) ==
-                                          Count{Pre}(a, x_1, 1, n_1)))));
+         (assert for default: (C_24 : (jessie : (\forall int32 x_1;
+                                                  (CountWithHole{Here}(
+                                                    a, x_1, 0, hole, n_1) ==
+                                                    Count{Pre}(a, x_1, 1, n_1))))));
          ()
       };
       
@@ -503,14 +505,16 @@ behavior default:
                (C_59 : (child_0 = (C_58 : ((C_57 : (child_0 - 1)) :> int32)))) else ());
                
                {  
-                  (assert for default: (C_66 : ParentChild(hole, child_0)));
+                  (assert for default: (C_66 : (jessie : ParentChild(
+                                               hole, child_0))));
                   ()
                };
                
                {  (if ((C_77 : (C_76 : (a + child_0)).intM) > tmp) then 
                   {  
                      {  
-                        (assert for default: (C_67 : (hole < (n_1 - 1))));
+                        (assert for default: (C_67 : (jessie : (hole <
+                                                                 (n_1 - 1)))));
                         ()
                      };
                      (C_72 : ((C_71 : (C_70 : (a + hole)).intM) = (C_69 : 
@@ -519,8 +523,10 @@ behavior default:
                                                                     child_0)).intM)));
                      
                      {  
-                        (assert for default: (C_73 : (\at((a + (n_1 - 1)).intM,Pre) ==
-                                                       (a + (n_1 - 1)).intM)));
+                        (assert for default: (C_73 : (jessie : (\at((a +
+                                                                    (n_1 - 1)).intM,Pre) ==
+                                                                 (a +
+                                                                   (n_1 - 1)).intM))));
                         ()
                      };
                      (C_74 : pop_push_heap_copy(a, n_1, hole, child_0));
@@ -537,7 +543,8 @@ behavior default:
                (if ((C_54 : (C_53 : (a + child_0)).intM) > tmp) then 
                {  
                   {  
-                     (assert for default: (C_44 : (hole < (n_1 - 1))));
+                     (assert for default: (C_44 : (jessie : (hole <
+                                                              (n_1 - 1)))));
                      ()
                   };
                   (C_49 : ((C_48 : (C_47 : (a + hole)).intM) = (C_46 : 
@@ -546,8 +553,9 @@ behavior default:
                                                                  child_0)).intM)));
                   
                   {  
-                     (assert for default: (C_50 : (\at((a + (n_1 - 1)).intM,Pre) ==
-                                                    (a + (n_1 - 1)).intM)));
+                     (assert for default: (C_50 : (jessie : (\at((a +
+                                                                   (n_1 - 1)).intM,Pre) ==
+                                                              (a + (n_1 - 1)).intM))));
                      ()
                   };
                   (C_51 : pop_push_heap_copy(a, n_1, hole, child_0));
@@ -561,136 +569,149 @@ behavior default:
       (while_0_break : ());
       
       {  
-         (assert for default: (C_80 : (\forall integer i_19;
-                                        (((hole < (n_1 - 1)) &&
-                                           ParentChild(i_19, hole)) ==>
-                                          ((a + i_19).intM >= tmp)))));
+         (assert for default: (C_80 : (jessie : (\forall integer i_19;
+                                                  (((hole < (n_1 - 1)) &&
+                                                     ParentChild(i_19, hole)) ==>
+                                                    ((a + i_19).intM >= tmp))))));
          ()
       };
       (C_83 : ((C_82 : (C_81 : (a + hole)).intM) = tmp));
       
       {  
-         (assert for default: (C_84 : (\forall int32 x_3;
-                                        (CountWithHole{Here}(a, x_3, 0, hole,
-                                                             n_1) ==
-                                          Count{Pre}(a, x_3, 1, n_1)))));
+         (assert for default: (C_84 : (jessie : (\forall int32 x_3;
+                                                  (CountWithHole{Here}(
+                                                    a, x_3, 0, hole, n_1) ==
+                                                    Count{Pre}(a, x_3, 1, n_1))))));
          ()
       };
       
       {  
-         (assert for default: (C_85 : ((hole < (n_1 - 1)) ==>
-                                        (((a + hole).intM == tmp) &&
-                                          ((tmp ==
-                                             \at((a + (n_1 - 1)).intM,Pre)) &&
-                                            (\at((a + (n_1 - 1)).intM,Pre) ==
-                                              (a + (n_1 - 1)).intM))))));
+         (assert for default: (C_85 : (jessie : ((hole < (n_1 - 1)) ==>
+                                                  (((a + hole).intM == tmp) &&
+                                                    ((tmp ==
+                                                       \at((a + (n_1 - 1)).intM,Pre)) &&
+                                                      (\at((a + (n_1 - 1)).intM,Pre) ==
+                                                        (a + (n_1 - 1)).intM)))))));
          ()
       };
       
       {  
-         (assert for default: (C_86 : (\forall int32 x_4;
-                                        ((hole < (n_1 - 1)) ==>
-                                          (Count{Here}(a, x_4, (hole + 1),
-                                                       ((n_1 - 1) + 1)) ==
-                                            CountWithoutHole{Here}(a, x_4,
-                                                                   (hole + 1),
-                                                                   (n_1 - 1),
-                                                                   n_1))))));
+         (assert for default: (C_86 : (jessie : (\forall int32 x_4;
+                                                  ((hole < (n_1 - 1)) ==>
+                                                    (Count{Here}(a, x_4,
+                                                                 (hole + 1),
+                                                                 ((n_1 - 1) +
+                                                                   1)) ==
+                                                      CountWithoutHole{Here}(
+                                                      a, x_4, (hole + 1),
+                                                      (n_1 - 1), n_1)))))));
          ()
       };
       
       {  
-         (assert for default: (C_87 : (\forall int32 x_5;
-                                        (((hole < (n_1 - 1)) ==>
-                                           ((CountWithHole{Here}(a, x_5, 0,
-                                                                 hole, n_1) ==
-                                              (CountWithHole{Here}(a, x_5, 0,
-                                                                   hole,
-                                                                   (n_1 - 1)) +
-                                                Count{Here}(a, x_5,
-                                                            (n_1 - 1),
-                                                            ((n_1 - 1) + 1)))) &&
-                                             (((CountWithHole{Here}(a, x_5,
-                                                                    0, hole,
-                                                                    (n_1 - 1)) +
-                                                 Count{Here}(a, x_5,
-                                                             (n_1 - 1),
-                                                             ((n_1 - 1) + 1))) ==
-                                                (CountWithoutHole{Here}(
-                                                  a, x_5, 0, hole, (hole + 1)) +
-                                                  Count{Here}(a, x_5,
-                                                              (hole + 1),
-                                                              (n_1 - 1)))) &&
-                                               (((CountWithoutHole{Here}(
-                                                   a, x_5, 0, hole,
-                                                   (hole + 1)) +
-                                                   Count{Here}(a, x_5,
-                                                               (hole + 1),
-                                                               (n_1 - 1))) ==
-                                                  CountWithoutHole{Here}(
-                                                  a, x_5, 0, hole, (n_1 - 1))) &&
-                                                 (CountWithoutHole{Here}(
-                                                   a, x_5, 0, hole, (n_1 - 1)) ==
-                                                   Count{Here}(a, x_5, 0,
-                                                               (n_1 - 1))))))) &&
-                                          ((hole == (n_1 - 1)) ==>
-                                            ((CountWithHole{Here}(a, x_5, 0,
-                                                                  hole, n_1) ==
-                                               CountWithHole{Here}(a, x_5, 0,
-                                                                   (n_1 - 1),
-                                                                   n_1)) &&
-                                              (CountWithHole{Here}(a, x_5, 0,
-                                                                   (n_1 - 1),
-                                                                   n_1) ==
-                                                Count{Here}(a, x_5, 0,
-                                                            (n_1 - 1)))))))));
+         (assert for default: (C_87 : (jessie : (\forall int32 x_5;
+                                                  (((hole < (n_1 - 1)) ==>
+                                                     ((CountWithHole{Here}(
+                                                        a, x_5, 0, hole, n_1) ==
+                                                        (CountWithHole{Here}(
+                                                          a, x_5, 0, hole,
+                                                          (n_1 - 1)) +
+                                                          Count{Here}(
+                                                          a, x_5, (n_1 - 1),
+                                                          ((n_1 - 1) + 1)))) &&
+                                                       (((CountWithHole{Here}(
+                                                           a, x_5, 0, hole,
+                                                           (n_1 - 1)) +
+                                                           Count{Here}(
+                                                           a, x_5, (n_1 - 1),
+                                                           ((n_1 - 1) + 1))) ==
+                                                          (CountWithoutHole{Here}(
+                                                            a, x_5, 0, hole,
+                                                            (hole + 1)) +
+                                                            Count{Here}(
+                                                            a, x_5,
+                                                            (hole + 1),
+                                                            (n_1 - 1)))) &&
+                                                         (((CountWithoutHole{Here}(
+                                                             a, x_5, 0, hole,
+                                                             (hole + 1)) +
+                                                             Count{Here}(
+                                                             a, x_5,
+                                                             (hole + 1),
+                                                             (n_1 - 1))) ==
+                                                            CountWithoutHole{Here}(
+                                                            a, x_5, 0, hole,
+                                                            (n_1 - 1))) &&
+                                                           (CountWithoutHole{Here}(
+                                                             a, x_5, 0, hole,
+                                                             (n_1 - 1)) ==
+                                                             Count{Here}(
+                                                             a, x_5, 0,
+                                                             (n_1 - 1))))))) &&
+                                                    ((hole == (n_1 - 1)) ==>
+                                                      ((CountWithHole{Here}(
+                                                         a, x_5, 0, hole, n_1) ==
+                                                         CountWithHole{Here}(
+                                                         a, x_5, 0,
+                                                         (n_1 - 1), n_1)) &&
+                                                        (CountWithHole{Here}(
+                                                          a, x_5, 0,
+                                                          (n_1 - 1), n_1) ==
+                                                          Count{Here}(
+                                                          a, x_5, 0,
+                                                          (n_1 - 1))))))))));
          ()
       };
       
       {  
-         (assert for default: (C_88 : (\forall int32 x_6;
-                                        ((Count{Here}(a, x_6, 0, (n_1 - 1)) ==
-                                           CountWithHole{Here}(a, x_6, 0,
-                                                               hole, n_1)) &&
-                                          (CountWithHole{Here}(a, x_6, 0,
-                                                               hole, n_1) ==
-                                            Count{Pre}(a, x_6, 1, n_1))))));
+         (assert for default: (C_88 : (jessie : (\forall int32 x_6;
+                                                  ((Count{Here}(a, x_6, 0,
+                                                                (n_1 - 1)) ==
+                                                     CountWithHole{Here}(
+                                                     a, x_6, 0, hole, n_1)) &&
+                                                    (CountWithHole{Here}(
+                                                      a, x_6, 0, hole, n_1) ==
+                                                      Count{Pre}(a, x_6, 1,
+                                                                 n_1)))))));
          ()
       };
       (C_93 : ((C_92 : (C_91 : (a + (C_90 : ((C_89 : (n_1 - 1)) :> int32)))).intM) = max));
       
       {  
-         (assert for default: (C_94 : (\forall int32 x_7;
-                                        (Count{Here}(a, x_7, (n_1 - 1),
-                                                     ((n_1 - 1) + 1)) ==
-                                          Count{Pre}(a, x_7, 0, 1)))));
+         (assert for default: (C_94 : (jessie : (\forall int32 x_7;
+                                                  (Count{Here}(a, x_7,
+                                                               (n_1 - 1),
+                                                               ((n_1 - 1) +
+                                                                 1)) ==
+                                                    Count{Pre}(a, x_7, 0, 1))))));
          ()
       };
       
       {  
-         (assert for default: (C_95 : (\forall int32 x_8;
-                                        (CountWithoutHole{Here}(a, x_8, 0,
-                                                                (n_1 - 1),
+         (assert for default: (C_95 : (jessie : (\forall int32 x_8;
+                                                  (CountWithoutHole{Here}(
+                                                    a, x_8, 0, (n_1 - 1), n_1) ==
+                                                    CountWithoutHole{Pre}(
+                                                    a, x_8, 0, 1, n_1))))));
+         ()
+      };
+      
+      {  
+         (assert for default: (C_96 : (jessie : (\forall int32 x_9;
+                                                  ((Count{Here}(a, x_9, 0,
                                                                 n_1) ==
-                                          CountWithoutHole{Pre}(a, x_8, 0, 1,
-                                                                n_1)))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_96 : (\forall int32 x_9;
-                                        ((Count{Here}(a, x_9, 0, n_1) ==
-                                           CountWithoutHole{Here}(a, x_9, 0,
-                                                                  (n_1 - 1),
-                                                                  n_1)) &&
-                                          ((CountWithoutHole{Here}(a, x_9, 0,
-                                                                   (n_1 - 1),
-                                                                   n_1) ==
-                                             CountWithoutHole{Pre}(a, x_9, 0,
-                                                                   1, n_1)) &&
-                                            (CountWithoutHole{Pre}(a, x_9, 0,
-                                                                   1, n_1) ==
-                                              Count{Pre}(a, x_9, 0, n_1)))))));
+                                                     CountWithoutHole{Here}(
+                                                     a, x_9, 0, (n_1 - 1),
+                                                     n_1)) &&
+                                                    ((CountWithoutHole{Here}(
+                                                       a, x_9, 0, (n_1 - 1),
+                                                       n_1) ==
+                                                       CountWithoutHole{Pre}(
+                                                       a, x_9, 0, 1, n_1)) &&
+                                                      (CountWithoutHole{Pre}(
+                                                        a, x_9, 0, 1, n_1) ==
+                                                        Count{Pre}(a, x_9, 0,
+                                                                   n_1))))))));
          ()
       };
       
@@ -728,9 +749,9 @@ behavior default:
             
             {  
                {  
-                  (assert for default: (C_115 : ((0 < i) ==>
-                                                  ParentChild(((i - 1) / 2),
-                                                              i))));
+                  (assert for default: (C_115 : (jessie : ((0 < i) ==>
+                                                            ParentChild(
+                                                            ((i - 1) / 2), i)))));
                   ()
                }
             };
@@ -1725,7 +1746,7 @@ clean:
 [JC_90]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 288
+line = 296
 begin = 26
 end = 67
 
@@ -1750,7 +1771,7 @@ end = 13
 [JC_93]
 kind = PointerDeref
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 305
+line = 313
 begin = 15
 end = 54
 
@@ -1855,7 +1876,7 @@ end = 28
 [JC_100]
 kind = PointerDeref
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 395
+line = 413
 begin = 15
 end = 88
 
@@ -1928,9 +1949,9 @@ end = 30
 
 [JC_155]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 451
+line = 472
 begin = 6
-end = 863
+end = 883
 
 [JC_103]
 file = "HOME/tests/c/popHeap.c"
@@ -1946,9 +1967,9 @@ end = 34
 
 [JC_156]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 451
+line = 472
 begin = 6
-end = 863
+end = 883
 
 [JC_104]
 kind = UserCall
@@ -2176,9 +2197,9 @@ end = 96
 
 [JC_165]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 451
+line = 472
 begin = 6
-end = 863
+end = 883
 
 [JC_113]
 file = "HOME/tests/c/popHeap.c"
@@ -2188,9 +2209,9 @@ end = 33
 
 [JC_166]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 451
+line = 472
 begin = 6
-end = 863
+end = 883
 
 [JC_114]
 file = "HOME/tests/c/popHeap.c"
@@ -2212,15 +2233,15 @@ end = -1
 
 [JC_116]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 205
+line = 207
 begin = 6
-end = 4192
+end = 4644
 
 [JC_117]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 205
+line = 207
 begin = 6
-end = 4192
+end = 4644
 
 [pop_heap_safety]
 name = "Function pop_heap"
@@ -2312,9 +2333,9 @@ end = 34
 
 [JC_66]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 205
+line = 207
 begin = 6
-end = 4192
+end = 4644
 
 [JC_14]
 file = "HOME/tests/c/popHeap.c"
@@ -2330,9 +2351,9 @@ end = 44
 
 [JC_67]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 205
+line = 207
 begin = 6
-end = 4192
+end = 4644
 
 [JC_15]
 file = "HOME/"
@@ -2343,7 +2364,7 @@ end = -1
 [JC_121]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 261
+line = 267
 begin = 29
 end = 70
 
@@ -2394,7 +2415,7 @@ end = 18
 [JC_124]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 288
+line = 296
 begin = 26
 end = 67
 
@@ -2590,7 +2611,7 @@ end = 108
 [JC_79]
 kind = PointerDeref
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 251
+line = 255
 begin = 30
 end = 304
 
@@ -2663,7 +2684,7 @@ end = 44
 [JC_81]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 261
+line = 267
 begin = 29
 end = 70
 
@@ -2759,7 +2780,7 @@ end = 23
 [JC_88]
 kind = PointerDeref
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 278
+line = 285
 begin = 27
 end = 292
 
@@ -2813,7 +2834,7 @@ end = -1
 
 [JC_145]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 441
+line = 462
 begin = 10
 end = 18
 
@@ -2825,7 +2846,7 @@ end = 56
 
 [JC_147]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 441
+line = 462
 begin = 10
 end = 18
 
@@ -37348,13 +37369,3 @@ goal pop_heap_safety_po_71:
   (integer_of_int32(result11) = (integer_of_int32(n_1_0) - 1)) ->
   (integer_of_int32(result11) <= offset_max(intP_alloc_table, a_4))
 
-========== running alt-ergo ==========
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/popHeap_why.why           : ..................#...#.#....#.#.....##...#.#.#..........#.#....#.#.....##...#.#.#.#.##.#.#.......##...###.#.##.#.#.#.....##....##.#.#..#.#.#.....##...#.#.#.....................#.#..............................................#............ (187/0/0/52/0)
-total   : 239
-valid   : 187 ( 78%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :  52 ( 22%)
-failure :   0 (  0%)
