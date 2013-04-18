@@ -45,10 +45,10 @@ $Id: java_lexer.mll,v 1.42 2009-12-08 16:38:49 marche Exp $
   open Java_parser
   open Lexing
   open Java_ast
-    
+
   type location = position * position
 
-  let loc lexbuf : location = 
+  let loc lexbuf : location =
     (lexeme_start_p lexbuf, lexeme_end_p lexbuf)
 
   exception Lexical_error of location * string
@@ -60,9 +60,9 @@ $Id: java_lexer.mll,v 1.42 2009-12-08 16:38:49 marche Exp $
 
   let buf = Buffer.create 97
 
-  let kw_table = 
+  let kw_table =
     let table = Hashtbl.create 17 in
-    let _ = 
+    let _ =
       List.iter
 	(fun (s,t) -> Hashtbl.add table s t)
 	[ "abstract", ABSTRACT;
@@ -71,7 +71,7 @@ $Id: java_lexer.mll,v 1.42 2009-12-08 16:38:49 marche Exp $
 	  "assigns", ASSIGNS;
 	  "assumes", ASSUMES;
 	  "axiom", AXIOM;
-	  "axiomatic", AXIOMATIC;	  
+	  "axiomatic", AXIOMATIC;
 	  "behavior", BEHAVIOR;
 	  "boolean", BOOLEAN;
 	  "break", BREAK;
@@ -152,7 +152,7 @@ $Id: java_lexer.mll,v 1.42 2009-12-08 16:38:49 marche Exp $
 	  (* "var", VAR; ??? *)
 	  "void", VOID;
 	  "volatile", VOLATILE;
-	  "while", WHILE;	
+	  "while", WHILE;
 	]
     in table
 
@@ -172,14 +172,14 @@ $Id: java_lexer.mll,v 1.42 2009-12-08 16:38:49 marche Exp $
 	    i*)
 	  (ID s)
 
-  let special_kw_table = 
+  let special_kw_table =
     let table = Hashtbl.create 17 in
-    let _ = 
+    let _ =
       List.iter
 	(fun (s,t) -> Hashtbl.add table s t)
 	[ "\\at", BSAT;
 	  "\\exists", BSEXISTS ;
-	  "\\fresh", BSFRESH ; 
+	  "\\fresh", BSFRESH ;
 	  "\\forall", BSFORALL ;
 	  "\\nothing", BSNOTHING;
 	  (*
@@ -196,7 +196,7 @@ $Id: java_lexer.mll,v 1.42 2009-12-08 16:38:49 marche Exp $
 
   let builtins_table =
     let table = Hashtbl.create 17 in
-    let _ = 
+    let _ =
       List.iter
 	(fun (_ty,id,_params) -> Hashtbl.add table id ())
 	Java_pervasives.builtin_logic_symbols
@@ -221,7 +221,7 @@ $Id: java_lexer.mll,v 1.42 2009-12-08 16:38:49 marche Exp $
     Format.fprintf Config.log "In file %s, parsing JML Spec: %s@."
       (Location.base_filename base) jml_string;
 i*)
-    match Jml_syntax.parse_jml_specification base jml_string with 
+    match Jml_syntax.parse_jml_specification base jml_string with
     | Ast_types.Jml_declaration d -> JML_DECLARATIONS(d)
     | Ast_types.Jml_method_specification s -> JML_METHOD_SPECIFICATION(s)
     | Ast_types.Jml_loop_annotation la -> JML_LOOP_ANNOTATION(la)
@@ -236,8 +236,8 @@ i*)
 *)
   let newline lexbuf =
     let pos = lexbuf.lex_curr_p in
-    lexbuf.lex_curr_p <- 
-      { pos with pos_lnum = pos.pos_lnum + 1; 
+    lexbuf.lex_curr_p <-
+      { pos with pos_lnum = pos.pos_lnum + 1;
 	  pos_bol = pos.pos_cnum }
 
   let pragma lexbuf id v =
@@ -246,22 +246,22 @@ i*)
 	  begin
 	    Java_options.termination_policy :=
 	      match v with
-		| "always" -> Jc_env.TPalways 
-		| "user" -> Jc_env.TPuser 
-		| "never" -> Jc_env.TPnever 
+		| "always" -> Jc_env.TPalways
+		| "user" -> Jc_env.TPuser
+		| "never" -> Jc_env.TPnever
 		| _ -> lex_error lexbuf ("unknown termination policy " ^ v)
-	  end  
-          
+	  end
+
       | "AbstractDomain" ->
 	  begin
 	    Java_options.ai_domain :=
 	      match v with
-		| "None" -> Jc_env.AbsNone 
-		| "Box" -> Jc_env.AbsBox 
-		| "Oct" -> Jc_env.AbsOct 
-		| "Pol" -> Jc_env.AbsPol 
+		| "None" -> Jc_env.AbsNone
+		| "Box" -> Jc_env.AbsBox
+		| "Oct" -> Jc_env.AbsOct
+		| "Pol" -> Jc_env.AbsPol
 		| _ -> lex_error lexbuf ("unknown abstract domain " ^ v)
-	  end  
+	  end
       | "AnnotationPolicy" ->
 	  begin
 	    Java_options.annotation_sem :=
@@ -271,31 +271,31 @@ i*)
 		| "WeakPre" -> Jc_env.AnnotWeakPre
 		| "StrongPre" -> Jc_env.AnnotStrongPre
 		| _ -> lex_error lexbuf ("unknown annotation policy " ^ v)
-	  end  
+	  end
       | "CheckArithOverflow" ->
 	  begin
-	    match String.lowercase v with	  
+	    match String.lowercase v with
 	      | "yes" -> Java_options.ignore_overflow := false
 	      | "no" -> Java_options.ignore_overflow := true
 	      | _ -> lex_error lexbuf "yes or no expected"
-	  end  
+	  end
       | "InvariantPolicy" ->
 	  begin
 	    Java_options.inv_sem :=
-	      match v with	  
+	      match v with
 		| "None" -> Jc_env.InvNone
 		| "Arguments" -> Jc_env.InvArguments
 		| "Ownership" -> Jc_env.InvOwnership
 		| _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
-	  end  
+	  end
       | "SeparationPolicy" ->
 	  begin
 	    Java_options.separation_policy :=
-	      match v with	  
+	      match v with
 		| "None" -> Jc_env.SepNone
 		| "Regions" -> Jc_env.SepRegions
 		| _ -> lex_error lexbuf ("unknown separation policy " ^ v)
-	  end  
+	  end
       | "NonNullByDefault" ->
 	  begin
 	    Java_options.nonnull_sem :=
@@ -305,14 +305,14 @@ i*)
 	      | "all" -> Java_env.NonNullAll
 	      | "alllocal" -> Java_env.NonNullAllLocal
 	      | _ -> lex_error lexbuf ("unknown nonnull policy " ^ v)
-	  end  
+	  end
       | "MinimalClassHierarchy" ->
 	  begin
-	    match String.lowercase v with	  
+	    match String.lowercase v with
 	      | "yes" -> Java_options.minimal_class_hierarchy := true
 	      | "no" -> Java_options.minimal_class_hierarchy := false
 	      | _ -> lex_error lexbuf "yes or no expected"
-	  end  
+	  end
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 
 }
@@ -324,6 +324,7 @@ let rD = ['0'-'9']
 let rL = ['a'-'z' 'A'-'Z' '_']
 let rH = ['a'-'f' 'A'-'F' '0'-'9']
 let rE = ['E''e']['+''-']? rD+
+let rP = ['P''p']['+''-']? rD+
 let rFS	= ('f'|'F'|'l'|'L')
 let rIS = ('u'|'U'|'l'|'L')*
 
@@ -331,17 +332,17 @@ let rIS = ('u'|'U'|'l'|'L')*
 rule token = parse
   | space+
       { token lexbuf }
-  | '\n' 
+  | '\n'
       { newline lexbuf; token lexbuf }
-  | ("/*" | "//") space+ "@"               
+  | ("/*" | "//") space+ "@"
       { lex_error lexbuf "no space allowed between /* and @" }
-  | "//@+" space* ((rL | rD)+ as id) space* "=" 
+  | "//@+" space* ((rL | rD)+ as id) space* "="
         space* ((rL | rD)+ as v) space* '\n'
-      { pragma lexbuf id v; newline lexbuf; token lexbuf } 
-  | "/*@"               
+      { pragma lexbuf id v; newline lexbuf; token lexbuf }
+  | "/*@"
       { let loc = lexeme_start_p lexbuf in
 	Buffer.clear buf; ANNOT(loc, annot lexbuf) }
-  | "//@" ([^ '\n']* as a) '\n'  
+  | "//@" ([^ '\n']* as a) '\n'
       { let loc = lexeme_start_p lexbuf in
 	newline lexbuf;	ANNOT(loc,a) }
   | "/*"
@@ -360,13 +361,13 @@ rule token = parse
       { DOT }
   | ".."
       { DOTDOT }
-  | '+'                 
+  | '+'
       { PLUS }
-  | '-'       
+  | '-'
       { MINUS }
-  | "++"                 
+  | "++"
       { PLUSPLUS }
-  | "--"       
+  | "--"
       { MINUSMINUS }
   | '*'
       { STAR }
@@ -396,45 +397,45 @@ rule token = parse
       { QUESTIONMARK }
   | ":"
       { COLON }
-  | "<<" 
+  | "<<"
       { SHIFT Blsl }
-  | ">>" 
+  | ">>"
       { SHIFT Blsr }
   | ">>>"
       { SHIFT Basr }
-  | "=" 
+  | "="
       { EQ }
-  | "*=" 
+  | "*="
       { ASSIGNOP Bmul }
-  | "/=" 
+  | "/="
       { ASSIGNOP Bdiv }
-  | "%=" 
+  | "%="
       { ASSIGNOP Bmod }
-  | "+=" 
+  | "+="
       { ASSIGNOP Badd }
-  | "-=" 
+  | "-="
       { ASSIGNOP Bsub }
-  | "<<=" 
+  | "<<="
       { ASSIGNOP Blsl }
-  | ">>=" 
+  | ">>="
       { ASSIGNOP Blsr }
-  | ">>>=" 
+  | ">>>="
       { ASSIGNOP Basr }
-  | "&=" 
+  | "&="
       { ASSIGNOP Bbwand }
-  | "^=" 
+  | "^="
       { ASSIGNOP Bbwxor }
-  | "|=" 
+  | "|="
       { ASSIGNOP Bbwor }
-  | ">" 
+  | ">"
       { GT }
-  | "<" 
+  | "<"
       { LT }
-  | "<=" 
+  | "<="
       { LE }
   | ">="
       { GE }
-  | "==" 
+  | "=="
       { EQOP Beq }
   | "!="
       { EQOP Bne }
@@ -447,12 +448,12 @@ rule token = parse
 
       (* octal constants *)
 
-  | '0'['0'-'7']+ ['l''L']? as n         
+  | '0'['0'-'7']+ ['l''L']? as n
       { INTCONSTANT n }
 
       (* hexadecimal constants *)
 
-  | '0'['x''X']rH+['l''L']? as n 
+  | '0'['x''X']rH+['l''L']? as n
     { INTCONSTANT n }
 
       (* trick to deal with intervals like 0..10 *)
@@ -468,6 +469,11 @@ rule token = parse
       { REALCONSTANT (pre,suf) }
 
   | (rD+ ['e''E'] ['-''+']?rD+) as pre (['f''F''d''D'] as suf) ?
+      { REALCONSTANT (pre,suf) }
+
+  | ('0'['x''X'] rH+ '.' rH* rP) as pre (['f''F''d''D'] as suf) ?
+  | ('0'['x''X'] rH* '.' rH+ rP) as pre (['f''F''d''D'] as suf) ?
+  | ('0'['x''X'] rH+ rP) as pre (['f''F''d''D'] as suf) ?
       { REALCONSTANT (pre,suf) }
 
       (* character constants *)
@@ -504,7 +510,7 @@ rule token = parse
       { RIGHTBRACKET }
   | '"'
       { Buffer.clear buf; STRING(string lexbuf) }
-  | _ 
+  | _
       { lex_error lexbuf ("unexpected char `" ^ lexeme lexbuf ^ "'") }
   | eof
       { EOF }
@@ -515,37 +521,37 @@ and string = parse
   | '\\' backslash_escapes
       { Buffer.add_string buf (lexeme lexbuf);
 	string lexbuf }
-  | '\\' _ 
+  | '\\' _
       { lex_error lexbuf "unknown escape sequence in string" }
   | ['\n' '\r']
       { (* no \n anymore in strings since java 1.4 *)
 	lex_error lexbuf "string not terminated"; }
-  | [^ '\n' '\\' '"']+ 
+  | [^ '\n' '\\' '"']+
       { Buffer.add_string buf (lexeme lexbuf); string lexbuf }
   | eof
       { lex_error lexbuf "string not terminated" }
 
 and comment = parse
-  | "*/"                
+  | "*/"
       { () }
   | '\n'
       { newline lexbuf; comment lexbuf }
-  | [^'*''\n']+             
+  | [^'*''\n']+
       { comment lexbuf }
-  | _                   
+  | _
       { comment lexbuf }
-  | eof                 
+  | eof
       { lex_error lexbuf "comment not terminated" }
 
 and annot = parse
-  | "*/"                
+  | "*/"
       { Buffer.contents buf }
-  | '\n' 
-      { newline lexbuf;  
+  | '\n'
+      { newline lexbuf;
 	Buffer.add_string buf (lexeme lexbuf);
 	annot lexbuf }
   | ('\n' space* as s) '@'
-      { newline lexbuf;  
+      { newline lexbuf;
 	Buffer.add_string buf s;
 	Buffer.add_char buf ' ';
 	annot lexbuf }
@@ -554,7 +560,7 @@ and annot = parse
 	annot lexbuf }
   | '@'
       { annot lexbuf }
-  | _                   
+  | _
       { Buffer.add_string buf (lexeme lexbuf);
 	annot lexbuf }
   | eof
@@ -563,7 +569,7 @@ and annot = parse
 {
 
 let dotdot_mem = ref false
- 
+
 let next_token lexbuf =
   if !dotdot_mem then
     begin
@@ -600,7 +606,7 @@ let next_token lexbuf =
 }
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "make -j -C .. bin/krakatoa.byte"
-End: 
+End:
 *)

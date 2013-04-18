@@ -190,7 +190,8 @@ let real_max_fi =
 *)
 
 let builtin_logic_symbols =
-  [ (Some real_type, "\\real_abs", [real_type]) ;
+  [ (Some real_type, "\\cos", [real_type]) ;
+    (Some real_type, "\\real_abs", [real_type]) ;
     (Some real_type, "\\real_max", [real_type; real_type]) ;
     (Some real_type, "\\real_min", [real_type; real_type]) ;
     (Some integer_type, "\\int_max", [integer_type; integer_type]) ;
