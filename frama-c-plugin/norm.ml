@@ -1182,7 +1182,7 @@ class retypeAddressTaken =
       | TField (fi,_) ->
           if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then
             (TMem
-               (Logic_utils.mk_dummy_term (TLval(host,off)) fi.ftype),TNoOffset)
+               (Logic_const.term (TLval(host,off)) (Ctype fi.ftype)),TNoOffset)
           else host,off
       | TModel _ | TIndex _ | TNoOffset -> host,off
   in

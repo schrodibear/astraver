@@ -1551,7 +1551,7 @@ let mkalloc_statement v ty loc = mkStmt (Instr(mkalloc v ty loc))
 let mkalloc_array v ty num loc =
   let callee = new_exp ~loc (Lval(Var(malloc_function ()),NoOffset)) in
   let arg = constant_expr
-    (Integer.of_int64 (Int64.mul num (Int64.of_int (sizeOf_int ty))))
+    (Integer.of_int64 (Int64.mul num (Int64.of_int (bytesSizeOf ty))))
   in
   Call(Some(Var v,NoOffset),callee,[arg],loc)
 
