@@ -167,9 +167,10 @@ let min_value_of_integral_type ?bitsize ty =
     | TInt(IBool,_attr) -> Integer.zero
     | TInt(ik,_attr) ->
 	min_of (isSigned ik) (size_in_bytes ik)
-    | TEnum ({ ekind = IBool;_},_) -> Integer.zero
-    | TEnum ({ekind=ik;_},_) ->
-	min_of (isSigned ik) (size_in_bytes ik)
+    | TEnum (e,_) when e.ekind = IBool -> Integer.zero
+    | TEnum (e,_) -> 
+      let ik = e.ekind in
+      min_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
 let max_value_of_integral_type ?bitsize ty =
@@ -190,8 +191,10 @@ let max_value_of_integral_type ?bitsize ty =
     | TInt(IBool,_attr) -> Integer.one
     | TInt(ik,_attr) ->
 	max_of (isSigned ik) (size_in_bytes ik)
-    | TEnum ({ekind=IBool;_},_) -> Integer.one
-    | TEnum ({ekind=ik;_},_) -> max_of (isSigned ik) (size_in_bytes ik)
+    | TEnum (e,_) when e.ekind=IBool -> Integer.one
+    | TEnum (e,_) -> 
+      let ik = e.ekind in
+      max_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
 (*TODO: projectify this *)

@@ -7,8 +7,8 @@
   version="0.94"/>
  <prover
   id="1"
-  name="CVC3"
-  version="2.2"/>
+  name="Alt-Ergo"
+  version="0.95.1"/>
  <prover
   id="2"
   name="Coq"
@@ -49,7 +49,7 @@
      edited="my_cosine_Jessie_model_method_error_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="6.06"/>
+     <result status="valid" time="5.96"/>
     </proof>
    </goal>
   </theory>
@@ -98,12 +98,20 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
       </proof>
      </goal>
      <goal
@@ -122,7 +130,7 @@
       <proof
        prover="3"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -163,7 +171,7 @@
       <proof
        prover="3"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -185,7 +193,7 @@
       <proof
        prover="3"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -207,490 +215,7 @@
       <proof
        prover="3"
        timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-    </transf>
-   </goal>
-   <goal
-    name="WP_parameter my_cos2_ensures_default"
-    locfile="../../my_cosine.c"
-    loclnum="52" loccnumb="6" loccnume="13"
-    expl="VC for my_cos2_ensures_default"
-    sum="faa006bc9dc70a227635097493dc1ae1"
-    proved="true"
-    expanded="true"
-    shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FAainfix &lt;=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FAainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
-    <label
-     name="expl:Function my_cos2, default behavior"/>
-    <label
-     name="expl:VC for my_cos2_ensures_default"/>
-    <transf
-     name="split_goal"
-     proved="true"
-     expanded="true">
-     <goal
-      name="WP_parameter my_cos2_ensures_default.1"
-      locfile="../../my_cosine.c"
-      loclnum="52" loccnumb="6" loccnume="13"
-      expl="1. assertion"
-      sum="8c3c9371f968780ee8e4b2146375e591"
-      proved="true"
-      expanded="true"
-      shape="ainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos2, default behavior"/>
-      <label
-       name="expl:VC for my_cos2_ensures_default"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter my_cos2_ensures_default.2"
-      locfile="../../my_cosine.c"
-      loclnum="52" loccnumb="6" loccnume="13"
-      expl="2. assertion"
-      sum="37b1f1b71b549d7d505c2c5c013017c7"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos2, default behavior"/>
-      <label
-       name="expl:VC for my_cos2_ensures_default"/>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.08"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter my_cos2_ensures_default.3"
-      locfile="../../my_cosine.c"
-      loclnum="52" loccnumb="6" loccnume="13"
-      expl="3. postcondition"
-      sum="0b414812c5daa827564a10b5d4e5d915"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix &lt;=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos2, default behavior"/>
-      <label
-       name="expl:VC for my_cos2_ensures_default"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-    </transf>
-   </goal>
-   <goal
-    name="WP_parameter my_cos2_safety"
-    locfile="../../my_cosine.c"
-    loclnum="52" loccnumb="6" loccnume="13"
-    expl="VC for my_cos2_safety"
-    sum="f9358e9a30bbaf98e2f3c7839b84ca89"
-    proved="true"
-    expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
-    <label
-     name="expl:Function my_cos2, Safety"/>
-    <label
-     name="expl:VC for my_cos2_safety"/>
-    <transf
-     name="split_goal"
-     proved="true"
-     expanded="true">
-     <goal
-      name="WP_parameter my_cos2_safety.1"
-      locfile="../../my_cosine.c"
-      loclnum="52" loccnumb="6" loccnume="13"
-      expl="1. floating-point overflow"
-      sum="0e281ec80a60e5e67132b798daaf7245"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos2, Safety"/>
-      <label
-       name="expl:VC for my_cos2_safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter my_cos2_safety.2"
-      locfile="../../my_cosine.c"
-      loclnum="52" loccnumb="6" loccnume="13"
-      expl="2. floating-point overflow"
-      sum="77c0f3df7c76b61e2c74d385174dbef3"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos2, Safety"/>
-      <label
-       name="expl:VC for my_cos2_safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter my_cos2_safety.3"
-      locfile="../../my_cosine.c"
-      loclnum="52" loccnumb="6" loccnume="13"
-      expl="3. floating-point overflow"
-      sum="f745cb938e7b5f3933510c72e8906c43"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos2, Safety"/>
-      <label
-       name="expl:VC for my_cos2_safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-    </transf>
-   </goal>
-   <goal
-    name="WP_parameter my_cos3_ensures_default"
-    locfile="../../my_cosine.c"
-    loclnum="65" loccnumb="6" loccnume="13"
-    expl="VC for my_cos3_ensures_default"
-    sum="52ccc070044fdef46b26c13d098eb5dc"
-    proved="true"
-    expanded="true"
-    shape="ainfix &lt;=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix &lt;=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FAainfix &lt;=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
-    <label
-     name="expl:Function my_cos3, default behavior"/>
-    <label
-     name="expl:VC for my_cos3_ensures_default"/>
-    <transf
-     name="split_goal"
-     proved="true"
-     expanded="true">
-     <goal
-      name="WP_parameter my_cos3_ensures_default.1"
-      locfile="../../my_cosine.c"
-      loclnum="65" loccnumb="6" loccnume="13"
-      expl="1. assertion"
-      sum="cdbb87de9e8c8f70264e8f55c9f4787c"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos3, default behavior"/>
-      <label
-       name="expl:VC for my_cos3_ensures_default"/>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.08"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter my_cos3_ensures_default.2"
-      locfile="../../my_cosine.c"
-      loclnum="65" loccnumb="6" loccnume="13"
-      expl="2. postcondition"
-      sum="5782f5c29b1fcb0631cbabddae45243c"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix &lt;=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FIainfix &lt;=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos3, default behavior"/>
-      <label
-       name="expl:VC for my_cos3_ensures_default"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-     </goal>
-    </transf>
-   </goal>
-   <goal
-    name="WP_parameter my_cos3_safety"
-    locfile="../../my_cosine.c"
-    loclnum="65" loccnumb="6" loccnume="13"
-    expl="VC for my_cos3_safety"
-    sum="8c90b166e149d750a0ecfef55c057fca"
-    proved="true"
-    expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
-    <label
-     name="expl:Function my_cos3, Safety"/>
-    <label
-     name="expl:VC for my_cos3_safety"/>
-    <transf
-     name="split_goal"
-     proved="true"
-     expanded="true">
-     <goal
-      name="WP_parameter my_cos3_safety.1"
-      locfile="../../my_cosine.c"
-      loclnum="65" loccnumb="6" loccnume="13"
-      expl="1. floating-point overflow"
-      sum="8d376848cf9fe284262c110b49619f8a"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos3, Safety"/>
-      <label
-       name="expl:VC for my_cos3_safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter my_cos3_safety.2"
-      locfile="../../my_cosine.c"
-      loclnum="65" loccnumb="6" loccnume="13"
-      expl="2. floating-point overflow"
-      sum="3fecfc58ff1c05aecea9a2345b2c586d"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos3, Safety"/>
-      <label
-       name="expl:VC for my_cos3_safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter my_cos3_safety.3"
-      locfile="../../my_cosine.c"
-      loclnum="65" loccnumb="6" loccnume="13"
-      expl="3. floating-point overflow"
-      sum="09aed1236d450b76cec4a7bf0f2bd31b"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
-      <label
-       name="expl:Function my_cos3, Safety"/>
-      <label
-       name="expl:VC for my_cos3_safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-     </goal>
-    </transf>
-   </goal>
-   <goal
-    name="WP_parameter my_cos4_ensures_default"
-    locfile="../../my_cosine.c"
-    loclnum="74" loccnumb="6" loccnume="13"
-    expl="VC for my_cos4_ensures_default"
-    sum="bd4f79ec787ff0994e21fa0e437b137e"
-    proved="true"
-    expanded="true"
-    shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FAainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
-    <label
-     name="expl:Function my_cos4, default behavior"/>
-    <label
-     name="expl:VC for my_cos4_ensures_default"/>
-    <transf
-     name="split_goal"
-     proved="true"
-     expanded="true">
-     <goal
-      name="WP_parameter my_cos4_ensures_default.1"
-      locfile="../../my_cosine.c"
-      loclnum="74" loccnumb="6" loccnume="13"
-      expl="1. assertion"
-      sum="f11a68cf2b6e661ce0abcdcde1673c94"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
-      <label
-       name="expl:Function my_cos4, default behavior"/>
-      <label
-       name="expl:VC for my_cos4_ensures_default"/>
-      <proof
-       prover="2"
-       timelimit="5"
        memlimit="1000"
-       edited="my_cosine_WP_Jessie_program_WP_parameter_my_cos4_ensures_default_2.v"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="6.23"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter my_cos4_ensures_default.2"
-      locfile="../../my_cosine.c"
-      loclnum="74" loccnumb="6" loccnume="13"
-      expl="2. postcondition"
-      sum="2b5ce097c1a3b70441c9f0169fe75f18"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV4V3V5FIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
-      <label
-       name="expl:Function my_cos4, default behavior"/>
-      <label
-       name="expl:VC for my_cos4_ensures_default"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-    </transf>
-   </goal>
-   <goal
-    name="WP_parameter my_cos4_safety"
-    locfile="../../my_cosine.c"
-    loclnum="74" loccnumb="6" loccnume="13"
-    expl="VC for my_cos4_safety"
-    sum="36fa5a3a08a6ccdc366f3b2f5ecfa33d"
-    proved="true"
-    expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
-    <label
-     name="expl:Function my_cos4, Safety"/>
-    <label
-     name="expl:VC for my_cos4_safety"/>
-    <transf
-     name="split_goal"
-     proved="true"
-     expanded="true">
-     <goal
-      name="WP_parameter my_cos4_safety.1"
-      locfile="../../my_cosine.c"
-      loclnum="74" loccnumb="6" loccnume="13"
-      expl="1. floating-point overflow"
-      sum="385fa64f09a276bf194f1cac21ace9f7"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
-      <label
-       name="expl:Function my_cos4, Safety"/>
-      <label
-       name="expl:VC for my_cos4_safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter my_cos4_safety.2"
-      locfile="../../my_cosine.c"
-      loclnum="74" loccnumb="6" loccnume="13"
-      expl="2. floating-point overflow"
-      sum="1fb7e237c391f45edead0d7ff59dd3f7"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
-      <label
-       name="expl:Function my_cos4, Safety"/>
-      <label
-       name="expl:VC for my_cos4_safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter my_cos4_safety.3"
-      locfile="../../my_cosine.c"
-      loclnum="74" loccnumb="6" loccnume="13"
-      expl="3. floating-point overflow"
-      sum="c5ed48b3ed78e4847a72b95864007186"
-      proved="true"
-      expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV4avalueV3amax_singleIainfix =amodelV4c1.0Aainfix =aexactV4c1.0Aainfix =avalueV4c1.0FIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_singleIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c0.5Aainfix =aexactV1c0.5Aainfix =avalueV1c0.5FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
-      <label
-       name="expl:Function my_cos4, Safety"/>
-      <label
-       name="expl:VC for my_cos4_safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
