@@ -300,10 +300,10 @@ else
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
       AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
-        Fluorine-20130401) 
+        Fluorine-20130401|Fluorine-20130501) 
            FRAMAC=yes
            ;;
-        *) FRAMACMSG="you need Frama-C version Fluorine-20130401"
+        *) FRAMACMSG="you need Frama-C version Fluorine-20130(4|5)01"
            FRAMAC=no
            AC_MSG_WARN($FRAMACMSG)
            ;;

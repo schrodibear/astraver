@@ -780,10 +780,13 @@ object(self)
       in
       List.map (fun z -> z, froms) zl
     in
-    let assigns =
+    let assigns = b.b_assigns
+      (* the following may stop completely the execution of the plugin ??? *)
+      (*
       (match b.b_assigns with
           WritesAny -> WritesAny
         | Writes l -> Writes (List.flatten (List.map assign l)))
+      *)
     in
 (*    Format.eprintf "[Norm.vbehavior] b_allocation = ";
     begin
