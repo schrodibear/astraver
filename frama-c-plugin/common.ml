@@ -1565,6 +1565,13 @@ let mkfree v loc =
 
 let mkfree_statement v loc = mkStmt (Instr(mkfree v loc))
 
+let predicate loc p =
+  {
+    name = [];
+    loc = loc;
+    content = p;
+  }
+
 (*
 Local Variables:
 compile-command: "LC_ALL=C make -C .. -j byte"

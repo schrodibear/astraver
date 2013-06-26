@@ -245,3 +245,5 @@ val force_exp_to_predicate: exp -> predicate named
 val force_exp_to_assertion: exp -> code_annotation
 val force_term_lval_to_lval: term_lval -> lval * opaque_term_env
 val force_back_lval_to_term_lval: opaque_term_env -> lval -> term_lval
+
+val predicate: location -> predicate -> predicate named

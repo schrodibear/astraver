@@ -330,7 +330,7 @@ jc/jc.cmi jc/jc.cmo: $(JCCMO_EXPORT)
 	$(OCAMLC) $(BFLAGS) -pack -o jc/jc.cmo src/ast.cmi $^
 
 jc/jc.cmx jc/jc.o: $(JCCMX_EXPORT)
-	$(OCAMLOPT) $(OFLAGS) -pack -o $@ src/ast.cmi $^
+	$(OCAMLOPT) $(OFLAGS) -pack -o jc/jc.cmx src/ast.cmi $^
 
 ppc: jc/jc.cmi jc/jc.cmo jc/jc.cmx
 
