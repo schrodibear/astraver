@@ -1,7 +1,7 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only undef.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD undef.c"
-undef.c:544:[kernel] warning: Body of function missing_return_wrong falls-through. Adding a return statement
-undef.c:552:[kernel] warning: Body of function missing_return_unsafe falls-through. Adding a return statement
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only undef.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/undef.c"
+PPCHOME/tests/jessie/undef.c:544:[kernel] warning: Body of function missing_return_wrong falls-through. Adding a return statement
+PPCHOME/tests/jessie/undef.c:552:[kernel] warning: Body of function missing_return_unsafe falls-through. Adding a return statement
 [jessie] Starting Jessie translation
 [kernel] warning: Neither code nor specification for function bar, generating default assigns from the prototype
 [kernel] warning: Neither code nor specification for function baz, generating default assigns from the prototype

@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only pi_example.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD pi_example.c"
-pi_example.c:11:[kernel] warning: Floating-point constant 3.14 is not represented exactly. Will use 0x1.91eb851eb851fp1. See documentation for option -warn-decimal-float
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only pi_example.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/pi_example.c"
+PPCHOME/tests/jessie/pi_example.c:11:[kernel] warning: Floating-point constant 3.14 is not represented exactly. Will use 0x1.91eb851eb851fp1. See documentation for option -warn-decimal-float
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir pi_example.jessie
 [jessie] File pi_example.jessie/pi_example.jc written.

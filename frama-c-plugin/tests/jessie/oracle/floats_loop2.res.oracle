@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only floats_loop2.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD floats_loop2.c"
-floats_loop2.c:50:[kernel] warning: Floating-point constant 0.1f is not represented exactly. Will use 0x1.99999a0000000p-4. See documentation for option -warn-decimal-float
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only floats_loop2.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/floats_loop2.c"
+PPCHOME/tests/jessie/floats_loop2.c:50:[kernel] warning: Floating-point constant 0.1f is not represented exactly. Will use 0x1.99999a0000000p-4. See documentation for option -warn-decimal-float
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir floats_loop2.jessie
 [jessie] File floats_loop2.jessie/floats_loop2.jc written.

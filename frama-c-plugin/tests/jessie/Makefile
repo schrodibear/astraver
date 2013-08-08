@@ -66,6 +66,7 @@ EXECCADUCEUSOPT=WHYLIB=$(WHYLIB) CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUSOPT)
 JC_OPTIONS+=-why-opt -split-user-conj
 PPC_OPTIONS+=\
      -cpp-extra-args="-I $(PPCHOME)/share/jessie -I$(FRAMAC_SHARE)/libc" \
+     -add-symbolic-path PPCHOME:$(PPCHOME) \
      -jessie
 
 DIR=`pwd`

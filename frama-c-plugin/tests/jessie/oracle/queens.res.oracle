@@ -1,8 +1,8 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only queens.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD queens.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only queens.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/queens.c"
 [jessie] Starting Jessie translation
 [kernel] warning: No code nor implicit assigns clause for function min_elt, generating default assigns from the prototype
-queens.c:297:[jessie] warning: skipping all arguments of implicit prototype store_solution
+PPCHOME/tests/jessie/queens.c:297:[jessie] warning: skipping all arguments of implicit prototype store_solution
 [jessie] Producing Jessie files in subdir queens.jessie
 [jessie] File queens.jessie/queens.jc written.
 [jessie] File queens.jessie/queens.cloc written.

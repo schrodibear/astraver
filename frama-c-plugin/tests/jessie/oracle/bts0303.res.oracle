@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0303.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0303.c"
-bts0303.c:28:[kernel] warning: Variable-sized local variable a
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only bts0303.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/bts0303.c"
+PPCHOME/tests/jessie/bts0303.c:28:[kernel] warning: Variable-sized local variable a
 [jessie] Starting Jessie translation
 [kernel] warning: Neither code nor specification for function __builtin_alloca, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir bts0303.jessie

@@ -1,6 +1,6 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only test7_floats.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD test7_floats.c"
-test7_floats.c:15:[kernel] warning: Floating-point constant 0.9890365552 is not represented exactly. Will use 0x1.fa62ffd643d6ep-1. See documentation for option -warn-decimal-float
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only test7_floats.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/test7_floats.c"
+PPCHOME/tests/jessie/test7_floats.c:15:[kernel] warning: Floating-point constant 0.9890365552 is not represented exactly. Will use 0x1.fa62ffd643d6ep-1. See documentation for option -warn-decimal-float
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir test7_floats.jessie
 [jessie] File test7_floats.jessie/test7_floats.jc written.

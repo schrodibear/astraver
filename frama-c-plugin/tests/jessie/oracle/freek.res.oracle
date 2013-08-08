@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only freek.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD freek.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only freek.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/freek.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir freek.jessie
 [jessie] File freek.jessie/freek.jc written.
@@ -82,11 +82,9 @@ behavior default:
       };
       (C_12 : print_equality(i, 0));
       
-      {  
-         {  (C_13 : (tmp_0 = i));
-            (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))));
-            (C_17 : (j = tmp_0))
-         };
+      {  (C_13 : (tmp_0 = i));
+         (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))));
+         (C_17 : (j = tmp_0));
          (C_18 : (i = j))
       };
       
@@ -494,19 +492,17 @@ let main_ensures_default =
         (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
         (JC_<somenum>: ((print_equality jessie_<somenum>) jessie_<somenum>))));
         (let jessie_<somenum> =
+        (C_13:
+        (C_16:
+        (C_17:
         (C_18:
         begin
-          (let jessie_<somenum> =
-          (C_13:
-          (C_16:
-          (C_17:
-          begin
-            (let jessie_<somenum> = (tmp_0 := !i) in void);
-           (let jessie_<somenum> =
-           (i := (C_15:
-                 (safe_int32_of_integer_ (C_14:
-                                         ((add_int (integer_of_int32 !i)) (1)))))) in
-           void); (j := !tmp_0); !j end))) in void); (i := !j); !i end) in
+          (let jessie_<somenum> = (tmp_0 := !i) in void);
+         (let jessie_<somenum> =
+         (i := (C_15:
+               (safe_int32_of_integer_ (C_14:
+                                       ((add_int (integer_of_int32 !i)) (1)))))) in
+         void); (let jessie_<somenum> = (j := !tmp_0) in void); (i := !j); !i end)))) in
         void); (assert { (JC_<somenum>: (integer_of_int32(i) = (0))) }; void);
         (C_20:
         (C_21:
@@ -562,20 +558,18 @@ let main_safety =
         (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
         (JC_<somenum>: ((print_equality_requires jessie_<somenum>) jessie_<somenum>))));
         (let jessie_<somenum> =
+        (C_13:
+        (C_16:
+        (C_17:
         (C_18:
         begin
-          (let jessie_<somenum> =
-          (C_13:
-          (C_16:
-          (C_17:
-          begin
-            (let jessie_<somenum> = (tmp_0 := !i) in void);
-           (let jessie_<somenum> =
-           (i := (C_15:
-                 (JC_<somenum>:
-                 (int32_of_integer_ (C_14:
-                                    ((add_int (integer_of_int32 !i)) (1))))))) in
-           void); (j := !tmp_0); !j end))) in void); (i := !j); !i end) in
+          (let jessie_<somenum> = (tmp_0 := !i) in void);
+         (let jessie_<somenum> =
+         (i := (C_15:
+               (JC_<somenum>:
+               (int32_of_integer_ (C_14:
+                                  ((add_int (integer_of_int32 !i)) (1))))))) in
+         void); (let jessie_<somenum> = (j := !tmp_0) in void); (i := !j); !i end)))) in
         void); [ { } unit reads i { (JC_<somenum>: (integer_of_int32(i) = (0))) } ];
         (C_20:
         (C_21:
