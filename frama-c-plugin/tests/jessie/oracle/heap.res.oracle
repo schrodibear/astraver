@@ -3,6 +3,8 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_S
 [kernel] warning: ignoring status of global invariant `size_inv'
 [kernel] warning: ignoring status of global invariant `is_heap_inv'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global invariant `size_inv'
+[kernel] warning: ignoring status of global invariant `is_heap_inv'
 [jessie] Producing Jessie files in subdir heap.jessie
 [jessie] File heap.jessie/heap.jc written.
 [jessie] File heap.jessie/heap.cloc written.

@@ -2,6 +2,7 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_S
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/queue.c"
 [kernel] warning: ignoring status of global invariant `q_invariant'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global invariant `q_invariant'
 [jessie] Producing Jessie files in subdir queue.jessie
 [jessie] File queue.jessie/queue.jc written.
 [jessie] File queue.jessie/queue.cloc written.
