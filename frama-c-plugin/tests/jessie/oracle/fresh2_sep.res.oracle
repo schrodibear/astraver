@@ -1,7 +1,7 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only fresh2_sep.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/fresh2_sep.c"
 [jessie] Starting Jessie translation
-[kernel] warning: Neither code nor specification for function malloc, generating default assigns from the prototype
+PPCHOME/tests/jessie/fresh2_sep.c:29:[kernel] warning: Neither code nor specification for function malloc, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir fresh2_sep.jessie
 [jessie] File fresh2_sep.jessie/fresh2_sep.jc written.
 [jessie] File fresh2_sep.jessie/fresh2_sep.cloc written.

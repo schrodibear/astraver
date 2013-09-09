@@ -3,9 +3,9 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_S
 PPCHOME/tests/jessie/undef.c:544:[kernel] warning: Body of function missing_return_wrong falls-through. Adding a return statement
 PPCHOME/tests/jessie/undef.c:552:[kernel] warning: Body of function missing_return_unsafe falls-through. Adding a return statement
 [jessie] Starting Jessie translation
-[kernel] warning: Neither code nor specification for function bar, generating default assigns from the prototype
-[kernel] warning: Neither code nor specification for function baz, generating default assigns from the prototype
-[kernel] warning: Neither code nor specification for function foo, generating default assigns from the prototype
+PPCHOME/tests/jessie/undef.c:658:[kernel] warning: Neither code nor specification for function bar, generating default assigns from the prototype
+PPCHOME/tests/jessie/undef.c:658:[kernel] warning: Neither code nor specification for function baz, generating default assigns from the prototype
+PPCHOME/tests/jessie/undef.c:658:[kernel] warning: Neither code nor specification for function foo, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir undef.jessie
 [jessie] File undef.jessie/undef.jc written.
 [jessie] File undef.jessie/undef.cloc written.
