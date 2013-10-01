@@ -109,6 +109,23 @@ OCAMLLIB=`$OCAMLC -where | tr -d '\\r'`
 echo "ocaml library path is $OCAMLLIB"
 
 
+## Where are the library we need
+# we look for ocamlfind; if not present, we just don't use it to find
+# libraries
+AC_CHECK_PROG(USEOCAMLFIND,ocamlfind,yes,no)
+
+if test "$USEOCAMLFIND" = yes; then
+   OCAMLFINDLIB=$(ocamlfind printconf stdlib)
+   OCAMLFIND=$(which ocamlfind)
+   if test "$OCAMLFINDLIB" != "$OCAMLLIB"; then
+   USEOCAMLFIND=no;
+   echo "but your ocamlfind is not compatible with your ocamlc:"
+   echo "ocamlfind : $OCAMLFINDLIB, ocamlc : $OCAMLLIB"
+   fi
+fi
+
+
+
 # Check for arch/OS
 
 AC_MSG_CHECKING(OS dependent settings)
@@ -225,7 +242,15 @@ fi
 
 LOCALOCAMLGRAPH=no
 
-AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
+if test "$USEOCAMLFIND" = yes; then
+  OCAMLGRAPHLIB=$(ocamlfind query ocamlgraph)
+fi
+if test -n "$OCAMLGRAPHLIB"; then
+   echo "ocamlfind found ocamlgraph in $OCAMLGRAPHLIB"
+      OCAMLGRAPHLIB="-I $OCAMLGRAPHLIB"
+      OCAMLGRAPHVER=" found by ocamlfind"
+ else
+ AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
  if test "$OCAMLGRAPH" = no ; then
     AC_CHECK_FILE(ocamlgraph/src/sig.mli,OCAMLGRAPH=yes,OCAMLGRAPH=no)
     if test "$OCAMLGRAPH" = no ; then
@@ -239,6 +264,7 @@ AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
     OCAMLGRAPHLIB="-I +ocamlgraph"
     OCAMLGRAPHVER=" in Ocaml lib, subdir ocamlgraph"
  fi
+fi
 
 # checking local ocamlgraph compilation
 
@@ -252,11 +278,24 @@ if test "$LOCALOCAMLGRAPH" = yes; then
 fi
 
 # checking for lablgtk2
-AC_CHECK_FILE($OCAMLLIB/lablgtk2/lablgtk.cma,LABLGTK2=yes,LABLGTK2=no)
-# AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no) not always available (Win32)
-if test "$LABLGTK2" = yes ; then
-      INCLUDEGTK2="-I +lablgtk2"
+if test "$USEOCAMLFIND" = yes; then
+   LABLGTKSV2LIB=$(ocamlfind query lablgtk2.sourceview2)
+   if test -z "$LABLGTKSV2LIB"; then
+      LABLGTKSV2LIB=$(ocamlfind query lablgtksourceview2)
+   fi
 fi
+if test -n "$LABLGTKSV2LIB";then
+   echo "ocamlfind found lablgtksourceview2 in $LABLGTKSV2LIB"
+   INCLUDEGTK2="-I $LABLGTKSV2LIB"
+   LABLGTK2=yes
+else
+  AC_CHECK_FILE($OCAMLLIB/lablgtk2/lablgtk.cma,LABLGTK2=yes,LABLGTK2=no)
+  # AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no) not always available (Win32)
+  if test "$LABLGTK2" = yes ; then
+        INCLUDEGTK2="-I +lablgtk2"
+  fi
+fi
+
 
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
@@ -300,10 +339,10 @@ else
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
       AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
-        Fluorine-20130401|Fluorine-20130501) 
+        Fluorine-20130401|Fluorine-20130501|Fluorine-20130601) 
            FRAMAC=yes
            ;;
-        *) FRAMACMSG="you need Frama-C version Fluorine-20130(4|5)01"
+        *) FRAMACMSG="you need Frama-C version Fluorine-2013(04|05|06)01"
            FRAMAC=no
            AC_MSG_WARN($FRAMACMSG)
            ;;
@@ -336,6 +375,7 @@ dnl  	  AC_MSG_RESULT(ok)
 dnl  	  CAMLP4O=$CAMLP4OOPT
 dnl      fi
 dnl fi
+
 
 WHYFLOATS=
 
