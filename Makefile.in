@@ -73,9 +73,10 @@ APRONLIB = @APRONLIB@
 APRONLIBS = @APRONLIBS@
 APRONBYTLIBS = $(APRONLIBS:.cmxa=.cma)
 
-FRAMAC= @FRAMAC@
+export FRAMAC = @FRAMAC@
+FRAMACPLUGIN = @FRAMACPLUGIN@
 
-ifeq ($(FRAMAC),yes)
+ifeq ($(FRAMACPLUGIN),yes)
 JESSIE_PLUGIN_BYTE= jessie_plugin.byte
 JESSIE_PLUGIN_OPT= jessie_plugin.opt
 JESSIE_PLUGIN_BEST= jessie_plugin.$(OCAMLBEST)
@@ -344,7 +345,7 @@ bin/jessie.byte: $(JCCMO)
 		unix.cma str.cma nums.cma graph.cma $^
 
 # Frama-C plugin for Jessie
-ifeq ($(FRAMAC),yes)
+ifeq ($(FRAMACPLUGIN),yes)
 JESSIE_PLUGIN_PATH=frama-c-plugin
 $(JESSIE_PLUGIN_BYTE): jc/jc.cmo $(JCCMO) $(CMO)
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
@@ -1177,7 +1178,7 @@ coq-clean::
 	rm -f .depend
 	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml mix/*.mli mix/*.ml ml/*.ml ml/*.mli > .depend
 	$(OCAMLDEP) -slash $(MLINCLUDES) ml/parsing/*.ml ml/parsing/*.mli ml/typing/*.ml ml/typing/*.mli ml/utils/*.ml ml/utils/*.mli >> .depend
-ifeq ($(FRAMAC),yes)
+ifeq ($(FRAMACPLUGIN),yes)
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
 endif
 

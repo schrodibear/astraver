@@ -326,12 +326,13 @@ fi
 TESTFRAMAC=yes
 
 if test "$TESTFRAMAC" = no ; then
-   FRAMAC=no
+   FRAMACPLUGIN=no
    FRAMACMSG="Disabled on user request"
 else
    AC_CHECK_PROG(FRAMAC,frama-c,frama-c,no)
    if test "$FRAMAC" = no ; then
 	AC_MSG_WARN(Cannot find frama-c.)
+	FRAMACPLUGIN=no
         FRAMACMSG="Cannot find Frama-C"
    else
       # we extract Ocaml version number
@@ -340,10 +341,10 @@ else
       AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
         Fluorine-20130401|Fluorine-20130501|Fluorine-20130601) 
-           FRAMAC=yes
+           FRAMACPLUGIN=yes
            ;;
         *) FRAMACMSG="you need Frama-C version Fluorine-2013(04|05|06)01"
-           FRAMAC=no
+           FRAMACPLUGIN=no
            AC_MSG_WARN($FRAMACMSG)
            ;;
       esac
@@ -534,6 +535,7 @@ AC_SUBST(enable_apron)
 AC_SUBST(APRONLIB)
 AC_SUBST(APRONLIBS)
 AC_SUBST(FRAMAC)
+AC_SUBST(FRAMACPLUGIN)
 AC_SUBST(ATPCMO)
 
 AC_SUBST(COQ)
@@ -578,8 +580,8 @@ echo "Inference of annotations : $enable_apron"
 if test "$enable_apron" = "yes" ; then
    echo "    APRON lib            : $APRONLIB"
 fi
-echo "Frama-C plugin           : $FRAMAC"
-if test "$FRAMAC" = "yes" ; then
+echo "Frama-C plugin           : $FRAMACPLUGIN"
+if test "$FRAMACPLUGIN" = "yes" ; then
    echo "    Frama-C version      : $FRAMACVERSION"
 else
    echo "    $FRAMACMSG"
