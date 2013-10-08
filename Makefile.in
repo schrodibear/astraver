@@ -106,7 +106,7 @@ VO8= lib/coq/WhyInt.vo lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo \
      lib/coq/WhySorted.vo  \
      lib/coq/WhyExn.vo lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo \
      lib/coq/WhyPrelude.vo lib/coq/WhyCM.vo lib/coq/Why.vo lib/coq/WhyReal.vo \
-     @JESSIE3LIBCOQ@ \
+     @JESSIEWHY3LIBCOQ@ \
      @JESSIELIBCOQ@ \
      @WHYFLOATS@
 
@@ -959,7 +959,7 @@ apidoc: $(OCAMLDOCSRC)
 .ml4.ml:
 	$(CAMLP4) pr_o.cmo -impl $< > $@
 
-@JESSIE3LIBCOQ@: COQEXTRAR += -R @WHY3COQPATH@ Why3
+@JESSIEWHY3LIBCOQ@: COQEXTRAR += -R @WHY3COQPATH@ Why3
 
 lib/coq/%.vo: lib/coq/%.v
 	$(COQC8) $(COQEXTRAR) -R lib/coq Why $<

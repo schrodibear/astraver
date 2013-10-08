@@ -448,7 +448,7 @@ else
 	  WHY3COQPATH=`$WHY3 --print-libdir`/coq
 	  if test -f "$WHY3COQPATH/int/Int.vo"; then
 	    AC_MSG_RESULT(yes)
-	    JESSIE3LIBCOQ="lib/coq/Jessie_memory_model.vo"
+	    JESSIEWHY3LIBCOQ="lib/coq/Jessie_memory_model.vo"
 	  else
 	    AC_MSG_RESULT(no)
 	  fi
@@ -547,7 +547,7 @@ AC_SUBST(COQVER)
 AC_SUBST(WHYLIBCOQ)
 AC_SUBST(WHYFLOATS)
 AC_SUBST(JESSIELIBCOQ)
-AC_SUBST(JESSIE3LIBCOQ)
+AC_SUBST(JESSIEWHY3LIBCOQ)
 AC_SUBST(WHY3COQPATH)
 
 AC_SUBST(enable_local)
@@ -591,10 +591,10 @@ echo "Coq support              : $COQ"
 if test "$COQ" = "yes" ; then
    echo "    Version              : $COQVER ($COQVERSION)"
    if test "$JESSIELIBCOQ" = ""; then
-      echo "                         : (Jessie Coq proofs disabled, requires >= 8.1)"
+      echo "                         : (Jessie/Why2 Coq proofs disabled, requires >= 8.1)"
    fi
-   if test "$JESSIE3LIBCOQ" = ""; then
-      echo "                         : (Jessie3 Coq proofs disabled, requires Coq realizations for Why3)"
+   if test "$JESSIEWHY3LIBCOQ" = ""; then
+      echo "                         : (Jessie/Why3 Coq proofs disabled, requires Coq realizations for Why3)"
    fi
    echo "    Lib                  : $COQLIB"
    echo "    FP lib (Flocq)       : $COQFLOATSMSG"
