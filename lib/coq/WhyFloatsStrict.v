@@ -155,53 +155,23 @@ repeat split.
 exact H2.
 Qed.
 
-Axiom Bplus_correct : (* the statement from Flocq 1.4 is not strong enough;
-                         the axiom can be removed once the library is converted to Flocq 2.0 *)
-  forall (prec emax : Z) (Hprec : (0 < prec)%Z) (Hmax : (prec < emax)%Z)
-         (m : Fappli_IEEE.mode) (x y : binary_float prec emax),
-  is_finite prec emax x = true ->
-  is_finite prec emax y = true ->
-  if Rlt_bool (Rabs (round radix2 (FLT_exp (3 - emax - prec) prec) (round_mode m)
-       (B2R prec emax x + B2R prec emax y))) (bpow radix2 emax)
-  then
-    B2R prec emax (Bplus prec emax Hprec Hmax m x y) =
-      round radix2 (FLT_exp (3 - emax - prec) prec) (round_mode m) (B2R prec emax x + B2R prec emax y) /\
-    is_finite prec emax (Bplus prec emax Hprec Hmax m x y) = true
-  else
-    B2FF prec emax (Bplus prec emax Hprec Hmax m x y) =
-      binary_overflow prec emax m (Bsign prec emax x) /\
-    Bsign prec emax x = Bsign prec emax y.
-
 Lemma add_single_specification :
   forall m (x y : single),
   no_overflow_single m (single_value x + single_value y) ->
   exists z, add_single_post m x y z.
 Proof.
 intros m x y Br.
-refine (_ (Bplus_correct 24 128 (refl_equal Lt) (refl_equal Lt) (rnd_of_mode m) (single_float x) (single_float y)
+refine (_ (Bplus_correct 24 128 (refl_equal Lt) (refl_equal Lt) binop_nan_pl32 (rnd_of_mode m) (single_float x) (single_float y)
   (single_finite x) (single_finite y))).
 rewrite Rlt_bool_true.
 2: now apply no_overflow_single_bounded.
 fold b32_plus.
 intros (H1, H2).
-refine (ex_intro _ (mk_single (add_single m x y) H2) _).
+destruct H2.
+refine (ex_intro _ (mk_single (add_single m x y) H) _).
 repeat split.
 exact H1.
 Qed.
-
-Axiom Bmult_correct : (* the statement from Flocq 1.4 is not strong enough;
-                         the axiom can be removed once the library is converted to Flocq 2.0 *)
-  forall (prec emax : Z) (Hprec : (0 < prec)%Z) (Hmax : (prec < emax)%Z)
-         (m : Fappli_IEEE.mode) (x y : binary_float prec emax),
-  if Rlt_bool (Rabs (round radix2 (FLT_exp (3 - emax - prec) prec) (round_mode m)
-       (B2R prec emax x * B2R prec emax y))) (bpow radix2 emax)
-  then
-    B2R prec emax (Bmult prec emax Hprec Hmax m x y) =
-      round radix2 (FLT_exp (3 - emax - prec) prec) (round_mode m) (B2R prec emax x * B2R prec emax y) /\
-    is_finite prec emax (Bmult prec emax Hprec Hmax m x y) = andb (is_finite prec emax x) (is_finite prec emax y)
-  else
-    B2FF prec emax (Bmult prec emax Hprec Hmax m x y) =
-      binary_overflow prec emax m (xorb (Bsign prec emax x) (Bsign prec emax y)).
 
 Lemma mul_single_specification :
   forall m (x y : single),
@@ -209,31 +179,17 @@ Lemma mul_single_specification :
   exists z, mul_single_post m x y z.
 Proof.
 intros m x y Br.
-refine (_ (Bmult_correct 24 128 (refl_equal Lt) (refl_equal Lt) (rnd_of_mode m) (single_float x) (single_float y))).
+refine (_ (Bmult_correct 24 128 (refl_equal Lt) (refl_equal Lt) binop_nan_pl32 (rnd_of_mode m) (single_float x) (single_float y))).
 rewrite Rlt_bool_true.
 2: now apply no_overflow_single_bounded.
 fold b32_mult.
 intros (H1, H2).
 rewrite (single_finite x), (single_finite y) in H2.
-refine (ex_intro _ (mk_single (mul_single m x y) H2) _).
+destruct H2.
+refine (ex_intro _ (mk_single (mul_single m x y) H) _).
 repeat split.
 exact H1.
 Qed.
-
-Axiom Bdiv_correct : (* the statement from Flocq 1.4 is not strong enough;
-                        the axiom can be removed once the library is converted to Flocq 2.0 *)
-  forall (prec emax : Z) (Hprec : (0 < prec)%Z) (Hmax : (prec < emax)%Z)
-    (m : Fappli_IEEE.mode) (x y : binary_float prec emax),
-  B2R prec emax y <> 0%R ->
-  if Rlt_bool (Rabs (round radix2 (FLT_exp (3 - emax - prec) prec) (round_mode m)
-       (B2R prec emax x / B2R prec emax y))) (bpow radix2 emax)
-  then
-    B2R prec emax (Bdiv prec emax Hprec Hmax m x y) =
-      round radix2 (FLT_exp (3 - emax - prec) prec) (round_mode m) (B2R prec emax x / B2R prec emax y) /\
-    is_finite prec emax (Bdiv prec emax Hprec Hmax m x y) = is_finite prec emax x
-  else
-    B2FF prec emax (Bdiv prec emax Hprec Hmax m x y) =
-      binary_overflow prec emax m (xorb (Bsign prec emax x) (Bsign prec emax y)).
 
 Lemma div_single_specification :
   forall m (x y : single), single_value y <> R0 ->
@@ -241,35 +197,29 @@ Lemma div_single_specification :
   exists z, div_single_post m x y z.
 Proof.
 intros m x y Zy Br.
-refine (_ (Bdiv_correct 24 128 (refl_equal Lt) (refl_equal Lt) (rnd_of_mode m) (single_float x) (single_float y) Zy)).
+refine (_ (Bdiv_correct 24 128 (refl_equal Lt) (refl_equal Lt) binop_nan_pl32 (rnd_of_mode m) (single_float x) (single_float y) Zy)).
 rewrite Rlt_bool_true.
 2: now apply no_overflow_single_bounded.
 fold b32_div.
 intros (H1, H2).
 rewrite (single_finite x) in H2.
-refine (ex_intro _ (mk_single (div_single m x y) H2) _).
+destruct H2.
+refine (ex_intro _ (mk_single (div_single m x y) H) _).
 repeat split.
 exact H1.
 Qed.
-
-Axiom Bsqrt_correct : (* the statement from Flocq 1.4 is not strong enough;
-                         the axiom can be removed once the library is converted to Flocq 2.0 *)
-  forall (prec emax : Z) (Hprec : (0 < prec)%Z) (Hmax : (prec < emax)%Z)
-         (m : Fappli_IEEE.mode) (x : binary_float prec emax),
-  B2R prec emax (Bsqrt prec emax Hprec Hmax m x) =
-    round radix2 (FLT_exp (3 - emax - prec) prec) (round_mode m) (sqrt (B2R prec emax x)) /\
-  is_finite prec emax (Bsqrt prec emax Hprec Hmax m x) = match x with B754_zero _ => true | B754_finite false _ _ _ => true | _ => false end.
 
 Lemma sqrt_single_specification :
   forall m (x : single), Rle 0 (single_value x) ->
   exists z, sqrt_single_post m x z.
 Proof.
 intros m x Zx.
-refine (_ (Bsqrt_correct 24 128 (refl_equal Lt) (refl_equal Lt) (rnd_of_mode m) (single_float x))).
+refine (_ (Bsqrt_correct 24 128 (refl_equal Lt) (refl_equal Lt) unop_nan_pl32 (rnd_of_mode m) (single_float x))).
 fold b32_sqrt.
 intros (H1, H2).
 assert (is_finite 24 128 (b32_sqrt (rnd_of_mode m) (single_float x)) = true).
-rewrite H2.
+destruct H2.
+rewrite H.
 revert Zx.
 clear.
 case x ; simpl.
