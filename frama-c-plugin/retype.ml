@@ -53,7 +53,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e = match e.enode with
+  method! vexpr e = match e.enode with
     | CastE(ty,e) ->
 	if isPointerType ty then
 	  match (stripCastsAndInfo e).enode with
@@ -93,7 +93,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vglob_aux = function
+  method! vglob_aux = function
     | GCompTag (compinfo,_) ->
 	let fields = compinfo.cfields in
 	let field fi =
@@ -104,7 +104,7 @@ object
 	DoChildren
     | _ -> DoChildren
 
-  method vterm =
+  method! vterm =
     do_on_term (None,Some postaction_expr)
 
 end
@@ -306,7 +306,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e = match e.enode with
+  method! vexpr e = match e.enode with
     | CastE(ty,e) when isPointerType ty ->
 	let enocast = stripCastsAndInfo e in
 	let ety = typeOf enocast in

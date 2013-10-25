@@ -50,7 +50,7 @@ class add_default_behavior =
   object(self)
     inherit Visitor.frama_c_inplace
 
-    method vspec s =
+    method! vspec s =
       if not (List.exists (fun x -> x.b_name = Cil.default_behavior_name)
                 s.spec_behavior)
       then begin
@@ -62,15 +62,8 @@ class add_default_behavior =
       end;
       SkipChildren
 
-    method vcode_annot _ = SkipChildren
+    method! vcode_annot _ = SkipChildren
 
-    method vfile _f =
-(*
-      let init = Globals.Functions.get_glob_init f  in
-      Format.eprintf "Rewrite.add_default_behavior#vfile: f = %s@." f.fileName;
-      ignore (visitFramacFunspec (self:>Visitor.frama_c_visitor) init.spec);
-*)
-      DoChildren
   end
 
 let add_default_behavior () =
@@ -107,11 +100,11 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vfunc f =
+  method! vfunc f =
     List.iter add_variable f.slocals;
     DoChildren
 
-  method vglob_aux = function
+  method! vglob_aux = function
     | GCompTag(compinfo,_loc)
     | GCompTagDecl(compinfo,_loc) ->
 	add_type (TComp(compinfo,empty_size_cache (),[]));
@@ -120,9 +113,9 @@ object
     | GEnumTagDecl _ | GEnumTag _ | GAsm _ | GPragma _ | GText _ ->
 	DoChildren
 
-  method vlogic_var_decl lv = add_logic_variable lv; DoChildren
+  method! vlogic_var_decl lv = add_logic_variable lv; DoChildren
 
-  method vlogic_var_use v =
+  method! vlogic_var_use v =
     let postaction v =
       (* Restore consistency between C variable name and logical name *)
       Extlib.may (fun cv -> v.lv_name <- cv.vname) v.lv_origin; v
@@ -215,7 +208,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vglob_aux = function
+  method! vglob_aux = function
     | GCompTag(compinfo,_loc) ->
 	let basety = TComp(compinfo,empty_size_cache () ,[]) in
 	let field fi nextoff =
@@ -254,14 +247,14 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e = match e.enode with
+  method! vexpr e = match e.enode with
     | AddrOf lv ->
 	if isArrayType(typeOfLval lv) then
 	  ChangeDoChildrenPost (new_exp ~loc:e.eloc (StartOf lv), fun x -> x)
 	else DoChildren
     | _ -> DoChildren
 
-  method vterm t = match t.term_node with
+  method! vterm t = match t.term_node with
     | TAddrOf tlv ->
 	let ty = force_app_term_type pointed_type t.term_type in
 	if isArrayType ty then
@@ -388,7 +381,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e = match e.enode with
+  method! vexpr e = match e.enode with
     | Const(CStr s) ->
 	let v =
 	  Datatype.String.Hashtbl.memo string_to_var s
@@ -407,7 +400,7 @@ object
 	ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v,NoOffset)))
     | _ -> DoChildren
 
-  method vglob_aux = function
+  method! vglob_aux = function
     | GVar(v,{init=Some(SingleInit({enode = Const _}))},_) ->
 	if isArrayType v.vtype then
 	  (* Avoid creating an array for holding the initializer for another
@@ -473,7 +466,7 @@ object(self)
   method private has_changed lv =
     (Cil.get_original_logic_var self#behavior lv) != lv
 
-  method vlogic_var_use lv =
+  method! vlogic_var_use lv =
     if self#has_changed lv then DoChildren (* Already visited *)
     else begin
       match lv.lv_origin with
@@ -493,7 +486,7 @@ object(self)
         | Some _ | None -> DoChildren
     end
 
-  method vterm t =
+  method! vterm t =
     let post_action t =
       let loc = t.term_loc in
       match t.term_node with
@@ -516,7 +509,7 @@ object(self)
         | _ -> t
     in ChangeDoChildrenPost(t,post_action)
 
-  method vspec s =
+  method! vspec s =
     let refresh_deps = function
       | FromAny -> FromAny
       | From locs -> From (List.map Logic_const.refresh_identified_term locs)
@@ -571,7 +564,7 @@ class specialize_memset =
 object
   inherit Visitor.frama_c_inplace
   val mutable my_globals = []
-  method vstmt_aux s =
+  method! vstmt_aux s =
     match Annotations.code_annot ~filter:Logic_utils.is_contract s with
       | [ annot ] ->
           (match annot.annot_content with
@@ -608,7 +601,7 @@ object
             | _ -> DoChildren)
       | _ -> DoChildren
 
-  method vglob_aux _ =
+  method! vglob_aux _ =
     let add_specialized g = let s = my_globals in my_globals <- []; s @ g in
     DoChildrenPost add_specialized
 end
@@ -637,13 +630,13 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e =
+  method! vexpr e =
     ChangeDoChildrenPost (preaction_expr e, fun x -> x)
 
-  method vterm =
+  method! vterm =
     do_on_term (Some preaction_expr,None)
 
-  method vpredicate = function
+  method! vpredicate = function
     | Prel(rel,t1,t2)
 	when app_term_type isPointerType false t1.term_type
 	  && not (is_null_term t1 || is_null_term t2
@@ -789,7 +782,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vfunc f =
+  method! vfunc f =
     curFundec := f;
     (* For simplicity, consider formals as self-cursors initially.
      * This is the way we declare bases (in the image of [cursor_to_base]).
@@ -805,7 +798,7 @@ object
     List.iter local f.slocals;
     DoChildren
 
-  method vinst = function
+  method! vinst = function
     | Set((Var v,NoOffset),e,_loc) ->
 	if candidate_var v then
 	  begin
@@ -835,10 +828,10 @@ object
     | Asm _ | Skip _ -> SkipChildren
     | Code_annot _ -> assert false
 
-  method vexpr e =
+  method! vexpr e =
     ignore(preaction_expr e); DoChildren
 
-  method vterm = do_on_term (Some preaction_expr, None)
+  method! vterm = do_on_term (Some preaction_expr, None)
 
 end
 
@@ -949,7 +942,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vfunc f =
+  method! vfunc f =
     let local v =
       if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_base v && not (isArrayType v.vtype) then
 	let name = unique_name ("__jc_off_" ^ v.vname) in
@@ -996,7 +989,7 @@ object
     List.iter local f.slocals;
     DoChildren
 
-  method vinst = function
+  method! vinst = function
     | Set((Var v,NoOffset),e,loc) ->
 	if v.vformal then
 	  begin try
@@ -1041,13 +1034,13 @@ object
 	  with Not_found -> DoChildren end
     | _ -> DoChildren
 
-  method vexpr e =
+  method! vexpr e =
     ChangeDoChildrenPost (preaction_expr e, postaction_expr)
 
-  method vterm =
+  method! vterm =
     do_on_term (Some preaction_expr,Some postaction_expr)
 
-  method vspec _sp =
+  method! vspec _sp =
     (* Do not modify the function contract, where offset variables
      * are not known *)
     SkipChildren
@@ -1167,7 +1160,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vfunc f =
+  method! vfunc f =
     (* For simplicity, consider formals as self-cursors initially.
      * This is the way we declare bases (in the image of [cursor_to_base]).
      *)
@@ -1177,7 +1170,7 @@ object
     List.iter formal f.sformals;
     DoChildren
 
-  method vinst = function
+  method! vinst = function
     | Set((Var v,NoOffset),e,_loc) ->
 	if candidate_var v then
 	  begin
@@ -1247,7 +1240,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vfunc f =
+  method! vfunc f =
     let local v =
       if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_base v then
 	let name = unique_name ("__jc_off_" ^ v.vname) in
@@ -1274,7 +1267,7 @@ object
     List.iter local f.slocals;
     DoChildren
 
-  method vinst = function
+  method! vinst = function
     | Set((Var v,NoOffset),e,loc) ->
 	begin try
 	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
@@ -1303,13 +1296,13 @@ object
 	with Not_found -> DoChildren end
     | _ -> DoChildren
 
-  method vexpr e =
+  method! vexpr e =
     ChangeDoChildrenPost (e,postaction_expr)
 
-  method vterm t =
+  method! vterm t =
     ChangeDoChildrenPost (t,postaction_term)
 
-  method vspec _sp =
+  method! vspec _sp =
     (* Do not modify the function contract, where offset variables
      * are not known *)
     SkipChildren
@@ -1451,7 +1444,7 @@ object(self)
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e =
+  method! vexpr e =
     begin match destruct_string_access e with None -> () | Some(v,off) ->
       if hasAttribute name_of_string_declspec (typeAttrs v.vtype) then
 	(* A string should be accessed within its bounds *)
@@ -1463,7 +1456,7 @@ object(self)
     end;
     DoChildren
 
-  method vstmt_aux s =
+  method! vstmt_aux s =
     let preaction s = match s.skind with
       | If(e,tbl,fbl,_loc) ->
 	  begin match destruct_string_test e with _,None -> ()
@@ -1554,7 +1547,7 @@ object(self)
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e = 
+  method! vexpr e = 
     match e.enode with
     | BinOp((Shiftlt | Shiftrt as op),e1,e2,_ty) ->
         let kf = the self#current_kf in
@@ -1653,7 +1646,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vtype ty =
+  method! vtype ty =
     if isVoidPtrType ty then
       let attr = typeAttr ty in
       ChangeTo (typeAddAttributes attr charPtrType)
@@ -1672,7 +1665,7 @@ end
 class debugVoid =
 object
   inherit Visitor.frama_c_inplace
-  method vterm ts = match ts.term_node with
+  method! vterm ts = match ts.term_node with
     | TLval(TResult _,_) -> DoChildren
     | _ ->
 	assert (not (app_term_type isVoidPtrType false ts.term_type));
@@ -1688,7 +1681,7 @@ class rewritePreOld : Visitor.frama_c_visitor =
 object(self)
   inherit Visitor.frama_c_inplace
   val mutable rep_lab = Logic_const.pre_label
-    method vbehavior b =
+    method! vbehavior b =
       rep_lab <- Logic_const.here_label;
       let requires = 
         Visitor.visitFramacPredicates 
@@ -1743,7 +1736,7 @@ object(self)
         ~name ~requires ~assumes ~assigns ~allocation ~post_cond () in
       ChangeTo b
 
-  method vlogic_label l =
+  method! vlogic_label l =
     if Cil_datatype.Logic_label.equal l Logic_const.pre_label
        && self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
     then
@@ -1758,7 +1751,7 @@ let rewrite_pre_old file =
 class remove_unsupported: Visitor.frama_c_visitor =
 object
   inherit Visitor.frama_c_inplace
-  method vpredicate =
+  method! vpredicate =
     function
       | Pseparated _ ->
           Jessie_options.warning ~once:true
@@ -1821,12 +1814,12 @@ class fromRangeToComprehension behavior = object
 
   inherit Visitor.generic_frama_c_visitor behavior
 
-  method vterm ts = match ts.term_type with
+  method! vterm ts = match ts.term_type with
     | Ltype ({ lt_name = "set"},[_]) ->
       ChangeDoChildrenPost(ts, make_comprehension)
     | _ -> DoChildren
 
-  method vterm_offset tsoff = match tsoff with
+  method! vterm_offset tsoff = match tsoff with
     | TIndex ({ term_node =Trange(t1opt,t2opt)} as t,tsoff') ->
         let v = make_temp_logic_var Linteger in
         add_range v t1opt t2opt;
@@ -1858,13 +1851,13 @@ class fromComprehensionToRange behavior =
       (visitCilTerm
          (object
            inherit nopCilVisitor
-           method vterm = function
+           method! vterm = function
            | { term_node =
                TBinOp(PlusPI,_ts,{term_node=TLval(TVar v,TNoOffset)})} ->
              vars := Logic_var.Set.add v !vars;
              DoChildren
            | _ -> DoChildren
-           method vterm_offset = function
+           method! vterm_offset = function
            | TIndex({term_node=TLval(TVar v,TNoOffset)},_tsoff) ->
              vars := Logic_var.Set.add v !vars;
              DoChildren
@@ -1906,7 +1899,7 @@ object(self)
       { t with term_type = Logic_const.make_set_type t.term_type }
     else t
 
-  method vterm t = match t.term_node with
+  method! vterm t = match t.term_node with
     | Tcomprehension(ts,[v],popt) ->
         let index_vars = index_variables_of_term ts in
         (* Only accept for now comprehension on index variables *)
@@ -2025,14 +2018,14 @@ object(self)
          has_set_type <- false;
          ChangeDoChildrenPost (t,self#propagate_set_type)
 
-  method vterm_lval (lh,lo) =
+  method! vterm_lval (lh,lo) =
     let lh' = visitCilTermLhost (self:>Cil.cilVisitor) lh in
     let has_set_type1 = has_set_type in
     let lo' = visitCilTermOffset (self :> Cil.cilVisitor) lo in
     has_set_type <- has_set_type || has_set_type1;
     if lh' != lh || lo' != lo then ChangeTo (lh',lo') else SkipChildren
 
-  method vterm_lhost = function
+  method! vterm_lhost = function
     | TVar v ->
         if Logic_var.Hashtbl.mem ranges v then begin
           Format.eprintf "vterm_lhost: Found: v = %s@." v.lv_name;
@@ -2041,7 +2034,7 @@ object(self)
         DoChildren
     | _ -> DoChildren
 
-  method vterm_offset off =
+  method! vterm_offset off =
     match off with
       | TIndex({term_node=TLval(TVar v,TNoOffset)} as idx,off') ->
           begin try

@@ -1239,7 +1239,7 @@ object
 
   inherit Visitor.frama_c_inplace
 
-  method vexpr e =
+  method! vexpr e =
     ChangeDoChildrenPost (preaction_expr e, fun x -> x)
 
 (* I comment on purpose additional verifications, because they cause some tests

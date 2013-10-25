@@ -3,8 +3,6 @@
 
 #define EOS 0
 
-typedef unsigned int size_t;
-
 /* Rewritten to be more analyzable -- use explicit array indexing. */
 char * ap_cpystrn(char *dst, const char *FRAMA_C_STRING src, size_t dst_size)
 {

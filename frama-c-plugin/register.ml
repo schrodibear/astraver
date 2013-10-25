@@ -72,7 +72,7 @@ let treat_jessie_no_prolog () =
 let steal_globals () =
   let vis = object
     inherit Visitor.frama_c_inplace
-    method vglob_aux g =
+    method! vglob_aux g =
       match g with
         | GAnnot (a,_) ->
             Annotations.remove_global (Annotations.emitter_of_global a) a;
