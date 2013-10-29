@@ -42,7 +42,7 @@ type voidP = [voidP]
 
 int32 atoi(charP[..] c)
 behavior default:
-  assigns c.charM;
+  assigns (c + [0..]).charM;
   ensures (C_1 : true);
 ;
 
@@ -381,7 +381,7 @@ parameter atoi :
     { } int32 writes charP_charM_c_1
     { (JC_<somenum>:
       not_assigns(charP_c_1_alloc_table, charP_charM_c_1@, charP_charM_c_1,
-      pset_singleton(c))) }
+      pset_range_right(pset_singleton(c), (0)))) }
 
 parameter atoi_requires :
  c:charP pointer ->
@@ -390,7 +390,7 @@ parameter atoi_requires :
     { } int32 writes charP_charM_c_1
     { (JC_<somenum>:
       not_assigns(charP_c_1_alloc_table, charP_charM_c_1@, charP_charM_c_1,
-      pset_singleton(c))) }
+      pset_range_right(pset_singleton(c), (0)))) }
 
 parameter f : tt:unit -> { } unit { true }
 
