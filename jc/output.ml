@@ -179,11 +179,13 @@ let why3ident s =
     | "single_exact" -> "Single.exact"
     | "single_round_error" -> "Single.round_error"
     | "round_single" -> "Single.round"
+    | "round_single_logic" -> "Single.round_logic"
     | "no_overflow_single" -> "Single.no_overflow"
     | "double_value" -> "Double.value"
     | "double_exact" -> "Double.exact"
     | "double_round_error" -> "Double.round_error"
     | "round_double" -> "Double.round"
+    | "round_double_logic" -> "Double.round_logic"
     | "no_overflow_double" -> "Double.no_overflow"
         (* floats full *)
     | "le_double_full" -> "Double.le"
