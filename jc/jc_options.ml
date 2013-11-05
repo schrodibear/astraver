@@ -81,6 +81,7 @@ let type_only = ref false
 let user_annot_only = ref false
 let print_graph = ref false
 let why_opt = ref ""
+let why3_opt = ref ""
 
 let verify_all_offsets = ref false
 let verify_invariants_only = ref false
@@ -90,6 +91,7 @@ let behavior = ref []
 let why3_backend = ref false
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
+let add_why3_opt s = why3_opt := !why3_opt ^ " " ^ s
 
 let annotation_sem = ref AnnotNone
 let ai_domain = ref AbsNone
@@ -144,6 +146,8 @@ let _ =
 
         "-why-opt", Arg.String add_why_opt,
 	  "  <why options>  passes options to Why";
+        "-why3-opt", Arg.String add_why3_opt,
+	  "  <why options>  passes options to Why3";
 	"-v", Arg.Set verbose,
           "  verbose mode";
 	"-q", Arg.Clear verbose,
@@ -205,6 +209,7 @@ let verbose = !verbose
 let werror = !werror
 let why3_backend = !why3_backend
 let why_opt = !why_opt
+let why3_opt = !why3_opt
 let inv_sem = inv_sem
 let separation_sem = separation_sem
 let trust_ai = !trust_ai

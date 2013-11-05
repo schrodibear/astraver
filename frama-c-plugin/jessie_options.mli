@@ -36,6 +36,7 @@ module ProjectName: Plugin.String
 module Behavior: Plugin.String
 module Analysis: Plugin.Bool
 module WhyOpt: Plugin.String_set
+module Why3Opt: Plugin.String_set
 module JcOpt: Plugin.String_set
 module GenOnly: Plugin.Bool
 module InferAnnot: Plugin.String
