@@ -379,8 +379,8 @@ let expand_row (view:GTree.view) path bench =
  *)
 let try_proof oblig =
   (Cache.hard_proof ())
-  or not (Cache.is_enabled ())
-  or (Cache.is_enabled () && not (in_cache (Cache.clean oblig))) 
+  || not (Cache.is_enabled ())
+  || (Cache.is_enabled () && not (in_cache (Cache.clean oblig))) 
 
 
 (* 
@@ -391,7 +391,7 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
   let column_p = p.Model.pr_icon in
   let column_i = p.Model.pr_image in
   let (_, _, _, oblig, seq) = o in
-  if bench or (try_proof seq) then
+  if bench || (try_proof seq) then
     try 
       let row = 
 	try Hashtbl.find Model.orows oblig 
@@ -439,7 +439,7 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
       model#set ~row ~column:p.Model.pr_result result;
       model#set ~row ~column:Model.result 
 	(max result (model#get ~row ~column:Model.result));
-      if alone or (Tools.live_update ())then begin 
+      if alone || (Tools.live_update ())then begin 
 	build_statistics model (model#get ~row ~column:Model.parent)
       end;
       result
@@ -558,7 +558,7 @@ let main () =
 	    (let old_w = ref 0 
 	     and old_h = ref 0 in
 	     fun {Gtk.width=w;Gtk.height=h} -> 
-	       if !old_w <> w or !old_h <> h then begin
+	       if !old_w <> w || !old_h <> h then begin
 		 old_h := h;
 		 old_w := w;
 		 Colors.window_height := h;

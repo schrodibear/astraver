@@ -67,7 +67,7 @@ let print_loc = function
       ("file \""^ff^"\", line "^l^", characters "^s^" - "^e)
 
 let is_cfile f = 
-  Filename.check_suffix f ".c" or Filename.check_suffix f ".h"
+  Filename.check_suffix f ".c" || Filename.check_suffix f ".h"
   (* otherwise it's .why *)
 
 let read_file = function 
