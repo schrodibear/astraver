@@ -705,6 +705,28 @@ and terms t =
 
     | Toffset _ -> Common.unsupported "logic offset"
 
+    | Toffset_max (lab, t1) | Toffset_min (lab, t1) as t -> 
+      begin match lab with
+          | LogicLabel (_, "Here") -> 
+              List.map (fun x -> JCPEoffset
+                  ((match t with
+                      | Toffset_max _ -> Offset_max
+                      | Toffset_min _ -> Offset_min
+                      | _ -> assert false), x))
+                (terms t1)
+          | _ ->
+              let label_name = match lab with 
+                | LogicLabel (_, lab) -> lab
+                | StmtLabel sref -> label (List.hd (filter_out is_case_label !sref.labels))
+              in
+              Common.unsupported "%s is only supported with label \"Here\", but label \"%s\" was encountered"
+                (match t with
+                   | Toffset_max _ -> "\\offset_max" 
+                   | Toffset_min _ -> "\\offset_min" 
+                   | _ -> assert false)
+                label_name
+      end
+
     | TLval lv ->
         List.map (fun x -> x#node) (terms_lval t.term_loc lv)
 

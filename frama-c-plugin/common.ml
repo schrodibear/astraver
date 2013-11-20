@@ -974,7 +974,8 @@ let rec force_term_to_exp t =
         let e,env = force_term_to_exp t' in CastE(ty,e), env
     | TAlignOf ty -> AlignOf ty, empty_term_env
     | TSizeOf ty -> SizeOf ty, empty_term_env
-    | Tapp _ | TDataCons _ | Tif _ | Tat _ | Tbase_addr _ | Toffset _
+    | Tapp _ | TDataCons _ | Tif _ | Tat _ | Tbase_addr _
+    | Toffset _ | Toffset_max _ | Toffset_min _
     | Tblock_length _ | Tnull | TCoerce _ | TCoerceE _ | TUpdate _
     | Tlambda _ | Ttypeof _ | Ttype _ | Tcomprehension _
     | Tunion _ | Tinter _ | Tempty_set | Trange _ | Tlet _

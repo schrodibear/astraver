@@ -766,7 +766,7 @@ object(self)
       | TSizeOf _ | TSizeOfE _ | TSizeOfStr _ | TAlignOf _ | TAlignOfE _
       | Tlambda _ | TDataCons _ | Tbase_addr _ | TBinOp _ | TUnOp _
       | Tblock_length _ | TCoerce _ | TCoerceE _ | TUpdate _
-      | Ttypeof _ | Ttype _ | Tlet _ | Toffset _ -> assert false
+      | Ttypeof _ | Ttype _ | Tlet _ | Toffset _ | Toffset_max _ | Toffset_min _ -> assert false
     in
     let zone idts =
       List.map Logic_const.new_identified_term (term idts.it_content)
