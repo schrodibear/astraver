@@ -705,27 +705,24 @@ and terms t =
 
     | Toffset _ -> Common.unsupported "logic offset"
 
-    | Toffset_max (lab, t1) | Toffset_min (lab, t1) as t -> 
-      begin match lab with
-          | LogicLabel (_, "Here") -> 
-              List.map (fun x -> JCPEoffset
-                  ((match t with
-                      | Toffset_max _ -> Offset_max
-                      | Toffset_min _ -> Offset_min
-                      | _ -> assert false), x))
-                (terms t1)
-          | _ ->
-              let label_name = match lab with 
-                | LogicLabel (_, lab) -> lab
-                | StmtLabel sref -> label (List.hd (filter_out is_case_label !sref.labels))
-              in
-              Common.unsupported "%s is only supported with label \"Here\", but label \"%s\" was encountered"
-                (match t with
-                   | Toffset_max _ -> "\\offset_max" 
-                   | Toffset_min _ -> "\\offset_min" 
-                   | _ -> assert false)
-                label_name
-      end
+    | Toffset_max (lab, t1) | Toffset_min (lab, t1) as tnode ->
+      let label_here = LogicLabel (None, "Here") in
+      let f, offset_kind = match tnode with
+        | Toffset_max _ -> (fun x -> {t with term_node = Toffset_max (label_here, x)}), Offset_max
+        | Toffset_min _ -> (fun x -> {t with term_node = Toffset_min (label_here, x)}), Offset_min 
+        | _ -> assert false
+      in
+      let label_name = match lab with 
+        | LogicLabel (_, lab) -> lab
+        | StmtLabel sref -> label (List.hd (filter_out is_case_label !sref.labels))
+      in
+      let f, start = match label_name with
+        | "Here" -> (fun x -> JCPEoffset (offset_kind, x)), terms t1
+        | _ ->
+            (fun x -> JCPEat (x, logic_label lab)),
+            terms (f {t1 with term_node = (Tat (t1, lab))})
+      in
+      List.map f start
 
     | TLval lv ->
         List.map (fun x -> x#node) (terms_lval t.term_loc lv)
