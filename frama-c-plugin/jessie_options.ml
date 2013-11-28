@@ -179,6 +179,13 @@ module HintLevel =
        let help = "level of hints, i.e. assertions to help the proof (e.g. for string usage)"
      end)
 
+module SpecBlockFuncs =
+  False
+    (struct
+      let option_name = "-jessie-spec-block-funs"
+      let help = "generate specialized versions for block-level functions e.g. memcpy"
+     end)
+
 (*
 Local Variables:
 compile-command: "make"

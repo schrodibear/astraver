@@ -560,6 +560,21 @@ axiom alloc_extends_except_offset_max:
      forall p:pointer 't.
        valid(a1) p /\ not in_pset p (l) -> offset_max(a1) p = offset_max(a2) p
 
+axiom alloc_fresh_not_same_block_extends:
+  forall a1:alloc_table 't. forall a2:alloc_table 't [alloc_extends a1 a2].
+    alloc_extends a1 a2 ->
+      forall p: pointer 't. forall n:int [alloc_fresh a1 p n].
+        alloc_fresh a1 p n /\ valid(a2) p ->
+          forall p_old: pointer 't [same_block p p_old].
+            valid(a1) p_old -> not same_block p p_old
+
+axiom alloc_fresh_not_same_block_extends_except:
+  forall a1:alloc_table 't. forall a2:alloc_table 't. forall l:pset 't [alloc_extends_except a1 a2 l].
+    alloc_extends_except a1 a2 l ->
+      forall p: pointer 't. forall n:int [alloc_fresh a1 p n].
+        alloc_fresh a1 p n /\ valid(a2) p ->
+          forall p_old: pointer 't [same_block p p_old].
+            valid(a1) p_old -> not same_block p p_old
 
 
 (* Frame predicate *)

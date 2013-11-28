@@ -113,4 +113,13 @@ $(WHY_DISTRIB)/%: $(WHY_DISTRIB)/Makefile $(WHY_DISTRIB)/.depend
 
 PLUGIN_GENERATED_LIST+=$(JESSIE_HOME_DIR)/jessie_config.ml
 
+RESOURCES   ?= jessie_spec_prolog.h 
+
+install::
+	$(MKDIR) $(FRAMAC_DATADIR)/jessie
+	$(CP) $(addprefix $(PLUGIN_DIR)/share/jessie/,$(RESOURCES)) $(FRAMAC_DATADIR)/jessie
+
+uninstall::
+	$(RM) -r $(FRAMAC_DATADIR)/jessie
+
 include $(FRAMAC_SHARE)/Makefile.dynamic

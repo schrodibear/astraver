@@ -42,9 +42,10 @@ open Jc
 (* Utility functions *)
 open Common
 
-(*
-let std_include = Filename.concat Version.datadir "jessie"
 
+let std_include = Filename.concat Config.datadir "jessie"
+
+(*
 let prolog_h_name = Filename.concat std_include "jessie_prolog.h"
 
 let treat_jessie_prolog () =
@@ -58,11 +59,17 @@ let treat_integer_model () =
   if !Interp.int_model = Interp.IMexact then
     Kernel.CppExtraArgs.add ("-D JESSIE_EXACT_INT_MODEL")
 
+let treat_jessie_spec_prolog () =
+  if Jessie_options.SpecBlockFuncs.get () then
+    let spec_prolog_h_name = Filename.concat std_include "jessie_spec_prolog.h" in
+    Kernel.CppExtraArgs.add ("-include " ^ spec_prolog_h_name)
+
 let () =
   (* [JS 2009/10/04]
      Preserve the behaviour of svn release <= r5012.
      However it works only if the int-model is set from the command line. *)
-  Cmdline.run_after_configuring_stage treat_integer_model
+  (* Extension -- support for specialized memcpy() versions. *)
+  List.iter Cmdline.run_after_configuring_stage [treat_integer_model; treat_jessie_spec_prolog]
 
 (*
 let treat_jessie_no_prolog () =

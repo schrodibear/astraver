@@ -44,6 +44,7 @@ module AbsDomain: Plugin.String
 module Atp: Plugin.String
 module CpuLimit: Plugin.Int
 module HintLevel: Plugin.Int
+module SpecBlockFuncs : Plugin.Bool
 
 (*
 Local Variables:
