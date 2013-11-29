@@ -619,6 +619,102 @@ let specialize_memset file =
   Ast.clear_last_decl ()
 
 (*****************************************************************************)
+(* Specification and specialization for memcpy and other block functions.    *)
+(*****************************************************************************)
+
+let specialize_blockfun { fundec; spec } _type =
+  let visitor = object(self)
+    inherit frama_c_copy (Project.current ())
+
+    method private is_pattern_type = function
+      | TNamed ({ torig_name = "_type"; ttype = TInt (_, []) }, []) -> true
+      | _ -> false
+    
+    method vtype t =
+      if not (self#is_pattern_type t) then DoChildren
+      else ChangeTo _type
+  end in
+  match fundec with
+    | Declaration (spec', fvinfo, Some argvinfos, loc) when spec' == spec ->
+      let spec = visitFramacFunspec visitor spec in
+      let fvinfo = visitFramacVarDecl visitor fvinfo in
+      let argvinfos = List.map (visitFramacVarDecl visitor) argvinfos in
+      Declaration (spec, fvinfo, Some argvinfos, loc)
+    | _ -> fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
+
+class specialize_blockfuns_visitor =
+object(self)
+  inherit frama_c_inplace
+
+  val mutable new_globals = []
+
+  method private arg_types_match fname tl t1 t2 t3 = match fname with
+    | "memcpy" -> 
+        not (need_cast tl t1)  &&
+        not (need_cast t1 t2) &&
+        not (need_cast t3 theMachine.typeOfSizeOf)
+    | _ -> fatal "unexpected blockfun: %s" fname
+
+  method vstmt_aux = function
+    | { skind = Instr (Call (lval_opt, { enode = Lval (Var fvar, NoOffset) }, args , loc)) } as stmt
+      when is_block_function fvar ->
+        let lval_type = Option_misc.map (fun x -> pointed_type (typeOfLval x)) lval_opt
+        and args_types = List.map (fun x -> pointed_type (typeOf x)) args in
+        begin match lval_type, args_types with
+          | Some tl, [t1; t2; t3] when self#arg_types_match fvar.vname tl t1 t2 t3 ->
+              let _type = t2 in
+              begin match specialize_blockfun (Globals.Functions.get fvar) _type with
+                | Declaration (spec, fvinfo, Some argvinfos, loc) ->
+                  let f =
+                    let fname = unique_name ("memcpy_" ^ type_name _type) in
+                    try
+                      let fdecl =
+                        List.find
+                          (function
+                            | GVarDecl (_, { vname }, _) -> vname = fname
+                            | _ -> false)
+                          new_globals
+                      in
+                      match fdecl with
+                        | GVarDecl (_, f, _) -> f
+                        | _ -> assert false
+                    with Not_found ->
+                      let arg_vardecls = List.map (fun v -> v.vname, v.vtype, []) argvinfos in
+                      let f =
+                        makeGlobalVar
+                          fname
+                          (TFun (TPtr (_type, []), Some arg_vardecls, false, []))
+                      in
+                      unsafeSetFormalsDecl f argvinfos;
+                      new_globals <- GVarDecl(empty_funspec (), f, loc) :: new_globals;
+                      Globals.Functions.replace_by_declaration spec f loc;
+                      let kernel_function = Globals.Functions.get f in
+                      Annotations.register_funspec ~emitter:Common.jessie_emitter kernel_function;
+                      f
+                  in
+                  stmt.skind <- Instr (Call (None, Cil.evar ~loc f, args, loc));
+                  SkipChildren
+                | _ -> assert false
+              end
+          | _ -> fatal "Can't specialize memcpy applied to arguments of different types: %a"
+                       Printer.pp_stmt stmt
+        end
+    | _ -> DoChildren
+
+  method vglob_aux _ =
+    DoChildrenPost (fun globals ->
+      let saved_globals = new_globals in
+      new_globals <-[];
+      saved_globals @ globals)
+    
+end
+
+let specialize_blockfuns file =
+  visitFramacFile (new specialize_blockfuns_visitor) file;
+  (* We may have introduced new globals: clear the last_decl table. *)
+  Ast.clear_last_decl () 
+
+(*****************************************************************************)
 (* Rewrite comparison of pointers into difference of pointers.               *)
 (*****************************************************************************)
 
@@ -2111,6 +2207,12 @@ let rewrite file =
   Jessie_options.debug "Use specialized versions of Frama_C_memset";
   specialize_memset file;
   if checking then check_types file;
+  (* Specialize block functions e.g. memcpy. *)
+  if Jessie_options.SpecBlockFuncs.get () then begin
+    Jessie_options.debug "Use specialized versions for block functions (e.g. memcpy)";
+    specialize_blockfuns file;
+    if checking then check_types file
+  end;
   (* Rewrite comparison of pointers into difference of pointers. *)
   if Jessie_options.InferAnnot.get () <> "" then
     begin

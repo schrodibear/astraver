@@ -386,6 +386,8 @@ let name_of_malloc = "malloc"
 let name_of_calloc = "calloc"
 let name_of_realloc = "realloc"
 
+let names_of_block_functions = ["memcpy"]
+
 let predefined_name =
   [ (* coding functions *)
     name_of_assert;
@@ -402,6 +404,8 @@ let is_free_function v = isFunctionType v.vtype && v.vname = name_of_free
 let is_malloc_function v = isFunctionType v.vtype && v.vname = name_of_malloc
 let is_calloc_function v = isFunctionType v.vtype && v.vname = name_of_calloc
 let is_realloc_function v = isFunctionType v.vtype && v.vname = name_of_realloc
+
+let is_block_function v = isFunctionType v.vtype && List.mem v.vname names_of_block_functions
 
 (* Name management *)
 
