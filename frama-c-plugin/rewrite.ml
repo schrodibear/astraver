@@ -622,12 +622,69 @@ let specialize_memset file =
 (* Specification and specialization for memcpy and other block functions.    *)
 (*****************************************************************************)
 
+module Option_misc = struct
+  let map f = function 
+    | Some x -> Some (f x)
+    | None -> None
+  let iter f = function
+    | Some x -> f x
+    | None -> ()
+  let map_default f d = function
+    | Some x -> f x
+    | None -> d 
+end
+
+class spec_refreshing_vsitor = object
+  inherit frama_c_copy (Project.current ())
+  method vspec s =
+    let refresh_deps = function
+       | FromAny -> FromAny
+       | From locs -> From (List.map Logic_const.refresh_identified_term locs)
+    in
+    let refresh_froms (loc, deps) =
+      (Logic_const.refresh_identified_term loc, refresh_deps deps)
+    in
+    let refresh_assigns = function
+      | WritesAny -> WritesAny
+      | Writes (writes) -> Writes (List.map refresh_froms writes)
+    in
+    let refresh_allocates = function
+      | FreeAllocAny -> FreeAllocAny
+      | FreeAlloc (free, alloc) ->
+          FreeAlloc (List.map Logic_const.refresh_identified_term free,
+                     List.map Logic_const.refresh_identified_term alloc)
+    in
+    let refresh_extended e =
+      List.map (fun (s, i, p) -> (s, i, List.map Logic_const.refresh_predicate p)) e
+    in
+    let refresh_behavior b =
+      let requires = List.map Logic_const.refresh_predicate b.b_requires in
+      let assumes = List.map Logic_const.refresh_predicate b.b_assumes in
+      let post_cond = 
+        List.map
+          (fun (k, p) -> (k, Logic_const.refresh_predicate p)) b.b_post_cond
+      in
+      let assigns = refresh_assigns b.b_assigns in
+      let allocation = Some (refresh_allocates b.b_allocation) in
+      let extended = refresh_extended b.b_extended in
+      Cil.mk_behavior
+        ~assumes ~requires ~post_cond ~assigns ~allocation ~extended ()
+    in
+    let refresh s =
+      let bhvs = List.map refresh_behavior s.spec_behavior in
+      s.spec_behavior <- bhvs;
+      s
+    in
+    DoChildrenPost (refresh)
+end
+
 let specialize_blockfun { fundec; spec } _type =
   let visitor = object(self)
     inherit frama_c_copy (Project.current ())
+    inherit spec_refreshing_vsitor
 
     method private is_pattern_type = function
-      | TNamed ({ torig_name = "_type"; ttype = TInt (_, []) }, []) -> true
+      | TNamed ({ torig_name = "_type"; ttype = TInt (_, []) }, _) -> true
       | _ -> false
     
     method vtype t =
@@ -635,11 +692,11 @@ let specialize_blockfun { fundec; spec } _type =
       else ChangeTo _type
   end in
   match fundec with
-    | Declaration (spec', fvinfo, Some argvinfos, loc) when spec' == spec ->
+    | Declaration (spec, fvinfo, Some argvinfos, loc) ->
       let spec = visitFramacFunspec visitor spec in
       let fvinfo = visitFramacVarDecl visitor fvinfo in
       let argvinfos = List.map (visitFramacVarDecl visitor) argvinfos in
-      Declaration (spec, fvinfo, Some argvinfos, loc)
+      (spec, fvinfo, argvinfos, loc)
     | _ -> fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
 
 class specialize_blockfuns_visitor =
@@ -648,54 +705,62 @@ object(self)
 
   val mutable new_globals = []
 
-  method private arg_types_match fname tl t1 t2 t3 = match fname with
-    | "memcpy" -> 
-        not (need_cast tl t1)  &&
-        not (need_cast t1 t2) &&
-        not (need_cast t3 theMachine.typeOfSizeOf)
-    | _ -> fatal "unexpected blockfun: %s" fname
+  method private arg_types_match fname tl_opt t1 t2 t3 =
+    let irrelevant_attributes = ["restrict"; "volatile"] in
+    let strip = typeRemoveAttributes irrelevant_attributes in
+    let strip_const = typeRemoveAttributes ("const" :: irrelevant_attributes) in
+    match fname with
+      | "memcpy" ->
+          let tl_opt = Option_misc.map strip tl_opt in
+          let t1 = strip t1 and t2 = strip_const t2 and t3 = strip t3 in
+          Option_misc.map_default (fun tl ->
+            not (need_cast tl t1)) true tl_opt &&
+          not (need_cast t1 t2) &&
+          not (need_cast t3 theMachine.typeOfSizeOf)
+      | _ -> fatal "unexpected blockfun: %s" fname
 
   method vstmt_aux = function
     | { skind = Instr (Call (lval_opt, { enode = Lval (Var fvar, NoOffset) }, args , loc)) } as stmt
       when is_block_function fvar ->
-        let lval_type = Option_misc.map (fun x -> pointed_type (typeOfLval x)) lval_opt
-        and args_types = List.map (fun x -> pointed_type (typeOf x)) args in
+        let args = List.map stripCasts args in
+        let pointed_type t = if isPointerType t then pointed_type t else t in
+        let lval_type = Option_misc.map (fun lval -> pointed_type (typeOfLval lval)) lval_opt in
+        let args_types = List.map (fun e -> pointed_type (typeOf e)) args in
         begin match lval_type, args_types with
-          | Some tl, [t1; t2; t3] when self#arg_types_match fvar.vname tl t1 t2 t3 ->
+          | tl_opt, [t1; t2; t3] when self#arg_types_match fvar.vname tl_opt t1 t2 t3 ->
               let _type = t2 in
-              begin match specialize_blockfun (Globals.Functions.get fvar) _type with
-                | Declaration (spec, fvinfo, Some argvinfos, loc) ->
-                  let f =
-                    let fname = unique_name ("memcpy_" ^ type_name _type) in
-                    try
-                      let fdecl =
-                        List.find
-                          (function
-                            | GVarDecl (_, { vname }, _) -> vname = fname
-                            | _ -> false)
-                          new_globals
-                      in
-                      match fdecl with
-                        | GVarDecl (_, f, _) -> f
-                        | _ -> assert false
-                    with Not_found ->
-                      let arg_vardecls = List.map (fun v -> v.vname, v.vtype, []) argvinfos in
-                      let f =
-                        makeGlobalVar
-                          fname
-                          (TFun (TPtr (_type, []), Some arg_vardecls, false, []))
-                      in
-                      unsafeSetFormalsDecl f argvinfos;
-                      new_globals <- GVarDecl(empty_funspec (), f, loc) :: new_globals;
-                      Globals.Functions.replace_by_declaration spec f loc;
-                      let kernel_function = Globals.Functions.get f in
-                      Annotations.register_funspec ~emitter:Common.jessie_emitter kernel_function;
-                      f
+              let f =
+                let fname = unique_name (fvar.vname ^ "_" ^ type_name _type) in
+                try
+                  let fdecl =
+                    List.find
+                      (function
+                        | GVarDecl (_, { vname }, _) -> vname = fname
+                        | _ -> false)
+                      new_globals
                   in
-                  stmt.skind <- Instr (Call (None, Cil.evar ~loc f, args, loc));
-                  SkipChildren
-                | _ -> assert false
-              end
+                  match fdecl with
+                    | GVarDecl (_, f, _) -> f
+                    | _ -> assert false
+                with Not_found ->
+                  let spec, fvinfo, argvinfos, loc =
+                    specialize_blockfun (Globals.Functions.find_by_name (fvar.vname ^ "__type")) _type
+                  in
+                  let arg_vardecls = List.map (fun v -> v.vname, v.vtype, []) argvinfos in
+                  let f =
+                    makeGlobalVar
+                      fname
+                      (TFun (TPtr (_type, []), Some arg_vardecls, false, []))
+                  in
+                  unsafeSetFormalsDecl f argvinfos;
+                  new_globals <- GVarDecl(empty_funspec (), f, loc) :: new_globals;
+                  Globals.Functions.replace_by_declaration spec f loc;
+                  let kernel_function = Globals.Functions.get f in
+                  Annotations.register_funspec ~emitter:Common.jessie_emitter kernel_function;
+                  f
+              in
+              stmt.skind <- Instr (Call (None, Cil.evar ~loc f, args, loc));
+              SkipChildren
           | _ -> fatal "Can't specialize memcpy applied to arguments of different types: %a"
                        Printer.pp_stmt stmt
         end
@@ -706,7 +771,6 @@ object(self)
       let saved_globals = new_globals in
       new_globals <-[];
       saved_globals @ globals)
-    
 end
 
 let specialize_blockfuns file =
