@@ -637,45 +637,12 @@ end
 class spec_refreshing_vsitor = object
   inherit frama_c_copy (Project.current ())
   method vspec s =
-    let refresh_deps = function
-       | FromAny -> FromAny
-       | From locs -> From (List.map Logic_const.refresh_identified_term locs)
+    let refresh_spec s =
+      match Logic_const.(refresh_code_annotation (new_code_annotation (AStmtSpec ([], s)))).annot_content with
+        | AStmtSpec (_, s) -> s
+        | _ -> assert false
     in
-    let refresh_froms (loc, deps) =
-      (Logic_const.refresh_identified_term loc, refresh_deps deps)
-    in
-    let refresh_assigns = function
-      | WritesAny -> WritesAny
-      | Writes (writes) -> Writes (List.map refresh_froms writes)
-    in
-    let refresh_allocates = function
-      | FreeAllocAny -> FreeAllocAny
-      | FreeAlloc (free, alloc) ->
-          FreeAlloc (List.map Logic_const.refresh_identified_term free,
-                     List.map Logic_const.refresh_identified_term alloc)
-    in
-    let refresh_extended e =
-      List.map (fun (s, i, p) -> (s, i, List.map Logic_const.refresh_predicate p)) e
-    in
-    let refresh_behavior b =
-      let requires = List.map Logic_const.refresh_predicate b.b_requires in
-      let assumes = List.map Logic_const.refresh_predicate b.b_assumes in
-      let post_cond = 
-        List.map
-          (fun (k, p) -> (k, Logic_const.refresh_predicate p)) b.b_post_cond
-      in
-      let assigns = refresh_assigns b.b_assigns in
-      let allocation = Some (refresh_allocates b.b_allocation) in
-      let extended = refresh_extended b.b_extended in
-      Cil.mk_behavior
-        ~assumes ~requires ~post_cond ~assigns ~allocation ~extended ()
-    in
-    let refresh s =
-      let bhvs = List.map refresh_behavior s.spec_behavior in
-      s.spec_behavior <- bhvs;
-      s
-    in
-    DoChildrenPost (refresh)
+    DoChildrenPost (refresh_spec)
 end
 
 let specialize_blockfun { fundec; spec } _type =
@@ -689,7 +656,7 @@ let specialize_blockfun { fundec; spec } _type =
     
     method vtype t =
       if not (self#is_pattern_type t) then DoChildren
-      else ChangeTo _type
+      else ChangeTo (typeAddAttributes (typeAttrs t) _type)
   end in
   match fundec with
     | Declaration (spec, fvinfo, Some argvinfos, loc) ->
@@ -759,7 +726,7 @@ object(self)
                   Annotations.register_funspec ~emitter:Common.jessie_emitter kernel_function;
                   f
               in
-              stmt.skind <- Instr (Call (None, Cil.evar ~loc f, args, loc));
+              stmt.skind <- Instr (Call (lval_opt, Cil.evar ~loc f, args, loc));
               SkipChildren
           | _ -> fatal "Can't specialize memcpy applied to arguments of different types: %a"
                        Printer.pp_stmt stmt
