@@ -622,55 +622,131 @@ let specialize_memset file =
 (* Specification and specialization for memcpy and other block functions.    *)
 (*****************************************************************************)
 
-module Option_misc = struct
-  let map f = function 
-    | Some x -> Some (f x)
-    | None -> None
-  let iter f = function
-    | Some x -> f x
-    | None -> ()
-  let map_default f d = function
-    | Some x -> f x
-    | None -> d 
-end
+module Option_misc = Jc.Option_misc
 
 class spec_refreshing_vsitor = object
-  inherit frama_c_copy (Project.current ())
-  method vspec s =
+  method vspec : 'a -> 'a visitAction = fun s ->
     let refresh_spec s =
       match Logic_const.(refresh_code_annotation (new_code_annotation (AStmtSpec ([], s)))).annot_content with
         | AStmtSpec (_, s) -> s
         | _ -> assert false
     in
-    DoChildrenPost (refresh_spec)
+    DoChildrenPost refresh_spec
 end
 
-let specialize_blockfun { fundec; spec } _type =
-  let visitor = object(self)
-    inherit frama_c_copy (Project.current ())
-    inherit spec_refreshing_vsitor
+class type_substituting_visitor _type = 
+  let is_pattern_type = function
+    | TNamed ({ torig_name = "_type"; ttype = TInt (_, []) }, _) -> true
+    | _ -> false
+  in
+object
+  method vtype : 'a -> 'a visitAction = fun t ->
+    if not (is_pattern_type t) then DoChildren
+    else ChangeTo (typeAddAttributes (typeAttrs t) _type)
+end
 
-    method private is_pattern_type = function
-      | TNamed ({ torig_name = "_type"; ttype = TInt (_, []) }, _) -> true
-      | _ -> false
-    
-    method vtype t =
-      if not (self#is_pattern_type t) then DoChildren
-      else ChangeTo (typeAddAttributes (typeAttrs t) _type)
-  end in
-  match fundec with
-    | Declaration (spec, fvinfo, Some argvinfos, loc) ->
-      let spec = visitFramacFunspec visitor spec in
-      let fvinfo = visitFramacVarDecl visitor fvinfo in
-      let argvinfos = List.map (visitFramacVarDecl visitor) argvinfos in
-      (spec, fvinfo, argvinfos, loc)
-    | _ -> fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
+class logic_info_substituting_visitor update_logic_info = object
+  method vlogic_info_use : logic_info -> logic_info visitAction = fun li ->
+    ChangeTo (update_logic_info li)
+end
+
+class logic_var_renaming_visitor old_name new_name =
+  let is_pattern_var lv = lv.lv_name = old_name in
+object(self)
+  method vlogic_var_decl : 'a -> 'a visitAction = fun lv -> 
+    if not (is_pattern_var lv) then DoChildren
+    else ChangeTo (Cil_const.make_logic_var_global new_name lv.lv_type)
+
+  method vlogic_var_use = self#vlogic_var_decl
+end
 
 class specialize_blockfuns_visitor =
+  let get_specialized_name _type =
+    Str.replace_first (Str.regexp_string "_type") (type_name _type)
+  in
+  let specialize_logic_info _type logic_info =
+    let old_name = logic_info.l_var_info.lv_name in
+    let new_name = get_specialized_name _type old_name in
+    let visitor = object
+      inherit frama_c_copy (Project.current ())
+      inherit type_substituting_visitor _type
+      inherit logic_var_renaming_visitor old_name new_name
+    end in
+    visitFramacLogicInfo visitor logic_info
+  in
+  let specialize_blockfun { fundec; spec } update_logic_info _type =
+    let visitor = object
+      inherit frama_c_copy (Project.current ())
+      inherit spec_refreshing_vsitor
+      inherit type_substituting_visitor _type
+      inherit logic_info_substituting_visitor (update_logic_info _type)
+    end in
+    match fundec with
+      | Declaration (spec, fvinfo, Some argvinfos, loc) ->
+        let spec = visitFramacFunspec visitor spec in
+        let fvinfo = visitFramacVarDecl visitor fvinfo in
+        let argvinfos = List.map (visitFramacVarDecl visitor) argvinfos in
+        (spec, fvinfo, argvinfos, loc)
+      | _ -> fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
+  in
 object(self)
   inherit frama_c_inplace
 
   val mutable new_globals = []
+
+  method private update_logic_info _type li =
+    try
+      let rec match_global = function
+        | GAnnot (Dfun_or_pred (li', _), _) ->
+          li'.l_var_info.lv_name = get_specialized_name _type li.l_var_info.lv_name
+        | GAnnot (Daxiomatic (_, lst, loc), _) ->
+          List.exists match_global (List.map (fun ga -> GAnnot (ga, loc)) lst)
+        | _ -> false
+      in
+      let rec find_li = function
+        | GAnnot (Dfun_or_pred (li, _), _) -> li
+        | GAnnot (Daxiomatic (_, lst, loc), _) ->
+          find_li (List.find match_global (List.map (fun ga -> GAnnot (ga, loc)) lst))
+        | _ -> assert false
+      in
+      find_li (List.find match_global new_globals)
+    with Not_found ->
+      let li = specialize_logic_info _type li in
+      let g = Dfun_or_pred (li, Location.unknown) in
+      new_globals <- GAnnot (g, Location.unknown) :: new_globals;
+      Annotations.add_global Common.jessie_emitter g;
+      li
+
+  method private find_specialized_function fname =
+    try
+      let fdecl =
+        List.find
+          (function
+            | GVarDecl (_, { vname }, _) -> vname = fname
+            | _ -> false)
+          new_globals
+      in
+      match fdecl with
+        | GVarDecl (_, f, _) -> Some f
+        | _ -> assert false
+    with Not_found -> None
+
+  method private specialize_function kf fname _type =
+    let spec, fvinfo, argvinfos, loc =
+      specialize_blockfun kf (self#update_logic_info) _type
+    in
+    let arg_vardecls = List.map (fun v -> v.vname, v.vtype, []) argvinfos in
+    let f =
+      makeGlobalVar
+        fname
+        (TFun (TPtr (_type, []), Some arg_vardecls, false, []))
+    in
+    unsafeSetFormalsDecl f argvinfos;
+    new_globals <- GVarDecl(empty_funspec (), f, loc) :: new_globals;
+    Globals.Functions.replace_by_declaration spec f loc;
+    let kernel_function = Globals.Functions.get f in
+    Annotations.register_funspec ~emitter:Common.jessie_emitter kernel_function;
+    f
 
   method private arg_types_match fname tl_opt t1 t2 t3 =
     let irrelevant_attributes = ["restrict"; "volatile"] in
@@ -698,33 +774,10 @@ object(self)
               let _type = t2 in
               let f =
                 let fname = unique_name (fvar.vname ^ "_" ^ type_name _type) in
-                try
-                  let fdecl =
-                    List.find
-                      (function
-                        | GVarDecl (_, { vname }, _) -> vname = fname
-                        | _ -> false)
-                      new_globals
-                  in
-                  match fdecl with
-                    | GVarDecl (_, f, _) -> f
-                    | _ -> assert false
-                with Not_found ->
-                  let spec, fvinfo, argvinfos, loc =
-                    specialize_blockfun (Globals.Functions.find_by_name (fvar.vname ^ "__type")) _type
-                  in
-                  let arg_vardecls = List.map (fun v -> v.vname, v.vtype, []) argvinfos in
-                  let f =
-                    makeGlobalVar
-                      fname
-                      (TFun (TPtr (_type, []), Some arg_vardecls, false, []))
-                  in
-                  unsafeSetFormalsDecl f argvinfos;
-                  new_globals <- GVarDecl(empty_funspec (), f, loc) :: new_globals;
-                  Globals.Functions.replace_by_declaration spec f loc;
-                  let kernel_function = Globals.Functions.get f in
-                  Annotations.register_funspec ~emitter:Common.jessie_emitter kernel_function;
-                  f
+                match self#find_specialized_function fname with
+                  | Some f -> f
+                  | None ->
+                      self#specialize_function (Globals.Functions.find_by_name (fvar.vname ^ "__type")) fname _type
               in
               stmt.skind <- Instr (Call (lval_opt, Cil.evar ~loc f, args, loc));
               SkipChildren
