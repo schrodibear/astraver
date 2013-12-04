@@ -29,7 +29,7 @@
 
 typedef char _type;
 
-/*@ axiomatic memcpy {
+/*@ axiomatic memcpy__type {
   @   predicate memcmp__type{L1, L2}(_type *p1, _type *p2, size_t n) =
   @     n % (sizeof (_type)) == 0 &&
   @     \let _n = n / sizeof (_type);

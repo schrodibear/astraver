@@ -624,10 +624,14 @@ let specialize_memset file =
 
 module Option_misc = Jc.Option_misc
 
+let get_specialized_name (*_type*) (*original_name*) =
+  let type_regexp = Str.regexp_string "_type" in
+  fun _type -> Str.replace_first type_regexp (type_name _type)
+
 class spec_refreshing_vsitor = object
   method vspec : 'a -> 'a visitAction = fun s ->
     let refresh_spec s =
-      match Logic_const.(refresh_code_annotation (new_code_annotation (AStmtSpec ([], s)))).annot_content with
+      match Logic_const.(refresh_code_annotation @@ new_code_annotation @@ AStmtSpec ([], s)).annot_content with
         | AStmtSpec (_, s) -> s
         | _ -> assert false
     in
@@ -650,38 +654,35 @@ class logic_info_substituting_visitor update_logic_info = object
     ChangeTo (update_logic_info li)
 end
 
-class logic_var_renaming_visitor old_name new_name =
-  let is_pattern_var lv = lv.lv_name = old_name in
+class logic_var_renaming_visitor _type =
+  let get_specialized_name = get_specialized_name _type in
 object(self)
-  method vlogic_var_decl : 'a -> 'a visitAction = fun lv -> 
-    if not (is_pattern_var lv) then DoChildren
-    else ChangeTo (Cil_const.make_logic_var_global new_name lv.lv_type)
+  method vlogic_var_decl : 'a -> 'a visitAction = fun { lv_name=old_name; lv_type } -> 
+    let new_name = get_specialized_name old_name in
+    if old_name = new_name then DoChildren
+    else ChangeTo (Cil_const.make_logic_var_global new_name lv_type)
 
   method vlogic_var_use = self#vlogic_var_decl
 end
 
 class specialize_blockfuns_visitor =
-  let get_specialized_name _type =
-    Str.replace_first (Str.regexp_string "_type") (type_name _type)
-  in
-  let specialize_logic_info _type logic_info =
-    let old_name = logic_info.l_var_info.lv_name in
-    let new_name = get_specialized_name _type old_name in
+  let specialize_logic_info _type (*logic_info*) =
     let visitor = object
       inherit frama_c_copy (Project.current ())
       inherit type_substituting_visitor _type
-      inherit logic_var_renaming_visitor old_name new_name
+      inherit logic_var_renaming_visitor _type
     end in
-    visitFramacLogicInfo visitor logic_info
+    fun logic_info -> visitFramacLogicInfo visitor logic_info
   in
-  let specialize_blockfun { fundec; spec } update_logic_info _type =
+  let specialize_blockfun update_logic_info _type (*kernel_function*) =
     let visitor = object
       inherit frama_c_copy (Project.current ())
       inherit spec_refreshing_vsitor
       inherit type_substituting_visitor _type
       inherit logic_info_substituting_visitor (update_logic_info _type)
+      inherit logic_var_renaming_visitor _type
     end in
-    match fundec with
+    fun { fundec; spec } -> match fundec with
       | Declaration (spec, fvinfo, Some argvinfos, loc) ->
         let spec = visitFramacFunspec visitor spec in
         let fvinfo = visitFramacVarDecl visitor fvinfo in
@@ -689,33 +690,72 @@ class specialize_blockfuns_visitor =
         (spec, fvinfo, argvinfos, loc)
       | _ -> fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
   in
+  let arg_types_match fname tl_opt t1 t2 t3 =
+    let irrelevant_attributes = ["restrict"; "volatile"] in
+    let strip = typeRemoveAttributes irrelevant_attributes in
+    let strip_const = typeRemoveAttributes ("const" :: irrelevant_attributes) in
+    match fname with
+      | "memcpy" ->
+          let tl_opt = Option_misc.map strip tl_opt in
+          let t1 = strip t1 and t2 = strip_const t2 and t3 = strip t3 in
+          Option_misc.map_default (fun tl ->
+            not (need_cast tl t1)) true tl_opt &&
+          not (need_cast t1 t2) &&
+          not (need_cast t3 theMachine.typeOfSizeOf)
+      | _ -> fatal "unexpected blockfun: %s" fname
+  in
 object(self)
   inherit frama_c_inplace
 
   val mutable new_globals = []
+  val mutable introduced_globals = []
 
-  method private update_logic_info _type li =
+  method private update_logic_info _type (*li*) =
+    let get_specialized_name = get_specialized_name _type in
+    let rec match_global_with_lvar_name name = function
+      | GAnnot (Dfun_or_pred ({ l_var_info={ lv_name } }, _), _) -> lv_name = name
+      | GAnnot (Daxiomatic (_, lst, loc), _) ->
+        List.exists (match_global_with_lvar_name name) (List.map (fun ga -> GAnnot (ga, loc)) lst)
+      | _ -> false
+    in
+    fun ({ l_var_info={ lv_name } } as li) ->
     try
-      let rec match_global = function
-        | GAnnot (Dfun_or_pred (li', _), _) ->
-          li'.l_var_info.lv_name = get_specialized_name _type li.l_var_info.lv_name
-        | GAnnot (Daxiomatic (_, lst, loc), _) ->
-          List.exists match_global (List.map (fun ga -> GAnnot (ga, loc)) lst)
-        | _ -> false
-      in
+      let match_global = match_global_with_lvar_name (get_specialized_name lv_name) in
       let rec find_li = function
         | GAnnot (Dfun_or_pred (li, _), _) -> li
         | GAnnot (Daxiomatic (_, lst, loc), _) ->
           find_li (List.find match_global (List.map (fun ga -> GAnnot (ga, loc)) lst))
         | _ -> assert false
       in
-      find_li (List.find match_global new_globals)
+      find_li (List.find match_global @@ new_globals @ introduced_globals)
     with Not_found ->
-      let li = specialize_logic_info _type li in
-      let g = Dfun_or_pred (li, Location.unknown) in
-      new_globals <- GAnnot (g, Location.unknown) :: new_globals;
-      Annotations.add_global Common.jessie_emitter g;
-      li
+      let match_global = match_global_with_lvar_name lv_name in
+      let axiomatic_opt =
+        Annotations.fold_global
+          (fun _ g acc -> if match_global @@ GAnnot (g, Location.unknown) then Some g else acc)
+          None
+      in
+      let specialize_logic_info = specialize_logic_info _type in
+      begin match axiomatic_opt with
+        | Some Daxiomatic (name, lst, loc) ->
+            let name = get_specialized_name name in
+            let lst =
+              List.map
+                (function
+                  | Dfun_or_pred (li, loc) ->
+                      let li = specialize_logic_info li in
+                      Dfun_or_pred (li, loc)
+                  | _ -> fatal "Can't specialize unknown logic info in axiomatic: %s" name)
+                lst
+            in
+            let g = Daxiomatic (name, lst, loc) in
+            new_globals <- GAnnot (g, CurrentLoc.get ()) :: new_globals;
+            Annotations.add_global Common.jessie_emitter g;
+            self#update_logic_info _type li
+        | Some _ -> fatal "Logic info (predicate, function, ...) specialization outside axiomatics is not supported: %s"
+                          lv_name
+        | None -> fatal "Can't find global logic info (predicate, function, ..): %s" lv_name
+      end
 
   method private find_specialized_function fname =
     try
@@ -724,7 +764,7 @@ object(self)
           (function
             | GVarDecl (_, { vname }, _) -> vname = fname
             | _ -> false)
-          new_globals
+          (new_globals @ introduced_globals)
       in
       match fdecl with
         | GVarDecl (_, f, _) -> Some f
@@ -732,9 +772,7 @@ object(self)
     with Not_found -> None
 
   method private specialize_function kf fname _type =
-    let spec, fvinfo, argvinfos, loc =
-      specialize_blockfun kf (self#update_logic_info) _type
-    in
+    let spec, fvinfo, argvinfos, loc = specialize_blockfun (self#update_logic_info) _type kf in
     let arg_vardecls = List.map (fun v -> v.vname, v.vtype, []) argvinfos in
     let f =
       makeGlobalVar
@@ -748,20 +786,6 @@ object(self)
     Annotations.register_funspec ~emitter:Common.jessie_emitter kernel_function;
     f
 
-  method private arg_types_match fname tl_opt t1 t2 t3 =
-    let irrelevant_attributes = ["restrict"; "volatile"] in
-    let strip = typeRemoveAttributes irrelevant_attributes in
-    let strip_const = typeRemoveAttributes ("const" :: irrelevant_attributes) in
-    match fname with
-      | "memcpy" ->
-          let tl_opt = Option_misc.map strip tl_opt in
-          let t1 = strip t1 and t2 = strip_const t2 and t3 = strip t3 in
-          Option_misc.map_default (fun tl ->
-            not (need_cast tl t1)) true tl_opt &&
-          not (need_cast t1 t2) &&
-          not (need_cast t3 theMachine.typeOfSizeOf)
-      | _ -> fatal "unexpected blockfun: %s" fname
-
   method vstmt_aux = function
     | { skind = Instr (Call (lval_opt, { enode = Lval (Var fvar, NoOffset) }, args , loc)) } as stmt
       when is_block_function fvar ->
@@ -770,7 +794,7 @@ object(self)
         let lval_type = Option_misc.map (fun lval -> pointed_type (typeOfLval lval)) lval_opt in
         let args_types = List.map (fun e -> pointed_type (typeOf e)) args in
         begin match lval_type, args_types with
-          | tl_opt, [t1; t2; t3] when self#arg_types_match fvar.vname tl_opt t1 t2 t3 ->
+          | tl_opt, [t1; t2; t3] when arg_types_match fvar.vname tl_opt t1 t2 t3 ->
               let _type = t2 in
               let f =
                 let fname = unique_name (fvar.vname ^ "_" ^ type_name _type) in
@@ -781,13 +805,14 @@ object(self)
               in
               stmt.skind <- Instr (Call (lval_opt, Cil.evar ~loc f, args, loc));
               SkipChildren
-          | _ -> fatal "Can't specialize memcpy applied to arguments of different types: %a"
+          | _ -> fatal "Can't specialize blockfun applied to arguments of different types: %a"
                        Printer.pp_stmt stmt
         end
     | _ -> DoChildren
 
   method vglob_aux _ =
     DoChildrenPost (fun globals ->
+      introduced_globals <- new_globals @ introduced_globals;
       let saved_globals = new_globals in
       new_globals <-[];
       saved_globals @ globals)
