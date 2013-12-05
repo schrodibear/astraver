@@ -649,18 +649,48 @@ object
     else ChangeTo (typeAddAttributes (typeAttrs t) _type)
 end
 
-class logic_info_substituting_visitor update_logic_info = object
-  method vlogic_info_use : logic_info -> logic_info visitAction = fun li ->
-    ChangeTo (update_logic_info li)
-end
-
-class logic_var_renaming_visitor _type =
+class virtual logic_info_substituting_visitor update_logic_info _type = 
+  let update_logic_info = update_logic_info _type in
   let get_specialized_name = get_specialized_name _type in
 object(self)
-  method vlogic_var_decl : 'a -> 'a visitAction = fun { lv_name=old_name; lv_type } -> 
-    let new_name = get_specialized_name old_name in
-    if old_name = new_name then DoChildren
-    else ChangeTo (Cil_const.make_logic_var_global new_name lv_type)
+  method virtual behavior : visitor_behavior
+
+  method private has_changed_li li =
+    (get_original_logic_info self#behavior li).l_var_info.lv_name <> li.l_var_info.lv_name
+
+  method vlogic_info_use : logic_info -> logic_info visitAction = fun ({ l_var_info = ({ lv_name } as lv) } as li) ->
+    if self#has_changed_li li || get_specialized_name lv_name = lv_name then DoChildren
+    else begin
+      let li' = update_logic_info li in
+      set_logic_info self#behavior li li';
+      set_orig_logic_info self#behavior li' li;
+      set_logic_var self#behavior lv li'.l_var_info;
+      set_orig_logic_var self#behavior li'.l_var_info lv;
+      ChangeTo li'
+    end
+end
+
+class virtual logic_var_renaming_visitor _type =
+  let get_specialized_name = get_specialized_name _type in
+object(self)
+  method virtual behavior : visitor_behavior
+
+  method private has_changed_lv lv = (get_original_logic_var self#behavior lv).lv_name <> lv.lv_name
+
+  method vlogic_var_decl : 'a -> 'a visitAction = fun ({ lv_name=old_name; lv_type; lv_origin } as lv) -> 
+    if self#has_changed_lv lv then DoChildren
+    else
+      let new_name = get_specialized_name old_name in
+      if old_name = new_name then DoChildren
+      else begin
+        match lv_origin with
+          | None ->
+              let lv' = Cil_const.make_logic_var_global new_name lv_type in
+              set_logic_var self#behavior lv lv';
+              set_orig_logic_var self#behavior lv' lv;
+              ChangeTo lv'
+          | Some vi -> fatal "Can't rename variable with origin: %a" Printer.pp_varinfo vi;
+      end
 
   method vlogic_var_use = self#vlogic_var_decl
 end
@@ -679,7 +709,7 @@ class specialize_blockfuns_visitor =
       inherit frama_c_copy (Project.current ())
       inherit spec_refreshing_vsitor
       inherit type_substituting_visitor _type
-      inherit logic_info_substituting_visitor (update_logic_info _type)
+      inherit logic_info_substituting_visitor update_logic_info _type
       inherit logic_var_renaming_visitor _type
     end in
     fun { fundec; spec } -> match fundec with
@@ -789,7 +819,8 @@ object(self)
   method vstmt_aux = function
     | { skind = Instr (Call (lval_opt, { enode = Lval (Var fvar, NoOffset) }, args , loc)) } as stmt
       when is_block_function fvar ->
-        let args = List.map stripCasts args in
+        let strip_void_ptr_casts e = if isVoidPtrType @@ typeOf e then stripCasts e else e in
+        let args = List.map strip_void_ptr_casts args in
         let pointed_type t = if isPointerType t then pointed_type t else t in
         let lval_type = Option_misc.map (fun lval -> pointed_type (typeOfLval lval)) lval_opt in
         let args_types = List.map (fun e -> pointed_type (typeOf e)) args in
@@ -797,10 +828,12 @@ object(self)
           | tl_opt, [t1; t2; t3] when arg_types_match fvar.vname tl_opt t1 t2 t3 ->
               let _type = t2 in
               let f =
-                let fname = unique_name (fvar.vname ^ "_" ^ type_name _type) in
+                let fname = fvar.vname ^ "_" ^ type_name _type in
                 match self#find_specialized_function fname with
                   | Some f -> f
                   | None ->
+                      if fname <> unique_name fname then
+                        fatal "Can't introduce specialized function due to name conflict: %s" fname;
                       self#specialize_function (Globals.Functions.find_by_name (fvar.vname ^ "__type")) fname _type
               in
               stmt.skind <- Instr (Call (lval_opt, Cil.evar ~loc f, args, loc));
