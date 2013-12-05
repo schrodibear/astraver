@@ -804,11 +804,9 @@ object(self)
   method private specialize_function kf fname _type =
     let spec, fvinfo, argvinfos, loc = specialize_blockfun (self#update_logic_info) _type kf in
     let arg_vardecls = List.map (fun v -> v.vname, v.vtype, []) argvinfos in
-    let f =
-      makeGlobalVar
-        fname
-        (TFun (TPtr (_type, []), Some arg_vardecls, false, []))
-    in
+    let f = makeGlobalVar fname fvinfo.vtype in
+    f.vstorage <- fvinfo.vstorage;
+    f.vattr <- fvinfo.vattr;
     unsafeSetFormalsDecl f argvinfos;
     new_globals <- GVarDecl(empty_funspec (), f, loc) :: new_globals;
     Globals.Functions.replace_by_declaration spec f loc;
