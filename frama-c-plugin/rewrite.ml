@@ -31,7 +31,7 @@
 
 (* Import from Cil *)
 open Cabs
-open Cil_types
+open! Cil_types
 open Cil
 open Cil_datatype
 open Ast_info
@@ -649,6 +649,109 @@ object
     else ChangeTo (typeAddAttributes (typeAttrs t) _type)
 end
 
+class composite_expanding_visitor =
+  let rec expand_equality ty t1 t2 =
+    let rec add_term_offset ty offset ({ term_node; term_loc=loc } as t) =
+      let open! Logic_const in
+      match term_node with
+        | TLval tlv ->
+            let offset = match offset with
+              | `Field f -> TField (f, TNoOffset)
+              | `Index i -> TIndex (tinteger ~loc i, TNoOffset)
+            in
+            { t with
+              term_node = TLval (addTermOffsetLval offset tlv);
+              term_type = Ctype ty }
+        | Tat (t, lab) -> tat ~loc (add_term_offset ty offset t, lab)
+        | TConst _ -> t
+        | _ -> assert false
+    in
+    match unrollType ty with
+      | TComp ({ cfields }, _, _) ->
+          let do_field ({ ftype } as f) =
+            let shift = add_term_offset ftype (`Field f) in
+            expand_equality ftype (shift t1) (shift t2)
+          in
+          List.flatten @@ List.map do_field cfields
+      | TArray (ty, _, _, _) ->
+          let do_elem i =
+            let shift = add_term_offset ty (`Index i) in
+            expand_equality ty (shift t1) (shift t2)
+          in
+          let rec do_elems acc i =
+            if i <= 0 then acc
+            else do_elems (do_elem (i - 1) @ acc) (i - 1)
+          in
+          assert (not @@ is_reference_type ty);
+          do_elems [] @@ Integer.to_int (direct_array_size ty)
+      | _ -> [Prel (Req, t1, t2)]
+  in
+  let identified_term_list_of_equality_list =
+    List.map 
+      (function
+        | Prel (Req, t, { term_node = TConst _} ) -> Logic_const.new_identified_term t
+        | _ -> assert false)
+  in
+  let predicate_of_equality_list loc lst =
+    Logic_const.(pands @@ List.map (unamed ~loc) lst).content
+  in
+  let is_term_to_expand { term_type } =
+    match term_type with
+      | Ctype t -> isStructOrUnionType t || isArrayType t
+      | _ -> false
+  in
+  let ctype = function
+    | Ctype t -> t
+    | _ -> assert false
+  in
+  let expand_identified_term_list lst =
+    let dummy_term = Logic_const.tinteger 0 in
+    let (to_expand, to_prepend) =
+      List.partition 
+        (fun { it_content } -> is_term_to_expand it_content)
+        lst
+    in
+    to_expand
+    |> List.map (fun { it_content = { term_type } as t } -> expand_equality (ctype term_type) t dummy_term)
+    |> List.flatten
+    |> identified_term_list_of_equality_list
+    |> fun expanded -> to_prepend @ expanded
+  in
+object
+  inherit frama_c_inplace
+
+  method vdeps = function
+    | FromAny -> DoChildren
+    | From lst -> ChangeTo (From (expand_identified_term_list lst))
+
+  method vassigns = function
+    | WritesAny -> DoChildren
+    | Writes lst ->
+        let lst =
+          List.map
+            (function
+              | { it_content = { term_type = ty1 } } as it1,
+                From [ { it_content = {term_type = ty2 } } as it2]
+                when Logic_utils.is_same_type ty1 ty2 ->
+                  (List.map2 (fun it1 it2 -> it1, From [it2])
+                    (expand_identified_term_list [it1])
+                    (expand_identified_term_list [it2]))
+              | it1, From [] -> List.map (fun it -> it, From []) @@ expand_identified_term_list [it1]
+              | f -> [f])
+            lst
+          |> List.flatten
+        in
+        ChangeTo (Writes lst)
+    | _ -> DoChildren
+
+  method vpredicate = function
+    | Prel (Req, ({ term_loc; term_type = ty1 } as t1), ({ term_type=ty2 } as t2))
+      when (is_term_to_expand t1 || is_term_to_expand t2) &&
+           Logic_utils.is_same_type ty1 ty2 ->
+        ChangeTo (predicate_of_equality_list term_loc @@ expand_equality (ctype ty1) t1 t2)
+    | _ -> DoChildren
+end
+
 class virtual logic_info_substituting_visitor update_logic_info _type = 
   let update_logic_info = update_logic_info _type in
   let get_specialized_name = get_specialized_name _type in
@@ -853,6 +956,8 @@ let specialize_blockfuns file =
   visitFramacFile (new specialize_blockfuns_visitor) file;
   (* We may have introduced new globals: clear the last_decl table. *)
   Ast.clear_last_decl () 
+
+let expand_composites file = visitFramacFile (new composite_expanding_visitor) file
 
 (*****************************************************************************)
 (* Rewrite comparison of pointers into difference of pointers.               *)
@@ -2351,6 +2456,9 @@ let rewrite file =
   if Jessie_options.SpecBlockFuncs.get () then begin
     Jessie_options.debug "Use specialized versions for block functions (e.g. memcpy)";
     specialize_blockfuns file;
+    if checking then check_types file;
+    Jessie_options.debug "Expand assigns and equality for composite types";
+    expand_composites file;
     if checking then check_types file
   end;
   (* Rewrite comparison of pointers into difference of pointers. *)
