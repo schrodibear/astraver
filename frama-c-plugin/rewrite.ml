@@ -40,7 +40,7 @@ open Extlib
 open Visitor
 
 (* Utility functions *)
-open Common
+open! Common
 
 (*****************************************************************************)
 (* Adds a default behavior for all functions                                 *)
@@ -629,7 +629,7 @@ let get_specialized_name (*_type*) (*original_name*) =
   fun _type -> Str.replace_first type_regexp (type_name _type)
 
 class spec_refreshing_vsitor = object
-  method vspec : 'a -> 'a visitAction = fun s ->
+  method vspec : 'a -> 'a visitAction = fun _ ->
     let refresh_spec s =
       match Logic_const.(refresh_code_annotation @@ new_code_annotation @@ AStmtSpec ([], s)).annot_content with
         | AStmtSpec (_, s) -> s
@@ -649,177 +649,97 @@ object
     else ChangeTo (typeAddAttributes (typeAttrs t) _type)
 end
 
-class composite_expanding_visitor =
-  let rec expand_equality ty t1 t2 =
-    let rec add_term_offset ty offset ({ term_node; term_loc=loc } as t) =
-      let open! Logic_const in
-      match term_node with
-        | TLval tlv ->
-            let offset = match offset with
-              | `Field f -> TField (f, TNoOffset)
-              | `Index i -> TIndex (tinteger ~loc i, TNoOffset)
-            in
-            { t with
-              term_node = TLval (addTermOffsetLval offset tlv);
-              term_type = Ctype ty }
-        | Tat (t, lab) -> tat ~loc (add_term_offset ty offset t, lab)
-        | TConst _ -> t
-        | _ -> assert false
-    in
-    match unrollType ty with
-      | TComp ({ cfields }, _, _) ->
-          let do_field ({ ftype } as f) =
-            let shift = add_term_offset ftype (`Field f) in
-            expand_equality ftype (shift t1) (shift t2)
-          in
-          List.flatten @@ List.map do_field cfields
-      | TArray (ty, _, _, _) ->
-          let do_elem i =
-            let shift = add_term_offset ty (`Index i) in
-            expand_equality ty (shift t1) (shift t2)
-          in
-          let rec do_elems acc i =
-            if i <= 0 then acc
-            else do_elems (do_elem (i - 1) @ acc) (i - 1)
-          in
-          assert (not @@ is_reference_type ty);
-          do_elems [] @@ Integer.to_int (direct_array_size ty)
-      | _ -> [Prel (Req, t1, t2)]
-  in
-  let identified_term_list_of_equality_list =
-    List.map 
-      (function
-        | Prel (Req, t, { term_node = TConst _} ) -> Logic_const.new_identified_term t
-        | _ -> assert false)
-  in
-  let predicate_of_equality_list loc lst =
-    Logic_const.(pands @@ List.map (unamed ~loc) lst).content
-  in
-  let is_term_to_expand { term_type } =
-    match term_type with
-      | Ctype t -> isStructOrUnionType t || isArrayType t
-      | _ -> false
-  in
-  let ctype = function
-    | Ctype t -> t
-    | _ -> assert false
-  in
-  let expand_identified_term_list lst =
-    let dummy_term = Logic_const.tinteger 0 in
-    let (to_expand, to_prepend) =
-      List.partition 
-        (fun { it_content } -> is_term_to_expand it_content)
-        lst
-    in
-    to_expand
-    |> List.map (fun { it_content = { term_type } as t } -> expand_equality (ctype term_type) t dummy_term)
-    |> List.flatten
-    |> identified_term_list_of_equality_list
-    |> fun expanded -> to_prepend @ expanded
-  in
-object
-  inherit frama_c_inplace
-
-  method vdeps = function
-    | FromAny -> DoChildren
-    | From lst -> ChangeTo (From (expand_identified_term_list lst))
-
-  method vassigns = function
-    | WritesAny -> DoChildren
-    | Writes lst ->
-        let lst =
-          List.map
-            (function
-              | { it_content = { term_type = ty1 } } as it1,
-                From [ { it_content = {term_type = ty2 } } as it2]
-                when Logic_utils.is_same_type ty1 ty2 ->
-                  (List.map2 (fun it1 it2 -> it1, From [it2])
-                    (expand_identified_term_list [it1])
-                    (expand_identified_term_list [it2]))
-              | it1, From [] -> List.map (fun it -> it, From []) @@ expand_identified_term_list [it1]
-              | f -> [f])
-            lst
-          |> List.flatten
-        in
-        ChangeTo (Writes lst)
-    | _ -> DoChildren
-
-  method vpredicate = function
-    | Prel (Req, ({ term_loc; term_type = ty1 } as t1), ({ term_type=ty2 } as t2))
-      when (is_term_to_expand t1 || is_term_to_expand t2) &&
-           Logic_utils.is_same_type ty1 ty2 ->
-        ChangeTo (predicate_of_equality_list term_loc @@ expand_equality (ctype ty1) t1 t2)
-    | _ -> DoChildren
-end
-
-class virtual logic_info_substituting_visitor update_logic_info _type = 
-  let update_logic_info = update_logic_info _type in
+class virtual logic_var_visitor _type =
   let get_specialized_name = get_specialized_name _type in
 object(self)
   method virtual behavior : visitor_behavior
 
-  method private has_changed_li li =
-    (get_original_logic_info self#behavior li).l_var_info.lv_name <> li.l_var_info.lv_name
+  method private has_changed lv = (get_original_logic_var self#behavior lv) != lv
 
-  method vlogic_info_use : logic_info -> logic_info visitAction = fun ({ l_var_info = ({ lv_name } as lv) } as li) ->
-    if self#has_changed_li li || get_specialized_name lv_name = lv_name then DoChildren
-    else begin
-      let li' = update_logic_info li in
-      set_logic_info self#behavior li li';
-      set_orig_logic_info self#behavior li' li;
-      set_logic_var self#behavior lv li'.l_var_info;
-      set_orig_logic_var self#behavior li'.l_var_info lv;
-      ChangeTo li'
-    end
-end
+  method virtual private vlogic_var_copying : logic_var -> logic_var visitAction
 
-class virtual logic_var_renaming_visitor _type =
-  let get_specialized_name = get_specialized_name _type in
-object(self)
-  method virtual behavior : visitor_behavior
+  method virtual private vlogic_var_renaming : logic_var -> logic_var visitAction
 
-  method private has_changed_lv lv = (get_original_logic_var self#behavior lv).lv_name <> lv.lv_name
-
-  method vlogic_var_decl : 'a -> 'a visitAction = fun ({ lv_name=old_name; lv_type; lv_origin } as lv) -> 
-    if self#has_changed_lv lv then DoChildren
+  method vlogic_var_decl : 'a -> 'a visitAction = fun ({ lv_name; lv_origin } as lv) -> 
+    if self#has_changed lv then
+      DoChildren
+    else if lv_name = get_specialized_name lv_name then
+      self#vlogic_var_copying lv
     else
-      let new_name = get_specialized_name old_name in
-      if old_name = new_name then DoChildren
-      else begin
-        match lv_origin with
-          | None ->
-              let lv' = Cil_const.make_logic_var_global new_name lv_type in
-              set_logic_var self#behavior lv lv';
-              set_orig_logic_var self#behavior lv' lv;
-              ChangeTo lv'
-          | Some vi -> fatal "Can't rename variable with origin: %a" Printer.pp_varinfo vi;
-      end
+      match lv_origin with
+        | None -> self#vlogic_var_renaming lv
+        | Some vi -> fatal "Can't handle logic variable with origin: %a" Printer.pp_varinfo vi
 
   method vlogic_var_use = self#vlogic_var_decl
+end
+
+class virtual logic_var_specializing_visitor update_logic_info _type =
+  let update_logic_info = update_logic_info _type in
+object(self)
+  inherit logic_var_visitor _type
+
+  method private vlogic_var_copying ({ lv_name; lv_type } as lv) =
+    let lv' = Cil_const.make_logic_var_global lv_name lv_type in
+    set_logic_var self#behavior lv lv';
+    set_orig_logic_var self#behavior lv' lv;
+    ChangeTo lv'
+
+  method private vlogic_var_renaming ({ lv_name } as lv) =
+    match Logic_env.find_all_logic_functions lv_name with
+      | [ li ] ->
+          let { l_var_info = lv' } as li' = update_logic_info li in
+          set_logic_info self#behavior li li';
+          set_orig_logic_info self#behavior li' li;
+          set_logic_var self#behavior lv lv';
+          set_orig_logic_var self#behavior lv' lv;
+          ChangeTo lv'
+     | [] -> fatal "Can't find logic_info for logic variable: %s" lv_name
+     | _ -> fatal "Ambiguous logic_info for logic variable: %s" lv_name
+end
+
+class virtual logic_var_renaming_visitor  _type =
+  let get_specialized_name = get_specialized_name _type in
+object(self)
+  inherit logic_var_visitor _type
+
+  method private vlogic_var_copying _ = DoChildren
+
+  method private vlogic_var_renaming ({ lv_name; lv_type } as lv) =
+    let lv_name' = get_specialized_name lv_name in
+    let lv' = Cil_const.make_logic_var_global lv_name' lv_type in
+    set_logic_var self#behavior lv lv';
+    set_orig_logic_var self#behavior lv' lv;
+    ChangeTo lv'
 end
 
 class specialize_blockfuns_visitor =
   let specialize_logic_info _type (*logic_info*) =
     let visitor = object
-      inherit frama_c_copy (Project.current ())
+      inherit frama_c_inplace
       inherit type_substituting_visitor _type
       inherit logic_var_renaming_visitor _type
     end in
-    fun logic_info -> visitFramacLogicInfo visitor logic_info
+    fun logic_info ->
+      let logic_info' = visitFramacLogicInfo (new frama_c_copy @@ Project.current ()) logic_info in
+      visitFramacLogicInfo visitor logic_info'
   in
   let specialize_blockfun update_logic_info _type (*kernel_function*) =
     let visitor = object
       inherit frama_c_copy (Project.current ())
       inherit spec_refreshing_vsitor
       inherit type_substituting_visitor _type
-      inherit logic_info_substituting_visitor update_logic_info _type
-      inherit logic_var_renaming_visitor _type
+      inherit logic_var_specializing_visitor update_logic_info _type
     end in
     fun { fundec; spec } -> match fundec with
       | Declaration (spec, fvinfo, Some argvinfos, loc) ->
         let spec = visitFramacFunspec visitor spec in
         let fvinfo = visitFramacVarDecl visitor fvinfo in
-        let argvinfos = List.map (visitFramacVarDecl visitor) argvinfos in
+        let argvinfos = ListLabels.map argvinfos ~f:(fun vi ->
+          let vi = visitFramacVarDecl visitor vi in
+          vi.vlogic_var_assoc <- Option_misc.map (get_logic_var visitor#behavior) vi.vlogic_var_assoc;
+          Option_misc.iter (fun lv -> lv.lv_origin <- Some vi) vi.vlogic_var_assoc;
+          vi)
+        in
         (spec, fvinfo, argvinfos, loc)
       | _ -> fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
   in
@@ -906,7 +826,6 @@ object(self)
 
   method private specialize_function kf fname _type =
     let spec, fvinfo, argvinfos, loc = specialize_blockfun (self#update_logic_info) _type kf in
-    let arg_vardecls = List.map (fun v -> v.vname, v.vtype, []) argvinfos in
     let f = makeGlobalVar fname fvinfo.vtype in
     f.vstorage <- fvinfo.vstorage;
     f.vattr <- fvinfo.vattr;
@@ -957,7 +876,117 @@ let specialize_blockfuns file =
   (* We may have introduced new globals: clear the last_decl table. *)
   Ast.clear_last_decl () 
 
-let expand_composites file = visitFramacFile (new composite_expanding_visitor) file
+(*****************************************************************************)
+(* Extending `assigns' clauses and equalities for composite types.           *)
+(*****************************************************************************)
+
+class composite_expanding_visitor =
+  let rec expand_equality ty t1 t2 =
+    let rec add_term_offset ty offset ({ term_node; term_loc=loc } as t) =
+      let open! Logic_const in
+      match term_node with
+        | TLval tlv ->
+            let offset = match offset with
+              | `Field f -> TField (f, TNoOffset)
+              | `Index i -> TIndex (tinteger ~loc i, TNoOffset)
+            in
+            { t with
+              term_node = TLval (addTermOffsetLval offset tlv);
+              term_type = Ctype ty }
+        | Tat (t, lab) -> tat ~loc (add_term_offset ty offset t, lab)
+        | TConst _ -> t
+        | _ -> assert false
+    in
+    match unrollType ty with
+      | TComp ({ cfields }, _, _) ->
+          let do_field ({ ftype } as f) =
+            let shift = add_term_offset ftype (`Field f) in
+            expand_equality ftype (shift t1) (shift t2)
+          in
+          List.flatten @@ List.map do_field cfields
+      | TArray (telem, _, _, _) as ty ->
+          let do_elem i =
+            let shift = add_term_offset telem (`Index i) in
+            expand_equality telem (shift t1) (shift t2)
+          in
+          let rec do_elems acc i =
+            if i <= 0 then acc
+            else do_elems (do_elem (i - 1) @ acc) (i - 1)
+          in
+          assert (not @@ is_reference_type ty);
+          do_elems [] @@ Integer.to_int (direct_array_size ty)
+      | _ -> [Prel (Req, t1, t2)]
+  in
+  let identified_term_list_of_equality_list =
+    List.map 
+      (function
+        | Prel (Req, t, { term_node = TConst _} ) -> Logic_const.new_identified_term t
+        | _ -> assert false)
+  in
+  let predicate_of_equality_list loc lst =
+    Logic_const.(pands @@ List.map (unamed ~loc) lst).content
+  in
+  let ctype ?(force=true) = function
+    | Ctype t -> t
+    | Ltype ({ lt_name = "set" }, [Ctype t]) -> t
+    | _ -> assert (not force); TVoid []
+  in
+  let is_term_to_expand { term_type } = 
+    let t = ctype ~force:false term_type in
+    isStructOrUnionType t || isArrayType t
+  in
+  let expand_identified_term_list lst =
+    let dummy_term = Logic_const.tinteger 0 in
+    let (to_expand, to_prepend) =
+      List.partition 
+        (fun { it_content } -> is_term_to_expand it_content)
+        lst
+    in
+    to_expand
+    |> List.map (fun { it_content = { term_type } as t } -> expand_equality (ctype term_type) t dummy_term)
+    |> List.flatten
+    |> identified_term_list_of_equality_list
+    |> fun expanded -> to_prepend @ expanded
+  in
+object
+  method vdeps = function
+    | FromAny -> DoChildren
+    | From lst -> ChangeTo (From (expand_identified_term_list lst))
+
+  method vassigns = function
+    | WritesAny -> DoChildren
+    | Writes lst ->
+        let lst =
+          List.map
+            (function
+              | { it_content = { term_type = ty1 } } as it1,
+                From [ { it_content = {term_type = ty2 } } as it2]
+                when Logic_utils.is_same_type ty1 ty2 ->
+                  (List.map2 (fun it1 it2 -> it1, From [it2])
+                    (expand_identified_term_list [it1])
+                    (expand_identified_term_list [it2]))
+              | it1, From [] -> List.map (fun it -> it, From []) @@ expand_identified_term_list [it1]
+              | f -> [f])
+            lst
+          |> List.flatten
+        in
+        ChangeTo (Writes lst)
+
+  method vpredicate = function
+    | Prel (Req, ({ term_loc; term_type = ty1 } as t1), ({ term_type=ty2 } as t2))
+      when (is_term_to_expand t1 || is_term_to_expand t2) &&
+           Logic_utils.is_same_type ty1 ty2 ->
+        ChangeTo (predicate_of_equality_list term_loc @@ expand_equality (ctype ty1) t1 t2)
+    | _ -> DoChildren
+end
+
+let expand_composites file =
+  visitFramacFile
+    (object
+      inherit frama_c_inplace
+      inherit composite_expanding_visitor
+     end)
+    file
 
 (*****************************************************************************)
 (* Rewrite comparison of pointers into difference of pointers.               *)
@@ -2419,6 +2448,16 @@ let from_comprehension_to_range behavior file =
 
 let rewrite file =
   if checking then check_types file;
+  (* Specialize block functions e.g. memcpy. *)
+  if Jessie_options.SpecBlockFuncs.get () then begin
+    Jessie_options.debug "Use specialized versions for block functions (e.g. memcpy)";
+    specialize_blockfuns file;
+    if checking then check_types file;
+  end;
+  (* Expand assigns clauses and equalities for composite types. *)
+  Jessie_options.debug "Expand assigns clauses and equality for composite types";
+  expand_composites file;
+  if checking then check_types file;
   (* adds a behavior named [name_of_default_behavior] to all functions if
      it does not already exist.
    *)
@@ -2452,15 +2491,6 @@ let rewrite file =
   Jessie_options.debug "Use specialized versions of Frama_C_memset";
   specialize_memset file;
   if checking then check_types file;
-  (* Specialize block functions e.g. memcpy. *)
-  if Jessie_options.SpecBlockFuncs.get () then begin
-    Jessie_options.debug "Use specialized versions for block functions (e.g. memcpy)";
-    specialize_blockfuns file;
-    if checking then check_types file;
-    Jessie_options.debug "Expand assigns and equality for composite types";
-    expand_composites file;
-    if checking then check_types file
-  end;
   (* Rewrite comparison of pointers into difference of pointers. *)
   if Jessie_options.InferAnnot.get () <> "" then
     begin

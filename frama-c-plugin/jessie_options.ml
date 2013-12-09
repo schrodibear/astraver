@@ -182,7 +182,7 @@ module HintLevel =
 module SpecBlockFuncs =
   False
     (struct
-      let option_name = "-jessie-spec-block-funs"
+      let option_name = "-jessie-specialize"
       let help = "generate specialized versions for block-level functions e.g. memcpy"
      end)
 
