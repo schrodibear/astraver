@@ -656,9 +656,9 @@ object(self)
 
   method private has_changed lv = (get_original_logic_var self#behavior lv) != lv
 
-  method virtual private vlogic_var_copying : logic_var -> logic_var visitAction
+  method private virtual vlogic_var_copying : logic_var -> logic_var visitAction
 
-  method virtual private vlogic_var_renaming : logic_var -> logic_var visitAction
+  method private virtual vlogic_var_renaming : logic_var -> logic_var visitAction
 
   method vlogic_var_decl : 'a -> 'a visitAction = fun ({ lv_name; lv_origin } as lv) -> 
     if self#has_changed lv then
@@ -697,7 +697,7 @@ object(self)
      | _ -> fatal "Ambiguous logic_info for logic variable: %s" lv_name
 end
 
-class virtual logic_var_renaming_visitor  _type =
+class virtual logic_var_renaming_visitor _type =
   let get_specialized_name = get_specialized_name _type in
 object(self)
   inherit logic_var_visitor _type
@@ -768,7 +768,7 @@ object(self)
     let rec match_global_with_lvar_name name = function
       | GAnnot (Dfun_or_pred ({ l_var_info={ lv_name } }, _), _) -> lv_name = name
       | GAnnot (Daxiomatic (_, lst, loc), _) ->
-        List.exists (match_global_with_lvar_name name) (List.map (fun ga -> GAnnot (ga, loc)) lst)
+          List.exists (match_global_with_lvar_name name) (List.map (fun ga -> GAnnot (ga, loc)) lst)
       | _ -> false
     in
     fun ({ l_var_info={ lv_name } } as li) ->
@@ -777,7 +777,7 @@ object(self)
       let rec find_li = function
         | GAnnot (Dfun_or_pred (li, _), _) -> li
         | GAnnot (Daxiomatic (_, lst, loc), _) ->
-          find_li (List.find match_global (List.map (fun ga -> GAnnot (ga, loc)) lst))
+            find_li (List.find match_global (List.map (fun ga -> GAnnot (ga, loc)) lst))
         | _ -> assert false
       in
       find_li (List.find match_global @@ new_globals @ introduced_globals)
@@ -792,14 +792,11 @@ object(self)
       begin match axiomatic_opt with
         | Some Daxiomatic (name, lst, loc) ->
             let name = get_specialized_name name in
-            let lst =
-              List.map
-                (function
-                  | Dfun_or_pred (li, loc) ->
-                      let li = specialize_logic_info li in
-                      Dfun_or_pred (li, loc)
-                  | _ -> fatal "Can't specialize unknown logic info in axiomatic: %s" name)
-                lst
+            let lst = ListLabels.map lst ~f:(function
+              | Dfun_or_pred (li, loc) ->
+                  let li = specialize_logic_info li in
+                  Dfun_or_pred (li, loc)
+              | _ -> fatal "Can't specialize unknown logic info in axiomatic: %s" name)
             in
             let g = Daxiomatic (name, lst, loc) in
             new_globals <- GAnnot (g, CurrentLoc.get ()) :: new_globals;
@@ -812,12 +809,9 @@ object(self)
 
   method private find_specialized_function fname =
     try
-      let fdecl =
-        List.find
-          (function
-            | GVarDecl (_, { vname }, _) -> vname = fname
-            | _ -> false)
-          (new_globals @ introduced_globals)
+      let fdecl = ListLabels.find (new_globals @ introduced_globals) ~f:(function
+        | GVarDecl (_, { vname }, _) -> vname = fname
+        | _ -> false)
       in
       match fdecl with
         | GVarDecl (_, f, _) -> Some f
@@ -917,11 +911,9 @@ class composite_expanding_visitor =
           do_elems [] @@ Integer.to_int (direct_array_size ty)
       | _ -> [Prel (Req, t1, t2)]
   in
-  let identified_term_list_of_equality_list =
-    List.map 
-      (function
-        | Prel (Req, t, { term_node = TConst _} ) -> Logic_const.new_identified_term t
-        | _ -> assert false)
+  let identified_term_list_of_equality_list = List.map (function
+    | Prel (Req, t, { term_node = TConst _}) -> Logic_const.new_identified_term t
+    | _ -> assert false)
   in
   let predicate_of_equality_list loc lst =
     Logic_const.(pands @@ List.map (unamed ~loc) lst).content
@@ -937,11 +929,7 @@ class composite_expanding_visitor =
   in
   let expand_identified_term_list lst =
     let dummy_term = Logic_const.tinteger 0 in
-    let (to_expand, to_prepend) =
-      List.partition 
-        (fun { it_content } -> is_term_to_expand it_content)
-        lst
-    in
+    let (to_expand, to_prepend) = ListLabels.partition lst ~f:(fun { it_content } -> is_term_to_expand it_content) in
     to_expand
     |> List.map (fun { it_content = { term_type } as t } -> expand_equality (ctype term_type) t dummy_term)
     |> List.flatten
@@ -956,19 +944,16 @@ object
   method vassigns = function
     | WritesAny -> DoChildren
     | Writes lst ->
-        let lst =
-          List.map
-            (function
-              | { it_content = { term_type = ty1 } } as it1,
-                From [ { it_content = {term_type = ty2 } } as it2]
-                when Logic_utils.is_same_type ty1 ty2 ->
-                  (List.map2 (fun it1 it2 -> it1, From [it2])
-                    (expand_identified_term_list [it1])
-                    (expand_identified_term_list [it2]))
-              | it1, From [] -> List.map (fun it -> it, From []) @@ expand_identified_term_list [it1]
-              | f -> [f])
-            lst
-          |> List.flatten
+        let lst = List.flatten @@ ListLabels.map lst ~f:(function
+          | { it_content = { term_type = ty1 } } as it1,
+            From [ { it_content = {term_type = ty2 } } as it2]
+            when Logic_utils.is_same_type ty1 ty2 ->
+              List.map2
+                (fun it1 it2 -> it1, From [it2])
+                (expand_identified_term_list [it1])
+                (expand_identified_term_list [it2])
+          | it1, From [] -> List.map (fun it -> it, From []) @@ expand_identified_term_list [it1]
+          | f -> [f])
         in
         ChangeTo (Writes lst)
 
@@ -980,13 +965,23 @@ object
     | _ -> DoChildren
 end
 
-let expand_composites file =
+let expand_composites =
   visitFramacFile
     (object
       inherit frama_c_inplace
       inherit composite_expanding_visitor
      end)
-    file
+
+(*****************************************************************************)
+(* Fold constants to avoid incorrect sizeofs.                                *)
+(*****************************************************************************)
+
+let fold_constants_in_terms =
+  visitFramacFile
+    (object
+      inherit frama_c_inplace
+      method vterm_node t = DoChildrenPost constFoldTermNodeAtTop
+     end)
 
 (*****************************************************************************)
 (* Rewrite comparison of pointers into difference of pointers.               *)
@@ -2457,6 +2452,10 @@ let rewrite file =
   (* Expand assigns clauses and equalities for composite types. *)
   Jessie_options.debug "Expand assigns clauses and equality for composite types";
   expand_composites file;
+  if checking then check_types file;
+  (* Fold constants to avoid incorrect sizeofs. *)
+  Jessie_options.debug "Fold constants in terms to avoid incorrect sizeofs";
+  fold_constants_in_terms file;
   if checking then check_types file;
   (* adds a behavior named [name_of_default_behavior] to all functions if
      it does not already exist.
