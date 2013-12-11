@@ -813,6 +813,18 @@ and terms t =
                 (value_of_integral_logic_const c) Integer.zero ->
               [JCPEconst JCCnull]
           | _ ->
+              (* Only hierarchical type-casts are available in Jessie. It   *)
+              (* should have been encoded as the use of pointer types       *)
+              (* on structure type.                                         *)
+              let dstty = unrollType @@ pointed_type ptrty in
+              let srcty = unrollType @@ force_app_term_type pointed_type t.term_type in
+              begin match srcty, dstty with 
+                | TComp _, TComp _
+                  when Retype.(subtype srcty dstty || subtype dstty srcty) ->
+                    [JCPEcast (term t, ctype ptrty)]
+                | _ -> unsupported "Casting from type %a to type %a not allowed in logic"
+                                   Printer.pp_logic_type t.term_type Printer.pp_typ ptrty
+              end
 (*               if isLogicIntegralType t.term_type then *)
 (*                 let addr = *)
 (*                   mkexpr (JCPEaddress(Addr_absolute,term t)) t.term_loc *)
@@ -842,17 +854,6 @@ and terms t =
 (*                   in *)
 (*                   JCPEapp(ptr_to_ptr,[],[term t]) *)
 (*               else *)
-              (* Only hierarchical types are available in Jessie. It
-               * should have been encoded as the use of pointer types
-               * on structure type.
-               *)
-
-(*               match unrollType ty with *)
-(*                 | TComp(compinfo,_) -> *)
-(*                     JCPEcast(term t,compinfo.cname) *)
-(*                 | _ -> assert false *)
-              unsupported "Casting from type %a to type %a not allowed in logic"
-                Printer.pp_logic_type t.term_type Printer.pp_typ ptrty
         end
 
     | TCastE(ty,t) ->
