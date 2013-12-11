@@ -980,7 +980,7 @@ let fold_constants_in_terms =
   visitFramacFile
     (object
       inherit frama_c_inplace
-      method vterm_node t = DoChildrenPost constFoldTermNodeAtTop
+      method vterm_node _ = DoChildrenPost constFoldTermNodeAtTop
      end)
 
 (*****************************************************************************)
@@ -2444,11 +2444,12 @@ let from_comprehension_to_range behavior file =
 let rewrite file =
   if checking then check_types file;
   (* Specialize block functions e.g. memcpy. *)
-  if Jessie_options.SpecBlockFuncs.get () then begin
-    Jessie_options.debug "Use specialized versions for block functions (e.g. memcpy)";
-    specialize_blockfuns file;
-    if checking then check_types file;
-  end;
+  if Jessie_options.SpecBlockFuncs.get () then
+    begin
+      Jessie_options.debug "Use specialized versions for block functions (e.g. memcpy)";
+      specialize_blockfuns file;
+      if checking then check_types file;
+    end;
   (* Expand assigns clauses and equalities for composite types. *)
   Jessie_options.debug "Expand assigns clauses and equality for composite types";
   expand_composites file;
@@ -2497,9 +2498,12 @@ let rewrite file =
       rewrite_pointer_compare file;
       if checking then check_types file
     end;
-  (* Rewrite type void* and (un)signed char* into char*. *)
-  Jessie_options.debug "Rewrite type void* and (un)signed char* into char*";
-  rewrite_void_pointer file;
+  if not (Jessie_options.VoidSupertype.get ()) then
+    begin
+      (* Rewrite type void* and (un)signed char* into char*. *)
+      Jessie_options.debug "Rewrite type void* and (un)signed char* into char*";
+      rewrite_void_pointer file;
+    end;
   if checking then check_types file;
   Jessie_options.debug "Rewrite Pre as Old in funspec";
   rewrite_pre_old file;

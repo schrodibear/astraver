@@ -186,6 +186,12 @@ module SpecBlockFuncs =
       let help = "generate specialized versions for block-level functions e.g. memcpy"
      end)
 
+module VoidSupertype =
+  False
+    (struct
+      let option_name = "-jessie-void-supertype"
+      let help = "don't rewrite void * into char *, so that void * becomes a supertype for all types"
+     end)
 (*
 Local Variables:
 compile-command: "make"

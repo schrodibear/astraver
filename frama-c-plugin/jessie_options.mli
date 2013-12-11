@@ -45,6 +45,7 @@ module Atp: Plugin.String
 module CpuLimit: Plugin.Int
 module HintLevel: Plugin.Int
 module SpecBlockFuncs : Plugin.Bool
+module VoidSupertype : Plugin.Bool
 
 (*
 Local Variables:
