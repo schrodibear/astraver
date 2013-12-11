@@ -464,6 +464,106 @@ function bw_xor int int : int
 
 function bw_or int int : int
 
+(* axioms for arithmetic overflow in bitwise operations *)
+
+function max_char : int = 127
+function max_short: int  = 32767
+function max_int : int = 2147483647
+function max_long : int = 9223372036854775807
+
+function min_char : int = -128
+function min_short : int = -32768
+function min_int : int = -2147483648
+function min_long : int = -9223372036854775808
+
+axiom bw_compl_nooverflow_signed:
+  forall a : int [bw_compl a].
+      (min_char <= a /\ a <= max_char ->
+        min_char <= bw_compl a /\ bw_compl a <= max_char) /\
+      (min_short <= a /\ a <= max_short ->
+        min_short <= bw_compl a /\ bw_compl a <= max_short) /\
+      (min_int <= a /\ a <= max_int ->
+        min_int <= bw_compl a /\ bw_compl a <= max_int) /\
+      (min_long <= a /\ a <= max_long ->
+        min_long <= bw_compl a /\ bw_compl a <= max_long)
+
+axiom bw_or_nooverflow_signed:
+  forall a : int.
+    forall b : int [bw_or a b].
+      (min_char <= a /\ a <= max_char /\ min_char <= b /\ b <= max_char ->
+        min_char <= bw_or a b /\ bw_or a b <= max_char) /\
+      (min_short <= a /\ a <= max_short /\ min_short <= b /\ b <= max_short ->
+        min_short <= bw_or a b /\ bw_or a b <= max_short) /\
+      (min_int <= a /\ a <= max_int /\ min_int <= b /\ b <= max_int ->
+        min_int <= bw_or a b /\ bw_or a b <= max_int) /\
+      (min_long <= a /\ a <= max_long /\ min_long <= b /\ b <= max_long ->
+        min_long <= bw_or a b /\ bw_or a b <= max_long)
+
+axiom bw_and_nooverflow_signed:
+  forall a : int.
+    forall b : int [bw_and a b].
+      (min_char <= a /\ a <= max_char /\ min_char <= b /\ b <= max_char ->
+        min_char <= bw_and a b /\ bw_and a b <= max_char) /\
+      (min_short <= a /\ a <= max_short /\ min_short <= b /\ b <= max_short ->
+        min_short <= bw_and a b /\ bw_and a b <= max_short) /\
+      (min_int <= a /\ a <= max_int /\ min_int <= b /\ b <= max_int ->
+        min_int <= bw_and a b /\ bw_and a b <= max_int) /\
+      (min_long <= a /\ a <= max_long /\ min_long <= b /\ b <= max_long ->
+        min_long <= bw_and a b /\ bw_and a b <= max_long)
+
+axiom bw_xor_nooverflow_signed:
+  forall a : int.
+    forall b : int [bw_xor a b].
+      (min_char <= a /\ a <= max_char /\ min_char <= b /\ b <= max_char ->
+        min_char <= bw_xor a b /\ bw_xor a b <= max_char) /\
+      (min_short <= a /\ a <= max_short /\ min_short <= b /\ b <= max_short ->
+        min_short <= bw_xor a b /\ bw_xor a b <= max_short) /\
+      (min_int <= a /\ a <= max_int /\ min_int <= b /\ b <= max_int ->
+        min_int <= bw_xor a b /\ bw_xor a b <= max_int) /\
+      (min_long <= a /\ a <= max_long /\ min_long <= b /\ b <= max_long ->
+        min_long <= bw_xor a b /\ bw_xor a b <= max_long)
+
+function max_uchar : int = 255
+function max_ushort : int = 65535
+function max_uint : int = 4294967295
+function max_ulong : int = 18446744073709551615
+
+axiom bw_or_nooverflow_unsigned:
+  forall a : int.
+    forall b : int [bw_or a b].
+      (0 <= a /\ a <= max_uchar /\ 0 <= b /\ b <= max_uchar ->
+        0 <= bw_or a b /\ bw_or a b <= max_uchar) /\
+      (0 <= a /\ a <= max_ushort /\ 0 <= b /\ b <= max_ushort ->
+        0 <= bw_or a b /\ bw_or a b <= max_ushort) /\
+      (0 <= a /\ a <= max_uint /\ 0 <= b /\ b <= max_uint ->
+        0 <= bw_or a b /\ bw_or a b <= max_uint) /\
+      (0 <= a /\ a <= max_ulong /\ 0 <= b /\ b <= max_ulong ->
+        0 <= bw_or a b /\ bw_or a b <= max_ulong)
+
+axiom bw_and_nooverflow_unsigned:
+  forall a : int.
+    forall b : int [bw_and a b].
+      (0 <= a /\ a <= max_uchar /\ 0 <= b /\ b <= max_uchar ->
+        0 <= bw_and a b /\ bw_and a b <= max_uchar) /\
+      (0 <= a /\ a <= max_ushort /\ 0 <= b /\ b <= max_ushort ->
+        0 <= bw_and a b /\ bw_and a b <= max_ushort) /\
+      (0 <= a /\ a <= max_uint /\ 0 <= b /\ b <= max_uint ->
+        0 <= bw_and a b /\ bw_and a b <= max_uint) /\
+      (0 <= a /\ a <= max_ulong /\ 0 <= b /\ b <= max_ulong ->
+        0 <= bw_and a b /\ bw_and a b <= max_ulong)
+
+axiom bw_xor_nooverflow_unsigned:
+  forall a : int.
+    forall b : int [bw_xor a b].
+      (0 <= a /\ a <= max_uchar /\ 0 <= b /\ b <= max_uchar ->
+        0 <= bw_xor a b /\ bw_xor a b <= max_uchar) /\
+      (0 <= a /\ a <= max_ushort /\ 0 <= b /\ b <= max_ushort ->
+        0 <= bw_xor a b /\ bw_xor a b <= max_ushort) /\
+      (0 <= a /\ a <= max_uint /\ 0 <= b /\ b <= max_uint ->
+        0 <= bw_xor a b /\ bw_xor a b <= max_uint) /\
+      (0 <= a /\ a <= max_ulong /\ 0 <= b /\ b <= max_ulong ->
+        0 <= bw_xor a b /\ bw_xor a b <= max_ulong)
+
 (* logical left shift *)
 
 function lsl int int : int
