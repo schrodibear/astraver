@@ -628,6 +628,10 @@ let get_specialized_name (*_type*) (*original_name*) =
   let type_regexp = Str.regexp_string "_type" in
   fun _type -> Str.replace_first type_regexp (type_name _type)
 
+let is_pattern_type = function
+  | TNamed ({ torig_name = "_type"; ttype = TInt (_, []) }, _) -> true
+  | _ -> false
+
 class spec_refreshing_vsitor = object
   method vspec : 'a -> 'a visitAction = fun _ ->
     let refresh_spec s =
@@ -639,10 +643,6 @@ class spec_refreshing_vsitor = object
 end
 
 class type_substituting_visitor _type = 
-  let is_pattern_type = function
-    | TNamed ({ torig_name = "_type"; ttype = TInt (_, []) }, _) -> true
-    | _ -> false
-  in
 object
   method vtype : 'a -> 'a visitAction = fun t ->
     if not (is_pattern_type t) then DoChildren
@@ -743,26 +743,45 @@ class specialize_blockfuns_visitor =
         (spec, fvinfo, argvinfos, loc)
       | _ -> fatal "Can't specialize user-defined block function: %a" Printer.pp_funspec spec
   in
-  let arg_types_match fname tl_opt t1 t2 t3 =
-    let irrelevant_attributes = ["restrict"; "volatile"] in
-    let strip = typeRemoveAttributes irrelevant_attributes in
-    let strip_const = typeRemoveAttributes ("const" :: irrelevant_attributes) in
-    match fname with
-      | "memcpy" | "memmove" ->
-          let tl_opt = Option_misc.map strip tl_opt in
-          let t1 = strip t1 and t2 = strip_const t2 and t3 = strip t3 in
-          Option_misc.map_default (fun tl ->
-            not (need_cast tl t1)) true tl_opt &&
-          not (need_cast t1 t2) &&
-          not (need_cast t3 theMachine.typeOfSizeOf)
-      | "memcmp" ->
-          let tl_opt = Option_misc.map strip tl_opt in
-          let t1 = strip_const t1 and t2 = strip_const t2 and t3 = strip t3 in
-          Option_misc.map_default (fun tl -> 
-            not (need_cast tl intType)) true tl_opt &&
-          not (need_cast t1 t2) &&
-          not (need_cast t3 theMachine.typeOfSizeOf)
-      | _ -> fatal "unexpected blockfun: %s" fname
+  let is_block_function = function 
+    | { fundec = Declaration (_, _, _, ({ Lexing.pos_fname }, _)) } ->
+        Filename.basename pos_fname = blockfuns_include_file_name
+    | _ -> false
+  in
+  let match_arg_types ftype tl_opt tacts =
+    match ftype with
+      | TFun (rtype, Some formals, _, _) ->
+          let _type_ref = ref None in
+          let matches ~tf:tf ta =
+            let irrelevant_attrs = ["restrict"; "volatile"] in
+            let const_attr = "const" in
+            let strip = typeRemoveAttributes irrelevant_attrs in
+            let strip_const = typeRemoveAttributes (const_attr :: irrelevant_attrs) in
+            let pointed_type = function
+              | TPtr (t, _) -> t
+              | TArray _ as arrty -> element_type arrty
+              | ty -> ty
+            in
+            if not (is_pattern_type @@ pointed_type tf) then begin
+              not @@ need_cast
+                       ((if not @@ hasAttribute const_attr @@ typeAttrs tf then strip else strip_const) ta)
+                       tf
+            end else
+              let ta = if isPointerType ta then pointed_type ta else ta in
+              if Option_misc.map_default (fun _type -> not (need_cast ta _type)) true !_type_ref then begin
+                _type_ref := Some ta;
+                true
+              end else
+                false
+          in
+          if
+            List.for_all id @@
+              (Option_misc.map_default (matches ~tf:rtype) true tl_opt) ::
+              List.map2 (fun (_, tf, _) ta -> matches ~tf ta) formals tacts
+          then !_type_ref
+          else None
+      | TFun _ -> fatal "Can't specialize the function by its return type: %a" Printer.pp_typ ftype
+      | _ -> fatal "%a is not a function type, can't check if the signature matches" Printer.pp_typ ftype
   in
 object(self)
   inherit frama_c_inplace
@@ -838,29 +857,35 @@ object(self)
     f
 
   method vstmt_aux = function
-    | { skind = Instr (Call (lval_opt, { enode = Lval (Var fvar, NoOffset) }, args , loc)) } as stmt
-      when is_block_function fvar ->
-        let strip_void_ptr_casts e = if isVoidPtrType @@ typeOf e then stripCasts e else e in
-        let args = List.map strip_void_ptr_casts args in
-        let pointed_type t = if isPointerType t then pointed_type t else t in
-        let lval_type = Option_misc.map (fun lval -> pointed_type (typeOfLval lval)) lval_opt in
-        let args_types = List.map (fun e -> pointed_type (typeOf e)) args in
-        begin match lval_type, args_types with
-          | tl_opt, [t1; t2; t3] when arg_types_match fvar.vname tl_opt t1 t2 t3 ->
-              let _type = t2 in
-              let f =
-                let fname = fvar.vname ^ "_" ^ type_name _type in
-                match self#find_specialized_function fname with
-                  | Some f -> f
-                  | None ->
-                      if fname <> unique_name fname then
-                        fatal "Can't introduce specialized function due to name conflict: %s" fname;
-                      self#specialize_function (Globals.Functions.find_by_name (fvar.vname ^ "__type")) fname _type
-              in
-              stmt.skind <- Instr (Call (lval_opt, Cil.evar ~loc f, args, loc));
-              SkipChildren
-          | _ -> fatal "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
-                       fvar.vname Printer.pp_stmt stmt
+    | { skind = Instr (Call (lval_opt, { enode = Lval (Var fvar, NoOffset) }, args , loc)) } as stmt ->
+        begin try
+          let fpatt = Globals.Functions.find_by_name (fvar.vname ^ "__type") in
+          if is_block_function fpatt then
+            let strip_void_ptr_casts e = if isVoidPtrType @@ typeOf e then stripCasts e else e in
+            let args = List.map strip_void_ptr_casts args in
+            let lval_type_opt = Option_misc.map typeOfLval lval_opt in
+            let arg_types =  List.map typeOf args in
+            let fvtype = match fpatt.fundec with
+              | Declaration (_, { vtype }, _ ,_) -> vtype
+              | _ -> assert false (* is_block_function == true *)
+            in
+            match match_arg_types fvtype lval_type_opt arg_types with     
+              | Some _type ->
+                let f =
+                  let fname = fvar.vname ^ "_" ^ type_name _type in
+                  match self#find_specialized_function fname with
+                    | Some f -> f
+                    | None ->
+                        if fname <> unique_name fname then
+                          fatal "Can't introduce specialized function due to name conflict: %s" fname;
+                        self#specialize_function fpatt fname _type
+                in
+                stmt.skind <- Instr (Call (lval_opt, Cil.evar ~loc f, args, loc));
+                SkipChildren
+              | _ -> fatal "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
+                           fvar.vname Printer.pp_stmt stmt
+          else DoChildren
+        with Not_found -> DoChildren
         end
     | _ -> DoChildren
 

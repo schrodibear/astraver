@@ -61,7 +61,7 @@ let treat_integer_model () =
 
 let treat_jessie_spec_prolog () =
   if Jessie_options.SpecBlockFuncs.get () then
-    let spec_prolog_h_name = Filename.concat std_include "jessie_spec_prolog.h" in
+    let spec_prolog_h_name = Filename.concat std_include blockfuns_include_file_name in
     Kernel.CppExtraArgs.add ("-include " ^ spec_prolog_h_name)
 
 let () =

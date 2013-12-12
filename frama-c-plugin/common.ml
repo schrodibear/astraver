@@ -386,8 +386,6 @@ let name_of_malloc = "malloc"
 let name_of_calloc = "calloc"
 let name_of_realloc = "realloc"
 
-let names_of_block_functions = ["memcpy"; "memmove"; "memcmp"]
-
 let predefined_name =
   [ (* coding functions *)
     name_of_assert;
@@ -405,7 +403,7 @@ let is_malloc_function v = isFunctionType v.vtype && v.vname = name_of_malloc
 let is_calloc_function v = isFunctionType v.vtype && v.vname = name_of_calloc
 let is_realloc_function v = isFunctionType v.vtype && v.vname = name_of_realloc
 
-let is_block_function v = isFunctionType v.vtype && List.mem v.vname names_of_block_functions
+let blockfuns_include_file_name = "jessie_spec_prolog.h"
 
 (* Name management *)
 

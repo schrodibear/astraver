@@ -159,7 +159,7 @@ val is_malloc_function : Cil_types.varinfo -> bool
 val is_realloc_function : Cil_types.varinfo -> bool
 val is_calloc_function : Cil_types.varinfo -> bool
 
-val is_block_function : Cil_types.varinfo -> bool
+val blockfuns_include_file_name : string
 
 val reference_size : Cil_types.typ -> int64
 
