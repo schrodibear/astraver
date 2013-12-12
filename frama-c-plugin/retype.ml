@@ -302,7 +302,7 @@ class createStructHierarchy =
 (* 	add_inheritance_relation sty2 !Common.struct_type_for_void *)
       end
   in
-object
+object(self)
 
   inherit Visitor.frama_c_inplace
 
@@ -314,6 +314,12 @@ object
 	  unify_type_hierarchies ty ety
 	else ();
 	DoChildren
+    | _ -> DoChildren
+
+  method vterm ({ term_node } as t) = match term_node with
+    | TCastE _ ->
+      ignore @@ self#vexpr @@ stripInfo @@ fst @@ Common.force_term_to_exp t;
+      DoChildren
     | _ -> DoChildren
 
 end
