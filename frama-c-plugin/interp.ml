@@ -43,11 +43,11 @@ open Jc
 open Jc_constructors
 open Jc_ast
 open Jc_env
-open Jc_pervasives
+open! Jc_pervasives
 
 (* Utility functions *)
-open Common
-open Jessie_integer
+open! Common
+open! Jessie_integer
 
 (*****************************************************************************)
 (* Smart constructors.                                                       *)
@@ -187,7 +187,7 @@ let separation_policy_regions = ref true
 
 type int_model = IMexact | IMbounded | IMmodulo
 
-let int_model = ref IMbounded
+let int_model = ref (IMbounded : int_model)
 
 let float_model = ref `Defensive
 
@@ -818,7 +818,7 @@ and terms t =
               (* on structure type.                                         *)
               let dstty = unrollType @@ pointed_type ptrty in
               let srcty = unrollType @@ force_app_term_type pointed_type t.term_type in
-              begin match srcty, dstty with 
+              begin match srcty, dstty with
                 | TComp _, TComp _
                   when Retype.(subtype srcty dstty || subtype dstty srcty) ->
                     [JCPEcast (term t, ctype ptrty)]
