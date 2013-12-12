@@ -907,6 +907,11 @@ let specialize_blockfuns file =
 (*****************************************************************************)
 
 class composite_expanding_visitor =
+  let ctype ?(force=true) = function
+    | Ctype t -> t
+    | Ltype ({ lt_name = "set" }, [Ctype t]) -> t
+    | _ -> assert (not force); TVoid []
+  in
   let rec expand_equality ty t1 t2 =
     let rec add_term_offset ty offset ({ term_node; term_loc=loc } as t) =
       let open! Logic_const in
@@ -920,6 +925,8 @@ class composite_expanding_visitor =
               term_node = TLval (addTermOffsetLval offset tlv);
               term_type = Ctype ty }
         | Tat (t, lab) -> tat ~loc (add_term_offset ty offset t, lab)
+        | TCastE (_, ({ term_type=Linteger } as t)) -> t
+        | TCastE (_, ({ term_type } as t)) when isIntegralType (ctype ~force:false term_type) -> t
         | TConst _ -> t
         | _ -> assert false
     in
@@ -949,11 +956,6 @@ class composite_expanding_visitor =
   in
   let predicate_of_equality_list loc lst =
     Logic_const.(pands @@ List.map (unamed ~loc) lst).content
-  in
-  let ctype ?(force=true) = function
-    | Ctype t -> t
-    | Ltype ({ lt_name = "set" }, [Ctype t]) -> t
-    | _ -> assert (not force); TVoid []
   in
   let is_term_to_expand { term_type } = 
     let t = ctype ~force:false term_type in
@@ -990,10 +992,12 @@ object
         ChangeTo (Writes lst)
 
   method vpredicate = function
-    | Prel (Req, ({ term_loc; term_type = ty1 } as t1), ({ term_type=ty2 } as t2))
-      when (is_term_to_expand t1 || is_term_to_expand t2) &&
-           Logic_utils.is_same_type ty1 ty2 ->
-        ChangeTo (predicate_of_equality_list term_loc @@ expand_equality (ctype ty1) t1 t2)
+    | Prel (Req, ({ term_loc; term_type=ty1 } as t1), ({ term_type=ty2 } as t2)) ->
+        let expand1 = is_term_to_expand t1 and expand2 = is_term_to_expand t2 in
+        if expand1 && expand2 && Logic_utils.is_same_type ty1 ty2 || not (expand1 = expand2) then
+          ChangeTo (predicate_of_equality_list term_loc @@ expand_equality (ctype ty1) t1 t2)
+        else
+          DoChildren
     | _ -> DoChildren
 end
 
