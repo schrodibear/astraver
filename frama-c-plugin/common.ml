@@ -333,7 +333,7 @@ let mkStructSingleton ?(padding=0) stname finame fitype =
   compinfo
 
 (* Locally use 64 bits integers *)
-open Jessie_integer
+open! Jessie_integer
 
 let bits_sizeof ty =
   let rec rec_size ?(top_size=false) ty =
@@ -367,7 +367,7 @@ let bits_sizeof ty =
   rec_size ~top_size:true ty
 
 (* Come back to normal 31 bits integers *)
-open Pervasives
+open! Pervasives
 
 
 (*****************************************************************************)
@@ -386,7 +386,7 @@ let name_of_malloc = "malloc"
 let name_of_calloc = "calloc"
 let name_of_realloc = "realloc"
 
-let names_of_block_functions = ["memcpy"]
+let names_of_block_functions = ["memcpy"; "memmove"; "memcmp"]
 
 let predefined_name =
   [ (* coding functions *)

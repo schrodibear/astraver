@@ -748,11 +748,18 @@ class specialize_blockfuns_visitor =
     let strip = typeRemoveAttributes irrelevant_attributes in
     let strip_const = typeRemoveAttributes ("const" :: irrelevant_attributes) in
     match fname with
-      | "memcpy" ->
+      | "memcpy" | "memmove" ->
           let tl_opt = Option_misc.map strip tl_opt in
           let t1 = strip t1 and t2 = strip_const t2 and t3 = strip t3 in
           Option_misc.map_default (fun tl ->
             not (need_cast tl t1)) true tl_opt &&
+          not (need_cast t1 t2) &&
+          not (need_cast t3 theMachine.typeOfSizeOf)
+      | "memcmp" ->
+          let tl_opt = Option_misc.map strip tl_opt in
+          let t1 = strip_const t1 and t2 = strip_const t2 and t3 = strip t3 in
+          Option_misc.map_default (fun tl -> 
+            not (need_cast tl intType)) true tl_opt &&
           not (need_cast t1 t2) &&
           not (need_cast t3 theMachine.typeOfSizeOf)
       | _ -> fatal "unexpected blockfun: %s" fname
@@ -852,8 +859,8 @@ object(self)
               in
               stmt.skind <- Instr (Call (lval_opt, Cil.evar ~loc f, args, loc));
               SkipChildren
-          | _ -> fatal "Can't specialize blockfun applied to arguments of different types: %a"
-                       Printer.pp_stmt stmt
+          | _ -> fatal "Can't specialize %s applied (or assigned) to arguments (or lvalue) of incorrect types: %a"
+                       fvar.vname Printer.pp_stmt stmt
         end
     | _ -> DoChildren
 
