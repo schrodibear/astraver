@@ -56,7 +56,7 @@ open Extlib
 open Visitor
 
 (* Utility functions *)
-open Common
+open! Common
 
 let label_here = LogicLabel(None,"Here")
 
@@ -780,13 +780,16 @@ object(self)
       in
       List.map (fun z -> z, froms) zl
     in
-    let assigns = b.b_assigns
+    let assigns =
       (* the following may stop completely the execution of the plugin ??? *)
-      (*
-      (match b.b_assigns with
+      (* Mikhail: Because \assigns as1 \from as2 if, for instance, as1 and as2 *)
+      (*          are some arrays (about 50 elements) of big structures (about 50 fields),  *)
+      (*          can expand to (50*50)^2=6250000 i.e. > 6 million term pairs.  *)
+      (*          But isn't it the case that the \from clause in \assigns is ignored later anyway? *)
+      (*          Then we can expand only the Writes part. *)
+      match b.b_assigns with
           WritesAny -> WritesAny
-        | Writes l -> Writes (List.flatten (List.map assign l)))
-      *)
+        | Writes l -> Writes (List.flatten (List.map assign l))
     in
 (*    Format.eprintf "[Norm.vbehavior] b_allocation = ";
     begin
