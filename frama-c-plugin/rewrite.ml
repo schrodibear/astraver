@@ -925,10 +925,17 @@ class composite_expanding_visitor =
               term_node = TLval (addTermOffsetLval offset tlv);
               term_type = Ctype ty }
         | Tat (t, lab) -> tat ~loc (add_term_offset ty offset t, lab)
-        | TCastE (_, ({ term_type=Linteger } as t)) -> t
-        | TCastE (_, ({ term_type } as t)) when isIntegralType (ctype ~force:false term_type) -> t
+        | TCastE (_, ({ term_type } as t)) 
+          when term_type = Linteger || term_type = Lreal ||
+               isIntegralType (ctype ~force:false term_type) || 
+               isFloatingType (ctype ~force:false term_type) ->
+            { t with term_node = 
+              TCastE (ty, if isIntegralType ty then tinteger ~loc 0 
+                          else if isFloatingType ty then treal_zero ()
+                          else if isPointerType ty then term ~loc Tnull (Ctype ty)
+                          else t) }
         | TConst _ -> t
-        | _ -> assert false
+        | _ -> unsupported "Don't know hot to expand term node: %a" Printer.pp_term t
     in
     match unrollType ty with
       | TComp ({ cfields }, _, _) ->
@@ -995,7 +1002,17 @@ object
     | Prel (Req, ({ term_loc; term_type=ty1 } as t1), ({ term_type=ty2 } as t2)) ->
         let expand1 = is_term_to_expand t1 and expand2 = is_term_to_expand t2 in
         if expand1 && expand2 && Logic_utils.is_same_type ty1 ty2 || not (expand1 = expand2) then
-          ChangeTo (predicate_of_equality_list term_loc @@ expand_equality (ctype ty1) t1 t2)
+          let result = predicate_of_equality_list term_loc @@ expand_equality (ctype ty1) t1 t2 in
+          let open! Logic_const in
+          let eq_implies_result t1 t2 =
+            (pimplies ~loc:term_loc (prel ~loc:term_loc (Req, t1, t2), unamed result)).content
+          in
+          let st1 = stripTermCasts t1 and st2 = stripTermCasts t2 in
+          match st1 == t1, st2 == t2 with
+            | true, true -> ChangeTo result
+            | false, true -> ChangeTo (eq_implies_result st1 @@ tinteger ~loc:term_loc 0)
+            | true, false -> ChangeTo (eq_implies_result st2 @@ tinteger ~loc:term_loc 0)
+            | _ -> unsupported "Don't know how to expand equality: %a = %a" Printer.pp_term t1 Printer.pp_term t2
         else
           DoChildren
     | _ -> DoChildren

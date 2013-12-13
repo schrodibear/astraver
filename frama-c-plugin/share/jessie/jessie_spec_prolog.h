@@ -82,7 +82,8 @@ extern int memcmp__type(const _type *dest, const _type *src, size_t n);
   @          \let _n = n / sizeof (_type);
   @          \valid(((_type *) dest)+(0 .. _n - 1));
   @ assigns ((_type *) dest)[0 .. (n / sizeof (_type)) - 1] \from val;
-  @ ensures \let _n = n / sizeof (_type); \forall integer k; 0 <= k < _n ==> dest[k] == (_type) (unsigned  char) val;
+  @ ensures \let _n = n / sizeof (_type);
+  @           val == 0 ==> \forall integer k; 0 <= k < _n ==> dest[k] == (_type) (unsigned  char) val;
   @*/
 extern void *memset__type(_type *dest, int val, size_t n);
 #endif /* _JESSIE_SPEC_PROLOG_H_ */
