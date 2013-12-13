@@ -155,7 +155,10 @@ val is_array_reference_type : Cil_types.typ -> bool
 
 val is_assert_function : Cil_types.varinfo -> bool
 val is_free_function : Cil_types.varinfo -> bool
+val is_kfree_function : Cil_types.varinfo -> bool
+val is_special_free_function : Cil_types.varinfo -> bool
 val is_malloc_function : Cil_types.varinfo -> bool
+val is_kmalloc_function : Cil_types.varinfo -> bool
 val is_realloc_function : Cil_types.varinfo -> bool
 val is_calloc_function : Cil_types.varinfo -> bool
 

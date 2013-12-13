@@ -382,7 +382,9 @@ let name_of_strlen = "strlen"
 let name_of_wcslen = "wcslen"
 let name_of_assert = "assert"
 let name_of_free = "free"
+let name_of_kfree = "kfree"
 let name_of_malloc = "malloc"
+let name_of_kmalloc = "kmalloc"
 let name_of_calloc = "calloc"
 let name_of_realloc = "realloc"
 
@@ -399,7 +401,13 @@ let is_predefined_name s = List.mem s predefined_name
 
 let is_assert_function v = isFunctionType v.vtype && v.vname = name_of_assert
 let is_free_function v = isFunctionType v.vtype && v.vname = name_of_free
+let is_kfree_function v = isFunctionType v.vtype && v.vname = name_of_kfree
+let is_special_free_function v =
+  isFunctionType v.vtype && (
+    String.length v.vname > 5 && Str.first_chars v.vname 5 = "free_" ||
+    String.length v.vname > 6 && Str.first_chars v.vname 6 = "kfree_")
 let is_malloc_function v = isFunctionType v.vtype && v.vname = name_of_malloc
+let is_kmalloc_function v = isFunctionType v.vtype && v.vname = name_of_kmalloc
 let is_calloc_function v = isFunctionType v.vtype && v.vname = name_of_calloc
 let is_realloc_function v = isFunctionType v.vtype && v.vname = name_of_realloc
 

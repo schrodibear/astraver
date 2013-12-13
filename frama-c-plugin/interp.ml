@@ -1817,26 +1817,33 @@ let instruction = function
                    Aassert,locate (boolean_expr (as_singleton eargs)))
       else
         let enode =
-          if is_free_function v then
-            let arg = as_singleton eargs in
-            let subarg = stripCasts arg in
-            let arg = if isPointerType (typeOf subarg) then subarg else arg in
-            JCPEfree(expr arg)
-          else
+          let default_result () = 
             JCPEapp(v.vname,[],
                     keep_only_declared_nb_of_arguments
                       v
                       (List.map expr eargs))
+          in
+          if is_free_function v || is_kfree_function v || is_special_free_function v then
+            let arg = as_singleton eargs in
+            let subarg = stripCasts arg in
+            let arg = if isPointerType (typeOf subarg) then subarg else arg in
+            let result = JCPEfree(expr arg) in
+            if not (is_special_free_function v) then result
+            else JCPEblock [mkexpr (default_result ()) pos; mkexpr result pos]
+          else
+            default_result ()
         in
         (locate (mkexpr enode pos))#node
 
   | Call(Some lv,{enode = Lval(Var v,NoOffset)},eargs,pos) ->
       let enode =
-        if is_malloc_function v || is_realloc_function v then
+        if is_malloc_function v || is_kmalloc_function v || is_realloc_function v then
           let lvtyp = pointed_type (typeOfLval lv) in
           let lvsiz = Integer.of_int64 ((bits_sizeof lvtyp) lsr 3) in
           let arg =
             if is_malloc_function v then as_singleton eargs
+            else if is_kmalloc_function v then 
+              match eargs with [ arg; _ ] -> arg | _ -> assert false
             else (* realloc *)
               match eargs with [ _; arg ] -> arg | _ -> assert false
           in

@@ -86,4 +86,19 @@ extern int memcmp__type(const _type *dest, const _type *src, size_t n);
   @           val == 0 ==> \forall integer k; 0 <= k < _n ==> dest[k] == (_type) (unsigned  char) val;
   @*/
 extern void *memset__type(_type *dest, int val, size_t n);
+
+/*@ axiomatic freeable__type {
+  @  predicate freeable_if_dynamic__type{L}(_type *p) = \valid{L}(p) && \offset_min{L}(p) == 0;
+  @ }
+  @*/
+
+/*@ requires freeable_if_dynamic__type{Pre}(ptr);
+  @ assigns \nothing;
+  @*/
+extern void free__type(_type *ptr);
+
+/*@ requires freeable_if_dynamic__type{Pre}(ptr);
+  @ assigns \nothing;
+  @*/
+extern void kfree__type(_type *ptr);
 #endif /* _JESSIE_SPEC_PROLOG_H_ */
