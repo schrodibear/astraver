@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.95.2"/>
+ <prover
+  id="1"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="2"
+  name="CVC4"
+  version="1.3"/>
+ <prover
+  id="3"
+  name="Z3"
+  version="4.3.1"/>
+ <file
+  name="../q19_switch_fun_call.mlw"
+  verified="false"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="../q19_switch_fun_call.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Jessie_program"
+   locfile="../q19_switch_fun_call.mlw"
+   loclnum="251" loccnumb="7" loccnume="21"
+   verified="false"
+   expanded="true">
+   <goal
+    name="WP_parameter compute_trans2_ensures_default"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="44" loccnumb="8" loccnume="22"
+    expl="VC for compute_trans2_ensures_default"
+    sum="34bd0adcc4c3832cfc0294f9b74b7238"
+    proved="true"
+    expanded="true"
+    shape="ainfix &gt;ainteger_of_int32V0c5Oainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Oainfix &lt;ainteger_of_int32V0c0ANainfix &lt;ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;ainteger_of_int32V0c0Aainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
+    <label
+     name="expl:Function compute_trans2, default behavior"/>
+    <label
+     name="expl:VC for compute_trans2_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter compute_trans2_ensures_less_than_five"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="44" loccnumb="8" loccnume="22"
+    expl="VC for compute_trans2_ensures_less_than_five"
+    sum="89d81acbb20f9f57e047a6fb3e220c2a"
+    proved="true"
+    expanded="true"
+    shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
+    <label
+     name="expl:Function compute_trans2, Behavior `less_than_five&apos;"/>
+    <label
+     name="expl:VC for compute_trans2_ensures_less_than_five"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter compute_trans2_ensures_more_than_five"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="44" loccnumb="8" loccnume="22"
+    expl="VC for compute_trans2_ensures_more_than_five"
+    sum="c9107c24f7c9230d24a9902052a04040"
+    proved="true"
+    expanded="true"
+    shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1Iainfix &gt;ainteger_of_int32V0c5Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1Iainfix &gt;ainteger_of_int32V0c5Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1Iainfix &gt;ainteger_of_int32V0c5Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5F">
+    <label
+     name="expl:Function compute_trans2, Behavior `more_than_five&apos;"/>
+    <label
+     name="expl:VC for compute_trans2_ensures_more_than_five"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter compute_trans2_ensures_none"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="44" loccnumb="8" loccnume="22"
+    expl="VC for compute_trans2_ensures_none"
+    sum="2fc4ffe979c1afc8f0aa4e5e47499f21"
+    proved="true"
+    expanded="true"
+    shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0Iainfix &lt;ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0Iainfix &lt;ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0Iainfix &lt;ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;ainteger_of_int32V0c0F">
+    <label
+     name="expl:Function compute_trans2, Behavior `none&apos;"/>
+    <label
+     name="expl:VC for compute_trans2_ensures_none"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter compute_trans2_safety"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="44" loccnumb="8" loccnume="22"
+    expl="VC for compute_trans2_safety"
+    sum="1987975682a6dc2639a095f687c45d9f"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Function compute_trans2, Safety"/>
+    <label
+     name="expl:VC for compute_trans2_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter compute_trans_ensures_default"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="19" loccnumb="8" loccnume="21"
+    expl="VC for compute_trans_ensures_default"
+    sum="34bd0adcc4c3832cfc0294f9b74b7238"
+    proved="true"
+    expanded="true"
+    shape="ainfix &gt;ainteger_of_int32V0c5Oainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Oainfix &lt;ainteger_of_int32V0c0ANainfix &lt;ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;ainteger_of_int32V0c0Aainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
+    <label
+     name="expl:Function compute_trans, default behavior"/>
+    <label
+     name="expl:VC for compute_trans_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter compute_trans_ensures_less_than_five"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="19" loccnumb="8" loccnume="21"
+    expl="VC for compute_trans_ensures_less_than_five"
+    sum="40a9f0311547453af7c5568a05494ba8"
+    proved="true"
+    expanded="true"
+    shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
+    <label
+     name="expl:Function compute_trans, Behavior `less_than_five&apos;"/>
+    <label
+     name="expl:VC for compute_trans_ensures_less_than_five"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter compute_trans_ensures_more_than_five"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="19" loccnumb="8" loccnume="21"
+    expl="VC for compute_trans_ensures_more_than_five"
+    sum="6df97889fb7f5b0d97673971f7d3c18c"
+    proved="true"
+    expanded="true"
+    shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5F">
+    <label
+     name="expl:Function compute_trans, Behavior `more_than_five&apos;"/>
+    <label
+     name="expl:VC for compute_trans_ensures_more_than_five"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter compute_trans_ensures_none"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="19" loccnumb="8" loccnume="21"
+    expl="VC for compute_trans_ensures_none"
+    sum="a66cd646652cb8e623ff405157f7365a"
+    proved="true"
+    expanded="true"
+    shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;ainteger_of_int32V0c0F">
+    <label
+     name="expl:Function compute_trans, Behavior `none&apos;"/>
+    <label
+     name="expl:VC for compute_trans_ensures_none"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter compute_trans_safety"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="19" loccnumb="8" loccnume="21"
+    expl="VC for compute_trans_safety"
+    sum="1987975682a6dc2639a095f687c45d9f"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Function compute_trans, Safety"/>
+    <label
+     name="expl:VC for compute_trans_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter main_ensures_default"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="56" loccnumb="4" loccnume="8"
+    expl="VC for main_ensures_default"
+    sum="75841d8051765ea7f8d45b3e4209e8b5"
+    proved="false"
+    expanded="true"
+    shape="iiiiainfix =ainteger_of_int32V11c2Oainfix =ainteger_of_int32V11c1Oainfix =ainteger_of_int32V11aprefix -c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9aprefix -c1Fainfix =ainteger_of_int32V14c2Oainfix =ainteger_of_int32V14c1Oainfix =ainteger_of_int32V14aprefix -c1Iainfix =V14V13FIainfix =V13V12FIainfix =ainteger_of_int32V12c2Fainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V8Iainfix =ainteger_of___anonenum_trans_t_1V8c1Fainfix =ainteger_of_int32V17c2Oainfix =ainteger_of_int32V17c1Oainfix =ainteger_of_int32V17aprefix -c1Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15c2Fainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2Fainfix =ainteger_of_int32V20c2Oainfix =ainteger_of_int32V20c1Oainfix =ainteger_of_int32V20aprefix -c1Iainfix =V20V19FIainfix =V19V18FIainfix =ainteger_of_int32V18c1Fainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1Fainfix =ainteger_of_int32V23c2Oainfix =ainteger_of_int32V23c1Oainfix =ainteger_of_int32V23aprefix -c1Iainfix =V23V22FIainfix =V22V21FIainfix =ainteger_of_int32V21aprefix -c1FAainfix =c1c2ainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+    <label
+     name="expl:Function main, default behavior"/>
+    <label
+     name="expl:VC for main_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.04"/>
+    </proof>
+    <transf
+     name="split_goal_wp"
+     proved="false"
+     expanded="true">
+     <goal
+      name="WP_parameter main_ensures_default.1"
+      locfile="../../q19_switch_fun_call.c"
+      loclnum="56" loccnumb="4" loccnume="8"
+      expl="1. assertion"
+      sum="afb3b496fb351eaac265854d4d248a71"
+      proved="false"
+      expanded="true"
+      shape="assertionainfix =c1c2Iainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="expl:Function main, default behavior"/>
+      <label
+       name="expl:VC for main_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.11"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="4.97"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="4.99"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter main_ensures_default.2"
+      locfile="../../q19_switch_fun_call.c"
+      loclnum="56" loccnumb="4" loccnume="8"
+      expl="2. postcondition"
+      sum="45cfc0954369a052fa492874e244ae8b"
+      proved="true"
+      expanded="false"
+      shape="postconditionainfix =ainteger_of_int32V8c2Oainfix =ainteger_of_int32V8c1Oainfix =ainteger_of_int32V8aprefix -c1Iainfix =V8V7FIainfix =V7V6FIainfix =ainteger_of_int32V6aprefix -c1FIainfix =c1c2Iainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="expl:Function main, default behavior"/>
+      <label
+       name="expl:VC for main_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter main_ensures_default.3"
+      locfile="../../q19_switch_fun_call.c"
+      loclnum="56" loccnumb="4" loccnume="8"
+      expl="3. postcondition"
+      sum="c2d4fb40ee9451381d2ecf21e5c38a3b"
+      proved="true"
+      expanded="false"
+      shape="postconditionainfix =ainteger_of_int32V9c2Oainfix =ainteger_of_int32V9c1Oainfix =ainteger_of_int32V9aprefix -c1Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c1FIainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="expl:Function main, default behavior"/>
+      <label
+       name="expl:VC for main_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter main_ensures_default.4"
+      locfile="../../q19_switch_fun_call.c"
+      loclnum="56" loccnumb="4" loccnume="8"
+      expl="4. postcondition"
+      sum="91b8b4994f6354504bf1a39c912e6d02"
+      proved="true"
+      expanded="false"
+      shape="postconditionainfix =ainteger_of_int32V10c2Oainfix =ainteger_of_int32V10c1Oainfix =ainteger_of_int32V10aprefix -c1Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8c2FIainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="expl:Function main, default behavior"/>
+      <label
+       name="expl:VC for main_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter main_ensures_default.5"
+      locfile="../../q19_switch_fun_call.c"
+      loclnum="56" loccnumb="4" loccnume="8"
+      expl="5. postcondition"
+      sum="f4e6a42d8276887e9ed0bdffeb3454de"
+      proved="true"
+      expanded="false"
+      shape="postconditionainfix =ainteger_of_int32V11c2Oainfix =ainteger_of_int32V11c1Oainfix =ainteger_of_int32V11aprefix -c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c2FIainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V8Iainfix =ainteger_of___anonenum_trans_t_1V8c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="expl:Function main, default behavior"/>
+      <label
+       name="expl:VC for main_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter main_ensures_default.6"
+      locfile="../../q19_switch_fun_call.c"
+      loclnum="56" loccnumb="4" loccnume="8"
+      expl="6. postcondition"
+      sum="1d605433f14a4a23667ca3fdbf9fc929"
+      proved="true"
+      expanded="false"
+      shape="postconditionainfix =ainteger_of_int32V11c2Oainfix =ainteger_of_int32V11c1Oainfix =ainteger_of_int32V11aprefix -c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9aprefix -c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V8Iainfix =ainteger_of___anonenum_trans_t_1V8c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="expl:Function main, default behavior"/>
+      <label
+       name="expl:VC for main_ensures_default"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter main_safety"
+    locfile="../../q19_switch_fun_call.c"
+    loclnum="56" loccnumb="4" loccnume="8"
+    expl="VC for main_safety"
+    sum="1987975682a6dc2639a095f687c45d9f"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Function main, Safety"/>
+    <label
+     name="expl:VC for main_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>
