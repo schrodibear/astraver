@@ -1343,7 +1343,8 @@ let append_list e l =
     | e'::rem ->
         match e.expr_node,e'.expr_node with
           | MultiAssign(mark1,pos1,lets1,isrefa1,ta1,a1,tmpe1,e1,f1,l1),
-            MultiAssign(_,_,lets2,_isrefa2,_ta2,a2,_tmpe2,e2,f2,l2) ->
+            MultiAssign(_,_,lets2,_isrefa2,_ta2,a2,_tmpe2,e2,f2,l2) 
+            when e'.expr_labels = [] ->
               (*
                 Format.eprintf
                 "Found multi-assigns: a1=%a, a2=%a, e1=%a, e2=%a, f1=%s,f2=%s@."
@@ -1357,7 +1358,7 @@ let append_list e l =
                     (*
                       Format.eprintf "append_list, merge successful!@.";
                     *)
-                    { expr_labels = e.expr_labels @ e'.expr_labels ;
+                    { expr_labels = e.expr_labels;
                       expr_node =
                         MultiAssign(mark1,pos1,lets1@lets2,isrefa1,ta1,a1,tmpe1,e1,f1,l) }
                     ::rem
@@ -1412,11 +1413,13 @@ let rec append' e1 e2 =
     | Block(l1),_ ->
       [make_block e1.expr_labels (concat l1 e2)]
     | _,Block(l2) ->
-      if e1.expr_labels = [] && e2.expr_labels = [] then
-        append_list e1 l2
-      else
-        let e1' = {e1 with expr_labels = []} in
-        [make_block (e1.expr_labels @ e2.expr_labels) (append_list e1' l2)]
+      begin match e1.expr_labels, e2.expr_labels with
+        | [], [] -> append_list e1 l2
+        | labels1, [] ->
+          [make_block labels1 (append_list {e1 with expr_labels = []} l2)]
+        | labels1, _ ->
+          [make_block labels1 (append_list {e1 with expr_labels = []} [e2])]
+      end
     | _ ->
       if e1.expr_labels = [] then
         append_list e1 [e2]
