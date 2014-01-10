@@ -581,6 +581,7 @@ let logic_type_name t =
   if !why3syntax then
     match t.logic_type_name with
       | "unit" -> "()"
+      | "bool" -> "Bool.bool"
       | s -> why3ident s
   else
     t.logic_type_name
