@@ -18,7 +18,7 @@ Definition pointer : forall (t:Type) {t_WT:WhyType t}, Type.
 
 Admitted.
 
-Global Instance pointer_whyType : forall (t:Type) {t_WT:WhyType t}, WhyType (pointer t).
+Global Instance pointer_WhyType : forall (t:Type) {t_WT:WhyType t}, WhyType (pointer t).
 Admitted.
 
 (* Why3 goal *)
@@ -569,7 +569,7 @@ Definition tag_id : forall (t:Type) {t_WT:WhyType t}, Type.
 
 Admitted.
 
-Global Instance tag_id_whyType : forall (t:Type) {t_WT:WhyType t}, WhyType (tag_id t).
+Global Instance tag_id_WhyType : forall (t:Type) {t_WT:WhyType t}, WhyType (tag_id t).
 Admitted.
 
 (* Why3 goal *)
