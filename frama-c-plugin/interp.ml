@@ -2645,8 +2645,8 @@ let global vardefs g =
   List.map (fun dnode -> mkdecl dnode pos) dnodes
 
 let integral_type name ty bitsize =
-  let min = Integer.to_num (min_value_of_integral_type ~bitsize ty) in
-  let max = Integer.to_num (max_value_of_integral_type ~bitsize ty) in
+  let min = Integer.to_num (min_value_of_integral_type ?bitsize ty) in
+  let max = Integer.to_num (max_value_of_integral_type ?bitsize ty) in
   mkdecl (JCDenum_type(name,min,max)) Loc.dummy_position
 
 (* let all_integral_kinds = *)

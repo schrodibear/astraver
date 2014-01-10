@@ -215,15 +215,21 @@ let name_of_integral_type ?bitsize ty =
       match bitsize with Some siz -> siz | None -> size_in_bytes * 8
     in
     let name = (if signed then "" else "u") ^ "int" ^ (string_of_int numbits) in
-    Hashtbl.replace all_integral_types name (ty,numbits);
+    Hashtbl.replace all_integral_types name (ty, Some numbits);
+    Integral_types_iterator.add name;
+    name
+  in
+  let name_bool () =
+    let name = "_bool" in
+    Hashtbl.replace all_integral_types name (ty, None);
     Integral_types_iterator.add name;
     name
   in
   match unrollType ty with
-    | TInt(IBool,_attr) -> "_bool"
+    | TInt(IBool,_attr) -> name_bool ()
     | TInt(ik,_attr) ->
 	name_it (isSigned ik) (size_in_bytes ik)
-    | TEnum ({ekind= IBool},_) -> "_bool"
+    | TEnum ({ekind= IBool},_) -> name_bool ()
     | TEnum ({ekind = ik},_) -> name_it (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
