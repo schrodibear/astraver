@@ -716,8 +716,8 @@ class specialize_blockfuns_visitor =
   let specialize_logic_info _type (*logic_info*) =
     let visitor = object
       inherit frama_c_inplace
-      inherit type_substituting_visitor _type
-      inherit logic_var_renaming_visitor _type
+      inherit! type_substituting_visitor _type
+      inherit! logic_var_renaming_visitor _type
     end in
     fun logic_info ->
       let logic_info' = visitFramacLogicInfo (new frama_c_copy @@ Project.current ()) logic_info in
@@ -726,9 +726,9 @@ class specialize_blockfuns_visitor =
   let specialize_blockfun update_logic_info _type (*kernel_function*) =
     let visitor = object
       inherit frama_c_copy (Project.current ())
-      inherit spec_refreshing_vsitor
-      inherit type_substituting_visitor _type
-      inherit logic_var_specializing_visitor update_logic_info _type
+      inherit! spec_refreshing_vsitor
+      inherit! type_substituting_visitor _type
+      inherit! logic_var_specializing_visitor update_logic_info _type
     end in
     fun { fundec; spec } -> match fundec with
       | Declaration (spec, fvinfo, Some argvinfos, loc) ->
@@ -826,7 +826,7 @@ object(self)
             in
             let g = Daxiomatic (name, lst, loc) in
             new_globals <- GAnnot (g, CurrentLoc.get ()) :: new_globals;
-            Annotations.add_global Common.jessie_emitter g;
+            Annotations.add_global jessie_emitter g;
             self#update_logic_info _type li
         | Some _ -> fatal "Logic info (predicate, function, ...) specialization outside axiomatics is not supported: %s"
                           lv_name
@@ -853,10 +853,10 @@ object(self)
     new_globals <- GVarDecl(empty_funspec (), f, loc) :: new_globals;
     Globals.Functions.replace_by_declaration spec f loc;
     let kernel_function = Globals.Functions.get f in
-    Annotations.register_funspec ~emitter:Common.jessie_emitter kernel_function;
+    Annotations.register_funspec ~emitter:jessie_emitter kernel_function;
     f
 
-  method vstmt_aux = function
+  method! vstmt_aux = function
     | { skind = Instr (Call (lval_opt, { enode = Lval (Var fvar, NoOffset) }, args , loc)) } as stmt ->
         begin try
           let fpatt = Globals.Functions.find_by_name (fvar.vname ^ "__type") in
@@ -889,7 +889,7 @@ object(self)
         end
     | _ -> DoChildren
 
-  method vglob_aux _ =
+  method! vglob_aux _ =
     DoChildrenPost (fun globals ->
       introduced_globals <- new_globals @ introduced_globals;
       let saved_globals = new_globals in
@@ -900,7 +900,7 @@ end
 let specialize_blockfuns file =
   visitFramacFile (new specialize_blockfuns_visitor) file;
   (* We may have introduced new globals: clear the last_decl table. *)
-  Ast.clear_last_decl () 
+  Ast.clear_last_decl ()
 
 (*****************************************************************************)
 (* Extending `assigns' clauses and equalities for composite types.           *)
@@ -1022,7 +1022,7 @@ let expand_composites =
   visitFramacFile
     (object
       inherit frama_c_inplace
-      inherit composite_expanding_visitor
+      inherit! composite_expanding_visitor
      end)
 
 (*****************************************************************************)
@@ -1033,8 +1033,139 @@ let fold_constants_in_terms =
   visitFramacFile
     (object
       inherit frama_c_inplace
-      method vterm_node _ = DoChildrenPost constFoldTermNodeAtTop
+      method! vterm_node _ = DoChildrenPost constFoldTermNodeAtTop
      end)
+
+(*****************************************************************************)
+(* Replace inine assembly with undefined function calls.                     *)
+(*****************************************************************************)
+
+class asms_to_functions_visitor =
+  let exp_of_lval ?(addr=false) ~loc lv = new_exp ~loc @@ if addr then AddrOf lv else Lval lv in
+  let to_args ~loc ins outs =
+    let thrd (_, _, e) = e in
+    List.map thrd ins @ List.map (fun trpl -> exp_of_lval ~loc ~addr:true @@ thrd trpl) outs
+  in
+object(self)
+  inherit frama_c_inplace
+
+  val mutable new_globals = []
+
+  method! vglob_aux =
+    let f g = let r = new_globals in new_globals <- []; r @ g in
+    function
+      | GAsm _ ->
+          warning "Ignoring global inline assembly, which can potentially have side effects!";
+          ChangeToPost ([], f)
+      | _ -> DoChildrenPost f
+
+  method private introduce_function ?(int=false) attrs outs ins clobs loc =
+    let to_param pkind i (name_opt, _, e) =
+      let typ = typeOf e in
+      let ret name = match pkind with
+        | `Input ->  name, typ, []
+        | `Output -> name, TPtr (typ, []), [Attr ("const", [])]
+      in
+      match name_opt with
+        | Some name -> ret name
+        | None -> match e.enode with
+          | Lval (Var { vname }, _) -> ret vname
+          | _ -> ret @@ (match pkind with `Input -> "in" | `Output -> "out") ^ string_of_int i
+    in
+    let to_oparam i (name_opt, constr, lval) = to_param `Output i (name_opt, constr, exp_of_lval ~loc lval) in
+    let ins = List.mapi (to_param `Input) ins and outs = List.mapi to_oparam outs in
+    let params = ins @ outs in
+    let ret_typ = if int then intType else voidType in
+    let attrs = attrs @ List.map (fun a -> Attr (a, [])) ["static"; "inline"] in
+    let fname = unique_name @@ "inline_asm" ^ (if int then "_goto" else "") in
+    let f = makeGlobalVar ~generated:true fname @@ TFun (ret_typ, Some params, false, attrs) in
+    new_globals <- GVarDecl (empty_funspec (), f, loc) :: new_globals;
+    Globals.Functions.replace_by_declaration (empty_funspec ()) f loc;
+    (* We've created a new undefined unspecified function. Now let's specify it: *)
+    let { fundec } as kf = Globals.Functions.get f in
+    match fundec with
+      | Declaration (funspec, _, Some args, loc) ->
+          let get_vars = List.map @@ fun (name, typ, _) ->
+            let vi = List.find (fun { vname } -> vname = name) @@ args in
+            let result = Cil_const.make_logic_var_formal name (Ctype typ) in
+            vi.vlogic_var_assoc <- Some result;
+            result.lv_origin <- Some vi;
+            result
+          in
+          let reads_any = ListLabels.exists ins ~f:(fun (_, typ, _)  ->
+            isPointerType typ || isStructOrUnionType typ || isArrayType typ)
+          in
+          let out_types = List.map (fun (_, typ, _) -> typ) outs in
+          let ins = get_vars ins and outs = get_vars outs in
+          let has_mem_clob = List.exists ((=) "memory") clobs in
+          funspec.spec_behavior <-
+            (let open! Logic_const in
+            [mk_behavior
+              ~requires:[new_predicate @@ pands @@ List.map (fun lv -> pvalid ~loc (here_label, tvar ~loc lv)) outs]
+              ~assigns:(if has_mem_clob then
+                          warning "The inline assembly includes memory clobber, but no side effect is assumed!";
+                        let to_terms = List.map @@ tvar ~loc in
+                        let outs from =
+                          let outs =
+                            (if int then [tresult ~loc intType] else []) @
+                            ListLabels.map2 (to_terms outs) out_types ~f:(fun t typ ->
+                              term ~loc (TLval (TMem t, TNoOffset)) @@ Ctype (pointed_type typ))
+                          in
+                          Writes (List.map (fun t -> new_identified_term t, from) outs)
+                        in
+                        if reads_any then begin
+                          warning ("The inline assembly takes pointer, array or composite argument, so " ^^
+                                   "over-approximating data dependencies in assigns clause with FromAny");
+                          outs FromAny
+                        end else
+                          outs (From (List.map new_identified_term @@ to_terms ins)))
+              ()]);
+          Annotations.register_funspec ~emitter:jessie_emitter kf;
+          f
+      | Declaration (_, _, None, _) -> fatal "Generated dummy function has somehow lost its arguments"
+      | Definition _ -> fatal "Generated dummy function was somehow unexpectedly defined"
+
+  method! vinst = function
+    | Asm (attrs, _, outs, ins, clobs, loc) ->
+        let f = self#introduce_function attrs outs ins clobs loc in
+        ChangeTo [Call (None, evar ~loc f, to_args ~loc ins outs, loc)]
+    | _ -> DoChildren
+
+  method! vstmt_aux = function
+    | { skind = AsmGoto (attrs, _, outs, ins, clobs, stmts, loc); succs; preds } as s ->
+        let f = self#introduce_function ~int:true attrs outs ins clobs loc in
+        begin match self#current_func with
+          | Some fundec ->
+              let aux = makeLocalVar fundec ~generated:true (unique_name "inline_asm_goto_aux") intType in
+              self#queueInstr [Call (Some (var aux), evar ~loc f, to_args ~loc ins outs, loc)];
+              let labeled lab succs ({ labels } as stmt) = { stmt with labels = lab :: labels; succs; preds } in
+              let cases =
+                let rec loop acc n = function
+                  | [] ->
+                      let stmts = List.map (!) stmts in
+                      let succs = List.filter (fun sr -> not @@ List.memq sr stmts) succs in
+                      assert (List.length succs = 1);
+                      List.rev @@ (labeled (Default loc) succs @@ mkStmtOneInstr @@ Skip loc) :: acc
+                  | sref :: srefs ->
+                      loop
+                        ((labeled (Case (integer ~loc @@ n, loc)) [!sref] @@ mkStmt @@ Goto (sref, loc)) :: acc)
+                        (n - 1)
+                        srefs
+                in
+                loop [] 0 stmts
+              in
+              s.skind <- Switch (evar aux, mkBlock cases, cases, loc);
+              SkipChildren
+          | None -> fatal "Can't introduce local auxiliary variable outside function body"
+        end
+    | _ -> DoChildren
+
+end
+
+let asms_to_functions file =
+  visitFramacFile (new asms_to_functions_visitor) file;
+  (* We may have introduced new globals: clear the last_decl table. *)
+  Ast.clear_last_decl ()
 
 (*****************************************************************************)
 (* Rewrite comparison of pointers into difference of pointers.               *)
@@ -2495,6 +2626,9 @@ let from_comprehension_to_range behavior file =
 (*****************************************************************************)
 
 let rewrite file =
+  if checking then check_types file;
+  (* Replace inline assembly with undefined function calls (and switches) *)
+  asms_to_functions file;
   if checking then check_types file;
   (* Specialize block functions e.g. memcpy. *)
   if Jessie_options.SpecBlockFuncs.get () then

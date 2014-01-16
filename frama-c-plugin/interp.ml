@@ -2105,7 +2105,7 @@ let rec statement s =
           effects of the statements... *)
         JCPEblock(statement_list (List.map (fun (x,_,_,_,_) -> x) seq))
 
-    | TryFinally _ | TryExcept _ -> assert false
+    | TryFinally _ | TryExcept _ | AsmGoto _ -> assert false
   in
   (* Prefix statement by all non-case labels *)
   let labels = filter_out is_case_label s.labels in
