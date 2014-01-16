@@ -869,7 +869,7 @@ object(self)
               | Declaration (_, { vtype }, _ ,_) -> vtype
               | _ -> assert false (* is_block_function == true *)
             in
-            match match_arg_types fvtype lval_type_opt arg_types with     
+            match match_arg_types fvtype lval_type_opt arg_types with
               | Some _type ->
                 let f =
                   let fname = fvar.vname ^ "_" ^ type_name _type in
@@ -993,8 +993,7 @@ object
                 (fun it1 it2 -> it1, From [it2])
                 (expand_identified_term_list [it1])
                 (expand_identified_term_list [it2])
-          | it1, From [] -> List.map (fun it -> it, From []) @@ expand_identified_term_list [it1]
-          | f -> [f])
+          | it1, from -> List.map (fun it -> it, from) @@ expand_identified_term_list [it1])
         in
         ChangeTo (Writes lst)
 
@@ -1041,7 +1040,19 @@ let fold_constants_in_terms =
 (*****************************************************************************)
 
 class asms_to_functions_visitor =
-  let exp_of_lval ?(addr=false) ~loc lv = new_exp ~loc @@ if addr then AddrOf lv else Lval lv in
+  let mkAddrOf ~loc lv =
+    let rec set_flag =
+      function
+        | Var vi, NoOffset -> vi.vaddrof <- true
+        | _, Field (fi, NoOffset) -> fi.faddrof <- true
+        | vi, Field (_, offset) -> set_flag (vi, offset)
+        | vi, Index (_, offset) -> set_flag (vi, offset)
+        | Mem _, _ -> ()
+    in
+    set_flag lv;
+    mkAddrOf ~loc lv
+  in
+  let exp_of_lval ?(addr=false) ~loc lv = if addr then mkAddrOf ~loc lv else new_exp ~loc @@ Lval lv in
   let to_args ~loc ins outs =
     let thrd (_, _, e) = e in
     List.map thrd ins @ List.map (fun trpl -> exp_of_lval ~loc ~addr:true @@ thrd trpl) outs
@@ -1063,8 +1074,8 @@ object(self)
     let to_param pkind i (name_opt, _, e) =
       let typ = typeOf e in
       let ret name = match pkind with
-        | `Input ->  name, typ, []
-        | `Output -> name, TPtr (typ, []), [Attr ("const", [])]
+        | `Input ->  unique_name name, typ, []
+        | `Output -> unique_name name, TPtr (typ, []), [Attr ("const", [])]
       in
       match name_opt with
         | Some name -> ret name
@@ -1144,12 +1155,12 @@ object(self)
                   | [] ->
                       let stmts = List.map (!) stmts in
                       let succs = List.filter (fun sr -> not @@ List.memq sr stmts) succs in
-                      assert (List.length succs = 1);
+                      assert (List.length succs <= 1);
                       List.rev @@ (labeled (Default loc) succs @@ mkStmtOneInstr @@ Skip loc) :: acc
                   | sref :: srefs ->
                       loop
                         ((labeled (Case (integer ~loc @@ n, loc)) [!sref] @@ mkStmt @@ Goto (sref, loc)) :: acc)
-                        (n - 1)
+                        (n + 1)
                         srefs
                 in
                 loop [] 0 stmts

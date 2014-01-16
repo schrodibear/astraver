@@ -176,8 +176,6 @@ val is_last_offset : Cil_types.offset -> bool
 
 val struct_type_for_void : Cil_types.typ ref
 
-val filter_alphanumeric : string -> (char * char) list -> char -> string
-
 (*
 val attach_globinit : Cil_types.stmt -> unit
 *)
