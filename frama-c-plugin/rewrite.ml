@@ -1075,7 +1075,7 @@ object(self)
       let typ = typeOf e in
       let ret name = match pkind with
         | `Input ->  unique_name name, typ, []
-        | `Output -> unique_name name, TPtr (typ, []), [Attr ("const", [])]
+        | `Output -> unique_name name, TPtr (typ, [Attr ("const", [])]), []
       in
       match name_opt with
         | Some name -> ret name
