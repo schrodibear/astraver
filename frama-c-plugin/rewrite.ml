@@ -1156,7 +1156,7 @@ object(self)
                       let stmts = List.map (!) stmts in
                       let succs = List.filter (fun sr -> not @@ List.memq sr stmts) succs in
                       assert (List.length succs <= 1);
-                      List.rev @@ (labeled (Default loc) succs @@ mkStmtOneInstr @@ Skip loc) :: acc
+                      List.rev @@ (labeled (Default loc) succs @@ mkStmtOneInstr ~valid_sid: true @@ Skip loc) :: acc
                   | sref :: srefs ->
                       loop
                         ((labeled (Case (integer ~loc @@ n, loc)) [!sref] @@ mkStmt @@ Goto (sref, loc)) :: acc)
@@ -1176,6 +1176,143 @@ end
 let asms_to_functions file =
   visitFramacFile (new asms_to_functions_visitor) file;
   (* We may have introduced new globals: clear the last_decl table. *)
+  Ast.clear_last_decl ()
+
+(*****************************************************************************)
+(* Rewrite function pointers into void* and fp calls into switch statements. *)
+(*****************************************************************************)
+
+class fptr_to_pvoid_visitor =
+object(self)
+  method vtype : 'a -> 'a visitAction = fun t ->
+    match unrollType t with
+      | TPtr (TFun _, _) -> ChangeTo voidConstPtrType
+      | _ -> DoChildren
+
+  method vlogic_type : 'b -> 'b visitAction = function
+    | Ctype t -> begin match self#vtype t with
+        | ChangeTo t -> ChangeTo (Ctype t)
+        | _ -> DoChildren
+      end
+    | _ -> DoChildren
+end
+
+class fp_eliminating_visitor =
+  let fatal_offset = fatal "Encountered function type with offset: %a" Printer.pp_exp in
+  let do_lval (lhost, loff as lval) =
+    match lhost with
+      | Mem { enode = Lval (Var vi as v, NoOffset) } when isFunctionType vi.vtype ->
+          v, loff
+      | Mem ({ enode = Lval (Var vi, _) } as e) when isFunctionType vi.vtype ->
+          fatal_offset e
+      | _ -> lval
+  in
+  let intro_var =
+    let new_lvals = Hashtbl.create 10 in
+    fun ~loc vi ->
+      try
+        mkAddrOf ~loc @@ Hashtbl.find new_lvals vi
+      with Not_found ->
+        let name = unique_name @@ "dummy_place_of_" ^ vi.vname in
+        let typ = array_type ~length:(integer ~loc:vi.vdecl 4) ~attr:[Attr ("const", [])] intType in
+        let vi' = makeGlobalVar ~generated:true name typ in
+        attach_global @@ GVar (vi', { init = None }, vi.vdecl);
+        vi'.vdecl <- vi.vdecl;
+        vi.vaddrof <- true;
+        vi'.vaddrof <- true;
+        let r = Var vi', NoOffset in
+        Hashtbl.add new_lvals vi r;
+        mkAddrOf ~loc r
+  in
+  let do_expr e =
+    match e.enode with
+      | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset) when isFunctionType vi.vtype ->
+          intro_var ~loc:e.eloc vi
+      | Lval (Var vi, _) | AddrOf (Var vi, _) when isFunctionType vi.vtype ->
+          fatal_offset e
+      | _ -> e
+  in
+object
+  inherit frama_c_inplace
+  inherit! fptr_to_pvoid_visitor
+
+  method! vlval _ = DoChildrenPost do_lval
+
+  method! vterm_lval = do_on_term_lval (None, Some do_lval)
+
+  method! vexpr e = ChangeDoChildrenPost (do_expr e, id)
+
+  method! vterm = do_on_term (Some do_expr, None)
+
+  method! vstmt_aux s =
+    match s.skind with
+      | Instr (Call (_, { enode=Lval (Var { vtype }, NoOffset) }, _, _)) when isFunctionType vtype -> DoChildren
+      | Instr (Call (_, ({ enode=Lval (Var { vtype }, _) } as e), _, _)) when isFunctionType vtype ->
+          fatal_offset e
+      | Instr (Call (_, f, _, _)) ->
+          let types t = match unrollType t with
+            | TFun (rt, ao, _, _) -> rt :: (List.map (fun (_, t, _) -> t) @@ opt_conv [] ao)
+            | _ -> fatal "Non-function called as function: %a" Printer.pp_exp f
+          in
+          let norm, ts =
+            let t = typeOf f in
+            if isPointerType t then id, types @@ pointed_type t
+            else
+              (function
+                | { enode = Lval (Mem e, _) } -> e
+                | _ -> fatal ("Expression of function type which is not a function " ^^
+                              "nor a function pointer dereference: %a") Printer.pp_exp f),
+              types t
+          in
+          let candidates ~loc =
+            Globals.Functions.fold
+              (fun kf acc -> match kf.fundec with
+                | Definition ( { svar = { vtype; vaddrof=true } as vi }, _)
+                | Declaration (_, ({ vtype; vaddrof=true } as vi), _, _) when isFunctionType vtype ->
+                    (vi, types vtype) :: acc
+                | _ -> acc)
+              []
+            |> filter_map
+                 (fun (_, ts') -> not @@ List.exists2 need_cast ts ts')
+                 (fun (vi, _) -> vi, intro_var ~loc vi)
+          in
+          let f = function
+            | { skind = Instr (Call (lv_opt, f, args, loc)); succs; preds } as s ->
+                attach_globaction (fun () ->
+                  let vis, addrs = List.split @@ candidates ~loc in
+                  let eqs = let f = norm f in List.map (mkBinOp ~loc Eq f) addrs in
+                  let mkStmt, mkStmtOneInstr =
+                    let l f x = { (f x) with preds; succs } in
+                    l mkStmt, l @@ mkStmtOneInstr ~valid_sid:true
+                  in
+                  let annot, call =
+                    mkStmtOneInstr @@ Code_annot
+                                        (force_exp_to_assertion @@
+                                           List.fold_left (mkBinOp ~loc LOr) (integer ~loc 1) eqs,
+                                         loc),
+                    mkStmt @@ ListLabels.fold_left2
+                      eqs vis
+                      ~init:(Instr
+                              (let z = integer ~loc 0 in
+                               Set ((Mem (mkCast ~force:false ~e:z ~newt:voidConstPtrType), NoOffset), z, loc)))
+                      ~f:(fun acc eq vi ->
+                            If (eq,
+                                mkBlock [mkStmtOneInstr @@ Call (lv_opt, evar ~loc vi, args, loc)],
+                                mkBlock [mkStmt acc],
+                                loc))
+                  in
+                  annot.succs <- [call];
+                  call.preds <- [annot];
+                  s.skind <- Block (mkBlock [annot; call]));
+                s
+            | s -> fatal "Unexpectedly transformed function call to something else: %a" Printer.pp_stmt s
+          in
+          DoChildrenPost f
+      | _ -> DoChildren
+end
+
+let eliminate_fps file =
+  visit_and_update_globals (new fp_eliminating_visitor) file;
   Ast.clear_last_decl ()
 
 (*****************************************************************************)
@@ -2638,7 +2775,12 @@ let from_comprehension_to_range behavior file =
 
 let rewrite file =
   if checking then check_types file;
+  (* Eliminate function pointers through dummy variables, assertions and if-then-else statements *)
+  Jessie_options.debug "Eliminate function pointers";
+  eliminate_fps file;
+  if checking then check_types file;
   (* Replace inline assembly with undefined function calls (and switches) *)
+  Jessie_options.debug "Replace inline assembly with undefined function calls";
   asms_to_functions file;
   if checking then check_types file;
   (* Specialize block functions e.g. memcpy. *)
