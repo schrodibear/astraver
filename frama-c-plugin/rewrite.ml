@@ -1179,17 +1179,19 @@ let asms_to_functions file =
   Ast.clear_last_decl ()
 
 (*****************************************************************************)
-(* Rewrite function pointers into void* and fp calls into switch statements. *)
+(* Rewrite function pointers into void* and fp calls into if statements.     *)
 (*****************************************************************************)
 
 class fptr_to_pvoid_visitor =
 object(self)
-  method vtype : 'a -> 'a visitAction = fun t ->
+  inherit frama_c_inplace
+
+  method! vtype t =
     match unrollType t with
       | TPtr (TFun _, _) -> ChangeTo voidConstPtrType
       | _ -> DoChildren
 
-  method vlogic_type : 'b -> 'b visitAction = function
+  method! vlogic_type = function
     | Ctype t -> begin match self#vtype t with
         | ChangeTo t -> ChangeTo (Ctype t)
         | _ -> DoChildren
@@ -1199,60 +1201,60 @@ end
 
 class fp_eliminating_visitor =
   let fatal_offset = fatal "Encountered function type with offset: %a" Printer.pp_exp in
-  let do_lval (lhost, loff as lval) =
-    match lhost with
-      | Mem { enode = Lval (Var vi as v, NoOffset) } when isFunctionType vi.vtype ->
-          v, loff
-      | Mem ({ enode = Lval (Var vi, _) } as e) when isFunctionType vi.vtype ->
-          fatal_offset e
-      | _ -> lval
+  let fatal_transform = fatal "Unexpectedly transformed function call to something else: %a" Printer.pp_stmt in
+  let do_not_touch = ref None in
+  let do_expr_pre e =
+    match e.enode with
+      | Lval (Mem e, NoOffset) when isFunctionType @@ typeOf e -> e
+      | Lval (Mem e', _) when isFunctionType @@ typeOf e' -> fatal_offset e
+      | _ -> e
   in
   let intro_var =
-    let new_lvals = Hashtbl.create 10 in
+    let new_vis = Hashtbl.create 10 in
     fun ~loc vi ->
+      let addr0 vi = mkAddrOf ~loc (Var vi, Index (integer ~loc 0, NoOffset)) in
       try
-        mkAddrOf ~loc @@ Hashtbl.find new_lvals vi
+        addr0 @@ Hashtbl.find new_vis vi
       with Not_found ->
         let name = unique_name @@ "dummy_place_of_" ^ vi.vname in
-        let typ = array_type ~length:(integer ~loc:vi.vdecl 4) ~attr:[Attr ("const", [])] intType in
+        let typ = array_type ~length:(integer ~loc:vi.vdecl 16) charType in
         let vi' = makeGlobalVar ~generated:true name typ in
         attach_global @@ GVar (vi', { init = None }, vi.vdecl);
         vi'.vdecl <- vi.vdecl;
         vi.vaddrof <- true;
         vi'.vaddrof <- true;
-        let r = Var vi', NoOffset in
-        Hashtbl.add new_lvals vi r;
-        mkAddrOf ~loc r
+        Hashtbl.add new_vis vi vi';
+        addr0 vi'
   in
-  let do_expr e =
-    match e.enode with
-      | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset) when isFunctionType vi.vtype ->
-          intro_var ~loc:e.eloc vi
-      | Lval (Var vi, _) | AddrOf (Var vi, _) when isFunctionType vi.vtype ->
-          fatal_offset e
+  let do_expr_post e =
+    if !do_not_touch = Some e then (do_not_touch := None; e)
+    else match e.enode with
+      | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset) when isFunctionType vi.vtype -> intro_var ~loc:e.eloc vi
+      | Lval (Var vi, _) | AddrOf (Var vi, _) when isFunctionType vi.vtype -> fatal_offset e
       | _ -> e
   in
-object
+object(self)
   inherit frama_c_inplace
-  inherit! fptr_to_pvoid_visitor
 
-  method! vlval _ = DoChildrenPost do_lval
+  method! vexpr e = ChangeDoChildrenPost (do_expr_pre e, do_expr_post)
 
-  method! vterm_lval = do_on_term_lval (None, Some do_lval)
-
-  method! vexpr e = ChangeDoChildrenPost (do_expr e, id)
-
-  method! vterm = do_on_term (Some do_expr, None)
+  method! vterm = do_on_term (Some do_expr_pre, Some do_expr_post)
 
   method! vstmt_aux s =
     match s.skind with
-      | Instr (Call (_, { enode=Lval (Var { vtype }, NoOffset) }, _, _)) when isFunctionType vtype -> DoChildren
-      | Instr (Call (_, ({ enode=Lval (Var { vtype }, _) } as e), _, _)) when isFunctionType vtype ->
+      | Instr (Call (_, ({ enode = Lval (Var { vtype }, NoOffset) } as e), _, _)) when isFunctionType vtype ->
+          do_not_touch := Some e;
+          DoChildrenPost (function
+            | { skind = Instr (Call (lval_opt, _, args, loc)) } as s ->
+                s.skind <- Instr (Call (lval_opt, e, args, loc)); (* Double protection (allows ignoring do_not_touch) *)
+                s
+            | s -> fatal_transform s)
+      | Instr (Call (_, ({ enode = Lval (Var { vtype }, _) } as e), _, _)) when isFunctionType vtype ->
           fatal_offset e
       | Instr (Call (_, f, _, _)) ->
           let types t = match unrollType t with
             | TFun (rt, ao, _, _) -> rt :: (List.map (fun (_, t, _) -> t) @@ opt_conv [] ao)
-            | _ -> fatal "Non-function called as function: %a" Printer.pp_exp f
+            | t -> fatal "Non-function (%a) called as function: %a" Printer.pp_typ t Printer.pp_exp f
           in
           let norm, ts =
             let t = typeOf f in
@@ -1273,39 +1275,32 @@ object
                 | _ -> acc)
               []
             |> filter_map
-                 (fun (_, ts') -> not @@ List.exists2 need_cast ts ts')
+                 (fun (_, ts') -> List.(length ts = length ts' && not @@ exists2 need_cast ts ts'))
                  (fun (vi, _) -> vi, intro_var ~loc vi)
           in
+          let kf = the self#current_kf in
           let f = function
             | { skind = Instr (Call (lv_opt, f, args, loc)); succs; preds } as s ->
                 attach_globaction (fun () ->
                   let vis, addrs = List.split @@ candidates ~loc in
-                  let eqs = let f = norm f in List.map (mkBinOp ~loc Eq f) addrs in
-                  let mkStmt, mkStmtOneInstr =
-                    let l f x = { (f x) with preds; succs } in
-                    l mkStmt, l @@ mkStmtOneInstr ~valid_sid:true
+                  let z = integer ~loc 0 in
+                  let eqs =
+                    let f = norm f in
+                    List.map (fun e -> mkBinOp ~loc Eq z @@ mkBinOp ~loc MinusPP f e) addrs
                   in
-                  let annot, call =
-                    mkStmtOneInstr @@ Code_annot
-                                        (force_exp_to_assertion @@
-                                           List.fold_left (mkBinOp ~loc LOr) (integer ~loc 1) eqs,
-                                         loc),
-                    mkStmt @@ ListLabels.fold_left2
-                      eqs vis
-                      ~init:(Instr
-                              (let z = integer ~loc 0 in
-                               Set ((Mem (mkCast ~force:false ~e:z ~newt:voidConstPtrType), NoOffset), z, loc)))
-                      ~f:(fun acc eq vi ->
-                            If (eq,
-                                mkBlock [mkStmtOneInstr @@ Call (lv_opt, evar ~loc vi, args, loc)],
-                                mkBlock [mkStmt acc],
-                                loc))
-                  in
-                  annot.succs <- [call];
-                  call.preds <- [annot];
-                  s.skind <- Block (mkBlock [annot; call]));
+                  Annotations.add_assert jessie_emitter ~kf s @@
+                    force_exp_to_predicate @@ List.fold_left (mkBinOp ~loc LOr) (integer ~loc 0) eqs;
+                  let link s = { s with preds; succs } in
+                  s.skind <- ListLabels.fold_left2
+                    eqs vis
+                    ~init:(Instr (Set ((Mem (mkCast ~force:false ~e:z ~newt:voidConstPtrType), NoOffset), z, loc)))
+                    ~f:(fun acc eq vi ->
+                          If (eq,
+                              mkBlock [link @@ mkStmtOneInstr @@ Call (lv_opt, evar ~loc vi, args, loc)],
+                              mkBlock [link @@ mkStmt acc],
+                              loc)));
                 s
-            | s -> fatal "Unexpectedly transformed function call to something else: %a" Printer.pp_stmt s
+            | s -> fatal_transform s
           in
           DoChildrenPost f
       | _ -> DoChildren
@@ -1313,6 +1308,7 @@ end
 
 let eliminate_fps file =
   visit_and_update_globals (new fp_eliminating_visitor) file;
+  visitFramacFile (new fptr_to_pvoid_visitor) file;
   Ast.clear_last_decl ()
 
 (*****************************************************************************)
