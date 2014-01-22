@@ -1143,23 +1143,19 @@ object(self)
     | _ -> DoChildren
 
   method! vstmt_aux = function
-    | { skind = AsmGoto (attrs, _, outs, ins, clobs, stmts, loc); succs; preds } as s ->
+    | { skind = AsmGoto (attrs, _, outs, ins, clobs, stmts, loc) } as s ->
         let f = self#introduce_function ~int:true attrs outs ins clobs loc in
         begin match self#current_func with
           | Some fundec ->
               let aux = makeLocalVar fundec ~generated:true (unique_name "inline_asm_goto_aux") intType in
               self#queueInstr [Call (Some (var aux), evar ~loc f, to_args ~loc ins outs, loc)];
-              let labeled lab succs ({ labels } as stmt) = { stmt with labels = lab :: labels; succs; preds } in
+              let labeled lab ({ labels } as stmt) = stmt.labels <- lab :: labels; stmt in
               let cases =
                 let rec loop acc n = function
-                  | [] ->
-                      let stmts = List.map (!) stmts in
-                      let succs = List.filter (fun sr -> not @@ List.memq sr stmts) succs in
-                      assert (List.length succs <= 1);
-                      List.rev @@ (labeled (Default loc) succs @@ mkStmtOneInstr ~valid_sid: true @@ Skip loc) :: acc
+                  | [] -> List.rev @@ (labeled (Default loc) @@ mkStmtOneInstr ~valid_sid:true @@ Skip loc) :: acc
                   | sref :: srefs ->
                       loop
-                        ((labeled (Case (integer ~loc @@ n, loc)) [!sref] @@ mkStmt @@ Goto (sref, loc)) :: acc)
+                        ((labeled (Case (integer ~loc @@ n, loc)) @@ mkStmt @@ Goto (sref, loc)) :: acc)
                         (n + 1)
                         srefs
                 in
@@ -1183,17 +1179,17 @@ let asms_to_functions file =
 (*****************************************************************************)
 
 class fptr_to_pvoid_visitor =
-object(self)
+object
   inherit frama_c_inplace
 
   method! vtype t =
     match unrollType t with
-      | TPtr (TFun _, _) -> ChangeTo voidConstPtrType
+      | TPtr (TFun _, _) | TArray (TFun _, _, _, _) -> ChangeTo voidConstPtrType
       | _ -> DoChildren
 
   method! vlogic_type = function
-    | Ctype t -> begin match self#vtype t with
-        | ChangeTo t -> ChangeTo (Ctype t)
+    | Ctype t -> begin match unrollType t with
+        | TFun _ | TPtr (TFun _, _) | TArray (TFun _, _, _, _) -> ChangeTo (Ctype voidConstPtrType)
         | _ -> DoChildren
       end
     | _ -> DoChildren
@@ -1210,6 +1206,7 @@ class fp_eliminating_visitor =
       | _ -> e
   in
   let intro_var =
+    let module Hashtbl = Cil_datatype.Varinfo.Hashtbl in
     let new_vis = Hashtbl.create 10 in
     fun ~loc vi ->
       let addr0 vi = mkAddrOf ~loc (Var vi, Index (integer ~loc 0, NoOffset)) in
@@ -1227,7 +1224,7 @@ class fp_eliminating_visitor =
         addr0 vi'
   in
   let do_expr_post e =
-    if !do_not_touch = Some e then (do_not_touch := None; e)
+    if !do_not_touch = Some e.eid then (do_not_touch := None; e)
     else match e.enode with
       | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset) when isFunctionType vi.vtype -> intro_var ~loc:e.eloc vi
       | Lval (Var vi, _) | AddrOf (Var vi, _) when isFunctionType vi.vtype -> fatal_offset e
@@ -1242,13 +1239,9 @@ object(self)
 
   method! vstmt_aux s =
     match s.skind with
-      | Instr (Call (_, ({ enode = Lval (Var { vtype }, NoOffset) } as e), _, _)) when isFunctionType vtype ->
-          do_not_touch := Some e;
-          DoChildrenPost (function
-            | { skind = Instr (Call (lval_opt, _, args, loc)) } as s ->
-                s.skind <- Instr (Call (lval_opt, e, args, loc)); (* Double protection (allows ignoring do_not_touch) *)
-                s
-            | s -> fatal_transform s)
+      | Instr (Call (_, ({ enode = Lval (Var { vtype }, NoOffset) } as f), _, _)) when isFunctionType vtype ->
+          do_not_touch := Some f.eid;
+          DoChildren
       | Instr (Call (_, ({ enode = Lval (Var { vtype }, _) } as e), _, _)) when isFunctionType vtype ->
           fatal_offset e
       | Instr (Call (_, f, _, _)) ->
@@ -1279,26 +1272,34 @@ object(self)
                  (fun (vi, _) -> vi, intro_var ~loc vi)
           in
           let kf = the self#current_kf in
+          let fundec = the self#current_func in
           let f = function
-            | { skind = Instr (Call (lv_opt, f, args, loc)); succs; preds } as s ->
+            | { skind = Instr (Call (lv_opt, f, args, loc)) } as s ->
                 attach_globaction (fun () ->
                   let vis, addrs = List.split @@ candidates ~loc in
-                  let z = integer ~loc 0 in
+                  let z = zero ~loc in
                   let eqs =
                     let f = norm f in
-                    List.map (fun e -> mkBinOp ~loc Eq z @@ mkBinOp ~loc MinusPP f e) addrs
+                    List.map (fun e -> new_exp ~loc @@ BinOp (Eq, f, e, intType)) addrs
                   in
                   Annotations.add_assert jessie_emitter ~kf s @@
-                    force_exp_to_predicate @@ List.fold_left (mkBinOp ~loc LOr) (integer ~loc 0) eqs;
-                  let link s = { s with preds; succs } in
-                  s.skind <- ListLabels.fold_left2
+                    force_exp_to_predicate @@ List.fold_left (mkBinOp ~loc LOr) z eqs;
+                  let s' = ListLabels.fold_left2
                     eqs vis
-                    ~init:(Instr (Set ((Mem (mkCast ~force:false ~e:z ~newt:voidConstPtrType), NoOffset), z, loc)))
+                    ~init:(let vi = makeTempVar fundec ~name:"unreachable" intType in
+                           let s = mkStmtOneInstr ~valid_sid:true @@
+                                     Set ((Var vi, NoOffset), mkBinOp ~loc Div z z, loc)
+                           in
+                           Annotations.add_assert jessie_emitter ~kf s @@ Logic_const.pfalse;
+                           s)
                     ~f:(fun acc eq vi ->
-                          If (eq,
-                              mkBlock [link @@ mkStmtOneInstr @@ Call (lv_opt, evar ~loc vi, args, loc)],
-                              mkBlock [link @@ mkStmt acc],
-                              loc)));
+                          mkStmt @@
+                            If (eq,
+                                mkBlock [mkStmtOneInstr ~valid_sid:true @@ Call (lv_opt, evar ~loc vi, args, loc)],
+                                mkBlock [acc],
+                                loc))
+                  in
+                  s.skind <- s'.skind);
                 s
             | s -> fatal_transform s
           in
