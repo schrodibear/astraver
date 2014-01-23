@@ -225,8 +225,19 @@ fi
 
 LOCALOCAMLGRAPH=no
 
-AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
- if test "$OCAMLGRAPH" = no ; then
+AC_CHECK_PROG(OCAMLFIND,ocamlfind,ocamlfind,no)
+
+if test "$OCAMLFIND" = no; then
+  AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
+else
+ if $OCAMLFIND list | grep -e ocamlgraph --quiet; then
+   OCAMLGRAPH=yes;
+ else
+   OCAMLGRAPH=no;
+ fi
+fi
+
+if test "$OCAMLGRAPH" = no ; then
     AC_CHECK_FILE(ocamlgraph/src/sig.mli,OCAMLGRAPH=yes,OCAMLGRAPH=no)
     if test "$OCAMLGRAPH" = no ; then
       AC_MSG_ERROR(Cannot find ocamlgraph library. Please install the *libocamlgraph-ocaml-dev* Debian package - or use the GODI caml package system *http://godi.ocaml-programming.de/* - or compile from sources *http://ocamlgraph.lri.fr/*)
@@ -235,10 +246,14 @@ AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
       OCAMLGRAPHVER=" in local subdir ocamlgraph"
       LOCALOCAMLGRAPH=yes
     fi
- else
+else if test "$OCAMLFIND" = no; then
     OCAMLGRAPHLIB="-I +ocamlgraph"
     OCAMLGRAPHVER=" in Ocaml lib, subdir ocamlgraph"
- fi
+else
+    OCAMLGRAPHLIB=$($OCAMLFIND query -i-format ocamlgraph)
+    OCAMLGRAPHVER=" installed by ocamlfind"
+fi;
+fi
 
 # checking local ocamlgraph compilation
 
