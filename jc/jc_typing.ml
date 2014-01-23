@@ -2553,7 +2553,7 @@ let field st root ((rep,abs), t, id, bitsize) =
     jc_field_info_type = ty;
     jc_field_info_hroot = root;
     jc_field_info_struct = st;
-    jc_field_info_rep = rep or (not (is_pointer_type ty));
+    jc_field_info_rep = rep || (not (is_pointer_type ty));
     jc_field_info_abstract = abs;
     jc_field_info_bitsize = bitsize;
   } in

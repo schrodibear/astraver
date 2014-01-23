@@ -726,7 +726,7 @@ let main () =
       if Options.delete_old_vcs then delete_old_vcs files;
       iter_with_last deal_file files;
       if type_only then exit 0;
-      if (pruning) or (Options.pruning_hyp_v != -1) then
+      if (pruning) || (Options.pruning_hyp_v != -1) then
 	begin
 	  let q =  declarationQueue in 
 	  encode q 

@@ -862,7 +862,7 @@ PdlSet
 module PdlSet = Set.Make(struct type t = vertexLabel
     let compare = compare end)
 let abstr_mem_of el pdl_set =
-  PdlSet.mem { l = el.l; pol = Pos } pdl_set or
+  PdlSet.mem { l = el.l; pol = Pos } pdl_set ||
   PdlSet.mem { l = el.l; pol = Neg } pdl_set
 
 let is_positive el =
@@ -874,10 +874,10 @@ let mem_of el pdl_set =
   (PdlSet.mem { l = el.l; pol = el.pol } pdl_set )
 
 let mem_of_or_pos el pdl_set =
-  (PdlSet.mem { l = el.l; pol = el.pol } pdl_set ) or el.pol == Pos
+  (PdlSet.mem { l = el.l; pol = el.pol } pdl_set ) || el.pol == Pos
 
 let mem_of_or_neg el pdl_set =
-  (PdlSet.mem { l = el.l; pol = el.pol } pdl_set ) or el.pol == Neg
+  (PdlSet.mem { l = el.l; pol = el.pol } pdl_set ) || el.pol == Neg
 
 let abstr_subset_of_pdl set1 set2 =
   if polarized_preds then
@@ -1099,11 +1099,11 @@ let get_suffixed_ident i1 i2 =
 (* in (remove_percents s) *)
 
 let is_comparison id =
-    (is_int_comparison id or is_real_comparison id or is_comparison id)
+    (is_int_comparison id || is_real_comparison id || is_comparison id)
 
 let comparison_to_consider id =
   use_comparison_as_criteria_for_graph_construction && (
-    ((not comparison_eqOnly) && (is_int_comparison id or is_real_comparison id))
+    ((not comparison_eqOnly) && (is_int_comparison id || is_real_comparison id))
     || (id == t_eq || id == t_neq || id == t_eq_int || id == t_neq_int || id == t_eq_real || id == t_neq_real )
   )
 
@@ -2121,14 +2121,14 @@ let filter_acc_variables l concl_rep selection_strategy pred_symb =
           display_str "vars" vars;
           display_str "concl_rep" concl_rep;
         end;
-        if (!variablesMaximumDepth< !vb) or condition then
+        if (!variablesMaximumDepth< !vb) || condition then
           begin
             if debug then
 	      begin
  		if (!predicateMaximumDepth< !pb) then
- 		  Format.printf "Keeped #1 (Vars - No filter due to VariableMaximumDepth<PredDepth)\n\n"
+ 		  Format.printf "Kept #1 (Vars - No filter due to VariableMaximumDepth<PredDepth)\n\n"
  		else
- 		  Format.printf "Keeped #1 (Vars)\n\n"
+ 		  Format.printf "Kept #1 (Vars)\n\n"
  	      end;
             
             (* the predicate symbols has to be in the list of symbols *)
@@ -2142,14 +2142,16 @@ let filter_acc_variables l concl_rep selection_strategy pred_symb =
                   display_symb_of_pdl_set pred_symb;
                 end;
 	      
-	      if (!predicateMaximumDepth< !pb) or (abstr_subset_of_pdl preds_of_p pred_symb) then
+	      if (!predicateMaximumDepth< !pb) || 
+                (abstr_subset_of_pdl preds_of_p pred_symb)
+              then
                 begin
                   if debug then 
  		    begin
  		      if (!predicateMaximumDepth< !pb) then
- 			Format.printf "Keeped #2 (Preds - No filter due to MaxReachableDepth<PredDepth)\n\n"
+ 			Format.printf "Kept #2 (Preds - No filter due to MaxReachableDepth<PredDepth)\n\n"
  		      else
- 			Format.printf "Keeped #2 (Preds)\n\n"
+ 			Format.printf "Kept #2 (Preds)\n\n"
  		    end;
 		  Spred (t, p):: filter q
                 end
@@ -2182,14 +2184,16 @@ let managesContext relevantPreds decl =
         let preds_of_p = get_preds_of p use_comparison_as_criteria_for_hypothesis_filtering in
 
 
-	if (!predicateMaximumDepth< !pb) or (abstr_subset_of_pdl preds_of_p relevantPreds) then
+	if (!predicateMaximumDepth< !pb) || 
+          (abstr_subset_of_pdl preds_of_p relevantPreds)
+        then
 	  begin
             if debug then 
 	      begin
 		if (!predicateMaximumDepth< !pb) then
-		  Format.printf "Ctx Keeped (No filter due to MaxReachableDepth<PredDepth)\n\n"
+		  Format.printf "Ctx Kept (No filter due to MaxReachableDepth<PredDepth)\n\n"
 		else
-		  Format.printf "Ctx Keeped \n\n"
+		  Format.printf "Ctx Kept \n\n"
 	      end;
             Queue.push ax decl
 	  end
@@ -2206,15 +2210,15 @@ let managesContext relevantPreds decl =
         
         | (p_cnf, Dpredicate_def (loc, ident, def)) :: l ->
             let preds_of_p_cnf = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in
-	    if (!predicateMaximumDepth< !pb) or (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then
+	    if (!predicateMaximumDepth< !pb) || (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then
 	      begin
                 (* On garde tout le predicat *)
                 if debug then
 		  begin
 		    if (!predicateMaximumDepth< !pb) then
-		      Format.printf "Ctx Keeped (No filter due to MaxReachableDepth<PredDepth)\n\n"
+		      Format.printf "Ctx Kept (No filter due to MaxReachableDepth<PredDepth)\n\n"
 		    else
-                      Format.printf "Ctx Keeped\n\n"
+                      Format.printf "Ctx Kept\n\n"
 		  end;
                 Queue.push (Dpredicate_def (loc, ident, def)) decl;
                 filter l
@@ -2240,15 +2244,15 @@ let managesContext relevantPreds decl =
         
         | (p_cnf, Daxiom (loc, ident, ps)) :: l ->
             let preds_of_p_cnf = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in
-            if (!predicateMaximumDepth< !pb) or (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then
+            if (!predicateMaximumDepth< !pb) || (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then
               begin
                 (* On garde tout l'axiome en forme originale *)
                 if debug then
 		  begin
 		    if (!predicateMaximumDepth< !pb) then
-		      Format.printf "Ctx Keeped (No filter due to MaxReachableDepth<PredDepth)\n\n"
+		      Format.printf "Ctx Kept (No filter due to MaxReachableDepth<PredDepth)\n\n"
 		    else
-                      Format.printf "Ctx Keeped\n\n"
+                      Format.printf "Ctx Kept\n\n"
 		  end;
 
                 Queue.push (Daxiom (loc, ident, ps)) decl;

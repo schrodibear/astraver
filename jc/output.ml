@@ -825,12 +825,12 @@ let rec fprintf_type ~need_colon anon form t =
   match t with
     | Prod_type(id,t1,t2) ->
 	  if !why3syntax then
-            let id = if id="" or anon then "_anonymous" else id in
+            let id = if id="" || anon then "_anonymous" else id in
             fprintf form "@[<hov 1>(%s:%a)@ %a@]" (why3ident id)
 	    (fprintf_type ~need_colon:false anon) t1
               (fprintf_type ~need_colon anon) t2
           else
-	    if id="" or anon then
+	    if id="" || anon then
 	      fprintf form "@[<hov 1>%a ->@ %a@]"
 	        (fprintf_type ~need_colon:false anon) t1
                 (fprintf_type ~need_colon anon) t2
