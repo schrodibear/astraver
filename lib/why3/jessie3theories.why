@@ -646,6 +646,11 @@ axiom alloc_fresh_def:
 
 predicate alloc_extends_except (alloc_table 't) (alloc_table 't) (pset 't)
 
+axiom alloc_extends_alloc_extends_except:
+  forall a1: alloc_table 't. forall a2: alloc_table 't [alloc_extends a1 a2].
+    forall l: pset 't [alloc_extends_except a1 a2 l].
+      alloc_extends a1 a2 -> alloc_extends_except a1 a2 l
+
 axiom alloc_extends_except_offset_min:
  forall a1:alloc_table 't. forall a2:alloc_table 't. forall l:(pset 't)
  [alloc_extends_except a1 a2 l].

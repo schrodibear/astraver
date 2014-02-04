@@ -37,6 +37,10 @@ open Jc_fenv
 
 val ( $ ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 
+val ( % ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
+
+val id: 'a -> 'a
+
 (*
 exception Error of Loc.position * string
 

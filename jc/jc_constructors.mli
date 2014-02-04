@@ -151,6 +151,31 @@ class term_with :
     region : region; typ : jc_type; .. > ->
   term
 
+val term_with_node :
+  < pos : Loc.position;
+    typ : jc_type;
+    mark : string;
+    region : region;
+    label: label option; .. > ->
+  ?pos:Loc.position ->
+  ?typ:jc_type ->
+  ?mark:string ->
+  ?region:region ->
+  term_node ->
+  term
+
+val term_with_node_nomark :
+  < pos : Loc.position;
+    typ : jc_type;
+    region : region;
+    label: label option; .. > ->
+  ?pos:Loc.position ->
+  ?typ:jc_type ->
+  ?mark:string ->
+  ?region:region ->
+  term_node ->
+  term
+
 class term_var :
   ?pos:Loc.position -> ?mark:string -> var_info -> term
 
@@ -204,6 +229,15 @@ class location_set_with :
   ?region:region ->
   node:location_set_node ->
   < pos : Loc.position; region : region; .. > ->
+  location_set
+
+val location_set_with_node :
+  < pos : Loc.position; region : region; label : label option; typ : jc_type; .. > ->
+  ?pos:Loc.position ->
+  ?typ:jc_type ->
+  ?label:label ->
+  ?region:region ->
+  location_set_node ->
   location_set
 
 class expr :
@@ -764,7 +798,13 @@ module Term :
       ?mark:string ->
       ?region:region -> node:term_node -> unit -> term
 *)
-
+    val mkconst :
+      const: const ->
+      ?pos:Loc.position ->
+      ?mark:string ->
+      ?region:Jc_env.region ->
+      unit ->
+      term
     val mkint :
       ?value: int ->
       ?valuestr:string ->

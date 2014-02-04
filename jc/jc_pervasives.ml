@@ -45,6 +45,10 @@ open Num
 
 let ( $ ) = fun f g x -> f(g x)
 
+let ( % ) f g x = f (g x)
+
+let id x = x
+
 exception Error of Loc.position * string
 
 let error l =

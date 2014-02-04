@@ -3505,6 +3505,66 @@ let get_valid_pred_app ~in_param vi =
     | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
     | JCTtype_var _ -> LTrue
 
+let rec valid_location_set_of_location ?(label=LabelOld) loc =
+  let rec contains_range =
+    let rec locs_contains_range = function
+      | JCLSvar _ -> false
+      | JCLSrange _ | JCLSrange_term _ -> true
+      | JCLSderef (locs, _, _, _) | JCLSat (locs, _) -> locs_contains_range locs#node
+    in
+    function
+      | JCLvar _ | JCLderef_term _ (* We don't support ranges in terms however *) -> false
+      | JCLat (loc, _) -> contains_range loc#node
+      | JCLderef (locs, _, _, _) -> locs_contains_range locs#node
+  in
+  location_set_with_node loc @@
+    let t = term_of_location loc in
+    let tzero_opt = Some (Term.mkconst ~const:(JCCinteger "0") ~pos:loc#pos ()) in
+    let int_term = new term ~pos:t#pos ~typ:(JCTnative Tinteger) in
+    if not (contains_range loc#node) then
+      JCLSrange_term (t,
+                      tzero_opt,
+                      Some (int_term @@
+                              JCTat (int_term @@
+                                       JCToffset (Offset_max,
+                                                  t,
+                                                  match t#typ with
+                                                    | JCTpointer (JCtag (st, _), _, _) -> st
+                                                    | typ -> Jc_typing.typing_error
+                                                               t#pos
+                                                               "Pointer type expected: %a : %a"
+                                                               Jc_output.term t
+                                                               print_type typ),
+                                     label)))
+    else
+      JCLSrange_term (t, tzero_opt, None)
+
+let alloc_extends ~type_safe alloc_tables locs =
+  let at_locs =
+    List.map
+      (fun loc -> alloc_table_name (lderef_alloc_class ~type_safe loc, loc#region), loc)
+      locs
+  in
+  let alloc_extends at =
+    let at = alloc_table_name at in
+    let args = [LDerefAtLabel (at, ""); LDeref at] in
+    let to_pset loc =
+      let locs = valid_location_set_of_location loc in
+      let lab = Option_misc.map_default id LabelOld locs#label in
+      pset ~type_safe ~global_assertion:false lab locs
+    in
+    match List.fold_left (fun acc (at', loc) -> if at = at' then loc :: acc else acc) [] at_locs with
+      | [] -> LPred ("alloc_extends", args)
+      | loc :: locs ->
+          let pset =
+            List.fold_left
+              (fun acc loc -> LApp ("pset_union", [to_pset loc; acc]))
+              (to_pset loc)
+              locs
+          in
+          LPred ("alloc_extends_except", args @ [pset])
+  in
+  AllocMap.fold (fun at _ acc -> make_and acc (alloc_extends at)) alloc_tables LTrue
 
 let pre_tr_fun f _funpos spec _body acc =
   begin
@@ -3624,7 +3684,19 @@ let tr_fun f funpos spec body acc =
 			LabelOld f.jc_fun_info_effects (Some loclist) funpos)
 		 in
 		 mark_assertion pos (make_and post assigns_post)
-	   in post
+	   in
+           (* Add alloc_extends[except] predicates for those alloc tables modified by the function, i.e. *)
+           (* listed in the f.jc_fun_info_effects.jc_writes. *)
+           (* We except psets of locations specified in the allocates clause i.e. b.jc_behavior_allocates. *)
+           (* IMPORTANT: We should add the predicates BOTH to the external and internal postconditions, *)
+           (* otherwise safety might be violated. *)
+           let post = match b.jc_behavior_allocates with
+               | None -> post
+               | Some (pos', locs) ->
+                   mark_assertion pos @@ make_and post @@ mark_assertion pos' @@
+                     alloc_extends ~type_safe f.jc_fun_info_effects.jc_writes.jc_effect_alloc_tables locs
+           in
+           post
 	 in
 	 let internal_post = make_post ~type_safe:false ~internal:true in
 	 let external_post = make_post ~type_safe:true ~internal:false in

@@ -140,6 +140,12 @@ class term_with ?pos ?typ ?mark ?region ?node t =
   let node = match node with None -> t#node | Some node -> node in
   term ~pos ~typ ~mark ?label:llab ~region node
 
+let term_with_node t ?(pos=t#pos) ?(typ=t#typ) ?(mark=t#mark) ?(region=t#region) node =
+  new term ~pos ~typ ~mark ?label:t#label ~region node
+
+let term_with_node_nomark t ?(pos=t#pos) ?(typ=t#typ) ?(mark="") ?(region=t#region) node =
+  new term ~pos ~typ ~mark ?label:t#label ~region node
+
 class term_var ?(pos = Loc.dummy_position) ?(mark="") v =
   term ~pos ~typ:v.jc_var_info_type ~mark ~region:v.jc_var_info_region
     (JCTvar v)
@@ -177,6 +183,10 @@ class location_set_with ?pos ~typ ?label ?region ~node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
   let region = match region with None -> t#region | Some region -> region in
   location_set ~pos ~typ ?label ~region node
+
+let location_set_with_node t ?(pos=t#pos) ?(typ=t#typ) ?label ?(region=t#region) node =
+  let label = match label with None -> t#label | Some _ -> label in
+  new location_set ~pos ~typ ?label ~region node
 
 class expr ?(pos = Loc.dummy_position) ~typ ?(mark="") ?region
   ?original_type node =

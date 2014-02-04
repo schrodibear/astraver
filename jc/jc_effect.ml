@@ -955,6 +955,45 @@ and location_set_of_term t =
   in
   new location_set_with ~typ:t#typ ~node:locs_node t
 
+let rec term_of_location_set locs =
+  term_with_node_nomark locs @@
+    let range_typ = function
+      | Some t, _ | _, Some t -> t#typ (* Relying on earlier type checks (equality is assumed) *)
+      | None, None -> JCTnative Tinteger
+    in
+    let range_term t1_opt t2_opt =
+      term_with_node_nomark
+        locs
+        ~typ:(range_typ (t1_opt, t2_opt))
+        ~region:dummy_region
+        (JCTrange (t1_opt, t2_opt))
+    in
+    match locs#node, locs#region with
+      | JCLSvar vi, _ -> JCTvar vi
+      | JCLSderef (locs, lab, fi, r), r' when r = r' ->
+          JCTderef (term_of_location_set locs, lab, fi)
+      | JCLSderef (_, _, _, r), r' ->
+          Jc_typing.typing_error
+            locs#pos
+            "Failed to transform location set to term: %a: different regions: %a != %a"
+            Jc_output.location_set locs Region.print r Region.print r'
+      | JCLSrange (locs, t1_opt, t2_opt), _ -> JCTshift (term_of_location_set locs, range_term t1_opt t2_opt)
+      | JCLSrange_term (t, t1_opt, t2_opt), _ -> JCTshift (t, range_term t1_opt t2_opt)
+      | JCLSat (locs, lab), _ -> JCTat (term_of_location_set locs, lab)
+
+let rec term_of_location ?(label=LabelHere) loc =
+  term_with_node_nomark loc @@
+    match loc#node, loc#region with
+      | JCLvar vi, _ -> JCTvar vi
+      | JCLderef (locs, lab, fi, r), r' when r = r' ->
+          JCTderef (term_of_location_set locs, lab, fi)
+      | JCLderef (_, _, _, r), r' ->
+          Jc_typing.typing_error
+            loc#pos
+            "Failed to transform location to term: %a: different regions: %a != %a"
+            Jc_output.location loc Region.print r Region.print r'
+      | JCLderef_term (t, fi), _ -> JCTderef (t, label, fi)
+      | JCLat (loc, label), _ -> JCTat (term_of_location ~label loc, label)
 
 (* last location can be mutated *)
 let rec immutable_location fef loc =
