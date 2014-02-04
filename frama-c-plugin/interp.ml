@@ -1262,7 +1262,12 @@ let allocates a =
   match a with
     | FreeAllocAny ->
         None
-    | FreeAlloc(alloc,frees) ->
+    | FreeAlloc(frees, alloc) ->
+      let frees =
+        List.map
+          (fun t -> Logic_const.({ t with it_content = tat ~loc:t.it_content.term_loc (t.it_content, old_label) }))
+          frees
+      in
       let assign_list =
         List.fold_left
           (fun acc out ->
