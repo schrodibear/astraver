@@ -3505,7 +3505,7 @@ let get_valid_pred_app ~in_param vi =
     | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
     | JCTtype_var _ -> LTrue
 
-let rec valid_location_set_of_location ?(label=LabelOld) loc =
+let rec valid_location_set_of_location ?(label=LabelHere) loc =
   let rec contains_range =
     let rec locs_contains_range = function
       | JCLSvar _ -> false
@@ -3549,9 +3549,12 @@ let alloc_extends ~type_safe alloc_tables locs =
     let at = alloc_table_name at in
     let args = [LDerefAtLabel (at, ""); LDeref at] in
     let to_pset loc =
-      let locs = valid_location_set_of_location loc in
-      let lab = Option_misc.map_default id LabelOld locs#label in
-      pset ~type_safe ~global_assertion:false lab locs
+      let label = match loc#node with
+        | JCLat (_, lab) -> Some lab
+        | _ -> None
+      in
+      let locs = valid_location_set_of_location ?label loc in
+      pset ~type_safe ~global_assertion:false LabelHere locs
     in
     match List.fold_left (fun acc (at', loc) -> if at = at' then loc :: acc else acc) [] at_locs with
       | [] -> LPred ("alloc_extends", args)

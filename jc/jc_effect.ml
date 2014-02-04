@@ -970,7 +970,7 @@ let rec term_of_location_set locs =
     in
     match locs#node, locs#region with
       | JCLSvar vi, _ -> JCTvar vi
-      | JCLSderef (locs, lab, fi, r), r' when r = r' ->
+      | JCLSderef (locs, lab, fi, r), r' when Region.equal r r' ->
           JCTderef (term_of_location_set locs, lab, fi)
       | JCLSderef (_, _, _, r), r' ->
           Jc_typing.typing_error
@@ -985,7 +985,7 @@ let rec term_of_location ?(label=LabelHere) loc =
   term_with_node_nomark loc @@
     match loc#node, loc#region with
       | JCLvar vi, _ -> JCTvar vi
-      | JCLderef (locs, lab, fi, r), r' when r = r' ->
+      | JCLderef (locs, lab, fi, r), r' when Region.equal r r' ->
           JCTderef (term_of_location_set locs, lab, fi)
       | JCLderef (_, _, _, r), r' ->
           Jc_typing.typing_error
