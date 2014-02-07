@@ -338,6 +338,11 @@ let run_and_catch_error () =
            Jessie plugin can not be used on your code."
     | Log.FeatureRequest (_,s) ->
 	Jessie_options.error "Unimplemented feature: %s." s
+    | SizeOfError (s, _) when Str.(string_match (regexp "abstract type '\\(.*\\)'") s 0) ->
+        Jessie_options.error
+          ~current:true
+          "Can't compute the size of an undeclared composite type '%s'"
+          (Str.matched_group 1 s)
 
 let run_and_catch_error =
   Dynamic.register
