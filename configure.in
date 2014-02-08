@@ -267,10 +267,21 @@ if test "$LOCALOCAMLGRAPH" = yes; then
 fi
 
 # checking for lablgtk2
-AC_CHECK_FILE($OCAMLLIB/lablgtk2/lablgtk.cma,LABLGTK2=yes,LABLGTK2=no)
-# AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no) not always available (Win32)
-if test "$LABLGTK2" = yes ; then
+if test "$OCAMLFIND" = no; then
+   AC_CHECK_FILE($OCAMLLIB/lablgtk2/lablgtk.cma,LABLGTK2=yes,LABLGTK2=no)
+   # AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no) not always available (Win32)
+   if test "$LABLGTK2" = yes ; then
       INCLUDEGTK2="-I +lablgtk2"
+   fi
+else
+   INCLUDEGTK2=$(ocamlfind query lablgtk2)
+   if test -n "$INCLUDEGTK2";then
+      LABLGTK2=yes
+      echo "ocamlfind found lablgtk2 in $INCLUDEGTK2"
+      INCLUDEGTK2="-I $INCLUDEGTK2"
+   else
+      LABLGTK2=no
+   fi
 fi
 
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
@@ -315,7 +326,7 @@ else
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
       AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
-        Fluorine-20130401) 
+        Fluorine-20130601+dev) 
            FRAMAC=yes
            ;;
         *) FRAMACMSG="you need Frama-C version Fluorine-20130401"

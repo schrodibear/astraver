@@ -96,7 +96,7 @@ let get_bc_predicate () =
   get_bc "lpredicate"
 
 let color_exists ty = 
-  (Hashtbl.mem fcolors ty) or (Hashtbl.mem bcolors ty)
+  (Hashtbl.mem fcolors ty) || (Hashtbl.mem bcolors ty)
 
 let get_all_colors () = 
   List.map 
