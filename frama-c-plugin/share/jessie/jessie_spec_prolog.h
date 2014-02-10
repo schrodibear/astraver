@@ -25,7 +25,9 @@
 #ifndef _JESSIE_SPEC_PROLOG_H_
 #define _JESSIE_SPEC_PROLOG_H_
 
+#ifndef _SIZE_T
 #include <stddef.h>
+#endif
 
 typedef char _type;
 
