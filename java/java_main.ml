@@ -177,7 +177,7 @@ let main () =
       Java_typing.type_table
       [] in
 
-  Java_options.lprintf "production phase 1.4 : generation of Jessie struct types@.";
+  Java_options.lprintf "production phase 1.3 : generation of Jessie struct types@.";
   let non_null_preds = Java_interp.tr_non_null_logic_fun () :: non_null_preds in
   let decls_java_types, decls_structs =
     Hashtbl.fold
@@ -190,15 +190,22 @@ let main () =
   let decls = decls_structs @ acc @ decls_java_types @ decl_any_string @ decls_constants @ non_null_preds @ decls in
 
 
-  Java_options.lprintf "production phase 1.3 : generation of Jessie logic functions@.";
-  let decls =
+  Java_options.lprintf "production phase 1.4 : generation of Jessie logic functions@.";
+  (* fix: Hashtbl.fold order is not specified... *)
+  let tmp =
     Hashtbl.fold
-      (fun _ (li,p) acc ->
+      (fun k x acc -> (k,x)::acc)
+      Java_typing.logic_defs_table []
+  in
+  let tmp = List.sort (fun (k1,_) (k2,_) -> Pervasives.compare k1 k2) tmp in
+  let decls =
+    List.fold_left
+      (fun acc (_,(li,p)) ->
 	 Java_options.lprintf "generating logic function `%s'@."
 	   li.java_logic_info_name;
 	 Java_interp.tr_logic_fun li (p :> Java_typing.logic_decl_body) acc)
-      Java_typing.logic_defs_table
       decls
+      tmp
   in
   let decls =
     Hashtbl.fold Java_interp.tr_axiomatic Java_typing.axiomatics_table
