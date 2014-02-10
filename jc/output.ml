@@ -950,7 +950,7 @@ type expr_node =
       (int * bool * bool * string) list
   | Let of string * expr * expr
   | Let_ref of string * expr * expr
- (* optionnaly give the return type to enforce *)
+ (* optionaly give the return type to enforce *)
   | App of expr * expr * why_type option
   | Raise of string * expr option
   | Try of expr * string * string option * expr
@@ -1033,7 +1033,7 @@ let fprintf_variant form = function
       else
         fprintf form "variant %a for %s" fprintf_term t r
 
-let rec fprintf_expr_node form e =
+let rec fprintf_expr_node in_app form e =
   match e with
     | Cte(c) -> fprintf_constant form c
     | Var(id) ->
@@ -1099,8 +1099,13 @@ let rec fprintf_expr_node form e =
         when !why3syntax && id="neq_int_" ->
 	fprintf form "@[<hov 1>(%a <> %a)@]" fprintf_expr e1 fprintf_expr e2
     | App(e1,e2,ty) when !why3syntax ->
-	fprintf form "@[<hov 1>(%a %a%a)@]" fprintf_expr e1 fprintf_expr e2
-          (Pp.print_option (fprintf_type ~need_colon:true false)) ty
+        if in_app then
+	  fprintf form "@[<hov 1>%a %a@]" 
+            (fprintf_expr_gen true) e1 fprintf_expr e2
+        else
+	  fprintf form "@[<hov 1>(%a %a%a)@]" 
+            (fprintf_expr_gen true) e1 fprintf_expr e2
+            (Pp.print_option (fprintf_type ~need_colon:true false)) ty
     | App(e1,e2,_) ->
 	fprintf form "@[<hov 1>(%a %a)@]" fprintf_expr e1 fprintf_expr e2
     | Raise(id,None) ->
@@ -1234,10 +1239,10 @@ let rec fprintf_expr_node form e =
 	  (l.pos_cnum - l.pos_bol) fprintf_expr e
 	*)
 
-and fprintf_expr form e =
+and fprintf_expr_gen in_app form e =
   let rec aux l =
     match l with
-      | [] -> fprintf_expr_node form e.expr_node
+      | [] -> fprintf_expr_node in_app form e.expr_node
       | s::l ->
 (*
           if s="L2" then Format.eprintf "Output.fprintf_expr: printing label %s for expression %a@." s fprintf_expr_node e.expr_node;
@@ -1249,6 +1254,8 @@ and fprintf_expr form e =
           aux l;
           fprintf form ")@]"
   in aux e.expr_labels
+
+and fprintf_expr form e = fprintf_expr_gen false form e
 
 and fprintf_expr_list form l =
   match l with
