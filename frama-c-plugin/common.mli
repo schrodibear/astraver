@@ -59,6 +59,7 @@ val name_of_integral_type : ?bitsize:int -> Cil_types.typ -> string
 val name_of_assert : string
 val name_of_free : string
 val name_of_malloc : string
+val name_of_kmalloc : string
 
 val filter_alphanumeric : string -> (char * char) list -> char -> string
 
@@ -159,6 +160,7 @@ val is_kfree_function : Cil_types.varinfo -> bool
 val is_special_free_function : Cil_types.varinfo -> bool
 val is_malloc_function : Cil_types.varinfo -> bool
 val is_kmalloc_function : Cil_types.varinfo -> bool
+val is_kzalloc_function : Cil_types.varinfo -> bool
 val is_realloc_function : Cil_types.varinfo -> bool
 val is_calloc_function : Cil_types.varinfo -> bool
 

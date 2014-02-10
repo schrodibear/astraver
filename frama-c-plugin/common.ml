@@ -391,6 +391,7 @@ let name_of_free = "free"
 let name_of_kfree = "kfree"
 let name_of_malloc = "malloc"
 let name_of_kmalloc = "kmalloc"
+let name_of_kzalloc = "kzalloc"
 let name_of_calloc = "calloc"
 let name_of_realloc = "realloc"
 
@@ -414,6 +415,7 @@ let is_special_free_function v =
     String.length v.vname > 6 && Str.first_chars v.vname 6 = "kfree_")
 let is_malloc_function v = isFunctionType v.vtype && v.vname = name_of_malloc
 let is_kmalloc_function v = isFunctionType v.vtype && v.vname = name_of_kmalloc
+let is_kzalloc_function v = isFunctionType v.vtype && v.vname = name_of_kzalloc
 let is_calloc_function v = isFunctionType v.vtype && v.vname = name_of_calloc
 let is_realloc_function v = isFunctionType v.vtype && v.vname = name_of_realloc
 

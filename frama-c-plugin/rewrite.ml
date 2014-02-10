@@ -622,6 +622,33 @@ let specialize_memset file =
 (* Specification and specialization for memcpy and other block functions.    *)
 (*****************************************************************************)
 
+(*****************************************************************************)
+(* Support for kzalloc as kmalloc+memset                                     *)
+(*****************************************************************************)
+
+class kzalloc_expanding_visitor = object
+  inherit frama_c_inplace
+
+  method vinst = function
+    | Call ((Some lv as lv_opt), { enode = Lval (Var fv, NoOffset); eloc }, ([size; _] as args), loc)
+      when is_kzalloc_function fv ->
+        let get_function name =
+          try Kernel_function.get_vi (Globals.Functions.find_by_name name)
+          with Not_found ->
+            unsupported ("Using kzalloc without declared %s prototype. " ^^
+                         "Please provide a declaration for %s with minimal specification (will be ignored)")
+                        name name
+        in
+        let vi_kmalloc = get_function name_of_kmalloc in
+        let vi_memset = get_function "memset" in
+        ChangeTo
+          ([ Call (lv_opt, evar ~loc:eloc vi_kmalloc, args, loc);
+             Call (None, evar ~loc:eloc vi_memset, [new_exp ~loc (Lval lv); zero ~loc; size], loc) ])
+    | _ -> SkipChildren
+end
+
+let expand_kzallocs file = visitFramacFile (new kzalloc_expanding_visitor) file;
+
 module Option_misc = Jc.Option_misc
 
 let get_specialized_name (*_type*) (*original_name*) =
@@ -2783,6 +2810,9 @@ let rewrite file =
   (* Specialize block functions e.g. memcpy. *)
   if Jessie_options.SpecBlockFuncs.get () then
     begin
+      Jessie_options.debug "Expand kzallocs to kmalloc+memset";
+      expand_kzallocs file;
+      if checking then check_types file;
       Jessie_options.debug "Use specialized versions for block functions (e.g. memcpy)";
       specialize_blockfuns file;
       if checking then check_types file;
