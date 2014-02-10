@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -43,10 +43,10 @@
     locfile="../Arrays.java"
     loclnum="98" loccnumb="23" loccnume="33"
     expl="VC for _Arrays_arrayShift_ensures_default"
-    sum="523408b1b30c856116031268c1e58dbd"
+    sum="b733761442bc5e4f965e9e7123393222"
     proved="true"
-    expanded="true"
-    shape="iainfix &gt;V4c0ainfix =aselectV6ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V7V8FAainfix =aselectV6ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V7Aainfix &lt;=c0V9FAainfix &lt;=c0V7Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1Fainfix =aselectV5ashiftV0V10aselectV1ashiftV0ainfix -V10c1Iainfix &lt;V10ainfix +aoffset_maxV2V0c1Aainfix &lt;c0V10FIainfix =aselectV5ashiftV0V11aselectV1ashiftV0ainfix -V11c1Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V11FAainfix =aselectV5ashiftV0V12aselectV1ashiftV0V12Iainfix &lt;=V12V4Aainfix &lt;=c0V12FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FAainfix =aselectV1ashiftV0V13aselectV1ashiftV0ainfix -V13c1Iainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;ainfix -V3c1V13FAainfix &lt;=c0ainfix -V3c1Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;ainfix -V3c1ainfix +aoffset_maxV2V0c1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    expanded="false"
+    shape="iainfix =aselectV5ashiftV0V6aselectV1ashiftV0ainfix -V6c1Iainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;c0V6Fainfix =aselectV7ashiftV0V9aselectV1ashiftV0ainfix -V9c1Iainfix &lt;V9ainfix +aoffset_maxV2V0c1Aainfix &lt;V8V9FAainfix =aselectV7ashiftV0V10aselectV1ashiftV0V10Iainfix &lt;=V10V8Aainfix &lt;=c0V10FAainfix &lt;=c0V8Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V8ainfix +aoffset_maxV2V0c1Iainfix =V8ainfix -V4c1FIainfix =V7astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1Fainfix &gt;V4c0Iainfix =aselectV5ashiftV0V11aselectV1ashiftV0ainfix -V11c1Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V11FAainfix =aselectV5ashiftV0V12aselectV1ashiftV0V12Iainfix &lt;=V12V4Aainfix &lt;=c0V12FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FAainfix =aselectV1ashiftV0V13aselectV1ashiftV0ainfix -V13c1Iainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;ainfix -V3c1V13FAainfix &lt;=c0ainfix -V3c1Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;ainfix -V3c1ainfix +aoffset_maxV2V0c1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method arrayShift, default behavior"/>
     <label
@@ -81,7 +81,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.14"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="4"
@@ -89,21 +89,21 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.75"/>
+     <result status="valid" time="0.14"/>
     </proof>
     <transf
      name="split_goal_wp"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter _Arrays_arrayShift_ensures_default.1"
       locfile="../Arrays.java"
       loclnum="98" loccnumb="23" loccnume="33"
       expl="1. loop invariant init"
-      sum="6eace2a72fd061438e69d46bbf4ed821"
+      sum="4111d876aebd67cf26f558d3e14914d3"
       proved="true"
-      expanded="true"
-      shape="ainfix =aselectV1ashiftV0V4aselectV1ashiftV0ainfix -V4c1Iainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;ainfix -V3c1V4FAainfix &lt;=c0ainfix -V3c1Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;ainfix -V3c1ainfix +aoffset_maxV2V0c1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+      expanded="false"
+      shape="loop invariant initainfix =aselectV1ashiftV0V4aselectV1ashiftV0ainfix -V4c1Iainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;ainfix -V3c1V4FAainfix &lt;=c0ainfix -V3c1Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;ainfix -V3c1ainfix +aoffset_maxV2V0c1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:Method arrayShift, default behavior"/>
       <label
@@ -154,10 +154,10 @@
       locfile="../Arrays.java"
       loclnum="98" loccnumb="23" loccnume="33"
       expl="2. loop invariant preservation"
-      sum="b730bfc8d130aba091b2000e7e126304"
+      sum="666275cb67c8a250bfe13ca18aa6215b"
       proved="true"
-      expanded="true"
-      shape="ainfix =aselectV6ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V7V8FAainfix =aselectV6ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V7Aainfix &lt;=c0V9FAainfix &lt;=c0V7Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1FIainfix &gt;V4c0Iainfix =aselectV5ashiftV0V10aselectV1ashiftV0ainfix -V10c1Iainfix &lt;V10ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V10FAainfix =aselectV5ashiftV0V11aselectV1ashiftV0V11Iainfix &lt;=V11V4Aainfix &lt;=c0V11FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+      expanded="false"
+      shape="loop invariant preservationainfix =aselectV6ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V7V8FAainfix =aselectV6ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V7Aainfix &lt;=c0V9FAainfix &lt;=c0V7Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1FIainfix &gt;V4c0Iainfix =aselectV5ashiftV0V10aselectV1ashiftV0ainfix -V10c1Iainfix &lt;V10ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V10FAainfix =aselectV5ashiftV0V11aselectV1ashiftV0V11Iainfix &lt;=V11V4Aainfix &lt;=c0V11FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:Method arrayShift, default behavior"/>
       <label
@@ -200,7 +200,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.19"/>
+       <result status="valid" time="0.95"/>
       </proof>
      </goal>
      <goal
@@ -208,10 +208,10 @@
       locfile="../Arrays.java"
       loclnum="98" loccnumb="23" loccnume="33"
       expl="3. postcondition"
-      sum="df9a4a3b6d32fb7ac536163bd986482f"
+      sum="49c950fe793dbf01e5b08e25c1354781"
       proved="true"
-      expanded="true"
-      shape="ainfix =aselectV5ashiftV0V6aselectV1ashiftV0ainfix -V6c1Iainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;c0V6FIainfix &gt;V4c0NIainfix =aselectV5ashiftV0V7aselectV1ashiftV0ainfix -V7c1Iainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V7FAainfix =aselectV5ashiftV0V8aselectV1ashiftV0V8Iainfix &lt;=V8V4Aainfix &lt;=c0V8FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+      expanded="false"
+      shape="postconditionainfix =aselectV5ashiftV0V6aselectV1ashiftV0ainfix -V6c1Iainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;c0V6FINainfix &gt;V4c0Iainfix =aselectV5ashiftV0V7aselectV1ashiftV0ainfix -V7c1Iainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V7FAainfix =aselectV5ashiftV0V8aselectV1ashiftV0V8Iainfix &lt;=V8V4Aainfix &lt;=c0V8FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:Method arrayShift, default behavior"/>
       <label
@@ -264,10 +264,10 @@
     locfile="../Arrays.java"
     loclnum="98" loccnumb="23" loccnume="33"
     expl="index bounds"
-    sum="85e812333afc2d34e601e8c633bd11f2"
+    sum="7d0a8386091d56c040864d4c096ee0d7"
     proved="true"
-    expanded="true"
-    shape="ainfix &lt;V7V4Aainfix &lt;=c0V4Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Aainfix &lt;=ainfix -V4c1aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainfix -V4c1Iainfix &gt;V4c0Iainfix =aselectV5ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V8FAainfix =aselectV5ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V4Aainfix &lt;=c0V9FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    expanded="false"
+    shape="index boundsainfix &lt;V8V4Aainfix &lt;=c0V4Iainfix =V8ainfix -V4c1FIainfix =V7astoreV5ashiftV0V4aselectV5ashiftV0V6FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Aainfix &lt;=V6aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V6Lainfix -V4c1Iainfix &gt;V4c0Iainfix =aselectV5ashiftV0V9aselectV1ashiftV0ainfix -V9c1Iainfix &lt;V9ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V9FAainfix =aselectV5ashiftV0V10aselectV1ashiftV0V10Iainfix &lt;=V10V4Aainfix &lt;=c0V10FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method arrayShift, Safety"/>
     <label
@@ -318,10 +318,10 @@
     locfile="../Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
     expl="VC for _Arrays_findMax2_ensures_default"
-    sum="7b8e8b900117443e8404d2568d6547a7"
+    sum="cb0c580b6c7016fe85bd83725eb233a1"
     proved="true"
-    expanded="true"
-    shape="iainfix &gt;aselectV1ashiftV0V3V5ais_maxV0V7V9V2V1Aainfix =V8aselectV1ashiftV0V7Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V9Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FIainfix =V7V3Fais_maxV0V4V10V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V10ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V10Iainfix =V10ainfix +V3c1FIainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAais_maxV0c0c1V2V1Aainfix =aselectV1ashiftV0c0aselectV1ashiftV0c0Aainfix &lt;c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1c1Iainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    expanded="false"
+    shape="iais_maxV0V4V7V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V7Iainfix =V7ainfix +V3c1Fais_maxV0V8V10V2V1Aainfix =V9aselectV1ashiftV0V8Aainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V8Aainfix &lt;=V10ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V10Iainfix =V10ainfix +V3c1FIainfix =V9aselectV1ashiftV0V3FIainfix =V8V3Fainfix &gt;aselectV1ashiftV0V3V5Iainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAais_maxV0c0c1V2V1Aainfix &lt;c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1c1Iainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method findMax2, default behavior"/>
     <label
@@ -340,7 +340,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.24"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="3"
@@ -356,7 +356,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.24"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
@@ -364,10 +364,10 @@
     locfile="../Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
     expl="VC for _Arrays_findMax2_ensures_max_found"
-    sum="afe404afb69195c1a01f514b3c44bfe3"
+    sum="8c7d569225e50258297b23b88cd93edb"
     proved="true"
-    expanded="true"
-    shape="ais_maxV0V7ainfix +aoffset_maxV2V0c1V2V1Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7V4FIainfix &lt;V3V6NIainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FIainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    expanded="false"
+    shape="ais_maxV0V7ainfix +aoffset_maxV2V0c1V2V1Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7V4FINainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FIainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method findMax2, Behavior `max_found&apos;"/>
     <label
@@ -418,10 +418,10 @@
     locfile="../Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
     expl="VC for _Arrays_findMax2_safety"
-    sum="a9c4bb9bc544cf5c55cce591d2265e6b"
+    sum="8ce7643a2135c8f7d36c180e11ad5a88"
     proved="true"
-    expanded="true"
-    shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V9ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix =V7V3Fainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=c0aoffset_maxV2V0Iainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    expanded="false"
+    shape="iainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V7ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V7ainfix +V3c1Fainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FIainfix =V9aselectV1ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix =V8V3Fainfix &gt;aselectV1ashiftV0V3V5Aainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=c0aoffset_maxV2V0Iainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method findMax2, Safety"/>
     <label
@@ -472,10 +472,10 @@
     locfile="../Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
     expl="VC for _Arrays_findMax_ensures_default"
-    sum="0881c0107f33fbb2e546b44d8d6d46cd"
+    sum="33137386915efdbcf11aa44d501341c8"
     proved="true"
-    expanded="true"
-    shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;=aselectV1ashiftV0V10V8Iainfix &lt;V10V9Aainfix &lt;=c0V10FAainfix =V8aselectV1ashiftV0V7Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V9Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FIainfix =V7V3Fainfix &lt;=aselectV1ashiftV0V12V5Iainfix &lt;V12V11Aainfix &lt;=c0V12FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V11Iainfix =V11ainfix +V3c1FIainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iainfix &lt;=aselectV1ashiftV0V13V5Iainfix &lt;V13V3Aainfix &lt;=c0V13FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=aselectV1ashiftV0V14aselectV1ashiftV0c0Iainfix &lt;V14c1Aainfix &lt;=c0V14FAainfix =aselectV1ashiftV0c0aselectV1ashiftV0c0Aainfix &lt;c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1c1Iainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    expanded="false"
+    shape="iainfix &lt;=aselectV1ashiftV0V8V5Iainfix &lt;V8V7Aainfix &lt;=c0V8FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V7Iainfix =V7ainfix +V3c1Fainfix &lt;=aselectV1ashiftV0V12V10Iainfix &lt;V12V11Aainfix &lt;=c0V12FAainfix =V10aselectV1ashiftV0V9Aainfix &lt;V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V9Aainfix &lt;=V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V11Iainfix =V11ainfix +V3c1FIainfix =V10aselectV1ashiftV0V3FIainfix =V9V3Fainfix &gt;aselectV1ashiftV0V3V5Iainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iainfix &lt;=aselectV1ashiftV0V13V5Iainfix &lt;V13V3Aainfix &lt;=c0V13FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=aselectV1ashiftV0V14aselectV1ashiftV0c0Iainfix &lt;V14c1Aainfix &lt;=c0V14FAainfix &lt;c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1c1Iainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method findMax, default behavior"/>
     <label
@@ -518,7 +518,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.69"/>
+     <result status="valid" time="1.01"/>
     </proof>
    </goal>
    <goal
@@ -526,10 +526,10 @@
     locfile="../Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
     expl="VC for _Arrays_findMax_ensures_max_found"
-    sum="98e094c0b65a7cd97e6fe7dc21898da1"
+    sum="ef151c85957a5faaafe038bde881e3d0"
     proved="true"
-    expanded="true"
-    shape="ainfix &lt;=aselectV1ashiftV0V8aselectV1ashiftV0V7Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V8FAainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7V4FIainfix &lt;V3V6NIainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iainfix &lt;=aselectV1ashiftV0V9V5Iainfix &lt;V9V3Aainfix &lt;=c0V9FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FIainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    expanded="false"
+    shape="ainfix &lt;=aselectV1ashiftV0V8aselectV1ashiftV0V7Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V8FAainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7V4FINainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Iainfix &lt;=aselectV1ashiftV0V9V5Iainfix &lt;V9V3Aainfix &lt;=c0V9FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FIainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method findMax, Behavior `max_found&apos;"/>
     <label
@@ -580,10 +580,10 @@
     locfile="../Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
     expl="VC for _Arrays_findMax_safety"
-    sum="48b34a68c5b523aacb0e277fd6aa4933"
+    sum="89cbead8e58cd0f6e789de18277abe31"
     proved="true"
-    expanded="true"
-    shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V9ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix =V7V3Fainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix &lt;=aselectV1ashiftV0V11V5Iainfix &lt;V11V3Aainfix &lt;=c0V11FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=c0aoffset_maxV2V0Iainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
+    expanded="false"
+    shape="iainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V7ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V7ainfix +V3c1Fainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FIainfix =V9aselectV1ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix =V8V3Fainfix &gt;aselectV1ashiftV0V3V5Aainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V6Iainfix &gt;=V6c0Aainfix &lt;=V6c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix &lt;=aselectV1ashiftV0V11V5Iainfix &lt;V11V3Aainfix &lt;=c0V11FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FAainfix &lt;=c0aoffset_maxV2V0Iainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method findMax, Safety"/>
     <label
@@ -631,12 +631,12 @@
    </goal>
    <goal
     name="WP_parameter cons_Arrays_ensures_default"
-    locfile="../."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Arrays_ensures_default"
-    sum="5a80e62785b92b9faea96caa5adf7794"
+    sum="d46a497420b37f563a5926eb30fc14a3"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:Constructor of class Arrays, default behavior"/>
@@ -685,12 +685,12 @@
    </goal>
    <goal
     name="WP_parameter cons_Arrays_safety"
-    locfile="../."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Arrays_safety"
-    sum="5a80e62785b92b9faea96caa5adf7794"
+    sum="d46a497420b37f563a5926eb30fc14a3"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:Constructor of class Arrays, Safety"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -35,7 +35,7 @@
     locfile="../Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop1_ensures_default"
-    sum="acd4b1eafb772c42f210e0da7600f104"
+    sum="3a13b554764427b76157fbc804edd619"
     proved="true"
     expanded="false"
     shape="t">
@@ -73,7 +73,7 @@
     locfile="../Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop1_safety"
-    sum="ae767d79771b3ce3d70a80e14229bc3e"
+    sum="545761e1447ba3af45b583bb38680984"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V3V2Aainfix &lt;=c0V2Iainfix =V3ainfix -V2c1FIainfix &gt;V2c0FIavalid_struct_TerminationV0c0c0V1FF">
@@ -111,7 +111,7 @@
     locfile="../Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop2_ensures_default"
-    sum="acd4b1eafb772c42f210e0da7600f104"
+    sum="3a13b554764427b76157fbc804edd619"
     proved="true"
     expanded="false"
     shape="t">
@@ -149,7 +149,7 @@
     locfile="../Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="VC for _Termination_loop2_safety"
-    sum="21335c0388718b0d93bfa88db504e04c"
+    sum="bbe670cdd14d7905ec9a5310ae5c256e"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -c100V3ainfix -c100V2Aainfix &lt;=c0ainfix -c100V2Iainfix =V3ainfix +V2c1FIainfix &lt;V2c100FIavalid_struct_TerminationV0c0c0V1FF">
@@ -187,10 +187,10 @@
     locfile="../Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="VC for _Termination_loop3_ensures_default"
-    sum="6daf159c5367107f91db82e27df0764f"
+    sum="cf7401eb0c4c6f4114b69fd2527ac058"
     proved="true"
     expanded="false"
-    shape="iainfix &gt;V2c0ainfix &lt;=V3c100Aainfix &lt;=c0V3Iainfix =V3ainfix -V2c1Fainfix =V4c0Iainfix =V4V2FIainfix &lt;=V2c100Aainfix &lt;=c0V2FAainfix &lt;=c100c100Aainfix &lt;=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
+    shape="iainfix =V3c0Iainfix =V3V2Fainfix &lt;=V4c100Aainfix &lt;=c0V4Iainfix =V4ainfix -V2c1Fainfix &gt;V2c0Iainfix &lt;=V2c100Aainfix &lt;=c0V2FAainfix &lt;=c100c100Aainfix &lt;=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
     <label
      name="expl:Method loop3, default behavior"/>
     <label
@@ -225,7 +225,7 @@
     locfile="../Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="VC for _Termination_loop3_safety"
-    sum="601a93a767479f365cd3207857e69982"
+    sum="9c93995d54acd4690d2fd605a5a8f945"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V3V2Aainfix &lt;=c0V2Iainfix =V3ainfix -V2c1FIainfix &gt;V2c0Iainfix &lt;=V2c100Aainfix &lt;=c0V2FIavalid_struct_TerminationV0c0c0V1FF">
@@ -260,10 +260,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Termination_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Termination_ensures_default"
-    sum="acd4b1eafb772c42f210e0da7600f104"
+    sum="3a13b554764427b76157fbc804edd619"
     proved="true"
     expanded="false"
     shape="t">
@@ -298,10 +298,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Termination_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Termination_safety"
-    sum="acd4b1eafb772c42f210e0da7600f104"
+    sum="3a13b554764427b76157fbc804edd619"
     proved="true"
     expanded="false"
     shape="t">

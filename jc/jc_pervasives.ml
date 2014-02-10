@@ -225,7 +225,7 @@ let any_type = JCTany
 let tempvar_count = ref 0
 (* let reset_tmp_var () = tempvar_count := 0 *)
 let tmp_var_name () =
-  incr tempvar_count; "jessie_" ^ string_of_int !tempvar_count
+  incr tempvar_count; "_jessie_" ^ string_of_int !tempvar_count
 
 (* variables *)
 

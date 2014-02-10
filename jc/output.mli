@@ -160,7 +160,8 @@ type expr_node =
   | Raise of string * expr option
   | Try of expr * string * string option * expr
   | Fun of (string * why_type) list *
-      assertion * expr * assertion * ((string * assertion) list)
+      assertion * bool * (* "diverges" flag *)
+      expr * assertion * ((string * assertion) list)
   | Triple of opaque *
       assertion * expr * assertion * ((string * assertion) list)
   | Assert of assert_kind * assertion * expr

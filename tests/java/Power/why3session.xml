@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -36,7 +36,7 @@
     locfile="../Power.java"
     loclnum="14" loccnumb="10" loccnume="19"
     expl="Lemma power_mul, lemma"
-    sum="af5be876028f528aa059e0ebfc229479"
+    sum="a045b6f8a8421d1b31b31a7078e904a6"
     proved="false"
     expanded="true"
     shape="ainfix =apowerainfix *V0V1V2ainfix *apowerV0V2apowerV1V2Iainfix &gt;=V2c0FFF">
@@ -64,7 +64,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="1.52"/>
+     <result status="unknown" time="0.32"/>
     </proof>
     <proof
      prover="3"
@@ -88,7 +88,7 @@
     locfile="../Power.java"
     loclnum="18" loccnumb="10" loccnume="20"
     expl="Lemma power_even, lemma"
-    sum="a51567f0a0320c9aef93d6382310d61e"
+    sum="33b4afe1321dd571602db88566d465d9"
     proved="false"
     expanded="true"
     shape="ainfix =apowerV0V1apowerainfix *V0V0adivV1c2Iainfix =amodV1c2c0Aainfix &gt;=V1c0FF">
@@ -116,7 +116,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.92"/>
+     <result status="unknown" time="0.16"/>
     </proof>
     <proof
      prover="3"
@@ -140,10 +140,10 @@
     locfile="../Power.java"
     loclnum="22" loccnumb="10" loccnume="19"
     expl="Lemma power_odd, lemma"
-    sum="a04e426a203207f318f4f300dee1ba52"
+    sum="59b0bc9fac6ef6ff69e3c40777e9186d"
     proved="false"
     expanded="true"
-    shape="ainfix =apowerV0V1ainfix *V0apowerainfix *V0V0adivV1c2Iainfix =amodV1c2c0NAainfix &gt;=V1c0FF">
+    shape="ainfix =apowerV0V1ainfix *V0apowerainfix *V0V0adivV1c2INainfix =amodV1c2c0Aainfix &gt;=V1c0FF">
     <label
      name="expl:Lemma power_odd, lemma"/>
     <proof
@@ -199,10 +199,10 @@
     locfile="../Power.java"
     loclnum="48" loccnumb="16" loccnume="19"
     expl="VC for _Power_imp_ensures_default"
-    sum="ec060f1b5e57f9a431beb75882ab34bd"
+    sum="f14488d17eb3e0f456f3f1298638f2c6"
     proved="true"
     expanded="false"
-    shape="iainfix &gt;V2c0iainfix =amodV2c2c0Nainfix =ainfix *V5apowerV6V7apowerV0V1Aainfix &lt;=c0V7Iainfix =V7adivV2c2FIainfix =V6ainfix *V3V3FIainfix =V5ainfix *V4V3Fainfix =ainfix *V4apowerV8V9apowerV0V1Aainfix &lt;=c0V9Iainfix =V9adivV2c2FIainfix =V8ainfix *V3V3Fainfix =V10apowerV0V1Iainfix =V10V4FIainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FAainfix =ainfix *c1apowerV0V1apowerV0V1Aainfix &lt;=c0V1Iainfix &lt;=c0V1F">
+    shape="iainfix =V5apowerV0V1Iainfix =V5V4Fiainfix =ainfix *V4apowerV6V7apowerV0V1Aainfix &lt;=c0V7Iainfix =V7adivV2c2FIainfix =V6ainfix *V3V3Fainfix =ainfix *V8apowerV9V10apowerV0V1Aainfix &lt;=c0V10Iainfix =V10adivV2c2FIainfix =V9ainfix *V3V3FIainfix =V8ainfix *V4V3FNainfix =amodV2c2c0ainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FAainfix =ainfix *c1apowerV0V1apowerV0V1Aainfix &lt;=c0V1Iainfix &lt;=c0V1F">
     <label
      name="expl:Method imp, default behavior"/>
     <label
@@ -232,10 +232,10 @@
       locfile="../Power.java"
       loclnum="48" loccnumb="16" loccnume="19"
       expl="1. loop invariant init"
-      sum="ba36cac3f95c95061415e8c3ac029df6"
+      sum="df08bbea3fa00443c505e5b47b0759d1"
       proved="true"
       expanded="false"
-      shape="ainfix =ainfix *c1apowerV0V1apowerV0V1Aainfix &lt;=c0V1Iainfix &lt;=c0V1F">
+      shape="loop invariant initainfix =ainfix *c1apowerV0V1apowerV0V1Aainfix &lt;=c0V1Iainfix &lt;=c0V1F">
       <label
        name="expl:Method imp, default behavior"/>
       <label
@@ -286,10 +286,10 @@
       locfile="../Power.java"
       loclnum="48" loccnumb="16" loccnume="19"
       expl="2. loop invariant preservation"
-      sum="70711a43b10758f3168d4cf0842d4e14"
+      sum="e17ae597a2d07a08436eeb8f344d05ce"
       proved="true"
       expanded="false"
-      shape="ainfix =ainfix *V5apowerV6V7apowerV0V1Aainfix &lt;=c0V7Iainfix =V7adivV2c2FIainfix =V6ainfix *V3V3FIainfix =V5ainfix *V4V3FIainfix =amodV2c2c0NIainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
+      shape="loop invariant preservationainfix =ainfix *V5apowerV6V7apowerV0V1Aainfix &lt;=c0V7Iainfix =V7adivV2c2FIainfix =V6ainfix *V3V3FIainfix =V5ainfix *V4V3FINainfix =amodV2c2c0Iainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
       <label
        name="expl:Method imp, default behavior"/>
       <label
@@ -324,10 +324,10 @@
       locfile="../Power.java"
       loclnum="48" loccnumb="16" loccnume="19"
       expl="3. loop invariant preservation"
-      sum="fa82bc4f20f7e318b295a39a3ddff19d"
+      sum="e0db476ad5f18a803fb1eece46c6933f"
       proved="true"
       expanded="false"
-      shape="ainfix =ainfix *V4apowerV5V6apowerV0V1Aainfix &lt;=c0V6Iainfix =V6adivV2c2FIainfix =V5ainfix *V3V3FIainfix =amodV2c2c0NNIainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
+      shape="loop invariant preservationainfix =ainfix *V4apowerV5V6apowerV0V1Aainfix &lt;=c0V6Iainfix =V6adivV2c2FIainfix =V5ainfix *V3V3FINNainfix =amodV2c2c0Iainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
       <label
        name="expl:Method imp, default behavior"/>
       <label
@@ -362,10 +362,10 @@
       locfile="../Power.java"
       loclnum="48" loccnumb="16" loccnume="19"
       expl="4. postcondition"
-      sum="6e290c8f65a4b1d049dc327a3a5a9cc6"
+      sum="e0d4f7042f508396e0d3ba4ccc2494a5"
       proved="true"
       expanded="false"
-      shape="ainfix =V5apowerV0V1Iainfix =V5V4FIainfix &gt;V2c0NIainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
+      shape="postconditionainfix =V5apowerV0V1Iainfix =V5V4FINainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
       <label
        name="expl:Method imp, default behavior"/>
       <label
@@ -386,10 +386,10 @@
     locfile="../Power.java"
     loclnum="48" loccnumb="16" loccnume="19"
     expl="VC for _Power_imp_safety"
-    sum="ad1a34b5c067038dd554b98999b16225"
+    sum="bad76ee45a60ae6ee1c7c2c58ffe01e3"
     proved="true"
     expanded="false"
-    shape="iainfix =amodV2c2c0Nainfix &lt;V7V2Aainfix &lt;=c0V2Iainfix =V7adivV2c2FAainfix =c2c0NIainfix =V6ainfix *V3V3FIainfix =V5ainfix *V4V3Fainfix &lt;V9V2Aainfix &lt;=c0V2Iainfix =V9adivV2c2FAainfix =c2c0NIainfix =V8ainfix *V3V3FAainfix =c2c0NIainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
+    shape="iainfix &lt;V6V2Aainfix &lt;=c0V2Iainfix =V6adivV2c2FANainfix =c2c0Iainfix =V5ainfix *V3V3Fainfix &lt;V9V2Aainfix &lt;=c0V2Iainfix =V9adivV2c2FANainfix =c2c0Iainfix =V8ainfix *V3V3FIainfix =V7ainfix *V4V3FNainfix =amodV2c2c0ANainfix =c2c0Iainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
     <label
      name="expl:Method imp, Safety"/>
     <label
@@ -408,10 +408,10 @@
     locfile="../Power.java"
     loclnum="35" loccnumb="16" loccnume="19"
     expl="VC for _Power_rec_ensures_default"
-    sum="4eb88a626d491128fe15636d38e548be"
+    sum="0a5b2c52e445dbdb73a3c3e5e5a668c7"
     proved="true"
     expanded="false"
-    shape="iainfix =V1c0ainfix =V2apowerV0V1Iainfix =V2c1Fiainfix =amodV1c2c0ainfix =V4apowerV0V1Iainfix =V4ainfix *V3V3Fainfix =V5apowerV0V1Iainfix =V5ainfix *ainfix *V3V3V0FLapowerV0adivV1c2Iainfix &lt;=c0V1F">
+    shape="iiainfix =V3apowerV0V1Iainfix =V3ainfix *ainfix *V2V2V0Fainfix =V4apowerV0V1Iainfix =V4ainfix *V2V2Fainfix =amodV1c2c0LapowerV0adivV1c2ainfix =V5apowerV0V1Iainfix =V5c1Fainfix =V1c0Iainfix &lt;=c0V1F">
     <label
      name="expl:Method rec, default behavior"/>
     <label
@@ -425,10 +425,10 @@
       locfile="../Power.java"
       loclnum="35" loccnumb="16" loccnume="19"
       expl="1. postcondition"
-      sum="16471bf6642be2a0d5c8ca13ced8dae6"
+      sum="656c018c67a68ec23c77ae3fbf3836df"
       proved="true"
       expanded="false"
-      shape="ainfix =V2apowerV0V1Iainfix =V2c1FIainfix =V1c0Iainfix &lt;=c0V1F">
+      shape="postconditionainfix =V2apowerV0V1Iainfix =V2c1FIainfix =V1c0Iainfix &lt;=c0V1F">
       <label
        name="expl:Method rec, default behavior"/>
       <label
@@ -447,10 +447,10 @@
       locfile="../Power.java"
       loclnum="35" loccnumb="16" loccnume="19"
       expl="2. postcondition"
-      sum="8a2cd2113e1fc3df8330e240920e6309"
+      sum="f75378018fec79693971bce718d8b79e"
       proved="true"
       expanded="false"
-      shape="ainfix =V3apowerV0V1Iainfix =V3ainfix *V2V2FIainfix =amodV1c2c0LapowerV0adivV1c2Iainfix =V1c0NIainfix &lt;=c0V1F">
+      shape="postconditionainfix =V3apowerV0V1Iainfix =V3ainfix *V2V2FIainfix =amodV1c2c0LapowerV0adivV1c2INainfix =V1c0Iainfix &lt;=c0V1F">
       <label
        name="expl:Method rec, default behavior"/>
       <label
@@ -485,10 +485,10 @@
       locfile="../Power.java"
       loclnum="35" loccnumb="16" loccnume="19"
       expl="3. postcondition"
-      sum="10a653723e46eb16550ef553f8e72703"
+      sum="17186300cc77deb41c9e63c6f1e36af4"
       proved="true"
       expanded="false"
-      shape="ainfix =V3apowerV0V1Iainfix =V3ainfix *ainfix *V2V2V0FIainfix =amodV1c2c0NLapowerV0adivV1c2Iainfix =V1c0NIainfix &lt;=c0V1F">
+      shape="postconditionainfix =V3apowerV0V1Iainfix =V3ainfix *ainfix *V2V2V0FINainfix =amodV1c2c0LapowerV0adivV1c2INainfix =V1c0Iainfix &lt;=c0V1F">
       <label
        name="expl:Method rec, default behavior"/>
       <label
@@ -509,10 +509,10 @@
     locfile="../Power.java"
     loclnum="35" loccnumb="16" loccnume="19"
     expl="VC for _Power_rec_safety"
-    sum="afc59cace05094f55574ee8358088f48"
+    sum="4017d8762fd14de93f9cb2f9e0629077"
     proved="true"
     expanded="false"
-    shape="ainfix =c2c0NAainfix &lt;=c0V1Aazwf_zeroV1V0LadivV0c2Aainfix =c2c0NIainfix =V0c0NIainfix &lt;=c0V0F">
+    shape="Nainfix =c2c0Aainfix &lt;=c0V1Aazwf_zeroV1V0LadivV0c2ANainfix =c2c0INainfix =V0c0Iainfix &lt;=c0V0F">
     <label
      name="expl:Method rec, Safety"/>
     <label
@@ -528,10 +528,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="142ec06bdf9f2f80d102f08344c5474e"
+    sum="8e47d78bfaa5cc47376251c26591337c"
     proved="true"
     expanded="false"
     shape="t">
@@ -550,10 +550,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="142ec06bdf9f2f80d102f08344c5474e"
+    sum="8e47d78bfaa5cc47376251c26591337c"
     proved="true"
     expanded="false"
     shape="t">
@@ -572,10 +572,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Power_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Power_ensures_default"
-    sum="142ec06bdf9f2f80d102f08344c5474e"
+    sum="8e47d78bfaa5cc47376251c26591337c"
     proved="true"
     expanded="false"
     shape="t">
@@ -594,10 +594,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Power_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Power_safety"
-    sum="142ec06bdf9f2f80d102f08344c5474e"
+    sum="8e47d78bfaa5cc47376251c26591337c"
     proved="true"
     expanded="false"
     shape="t">

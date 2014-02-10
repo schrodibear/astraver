@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Gappa"
-  version="0.16.6"/>
+  version="1.0.0"/>
  <file
   name="../double_rounding_multirounding_model.mlw"
   verified="true"
@@ -27,7 +27,7 @@
     locfile="../../double_rounding_multirounding_model.c"
     loclnum="11" loccnumb="7" loccnume="21"
     expl="VC for doublerounding_ensures_default"
-    sum="2eaa7c8166446d475174a1952b1d985b"
+    sum="14113b4e1a4826f95576b98840c10c55"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=avalueV7ainfix +ainfix +c1.0c0x1.p-52c0x1.p-62Aainfix &lt;=ainfix -c1.0c0x1.p-63avalueV7Iainfix =V7V6FIaadd_postaNearestTiesToEvenV1V5V6FIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIaof_real_postaNearestTiesToEvenc0x1.p-53V3FIaof_real_postaNearestTiesToEvenc0x1.p-64V2FIainfix =V1V0FIaof_real_exact_postc1.0V0F">
@@ -49,10 +49,10 @@
     locfile="../../double_rounding_multirounding_model.c"
     loclnum="11" loccnumb="7" loccnume="21"
     expl="VC for doublerounding_safety"
-    sum="3a51a2dd26479f784162c72d30e87c3d"
+    sum="5dc6e26aaf5aeac3408d66fea4f058a0"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV6amax_doubleIainfix =V6V5FIaadd_postV4V3V2V5FAainfix &lt;=aabsaroundV4ainfix +avalueV3avalueV2amax_doubleLaNearestTiesToEvenIaof_real_exact_postc0x1.p-53V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
     <label
      name="expl:Function doublerounding, Safety"/>
     <label
@@ -66,10 +66,10 @@
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
       expl="1. floating-point overflow"
-      sum="391f5363e60ae81af5086eec880c48e6"
+      sum="b329896ade3da784851cbf697cf0ee4d"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
@@ -88,10 +88,10 @@
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
       expl="2. floating-point overflow"
-      sum="5a7e2989099dc631bfeeec42481707cb"
+      sum="c42151b6f3ebd3d613937de0c21a7bf2"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
@@ -110,10 +110,10 @@
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
       expl="3. floating-point overflow"
-      sum="e4febc6aa47ce23855e3237acaedb3af"
+      sum="255a9d979a778784682d95dd049811f9"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV4ainfix +avalueV3avalueV2amax_doubleLaNearestTiesToEvenIaof_real_exact_postc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label
@@ -132,10 +132,10 @@
       locfile="../../double_rounding_multirounding_model.c"
       loclnum="11" loccnumb="7" loccnume="21"
       expl="4. floating-point overflow"
-      sum="f97e856c364fd97d50ce14d7dafcfe08"
+      sum="cc92e1207f9cf4deb5b5c16964512f26"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV5amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV3avalueV2amax_doubleIaof_real_exact_postc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV1avalueV6amax_doubleIainfix =V6V5FIaadd_postV4V3V2V5FIainfix &lt;=aabsaroundV4ainfix +avalueV3avalueV2amax_doubleLaNearestTiesToEvenIaof_real_exact_postc0x1.p-53V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-53amax_doubleIaof_real_exact_postc0x1.p-64V2FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-64amax_doubleIainfix =V1V0FIaof_real_exact_postc1.0V0F">
       <label
        name="expl:Function doublerounding, Safety"/>
       <label

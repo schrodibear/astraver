@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -16,7 +16,7 @@
  <prover
   id="3"
   name="Coq"
-  version="8.4"/>
+  version="8.4pl1"/>
  <prover
   id="4"
   name="Z3"
@@ -40,7 +40,7 @@
     locfile="../Fibonacci.java"
     loclnum="46" loccnumb="10" loccnume="19"
     expl="Lemma isfib_2_1, lemma"
-    sum="f32a5cfbf05b258183b43241778dede5"
+    sum="1d8d0f94260ecccf22ee58245ef680f4"
     proved="true"
     expanded="true"
     shape="aisfibc2c1">
@@ -53,7 +53,7 @@
      edited="Fibonacci_Jessie_model_isfib_2_1_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="2.07"/>
+     <result status="valid" time="0.94"/>
     </proof>
    </goal>
    <goal
@@ -61,7 +61,7 @@
     locfile="../Fibonacci.java"
     loclnum="47" loccnumb="10" loccnume="19"
     expl="Lemma isfib_6_8, lemma"
-    sum="d976e10fff40f6ccbfb31b2ada7f800c"
+    sum="1dd0ddfb8601d5883c31b2bfefedfe94"
     proved="true"
     expanded="true"
     shape="aisfibc6c8">
@@ -74,7 +74,7 @@
      edited="Fibonacci_Jessie_model_isfib_6_8_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="2.09"/>
+     <result status="valid" time="0.95"/>
     </proof>
    </goal>
    <goal
@@ -82,10 +82,10 @@
     locfile="../Fibonacci.java"
     loclnum="50" loccnumb="10" loccnume="23"
     expl="Lemma not_isfib_2_2, lemma"
-    sum="cae18ccb124a8c294d439e1853a78f0c"
+    sum="80429d8d0e9a4cfeb36ab15de18c407e"
     proved="true"
     expanded="true"
-    shape="aisfibc2c2N">
+    shape="Naisfibc2c2">
     <label
      name="expl:Lemma not_isfib_2_2, lemma"/>
     <proof
@@ -141,10 +141,10 @@
     locfile="../Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
     expl="VC for _Fibonacci_Fib_ensures_default"
-    sum="47a815e7cd6590ba353ef5cae71a98a6"
+    sum="70542451f61c66d259d8f5868c2a7754"
     proved="true"
     expanded="true"
-    shape="iainfix &lt;V1V0aisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FaisfibV0V8Iainfix =V8V3FIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
+    shape="iaisfibV0V4Iainfix =V4V3FaisfibV8V6Aaisfibainfix +V8c1V7Aainfix &lt;=V8V0Aainfix &lt;=c0V8Iainfix =V8ainfix +V1c1FIainfix =V7ainfix +V2V5FIainfix =V6V2FIainfix =V5V3Fainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
     <label
      name="expl:Method Fib, default behavior"/>
     <label
@@ -166,10 +166,10 @@
       locfile="../Fibonacci.java"
       loclnum="57" loccnumb="23" loccnume="26"
       expl="1. loop invariant init"
-      sum="3668560b1435a2af99848364737a06e1"
+      sum="f1202572cad7d02f73244e9cf2a851c4"
       proved="true"
       expanded="true"
-      shape="aisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
+      shape="loop invariant initaisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
       <label
        name="expl:Method Fib, default behavior"/>
       <label
@@ -220,10 +220,10 @@
       locfile="../Fibonacci.java"
       loclnum="57" loccnumb="23" loccnume="26"
       expl="2. loop invariant preservation"
-      sum="a81d1a97185829bbc4a5824a6731d347"
+      sum="b7abe0fb11fb219da9ea4bedebe54a9d"
       proved="true"
       expanded="true"
-      shape="aisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+      shape="loop invariant preservationaisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
       <label
        name="expl:Method Fib, default behavior"/>
       <label
@@ -242,7 +242,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="4.14"/>
+       <result status="unknown" time="5.72"/>
       </proof>
       <proof
        prover="2"
@@ -277,7 +277,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="1."
-        sum="0f7291488aac359000c8fa743ccbf79f"
+        sum="cb2b9d077be511742e1ed3136cfba072"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -331,7 +331,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="2."
-        sum="1b3bf6d2f3654a782c59084b8e8f755d"
+        sum="1ac48902f431b983b3dab7089ff66700"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V7V0Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -385,7 +385,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="3."
-        sum="d1dd8fcb3aa9b59b2f6de0ca2fd4a89c"
+        sum="97677109520b548e1a4b9e8b7431c699"
         proved="true"
         expanded="true"
         shape="aisfibainfix +V7c1V6Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -407,7 +407,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="unknown" time="4.12"/>
+         <result status="unknown" time="5.98"/>
         </proof>
         <proof
          prover="2"
@@ -439,7 +439,7 @@
         locfile="../Fibonacci.java"
         loclnum="57" loccnumb="23" loccnume="26"
         expl="4."
-        sum="e1ab8a142aff2ebadd68da33053f68d2"
+        sum="7a431770ed1d125ecc4668db635b65e4"
         proved="true"
         expanded="false"
         shape="aisfibV7V5Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -495,10 +495,10 @@
       locfile="../Fibonacci.java"
       loclnum="57" loccnumb="23" loccnume="26"
       expl="3. postcondition"
-      sum="3b4906e5436a39deaabbacb73ff26215"
+      sum="4fc4a049fc570dc12a1d6de8395787da"
       proved="true"
       expanded="true"
-      shape="aisfibV0V4Iainfix =V4V3FIainfix &lt;V1V0NIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+      shape="postconditionaisfibV0V4Iainfix =V4V3FINainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
       <label
        name="expl:Method Fib, default behavior"/>
       <label
@@ -551,7 +551,7 @@
     locfile="../Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
     expl="VC for _Fibonacci_Fib_safety"
-    sum="f703fa25e4817b47346309b613a99463"
+    sum="e3c4ea7f2375dcc1ab12ef32b478a091"
     proved="true"
     expanded="true"
     shape="ainfix &lt;ainfix -V0V7ainfix -V0V1Aainfix &lt;=c0ainfix -V0V1Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
@@ -602,10 +602,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fibonacci_ensures_default"
-    sum="74b8278ae6a386b2ccdc6a29f421ec7c"
+    sum="a7cd7a10ff710d373d645370486bf369"
     proved="true"
     expanded="true"
     shape="t">
@@ -656,10 +656,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fibonacci_safety"
-    sum="74b8278ae6a386b2ccdc6a29f421ec7c"
+    sum="a7cd7a10ff710d373d645370486bf369"
     proved="true"
     expanded="true"
     shape="t">

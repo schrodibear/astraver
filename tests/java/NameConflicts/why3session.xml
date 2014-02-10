@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -35,7 +35,7 @@
     locfile="../NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
     expl="VC for _NameConflicts_field_ensures_default"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
     expanded="true"
     shape="t">
@@ -73,7 +73,7 @@
     locfile="../NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
     expl="VC for _NameConflicts_field_safety"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
     expanded="true"
     shape="t">
@@ -111,7 +111,7 @@
     locfile="../NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="VC for _NameConflicts_m_ensures_default"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,7 +149,7 @@
     locfile="../NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="VC for _NameConflicts_m_ensures_normal"
-    sum="e449ef186f77efeb88543fbba0f96859"
+    sum="1dd717cff4d2fc355051246df1b07235"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c0Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
@@ -187,7 +187,7 @@
     locfile="../NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="VC for _NameConflicts_m_safety"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
     expanded="true"
     shape="t">
@@ -225,7 +225,7 @@
     locfile="../NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
     expl="VC for _NameConflicts_setI_ensures_default"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
     expanded="true"
     shape="t">
@@ -263,7 +263,7 @@
     locfile="../NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
     expl="VC for _NameConflicts_setI_safety"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
     expanded="true"
     shape="t">
@@ -298,10 +298,10 @@
    </goal>
    <goal
     name="WP_parameter cons_NameConflicts_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_NameConflicts_ensures_default"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
     expanded="true"
     shape="t">
@@ -336,10 +336,10 @@
    </goal>
    <goal
     name="WP_parameter cons_NameConflicts_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_NameConflicts_safety"
-    sum="e9d6ce8e8696228a662e5e0ed99a3fe3"
+    sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
     expanded="true"
     shape="t">

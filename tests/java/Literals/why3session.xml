@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -35,7 +35,7 @@
     locfile="../Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="VC for _Literals_f_ensures_default"
-    sum="475bd2ee000672a08cc7397a59f4bd05"
+    sum="737289222f9e552b8aa6b39b59c3d6c3"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c13Iainfix =V4V3FIainfix =ainteger_of_int32V3c13FIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
@@ -73,7 +73,7 @@
     locfile="../Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="VC for _Literals_f_safety"
-    sum="b5301ce11b620bd25d019ade98a0fab3"
+    sum="45e0abcefc23ba1029d644e2ce69dca9"
     proved="true"
     expanded="true"
     shape="t">
@@ -108,10 +108,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Literals_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Literals_ensures_default"
-    sum="b5301ce11b620bd25d019ade98a0fab3"
+    sum="45e0abcefc23ba1029d644e2ce69dca9"
     proved="true"
     expanded="true"
     shape="t">
@@ -146,10 +146,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Literals_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Literals_safety"
-    sum="b5301ce11b620bd25d019ade98a0fab3"
+    sum="45e0abcefc23ba1029d644e2ce69dca9"
     proved="true"
     expanded="true"
     shape="t">

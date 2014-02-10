@@ -955,7 +955,8 @@ type expr_node =
   | Raise of string * expr option
   | Try of expr * string * string option * expr
   | Fun of (string * why_type) list *
-      assertion * expr * assertion * ((string * assertion) list)
+      assertion * bool *
+      expr * assertion * ((string * assertion) list)
   | Triple of opaque *
       assertion * expr * assertion * ((string * assertion) list)
   | Assert of assert_kind * assertion * expr
@@ -1004,7 +1005,7 @@ let rec iter_expr f e =
     | Raise (_, None) -> ()
     | Raise(_id,Some e) -> iter_expr f e
     | Try(e1,_exc,_id,e2) -> iter_expr f e1; iter_expr f e2
-    | Fun(_params,pre,body,post,signals) ->
+    | Fun(_params,pre,_diverges,body,post,signals) ->
 	iter_assertion f pre;
 	iter_expr f body;
 	iter_assertion f post;
@@ -1118,7 +1119,7 @@ let rec fprintf_expr_node in_app form e =
     | Try(e1,exc,Some id,e2) ->
 	fprintf form "@[<hov 1>try@ %a@ with@ %s %s ->@ %a end@]"
 	  fprintf_expr e1 exc id fprintf_expr e2
-    | Fun(params,pre,body,post,signals) ->
+    | Fun(params,pre,diverges,body,post,signals) ->
 	fprintf form "@[<hov 1>fun @[";
 	List.iter
 	  (fun (x,t) ->
@@ -1132,6 +1133,8 @@ let rec fprintf_expr_node in_app form e =
           begin
 	    fprintf form "@]->@ @[<hov 0>requires { %a  }@ "
               fprintf_assertion pre;
+            ignore(diverges);
+            (* does not work: if diverges then fprintf form "diverges@ "; *)
             begin
 	    match signals with
 	      | [] ->

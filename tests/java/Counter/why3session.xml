@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -35,7 +35,7 @@
     locfile="../Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
     expl="VC for _Counter_decrement_ensures_default"
-    sum="6ea066c9734a2524854795b7dd42abe4"
+    sum="671afc8f70ba5bb7ea24f590d672dfe7"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V4V1ainfix -avalueV0V2V1c1Iainfix =V4astoreV2V0ainfix +aselectV2V0c1FIavalid_struct_CounterV0c0c0V3FF">
@@ -73,7 +73,7 @@
     locfile="../Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
     expl="VC for _Counter_decrement_safety"
-    sum="d7c46bbe99061e6c2cad802273a503f2"
+    sum="e9573492361fc5d855ee3d68863dbd86"
     proved="true"
     expanded="true"
     shape="t">
@@ -111,7 +111,7 @@
     locfile="../Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
     expl="VC for _Counter_increment_ensures_default"
-    sum="070154e8d23d88e697df2c8d642895a6"
+    sum="b497e7efa85f4dffea010cdb34dd8da6"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FF">
@@ -149,7 +149,7 @@
     locfile="../Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
     expl="VC for _Counter_increment_safety"
-    sum="d7c46bbe99061e6c2cad802273a503f2"
+    sum="e9573492361fc5d855ee3d68863dbd86"
     proved="true"
     expanded="true"
     shape="t">
@@ -184,10 +184,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Counter_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Counter_ensures_default"
-    sum="d7c46bbe99061e6c2cad802273a503f2"
+    sum="e9573492361fc5d855ee3d68863dbd86"
     proved="true"
     expanded="true"
     shape="t">
@@ -222,10 +222,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Counter_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Counter_safety"
-    sum="d7c46bbe99061e6c2cad802273a503f2"
+    sum="e9573492361fc5d855ee3d68863dbd86"
     proved="true"
     expanded="true"
     shape="t">
