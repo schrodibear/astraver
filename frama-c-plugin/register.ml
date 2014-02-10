@@ -234,6 +234,16 @@ let run () =
 	       s);
 	!res
       in
+      let why3_opt =
+	let res = ref "" in
+	Jessie_options.Why3Opt.iter
+	  (fun s ->
+	     res := Format.sprintf "%s%s-why3-opt %S"
+	       !res
+	       (if !res = "" then "" else " ")
+	       s);
+	!res
+      in
       let jc_opt = Jessie_options.JcOpt.get_set ~sep:" " () in
       let debug_opt = if Jessie_options.debug_atleast 1 then " -d " else " " in
       let behav_opt =
@@ -289,7 +299,7 @@ let run () =
       let cmd =
 	make_command
 	  [ env_opt; jessie_cmd; jessie_opt ;
-	    verbose_opt; why_opt; jc_opt; debug_opt; behav_opt;
+	    verbose_opt; why_opt; why3_opt; jc_opt; debug_opt; behav_opt;
 	    "-locs"; locname; filename ]
       in
       (*      Format.eprintf "CMD=%S" cmd; *)

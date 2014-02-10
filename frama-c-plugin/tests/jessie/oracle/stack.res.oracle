@@ -1,59 +1,10 @@
-========== file tests/c/Sterbenz.c ==========
-/**************************************************************************/
-/*                                                                        */
-/*  The Why platform for program certification                            */
-/*                                                                        */
-/*  Copyright (C) 2002-2011                                               */
-/*                                                                        */
-/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
-/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
-/*    Yannick MOY, Univ. Paris-sud 11                                     */
-/*    Romain BARDOU, Univ. Paris-sud 11                                   */
-/*                                                                        */
-/*  Secondary contributors:                                               */
-/*                                                                        */
-/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
-/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
-/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
-/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
-/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
-/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
-/*                                                                        */
-/*  This software is free software; you can redistribute it and/or        */
-/*  modify it under the terms of the GNU Lesser General Public            */
-/*  License version 2.1, with the special exception on linking            */
-/*  described in file LICENSE.                                            */
-/*                                                                        */
-/*  This software is distributed in the hope that it will be useful,      */
-/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
-/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
-/*                                                                        */
-/**************************************************************************/
-
-// RUNCOQ: will ask regtests to check Coq proofs of this program
-
-/*@ requires  y / 2.0 <= x <= 2.0 * y;
-  @ ensures   \result == x - y;
-  @*/
-float Sterbenz(float x, float y) {
-  //@ assert 0.0 <= y;
-  //@ assert 0.0 <= x;
-  return x-y;
-}
-
-
-/*
-Local Variables:
-compile-command: "make Sterbenz.why3ide"
-End:
-*/
-========== frama-c -jessie execution ==========
-[kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/Sterbenz.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only stack.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD stack.c"
 [jessie] Starting Jessie translation
-[jessie] Producing Jessie files in subdir tests/c/Sterbenz.jessie
-[jessie] File tests/c/Sterbenz.jessie/Sterbenz.jc written.
-[jessie] File tests/c/Sterbenz.jessie/Sterbenz.cloc written.
-========== file tests/c/Sterbenz.jessie/Sterbenz.jc ==========
+[jessie] warning: \separated is not supported by Jessie. This predicate will be ignored
+[jessie] Producing Jessie files in subdir stack.jessie
+[jessie] File stack.jessie/stack.jc written.
+[jessie] File stack.jessie/stack.cloc written.
 # IntModel = bounded
 # InvariantPolicy = Arguments
 # SeparationPolicy = Regions
@@ -70,11 +21,19 @@ type uint8 = 0..255
 
 type int8 = -128..127
 
+type int32 = -2147483648..2147483647
+
 tag unsigned_charP = {
   uint8 unsigned_charM: 8;
 }
 
 type unsigned_charP = [unsigned_charP]
+
+tag intP = {
+  int32 intM: 32;
+}
+
+type intP = [intP]
 
 tag charP = {
   int8 charM: 8;
@@ -87,395 +46,81 @@ tag voidP = {
 
 type voidP = [voidP]
 
-float Sterbenz(float x, float y)
-  requires (C_6 : ((C_7 : (((y :> real) / 2.0) <= (x :> real))) &&
-                    (C_8 : ((x :> real) <= (2.0 * (y :> real))))));
+tag A = {
+  int32 n_1: 32; 
+  intP[..] a: 32;
+}
+
+type A = [A]
+
+unit foo(A[..] x_0, int32 i_0)
+  requires (C_14 : ((C_15 : (\offset_min(x_0) <= 0)) &&
+                     (C_16 : (\offset_max(x_0) >= 0))));
+  requires (C_9 : ((C_10 : (x_0.n_1 >= 0)) &&
+                    ((C_12 : (\offset_min(x_0.a) <= 0)) &&
+                      (C_13 : (\offset_max(x_0.a) >= (x_0.n_1 - 1))))));
 behavior default:
-  ensures (C_5 : ((\result :> real) ==
-                   ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
+  assigns (x_0.a + i_0).intM;
+  ensures (C_6 : true);
+behavior assign_sth:
+  assumes ((0 <= i_0) && (i_0 < x_0.n_1));
+  assigns (x_0.a + i_0).intM;
+  ensures (C_7 : true);
+behavior assign_nth:
+  assumes ((i_0 < 0) || (i_0 >= x_0.n_1));
+  assigns \nothing;
+  ensures (C_8 : true);
 {  
-   (var float __retres);
+   (check (disjoint_behaviors : (! (((0 <= i_0) && (i_0 < x_0.n_1)) &&
+                                     ((i_0 < 0) || (i_0 >= x_0.n_1))))));
    
-   {  
-      {  
-         (assert for default: (C_1 : (jessie : (0.0 <= (y :> real)))));
-         ()
-      };
+   (check (complete_behaviors : (((i_0 < 0) || (i_0 >= x_0.n_1)) ||
+                                  ((0 <= i_0) && (i_0 < x_0.n_1)))));
+   
+   {  (if (i_0 >= 0) then (if (i_0 < (C_5 : x_0.n_1)) then (C_4 : ((C_3 : 
+                                                                   (C_2 : 
+                                                                   ((C_1 : x_0.a) +
+                                                                    i_0)).intM) = 0)) else ()) else ());
       
-      {  
-         (assert for default: (C_2 : (jessie : (0.0 <= (x :> real)))));
-         ()
-      };
-      
-      {  (C_4 : (__retres = (C_3 : (x - y))));
-         
-         (return __retres)
-      }
+      (return ())
    }
 }
-========== file tests/c/Sterbenz.jessie/Sterbenz.cloc ==========
-[C_1]
-file = "HOME/tests/c/Sterbenz.c"
-line = 38
-begin = 13
-end = 21
 
-[C_2]
-file = "HOME/tests/c/Sterbenz.c"
-line = 39
-begin = 13
-end = 21
+unit bar(A[..] x, A[..] y, int32 i)
+  requires (C_34 : ((C_35 : (\offset_min(x) <= 0)) &&
+                     (C_36 : (\offset_max(x) >= 0))));
+  requires (C_31 : ((C_32 : (\offset_min(y) <= 0)) &&
+                     (C_33 : (\offset_max(y) >= 0))));
+  requires (C_26 : ((C_27 : (x.n_1 >= 0)) &&
+                     ((C_29 : (\offset_min(x.a) <= 0)) &&
+                       (C_30 : (\offset_max(x.a) >= (x.n_1 - 1))))));
+  requires (C_21 : ((C_22 : (y.n_1 >= 0)) &&
+                     ((C_24 : (\offset_min(y.a) <= 0)) &&
+                       (C_25 : (\offset_max(y.a) >= (y.n_1 - 1))))));
+  requires (C_20 : true);
+behavior default:
+  ensures (C_19 : true);
+{  
+   {  (C_17 : foo(x, i));
+      
+      {  
+         (assert for default: (C_18 : (jessie : (y.a == \at(y.a,Pre)))));
+         ()
+      };
+      
+      (return ())
+   }
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs stack.jessie/stack.cloc stack.jessie/stack.jc
+type A
 
-[C_3]
-file = "HOME/tests/c/Sterbenz.c"
-line = 40
-begin = 9
-end = 12
-
-[C_4]
-file = "HOME/tests/c/Sterbenz.c"
-line = 40
-begin = 2
-end = 13
-
-[C_5]
-file = "HOME/tests/c/Sterbenz.c"
-line = 35
-begin = 12
-end = 28
-
-[C_6]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 13
-end = 36
-
-[C_7]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 13
-end = 25
-
-[C_8]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 24
-end = 36
-
-[Sterbenz]
-name = "Function Sterbenz"
-file = "HOME/tests/c/Sterbenz.c"
-line = 37
-begin = 6
-end = 14
-
-========== jessie execution ==========
-Generating Why function Sterbenz
-========== file tests/c/Sterbenz.jessie/Sterbenz.makefile ==========
-# this makefile was automatically generated; do not edit 
-
-TIMEOUT ?= 10
-
-DP ?= why-dp -timeout $(TIMEOUT)
-WHYEXEC ?= why
-GWHYEXEC ?= gwhy-bin
-WHYLIB ?= HOME/lib
-
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Sterbenz.loc
-
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Sterbenz.loc
-
-JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
-JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
-
-COQDEP = coqdep
-
-.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
-
-all: simplify/Sterbenz_why.sx
-
-project: why/Sterbenz.wpr
-
-why/%.wpr:  WHYOPT=--project -dir why
-why/%.wpr: why/%.why
-	@echo 'why --project [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-goals: why/Sterbenz_ctx.why
-
-why/%_ctx.why: WHYOPT=--multi-why -dir why
-why/%_ctx.why: why/%.why
-	@echo 'why --multi-why [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-coq: coq/Sterbenz_why.vo
-
-coq/Sterbenz_why.v: WHYOPT=-coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
-coq/Sterbenz_why.v: why/Sterbenz.why
-	@echo 'why -coq [...] why/Sterbenz.why' && $(WHY) $(JESSIELIBFILES) why/Sterbenz.why && rm -f coq/jessie_why.v
-
-coq-goals: goals coq/Sterbenz_ctx_why.vo
-	for f in why/*_po*.why; do make -f Sterbenz.makefile coq/`basename $$f .why`_why.v ; done
-
-coq/Sterbenz_ctx_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
-coq/Sterbenz_ctx_why.v: why/Sterbenz_ctx.why
-	@echo 'why -coq [...] why/Sterbenz_ctx.why' && $(WHY) why/Sterbenz_ctx.why
-
-coq/%_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export Sterbenz_ctx_why." -coq-tactic "intuition"
-coq/%_why.v: why/%.why
-	@echo 'why -coq [...] why/$*.why' && $(WHY) why/Sterbenz_ctx.why why/$*.why
-
-coq/%.vo: coq/%.v
-	coqc -I coq $<
-coq/%_po_why.vo: coq/Sterbenz_ctx_why.vo
-
-pvs: pvs/Sterbenz_why.pvs
-
-pvs/%_why.pvs: WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@jessie"
-pvs/%_why.pvs: why/%.why
-	$(WHY) $(JESSIELIBFILES) why/$*.why
-
-pvs/jessie_why.pvs:WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@why"
-pvs/jessie_why.pvs:
-	$(WHY) $(JESSIELIBFILES)
-
-isabelle: isabelle/Sterbenz_why.thy
-
-isabelle/%_why.thy: WHYOPT=-isabelle -dir isabelle -isabelle-base-theory jessie_why
-isabelle/%_why.thy: why/%.why
-	$(WHY) $(JESSIELIBFILES) why/$*.why
-	cp -f HOME/lib/isabelle/jessie_why.thy isabelle/
-
-simplify: simplify/Sterbenz_why.sx
-	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
-
-simplify/%_why.sx: WHYOPT=-simplify -dir simplify
-simplify/%_why.sx: why/%.why
-	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-vampire: vampire/Sterbenz_why.vp
-	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
-
-vampire/%_why.vp: WHYOPT=-vampire -dir vampire
-vampire/%_why.vp: why/%.why
-	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-alt-ergo ergo: why/Sterbenz_why.why
-	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
-
-why/%_why.why: WHYOPT=-alt-ergo -dir why
-why/%_why.why: why/%.why
-	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-gappa: gappa/Sterbenz_why.gappa
-	@echo 'Running Gappa on proof obligations' && ($(DP) $^)
-
-gappa/%_why.gappa: WHYOPT=-gappa -dir gappa
-gappa/%_why.gappa: why/%.why
-	@echo 'why -gappa [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-cvcl: cvcl/Sterbenz_why.cvc
-
-	@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)
-
-cvcl/%_why.cvc: WHYOPT=-cvcl -dir cvcl
-cvcl/%_why.cvc: why/%.why
-	@echo 'why -cvcl [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-harvey: harvey/Sterbenz_why.rv
-	@echo 'Running haRVey on proof obligations' && ($(DP) $^)
-
-harvey/%_why.rv: WHYOPT=-harvey -dir harvey
-harvey/%_why.rv: why/%.why
-	@echo 'why -harvey [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-zenon: zenon/Sterbenz_why.znn
-	@echo 'Running Zenon on proof obligations' && ($(DP) $^)
-
-zenon/%_why.znn: WHYOPT=-zenon -dir zenon
-zenon/%_why.znn: why/%.why
-	@echo 'why -zenon [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-smtlib: smtlib/Sterbenz_why.smt
-	@echo 'Running Z3 on proof obligations' && ($(DP) $^)
-
-smtlib/%_why.smt:  WHYOPT=-smtlib --encoding sstrat --exp goal -dir smtlib
-smtlib/%_why.smt: why/%.why
-	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-z3: smtlib/Sterbenz_why.smt
-	@echo 'Running Z3 on proof obligations' && ($(DP) -smt-solver z3 $^)
-
-yices: smtlib/Sterbenz_why.smt
-	@echo 'Running Yices on proof obligations' && ($(DP) -smt-solver yices $^)
-
-cvc3: smtlib/Sterbenz_why.smt
-	@echo 'Running CVC3 on proof obligations' && ($(DP) -smt-solver cvc3 $^)
-
-smtlib-v1: smtlib-v1/Sterbenz_why.smt
-smtlib-v1/%_why.smt:  WHYOPT=-smtlib --smtlib-v1 --encoding sstrat --exp goal -dir smtlib-v1
-smtlib-v1/%_why.smt: why/%.why
-	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-
-verit: smtlib-v1/Sterbenz_why.smt
-	@echo 'Running VeriT on proof obligations' && ($(DP) -smt-solver verit $^)
-
-gui stat: Sterbenz.stat
-
-%.stat: why/%.why
-	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
-
-why3: why/Sterbenz_why3.why
-why/%_why3.why:  WHYOPT=-why3
-why/%_why3.why: why/%.why
-	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-why3ml: Sterbenz.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
-
-why3ide: Sterbenz.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
-
-why3replay: Sterbenz.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
-
--include Sterbenz.depend
-
-depend: coq/Sterbenz_why.v
-	-$(COQDEP) -I coq coq/Sterbenz*_why.v > Sterbenz.depend
-
-clean:
-	rm -f coq/*.vo
-
-========== file tests/c/Sterbenz.jessie/Sterbenz.loc ==========
-[JC_1]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 13
-end = 25
-
-[JC_2]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 24
-end = 36
-
-[JC_3]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 13
-end = 36
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_5]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 13
-end = 25
-
-[JC_6]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 24
-end = 36
-
-[JC_7]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 13
-end = 36
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/c/Sterbenz.c"
-line = 35
-begin = 12
-end = 28
-
-[Sterbenz_ensures_default]
-name = "Function Sterbenz"
-behavior = "default behavior"
-file = "HOME/tests/c/Sterbenz.c"
-line = 37
-begin = 6
-end = 14
-
-[JC_10]
-file = "HOME/tests/c/Sterbenz.c"
-line = 35
-begin = 12
-end = 28
-
-[JC_11]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_13]
-file = "HOME/tests/c/Sterbenz.c"
-line = 38
-begin = 13
-end = 21
-
-[JC_14]
-file = "HOME/tests/c/Sterbenz.c"
-line = 39
-begin = 13
-end = 21
-
-[JC_15]
-kind = FPOverflow
-file = "HOME/tests/c/Sterbenz.c"
-line = 40
-begin = 9
-end = 12
-
-[JC_16]
-file = "HOME/tests/c/Sterbenz.c"
-line = 38
-begin = 13
-end = 21
-
-[JC_17]
-file = "HOME/tests/c/Sterbenz.c"
-line = 39
-begin = 13
-end = 21
-
-[JC_18]
-kind = FPOverflow
-file = "HOME/tests/c/Sterbenz.c"
-line = 40
-begin = 9
-end = 12
-
-[Sterbenz_safety]
-name = "Function Sterbenz"
-behavior = "Safety"
-file = "HOME/tests/c/Sterbenz.c"
-line = 37
-begin = 6
-end = 14
-
-========== file tests/c/Sterbenz.jessie/why/Sterbenz.why ==========
 type charP
 
+type int32
+
 type int8
+
+type intP
 
 type padding
 
@@ -484,6 +129,21 @@ type uint8
 type unsigned_charP
 
 type voidP
+
+logic A_tag:  -> A tag_id
+
+axiom A_int : (int_of_tag(A_tag) = (1))
+
+logic A_of_pointer_address: unit pointer -> A pointer
+
+axiom A_of_pointer_address_of_pointer_addr :
+ (forall p:A pointer. (p = A_of_pointer_address(pointer_address(p))))
+
+axiom A_parenttag_bottom : parenttag(A_tag, bottom_tag)
+
+axiom A_tags :
+ (forall x:A pointer.
+  (forall A_tag_table:A tag_table. instanceof(A_tag_table, x, A_tag)))
 
 logic charP_tag:  -> charP tag_id
 
@@ -501,6 +161,11 @@ axiom charP_tags :
   (forall charP_tag_table:charP tag_table.
    instanceof(charP_tag_table, x, charP_tag)))
 
+logic integer_of_int32: int32 -> int
+
+predicate eq_int32(x:int32, y:int32) =
+ eq_int(integer_of_int32(x), integer_of_int32(y))
+
 logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
@@ -510,6 +175,23 @@ logic integer_of_uint8: uint8 -> int
 
 predicate eq_uint8(x:uint8, y:uint8) =
  eq_int(integer_of_uint8(x), integer_of_uint8(y))
+
+logic int32_of_integer: int -> int32
+
+axiom int32_coerce :
+ (forall x:int.
+  ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
+   eq_int(integer_of_int32(int32_of_integer(x)), x)))
+
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32[eq_int(integer_of_int32(x), integer_of_int32(y))].
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
+axiom int32_range :
+ (forall x:int32.
+  (le_int((-2147483648), integer_of_int32(x))
+  and le_int(integer_of_int32(x), (2147483647))))
 
 logic int8_of_integer: int -> int8
 
@@ -527,9 +209,31 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
+logic intP_tag:  -> intP tag_id
+
+axiom intP_int : (int_of_tag(intP_tag) = (1))
+
+logic intP_of_pointer_address: unit pointer -> intP pointer
+
+axiom intP_of_pointer_address_of_pointer_addr :
+ (forall p:intP pointer. (p = intP_of_pointer_address(pointer_address(p))))
+
+axiom intP_parenttag_bottom : parenttag(intP_tag, bottom_tag)
+
+axiom intP_tags :
+ (forall x:intP pointer.
+  (forall intP_tag_table:intP tag_table.
+   instanceof(intP_tag_table, x, intP_tag)))
+
+predicate left_valid_struct_A(p:A pointer, a:int,
+ A_alloc_table:A alloc_table) = (offset_min(A_alloc_table, p) <= a)
+
 predicate left_valid_struct_charP(p:charP pointer, a:int,
  charP_alloc_table:charP alloc_table) =
  (offset_min(charP_alloc_table, p) <= a)
+
+predicate left_valid_struct_intP(p:intP pointer, a:int,
+ intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
 predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
  unsigned_charP_alloc_table:unsigned_charP alloc_table) =
@@ -539,8 +243,14 @@ predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
 
+axiom pointer_addr_of_A_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(A_of_pointer_address(p))))
+
 axiom pointer_addr_of_charP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+axiom pointer_addr_of_intP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
 
 logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
 
@@ -553,9 +263,15 @@ logic voidP_of_pointer_address: unit pointer -> voidP pointer
 axiom pointer_addr_of_voidP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
+predicate right_valid_struct_A(p:A pointer, b:int,
+ A_alloc_table:A alloc_table) = (offset_max(A_alloc_table, p) >= b)
+
 predicate right_valid_struct_charP(p:charP pointer, b:int,
  charP_alloc_table:charP alloc_table) =
  (offset_max(charP_alloc_table, p) >= b)
+
+predicate right_valid_struct_intP(p:intP pointer, b:int,
+ intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
 
 predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
  unsigned_charP_alloc_table:unsigned_charP alloc_table) =
@@ -565,10 +281,19 @@ predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
 
+predicate strict_valid_root_A(p:A pointer, a:int, b:int,
+ A_alloc_table:A alloc_table) =
+ ((offset_min(A_alloc_table, p) = a) and (offset_max(A_alloc_table, p) = b))
+
 predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
+
+predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) = a)
+ and (offset_max(intP_alloc_table, p) = b))
 
 predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
  b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
@@ -580,10 +305,19 @@ predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
+predicate strict_valid_struct_A(p:A pointer, a:int, b:int,
+ A_alloc_table:A alloc_table) =
+ ((offset_min(A_alloc_table, p) = a) and (offset_max(A_alloc_table, p) = b))
+
 predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
+
+predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) = a)
+ and (offset_max(intP_alloc_table, p) = b))
 
 predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
  b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
@@ -627,10 +361,20 @@ axiom unsigned_charP_tags :
   (forall unsigned_charP_tag_table:unsigned_charP tag_table.
    instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
+predicate valid_root_A(p:A pointer, a:int, b:int,
+ A_alloc_table:A alloc_table) =
+ ((offset_min(A_alloc_table, p) <= a)
+ and (offset_max(A_alloc_table, p) >= b))
+
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_root_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) <= a)
+ and (offset_max(intP_alloc_table, p) >= b))
 
 predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
  unsigned_charP_alloc_table:unsigned_charP alloc_table) =
@@ -642,10 +386,20 @@ predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) <= a)
  and (offset_max(voidP_alloc_table, p) >= b))
 
+predicate valid_struct_A(p:A pointer, a:int, b:int,
+ A_alloc_table:A alloc_table) =
+ ((offset_min(A_alloc_table, p) <= a)
+ and (offset_max(A_alloc_table, p) >= b))
+
 predicate valid_struct_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_struct_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) <= a)
+ and (offset_max(intP_alloc_table, p) >= b))
 
 predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
  unsigned_charP_alloc_table:unsigned_charP alloc_table) =
@@ -671,28 +425,35 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
+parameter A_alloc_table : A alloc_table ref
+
+parameter A_tag_table : A tag_table ref
+
 exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-parameter Sterbenz :
- x_0:single ->
-  y:single ->
-   { } single
-   { (JC_10:
-     (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
+parameter alloc_struct_A :
+ n:int ->
+  A_alloc_table:A alloc_table ref ->
+   A_tag_table:A tag_table ref ->
+    { } A pointer writes A_alloc_table,A_tag_table
+    { (strict_valid_struct_A(result, (0), sub_int(n, (1)), A_alloc_table)
+      and (alloc_extends(A_alloc_table@, A_alloc_table)
+          and (alloc_fresh(A_alloc_table@, result, n)
+              and instanceof(A_tag_table, result, A_tag)))) }
 
-parameter Sterbenz_requires :
- x_0:single ->
-  y:single ->
-   { (JC_3:
-     ((JC_1: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
-     and (JC_2: le_real(single_value(x_0), mul_real(2.0, single_value(y))))))}
-   single
-   { (JC_10:
-     (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
+parameter alloc_struct_A_requires :
+ n:int ->
+  A_alloc_table:A alloc_table ref ->
+   A_tag_table:A tag_table ref ->
+    { ge_int(n, (0))} A pointer writes A_alloc_table,A_tag_table
+    { (strict_valid_struct_A(result, (0), sub_int(n, (1)), A_alloc_table)
+      and (alloc_extends(A_alloc_table@, A_alloc_table)
+          and (alloc_fresh(A_alloc_table@, result, n)
+              and instanceof(A_tag_table, result, A_tag)))) }
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -719,6 +480,32 @@ parameter alloc_struct_charP_requires :
       and (alloc_extends(charP_alloc_table@, charP_alloc_table)
           and (alloc_fresh(charP_alloc_table@, result, n)
               and instanceof(charP_tag_table, result, charP_tag)))) }
+
+parameter intP_alloc_table : intP alloc_table ref
+
+parameter intP_tag_table : intP tag_table ref
+
+parameter alloc_struct_intP :
+ n:int ->
+  intP_alloc_table:intP alloc_table ref ->
+   intP_tag_table:intP tag_table ref ->
+    { } intP pointer writes intP_alloc_table,intP_tag_table
+    { (strict_valid_struct_intP(result, (0), sub_int(n, (1)),
+       intP_alloc_table)
+      and (alloc_extends(intP_alloc_table@, intP_alloc_table)
+          and (alloc_fresh(intP_alloc_table@, result, n)
+              and instanceof(intP_tag_table, result, intP_tag)))) }
+
+parameter alloc_struct_intP_requires :
+ n:int ->
+  intP_alloc_table:intP alloc_table ref ->
+   intP_tag_table:intP tag_table ref ->
+    { ge_int(n, (0))} intP pointer writes intP_alloc_table,intP_tag_table
+    { (strict_valid_struct_intP(result, (0), sub_int(n, (1)),
+       intP_alloc_table)
+      and (alloc_extends(intP_alloc_table@, intP_alloc_table)
+          and (alloc_fresh(intP_alloc_table@, result, n)
+              and instanceof(intP_tag_table, result, intP_tag)))) }
 
 parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
 
@@ -778,14 +565,163 @@ parameter alloc_struct_voidP_requires :
           and (alloc_fresh(voidP_alloc_table@, result, n)
               and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
+parameter any_int32 : unit -> { } int32 { true }
+
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint8 : unit -> { } uint8 { true }
+
+parameter bar :
+ x_1:A pointer ->
+  y:A pointer ->
+   i:int32 ->
+    intP_intM_a_6:(intP, int32) memory ref ->
+     intP_a_6_alloc_table:intP alloc_table ->
+      intP_a_5_alloc_table:intP alloc_table ->
+       A_y_3_alloc_table:A alloc_table ->
+        A_x_2_alloc_table:A alloc_table ->
+         A_a_y_3:(A, intP pointer) memory ->
+          A_a_x_2:(A, intP pointer) memory ->
+           A_n_1_y_3:(A, int32) memory ->
+            A_n_1_x_2:(A, int32) memory ->
+             { } unit writes intP_intM_a_6 { true }
+
+parameter bar_requires :
+ x_1:A pointer ->
+  y:A pointer ->
+   i:int32 ->
+    intP_intM_a_6:(intP, int32) memory ref ->
+     intP_a_6_alloc_table:intP alloc_table ->
+      intP_a_5_alloc_table:intP alloc_table ->
+       A_y_3_alloc_table:A alloc_table ->
+        A_x_2_alloc_table:A alloc_table ->
+         A_a_y_3:(A, intP pointer) memory ->
+          A_a_x_2:(A, intP pointer) memory ->
+           A_n_1_y_3:(A, int32) memory ->
+            A_n_1_x_2:(A, int32) memory ->
+             { (JC_<somenum>:
+               ((JC_<somenum>: le_int(offset_min(A_x_2_alloc_table, x_1), (0)))
+               and ((JC_<somenum>: ge_int(offset_max(A_x_2_alloc_table, x_1), (0)))
+                   and ((JC_<somenum>:
+                        le_int(offset_min(A_y_3_alloc_table, y), (0)))
+                       and ((JC_<somenum>:
+                            ge_int(offset_max(A_y_3_alloc_table, y), (0)))
+                           and ((JC_<somenum>:
+                                ge_int(integer_of_int32(select(A_n_1_x_2,
+                                                        x_1)),
+                                (0)))
+                               and ((JC_<somenum>:
+                                    le_int(offset_min(intP_a_6_alloc_table,
+                                           select(A_a_x_2, x_1)),
+                                    (0)))
+                                   and ((JC_<somenum>:
+                                        ge_int(offset_max(intP_a_6_alloc_table,
+                                               select(A_a_x_2, x_1)),
+                                        sub_int(integer_of_int32(select(A_n_1_x_2,
+                                                                 x_1)),
+                                        (1))))
+                                       and ((JC_<somenum>:
+                                            ge_int(integer_of_int32(select(A_n_1_y_3,
+                                                                    y)),
+                                            (0)))
+                                           and ((JC_<somenum>:
+                                                le_int(offset_min(intP_a_5_alloc_table,
+                                                       select(A_a_y_3, y)),
+                                                (0)))
+                                               and ((JC_<somenum>:
+                                                    ge_int(offset_max(intP_a_5_alloc_table,
+                                                           select(A_a_y_3, y)),
+                                                    sub_int(integer_of_int32(
+                                                            select(A_n_1_y_3,
+                                                            y)),
+                                                    (1))))
+                                                   and (JC_<somenum>: (true = true)))))))))))))}
+             unit writes intP_intM_a_6 { true }
+
+parameter foo :
+ x_0:A pointer ->
+  i_0:int32 ->
+   intP_intM_a_4:(intP, int32) memory ref ->
+    intP_a_4_alloc_table:intP alloc_table ->
+     A_x_0_1_alloc_table:A alloc_table ->
+      A_a_x_0_1:(A, intP pointer) memory ->
+       A_n_1_x_0_1:(A, int32) memory ->
+        { } unit writes intP_intM_a_4
+        { (((lt_int(integer_of_int32(i_0), (0))
+            or ge_int(integer_of_int32(i_0),
+               integer_of_int32(select(A_n_1_x_0_1, x_0)))) ->
+            (JC_<somenum>:
+            not_assigns(intP_a_4_alloc_table, intP_intM_a_4@, intP_intM_a_4,
+            pset_empty)))
+          and (((le_int((0), integer_of_int32(i_0))
+                and lt_int(integer_of_int32(i_0),
+                    integer_of_int32(select(A_n_1_x_0_1, x_0)))) ->
+                (JC_<somenum>:
+                not_assigns(intP_a_4_alloc_table, intP_intM_a_4@,
+                intP_intM_a_4,
+                pset_range(pset_deref(A_a_x_0_1, pset_singleton(x_0)),
+                integer_of_int32(i_0), integer_of_int32(i_0)))))
+              and (JC_<somenum>:
+                  not_assigns(intP_a_4_alloc_table, intP_intM_a_4@,
+                  intP_intM_a_4,
+                  pset_range(pset_deref(A_a_x_0_1, pset_singleton(x_0)),
+                  integer_of_int32(i_0), integer_of_int32(i_0)))))) }
+
+parameter foo_requires :
+ x_0:A pointer ->
+  i_0:int32 ->
+   intP_intM_a_4:(intP, int32) memory ref ->
+    intP_a_4_alloc_table:intP alloc_table ->
+     A_x_0_1_alloc_table:A alloc_table ->
+      A_a_x_0_1:(A, intP pointer) memory ->
+       A_n_1_x_0_1:(A, int32) memory ->
+        { (JC_<somenum>:
+          ((JC_<somenum>: le_int(offset_min(A_x_0_1_alloc_table, x_0), (0)))
+          and ((JC_<somenum>: ge_int(offset_max(A_x_0_1_alloc_table, x_0), (0)))
+              and ((JC_<somenum>:
+                   ge_int(integer_of_int32(select(A_n_1_x_0_1, x_0)), (0)))
+                  and ((JC_<somenum>:
+                       le_int(offset_min(intP_a_4_alloc_table,
+                              select(A_a_x_0_1, x_0)),
+                       (0)))
+                      and (JC_<somenum>:
+                          ge_int(offset_max(intP_a_4_alloc_table,
+                                 select(A_a_x_0_1, x_0)),
+                          sub_int(integer_of_int32(select(A_n_1_x_0_1, x_0)),
+                          (1)))))))))}
+        unit writes intP_intM_a_4
+        { (((lt_int(integer_of_int32(i_0), (0))
+            or ge_int(integer_of_int32(i_0),
+               integer_of_int32(select(A_n_1_x_0_1, x_0)))) ->
+            (JC_<somenum>:
+            not_assigns(intP_a_4_alloc_table, intP_intM_a_4@, intP_intM_a_4,
+            pset_empty)))
+          and (((le_int((0), integer_of_int32(i_0))
+                and lt_int(integer_of_int32(i_0),
+                    integer_of_int32(select(A_n_1_x_0_1, x_0)))) ->
+                (JC_<somenum>:
+                not_assigns(intP_a_4_alloc_table, intP_intM_a_4@,
+                intP_intM_a_4,
+                pset_range(pset_deref(A_a_x_0_1, pset_singleton(x_0)),
+                integer_of_int32(i_0), integer_of_int32(i_0)))))
+              and (JC_<somenum>:
+                  not_assigns(intP_a_4_alloc_table, intP_intM_a_4@,
+                  intP_intM_a_4,
+                  pset_range(pset_deref(A_a_x_0_1, pset_singleton(x_0)),
+                  integer_of_int32(i_0), integer_of_int32(i_0)))))) }
+
+parameter int32_of_integer_ :
+ x:int ->
+  { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
+  { eq_int(integer_of_int32(result), x) }
 
 parameter int8_of_integer_ :
  x:int ->
   { (le_int((-128), x) and le_int(x, (127)))} int8
   { eq_int(integer_of_int8(result), x) }
+
+parameter safe_int32_of_integer_ :
+ x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
@@ -798,54 +734,359 @@ parameter uint8_of_integer_ :
   { (le_int((0), x) and le_int(x, (255)))} uint8
   { eq_int(integer_of_uint8(result), x) }
 
-let Sterbenz_ensures_default =
- fun (x_0 : single) (y : single) ->
-  { (JC_7:
-    ((JC_5: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
-    and (JC_6: le_real(single_value(x_0), mul_real(2.0, single_value(y)))))) }
+let bar_ensures_default =
+ fun (x_1 : A pointer) (y : A pointer) (i : int32) (intP_intM_a_6 : (intP, int32) memory ref) (A_x_2_alloc_table : A alloc_table) (A_y_3_alloc_table : A alloc_table) (intP_a_5_alloc_table : intP alloc_table) (intP_a_6_alloc_table : intP alloc_table) (A_n_1_x_2 : (A, int32) memory) (A_n_1_y_3 : (A, int32) memory) (A_a_x_2 : (A, intP pointer) memory) (A_a_y_3 : (A, intP pointer) memory) ->
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(A_x_2_alloc_table, x_1), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(A_x_2_alloc_table, x_1), (0)))
+        and ((JC_<somenum>: le_int(offset_min(A_y_3_alloc_table, y), (0)))
+            and ((JC_<somenum>: ge_int(offset_max(A_y_3_alloc_table, y), (0)))
+                and ((JC_<somenum>:
+                     ge_int(integer_of_int32(select(A_n_1_x_2, x_1)), (0)))
+                    and ((JC_<somenum>:
+                         le_int(offset_min(intP_a_6_alloc_table,
+                                select(A_a_x_2, x_1)),
+                         (0)))
+                        and ((JC_<somenum>:
+                             ge_int(offset_max(intP_a_6_alloc_table,
+                                    select(A_a_x_2, x_1)),
+                             sub_int(integer_of_int32(select(A_n_1_x_2, x_1)),
+                             (1))))
+                            and ((JC_<somenum>:
+                                 ge_int(integer_of_int32(select(A_n_1_y_3, y)),
+                                 (0)))
+                                and ((JC_<somenum>:
+                                     le_int(offset_min(intP_a_5_alloc_table,
+                                            select(A_a_y_3, y)),
+                                     (0)))
+                                    and ((JC_<somenum>:
+                                         ge_int(offset_max(intP_a_5_alloc_table,
+                                                select(A_a_y_3, y)),
+                                         sub_int(integer_of_int32(select(A_n_1_y_3,
+                                                                  y)),
+                                         (1))))
+                                        and (JC_<somenum>: (true = true))))))))))))) }
   (init:
-  (let return = ref (any_single void) in
+  try
+   (C_17:
+   begin
+     (let jessie_<somenum> = x_1 in
+     (let jessie_<somenum> = i in
+     (JC_<somenum>:
+     (((((((foo jessie_<somenum>) jessie_<somenum>) intP_intM_a_6) intP_a_6_alloc_table) A_x_2_alloc_table) A_a_x_2) A_n_1_x_2))));
+    (assert { (JC_<somenum>: (select(A_a_y_3, y) = select(A_a_y_3, y))) }; void);
+    void; (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
+
+let bar_safety =
+ fun (x_1 : A pointer) (y : A pointer) (i : int32) (intP_intM_a_6 : (intP, int32) memory ref) (A_x_2_alloc_table : A alloc_table) (A_y_3_alloc_table : A alloc_table) (intP_a_5_alloc_table : intP alloc_table) (intP_a_6_alloc_table : intP alloc_table) (A_n_1_x_2 : (A, int32) memory) (A_n_1_y_3 : (A, int32) memory) (A_a_x_2 : (A, intP pointer) memory) (A_a_y_3 : (A, intP pointer) memory) ->
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(A_x_2_alloc_table, x_1), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(A_x_2_alloc_table, x_1), (0)))
+        and ((JC_<somenum>: le_int(offset_min(A_y_3_alloc_table, y), (0)))
+            and ((JC_<somenum>: ge_int(offset_max(A_y_3_alloc_table, y), (0)))
+                and ((JC_<somenum>:
+                     ge_int(integer_of_int32(select(A_n_1_x_2, x_1)), (0)))
+                    and ((JC_<somenum>:
+                         le_int(offset_min(intP_a_6_alloc_table,
+                                select(A_a_x_2, x_1)),
+                         (0)))
+                        and ((JC_<somenum>:
+                             ge_int(offset_max(intP_a_6_alloc_table,
+                                    select(A_a_x_2, x_1)),
+                             sub_int(integer_of_int32(select(A_n_1_x_2, x_1)),
+                             (1))))
+                            and ((JC_<somenum>:
+                                 ge_int(integer_of_int32(select(A_n_1_y_3, y)),
+                                 (0)))
+                                and ((JC_<somenum>:
+                                     le_int(offset_min(intP_a_5_alloc_table,
+                                            select(A_a_y_3, y)),
+                                     (0)))
+                                    and ((JC_<somenum>:
+                                         ge_int(offset_max(intP_a_5_alloc_table,
+                                                select(A_a_y_3, y)),
+                                         sub_int(integer_of_int32(select(A_n_1_y_3,
+                                                                  y)),
+                                         (1))))
+                                        and (JC_<somenum>: (true = true))))))))))))) }
+  (init:
+  try
+   (C_17:
+   begin
+     (let jessie_<somenum> = x_1 in
+     (let jessie_<somenum> = i in
+     (JC_<somenum>:
+     (((((((foo_requires jessie_<somenum>) jessie_<somenum>) intP_intM_a_6) intP_a_6_alloc_table) A_x_2_alloc_table) A_a_x_2) A_n_1_x_2))));
+    [ { } unit { (JC_<somenum>: (select(A_a_y_3, y) = select(A_a_y_3, y))) } ];
+    void; (raise Return); (raise Return) end) with Return -> void end)
+  { true }
+
+let foo_ensures_assign_nth =
+ fun (x_0 : A pointer) (i_0 : int32) (intP_intM_a_4 : (intP, int32) memory ref) (A_x_0_1_alloc_table : A alloc_table) (intP_a_4_alloc_table : intP alloc_table) (A_n_1_x_0_1 : (A, int32) memory) (A_a_x_0_1 : (A, intP pointer) memory) ->
+  { ((lt_int(integer_of_int32(i_0), (0))
+     or ge_int(integer_of_int32(i_0),
+        integer_of_int32(select(A_n_1_x_0_1, x_0))))
+    and (JC_<somenum>:
+        ((JC_<somenum>: le_int(offset_min(A_x_0_1_alloc_table, x_0), (0)))
+        and ((JC_<somenum>: ge_int(offset_max(A_x_0_1_alloc_table, x_0), (0)))
+            and ((JC_<somenum>:
+                 ge_int(integer_of_int32(select(A_n_1_x_0_1, x_0)), (0)))
+                and ((JC_<somenum>:
+                     le_int(offset_min(intP_a_4_alloc_table,
+                            select(A_a_x_0_1, x_0)),
+                     (0)))
+                    and (JC_<somenum>:
+                        ge_int(offset_max(intP_a_4_alloc_table,
+                               select(A_a_x_0_1, x_0)),
+                        sub_int(integer_of_int32(select(A_n_1_x_0_1, x_0)),
+                        (1)))))))))) }
+  (init:
   try
    begin
-     (let __retres = ref (any_single void) in
-     begin
-       (assert { (JC_16: le_real(0.0, single_value(y))) }; void); void;
-      (assert { (JC_17: le_real(0.0, single_value(x_0))) }; void);
-      (C_4:
-      begin
-        void;
-       (let jessie_<num> =
-       (__retres := (C_3: (JC_18: (((sub_single_safe nearest_even) x_0) y)))) in
-       void); (return := !__retres); (raise Return) end) end); absurd  end
-   with Return -> !return end))
-  { (JC_9:
-    (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
+     (if ((ge_int_ (integer_of_int32 i_0)) (0))
+     then
+      (if ((lt_int_ (integer_of_int32 i_0)) (integer_of_int32 (C_5:
+                                                              ((safe_acc_ A_n_1_x_0_1) x_0))))
+      then
+       (let jessie_<somenum> =
+       (C_4:
+       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+       (let jessie_<somenum> = (C_1: ((safe_acc_ A_a_x_0_1) x_0)) in
+       (let jessie_<somenum> = (integer_of_int32 i_0) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+       (((safe_upd_ intP_intM_a_4) jessie_<somenum>) jessie_<somenum>)))))) in void)
+      else void) else void); (raise Return); (raise Return) end with
+   Return -> void end)
+  { (JC_<somenum>:
+    not_assigns(intP_a_4_alloc_table, intP_intM_a_4@, intP_intM_a_4,
+    pset_empty)) }
 
-let Sterbenz_safety =
- fun (x_0 : single) (y : single) ->
-  { (JC_7:
-    ((JC_5: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
-    and (JC_6: le_real(single_value(x_0), mul_real(2.0, single_value(y)))))) }
+let foo_ensures_assign_sth =
+ fun (x_0 : A pointer) (i_0 : int32) (intP_intM_a_4 : (intP, int32) memory ref) (A_x_0_1_alloc_table : A alloc_table) (intP_a_4_alloc_table : intP alloc_table) (A_n_1_x_0_1 : (A, int32) memory) (A_a_x_0_1 : (A, intP pointer) memory) ->
+  { ((le_int((0), integer_of_int32(i_0))
+     and lt_int(integer_of_int32(i_0),
+         integer_of_int32(select(A_n_1_x_0_1, x_0))))
+    and (JC_<somenum>:
+        ((JC_<somenum>: le_int(offset_min(A_x_0_1_alloc_table, x_0), (0)))
+        and ((JC_<somenum>: ge_int(offset_max(A_x_0_1_alloc_table, x_0), (0)))
+            and ((JC_<somenum>:
+                 ge_int(integer_of_int32(select(A_n_1_x_0_1, x_0)), (0)))
+                and ((JC_<somenum>:
+                     le_int(offset_min(intP_a_4_alloc_table,
+                            select(A_a_x_0_1, x_0)),
+                     (0)))
+                    and (JC_<somenum>:
+                        ge_int(offset_max(intP_a_4_alloc_table,
+                               select(A_a_x_0_1, x_0)),
+                        sub_int(integer_of_int32(select(A_n_1_x_0_1, x_0)),
+                        (1)))))))))) }
   (init:
-  (let return = ref (any_single void) in
   try
    begin
-     (let __retres = ref (any_single void) in
-     begin
-       [ { } unit { (JC_13: le_real(0.0, single_value(y))) } ]; void;
-      [ { } unit { (JC_14: le_real(0.0, single_value(x_0))) } ];
+     (if ((ge_int_ (integer_of_int32 i_0)) (0))
+     then
+      (if ((lt_int_ (integer_of_int32 i_0)) (integer_of_int32 (C_5:
+                                                              ((safe_acc_ A_n_1_x_0_1) x_0))))
+      then
+       (let jessie_<somenum> =
+       (C_4:
+       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+       (let jessie_<somenum> = (C_1: ((safe_acc_ A_a_x_0_1) x_0)) in
+       (let jessie_<somenum> = (integer_of_int32 i_0) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+       (((safe_upd_ intP_intM_a_4) jessie_<somenum>) jessie_<somenum>)))))) in void)
+      else void) else void); (raise Return); (raise Return) end with
+   Return -> void end)
+  { (JC_<somenum>:
+    not_assigns(intP_a_4_alloc_table, intP_intM_a_4@, intP_intM_a_4,
+    pset_range(pset_deref(A_a_x_0_1, pset_singleton(x_0)),
+    integer_of_int32(i_0), integer_of_int32(i_0)))) }
+
+let foo_ensures_default =
+ fun (x_0 : A pointer) (i_0 : int32) (intP_intM_a_4 : (intP, int32) memory ref) (A_x_0_1_alloc_table : A alloc_table) (intP_a_4_alloc_table : intP alloc_table) (A_n_1_x_0_1 : (A, int32) memory) (A_a_x_0_1 : (A, intP pointer) memory) ->
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(A_x_0_1_alloc_table, x_0), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(A_x_0_1_alloc_table, x_0), (0)))
+        and ((JC_<somenum>: ge_int(integer_of_int32(select(A_n_1_x_0_1, x_0)), (0)))
+            and ((JC_<somenum>:
+                 le_int(offset_min(intP_a_4_alloc_table,
+                        select(A_a_x_0_1, x_0)),
+                 (0)))
+                and (JC_<somenum>:
+                    ge_int(offset_max(intP_a_4_alloc_table,
+                           select(A_a_x_0_1, x_0)),
+                    sub_int(integer_of_int32(select(A_n_1_x_0_1, x_0)), (1))))))))) }
+  (init:
+  try
+   begin
+     (check
+     { (JC_<somenum>:
+       (not (le_int((0), integer_of_int32(i_0))
+            and (lt_int(integer_of_int32(i_0),
+                 integer_of_int32(select(A_n_1_x_0_1, x_0)))
+                and (lt_int(integer_of_int32(i_0), (0))
+                    or ge_int(integer_of_int32(i_0),
+                       integer_of_int32(select(A_n_1_x_0_1, x_0)))))))) };
+     void);
+    (check
+    { (JC_<somenum>:
+      (lt_int(integer_of_int32(i_0), (0))
+      or (ge_int(integer_of_int32(i_0),
+          integer_of_int32(select(A_n_1_x_0_1, x_0)))
+         or (le_int((0), integer_of_int32(i_0))
+            and lt_int(integer_of_int32(i_0),
+                integer_of_int32(select(A_n_1_x_0_1, x_0))))))) }; void);
+    (if ((ge_int_ (integer_of_int32 i_0)) (0))
+    then
+     (if ((lt_int_ (integer_of_int32 i_0)) (integer_of_int32 (C_5:
+                                                             ((safe_acc_ A_n_1_x_0_1) x_0))))
+     then
+      (let jessie_<somenum> =
       (C_4:
-      begin
-        void;
-       (let jessie_<num> =
-       (__retres := (C_3: (JC_15: (((sub_single nearest_even) x_0) y)))) in
-       void); (return := !__retres); (raise Return) end) end); absurd  end
-   with Return -> !return end)) { true }
+      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let jessie_<somenum> = (C_1: ((safe_acc_ A_a_x_0_1) x_0)) in
+      (let jessie_<somenum> = (integer_of_int32 i_0) in
+      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+      (((safe_upd_ intP_intM_a_4) jessie_<somenum>) jessie_<somenum>)))))) in void)
+     else void) else void); (raise Return); (raise Return) end with Return ->
+   void end)
+  { (JC_<somenum>:
+    not_assigns(intP_a_4_alloc_table, intP_intM_a_4@, intP_intM_a_4,
+    pset_range(pset_deref(A_a_x_0_1, pset_singleton(x_0)),
+    integer_of_int32(i_0), integer_of_int32(i_0)))) }
+
+let foo_safety =
+ fun (x_0 : A pointer) (i_0 : int32) (intP_intM_a_4 : (intP, int32) memory ref) (A_x_0_1_alloc_table : A alloc_table) (intP_a_4_alloc_table : intP alloc_table) (A_n_1_x_0_1 : (A, int32) memory) (A_a_x_0_1 : (A, intP pointer) memory) ->
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(A_x_0_1_alloc_table, x_0), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(A_x_0_1_alloc_table, x_0), (0)))
+        and ((JC_<somenum>: ge_int(integer_of_int32(select(A_n_1_x_0_1, x_0)), (0)))
+            and ((JC_<somenum>:
+                 le_int(offset_min(intP_a_4_alloc_table,
+                        select(A_a_x_0_1, x_0)),
+                 (0)))
+                and (JC_<somenum>:
+                    ge_int(offset_max(intP_a_4_alloc_table,
+                           select(A_a_x_0_1, x_0)),
+                    sub_int(integer_of_int32(select(A_n_1_x_0_1, x_0)), (1))))))))) }
+  (init:
+  try
+   begin
+     (if ((ge_int_ (integer_of_int32 i_0)) (0))
+     then
+      (if ((lt_int_ (integer_of_int32 i_0)) (integer_of_int32 (C_5:
+                                                              (JC_<somenum>:
+                                                              (((acc_ A_x_0_1_alloc_table) A_n_1_x_0_1) x_0)))))
+      then
+       (let jessie_<somenum> =
+       (C_4:
+       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+       (let jessie_<somenum> =
+       (C_1: (JC_<somenum>: (((acc_ A_x_0_1_alloc_table) A_a_x_0_1) x_0))) in
+       (let jessie_<somenum> = (integer_of_int32 i_0) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+       (JC_<somenum>:
+       (((((offset_upd_ intP_a_4_alloc_table) intP_intM_a_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
+       void) else void) else void); (raise Return); (raise Return) end with
+   Return -> void end) { true }
 
 
-========== generation of alt-ergo VC output ==========
-why -alt-ergo [...] why/Sterbenz.why
-========== file tests/c/Sterbenz.jessie/why/Sterbenz_why.why ==========
+WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C stack.jessie --quiet -f stack.makefile project
+why --project [...] why/stack.why
+<project name="stack" context="why/stack_ctx.why">
+  <function name="Function foo">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/stack_po8.why">
+      <location file = "PPCHOME/tests/jessie/stack.jessie/stack.jc" line = "67" begin = "10" end = "142"/>
+      <explain kind = "Check"/>
+    </goal>
+    <goal why_file="why/stack_po9.why">
+      <location file = "PPCHOME/tests/jessie/stack.jessie/stack.jc" line = "70" begin = "10" end = "135"/>
+      <explain kind = "Check"/>
+    </goal>
+    <goal why_file="why/stack_po10.why">
+      <location file = "PPCHOME/tests/jessie/stack.c" line = "27" begin = "5" end = "8"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/stack_po11.why">
+      <location file = "PPCHOME/tests/jessie/stack.c" line = "29" begin = "22" end = "26"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/stack_po12.why">
+      <location file = "PPCHOME/tests/jessie/stack.c" line = "29" begin = "22" end = "26"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/stack_po13.why">
+      <location file = "PPCHOME/tests/jessie/stack.c" line = "30" begin = "8" end = "12"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/stack_po14.why">
+      <location file = "PPCHOME/tests/jessie/stack.c" line = "30" begin = "8" end = "12"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/stack_po15.why">
+      <location file = "PPCHOME/tests/jessie/stack.c" line = "30" begin = "18" end = "19"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/stack_po16.why">
+      <location file = "PPCHOME/tests/jessie/stack.c" line = "30" begin = "18" end = "19"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    </behavior>
+    <behavior name="Behavior `assign_sth'">
+    <goal why_file="why/stack_po7.why">
+      <location file = "PPCHOME/tests/jessie/stack.c" line = "27" begin = "5" end = "8"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Behavior `assign_nth'">
+    <goal why_file="why/stack_po6.why">
+      <location file = "PPCHOME/tests/jessie/stack.c" line = "27" begin = "5" end = "8"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
+  </function>
+  <function name="Function bar">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
+    <goal why_file="why/stack_po1.why">
+      <location file = "PPCHOME/tests/jessie/stack.jessie/stack.jc" line = "97" begin = "14" end = "23"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/stack_po2.why">
+      <location file = "PPCHOME/tests/jessie/stack.jessie/stack.jc" line = "97" begin = "14" end = "23"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/stack_po3.why">
+      <location file = "PPCHOME/tests/jessie/stack.jessie/stack.jc" line = "97" begin = "14" end = "23"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/stack_po4.why">
+      <location file = "PPCHOME/tests/jessie/stack.jessie/stack.jc" line = "97" begin = "14" end = "23"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/stack_po5.why">
+      <location file = "PPCHOME/tests/jessie/stack.jessie/stack.jc" line = "97" begin = "14" end = "23"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    </behavior>
+  </function>
+</project>
 logic eq_unit : unit, unit -> prop
 
 logic neq_unit : unit, unit -> prop
@@ -1784,308 +2025,15 @@ axiom frame_between_sub:
           (frame_between(sa, m1, m2) ->
            (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
-type mode
-
-logic nearest_even : mode
-
-logic to_zero : mode
-
-logic up : mode
-
-logic down : mode
-
-logic nearest_away : mode
-
-logic mode_match : mode, 'a1, 'a1, 'a1, 'a1, 'a1 -> 'a1
-
-axiom mode_match_nearest_even:
-  (forall aux_2:'a1.
-    (forall aux_3:'a1.
-      (forall aux_4:'a1.
-        (forall aux_5:'a1.
-          (forall aux_6:'a1 [mode_match(nearest_even, aux_2, aux_3, aux_4,
-            aux_5, aux_6)]. (mode_match(nearest_even, aux_2, aux_3, aux_4,
-            aux_5, aux_6) = aux_2))))))
-
-axiom mode_match_to_zero:
-  (forall aux_2:'a1.
-    (forall aux_3:'a1.
-      (forall aux_4:'a1.
-        (forall aux_5:'a1.
-          (forall aux_6:'a1 [mode_match(to_zero, aux_2, aux_3, aux_4, aux_5,
-            aux_6)]. (mode_match(to_zero, aux_2, aux_3, aux_4, aux_5,
-            aux_6) = aux_3))))))
-
-axiom mode_match_up:
-  (forall aux_2:'a1.
-    (forall aux_3:'a1.
-      (forall aux_4:'a1.
-        (forall aux_5:'a1.
-          (forall aux_6:'a1 [mode_match(up, aux_2, aux_3, aux_4, aux_5,
-            aux_6)]. (mode_match(up, aux_2, aux_3, aux_4, aux_5,
-            aux_6) = aux_4))))))
-
-axiom mode_match_down:
-  (forall aux_2:'a1.
-    (forall aux_3:'a1.
-      (forall aux_4:'a1.
-        (forall aux_5:'a1.
-          (forall aux_6:'a1 [mode_match(down, aux_2, aux_3, aux_4, aux_5,
-            aux_6)]. (mode_match(down, aux_2, aux_3, aux_4, aux_5,
-            aux_6) = aux_5))))))
-
-axiom mode_match_nearest_away:
-  (forall aux_2:'a1.
-    (forall aux_3:'a1.
-      (forall aux_4:'a1.
-        (forall aux_5:'a1.
-          (forall aux_6:'a1 [mode_match(nearest_away, aux_2, aux_3, aux_4,
-            aux_5, aux_6)]. (mode_match(nearest_away, aux_2, aux_3, aux_4,
-            aux_5, aux_6) = aux_6))))))
-
-axiom mode_inversion:
-  (forall aux_1:mode.
-    (((((aux_1 = nearest_even) or (aux_1 = to_zero)) or (aux_1 = up)) or
-      (aux_1 = down)) or
-     (aux_1 = nearest_away)))
-
-logic mode_to_int : mode -> int
-
-axiom mode_to_int_nearest_even: (mode_to_int(nearest_even) = 0)
-
-axiom mode_to_int_to_zero: (mode_to_int(to_zero) = 1)
-
-axiom mode_to_int_up: (mode_to_int(up) = 2)
-
-axiom mode_to_int_down: (mode_to_int(down) = 3)
-
-axiom mode_to_int_nearest_away: (mode_to_int(nearest_away) = 4)
-
-type double
-
-logic round_double : mode, real -> real
-
-logic round_double_logic : mode, real -> double
-
-logic double_value : double -> real
-
-logic double_exact : double -> real
-
-logic double_model : double -> real
-
-function double_round_error(x: double) : real =
-  abs_real((double_value(x) - double_exact(x)))
-
-function double_total_error(x: double) : real =
-  abs_real((double_value(x) - double_model(x)))
-
-function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
-
-predicate no_overflow_double(m: mode, x: real) = (abs_real(round_double(m,
-  x)) <= max_double)
-
-axiom bounded_real_no_overflow_double:
-  (forall m:mode.
-    (forall x:real.
-      ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
-
-axiom round_double_monotonic:
-  (forall x:real.
-    (forall y:real.
-      (forall m:mode.
-        ((x <= y) -> (round_double(m, x) <= round_double(m, y))))))
-
-axiom exact_round_double_for_integers:
-  (forall i:int.
-    (forall m:mode.
-      ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
-       (round_double(m, real_of_int(i)) = real_of_int(i)))))
-
-axiom exact_round_double_for_doubles:
-  (forall x:double.
-    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
-
-axiom round_double_idempotent:
-  (forall m1:mode.
-    (forall m2:mode.
-      (forall x:real. (round_double(m1, round_double(m2,
-        x)) = round_double(m2, x)))))
-
-axiom round_down_double_neg:
-  (forall x:real. (round_double(down, (-x)) = (-round_double(up, x))))
-
-axiom round_up_double_neg:
-  (forall x:real. (round_double(up, (-x)) = (-round_double(down, x))))
-
-axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
-
-axiom round_up_double_ge: (forall x:real. (round_double(up, x) >= x))
-
-type single
-
-logic round_single : mode, real -> real
-
-logic round_single_logic : mode, real -> single
-
-logic single_value : single -> real
-
-logic single_exact : single -> real
-
-logic single_model : single -> real
-
-function single_round_error(x: single) : real =
-  abs_real((single_value(x) - single_exact(x)))
-
-function single_total_error(x: single) : real =
-  abs_real((single_value(x) - single_model(x)))
-
-function max_single() : real = 0x1.FFFFFEp127
-
-predicate no_overflow_single(m: mode, x: real) = (abs_real(round_single(m,
-  x)) <= max_single)
-
-axiom bounded_real_no_overflow_single:
-  (forall m:mode.
-    (forall x:real.
-      ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
-
-axiom round_single_monotonic:
-  (forall x:real.
-    (forall y:real.
-      (forall m:mode.
-        ((x <= y) -> (round_single(m, x) <= round_single(m, y))))))
-
-axiom exact_round_single_for_integers:
-  (forall i:int.
-    (forall m:mode.
-      ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
-       real_of_int(i)) = real_of_int(i)))))
-
-axiom exact_round_single_for_singles:
-  (forall x:single.
-    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
-
-axiom round_single_idempotent:
-  (forall m1:mode.
-    (forall m2:mode.
-      (forall x:real. (round_single(m1, round_single(m2,
-        x)) = round_single(m2, x)))))
-
-axiom round_down_single_neg:
-  (forall x:real. (round_single(down, (-x)) = (-round_single(up, x))))
-
-axiom round_up_single_neg:
-  (forall x:real. (round_single(up, (-x)) = (-round_single(down, x))))
-
-axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
-
-axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
-
-axiom single_value_is_bounded:
-  (forall x:single. (abs_real(single_value(x)) <= max_single))
-
-axiom double_value_is_bounded:
-  (forall x:double. (abs_real(double_value(x)) <= max_double))
-
-predicate single_of_real_post(m: mode, x: real, res: single) =
-  ((single_value(res) = round_single(m, x)) and
-   ((single_exact(res) = x) and (single_model(res) = x)))
-
-predicate single_of_double_post(m: mode, x: double, res: single) =
-  ((single_value(res) = round_single(m, double_value(x))) and
-   ((single_exact(res) = double_exact(x)) and
-    (single_model(res) = double_model(x))))
-
-predicate add_single_post(m: mode, x: single, y: single, res: single) =
-  ((single_value(res) = round_single(m,
-   (single_value(x) + single_value(y)))) and
-   ((single_exact(res) = (single_exact(x) + single_exact(y))) and
-    (single_model(res) = (single_model(x) + single_model(y)))))
-
-predicate sub_single_post(m: mode, x: single, y: single, res: single) =
-  ((single_value(res) = round_single(m,
-   (single_value(x) - single_value(y)))) and
-   ((single_exact(res) = (single_exact(x) - single_exact(y))) and
-    (single_model(res) = (single_model(x) - single_model(y)))))
-
-predicate mul_single_post(m: mode, x: single, y: single, res: single) =
-  ((single_value(res) = round_single(m,
-   (single_value(x) * single_value(y)))) and
-   ((single_exact(res) = (single_exact(x) * single_exact(y))) and
-    (single_model(res) = (single_model(x) * single_model(y)))))
-
-predicate div_single_post(m: mode, x: single, y: single, res: single) =
-  ((single_value(res) = round_single(m, div_real(single_value(x),
-   single_value(y)))) and
-   ((single_exact(res) = div_real(single_exact(x), single_exact(y))) and
-    (single_model(res) = div_real(single_model(x), single_model(y)))))
-
-predicate sqrt_single_post(m: mode, x: single, res: single) =
-  ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
-   ((single_exact(res) = sqrt_real(single_exact(x))) and
-    (single_model(res) = sqrt_real(single_model(x)))))
-
-predicate neg_single_post(x: single, res: single) =
-  ((single_value(res) = (-single_value(x))) and
-   ((single_exact(res) = (-single_exact(x))) and
-    (single_model(res) = (-single_model(x)))))
-
-predicate abs_single_post(x: single, res: single) =
-  ((single_value(res) = abs_real(single_value(x))) and
-   ((single_exact(res) = abs_real(single_exact(x))) and
-    (single_model(res) = abs_real(single_model(x)))))
-
-predicate double_of_real_post(m: mode, x: real, res: double) =
-  ((double_value(res) = round_double(m, x)) and
-   ((double_exact(res) = x) and (double_model(res) = x)))
-
-predicate double_of_single_post(x: single, res: double) =
-  ((double_value(res) = single_value(x)) and
-   ((double_exact(res) = single_exact(x)) and
-    (double_model(res) = single_model(x))))
-
-predicate add_double_post(m: mode, x: double, y: double, res: double) =
-  ((double_value(res) = round_double(m,
-   (double_value(x) + double_value(y)))) and
-   ((double_exact(res) = (double_exact(x) + double_exact(y))) and
-    (double_model(res) = (double_model(x) + double_model(y)))))
-
-predicate sub_double_post(m: mode, x: double, y: double, res: double) =
-  ((double_value(res) = round_double(m,
-   (double_value(x) - double_value(y)))) and
-   ((double_exact(res) = (double_exact(x) - double_exact(y))) and
-    (double_model(res) = (double_model(x) - double_model(y)))))
-
-predicate mul_double_post(m: mode, x: double, y: double, res: double) =
-  ((double_value(res) = round_double(m,
-   (double_value(x) * double_value(y)))) and
-   ((double_exact(res) = (double_exact(x) * double_exact(y))) and
-    (double_model(res) = (double_model(x) * double_model(y)))))
-
-predicate div_double_post(m: mode, x: double, y: double, res: double) =
-  ((double_value(res) = round_double(m, div_real(double_value(x),
-   double_value(y)))) and
-   ((double_exact(res) = div_real(double_exact(x), double_exact(y))) and
-    (double_model(res) = div_real(double_model(x), double_model(y)))))
-
-predicate sqrt_double_post(m: mode, x: double, res: double) =
-  ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
-   ((double_exact(res) = sqrt_real(double_exact(x))) and
-    (double_model(res) = sqrt_real(double_model(x)))))
-
-predicate neg_double_post(x: double, res: double) =
-  ((double_value(res) = (-double_value(x))) and
-   ((double_exact(res) = (-double_exact(x))) and
-    (double_model(res) = (-double_model(x)))))
-
-predicate abs_double_post(x: double, res: double) =
-  ((double_value(res) = abs_real(double_value(x))) and
-   ((double_exact(res) = abs_real(double_exact(x))) and
-    (double_model(res) = abs_real(double_model(x)))))
+type A
 
 type charP
 
+type int32
+
 type int8
+
+type intP
 
 type padding
 
@@ -2094,6 +2042,21 @@ type uint8
 type unsigned_charP
 
 type voidP
+
+logic A_tag : A tag_id
+
+axiom A_int: (int_of_tag(A_tag) = 1)
+
+logic A_of_pointer_address : unit pointer -> A pointer
+
+axiom A_of_pointer_address_of_pointer_addr:
+  (forall p:A pointer. (p = A_of_pointer_address(pointer_address(p))))
+
+axiom A_parenttag_bottom: parenttag(A_tag, bottom_tag)
+
+axiom A_tags:
+  (forall x:A pointer.
+    (forall A_tag_table:A tag_table. instanceof(A_tag_table, x, A_tag)))
 
 logic charP_tag : charP tag_id
 
@@ -2112,6 +2075,11 @@ axiom charP_tags:
     (forall charP_tag_table:charP tag_table. instanceof(charP_tag_table, x,
       charP_tag)))
 
+logic integer_of_int32 : int32 -> int
+
+predicate eq_int32(x: int32, y: int32) =
+  (integer_of_int32(x) = integer_of_int32(y))
+
 logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
@@ -2122,6 +2090,23 @@ logic integer_of_uint8 : uint8 -> int
 predicate eq_uint8(x: uint8, y: uint8) =
   (integer_of_uint8(x) = integer_of_uint8(y))
 
+logic int32_of_integer : int -> int32
+
+axiom int32_coerce:
+  (forall x:int.
+    ((((-2147483648) <= x) and (x <= 2147483647)) ->
+     (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32 [(integer_of_int32(x) = integer_of_int32(y))].
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
+axiom int32_range:
+  (forall x:int32.
+    (((-2147483648) <= integer_of_int32(x)) and
+     (integer_of_int32(x) <= 2147483647)))
+
 logic int8_of_integer : int -> int8
 
 axiom int8_coerce:
@@ -2131,14 +2116,38 @@ axiom int8_coerce:
 
 axiom int8_extensionality:
   (forall x:int8.
-    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
+    (forall y:int8 [(integer_of_int8(x) = integer_of_int8(y))].
+      ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
+logic intP_tag : intP tag_id
+
+axiom intP_int: (int_of_tag(intP_tag) = 1)
+
+logic intP_of_pointer_address : unit pointer -> intP pointer
+
+axiom intP_of_pointer_address_of_pointer_addr:
+  (forall p:intP pointer. (p = intP_of_pointer_address(pointer_address(p))))
+
+axiom intP_parenttag_bottom: parenttag(intP_tag, bottom_tag)
+
+axiom intP_tags:
+  (forall x:intP pointer.
+    (forall intP_tag_table:intP tag_table. instanceof(intP_tag_table, x,
+      intP_tag)))
+
+predicate left_valid_struct_A(p: A pointer, a: int,
+  A_alloc_table: A alloc_table) = (offset_min(A_alloc_table, p) <= a)
+
 predicate left_valid_struct_charP(p: charP pointer, a: int,
   charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_intP(p: intP pointer, a: int,
+  intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
 predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
@@ -2149,8 +2158,14 @@ predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
+axiom pointer_addr_of_A_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(A_of_pointer_address(p))))
+
 axiom pointer_addr_of_charP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+axiom pointer_addr_of_intP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
 
 logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
 
@@ -2163,8 +2178,15 @@ logic voidP_of_pointer_address : unit pointer -> voidP pointer
 axiom pointer_addr_of_voidP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
+predicate right_valid_struct_A(p: A pointer, b: int,
+  A_alloc_table: A alloc_table) = (offset_max(A_alloc_table, p) >= b)
+
 predicate right_valid_struct_charP(p: charP pointer, b: int,
   charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
+  p) >= b)
+
+predicate right_valid_struct_intP(p: intP pointer, b: int,
+  intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
 
 predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
@@ -2175,9 +2197,18 @@ predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
+predicate strict_valid_root_A(p: A pointer, a: int, b: int,
+  A_alloc_table: A alloc_table) =
+  ((offset_min(A_alloc_table, p) = a) and (offset_max(A_alloc_table, p) = b))
+
 predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
+
+predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
 predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
@@ -2190,9 +2221,18 @@ predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_A(p: A pointer, a: int, b: int,
+  A_alloc_table: A alloc_table) =
+  ((offset_min(A_alloc_table, p) = a) and (offset_max(A_alloc_table, p) = b))
+
 predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
+
+predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
 predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
@@ -2213,7 +2253,7 @@ axiom uint8_coerce:
 
 axiom uint8_extensionality:
   (forall x:uint8.
-    (forall y:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
       ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
 
 axiom uint8_range:
@@ -2236,9 +2276,19 @@ axiom unsigned_charP_tags:
     (forall unsigned_charP_tag_table:unsigned_charP tag_table.
       instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
+predicate valid_root_A(p: A pointer, a: int, b: int,
+  A_alloc_table: A alloc_table) =
+  ((offset_min(A_alloc_table, p) <= a) and (offset_max(A_alloc_table,
+   p) >= b))
+
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
+
+predicate valid_root_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
 
 predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
@@ -2251,9 +2301,19 @@ predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
    p) >= b))
 
+predicate valid_struct_A(p: A pointer, a: int, b: int,
+  A_alloc_table: A alloc_table) =
+  ((offset_min(A_alloc_table, p) <= a) and (offset_max(A_alloc_table,
+   p) >= b))
+
 predicate valid_struct_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
+
+predicate valid_struct_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
 
 predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
@@ -2281,403 +2341,3 @@ axiom voidP_tags:
     (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
       voidP_tag)))
 
-goal Sterbenz_ensures_default_po_1:
-  forall x_0:single.
-  forall y:single.
-  ("JC_7":
-  (("JC_5": (div_real(single_value(y), 2.0) <= single_value(x_0))) and
-   ("JC_6": (single_value(x_0) <= (2.0 * single_value(y)))))) ->
-  ("JC_16": (0.0 <= single_value(y)))
-
-goal Sterbenz_ensures_default_po_2:
-  forall x_0:single.
-  forall y:single.
-  ("JC_7":
-  (("JC_5": (div_real(single_value(y), 2.0) <= single_value(x_0))) and
-   ("JC_6": (single_value(x_0) <= (2.0 * single_value(y)))))) ->
-  ("JC_16": (0.0 <= single_value(y))) ->
-  ("JC_17": (0.0 <= single_value(x_0)))
-
-goal Sterbenz_ensures_default_po_3:
-  forall x_0:single.
-  forall y:single.
-  ("JC_7":
-  (("JC_5": (div_real(single_value(y), 2.0) <= single_value(x_0))) and
-   ("JC_6": (single_value(x_0) <= (2.0 * single_value(y)))))) ->
-  ("JC_16": (0.0 <= single_value(y))) ->
-  ("JC_17": (0.0 <= single_value(x_0))) ->
-  forall result:single.
-  sub_single_post(nearest_even, x_0, y, result) ->
-  forall __retres:single.
-  (__retres = result) ->
-  forall return:single.
-  (return = __retres) ->
-  ("JC_9": (single_value(return) = (single_value(x_0) - single_value(y))))
-
-goal Sterbenz_safety_po_1:
-  forall x_0:single.
-  forall y:single.
-  ("JC_7":
-  (("JC_5": (div_real(single_value(y), 2.0) <= single_value(x_0))) and
-   ("JC_6": (single_value(x_0) <= (2.0 * single_value(y)))))) ->
-  ("JC_13": (0.0 <= single_value(y))) ->
-  ("JC_14": (0.0 <= single_value(x_0))) ->
-  no_overflow_single(nearest_even, (single_value(x_0) - single_value(y)))
-
-// RUNCOQ: will ask regtests to check Coq proofs of this program
-========== generation of Coq VC output ==========
-why -coq [...] why/Sterbenz.why
-File "/home/cmarche/recherche/why2-fluorine/tests/c/Sterbenz.jessie/coq/Sterbenz_why.v", line 4, characters 0-37:
-Error: Cannot find library WhyFloatsStrictLegacy in loadpath
-========== file tests/c/Sterbenz.jessie/coq/Sterbenz_why.v ==========
-(* This file was originally generated by why.
-   It can be modified; only the generated parts will be overwritten. *)
-Require Export jessie_why.
-Require Export WhyFloatsStrictLegacy.
-
-(*Why type*) Definition charP: Set.
-Admitted.
-
-(*Why type*) Definition int8: Set.
-Admitted.
-
-(*Why type*) Definition padding: Set.
-Admitted.
-
-(*Why type*) Definition uint8: Set.
-Admitted.
-
-(*Why type*) Definition unsigned_charP: Set.
-Admitted.
-
-(*Why type*) Definition voidP: Set.
-Admitted.
-
-(*Why logic*) Definition charP_tag : (tag_id charP).
-Admitted.
-
-(*Why axiom*) Lemma charP_int : (int_of_tag charP_tag) = 1.
-Admitted.
-Dp_hint charP_int.
-
-(*Why logic*) Definition charP_of_pointer_address :
-  (pointer unit) -> (pointer charP).
-Admitted.
-
-(*Why axiom*) Lemma charP_of_pointer_address_of_pointer_addr :
-  (forall (p:(pointer charP)),
-   p = (charP_of_pointer_address (pointer_address p))).
-Admitted.
-Dp_hint charP_of_pointer_address_of_pointer_addr.
-
-(*Why axiom*) Lemma charP_parenttag_bottom :
-  (parenttag charP_tag (@bottom_tag charP)).
-Admitted.
-Dp_hint charP_parenttag_bottom.
-
-(*Why axiom*) Lemma charP_tags :
-  (forall (x:(pointer charP)),
-   (forall (charP_tag_table:(tag_table charP)),
-    (instanceof charP_tag_table x charP_tag))).
-Admitted.
-Dp_hint charP_tags.
-
-(*Why logic*) Definition integer_of_int8 : int8 -> Z.
-Admitted.
-
-(*Why predicate*) Definition eq_int8  (x:int8) (y:int8)
-  := (integer_of_int8 x) = (integer_of_int8 y).
-
-(*Why logic*) Definition integer_of_uint8 : uint8 -> Z.
-Admitted.
-
-(*Why predicate*) Definition eq_uint8  (x:uint8) (y:uint8)
-  := (integer_of_uint8 x) = (integer_of_uint8 y).
-
-(*Why logic*) Definition int8_of_integer : Z -> int8.
-Admitted.
-
-(*Why axiom*) Lemma int8_coerce :
-  (forall (x:Z),
-   ((-128) <= x /\ x <= 127 -> (integer_of_int8 (int8_of_integer x)) = x)).
-Admitted.
-
-(*Why axiom*) Lemma int8_extensionality :
-  (forall (x:int8),
-   (forall (y:int8), ((integer_of_int8 x) = (integer_of_int8 y) -> x = y))).
-Admitted.
-Dp_hint int8_extensionality.
-
-(*Why axiom*) Lemma int8_range :
-  (forall (x:int8), (-128) <= (integer_of_int8 x) /\ (integer_of_int8 x) <=
-   127).
-Admitted.
-
-
-
-(*Why predicate*) Definition left_valid_struct_charP  (p:(pointer charP)) (a:Z) (charP_alloc_table:(alloc_table charP))
-  := (offset_min charP_alloc_table p) <= a.
-
-(*Why predicate*) Definition left_valid_struct_unsigned_charP  (p:(pointer unsigned_charP)) (a:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
-  := (offset_min unsigned_charP_alloc_table p) <= a.
-
-(*Why predicate*) Definition left_valid_struct_voidP  (p:(pointer voidP)) (a:Z) (voidP_alloc_table:(alloc_table voidP))
-  := (offset_min voidP_alloc_table p) <= a.
-
-(*Why axiom*) Lemma pointer_addr_of_charP_of_pointer_address :
-  (forall (p:(pointer unit)),
-   p = (pointer_address (charP_of_pointer_address p))).
-Admitted.
-Dp_hint pointer_addr_of_charP_of_pointer_address.
-
-(*Why logic*) Definition unsigned_charP_of_pointer_address :
-  (pointer unit) -> (pointer unsigned_charP).
-Admitted.
-
-(*Why axiom*) Lemma pointer_addr_of_unsigned_charP_of_pointer_address :
-  (forall (p:(pointer unit)),
-   p = (pointer_address (unsigned_charP_of_pointer_address p))).
-Admitted.
-Dp_hint pointer_addr_of_unsigned_charP_of_pointer_address.
-
-(*Why logic*) Definition voidP_of_pointer_address :
-  (pointer unit) -> (pointer voidP).
-Admitted.
-
-(*Why axiom*) Lemma pointer_addr_of_voidP_of_pointer_address :
-  (forall (p:(pointer unit)),
-   p = (pointer_address (voidP_of_pointer_address p))).
-Admitted.
-Dp_hint pointer_addr_of_voidP_of_pointer_address.
-
-(*Why predicate*) Definition right_valid_struct_charP  (p:(pointer charP)) (b:Z) (charP_alloc_table:(alloc_table charP))
-  := (offset_max charP_alloc_table p) >= b.
-
-(*Why predicate*) Definition right_valid_struct_unsigned_charP  (p:(pointer unsigned_charP)) (b:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
-  := (offset_max unsigned_charP_alloc_table p) >= b.
-
-(*Why predicate*) Definition right_valid_struct_voidP  (p:(pointer voidP)) (b:Z) (voidP_alloc_table:(alloc_table voidP))
-  := (offset_max voidP_alloc_table p) >= b.
-
-(*Why predicate*) Definition strict_valid_root_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
-  := (offset_min charP_alloc_table p) = a /\
-     (offset_max charP_alloc_table p) = b.
-
-(*Why predicate*) Definition strict_valid_root_unsigned_charP  (p:(pointer unsigned_charP)) (a:Z) (b:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
-  := (offset_min unsigned_charP_alloc_table p) = a /\
-     (offset_max unsigned_charP_alloc_table p) = b.
-
-(*Why predicate*) Definition strict_valid_root_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
-  := (offset_min voidP_alloc_table p) = a /\
-     (offset_max voidP_alloc_table p) = b.
-
-(*Why predicate*) Definition strict_valid_struct_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
-  := (offset_min charP_alloc_table p) = a /\
-     (offset_max charP_alloc_table p) = b.
-
-(*Why predicate*) Definition strict_valid_struct_unsigned_charP  (p:(pointer unsigned_charP)) (a:Z) (b:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
-  := (offset_min unsigned_charP_alloc_table p) = a /\
-     (offset_max unsigned_charP_alloc_table p) = b.
-
-(*Why predicate*) Definition strict_valid_struct_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
-  := (offset_min voidP_alloc_table p) = a /\
-     (offset_max voidP_alloc_table p) = b.
-
-(*Why logic*) Definition uint8_of_integer : Z -> uint8.
-Admitted.
-
-(*Why axiom*) Lemma uint8_coerce :
-  (forall (x:Z),
-   (0 <= x /\ x <= 255 -> (integer_of_uint8 (uint8_of_integer x)) = x)).
-Admitted.
-Dp_hint uint8_coerce.
-
-(*Why axiom*) Lemma uint8_extensionality :
-  (forall (x:uint8),
-   (forall (y:uint8), ((integer_of_uint8 x) = (integer_of_uint8 y) -> x = y))).
-Admitted.
-Dp_hint uint8_extensionality.
-
-(*Why axiom*) Lemma uint8_range :
-  (forall (x:uint8), 0 <= (integer_of_uint8 x) /\ (integer_of_uint8 x) <= 255).
-Admitted.
-Dp_hint uint8_range.
-
-(*Why logic*) Definition unsigned_charP_tag : (tag_id unsigned_charP).
-Admitted.
-
-(*Why axiom*) Lemma unsigned_charP_int : (int_of_tag unsigned_charP_tag) = 1.
-Admitted.
-Dp_hint unsigned_charP_int.
-
-(*Why axiom*) Lemma unsigned_charP_of_pointer_address_of_pointer_addr :
-  (forall (p:(pointer unsigned_charP)),
-   p = (unsigned_charP_of_pointer_address (pointer_address p))).
-Admitted.
-Dp_hint unsigned_charP_of_pointer_address_of_pointer_addr.
-
-(*Why axiom*) Lemma unsigned_charP_parenttag_bottom :
-  (parenttag unsigned_charP_tag (@bottom_tag unsigned_charP)).
-Admitted.
-Dp_hint unsigned_charP_parenttag_bottom.
-
-(*Why axiom*) Lemma unsigned_charP_tags :
-  (forall (x:(pointer unsigned_charP)),
-   (forall (unsigned_charP_tag_table:(tag_table unsigned_charP)),
-    (instanceof unsigned_charP_tag_table x unsigned_charP_tag))).
-Admitted.
-Dp_hint unsigned_charP_tags.
-
-(*Why predicate*) Definition valid_root_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
-  := (offset_min charP_alloc_table p) <= a /\
-     (offset_max charP_alloc_table p) >= b.
-
-(*Why predicate*) Definition valid_root_unsigned_charP  (p:(pointer unsigned_charP)) (a:Z) (b:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
-  := (offset_min unsigned_charP_alloc_table p) <= a /\
-     (offset_max unsigned_charP_alloc_table p) >= b.
-
-(*Why predicate*) Definition valid_root_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
-  := (offset_min voidP_alloc_table p) <= a /\
-     (offset_max voidP_alloc_table p) >= b.
-
-(*Why predicate*) Definition valid_struct_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
-  := (offset_min charP_alloc_table p) <= a /\
-     (offset_max charP_alloc_table p) >= b.
-
-(*Why predicate*) Definition valid_struct_unsigned_charP  (p:(pointer unsigned_charP)) (a:Z) (b:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
-  := (offset_min unsigned_charP_alloc_table p) <= a /\
-     (offset_max unsigned_charP_alloc_table p) >= b.
-
-(*Why predicate*) Definition valid_struct_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
-  := (offset_min voidP_alloc_table p) <= a /\
-     (offset_max voidP_alloc_table p) >= b.
-
-(*Why logic*) Definition voidP_tag : (tag_id voidP).
-Admitted.
-
-(*Why axiom*) Lemma voidP_int : (int_of_tag voidP_tag) = 1.
-Admitted.
-Dp_hint voidP_int.
-
-(*Why axiom*) Lemma voidP_of_pointer_address_of_pointer_addr :
-  (forall (p:(pointer voidP)),
-   p = (voidP_of_pointer_address (pointer_address p))).
-Admitted.
-Dp_hint voidP_of_pointer_address_of_pointer_addr.
-
-(*Why axiom*) Lemma voidP_parenttag_bottom :
-  (parenttag voidP_tag (@bottom_tag voidP)).
-Admitted.
-Dp_hint voidP_parenttag_bottom.
-
-(*Why axiom*) Lemma voidP_tags :
-  (forall (x:(pointer voidP)),
-   (forall (voidP_tag_table:(tag_table voidP)),
-    (instanceof voidP_tag_table x voidP_tag))).
-Admitted.
-Dp_hint voidP_tags.
-
-(* Why obligation from file "Sterbenz.c", line 38, characters 13-21: *)
-(*Why goal*) Lemma Sterbenz_ensures_default_po_1 : 
-  forall (x_0: single),
-  forall (y: single),
-  forall (HW_1: (* JC_7 *)
-                ((* JC_5 *)
-                 (Rle (Rdiv (single_value y) (2)%R) (single_value x_0)) /\
-                (* JC_6 *)
-                (Rle (single_value x_0) (Rmult (2)%R (single_value y))))),
-  (* JC_16 *) (Rle (0)%R (single_value y)).
-Proof.
-intros x y (h1,h2).
-apply Rmult_le_reg_l with 3%R.
-  apply Rlt_le_trans with 2%R; auto with real.
-apply Rplus_le_reg_l with (single_value y).
-apply Rmult_le_reg_l with (/2)%R; auto with real.
-replace (/ 2 * (single_value y + 3 * 0))%R with (single_value y / 2)%R by (unfold Rdiv; ring).
-apply Rle_trans with (single_value x); [apply h1|idtac].
-apply Rle_trans with  (2 * single_value y)%R; [ apply h2 | right; field].
-Qed.
-
-(* Why obligation from file "Sterbenz.c", line 39, characters 13-21: *)
-(*Why goal*) Lemma Sterbenz_ensures_default_po_2 : 
-  forall (x_0: single),
-  forall (y: single),
-  forall (HW_1: (* JC_7 *)
-                ((* JC_5 *)
-                 (Rle (Rdiv (single_value y) (2)%R) (single_value x_0)) /\
-                (* JC_6 *)
-                (Rle (single_value x_0) (Rmult (2)%R (single_value y))))),
-  forall (HW_4: (* JC_16 *) (Rle (0)%R (single_value y))),
-  (* JC_17 *) (Rle (0)%R (single_value x_0)).
-Proof.
-intros x y (h1,h2) y_pos.
-apply Rle_trans with (single_value y / 2)%R; [idtac|apply h1].
-unfold Rdiv; apply Rmult_le_pos; auto with real.
-Save.
-
-(* Why obligation from file "Sterbenz.c", line 35, characters 12-28: *)
-(*Why goal*) Lemma Sterbenz_ensures_default_po_3 : 
-  forall (x_0: single),
-  forall (y: single),
-  forall (HW_1: (* JC_7 *)
-                ((* JC_5 *)
-                 (Rle (Rdiv (single_value y) (2)%R) (single_value x_0)) /\
-                (* JC_6 *)
-                (Rle (single_value x_0) (Rmult (2)%R (single_value y))))),
-  forall (HW_4: (* JC_16 *) (Rle (0)%R (single_value y))),
-  forall (HW_5: (* JC_17 *) (Rle (0)%R (single_value x_0))),
-  forall (result: single),
-  forall (HW_6: (sub_single_post nearest_even x_0 y result)),
-  forall (__retres: single),
-  forall (HW_7: __retres = result),
-  forall (why__return: single),
-  forall (HW_8: why__return = __retres),
-  (* JC_9 *)
-  (eq (single_value why__return) (Rminus (single_value x_0) (single_value y))).
-Proof.
-intros x y (H1,H2) _ _ r (H4,(H5a,H5b)) r' H6 r'' H7.
-rewrite H7,H6,H4; unfold single_value in *.
-unfold FtoRradix; rewrite <- Fminus_correct; auto with zarith.
-elim (mode_single_RoundingMode nearest_even); intros P (H8,H9).
-apply sym_eq; apply RoundedModeProjectorIdemEq with bsingle 24%nat P; try apply psGivesBound; auto with zarith.
-apply Sterbenz; auto with zarith; try apply FcanonicBound with radix; try now destruct x; try now destruct y.
-fold FtoRradix; apply Rle_trans with (2:=H1); unfold Rdiv; simpl; right; ring.
-Save.
-
-(* Why obligation from file "Sterbenz.c", line 40, characters 9-12: *)
-(*Why goal*) Lemma Sterbenz_safety_po_1 : 
-  forall (x_0: single),
-  forall (y: single),
-  forall (HW_1: (* JC_7 *)
-                ((* JC_5 *)
-                 (Rle (Rdiv (single_value y) (2)%R) (single_value x_0)) /\
-                (* JC_6 *)
-                (Rle (single_value x_0) (Rmult (2)%R (single_value y))))),
-  forall (HW_4: (* JC_13 *) (Rle (0)%R (single_value y))),
-  forall (HW_5: (* JC_14 *) (Rle (0)%R (single_value x_0))),
-  (no_overflow_single
-   nearest_even (Rminus (single_value x_0) (single_value y))).
-Proof.
-intros x y (h1,h2) y_pos x_pos.
-apply bounded_real_no_overflow_single.
-case (Rle_or_lt (single_value x) (single_value y)); intros.
-rewrite Rabs_left1.
-ring_simplify.
-apply Rle_trans with (-0+single_value y)%R;auto with real.
-ring_simplify; rewrite <- (Rabs_right (single_value y)).
-apply single_le_strict.
-auto with real.
-apply Rplus_le_reg_l with (single_value y); now ring_simplify.
-rewrite Rabs_right.
-ring_simplify.
-apply Rle_trans with (single_value x-0)%R.
-apply Rplus_le_compat_l; auto with real.
-ring_simplify; rewrite <- (Rabs_right (single_value x)).
-apply single_le_strict.
-auto with real.
-apply Rle_ge; apply Rplus_le_reg_l with (single_value y); ring_simplify; auto with real.
-Save.
-
-========== running Coq ==========
-File "/home/cmarche/recherche/why2-fluorine/tests/c/Sterbenz.jessie/coq/Sterbenz_why.v", line 4, characters 0-37:
-Error: Cannot find library WhyFloatsStrictLegacy in loadpath

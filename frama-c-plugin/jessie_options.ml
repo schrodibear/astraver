@@ -112,6 +112,14 @@ module WhyOpt =
        let help = "give an option to Why (e.g., -jessie-why-opt=\"-fast-wp\")"
      end)
 
+module Why3Opt =
+  StringSet
+    (struct
+       let option_name = "-jessie-why3-opt"
+       let arg_name = ""
+       let help = "give an option to Why3 (e.g., -jessie-why3-opt=\"--debug fast-wp\")"
+     end)
+
 module GenOnly =
   False(struct
 	  let option_name = "-jessie-gen-only"

@@ -53,6 +53,7 @@ val verbose : bool
 val werror : bool
 val why3_backend : bool
 val why_opt : string
+val why3_opt : string
 
 val verify_all_offsets : bool
 val verify_invariants_only : bool

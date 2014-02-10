@@ -109,6 +109,23 @@ OCAMLLIB=`$OCAMLC -where | tr -d '\\r'`
 echo "ocaml library path is $OCAMLLIB"
 
 
+## Where are the library we need
+# we look for ocamlfind; if not present, we just don't use it to find
+# libraries
+AC_CHECK_PROG(USEOCAMLFIND,ocamlfind,yes,no)
+
+if test "$USEOCAMLFIND" = yes; then
+   OCAMLFINDLIB=$(ocamlfind printconf stdlib)
+   OCAMLFIND=$(which ocamlfind)
+   if test "$OCAMLFINDLIB" != "$OCAMLLIB"; then
+   USEOCAMLFIND=no;
+   echo "but your ocamlfind is not compatible with your ocamlc:"
+   echo "ocamlfind : $OCAMLFINDLIB, ocamlc : $OCAMLLIB"
+   fi
+fi
+
+
+
 # Check for arch/OS
 
 AC_MSG_CHECKING(OS dependent settings)
@@ -225,19 +242,16 @@ fi
 
 LOCALOCAMLGRAPH=no
 
-AC_CHECK_PROG(OCAMLFIND,ocamlfind,ocamlfind,no)
-
-if test "$OCAMLFIND" = no; then
-  AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
-else
- if $OCAMLFIND list | grep -e ocamlgraph --quiet; then
-   OCAMLGRAPH=yes;
- else
-   OCAMLGRAPH=no;
- fi
+if test "$USEOCAMLFIND" = yes; then
+  OCAMLGRAPHLIB=$(ocamlfind query -i-format ocamlgraph)
 fi
-
-if test "$OCAMLGRAPH" = no ; then
+if test -n "$OCAMLGRAPHLIB"; then
+   echo "ocamlfind found ocamlgraph in $OCAMLGRAPHLIB"
+      OCAMLGRAPHLIB="-I $OCAMLGRAPHLIB"
+      OCAMLGRAPHVER=" found by ocamlfind"
+ else
+ AC_CHECK_FILE($OCAMLLIB/ocamlgraph/graph.cmi,OCAMLGRAPH=yes,OCAMLGRAPH=no)
+ if test "$OCAMLGRAPH" = no ; then
     AC_CHECK_FILE(ocamlgraph/src/sig.mli,OCAMLGRAPH=yes,OCAMLGRAPH=no)
     if test "$OCAMLGRAPH" = no ; then
       AC_MSG_ERROR(Cannot find ocamlgraph library. Please install the *libocamlgraph-ocaml-dev* Debian package - or use the GODI caml package system *http://godi.ocaml-programming.de/* - or compile from sources *http://ocamlgraph.lri.fr/*)
@@ -246,13 +260,10 @@ if test "$OCAMLGRAPH" = no ; then
       OCAMLGRAPHVER=" in local subdir ocamlgraph"
       LOCALOCAMLGRAPH=yes
     fi
-else if test "$OCAMLFIND" = no; then
+ else
     OCAMLGRAPHLIB="-I +ocamlgraph"
     OCAMLGRAPHVER=" in Ocaml lib, subdir ocamlgraph"
-else
-    OCAMLGRAPHLIB=$($OCAMLFIND query -i-format ocamlgraph)
-    OCAMLGRAPHVER=" installed by ocamlfind"
-fi;
+ fi
 fi
 
 # checking local ocamlgraph compilation
@@ -267,22 +278,24 @@ if test "$LOCALOCAMLGRAPH" = yes; then
 fi
 
 # checking for lablgtk2
-if test "$OCAMLFIND" = no; then
-   AC_CHECK_FILE($OCAMLLIB/lablgtk2/lablgtk.cma,LABLGTK2=yes,LABLGTK2=no)
-   # AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no) not always available (Win32)
-   if test "$LABLGTK2" = yes ; then
-      INCLUDEGTK2="-I +lablgtk2"
-   fi
-else
-   INCLUDEGTK2=$(ocamlfind query lablgtk2)
-   if test -n "$INCLUDEGTK2";then
-      LABLGTK2=yes
-      echo "ocamlfind found lablgtk2 in $INCLUDEGTK2"
-      INCLUDEGTK2="-I $INCLUDEGTK2"
-   else
-      LABLGTK2=no
+if test "$USEOCAMLFIND" = yes; then
+   LABLGTKSV2LIB=$(ocamlfind query lablgtk2.sourceview2)
+   if test -z "$LABLGTKSV2LIB"; then
+      LABLGTKSV2LIB=$(ocamlfind query lablgtksourceview2)
    fi
 fi
+if test -n "$LABLGTKSV2LIB";then
+   echo "ocamlfind found lablgtksourceview2 in $LABLGTKSV2LIB"
+   INCLUDEGTK2="-I $LABLGTKSV2LIB"
+   LABLGTK2=yes
+else
+  AC_CHECK_FILE($OCAMLLIB/lablgtk2/lablgtk.cma,LABLGTK2=yes,LABLGTK2=no)
+  # AC_CHECK_PROG(LABLGTK2,lablgtk2,yes,no) not always available (Win32)
+  if test "$LABLGTK2" = yes ; then
+        INCLUDEGTK2="-I +lablgtk2"
+  fi
+fi
+
 
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
@@ -313,12 +326,13 @@ fi
 TESTFRAMAC=yes
 
 if test "$TESTFRAMAC" = no ; then
-   FRAMAC=no
+   FRAMACPLUGIN=no
    FRAMACMSG="Disabled on user request"
 else
    AC_CHECK_PROG(FRAMAC,frama-c,frama-c,no)
    if test "$FRAMAC" = no ; then
 	AC_MSG_WARN(Cannot find frama-c.)
+	FRAMACPLUGIN=no
         FRAMACMSG="Cannot find Frama-C"
    else
       # we extract Ocaml version number
@@ -326,11 +340,11 @@ else
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
       AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
-        Fluorine-20130601+dev) 
-           FRAMAC=yes
+        Fluorine-20130601+dev)
+           FRAMACPLUGIN=yes
            ;;
-        *) FRAMACMSG="you need Frama-C version Fluorine-20130401"
-           FRAMAC=no
+        *) FRAMACMSG="you need Frama-C version Fluorine-2013(04|05|06)01"
+           FRAMACPLUGIN=no
            AC_MSG_WARN($FRAMACMSG)
            ;;
       esac
@@ -362,6 +376,7 @@ dnl  	  AC_MSG_RESULT(ok)
 dnl  	  CAMLP4O=$CAMLP4OOPT
 dnl      fi
 dnl fi
+
 
 WHYFLOATS=
 
@@ -433,7 +448,7 @@ else
 	  WHY3COQPATH=`$WHY3 --print-libdir`/coq
 	  if test -f "$WHY3COQPATH/int/Int.vo"; then
 	    AC_MSG_RESULT(yes)
-	    JESSIE3LIBCOQ="lib/coq/Jessie_memory_model.vo"
+	    JESSIEWHY3LIBCOQ="lib/coq/Jessie_memory_model.vo"
 	  else
 	    AC_MSG_RESULT(no)
 	  fi
@@ -520,6 +535,7 @@ AC_SUBST(enable_apron)
 AC_SUBST(APRONLIB)
 AC_SUBST(APRONLIBS)
 AC_SUBST(FRAMAC)
+AC_SUBST(FRAMACPLUGIN)
 AC_SUBST(ATPCMO)
 
 AC_SUBST(COQ)
@@ -531,7 +547,7 @@ AC_SUBST(COQVER)
 AC_SUBST(WHYLIBCOQ)
 AC_SUBST(WHYFLOATS)
 AC_SUBST(JESSIELIBCOQ)
-AC_SUBST(JESSIE3LIBCOQ)
+AC_SUBST(JESSIEWHY3LIBCOQ)
 AC_SUBST(WHY3COQPATH)
 
 AC_SUBST(enable_local)
@@ -564,8 +580,8 @@ echo "Inference of annotations : $enable_apron"
 if test "$enable_apron" = "yes" ; then
    echo "    APRON lib            : $APRONLIB"
 fi
-echo "Frama-C plugin           : $FRAMAC"
-if test "$FRAMAC" = "yes" ; then
+echo "Frama-C plugin           : $FRAMACPLUGIN"
+if test "$FRAMACPLUGIN" = "yes" ; then
    echo "    Frama-C version      : $FRAMACVERSION"
 else
    echo "    $FRAMACMSG"
@@ -575,10 +591,10 @@ echo "Coq support              : $COQ"
 if test "$COQ" = "yes" ; then
    echo "    Version              : $COQVER ($COQVERSION)"
    if test "$JESSIELIBCOQ" = ""; then
-      echo "                         : (Jessie Coq proofs disabled, requires >= 8.1)"
+      echo "                         : (Jessie/Why2 Coq proofs disabled, requires >= 8.1)"
    fi
-   if test "$JESSIE3LIBCOQ" = ""; then
-      echo "                         : (Jessie3 Coq proofs disabled, requires Coq realizations for Why3)"
+   if test "$JESSIEWHY3LIBCOQ" = ""; then
+      echo "                         : (Jessie/Why3 Coq proofs disabled, requires Coq realizations for Why3)"
    fi
    echo "    Lib                  : $COQLIB"
    echo "    FP lib (Flocq)       : $COQFLOATSMSG"

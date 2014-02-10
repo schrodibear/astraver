@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="3">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.1"/>
  <prover
   id="1"
   name="CVC3"
@@ -39,10 +39,10 @@
     locfile="../../eps_line1.c"
     loclnum="30" loccnumb="4" loccnume="12"
     expl="VC for eps_line_ensures_default"
-    sum="412000636c6c9b0753c350cf364a2d9e"
+    sum="16dde26b38abafdf6a9fb9ae7fc463f2"
     proved="true"
-    expanded="false"
-    shape="ainfix =ainteger_of_int32V22ainfix *al_signainfix +ainfix *aexactV0aexactV2ainfix *aexactV1aexactV3al_signainfix -ainfix *aexactV0aexactV3ainfix *aexactV1aexactV2Iainfix =ainteger_of_int32V22c0NIainfix =V22V21FIainfix =V21V20FIainfix =ainteger_of_int32V20ainfix *ainteger_of_int32V11ainteger_of_int32V19FIainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFIaof_real_postaNearestTiesToEvenc0x1.p-45V17FIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIasub_postaNearestTiesToEvenV13V12V14FIamul_postaNearestTiesToEvenV0V3V13FIamul_postaNearestTiesToEvenV1V2V12FIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIaof_real_postaNearestTiesToEvenc0x1.p-45V9FIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIaadd_postaNearestTiesToEvenV5V4V6FIamul_postaNearestTiesToEvenV0V2V5FIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+    expanded="true"
+    shape="ainfix =ainteger_of_int32V22ainfix *al_signainfix +ainfix *aexactV0aexactV2ainfix *aexactV1aexactV3al_signainfix -ainfix *aexactV0aexactV3ainfix *aexactV1aexactV2INainfix =ainteger_of_int32V22c0Iainfix =V22V21FIainfix =V21V20FIainfix =ainteger_of_int32V20ainfix *ainteger_of_int32V11ainteger_of_int32V19FIainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14INainfix =ainteger_of_int32V18c0FIaof_real_postaNearestTiesToEvenc0x1.p-45V17FIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIasub_postaNearestTiesToEvenV13V12V14FIamul_postaNearestTiesToEvenV0V3V13FIamul_postaNearestTiesToEvenV1V2V12FIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6INainfix =ainteger_of_int32V10c0FIaof_real_postaNearestTiesToEvenc0x1.p-45V9FIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIaadd_postaNearestTiesToEvenV5V4V6FIamul_postaNearestTiesToEvenV0V2V5FIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
     <label
      name="expl:Function eps_line, default behavior"/>
     <label
@@ -53,7 +53,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.20"/>
     </proof>
    </goal>
    <goal
@@ -61,10 +61,10 @@
     locfile="../../eps_line1.c"
     loclnum="30" loccnumb="4" loccnume="12"
     expl="VC for eps_line_safety"
-    sum="12b88bcc38e03f82c9baa469c882281d"
+    sum="a52af5bb31e580b5536f33c1a0f909c7"
     proved="true"
-    expanded="false"
-    shape="ainfix &lt;=ainfix *ainteger_of_int32V11ainteger_of_int32V19c2147483647Aainfix &lt;=aprefix -c2147483648ainfix *ainteger_of_int32V11ainteger_of_int32V19Iainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFAainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_postaNearestTiesToEvenc0x1.p-45V17FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFAainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+    expanded="true"
+    shape="ainfix &lt;=V30c2147483647Aainfix &lt;=aprefix -c2147483648V30Lainfix *ainteger_of_int32V16ainteger_of_int32V29Iainfix =V29V28FIainfix &lt;=aabsainteger_of_int32V28c1Aainfix =ainteger_of_int32V28al_signaexactV22INainfix =ainteger_of_int32V28c0FAainfix &lt;=ainfix -avalueV22aexactV22avalueV27Aainfix &lt;=avalueV25ainfix -avalueV22aexactV22Iaof_real_postV26c0x1.p-45V27FAainfix &lt;=aabsaroundV26c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV24V25FIaof_real_postV23c0x1.p-45V24FAainfix &lt;=aabsaroundV23c0x1.p-45amax_doubleLaNearestTiesToEvenIasub_postV21V20V18V22FAainfix &lt;=aabsaroundV21ainfix -avalueV20avalueV18amax_doubleLaNearestTiesToEvenIamul_postV19V0V3V20FAainfix &lt;=aabsaroundV19ainfix *avalueV0avalueV3amax_doubleLaNearestTiesToEvenIamul_postV17V1V2V18FAainfix &lt;=aabsaroundV17ainfix *avalueV1avalueV2amax_doubleLaNearestTiesToEvenIainfix =V16V15FIainfix &lt;=aabsainteger_of_int32V15c1Aainfix =ainteger_of_int32V15al_signaexactV9INainfix =ainteger_of_int32V15c0FAainfix &lt;=ainfix -avalueV9aexactV9avalueV14Aainfix &lt;=avalueV12ainfix -avalueV9aexactV9Iaof_real_postV13c0x1.p-45V14FAainfix &lt;=aabsaroundV13c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV11V12FIaof_real_postV10c0x1.p-45V11FAainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FAainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FAainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FAainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
     <label
      name="expl:Function eps_line, Safety"/>
     <label
@@ -72,16 +72,16 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter eps_line_safety.1"
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="1. floating-point overflow"
-      sum="b6613c60d0b6b4612d123bd02bf6904f"
+      sum="2b8c012291570f0c5eb51ae88fbdaa48"
       proved="true"
-      expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      expanded="true"
+      shape="floating-point overflowainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -92,7 +92,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.00"/>
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
      <goal
@@ -100,10 +100,10 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="2. floating-point overflow"
-      sum="21ffa2c99f3acee1f954ff49aa24da05"
+      sum="03dfd090d0eae0ee1731d7444a8ceae7"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -114,7 +114,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.00"/>
+       <result status="valid" time="0.02"/>
       </proof>
      </goal>
      <goal
@@ -122,10 +122,10 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="3. floating-point overflow"
-      sum="d3e169ff8d700c33410b804ed6c584dd"
+      sum="62dcf9670d634ede5390775331125747"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -144,10 +144,10 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="4. floating-point overflow"
-      sum="3dccd9778f2356b8c5c924b7bd19d3b3"
+      sum="588c402630da387cdc6f67e04063ee20"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -158,7 +158,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.00"/>
+       <result status="valid" time="0.02"/>
       </proof>
      </goal>
      <goal
@@ -166,10 +166,10 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="5. floating-point overflow"
-      sum="fe09fc0a7e60c8f2f1c5e8e6523ab52a"
+      sum="af36a561e12a7c07d2bd2ff4371f7572"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV13c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV11V12FIaof_real_postV10c0x1.p-45V11FIainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -188,10 +188,10 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="6. precondition for call"
-      sum="536d6ea2f84690f8bb8626990d510819"
+      sum="6f916b458ee51d6347c07083b2e27659"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="precondition for callainfix &lt;=ainfix -avalueV9aexactV9avalueV14Aainfix &lt;=avalueV12ainfix -avalueV9aexactV9Iaof_real_postV13c0x1.p-45V14FIainfix &lt;=aabsaroundV13c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV11V12FIaof_real_postV10c0x1.p-45V11FIainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -210,32 +210,10 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="7. floating-point overflow"
-      sum="0ed69e052b264cec4979307ed51efcf3"
+      sum="7e50947cf119af075351b06c9f440cba"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
-      <label
-       name="expl:Function eps_line, Safety"/>
-      <label
-       name="expl:VC for eps_line_safety"/>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter eps_line_safety.8"
-      locfile="../../eps_line1.c"
-      loclnum="30" loccnumb="4" loccnume="12"
-      expl="8. floating-point overflow"
-      sum="b78fc5694c749dffa0a04e992e10900f"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV17ainfix *avalueV1avalueV2amax_doubleLaNearestTiesToEvenIainfix =V16V15FIainfix &lt;=aabsainteger_of_int32V15c1Aainfix =ainteger_of_int32V15al_signaexactV9INainfix =ainteger_of_int32V15c0FIainfix &lt;=ainfix -avalueV9aexactV9avalueV14Aainfix &lt;=avalueV12ainfix -avalueV9aexactV9Iaof_real_postV13c0x1.p-45V14FIainfix &lt;=aabsaroundV13c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV11V12FIaof_real_postV10c0x1.p-45V11FIainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -250,14 +228,36 @@
       </proof>
      </goal>
      <goal
+      name="WP_parameter eps_line_safety.8"
+      locfile="../../eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="8. floating-point overflow"
+      sum="7e2121cb38b5cf9720753f9196ac819f"
+      proved="true"
+      expanded="false"
+      shape="floating-point overflowainfix &lt;=aabsaroundV19ainfix *avalueV0avalueV3amax_doubleLaNearestTiesToEvenIamul_postV17V1V2V18FIainfix &lt;=aabsaroundV17ainfix *avalueV1avalueV2amax_doubleLaNearestTiesToEvenIainfix =V16V15FIainfix &lt;=aabsainteger_of_int32V15c1Aainfix =ainteger_of_int32V15al_signaexactV9INainfix =ainteger_of_int32V15c0FIainfix &lt;=ainfix -avalueV9aexactV9avalueV14Aainfix &lt;=avalueV12ainfix -avalueV9aexactV9Iaof_real_postV13c0x1.p-45V14FIainfix &lt;=aabsaroundV13c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV11V12FIaof_real_postV10c0x1.p-45V11FIainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:VC for eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
       name="WP_parameter eps_line_safety.9"
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="9. floating-point overflow"
-      sum="98d20f7116a3bb639057e0cb200d1541"
+      sum="8c421aa3a35099cd6597438ecbe83782"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV21ainfix -avalueV20avalueV18amax_doubleLaNearestTiesToEvenIamul_postV19V0V3V20FIainfix &lt;=aabsaroundV19ainfix *avalueV0avalueV3amax_doubleLaNearestTiesToEvenIamul_postV17V1V2V18FIainfix &lt;=aabsaroundV17ainfix *avalueV1avalueV2amax_doubleLaNearestTiesToEvenIainfix =V16V15FIainfix &lt;=aabsainteger_of_int32V15c1Aainfix =ainteger_of_int32V15al_signaexactV9INainfix =ainteger_of_int32V15c0FIainfix &lt;=ainfix -avalueV9aexactV9avalueV14Aainfix &lt;=avalueV12ainfix -avalueV9aexactV9Iaof_real_postV13c0x1.p-45V14FIainfix &lt;=aabsaroundV13c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV11V12FIaof_real_postV10c0x1.p-45V11FIainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -276,10 +276,10 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="10. floating-point overflow"
-      sum="5b9b09eeae9aa62af697e85076a25778"
+      sum="ff417b63f37c25052305f3ef89c64a06"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV23c0x1.p-45amax_doubleLaNearestTiesToEvenIasub_postV21V20V18V22FIainfix &lt;=aabsaroundV21ainfix -avalueV20avalueV18amax_doubleLaNearestTiesToEvenIamul_postV19V0V3V20FIainfix &lt;=aabsaroundV19ainfix *avalueV0avalueV3amax_doubleLaNearestTiesToEvenIamul_postV17V1V2V18FIainfix &lt;=aabsaroundV17ainfix *avalueV1avalueV2amax_doubleLaNearestTiesToEvenIainfix =V16V15FIainfix &lt;=aabsainteger_of_int32V15c1Aainfix =ainteger_of_int32V15al_signaexactV9INainfix =ainteger_of_int32V15c0FIainfix &lt;=ainfix -avalueV9aexactV9avalueV14Aainfix &lt;=avalueV12ainfix -avalueV9aexactV9Iaof_real_postV13c0x1.p-45V14FIainfix &lt;=aabsaroundV13c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV11V12FIaof_real_postV10c0x1.p-45V11FIainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -290,7 +290,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
@@ -298,10 +298,10 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="11. floating-point overflow"
-      sum="d6c9748569ad3fd005ffb9bc1dce91ef"
+      sum="f029c7b2600e7ac8d5726405f380ce36"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV26c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV24V25FIaof_real_postV23c0x1.p-45V24FIainfix &lt;=aabsaroundV23c0x1.p-45amax_doubleLaNearestTiesToEvenIasub_postV21V20V18V22FIainfix &lt;=aabsaroundV21ainfix -avalueV20avalueV18amax_doubleLaNearestTiesToEvenIamul_postV19V0V3V20FIainfix &lt;=aabsaroundV19ainfix *avalueV0avalueV3amax_doubleLaNearestTiesToEvenIamul_postV17V1V2V18FIainfix &lt;=aabsaroundV17ainfix *avalueV1avalueV2amax_doubleLaNearestTiesToEvenIainfix =V16V15FIainfix &lt;=aabsainteger_of_int32V15c1Aainfix =ainteger_of_int32V15al_signaexactV9INainfix =ainteger_of_int32V15c0FIainfix &lt;=ainfix -avalueV9aexactV9avalueV14Aainfix &lt;=avalueV12ainfix -avalueV9aexactV9Iaof_real_postV13c0x1.p-45V14FIainfix &lt;=aabsaroundV13c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV11V12FIaof_real_postV10c0x1.p-45V11FIainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -312,7 +312,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
@@ -320,10 +320,10 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="12. precondition for call"
-      sum="226557db88e2ffd3f8808a9492e07e5f"
+      sum="4e1a4669a72b3e8adbaa4ee061159b9d"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_postaNearestTiesToEvenc0x1.p-45V17FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="precondition for callainfix &lt;=ainfix -avalueV22aexactV22avalueV27Aainfix &lt;=avalueV25ainfix -avalueV22aexactV22Iaof_real_postV26c0x1.p-45V27FIainfix &lt;=aabsaroundV26c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV24V25FIaof_real_postV23c0x1.p-45V24FIainfix &lt;=aabsaroundV23c0x1.p-45amax_doubleLaNearestTiesToEvenIasub_postV21V20V18V22FIainfix &lt;=aabsaroundV21ainfix -avalueV20avalueV18amax_doubleLaNearestTiesToEvenIamul_postV19V0V3V20FIainfix &lt;=aabsaroundV19ainfix *avalueV0avalueV3amax_doubleLaNearestTiesToEvenIamul_postV17V1V2V18FIainfix &lt;=aabsaroundV17ainfix *avalueV1avalueV2amax_doubleLaNearestTiesToEvenIainfix =V16V15FIainfix &lt;=aabsainteger_of_int32V15c1Aainfix =ainteger_of_int32V15al_signaexactV9INainfix =ainteger_of_int32V15c0FIainfix &lt;=ainfix -avalueV9aexactV9avalueV14Aainfix &lt;=avalueV12ainfix -avalueV9aexactV9Iaof_real_postV13c0x1.p-45V14FIainfix &lt;=aabsaroundV13c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV11V12FIaof_real_postV10c0x1.p-45V11FIainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -342,10 +342,10 @@
       locfile="../../eps_line1.c"
       loclnum="30" loccnumb="4" loccnume="12"
       expl="13. arithmetic overflow"
-      sum="7a247f7b66211cec1850b3814fb7e4ca"
+      sum="caa68349fa595fdd2ce0a977ea3802ad"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainfix *ainteger_of_int32V11ainteger_of_int32V19c2147483647Aainfix &lt;=aprefix -c2147483648ainfix *ainteger_of_int32V11ainteger_of_int32V19Iainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFIainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_postaNearestTiesToEvenc0x1.p-45V17FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV13V12V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV13avalueV12amax_doubleIamul_postaNearestTiesToEvenV0V3V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIamul_postaNearestTiesToEvenV1V2V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIamul_postaNearestTiesToEvenV0V2V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIamul_postaNearestTiesToEvenV1V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
+      shape="arithmetic overflowainfix &lt;=V30c2147483647Aainfix &lt;=aprefix -c2147483648V30Lainfix *ainteger_of_int32V16ainteger_of_int32V29Iainfix =V29V28FIainfix &lt;=aabsainteger_of_int32V28c1Aainfix =ainteger_of_int32V28al_signaexactV22INainfix =ainteger_of_int32V28c0FIainfix &lt;=ainfix -avalueV22aexactV22avalueV27Aainfix &lt;=avalueV25ainfix -avalueV22aexactV22Iaof_real_postV26c0x1.p-45V27FIainfix &lt;=aabsaroundV26c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV24V25FIaof_real_postV23c0x1.p-45V24FIainfix &lt;=aabsaroundV23c0x1.p-45amax_doubleLaNearestTiesToEvenIasub_postV21V20V18V22FIainfix &lt;=aabsaroundV21ainfix -avalueV20avalueV18amax_doubleLaNearestTiesToEvenIamul_postV19V0V3V20FIainfix &lt;=aabsaroundV19ainfix *avalueV0avalueV3amax_doubleLaNearestTiesToEvenIamul_postV17V1V2V18FIainfix &lt;=aabsaroundV17ainfix *avalueV1avalueV2amax_doubleLaNearestTiesToEvenIainfix =V16V15FIainfix &lt;=aabsainteger_of_int32V15c1Aainfix =ainteger_of_int32V15al_signaexactV9INainfix =ainteger_of_int32V15c0FIainfix &lt;=ainfix -avalueV9aexactV9avalueV14Aainfix &lt;=avalueV12ainfix -avalueV9aexactV9Iaof_real_postV13c0x1.p-45V14FIainfix &lt;=aabsaroundV13c0x1.p-45amax_doubleLaNearestTiesToEvenIaneg_postV11V12FIaof_real_postV10c0x1.p-45V11FIainfix &lt;=aabsaroundV10c0x1.p-45amax_doubleLaNearestTiesToEvenIaadd_postV8V7V5V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV5amax_doubleLaNearestTiesToEvenIamul_postV6V0V2V7FIainfix &lt;=aabsaroundV6ainfix *avalueV0avalueV2amax_doubleLaNearestTiesToEvenIamul_postV4V1V3V5FIainfix &lt;=aabsaroundV4ainfix *avalueV1avalueV3amax_doubleLaNearestTiesToEvenIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0F">
       <label
        name="expl:Function eps_line, Safety"/>
       <label
@@ -366,10 +366,10 @@
     locfile="../../eps_line1.c"
     loclnum="11" loccnumb="4" loccnume="8"
     expl="VC for sign_ensures_default"
-    sum="9333242ce014f0f09c415db1307c4731"
+    sum="2f73c1e19682a6723e93b040effd0a8f"
     proved="true"
     expanded="false"
-    shape="iainfix =V3aTrueainfix &lt;=aabsainteger_of_int32V6c1Aainfix =ainteger_of_int32V6al_signaexactV0Iainfix =ainteger_of_int32V6c0NIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fiainfix =V7aTrueainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV0Iainfix =ainteger_of_int32V10c0NIainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8aprefix -c1Fainfix &lt;=aabsainteger_of_int32V13c1Aainfix =ainteger_of_int32V13al_signaexactV0Iainfix =ainteger_of_int32V13c0NIainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11c0FIiainfix =V7aTruealtV0V1altV0V1NFIiainfix =V3aTrueainfix &gt;avalueV0avalueV2ainfix &lt;=avalueV0avalueV2FIainfix &lt;=ainfix -avalueV0aexactV0avalueV2Aainfix &lt;=avalueV1ainfix -avalueV0aexactV0F">
+    shape="iiainfix &lt;=aabsainteger_of_int32V7c1Aainfix =ainteger_of_int32V7al_signaexactV0INainfix =ainteger_of_int32V7c0Iainfix =V7V6FIainfix =V6V5FIainfix =ainteger_of_int32V5c0Fainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV0INainfix =ainteger_of_int32V10c0Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8aprefix -c1Fainfix =V4aTrueIiNaltV0V1altV0V1ainfix =V4aTrueFainfix &lt;=aabsainteger_of_int32V13c1Aainfix =ainteger_of_int32V13al_signaexactV0INainfix =ainteger_of_int32V13c0Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11c1Fainfix =V3aTrueIiainfix &lt;=avalueV0avalueV2ainfix &gt;avalueV0avalueV2ainfix =V3aTrueFIainfix &lt;=ainfix -avalueV0aexactV0avalueV2Aainfix &lt;=avalueV1ainfix -avalueV0aexactV0F">
     <label
      name="expl:Function sign, default behavior"/>
     <label
@@ -404,7 +404,7 @@
     locfile="../../eps_line1.c"
     loclnum="11" loccnumb="4" loccnume="8"
     expl="VC for sign_safety"
-    sum="fcac7cc7208c4c7a277f55e5d7868f88"
+    sum="d7c69d1fa3043932370677040054e319"
     proved="true"
     expanded="false"
     shape="t">

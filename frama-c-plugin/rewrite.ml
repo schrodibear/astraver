@@ -69,7 +69,7 @@ class add_default_behavior =
 let add_default_behavior () =
   let treat_one_function kf =
     let bhvs = Annotations.behaviors kf in
-    if not 
+    if not
       (List.exists (fun bhv -> bhv.b_name = Cil.default_behavior_name) bhvs)
     then begin
       Annotations.add_behaviors Common.jessie_emitter kf [Cil.mk_behavior()];
@@ -437,8 +437,8 @@ let gather_initialization file =
 	  | None ->
 	      if bitsSizeOf v.vtype lsr 3 < 100 then
 		(* Enforce zero-initialization of global variables *)
-		let ie = 
-                  makeZeroInit ~loc:Cil_datatype.Location.unknown v.vtype 
+		let ie =
+                  makeZeroInit ~loc:Cil_datatype.Location.unknown v.vtype
                 in
 		let b =
                   Cabs2cil.blockInit
@@ -533,7 +533,7 @@ object(self)
     let refresh_behavior b =
       let requires = List.map Logic_const.refresh_predicate b.b_requires in
       let assumes = List.map Logic_const.refresh_predicate b.b_assumes in
-      let post_cond = 
+      let post_cond =
         List.map
           (fun (k,p) -> (k,Logic_const.refresh_predicate p)) b.b_post_cond
       in
@@ -555,7 +555,7 @@ let copy_spec_specialize_memset s =
   let vis = new copy_spec_specialize_memset in
   let s' = Visitor.visitFramacFunspec vis s in
   let args =
-    Cil.fold_visitor_varinfo 
+    Cil.fold_visitor_varinfo
       vis#behavior (fun oldv newv acc -> (oldv,newv)::acc) []
   in
   args,s'
@@ -590,7 +590,7 @@ object
                     (TFun (TVoid [], Some arg_type, false, []))
                 in
                  Cil.unsafeSetFormalsDecl f formals;
-                my_globals <- 
+                my_globals <-
                   GVarDecl(Cil.empty_funspec(),f,loc) :: my_globals;
                 Globals.Functions.replace_by_declaration spec f loc;
                 let kf = Globals.Functions.get f in
@@ -606,10 +606,10 @@ object
     DoChildrenPost add_specialized
 end
 
-let specialize_memset file = 
+let specialize_memset file =
   visitFramacFile (new specialize_memset) file;
   (* We may have introduced new globals: clear the last_decl table. *)
-  Ast.clear_last_decl () 
+  Ast.clear_last_decl ()
 
 (*****************************************************************************)
 (* Rewrite comparison of pointers into difference of pointers.               *)
@@ -1547,7 +1547,7 @@ object(self)
 
   inherit Visitor.frama_c_inplace
 
-  method! vexpr e = 
+  method! vexpr e =
     match e.enode with
     | BinOp((Shiftlt | Shiftrt as op),e1,e2,_ty) ->
         let kf = the self#current_kf in
@@ -1606,7 +1606,7 @@ object(self)
 	if is_left_shift && isSignedInteger ty1 then
 	  let max_int = max_value_of_integral_type ty1 in
 	  begin match possible_value_of_integral_expr e2' with
-	    | Some i when Integer.ge i Integer.zero && 
+	    | Some i when Integer.ge i Integer.zero &&
                 Integer.lt i (Integer.of_int 64) ->
 		let max_left = constant_expr (Integer.shift_right max_int i)
                 in
@@ -1683,12 +1683,12 @@ object(self)
   val mutable rep_lab = Logic_const.pre_label
     method! vbehavior b =
       rep_lab <- Logic_const.here_label;
-      let requires = 
-        Visitor.visitFramacPredicates 
-          (self:>Visitor.frama_c_visitor) b.b_requires 
+      let requires =
+        Visitor.visitFramacPredicates
+          (self:>Visitor.frama_c_visitor) b.b_requires
       in
       let assumes =
-        Visitor.visitFramacPredicates 
+        Visitor.visitFramacPredicates
           (self:>Visitor.frama_c_visitor) b.b_assumes
       in
       let allocation =
@@ -1696,9 +1696,9 @@ object(self)
           | FreeAllocAny -> FreeAllocAny
           | FreeAlloc(free,alloc) ->
               rep_lab <- Logic_const.here_label;
-              let free = 
-                List.map 
-                  (Visitor.visitFramacIdTerm 
+              let free =
+                List.map
+                  (Visitor.visitFramacIdTerm
                      (self:>Visitor.frama_c_visitor))
                   free
               in
@@ -1717,14 +1717,14 @@ object(self)
       let allocation = Some allocation in
       rep_lab <- Logic_const.old_label;
       let assigns =
-        Visitor.visitFramacAssigns 
+        Visitor.visitFramacAssigns
           (self:>Visitor.frama_c_visitor) b.b_assigns
       in
-      let post_cond = 
-        Cil.mapNoCopy 
-          (fun (k,p as e) -> 
-            let p' = 
-              Visitor.visitFramacIdPredicate 
+      let post_cond =
+        Cil.mapNoCopy
+          (fun (k,p as e) ->
+            let p' =
+              Visitor.visitFramacIdPredicate
                 (self:>Visitor.frama_c_visitor) p
             in
             if p != p' then (k,p') else e)
@@ -1741,7 +1741,12 @@ object(self)
        && self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
     then
       ChangeTo rep_lab
-    else DoChildren
+    else
+      if Cil_datatype.Logic_label.equal l Logic_const.post_label
+      then
+        ChangeTo Logic_const.here_label
+      else
+        DoChildren
 end
 
 let rewrite_pre_old file =

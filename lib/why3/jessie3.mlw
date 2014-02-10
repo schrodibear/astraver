@@ -263,6 +263,10 @@ val mul_double (m:mode) (x:double) (y:double) : double
   requires { true }
   ensures  { Double.mul_post m x y result }
 
+val div_double (m:mode) (x:double) (y:double) : double
+  requires { true }
+  ensures  { Double.div_post m x y result }
+
 val neg_double (x:double) : double
   requires { true }
   ensures  { Double.neg_post x result }

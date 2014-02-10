@@ -28,10 +28,10 @@
 # Do not use ?= to initialize both below variables
 # (fixed efficiency issue, see GNU Make manual, Section 8.11)
 ifndef FRAMAC_SHARE
-FRAMAC_SHARE  :=$(shell frama-c -journal-disable -print-path)
+FRAMAC_SHARE  :=$(shell $(FRAMAC) -journal-disable -print-path)
 endif
 ifndef FRAMAC_LIBDIR
-FRAMAC_LIBDIR :=$(shell frama-c -journal-disable -print-libpath)
+FRAMAC_LIBDIR :=$(shell $(FRAMAC) -journal-disable -print-libpath)
 endif
 
 PLUGIN_DIR      ?= .

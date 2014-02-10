@@ -1,5 +1,5 @@
 <#def GPL><A href="http://www.gnu.org/licenses/gpl.html">GNU GENERAL PUBLIC LICENSE</a></#def>
-<#def version>2.32</#def>
+<#def version>2.33</#def>
 <#def thisfile>index</#def>
 <#def top>index</#def>
 <#def why><a href="http://why.lri.fr/"><i>Why</i></a></#def>
@@ -81,6 +81,7 @@ details. The table below summarizes the compatibility between Frama-C, Why 2.xx 
 <tr> <td>Nitrogen-20111001 <td> 2.30 <td> 0.71 <td> Output through Why3 VC generator and IDE is now the default, use former option <tt>-jessie-atp=gui</tt> to obtain the former behavior calling Why 2.xx VC gen
 <tr> <td>Nitrogen-20111001 <td> 2.31 <td> 0.72 or 0.73<td> 0.73 is recommended
 <tr> <td>Oxygen-20120901 <td> 2.32 <td> 0.81 <td> 
+<tr> <td>Fluorine-20130401 <td> 2.33 <td> 0.81 <td> 
 <tr> 
 </table>
 </p>
