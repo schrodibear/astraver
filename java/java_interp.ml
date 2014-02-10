@@ -389,6 +389,7 @@ let create_logic_fun pos fi =
     List.map (create_var pos) fi.java_logic_info_parameters;
   nfi.jc_logic_info_labels <-
     List.map tr_logic_label fi.java_logic_info_labels;
+  eprintf "adding symbol %s in logics_table@." fi.java_logic_info_name;
   Hashtbl.add logics_table fi.java_logic_info_tag nfi;
   nfi
 

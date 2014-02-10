@@ -243,7 +243,7 @@ fi
 LOCALOCAMLGRAPH=no
 
 if test "$USEOCAMLFIND" = yes; then
-  OCAMLGRAPHLIB=$(ocamlfind query -i-format ocamlgraph)
+  OCAMLGRAPHLIB=$(ocamlfind query ocamlgraph)
 fi
 if test -n "$OCAMLGRAPHLIB"; then
    echo "ocamlfind found ocamlgraph in $OCAMLGRAPHLIB"

@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
- <prover
-  id="1"
-  name="Alt-Ergo"
   version="0.95.1"/>
  <prover
-  id="2"
-  name="CVC3"
-  version="2.2"/>
- <prover
-  id="3"
+  id="1"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="4"
-  name="Z3"
-  version="3.2"/>
+  id="2"
+  name="CVC4"
+  version="1.3"/>
  <prover
-  id="5"
+  id="3"
   name="Z3"
   version="4.3.1"/>
  <file
@@ -40,7 +32,7 @@
     locfile="../../binary_search.c"
     loclnum="34" loccnumb="4" loccnume="67"
     expl="Lemma mean, lemma"
-    sum="01eaf0510da8e27fd757a58cd328a09d"
+    sum="a6ef55a33c49d5158fa110eea840f0f8"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=adivainfix +V0V1c2V1Aainfix &lt;=V0adivainfix +V0V1c2Iainfix &lt;=V0V1FF">
@@ -55,7 +47,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -63,7 +55,7 @@
      <result status="valid" time="0.07"/>
     </proof>
     <proof
-     prover="5"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -83,10 +75,10 @@
     locfile="../../binary_search.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="VC for binary_search_ensures_default"
-    sum="20ef94f6e93fbf22ddb5600ce3750594"
+    sum="67fb4c168777b7d477065eee61dde669"
     proved="true"
     expanded="false"
-    shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2ainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V15Iainfix =V15V14FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V13c1Fiainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2ainfix &lt;=ainteger_of_int32V17ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix -ainteger_of_int32V13c1Fainfix &lt;ainteger_of_int32V19ainteger_of_int32V1Aainfix &lt;=aprefix -c1ainteger_of_int32V19Iainfix =V19V18FIainfix =V18V13FAainfix &lt;=ainteger_of_int32V13ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9Fainfix &lt;ainteger_of_int32V22ainteger_of_int32V1Aainfix &lt;=aprefix -c1ainteger_of_int32V22Iainfix =V22V21FIainfix =V21V20FIainfix =ainteger_of_int32V20aprefix -c1FIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FAainfix &lt;=ainteger_of_int32V8ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V6Iainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+    shape="iainfix &lt;ainteger_of_int32V13ainteger_of_int32V1Aainfix &lt;=aprefix -c1ainteger_of_int32V13Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1Fiiainfix &lt;ainteger_of_int32V18ainteger_of_int32V1Aainfix &lt;=aprefix -c1ainteger_of_int32V18Iainfix =V18V17FIainfix =V17V16Fainfix &lt;=ainteger_of_int32V20ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V16c1Fainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2ainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V22Iainfix =V22V21FIainfix =ainteger_of_int32V21ainfix +ainteger_of_int32V16c1Fainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2Aainfix &lt;=ainteger_of_int32V16ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15adivainteger_of_int32V14c2FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V10ainteger_of_int32V9Fainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FAainfix &lt;=ainteger_of_int32V8ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V6Iainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
     <label
      name="expl:Function binary_search, default behavior"/>
     <label
@@ -100,15 +92,15 @@
      <result status="valid" time="0.52"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.67"/>
+     <result status="valid" time="1.18"/>
     </proof>
     <proof
-     prover="5"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -121,29 +113,21 @@
     locfile="../../binary_search.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="VC for binary_search_ensures_failure"
-    sum="16218992151d71172893eef0bb743330"
+    sum="95335bae6830a47c8f35b6251e006780"
     proved="true"
     expanded="false"
-    shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2ainfix &lt;=V16ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V15V16Iainfix =ainteger_of_int32aselectV4ashiftV0V16ainteger_of_int32V2Aainfix &lt;V16ainteger_of_int32V1Aainfix &lt;=c0V16FIainfix =V15V14FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V13c1Fiainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2ainfix &lt;=V19ainteger_of_int32V18Aainfix &lt;=ainteger_of_int32V10V19Iainfix =ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Aainfix &lt;V19ainteger_of_int32V1Aainfix &lt;=c0V19FIainfix =V18V17FIainfix =ainteger_of_int32V17ainfix -ainteger_of_int32V13c1Fainfix =ainteger_of_int32aselectV4ashiftV0V22ainteger_of_int32V2NIainfix &lt;V22ainteger_of_int32V1Aainfix &lt;=c0V22FIainfix =ainteger_of_int32V21aprefix -c1Iainfix =V21V20FIainfix =V20V13FIainfix &lt;=ainteger_of_int32V13ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9Fainfix =ainteger_of_int32aselectV4ashiftV0V26ainteger_of_int32V2NIainfix &lt;V26ainteger_of_int32V1Aainfix &lt;=c0V26FIainfix =ainteger_of_int32V25aprefix -c1Iainfix =V25V24FIainfix =V24V23FIainfix =ainteger_of_int32V23aprefix -c1FIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Iainfix &lt;=V27ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10V27Iainfix =ainteger_of_int32aselectV4ashiftV0V27ainteger_of_int32V2Aainfix &lt;V27ainteger_of_int32V1Aainfix &lt;=c0V27FFAainfix &lt;=V28ainteger_of_int32V8Aainfix &lt;=ainteger_of_int32V6V28Iainfix =ainteger_of_int32aselectV4ashiftV0V28ainteger_of_int32V2Aainfix &lt;V28ainteger_of_int32V1Aainfix &lt;=c0V28FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
+    shape="iNainfix =ainteger_of_int32aselectV4ashiftV0V14ainteger_of_int32V2Iainfix &lt;V14ainteger_of_int32V1Aainfix &lt;=c0V14FIainfix =ainteger_of_int32V13aprefix -c1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1FiiNainfix =ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V1Aainfix &lt;=c0V20FIainfix =ainteger_of_int32V19aprefix -c1Iainfix =V19V18FIainfix =V18V17Fainfix &lt;=V23ainteger_of_int32V22Aainfix &lt;=ainteger_of_int32V10V23Iainfix =ainteger_of_int32aselectV4ashiftV0V23ainteger_of_int32V2Aainfix &lt;V23ainteger_of_int32V1Aainfix &lt;=c0V23FIainfix =V22V21FIainfix =ainteger_of_int32V21ainfix -ainteger_of_int32V17c1Fainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V17ainteger_of_int32V2ainfix &lt;=V26ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V25V26Iainfix =ainteger_of_int32aselectV4ashiftV0V26ainteger_of_int32V2Aainfix &lt;V26ainteger_of_int32V1Aainfix &lt;=c0V26FIainfix =V25V24FIainfix =ainteger_of_int32V24ainfix +ainteger_of_int32V17c1Fainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V17ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V17ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V17Iainfix =V17V16FIainfix =ainteger_of_int32V16adivainteger_of_int32V15c2FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V10ainteger_of_int32V9Fainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Iainfix &lt;=V27ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10V27Iainfix =ainteger_of_int32aselectV4ashiftV0V27ainteger_of_int32V2Aainfix &lt;V27ainteger_of_int32V1Aainfix &lt;=c0V27FFAainfix &lt;=V28ainteger_of_int32V8Aainfix &lt;=ainteger_of_int32V6V28Iainfix =ainteger_of_int32aselectV4ashiftV0V28ainteger_of_int32V2Aainfix &lt;V28ainteger_of_int32V1Aainfix &lt;=c0V28FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
     <label
      name="expl:Function binary_search, Behavior `failure&apos;"/>
     <label
      name="expl:VC for binary_search_ensures_failure"/>
     <proof
-     prover="0"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="2.40"/>
-    </proof>
-    <proof
-     prover="5"
-     timelimit="5"
-     memlimit="0"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="2.58"/>
     </proof>
    </goal>
    <goal
@@ -151,10 +135,10 @@
     locfile="../../binary_search.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="VC for binary_search_ensures_success"
-    sum="8804126df63100c35ee530f1ce6ee1a1"
+    sum="5d6ef4646f847873efeb603549998487"
     proved="true"
     expanded="false"
-    shape="iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9ainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V15ainteger_of_int32V2Iainfix &gt;=ainteger_of_int32V15c0Iainfix =V15V14FIainfix =V14V13FIainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2NIainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2NIainfix &lt;=ainteger_of_int32V13ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9Fainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V18ainteger_of_int32V2Iainfix &gt;=ainteger_of_int32V18c0Iainfix =V18V17FIainfix =V17V16FIainfix =ainteger_of_int32V16aprefix -c1FIainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+    shape="iainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2Iainfix &gt;=ainteger_of_int32V13c0Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1Fainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V18ainteger_of_int32V2Iainfix &gt;=ainteger_of_int32V18c0Iainfix =V18V17FIainfix =V17V16FINainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2INainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15adivainteger_of_int32V14c2FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V10ainteger_of_int32V9Fainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
     <label
      name="expl:Function binary_search, Behavior `success&apos;"/>
     <label
@@ -168,7 +152,7 @@
      <result status="valid" time="0.09"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -176,7 +160,7 @@
      <result status="valid" time="0.07"/>
     </proof>
     <proof
-     prover="5"
+     prover="3"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -189,10 +173,10 @@
     locfile="../../binary_search.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="VC for binary_search_safety"
-    sum="fe1e20cc3fb09828dde6a83c27c40d0c"
+    sum="3102f21fd8613e35f4b9e3ad438abfe7"
     proved="false"
     expanded="true"
-    shape="iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2ainfix &lt;ainfix -ainteger_of_int32V9ainteger_of_int32V16ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1FAainfix &lt;=ainfix +ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V14c1ainfix &lt;ainfix -ainteger_of_int32V18ainteger_of_int32V10ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V18V17FIainfix =ainteger_of_int32V17ainfix -ainteger_of_int32V14c1FAainfix &lt;=ainfix -ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V14c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Aainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Aainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FAainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Aainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9FAainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FAainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+    shape="iainfix &lt;ainfix -ainteger_of_int32V21ainteger_of_int32V11ainfix -ainteger_of_int32V10ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix =V21V20FIainfix =ainteger_of_int32V20V19FAainfix &lt;=V19c2147483647Aainfix &lt;=aprefix -c2147483648V19Lainfix -ainteger_of_int32V16c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Aainfix &lt;=V18aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V18Lainteger_of_int32V16ainfix &lt;ainfix -ainteger_of_int32V10ainteger_of_int32V24ainfix -ainteger_of_int32V10ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix =V24V23FIainfix =ainteger_of_int32V23V22FAainfix &lt;=V22c2147483647Aainfix &lt;=aprefix -c2147483648V22Lainfix +ainteger_of_int32V16c1ainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Aainfix &lt;=V17aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FAainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2ANainfix =c2c0Iainfix =ainteger_of_int32V13V12FAainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V11FIainfix =V9V8FIainfix =ainteger_of_int32V8V7FAainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
     <label
      name="expl:Function binary_search, Safety"/>
     <label
@@ -206,10 +190,10 @@
       locfile="../../binary_search.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="1. arithmetic overflow"
-      sum="03392ecd16814dd96ae911e61fa7fe3b"
+      sum="0756b4555e22fcace6ff6e91253454ec"
       proved="true"
-      expanded="false"
-      shape="ainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+      expanded="true"
+      shape="arithmetic overflowainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
       <label
        name="expl:Function binary_search, Safety"/>
       <label
@@ -217,26 +201,26 @@
       <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
@@ -244,129 +228,56 @@
       locfile="../../binary_search.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="2. arithmetic overflow"
-      sum="73cc80217d36ecc41fc21426cca015b9"
+      sum="3226f660db27f61928922604b9272221"
       proved="false"
       expanded="true"
-      shape="ainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+      shape="arithmetic overflowainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V11FIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
       <label
        name="expl:Function binary_search, Safety"/>
       <label
        name="expl:VC for binary_search_safety"/>
-      <transf
-       name="split_goal"
-       proved="false"
-       expanded="true">
-       <goal
-        name="WP_parameter binary_search_safety.2.1"
-        locfile="../../binary_search.c"
-        loclnum="49" loccnumb="4" loccnume="17"
-        expl="1."
-        sum="8863dc064e5ff1e7c9cb81323357321f"
-        proved="true"
-        expanded="false"
-        shape="ainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
-        <label
-         name="expl:Function binary_search, Safety"/>
-        <label
-         name="expl:VC for binary_search_safety"/>
-        <proof
-         prover="0"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.01"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.04"/>
-        </proof>
-        <proof
-         prover="5"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.05"/>
-        </proof>
-       </goal>
-       <goal
-        name="WP_parameter binary_search_safety.2.2"
-        locfile="../../binary_search.c"
-        loclnum="49" loccnumb="4" loccnume="17"
-        expl="2."
-        sum="f944b39b6d9ce0fb159ffaaed18da33e"
-        proved="false"
-        expanded="true"
-        shape="ainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
-        <label
-         name="expl:Function binary_search, Safety"/>
-        <label
-         name="expl:VC for binary_search_safety"/>
-        <proof
-         prover="0"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.74"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.00"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="unknown" time="1.90"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="unknown" time="5.74"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.15"/>
-        </proof>
-        <proof
-         prover="5"
-         timelimit="5"
-         memlimit="0"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.79"/>
-        </proof>
-       </goal>
-      </transf>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="2.45"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="4.93"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.10"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.02"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter binary_search_safety.3"
       locfile="../../binary_search.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="3. division by zero"
-      sum="a7f85ce07386d3f188f981da119dd6e5"
+      sum="f3b4d034cae3d54f108103e806537c7f"
       proved="true"
       expanded="false"
-      shape="ainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9FIainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+      shape="division by zeroNainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V11FIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
       <label
        name="expl:Function binary_search, Safety"/>
       <label
@@ -380,7 +291,7 @@
        <result status="valid" time="0.01"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -388,9 +299,17 @@
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="5"
+       prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
@@ -401,10 +320,10 @@
       locfile="../../binary_search.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="4. arithmetic overflow"
-      sum="a8a15cb983bc2eefd79c97c9d540859e"
+      sum="f8160aaac06872999c038344ac0d5ea7"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9FIainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+      shape="arithmetic overflowainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V11FIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
       <label
        name="expl:Function binary_search, Safety"/>
       <label
@@ -415,23 +334,31 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="5"
+       prover="3"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
      <goal
@@ -439,10 +366,10 @@
       locfile="../../binary_search.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="5. pointer dereference"
-      sum="19a2eebe62138469f77937b98dcf6048"
+      sum="8a758dcb1c5e3bfa0bc24e00809fe746"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9FIainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+      shape="pointer dereferenceainfix &lt;=V17aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V11FIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
       <label
        name="expl:Function binary_search, Safety"/>
       <label
@@ -456,7 +383,7 @@
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -464,9 +391,17 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="5"
+       prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
@@ -477,10 +412,148 @@
       locfile="../../binary_search.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="6. arithmetic overflow"
-      sum="48327c9bca6b724be476b7107d43fe13"
+      sum="02c0d6dd777f7e9aa9c1023cd9df9778"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=ainfix +ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V14c1Iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9FIainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+      shape="arithmetic overflowainfix &lt;=V18c2147483647Aainfix &lt;=aprefix -c2147483648V18Lainfix +ainteger_of_int32V16c1Iainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;=V17aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V11FIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:VC for binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.11"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.7"
+      locfile="../../binary_search.c"
+      loclnum="49" loccnumb="4" loccnume="17"
+      expl="7. loop variant decrease"
+      sum="28dcbae0f09bd8cfe7c0eb43edd8640b"
+      proved="true"
+      expanded="false"
+      shape="loop variant decreaseainfix &lt;ainfix -ainteger_of_int32V10ainteger_of_int32V20ainfix -ainteger_of_int32V10ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix =V20V19FIainfix =ainteger_of_int32V19V18FIainfix &lt;=V18c2147483647Aainfix &lt;=aprefix -c2147483648V18Lainfix +ainteger_of_int32V16c1Iainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;=V17aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V11FIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:VC for binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.8"
+      locfile="../../binary_search.c"
+      loclnum="49" loccnumb="4" loccnume="17"
+      expl="8. pointer dereference"
+      sum="700886dd261a63f54954d74cc3cbe011"
+      proved="true"
+      expanded="false"
+      shape="pointer dereferenceainfix &lt;=V18aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V18Lainteger_of_int32V16INainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;=V17aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V11FIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+      <label
+       name="expl:Function binary_search, Safety"/>
+      <label
+       name="expl:VC for binary_search_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter binary_search_safety.9"
+      locfile="../../binary_search.c"
+      loclnum="49" loccnumb="4" loccnume="17"
+      expl="9. arithmetic overflow"
+      sum="02ef9751c845ad8ded301ca6db91cf3f"
+      proved="true"
+      expanded="false"
+      shape="arithmetic overflowainfix &lt;=V19c2147483647Aainfix &lt;=aprefix -c2147483648V19Lainfix -ainteger_of_int32V16c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;=V18aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V18Lainteger_of_int32V16INainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;=V17aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V11FIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
       <label
        name="expl:Function binary_search, Safety"/>
       <label
@@ -494,7 +567,7 @@
        <result status="valid" time="0.12"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -502,23 +575,31 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="5"
+       prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
-      name="WP_parameter binary_search_safety.7"
+      name="WP_parameter binary_search_safety.10"
       locfile="../../binary_search.c"
       loclnum="49" loccnumb="4" loccnume="17"
-      expl="7. loop variant decrease"
-      sum="01ad1f6bbf499dc536e456a1bb46869b"
+      expl="10. loop variant decrease"
+      sum="2bc3144ca1cc02bacb25b289574d8ea1"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;ainfix -ainteger_of_int32V9ainteger_of_int32V16ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1FIainfix &lt;=ainfix +ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V14c1Iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9FIainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+      shape="loop variant decreaseainfix &lt;ainfix -ainteger_of_int32V21ainteger_of_int32V11ainfix -ainteger_of_int32V10ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix =V21V20FIainfix =ainteger_of_int32V20V19FIainfix &lt;=V19c2147483647Aainfix &lt;=aprefix -c2147483648V19Lainfix -ainteger_of_int32V16c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix &lt;=V18aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V18Lainteger_of_int32V16INainfix &lt;ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix &lt;=V17aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V11FIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
       <label
        name="expl:Function binary_search, Safety"/>
       <label
@@ -532,7 +613,7 @@
        <result status="valid" time="0.03"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -540,123 +621,17 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="5"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter binary_search_safety.8"
-      locfile="../../binary_search.c"
-      loclnum="49" loccnumb="4" loccnume="17"
-      expl="8. pointer dereference"
-      sum="bfc194b60bd8076af63a5e8b5a72f069"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9FIainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
-      <label
-       name="expl:Function binary_search, Safety"/>
-      <label
-       name="expl:VC for binary_search_safety"/>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
-       prover="5"
+       prover="3"
        timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter binary_search_safety.9"
-      locfile="../../binary_search.c"
-      loclnum="49" loccnumb="4" loccnume="17"
-      expl="9. arithmetic overflow"
-      sum="bddc8922f5fc5c1add4f1e92a8b65ed9"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;=ainfix -ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V14c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9FIainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
-      <label
-       name="expl:Function binary_search, Safety"/>
-      <label
-       name="expl:VC for binary_search_safety"/>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter binary_search_safety.10"
-      locfile="../../binary_search.c"
-      loclnum="49" loccnumb="4" loccnume="17"
-      expl="10. loop variant decrease"
-      sum="8866cbe5c768d340b0529a8e072059c8"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;ainfix -ainteger_of_int32V16ainteger_of_int32V10ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix &lt;=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix &lt;=ainfix -ainteger_of_int32V14c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V14c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Iainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix &lt;=ainteger_of_int32V14aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0ainteger_of_int32V14Iainfix &lt;=ainteger_of_int32V14ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Ladivainteger_of_int32V11c2Iainfix =c2c0NIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9FIainfix &lt;=ainfix +ainteger_of_int32V10ainteger_of_int32V9c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
-      <label
-       name="expl:Function binary_search, Safety"/>
-      <label
-       name="expl:VC for binary_search_safety"/>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.07"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
