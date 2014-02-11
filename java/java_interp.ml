@@ -1467,7 +1467,8 @@ let rec expr ?(reg=false) e =
 	  let si = get_class ci.constr_info_class.class_info_name in
 	  let ty = JCTpointer(JCtag(si, []), Some num_zero, Some num_zero) in
 	  let this = Jc_pervasives.var ~formal:true ty "this" in
-	  let tt = Jc_pervasives.var ~formal:true Jc_pervasives.unit_type "tt" in
+	  let tt = Jc_pervasives.var ~formal:true
+            Jc_pervasives.unit_type "_tt" in
 	  let args =
             (mkvar ~name:(var_name this) ()) :: List.map expr args in
           mklet

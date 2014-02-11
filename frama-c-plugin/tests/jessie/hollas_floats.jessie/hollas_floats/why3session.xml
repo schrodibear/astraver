@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -40,7 +40,7 @@
     locfile="../../hollas_floats.c"
     loclnum="3" loccnumb="4" loccnume="54"
     expl="Lemma rp, lemma"
-    sum="827f9d3b976911aa11db0f314e345bf1"
+    sum="7b55e9a2523095b7f0f80410a39cdfcc"
     proved="true"
     expanded="true"
     shape="ainfix &gt;ainfix /c1.0V0c0.0Iainfix &gt;V0c0.0F">
@@ -75,7 +75,7 @@
     locfile="../../hollas_floats.c"
     loclnum="21" loccnumb="4" loccnume="8"
     expl="VC for main_ensures_default"
-    sum="58037070157710fba3a903a908d3d798"
+    sum="ac8ab5bd216a51ff79d1fce7a1247b8c"
     proved="true"
     expanded="true"
     shape="ainfix &gt;V6c0.0Iainfix =V6V5FIainfix &gt;V5c0.0FAainfix &gt;V4c0.0Iainfix =V4V3FIainfix &gt;V3c0.0FIainfix =V2c30.0FIainfix =V1c20.0FIainfix =V0c10.0F">
@@ -129,7 +129,7 @@
     locfile="../../hollas_floats.c"
     loclnum="21" loccnumb="4" loccnume="8"
     expl="VC for main_safety"
-    sum="2c5ce0d396406e536daa7f17894073db"
+    sum="63e89b25af31d89a9e525fb844d58d01"
     proved="true"
     expanded="true"
     shape="ainfix &gt;V4c0.0Aainfix &gt;V0c0.0Iainfix &gt;V4c0.0Iainfix =V4V3FIainfix &gt;V3c0.0FAainfix &gt;V2c0.0Aainfix &gt;V1c0.0Iainfix =V2c30.0FIainfix =V1c20.0FIainfix =V0c10.0F">
@@ -183,7 +183,7 @@
     locfile="../../hollas_floats.c"
     loclnum="16" loccnumb="6" loccnume="11"
     expl="VC for r_par_ensures_default"
-    sum="a9469383d8cca2ba303a093b30f55de7"
+    sum="e62ed3dbff4717f9c687ee7ee43f9fcd"
     proved="true"
     expanded="true"
     shape="ainfix &gt;V3c0.0Iainfix =V3V2FIainfix =V2ainfix /c1.0ainfix +ainfix /c1.0V0ainfix /c1.0V1FIainfix &gt;V1c0.0Aainfix &gt;V0c0.0F">
@@ -229,10 +229,10 @@
     locfile="../../hollas_floats.c"
     loclnum="16" loccnumb="6" loccnume="11"
     expl="VC for r_par_safety"
-    sum="43097f2c6c72ab3c0cb3cf0aae7a0702"
+    sum="dbb0f308104bf2724843c435b84974a4"
     proved="true"
     expanded="true"
-    shape="ainfix =ainfix +ainfix /c1.0V0ainfix /c1.0V1c0.0NAainfix =V0c0.0NAainfix =V1c0.0NIainfix &gt;V1c0.0Aainfix &gt;V0c0.0F">
+    shape="Nainfix =ainfix +ainfix /c1.0V0ainfix /c1.0V1c0.0ANainfix =V0c0.0ANainfix =V1c0.0Iainfix &gt;V1c0.0Aainfix &gt;V0c0.0F">
     <label
      name="expl:Function r_par, Safety"/>
     <label
@@ -275,7 +275,7 @@
     locfile="../../hollas_floats.c"
     loclnum="8" loccnumb="6" loccnume="11"
     expl="VC for r_seq_ensures_default"
-    sum="93de7d89ca4bb488dfec46d2c1ebaede"
+    sum="762e2139bda0f34186edb7e0556c38e8"
     proved="true"
     expanded="true"
     shape="ainfix &gt;V3c0.0Iainfix =V3V2FIainfix =V2ainfix +V0V1FIainfix &gt;V1c0.0Aainfix &gt;V0c0.0F">
@@ -337,7 +337,7 @@
     locfile="../../hollas_floats.c"
     loclnum="8" loccnumb="6" loccnume="11"
     expl="VC for r_seq_safety"
-    sum="f5ebbeb37531ada9d801aba15e47870e"
+    sum="58f31e334048751c94b7cf9d318c9941"
     proved="true"
     expanded="true"
     shape="t">

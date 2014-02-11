@@ -12,7 +12,7 @@
  <prover
   id="2"
   name="Coq"
-  version="8.4pl1"/>
+  version="8.4pl2"/>
  <prover
   id="3"
   name="Z3"
@@ -329,7 +329,7 @@
     <proof
      prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      edited="Gcd_Jessie_model_gcd_zero_2.v"
      obsolete="false"
      archived="false">
@@ -350,7 +350,7 @@
     <proof
      prover="2"
      timelimit="5"
-     memlimit="0"
+     memlimit="1000"
      edited="Gcd_Jessie_model_gcd_property_2.v"
      obsolete="false"
      archived="false">

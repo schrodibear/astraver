@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -35,7 +35,7 @@
     locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="VC for swap_ensures_default"
-    sum="8a810da30705484c45f912205aad5bb7"
+    sum="14e944fb85a1263e10c5730159dcc95a"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FF">
@@ -73,7 +73,7 @@
     locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="VC for swap_safety"
-    sum="7208bbaa6587562d5373e9459be61588"
+    sum="5756151f2df887202e19afb100d1e1c7"
     proved="true"
     expanded="true"
     shape="t">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -43,10 +43,10 @@
     locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
     expl="VC for _FlagStatic_flag_ensures_default"
-    sum="0d14ff2ac862cfbaea9beca75be4787d"
+    sum="5e28e063f0eff5e08d00e9b03e1093ed"
     proved="true"
     expanded="false"
-    shape="iainfix =V8a_FlagStatic_BLUEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V12a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V12V4Aainfix &lt;=V6V12Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDais_monochromeV0V13ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV14Aais_monochromeV0V6V5a_FlagStatic_WHITEV14Aais_monochromeV0c0V6a_FlagStatic_BLUEV14Aainfix &lt;=V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V13Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V14Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FIainfix =V13ainfix -V4c1Fais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7LaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FAais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+    shape="iiiais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Aais_monochromeV0V6V5a_FlagStatic_WHITEV10Aais_monochromeV0c0V6a_FlagStatic_BLUEV10Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V9Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1Fainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V11a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V11V4Aainfix &lt;=V6V11Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V11ainfix +V5c1Fainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV14Aais_monochromeV0V12V13a_FlagStatic_WHITEV14Aais_monochromeV0c0V12a_FlagStatic_BLUEV14Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V13V4Aainfix &lt;=V12V13Aainfix &lt;=c0V12Aais_color_arrayV0V2V14Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV14ashiftV0V6aselectV7ashiftV0V5FIainfix =V13ainfix +V5c1FIainfix =V12ainfix +V6c1Fainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FAais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method flag, default behavior"/>
     <label
@@ -60,10 +60,10 @@
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="1. loop invariant init"
-      sum="67ef1d9ccf01221517a65ca3131c3b89"
+      sum="0776378cf025611c6001092871879378"
       proved="true"
       expanded="false"
-      shape="ais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+      shape="loop invariant initais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V3Aainfix &lt;=c0c0Aainfix &lt;=c0c0Aais_color_arrayV0V2V1Iainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:Method flag, default behavior"/>
       <label
@@ -114,10 +114,10 @@
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="2. loop invariant preservation"
-      sum="f953c0cc0530311dfc59cf1848a219fd"
+      sum="2516f038f1e963509e28127ad4290556"
       proved="true"
       expanded="false"
-      shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+      shape="loop invariant preservationais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V10V4Aainfix &lt;=V9V10Aainfix &lt;=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:Method flag, default behavior"/>
       <label
@@ -131,7 +131,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="1."
-        sum="018cf6778e2afc1f7864adbf889ac4ec"
+        sum="f7812fb2f9227e573c9542c1b1f1edc8"
         proved="true"
         expanded="false"
         shape="ais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -148,10 +148,10 @@
           locfile="../FlagStatic.java"
           loclnum="87" loccnumb="23" loccnume="27"
           expl="1."
-          sum="f1c8b6c4b8d432e2ac157b2e6da2d8af"
+          sum="45dfaf3f34e0b85b383aa774aed0e3b4"
           proved="true"
           expanded="false"
-          shape="ais_coloraselectV11ashiftV0V12Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V12FAa_Non_null_intMV0V2Iainfix =aselectV11V13aselectV7V13Iain_psetV13apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6NAavalidV2V13FAainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8c1LaselectV7ashiftV0V5Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V14a_FlagStatic_REDIainfix &lt;V14ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_WHITEIainfix &lt;V15V5Aainfix &lt;=V6V15FAainfix =aselectV7ashiftV0V16a_FlagStatic_BLUEIainfix &lt;V16V6Aainfix &lt;=c0V16FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2FIainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_coloraselectV1ashiftV0V18Iainfix &lt;V18ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V18FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FF">
+          shape="ais_coloraselectV11ashiftV0V12Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V12FAa_Non_null_intMV0V2Iainfix =aselectV11V13aselectV7V13INain_psetV13apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6AavalidV2V13FAainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8c1LaselectV7ashiftV0V5Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V14a_FlagStatic_REDIainfix &lt;V14ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_WHITEIainfix &lt;V15V5Aainfix &lt;=V6V15FAainfix =aselectV7ashiftV0V16a_FlagStatic_BLUEIainfix &lt;V16V6Aainfix &lt;=c0V16FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2FIainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_coloraselectV1ashiftV0V18Iainfix &lt;V18ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V18FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FF">
           <label
            name="expl:Method flag, default behavior"/>
           <label
@@ -162,7 +162,7 @@
            memlimit="1000"
            obsolete="false"
            archived="false">
-           <result status="valid" time="1.27"/>
+           <result status="valid" time="1.01"/>
           </proof>
           <proof
            prover="1"
@@ -170,7 +170,7 @@
            memlimit="1000"
            obsolete="false"
            archived="false">
-           <result status="valid" time="1.98"/>
+           <result status="valid" time="0.46"/>
           </proof>
           <proof
            prover="2"
@@ -178,7 +178,7 @@
            memlimit="1000"
            obsolete="false"
            archived="false">
-           <result status="valid" time="1.69"/>
+           <result status="valid" time="0.35"/>
           </proof>
           <proof
            prover="3"
@@ -204,7 +204,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="2."
-        sum="d69f63a1ee695de8aa16b04148addd09"
+        sum="a054a69eadb940338a2366294a46538b"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0V9Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -258,7 +258,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="3."
-        sum="778a92943be42b4295db17297e3e5f70"
+        sum="194f011e37bdcc78add5b2fc7d69d90d"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V9V10Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -312,7 +312,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="4."
-        sum="fbbd4dca70593bf445809191564530ab"
+        sum="19890569205c7d770ddb34decb654a0f"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V10V4Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -366,7 +366,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="5."
-        sum="a3a610350fe8aa918a897adf5fdf255e"
+        sum="99ad1c226bdf5932d5881070fad7b6ec"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V4ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -420,7 +420,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="6."
-        sum="99c6ac135202b5b65852277227d88bc9"
+        sum="26e8229e63a4f2d46200b91dcf685989"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0c0V9a_FlagStatic_BLUEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -434,7 +434,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.18"/>
+         <result status="valid" time="0.95"/>
         </proof>
         <proof
          prover="2"
@@ -442,7 +442,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="2.77"/>
+         <result status="valid" time="0.51"/>
         </proof>
         <proof
          prover="3"
@@ -458,7 +458,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.48"/>
+         <result status="valid" time="0.14"/>
         </proof>
        </goal>
        <goal
@@ -466,7 +466,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="7."
-        sum="9737ac1e9bc8be2fbf0bf8b382e03b90"
+        sum="8f5311472fcb94561e79a8b61832f613"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V9V10a_FlagStatic_WHITEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -480,7 +480,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.23"/>
+         <result status="valid" time="0.96"/>
         </proof>
         <proof
          prover="2"
@@ -488,7 +488,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="2.06"/>
+         <result status="valid" time="0.41"/>
         </proof>
         <proof
          prover="3"
@@ -504,7 +504,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.64"/>
+         <result status="valid" time="0.16"/>
         </proof>
        </goal>
        <goal
@@ -512,7 +512,7 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="8."
-        sum="420a5d5ebcb4700cc7b314f615429407"
+        sum="7b662433c7753aec2569ea2bf3d109aa"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
@@ -526,7 +526,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.93"/>
+         <result status="valid" time="0.73"/>
         </proof>
         <proof
          prover="1"
@@ -534,7 +534,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="5.61"/>
+         <result status="valid" time="1.91"/>
         </proof>
         <proof
          prover="2"
@@ -542,7 +542,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="2.39"/>
+         <result status="valid" time="0.47"/>
         </proof>
         <proof
          prover="3"
@@ -558,7 +558,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="6.19"/>
+         <result status="timeout" time="4.97"/>
         </proof>
        </goal>
       </transf>
@@ -568,10 +568,10 @@
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="3. loop invariant preservation"
-      sum="5184d77c42dc886bd2b53c7d097d1b9f"
+      sum="3fb1121792fa548796c582900e5800d6"
       proved="true"
       expanded="false"
-      shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V9V4Aainfix &lt;=V6V9Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V9ainfix +V5c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+      shape="loop invariant preservationais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V9V4Aainfix &lt;=V6V9Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V9ainfix +V5c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:Method flag, default behavior"/>
       <label
@@ -614,7 +614,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.25"/>
       </proof>
      </goal>
      <goal
@@ -622,10 +622,10 @@
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="4. loop invariant preservation"
-      sum="8bdd2d25932f554dcfcef49e441e87c8"
+      sum="5d33f5033b5a72d315054d37b5481e45"
       proved="true"
       expanded="false"
-      shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Aais_monochromeV0V6V5a_FlagStatic_WHITEV10Aais_monochromeV0c0V6a_FlagStatic_BLUEV10Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V9Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+      shape="loop invariant preservationais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Aais_monochromeV0V6V5a_FlagStatic_WHITEV10Aais_monochromeV0c0V6a_FlagStatic_BLUEV10Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V9Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDINainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:Method flag, default behavior"/>
       <label
@@ -639,10 +639,10 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="1."
-        sum="36201be85ed35a7c0cb7c3bfd29421d7"
+        sum="bbd8522894e1722fdf4474c355a8fbef"
         proved="true"
         expanded="false"
-        shape="ais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+        shape="ais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDINainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:Method flag, default behavior"/>
         <label
@@ -656,10 +656,10 @@
           locfile="../FlagStatic.java"
           loclnum="87" loccnumb="23" loccnume="27"
           expl="1."
-          sum="444b30aa633678bc8b541061380c7af0"
+          sum="af6ce9fc527eedf2109828d5a13e6dad"
           proved="true"
           expanded="false"
-          shape="ais_coloraselectV10ashiftV0V11Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V11FAa_Non_null_intMV0V2Iainfix =aselectV10V12aselectV7V12Iain_psetV12apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9NAavalidV2V12FAainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix +V4aprefix -c1FIainfix =V8c1Oainfix =V8c2Oainfix =V8c3Iainfix =V8c1Oainfix =V8c2NIainfix =V8c1NLaselectV7ashiftV0V5Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V13a_FlagStatic_REDIainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V13FAainfix =aselectV7ashiftV0V14a_FlagStatic_WHITEIainfix &lt;V14V5Aainfix &lt;=V6V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_BLUEIainfix &lt;V15V6Aainfix &lt;=c0V15FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V16Iainfix &lt;V16ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V16FAa_Non_null_intMV0V2FIainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_coloraselectV1ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FF">
+          shape="ais_coloraselectV10ashiftV0V11Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V11FAa_Non_null_intMV0V2Iainfix =aselectV10V12aselectV7V12INain_psetV12apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9AavalidV2V12FAainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix +V4aprefix -c1FIainfix =V8c1Oainfix =V8c2Oainfix =V8c3INainfix =V8c1Oainfix =V8c2INainfix =V8c1LaselectV7ashiftV0V5Iainfix &lt;V5V4Iainfix =aselectV7ashiftV0V13a_FlagStatic_REDIainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=V4V13FAainfix =aselectV7ashiftV0V14a_FlagStatic_WHITEIainfix &lt;V14V5Aainfix &lt;=V6V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_BLUEIainfix &lt;V15V6Aainfix &lt;=c0V15FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix &lt;V5V4Aainfix =V6V5Oainfix &lt;V6V5Aainfix =c0V6Oainfix &lt;c0V6Aais_coloraselectV7ashiftV0V16Iainfix &lt;V16ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V16FAa_Non_null_intMV0V2FIainfix &lt;=c0V3Aainfix =V3c2147483647Oainfix &lt;V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_coloraselectV1ashiftV0V17Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V17FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FF">
           <label
            name="expl:Method flag, default behavior"/>
           <label
@@ -670,7 +670,7 @@
            memlimit="1000"
            obsolete="false"
            archived="false">
-           <result status="valid" time="4.14"/>
+           <result status="valid" time="3.42"/>
           </proof>
           <proof
            prover="1"
@@ -678,7 +678,7 @@
            memlimit="1000"
            obsolete="false"
            archived="false">
-           <result status="valid" time="3.33"/>
+           <result status="valid" time="0.88"/>
           </proof>
           <proof
            prover="2"
@@ -686,7 +686,7 @@
            memlimit="1000"
            obsolete="false"
            archived="false">
-           <result status="valid" time="1.87"/>
+           <result status="valid" time="0.33"/>
           </proof>
           <proof
            prover="3"
@@ -702,7 +702,7 @@
            memlimit="1000"
            obsolete="false"
            archived="false">
-           <result status="timeout" time="5.68"/>
+           <result status="valid" time="0.08"/>
           </proof>
          </goal>
         </transf>
@@ -712,10 +712,10 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="2."
-        sum="6dcb9c33471d68abc70362ab960b7a05"
+        sum="0f0bc58bce05f532e725d606e12b744d"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=c0V6Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+        shape="ainfix &lt;=c0V6Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDINainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:Method flag, default behavior"/>
         <label
@@ -766,10 +766,10 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="3."
-        sum="043f9fdf63839c8f0e472258bcecbf6e"
+        sum="5a8c58f76eb128b9b0677d7d4de365d1"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=V6V5Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+        shape="ainfix &lt;=V6V5Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDINainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:Method flag, default behavior"/>
         <label
@@ -820,10 +820,10 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="4."
-        sum="36d3033acd22f1b2422fefb1ac119d35"
+        sum="e27b6319493de8eff8a9dbeddc8364df"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=V5V9Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+        shape="ainfix &lt;=V5V9Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDINainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:Method flag, default behavior"/>
         <label
@@ -874,10 +874,10 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="5."
-        sum="f2c2a6f84be65b0d8b4fae635a1dadf7"
+        sum="7bb0fd17de1f34e619eff799cc74db66"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=V9ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+        shape="ainfix &lt;=V9ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDINainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:Method flag, default behavior"/>
         <label
@@ -928,10 +928,10 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="6."
-        sum="038322df99eacc3d653eb1a5aa84429e"
+        sum="bcd9a2d1165e557490012de6c468cf02"
         proved="true"
         expanded="false"
-        shape="ais_monochromeV0c0V6a_FlagStatic_BLUEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+        shape="ais_monochromeV0c0V6a_FlagStatic_BLUEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDINainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:Method flag, default behavior"/>
         <label
@@ -950,7 +950,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="3.46"/>
+         <result status="valid" time="0.40"/>
         </proof>
         <proof
          prover="3"
@@ -966,7 +966,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.40"/>
+         <result status="valid" time="0.12"/>
         </proof>
        </goal>
        <goal
@@ -974,10 +974,10 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="7."
-        sum="eaca24e7e1183f61fbfeb7a09c844d3f"
+        sum="c458bacda57d06d21ec0d14a2f106663"
         proved="true"
         expanded="false"
-        shape="ais_monochromeV0V6V5a_FlagStatic_WHITEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+        shape="ais_monochromeV0V6V5a_FlagStatic_WHITEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDINainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:Method flag, default behavior"/>
         <label
@@ -988,7 +988,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.24"/>
+         <result status="valid" time="1.01"/>
         </proof>
         <proof
          prover="2"
@@ -996,7 +996,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="2.95"/>
+         <result status="valid" time="0.44"/>
         </proof>
         <proof
          prover="3"
@@ -1012,7 +1012,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.18"/>
+         <result status="valid" time="0.16"/>
         </proof>
        </goal>
        <goal
@@ -1020,10 +1020,10 @@
         locfile="../FlagStatic.java"
         loclnum="87" loccnumb="23" loccnume="27"
         expl="8."
-        sum="4c0dd82844c1f2555fd121b106667863"
+        sum="890bb6443008de59f4a3072107874838"
         proved="true"
         expanded="false"
-        shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+        shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDINainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
         <label
          name="expl:Method flag, default behavior"/>
         <label
@@ -1034,7 +1034,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.36"/>
+         <result status="valid" time="1.09"/>
         </proof>
         <proof
          prover="2"
@@ -1042,7 +1042,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="3.28"/>
+         <result status="valid" time="0.45"/>
         </proof>
         <proof
          prover="3"
@@ -1058,7 +1058,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.16"/>
+         <result status="valid" time="0.13"/>
         </proof>
        </goal>
       </transf>
@@ -1068,10 +1068,10 @@
       locfile="../FlagStatic.java"
       loclnum="87" loccnumb="23" loccnume="27"
       expl="5. loop invariant preservation"
-      sum="db4301d37b449529af2b1a7c1c7d1cec"
+      sum="0da5fa338820c04a6946686a08e806ad"
       proved="true"
       expanded="false"
-      shape="ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7Iainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDNIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENLaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+      shape="loop invariant preservationais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7INainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDINainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEINainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
       <label
        name="expl:Method flag, default behavior"/>
       <label
@@ -1124,10 +1124,10 @@
     locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
     expl="VC for _FlagStatic_flag_ensures_sorts"
-    sum="a06552ddc1222a069ff815ee2840a993"
+    sum="d9a77c4add30951d5dde8c22d4f92459"
     proved="true"
     expanded="false"
-    shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V8V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V8a_FlagStatic_BLUEV7EEIainfix &lt;V5V4NIais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+    shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V8V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V8a_FlagStatic_BLUEV7EEINainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method flag, Behavior `sorts&apos;"/>
     <label
@@ -1162,7 +1162,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="timeout" time="4.98"/>
     </proof>
     <proof
      prover="4"
@@ -1170,7 +1170,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="timeout" time="4.99"/>
     </proof>
    </goal>
    <goal
@@ -1178,10 +1178,10 @@
     locfile="../FlagStatic.java"
     loclnum="87" loccnumb="23" loccnume="27"
     expl="index bounds"
-    sum="45e1852d1c871912b594b61c8a10e523"
+    sum="2df99a9ba5cbdb83bb3aa12e29a4ddb6"
     proved="true"
     expanded="false"
-    shape="iainfix =V8a_FlagStatic_BLUEainfix &lt;ainfix -V4V10ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V6Iainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEainfix &lt;ainfix -V4V12ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDainfix &lt;ainfix -V13V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V13Iainfix =V13ainfix -V4c1Fainfix &lt;ainfix -V4V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5LaselectV7ashiftV0V5Aainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
+    shape="index boundsiiiainfix &lt;ainfix -V4V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5ainfix &lt;ainfix -V9V5ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V9Iainfix =V9ainfix -V4c1Fainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDainfix &lt;ainfix -V4V11ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Iainfix =V11ainfix +V5c1Fainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEainfix &lt;ainfix -V4V13ainfix -V4V5Aainfix &lt;=c0ainfix -V4V5Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV14ashiftV0V6aselectV7ashiftV0V5FAainfix &lt;V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V5Aainfix &lt;V6ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V6Iainfix =V13ainfix +V5c1FIainfix =V12ainfix +V6c1Fainfix =V8a_FlagStatic_BLUELaselectV7ashiftV0V5Aainfix &lt;=V5aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V5Iainfix &lt;V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix &lt;=V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=V5V4Aainfix &lt;=V6V5Aainfix &lt;=c0V6Aais_color_arrayV0V2V7FIainfix &gt;=V3c0Aainfix &lt;=V3c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FF">
     <label
      name="expl:Method flag, Safety"/>
     <label
@@ -1232,10 +1232,10 @@
     locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
     expl="VC for _FlagStatic_isMonochrome_ensures_decides_monochromatic"
-    sum="47b0c93aff9c5c8f4da7b0bbb007c6ff"
+    sum="3c4fa532574680583091575bd2e7341f"
     proved="true"
     expanded="false"
-    shape="iainfix &lt;V6V2ais_monochromeV0V1V2V3V4qainfix =V7aTrueIainfix =V7aFalseFIainfix =aselectV4ashiftV0V6V3Nais_monochromeV0V1V2V3V4qainfix =V8aTrueIainfix =V8aTrueFIainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
+    shape="iais_monochromeV0V1V2V3V4qainfix =V7aTrueIainfix =V7aTrueFais_monochromeV0V1V2V3V4qainfix =V8aTrueIainfix =V8aFalseFINainfix =aselectV4ashiftV0V6V3ainfix &lt;V6V2Iainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
     <label
      name="expl:Method isMonochrome, Behavior `decides_monochromatic&apos;"/>
     <label
@@ -1286,7 +1286,7 @@
     locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
     expl="VC for _FlagStatic_isMonochrome_ensures_default"
-    sum="a91140296be8c7827cdd326a8f095aad"
+    sum="01f83449300e9471d2e55189b9e86629"
     proved="true"
     expanded="false"
     shape="ainfix =aselectV4ashiftV0V8V3Iainfix &lt;V8V7Aainfix &lt;=V1V8FAainfix &lt;=V1V7Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Iainfix &lt;V6V2Iainfix =aselectV4ashiftV0V9V3Iainfix &lt;V9V6Aainfix &lt;=V1V9FAainfix &lt;=V1V6FAainfix =aselectV4ashiftV0V10V3Iainfix &lt;V10V1Aainfix &lt;=V1V10FAainfix &lt;=V1V1Iainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
@@ -1332,7 +1332,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.19"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -1340,7 +1340,7 @@
     locfile="../FlagStatic.java"
     loclnum="58" loccnumb="26" loccnume="38"
     expl="VC for _FlagStatic_isMonochrome_safety"
-    sum="b13d230966cf94e212cca587521c9d5e"
+    sum="295ff35fc182ae7f6d3b33241c6d5436"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -V2V7ainfix -V2V6Aainfix &lt;=c0ainfix -V2V6Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Aainfix &lt;=V6aoffset_maxV5V0Aainfix &lt;=aoffset_minV5V0V6Iainfix &lt;V6V2Iainfix =aselectV4ashiftV0V8V3Iainfix &lt;V8V6Aainfix &lt;=V1V8FAainfix &lt;=V1V6FIainfix &lt;=V2ainfix +aoffset_maxV5V0c1Aainfix &lt;=V1V2Aainfix &lt;=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FF">
@@ -1394,7 +1394,7 @@
     locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
     expl="VC for _FlagStatic_swap_ensures_default"
-    sum="f809b3699c02cb54ee9ca11ae619c60d"
+    sum="baa8c652782c8f2f7b37754347915915"
     proved="true"
     expanded="false"
     shape="t">
@@ -1448,7 +1448,7 @@
     locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
     expl="VC for _FlagStatic_swap_ensures_i_j_swapped"
-    sum="124c598380eae4f7f0ebcf023ee46a53"
+    sum="92bfde1a412b56c247c012fd43798b8d"
     proved="true"
     expanded="false"
     shape="anot_assignsV4V3V6apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV6ashiftV0V2aselectV3ashiftV0V1Aainfix =aselectV6ashiftV0V1aselectV3ashiftV0V2Iainfix =V6astoreV5ashiftV0V2aselectV3ashiftV0V1FIainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FIainfix &lt;V2ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V2Aainfix &lt;V1ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V1Aaleft_valid_struct_intMV0c0V4FF">
@@ -1470,7 +1470,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.02"/>
+     <result status="valid" time="0.16"/>
     </proof>
     <proof
      prover="2"
@@ -1478,7 +1478,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.93"/>
+     <result status="valid" time="0.20"/>
     </proof>
     <proof
      prover="3"
@@ -1502,7 +1502,7 @@
     locfile="../FlagStatic.java"
     loclnum="72" loccnumb="24" loccnume="28"
     expl="VC for _FlagStatic_swap_safety"
-    sum="8beb96f30e3ee916fc35b2cc43f9866b"
+    sum="a70e669c208523e73d934c7d86adcba9"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Iainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FAainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Aainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Aainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Iainfix &lt;V2ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V2Aainfix &lt;V1ainfix +aoffset_maxV4V0c1Aainfix &lt;=c0V1Aaleft_valid_struct_intMV0c0V4FF">
@@ -1553,10 +1553,10 @@
    </goal>
    <goal
     name="WP_parameter cons_FlagStatic_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_FlagStatic_ensures_default"
-    sum="f809b3699c02cb54ee9ca11ae619c60d"
+    sum="baa8c652782c8f2f7b37754347915915"
     proved="true"
     expanded="false"
     shape="t">
@@ -1607,10 +1607,10 @@
    </goal>
    <goal
     name="WP_parameter cons_FlagStatic_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_FlagStatic_safety"
-    sum="f809b3699c02cb54ee9ca11ae619c60d"
+    sum="baa8c652782c8f2f7b37754347915915"
     proved="true"
     expanded="false"
     shape="t">
@@ -1661,10 +1661,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="f809b3699c02cb54ee9ca11ae619c60d"
+    sum="baa8c652782c8f2f7b37754347915915"
     proved="true"
     expanded="false"
     shape="t">
@@ -1715,10 +1715,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="f809b3699c02cb54ee9ca11ae619c60d"
+    sum="baa8c652782c8f2f7b37754347915915"
     proved="true"
     expanded="false"
     shape="t">
