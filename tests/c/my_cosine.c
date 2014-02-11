@@ -76,6 +76,7 @@ float my_cos4(float x) {
   return 1.0f - x * x * 0.5f;
 }
 
+#endif
 
 /*
 Local Variables:

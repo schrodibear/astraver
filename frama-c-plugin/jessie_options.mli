@@ -32,18 +32,18 @@
 open Plugin
 include Plugin.S
 
-module ProjectName: Plugin.String
-module Behavior: Plugin.String
-module Analysis: Plugin.Bool
-module WhyOpt: Plugin.String_set
-module Why3Opt: Plugin.String_set
-module JcOpt: Plugin.String_set
-module GenOnly: Plugin.Bool
-module InferAnnot: Plugin.String
-module AbsDomain: Plugin.String
-module Atp: Plugin.String
-module CpuLimit: Plugin.Int
-module HintLevel: Plugin.Int
+module ProjectName: Parameter_sig.String
+module Behavior: Parameter_sig.String
+module Analysis: Parameter_sig.Bool
+module WhyOpt: Parameter_sig.String_set
+module Why3Opt: Parameter_sig.String_set
+module JcOpt: Parameter_sig.String_set
+module GenOnly: Parameter_sig.Bool
+module InferAnnot: Parameter_sig.String
+module AbsDomain: Parameter_sig.String
+module Atp: Parameter_sig.String
+module CpuLimit: Parameter_sig.Int
+module HintLevel: Parameter_sig.Int
 
 (*
 Local Variables:
