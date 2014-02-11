@@ -11,15 +11,15 @@
   @ }
   @*/
 
-/*@ lemma power_mul: 
+/*@ lemma power_mul:
   @   \forall integer x y n; n >= 0 ==> power(x*y,n) == power(x,n)*power(y,n);
   @*/
 
-/*@ lemma power_even: 
+/*@ lemma power_even:
   @   \forall integer x n; n >= 0 && n % 2 == 0 ==> power(x,n) == power(x*x,n/2);
   @*/
 
-/*@ lemma power_odd: 
+/*@ lemma power_odd:
   @   \forall integer x n; n >= 0 && n % 2 != 0 ==> power(x,n) == x*power(x*x,n/2);
   @*/
 
@@ -49,7 +49,7 @@ class Power {
         long r = 1, p = x;
         int e = n;
 
-        /*@ loop_invariant 
+        /*@ loop_invariant
           @   0 <= e && r * power(p,e) == power(x,n);
           @ loop_variant e;
           @*/

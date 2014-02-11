@@ -32,7 +32,7 @@
 class NameConflicts {
 
     int i;
-    
+
     void setI(int i) {
 	this.i = i;
     }
@@ -42,7 +42,7 @@ class NameConflicts {
       @*/
     int m() {
 	int result = 0;
-	return 0;
+	return result;
     }
 
     int field;

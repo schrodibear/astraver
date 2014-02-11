@@ -16,7 +16,7 @@
  <prover
   id="3"
   name="Coq"
-  version="8.4pl1"/>
+  version="8.4pl2"/>
  <prover
   id="4"
   name="Z3"
@@ -133,7 +133,7 @@
   <theory
    name="Jessie_program"
    locfile="../Fibonacci.mlw"
-   loclnum="196" loccnumb="7" loccnume="21"
+   loclnum="194" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
@@ -145,6 +145,8 @@
     proved="true"
     expanded="true"
     shape="iaisfibV0V4Iainfix =V4V3FaisfibV8V6Aaisfibainfix +V8c1V7Aainfix &lt;=V8V0Aainfix &lt;=c0V8Iainfix =V8ainfix +V1c1FIainfix =V7ainfix +V2V5FIainfix =V6V2FIainfix =V5V3Fainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method Fib, default behavior"/>
     <label
@@ -170,6 +172,8 @@
       proved="true"
       expanded="true"
       shape="loop invariant initaisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method Fib, default behavior"/>
       <label
@@ -224,6 +228,8 @@
       proved="true"
       expanded="true"
       shape="loop invariant preservationaisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method Fib, default behavior"/>
       <label
@@ -282,6 +288,8 @@
         expanded="false"
         shape="ainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
         <label
+         name="W:diverges:N"/>
+        <label
          name="expl:Method Fib, default behavior"/>
         <label
          name="expl:VC for _Fibonacci_Fib_ensures_default"/>
@@ -335,6 +343,8 @@
         proved="true"
         expanded="false"
         shape="ainfix &lt;=V7V0Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Method Fib, default behavior"/>
         <label
@@ -390,6 +400,8 @@
         expanded="true"
         shape="aisfibainfix +V7c1V6Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
         <label
+         name="W:diverges:N"/>
+        <label
          name="expl:Method Fib, default behavior"/>
         <label
          name="expl:VC for _Fibonacci_Fib_ensures_default"/>
@@ -443,6 +455,8 @@
         proved="true"
         expanded="false"
         shape="aisfibV7V5Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Method Fib, default behavior"/>
         <label
@@ -499,6 +513,8 @@
       proved="true"
       expanded="true"
       shape="postconditionaisfibV0V4Iainfix =V4V3FINainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method Fib, default behavior"/>
       <label
@@ -609,6 +625,8 @@
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Fibonacci, default behavior"/>
     <label

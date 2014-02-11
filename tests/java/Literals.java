@@ -33,11 +33,11 @@ class Literals {
 
     public static final int x = 0xbad;
 
-    /*@ ensures \result == 0xd;
+    /*@ ensures \result == 5991;
       @*/
     int f() {
-	int x = 0xbad;
-	return 015;
+	int y = 0xbad;
+	return y+x+015;
     }
 
 }

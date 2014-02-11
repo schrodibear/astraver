@@ -16,13 +16,13 @@
  <file
   name="../Literals.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
    locfile="../Literals.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
-   expanded="true">
+   expanded="false">
   </theory>
   <theory
    name="Jessie_program"
@@ -35,10 +35,12 @@
     locfile="../Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="VC for _Literals_f_ensures_default"
-    sum="737289222f9e552b8aa6b39b59c3d6c3"
+    sum="d71bce4ddd122a2f15f0f3f6b34aaf72"
     proved="true"
-    expanded="true"
-    shape="ainfix =ainteger_of_int32V4c13Iainfix =V4V3FIainfix =ainteger_of_int32V3c13FIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
+    expanded="false"
+    shape="ainfix =ainteger_of_int32V5c5991Iainfix =V5V4FIainfix =ainteger_of_int32V4ainfix +ainteger_of_int32V3c13FIainfix =ainteger_of_int32V3ainfix +ainteger_of_int32V2ainteger_of_int32a_Literals_xFIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method f, default behavior"/>
     <label
@@ -57,7 +59,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="2"
@@ -65,7 +67,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -73,10 +75,10 @@
     locfile="../Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="VC for _Literals_f_safety"
-    sum="45e0abcefc23ba1029d644e2ce69dca9"
+    sum="f3d087602b846b0188d40edc7e71d33a"
     proved="true"
-    expanded="true"
-    shape="t">
+    expanded="false"
+    shape="ainfix &lt;=V5c2147483647Aainfix &lt;=aprefix -c2147483648V5Lainfix +ainteger_of_int32V4c13Iainfix =ainteger_of_int32V4V3FAainfix &lt;=V3c2147483647Aainfix &lt;=aprefix -c2147483648V3Lainfix +ainteger_of_int32V2ainteger_of_int32a_Literals_xIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
     <label
      name="expl:Method f, Safety"/>
     <label
@@ -113,8 +115,10 @@
     expl="VC for cons_Literals_ensures_default"
     sum="45e0abcefc23ba1029d644e2ce69dca9"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Literals, default behavior"/>
     <label
@@ -151,7 +155,7 @@
     expl="VC for cons_Literals_safety"
     sum="45e0abcefc23ba1029d644e2ce69dca9"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:Constructor of class Literals, Safety"/>

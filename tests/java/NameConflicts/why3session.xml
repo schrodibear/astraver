@@ -16,13 +16,13 @@
  <file
   name="../NameConflicts.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
    locfile="../NameConflicts.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
-   expanded="true">
+   expanded="false">
   </theory>
   <theory
    name="Jessie_program"
@@ -37,8 +37,10 @@
     expl="VC for _NameConflicts_field_ensures_default"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method field, default behavior"/>
     <label
@@ -75,7 +77,7 @@
     expl="VC for _NameConflicts_field_safety"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:Method field, Safety"/>
@@ -113,8 +115,10 @@
     expl="VC for _NameConflicts_m_ensures_default"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method m, default behavior"/>
     <label
@@ -149,10 +153,12 @@
     locfile="../NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="VC for _NameConflicts_m_ensures_normal"
-    sum="1dd717cff4d2fc355051246df1b07235"
+    sum="d1dbf10b7697eb935243fd92f1de57e2"
     proved="true"
-    expanded="true"
-    shape="ainfix =ainteger_of_int32V4c0Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
+    expanded="false"
+    shape="ainfix =ainteger_of_int32V3c0Iainfix =V3V2FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method m, Behavior `normal&apos;"/>
     <label
@@ -189,7 +195,7 @@
     expl="VC for _NameConflicts_m_safety"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:Method m, Safety"/>
@@ -227,8 +233,10 @@
     expl="VC for _NameConflicts_setI_ensures_default"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method setI, default behavior"/>
     <label
@@ -265,7 +273,7 @@
     expl="VC for _NameConflicts_setI_safety"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:Method setI, Safety"/>
@@ -303,8 +311,10 @@
     expl="VC for cons_NameConflicts_ensures_default"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class NameConflicts, default behavior"/>
     <label
@@ -341,7 +351,7 @@
     expl="VC for cons_NameConflicts_safety"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:Constructor of class NameConflicts, Safety"/>

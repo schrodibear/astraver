@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -43,22 +43,16 @@
     locfile="../Isqrt.java"
     loclnum="42" loccnumb="11" loccnume="16"
     expl="VC for _Isqrt_isqrt_ensures_default"
-    sum="c53cc381451eec899aa89019e78a7341"
+    sum="c4263902683cc46046adecd383b97412"
     proved="true"
     expanded="false"
-    shape="iainfix &lt;=V1V0ainfix =V4asqrainfix +V3c1Aainfix &gt;=V0asqrV3Aainfix &gt;=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1Fainfix &lt;V0asqrainfix +V5c1Aainfix &lt;=asqrV5V0Aainfix &gt;=V5c0Iainfix =V5V2FIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FAainfix =c1asqrainfix +c0c1Aainfix &gt;=V0asqrc0Aainfix &gt;=c0c0Iainfix &gt;=V0c0F">
+    shape="iainfix &lt;V0asqrainfix +V3c1Aainfix &lt;=asqrV3V0Aainfix &gt;=V3c0Iainfix =V3V2Fainfix =V5asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0Iainfix =V5ainfix +V1ainfix +ainfix *c2V4c1FIainfix =V4ainfix +V2c1Fainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FAainfix =c1asqrainfix +c0c1Aainfix &gt;=V0asqrc0Aainfix &gt;=c0c0Iainfix &gt;=V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method isqrt, default behavior"/>
     <label
      name="expl:VC for _Isqrt_isqrt_ensures_default"/>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.06"/>
-    </proof>
     <proof
      prover="1"
      timelimit="5"
@@ -81,7 +75,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.15"/>
+     <result status="valid" time="0.09"/>
     </proof>
     <proof
      prover="4"
@@ -89,7 +83,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.78"/>
+     <result status="valid" time="0.24"/>
     </proof>
     <transf
      name="split_goal_wp"
@@ -100,10 +94,12 @@
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="1. loop invariant init"
-      sum="366b8facd58492b31d832d18c3d44e8d"
+      sum="688e17598161ad3a132de4874c2f383b"
       proved="true"
       expanded="false"
-      shape="ainfix =c1asqrainfix +c0c1Aainfix &gt;=V0asqrc0Aainfix &gt;=c0c0Iainfix &gt;=V0c0F">
+      shape="loop invariant initainfix =c1asqrainfix +c0c1Aainfix &gt;=V0asqrc0Aainfix &gt;=c0c0Iainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method isqrt, default behavior"/>
       <label
@@ -154,10 +150,12 @@
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="2. loop invariant preservation"
-      sum="f18a678e8d9b304cb47553dd9329167d"
+      sum="2fa620866e93fce0942fb42069946ce6"
       proved="true"
       expanded="false"
-      shape="ainfix =V4asqrainfix +V3c1Aainfix &gt;=V0asqrV3Aainfix &gt;=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+      shape="loop invariant preservationainfix =V4asqrainfix +V3c1Aainfix &gt;=V0asqrV3Aainfix &gt;=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method isqrt, default behavior"/>
       <label
@@ -192,7 +190,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.14"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="4"
@@ -200,7 +198,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.12"/>
+       <result status="valid" time="0.09"/>
       </proof>
       <transf
        name="split_goal_wp"
@@ -211,10 +209,12 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="1."
-        sum="f1d3c9869b1ef18fb01e1749d4d0e656"
+        sum="a6f03dad6a2965f92ff37a3fbab8f212"
         proved="true"
         expanded="false"
         shape="ainfix &gt;=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Method isqrt, default behavior"/>
         <label
@@ -265,10 +265,12 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="2."
-        sum="45bd4fc5b6a9db057721c935f9dcf44f"
+        sum="45f00cf10f1b8fab46909192d368849e"
         proved="true"
         expanded="false"
         shape="ainfix &gt;=V0asqrV3Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Method isqrt, default behavior"/>
         <label
@@ -303,7 +305,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.13"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="4"
@@ -311,7 +313,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.13"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
@@ -319,22 +321,16 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="3."
-        sum="be763244a61803855088bc6d67e7852c"
+        sum="3c4357e4f96915afb16b4378339371e4"
         proved="true"
         expanded="false"
         shape="ainfix =V4asqrainfix +V3c1Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
         <label
+         name="W:diverges:N"/>
+        <label
          name="expl:Method isqrt, default behavior"/>
         <label
          name="expl:VC for _Isqrt_isqrt_ensures_default"/>
-        <proof
-         prover="0"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="unknown" time="0.06"/>
-        </proof>
         <proof
          prover="1"
          timelimit="5"
@@ -357,7 +353,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.12"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="4"
@@ -365,7 +361,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.12"/>
+         <result status="valid" time="0.06"/>
         </proof>
        </goal>
       </transf>
@@ -375,10 +371,12 @@
       locfile="../Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="3. postcondition"
-      sum="b3e9ef8c0264b82ee4af4bdc1d5e7075"
+      sum="17761c0ff38209de07e21b0481415aa5"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;V0asqrainfix +V3c1Aainfix &lt;=asqrV3V0Aainfix &gt;=V3c0Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+      shape="postconditionainfix &lt;V0asqrainfix +V3c1Aainfix &lt;=asqrV3V0Aainfix &gt;=V3c0Iainfix =V3V2FINainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method isqrt, default behavior"/>
       <label
@@ -413,7 +411,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.12"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="4"
@@ -421,7 +419,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.20"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <transf
        name="split_goal_wp"
@@ -432,10 +430,12 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="1."
-        sum="d907878dd8440d5531da4e42dbaee140"
+        sum="33432cbdc68f51ab60268065371384ce"
         proved="true"
         expanded="false"
-        shape="ainfix &gt;=V3c0Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+        shape="ainfix &gt;=V3c0Iainfix =V3V2FINainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Method isqrt, default behavior"/>
         <label
@@ -486,10 +486,12 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="2."
-        sum="5042df7ab66fc9c5bc7c2aa14fdbf90c"
+        sum="dcfa3effe4e8fecaae5f82399ab06aa1"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;=asqrV3V0Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+        shape="ainfix &lt;=asqrV3V0Iainfix =V3V2FINainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Method isqrt, default behavior"/>
         <label
@@ -524,7 +526,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="4.13"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="4"
@@ -532,7 +534,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.13"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
@@ -540,10 +542,12 @@
         locfile="../Isqrt.java"
         loclnum="42" loccnumb="11" loccnume="16"
         expl="3."
-        sum="8758a606adaa70db1172f8f426a4ac62"
+        sum="b8fe6d8d77ab6f721cd1411076874749"
         proved="true"
         expanded="false"
-        shape="ainfix &lt;V0asqrainfix +V3c1Iainfix =V3V2FIainfix &lt;=V1V0NIainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+        shape="ainfix &lt;V0asqrainfix +V3c1Iainfix =V3V2FINainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Method isqrt, default behavior"/>
         <label
@@ -578,7 +582,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.13"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="4"
@@ -586,7 +590,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.13"/>
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
       </transf>
@@ -598,7 +602,7 @@
     locfile="../Isqrt.java"
     loclnum="42" loccnumb="11" loccnume="16"
     expl="VC for _Isqrt_isqrt_safety"
-    sum="7455900e02c16a22986d3e5f026c4da1"
+    sum="ba4b0a6d9566434bbeec88698e37fbd9"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainfix -V0V3ainfix -V0V2Aainfix &lt;=c0ainfix -V0V2Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix &lt;=V1V0Iainfix =V1asqrainfix +V2c1Aainfix &gt;=V0asqrV2Aainfix &gt;=V2c0FIainfix &gt;=V0c0F">
@@ -652,45 +656,23 @@
     locfile="../Isqrt.java"
     loclnum="52" loccnumb="11" loccnume="15"
     expl="VC for _Isqrt_main_ensures_default"
-    sum="100dd210d770a6e9bd1c34100e00678e"
+    sum="682d2967c9959c104ccb5a4e71268ee0"
     proved="true"
-    expanded="true"
-    shape="ainfix =V2c4Iainfix =V2V1FAainfix &gt;V1c4NAainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+    expanded="false"
+    shape="ainfix =V2c4Iainfix =V2V1FANainfix &gt;V1c4ANainfix &lt;V1c4Iainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method main, default behavior"/>
     <label
      name="expl:VC for _Isqrt_main_ensures_default"/>
-    <proof
-     prover="0"
-     timelimit="30"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.04"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="30"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.80"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="30"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="6.90"/>
-    </proof>
     <proof
      prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="4.33"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="4"
@@ -698,21 +680,23 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="4.48"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <transf
      name="split_goal_wp"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter _Isqrt_main_ensures_default.1"
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="1. assertion"
-      sum="615dcc00e762e6fa3b62f2a850e36012"
+      sum="e569deaee24833f456ffc28c09853b25"
       proved="true"
-      expanded="true"
-      shape="ainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+      expanded="false"
+      shape="assertionNainfix &lt;V1c4Iainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method main, default behavior"/>
       <label
@@ -724,22 +708,6 @@
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="1.15"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="10"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="5.81"/>
       </proof>
       <proof
        prover="3"
@@ -763,38 +731,16 @@
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="2. assertion"
-      sum="d96dbbd2a17cc136a5d2861a8788b385"
+      sum="0096d7bda17092e236a6d876e963ed56"
       proved="true"
-      expanded="true"
-      shape="ainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+      expanded="false"
+      shape="assertionNainfix &gt;V1c4INainfix &lt;V1c4Iainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method main, default behavior"/>
       <label
        name="expl:VC for _Isqrt_main_ensures_default"/>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.03"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.51"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="5.93"/>
-      </proof>
       <proof
        prover="3"
        timelimit="5"
@@ -817,10 +763,12 @@
       locfile="../Isqrt.java"
       loclnum="52" loccnumb="11" loccnume="15"
       expl="3. postcondition"
-      sum="ece4e0e53f61f4af2d17a03ae2664070"
+      sum="3c68599692cb201feede00f3450a247b"
       proved="true"
-      expanded="true"
-      shape="ainfix =V2c4Iainfix =V2V1FIainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+      expanded="false"
+      shape="postconditionainfix =V2c4Iainfix =V2V1FINainfix &gt;V1c4INainfix &lt;V1c4Iainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method main, default behavior"/>
       <label
@@ -873,7 +821,7 @@
     locfile="../Isqrt.java"
     loclnum="52" loccnumb="11" loccnume="15"
     expl="VC for _Isqrt_main_safety"
-    sum="2b72ece77e68599315de10e302e5725e"
+    sum="393a13a841d752ff29a9d9b9d5ce779e"
     proved="true"
     expanded="false"
     shape="ainfix &gt;=c17c0">
@@ -924,13 +872,15 @@
    </goal>
    <goal
     name="WP_parameter cons_Isqrt_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Isqrt_ensures_default"
-    sum="dd97d3fbe25a0e6b2312a60bf76a87ab"
+    sum="631f019bedf4db8c228fec1ea584a945"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Isqrt, default behavior"/>
     <label
@@ -978,10 +928,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Isqrt_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Isqrt_safety"
-    sum="dd97d3fbe25a0e6b2312a60bf76a87ab"
+    sum="631f019bedf4db8c228fec1ea584a945"
     proved="true"
     expanded="false"
     shape="t">
@@ -1032,13 +982,15 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="dd97d3fbe25a0e6b2312a60bf76a87ab"
+    sum="631f019bedf4db8c228fec1ea584a945"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Object, default behavior"/>
     <label
@@ -1086,10 +1038,10 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile="../."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="dd97d3fbe25a0e6b2312a60bf76a87ab"
+    sum="631f019bedf4db8c228fec1ea584a945"
     proved="true"
     expanded="false"
     shape="t">
