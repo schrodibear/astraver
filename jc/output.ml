@@ -955,8 +955,7 @@ type expr_node =
   | Raise of string * expr option
   | Try of expr * string * string option * expr
   | Fun of (string * why_type) list *
-      assertion * bool *
-      expr * assertion * ((string * assertion) list)
+      assertion * expr * assertion * ((string * assertion) list)
   | Triple of opaque *
       assertion * expr * assertion * ((string * assertion) list)
   | Assert of assert_kind * assertion * expr
@@ -1005,7 +1004,7 @@ let rec iter_expr f e =
     | Raise (_, None) -> ()
     | Raise(_id,Some e) -> iter_expr f e
     | Try(e1,_exc,_id,e2) -> iter_expr f e1; iter_expr f e2
-    | Fun(_params,pre,_diverges,body,post,signals) ->
+    | Fun(_params,pre,body,post,signals) ->
 	iter_assertion f pre;
 	iter_expr f body;
 	iter_assertion f post;
@@ -1119,7 +1118,7 @@ let rec fprintf_expr_node in_app form e =
     | Try(e1,exc,Some id,e2) ->
 	fprintf form "@[<hov 1>try@ %a@ with@ %s %s ->@ %a end@]"
 	  fprintf_expr e1 exc id fprintf_expr e2
-    | Fun(params,pre,diverges,body,post,signals) ->
+    | Fun(params,pre,body,post,signals) ->
 	fprintf form "@[<hov 1>fun @[";
 	List.iter
 	  (fun (x,t) ->
@@ -1133,8 +1132,6 @@ let rec fprintf_expr_node in_app form e =
           begin
 	    fprintf form "@]->@ @[<hov 0>requires { %a  }@ "
               fprintf_assertion pre;
-            ignore(diverges);
-            (* does not work: if diverges then fprintf form "diverges@ "; *)
             begin
 	    match signals with
 	      | [] ->
@@ -1451,7 +1448,7 @@ let id_no_loc s = { name = s; loc = Loc.dummy_floc }
 
 type why_decl =
   | Param of bool * why_id * why_type         (*r parameter in why *)
-  | Def of why_id * expr               (*r global let in why *)
+  | Def of why_id * bool * expr               (*r global let in why *)
   | Logic of bool * why_id * (string * logic_type) list * logic_type    (*r logic decl in why *)
   | Predicate of bool * why_id * (string * logic_type) list * assertion
   | Inductive of bool * why_id * (string * logic_type) list *
@@ -1467,7 +1464,7 @@ let get_why_id d =
   match d with
     | Param(_,id,_)
     | Logic(_,id,_,_)
-    | Def(id,_)
+    | Def(id,_,_)
     | Goal(_,id,_)
     | Predicate(_,id,_,_)
     | Function(_,id,_,_,_)
@@ -1478,7 +1475,7 @@ let get_why_id d =
 let iter_why_decl f d =
   match d with
     | Param(_,_,t) -> iter_why_type f t
-    | Def(_id,t) -> iter_expr f t
+    | Def(_id,_,t) -> iter_expr f t
     | Logic(_,_id,args,t) ->
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_logic_type f t
@@ -1616,12 +1613,13 @@ let fprintf_why_decl form d =
 	fprintf form "@[<hov 1>%s %s :@ %a@]@.@." (str_of_goal_kind k)
           id.name
 	  fprintf_assertion p
-    | Def(id,e) when !why3syntax ->
-        fprintf form "@[<hov 1>let %s %a=@ %a@]@.@."
+    | Def(id,diverges,e) when !why3syntax ->
+        fprintf form "@[<hov 1>let %s%s %a=@ %a@]@.@."
           (why3id id.name)
+          (if diverges then " \"W:diverges:N\"" else "")
           (why3loc ~prog:false) id.name
           fprintf_expr e
-    | Def(id,e) ->
+    | Def(id,_,e) ->
         fprintf form "@[<hov 1>let %s =@ %a@]@.@." (why3id_if id.name)
           fprintf_expr e
     | Predicate (b, id, args, p) when !why3syntax ->

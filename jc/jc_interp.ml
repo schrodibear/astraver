@@ -3252,7 +3252,7 @@ let rec finalize e =
 (*
     | Label (l, e) -> Label(l,finalize e)
 *)
-    | Fun (_, _, _, _, _, _) -> assert false
+    | Fun (_, _, _, _, _) -> assert false
     | Try (e1, exc, arg, e2) ->
         {e with expr_node = Try(finalize e1, exc, arg, finalize e2)}
     | Raise (id, Some e1) ->
@@ -3934,10 +3934,10 @@ let tr_fun f funpos spec body acc =
 		if Jc_options.verify_invariants_only then acc else
                   Def(
                     id_no_loc newid,
+                    false, (* we require termination proofs *)
                     mk_expr (Fun(
                       params,
                       internal_requires,
-                      false, (* we require termination proofs *)
                       safety_body,
                       internal_safety_post,
                       excep_posts_for_others None excep_behaviors)))
@@ -3964,10 +3964,10 @@ let tr_fun f funpos spec body acc =
                      funpos;
                    Def(
                      id_no_loc newid,
+                     true, (* we do not require termination *)
                      mk_expr (Fun(
 		       params,
 		       assume_in_precondition b internal_requires,
-                       true, (* we do not require termination *)
 		       normal_body,
 		       internal_post,
 		       excep_posts_for_others None excep_behaviors)))
@@ -3992,10 +3992,10 @@ let tr_fun f funpos spec body acc =
                           ~beh:("Behavior `" ^ id ^ "'")
                           funpos;
                         Def(id_no_loc newid,
+                            true, (* we do not require termination *)
                             mk_expr (Fun(
 			      params,
 			      assume_in_precondition b internal_requires,
-                              true, (* we do not require termination *)
 			      except_body,
 			      LTrue,
 			      (exception_name exc, internal_post) ::

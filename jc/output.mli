@@ -160,8 +160,7 @@ type expr_node =
   | Raise of string * expr option
   | Try of expr * string * string option * expr
   | Fun of (string * why_type) list *
-      assertion * bool * (* "diverges" flag *)
-      expr * assertion * ((string * assertion) list)
+      assertion * expr * assertion * ((string * assertion) list)
   | Triple of opaque *
       assertion * expr * assertion * ((string * assertion) list)
   | Assert of assert_kind * assertion * expr
@@ -235,7 +234,8 @@ type goal_kind = KAxiom | KLemma | KGoal
 
 type why_decl =
   | Param of bool * why_id * why_type         (*r parameter in why *)
-  | Def of why_id * expr               (*r global let in why *)
+  | Def of why_id * bool *     (* "diverges" flag *)
+            expr               (*r global let in why *)
   | Logic of bool * why_id * (string * logic_type) list * logic_type    (*r logic decl in why *)
   | Predicate of bool * why_id * (string * logic_type) list * assertion
   | Inductive of bool * why_id * (string * logic_type) list *
