@@ -629,7 +629,7 @@ let specialize_memset file =
 class kzalloc_expanding_visitor = object
   inherit frama_c_inplace
 
-  method vinst = function
+  method! vinst = function
     | Call ((Some lv as lv_opt), { enode = Lval (Var fv, NoOffset); eloc }, ([size; _] as args), loc)
       when is_kzalloc_function fv ->
         let get_function name =
@@ -1210,12 +1210,12 @@ object
   inherit frama_c_inplace
 
   method! vtype t =
-    match unrollType t with
+    match unrollTypeDeep t with
       | TPtr (TFun _, _) | TArray (TFun _, _, _, _) -> ChangeTo voidConstPtrType
       | _ -> DoChildren
 
   method! vlogic_type = function
-    | Ctype t -> begin match unrollType t with
+    | Ctype t -> begin match unrollTypeDeep t with
         | TFun _ | TPtr (TFun _, _) | TArray (TFun _, _, _, _) -> ChangeTo (Ctype voidConstPtrType)
         | _ -> DoChildren
       end

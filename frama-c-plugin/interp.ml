@@ -2504,8 +2504,8 @@ let global vardefs g =
             | TEnum _ -> false
             | TArray _ -> assert false (* Removed by translation *)
             | TFun _ ->
-                unsupported "Function pointer type %a not allowed"
-                  Printer.pp_typ ty
+                unsupported "Function pointer type %a not allowed in structure %s"
+                  Printer.pp_typ ty (compFullName compinfo)
             | TNamed _ -> assert false
             | TBuiltin_va_list _ -> assert false (* not supported *)
         in
