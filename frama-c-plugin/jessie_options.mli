@@ -29,7 +29,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Plugin
 include Plugin.S
 
 module ProjectName: Parameter_sig.String

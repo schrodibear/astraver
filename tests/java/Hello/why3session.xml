@@ -4,7 +4,7 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
@@ -106,7 +106,7 @@
    </goal>
    <goal
     name="WP_parameter cons_FilterOutputStream_OutputStream_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/io/FilterOutputStream.java"
+    locfile="../../../lib/java_api/java/io/FilterOutputStream.java"
     loclnum="43" loccnumb="11" loccnume="29"
     expl="VC for cons_FilterOutputStream_OutputStream_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -130,7 +130,7 @@
    </goal>
    <goal
     name="WP_parameter cons_FilterOutputStream_OutputStream_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/io/FilterOutputStream.java"
+    locfile="../../../lib/java_api/java/io/FilterOutputStream.java"
     loclnum="43" loccnumb="11" loccnume="29"
     expl="VC for cons_FilterOutputStream_OutputStream_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -290,7 +290,7 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_boolean_String_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="113" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_boolean_String_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -314,7 +314,7 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_boolean_String_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="113" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_boolean_String_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -336,7 +336,7 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_boolean_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="92" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_boolean_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -360,7 +360,7 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_boolean_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="92" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_boolean_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -382,7 +382,7 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="55" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -406,7 +406,7 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="55" loccnumb="11" loccnume="22"
     expl="VC for cons_PrintStream_OutputStream_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -428,7 +428,7 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_boolean_OutputStream_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="67" loccnumb="12" loccnume="23"
     expl="VC for cons_PrintStream_boolean_OutputStream_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -452,7 +452,7 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_boolean_OutputStream_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="../../../lib/java_api/java/io/PrintStream.java"
     loclnum="67" loccnumb="12" loccnume="23"
     expl="VC for cons_PrintStream_boolean_OutputStream_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -474,7 +474,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_StringBuffer_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="403" loccnumb="11" loccnume="17"
     expl="VC for cons_String_StringBuffer_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -498,7 +498,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_StringBuffer_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="403" loccnumb="11" loccnume="17"
     expl="VC for cons_String_StringBuffer_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -520,7 +520,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_String_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="142" loccnumb="11" loccnume="17"
     expl="VC for cons_String_String_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -544,7 +544,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_String_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="142" loccnumb="11" loccnume="17"
     expl="VC for cons_String_String_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -566,7 +566,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_String_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="345" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_String_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -590,7 +590,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_String_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="345" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_String_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -612,7 +612,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="391" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -636,7 +636,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="275" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -660,7 +660,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_String_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="316" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_String_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -684,7 +684,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_String_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="316" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_String_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -706,7 +706,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="371" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -730,7 +730,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_int_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="234" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_int_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -754,7 +754,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_int_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="234" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_int_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -776,7 +776,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="371" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_int_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -798,7 +798,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="275" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_int_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -820,7 +820,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="391" loccnumb="11" loccnume="17"
     expl="VC for cons_String_byteA_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -842,7 +842,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_charA_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="167" loccnumb="11" loccnume="17"
     expl="VC for cons_String_charA_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -866,7 +866,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_charA_int_int_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="189" loccnumb="11" loccnume="17"
     expl="VC for cons_String_charA_int_int_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -890,7 +890,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_charA_int_int_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="189" loccnumb="11" loccnume="17"
     expl="VC for cons_String_charA_int_int_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -912,7 +912,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_charA_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="167" loccnumb="11" loccnume="17"
     expl="VC for cons_String_charA_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -934,7 +934,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="129" loccnumb="11" loccnume="17"
     expl="VC for cons_String_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -958,7 +958,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_int_int_charA_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="413" loccnumb="4" loccnume="10"
     expl="VC for cons_String_int_int_charA_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -982,7 +982,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_int_int_charA_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="413" loccnumb="4" loccnume="10"
     expl="VC for cons_String_int_int_charA_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -1004,7 +1004,7 @@
    </goal>
    <goal
     name="WP_parameter cons_String_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="../../../lib/java_api/java/lang/String.java"
     loclnum="129" loccnumb="11" loccnume="17"
     expl="VC for cons_String_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -1026,7 +1026,7 @@
    </goal>
    <goal
     name="WP_parameter cons_System_ensures_default"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/System.java"
+    locfile="../../../lib/java_api/java/lang/System.java"
     loclnum="44" loccnumb="12" loccnume="18"
     expl="VC for cons_System_ensures_default"
     sum="b13a250bd3387d23cb8b07a7133b393d"
@@ -1050,7 +1050,7 @@
    </goal>
    <goal
     name="WP_parameter cons_System_safety"
-    locfile="../../../../../../usr/local/lib/why/java_api/java/lang/System.java"
+    locfile="../../../lib/java_api/java/lang/System.java"
     loclnum="44" loccnumb="12" loccnume="18"
     expl="VC for cons_System_safety"
     sum="b13a250bd3387d23cb8b07a7133b393d"

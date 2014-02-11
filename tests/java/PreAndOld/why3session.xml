@@ -4,11 +4,11 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -39,6 +39,8 @@
     proved="true"
     expanded="true"
     shape="ainfix =V5afV1V2Iainfix =V5ainfix +V1V2FIainfix =V4c12FIavalid_struct_PreAndOldV0c0c0V3FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method g, default behavior"/>
     <label
@@ -115,6 +117,8 @@
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class PreAndOld, default behavior"/>
     <label

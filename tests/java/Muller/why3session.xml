@@ -4,11 +4,11 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Coq"
@@ -168,7 +168,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.59"/>
+     <result status="valid" time="1.16"/>
     </proof>
     <proof
      prover="3"
@@ -181,7 +181,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Muller_ensures_default"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Muller_ensures_default"
     sum="85374ba29e9cc9b202d0b4de97d41e89"
@@ -221,7 +221,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Muller_safety"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Muller_safety"
     sum="85374ba29e9cc9b202d0b4de97d41e89"

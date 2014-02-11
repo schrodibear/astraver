@@ -4,7 +4,7 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="Gappa"
@@ -35,6 +35,8 @@
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -avalueaselectV9ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV9ashiftV7c1V8Aainfix =aselectV9ashiftV7c0V6Aanot_assignsV5V2V9apset_rangeapset_singletonV7c0c1FIaadd_postaNearestTiesToEvenaselectV1ashiftabc1aselectV0ashiftacc1V8FLaaIaadd_postaNearestTiesToEvenaselectV1ashiftabc0aselectV0ashiftacc0V6FIavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function test, default behavior"/>
     <label

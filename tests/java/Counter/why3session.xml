@@ -4,11 +4,11 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -39,6 +39,8 @@
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V4V1ainfix -avalueV0V2V1c1Iainfix =V4astoreV2V0ainfix +aselectV2V0c1FIavalid_struct_CounterV0c0c0V3FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method decrement, default behavior"/>
     <label
@@ -116,6 +118,8 @@
     expanded="true"
     shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FF">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Method increment, default behavior"/>
     <label
      name="expl:VC for _Counter_increment_ensures_default"/>
@@ -191,6 +195,8 @@
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Counter, default behavior"/>
     <label

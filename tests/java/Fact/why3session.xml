@@ -4,7 +4,7 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <file
   name="../Fact.mlw"
   verified="true"
@@ -31,6 +31,8 @@
     proved="true"
     expanded="true"
     shape="iaisfactV0V3Iainfix =V3V1FaisfactV4V5Aainfix &lt;=V4V0Aainfix &lt;=c0V4Iainfix =V5ainfix *V1V4FIainfix =V4ainfix +V2c1Fainfix &lt;V2V0IaisfactV2V1Aainfix &lt;=V2V0Aainfix &lt;=c0V2FAaisfactc0c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method fact, default behavior"/>
     <label
@@ -75,6 +77,8 @@
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Fact, default behavior"/>
     <label

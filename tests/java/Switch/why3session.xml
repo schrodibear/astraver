@@ -4,11 +4,11 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -39,6 +39,8 @@
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method test1, default behavior"/>
     <label
@@ -77,6 +79,8 @@
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c2Fainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c0Fainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method test1, Behavior `normal&apos;"/>
     <label
@@ -154,6 +158,8 @@
     expanded="true"
     shape="t">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Method test2, default behavior"/>
     <label
      name="expl:VC for _Switch_test2_ensures_default"/>
@@ -191,6 +197,8 @@
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V3c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c2Fainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V6c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fainfix =ainteger_of_int32V0c4Oainfix =ainteger_of_int32V0c7ainfix =ainteger_of_int32V9c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V9c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c0Fainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method test2, Behavior `normal&apos;"/>
     <label
@@ -267,6 +275,8 @@
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Switch, default behavior"/>
     <label

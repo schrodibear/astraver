@@ -4,11 +4,11 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -39,6 +39,8 @@
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method loop1, default behavior"/>
     <label
@@ -116,6 +118,8 @@
     expanded="false"
     shape="t">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Method loop2, default behavior"/>
     <label
      name="expl:VC for _Termination_loop2_ensures_default"/>
@@ -192,6 +196,8 @@
     expanded="false"
     shape="iainfix =V3c0Iainfix =V3V2Fainfix &lt;=V4c100Aainfix &lt;=c0V4Iainfix =V4ainfix -V2c1Fainfix &gt;V2c0Iainfix &lt;=V2c100Aainfix &lt;=c0V2FAainfix &lt;=c100c100Aainfix &lt;=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Method loop3, default behavior"/>
     <label
      name="expl:VC for _Termination_loop3_ensures_default"/>
@@ -267,6 +273,8 @@
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Termination, default behavior"/>
     <label

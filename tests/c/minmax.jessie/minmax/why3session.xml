@@ -4,11 +4,11 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -39,6 +39,8 @@
     proved="true"
     expanded="true"
     shape="iainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function dmax, default behavior"/>
     <label
@@ -108,6 +110,8 @@
     expanded="true"
     shape="iainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Function dmin, default behavior"/>
     <label
      name="expl:VC for dmin_ensures_default"/>
@@ -175,6 +179,8 @@
     proved="true"
     expanded="true"
     shape="iainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function fmax, default behavior"/>
     <label
@@ -244,6 +250,8 @@
     expanded="true"
     shape="iainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Function fmin, default behavior"/>
     <label
      name="expl:VC for fmin_ensures_default"/>
@@ -312,6 +320,8 @@
     expanded="true"
     shape="iainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1Fainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1F">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Function max, default behavior"/>
     <label
      name="expl:VC for max_ensures_default"/>
@@ -379,6 +389,8 @@
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0Fainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function min, default behavior"/>
     <label

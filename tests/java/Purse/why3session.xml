@@ -4,11 +4,11 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
   name="Z3"
@@ -39,6 +39,8 @@
     proved="true"
     expanded="false"
     shape="anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix +aselectV2V0V1Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method credit, default behavior"/>
     <label
@@ -116,6 +118,8 @@
     expanded="false"
     shape="ainfix =V3aselectV1V0Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FF">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Method getBalance, default behavior"/>
     <label
      name="expl:VC for _Purse_getBalance_ensures_default"/>
@@ -192,6 +196,8 @@
     expanded="false"
     shape="ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFanot_assignsV3V2V7apset_singletonV0Aainfix =aselectV7V0ainfix -aselectV2V0V1Aainfix &lt;=V1aselectV2V0Iainfix =V7astoreV2V0ainfix -aselectV2V0V1Fainfix &gt;=aselectV2V0V1Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Method withdraw, default behavior"/>
     <label
      name="expl:VC for _Purse_withdraw_ensures_default"/>
@@ -229,6 +235,8 @@
     proved="true"
     expanded="false"
     shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix &gt;V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFINainfix &gt;=aselectV2V0V1Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method withdraw, Behavior `amount_too_large&apos;"/>
     <label
@@ -306,6 +314,8 @@
     expanded="false"
     shape="t">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Constructor of class Exception, default behavior"/>
     <label
      name="expl:VC for cons_Exception_String_Throwable_ensures_default"/>
@@ -381,6 +391,8 @@
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Exception, default behavior"/>
     <label
@@ -458,6 +470,8 @@
     expanded="false"
     shape="t">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Constructor of class Exception, default behavior"/>
     <label
      name="expl:VC for cons_Exception_Throwable_ensures_default"/>
@@ -533,6 +547,8 @@
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Exception, default behavior"/>
     <label
@@ -610,6 +626,8 @@
     expanded="false"
     shape="t">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Constructor of class NoCreditException, default behavior"/>
     <label
      name="expl:VC for cons_NoCreditException_ensures_default"/>
@@ -685,6 +703,8 @@
     proved="true"
     expanded="false"
     shape="anot_assignsV2V1V4apset_singletonV0Aainfix =aselectV4V0c0Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Purse, default behavior"/>
     <label
@@ -762,6 +782,8 @@
     expanded="false"
     shape="t">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label
      name="expl:VC for cons_Throwable_String_Throwable_ensures_default"/>
@@ -837,6 +859,8 @@
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label
@@ -914,6 +938,8 @@
     expanded="false"
     shape="t">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label
      name="expl:VC for cons_Throwable_Throwable_ensures_default"/>
@@ -989,6 +1015,8 @@
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Throwable, default behavior"/>
     <label

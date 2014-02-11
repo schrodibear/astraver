@@ -4,15 +4,15 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
-  name="CVC3"
-  version="2.4.1"/>
+  name="CVC4"
+  version="1.3"/>
  <prover
   id="3"
   name="Coq"
@@ -42,7 +42,7 @@
     expl="Lemma isfib_2_1, lemma"
     sum="1d8d0f94260ecccf22ee58245ef680f4"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="aisfibc2c1">
     <label
      name="expl:Lemma isfib_2_1, lemma"/>
@@ -63,7 +63,7 @@
     expl="Lemma isfib_6_8, lemma"
     sum="1dd0ddfb8601d5883c31b2bfefedfe94"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="aisfibc6c8">
     <label
      name="expl:Lemma isfib_6_8, lemma"/>
@@ -84,7 +84,7 @@
     expl="Lemma not_isfib_2_2, lemma"
     sum="80429d8d0e9a4cfeb36ab15de18c407e"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="Naisfibc2c2">
     <label
      name="expl:Lemma not_isfib_2_2, lemma"/>
@@ -102,7 +102,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="2"
@@ -110,7 +110,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="4"
@@ -133,7 +133,7 @@
   <theory
    name="Jessie_program"
    locfile="../Fibonacci.mlw"
-   loclnum="194" loccnumb="7" loccnume="21"
+   loclnum="196" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
@@ -170,7 +170,7 @@
       expl="1. loop invariant init"
       sum="f1202572cad7d02f73244e9cf2a851c4"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="loop invariant initaisfibc0c0Aaisfibainfix +c0c1c1Aainfix &lt;=c0V0Aainfix &lt;=c0c0Iainfix &gt;=V0c0F">
       <label
        name="W:diverges:N"/>
@@ -200,7 +200,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="4"
@@ -226,7 +226,7 @@
       expl="2. loop invariant preservation"
       sum="b7abe0fb11fb219da9ea4bedebe54a9d"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="loop invariant preservationaisfibV7V5Aaisfibainfix +V7c1V6Aainfix &lt;=V7V0Aainfix &lt;=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
       <label
        name="W:diverges:N"/>
@@ -242,42 +242,10 @@
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="5.72"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.12"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.17"/>
-      </proof>
-      <proof
-       prover="5"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.11"/>
-      </proof>
       <transf
        name="split_goal_wp"
        proved="true"
-       expanded="true">
+       expanded="false">
        <goal
         name="WP_parameter _Fibonacci_Fib_ensures_default.2.1"
         locfile="../Fibonacci.java"
@@ -307,7 +275,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.05"/>
         </proof>
         <proof
          prover="2"
@@ -315,7 +283,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.06"/>
         </proof>
         <proof
          prover="4"
@@ -363,7 +331,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.05"/>
         </proof>
         <proof
          prover="2"
@@ -397,7 +365,7 @@
         expl="3."
         sum="97677109520b548e1a4b9e8b7431c699"
         proved="true"
-        expanded="true"
+        expanded="false"
         shape="aisfibainfix +V7c1V6Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
         <label
          name="W:diverges:N"/>
@@ -412,38 +380,6 @@
          obsolete="false"
          archived="false">
          <result status="valid" time="0.02"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="unknown" time="5.98"/>
-        </proof>
-        <proof
-         prover="2"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.13"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.14"/>
-        </proof>
-        <proof
-         prover="5"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.17"/>
         </proof>
        </goal>
        <goal
@@ -475,7 +411,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.03"/>
+         <result status="valid" time="0.05"/>
         </proof>
         <proof
          prover="2"
@@ -483,7 +419,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.07"/>
         </proof>
         <proof
          prover="4"
@@ -511,7 +447,7 @@
       expl="3. postcondition"
       sum="4fc4a049fc570dc12a1d6de8395787da"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="postconditionaisfibV0V4Iainfix =V4V3FINainfix &lt;V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix &lt;=V1V0Aainfix &lt;=c0V1FIainfix &gt;=V0c0F">
       <label
        name="W:diverges:N"/>
@@ -533,7 +469,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="2"
@@ -597,7 +533,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="4"
@@ -618,7 +554,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_ensures_default"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fibonacci_ensures_default"
     sum="a7cd7a10ff710d373d645370486bf369"
@@ -645,7 +581,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="2"
@@ -674,7 +610,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_safety"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fibonacci_safety"
     sum="a7cd7a10ff710d373d645370486bf369"
@@ -699,7 +635,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="2"
