@@ -773,11 +773,8 @@ object(self)
     in
     let assign (z,froms) =
       let zl = zone z in
-      let froms = 
-        match froms with
-            FromAny -> froms
-          | From l -> From (List.flatten (List.map zone l))
-      in
+      (* The \from clause isn't handled by Jessie translation anyway (there is no such clause in Jessie language) *)
+      (* But the full expansion can cause the plugin to hang, so we don't expand \froms *)
       List.map (fun z -> z, froms) zl
     in
     let assigns =
