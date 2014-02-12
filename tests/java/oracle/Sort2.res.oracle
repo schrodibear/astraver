@@ -111,19 +111,19 @@ Parsing OK.
 Typing OK.
 Generating JC function Sort_swap for method Sort.swap
 Generating JC function Sort_min_sort for method Sort.min_sort
-Generating JC function cons_Sort for constructor Sort
-Generating JC function Object_registerNatives for method Object.registerNatives
+Generating JC function Object_clone for method Object.clone
+Generating JC function Object_notifyAll for method Object.notifyAll
 Generating JC function Object_hashCode for method Object.hashCode
 Generating JC function Object_equals for method Object.equals
-Generating JC function Object_clone for method Object.clone
-Generating JC function Object_toString for method Object.toString
-Generating JC function Object_notify for method Object.notify
-Generating JC function Object_notifyAll for method Object.notifyAll
-Generating JC function Object_wait_long for method Object.wait
-Generating JC function Object_wait_long_int for method Object.wait
 Generating JC function Object_wait for method Object.wait
-Generating JC function Object_finalize for method Object.finalize
+Generating JC function Object_notify for method Object.notify
+Generating JC function Object_wait_long for method Object.wait
+Generating JC function cons_Sort for constructor Sort
+Generating JC function Object_toString for method Object.toString
+Generating JC function Object_wait_long_int for method Object.wait
 Generating JC function cons_Object for constructor Object
+Generating JC function Object_finalize for method Object.finalize
+Generating JC function Object_registerNatives for method Object.registerNatives
 Done.
 ========== file tests/java/Sort2.jc ==========
 # InvariantPolicy = Arguments
@@ -141,19 +141,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag Sort = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag Sort = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -235,9 +235,9 @@ axiomatic Permut {
   
 }
 
-exception Throwable of Throwable[0..]
-
 exception Exception of Exception[0..]
+
+exception Throwable of Throwable[0..]
 
 unit Sort_swap(Sort[0] this_2, intM[0..] t, integer i_2, integer j_1)
   requires (K_10 : ((K_9 : ((K_8 : Non_null_intM(t)) &&
@@ -348,42 +348,42 @@ behavior default:
    }
 }
 
-unit cons_Sort(! Sort[0] this_3){()}
-
-unit Object_registerNatives()
+Object[0..] Object_clone(Object[0] this_4)
 ;
 
-integer Object_hashCode(Object[0] this_4)
+unit Object_notifyAll(Object[0] this_5)
 ;
 
-boolean Object_equals(Object[0] this_5, Object[0..] obj)
+integer Object_hashCode(Object[0] this_6)
 ;
 
-Object[0..] Object_clone(Object[0] this_6)
+boolean Object_equals(Object[0] this_7, Object[0..] obj)
 ;
 
-String[0..] Object_toString(Object[0] this_7)
+unit Object_wait(Object[0] this_8)
 ;
 
-unit Object_notify(Object[0] this_8)
-;
-
-unit Object_notifyAll(Object[0] this_9)
+unit Object_notify(Object[0] this_9)
 ;
 
 unit Object_wait_long(Object[0] this_10, integer timeout)
 ;
 
-unit Object_wait_long_int(Object[0] this_11, integer timeout_0, integer nanos)
+unit cons_Sort(! Sort[0] this_3){()}
+
+String[0..] Object_toString(Object[0] this_11)
 ;
 
-unit Object_wait(Object[0] this_12)
+unit Object_wait_long_int(Object[0] this_12, integer timeout_0, integer nanos)
 ;
+
+unit cons_Object(! Object[0] this_14){()}
 
 unit Object_finalize(Object[0] this_13)
 ;
 
-unit cons_Object(! Object[0] this_14){()}
+unit Object_registerNatives()
+;
 
 /*
 Local Variables:
@@ -392,83 +392,18 @@ compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Sort2.jloc t
 End:
 */
 ========== file tests/java/Sort2.jloc ==========
-[K_10]
-file = "HOME/tests/java/Sort2.java"
-line = 68
-begin = 17
-end = 80
+[Permut_swap]
+name = "Lemma Permut_swap"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
 
-[K_11]
+[K_30]
 file = "HOME/tests/java/Sort2.java"
-line = 75
-begin = 8
-end = 12
-
-[K_12]
-file = "HOME/tests/java/Sort2.java"
-line = 75
-begin = 1
-end = 12
-
-[K_13]
-file = "HOME/tests/java/Sort2.java"
-line = 76
-begin = 1
-end = 11
-
-[K_14]
-file = "HOME/tests/java/Sort2.java"
-line = 74
-begin = 11
-end = 15
-
-[K_15]
-file = "HOME/tests/java/Sort2.java"
-line = 80
-begin = 42
-end = 74
-
-[K_16]
-file = "HOME/tests/java/Sort2.java"
-line = 80
-begin = 16
-end = 38
-
-[K_17]
-file = "HOME/tests/java/Sort2.java"
-line = 80
-begin = 16
-end = 74
-
-[K_18]
-file = "HOME/tests/java/Sort2.java"
-line = 79
-begin = 17
-end = 26
-
-[K_19]
-file = "HOME/tests/java/Sort2.java"
-line = 88
-begin = 9
-end = 41
-
-[K_20]
-file = "HOME/tests/java/Sort2.java"
-line = 86
-begin = 8
-end = 90
-
-[K_21]
-file = "HOME/tests/java/Sort2.java"
-line = 85
-begin = 30
-end = 43
-
-[K_22]
-file = "HOME/tests/java/Sort2.java"
-line = 85
-begin = 20
-end = 26
+line = 93
+begin = 38
+end = 51
 
 [K_23]
 file = "HOME/tests/java/Sort2.java"
@@ -476,17 +411,49 @@ line = 85
 begin = 20
 end = 43
 
-[K_24]
-file = "HOME/tests/java/Sort2.java"
-line = 85
-begin = 20
-end = 139
+[Permut_refl]
+name = "Lemma Permut_refl"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
 
-[K_1]
+[K_33]
 file = "HOME/tests/java/Sort2.java"
-line = 71
+line = 93
+begin = 24
+end = 29
+
+[K_49]
+file = "HOME/tests/java/Sort2.java"
+line = 90
+begin = 11
+end = 23
+
+[K_17]
+file = "HOME/tests/java/Sort2.java"
+line = 80
 begin = 16
-end = 37
+end = 74
+
+[Object_wait_long]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[K_11]
+file = "HOME/tests/java/Sort2.java"
+line = 75
+begin = 8
+end = 12
+
+[K_38]
+file = "HOME/tests/java/Sort2.java"
+line = 100
+begin = 20
+end = 24
 
 [K_25]
 file = "HOME/tests/java/Sort2.java"
@@ -494,84 +461,37 @@ line = 85
 begin = 20
 end = 184
 
-[K_2]
+[K_13]
 file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 37
-end = 49
+line = 76
+begin = 1
+end = 11
 
-[K_26]
-file = "HOME/tests/java/Sort2.java"
-line = 92
-begin = 10
-end = 14
-
-[K_3]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 32
-end = 38
-
-[Object_equals]
-name = "Method equals"
+[Object_finalize]
+name = "Method finalize"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
+line = 481
 begin = 19
-end = 25
-
-[K_27]
-file = "HOME/tests/java/Sort2.java"
-line = 96
-begin = 9
-end = 41
-
-[K_4]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 32
-end = 49
-
-[K_28]
-file = "HOME/tests/java/Sort2.java"
-line = 95
-begin = 12
-end = 56
-
-[K_5]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 16
-end = 28
-
-[K_29]
-file = "HOME/tests/java/Sort2.java"
-line = 94
-begin = 9
-end = 20
-
-[K_6]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 11
-end = 17
-
-[K_7]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 11
-end = 28
-
-[K_8]
-file = "HOME/tests/java/Sort2.java"
-line = 68
-begin = 17
-end = 26
+end = 27
 
 [K_9]
 file = "HOME/tests/java/Sort2.java"
 line = 68
 begin = 17
 end = 59
+
+[Object_wait]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[K_44]
+file = "HOME/tests/java/Sort2.java"
+line = 98
+begin = 12
+end = 15
 
 [Object_notify]
 name = "Method notify"
@@ -580,6 +500,19 @@ line = 243
 begin = 29
 end = 35
 
+[Object_clone]
+name = "Method clone"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
+
+[K_28]
+file = "HOME/tests/java/Sort2.java"
+line = 95
+begin = 12
+end = 56
+
 [cons_Object]
 name = "Constructor of class Object"
 file = "HOME/"
@@ -587,11 +520,122 @@ line = 0
 begin = -1
 end = -1
 
-[K_30]
+[K_1]
+file = "HOME/tests/java/Sort2.java"
+line = 71
+begin = 16
+end = 37
+
+[K_15]
+file = "HOME/tests/java/Sort2.java"
+line = 80
+begin = 42
+end = 74
+
+[K_4]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 32
+end = 49
+
+[K_12]
+file = "HOME/tests/java/Sort2.java"
+line = 75
+begin = 1
+end = 12
+
+[Object_wait_long_int]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[K_34]
 file = "HOME/tests/java/Sort2.java"
 line = 93
-begin = 38
+begin = 24
 end = 51
+
+[Object_registerNatives]
+name = "Method registerNatives"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[K_20]
+file = "HOME/tests/java/Sort2.java"
+line = 86
+begin = 8
+end = 90
+
+[K_2]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 37
+end = 49
+
+[K_41]
+file = "HOME/tests/java/Sort2.java"
+line = 98
+begin = 31
+end = 34
+
+[K_47]
+file = "HOME/tests/java/Sort2.java"
+line = 90
+begin = 13
+end = 21
+
+[K_29]
+file = "HOME/tests/java/Sort2.java"
+line = 94
+begin = 9
+end = 20
+
+[K_10]
+file = "HOME/tests/java/Sort2.java"
+line = 68
+begin = 17
+end = 80
+
+[K_35]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 24
+end = 75
+
+[K_6]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 11
+end = 17
+
+[K_8]
+file = "HOME/tests/java/Sort2.java"
+line = 68
+begin = 17
+end = 26
+
+[K_48]
+file = "HOME/tests/java/Sort2.java"
+line = 90
+begin = 13
+end = 23
+
+[Permut_trans]
+name = "Lemma Permut_trans"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[K_3]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 32
+end = 38
 
 [K_31]
 file = "HOME/tests/java/Sort2.java"
@@ -605,170 +649,11 @@ line = 93
 begin = 33
 end = 51
 
-[K_33]
+[K_27]
 file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 24
-end = 29
-
-[K_34]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 24
-end = 51
-
-[K_35]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 24
-end = 75
-
-[K_36]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 24
-end = 136
-
-[K_37]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 24
-end = 181
-
-[K_38]
-file = "HOME/tests/java/Sort2.java"
-line = 100
-begin = 20
-end = 24
-
-[Permut_sym]
-name = "Lemma Permut_sym"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[Object_wait_long_int]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[K_39]
-file = "HOME/tests/java/Sort2.java"
-line = 99
-begin = 6
-end = 10
-
-[Object_wait_long]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[Object_hashCode]
-name = "Method hashCode"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
-
-[Object_notifyAll]
-name = "Method notifyAll"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[K_40]
-file = "HOME/tests/java/Sort2.java"
-line = 99
-begin = 6
-end = 15
-
-[K_41]
-file = "HOME/tests/java/Sort2.java"
-line = 98
-begin = 31
-end = 34
-
-[K_42]
-file = "HOME/tests/java/Sort2.java"
-line = 98
-begin = 21
-end = 29
-
-[K_43]
-file = "HOME/tests/java/Sort2.java"
-line = 98
-begin = 17
-end = 29
-
-[K_44]
-file = "HOME/tests/java/Sort2.java"
-line = 98
-begin = 12
-end = 15
-
-[Permut_swap]
-name = "Lemma Permut_swap"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[Object_toString]
-name = "Method toString"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
-
-[K_45]
-file = "HOME/tests/java/Sort2.java"
-line = 103
-begin = 5
-end = 17
-
-[Permut_trans]
-name = "Lemma Permut_trans"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[K_46]
-file = "HOME/tests/java/Sort2.java"
-line = 90
-begin = 25
-end = 28
-
-[K_47]
-file = "HOME/tests/java/Sort2.java"
-line = 90
-begin = 13
-end = 21
-
-[K_48]
-file = "HOME/tests/java/Sort2.java"
-line = 90
-begin = 13
-end = 23
-
-[K_49]
-file = "HOME/tests/java/Sort2.java"
-line = 90
-begin = 11
-end = 23
-
-[Sort_swap]
-name = "Method swap"
-file = "HOME/tests/java/Sort2.java"
-line = 73
+line = 96
 begin = 9
-end = 13
+end = 41
 
 [cons_Sort]
 name = "Constructor of class Sort"
@@ -777,33 +662,79 @@ line = 0
 begin = -1
 end = -1
 
-[Object_registerNatives]
-name = "Method registerNatives"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+[K_46]
+file = "HOME/tests/java/Sort2.java"
+line = 90
+begin = 25
+end = 28
 
-[Object_clone]
-name = "Method clone"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+[K_21]
+file = "HOME/tests/java/Sort2.java"
+line = 85
+begin = 30
+end = 43
 
-[Object_wait]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
+[K_42]
+file = "HOME/tests/java/Sort2.java"
+line = 98
+begin = 21
+end = 29
 
-[Permut_refl]
-name = "Lemma Permut_refl"
+[K_24]
+file = "HOME/tests/java/Sort2.java"
+line = 85
+begin = 20
+end = 139
+
+[K_14]
+file = "HOME/tests/java/Sort2.java"
+line = 74
+begin = 11
+end = 15
+
+[K_39]
+file = "HOME/tests/java/Sort2.java"
+line = 99
+begin = 6
+end = 10
+
+[K_36]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 24
+end = 136
+
+[Permut_sym]
+name = "Lemma Permut_sym"
 file = "HOME/"
 line = 0
 begin = 0
 end = 0
+
+[Object_notifyAll]
+name = "Method notifyAll"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
+
+[K_37]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 24
+end = 181
+
+[K_19]
+file = "HOME/tests/java/Sort2.java"
+line = 88
+begin = 9
+end = 41
+
+[K_5]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 16
+end = 28
 
 [Sort_min_sort]
 name = "Method min_sort"
@@ -812,12 +743,81 @@ line = 82
 begin = 9
 end = 17
 
-[Object_finalize]
-name = "Method finalize"
+[K_18]
+file = "HOME/tests/java/Sort2.java"
+line = 79
+begin = 17
+end = 26
+
+[Object_equals]
+name = "Method equals"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
+line = 122
 begin = 19
-end = 27
+end = 25
+
+[Sort_swap]
+name = "Method swap"
+file = "HOME/tests/java/Sort2.java"
+line = 73
+begin = 9
+end = 13
+
+[K_7]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 11
+end = 28
+
+[K_40]
+file = "HOME/tests/java/Sort2.java"
+line = 99
+begin = 6
+end = 15
+
+[Object_hashCode]
+name = "Method hashCode"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
+
+[K_26]
+file = "HOME/tests/java/Sort2.java"
+line = 92
+begin = 10
+end = 14
+
+[Object_toString]
+name = "Method toString"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
+
+[K_22]
+file = "HOME/tests/java/Sort2.java"
+line = 85
+begin = 20
+end = 26
+
+[K_45]
+file = "HOME/tests/java/Sort2.java"
+line = 103
+begin = 5
+end = 17
+
+[K_16]
+file = "HOME/tests/java/Sort2.java"
+line = 80
+begin = 16
+end = 38
+
+[K_43]
+file = "HOME/tests/java/Sort2.java"
+line = 98
+begin = 17
+end = 29
 
 ========== jessie execution ==========
 Generating Why function Sort_swap
@@ -834,10 +834,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Sort2.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Sort2.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Sort2.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Sort2.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -982,13 +983,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: Sort2.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: Sort2.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: Sort2.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include Sort2.depend
 
@@ -999,989 +1000,11 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/Sort2.loc ==========
-[JC_103]
-file = "HOME/tests/java/Sort2.java"
-line = 85
-begin = 20
-end = 26
-
-[JC_104]
-file = "HOME/tests/java/Sort2.java"
-line = 85
-begin = 30
-end = 43
-
-[JC_105]
-file = "HOME/tests/java/Sort2.java"
-line = 86
-begin = 8
-end = 90
-
-[JC_106]
-file = "HOME/tests/java/Sort2.java"
-line = 88
-begin = 9
-end = 41
-
-[JC_40]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 11
-end = 17
-
-[JC_107]
-file = "HOME/tests/java/Sort2.java"
-line = 85
-begin = 20
-end = 184
-
-[JC_41]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 16
-end = 28
-
-[JC_108]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_42]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 32
-end = 38
-
-[JC_220]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_109]
-file = "HOME/tests/java/Sort2.jc"
-line = 153
-begin = 15
-end = 4048
-
-[JC_43]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 37
-end = 49
-
-[JC_221]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Sort_swap_safety]
-name = "Method swap"
-behavior = "Safety"
-file = "HOME/tests/java/Sort2.java"
-line = 73
-begin = 9
-end = 13
-
-[JC_44]
-file = "HOME/tests/java/Sort2.java"
-line = 68
-begin = 17
-end = 80
-
-[JC_222]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_45]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_223]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_46]
-file = "HOME/tests/java/Sort2.java"
-line = 68
-begin = 17
-end = 26
-
-[JC_224]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_47]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 11
-end = 17
-
-[JC_225]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_48]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 16
-end = 28
-
-[JC_226]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_49]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 32
-end = 38
-
-[JC_227]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_110]
-file = "HOME/tests/java/Sort2.jc"
-line = 153
-begin = 15
-end = 4048
-
-[JC_111]
-kind = UserCall
-file = "HOME/tests/java/Sort2.java"
-line = 90
-begin = 13
-end = 21
-
-[JC_112]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 24
-end = 29
-
-[JC_113]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 33
-end = 40
-
-[JC_114]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 38
-end = 51
-
-[JC_115]
-file = "HOME/tests/java/Sort2.java"
-line = 94
-begin = 9
-end = 20
-
-[JC_116]
-file = "HOME/tests/java/Sort2.java"
-line = 95
-begin = 12
-end = 56
-
-[JC_50]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 37
-end = 49
-
-[JC_117]
-file = "HOME/tests/java/Sort2.java"
-line = 96
-begin = 9
-end = 41
-
-[JC_51]
-file = "HOME/tests/java/Sort2.java"
-line = 68
-begin = 17
-end = 80
-
-[JC_118]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 24
-end = 181
-
-[JC_52]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_119]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_53]
-file = "HOME/tests/java/Sort2.java"
-line = 71
-begin = 16
-end = 37
-
-[JC_54]
-file = "HOME/tests/java/Sort2.java"
-line = 73
-begin = 9
-end = 13
-
-[JC_55]
-file = "HOME/tests/java/Sort2.jc"
-line = 120
-begin = 9
-end = 16
-
-[JC_56]
-file = "HOME/tests/java/Sort2.java"
-line = 71
-begin = 16
-end = 37
-
-[JC_57]
-file = "HOME/tests/java/Sort2.java"
-line = 73
-begin = 9
-end = 13
-
-[JC_58]
-file = "HOME/tests/java/Sort2.jc"
-line = 120
-begin = 9
-end = 16
-
-[JC_59]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_120]
-file = "HOME/tests/java/Sort2.jc"
-line = 180
-begin = 21
-end = 2293
-
-[JC_121]
-file = "HOME/tests/java/Sort2.jc"
-line = 180
-begin = 21
-end = 2293
-
-[JC_122]
-kind = UserCall
-file = "HOME/tests/java/Sort2.java"
-line = 98
-begin = 21
-end = 29
-
-[JC_123]
-kind = UserCall
-file = "HOME/tests/java/Sort2.jc"
-line = 214
-begin = 29
-end = 60
-
-[JC_124]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_125]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Permut_trans]
-name = "Lemma Permut_trans"
-behavior = "axiom"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[JC_126]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_60]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_127]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_61]
-kind = PointerDeref
-file = "HOME/tests/java/Sort2.java"
-line = 74
-begin = 11
-end = 15
-
-[JC_128]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_62]
-kind = PointerDeref
-file = "HOME/tests/java/Sort2.java"
-line = 75
-begin = 8
-end = 12
-
-[JC_129]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_63]
-kind = PointerDeref
-file = "HOME/tests/java/Sort2.jc"
-line = 128
-begin = 18
-end = 58
-
-[JC_64]
-kind = PointerDeref
-file = "HOME/tests/java/Sort2.jc"
-line = 129
-begin = 18
-end = 38
-
-[JC_65]
-file = "HOME/tests/java/Sort2.java"
-line = 79
-begin = 17
-end = 26
-
-[JC_66]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_67]
-file = "HOME/tests/java/Sort2.java"
-line = 79
-begin = 17
-end = 26
-
-[JC_68]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_69]
-file = "HOME/tests/java/Sort2.java"
-line = 80
-begin = 16
-end = 38
-
-[JC_130]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_131]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_132]
+[JC_198]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[Sort_min_sort_safety]
-name = "Method min_sort"
-behavior = "Safety"
-file = "HOME/tests/java/Sort2.java"
-line = 82
-begin = 9
-end = 17
-
-[JC_133]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_134]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[JC_135]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_136]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_70]
-file = "HOME/tests/java/Sort2.java"
-line = 80
-begin = 42
-end = 74
-
-[JC_137]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_71]
-file = "HOME/tests/java/Sort2.java"
-line = 80
-begin = 16
-end = 74
-
-[JC_138]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_72]
-file = "HOME/tests/java/Sort2.java"
-line = 80
-begin = 16
-end = 38
-
-[JC_139]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_73]
-file = "HOME/tests/java/Sort2.java"
-line = 80
-begin = 42
-end = 74
-
-[JC_74]
-file = "HOME/tests/java/Sort2.java"
-line = 80
-begin = 16
-end = 74
-
-[JC_75]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_76]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_77]
-file = "HOME/tests/java/Sort2.java"
-line = 85
-begin = 20
-end = 26
-
-[JC_78]
-file = "HOME/tests/java/Sort2.java"
-line = 85
-begin = 30
-end = 43
-
-[JC_79]
-file = "HOME/tests/java/Sort2.java"
-line = 86
-begin = 8
-end = 90
-
-[JC_140]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
+line = 386
 begin = 22
-end = 30
-
-[JC_141]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_142]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
-
-[JC_143]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_144]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_145]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_Object_safety]
-name = "Constructor of class Object"
-behavior = "Safety"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_146]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_80]
-file = "HOME/tests/java/Sort2.java"
-line = 88
-begin = 9
-end = 41
-
-[JC_147]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_81]
-file = "HOME/tests/java/Sort2.java"
-line = 85
-begin = 20
-end = 184
-
-[JC_148]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
-
-[JC_82]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_149]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_83]
-file = "HOME/tests/java/Sort2.jc"
-line = 153
-begin = 15
-end = 4048
-
-[JC_84]
-file = "HOME/tests/java/Sort2.jc"
-line = 153
-begin = 15
-end = 4048
-
-[JC_85]
-kind = UserCall
-file = "HOME/tests/java/Sort2.java"
-line = 90
-begin = 13
-end = 21
-
-[JC_86]
-kind = IndexBounds
-file = "HOME/tests/java/Sort2.java"
-line = 90
-begin = 13
-end = 21
-
-[JC_87]
-kind = PointerDeref
-file = "HOME/tests/java/Sort2.java"
-line = 92
-begin = 10
-end = 14
-
-[JC_88]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 24
-end = 29
-
-[JC_1]
-file = "HOME/tests/java/Sort2.jc"
-line = 13
-begin = 12
-end = 22
-
-[JC_89]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 33
-end = 40
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_3]
-file = "HOME/tests/java/Sort2.jc"
-line = 13
-begin = 12
-end = 22
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_150]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_151]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_152]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/java/Sort2.jc"
-line = 42
-begin = 8
-end = 21
-
-[JC_153]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_154]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Permut_sym]
-name = "Lemma Permut_sym"
-behavior = "axiom"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[JC_155]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_156]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
-
-[JC_90]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 38
-end = 51
-
-[JC_157]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_91]
-file = "HOME/tests/java/Sort2.java"
-line = 94
-begin = 9
-end = 20
-
-[Permut_refl]
-name = "Lemma Permut_refl"
-behavior = "axiom"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[JC_158]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
-
-[JC_92]
-file = "HOME/tests/java/Sort2.java"
-line = 95
-begin = 12
-end = 56
-
-[JC_159]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_93]
-file = "HOME/tests/java/Sort2.java"
-line = 96
-begin = 9
-end = 41
-
-[JC_94]
-file = "HOME/tests/java/Sort2.java"
-line = 93
-begin = 24
-end = 181
-
-[JC_95]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_96]
-file = "HOME/tests/java/Sort2.jc"
-line = 180
-begin = 21
-end = 2293
-
-[JC_97]
-file = "HOME/tests/java/Sort2.jc"
-line = 180
-begin = 21
-end = 2293
-
-[Permut_swap]
-name = "Lemma Permut_swap"
-behavior = "axiom"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[JC_98]
-kind = UserCall
-file = "HOME/tests/java/Sort2.java"
-line = 98
-begin = 21
-end = 29
-
-[JC_99]
-kind = IndexBounds
-file = "HOME/tests/java/Sort2.java"
-line = 98
-begin = 21
-end = 29
-
-[JC_160]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_161]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_Sort_ensures_default]
-name = "Constructor of class Sort"
-behavior = "default behavior"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_162]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_163]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_164]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
 end = 26
-
-[JC_165]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_166]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
-
-[JC_167]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_168]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_169]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Sort_swap_ensures_default]
-name = "Method swap"
-behavior = "default behavior"
-file = "HOME/tests/java/Sort2.java"
-line = 73
-begin = 9
-end = 13
-
-[JC_170]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_171]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_172]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[JC_173]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_174]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[JC_175]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 [JC_176]
 file = "HOME/"
@@ -1995,121 +1018,158 @@ line = 0
 begin = -1
 end = -1
 
-[JC_178]
+[JC_94]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 24
+end = 181
+
+[JC_73]
+file = "HOME/tests/java/Sort2.java"
+line = 80
+begin = 42
+end = 74
+
+[Permut_swap]
+name = "Lemma Permut_swap"
+behavior = "axiom"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[JC_221]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_179]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_11]
-file = "HOME/tests/java/Sort2.jc"
-line = 42
-begin = 8
-end = 21
-
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_13]
-file = "HOME/tests/java/Sort2.jc"
-line = 45
-begin = 11
-end = 66
-
-[JC_14]
-file = "HOME/tests/java/Sort2.jc"
-line = 44
-begin = 10
-end = 18
-
-[JC_15]
-file = "HOME/tests/java/Sort2.jc"
-line = 45
-begin = 11
-end = 66
-
-[JC_16]
-file = "HOME/tests/java/Sort2.jc"
-line = 44
-begin = 10
-end = 18
-
-[JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_180]
+[JC_158]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
+line = 430
+begin = 22
+end = 26
+
+[JC_63]
+kind = PointerDeref
+file = "HOME/tests/java/Sort2.jc"
+line = 128
+begin = 18
+end = 58
+
+[JC_196]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[JC_80]
+file = "HOME/tests/java/Sort2.java"
+line = 88
+begin = 9
+end = 41
+
+[JC_51]
+file = "HOME/tests/java/Sort2.java"
+line = 68
+begin = 17
+end = 80
+
+[Permut_refl]
+name = "Lemma Permut_refl"
+behavior = "axiom"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[JC_71]
+file = "HOME/tests/java/Sort2.java"
+line = 80
+begin = 16
+end = 74
+
+[JC_197]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_147]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_207]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_151]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_45]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_123]
+kind = UserCall
+file = "HOME/tests/java/Sort2.jc"
+line = 214
 begin = 29
+end = 60
+
+[JC_106]
+file = "HOME/tests/java/Sort2.java"
+line = 88
+begin = 9
+end = 41
+
+[JC_143]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_113]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 33
+end = 40
+
+[JC_203]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_116]
+file = "HOME/tests/java/Sort2.java"
+line = 95
+begin = 12
+end = 56
+
+[JC_64]
+kind = PointerDeref
+file = "HOME/tests/java/Sort2.jc"
+line = 129
+begin = 18
 end = 38
 
-[JC_18]
+[JC_133]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_181]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_19]
-file = "HOME/tests/java/Sort2.jc"
-line = 48
-begin = 8
-end = 30
-
-[JC_182]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[JC_183]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_184]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_185]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_186]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_187]
+[JC_227]
 file = "HOME/"
 line = 0
 begin = -1
@@ -2117,33 +1177,9 @@ end = -1
 
 [JC_188]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[JC_189]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_21]
-file = "HOME/tests/java/Sort2.jc"
-line = 48
-begin = 8
-end = 30
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+line = 207
+begin = 18
+end = 26
 
 [cons_Object_ensures_default]
 name = "Constructor of class Object"
@@ -2153,17 +1189,37 @@ line = 0
 begin = -1
 end = -1
 
+[JC_180]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_99]
+kind = IndexBounds
+file = "HOME/tests/java/Sort2.java"
+line = 98
+begin = 21
+end = 29
+
 [JC_200]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_23]
-file = "HOME/tests/java/Sort2.jc"
-line = 51
-begin = 11
-end = 103
+[JC_85]
+kind = UserCall
+file = "HOME/tests/java/Sort2.java"
+line = 90
+begin = 13
+end = 21
+
+[JC_126]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
 
 [JC_201]
 file = "HOME/"
@@ -2171,159 +1227,7 @@ line = 0
 begin = -1
 end = -1
 
-[JC_24]
-file = "HOME/tests/java/Sort2.jc"
-line = 50
-begin = 10
-end = 18
-
-[JC_202]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_25]
-file = "HOME/tests/java/Sort2.jc"
-line = 51
-begin = 11
-end = 103
-
-[JC_203]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_26]
-file = "HOME/tests/java/Sort2.jc"
-line = 50
-begin = 10
-end = 18
-
-[Sort_min_sort_ensures_default]
-name = "Method min_sort"
-behavior = "default behavior"
-file = "HOME/tests/java/Sort2.java"
-line = 82
-begin = 9
-end = 17
-
-[JC_204]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
-
-[JC_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_205]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_190]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_206]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
-
-[JC_191]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_29]
-file = "HOME/tests/java/Sort2.jc"
-line = 55
-begin = 8
-end = 23
-
-[JC_207]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_192]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_208]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_193]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_209]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_194]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_195]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_196]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[JC_197]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_198]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[JC_199]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_30]
+[JC_170]
 file = "HOME/"
 line = 0
 begin = -1
@@ -2335,35 +1239,178 @@ line = 55
 begin = 8
 end = 23
 
-[JC_32]
+[JC_17]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_210]
+[JC_194]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_33]
+[JC_122]
+kind = UserCall
+file = "HOME/tests/java/Sort2.java"
+line = 98
+begin = 21
+end = 29
+
+[Sort_min_sort_safety]
+name = "Method min_sort"
+behavior = "Safety"
+file = "HOME/tests/java/Sort2.java"
+line = 82
+begin = 9
+end = 17
+
+[JC_205]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_211]
+[JC_81]
+file = "HOME/tests/java/Sort2.java"
+line = 85
+begin = 20
+end = 184
+
+[JC_55]
+file = "HOME/tests/java/Sort2.jc"
+line = 120
+begin = 9
+end = 16
+
+[JC_138]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_34]
+[JC_134]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
+
+[JC_148]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
+
+[JC_137]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[Sort_min_sort_ensures_default]
+name = "Method min_sort"
+behavior = "default behavior"
+file = "HOME/tests/java/Sort2.java"
+line = 82
+begin = 9
+end = 17
+
+[JC_48]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 16
+end = 28
+
+[JC_23]
+file = "HOME/tests/java/Sort2.jc"
+line = 51
+begin = 11
+end = 103
+
+[JC_22]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_172]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[JC_121]
+file = "HOME/tests/java/Sort2.jc"
+line = 180
+begin = 21
+end = 2293
+
+[JC_5]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_125]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_67]
+file = "HOME/tests/java/Sort2.java"
+line = 79
+begin = 17
+end = 26
+
+[JC_9]
+file = "HOME/tests/java/Sort2.jc"
+line = 42
+begin = 8
+end = 21
+
+[JC_75]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_24]
+file = "HOME/tests/java/Sort2.jc"
+line = 50
+begin = 10
+end = 18
+
+[JC_193]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_25]
+file = "HOME/tests/java/Sort2.jc"
+line = 51
+begin = 11
+end = 103
+
+[JC_189]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_186]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_78]
+file = "HOME/tests/java/Sort2.java"
+line = 85
+begin = 30
+end = 43
 
 [JC_212]
 file = "HOME/lib/java_api/java/lang/Object.java"
@@ -2371,17 +1418,191 @@ line = 481
 begin = 19
 end = 27
 
-[JC_35]
+[JC_175]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_213]
+[JC_41]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 16
+end = 28
+
+[JC_224]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_74]
+file = "HOME/tests/java/Sort2.java"
+line = 80
+begin = 16
+end = 74
+
+[JC_195]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_47]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 11
+end = 17
+
+[JC_52]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_26]
+file = "HOME/tests/java/Sort2.jc"
+line = 50
+begin = 10
+end = 18
+
+[Sort_swap_safety]
+name = "Method swap"
+behavior = "Safety"
+file = "HOME/tests/java/Sort2.java"
+line = 73
+begin = 9
+end = 13
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Sort_ensures_default]
+name = "Constructor of class Sort"
+behavior = "default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_154]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+file = "HOME/tests/java/Sort2.java"
+line = 73
+begin = 9
+end = 13
+
+[JC_208]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_79]
+file = "HOME/tests/java/Sort2.java"
+line = 86
+begin = 8
+end = 90
+
+[JC_13]
+file = "HOME/tests/java/Sort2.jc"
+line = 45
+begin = 11
+end = 66
+
+[JC_130]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_82]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_174]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[JC_163]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_153]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_222]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[JC_87]
+kind = PointerDeref
+file = "HOME/tests/java/Sort2.java"
+line = 92
+begin = 10
+end = 14
+
+[JC_11]
+file = "HOME/tests/java/Sort2.jc"
+line = 42
+begin = 8
+end = 21
+
+[JC_185]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_184]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_167]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_98]
+kind = UserCall
+file = "HOME/tests/java/Sort2.java"
+line = 98
+begin = 21
+end = 29
+
+[JC_70]
+file = "HOME/tests/java/Sort2.java"
+line = 80
+begin = 42
+end = 74
+
+[JC_15]
+file = "HOME/tests/java/Sort2.jc"
+line = 45
+begin = 11
+end = 66
 
 [JC_36]
 file = "HOME/"
@@ -2389,35 +1610,29 @@ line = 0
 begin = -1
 end = -1
 
-[JC_214]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
-
-[JC_37]
-file = "HOME/tests/java/Sort2.jc"
-line = 57
-begin = 11
-end = 65
-
-[JC_215]
+[JC_182]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_38]
-file = "HOME/tests/java/Sort2.jc"
-line = 57
-begin = 11
-end = 65
-
-[JC_216]
+[JC_168]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_104]
+file = "HOME/tests/java/Sort2.java"
+line = 85
+begin = 30
+end = 43
+
+[JC_91]
+file = "HOME/tests/java/Sort2.java"
+line = 94
+begin = 9
+end = 20
 
 [JC_39]
 file = "HOME/tests/java/Sort2.java"
@@ -2425,7 +1640,185 @@ line = 68
 begin = 17
 end = 26
 
-[JC_217]
+[JC_112]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 24
+end = 29
+
+[JC_40]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 11
+end = 17
+
+[JC_162]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_135]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_169]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_83]
+file = "HOME/tests/java/Sort2.jc"
+line = 153
+begin = 15
+end = 4048
+
+[JC_35]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_215]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_132]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
+
+[JC_27]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_115]
+file = "HOME/tests/java/Sort2.java"
+line = 94
+begin = 9
+end = 20
+
+[JC_109]
+file = "HOME/tests/java/Sort2.jc"
+line = 153
+begin = 15
+end = 4048
+
+[JC_107]
+file = "HOME/tests/java/Sort2.java"
+line = 85
+begin = 20
+end = 184
+
+[JC_69]
+file = "HOME/tests/java/Sort2.java"
+line = 80
+begin = 16
+end = 38
+
+[JC_219]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_179]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_124]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
+
+[Sort_swap_ensures_default]
+name = "Method swap"
+behavior = "default behavior"
+file = "HOME/tests/java/Sort2.java"
+line = 73
+begin = 9
+end = 13
+
+[JC_38]
+file = "HOME/tests/java/Sort2.jc"
+line = 57
+begin = 11
+end = 65
+
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_156]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_127]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_171]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_164]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
+
+[JC_44]
+file = "HOME/tests/java/Sort2.java"
+line = 68
+begin = 17
+end = 80
+
+[JC_155]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Permut_trans]
+name = "Lemma Permut_trans"
+behavior = "axiom"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[JC_206]
 file = "HOME/"
 line = 0
 begin = -1
@@ -2437,15 +1830,631 @@ line = 0
 begin = -1
 end = -1
 
-[JC_219]
+[JC_191]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_62]
+kind = PointerDeref
+file = "HOME/tests/java/Sort2.java"
+line = 75
+begin = 8
+end = 12
+
+[JC_101]
+kind = PointerDeref
+file = "HOME/tests/java/Sort2.java"
+line = 100
+begin = 20
+end = 24
+
+[JC_88]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 24
+end = 29
+
+[JC_223]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_129]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_42]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 32
+end = 38
+
+[JC_190]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
+
+[JC_178]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_110]
+file = "HOME/tests/java/Sort2.jc"
+line = 153
+begin = 15
+end = 4048
+
+[JC_166]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
+
+[JC_103]
+file = "HOME/tests/java/Sort2.java"
+line = 85
+begin = 20
+end = 26
+
+[JC_46]
+file = "HOME/tests/java/Sort2.java"
+line = 68
+begin = 17
+end = 26
+
 [cons_Sort_safety]
 name = "Constructor of class Sort"
 behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_141]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_61]
+kind = PointerDeref
+file = "HOME/tests/java/Sort2.java"
+line = 74
+begin = 11
+end = 15
+
+[JC_32]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_199]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_56]
+file = "HOME/tests/java/Sort2.java"
+line = 71
+begin = 16
+end = 37
+
+[JC_220]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_65]
+file = "HOME/tests/java/Sort2.java"
+line = 79
+begin = 17
+end = 26
+
+[JC_118]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 24
+end = 181
+
+[JC_173]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_105]
+file = "HOME/tests/java/Sort2.java"
+line = 86
+begin = 8
+end = 90
+
+[JC_140]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
+
+[JC_29]
+file = "HOME/tests/java/Sort2.jc"
+line = 55
+begin = 8
+end = 23
+
+[JC_202]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_144]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Object_safety]
+name = "Constructor of class Object"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_159]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_68]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/tests/java/Sort2.jc"
+line = 44
+begin = 10
+end = 18
+
+[JC_96]
+file = "HOME/tests/java/Sort2.jc"
+line = 180
+begin = 21
+end = 2293
+
+[JC_43]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 37
+end = 49
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_95]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_93]
+file = "HOME/tests/java/Sort2.java"
+line = 96
+begin = 9
+end = 41
+
+[JC_97]
+file = "HOME/tests/java/Sort2.jc"
+line = 180
+begin = 21
+end = 2293
+
+[Permut_sym]
+name = "Lemma Permut_sym"
+behavior = "axiom"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[JC_84]
+file = "HOME/tests/java/Sort2.jc"
+line = 153
+begin = 15
+end = 4048
+
+[JC_214]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[JC_160]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_128]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_114]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 38
+end = 51
+
+[JC_14]
+file = "HOME/tests/java/Sort2.jc"
+line = 44
+begin = 10
+end = 18
+
+[JC_150]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
+
+[JC_117]
+file = "HOME/tests/java/Sort2.java"
+line = 96
+begin = 9
+end = 41
+
+[JC_90]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 38
+end = 51
+
+[JC_53]
+file = "HOME/tests/java/Sort2.java"
+line = 71
+begin = 16
+end = 37
+
+[JC_225]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_204]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_157]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_145]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_21]
+file = "HOME/tests/java/Sort2.jc"
+line = 48
+begin = 8
+end = 30
+
+[JC_209]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_149]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_111]
+kind = UserCall
+file = "HOME/tests/java/Sort2.java"
+line = 90
+begin = 13
+end = 21
+
+[JC_77]
+file = "HOME/tests/java/Sort2.java"
+line = 85
+begin = 20
+end = 26
+
+[JC_49]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 32
+end = 38
+
+[JC_1]
+file = "HOME/tests/java/Sort2.jc"
+line = 13
+begin = 12
+end = 22
+
+[JC_216]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_131]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_102]
+kind = UserCall
+file = "HOME/tests/java/Sort2.jc"
+line = 214
+begin = 29
+end = 60
+
+[JC_37]
+file = "HOME/tests/java/Sort2.jc"
+line = 57
+begin = 11
+end = 65
+
+[JC_181]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_142]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_108]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_57]
+file = "HOME/tests/java/Sort2.java"
+line = 73
+begin = 9
+end = 13
+
+[JC_211]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_161]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_146]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_89]
+file = "HOME/tests/java/Sort2.java"
+line = 93
+begin = 33
+end = 40
+
+[JC_136]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_66]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_59]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_165]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_213]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_192]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_217]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/java/Sort2.jc"
+line = 13
+begin = 12
+end = 22
+
+[JC_92]
+file = "HOME/tests/java/Sort2.java"
+line = 95
+begin = 12
+end = 56
+
+[JC_152]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_86]
+kind = IndexBounds
+file = "HOME/tests/java/Sort2.java"
+line = 90
+begin = 13
+end = 21
+
+[JC_60]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_183]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_139]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_72]
+file = "HOME/tests/java/Sort2.java"
+line = 80
+begin = 16
+end = 38
+
+[JC_19]
+file = "HOME/tests/java/Sort2.jc"
+line = 48
+begin = 8
+end = 30
+
+[JC_119]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_210]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_187]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_76]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_50]
+file = "HOME/tests/java/Sort2.java"
+line = 69
+begin = 37
+end = 49
+
+[JC_30]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_120]
+file = "HOME/tests/java/Sort2.jc"
+line = 180
+begin = 21
+end = 2293
+
+[JC_58]
+file = "HOME/tests/java/Sort2.jc"
+line = 120
+begin = 9
+end = 16
+
+[JC_226]
 file = "HOME/"
 line = 0
 begin = -1
@@ -2458,19 +2467,11 @@ line = 99
 begin = 6
 end = 10
 
-[JC_101]
-kind = PointerDeref
-file = "HOME/tests/java/Sort2.java"
-line = 100
-begin = 20
-end = 24
-
-[JC_102]
-kind = UserCall
-file = "HOME/tests/java/Sort2.jc"
-line = 214
-begin = 29
-end = 60
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/Sort2.why ==========
 type Object
@@ -2755,19 +2756,19 @@ exception Loop_exit_exc of unit
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_clone :
- this_6:Object pointer ->
+ this_4:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_clone_requires :
- this_6:Object pointer ->
+ this_4:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_equals :
- this_5:Object pointer ->
+ this_7:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
 parameter Object_equals_requires :
- this_5:Object pointer ->
+ this_7:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
 parameter Object_finalize :
@@ -2777,22 +2778,22 @@ parameter Object_finalize_requires :
  this_13:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_hashCode :
- this_4:Object pointer -> { } int reads Object_alloc_table { true }
+ this_6:Object pointer -> { } int reads Object_alloc_table { true }
 
 parameter Object_hashCode_requires :
- this_4:Object pointer -> { } int reads Object_alloc_table { true }
+ this_6:Object pointer -> { } int reads Object_alloc_table { true }
 
 parameter Object_notify :
- this_8:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_9:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notifyAll :
- this_9:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_5:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notifyAll_requires :
- this_9:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_5:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notify_requires :
- this_8:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_9:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_registerNatives : tt:unit -> { } unit { true }
 
@@ -2801,26 +2802,26 @@ parameter Object_registerNatives_requires : tt:unit -> { } unit { true }
 parameter Object_tag_table : Object tag_table ref
 
 parameter Object_toString :
- this_7:Object pointer ->
+ this_11:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_toString_requires :
- this_7:Object pointer ->
+ this_11:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_wait :
- this_12:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_8:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long :
  this_10:Object pointer ->
   timeout:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_int :
- this_11:Object pointer ->
+ this_12:Object pointer ->
   timeout_0:int -> nanos:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_int_requires :
- this_11:Object pointer ->
+ this_12:Object pointer ->
   timeout_0:int -> nanos:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_requires :
@@ -2828,7 +2829,7 @@ parameter Object_wait_long_requires :
   timeout:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_requires :
- this_12:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_8:Object pointer -> { } unit reads Object_alloc_table { true }
 
 exception Return_label_exc of unit
 
@@ -3138,7 +3139,7 @@ let Sort_min_sort_ensures_default =
      (let mi = ref (any_int void) in
      (let mv = ref (any_int void) in
      begin
-       (let jessie_<num> = (i_3 := (0)) in void);
+       (let _jessie_<num> = (i_3 := (0)) in void);
       try
        (loop_3:
        while true do
@@ -3170,15 +3171,16 @@ let Sort_min_sort_ensures_default =
             (if (K_49:
                 ((lt_int_ !i_3) (K_48:
                                 ((sub_int (K_47:
-                                          (let jessie_<num> = t_0 in
+                                          (let _jessie_<num> = t_0 in
                                           (JC_111:
-                                          (java_array_length_intM jessie_<num>))))) (1)))))
+                                          (java_array_length_intM _jessie_<num>))))) (1)))))
             then
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (mv := (K_26: ((safe_acc_ !intM_intP) ((shift t_0) !i_3)))) in
-               void); (let jessie_<num> = (mi := !i_3) in void);
-              (let jessie_<num> = (j_2 := (K_44: ((add_int !i_3) (1)))) in void);
+               void); (let _jessie_<num> = (mi := !i_3) in void);
+              (let _jessie_<num> = (j_2 := (K_44: ((add_int !i_3) (1)))) in
+              void);
               try
                (loop_4:
                while true do
@@ -3210,47 +3212,47 @@ let Sort_min_sort_ensures_default =
                   begin
                     (if (K_43:
                         ((lt_int_ !j_2) (K_42:
-                                        (let jessie_<num> = t_0 in
+                                        (let _jessie_<num> = t_0 in
                                         (JC_122:
-                                        (java_array_length_intM jessie_<num>))))))
+                                        (java_array_length_intM _jessie_<num>))))))
                     then
                      (if (K_40:
                          ((lt_int_ (K_39:
                                    ((safe_acc_ !intM_intP) ((shift t_0) !j_2)))) !mv))
                      then
-                      (let jessie_<num> =
+                      (let _jessie_<num> =
                       begin
-                        (let jessie_<num> = (mi := !j_2) in void);
+                        (let _jessie_<num> = (mi := !j_2) in void);
                        (mv := (K_38:
                               ((safe_acc_ !intM_intP) ((shift t_0) !j_2))));
                        !mv end in void) else void)
                     else (raise (Loop_exit_exc void)));
                    (raise (Loop_continue_exc void)) end with
-                  Loop_continue_exc jessie_<num> ->
-                  (let jessie_<num> =
+                  Loop_continue_exc _jessie_<num> ->
+                  (let _jessie_<num> =
                   (K_41:
-                  (let jessie_<num> = !j_2 in
+                  (let _jessie_<num> = !j_2 in
                   begin
-                    (let jessie_<num> = (j_2 := ((add_int jessie_<num>) (1))) in
-                    void); jessie_<num> end)) in void) end end done) with
-               Loop_exit_exc jessie_<num> -> void end;
+                    (let _jessie_<num> = (j_2 := ((add_int _jessie_<num>) (1))) in
+                    void); _jessie_<num> end)) in void) end end done) with
+               Loop_exit_exc _jessie_<num> -> void end;
               (K_45:
-              (let jessie_<num> = this_0 in
-              (let jessie_<num> = t_0 in
-              (let jessie_<num> = !i_3 in
-              (let jessie_<num> = !mi in
+              (let _jessie_<num> = this_0 in
+              (let _jessie_<num> = t_0 in
+              (let _jessie_<num> = !i_3 in
+              (let _jessie_<num> = !mi in
               (JC_123:
-              ((((Sort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>)))))))
+              ((((Sort_swap _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))))
              end else (raise (Loop_exit_exc void)));
            (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> ->
-          (let jessie_<num> =
+          Loop_continue_exc _jessie_<num> ->
+          (let _jessie_<num> =
           (K_46:
-          (let jessie_<num> = !i_3 in
+          (let _jessie_<num> = !i_3 in
           begin
-            (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in void);
-           jessie_<num> end)) in void) end end done) with
-       Loop_exit_exc jessie_<num> -> void end end)))); (raise Return) end with
+            (let _jessie_<num> = (i_3 := ((add_int _jessie_<num>) (1))) in void);
+           _jessie_<num> end)) in void) end end done) with
+       Loop_exit_exc _jessie_<num> -> void end end)))); (raise Return) end with
    Return -> void end)
   { (JC_71:
     ((JC_69:
@@ -3275,7 +3277,7 @@ let Sort_min_sort_safety =
      (let mi = ref (any_int void) in
      (let mv = ref (any_int void) in
      begin
-       (let jessie_<num> = (i_3 := (0)) in void);
+       (let _jessie_<num> = (i_3 := (0)) in void);
       try
        (loop_1:
        while true do
@@ -3307,22 +3309,23 @@ let Sort_min_sort_safety =
             (if (K_49:
                 ((lt_int_ !i_3) (K_48:
                                 ((sub_int (K_47:
-                                          (let jessie_<num> = t_0 in
+                                          (let _jessie_<num> = t_0 in
                                           (JC_86:
                                           (assert
                                           { ge_int(offset_max(Object_alloc_table,
-                                                   jessie_<num>),
+                                                   _jessie_<num>),
                                             (-1)) };
                                           (JC_85:
-                                          (java_array_length_intM_requires jessie_<num>))))))) (1)))))
+                                          (java_array_length_intM_requires _jessie_<num>))))))) (1)))))
             then
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (mv := (K_26:
                       (JC_87:
                       ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !i_3)))) in
-               void); (let jessie_<num> = (mi := !i_3) in void);
-              (let jessie_<num> = (j_2 := (K_44: ((add_int !i_3) (1)))) in void);
+               void); (let _jessie_<num> = (mi := !i_3) in void);
+              (let _jessie_<num> = (j_2 := (K_44: ((add_int !i_3) (1)))) in
+              void);
               try
                (loop_2:
                while true do
@@ -3355,54 +3358,54 @@ let Sort_min_sort_safety =
                   begin
                     (if (K_43:
                         ((lt_int_ !j_2) (K_42:
-                                        (let jessie_<num> = t_0 in
+                                        (let _jessie_<num> = t_0 in
                                         (JC_99:
                                         (assert
                                         { ge_int(offset_max(Object_alloc_table,
-                                                 jessie_<num>),
+                                                 _jessie_<num>),
                                           (-1)) };
                                         (JC_98:
-                                        (java_array_length_intM_requires jessie_<num>))))))))
+                                        (java_array_length_intM_requires _jessie_<num>))))))))
                     then
                      (if (K_40:
                          ((lt_int_ (K_39:
                                    (JC_100:
                                    ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2)))) !mv))
                      then
-                      (let jessie_<num> =
+                      (let _jessie_<num> =
                       begin
-                        (let jessie_<num> = (mi := !j_2) in void);
+                        (let _jessie_<num> = (mi := !j_2) in void);
                        (mv := (K_38:
                               (JC_101:
                               ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2))));
                        !mv end in void) else void)
                     else (raise (Loop_exit_exc void)));
                    (raise (Loop_continue_exc void)) end with
-                  Loop_continue_exc jessie_<num> ->
-                  (let jessie_<num> =
+                  Loop_continue_exc _jessie_<num> ->
+                  (let _jessie_<num> =
                   (K_41:
-                  (let jessie_<num> = !j_2 in
+                  (let _jessie_<num> = !j_2 in
                   begin
-                    (let jessie_<num> = (j_2 := ((add_int jessie_<num>) (1))) in
-                    void); jessie_<num> end)) in void) end end done) with
-               Loop_exit_exc jessie_<num> -> void end;
+                    (let _jessie_<num> = (j_2 := ((add_int _jessie_<num>) (1))) in
+                    void); _jessie_<num> end)) in void) end end done) with
+               Loop_exit_exc _jessie_<num> -> void end;
               (K_45:
-              (let jessie_<num> = this_0 in
-              (let jessie_<num> = t_0 in
-              (let jessie_<num> = !i_3 in
-              (let jessie_<num> = !mi in
+              (let _jessie_<num> = this_0 in
+              (let _jessie_<num> = t_0 in
+              (let _jessie_<num> = !i_3 in
+              (let _jessie_<num> = !mi in
               (JC_102:
-              ((((Sort_swap_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>)))))))
+              ((((Sort_swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))))
              end else (raise (Loop_exit_exc void)));
            (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> ->
-          (let jessie_<num> =
+          Loop_continue_exc _jessie_<num> ->
+          (let _jessie_<num> =
           (K_46:
-          (let jessie_<num> = !i_3 in
+          (let _jessie_<num> = !i_3 in
           begin
-            (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in void);
-           jessie_<num> end)) in void) end end done) with
-       Loop_exit_exc jessie_<num> -> void end end)))); (raise Return) end with
+            (let _jessie_<num> = (i_3 := ((add_int _jessie_<num>) (1))) in void);
+           _jessie_<num> end)) in void) end end done) with
+       Loop_exit_exc _jessie_<num> -> void end end)))); (raise Return) end with
    Return -> void end) { true }
 
 let Sort_swap_ensures_default =
@@ -3422,22 +3425,22 @@ let Sort_swap_ensures_default =
   (init:
   try
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (let tmp = (K_14: ((safe_acc_ !intM_intP) ((shift t) i_2))) in
      (K_12:
      begin
-       (let jessie_<num> =
-       (let jessie_<num> = (K_11: ((safe_acc_ !intM_intP) ((shift t) j_1))) in
-       (let jessie_<num> = t in
-       (let jessie_<num> = i_2 in
-       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-       (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+       (let _jessie_<num> =
+       (let _jessie_<num> = (K_11: ((safe_acc_ !intM_intP) ((shift t) j_1))) in
+       (let _jessie_<num> = t in
+       (let _jessie_<num> = i_2 in
+       (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+       (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
       (K_13:
-      (let jessie_<num> = tmp in
-      (let jessie_<num> = t in
-      (let jessie_<num> = j_1 in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      begin   (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>); jessie_<num> end)))))
+      (let _jessie_<num> = tmp in
+      (let _jessie_<num> = t in
+      (let _jessie_<num> = j_1 in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      begin   (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>); _jessie_<num> end)))))
      end)) in void); (raise Return) end with Return -> void end)
   { (JC_55:
     ((JC_53: Swap(t, i_2, j_1, intM_intP, intM_intP@))
@@ -3463,38 +3466,38 @@ let Sort_swap_safety =
   (init:
   try
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (let tmp =
      (K_14:
      (JC_61: ((((offset_acc_ !Object_alloc_table) !intM_intP) t) i_2))) in
      (K_12:
      begin
-       (let jessie_<num> =
-       (let jessie_<num> =
+       (let _jessie_<num> =
+       (let _jessie_<num> =
        (K_11:
        (JC_62: ((((offset_acc_ !Object_alloc_table) !intM_intP) t) j_1))) in
-       (let jessie_<num> = t in
-       (let jessie_<num> = i_2 in
-       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+       (let _jessie_<num> = t in
+       (let _jessie_<num> = i_2 in
+       (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
        (JC_63:
-       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+       (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
        void);
       (K_13:
-      (let jessie_<num> = tmp in
-      (let jessie_<num> = t in
-      (let jessie_<num> = j_1 in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (let _jessie_<num> = tmp in
+      (let _jessie_<num> = t in
+      (let _jessie_<num> = j_1 in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
       (JC_64:
       begin
-        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>);
-       jessie_<num> end)))))) end)) in void); (raise Return) end with Return ->
+        (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>);
+       _jessie_<num> end)))))) end)) in void); (raise Return) end with Return ->
    void end) { true }
 
 let cons_Object_ensures_default =
  fun (this_14 : Object pointer) ->
   { valid_struct_Object(this_14, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_224: true) }
+  { (JC_208: true) }
 
 let cons_Object_safety =
  fun (this_14 : Object pointer) ->
@@ -3506,7 +3509,7 @@ let cons_Sort_ensures_default =
  fun (this_3 : Object pointer) ->
   { valid_struct_Sort(this_3, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_128: true) }
+  { (JC_184: true) }
 
 let cons_Sort_safety =
  fun (this_3 : Object pointer) ->
@@ -3672,7 +3675,7 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/Sort2_po29.why">
-      <location file = "why/Sort2.why" line = "838" begin = "44" end = "194"/>
+      <location file = "why/Sort2.why" line = "839" begin = "44" end = "195"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Sort2_po30.why">
@@ -9599,7 +9602,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
 (EQ (Permut
 t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP0 intM_intP) |@true|))))))))))))))
 
-;; Sort_min_sort_safety_po_1, File "why/Sort2.why", line 838, characters 44-194
+;; Sort_min_sort_safety_po_1, File "why/Sort2.why", line 839, characters 44-195
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
@@ -10185,6 +10188,7 @@ Object_alloc_table intM_intP intM_intP1 (pset_union
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
+Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Sort2_why.sx         : .........................?................. (42/0/1/0/0)
 total   :  43

@@ -305,19 +305,89 @@ behavior default:
    }
 }
 ========== file tests/c/scalar_product.jessie/scalar_product.cloc ==========
-[bound_int_to_real]
-name = "Lemma bound_int_to_real"
+[C_15]
 file = "HOME/tests/c/scalar_product.c"
-line = 33
-begin = 4
-end = 76
+line = 59
+begin = 12
+end = 16
 
-[A1]
-name = "Lemma A1"
+[C_11]
 file = "HOME/tests/c/scalar_product.c"
-line = 23
-begin = 6
-end = 85
+line = 56
+begin = 15
+end = 44
+
+[C_1]
+file = "HOME/tests/c/scalar_product.c"
+line = 46
+begin = 2
+end = 8
+
+[C_33]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 38
+end = 59
+
+[C_9]
+file = "HOME/tests/c/scalar_product.c"
+line = 54
+begin = 15
+end = 32
+
+[C_10]
+file = "HOME/tests/c/scalar_product.c"
+line = 55
+begin = 15
+end = 32
+
+[C_20]
+file = "HOME/tests/c/scalar_product.c"
+line = 67
+begin = 10
+end = 195
+
+[C_32]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 38
+end = 59
+
+[C_17]
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 8
+end = 21
+
+[C_36]
+file = "HOME/tests/c/scalar_product.c"
+line = 38
+begin = 13
+end = 19
+
+[C_5]
+file = "HOME/tests/c/scalar_product.c"
+line = 48
+begin = 21
+end = 59
+
+[C_34]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 38
+end = 59
+
+[C_29]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 13
+end = 34
+
+[C_13]
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 17
+end = 21
 
 [A2]
 name = "Lemma A2"
@@ -326,113 +396,11 @@ line = 25
 begin = 6
 end = 178
 
-[C_10]
-file = "HOME/tests/c/scalar_product.c"
-line = 55
-begin = 15
-end = 32
-
-[C_11]
-file = "HOME/tests/c/scalar_product.c"
-line = 56
-begin = 15
-end = 44
-
-[C_12]
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 17
-end = 18
-
-[C_13]
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 17
-end = 21
-
-[C_14]
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 12
-end = 13
-
-[C_15]
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 12
-end = 16
-
-[C_16]
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 12
-end = 21
-
-[C_17]
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 8
-end = 21
-
-[C_18]
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 8
-end = 21
-
-[C_19]
-file = "HOME/tests/c/scalar_product.c"
-line = 62
-begin = 15
-end = 60
-
-[C_1]
-file = "HOME/tests/c/scalar_product.c"
-line = 46
-begin = 2
-end = 8
-
-[C_2]
-file = "HOME/tests/c/scalar_product.c"
-line = 52
-begin = 7
-end = 10
-
-[C_3]
-file = "HOME/tests/c/scalar_product.c"
-line = 50
-begin = 19
-end = 22
-
-[C_4]
-file = "HOME/tests/c/scalar_product.c"
-line = 49
-begin = 21
-end = 75
-
-[C_20]
-file = "HOME/tests/c/scalar_product.c"
-line = 67
-begin = 10
-end = 195
-
-[C_5]
-file = "HOME/tests/c/scalar_product.c"
-line = 48
-begin = 21
-end = 59
-
-[C_21]
-file = "HOME/tests/c/scalar_product.c"
-line = 75
-begin = 6
-end = 113
-
-[C_6]
+[C_7]
 file = "HOME/tests/c/scalar_product.c"
 line = 47
 begin = 21
-end = 32
+end = 27
 
 [C_22]
 file = "HOME/tests/c/scalar_product.c"
@@ -440,13 +408,26 @@ line = 80
 begin = 15
 end = 45
 
-[C_7]
+[C_14]
 file = "HOME/tests/c/scalar_product.c"
-line = 47
-begin = 21
-end = 27
+line = 59
+begin = 12
+end = 13
 
-[C_23]
+[C_35]
+file = "HOME/tests/c/scalar_product.c"
+line = 38
+begin = 13
+end = 25
+
+[scalar_product]
+name = "Function scalar_product"
+file = "HOME/tests/c/scalar_product.c"
+line = 45
+begin = 7
+end = 21
+
+[C_25]
 file = "HOME/tests/c/scalar_product.c"
 line = 52
 begin = 23
@@ -458,29 +439,12 @@ line = 47
 begin = 26
 end = 32
 
-[C_24]
+[A1]
+name = "Lemma A1"
 file = "HOME/tests/c/scalar_product.c"
-line = 52
-begin = 23
-end = 26
-
-[C_9]
-file = "HOME/tests/c/scalar_product.c"
-line = 54
-begin = 15
-end = 32
-
-[C_25]
-file = "HOME/tests/c/scalar_product.c"
-line = 52
-begin = 23
-end = 26
-
-[C_26]
-file = "HOME/tests/c/scalar_product.c"
-line = 43
-begin = 7
-end = 67
+line = 23
+begin = 6
+end = 85
 
 [C_27]
 file = "HOME/tests/c/scalar_product.c"
@@ -488,17 +452,65 @@ line = 40
 begin = 13
 end = 98
 
+[C_37]
+file = "HOME/tests/c/scalar_product.c"
+line = 38
+begin = 18
+end = 25
+
+[C_19]
+file = "HOME/tests/c/scalar_product.c"
+line = 62
+begin = 15
+end = 60
+
+[C_4]
+file = "HOME/tests/c/scalar_product.c"
+line = 49
+begin = 21
+end = 75
+
+[C_12]
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 17
+end = 18
+
+[C_26]
+file = "HOME/tests/c/scalar_product.c"
+line = 43
+begin = 7
+end = 67
+
+[C_18]
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 8
+end = 21
+
+[C_2]
+file = "HOME/tests/c/scalar_product.c"
+line = 52
+begin = 7
+end = 10
+
 [C_28]
 file = "HOME/tests/c/scalar_product.c"
 line = 39
 begin = 13
 end = 59
 
-[C_29]
+[C_24]
 file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 13
-end = 34
+line = 52
+begin = 23
+end = 26
+
+[C_6]
+file = "HOME/tests/c/scalar_product.c"
+line = 47
+begin = 21
+end = 32
 
 [C_30]
 file = "HOME/tests/c/scalar_product.c"
@@ -506,54 +518,42 @@ line = 39
 begin = 13
 end = 34
 
+[bound_int_to_real]
+name = "Lemma bound_int_to_real"
+file = "HOME/tests/c/scalar_product.c"
+line = 33
+begin = 4
+end = 76
+
+[C_21]
+file = "HOME/tests/c/scalar_product.c"
+line = 75
+begin = 6
+end = 113
+
+[C_3]
+file = "HOME/tests/c/scalar_product.c"
+line = 50
+begin = 19
+end = 22
+
+[C_16]
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 12
+end = 21
+
 [C_31]
 file = "HOME/tests/c/scalar_product.c"
 line = 39
 begin = 13
 end = 34
 
-[C_32]
+[C_23]
 file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 38
-end = 59
-
-[C_33]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 38
-end = 59
-
-[C_34]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 38
-end = 59
-
-[C_35]
-file = "HOME/tests/c/scalar_product.c"
-line = 38
-begin = 13
-end = 25
-
-[C_36]
-file = "HOME/tests/c/scalar_product.c"
-line = 38
-begin = 13
-end = 19
-
-[C_37]
-file = "HOME/tests/c/scalar_product.c"
-line = 38
-begin = 18
-end = 25
-
-[scalar_product]
-name = "Function scalar_product"
-file = "HOME/tests/c/scalar_product.c"
-line = 45
-begin = 7
-end = 21
+line = 52
+begin = 23
+end = 26
 
 ========== jessie execution ==========
 Generating Why function scalar_product
@@ -567,10 +567,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs scalar_product.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs scalar_product.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs scalar_product.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs scalar_product.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -715,13 +716,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: scalar_product.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: scalar_product.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: scalar_product.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include scalar_product.depend
 
@@ -732,44 +733,11 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/scalar_product.jessie/scalar_product.loc ==========
-[JC_40]
-file = "HOME/tests/c/scalar_product.c"
-line = 75
-begin = 6
-end = 113
-
-[JC_41]
-file = "HOME/tests/c/scalar_product.c"
-line = 80
-begin = 15
-end = 45
-
-[JC_42]
-kind = ArithOverflow
-file = "HOME/tests/c/scalar_product.c"
-line = 52
-begin = 23
-end = 26
-
-[bound_int_to_real]
-name = "Lemma bound_int_to_real"
-behavior = "lemma"
-file = "HOME/tests/c/scalar_product.c"
-line = 33
-begin = 4
-end = 76
-
-[JC_43]
-file = "HOME/tests/c/scalar_product.c"
-line = 50
-begin = 19
-end = 22
-
-[JC_44]
-file = "HOME/tests/c/scalar_product.c"
-line = 49
-begin = 21
-end = 75
+[JC_51]
+file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
+line = 92
+begin = 9
+end = 6054
 
 [JC_45]
 file = "HOME/tests/c/scalar_product.c"
@@ -777,83 +745,30 @@ line = 48
 begin = 21
 end = 59
 
-[JC_46]
+[JC_31]
 file = "HOME/tests/c/scalar_product.c"
-line = 47
-begin = 21
-end = 27
-
-[JC_1]
-file = "HOME/tests/c/scalar_product.c"
-line = 38
-begin = 13
-end = 19
-
-[JC_47]
-file = "HOME/tests/c/scalar_product.c"
-line = 47
-begin = 26
+line = 54
+begin = 15
 end = 32
 
-[JC_2]
+[JC_17]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_55]
+kind = FPOverflow
 file = "HOME/tests/c/scalar_product.c"
-line = 38
-begin = 18
-end = 25
+line = 59
+begin = 12
+end = 21
 
 [JC_48]
 file = "HOME/tests/c/scalar_product.c"
 line = 47
 begin = 21
 end = 32
-
-[JC_3]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 13
-end = 34
-
-[JC_49]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_4]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 13
-end = 34
-
-[JC_5]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 38
-end = 59
-
-[JC_6]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 38
-end = 59
-
-[JC_7]
-file = "HOME/tests/c/scalar_product.c"
-line = 40
-begin = 13
-end = 98
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 [scalar_product_safety]
 name = "Function scalar_product"
@@ -863,161 +778,11 @@ line = 45
 begin = 7
 end = 21
 
-[JC_50]
-file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
-line = 92
-begin = 9
-end = 6054
-
-[A1]
-name = "Lemma A1"
-behavior = "axiom"
+[JC_23]
 file = "HOME/tests/c/scalar_product.c"
-line = 23
-begin = 6
-end = 85
-
-[JC_51]
-file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
-line = 92
-begin = 9
-end = 6054
-
-[A2]
-name = "Lemma A2"
-behavior = "axiom"
-file = "HOME/tests/c/scalar_product.c"
-line = 25
-begin = 6
-end = 178
-
-[JC_52]
-file = "HOME/tests/c/scalar_product.c"
-line = 54
-begin = 15
-end = 32
-
-[JC_53]
-file = "HOME/tests/c/scalar_product.c"
-line = 55
-begin = 15
-end = 32
-
-[JC_54]
-file = "HOME/tests/c/scalar_product.c"
-line = 56
-begin = 15
-end = 44
-
-[JC_55]
-kind = FPOverflow
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 12
-end = 21
-
-[JC_56]
-kind = FPOverflow
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 8
-end = 21
-
-[JC_57]
-file = "HOME/tests/c/scalar_product.c"
-line = 62
-begin = 15
-end = 60
-
-[JC_58]
-file = "HOME/tests/c/scalar_product.c"
-line = 67
-begin = 10
-end = 195
-
-[JC_59]
-file = "HOME/tests/c/scalar_product.c"
-line = 75
-begin = 6
-end = 113
-
-[JC_60]
-file = "HOME/tests/c/scalar_product.c"
-line = 80
-begin = 15
-end = 45
-
-[JC_10]
-file = "HOME/tests/c/scalar_product.c"
-line = 38
-begin = 13
-end = 19
-
-[JC_11]
-file = "HOME/tests/c/scalar_product.c"
-line = 38
-begin = 18
-end = 25
-
-[JC_12]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 13
-end = 34
-
-[JC_13]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 13
-end = 34
-
-[JC_14]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 38
-end = 59
-
-[JC_15]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 38
-end = 59
-
-[JC_16]
-file = "HOME/tests/c/scalar_product.c"
-line = 40
-begin = 13
-end = 98
-
-[JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_19]
-file = "HOME/tests/c/scalar_product.c"
-line = 43
-begin = 7
-end = 67
-
-[JC_20]
-file = "HOME/tests/c/scalar_product.c"
-line = 43
-begin = 7
-end = 67
-
-[JC_21]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+line = 49
+begin = 21
+end = 75
 
 [JC_22]
 file = "HOME/"
@@ -1025,11 +790,17 @@ line = 0
 begin = -1
 end = -1
 
-[JC_23]
+[JC_5]
 file = "HOME/tests/c/scalar_product.c"
-line = 49
-begin = 21
-end = 75
+line = 39
+begin = 38
+end = 59
+
+[JC_9]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_24]
 file = "HOME/tests/c/scalar_product.c"
@@ -1043,11 +814,93 @@ line = 47
 begin = 21
 end = 27
 
+[JC_41]
+file = "HOME/tests/c/scalar_product.c"
+line = 80
+begin = 15
+end = 45
+
+[JC_47]
+file = "HOME/tests/c/scalar_product.c"
+line = 47
+begin = 26
+end = 32
+
+[JC_52]
+file = "HOME/tests/c/scalar_product.c"
+line = 54
+begin = 15
+end = 32
+
 [JC_26]
 file = "HOME/tests/c/scalar_product.c"
 line = 47
 begin = 26
 end = 32
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+file = "HOME/tests/c/scalar_product.c"
+line = 56
+begin = 15
+end = 44
+
+[A2]
+name = "Lemma A2"
+behavior = "axiom"
+file = "HOME/tests/c/scalar_product.c"
+line = 25
+begin = 6
+end = 178
+
+[JC_13]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 13
+end = 34
+
+[JC_11]
+file = "HOME/tests/c/scalar_product.c"
+line = 38
+begin = 18
+end = 25
+
+[JC_15]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 38
+end = 59
+
+[JC_36]
+kind = FPOverflow
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 12
+end = 21
+
+[JC_39]
+file = "HOME/tests/c/scalar_product.c"
+line = 67
+begin = 10
+end = 195
+
+[JC_40]
+file = "HOME/tests/c/scalar_product.c"
+line = 75
+begin = 6
+end = 113
+
+[JC_35]
+kind = PointerDeref
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 17
+end = 21
 
 [JC_27]
 file = "HOME/tests/c/scalar_product.c"
@@ -1055,17 +908,118 @@ line = 47
 begin = 21
 end = 32
 
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_38]
+file = "HOME/tests/c/scalar_product.c"
+line = 62
+begin = 15
+end = 60
+
+[JC_12]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 13
+end = 34
+
+[JC_6]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 38
+end = 59
+
+[JC_44]
+file = "HOME/tests/c/scalar_product.c"
+line = 49
+begin = 21
+end = 75
+
+[JC_4]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 13
+end = 34
+
+[JC_42]
+kind = ArithOverflow
+file = "HOME/tests/c/scalar_product.c"
+line = 52
+begin = 23
+end = 26
+
+[JC_46]
+file = "HOME/tests/c/scalar_product.c"
+line = 47
+begin = 21
+end = 27
+
+[A1]
+name = "Lemma A1"
+behavior = "axiom"
+file = "HOME/tests/c/scalar_product.c"
+line = 23
+begin = 6
+end = 85
+
+[JC_32]
+file = "HOME/tests/c/scalar_product.c"
+line = 55
+begin = 15
+end = 32
+
+[JC_56]
+kind = FPOverflow
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 8
+end = 21
+
+[JC_33]
+file = "HOME/tests/c/scalar_product.c"
+line = 56
+begin = 15
+end = 44
 
 [JC_29]
 file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
 line = 92
 begin = 9
 end = 6054
+
+[JC_7]
+file = "HOME/tests/c/scalar_product.c"
+line = 40
+begin = 13
+end = 98
+
+[JC_16]
+file = "HOME/tests/c/scalar_product.c"
+line = 40
+begin = 13
+end = 98
+
+[JC_43]
+file = "HOME/tests/c/scalar_product.c"
+line = 50
+begin = 19
+end = 22
+
+[JC_2]
+file = "HOME/tests/c/scalar_product.c"
+line = 38
+begin = 18
+end = 25
+
+[JC_34]
+kind = PointerDeref
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 12
+end = 16
+
+[JC_14]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 38
+end = 59
 
 [scalar_product_ensures_default]
 name = "Function scalar_product"
@@ -1075,50 +1029,29 @@ line = 45
 begin = 7
 end = 21
 
-[JC_30]
-file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
-line = 92
-begin = 9
-end = 6054
-
-[JC_31]
-file = "HOME/tests/c/scalar_product.c"
-line = 54
-begin = 15
-end = 32
-
-[JC_32]
+[JC_53]
 file = "HOME/tests/c/scalar_product.c"
 line = 55
 begin = 15
 end = 32
 
-[JC_33]
-file = "HOME/tests/c/scalar_product.c"
-line = 56
-begin = 15
-end = 44
+[JC_21]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_34]
-kind = PointerDeref
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 12
-end = 16
+[JC_49]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_35]
-kind = PointerDeref
+[JC_1]
 file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 17
-end = 21
-
-[JC_36]
-kind = FPOverflow
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 12
-end = 21
+line = 38
+begin = 13
+end = 19
 
 [JC_37]
 kind = FPOverflow
@@ -1127,17 +1060,85 @@ line = 59
 begin = 8
 end = 21
 
-[JC_38]
+[JC_10]
+file = "HOME/tests/c/scalar_product.c"
+line = 38
+begin = 13
+end = 19
+
+[JC_57]
 file = "HOME/tests/c/scalar_product.c"
 line = 62
 begin = 15
 end = 60
 
-[JC_39]
+[JC_59]
+file = "HOME/tests/c/scalar_product.c"
+line = 75
+begin = 6
+end = 113
+
+[JC_20]
+file = "HOME/tests/c/scalar_product.c"
+line = 43
+begin = 7
+end = 67
+
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 13
+end = 34
+
+[bound_int_to_real]
+name = "Lemma bound_int_to_real"
+behavior = "lemma"
+file = "HOME/tests/c/scalar_product.c"
+line = 33
+begin = 4
+end = 76
+
+[JC_60]
+file = "HOME/tests/c/scalar_product.c"
+line = 80
+begin = 15
+end = 45
+
+[JC_19]
+file = "HOME/tests/c/scalar_product.c"
+line = 43
+begin = 7
+end = 67
+
+[JC_50]
+file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
+line = 92
+begin = 9
+end = 6054
+
+[JC_30]
+file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
+line = 92
+begin = 9
+end = 6054
+
+[JC_58]
 file = "HOME/tests/c/scalar_product.c"
 line = 67
 begin = 10
 end = 195
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/c/scalar_product.jessie/why/scalar_product.why ==========
 type charP
@@ -1749,12 +1750,12 @@ let scalar_product_ensures_default =
      (let i = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<num> = (p := (double_of_real_exact 0.0)) in void);
+       (let _jessie_<num> = (p := (double_of_real_exact 0.0)) in void);
       try
        (C_2:
        (loop_2:
        begin
-         (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
+         (let _jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
         while true do
         { invariant
             ((JC_44:
@@ -1777,7 +1778,7 @@ let scalar_product_ensures_default =
            [ { } unit { true } ];
           try
            begin
-             (let jessie_<num> =
+             (let _jessie_<num> =
              begin
                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
                then void else (raise (Goto_while_0_break_exc void)));
@@ -1798,7 +1799,7 @@ let scalar_product_ensures_default =
               (L:
               begin
                 void;
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (C_18:
                (p := (C_17:
                      (JC_56:
@@ -1887,9 +1888,9 @@ let scalar_product_ensures_default =
                       (safe_int32_of_integer_ (C_23:
                                               ((add_int (integer_of_int32 !i)) (1))))));
                 !i end) end) end in void); (raise (Loop_continue_exc void))
-           end with Loop_continue_exc jessie_<num> -> void end end done;
+           end with Loop_continue_exc _jessie_<num> -> void end end done;
         (raise (Goto_while_0_break_exc void)) end)) with
-       Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
+       Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
       (return := !p); (raise Return) end))); absurd  end with Return ->
    !return end))
   { (JC_19:
@@ -1931,12 +1932,12 @@ let scalar_product_safety =
      (let i = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<num> = (p := (double_of_real_exact 0.0)) in void);
+       (let _jessie_<num> = (p := (double_of_real_exact 0.0)) in void);
       try
        (C_2:
        (loop_1:
        begin
-         (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
+         (let _jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
         while true do
         { invariant (JC_29: true)
           variant (JC_43 : sub_int(integer_of_int32(n_1),
@@ -1961,7 +1962,7 @@ let scalar_product_safety =
                            le_int(integer_of_int32(i), integer_of_int32(n_1))))))) } ];
           try
            begin
-             (let jessie_<num> =
+             (let _jessie_<num> =
              begin
                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
                then void else (raise (Goto_while_0_break_exc void)));
@@ -1984,7 +1985,7 @@ let scalar_product_safety =
               (L:
               begin
                 void;
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (C_18:
                (p := (C_17:
                      (JC_37:
@@ -2074,9 +2075,9 @@ let scalar_product_safety =
                       (int32_of_integer_ (C_23:
                                          ((add_int (integer_of_int32 !i)) (1)))))));
                 !i end) end) end in void); (raise (Loop_continue_exc void))
-           end with Loop_continue_exc jessie_<num> -> void end end done;
+           end with Loop_continue_exc _jessie_<num> -> void end end done;
         (raise (Goto_while_0_break_exc void)) end)) with
-       Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
+       Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
       (return := !p); (raise Return) end))); absurd  end with Return ->
    !return end)) { true }
 

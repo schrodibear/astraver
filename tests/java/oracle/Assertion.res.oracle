@@ -10,8 +10,8 @@ public class Assertion {
 } ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
-Generating JC function Assertion_max for method Assertion.max
 Generating JC function cons_Assertion for constructor Assertion
+Generating JC function Assertion_max for method Assertion.max
 Done.
 ========== file tests/java/Assertion.jc ==========
 # InvariantPolicy = Arguments
@@ -36,19 +36,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag Assertion = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag Assertion = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -63,9 +63,11 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
+exception Exception of Exception[0..]
+
 exception Throwable of Throwable[0..]
 
-exception Exception of Exception[0..]
+unit cons_Assertion(! Assertion[0] this_0){()}
 
 int32 Assertion_max(int32 x)
 behavior default:
@@ -75,8 +77,6 @@ behavior default:
    
    (return x)
 }
-
-unit cons_Assertion(! Assertion[0] this_0){()}
 
 /*
 Local Variables:
@@ -97,6 +97,13 @@ line = 6
 begin = 28
 end = 34
 
+[Assertion_max]
+name = "Method max"
+file = "HOME/tests/java/Assertion.java"
+line = 5
+begin = 27
+end = 30
+
 [K_3]
 file = "HOME/tests/java/Assertion.java"
 line = 6
@@ -110,16 +117,9 @@ line = 0
 begin = -1
 end = -1
 
-[Assertion_max]
-name = "Method max"
-file = "HOME/tests/java/Assertion.java"
-line = 5
-begin = 27
-end = 30
-
 ========== jessie execution ==========
-Generating Why function Assertion_max
 Generating Why function cons_Assertion
+Generating Why function Assertion_max
 ========== file tests/java/Assertion.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -130,10 +130,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Assertion.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Assertion.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Assertion.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Assertion.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -278,13 +279,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: Assertion.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: Assertion.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: Assertion.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include Assertion.depend
 
@@ -295,25 +296,25 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/Assertion.loc ==========
-[JC_1]
-file = "HOME/tests/java/Assertion.jc"
-line = 20
-begin = 12
-end = 22
+[JC_31]
+file = "HOME/tests/java/Assertion.java"
+line = 3
+begin = 21
+end = 33
 
-[JC_2]
+[JC_17]
+file = "HOME/tests/java/Assertion.jc"
+line = 47
+begin = 11
+end = 65
+
+[JC_23]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_3]
-file = "HOME/tests/java/Assertion.jc"
-line = 20
-begin = 12
-end = 22
-
-[JC_4]
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
@@ -325,13 +326,33 @@ line = 0
 begin = -1
 end = -1
 
-[JC_6]
+[JC_9]
+file = "HOME/tests/java/Assertion.jc"
+line = 45
+begin = 8
+end = 23
+
+[JC_24]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_7]
+[JC_25]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Assertion_max_safety]
+name = "Method max"
+behavior = "Safety"
+file = "HOME/tests/java/Assertion.java"
+line = 5
+begin = 27
+end = 30
+
+[JC_26]
 file = "HOME/"
 line = 0
 begin = -1
@@ -343,21 +364,7 @@ line = 0
 begin = -1
 end = -1
 
-[JC_9]
-file = "HOME/tests/java/Assertion.jc"
-line = 45
-begin = 8
-end = 23
-
-[Assertion_max_ensures_default]
-name = "Method max"
-behavior = "default behavior"
-file = "HOME/tests/java/Assertion.java"
-line = 5
-begin = 27
-end = 30
-
-[JC_10]
+[JC_13]
 file = "HOME/"
 line = 0
 begin = -1
@@ -369,25 +376,67 @@ line = 45
 begin = 8
 end = 23
 
+[JC_15]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_36]
+file = "HOME/tests/java/Assertion.java"
+line = 6
+begin = 28
+end = 34
+
+[JC_35]
+file = "HOME/tests/java/Assertion.java"
+line = 6
+begin = 28
+end = 34
+
+[JC_27]
+file = "HOME/tests/java/Assertion.java"
+line = 5
+begin = 27
+end = 30
+
 [JC_12]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_13]
+[JC_6]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_14]
+[JC_4]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_15]
+[JC_32]
+file = "HOME/tests/java/Assertion.java"
+line = 3
+begin = 21
+end = 33
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_29]
+file = "HOME/tests/java/Assertion.java"
+line = 5
+begin = 27
+end = 30
+
+[JC_7]
 file = "HOME/"
 line = 0
 begin = -1
@@ -399,17 +448,67 @@ line = 0
 begin = -1
 end = -1
 
-[JC_17]
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_21]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_1]
 file = "HOME/tests/java/Assertion.jc"
-line = 47
-begin = 11
-end = 65
+line = 20
+begin = 12
+end = 22
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_18]
 file = "HOME/tests/java/Assertion.jc"
 line = 47
 begin = 11
 end = 65
+
+[JC_3]
+file = "HOME/tests/java/Assertion.jc"
+line = 20
+begin = 12
+end = 22
+
+[Assertion_max_ensures_default]
+name = "Method max"
+behavior = "default behavior"
+file = "HOME/tests/java/Assertion.java"
+line = 5
+begin = 27
+end = 30
 
 [cons_Assertion_ensures_default]
 name = "Constructor of class Assertion"
@@ -428,66 +527,6 @@ begin = -1
 end = -1
 
 [JC_19]
-file = "HOME/tests/java/Assertion.java"
-line = 5
-begin = 27
-end = 30
-
-[JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_21]
-file = "HOME/tests/java/Assertion.java"
-line = 5
-begin = 27
-end = 30
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_23]
-file = "HOME/tests/java/Assertion.java"
-line = 3
-begin = 21
-end = 33
-
-[JC_24]
-file = "HOME/tests/java/Assertion.java"
-line = 3
-begin = 21
-end = 33
-
-[JC_25]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_26]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_27]
-file = "HOME/tests/java/Assertion.java"
-line = 6
-begin = 28
-end = 34
-
-[JC_28]
-file = "HOME/tests/java/Assertion.java"
-line = 6
-begin = 28
-end = 34
-
-[JC_29]
 file = "HOME/"
 line = 0
 begin = -1
@@ -499,45 +538,7 @@ line = 0
 begin = -1
 end = -1
 
-[JC_31]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_32]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_34]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_35]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Assertion_max_safety]
-name = "Method max"
-behavior = "Safety"
-file = "HOME/tests/java/Assertion.java"
-line = 5
-begin = 27
-end = 30
-
-[JC_36]
+[JC_28]
 file = "HOME/"
 line = 0
 begin = -1
@@ -848,10 +849,10 @@ predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  and (offset_max(interface_alloc_table, p) >= b))
 
 parameter Assertion_max :
- x_2:int32 -> { } int32 { (JC_24: (integer_of_int32(result) = (5))) }
+ x_2:int32 -> { } int32 { (JC_32: (integer_of_int32(result) = (5))) }
 
 parameter Assertion_max_requires :
- x_2:int32 -> { } int32 { (JC_24: (integer_of_int32(result) = (5))) }
+ x_2:int32 -> { } int32 { (JC_32: (integer_of_int32(result) = (5))) }
 
 exception Exception_exc of Object pointer
 
@@ -1085,25 +1086,25 @@ parameter short_of_integer_ :
 
 let Assertion_max_ensures_default =
  fun (x_2 : int32) ->
-  { (JC_22: true) }
+  { (JC_30: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    (K_3:
    begin
-     (assert { (JC_28: (integer_of_int32(x_2) = (5))) }; void);
+     (assert { (JC_36: (integer_of_int32(x_2) = (5))) }; void);
     (return := x_2); (raise Return); absurd  end) with Return -> !return end))
-  { (JC_23: (integer_of_int32(result) = (5))) }
+  { (JC_31: (integer_of_int32(result) = (5))) }
 
 let Assertion_max_safety =
  fun (x_2 : int32) ->
-  { (JC_22: true) }
+  { (JC_30: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    (K_3:
    begin
-     [ { } unit { (JC_27: (integer_of_int32(x_2) = (5))) } ];
+     [ { } unit { (JC_35: (integer_of_int32(x_2) = (5))) } ];
     (return := x_2); (raise Return); absurd  end) with Return -> !return end))
   { true }
 
@@ -1111,7 +1112,7 @@ let cons_Assertion_ensures_default =
  fun (this_0 : Object pointer) ->
   { valid_struct_Assertion(this_0, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_33: true) }
+  { (JC_23: true) }
 
 let cons_Assertion_safety =
  fun (this_0 : Object pointer) ->
@@ -2385,17 +2386,17 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 ========== file tests/java/why/Assertion_po1.why ==========
 goal Assertion_max_ensures_default_po_1:
   forall x_2:int32.
-  ("JC_22": true) ->
-  ("JC_28": (integer_of_int32(x_2) = 5))
+  ("JC_30": true) ->
+  ("JC_36": (integer_of_int32(x_2) = 5))
 
 ========== file tests/java/why/Assertion_po2.why ==========
 goal Assertion_max_ensures_default_po_2:
   forall x_2:int32.
-  ("JC_22": true) ->
-  ("JC_28": (integer_of_int32(x_2) = 5)) ->
+  ("JC_30": true) ->
+  ("JC_36": (integer_of_int32(x_2) = 5)) ->
   forall return:int32.
   (return = x_2) ->
-  ("JC_23": (integer_of_int32(return) = 5))
+  ("JC_31": (integer_of_int32(return) = 5))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Assertion.why
@@ -3483,6 +3484,7 @@ why -simplify [...] why/Assertion.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
+Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Assertion_why.sx     : ?. (1/0/1/0/0)
 total   :   2
@@ -4733,14 +4735,14 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 
 goal Assertion_max_ensures_default_po_1:
   forall x_2:int32.
-  ("JC_22": true) ->
-  ("JC_28": (integer_of_int32(x_2) = 5))
+  ("JC_30": true) ->
+  ("JC_36": (integer_of_int32(x_2) = 5))
 
 goal Assertion_max_ensures_default_po_2:
   forall x_2:int32.
-  ("JC_22": true) ->
-  ("JC_28": (integer_of_int32(x_2) = 5)) ->
+  ("JC_30": true) ->
+  ("JC_36": (integer_of_int32(x_2) = 5)) ->
   forall return:int32.
   (return = x_2) ->
-  ("JC_23": (integer_of_int32(return) = 5))
+  ("JC_31": (integer_of_int32(return) = 5))
 

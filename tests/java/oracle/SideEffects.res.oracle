@@ -61,8 +61,8 @@ End:
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
-Generating JC function SideEffects_m1 for method SideEffects.m1
 Generating JC function cons_SideEffects for constructor SideEffects
+Generating JC function SideEffects_m1 for method SideEffects.m1
 Done.
 ========== file tests/java/SideEffects.jc ==========
 # InvariantPolicy = Arguments
@@ -80,19 +80,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag SideEffects = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag SideEffects = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -124,9 +124,11 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
+exception Exception of Exception[0..]
+
 exception Throwable of Throwable[0..]
 
-exception Exception of Exception[0..]
+unit cons_SideEffects(! SideEffects[0] this_1){()}
 
 unit SideEffects_m1(SideEffects[0] this_0, intM[0..] t)
   requires (K_1 : ((\offset_max(t) + 1) > 10));
@@ -158,8 +160,6 @@ unit SideEffects_m1(SideEffects[0] this_0, intM[0..] t)
    }
 }
 
-unit cons_SideEffects(! SideEffects[0] this_1){()}
-
 /*
 Local Variables:
 mode: java
@@ -167,82 +167,10 @@ compile-command: "jessie -why-opt -split-user-conj -locs tests/java/SideEffects.
 End:
 */
 ========== file tests/java/SideEffects.jloc ==========
-[K_10]
+[K_30]
 file = "HOME/tests/java/SideEffects.java"
-line = 43
-begin = 38
-end = 44
-
-[K_11]
-file = "HOME/tests/java/SideEffects.java"
-line = 43
+line = 47
 begin = 25
-end = 34
-
-[K_12]
-file = "HOME/tests/java/SideEffects.java"
-line = 43
-begin = 12
-end = 21
-
-[K_13]
-file = "HOME/tests/java/SideEffects.java"
-line = 43
-begin = 12
-end = 34
-
-[K_14]
-file = "HOME/tests/java/SideEffects.java"
-line = 43
-begin = 12
-end = 44
-
-[K_15]
-file = "HOME/tests/java/SideEffects.java"
-line = 43
-begin = 12
-end = 44
-
-[K_16]
-file = "HOME/tests/java/SideEffects.java"
-line = 44
-begin = 3
-end = 6
-
-[K_17]
-file = "HOME/tests/java/SideEffects.java"
-line = 44
-begin = 1
-end = 11
-
-[K_18]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 51
-end = 57
-
-[K_19]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 38
-end = 47
-
-[K_20]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 25
-end = 34
-
-[K_21]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 12
-end = 21
-
-[K_22]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 12
 end = 34
 
 [K_23]
@@ -251,10 +179,46 @@ line = 45
 begin = 12
 end = 47
 
-[K_24]
+[K_33]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 12
+end = 47
+
+[K_17]
+file = "HOME/tests/java/SideEffects.java"
+line = 44
+begin = 1
+end = 11
+
+[K_11]
+file = "HOME/tests/java/SideEffects.java"
+line = 43
+begin = 25
+end = 34
+
+[K_25]
 file = "HOME/tests/java/SideEffects.java"
 line = 45
 begin = 12
+end = 57
+
+[K_13]
+file = "HOME/tests/java/SideEffects.java"
+line = 43
+begin = 12
+end = 34
+
+[K_9]
+file = "HOME/tests/java/SideEffects.java"
+line = 42
+begin = 1
+end = 11
+
+[K_28]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 51
 end = 57
 
 [K_1]
@@ -263,35 +227,11 @@ line = 36
 begin = 17
 end = 30
 
-[K_25]
+[K_15]
 file = "HOME/tests/java/SideEffects.java"
-line = 45
+line = 43
 begin = 12
-end = 57
-
-[K_2]
-file = "HOME/tests/java/SideEffects.java"
-line = 40
-begin = 3
-end = 6
-
-[K_26]
-file = "HOME/tests/java/SideEffects.java"
-line = 46
-begin = 3
-end = 6
-
-[K_3]
-file = "HOME/tests/java/SideEffects.java"
-line = 40
-begin = 1
-end = 11
-
-[K_27]
-file = "HOME/tests/java/SideEffects.java"
-line = 46
-begin = 1
-end = 11
+end = 44
 
 [K_4]
 file = "HOME/tests/java/SideEffects.java"
@@ -299,17 +239,29 @@ line = 41
 begin = 25
 end = 31
 
-[K_28]
+[K_12]
 file = "HOME/tests/java/SideEffects.java"
-line = 47
-begin = 51
-end = 57
-
-[K_5]
-file = "HOME/tests/java/SideEffects.java"
-line = 41
+line = 43
 begin = 12
 end = 21
+
+[K_34]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 12
+end = 57
+
+[K_20]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 25
+end = 34
+
+[K_2]
+file = "HOME/tests/java/SideEffects.java"
+line = 40
+begin = 3
+end = 6
 
 [K_29]
 file = "HOME/tests/java/SideEffects.java"
@@ -317,13 +269,19 @@ line = 47
 begin = 38
 end = 47
 
-[K_6]
+[K_10]
 file = "HOME/tests/java/SideEffects.java"
-line = 41
-begin = 12
-end = 31
+line = 43
+begin = 38
+end = 44
 
-[K_7]
+[K_35]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 12
+end = 57
+
+[K_6]
 file = "HOME/tests/java/SideEffects.java"
 line = 41
 begin = 12
@@ -335,11 +293,17 @@ line = 42
 begin = 3
 end = 6
 
-[K_9]
+[K_3]
 file = "HOME/tests/java/SideEffects.java"
-line = 42
+line = 40
 begin = 1
 end = 11
+
+[K_31]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 12
+end = 21
 
 [cons_SideEffects]
 name = "Constructor of class SideEffects"
@@ -348,47 +312,59 @@ line = 0
 begin = -1
 end = -1
 
-[K_30]
-file = "HOME/tests/java/SideEffects.java"
-line = 47
-begin = 25
-end = 34
-
-[K_31]
-file = "HOME/tests/java/SideEffects.java"
-line = 47
-begin = 12
-end = 21
-
 [K_32]
 file = "HOME/tests/java/SideEffects.java"
 line = 47
 begin = 12
 end = 34
 
-[K_33]
+[K_27]
 file = "HOME/tests/java/SideEffects.java"
-line = 47
-begin = 12
-end = 47
+line = 46
+begin = 1
+end = 11
 
-[K_34]
+[K_21]
 file = "HOME/tests/java/SideEffects.java"
-line = 47
+line = 45
+begin = 12
+end = 21
+
+[K_24]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
 begin = 12
 end = 57
 
-[K_35]
+[K_14]
 file = "HOME/tests/java/SideEffects.java"
-line = 47
+line = 43
 begin = 12
-end = 57
+end = 44
 
 [K_36]
 file = "HOME/tests/java/SideEffects.java"
 line = 39
 begin = 9
 end = 10
+
+[K_19]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 38
+end = 47
+
+[K_5]
+file = "HOME/tests/java/SideEffects.java"
+line = 41
+begin = 12
+end = 21
+
+[K_18]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 51
+end = 57
 
 [SideEffects_m1]
 name = "Method m1"
@@ -397,9 +373,33 @@ line = 38
 begin = 9
 end = 11
 
+[K_7]
+file = "HOME/tests/java/SideEffects.java"
+line = 41
+begin = 12
+end = 31
+
+[K_26]
+file = "HOME/tests/java/SideEffects.java"
+line = 46
+begin = 3
+end = 6
+
+[K_22]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 12
+end = 34
+
+[K_16]
+file = "HOME/tests/java/SideEffects.java"
+line = 44
+begin = 3
+end = 6
+
 ========== jessie execution ==========
-Generating Why function SideEffects_m1
 Generating Why function cons_SideEffects
+Generating Why function SideEffects_m1
 ========== file tests/java/SideEffects.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -410,10 +410,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs SideEffects.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs SideEffects.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs SideEffects.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs SideEffects.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -558,13 +559,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: SideEffects.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: SideEffects.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: SideEffects.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include SideEffects.depend
 
@@ -575,71 +576,29 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/SideEffects.loc ==========
-[JC_90]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_91]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_92]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_40]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_41]
+[JC_73]
 file = "HOME/tests/java/SideEffects.java"
-line = 36
-begin = 17
-end = 30
+line = 47
+begin = 38
+end = 47
 
-[JC_42]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_43]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_44]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_45]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_46]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_1]
-file = "HOME/tests/java/SideEffects.jc"
-line = 13
+[JC_63]
+file = "HOME/tests/java/SideEffects.java"
+line = 43
 begin = 12
-end = 22
+end = 44
+
+[JC_80]
+file = "HOME/tests/java/SideEffects.java"
+line = 43
+begin = 25
+end = 34
+
+[JC_51]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_SideEffects_ensures_default]
 name = "Constructor of class SideEffects"
@@ -649,38 +608,69 @@ line = 0
 begin = -1
 end = -1
 
-[JC_47]
-kind = PointerDeref
-file = "HOME/tests/java/SideEffects.jc"
-line = 70
-begin = 17
-end = 46
+[JC_71]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 12
+end = 21
 
-[JC_2]
+[JC_45]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_48]
-file = "HOME/tests/java/SideEffects.java"
-line = 41
-begin = 12
-end = 21
-
-[JC_3]
+[JC_64]
+kind = PointerDeref
 file = "HOME/tests/java/SideEffects.jc"
-line = 13
-begin = 12
-end = 22
+line = 80
+begin = 18
+end = 48
 
-[JC_49]
+[JC_85]
 file = "HOME/tests/java/SideEffects.java"
-line = 41
-begin = 25
-end = 31
+line = 45
+begin = 38
+end = 47
 
-[JC_4]
+[JC_31]
+file = "HOME/tests/java/SideEffects.jc"
+line = 55
+begin = 8
+end = 23
+
+[JC_17]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_81]
+file = "HOME/tests/java/SideEffects.java"
+line = 43
+begin = 38
+end = 44
+
+[JC_55]
+kind = PointerDeref
+file = "HOME/tests/java/SideEffects.jc"
+line = 72
+begin = 17
+end = 46
+
+[JC_48]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_23]
+file = "HOME/tests/java/SideEffects.jc"
+line = 51
+begin = 11
+end = 103
+
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
@@ -692,23 +682,11 @@ line = 0
 begin = -1
 end = -1
 
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_67]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 38
+end = 47
 
 [JC_9]
 file = "HOME/tests/java/SideEffects.jc"
@@ -716,67 +694,132 @@ line = 42
 begin = 8
 end = 21
 
-[JC_50]
+[JC_75]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 12
+end = 57
+
+[JC_24]
+file = "HOME/tests/java/SideEffects.jc"
+line = 50
+begin = 10
+end = 18
+
+[JC_25]
+file = "HOME/tests/java/SideEffects.jc"
+line = 51
+begin = 11
+end = 103
+
+[JC_78]
 file = "HOME/tests/java/SideEffects.java"
 line = 41
 begin = 12
 end = 31
 
-[JC_51]
-kind = PointerDeref
-file = "HOME/tests/java/SideEffects.jc"
-line = 73
+[JC_41]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_74]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 51
+end = 57
+
+[JC_47]
+file = "HOME/tests/java/SideEffects.java"
+line = 36
 begin = 17
-end = 46
+end = 30
 
 [JC_52]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_26]
+file = "HOME/tests/java/SideEffects.jc"
+line = 50
+begin = 10
+end = 18
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_79]
 file = "HOME/tests/java/SideEffects.java"
 line = 43
 begin = 12
 end = 21
 
-[JC_53]
-file = "HOME/tests/java/SideEffects.java"
-line = 43
-begin = 25
-end = 34
+[JC_13]
+file = "HOME/tests/java/SideEffects.jc"
+line = 45
+begin = 11
+end = 66
 
-[JC_54]
-file = "HOME/tests/java/SideEffects.java"
-line = 43
-begin = 38
-end = 44
-
-[JC_55]
+[JC_82]
 file = "HOME/tests/java/SideEffects.java"
 line = 43
 begin = 12
 end = 44
 
-[JC_56]
+[JC_87]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 12
+end = 57
+
+[JC_11]
+file = "HOME/tests/java/SideEffects.jc"
+line = 42
+begin = 8
+end = 21
+
+[JC_70]
 kind = PointerDeref
 file = "HOME/tests/java/SideEffects.jc"
-line = 78
+line = 86
 begin = 18
 end = 48
 
-[JC_57]
-file = "HOME/tests/java/SideEffects.java"
+[JC_15]
+file = "HOME/tests/java/SideEffects.jc"
 line = 45
-begin = 12
-end = 21
+begin = 11
+end = 66
 
-[JC_58]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 25
-end = 34
+[JC_36]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_59]
+[JC_91]
 file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 38
-end = 47
+line = 47
+begin = 51
+end = 57
+
+[JC_39]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [SideEffects_m1_safety]
 name = "Method m1"
@@ -786,48 +829,41 @@ line = 38
 begin = 9
 end = 11
 
-[JC_60]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 51
-end = 57
-
-[JC_61]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 12
-end = 57
-
-[JC_62]
-kind = PointerDeref
-file = "HOME/tests/java/SideEffects.jc"
-line = 84
-begin = 18
-end = 48
-
-[JC_10]
+[JC_40]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_63]
+[JC_83]
 file = "HOME/tests/java/SideEffects.java"
-line = 47
+line = 45
 begin = 12
 end = 21
 
-[JC_11]
-file = "HOME/tests/java/SideEffects.jc"
-line = 42
-begin = 8
-end = 21
+[JC_35]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_64]
+[JC_27]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_69]
 file = "HOME/tests/java/SideEffects.java"
-line = 47
-begin = 25
-end = 34
+line = 45
+begin = 12
+end = 57
+
+[JC_38]
+file = "HOME/tests/java/SideEffects.jc"
+line = 57
+begin = 11
+end = 65
 
 [JC_12]
 file = "HOME/"
@@ -835,47 +871,95 @@ line = 0
 begin = -1
 end = -1
 
-[JC_65]
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_62]
 file = "HOME/tests/java/SideEffects.java"
-line = 47
+line = 43
 begin = 38
-end = 47
+end = 44
 
-[JC_13]
-file = "HOME/tests/java/SideEffects.jc"
-line = 45
-begin = 11
-end = 66
-
-[JC_66]
-file = "HOME/tests/java/SideEffects.java"
-line = 47
-begin = 51
-end = 57
-
-[JC_14]
-file = "HOME/tests/java/SideEffects.jc"
-line = 44
-begin = 10
-end = 18
-
-[JC_67]
+[JC_88]
 file = "HOME/tests/java/SideEffects.java"
 line = 47
 begin = 12
-end = 57
+end = 21
 
-[JC_15]
-file = "HOME/tests/java/SideEffects.jc"
-line = 45
-begin = 11
-end = 66
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_68]
+[JC_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_61]
+file = "HOME/tests/java/SideEffects.java"
+line = 43
+begin = 25
+end = 34
+
+[JC_32]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_56]
 file = "HOME/tests/java/SideEffects.java"
 line = 41
 begin = 12
 end = 21
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_65]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 12
+end = 21
+
+[JC_29]
+file = "HOME/tests/java/SideEffects.jc"
+line = 55
+begin = 8
+end = 23
+
+[JC_68]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 51
+end = 57
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_16]
 file = "HOME/tests/java/SideEffects.jc"
@@ -883,13 +967,126 @@ line = 44
 begin = 10
 end = 18
 
-[JC_69]
+[JC_43]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_84]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 25
+end = 34
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/tests/java/SideEffects.jc"
+line = 44
+begin = 10
+end = 18
+
+[JC_90]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 38
+end = 47
+
+[JC_53]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_21]
+file = "HOME/tests/java/SideEffects.jc"
+line = 48
+begin = 8
+end = 30
+
+[SideEffects_m1_ensures_default]
+name = "Method m1"
+behavior = "default behavior"
+file = "HOME/tests/java/SideEffects.java"
+line = 38
+begin = 9
+end = 11
+
+[JC_77]
 file = "HOME/tests/java/SideEffects.java"
 line = 41
 begin = 25
 end = 31
 
-[JC_17]
+[JC_49]
+file = "HOME/tests/java/SideEffects.java"
+line = 36
+begin = 17
+end = 30
+
+[JC_1]
+file = "HOME/tests/java/SideEffects.jc"
+line = 13
+begin = 12
+end = 22
+
+[JC_37]
+file = "HOME/tests/java/SideEffects.jc"
+line = 57
+begin = 11
+end = 65
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_57]
+file = "HOME/tests/java/SideEffects.java"
+line = 41
+begin = 25
+end = 31
+
+[JC_89]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 25
+end = 34
+
+[JC_66]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 25
+end = 34
+
+[JC_59]
+kind = PointerDeref
+file = "HOME/tests/java/SideEffects.jc"
+line = 75
+begin = 17
+end = 46
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_SideEffects_safety]
+name = "Constructor of class SideEffects"
+behavior = "Safety"
 file = "HOME/"
 line = 0
 begin = -1
@@ -901,19 +1098,25 @@ line = 0
 begin = -1
 end = -1
 
-[JC_19]
+[JC_3]
 file = "HOME/tests/java/SideEffects.jc"
-line = 48
-begin = 8
-end = 30
-
-[JC_70]
-file = "HOME/tests/java/SideEffects.java"
-line = 41
+line = 13
 begin = 12
-end = 31
+end = 22
 
-[JC_71]
+[JC_92]
+file = "HOME/tests/java/SideEffects.java"
+line = 47
+begin = 12
+end = 57
+
+[JC_86]
+file = "HOME/tests/java/SideEffects.java"
+line = 45
+begin = 51
+end = 57
+
+[JC_60]
 file = "HOME/tests/java/SideEffects.java"
 line = 43
 begin = 12
@@ -921,137 +1124,27 @@ end = 21
 
 [JC_72]
 file = "HOME/tests/java/SideEffects.java"
-line = 43
+line = 47
 begin = 25
 end = 34
 
-[JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_73]
-file = "HOME/tests/java/SideEffects.java"
-line = 43
-begin = 38
-end = 44
-
-[JC_21]
+[JC_19]
 file = "HOME/tests/java/SideEffects.jc"
 line = 48
 begin = 8
 end = 30
 
-[JC_74]
-file = "HOME/tests/java/SideEffects.java"
-line = 43
-begin = 12
-end = 44
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_75]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 12
-end = 21
-
-[JC_23]
-file = "HOME/tests/java/SideEffects.jc"
-line = 51
-begin = 11
-end = 103
-
 [JC_76]
 file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 25
-end = 34
-
-[JC_24]
-file = "HOME/tests/java/SideEffects.jc"
-line = 50
-begin = 10
-end = 18
-
-[JC_77]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 38
-end = 47
-
-[JC_25]
-file = "HOME/tests/java/SideEffects.jc"
-line = 51
-begin = 11
-end = 103
-
-[JC_78]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 51
-end = 57
-
-[JC_26]
-file = "HOME/tests/java/SideEffects.jc"
-line = 50
-begin = 10
-end = 18
-
-[JC_79]
-file = "HOME/tests/java/SideEffects.java"
-line = 45
-begin = 12
-end = 57
-
-[JC_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_29]
-file = "HOME/tests/java/SideEffects.jc"
-line = 55
-begin = 8
-end = 23
-
-[SideEffects_m1_ensures_default]
-name = "Method m1"
-behavior = "default behavior"
-file = "HOME/tests/java/SideEffects.java"
-line = 38
-begin = 9
-end = 11
-
-[JC_80]
-file = "HOME/tests/java/SideEffects.java"
-line = 47
+line = 41
 begin = 12
 end = 21
 
-[JC_81]
-file = "HOME/tests/java/SideEffects.java"
-line = 47
-begin = 25
-end = 34
-
-[JC_82]
-file = "HOME/tests/java/SideEffects.java"
-line = 47
-begin = 38
-end = 47
+[JC_50]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_30]
 file = "HOME/"
@@ -1059,109 +1152,17 @@ line = 0
 begin = -1
 end = -1
 
-[JC_83]
+[JC_58]
 file = "HOME/tests/java/SideEffects.java"
-line = 47
-begin = 51
-end = 57
-
-[JC_31]
-file = "HOME/tests/java/SideEffects.jc"
-line = 55
-begin = 8
-end = 23
-
-[JC_84]
-file = "HOME/tests/java/SideEffects.java"
-line = 47
+line = 41
 begin = 12
-end = 57
+end = 31
 
-[JC_32]
+[JC_28]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_85]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_86]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_34]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_87]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_35]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_88]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_36]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_89]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_37]
-file = "HOME/tests/java/SideEffects.jc"
-line = 57
-begin = 11
-end = 65
-
-[cons_SideEffects_safety]
-name = "Constructor of class SideEffects"
-behavior = "Safety"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_38]
-file = "HOME/tests/java/SideEffects.jc"
-line = 57
-begin = 11
-end = 65
-
-[JC_39]
-file = "HOME/tests/java/SideEffects.java"
-line = 36
-begin = 17
-end = 30
 
 ========== file tests/java/why/SideEffects.why ==========
 type Object
@@ -1395,7 +1396,7 @@ parameter SideEffects_m1 :
 parameter SideEffects_m1_requires :
  this_0:Object pointer ->
   t:Object pointer ->
-   { (JC_39: gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10)))}
+   { (JC_47: gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10)))}
    unit reads Object_alloc_table,intM_intP writes intM_intP { true }
 
 exception Throwable_exc of Object pointer
@@ -1623,7 +1624,7 @@ let SideEffects_m1_ensures_default =
  fun (this_0 : Object pointer) (t : Object pointer) ->
   { (left_valid_struct_intM(t, (0), Object_alloc_table)
     and (valid_struct_SideEffects(this_0, (0), (0), Object_alloc_table)
-        and (JC_41:
+        and (JC_49:
             gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10))))) }
   (init:
   try
@@ -1637,69 +1638,69 @@ let SideEffects_m1_ensures_default =
      (K_25:
      (K_27:
      begin
-       (let jessie_<num> =
-       (let jessie_<num> = (1) in
-       (let jessie_<num> = t in
-       (let jessie_<num> =
+       (let _jessie_<num> =
+       (let _jessie_<num> = (1) in
+       (let _jessie_<num> = t in
+       (let _jessie_<num> =
        (K_2:
-       (let jessie_<num> = !i in
+       (let _jessie_<num> = !i in
        begin
-         (let jessie_<num> = (i := ((add_int jessie_<num>) (1))) in void); jessie_<num>
-       end)) in
-       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-       (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+         (let _jessie_<num> = (i := ((add_int _jessie_<num>) (1))) in void);
+        _jessie_<num> end)) in
+       (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+       (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
       (assert
-      { (JC_70:
-        ((JC_68: (select(intM_intP, shift(t, (0))) = (1)))
-        and (JC_69: (i = (1))))) }; void);
-      (let jessie_<num> =
-      (let jessie_<num> = (2) in
-      (let jessie_<num> = t in
-      (let jessie_<num> = (K_8: begin   (i := ((add_int !i) (1))); !i end) in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+      { (JC_78:
+        ((JC_76: (select(intM_intP, shift(t, (0))) = (1)))
+        and (JC_77: (i = (1))))) }; void);
+      (let _jessie_<num> =
+      (let _jessie_<num> = (2) in
+      (let _jessie_<num> = t in
+      (let _jessie_<num> = (K_8: begin   (i := ((add_int !i) (1))); !i end) in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
       (assert
-      { (JC_74:
-        ((JC_71: (select(intM_intP, shift(t, (0))) = (1)))
-        and ((JC_72: (select(intM_intP, shift(t, (2))) = (2)))
-            and (JC_73: (i = (2)))))) }; void);
-      (let jessie_<num> =
-      (let jessie_<num> = (3) in
-      (let jessie_<num> = t in
-      (let jessie_<num> = (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+      { (JC_82:
+        ((JC_79: (select(intM_intP, shift(t, (0))) = (1)))
+        and ((JC_80: (select(intM_intP, shift(t, (2))) = (2)))
+            and (JC_81: (i = (2)))))) }; void);
+      (let _jessie_<num> =
+      (let _jessie_<num> = (3) in
+      (let _jessie_<num> = t in
+      (let _jessie_<num> = (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
       (assert
-      { (JC_79:
-        ((JC_75: (select(intM_intP, shift(t, (0))) = (1)))
-        and ((JC_76: (select(intM_intP, shift(t, (2))) = (2)))
-            and ((JC_77: (select(intM_intP, shift(t, (1))) = (3)))
-                and (JC_78: (i = (1))))))) }; void);
-      (let jessie_<num> =
-      (let jessie_<num> = (4) in
-      (let jessie_<num> = t in
-      (let jessie_<num> =
+      { (JC_87:
+        ((JC_83: (select(intM_intP, shift(t, (0))) = (1)))
+        and ((JC_84: (select(intM_intP, shift(t, (2))) = (2)))
+            and ((JC_85: (select(intM_intP, shift(t, (1))) = (3)))
+                and (JC_86: (i = (1))))))) }; void);
+      (let _jessie_<num> =
+      (let _jessie_<num> = (4) in
+      (let _jessie_<num> = t in
+      (let _jessie_<num> =
       (K_26:
-      (let jessie_<num> = !i in
+      (let _jessie_<num> = !i in
       begin
-        (let jessie_<num> = (i := ((sub_int jessie_<num>) (1))) in void); jessie_<num>
-      end)) in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+        (let _jessie_<num> = (i := ((sub_int _jessie_<num>) (1))) in void);
+       _jessie_<num> end)) in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
       (K_35:
       (assert
-      { (JC_84:
-        ((JC_80: (select(intM_intP, shift(t, (0))) = (1)))
-        and ((JC_81: (select(intM_intP, shift(t, (2))) = (2)))
-            and ((JC_82: (select(intM_intP, shift(t, (1))) = (4)))
-                and (JC_83: (i = (0))))))) }; void)) end))))))));
-    (raise Return) end with Return -> void end) { (JC_43: true) }
+      { (JC_92:
+        ((JC_88: (select(intM_intP, shift(t, (0))) = (1)))
+        and ((JC_89: (select(intM_intP, shift(t, (2))) = (2)))
+            and ((JC_90: (select(intM_intP, shift(t, (1))) = (4)))
+                and (JC_91: (i = (0))))))) }; void)) end))))))));
+    (raise Return) end with Return -> void end) { (JC_51: true) }
 
 let SideEffects_m1_safety =
  fun (this_0 : Object pointer) (t : Object pointer) ->
   { (left_valid_struct_intM(t, (0), Object_alloc_table)
     and (valid_struct_SideEffects(this_0, (0), (0), Object_alloc_table)
-        and (JC_41:
+        and (JC_49:
             gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10))))) }
   (init:
   try
@@ -1713,77 +1714,77 @@ let SideEffects_m1_safety =
      (K_25:
      (K_27:
      begin
-       (let jessie_<num> =
-       (let jessie_<num> = (1) in
-       (let jessie_<num> = t in
-       (let jessie_<num> =
+       (let _jessie_<num> =
+       (let _jessie_<num> = (1) in
+       (let _jessie_<num> = t in
+       (let _jessie_<num> =
        (K_2:
-       (let jessie_<num> = !i in
+       (let _jessie_<num> = !i in
        begin
-         (let jessie_<num> = (i := ((add_int jessie_<num>) (1))) in void); jessie_<num>
-       end)) in
-       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-       (JC_47:
-       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+         (let _jessie_<num> = (i := ((add_int _jessie_<num>) (1))) in void);
+        _jessie_<num> end)) in
+       (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+       (JC_55:
+       (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
        void);
       [ { } unit reads i,intM_intP
-        { (JC_50:
-          ((JC_48: (select(intM_intP, shift(t, (0))) = (1)))
-          and (JC_49: (i = (1))))) } ];
-      (let jessie_<num> =
-      (let jessie_<num> = (2) in
-      (let jessie_<num> = t in
-      (let jessie_<num> = (K_8: begin   (i := ((add_int !i) (1))); !i end) in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (JC_51:
-      (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+        { (JC_58:
+          ((JC_56: (select(intM_intP, shift(t, (0))) = (1)))
+          and (JC_57: (i = (1))))) } ];
+      (let _jessie_<num> =
+      (let _jessie_<num> = (2) in
+      (let _jessie_<num> = t in
+      (let _jessie_<num> = (K_8: begin   (i := ((add_int !i) (1))); !i end) in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (JC_59:
+      (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
       void);
       [ { } unit reads i,intM_intP
-        { (JC_55:
-          ((JC_52: (select(intM_intP, shift(t, (0))) = (1)))
-          and ((JC_53: (select(intM_intP, shift(t, (2))) = (2)))
-              and (JC_54: (i = (2)))))) } ];
-      (let jessie_<num> =
-      (let jessie_<num> = (3) in
-      (let jessie_<num> = t in
-      (let jessie_<num> = (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (JC_56:
-      (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+        { (JC_63:
+          ((JC_60: (select(intM_intP, shift(t, (0))) = (1)))
+          and ((JC_61: (select(intM_intP, shift(t, (2))) = (2)))
+              and (JC_62: (i = (2)))))) } ];
+      (let _jessie_<num> =
+      (let _jessie_<num> = (3) in
+      (let _jessie_<num> = t in
+      (let _jessie_<num> = (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (JC_64:
+      (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
       void);
       [ { } unit reads i,intM_intP
-        { (JC_61:
-          ((JC_57: (select(intM_intP, shift(t, (0))) = (1)))
-          and ((JC_58: (select(intM_intP, shift(t, (2))) = (2)))
-              and ((JC_59: (select(intM_intP, shift(t, (1))) = (3)))
-                  and (JC_60: (i = (1))))))) } ];
-      (let jessie_<num> =
-      (let jessie_<num> = (4) in
-      (let jessie_<num> = t in
-      (let jessie_<num> =
+        { (JC_69:
+          ((JC_65: (select(intM_intP, shift(t, (0))) = (1)))
+          and ((JC_66: (select(intM_intP, shift(t, (2))) = (2)))
+              and ((JC_67: (select(intM_intP, shift(t, (1))) = (3)))
+                  and (JC_68: (i = (1))))))) } ];
+      (let _jessie_<num> =
+      (let _jessie_<num> = (4) in
+      (let _jessie_<num> = t in
+      (let _jessie_<num> =
       (K_26:
-      (let jessie_<num> = !i in
+      (let _jessie_<num> = !i in
       begin
-        (let jessie_<num> = (i := ((sub_int jessie_<num>) (1))) in void); jessie_<num>
-      end)) in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (JC_62:
-      (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+        (let _jessie_<num> = (i := ((sub_int _jessie_<num>) (1))) in void);
+       _jessie_<num> end)) in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (JC_70:
+      (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
       void);
       (K_35:
       [ { } unit reads i,intM_intP
-        { (JC_67:
-          ((JC_63: (select(intM_intP, shift(t, (0))) = (1)))
-          and ((JC_64: (select(intM_intP, shift(t, (2))) = (2)))
-              and ((JC_65: (select(intM_intP, shift(t, (1))) = (4)))
-                  and (JC_66: (i = (0))))))) } ]) end)))))))); (raise Return)
+        { (JC_75:
+          ((JC_71: (select(intM_intP, shift(t, (0))) = (1)))
+          and ((JC_72: (select(intM_intP, shift(t, (2))) = (2)))
+              and ((JC_73: (select(intM_intP, shift(t, (1))) = (4)))
+                  and (JC_74: (i = (0))))))) } ]) end)))))))); (raise Return)
    end with Return -> void end) { true }
 
 let cons_SideEffects_ensures_default =
  fun (this_1 : Object pointer) ->
   { valid_struct_SideEffects(this_1, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_89: true) }
+  { (JC_43: true) }
 
 let cons_SideEffects_safety =
  fun (this_1 : Object pointer) ->
@@ -1854,32 +1855,32 @@ why --project [...] why/SideEffects.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/SideEffects_po14.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "70" begin = "17" end = "46"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "72" begin = "17" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po15.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "70" begin = "17" end = "46"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "72" begin = "17" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po16.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "73" begin = "17" end = "46"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "75" begin = "17" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po17.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "73" begin = "17" end = "46"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "75" begin = "17" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po18.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "78" begin = "18" end = "48"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "80" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po19.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "78" begin = "18" end = "48"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "80" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -3047,13 +3048,13 @@ goal SideEffects_m1_ensures_default_po_1:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70": ("JC_68": (select(intM_intP0, shift(t, 0)) = 1)))
+  ("JC_78": ("JC_76": (select(intM_intP0, shift(t, 0)) = 1)))
 
 ========== file tests/java/why/SideEffects_po10.why ==========
 goal SideEffects_m1_ensures_default_po_10:
@@ -3064,37 +3065,37 @@ goal SideEffects_m1_ensures_default_po_10:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79":
-  (("JC_75": (select(intM_intP2, shift(t, 0)) = 1)) and
-   (("JC_76": (select(intM_intP2, shift(t, 2)) = 2)) and
-    (("JC_77": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_78": (i1 = 1)))))) ->
+  ("JC_87":
+  (("JC_83": (select(intM_intP2, shift(t, 0)) = 1)) and
+   (("JC_84": (select(intM_intP2, shift(t, 2)) = 2)) and
+    (("JC_85": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_86": (i1 = 1)))))) ->
   forall i2:int.
   (i2 = (i1 - 1)) ->
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("JC_84": ("JC_80": (select(intM_intP3, shift(t, 0)) = 1)))
+  ("JC_92": ("JC_88": (select(intM_intP3, shift(t, 0)) = 1)))
 
 ========== file tests/java/why/SideEffects_po11.why ==========
 goal SideEffects_m1_ensures_default_po_11:
@@ -3105,37 +3106,37 @@ goal SideEffects_m1_ensures_default_po_11:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79":
-  (("JC_75": (select(intM_intP2, shift(t, 0)) = 1)) and
-   (("JC_76": (select(intM_intP2, shift(t, 2)) = 2)) and
-    (("JC_77": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_78": (i1 = 1)))))) ->
+  ("JC_87":
+  (("JC_83": (select(intM_intP2, shift(t, 0)) = 1)) and
+   (("JC_84": (select(intM_intP2, shift(t, 2)) = 2)) and
+    (("JC_85": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_86": (i1 = 1)))))) ->
   forall i2:int.
   (i2 = (i1 - 1)) ->
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("JC_84": ("JC_81": (select(intM_intP3, shift(t, 2)) = 2)))
+  ("JC_92": ("JC_89": (select(intM_intP3, shift(t, 2)) = 2)))
 
 ========== file tests/java/why/SideEffects_po12.why ==========
 goal SideEffects_m1_ensures_default_po_12:
@@ -3146,37 +3147,37 @@ goal SideEffects_m1_ensures_default_po_12:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79":
-  (("JC_75": (select(intM_intP2, shift(t, 0)) = 1)) and
-   (("JC_76": (select(intM_intP2, shift(t, 2)) = 2)) and
-    (("JC_77": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_78": (i1 = 1)))))) ->
+  ("JC_87":
+  (("JC_83": (select(intM_intP2, shift(t, 0)) = 1)) and
+   (("JC_84": (select(intM_intP2, shift(t, 2)) = 2)) and
+    (("JC_85": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_86": (i1 = 1)))))) ->
   forall i2:int.
   (i2 = (i1 - 1)) ->
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("JC_84": ("JC_82": (select(intM_intP3, shift(t, 1)) = 4)))
+  ("JC_92": ("JC_90": (select(intM_intP3, shift(t, 1)) = 4)))
 
 ========== file tests/java/why/SideEffects_po13.why ==========
 goal SideEffects_m1_ensures_default_po_13:
@@ -3187,37 +3188,37 @@ goal SideEffects_m1_ensures_default_po_13:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79":
-  (("JC_75": (select(intM_intP2, shift(t, 0)) = 1)) and
-   (("JC_76": (select(intM_intP2, shift(t, 2)) = 2)) and
-    (("JC_77": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_78": (i1 = 1)))))) ->
+  ("JC_87":
+  (("JC_83": (select(intM_intP2, shift(t, 0)) = 1)) and
+   (("JC_84": (select(intM_intP2, shift(t, 2)) = 2)) and
+    (("JC_85": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_86": (i1 = 1)))))) ->
   forall i2:int.
   (i2 = (i1 - 1)) ->
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("JC_84": ("JC_83": (i2 = 0)))
+  ("JC_92": ("JC_91": (i2 = 0)))
 
 ========== file tests/java/why/SideEffects_po14.why ==========
 goal SideEffects_m1_safety_po_1:
@@ -3226,7 +3227,7 @@ goal SideEffects_m1_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   (offset_min(Object_alloc_table, t) <= 0)
@@ -3238,7 +3239,7 @@ goal SideEffects_m1_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   (0 <= offset_max(Object_alloc_table, t))
@@ -3252,7 +3253,7 @@ goal SideEffects_m1_safety_po_3:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((offset_min(Object_alloc_table, t) <= 0) and
@@ -3260,8 +3261,8 @@ goal SideEffects_m1_safety_po_3:
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_50":
-  (("JC_48": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_49": (i = 1)))) ->
+  ("JC_58":
+  (("JC_56": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_57": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   (offset_min(Object_alloc_table, t) <= i0)
@@ -3275,7 +3276,7 @@ goal SideEffects_m1_safety_po_4:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((offset_min(Object_alloc_table, t) <= 0) and
@@ -3283,8 +3284,8 @@ goal SideEffects_m1_safety_po_4:
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_50":
-  (("JC_48": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_49": (i = 1)))) ->
+  ("JC_58":
+  (("JC_56": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_57": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   (i0 <= offset_max(Object_alloc_table, t))
@@ -3298,7 +3299,7 @@ goal SideEffects_m1_safety_po_5:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((offset_min(Object_alloc_table, t) <= 0) and
@@ -3306,8 +3307,8 @@ goal SideEffects_m1_safety_po_5:
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_50":
-  (("JC_48": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_49": (i = 1)))) ->
+  ("JC_58":
+  (("JC_56": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_57": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((offset_min(Object_alloc_table, t) <= i0) and
@@ -3315,9 +3316,9 @@ goal SideEffects_m1_safety_po_5:
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_55":
-  (("JC_52": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_53": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_54": (i0 = 2))))) ->
+  ("JC_63":
+  (("JC_60": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_61": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_62": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   (offset_min(Object_alloc_table, t) <= i1)
@@ -3331,7 +3332,7 @@ goal SideEffects_m1_safety_po_6:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((offset_min(Object_alloc_table, t) <= 0) and
@@ -3339,8 +3340,8 @@ goal SideEffects_m1_safety_po_6:
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_50":
-  (("JC_48": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_49": (i = 1)))) ->
+  ("JC_58":
+  (("JC_56": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_57": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((offset_min(Object_alloc_table, t) <= i0) and
@@ -3348,9 +3349,9 @@ goal SideEffects_m1_safety_po_6:
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_55":
-  (("JC_52": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_53": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_54": (i0 = 2))))) ->
+  ("JC_63":
+  (("JC_60": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_61": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_62": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   (i1 <= offset_max(Object_alloc_table, t))
@@ -3364,13 +3365,13 @@ goal SideEffects_m1_ensures_default_po_2:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70": ("JC_69": (i = 1)))
+  ("JC_78": ("JC_77": (i = 1)))
 
 ========== file tests/java/why/SideEffects_po3.why ==========
 goal SideEffects_m1_ensures_default_po_3:
@@ -3381,20 +3382,20 @@ goal SideEffects_m1_ensures_default_po_3:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74": ("JC_71": (select(intM_intP1, shift(t, 0)) = 1)))
+  ("JC_82": ("JC_79": (select(intM_intP1, shift(t, 0)) = 1)))
 
 ========== file tests/java/why/SideEffects_po4.why ==========
 goal SideEffects_m1_ensures_default_po_4:
@@ -3405,20 +3406,20 @@ goal SideEffects_m1_ensures_default_po_4:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74": ("JC_72": (select(intM_intP1, shift(t, 2)) = 2)))
+  ("JC_82": ("JC_80": (select(intM_intP1, shift(t, 2)) = 2)))
 
 ========== file tests/java/why/SideEffects_po5.why ==========
 goal SideEffects_m1_ensures_default_po_5:
@@ -3429,20 +3430,20 @@ goal SideEffects_m1_ensures_default_po_5:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74": ("JC_73": (i0 = 2)))
+  ("JC_82": ("JC_81": (i0 = 2)))
 
 ========== file tests/java/why/SideEffects_po6.why ==========
 goal SideEffects_m1_ensures_default_po_6:
@@ -3453,28 +3454,28 @@ goal SideEffects_m1_ensures_default_po_6:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79": ("JC_75": (select(intM_intP2, shift(t, 0)) = 1)))
+  ("JC_87": ("JC_83": (select(intM_intP2, shift(t, 0)) = 1)))
 
 ========== file tests/java/why/SideEffects_po7.why ==========
 goal SideEffects_m1_ensures_default_po_7:
@@ -3485,28 +3486,28 @@ goal SideEffects_m1_ensures_default_po_7:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79": ("JC_76": (select(intM_intP2, shift(t, 2)) = 2)))
+  ("JC_87": ("JC_84": (select(intM_intP2, shift(t, 2)) = 2)))
 
 ========== file tests/java/why/SideEffects_po8.why ==========
 goal SideEffects_m1_ensures_default_po_8:
@@ -3517,28 +3518,28 @@ goal SideEffects_m1_ensures_default_po_8:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79": ("JC_77": (select(intM_intP2, shift(t, 1)) = 3)))
+  ("JC_87": ("JC_85": (select(intM_intP2, shift(t, 1)) = 3)))
 
 ========== file tests/java/why/SideEffects_po9.why ==========
 goal SideEffects_m1_ensures_default_po_9:
@@ -3549,28 +3550,28 @@ goal SideEffects_m1_ensures_default_po_9:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79": ("JC_78": (i1 = 1)))
+  ("JC_87": ("JC_86": (i1 = 1)))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/SideEffects.why
@@ -4880,7 +4881,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (intM_intP3)
 (IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4)) (EQ i2 0)))))))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_1, File "HOME/tests/java/SideEffects.jc", line 70, characters 17-46
+;; SideEffects_m1_safety_po_1, File "HOME/tests/java/SideEffects.jc", line 72, characters 17-46
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4890,7 +4891,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1)) (<= (offset_min Object_alloc_table t) 0)))))))
 
-;; SideEffects_m1_safety_po_2, File "HOME/tests/java/SideEffects.jc", line 70, characters 17-46
+;; SideEffects_m1_safety_po_2, File "HOME/tests/java/SideEffects.jc", line 72, characters 17-46
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4900,7 +4901,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1)) (<= 0 (offset_max Object_alloc_table t))))))))
 
-;; SideEffects_m1_safety_po_3, File "HOME/tests/java/SideEffects.jc", line 73, characters 17-46
+;; SideEffects_m1_safety_po_3, File "HOME/tests/java/SideEffects.jc", line 75, characters 17-46
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4918,7 +4919,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1)) (<= (offset_min Object_alloc_table t) i0))))))))))))))
 
-;; SideEffects_m1_safety_po_4, File "HOME/tests/java/SideEffects.jc", line 73, characters 17-46
+;; SideEffects_m1_safety_po_4, File "HOME/tests/java/SideEffects.jc", line 75, characters 17-46
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4936,7 +4937,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1)) (<= i0 (offset_max Object_alloc_table t)))))))))))))))
 
-;; SideEffects_m1_safety_po_5, File "HOME/tests/java/SideEffects.jc", line 78, characters 18-48
+;; SideEffects_m1_safety_po_5, File "HOME/tests/java/SideEffects.jc", line 80, characters 18-48
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4962,7 +4963,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i1)
 (IMPLIES (EQ i1 (- i0 1)) (<= (offset_min Object_alloc_table t) i1))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_6, File "HOME/tests/java/SideEffects.jc", line 78, characters 18-48
+;; SideEffects_m1_safety_po_6, File "HOME/tests/java/SideEffects.jc", line 80, characters 18-48
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4990,6 +4991,7 @@ why -simplify [...] why/SideEffects.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
+Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/SideEffects_why.sx   : ................... (19/0/0/0/0)
 total   :  19
@@ -6157,13 +6159,13 @@ goal SideEffects_m1_ensures_default_po_1:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70": ("JC_68": (select(intM_intP0, shift(t, 0)) = 1)))
+  ("JC_78": ("JC_76": (select(intM_intP0, shift(t, 0)) = 1)))
 
 goal SideEffects_m1_ensures_default_po_2:
   forall this_0:Object pointer.
@@ -6173,13 +6175,13 @@ goal SideEffects_m1_ensures_default_po_2:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70": ("JC_69": (i = 1)))
+  ("JC_78": ("JC_77": (i = 1)))
 
 goal SideEffects_m1_ensures_default_po_3:
   forall this_0:Object pointer.
@@ -6189,20 +6191,20 @@ goal SideEffects_m1_ensures_default_po_3:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74": ("JC_71": (select(intM_intP1, shift(t, 0)) = 1)))
+  ("JC_82": ("JC_79": (select(intM_intP1, shift(t, 0)) = 1)))
 
 goal SideEffects_m1_ensures_default_po_4:
   forall this_0:Object pointer.
@@ -6212,20 +6214,20 @@ goal SideEffects_m1_ensures_default_po_4:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74": ("JC_72": (select(intM_intP1, shift(t, 2)) = 2)))
+  ("JC_82": ("JC_80": (select(intM_intP1, shift(t, 2)) = 2)))
 
 goal SideEffects_m1_ensures_default_po_5:
   forall this_0:Object pointer.
@@ -6235,20 +6237,20 @@ goal SideEffects_m1_ensures_default_po_5:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74": ("JC_73": (i0 = 2)))
+  ("JC_82": ("JC_81": (i0 = 2)))
 
 goal SideEffects_m1_ensures_default_po_6:
   forall this_0:Object pointer.
@@ -6258,28 +6260,28 @@ goal SideEffects_m1_ensures_default_po_6:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79": ("JC_75": (select(intM_intP2, shift(t, 0)) = 1)))
+  ("JC_87": ("JC_83": (select(intM_intP2, shift(t, 0)) = 1)))
 
 goal SideEffects_m1_ensures_default_po_7:
   forall this_0:Object pointer.
@@ -6289,28 +6291,28 @@ goal SideEffects_m1_ensures_default_po_7:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79": ("JC_76": (select(intM_intP2, shift(t, 2)) = 2)))
+  ("JC_87": ("JC_84": (select(intM_intP2, shift(t, 2)) = 2)))
 
 goal SideEffects_m1_ensures_default_po_8:
   forall this_0:Object pointer.
@@ -6320,28 +6322,28 @@ goal SideEffects_m1_ensures_default_po_8:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79": ("JC_77": (select(intM_intP2, shift(t, 1)) = 3)))
+  ("JC_87": ("JC_85": (select(intM_intP2, shift(t, 1)) = 3)))
 
 goal SideEffects_m1_ensures_default_po_9:
   forall this_0:Object pointer.
@@ -6351,28 +6353,28 @@ goal SideEffects_m1_ensures_default_po_9:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79": ("JC_78": (i1 = 1)))
+  ("JC_87": ("JC_86": (i1 = 1)))
 
 goal SideEffects_m1_ensures_default_po_10:
   forall this_0:Object pointer.
@@ -6382,37 +6384,37 @@ goal SideEffects_m1_ensures_default_po_10:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79":
-  (("JC_75": (select(intM_intP2, shift(t, 0)) = 1)) and
-   (("JC_76": (select(intM_intP2, shift(t, 2)) = 2)) and
-    (("JC_77": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_78": (i1 = 1)))))) ->
+  ("JC_87":
+  (("JC_83": (select(intM_intP2, shift(t, 0)) = 1)) and
+   (("JC_84": (select(intM_intP2, shift(t, 2)) = 2)) and
+    (("JC_85": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_86": (i1 = 1)))))) ->
   forall i2:int.
   (i2 = (i1 - 1)) ->
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("JC_84": ("JC_80": (select(intM_intP3, shift(t, 0)) = 1)))
+  ("JC_92": ("JC_88": (select(intM_intP3, shift(t, 0)) = 1)))
 
 goal SideEffects_m1_ensures_default_po_11:
   forall this_0:Object pointer.
@@ -6422,37 +6424,37 @@ goal SideEffects_m1_ensures_default_po_11:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79":
-  (("JC_75": (select(intM_intP2, shift(t, 0)) = 1)) and
-   (("JC_76": (select(intM_intP2, shift(t, 2)) = 2)) and
-    (("JC_77": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_78": (i1 = 1)))))) ->
+  ("JC_87":
+  (("JC_83": (select(intM_intP2, shift(t, 0)) = 1)) and
+   (("JC_84": (select(intM_intP2, shift(t, 2)) = 2)) and
+    (("JC_85": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_86": (i1 = 1)))))) ->
   forall i2:int.
   (i2 = (i1 - 1)) ->
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("JC_84": ("JC_81": (select(intM_intP3, shift(t, 2)) = 2)))
+  ("JC_92": ("JC_89": (select(intM_intP3, shift(t, 2)) = 2)))
 
 goal SideEffects_m1_ensures_default_po_12:
   forall this_0:Object pointer.
@@ -6462,37 +6464,37 @@ goal SideEffects_m1_ensures_default_po_12:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79":
-  (("JC_75": (select(intM_intP2, shift(t, 0)) = 1)) and
-   (("JC_76": (select(intM_intP2, shift(t, 2)) = 2)) and
-    (("JC_77": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_78": (i1 = 1)))))) ->
+  ("JC_87":
+  (("JC_83": (select(intM_intP2, shift(t, 0)) = 1)) and
+   (("JC_84": (select(intM_intP2, shift(t, 2)) = 2)) and
+    (("JC_85": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_86": (i1 = 1)))))) ->
   forall i2:int.
   (i2 = (i1 - 1)) ->
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("JC_84": ("JC_82": (select(intM_intP3, shift(t, 1)) = 4)))
+  ("JC_92": ("JC_90": (select(intM_intP3, shift(t, 1)) = 4)))
 
 goal SideEffects_m1_ensures_default_po_13:
   forall this_0:Object pointer.
@@ -6502,37 +6504,37 @@ goal SideEffects_m1_ensures_default_po_13:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70":
-  (("JC_68": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_69": (i = 1)))) ->
+  ("JC_78":
+  (("JC_76": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_77": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_74":
-  (("JC_71": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_72": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_73": (i0 = 2))))) ->
+  ("JC_82":
+  (("JC_79": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_80": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_81": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("JC_79":
-  (("JC_75": (select(intM_intP2, shift(t, 0)) = 1)) and
-   (("JC_76": (select(intM_intP2, shift(t, 2)) = 2)) and
-    (("JC_77": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_78": (i1 = 1)))))) ->
+  ("JC_87":
+  (("JC_83": (select(intM_intP2, shift(t, 0)) = 1)) and
+   (("JC_84": (select(intM_intP2, shift(t, 2)) = 2)) and
+    (("JC_85": (select(intM_intP2, shift(t, 1)) = 3)) and ("JC_86": (i1 = 1)))))) ->
   forall i2:int.
   (i2 = (i1 - 1)) ->
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("JC_84": ("JC_83": (i2 = 0)))
+  ("JC_92": ("JC_91": (i2 = 0)))
 
 goal SideEffects_m1_safety_po_1:
   forall this_0:Object pointer.
@@ -6540,7 +6542,7 @@ goal SideEffects_m1_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   (offset_min(Object_alloc_table, t) <= 0)
@@ -6551,7 +6553,7 @@ goal SideEffects_m1_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   (0 <= offset_max(Object_alloc_table, t))
@@ -6564,7 +6566,7 @@ goal SideEffects_m1_safety_po_3:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((offset_min(Object_alloc_table, t) <= 0) and
@@ -6572,8 +6574,8 @@ goal SideEffects_m1_safety_po_3:
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_50":
-  (("JC_48": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_49": (i = 1)))) ->
+  ("JC_58":
+  (("JC_56": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_57": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   (offset_min(Object_alloc_table, t) <= i0)
@@ -6586,7 +6588,7 @@ goal SideEffects_m1_safety_po_4:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((offset_min(Object_alloc_table, t) <= 0) and
@@ -6594,8 +6596,8 @@ goal SideEffects_m1_safety_po_4:
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_50":
-  (("JC_48": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_49": (i = 1)))) ->
+  ("JC_58":
+  (("JC_56": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_57": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   (i0 <= offset_max(Object_alloc_table, t))
@@ -6608,7 +6610,7 @@ goal SideEffects_m1_safety_po_5:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((offset_min(Object_alloc_table, t) <= 0) and
@@ -6616,8 +6618,8 @@ goal SideEffects_m1_safety_po_5:
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_50":
-  (("JC_48": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_49": (i = 1)))) ->
+  ("JC_58":
+  (("JC_56": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_57": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((offset_min(Object_alloc_table, t) <= i0) and
@@ -6625,9 +6627,9 @@ goal SideEffects_m1_safety_po_5:
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_55":
-  (("JC_52": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_53": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_54": (i0 = 2))))) ->
+  ("JC_63":
+  (("JC_60": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_61": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_62": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   (offset_min(Object_alloc_table, t) <= i1)
@@ -6640,7 +6642,7 @@ goal SideEffects_m1_safety_po_6:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+    ("JC_49": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((offset_min(Object_alloc_table, t) <= 0) and
@@ -6648,8 +6650,8 @@ goal SideEffects_m1_safety_po_6:
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_50":
-  (("JC_48": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_49": (i = 1)))) ->
+  ("JC_58":
+  (("JC_56": (select(intM_intP0, shift(t, 0)) = 1)) and ("JC_57": (i = 1)))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((offset_min(Object_alloc_table, t) <= i0) and
@@ -6657,9 +6659,9 @@ goal SideEffects_m1_safety_po_6:
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("JC_55":
-  (("JC_52": (select(intM_intP1, shift(t, 0)) = 1)) and
-   (("JC_53": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_54": (i0 = 2))))) ->
+  ("JC_63":
+  (("JC_60": (select(intM_intP1, shift(t, 0)) = 1)) and
+   (("JC_61": (select(intM_intP1, shift(t, 2)) = 2)) and ("JC_62": (i0 = 2))))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
   (i1 <= offset_max(Object_alloc_table, t))

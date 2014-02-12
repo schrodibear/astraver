@@ -207,36 +207,53 @@ behavior default:
    }
 }
 ========== file tests/c/float_array.jessie/float_array.cloc ==========
-[C_50]
+[C_15]
 file = "HOME/tests/c/float_array.c"
-line = 50
+line = 32
 begin = 13
-end = 30
+end = 18
 
-[C_51]
+[C_11]
 file = "HOME/tests/c/float_array.c"
-line = 49
+line = 31
 begin = 13
-end = 33
+end = 18
 
-[C_52]
+[C_1]
 file = "HOME/tests/c/float_array.c"
-line = 49
+line = 17
+begin = 10
+end = 15
+
+[C_33]
+file = "HOME/tests/c/float_array.c"
+line = 41
+begin = 12
+end = 45
+
+[C_9]
+file = "HOME/tests/c/float_array.c"
+line = 31
+begin = 8
+end = 9
+
+[C_10]
+file = "HOME/tests/c/float_array.c"
+line = 31
 begin = 13
-end = 33
+end = 18
 
-[C_53]
+[C_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[C_43]
 file = "HOME/tests/c/float_array.c"
-line = 49
+line = 57
 begin = 13
-end = 33
-
-[AffectDoubleDansTab]
-name = "Function AffectDoubleDansTab"
-file = "HOME/tests/c/float_array.c"
-line = 30
-begin = 5
-end = 24
+end = 18
 
 [AffectDoubleDansX]
 name = "Function AffectDoubleDansX"
@@ -245,57 +262,7 @@ line = 16
 begin = 5
 end = 22
 
-[C_10]
-file = "HOME/tests/c/float_array.c"
-line = 31
-begin = 13
-end = 18
-
-[AffectDoubleDansTab0]
-name = "Function AffectDoubleDansTab0"
-file = "HOME/tests/c/float_array.c"
-line = 56
-begin = 5
-end = 25
-
-[C_11]
-file = "HOME/tests/c/float_array.c"
-line = 31
-begin = 13
-end = 18
-
-[AffectDoubleDansTab1]
-name = "Function AffectDoubleDansTab1"
-file = "HOME/tests/c/float_array.c"
-line = 44
-begin = 5
-end = 25
-
-[C_12]
-file = "HOME/tests/c/float_array.c"
-line = 32
-begin = 13
-end = 18
-
-[C_13]
-file = "HOME/tests/c/float_array.c"
-line = 32
-begin = 8
-end = 9
-
-[C_14]
-file = "HOME/tests/c/float_array.c"
-line = 32
-begin = 13
-end = 18
-
-[C_15]
-file = "HOME/tests/c/float_array.c"
-line = 32
-begin = 13
-end = 18
-
-[C_16]
+[C_32]
 file = "HOME/"
 line = 0
 begin = -1
@@ -307,167 +274,18 @@ line = 25
 begin = 12
 end = 45
 
-[C_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_19]
+[C_40]
 file = "HOME/tests/c/float_array.c"
-line = 26
-begin = 12
-end = 41
-
-[C_1]
-file = "HOME/tests/c/float_array.c"
-line = 17
-begin = 10
-end = 15
-
-[C_2]
-file = "HOME/tests/c/float_array.c"
-line = 17
-begin = 10
-end = 15
-
-[C_3]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_4]
-file = "HOME/tests/c/float_array.c"
-line = 13
-begin = 12
-end = 42
-
-[C_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_5]
-file = "HOME/tests/c/float_array.c"
-line = 14
-begin = 12
-end = 38
-
-[C_21]
-file = "HOME/tests/c/float_array.c"
-line = 27
-begin = 12
-end = 45
-
-[C_6]
-file = "HOME/tests/c/float_array.c"
-line = 11
-begin = 13
-end = 33
-
-[C_22]
-file = "HOME/tests/c/float_array.c"
-line = 28
-begin = 12
-end = 41
-
-[C_7]
-file = "HOME/tests/c/float_array.c"
-line = 10
-begin = 13
-end = 30
-
-[C_23]
-file = "HOME/tests/c/float_array.c"
-line = 23
-begin = 13
-end = 33
-
-[C_8]
-file = "HOME/tests/c/float_array.c"
-line = 31
+line = 57
 begin = 13
 end = 18
 
-[C_24]
+[AffectDoubleDansTab1]
+name = "Function AffectDoubleDansTab1"
 file = "HOME/tests/c/float_array.c"
-line = 22
-begin = 13
-end = 30
-
-[C_9]
-file = "HOME/tests/c/float_array.c"
-line = 31
-begin = 8
-end = 9
-
-[C_25]
-file = "HOME/tests/c/float_array.c"
-line = 21
-begin = 13
-end = 33
-
-[C_26]
-file = "HOME/tests/c/float_array.c"
-line = 21
-begin = 13
-end = 33
-
-[C_27]
-file = "HOME/tests/c/float_array.c"
-line = 21
-begin = 13
-end = 33
-
-[C_28]
-file = "HOME/tests/c/float_array.c"
-line = 45
-begin = 13
-end = 18
-
-[C_29]
-file = "HOME/tests/c/float_array.c"
-line = 45
-begin = 8
-end = 9
-
-[C_30]
-file = "HOME/tests/c/float_array.c"
-line = 45
-begin = 13
-end = 18
-
-[C_31]
-file = "HOME/tests/c/float_array.c"
-line = 45
-begin = 13
-end = 18
-
-[C_32]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_33]
-file = "HOME/tests/c/float_array.c"
-line = 41
-begin = 12
-end = 45
-
-[C_34]
-file = "HOME/tests/c/float_array.c"
-line = 42
-begin = 12
-end = 41
-
-[C_35]
-file = "HOME/tests/c/float_array.c"
-line = 39
-begin = 13
-end = 33
+line = 44
+begin = 5
+end = 25
 
 [C_36]
 file = "HOME/tests/c/float_array.c"
@@ -475,9 +293,81 @@ line = 38
 begin = 13
 end = 30
 
-[C_37]
+[C_42]
 file = "HOME/tests/c/float_array.c"
-line = 37
+line = 57
+begin = 13
+end = 18
+
+[C_5]
+file = "HOME/tests/c/float_array.c"
+line = 14
+begin = 12
+end = 38
+
+[C_34]
+file = "HOME/tests/c/float_array.c"
+line = 42
+begin = 12
+end = 41
+
+[C_29]
+file = "HOME/tests/c/float_array.c"
+line = 45
+begin = 8
+end = 9
+
+[C_13]
+file = "HOME/tests/c/float_array.c"
+line = 32
+begin = 8
+end = 9
+
+[C_45]
+file = "HOME/tests/c/float_array.c"
+line = 59
+begin = 19
+end = 40
+
+[C_47]
+file = "HOME/tests/c/float_array.c"
+line = 53
+begin = 12
+end = 45
+
+[C_7]
+file = "HOME/tests/c/float_array.c"
+line = 10
+begin = 13
+end = 30
+
+[C_22]
+file = "HOME/tests/c/float_array.c"
+line = 28
+begin = 12
+end = 41
+
+[C_14]
+file = "HOME/tests/c/float_array.c"
+line = 32
+begin = 13
+end = 18
+
+[C_35]
+file = "HOME/tests/c/float_array.c"
+line = 39
+begin = 13
+end = 33
+
+[C_52]
+file = "HOME/tests/c/float_array.c"
+line = 49
+begin = 13
+end = 33
+
+[C_25]
+file = "HOME/tests/c/float_array.c"
+line = 21
 begin = 13
 end = 33
 
@@ -487,15 +377,130 @@ line = 37
 begin = 13
 end = 33
 
+[AffectDoubleDansTab]
+name = "Function AffectDoubleDansTab"
+file = "HOME/tests/c/float_array.c"
+line = 30
+begin = 5
+end = 24
+
+[C_8]
+file = "HOME/tests/c/float_array.c"
+line = 31
+begin = 13
+end = 18
+
 [C_39]
 file = "HOME/tests/c/float_array.c"
 line = 37
 begin = 13
 end = 33
 
-[C_40]
+[C_44]
 file = "HOME/tests/c/float_array.c"
-line = 57
+line = 58
+begin = 19
+end = 60
+
+[C_27]
+file = "HOME/tests/c/float_array.c"
+line = 21
+begin = 13
+end = 33
+
+[C_50]
+file = "HOME/tests/c/float_array.c"
+line = 50
+begin = 13
+end = 30
+
+[C_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[C_53]
+file = "HOME/tests/c/float_array.c"
+line = 49
+begin = 13
+end = 33
+
+[C_37]
+file = "HOME/tests/c/float_array.c"
+line = 37
+begin = 13
+end = 33
+
+[C_19]
+file = "HOME/tests/c/float_array.c"
+line = 26
+begin = 12
+end = 41
+
+[C_48]
+file = "HOME/tests/c/float_array.c"
+line = 54
+begin = 12
+end = 41
+
+[C_4]
+file = "HOME/tests/c/float_array.c"
+line = 13
+begin = 12
+end = 42
+
+[C_12]
+file = "HOME/tests/c/float_array.c"
+line = 32
+begin = 13
+end = 18
+
+[C_26]
+file = "HOME/tests/c/float_array.c"
+line = 21
+begin = 13
+end = 33
+
+[C_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[C_51]
+file = "HOME/tests/c/float_array.c"
+line = 49
+begin = 13
+end = 33
+
+[C_2]
+file = "HOME/tests/c/float_array.c"
+line = 17
+begin = 10
+end = 15
+
+[C_28]
+file = "HOME/tests/c/float_array.c"
+line = 45
+begin = 13
+end = 18
+
+[C_24]
+file = "HOME/tests/c/float_array.c"
+line = 22
+begin = 13
+end = 30
+
+[C_6]
+file = "HOME/tests/c/float_array.c"
+line = 11
+begin = 13
+end = 33
+
+[C_30]
+file = "HOME/tests/c/float_array.c"
+line = 45
 begin = 13
 end = 18
 
@@ -505,51 +510,46 @@ line = 57
 begin = 8
 end = 9
 
-[C_42]
+[C_21]
 file = "HOME/tests/c/float_array.c"
-line = 57
-begin = 13
-end = 18
+line = 27
+begin = 12
+end = 45
 
-[C_43]
-file = "HOME/tests/c/float_array.c"
-line = 57
-begin = 13
-end = 18
-
-[C_44]
-file = "HOME/tests/c/float_array.c"
-line = 58
-begin = 19
-end = 60
-
-[C_45]
-file = "HOME/tests/c/float_array.c"
-line = 59
-begin = 19
-end = 40
-
-[C_46]
+[C_3]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[C_47]
-file = "HOME/tests/c/float_array.c"
-line = 53
-begin = 12
-end = 45
+[C_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[C_48]
+[AffectDoubleDansTab0]
+name = "Function AffectDoubleDansTab0"
 file = "HOME/tests/c/float_array.c"
-line = 54
-begin = 12
-end = 41
+line = 56
+begin = 5
+end = 25
 
 [C_49]
 file = "HOME/tests/c/float_array.c"
 line = 51
+begin = 13
+end = 33
+
+[C_31]
+file = "HOME/tests/c/float_array.c"
+line = 45
+begin = 13
+end = 18
+
+[C_23]
+file = "HOME/tests/c/float_array.c"
+line = 23
 begin = 13
 end = 33
 
@@ -568,10 +568,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs float_array.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs float_array.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs float_array.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs float_array.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -716,13 +717,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: float_array.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: float_array.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: float_array.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include float_array.depend
 
@@ -733,52 +734,6 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/float_array.jessie/float_array.loc ==========
-[JC_90]
-kind = FPOverflow
-file = "HOME/tests/c/float_array.c"
-line = 57
-begin = 13
-end = 18
-
-[JC_91]
-file = "HOME/tests/c/float_array.c"
-line = 58
-begin = 19
-end = 60
-
-[JC_92]
-file = "HOME/tests/c/float_array.c"
-line = 59
-begin = 19
-end = 40
-
-[JC_40]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[AffectDoubleDansX_ensures_default]
-name = "Function AffectDoubleDansX"
-behavior = "default behavior"
-file = "HOME/tests/c/float_array.c"
-line = 16
-begin = 5
-end = 22
-
-[JC_93]
-kind = PointerDeref
-file = "HOME/tests/c/float_array.jessie/float_array.jc"
-line = 117
-begin = 15
-end = 148
-
-[JC_41]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_94]
 kind = FPOverflow
 file = "HOME/tests/c/float_array.c"
@@ -786,37 +741,35 @@ line = 57
 begin = 13
 end = 18
 
-[JC_42]
+[JC_73]
+file = "HOME/tests/c/float_array.c"
+line = 51
+begin = 13
+end = 33
+
+[JC_63]
+file = "HOME/tests/c/float_array.c"
+line = 42
+begin = 12
+end = 41
+
+[JC_80]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_95]
-file = "HOME/tests/c/float_array.c"
-line = 58
-begin = 19
-end = 60
+[JC_51]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_43]
-kind = FPOverflow
+[JC_71]
 file = "HOME/tests/c/float_array.c"
-line = 31
+line = 49
 begin = 13
-end = 18
-
-[JC_96]
-file = "HOME/tests/c/float_array.c"
-line = 59
-begin = 19
-end = 40
-
-[JC_44]
-kind = FPOverflow
-file = "HOME/tests/c/float_array.c"
-line = 32
-begin = 13
-end = 18
+end = 33
 
 [JC_45]
 kind = FPOverflow
@@ -825,160 +778,11 @@ line = 31
 begin = 13
 end = 18
 
-[JC_46]
-kind = FPOverflow
-file = "HOME/tests/c/float_array.c"
-line = 32
-begin = 13
-end = 18
-
-[JC_1]
-file = "HOME/tests/c/float_array.c"
-line = 10
-begin = 13
-end = 30
-
-[JC_47]
-file = "HOME/tests/c/float_array.c"
-line = 37
-begin = 13
-end = 33
-
-[JC_2]
-file = "HOME/tests/c/float_array.c"
-line = 11
-begin = 13
-end = 33
-
-[JC_48]
-file = "HOME/tests/c/float_array.c"
-line = 37
-begin = 13
-end = 33
-
-[JC_3]
+[JC_64]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_49]
-file = "HOME/tests/c/float_array.c"
-line = 38
-begin = 13
-end = 30
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_5]
-file = "HOME/tests/c/float_array.c"
-line = 10
-begin = 13
-end = 30
-
-[JC_6]
-file = "HOME/tests/c/float_array.c"
-line = 11
-begin = 13
-end = 33
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/c/float_array.c"
-line = 13
-begin = 12
-end = 42
-
-[AffectDoubleDansTab1_ensures_default]
-name = "Function AffectDoubleDansTab1"
-behavior = "default behavior"
-file = "HOME/tests/c/float_array.c"
-line = 44
-begin = 5
-end = 25
-
-[JC_50]
-file = "HOME/tests/c/float_array.c"
-line = 39
-begin = 13
-end = 33
-
-[JC_51]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_52]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_53]
-file = "HOME/tests/c/float_array.c"
-line = 37
-begin = 13
-end = 33
-
-[JC_54]
-file = "HOME/tests/c/float_array.c"
-line = 37
-begin = 13
-end = 33
-
-[JC_55]
-file = "HOME/tests/c/float_array.c"
-line = 38
-begin = 13
-end = 30
-
-[JC_56]
-file = "HOME/tests/c/float_array.c"
-line = 39
-begin = 13
-end = 33
-
-[JC_57]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_58]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_59]
-file = "HOME/tests/c/float_array.c"
-line = 41
-begin = 12
-end = 45
-
-[AffectDoubleDansTab0_safety]
-name = "Function AffectDoubleDansTab0"
-behavior = "Safety"
-file = "HOME/tests/c/float_array.c"
-line = 56
-begin = 5
-end = 25
 
 [AffectDoubleDansTab_ensures_default]
 name = "Function AffectDoubleDansTab"
@@ -988,118 +792,25 @@ line = 30
 begin = 5
 end = 24
 
-[JC_60]
+[JC_85]
 file = "HOME/tests/c/float_array.c"
-line = 42
-begin = 12
-end = 41
-
-[JC_61]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_62]
-file = "HOME/tests/c/float_array.c"
-line = 41
+line = 53
 begin = 12
 end = 45
 
-[JC_10]
-file = "HOME/tests/c/float_array.c"
-line = 14
-begin = 12
-end = 38
-
-[JC_63]
-file = "HOME/tests/c/float_array.c"
-line = 42
-begin = 12
-end = 41
-
-[JC_11]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_64]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_12]
-file = "HOME/tests/c/float_array.c"
-line = 13
-begin = 12
-end = 42
-
-[AffectDoubleDansTab0_ensures_default]
-name = "Function AffectDoubleDansTab0"
+[AffectDoubleDansTab1_ensures_default]
+name = "Function AffectDoubleDansTab1"
 behavior = "default behavior"
 file = "HOME/tests/c/float_array.c"
-line = 56
+line = 44
 begin = 5
 end = 25
 
-[JC_65]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_13]
+[JC_31]
 file = "HOME/tests/c/float_array.c"
-line = 14
+line = 25
 begin = 12
-end = 38
-
-[JC_66]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_14]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_67]
-kind = FPOverflow
-file = "HOME/tests/c/float_array.c"
-line = 45
-begin = 13
-end = 18
-
-[JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_68]
-kind = PointerDeref
-file = "HOME/tests/c/float_array.jessie/float_array.jc"
-line = 98
-begin = 15
-end = 148
-
-[JC_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_69]
-kind = FPOverflow
-file = "HOME/tests/c/float_array.c"
-line = 45
-begin = 13
-end = 18
+end = 45
 
 [JC_17]
 kind = FPOverflow
@@ -1108,56 +819,25 @@ line = 17
 begin = 10
 end = 15
 
-[JC_18]
-kind = FPOverflow
-file = "HOME/tests/c/float_array.c"
-line = 17
-begin = 10
-end = 15
+[JC_81]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_19]
+[JC_55]
 file = "HOME/tests/c/float_array.c"
-line = 21
-begin = 13
-end = 33
-
-[JC_70]
-file = "HOME/tests/c/float_array.c"
-line = 49
-begin = 13
-end = 33
-
-[JC_71]
-file = "HOME/tests/c/float_array.c"
-line = 49
-begin = 13
-end = 33
-
-[JC_72]
-file = "HOME/tests/c/float_array.c"
-line = 50
+line = 38
 begin = 13
 end = 30
 
-[JC_20]
+[JC_48]
 file = "HOME/tests/c/float_array.c"
-line = 21
+line = 37
 begin = 13
 end = 33
 
-[JC_73]
-file = "HOME/tests/c/float_array.c"
-line = 51
-begin = 13
-end = 33
-
-[JC_21]
-file = "HOME/tests/c/float_array.c"
-line = 22
-begin = 13
-end = 30
-
-[JC_74]
+[JC_23]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1169,43 +849,36 @@ line = 23
 begin = 13
 end = 33
 
+[JC_5]
+file = "HOME/tests/c/float_array.c"
+line = 10
+begin = 13
+end = 30
+
+[JC_67]
+kind = FPOverflow
+file = "HOME/tests/c/float_array.c"
+line = 45
+begin = 13
+end = 18
+
+[JC_9]
+file = "HOME/tests/c/float_array.c"
+line = 13
+begin = 12
+end = 42
+
 [JC_75]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[AffectDoubleDansTab_safety]
-name = "Function AffectDoubleDansTab"
-behavior = "Safety"
-file = "HOME/tests/c/float_array.c"
-line = 30
-begin = 5
-end = 24
-
-[JC_23]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_76]
-file = "HOME/tests/c/float_array.c"
-line = 49
-begin = 13
-end = 33
-
 [JC_24]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_77]
-file = "HOME/tests/c/float_array.c"
-line = 49
-begin = 13
-end = 33
 
 [JC_25]
 file = "HOME/tests/c/float_array.c"
@@ -1219,9 +892,53 @@ line = 50
 begin = 13
 end = 30
 
+[JC_41]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[AffectDoubleDansTab1_safety]
+name = "Function AffectDoubleDansTab1"
+behavior = "Safety"
+file = "HOME/tests/c/float_array.c"
+line = 44
+begin = 5
+end = 25
+
+[JC_74]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_47]
+file = "HOME/tests/c/float_array.c"
+line = 37
+begin = 13
+end = 33
+
+[JC_52]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_26]
 file = "HOME/tests/c/float_array.c"
 line = 21
+begin = 13
+end = 33
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+file = "HOME/tests/c/float_array.c"
+line = 37
 begin = 13
 end = 33
 
@@ -1231,35 +948,19 @@ line = 51
 begin = 13
 end = 33
 
-[JC_27]
+[JC_13]
 file = "HOME/tests/c/float_array.c"
-line = 22
-begin = 13
-end = 30
+line = 14
+begin = 12
+end = 38
 
-[JC_28]
+[AffectDoubleDansTab0_safety]
+name = "Function AffectDoubleDansTab0"
+behavior = "Safety"
 file = "HOME/tests/c/float_array.c"
-line = 23
-begin = 13
-end = 33
-
-[JC_29]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_80]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_81]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+line = 56
+begin = 5
+end = 25
 
 [JC_82]
 file = "HOME/tests/c/float_array.c"
@@ -1267,73 +968,25 @@ line = 53
 begin = 12
 end = 45
 
-[JC_30]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_83]
-file = "HOME/tests/c/float_array.c"
-line = 54
-begin = 12
-end = 41
-
-[JC_31]
-file = "HOME/tests/c/float_array.c"
-line = 25
-begin = 12
-end = 45
-
-[JC_84]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_32]
-file = "HOME/tests/c/float_array.c"
-line = 26
-begin = 12
-end = 41
-
-[JC_85]
-file = "HOME/tests/c/float_array.c"
-line = 53
-begin = 12
-end = 45
-
-[JC_33]
-file = "HOME/tests/c/float_array.c"
-line = 27
-begin = 12
-end = 45
-
-[JC_86]
-file = "HOME/tests/c/float_array.c"
-line = 54
-begin = 12
-end = 41
-
-[JC_34]
-file = "HOME/tests/c/float_array.c"
-line = 28
-begin = 12
-end = 41
-
 [JC_87]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_35]
+[JC_11]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_88]
+[JC_70]
+file = "HOME/tests/c/float_array.c"
+line = 49
+begin = 13
+end = 33
+
+[JC_15]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1345,25 +998,48 @@ line = 25
 begin = 12
 end = 45
 
-[JC_89]
+[JC_91]
+file = "HOME/tests/c/float_array.c"
+line = 58
+begin = 19
+end = 60
+
+[JC_39]
+file = "HOME/tests/c/float_array.c"
+line = 28
+begin = 12
+end = 41
+
+[JC_40]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_37]
+[JC_83]
 file = "HOME/tests/c/float_array.c"
-line = 26
+line = 54
 begin = 12
 end = 41
 
-[AffectDoubleDansTab1_safety]
-name = "Function AffectDoubleDansTab1"
-behavior = "Safety"
+[JC_35]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_27]
 file = "HOME/tests/c/float_array.c"
-line = 44
-begin = 5
-end = 25
+line = 22
+begin = 13
+end = 30
+
+[JC_69]
+kind = FPOverflow
+file = "HOME/tests/c/float_array.c"
+line = 45
+begin = 13
+end = 18
 
 [JC_38]
 file = "HOME/tests/c/float_array.c"
@@ -1371,11 +1047,38 @@ line = 27
 begin = 12
 end = 45
 
-[JC_39]
+[AffectDoubleDansTab0_ensures_default]
+name = "Function AffectDoubleDansTab0"
+behavior = "default behavior"
 file = "HOME/tests/c/float_array.c"
-line = 28
+line = 56
+begin = 5
+end = 25
+
+[JC_12]
+file = "HOME/tests/c/float_array.c"
+line = 13
 begin = 12
-end = 41
+end = 42
+
+[JC_6]
+file = "HOME/tests/c/float_array.c"
+line = 11
+begin = 13
+end = 33
+
+[JC_44]
+kind = FPOverflow
+file = "HOME/tests/c/float_array.c"
+line = 32
+begin = 13
+end = 18
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [AffectDoubleDansX_safety]
 name = "Function AffectDoubleDansX"
@@ -1384,6 +1087,304 @@ file = "HOME/tests/c/float_array.c"
 line = 16
 begin = 5
 end = 22
+
+[JC_62]
+file = "HOME/tests/c/float_array.c"
+line = 41
+begin = 12
+end = 45
+
+[JC_88]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_46]
+kind = FPOverflow
+file = "HOME/tests/c/float_array.c"
+line = 32
+begin = 13
+end = 18
+
+[JC_61]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_32]
+file = "HOME/tests/c/float_array.c"
+line = 26
+begin = 12
+end = 41
+
+[JC_56]
+file = "HOME/tests/c/float_array.c"
+line = 39
+begin = 13
+end = 33
+
+[JC_33]
+file = "HOME/tests/c/float_array.c"
+line = 27
+begin = 12
+end = 45
+
+[JC_65]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_29]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_68]
+kind = PointerDeref
+file = "HOME/tests/c/float_array.jessie/float_array.jc"
+line = 98
+begin = 15
+end = 148
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_96]
+file = "HOME/tests/c/float_array.c"
+line = 59
+begin = 19
+end = 40
+
+[JC_43]
+kind = FPOverflow
+file = "HOME/tests/c/float_array.c"
+line = 31
+begin = 13
+end = 18
+
+[JC_2]
+file = "HOME/tests/c/float_array.c"
+line = 11
+begin = 13
+end = 33
+
+[JC_95]
+file = "HOME/tests/c/float_array.c"
+line = 58
+begin = 19
+end = 60
+
+[JC_93]
+kind = PointerDeref
+file = "HOME/tests/c/float_array.jessie/float_array.jc"
+line = 117
+begin = 15
+end = 148
+
+[AffectDoubleDansX_ensures_default]
+name = "Function AffectDoubleDansX"
+behavior = "default behavior"
+file = "HOME/tests/c/float_array.c"
+line = 16
+begin = 5
+end = 22
+
+[JC_84]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_34]
+file = "HOME/tests/c/float_array.c"
+line = 28
+begin = 12
+end = 41
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_90]
+kind = FPOverflow
+file = "HOME/tests/c/float_array.c"
+line = 57
+begin = 13
+end = 18
+
+[JC_53]
+file = "HOME/tests/c/float_array.c"
+line = 37
+begin = 13
+end = 33
+
+[JC_21]
+file = "HOME/tests/c/float_array.c"
+line = 22
+begin = 13
+end = 30
+
+[JC_77]
+file = "HOME/tests/c/float_array.c"
+line = 49
+begin = 13
+end = 33
+
+[JC_49]
+file = "HOME/tests/c/float_array.c"
+line = 38
+begin = 13
+end = 30
+
+[JC_1]
+file = "HOME/tests/c/float_array.c"
+line = 10
+begin = 13
+end = 30
+
+[JC_37]
+file = "HOME/tests/c/float_array.c"
+line = 26
+begin = 12
+end = 41
+
+[JC_10]
+file = "HOME/tests/c/float_array.c"
+line = 14
+begin = 12
+end = 38
+
+[JC_57]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_89]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_66]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_59]
+file = "HOME/tests/c/float_array.c"
+line = 41
+begin = 12
+end = 45
+
+[JC_20]
+file = "HOME/tests/c/float_array.c"
+line = 21
+begin = 13
+end = 33
+
+[JC_18]
+kind = FPOverflow
+file = "HOME/tests/c/float_array.c"
+line = 17
+begin = 10
+end = 15
+
+[JC_3]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_92]
+file = "HOME/tests/c/float_array.c"
+line = 59
+begin = 19
+end = 40
+
+[JC_86]
+file = "HOME/tests/c/float_array.c"
+line = 54
+begin = 12
+end = 41
+
+[JC_60]
+file = "HOME/tests/c/float_array.c"
+line = 42
+begin = 12
+end = 41
+
+[AffectDoubleDansTab_safety]
+name = "Function AffectDoubleDansTab"
+behavior = "Safety"
+file = "HOME/tests/c/float_array.c"
+line = 30
+begin = 5
+end = 24
+
+[JC_72]
+file = "HOME/tests/c/float_array.c"
+line = 50
+begin = 13
+end = 30
+
+[JC_19]
+file = "HOME/tests/c/float_array.c"
+line = 21
+begin = 13
+end = 33
+
+[JC_76]
+file = "HOME/tests/c/float_array.c"
+line = 49
+begin = 13
+end = 33
+
+[JC_50]
+file = "HOME/tests/c/float_array.c"
+line = 39
+begin = 13
+end = 33
+
+[JC_30]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_58]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_28]
+file = "HOME/tests/c/float_array.c"
+line = 23
+begin = 13
+end = 33
 
 ========== file tests/c/float_array.jessie/why/float_array.why ==========
 type charP
@@ -1945,12 +1946,12 @@ let AffectDoubleDansTab0_ensures_default =
   try
    (C_43:
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (C_40:
      (JC_94:
      (((add_double_safe nearest_even) d_0) (double_of_real_exact 1.0)))) in
-     (let jessie_<num> = X_0 in
-     (((safe_upd_ doubleP_doubleM_X_0_3) jessie_<num>) jessie_<num>)));
+     (let _jessie_<num> = X_0 in
+     (((safe_upd_ doubleP_doubleM_X_0_3) _jessie_<num>) _jessie_<num>)));
     (assert
     { (JC_95:
       (double_value(select(doubleP_doubleM_X_0_3, shift(X_0, (0)))) = 
@@ -1983,12 +1984,12 @@ let AffectDoubleDansTab0_safety =
   try
    (C_43:
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (C_40:
      (JC_90: (((add_double nearest_even) d_0) (double_of_real_exact 1.0)))) in
-     (let jessie_<num> = X_0 in
+     (let _jessie_<num> = X_0 in
      (JC_93:
-     ((((upd_ doubleP_X_0_3_alloc_table) doubleP_doubleM_X_0_3) jessie_<num>) jessie_<num>))));
+     ((((upd_ doubleP_X_0_3_alloc_table) doubleP_doubleM_X_0_3) _jessie_<num>) _jessie_<num>))));
     [ { } unit reads doubleP_doubleM_X_0_3
       { (JC_91:
         (double_value(select(doubleP_doubleM_X_0_3, shift(X_0, (0)))) = 
@@ -2011,15 +2012,15 @@ let AffectDoubleDansTab1_ensures_default =
   try
    (C_31:
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (C_28:
      (JC_69:
      (((add_double_safe nearest_even) d_1) (double_of_real_exact 1.0)))) in
-     (let jessie_<num> = X_1 in
-     (let jessie_<num> = (1) in
-     (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-     (let jessie_<num> = ((shift jessie_<num>) (1)) in
-     (((safe_upd_ doubleP_doubleM_X_1_2) jessie_<num>) jessie_<num>))))));
+     (let _jessie_<num> = X_1 in
+     (let _jessie_<num> = (1) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+     (let _jessie_<num> = ((shift _jessie_<num>) (1)) in
+     (((safe_upd_ doubleP_doubleM_X_1_2) _jessie_<num>) _jessie_<num>))))));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_61:
     ((JC_59:
@@ -2043,15 +2044,15 @@ let AffectDoubleDansTab1_safety =
   try
    (C_31:
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (C_28:
      (JC_67: (((add_double nearest_even) d_1) (double_of_real_exact 1.0)))) in
-     (let jessie_<num> = X_1 in
-     (let jessie_<num> = (1) in
-     (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-     (let jessie_<num> = ((shift jessie_<num>) (1)) in
+     (let _jessie_<num> = X_1 in
+     (let _jessie_<num> = (1) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+     (let _jessie_<num> = ((shift _jessie_<num>) (1)) in
      (JC_68:
-     ((((upd_ doubleP_X_1_2_alloc_table) doubleP_doubleM_X_1_2) jessie_<num>) jessie_<num>)))))));
+     ((((upd_ doubleP_X_1_2_alloc_table) doubleP_doubleM_X_1_2) _jessie_<num>) _jessie_<num>)))))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let AffectDoubleDansTab_ensures_default =
@@ -2066,24 +2067,24 @@ let AffectDoubleDansTab_ensures_default =
    (C_11:
    (C_15:
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (C_8:
      (JC_45: (((add_double_safe nearest_even) d) (double_of_real_exact 1.0)))) in
-     (let jessie_<num> = X in
-     (let jessie_<num> = (1) in
-     (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-     (let jessie_<num> =
+     (let _jessie_<num> = X in
+     (let _jessie_<num> = (1) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+     (let _jessie_<num> =
      (C_12:
      (JC_46: (((add_double_safe nearest_even) d) (double_of_real_exact 1.0)))) in
-     (let jessie_<num> = X in
-     (let jessie_<num> = (2) in
-     (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+     (let _jessie_<num> = X in
+     (let _jessie_<num> = (2) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
      [ { } unit reads doubleP_doubleM_X_1 writes doubleP_doubleM_X_1
        { (not_assigns(doubleP_X_1_alloc_table, doubleP_doubleM_X_1@,
           doubleP_doubleM_X_1,
-          pset_range(pset_singleton(jessie_<num>), (1), (2)))
-         and ((select(doubleP_doubleM_X_1, shift(jessie_<num>, (1))) = jessie_<num>)
-             and (select(doubleP_doubleM_X_1, shift(jessie_<num>, (2))) = jessie_<num>))) } ]))))))));
+          pset_range(pset_singleton(_jessie_<num>), (1), (2)))
+         and ((select(doubleP_doubleM_X_1, shift(_jessie_<num>, (1))) = _jessie_<num>)
+             and (select(doubleP_doubleM_X_1, shift(_jessie_<num>, (2))) = _jessie_<num>))) } ]))))))));
     (raise Return); (raise Return) end)) with Return -> void end)
   { (JC_35:
     ((JC_31:
@@ -2117,29 +2118,29 @@ let AffectDoubleDansTab_safety =
    (C_11:
    (C_15:
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (C_8:
      (JC_43: (((add_double nearest_even) d) (double_of_real_exact 1.0)))) in
-     (let jessie_<num> = X in
-     (let jessie_<num> = (1) in
-     (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-     (let jessie_<num> =
+     (let _jessie_<num> = X in
+     (let _jessie_<num> = (1) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+     (let _jessie_<num> =
      (C_12:
      (JC_44: (((add_double nearest_even) d) (double_of_real_exact 1.0)))) in
-     (let jessie_<num> = X in
-     (let jessie_<num> = (2) in
-     (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-     [ { (le_int(offset_min(doubleP_X_1_alloc_table, jessie_<num>), (2))
-         and (le_int((2), offset_max(doubleP_X_1_alloc_table, jessie_<num>))
-             and (le_int(offset_min(doubleP_X_1_alloc_table, jessie_<num>), (1))
+     (let _jessie_<num> = X in
+     (let _jessie_<num> = (2) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+     [ { (le_int(offset_min(doubleP_X_1_alloc_table, _jessie_<num>), (2))
+         and (le_int((2), offset_max(doubleP_X_1_alloc_table, _jessie_<num>))
+             and (le_int(offset_min(doubleP_X_1_alloc_table, _jessie_<num>), (1))
                  and le_int((1),
-                     offset_max(doubleP_X_1_alloc_table, jessie_<num>)))))}
+                     offset_max(doubleP_X_1_alloc_table, _jessie_<num>)))))}
        unit reads doubleP_doubleM_X_1 writes doubleP_doubleM_X_1
        { (not_assigns(doubleP_X_1_alloc_table, doubleP_doubleM_X_1@,
           doubleP_doubleM_X_1,
-          pset_range(pset_singleton(jessie_<num>), (1), (2)))
-         and ((select(doubleP_doubleM_X_1, shift(jessie_<num>, (1))) = jessie_<num>)
-             and (select(doubleP_doubleM_X_1, shift(jessie_<num>, (2))) = jessie_<num>))) } ]))))))));
+          pset_range(pset_singleton(_jessie_<num>), (1), (2)))
+         and ((select(doubleP_doubleM_X_1, shift(_jessie_<num>, (1))) = _jessie_<num>)
+             and (select(doubleP_doubleM_X_1, shift(_jessie_<num>, (2))) = _jessie_<num>))) } ]))))))));
     (raise Return); (raise Return) end)) with Return -> void end) { true }
 
 let AffectDoubleDansX_ensures_default =
@@ -2151,7 +2152,7 @@ let AffectDoubleDansX_ensures_default =
   try
    (C_2:
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (x_0 := (C_1:
              (JC_18:
              (((add_double_safe nearest_even) d_2) (double_of_real_exact 1.0))))) in
@@ -2172,7 +2173,7 @@ let AffectDoubleDansX_safety =
   try
    (C_2:
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (x_0 := (C_1:
              (JC_17:
              (((add_double nearest_even) d_2) (double_of_real_exact 1.0))))) in

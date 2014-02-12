@@ -254,64 +254,16 @@ behavior default:
    }
 }
 ========== file tests/c/my_cosine.jessie/my_cosine.cloc ==========
-[C_10]
-file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 19
-end = 31
-
-[C_11]
-file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 12
-end = 31
-
-[C_12]
-file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 2
-end = 7
-
-[C_13]
-file = "HOME/tests/c/my_cosine.c"
-line = 55
-begin = 13
-end = 49
-
-[C_14]
-file = "HOME/tests/c/my_cosine.c"
-line = 50
-begin = 12
-end = 46
-
 [C_15]
 file = "HOME/tests/c/my_cosine.c"
 line = 49
 begin = 13
 end = 56
 
-[C_16]
+[C_11]
 file = "HOME/tests/c/my_cosine.c"
-line = 49
-begin = 13
-end = 30
-
-[C_17]
-file = "HOME/tests/c/my_cosine.c"
-line = 49
-begin = 34
-end = 56
-
-[C_18]
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 19
-end = 24
-
-[C_19]
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 19
+line = 54
+begin = 12
 end = 31
 
 [C_1]
@@ -320,77 +272,11 @@ line = 44
 begin = 13
 end = 53
 
-[C_2]
+[C_33]
 file = "HOME/tests/c/my_cosine.c"
-line = 45
-begin = 16
-end = 21
-
-[C_3]
-file = "HOME/tests/c/my_cosine.c"
-line = 45
-begin = 16
-end = 28
-
-[C_4]
-file = "HOME/tests/c/my_cosine.c"
-line = 45
-begin = 9
-end = 28
-
-[C_20]
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 12
-end = 31
-
-[C_5]
-file = "HOME/tests/c/my_cosine.c"
-line = 45
+line = 76
 begin = 2
 end = 29
-
-[C_21]
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 2
-end = 7
-
-[C_6]
-file = "HOME/tests/c/my_cosine.c"
-line = 41
-begin = 12
-end = 46
-
-[C_22]
-file = "HOME/tests/c/my_cosine.c"
-line = 67
-begin = 13
-end = 57
-
-[C_7]
-file = "HOME/tests/c/my_cosine.c"
-line = 40
-begin = 13
-end = 30
-
-[C_23]
-file = "HOME/tests/c/my_cosine.c"
-line = 62
-begin = 12
-end = 124
-
-[C_8]
-file = "HOME/tests/c/my_cosine.c"
-line = 53
-begin = 13
-end = 27
-
-[C_24]
-file = "HOME/tests/c/my_cosine.c"
-line = 62
-begin = 12
-end = 62
 
 [C_9]
 file = "HOME/tests/c/my_cosine.c"
@@ -398,54 +284,17 @@ line = 54
 begin = 19
 end = 24
 
-[C_25]
+[C_10]
 file = "HOME/tests/c/my_cosine.c"
-line = 63
-begin = 11
-end = 61
+line = 54
+begin = 19
+end = 31
 
-[C_26]
+[C_20]
 file = "HOME/tests/c/my_cosine.c"
-line = 60
-begin = 13
-end = 76
-
-[C_27]
-file = "HOME/tests/c/my_cosine.c"
-line = 60
-begin = 13
-end = 38
-
-[C_28]
-file = "HOME/tests/c/my_cosine.c"
-line = 61
-begin = 11
-end = 37
-
-[C_29]
-file = "HOME/tests/c/my_cosine.c"
-line = 75
-begin = 13
-end = 55
-
-[method_error]
-name = "Lemma method_error"
-file = "HOME/tests/c/my_cosine.c"
-line = 36
-begin = 4
-end = 111
-
-[C_30]
-file = "HOME/tests/c/my_cosine.c"
-line = 76
-begin = 16
-end = 21
-
-[C_31]
-file = "HOME/tests/c/my_cosine.c"
-line = 76
-begin = 16
-end = 28
+line = 66
+begin = 12
+end = 31
 
 [C_32]
 file = "HOME/tests/c/my_cosine.c"
@@ -453,37 +302,11 @@ line = 76
 begin = 9
 end = 28
 
-[C_33]
+[C_17]
 file = "HOME/tests/c/my_cosine.c"
-line = 76
-begin = 2
-end = 29
-
-[C_34]
-file = "HOME/tests/c/my_cosine.c"
-line = 72
-begin = 12
-end = 48
-
-[C_35]
-file = "HOME/tests/c/my_cosine.c"
-line = 71
-begin = 13
-end = 28
-
-[my_cos1]
-name = "Function my_cos1"
-file = "HOME/tests/c/my_cosine.c"
-line = 43
-begin = 6
-end = 13
-
-[my_cos2]
-name = "Function my_cos2"
-file = "HOME/tests/c/my_cosine.c"
-line = 52
-begin = 6
-end = 13
+line = 49
+begin = 34
+end = 56
 
 [my_cos3]
 name = "Function my_cos3"
@@ -498,6 +321,183 @@ file = "HOME/tests/c/my_cosine.c"
 line = 74
 begin = 6
 end = 13
+
+[C_5]
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 2
+end = 29
+
+[C_34]
+file = "HOME/tests/c/my_cosine.c"
+line = 72
+begin = 12
+end = 48
+
+[C_29]
+file = "HOME/tests/c/my_cosine.c"
+line = 75
+begin = 13
+end = 55
+
+[C_13]
+file = "HOME/tests/c/my_cosine.c"
+line = 55
+begin = 13
+end = 49
+
+[C_7]
+file = "HOME/tests/c/my_cosine.c"
+line = 40
+begin = 13
+end = 30
+
+[C_22]
+file = "HOME/tests/c/my_cosine.c"
+line = 67
+begin = 13
+end = 57
+
+[C_14]
+file = "HOME/tests/c/my_cosine.c"
+line = 50
+begin = 12
+end = 46
+
+[C_35]
+file = "HOME/tests/c/my_cosine.c"
+line = 71
+begin = 13
+end = 28
+
+[C_25]
+file = "HOME/tests/c/my_cosine.c"
+line = 63
+begin = 11
+end = 61
+
+[C_8]
+file = "HOME/tests/c/my_cosine.c"
+line = 53
+begin = 13
+end = 27
+
+[my_cos2]
+name = "Function my_cos2"
+file = "HOME/tests/c/my_cosine.c"
+line = 52
+begin = 6
+end = 13
+
+[C_27]
+file = "HOME/tests/c/my_cosine.c"
+line = 60
+begin = 13
+end = 38
+
+[C_19]
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 19
+end = 31
+
+[C_4]
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 9
+end = 28
+
+[C_12]
+file = "HOME/tests/c/my_cosine.c"
+line = 54
+begin = 2
+end = 7
+
+[method_error]
+name = "Lemma method_error"
+file = "HOME/tests/c/my_cosine.c"
+line = 36
+begin = 4
+end = 111
+
+[C_26]
+file = "HOME/tests/c/my_cosine.c"
+line = 60
+begin = 13
+end = 76
+
+[C_18]
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 19
+end = 24
+
+[C_2]
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 16
+end = 21
+
+[my_cos1]
+name = "Function my_cos1"
+file = "HOME/tests/c/my_cosine.c"
+line = 43
+begin = 6
+end = 13
+
+[C_28]
+file = "HOME/tests/c/my_cosine.c"
+line = 61
+begin = 11
+end = 37
+
+[C_24]
+file = "HOME/tests/c/my_cosine.c"
+line = 62
+begin = 12
+end = 62
+
+[C_6]
+file = "HOME/tests/c/my_cosine.c"
+line = 41
+begin = 12
+end = 46
+
+[C_30]
+file = "HOME/tests/c/my_cosine.c"
+line = 76
+begin = 16
+end = 21
+
+[C_21]
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 2
+end = 7
+
+[C_3]
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 16
+end = 28
+
+[C_16]
+file = "HOME/tests/c/my_cosine.c"
+line = 49
+begin = 13
+end = 30
+
+[C_31]
+file = "HOME/tests/c/my_cosine.c"
+line = 76
+begin = 16
+end = 28
+
+[C_23]
+file = "HOME/tests/c/my_cosine.c"
+line = 62
+begin = 12
+end = 124
 
 ========== jessie execution ==========
 Generating Why function my_cos1
@@ -514,10 +514,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs my_cosine.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs my_cosine.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs my_cosine.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs my_cosine.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -662,13 +663,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: my_cosine.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: my_cosine.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: my_cosine.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include my_cosine.depend
 
@@ -679,234 +680,12 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/my_cosine.jessie/my_cosine.loc ==========
-[my_cos4_ensures_default]
-name = "Function my_cos4"
-behavior = "default behavior"
-file = "HOME/tests/c/my_cosine.c"
-line = 74
-begin = 6
-end = 13
-
-[JC_40]
-file = "HOME/tests/c/my_cosine.c"
-line = 61
-begin = 11
-end = 37
-
-[my_cos3_safety]
-name = "Function my_cos3"
-behavior = "Safety"
-file = "HOME/tests/c/my_cosine.c"
-line = 65
-begin = 6
-end = 13
-
-[JC_41]
-file = "HOME/tests/c/my_cosine.c"
-line = 60
-begin = 13
-end = 76
-
-[JC_42]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_43]
-file = "HOME/tests/c/my_cosine.c"
-line = 60
-begin = 13
-end = 38
-
-[JC_44]
-file = "HOME/tests/c/my_cosine.c"
-line = 61
-begin = 11
-end = 37
-
-[JC_45]
-file = "HOME/tests/c/my_cosine.c"
-line = 60
-begin = 13
-end = 76
-
-[JC_46]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_1]
-file = "HOME/tests/c/my_cosine.c"
-line = 40
-begin = 13
-end = 30
-
-[JC_47]
-file = "HOME/tests/c/my_cosine.c"
-line = 62
-begin = 12
-end = 62
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_48]
-file = "HOME/tests/c/my_cosine.c"
-line = 63
-begin = 11
-end = 61
-
-[JC_3]
-file = "HOME/tests/c/my_cosine.c"
-line = 40
-begin = 13
-end = 30
-
-[JC_49]
-file = "HOME/tests/c/my_cosine.c"
-line = 62
-begin = 12
-end = 124
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_5]
-file = "HOME/tests/c/my_cosine.c"
-line = 41
-begin = 12
-end = 46
-
-[JC_6]
-file = "HOME/tests/c/my_cosine.c"
-line = 41
-begin = 12
-end = 46
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 13
-end = 53
-
-[JC_50]
-file = "HOME/tests/c/my_cosine.c"
-line = 62
-begin = 12
-end = 62
-
-[JC_51]
-file = "HOME/tests/c/my_cosine.c"
-line = 63
-begin = 11
-end = 61
-
-[JC_52]
-file = "HOME/tests/c/my_cosine.c"
-line = 62
-begin = 12
-end = 124
-
-[JC_53]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[my_cos4_safety]
-name = "Function my_cos4"
-behavior = "Safety"
-file = "HOME/tests/c/my_cosine.c"
-line = 74
-begin = 6
-end = 13
-
-[JC_54]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_55]
+[JC_73]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 19
-end = 24
-
-[JC_56]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 19
-end = 31
-
-[JC_57]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 12
-end = 31
-
-[JC_58]
-file = "HOME/tests/c/my_cosine.c"
-line = 67
-begin = 13
-end = 57
-
-[JC_59]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 19
-end = 24
-
-[JC_60]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 19
-end = 31
-
-[JC_61]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 12
-end = 31
-
-[JC_62]
-file = "HOME/tests/c/my_cosine.c"
-line = 67
-begin = 13
-end = 57
-
-[JC_10]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 45
+line = 76
 begin = 16
-end = 21
+end = 28
 
 [JC_63]
 file = "HOME/tests/c/my_cosine.c"
@@ -914,100 +693,11 @@ line = 71
 begin = 13
 end = 28
 
-[JC_11]
-kind = FPOverflow
+[JC_51]
 file = "HOME/tests/c/my_cosine.c"
-line = 45
-begin = 16
-end = 28
-
-[JC_64]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_12]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 45
-begin = 9
-end = 28
-
-[JC_65]
-file = "HOME/tests/c/my_cosine.c"
-line = 71
-begin = 13
-end = 28
-
-[JC_13]
-file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 13
-end = 53
-
-[JC_66]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_14]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 45
-begin = 16
-end = 21
-
-[JC_67]
-file = "HOME/tests/c/my_cosine.c"
-line = 72
-begin = 12
-end = 48
-
-[JC_15]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 45
-begin = 16
-end = 28
-
-[JC_68]
-file = "HOME/tests/c/my_cosine.c"
-line = 72
-begin = 12
-end = 48
-
-[JC_16]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 45
-begin = 9
-end = 28
-
-[JC_69]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_17]
-file = "HOME/tests/c/my_cosine.c"
-line = 49
-begin = 13
-end = 30
-
-[JC_18]
-file = "HOME/tests/c/my_cosine.c"
-line = 49
-begin = 34
-end = 56
-
-[JC_19]
-file = "HOME/tests/c/my_cosine.c"
-line = 49
-begin = 13
-end = 56
+line = 63
+begin = 11
+end = 61
 
 [my_cos1_ensures_default]
 name = "Function my_cos1"
@@ -1017,86 +707,49 @@ line = 43
 begin = 6
 end = 13
 
-[my_cos1_safety]
-name = "Function my_cos1"
-behavior = "Safety"
-file = "HOME/tests/c/my_cosine.c"
-line = 43
-begin = 6
-end = 13
-
-[JC_70]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[my_cos3_ensures_default]
-name = "Function my_cos3"
-behavior = "default behavior"
-file = "HOME/tests/c/my_cosine.c"
-line = 65
-begin = 6
-end = 13
-
 [JC_71]
 file = "HOME/tests/c/my_cosine.c"
 line = 75
 begin = 13
 end = 55
 
-[JC_72]
-kind = FPOverflow
+[JC_45]
 file = "HOME/tests/c/my_cosine.c"
-line = 76
-begin = 16
-end = 21
+line = 60
+begin = 13
+end = 76
 
-[JC_20]
+[JC_64]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_73]
+[JC_31]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 76
-begin = 16
-end = 28
+line = 54
+begin = 19
+end = 31
 
-[JC_21]
+[JC_17]
 file = "HOME/tests/c/my_cosine.c"
 line = 49
 begin = 13
 end = 30
 
-[JC_74]
+[JC_55]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 76
-begin = 9
-end = 28
+line = 66
+begin = 19
+end = 24
 
-[JC_22]
+[JC_48]
 file = "HOME/tests/c/my_cosine.c"
-line = 49
-begin = 34
-end = 56
-
-[method_error]
-name = "Lemma method_error"
-behavior = "lemma"
-file = "HOME/tests/c/my_cosine.c"
-line = 36
-begin = 4
-end = 111
-
-[JC_75]
-file = "HOME/tests/c/my_cosine.c"
-line = 75
-begin = 13
-end = 55
+line = 63
+begin = 11
+end = 61
 
 [JC_23]
 file = "HOME/tests/c/my_cosine.c"
@@ -1104,25 +757,41 @@ line = 49
 begin = 13
 end = 56
 
-[JC_76]
-kind = FPOverflow
+[JC_22]
 file = "HOME/tests/c/my_cosine.c"
-line = 76
-begin = 16
-end = 21
+line = 49
+begin = 34
+end = 56
+
+[JC_5]
+file = "HOME/tests/c/my_cosine.c"
+line = 41
+begin = 12
+end = 46
+
+[JC_67]
+file = "HOME/tests/c/my_cosine.c"
+line = 72
+begin = 12
+end = 48
+
+[JC_9]
+file = "HOME/tests/c/my_cosine.c"
+line = 44
+begin = 13
+end = 53
+
+[JC_75]
+file = "HOME/tests/c/my_cosine.c"
+line = 75
+begin = 13
+end = 55
 
 [JC_24]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_77]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 76
-begin = 16
-end = 28
 
 [JC_25]
 file = "HOME/tests/c/my_cosine.c"
@@ -1137,29 +806,42 @@ line = 76
 begin = 9
 end = 28
 
+[JC_41]
+file = "HOME/tests/c/my_cosine.c"
+line = 60
+begin = 13
+end = 76
+
+[JC_74]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 76
+begin = 9
+end = 28
+
+[JC_47]
+file = "HOME/tests/c/my_cosine.c"
+line = 62
+begin = 12
+end = 62
+
+[JC_52]
+file = "HOME/tests/c/my_cosine.c"
+line = 62
+begin = 12
+end = 124
+
 [JC_26]
 file = "HOME/tests/c/my_cosine.c"
 line = 50
 begin = 12
 end = 46
 
-[JC_27]
+[JC_8]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_29]
-file = "HOME/tests/c/my_cosine.c"
-line = 53
-begin = 13
-end = 27
 
 [my_cos2_safety]
 name = "Function my_cos2"
@@ -1169,45 +851,45 @@ line = 52
 begin = 6
 end = 13
 
-[JC_30]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 19
-end = 24
+[JC_54]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_31]
-kind = FPOverflow
+[JC_13]
 file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 19
-end = 31
-
-[JC_32]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 12
-end = 31
-
-[JC_33]
-file = "HOME/tests/c/my_cosine.c"
-line = 55
+line = 44
 begin = 13
-end = 49
+end = 53
 
-[JC_34]
+[my_cos4_ensures_default]
+name = "Function my_cos4"
+behavior = "default behavior"
 file = "HOME/tests/c/my_cosine.c"
-line = 53
-begin = 13
-end = 27
+line = 74
+begin = 6
+end = 13
 
-[JC_35]
+[JC_11]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 19
-end = 24
+line = 45
+begin = 16
+end = 28
+
+[JC_70]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_15]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 16
+end = 28
 
 [JC_36]
 kind = FPOverflow
@@ -1215,6 +897,25 @@ file = "HOME/tests/c/my_cosine.c"
 line = 54
 begin = 19
 end = 31
+
+[JC_39]
+file = "HOME/tests/c/my_cosine.c"
+line = 60
+begin = 13
+end = 38
+
+[JC_40]
+file = "HOME/tests/c/my_cosine.c"
+line = 61
+begin = 11
+end = 37
+
+[JC_35]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 54
+begin = 19
+end = 24
 
 [my_cos2_ensures_default]
 name = "Function my_cos2"
@@ -1224,12 +925,17 @@ line = 52
 begin = 6
 end = 13
 
-[JC_37]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 12
-end = 31
+[JC_27]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_69]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_38]
 file = "HOME/tests/c/my_cosine.c"
@@ -1237,11 +943,306 @@ line = 55
 begin = 13
 end = 49
 
-[JC_39]
+[JC_12]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 9
+end = 28
+
+[JC_6]
+file = "HOME/tests/c/my_cosine.c"
+line = 41
+begin = 12
+end = 46
+
+[JC_44]
+file = "HOME/tests/c/my_cosine.c"
+line = 61
+begin = 11
+end = 37
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_62]
+file = "HOME/tests/c/my_cosine.c"
+line = 67
+begin = 13
+end = 57
+
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[my_cos3_ensures_default]
+name = "Function my_cos3"
+behavior = "default behavior"
+file = "HOME/tests/c/my_cosine.c"
+line = 65
+begin = 6
+end = 13
+
+[JC_61]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 12
+end = 31
+
+[JC_32]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 54
+begin = 12
+end = 31
+
+[JC_56]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 19
+end = 31
+
+[my_cos3_safety]
+name = "Function my_cos3"
+behavior = "Safety"
+file = "HOME/tests/c/my_cosine.c"
+line = 65
+begin = 6
+end = 13
+
+[JC_33]
+file = "HOME/tests/c/my_cosine.c"
+line = 55
+begin = 13
+end = 49
+
+[JC_65]
+file = "HOME/tests/c/my_cosine.c"
+line = 71
+begin = 13
+end = 28
+
+[JC_29]
+file = "HOME/tests/c/my_cosine.c"
+line = 53
+begin = 13
+end = 27
+
+[method_error]
+name = "Lemma method_error"
+behavior = "lemma"
+file = "HOME/tests/c/my_cosine.c"
+line = 36
+begin = 4
+end = 111
+
+[JC_68]
+file = "HOME/tests/c/my_cosine.c"
+line = 72
+begin = 12
+end = 48
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 9
+end = 28
+
+[JC_43]
 file = "HOME/tests/c/my_cosine.c"
 line = 60
 begin = 13
 end = 38
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[my_cos4_safety]
+name = "Function my_cos4"
+behavior = "Safety"
+file = "HOME/tests/c/my_cosine.c"
+line = 74
+begin = 6
+end = 13
+
+[JC_34]
+file = "HOME/tests/c/my_cosine.c"
+line = 53
+begin = 13
+end = 27
+
+[JC_14]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 16
+end = 21
+
+[JC_53]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_21]
+file = "HOME/tests/c/my_cosine.c"
+line = 49
+begin = 13
+end = 30
+
+[JC_77]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 76
+begin = 16
+end = 28
+
+[JC_49]
+file = "HOME/tests/c/my_cosine.c"
+line = 62
+begin = 12
+end = 124
+
+[JC_1]
+file = "HOME/tests/c/my_cosine.c"
+line = 40
+begin = 13
+end = 30
+
+[JC_37]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 54
+begin = 12
+end = 31
+
+[JC_10]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 16
+end = 21
+
+[JC_57]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 12
+end = 31
+
+[my_cos1_safety]
+name = "Function my_cos1"
+behavior = "Safety"
+file = "HOME/tests/c/my_cosine.c"
+line = 43
+begin = 6
+end = 13
+
+[JC_66]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_59]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 19
+end = 24
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/tests/c/my_cosine.c"
+line = 49
+begin = 34
+end = 56
+
+[JC_3]
+file = "HOME/tests/c/my_cosine.c"
+line = 40
+begin = 13
+end = 30
+
+[JC_60]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 19
+end = 31
+
+[JC_72]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 76
+begin = 16
+end = 21
+
+[JC_19]
+file = "HOME/tests/c/my_cosine.c"
+line = 49
+begin = 13
+end = 56
+
+[JC_76]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 76
+begin = 16
+end = 21
+
+[JC_50]
+file = "HOME/tests/c/my_cosine.c"
+line = 62
+begin = 12
+end = 62
+
+[JC_30]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 54
+begin = 19
+end = 24
+
+[JC_58]
+file = "HOME/tests/c/my_cosine.c"
+line = 67
+begin = 13
+end = 57
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/c/my_cosine.jessie/why/my_cosine.why ==========
 type charP
@@ -1649,7 +1650,7 @@ let my_cos1_ensures_default =
       (C_5:
       begin
         void;
-       (let jessie_<num> =
+       (let _jessie_<num> =
        (__retres := (C_4:
                     (JC_16:
                     (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
@@ -1685,7 +1686,7 @@ let my_cos1_safety =
       (C_5:
       begin
         void;
-       (let jessie_<num> =
+       (let _jessie_<num> =
        (__retres := (C_4:
                     (JC_12:
                     (((sub_single nearest_even) (single_of_real_exact 1.0)) 
@@ -1711,7 +1712,7 @@ let my_cos2_ensures_default =
      begin
        (assert { (JC_34: (single_exact(x_0_0) = single_value(x_0_0))) };
        void); void;
-      (let jessie_<num> =
+      (let _jessie_<num> =
       (C_12:
       begin
         (r := (C_11:
@@ -1745,7 +1746,7 @@ let my_cos2_safety =
      begin
        [ { } unit { (JC_29: (single_exact(x_0_0) = single_value(x_0_0))) } ];
       void;
-      (let jessie_<num> =
+      (let _jessie_<num> =
       (C_12:
       begin
         (r := (C_11:
@@ -1776,7 +1777,7 @@ let my_cos3_ensures_default =
      (let r_0 = ref (any_single void) in
      (C_21:
      begin
-       (let jessie_<num> =
+       (let _jessie_<num> =
        (r_0 := (C_20:
                (JC_61:
                (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
@@ -1811,7 +1812,7 @@ let my_cos3_safety =
      (let r_0 = ref (any_single void) in
      (C_21:
      begin
-       (let jessie_<num> =
+       (let _jessie_<num> =
        (r_0 := (C_20:
                (JC_57:
                (((sub_single nearest_even) (single_of_real_exact 1.0)) 
@@ -1848,7 +1849,7 @@ let my_cos4_ensures_default =
       (C_33:
       begin
         void;
-       (let jessie_<num> =
+       (let _jessie_<num> =
        (__retres_0 := (C_32:
                       (JC_78:
                       (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
@@ -1884,7 +1885,7 @@ let my_cos4_safety =
       (C_33:
       begin
         void;
-       (let jessie_<num> =
+       (let _jessie_<num> =
        (__retres_0 := (C_32:
                       (JC_74:
                       (((sub_single nearest_even) (single_of_real_exact 1.0)) 

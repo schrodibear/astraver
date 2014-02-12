@@ -72,19 +72,19 @@ Parsing OK.
 Typing OK.
 Generating JC function Isqrt_isqrt for method Isqrt.isqrt
 Generating JC function Isqrt_main for method Isqrt.main
-Generating JC function cons_Isqrt for constructor Isqrt
-Generating JC function Object_registerNatives for method Object.registerNatives
+Generating JC function Object_clone for method Object.clone
+Generating JC function Object_notifyAll for method Object.notifyAll
 Generating JC function Object_hashCode for method Object.hashCode
 Generating JC function Object_equals for method Object.equals
-Generating JC function Object_clone for method Object.clone
-Generating JC function Object_toString for method Object.toString
-Generating JC function Object_notify for method Object.notify
-Generating JC function Object_notifyAll for method Object.notifyAll
-Generating JC function Object_wait_long for method Object.wait
-Generating JC function Object_wait_long_int for method Object.wait
 Generating JC function Object_wait for method Object.wait
-Generating JC function Object_finalize for method Object.finalize
+Generating JC function Object_notify for method Object.notify
+Generating JC function Object_wait_long for method Object.wait
+Generating JC function cons_Isqrt for constructor Isqrt
+Generating JC function Object_toString for method Object.toString
+Generating JC function Object_wait_long_int for method Object.wait
 Generating JC function cons_Object for constructor Object
+Generating JC function Object_finalize for method Object.finalize
+Generating JC function Object_registerNatives for method Object.registerNatives
 Done.
 ========== file tests/java/Isqrt.jc ==========
 # InvariantPolicy = Arguments
@@ -99,19 +99,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag Isqrt = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag Isqrt = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -129,9 +129,9 @@ behavior normal:
 logic integer sqr(integer x) =
 (x * x)
 
-exception Throwable of Throwable[0..]
-
 exception Exception of Exception[0..]
+
+exception Throwable of Throwable[0..]
 
 integer Isqrt_isqrt(integer x_0)
   requires (K_6 : (x_0 >= 0));
@@ -182,42 +182,42 @@ behavior default:
    }
 }
 
-unit cons_Isqrt(! Isqrt[0] this_1){()}
-
-unit Object_registerNatives()
+Object[0..] Object_clone(Object[0] this_2)
 ;
 
-integer Object_hashCode(Object[0] this_2)
+unit Object_notifyAll(Object[0] this_3)
 ;
 
-boolean Object_equals(Object[0] this_3, Object[0..] obj)
+integer Object_hashCode(Object[0] this_4)
 ;
 
-Object[0..] Object_clone(Object[0] this_4)
+boolean Object_equals(Object[0] this_5, Object[0..] obj)
 ;
 
-String[0..] Object_toString(Object[0] this_5)
+unit Object_wait(Object[0] this_6)
 ;
 
-unit Object_notify(Object[0] this_6)
-;
-
-unit Object_notifyAll(Object[0] this_7)
+unit Object_notify(Object[0] this_7)
 ;
 
 unit Object_wait_long(Object[0] this_8, integer timeout)
 ;
 
-unit Object_wait_long_int(Object[0] this_9, integer timeout_0, integer nanos)
+unit cons_Isqrt(! Isqrt[0] this_1){()}
+
+String[0..] Object_toString(Object[0] this_9)
 ;
 
-unit Object_wait(Object[0] this_10)
+unit Object_wait_long_int(Object[0] this_10, integer timeout_0, integer nanos)
 ;
+
+unit cons_Object(! Object[0] this_12){()}
 
 unit Object_finalize(Object[0] this_11)
 ;
 
-unit cons_Object(! Object[0] this_12){()}
+unit Object_registerNatives()
+;
 
 /*
 Local Variables:
@@ -226,204 +226,17 @@ compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Isqrt.jloc t
 End:
 */
 ========== file tests/java/Isqrt.jloc ==========
-[K_10]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 21
-end = 50
-
-[K_11]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 21
-end = 73
-
-[K_12]
-file = "HOME/tests/java/Isqrt.java"
-line = 45
-begin = 20
-end = 29
-
-[K_13]
-file = "HOME/tests/java/Isqrt.java"
-line = 47
-begin = 30
-end = 37
-
-[K_14]
-file = "HOME/tests/java/Isqrt.java"
-line = 47
-begin = 26
-end = 37
-
-[K_15]
-file = "HOME/tests/java/Isqrt.java"
-line = 47
-begin = 26
-end = 41
-
-[K_16]
-file = "HOME/tests/java/Isqrt.java"
-line = 47
-begin = 19
-end = 41
-
-[K_17]
-file = "HOME/tests/java/Isqrt.java"
-line = 47
-begin = 9
-end = 17
-
-[K_18]
-file = "HOME/tests/java/Isqrt.java"
-line = 43
-begin = 23
-end = 24
-
-[K_19]
-file = "HOME/tests/java/Isqrt.java"
-line = 43
-begin = 14
-end = 15
-
-[cons_Isqrt]
-name = "Constructor of class Isqrt"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Isqrt_main]
-name = "Method main"
-file = "HOME/tests/java/Isqrt.java"
-line = 52
-begin = 11
-end = 15
-
-[K_20]
-file = "HOME/tests/java/Isqrt.java"
-line = 51
-begin = 12
-end = 24
-
-[K_21]
-file = "HOME/tests/java/Isqrt.java"
-line = 54
-begin = 6
-end = 15
-
-[K_22]
-file = "HOME/tests/java/Isqrt.java"
-line = 55
-begin = 13
-end = 28
-
 [K_23]
 file = "HOME/tests/java/Isqrt.java"
 line = 55
 begin = 13
 end = 28
 
-[K_24]
+[K_17]
 file = "HOME/tests/java/Isqrt.java"
-line = 56
-begin = 13
-end = 28
-
-[K_1]
-file = "HOME/tests/java/Isqrt.java"
-line = 40
-begin = 49
-end = 69
-
-[K_25]
-file = "HOME/tests/java/Isqrt.java"
-line = 56
-begin = 13
-end = 28
-
-[K_2]
-file = "HOME/tests/java/Isqrt.java"
-line = 40
-begin = 28
-end = 45
-
-[K_3]
-file = "HOME/tests/java/Isqrt.java"
-line = 40
-begin = 12
-end = 24
-
-[Object_equals]
-name = "Method equals"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
-
-[K_4]
-file = "HOME/tests/java/Isqrt.java"
-line = 40
-begin = 12
-end = 45
-
-[K_5]
-file = "HOME/tests/java/Isqrt.java"
-line = 40
-begin = 12
-end = 69
-
-[K_6]
-file = "HOME/tests/java/Isqrt.java"
-line = 39
-begin = 13
-end = 19
-
-[K_7]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 54
-end = 73
-
-[K_8]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 35
-end = 50
-
-[K_9]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 21
-end = 31
-
-[Object_notify]
-name = "Method notify"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[cons_Object]
-name = "Constructor of class Object"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Isqrt_isqrt]
-name = "Method isqrt"
-file = "HOME/tests/java/Isqrt.java"
-line = 42
-begin = 11
-end = 16
-
-[Object_wait_long_int]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+line = 47
+begin = 9
+end = 17
 
 [Object_wait_long]
 name = "Method wait"
@@ -432,25 +245,101 @@ line = 333
 begin = 29
 end = 33
 
-[Object_hashCode]
-name = "Method hashCode"
+[K_11]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 21
+end = 73
+
+[K_25]
+file = "HOME/tests/java/Isqrt.java"
+line = 56
+begin = 13
+end = 28
+
+[K_13]
+file = "HOME/tests/java/Isqrt.java"
+line = 47
+begin = 30
+end = 37
+
+[Object_finalize]
+name = "Method finalize"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
+line = 481
+begin = 19
+end = 27
+
+[K_9]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 21
+end = 31
+
+[Object_wait]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
 begin = 22
-end = 30
+end = 26
 
-[Object_notifyAll]
-name = "Method notifyAll"
+[Isqrt_main]
+name = "Method main"
+file = "HOME/tests/java/Isqrt.java"
+line = 52
+begin = 11
+end = 15
+
+[Object_notify]
+name = "Method notify"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
+line = 243
 begin = 29
-end = 38
+end = 35
 
-[Object_toString]
-name = "Method toString"
+[Object_clone]
+name = "Method clone"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
+line = 184
+begin = 28
+end = 33
+
+[cons_Object]
+name = "Constructor of class Object"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[K_1]
+file = "HOME/tests/java/Isqrt.java"
+line = 40
+begin = 49
+end = 69
+
+[K_15]
+file = "HOME/tests/java/Isqrt.java"
+line = 47
+begin = 26
+end = 41
+
+[K_4]
+file = "HOME/tests/java/Isqrt.java"
+line = 40
+begin = 12
+end = 45
+
+[K_12]
+file = "HOME/tests/java/Isqrt.java"
+line = 45
+begin = 20
+end = 29
+
+[Object_wait_long_int]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
 end = 26
 
 [Object_registerNatives]
@@ -460,26 +349,137 @@ line = 22
 begin = 31
 end = 46
 
-[Object_clone]
-name = "Method clone"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+[K_20]
+file = "HOME/tests/java/Isqrt.java"
+line = 51
+begin = 12
+end = 24
 
-[Object_wait]
-name = "Method wait"
+[K_2]
+file = "HOME/tests/java/Isqrt.java"
+line = 40
+begin = 28
+end = 45
+
+[K_10]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 21
+end = 50
+
+[K_6]
+file = "HOME/tests/java/Isqrt.java"
+line = 39
+begin = 13
+end = 19
+
+[K_8]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 35
+end = 50
+
+[K_3]
+file = "HOME/tests/java/Isqrt.java"
+line = 40
+begin = 12
+end = 24
+
+[K_21]
+file = "HOME/tests/java/Isqrt.java"
+line = 54
+begin = 6
+end = 15
+
+[Isqrt_isqrt]
+name = "Method isqrt"
+file = "HOME/tests/java/Isqrt.java"
+line = 42
+begin = 11
+end = 16
+
+[K_24]
+file = "HOME/tests/java/Isqrt.java"
+line = 56
+begin = 13
+end = 28
+
+[K_14]
+file = "HOME/tests/java/Isqrt.java"
+line = 47
+begin = 26
+end = 37
+
+[Object_notifyAll]
+name = "Method notifyAll"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
+line = 267
+begin = 29
+end = 38
+
+[K_19]
+file = "HOME/tests/java/Isqrt.java"
+line = 43
+begin = 14
+end = 15
+
+[K_5]
+file = "HOME/tests/java/Isqrt.java"
+line = 40
+begin = 12
+end = 69
+
+[K_18]
+file = "HOME/tests/java/Isqrt.java"
+line = 43
+begin = 23
+end = 24
+
+[Object_equals]
+name = "Method equals"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
+
+[K_7]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 54
+end = 73
+
+[Object_hashCode]
+name = "Method hashCode"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
 begin = 22
+end = 30
+
+[Object_toString]
+name = "Method toString"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
 end = 26
 
-[Object_finalize]
-name = "Method finalize"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
+[K_22]
+file = "HOME/tests/java/Isqrt.java"
+line = 55
+begin = 13
+end = 28
+
+[K_16]
+file = "HOME/tests/java/Isqrt.java"
+line = 47
 begin = 19
-end = 27
+end = 41
+
+[cons_Isqrt]
+name = "Constructor of class Isqrt"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== jessie execution ==========
 Generating Why function Isqrt_isqrt
@@ -496,10 +496,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Isqrt.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Isqrt.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Isqrt.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Isqrt.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -644,13 +645,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: Isqrt.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: Isqrt.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: Isqrt.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include Isqrt.depend
 
@@ -661,91 +662,49 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/Isqrt.loc ==========
-[JC_90]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_91]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_92]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_40]
-file = "HOME/tests/java/Isqrt.java"
-line = 45
-begin = 20
-end = 29
-
-[JC_93]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_41]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 21
-end = 31
-
 [JC_94]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+line = 430
+begin = 22
+end = 26
 
-[JC_42]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 35
-end = 50
-
-[JC_95]
+[JC_73]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_43]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 54
-end = 73
-
-[JC_96]
+[JC_158]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+line = 22
+begin = 31
+end = 46
 
-[JC_44]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 21
-end = 73
-
-[JC_150]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
-
-[JC_97]
+[JC_63]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_45]
+[JC_80]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
+
+[JC_51]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_71]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_147]
 file = "HOME/"
 line = 0
 begin = -1
@@ -757,165 +716,13 @@ line = 0
 begin = -1
 end = -1
 
-[JC_98]
+[JC_45]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_46]
-file = "HOME/tests/java/Isqrt.jc"
-line = 61
-begin = 12
-end = 481
-
-[JC_1]
-file = "HOME/tests/java/Isqrt.jc"
-line = 10
-begin = 12
-end = 22
-
-[JC_152]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
-
-[JC_100]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_99]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_47]
-file = "HOME/tests/java/Isqrt.jc"
-line = 61
-begin = 12
-end = 481
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_153]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_101]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_48]
-file = "HOME/tests/java/Isqrt.java"
-line = 52
-begin = 11
-end = 15
-
-[JC_3]
-file = "HOME/tests/java/Isqrt.jc"
-line = 10
-begin = 12
-end = 22
-
-[JC_154]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_102]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
-
-[JC_49]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_155]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_103]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_156]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_104]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
-
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_157]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_105]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_Object_safety]
-name = "Constructor of class Object"
-behavior = "Safety"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_158]
+[JC_123]
 file = "HOME/"
 line = 0
 begin = -1
@@ -927,161 +734,7 @@ line = 0
 begin = -1
 end = -1
 
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_159]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_107]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/java/Isqrt.jc"
-line = 35
-begin = 8
-end = 23
-
-[JC_108]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_109]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_50]
-file = "HOME/tests/java/Isqrt.java"
-line = 52
-begin = 11
-end = 15
-
-[JC_51]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_52]
-file = "HOME/tests/java/Isqrt.java"
-line = 51
-begin = 12
-end = 24
-
-[Isqrt_main_ensures_default]
-name = "Method main"
-behavior = "default behavior"
-file = "HOME/tests/java/Isqrt.java"
-line = 52
-begin = 11
-end = 15
-
-[JC_53]
-file = "HOME/tests/java/Isqrt.java"
-line = 51
-begin = 12
-end = 24
-
-[JC_54]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_160]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_55]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_161]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_56]
-kind = UserCall
-file = "HOME/tests/java/Isqrt.java"
-line = 54
-begin = 6
-end = 15
-
-[JC_162]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_110]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[JC_57]
-file = "HOME/tests/java/Isqrt.java"
-line = 55
-begin = 13
-end = 28
-
-[JC_163]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_111]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_58]
-file = "HOME/tests/java/Isqrt.java"
-line = 56
-begin = 13
-end = 28
-
-[JC_164]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_112]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[JC_59]
-kind = UserCall
-file = "HOME/tests/java/Isqrt.java"
-line = 54
-begin = 6
-end = 15
-
-[JC_165]
+[JC_143]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1093,205 +746,33 @@ line = 0
 begin = -1
 end = -1
 
-[JC_114]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_115]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_116]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_117]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_118]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[JC_119]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_60]
-file = "HOME/tests/java/Isqrt.java"
-line = 55
-begin = 13
-end = 28
-
-[JC_61]
-file = "HOME/tests/java/Isqrt.java"
-line = 56
-begin = 13
-end = 28
-
-[JC_62]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_63]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_11]
-file = "HOME/tests/java/Isqrt.jc"
-line = 35
-begin = 8
-end = 23
-
 [JC_64]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_65]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_66]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_14]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_120]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[JC_67]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_121]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_68]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_122]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_69]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_17]
-file = "HOME/tests/java/Isqrt.jc"
-line = 37
-begin = 11
-end = 65
-
-[JC_123]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_18]
-file = "HOME/tests/java/Isqrt.jc"
-line = 37
-begin = 11
-end = 65
-
-[JC_124]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_19]
-file = "HOME/tests/java/Isqrt.java"
-line = 39
-begin = 13
-end = 19
-
-[JC_125]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_126]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
+line = 184
+begin = 28
 end = 33
 
-[JC_127]
+[JC_133]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Object_ensures_default]
+name = "Constructor of class Object"
+behavior = "default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_99]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1305,43 +786,67 @@ line = 42
 begin = 11
 end = 16
 
-[JC_128]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[JC_129]
+[JC_85]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_70]
+[JC_126]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+line = 207
+begin = 18
+end = 26
 
-[JC_71]
+[JC_31]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_72]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+[JC_17]
+file = "HOME/tests/java/Isqrt.jc"
+line = 37
+begin = 11
+end = 65
 
-[JC_20]
+[JC_122]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_73]
+[JC_81]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_55]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_138]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_134]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[JC_148]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_137]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1355,29 +860,11 @@ line = 0
 begin = -1
 end = -1
 
-[JC_21]
+[JC_48]
 file = "HOME/tests/java/Isqrt.java"
-line = 39
-begin = 13
-end = 19
-
-[JC_74]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_75]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+line = 52
+begin = 11
+end = 15
 
 [JC_23]
 file = "HOME/tests/java/Isqrt.java"
@@ -1385,7 +872,43 @@ line = 40
 begin = 12
 end = 24
 
-[JC_76]
+[JC_22]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_121]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_5]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_125]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_67]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_9]
+file = "HOME/tests/java/Isqrt.jc"
+line = 35
+begin = 8
+end = 23
+
+[JC_75]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1397,37 +920,11 @@ line = 40
 begin = 28
 end = 45
 
-[cons_Object_ensures_default]
-name = "Constructor of class Object"
-behavior = "default behavior"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_130]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_77]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_25]
 file = "HOME/tests/java/Isqrt.java"
 line = 40
 begin = 49
 end = 69
-
-[JC_131]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 [JC_78]
 file = "HOME/lib/java_api/java/lang/Object.java"
@@ -1435,13 +932,49 @@ line = 74
 begin = 22
 end = 30
 
+[JC_41]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 21
+end = 31
+
+[JC_74]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_47]
+file = "HOME/tests/java/Isqrt.jc"
+line = 61
+begin = 12
+end = 481
+
+[JC_52]
+file = "HOME/tests/java/Isqrt.java"
+line = 51
+begin = 12
+end = 24
+
 [JC_26]
 file = "HOME/tests/java/Isqrt.java"
 line = 40
 begin = 12
 end = 69
 
-[JC_132]
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_154]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1453,37 +986,37 @@ line = 0
 begin = -1
 end = -1
 
-[JC_27]
-file = "HOME/tests/java/Isqrt.java"
-line = 40
-begin = 12
-end = 24
-
-[JC_133]
+[JC_13]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_28]
-file = "HOME/tests/java/Isqrt.java"
-line = 40
-begin = 28
-end = 45
+[JC_130]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_134]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+[JC_82]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_29]
-file = "HOME/tests/java/Isqrt.java"
-line = 40
-begin = 49
-end = 69
+[JC_163]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_135]
+[JC_153]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_87]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1497,153 +1030,25 @@ line = 52
 begin = 11
 end = 15
 
-[JC_136]
+[JC_11]
+file = "HOME/tests/java/Isqrt.jc"
+line = 35
+begin = 8
+end = 23
+
+[JC_98]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_70]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+line = 267
+begin = 29
+end = 38
 
-[JC_137]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_138]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_139]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_80]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
-
-[JC_81]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_Isqrt_safety]
-name = "Constructor of class Isqrt"
-behavior = "Safety"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_82]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_30]
-file = "HOME/tests/java/Isqrt.java"
-line = 40
-begin = 12
-end = 69
-
-[JC_83]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_31]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_84]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_32]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_85]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_33]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 21
-end = 31
-
-[JC_86]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
-
-[JC_34]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 35
-end = 50
-
-[JC_140]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_87]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_35]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 54
-end = 73
-
-[JC_141]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_88]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
-
-[JC_36]
-file = "HOME/tests/java/Isqrt.java"
-line = 44
-begin = 21
-end = 73
-
-[JC_142]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
-
-[JC_89]
+[JC_15]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1657,13 +1062,103 @@ line = 42
 begin = 11
 end = 16
 
-[JC_37]
+[JC_36]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 21
+end = 73
+
+[JC_104]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
+
+[JC_91]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_143]
+[JC_39]
+file = "HOME/tests/java/Isqrt.jc"
+line = 61
+begin = 12
+end = 481
+
+[JC_112]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[JC_40]
+file = "HOME/tests/java/Isqrt.java"
+line = 45
+begin = 20
+end = 29
+
+[JC_162]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_135]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_83]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_35]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 54
+end = 73
+
+[JC_132]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_27]
+file = "HOME/tests/java/Isqrt.java"
+line = 40
+begin = 12
+end = 24
+
+[JC_115]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_109]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_107]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_69]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_124]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1675,19 +1170,404 @@ line = 61
 begin = 12
 end = 481
 
-[JC_144]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_39]
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_156]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_127]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_164]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 21
+end = 73
+
+[JC_155]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_62]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
+
+[JC_101]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_88]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
+
+[JC_129]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_42]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 35
+end = 50
+
+[JC_110]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[JC_103]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_46]
 file = "HOME/tests/java/Isqrt.jc"
 line = 61
 begin = 12
 end = 481
 
+[JC_141]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_61]
+file = "HOME/tests/java/Isqrt.java"
+line = 56
+begin = 13
+end = 28
+
+[JC_32]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_56]
+kind = UserCall
+file = "HOME/tests/java/Isqrt.java"
+line = 54
+begin = 6
+end = 15
+
+[JC_33]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 21
+end = 31
+
+[cons_Isqrt_safety]
+name = "Constructor of class Isqrt"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_65]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_118]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_105]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_140]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_29]
+file = "HOME/tests/java/Isqrt.java"
+line = 40
+begin = 49
+end = 69
+
+[JC_144]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_159]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Object_safety]
+name = "Constructor of class Object"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_68]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_96]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_43]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 54
+end = 73
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_95]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_93]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_97]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Isqrt_main_ensures_default]
+name = "Method main"
+behavior = "default behavior"
+file = "HOME/tests/java/Isqrt.java"
+line = 52
+begin = 11
+end = 15
+
+[JC_84]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_160]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[JC_128]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
+
+[JC_34]
+file = "HOME/tests/java/Isqrt.java"
+line = 44
+begin = 35
+end = 50
+
+[JC_114]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_150]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[JC_117]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_90]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_53]
+file = "HOME/tests/java/Isqrt.java"
+line = 51
+begin = 12
+end = 24
+
+[JC_157]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_145]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_21]
+file = "HOME/tests/java/Isqrt.java"
+line = 39
+begin = 13
+end = 19
+
+[JC_149]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_111]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_77]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_49]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_1]
+file = "HOME/tests/java/Isqrt.jc"
+line = 10
+begin = 12
+end = 22
+
+[JC_131]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_102]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
+
+[JC_37]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_142]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_108]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_57]
+file = "HOME/tests/java/Isqrt.java"
+line = 55
+begin = 13
+end = 28
+
+[JC_161]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1699,23 +1579,144 @@ line = 0
 begin = -1
 end = -1
 
-[JC_147]
+[JC_89]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_148]
+[JC_136]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[JC_66]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_149]
+[JC_59]
+kind = UserCall
+file = "HOME/tests/java/Isqrt.java"
+line = 54
+begin = 6
+end = 15
+
+[JC_20]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_165]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/tests/java/Isqrt.jc"
+line = 37
+begin = 11
+end = 65
+
+[JC_3]
+file = "HOME/tests/java/Isqrt.jc"
+line = 10
+begin = 12
+end = 22
+
+[JC_92]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_152]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[JC_86]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
+
+[JC_60]
+file = "HOME/tests/java/Isqrt.java"
+line = 55
+begin = 13
+end = 28
+
+[JC_139]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_72]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
+
+[JC_19]
+file = "HOME/tests/java/Isqrt.java"
+line = 39
+begin = 13
+end = 19
+
+[JC_119]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_76]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_50]
+file = "HOME/tests/java/Isqrt.java"
+line = 52
+begin = 11
+end = 15
+
+[JC_30]
+file = "HOME/tests/java/Isqrt.java"
+line = 40
+begin = 12
+end = 69
+
+[JC_120]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_58]
+file = "HOME/tests/java/Isqrt.java"
+line = 56
+begin = 13
+end = 28
+
+[JC_100]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_28]
+file = "HOME/tests/java/Isqrt.java"
+line = 40
+begin = 28
+end = 45
 
 ========== file tests/java/why/Isqrt.why ==========
 type Object
@@ -1935,19 +1936,19 @@ exception Loop_exit_exc of unit
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_clone :
- this_4:Object pointer ->
+ this_2:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_clone_requires :
- this_4:Object pointer ->
+ this_2:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_equals :
- this_3:Object pointer ->
+ this_5:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
 parameter Object_equals_requires :
- this_3:Object pointer ->
+ this_5:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
 parameter Object_finalize :
@@ -1957,22 +1958,22 @@ parameter Object_finalize_requires :
  this_11:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_hashCode :
- this_2:Object pointer -> { } int reads Object_alloc_table { true }
+ this_4:Object pointer -> { } int reads Object_alloc_table { true }
 
 parameter Object_hashCode_requires :
- this_2:Object pointer -> { } int reads Object_alloc_table { true }
+ this_4:Object pointer -> { } int reads Object_alloc_table { true }
 
 parameter Object_notify :
- this_6:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_7:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notifyAll :
- this_7:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_3:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notifyAll_requires :
- this_7:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_3:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notify_requires :
- this_6:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_7:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_registerNatives : tt:unit -> { } unit { true }
 
@@ -1981,26 +1982,26 @@ parameter Object_registerNatives_requires : tt:unit -> { } unit { true }
 parameter Object_tag_table : Object tag_table ref
 
 parameter Object_toString :
- this_5:Object pointer ->
+ this_9:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_toString_requires :
- this_5:Object pointer ->
+ this_9:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_wait :
- this_10:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_6:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long :
  this_8:Object pointer ->
   timeout:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_int :
- this_9:Object pointer ->
+ this_10:Object pointer ->
   timeout_0:int -> nanos:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_int_requires :
- this_9:Object pointer ->
+ this_10:Object pointer ->
   timeout_0:int -> nanos:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_requires :
@@ -2008,7 +2009,7 @@ parameter Object_wait_long_requires :
   timeout:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_requires :
- this_10:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_6:Object pointer -> { } unit reads Object_alloc_table { true }
 
 exception Return_label_exc of unit
 
@@ -2210,7 +2211,7 @@ let Isqrt_isqrt_ensures_default =
            begin
              (if (K_17: ((le_int_ !sum) x_0_0))
              then
-              (let jessie_<num> =
+              (let _jessie_<num> =
               (K_16:
               begin
                 (sum := ((add_int !sum) (K_15:
@@ -2222,8 +2223,8 @@ let Isqrt_isqrt_ensures_default =
                                                                   !count end)))) (1)))));
                !sum end) in void) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<num> -> void end end done) with
-        Loop_exit_exc jessie_<num> -> void end; (return := !count);
+           Loop_continue_exc _jessie_<num> -> void end end done) with
+        Loop_exit_exc _jessie_<num> -> void end; (return := !count);
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_26:
     ((JC_23: ge_int(result, (0)))
@@ -2254,7 +2255,7 @@ let Isqrt_isqrt_safety =
            begin
              (if (K_17: ((le_int_ !sum) x_0_0))
              then
-              (let jessie_<num> =
+              (let _jessie_<num> =
               (K_16:
               begin
                 (sum := ((add_int !sum) (K_15:
@@ -2266,8 +2267,8 @@ let Isqrt_isqrt_safety =
                                                                   !count end)))) (1)))));
                !sum end) in void) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<num> -> void end end done) with
-        Loop_exit_exc jessie_<num> -> void end; (return := !count);
+           Loop_continue_exc _jessie_<num> -> void end end done) with
+        Loop_exit_exc _jessie_<num> -> void end; (return := !count);
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 
@@ -2282,9 +2283,9 @@ let Isqrt_main_ensures_default =
      (K_23:
      (K_25:
      begin
-       (let jessie_<num> =
+       (let _jessie_<num> =
        (r := (K_21:
-             (let jessie_<num> = (17) in (JC_59: (Isqrt_isqrt jessie_<num>))))) in
+             (let _jessie_<num> = (17) in (JC_59: (Isqrt_isqrt _jessie_<num>))))) in
        void); (assert { (JC_60: (lt_int(r, (4)) -> (false = true))) }; void);
       (assert { (JC_61: (gt_int(r, (4)) -> (false = true))) }; void);
       (return := !r); (raise Return) end))); absurd  end with Return ->
@@ -2301,10 +2302,10 @@ let Isqrt_main_safety =
      (K_23:
      (K_25:
      begin
-       (let jessie_<num> =
+       (let _jessie_<num> =
        (r := (K_21:
-             (let jessie_<num> = (17) in
-             (JC_56: (Isqrt_isqrt_requires jessie_<num>))))) in void);
+             (let _jessie_<num> = (17) in
+             (JC_56: (Isqrt_isqrt_requires _jessie_<num>))))) in void);
       [ { } unit reads r { (JC_57: (lt_int(r, (4)) -> (false = true))) } ];
       [ { } unit reads r { (JC_58: (gt_int(r, (4)) -> (false = true))) } ];
       (return := !r); (raise Return) end))); absurd  end with Return ->
@@ -2314,7 +2315,7 @@ let cons_Isqrt_ensures_default =
  fun (this_1 : Object pointer) ->
   { valid_struct_Isqrt(this_1, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_66: true) }
+  { (JC_122: true) }
 
 let cons_Isqrt_safety =
  fun (this_1 : Object pointer) ->
@@ -2326,7 +2327,7 @@ let cons_Object_ensures_default =
  fun (this_12 : Object pointer) ->
   { valid_struct_Object(this_12, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_162: true) }
+  { (JC_146: true) }
 
 let cons_Object_safety =
  fun (this_12 : Object pointer) ->
@@ -4858,6 +4859,7 @@ why -simplify [...] why/Isqrt.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
+Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Isqrt_why.sx         : .....?...?.??.. (11/0/4/0/0)
 total   :  15

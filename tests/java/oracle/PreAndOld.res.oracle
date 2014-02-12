@@ -64,8 +64,8 @@ End:
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
-Generating JC function PreAndOld_g for method PreAndOld.g
 Generating JC function cons_PreAndOld for constructor PreAndOld
+Generating JC function PreAndOld_g for method PreAndOld.g
 Done.
 ========== file tests/java/PreAndOld.jc ==========
 # InvariantPolicy = Arguments
@@ -80,19 +80,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag PreAndOld = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag PreAndOld = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -102,19 +102,21 @@ type interface = [interface]
 tag interface = {
 }
 
+integer PreAndOld_y;
+
 boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
-integer PreAndOld_y;
-
 logic integer f{L}(integer n) =
 (n + PreAndOld_y)
 
+exception Exception of Exception[0..]
+
 exception Throwable of Throwable[0..]
 
-exception Exception of Exception[0..]
+unit cons_PreAndOld(! PreAndOld[0] this_1){()}
 
 integer PreAndOld_g(PreAndOld[0] this_0, integer x)
 behavior default:
@@ -132,8 +134,6 @@ behavior default:
    }
 }
 
-unit cons_PreAndOld(! PreAndOld[0] this_1){()}
-
 /*
 Local Variables:
 mode: java
@@ -147,17 +147,12 @@ line = 44
 begin = 16
 end = 40
 
-[K_2]
+[PreAndOld_g]
+name = "Method g"
 file = "HOME/tests/java/PreAndOld.java"
-line = 43
-begin = 16
-end = 36
-
-[K_3]
-file = "HOME/tests/java/PreAndOld.java"
-line = 42
-begin = 16
-end = 37
+line = 46
+begin = 8
+end = 9
 
 [K_4]
 file = "HOME/tests/java/PreAndOld.java"
@@ -165,11 +160,11 @@ line = 42
 begin = 16
 end = 74
 
-[K_5]
+[K_2]
 file = "HOME/tests/java/PreAndOld.java"
-line = 42
+line = 43
 begin = 16
-end = 115
+end = 36
 
 [K_6]
 file = "HOME/tests/java/PreAndOld.java"
@@ -177,18 +172,11 @@ line = 49
 begin = 15
 end = 20
 
-[K_7]
+[K_3]
 file = "HOME/tests/java/PreAndOld.java"
-line = 47
-begin = 18
-end = 19
-
-[PreAndOld_g]
-name = "Method g"
-file = "HOME/tests/java/PreAndOld.java"
-line = 46
-begin = 8
-end = 9
+line = 42
+begin = 16
+end = 37
 
 [cons_PreAndOld]
 name = "Constructor of class PreAndOld"
@@ -197,9 +185,21 @@ line = 0
 begin = -1
 end = -1
 
+[K_5]
+file = "HOME/tests/java/PreAndOld.java"
+line = 42
+begin = 16
+end = 115
+
+[K_7]
+file = "HOME/tests/java/PreAndOld.java"
+line = 47
+begin = 18
+end = 19
+
 ========== jessie execution ==========
-Generating Why function PreAndOld_g
 Generating Why function cons_PreAndOld
+Generating Why function PreAndOld_g
 ========== file tests/java/PreAndOld.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -210,10 +210,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs PreAndOld.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs PreAndOld.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs PreAndOld.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs PreAndOld.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -358,13 +359,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: PreAndOld.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: PreAndOld.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: PreAndOld.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include PreAndOld.depend
 
@@ -375,31 +376,33 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/PreAndOld.loc ==========
-[JC_40]
+[JC_31]
+file = "HOME/tests/java/PreAndOld.java"
+line = 42
+begin = 16
+end = 37
+
+[JC_17]
+file = "HOME/tests/java/PreAndOld.jc"
+line = 39
+begin = 11
+end = 65
+
+[PreAndOld_g_safety]
+name = "Method g"
+behavior = "Safety"
+file = "HOME/tests/java/PreAndOld.java"
+line = 46
+begin = 8
+end = 9
+
+[JC_23]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_1]
-file = "HOME/tests/java/PreAndOld.jc"
-line = 10
-begin = 12
-end = 22
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_3]
-file = "HOME/tests/java/PreAndOld.jc"
-line = 10
-begin = 12
-end = 22
-
-[JC_4]
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
@@ -411,33 +414,19 @@ line = 0
 begin = -1
 end = -1
 
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_9]
 file = "HOME/tests/java/PreAndOld.jc"
-line = 35
+line = 37
 begin = 8
 end = 23
 
-[cons_PreAndOld_ensures_default]
-name = "Constructor of class PreAndOld"
-behavior = "default behavior"
+[JC_24]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_25]
 file = "HOME/"
 line = 0
 begin = -1
@@ -451,27 +440,13 @@ line = 46
 begin = 8
 end = 9
 
-[JC_10]
+[JC_26]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[PreAndOld_g_safety]
-name = "Method g"
-behavior = "Safety"
-file = "HOME/tests/java/PreAndOld.java"
-line = 46
-begin = 8
-end = 9
-
-[JC_11]
-file = "HOME/tests/java/PreAndOld.jc"
-line = 35
-begin = 8
-end = 23
-
-[JC_12]
+[JC_8]
 file = "HOME/"
 line = 0
 begin = -1
@@ -483,13 +458,91 @@ line = 0
 begin = -1
 end = -1
 
-[JC_14]
+[JC_11]
+file = "HOME/tests/java/PreAndOld.jc"
+line = 37
+begin = 8
+end = 23
+
+[JC_15]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_15]
+[JC_36]
+file = "HOME/tests/java/PreAndOld.java"
+line = 43
+begin = 16
+end = 36
+
+[JC_39]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_40]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_35]
+file = "HOME/tests/java/PreAndOld.java"
+line = 42
+begin = 16
+end = 37
+
+[JC_27]
+file = "HOME/tests/java/PreAndOld.java"
+line = 46
+begin = 8
+end = 9
+
+[JC_38]
+file = "HOME/tests/java/PreAndOld.java"
+line = 42
+begin = 16
+end = 115
+
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_32]
+file = "HOME/tests/java/PreAndOld.java"
+line = 43
+begin = 16
+end = 36
+
+[JC_33]
+file = "HOME/tests/java/PreAndOld.java"
+line = 44
+begin = 16
+end = 40
+
+[JC_29]
+file = "HOME/tests/java/PreAndOld.java"
+line = 46
+begin = 8
+end = 9
+
+[JC_7]
 file = "HOME/"
 line = 0
 begin = -1
@@ -501,97 +554,7 @@ line = 0
 begin = -1
 end = -1
 
-[JC_17]
-file = "HOME/tests/java/PreAndOld.jc"
-line = 37
-begin = 11
-end = 65
-
-[JC_18]
-file = "HOME/tests/java/PreAndOld.jc"
-line = 37
-begin = 11
-end = 65
-
-[JC_19]
-file = "HOME/tests/java/PreAndOld.java"
-line = 46
-begin = 8
-end = 9
-
-[JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_21]
-file = "HOME/tests/java/PreAndOld.java"
-line = 46
-begin = 8
-end = 9
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_23]
-file = "HOME/tests/java/PreAndOld.java"
-line = 42
-begin = 16
-end = 37
-
-[JC_24]
-file = "HOME/tests/java/PreAndOld.java"
-line = 43
-begin = 16
-end = 36
-
-[JC_25]
-file = "HOME/tests/java/PreAndOld.java"
-line = 44
-begin = 16
-end = 40
-
-[JC_26]
-file = "HOME/tests/java/PreAndOld.java"
-line = 42
-begin = 16
-end = 115
-
-[JC_27]
-file = "HOME/tests/java/PreAndOld.java"
-line = 42
-begin = 16
-end = 37
-
-[JC_28]
-file = "HOME/tests/java/PreAndOld.java"
-line = 43
-begin = 16
-end = 36
-
-[JC_29]
-file = "HOME/tests/java/PreAndOld.java"
-line = 44
-begin = 16
-end = 40
-
-[JC_30]
-file = "HOME/tests/java/PreAndOld.java"
-line = 42
-begin = 16
-end = 115
-
-[JC_31]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_32]
+[JC_2]
 file = "HOME/"
 line = 0
 begin = -1
@@ -605,43 +568,81 @@ line = 0
 begin = -1
 end = -1
 
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_34]
+file = "HOME/tests/java/PreAndOld.java"
+line = 42
+begin = 16
+end = 115
+
+[JC_14]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_35]
+[JC_21]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_36]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_1]
+file = "HOME/tests/java/PreAndOld.jc"
+line = 10
+begin = 12
+end = 22
 
 [JC_37]
+file = "HOME/tests/java/PreAndOld.java"
+line = 44
+begin = 16
+end = 40
+
+[JC_10]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_38]
+[cons_PreAndOld_ensures_default]
+name = "Constructor of class PreAndOld"
+behavior = "default behavior"
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_39]
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/tests/java/PreAndOld.jc"
+line = 39
+begin = 11
+end = 65
+
+[JC_3]
+file = "HOME/tests/java/PreAndOld.jc"
+line = 10
+begin = 12
+end = 22
+
+[JC_19]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_30]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_28]
 file = "HOME/"
 line = 0
 begin = -1
@@ -851,19 +852,19 @@ parameter PreAndOld_g :
  this_0:Object pointer ->
   x_2:int ->
    { } int reads Object_alloc_table,PreAndOld_y writes PreAndOld_y
-   { (JC_30:
-     ((JC_27: (result = f(x_2, PreAndOld_y@)))
-     and ((JC_28: (result = f(x_2, PreAndOld_y@)))
-         and (JC_29: (result = f(x_2, PreAndOld_y@)))))) }
+   { (JC_38:
+     ((JC_35: (result = f(x_2, PreAndOld_y@)))
+     and ((JC_36: (result = f(x_2, PreAndOld_y@)))
+         and (JC_37: (result = f(x_2, PreAndOld_y@)))))) }
 
 parameter PreAndOld_g_requires :
  this_0:Object pointer ->
   x_2:int ->
    { } int reads Object_alloc_table,PreAndOld_y writes PreAndOld_y
-   { (JC_30:
-     ((JC_27: (result = f(x_2, PreAndOld_y@)))
-     and ((JC_28: (result = f(x_2, PreAndOld_y@)))
-         and (JC_29: (result = f(x_2, PreAndOld_y@)))))) }
+   { (JC_38:
+     ((JC_35: (result = f(x_2, PreAndOld_y@)))
+     and ((JC_36: (result = f(x_2, PreAndOld_y@)))
+         and (JC_37: (result = f(x_2, PreAndOld_y@)))))) }
 
 exception Return_label_exc of unit
 
@@ -1044,13 +1045,13 @@ let PreAndOld_g_ensures_default =
    begin
      (let tmp = (K_7: !PreAndOld_y) in
      begin
-       (let jessie_<num> = (PreAndOld_y := (12)) in void);
+       (let _jessie_<num> = (PreAndOld_y := (12)) in void);
       (return := (K_6: ((add_int x_2) tmp))); (raise Return) end); absurd 
    end with Return -> !return end))
-  { (JC_26:
-    ((JC_23: (result = f(x_2, PreAndOld_y@)))
-    and ((JC_24: (result = f(x_2, PreAndOld_y@)))
-        and (JC_25: (result = f(x_2, PreAndOld_y@)))))) }
+  { (JC_34:
+    ((JC_31: (result = f(x_2, PreAndOld_y@)))
+    and ((JC_32: (result = f(x_2, PreAndOld_y@)))
+        and (JC_33: (result = f(x_2, PreAndOld_y@)))))) }
 
 let PreAndOld_g_safety =
  fun (this_0 : Object pointer) (x_2 : int) ->
@@ -1061,7 +1062,7 @@ let PreAndOld_g_safety =
    begin
      (let tmp = (K_7: !PreAndOld_y) in
      begin
-       (let jessie_<num> = (PreAndOld_y := (12)) in void);
+       (let _jessie_<num> = (PreAndOld_y := (12)) in void);
       (return := (K_6: ((add_int x_2) tmp))); (raise Return) end); absurd 
    end with Return -> !return end)) { true }
 
@@ -1069,7 +1070,7 @@ let cons_PreAndOld_ensures_default =
  fun (this_1 : Object pointer) ->
   { valid_struct_PreAndOld(this_1, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_37: true) }
+  { (JC_23: true) }
 
 let cons_PreAndOld_safety =
  fun (this_1 : Object pointer) ->
@@ -2241,7 +2242,7 @@ goal PreAndOld_g_ensures_default_po_1:
   (PreAndOld_y0 = 12) ->
   forall return:int.
   (return = (x_2 + PreAndOld_y)) ->
-  ("JC_26": ("JC_23": (return = f(x_2, PreAndOld_y))))
+  ("JC_34": ("JC_31": (return = f(x_2, PreAndOld_y))))
 
 ========== file tests/java/why/PreAndOld_po2.why ==========
 goal PreAndOld_g_ensures_default_po_2:
@@ -2254,7 +2255,7 @@ goal PreAndOld_g_ensures_default_po_2:
   (PreAndOld_y0 = 12) ->
   forall return:int.
   (return = (x_2 + PreAndOld_y)) ->
-  ("JC_26": ("JC_24": (return = f(x_2, PreAndOld_y))))
+  ("JC_34": ("JC_32": (return = f(x_2, PreAndOld_y))))
 
 ========== file tests/java/why/PreAndOld_po3.why ==========
 goal PreAndOld_g_ensures_default_po_3:
@@ -2267,7 +2268,7 @@ goal PreAndOld_g_ensures_default_po_3:
   (PreAndOld_y0 = 12) ->
   forall return:int.
   (return = (x_2 + PreAndOld_y)) ->
-  ("JC_26": ("JC_25": (return = f(x_2, PreAndOld_y))))
+  ("JC_34": ("JC_33": (return = f(x_2, PreAndOld_y))))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/PreAndOld.why
@@ -3289,6 +3290,7 @@ why -simplify [...] why/PreAndOld.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
+Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/PreAndOld_why.sx     : ... (3/0/0/0/0)
 total   :   3
@@ -4436,7 +4438,7 @@ goal PreAndOld_g_ensures_default_po_1:
   (PreAndOld_y0 = 12) ->
   forall return:int.
   (return = (x_2 + PreAndOld_y)) ->
-  ("JC_26": ("JC_23": (return = f(x_2, PreAndOld_y))))
+  ("JC_34": ("JC_31": (return = f(x_2, PreAndOld_y))))
 
 goal PreAndOld_g_ensures_default_po_2:
   forall this_0:Object pointer.
@@ -4448,7 +4450,7 @@ goal PreAndOld_g_ensures_default_po_2:
   (PreAndOld_y0 = 12) ->
   forall return:int.
   (return = (x_2 + PreAndOld_y)) ->
-  ("JC_26": ("JC_24": (return = f(x_2, PreAndOld_y))))
+  ("JC_34": ("JC_32": (return = f(x_2, PreAndOld_y))))
 
 goal PreAndOld_g_ensures_default_po_3:
   forall this_0:Object pointer.
@@ -4460,5 +4462,5 @@ goal PreAndOld_g_ensures_default_po_3:
   (PreAndOld_y0 = 12) ->
   forall return:int.
   (return = (x_2 + PreAndOld_y)) ->
-  ("JC_26": ("JC_25": (return = f(x_2, PreAndOld_y))))
+  ("JC_34": ("JC_33": (return = f(x_2, PreAndOld_y))))
 

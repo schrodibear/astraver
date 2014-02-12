@@ -764,267 +764,11 @@ behavior default:
    }
 }
 ========== file tests/c/popHeap.jessie/popHeap.cloc ==========
-[C_50]
+[C_110]
 file = "HOME/tests/c/popHeap.c"
-line = 193
-begin = 19
-end = 44
-
-[C_51]
-file = "HOME/tests/c/popHeap.c"
-line = 194
-begin = 18
-end = 52
-
-[C_52]
-file = "HOME/tests/c/popHeap.c"
-line = 195
+line = 247
 begin = 15
 end = 20
-
-[C_53]
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 26
-end = 27
-
-[C_54]
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 26
-end = 34
-
-[C_55]
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 19
-end = 22
-
-[C_56]
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 19
-end = 22
-
-[C_57]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 33
-end = 40
-
-[C_58]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 33
-end = 40
-
-[C_59]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 33
-end = 40
-
-[pop_heap]
-name = "Function pop_heap"
-file = "HOME/tests/c/popHeap.c"
-line = 145
-begin = 5
-end = 13
-
-[Count0]
-name = "Lemma Count0"
-file = "HOME/tests/c/popHeap.c"
-line = 72
-begin = 4
-end = 105
-
-[Count1]
-name = "Lemma Count1"
-file = "HOME/tests/c/popHeap.c"
-line = 76
-begin = 4
-end = 184
-
-[Count2]
-name = "Lemma Count2"
-file = "HOME/tests/c/popHeap.c"
-line = 81
-begin = 4
-end = 162
-
-[C_60]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 23
-end = 30
-
-[C_61]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 23
-end = 30
-
-[C_62]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 21
-end = 22
-
-[C_10]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 20
-end = 38
-
-[C_63]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 21
-end = 31
-
-[C_11]
-file = "HOME/tests/c/popHeap.c"
-line = 147
-begin = 12
-end = 35
-
-[C_64]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 10
-end = 11
-
-[C_12]
-file = "HOME/tests/c/popHeap.c"
-line = 148
-begin = 13
-end = 58
-
-[C_65]
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 10
-end = 18
-
-[C_13]
-file = "HOME/tests/c/popHeap.c"
-line = 149
-begin = 2
-end = 12
-
-[C_66]
-file = "HOME/tests/c/popHeap.c"
-line = 175
-begin = 17
-end = 40
-
-[C_14]
-file = "HOME/tests/c/popHeap.c"
-line = 149
-begin = 2
-end = 12
-
-[C_67]
-file = "HOME/tests/c/popHeap.c"
-line = 178
-begin = 19
-end = 29
-
-[C_15]
-file = "HOME/tests/c/popHeap.c"
-line = 150
-begin = 2
-end = 11
-
-[C_100]
-file = "HOME/tests/c/popHeap.c"
-line = 138
-begin = 11
-end = 31
-
-[C_68]
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 18
-end = 19
-
-[C_16]
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 10
-end = 13
-
-[C_101]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_69]
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 18
-end = 26
-
-[C_17]
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 10
-end = 13
-
-[C_102]
-file = "HOME/tests/c/popHeap.c"
-line = 139
-begin = 11
-end = 31
-
-[C_18]
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 8
-end = 9
-
-[C_103]
-file = "HOME/tests/c/popHeap.c"
-line = 140
-begin = 11
-end = 39
-
-[C_19]
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 8
-end = 14
-
-[C_104]
-file = "HOME/tests/c/popHeap.c"
-line = 133
-begin = 12
-end = 24
-
-[C_105]
-file = "HOME/tests/c/popHeap.c"
-line = 132
-begin = 12
-end = 30
-
-[C_106]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 12
-end = 37
-
-[C_107]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 12
-end = 17
-
-[C_108]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 16
-end = 37
 
 [C_109]
 file = "HOME/tests/c/popHeap.c"
@@ -1032,186 +776,23 @@ line = 249
 begin = 7
 end = 16
 
+[C_15]
+file = "HOME/tests/c/popHeap.c"
+line = 150
+begin = 2
+end = 11
+
+[C_11]
+file = "HOME/tests/c/popHeap.c"
+line = 147
+begin = 12
+end = 35
+
 [C_1]
 file = "HOME/tests/c/popHeap.c"
 line = 123
 begin = 10
 end = 105
-
-[C_2]
-file = "HOME/tests/c/popHeap.c"
-line = 119
-begin = 11
-end = 32
-
-[CountLemma]
-name = "Lemma CountLemma"
-file = "HOME/tests/c/popHeap.c"
-line = 93
-begin = 2
-end = 150
-
-[C_70]
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 8
-end = 9
-
-[C_3]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 11
-end = 34
-
-[C_71]
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 18
-end = 26
-
-[C_4]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 11
-end = 22
-
-[C_72]
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 18
-end = 26
-
-[C_20]
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 8
-end = 14
-
-[C_5]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 16
-end = 34
-
-[C_73]
-file = "HOME/tests/c/popHeap.c"
-line = 180
-begin = 19
-end = 44
-
-[C_21]
-file = "HOME/tests/c/popHeap.c"
-line = 152
-begin = 8
-end = 9
-
-[C_6]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 16
-end = 30
-
-[C_74]
-file = "HOME/tests/c/popHeap.c"
-line = 181
-begin = 18
-end = 52
-
-[C_22]
-file = "HOME/tests/c/popHeap.c"
-line = 152
-begin = 8
-end = 12
-
-[C_7]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 25
-end = 34
-
-[C_75]
-file = "HOME/tests/c/popHeap.c"
-line = 182
-begin = 15
-end = 20
-
-[C_23]
-file = "HOME/tests/c/popHeap.c"
-line = 152
-begin = 8
-end = 12
-
-[C_8]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 11
-end = 38
-
-[C_76]
-file = "HOME/tests/c/popHeap.c"
-line = 176
-begin = 10
-end = 11
-
-[C_24]
-file = "HOME/tests/c/popHeap.c"
-line = 153
-begin = 13
-end = 93
-
-[C_9]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 11
-end = 16
-
-[C_77]
-file = "HOME/tests/c/popHeap.c"
-line = 176
-begin = 10
-end = 18
-
-[C_25]
-file = "HOME/tests/c/popHeap.c"
-line = 167
-begin = 18
-end = 26
-
-[C_110]
-file = "HOME/tests/c/popHeap.c"
-line = 247
-begin = 15
-end = 20
-
-[C_78]
-file = "HOME/tests/c/popHeap.c"
-line = 172
-begin = 16
-end = 19
-
-[C_26]
-file = "HOME/tests/c/popHeap.c"
-line = 164
-begin = 20
-end = 45
-
-[C_111]
-file = "HOME/tests/c/popHeap.c"
-line = 245
-begin = 17
-end = 73
-
-[C_79]
-file = "HOME/tests/c/popHeap.c"
-line = 172
-begin = 16
-end = 19
-
-[C_27]
-file = "HOME/tests/c/popHeap.c"
-line = 162
-begin = 20
-end = 100
 
 [C_112]
 file = "HOME/tests/c/popHeap.c"
@@ -1219,73 +800,71 @@ line = 244
 begin = 17
 end = 28
 
-[C_28]
+[C_93]
 file = "HOME/tests/c/popHeap.c"
-line = 160
-begin = 20
-end = 96
+line = 226
+begin = 11
+end = 14
 
-[C_113]
+[C_55]
 file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 17
-end = 23
+line = 189
+begin = 19
+end = 22
 
-[C_29]
+[C_33]
 file = "HOME/tests/c/popHeap.c"
-line = 159
-begin = 20
-end = 65
+line = 157
+begin = 25
+end = 33
 
-[C_114]
+[C_74]
 file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 22
-end = 28
+line = 181
+begin = 18
+end = 52
 
-[C_115]
+[C_64]
 file = "HOME/tests/c/popHeap.c"
-line = 251
-begin = 15
-end = 48
-
-[C_116]
-file = "HOME/tests/c/popHeap.c"
-line = 249
-begin = 31
-end = 34
-
-[C_117]
-file = "HOME/tests/c/popHeap.c"
-line = 249
-begin = 31
-end = 34
-
-[ParentChild_1]
-name = "Lemma ParentChild_1"
-file = "HOME/tests/c/popHeap.c"
-line = 40
-begin = 4
-end = 126
-
-[C_118]
-file = "HOME/tests/c/popHeap.c"
-line = 249
-begin = 31
-end = 34
-
-[ParentChild_2]
-name = "Lemma ParentChild_2"
-file = "HOME/tests/c/popHeap.c"
-line = 44
-begin = 4
-end = 106
-
-[C_119]
-file = "HOME/tests/c/popHeap.c"
-line = 111
+line = 174
 begin = 10
-end = 56
+end = 11
+
+[C_9]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 11
+end = 16
+
+[C_10]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 20
+end = 38
+
+[C_90]
+file = "HOME/tests/c/popHeap.c"
+line = 226
+begin = 4
+end = 7
+
+[C_68]
+file = "HOME/tests/c/popHeap.c"
+line = 179
+begin = 18
+end = 19
+
+[C_123]
+file = "HOME/tests/c/popHeap.c"
+line = 106
+begin = 20
+end = 38
+
+[C_84]
+file = "HOME/tests/c/popHeap.c"
+line = 205
+begin = 13
+end = 93
 
 [ParentChild_3]
 name = "Lemma ParentChild_3"
@@ -1294,47 +873,60 @@ line = 49
 begin = 2
 end = 234
 
+[C_86]
+file = "HOME/tests/c/popHeap.c"
+line = 209
+begin = 13
+end = 119
+
 [C_80]
 file = "HOME/tests/c/popHeap.c"
 line = 200
 begin = 14
 end = 86
 
-[C_81]
+[C_20]
 file = "HOME/tests/c/popHeap.c"
-line = 204
-begin = 2
-end = 3
+line = 151
+begin = 8
+end = 14
 
-[C_82]
+[ParentChild_1]
+name = "Lemma ParentChild_1"
 file = "HOME/tests/c/popHeap.c"
-line = 204
-begin = 12
-end = 15
+line = 40
+begin = 4
+end = 126
 
-[C_30]
+[C_43]
 file = "HOME/tests/c/popHeap.c"
-line = 158
-begin = 20
-end = 33
+line = 188
+begin = 14
+end = 24
 
-[C_83]
+[C_79]
 file = "HOME/tests/c/popHeap.c"
-line = 204
-begin = 12
-end = 15
+line = 172
+begin = 16
+end = 19
 
-[C_31]
+[C_62]
 file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 20
-end = 33
+line = 174
+begin = 21
+end = 22
 
-[C_84]
+[C_114]
 file = "HOME/tests/c/popHeap.c"
-line = 205
-begin = 13
-end = 93
+line = 244
+begin = 22
+end = 28
+
+[C_59]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 33
+end = 40
 
 [C_32]
 file = "HOME/tests/c/popHeap.c"
@@ -1342,120 +934,11 @@ line = 157
 begin = 20
 end = 29
 
-[C_85]
+[C_17]
 file = "HOME/tests/c/popHeap.c"
-line = 208
-begin = 13
-end = 67
-
-[C_33]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 25
-end = 33
-
-[C_86]
-file = "HOME/tests/c/popHeap.c"
-line = 209
-begin = 13
-end = 119
-
-[C_34]
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 28
-
-[C_87]
-file = "HOME/tests/c/popHeap.c"
-line = 213
-begin = 13
-end = 408
-
-[C_35]
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 28
-
-[C_120]
-file = "HOME/tests/c/popHeap.c"
-line = 107
-begin = 11
-end = 23
-
-[C_88]
-file = "HOME/tests/c/popHeap.c"
-line = 222
-begin = 13
-end = 113
-
-[C_36]
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 32
-
-[C_121]
-file = "HOME/tests/c/popHeap.c"
-line = 106
-begin = 11
-end = 38
-
-[C_89]
-file = "HOME/tests/c/popHeap.c"
-line = 226
-begin = 4
-end = 7
-
-[C_37]
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 32
-
-[C_122]
-file = "HOME/tests/c/popHeap.c"
-line = 106
-begin = 11
-end = 16
-
-[C_38]
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 4
+line = 151
+begin = 10
 end = 13
-
-[C_123]
-file = "HOME/tests/c/popHeap.c"
-line = 106
-begin = 20
-end = 38
-
-[C_39]
-file = "HOME/tests/c/popHeap.c"
-line = 188
-begin = 14
-end = 20
-
-[pop_heap_induction]
-name = "Function pop_heap_induction"
-file = "HOME/tests/c/popHeap.c"
-line = 241
-begin = 5
-end = 23
-
-[C_90]
-file = "HOME/tests/c/popHeap.c"
-line = 226
-begin = 4
-end = 7
-
-[C_91]
-file = "HOME/tests/c/popHeap.c"
-line = 226
-begin = 2
-end = 3
 
 [C_92]
 file = "HOME/tests/c/popHeap.c"
@@ -1469,29 +952,17 @@ line = 188
 begin = 14
 end = 20
 
-[C_93]
+[C_104]
 file = "HOME/tests/c/popHeap.c"
-line = 226
-begin = 11
-end = 14
-
-[C_41]
-file = "HOME/tests/c/popHeap.c"
-line = 188
-begin = 14
+line = 133
+begin = 12
 end = 24
 
-[C_94]
+[C_63]
 file = "HOME/tests/c/popHeap.c"
-line = 227
-begin = 13
-end = 88
-
-[C_42]
-file = "HOME/tests/c/popHeap.c"
-line = 188
-begin = 14
-end = 24
+line = 174
+begin = 21
+end = 31
 
 [C_95]
 file = "HOME/tests/c/popHeap.c"
@@ -1499,29 +970,73 @@ line = 230
 begin = 13
 end = 108
 
-[C_43]
+[C_36]
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 32
+
+[C_42]
 file = "HOME/tests/c/popHeap.c"
 line = 188
 begin = 14
 end = 24
 
-[C_96]
+[C_5]
 file = "HOME/tests/c/popHeap.c"
-line = 233
-begin = 13
-end = 157
+line = 118
+begin = 16
+end = 34
 
-[C_44]
+[C_56]
 file = "HOME/tests/c/popHeap.c"
-line = 191
+line = 189
 begin = 19
-end = 29
+end = 22
 
-[C_97]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[C_34]
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 28
+
+[C_29]
+file = "HOME/tests/c/popHeap.c"
+line = 159
+begin = 20
+end = 65
+
+[CountLemma]
+name = "Lemma CountLemma"
+file = "HOME/tests/c/popHeap.c"
+line = 93
+begin = 2
+end = 150
+
+[ParentChild_2]
+name = "Lemma ParentChild_2"
+file = "HOME/tests/c/popHeap.c"
+line = 44
+begin = 4
+end = 106
+
+[C_61]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 23
+end = 30
+
+[C_13]
+file = "HOME/tests/c/popHeap.c"
+line = 149
+begin = 2
+end = 12
+
+[C_77]
+file = "HOME/tests/c/popHeap.c"
+line = 176
+begin = 10
+end = 18
 
 [C_45]
 file = "HOME/tests/c/popHeap.c"
@@ -1529,23 +1044,17 @@ line = 192
 begin = 18
 end = 19
 
-[C_98]
-file = "HOME/tests/c/popHeap.c"
-line = 137
-begin = 11
-end = 25
-
-[C_46]
-file = "HOME/tests/c/popHeap.c"
-line = 192
-begin = 18
-end = 26
-
-[C_99]
+[C_101]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[C_111]
+file = "HOME/tests/c/popHeap.c"
+line = 245
+begin = 17
+end = 73
 
 [C_47]
 file = "HOME/tests/c/popHeap.c"
@@ -1553,17 +1062,508 @@ line = 192
 begin = 8
 end = 9
 
+[C_100]
+file = "HOME/tests/c/popHeap.c"
+line = 138
+begin = 11
+end = 31
+
+[C_69]
+file = "HOME/tests/c/popHeap.c"
+line = 179
+begin = 18
+end = 26
+
+[C_98]
+file = "HOME/tests/c/popHeap.c"
+line = 137
+begin = 11
+end = 25
+
+[C_88]
+file = "HOME/tests/c/popHeap.c"
+line = 222
+begin = 13
+end = 113
+
+[C_54]
+file = "HOME/tests/c/popHeap.c"
+line = 189
+begin = 26
+end = 34
+
+[C_7]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 25
+end = 34
+
+[C_122]
+file = "HOME/tests/c/popHeap.c"
+line = 106
+begin = 11
+end = 16
+
+[C_89]
+file = "HOME/tests/c/popHeap.c"
+line = 226
+begin = 4
+end = 7
+
+[C_22]
+file = "HOME/tests/c/popHeap.c"
+line = 152
+begin = 8
+end = 12
+
+[C_121]
+file = "HOME/tests/c/popHeap.c"
+line = 106
+begin = 11
+end = 38
+
+[C_58]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 33
+end = 40
+
+[C_14]
+file = "HOME/tests/c/popHeap.c"
+line = 149
+begin = 2
+end = 12
+
+[C_35]
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 28
+
+[C_52]
+file = "HOME/tests/c/popHeap.c"
+line = 195
+begin = 15
+end = 20
+
+[pop_heap]
+name = "Function pop_heap"
+file = "HOME/tests/c/popHeap.c"
+line = 145
+begin = 5
+end = 13
+
+[Count2]
+name = "Lemma Count2"
+file = "HOME/tests/c/popHeap.c"
+line = 81
+begin = 4
+end = 162
+
+[C_76]
+file = "HOME/tests/c/popHeap.c"
+line = 176
+begin = 10
+end = 11
+
+[C_66]
+file = "HOME/tests/c/popHeap.c"
+line = 175
+begin = 17
+end = 40
+
+[C_25]
+file = "HOME/tests/c/popHeap.c"
+line = 167
+begin = 18
+end = 26
+
+[C_65]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 10
+end = 18
+
+[C_38]
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 4
+end = 13
+
+[C_72]
+file = "HOME/tests/c/popHeap.c"
+line = 179
+begin = 18
+end = 26
+
+[C_60]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 23
+end = 30
+
+[C_8]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 11
+end = 38
+
+[C_105]
+file = "HOME/tests/c/popHeap.c"
+line = 132
+begin = 12
+end = 30
+
+[C_116]
+file = "HOME/tests/c/popHeap.c"
+line = 249
+begin = 31
+end = 34
+
+[C_103]
+file = "HOME/tests/c/popHeap.c"
+line = 140
+begin = 11
+end = 39
+
+[Count0]
+name = "Lemma Count0"
+file = "HOME/tests/c/popHeap.c"
+line = 72
+begin = 4
+end = 105
+
+[C_106]
+file = "HOME/tests/c/popHeap.c"
+line = 131
+begin = 12
+end = 37
+
+[C_73]
+file = "HOME/tests/c/popHeap.c"
+line = 180
+begin = 19
+end = 44
+
+[C_71]
+file = "HOME/tests/c/popHeap.c"
+line = 179
+begin = 18
+end = 26
+
+[C_39]
+file = "HOME/tests/c/popHeap.c"
+line = 188
+begin = 14
+end = 20
+
+[C_96]
+file = "HOME/tests/c/popHeap.c"
+line = 233
+begin = 13
+end = 157
+
+[C_82]
+file = "HOME/tests/c/popHeap.c"
+line = 204
+begin = 12
+end = 15
+
+[C_57]
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 33
+end = 40
+
+[C_75]
+file = "HOME/tests/c/popHeap.c"
+line = 182
+begin = 15
+end = 20
+
+[C_44]
+file = "HOME/tests/c/popHeap.c"
+line = 191
+begin = 19
+end = 29
+
+[C_27]
+file = "HOME/tests/c/popHeap.c"
+line = 162
+begin = 20
+end = 100
+
+[C_50]
+file = "HOME/tests/c/popHeap.c"
+line = 193
+begin = 19
+end = 44
+
+[C_46]
+file = "HOME/tests/c/popHeap.c"
+line = 192
+begin = 18
+end = 26
+
+[C_53]
+file = "HOME/tests/c/popHeap.c"
+line = 189
+begin = 26
+end = 27
+
+[C_37]
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 32
+
+[C_19]
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 8
+end = 14
+
+[C_102]
+file = "HOME/tests/c/popHeap.c"
+line = 139
+begin = 11
+end = 31
+
 [C_48]
 file = "HOME/tests/c/popHeap.c"
 line = 192
 begin = 18
 end = 26
 
+[C_4]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 11
+end = 22
+
+[C_120]
+file = "HOME/tests/c/popHeap.c"
+line = 107
+begin = 11
+end = 23
+
+[C_12]
+file = "HOME/tests/c/popHeap.c"
+line = 148
+begin = 13
+end = 58
+
+[C_26]
+file = "HOME/tests/c/popHeap.c"
+line = 164
+begin = 20
+end = 45
+
+[C_115]
+file = "HOME/tests/c/popHeap.c"
+line = 251
+begin = 15
+end = 48
+
+[C_99]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[C_94]
+file = "HOME/tests/c/popHeap.c"
+line = 227
+begin = 13
+end = 88
+
+[C_18]
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 8
+end = 9
+
+[C_107]
+file = "HOME/tests/c/popHeap.c"
+line = 131
+begin = 12
+end = 17
+
+[C_51]
+file = "HOME/tests/c/popHeap.c"
+line = 194
+begin = 18
+end = 52
+
+[C_2]
+file = "HOME/tests/c/popHeap.c"
+line = 119
+begin = 11
+end = 32
+
+[C_97]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[C_113]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 17
+end = 23
+
+[C_28]
+file = "HOME/tests/c/popHeap.c"
+line = 160
+begin = 20
+end = 96
+
+[C_67]
+file = "HOME/tests/c/popHeap.c"
+line = 178
+begin = 19
+end = 29
+
+[Count1]
+name = "Lemma Count1"
+file = "HOME/tests/c/popHeap.c"
+line = 76
+begin = 4
+end = 184
+
+[C_24]
+file = "HOME/tests/c/popHeap.c"
+line = 153
+begin = 13
+end = 93
+
+[C_6]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 16
+end = 30
+
+[C_30]
+file = "HOME/tests/c/popHeap.c"
+line = 158
+begin = 20
+end = 33
+
+[C_119]
+file = "HOME/tests/c/popHeap.c"
+line = 111
+begin = 10
+end = 56
+
+[C_118]
+file = "HOME/tests/c/popHeap.c"
+line = 249
+begin = 31
+end = 34
+
+[C_108]
+file = "HOME/tests/c/popHeap.c"
+line = 131
+begin = 16
+end = 37
+
+[C_81]
+file = "HOME/tests/c/popHeap.c"
+line = 204
+begin = 2
+end = 3
+
+[C_41]
+file = "HOME/tests/c/popHeap.c"
+line = 188
+begin = 14
+end = 24
+
+[C_21]
+file = "HOME/tests/c/popHeap.c"
+line = 152
+begin = 8
+end = 9
+
+[C_3]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 11
+end = 34
+
+[C_16]
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 10
+end = 13
+
+[C_91]
+file = "HOME/tests/c/popHeap.c"
+line = 226
+begin = 2
+end = 3
+
+[pop_heap_induction]
+name = "Function pop_heap_induction"
+file = "HOME/tests/c/popHeap.c"
+line = 241
+begin = 5
+end = 23
+
+[C_87]
+file = "HOME/tests/c/popHeap.c"
+line = 213
+begin = 13
+end = 408
+
 [C_49]
 file = "HOME/tests/c/popHeap.c"
 line = 192
 begin = 18
 end = 26
+
+[C_31]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 20
+end = 33
+
+[C_117]
+file = "HOME/tests/c/popHeap.c"
+line = 249
+begin = 31
+end = 34
+
+[C_85]
+file = "HOME/tests/c/popHeap.c"
+line = 208
+begin = 13
+end = 67
+
+[C_78]
+file = "HOME/tests/c/popHeap.c"
+line = 172
+begin = 16
+end = 19
+
+[C_70]
+file = "HOME/tests/c/popHeap.c"
+line = 179
+begin = 8
+end = 9
+
+[C_23]
+file = "HOME/tests/c/popHeap.c"
+line = 152
+begin = 8
+end = 12
+
+[C_83]
+file = "HOME/tests/c/popHeap.c"
+line = 204
+begin = 12
+end = 15
 
 ========== jessie execution ==========
 Generating Why function pop_heap
@@ -1578,10 +1578,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs popHeap.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs popHeap.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs popHeap.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs popHeap.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -1726,13 +1727,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: popHeap.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: popHeap.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: popHeap.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include popHeap.depend
 
@@ -1743,105 +1744,57 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/popHeap.jessie/popHeap.loc ==========
-[JC_90]
-kind = UserCall
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 296
-begin = 26
-end = 67
-
-[JC_91]
-file = "HOME/tests/c/popHeap.c"
-line = 167
-begin = 18
-end = 26
-
-[JC_92]
-file = "HOME/tests/c/popHeap.c"
-line = 200
-begin = 14
-end = 86
-
-[JC_40]
-file = "HOME/tests/c/popHeap.c"
-line = 145
-begin = 5
-end = 13
-
-[JC_93]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 313
-begin = 15
-end = 54
-
-[JC_41]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 162
-begin = 9
-end = 16
-
 [JC_94]
 file = "HOME/tests/c/popHeap.c"
 line = 205
 begin = 13
 end = 93
 
-[JC_42]
+[JC_73]
+kind = PointerDeref
 file = "HOME/tests/c/popHeap.c"
-line = 137
-begin = 11
-end = 25
-
-[JC_95]
-file = "HOME/tests/c/popHeap.c"
-line = 208
-begin = 13
-end = 67
-
-[JC_43]
-file = "HOME/tests/c/popHeap.c"
-line = 138
-begin = 11
+line = 174
+begin = 21
 end = 31
 
-[JC_96]
+[JC_158]
+kind = ArithOverflow
 file = "HOME/tests/c/popHeap.c"
-line = 209
-begin = 13
-end = 119
+line = 249
+begin = 31
+end = 34
 
-[JC_44]
+[JC_63]
 file = "HOME/tests/c/popHeap.c"
-line = 139
-begin = 11
-end = 31
+line = 157
+begin = 25
+end = 33
 
-[pop_heap_induction_safety]
-name = "Function pop_heap_induction"
-behavior = "Safety"
+[JC_80]
 file = "HOME/tests/c/popHeap.c"
-line = 241
-begin = 5
-end = 23
+line = 180
+begin = 19
+end = 44
 
-[JC_150]
-file = "HOME/tests/c/popHeap.c"
-line = 245
-begin = 17
-end = 73
+[JC_51]
+kind = UserCall
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 180
+begin = 14
+end = 40
 
-[JC_97]
+[JC_71]
+kind = PointerDeref
 file = "HOME/tests/c/popHeap.c"
-line = 213
-begin = 13
-end = 408
+line = 174
+begin = 10
+end = 18
 
-[JC_45]
-file = "HOME/tests/c/popHeap.c"
-line = 140
-begin = 11
-end = 39
+[JC_147]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 462
+begin = 10
+end = 18
 
 [JC_151]
 file = "HOME/tests/c/popHeap.c"
@@ -1849,36 +1802,53 @@ line = 244
 begin = 17
 end = 23
 
-[JC_98]
+[JC_45]
 file = "HOME/tests/c/popHeap.c"
-line = 222
-begin = 13
-end = 113
+line = 140
+begin = 11
+end = 39
 
-[JC_46]
+[JC_123]
+file = "HOME/tests/c/popHeap.c"
+line = 193
+begin = 19
+end = 44
+
+[JC_106]
+file = "HOME/tests/c/popHeap.c"
+line = 153
+begin = 13
+end = 93
+
+[JC_143]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_1]
+[JC_113]
 file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 11
-end = 16
+line = 157
+begin = 25
+end = 33
 
-[JC_152]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 22
-end = 28
-
-[JC_100]
-kind = PointerDeref
+[JC_116]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 413
-begin = 15
-end = 88
+line = 207
+begin = 6
+end = 4644
+
+[JC_64]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 20
+end = 33
+
+[JC_133]
+file = "HOME/tests/c/popHeap.c"
+line = 233
+begin = 13
+end = 157
 
 [JC_99]
 kind = ArithOverflow
@@ -1887,29 +1857,90 @@ line = 226
 begin = 4
 end = 7
 
-[JC_47]
+[ParentChild_3]
+name = "Lemma ParentChild_3"
+behavior = "lemma"
 file = "HOME/tests/c/popHeap.c"
-line = 145
-begin = 5
-end = 13
+line = 49
+begin = 2
+end = 234
 
-[JC_2]
+[JC_85]
+kind = PointerDeref
 file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 20
-end = 38
+line = 189
+begin = 26
+end = 34
 
-[JC_153]
+[JC_126]
 file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 17
-end = 28
-
-[JC_101]
-file = "HOME/tests/c/popHeap.c"
-line = 227
+line = 205
 begin = 13
-end = 88
+end = 93
+
+[ParentChild_1]
+name = "Lemma ParentChild_1"
+behavior = "axiom"
+file = "HOME/tests/c/popHeap.c"
+line = 40
+begin = 4
+end = 126
+
+[JC_31]
+file = "HOME/tests/c/popHeap.c"
+line = 132
+begin = 12
+end = 30
+
+[JC_17]
+file = "HOME/tests/c/popHeap.c"
+line = 123
+begin = 10
+end = 105
+
+[JC_122]
+file = "HOME/tests/c/popHeap.c"
+line = 191
+begin = 19
+end = 29
+
+[JC_81]
+kind = UserCall
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 267
+begin = 29
+end = 70
+
+[JC_55]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.c"
+line = 152
+begin = 8
+end = 12
+
+[JC_138]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_134]
+file = "HOME/tests/c/popHeap.c"
+line = 106
+begin = 11
+end = 16
+
+[JC_148]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_137]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_48]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
@@ -1917,47 +1948,24 @@ line = 162
 begin = 9
 end = 16
 
-[JC_3]
+[JC_23]
 file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 11
-end = 22
+line = 131
+begin = 12
+end = 17
 
-[JC_154]
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_102]
-file = "HOME/tests/c/popHeap.c"
-line = 230
-begin = 13
-end = 108
-
-[JC_49]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_4]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 16
-end = 30
-
-[JC_155]
+[JC_121]
+kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 472
-begin = 6
-end = 883
-
-[JC_103]
-file = "HOME/tests/c/popHeap.c"
-line = 233
-begin = 13
-end = 157
+line = 267
+begin = 29
+end = 70
 
 [JC_5]
 file = "HOME/tests/c/popHeap.c"
@@ -1965,42 +1973,165 @@ line = 118
 begin = 25
 end = 34
 
-[JC_156]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 472
-begin = 6
-end = 883
-
-[JC_104]
-kind = UserCall
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 180
+[JC_125]
+file = "HOME/tests/c/popHeap.c"
+line = 200
 begin = 14
+end = 86
+
+[JC_67]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 207
+begin = 6
+end = 4644
+
+[JC_9]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 11
+end = 16
+
+[JC_75]
+file = "HOME/tests/c/popHeap.c"
+line = 175
+begin = 17
 end = 40
 
-[JC_6]
+[JC_24]
 file = "HOME/tests/c/popHeap.c"
-line = 119
-begin = 11
-end = 32
+line = 131
+begin = 16
+end = 37
 
-[JC_157]
+[JC_25]
 file = "HOME/tests/c/popHeap.c"
-line = 251
-begin = 15
-end = 48
+line = 132
+begin = 12
+end = 30
 
-[JC_105]
+[JC_78]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.c"
+line = 179
+begin = 18
+end = 26
+
+[JC_41]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 162
+begin = 9
+end = 16
+
+[JC_74]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 174
+begin = 33
+end = 40
+
+[JC_47]
+file = "HOME/tests/c/popHeap.c"
+line = 145
+begin = 5
+end = 13
+
+[JC_52]
 file = "HOME/tests/c/popHeap.c"
 line = 148
 begin = 13
 end = 58
 
-[JC_7]
+[JC_26]
+file = "HOME/tests/c/popHeap.c"
+line = 133
+begin = 12
+end = 24
+
+[JC_8]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[CountLemma]
+name = "Lemma CountLemma"
+behavior = "lemma"
+file = "HOME/tests/c/popHeap.c"
+line = 93
+begin = 2
+end = 150
+
+[ParentChild_2]
+name = "Lemma ParentChild_2"
+behavior = "axiom"
+file = "HOME/tests/c/popHeap.c"
+line = 44
+begin = 4
+end = 106
+
+[JC_154]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 8
+end = 14
+
+[JC_79]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 255
+begin = 30
+end = 304
+
+[JC_13]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 25
+end = 34
+
+[JC_130]
+file = "HOME/tests/c/popHeap.c"
+line = 222
+begin = 13
+end = 113
+
+[JC_82]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 188
+begin = 14
+end = 20
+
+[JC_163]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 17
+end = 28
+
+[JC_153]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 17
+end = 28
+
+[JC_87]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.c"
+line = 192
+begin = 18
+end = 26
+
+[JC_11]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 11
+end = 22
 
 [pop_heap_induction_ensures_default]
 name = "Function pop_heap_induction"
@@ -2010,174 +2141,51 @@ line = 241
 begin = 5
 end = 23
 
-[JC_158]
+[JC_167]
+file = "HOME/tests/c/popHeap.c"
+line = 251
+begin = 15
+end = 48
+
+[JC_98]
+file = "HOME/tests/c/popHeap.c"
+line = 222
+begin = 13
+end = 113
+
+[JC_70]
 kind = ArithOverflow
 file = "HOME/tests/c/popHeap.c"
-line = 249
-begin = 31
-end = 34
+line = 172
+begin = 16
+end = 19
 
-[JC_106]
-file = "HOME/tests/c/popHeap.c"
-line = 153
-begin = 13
-end = 93
-
-[JC_8]
+[JC_15]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_159]
+[JC_36]
 file = "HOME/tests/c/popHeap.c"
-line = 247
-begin = 15
-end = 20
-
-[JC_107]
-file = "HOME/tests/c/popHeap.c"
-line = 164
-begin = 20
-end = 45
-
-[JC_9]
-file = "HOME/tests/c/popHeap.c"
-line = 117
+line = 138
 begin = 11
-end = 16
+end = 31
 
-[JC_108]
-file = "HOME/tests/c/popHeap.c"
-line = 162
-begin = 20
-end = 100
-
-[JC_109]
-file = "HOME/tests/c/popHeap.c"
-line = 160
-begin = 20
-end = 96
-
-[Count0]
-name = "Lemma Count0"
-behavior = "axiom"
-file = "HOME/tests/c/popHeap.c"
-line = 72
-begin = 4
-end = 105
-
-[JC_50]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Count1]
-name = "Lemma Count1"
-behavior = "axiom"
-file = "HOME/tests/c/popHeap.c"
-line = 76
-begin = 4
-end = 184
-
-[JC_51]
+[JC_104]
 kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
 line = 180
 begin = 14
 end = 40
 
-[Count2]
-name = "Lemma Count2"
-behavior = "axiom"
+[JC_91]
 file = "HOME/tests/c/popHeap.c"
-line = 81
-begin = 4
-end = 162
+line = 167
+begin = 18
+end = 26
 
-[JC_52]
-file = "HOME/tests/c/popHeap.c"
-line = 148
-begin = 13
-end = 58
-
-[JC_53]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 10
-end = 13
-
-[JC_54]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 151
-begin = 8
-end = 14
-
-[JC_160]
-file = "HOME/tests/c/popHeap.c"
-line = 245
-begin = 17
-end = 73
-
-[JC_55]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 152
-begin = 8
-end = 12
-
-[JC_161]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 17
-end = 23
-
-[JC_56]
-file = "HOME/tests/c/popHeap.c"
-line = 153
-begin = 13
-end = 93
-
-[JC_162]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 22
-end = 28
-
-[JC_110]
-file = "HOME/tests/c/popHeap.c"
-line = 159
-begin = 20
-end = 65
-
-[JC_57]
-file = "HOME/tests/c/popHeap.c"
-line = 164
-begin = 20
-end = 45
-
-[JC_163]
-file = "HOME/tests/c/popHeap.c"
-line = 244
-begin = 17
-end = 28
-
-[JC_111]
-file = "HOME/tests/c/popHeap.c"
-line = 158
-begin = 20
-end = 33
-
-[JC_58]
-file = "HOME/tests/c/popHeap.c"
-line = 162
-begin = 20
-end = 100
-
-[JC_164]
+[JC_39]
 file = "HOME/"
 line = 0
 begin = -1
@@ -2189,41 +2197,56 @@ line = 157
 begin = 20
 end = 29
 
-[JC_59]
+[JC_40]
 file = "HOME/tests/c/popHeap.c"
-line = 160
+line = 145
+begin = 5
+end = 13
+
+[JC_162]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 22
+end = 28
+
+[JC_135]
+file = "HOME/tests/c/popHeap.c"
+line = 106
 begin = 20
-end = 96
+end = 38
 
-[JC_165]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 472
-begin = 6
-end = 883
-
-[JC_113]
+[JC_83]
+kind = ArithOverflow
 file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 25
-end = 33
+line = 188
+begin = 14
+end = 24
 
-[JC_166]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 472
-begin = 6
-end = 883
-
-[JC_114]
+[JC_35]
 file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 20
-end = 33
+line = 137
+begin = 11
+end = 25
 
-[JC_167]
+[Count2]
+name = "Lemma Count2"
+behavior = "axiom"
 file = "HOME/tests/c/popHeap.c"
-line = 251
-begin = 15
-end = 48
+line = 81
+begin = 4
+end = 162
+
+[JC_132]
+file = "HOME/tests/c/popHeap.c"
+line = 230
+begin = 13
+end = 108
+
+[JC_27]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_115]
 file = "HOME/"
@@ -2231,11 +2254,335 @@ line = 0
 begin = -1
 end = -1
 
-[JC_116]
+[JC_109]
+file = "HOME/tests/c/popHeap.c"
+line = 160
+begin = 20
+end = 96
+
+[JC_107]
+file = "HOME/tests/c/popHeap.c"
+line = 164
+begin = 20
+end = 45
+
+[JC_69]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 32
+
+[JC_124]
+kind = UserCall
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 207
+line = 296
+begin = 26
+end = 67
+
+[JC_38]
+file = "HOME/tests/c/popHeap.c"
+line = 140
+begin = 11
+end = 39
+
+[JC_12]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 16
+end = 30
+
+[JC_6]
+file = "HOME/tests/c/popHeap.c"
+line = 119
+begin = 11
+end = 32
+
+[JC_156]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 472
 begin = 6
-end = 4644
+end = 883
+
+[JC_127]
+file = "HOME/tests/c/popHeap.c"
+line = 208
+begin = 13
+end = 67
+
+[JC_164]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/tests/c/popHeap.c"
+line = 139
+begin = 11
+end = 31
+
+[JC_155]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 472
+begin = 6
+end = 883
+
+[JC_4]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 16
+end = 30
+
+[pop_heap_induction_safety]
+name = "Function pop_heap_induction"
+behavior = "Safety"
+file = "HOME/tests/c/popHeap.c"
+line = 241
+begin = 5
+end = 23
+
+[JC_62]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 20
+end = 29
+
+[JC_101]
+file = "HOME/tests/c/popHeap.c"
+line = 227
+begin = 13
+end = 88
+
+[Count0]
+name = "Lemma Count0"
+behavior = "axiom"
+file = "HOME/tests/c/popHeap.c"
+line = 72
+begin = 4
+end = 105
+
+[JC_88]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 285
+begin = 27
+end = 292
+
+[JC_129]
+file = "HOME/tests/c/popHeap.c"
+line = 213
+begin = 13
+end = 408
+
+[JC_42]
+file = "HOME/tests/c/popHeap.c"
+line = 137
+begin = 11
+end = 25
+
+[JC_110]
+file = "HOME/tests/c/popHeap.c"
+line = 159
+begin = 20
+end = 65
+
+[JC_166]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 472
+begin = 6
+end = 883
+
+[JC_103]
+file = "HOME/tests/c/popHeap.c"
+line = 233
+begin = 13
+end = 157
+
+[JC_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_141]
+file = "HOME/tests/c/popHeap.c"
+line = 107
+begin = 11
+end = 23
+
+[JC_61]
+file = "HOME/tests/c/popHeap.c"
+line = 158
+begin = 20
+end = 33
+
+[JC_32]
+file = "HOME/tests/c/popHeap.c"
+line = 133
+begin = 12
+end = 24
+
+[JC_56]
+file = "HOME/tests/c/popHeap.c"
+line = 153
+begin = 13
+end = 93
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_65]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_118]
+file = "HOME/tests/c/popHeap.c"
+line = 175
+begin = 17
+end = 40
+
+[JC_105]
+file = "HOME/tests/c/popHeap.c"
+line = 148
+begin = 13
+end = 58
+
+[JC_140]
+file = "HOME/tests/c/popHeap.c"
+line = 106
+begin = 20
+end = 38
+
+[JC_29]
+file = "HOME/tests/c/popHeap.c"
+line = 131
+begin = 12
+end = 17
+
+[JC_144]
+file = "HOME/tests/c/popHeap.c"
+line = 111
+begin = 10
+end = 56
+
+[JC_159]
+file = "HOME/tests/c/popHeap.c"
+line = 247
+begin = 15
+end = 20
+
+[JC_68]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 171
+begin = 22
+end = 28
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_96]
+file = "HOME/tests/c/popHeap.c"
+line = 209
+begin = 13
+end = 119
+
+[JC_43]
+file = "HOME/tests/c/popHeap.c"
+line = 138
+begin = 11
+end = 31
+
+[JC_2]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 20
+end = 38
+
+[JC_95]
+file = "HOME/tests/c/popHeap.c"
+line = 208
+begin = 13
+end = 67
+
+[JC_93]
+kind = PointerDeref
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 313
+begin = 15
+end = 54
+
+[JC_97]
+file = "HOME/tests/c/popHeap.c"
+line = 213
+begin = 13
+end = 408
+
+[JC_84]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 189
+begin = 19
+end = 22
+
+[JC_160]
+file = "HOME/tests/c/popHeap.c"
+line = 245
+begin = 17
+end = 73
+
+[JC_128]
+file = "HOME/tests/c/popHeap.c"
+line = 209
+begin = 13
+end = 119
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_114]
+file = "HOME/tests/c/popHeap.c"
+line = 157
+begin = 20
+end = 33
+
+[JC_14]
+file = "HOME/tests/c/popHeap.c"
+line = 119
+begin = 11
+end = 32
+
+[JC_150]
+file = "HOME/tests/c/popHeap.c"
+line = 245
+begin = 17
+end = 73
+
+[pop_heap_ensures_default]
+name = "Function pop_heap"
+behavior = "default behavior"
+file = "HOME/tests/c/popHeap.c"
+line = 145
+begin = 5
+end = 13
 
 [JC_117]
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
@@ -2251,15 +2598,193 @@ line = 145
 begin = 5
 end = 13
 
-[JC_118]
-file = "HOME/tests/c/popHeap.c"
-line = 175
-begin = 17
-end = 40
+[JC_90]
+kind = UserCall
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 296
+begin = 26
+end = 67
 
-[JC_119]
+[JC_53]
+kind = ArithOverflow
+file = "HOME/tests/c/popHeap.c"
+line = 151
+begin = 10
+end = 13
+
+[JC_157]
+file = "HOME/tests/c/popHeap.c"
+line = 251
+begin = 15
+end = 48
+
+[JC_145]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 462
+begin = 10
+end = 18
+
+[JC_21]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_149]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_111]
+file = "HOME/tests/c/popHeap.c"
+line = 158
+begin = 20
+end = 33
+
+[JC_77]
 file = "HOME/tests/c/popHeap.c"
 line = 178
+begin = 19
+end = 29
+
+[JC_49]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_1]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 11
+end = 16
+
+[JC_131]
+file = "HOME/tests/c/popHeap.c"
+line = 227
+begin = 13
+end = 88
+
+[JC_102]
+file = "HOME/tests/c/popHeap.c"
+line = 230
+begin = 13
+end = 108
+
+[JC_37]
+file = "HOME/tests/c/popHeap.c"
+line = 139
+begin = 11
+end = 31
+
+[Count1]
+name = "Lemma Count1"
+behavior = "axiom"
+file = "HOME/tests/c/popHeap.c"
+line = 76
+begin = 4
+end = 184
+
+[JC_142]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_10]
+file = "HOME/tests/c/popHeap.c"
+line = 117
+begin = 20
+end = 38
+
+[JC_108]
+file = "HOME/tests/c/popHeap.c"
+line = 162
+begin = 20
+end = 100
+
+[JC_57]
+file = "HOME/tests/c/popHeap.c"
+line = 164
+begin = 20
+end = 45
+
+[JC_161]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 17
+end = 23
+
+[JC_146]
+file = "HOME/tests/c/popHeap.c"
+line = 111
+begin = 10
+end = 56
+
+[JC_89]
+file = "HOME/tests/c/popHeap.c"
+line = 193
+begin = 19
+end = 44
+
+[JC_136]
+file = "HOME/tests/c/popHeap.c"
+line = 107
+begin = 11
+end = 23
+
+[JC_66]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 207
+begin = 6
+end = 4644
+
+[JC_59]
+file = "HOME/tests/c/popHeap.c"
+line = 160
+begin = 20
+end = 96
+
+[JC_20]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 149
+begin = 10
+end = 18
+
+[JC_165]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 472
+begin = 6
+end = 883
+
+[JC_18]
+file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
+line = 149
+begin = 10
+end = 18
+
+[JC_3]
+file = "HOME/tests/c/popHeap.c"
+line = 118
+begin = 11
+end = 22
+
+[JC_92]
+file = "HOME/tests/c/popHeap.c"
+line = 200
+begin = 14
+end = 86
+
+[JC_152]
+file = "HOME/tests/c/popHeap.c"
+line = 244
+begin = 22
+end = 28
+
+[JC_86]
+file = "HOME/tests/c/popHeap.c"
+line = 191
 begin = 19
 end = 29
 
@@ -2269,213 +2794,11 @@ line = 159
 begin = 20
 end = 65
 
-[JC_61]
+[JC_139]
 file = "HOME/tests/c/popHeap.c"
-line = 158
-begin = 20
-end = 33
-
-[JC_62]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 20
-end = 29
-
-[JC_10]
-file = "HOME/tests/c/popHeap.c"
-line = 117
-begin = 20
-end = 38
-
-[JC_63]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 25
-end = 33
-
-[JC_11]
-file = "HOME/tests/c/popHeap.c"
-line = 118
+line = 106
 begin = 11
-end = 22
-
-[JC_64]
-file = "HOME/tests/c/popHeap.c"
-line = 157
-begin = 20
-end = 33
-
-[JC_12]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 16
-end = 30
-
-[CountLemma]
-name = "Lemma CountLemma"
-behavior = "lemma"
-file = "HOME/tests/c/popHeap.c"
-line = 93
-begin = 2
-end = 150
-
-[JC_65]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_13]
-file = "HOME/tests/c/popHeap.c"
-line = 118
-begin = 25
-end = 34
-
-[JC_66]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 207
-begin = 6
-end = 4644
-
-[JC_14]
-file = "HOME/tests/c/popHeap.c"
-line = 119
-begin = 11
-end = 32
-
-[JC_120]
-file = "HOME/tests/c/popHeap.c"
-line = 180
-begin = 19
-end = 44
-
-[JC_67]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 207
-begin = 6
-end = 4644
-
-[JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_121]
-kind = UserCall
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 267
-begin = 29
-end = 70
-
-[JC_68]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 28
-
-[JC_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_122]
-file = "HOME/tests/c/popHeap.c"
-line = 191
-begin = 19
-end = 29
-
-[JC_69]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 171
-begin = 22
-end = 32
-
-[JC_17]
-file = "HOME/tests/c/popHeap.c"
-line = 123
-begin = 10
-end = 105
-
-[JC_123]
-file = "HOME/tests/c/popHeap.c"
-line = 193
-begin = 19
-end = 44
-
-[JC_18]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 149
-begin = 10
-end = 18
-
-[JC_124]
-kind = UserCall
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 296
-begin = 26
-end = 67
-
-[JC_19]
-file = "HOME/tests/c/popHeap.c"
-line = 123
-begin = 10
-end = 105
-
-[JC_125]
-file = "HOME/tests/c/popHeap.c"
-line = 200
-begin = 14
-end = 86
-
-[JC_126]
-file = "HOME/tests/c/popHeap.c"
-line = 205
-begin = 13
-end = 93
-
-[JC_127]
-file = "HOME/tests/c/popHeap.c"
-line = 208
-begin = 13
-end = 67
-
-[JC_128]
-file = "HOME/tests/c/popHeap.c"
-line = 209
-begin = 13
-end = 119
-
-[JC_129]
-file = "HOME/tests/c/popHeap.c"
-line = 213
-begin = 13
-end = 408
-
-[JC_70]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 172
-begin = 16
-end = 19
-
-[JC_71]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 10
-end = 18
-
-[ParentChild_1]
-name = "Lemma ParentChild_1"
-behavior = "axiom"
-file = "HOME/tests/c/popHeap.c"
-line = 40
-begin = 4
-end = 126
+end = 16
 
 [JC_72]
 kind = ArithOverflow
@@ -2484,73 +2807,17 @@ line = 174
 begin = 23
 end = 30
 
-[JC_20]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 149
+[JC_19]
+file = "HOME/tests/c/popHeap.c"
+line = 123
 begin = 10
-end = 18
+end = 105
 
-[ParentChild_2]
-name = "Lemma ParentChild_2"
-behavior = "axiom"
+[JC_119]
 file = "HOME/tests/c/popHeap.c"
-line = 44
-begin = 4
-end = 106
-
-[JC_73]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 21
-end = 31
-
-[JC_21]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[ParentChild_3]
-name = "Lemma ParentChild_3"
-behavior = "lemma"
-file = "HOME/tests/c/popHeap.c"
-line = 49
-begin = 2
-end = 234
-
-[pop_heap_ensures_default]
-name = "Function pop_heap"
-behavior = "default behavior"
-file = "HOME/tests/c/popHeap.c"
-line = 145
-begin = 5
-end = 13
-
-[JC_74]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 174
-begin = 33
-end = 40
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_75]
-file = "HOME/tests/c/popHeap.c"
-line = 175
-begin = 17
-end = 40
-
-[JC_23]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 12
-end = 17
+line = 178
+begin = 19
+end = 29
 
 [JC_76]
 kind = PointerDeref
@@ -2559,141 +2826,11 @@ line = 176
 begin = 10
 end = 18
 
-[JC_24]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 16
-end = 37
-
-[JC_130]
-file = "HOME/tests/c/popHeap.c"
-line = 222
-begin = 13
-end = 113
-
-[JC_77]
-file = "HOME/tests/c/popHeap.c"
-line = 178
-begin = 19
-end = 29
-
-[JC_25]
-file = "HOME/tests/c/popHeap.c"
-line = 132
-begin = 12
-end = 30
-
-[JC_131]
-file = "HOME/tests/c/popHeap.c"
-line = 227
-begin = 13
-end = 88
-
-[JC_78]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 179
-begin = 18
-end = 26
-
-[JC_26]
-file = "HOME/tests/c/popHeap.c"
-line = 133
-begin = 12
-end = 24
-
-[JC_132]
-file = "HOME/tests/c/popHeap.c"
-line = 230
-begin = 13
-end = 108
-
-[JC_79]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 255
-begin = 30
-end = 304
-
-[JC_27]
+[JC_50]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_133]
-file = "HOME/tests/c/popHeap.c"
-line = 233
-begin = 13
-end = 157
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_134]
-file = "HOME/tests/c/popHeap.c"
-line = 106
-begin = 11
-end = 16
-
-[JC_29]
-file = "HOME/tests/c/popHeap.c"
-line = 131
-begin = 12
-end = 17
-
-[JC_135]
-file = "HOME/tests/c/popHeap.c"
-line = 106
-begin = 20
-end = 38
-
-[JC_136]
-file = "HOME/tests/c/popHeap.c"
-line = 107
-begin = 11
-end = 23
-
-[JC_137]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_138]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_139]
-file = "HOME/tests/c/popHeap.c"
-line = 106
-begin = 11
-end = 16
-
-[JC_80]
-file = "HOME/tests/c/popHeap.c"
-line = 180
-begin = 19
-end = 44
-
-[JC_81]
-kind = UserCall
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 267
-begin = 29
-end = 70
-
-[JC_82]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 188
-begin = 14
-end = 20
 
 [JC_30]
 file = "HOME/tests/c/popHeap.c"
@@ -2701,162 +2838,26 @@ line = 131
 begin = 16
 end = 37
 
-[JC_83]
-kind = ArithOverflow
+[JC_120]
 file = "HOME/tests/c/popHeap.c"
-line = 188
-begin = 14
-end = 24
-
-[JC_31]
-file = "HOME/tests/c/popHeap.c"
-line = 132
-begin = 12
-end = 30
-
-[JC_84]
-kind = ArithOverflow
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 19
-end = 22
-
-[JC_32]
-file = "HOME/tests/c/popHeap.c"
-line = 133
-begin = 12
-end = 24
-
-[JC_85]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 189
-begin = 26
-end = 34
-
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_86]
-file = "HOME/tests/c/popHeap.c"
-line = 191
-begin = 19
-end = 29
-
-[JC_34]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_140]
-file = "HOME/tests/c/popHeap.c"
-line = 106
-begin = 20
-end = 38
-
-[JC_87]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.c"
-line = 192
-begin = 18
-end = 26
-
-[JC_35]
-file = "HOME/tests/c/popHeap.c"
-line = 137
-begin = 11
-end = 25
-
-[JC_141]
-file = "HOME/tests/c/popHeap.c"
-line = 107
-begin = 11
-end = 23
-
-[JC_88]
-kind = PointerDeref
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 285
-begin = 27
-end = 292
-
-[JC_36]
-file = "HOME/tests/c/popHeap.c"
-line = 138
-begin = 11
-end = 31
-
-[JC_142]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_89]
-file = "HOME/tests/c/popHeap.c"
-line = 193
+line = 180
 begin = 19
 end = 44
 
-[JC_37]
+[JC_58]
 file = "HOME/tests/c/popHeap.c"
-line = 139
-begin = 11
-end = 31
+line = 162
+begin = 20
+end = 100
 
-[JC_143]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_38]
-file = "HOME/tests/c/popHeap.c"
-line = 140
-begin = 11
-end = 39
-
-[JC_144]
-file = "HOME/tests/c/popHeap.c"
-line = 111
-begin = 10
-end = 56
-
-[JC_39]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_145]
+[JC_100]
+kind = PointerDeref
 file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 462
-begin = 10
-end = 18
+line = 413
+begin = 15
+end = 88
 
-[JC_146]
-file = "HOME/tests/c/popHeap.c"
-line = 111
-begin = 10
-end = 56
-
-[JC_147]
-file = "HOME/tests/c/popHeap.jessie/popHeap.jc"
-line = 462
-begin = 10
-end = 18
-
-[JC_148]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_149]
+[JC_28]
 file = "HOME/"
 line = 0
 begin = -1
@@ -3587,9 +3588,9 @@ let pop_heap_ensures_default =
      try
       (C_11:
       begin
-        (let jessie_<num> = a_4 in
-        (let jessie_<num> = n_1_0 in
-        (JC_104: ((pop_heap_induction jessie_<num>) jessie_<num>))));
+        (let _jessie_<num> = a_4 in
+        (let _jessie_<num> = n_1_0 in
+        (JC_104: ((pop_heap_induction _jessie_<num>) _jessie_<num>))));
        (assert
        { (JC_105:
          (forall i_16:int.
@@ -3601,14 +3602,14 @@ let pop_heap_ensures_default =
        (C_23:
        begin
          void;
-        (let jessie_<num> =
+        (let _jessie_<num> =
         (C_13:
         (C_14:
         begin
-          (let jessie_<num> = (tmp := (safe_int32_of_integer_ (0))) in void);
+          (let _jessie_<num> = (tmp := (safe_int32_of_integer_ (0))) in void);
          (max_1 := (safe_int32_of_integer_ (0))); !max_1 end)) in void);
-        (let jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
-        (let jessie_<num> =
+        (let _jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
+        (let _jessie_<num> =
         (tmp := (C_19:
                 ((safe_acc_ !intP_intM) (C_18:
                                         ((shift a_4) (integer_of_int32 
@@ -3617,7 +3618,7 @@ let pop_heap_ensures_default =
                                                        (C_16:
                                                        ((sub_int (integer_of_int32 n_1_0)) (1))))))))))) in
         void);
-        (let jessie_<num> =
+        (let _jessie_<num> =
         (max_1 := (C_22: ((safe_acc_ !intP_intM) (C_21: ((shift a_4) (0)))))) in
         void);
         (assert
@@ -3686,7 +3687,7 @@ let pop_heap_ensures_default =
            try
             (C_38:
             begin
-              (let jessie_<num> =
+              (let _jessie_<num> =
               (child_0 := (C_37:
                           (safe_int32_of_integer_ (C_36:
                                                   ((add_int (integer_of_int32 
@@ -3717,7 +3718,7 @@ let pop_heap_ensures_default =
                                                                   ((sub_int 
                                                                     (integer_of_int32 !child_0)) (1))))))))))))
                 then
-                 (let jessie_<num> =
+                 (let _jessie_<num> =
                  (C_59:
                  (child_0 := (C_58:
                              (safe_int32_of_integer_ (C_57:
@@ -3733,7 +3734,7 @@ let pop_heap_ensures_default =
                                                 ((shift a_4) (integer_of_int32 !child_0))))))) 
                     (integer_of_int32 !tmp))
                then
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 begin
                   (assert
                   { (JC_119:
@@ -3742,15 +3743,16 @@ let pop_heap_ensures_default =
                  (C_72:
                  begin
                    void;
-                  (let jessie_<num> =
-                  (let jessie_<num> =
+                  (let _jessie_<num> =
+                  (let _jessie_<num> =
                   (C_69:
                   ((safe_acc_ !intP_intM) (C_68:
                                           ((shift a_4) (integer_of_int32 !child_0))))) in
-                  (let jessie_<num> = a_4 in
-                  (let jessie_<num> = (integer_of_int32 !hole) in
-                  (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-                  (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
+                  (let _jessie_<num> = a_4 in
+                  (let _jessie_<num> = (integer_of_int32 !hole) in
+                  (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+                  (((safe_upd_ intP_intM) _jessie_<num>) _jessie_<num>))))) in
+                  void);
                   (assert
                   { (JC_120:
                     (integer_of_int32(select(intP_intM@init,
@@ -3764,18 +3766,18 @@ let pop_heap_ensures_default =
                   (C_75:
                   begin
                     void;
-                   (let jessie_<num> = a_4 in
-                   (let jessie_<num> = n_1_0 in
-                   (let jessie_<num> = !hole in
-                   (let jessie_<num> = !child_0 in
+                   (let _jessie_<num> = a_4 in
+                   (let _jessie_<num> = n_1_0 in
+                   (let _jessie_<num> = !hole in
+                   (let _jessie_<num> = !child_0 in
                    (JC_121:
-                   ((((pop_push_heap_copy jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+                   ((((pop_push_heap_copy _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))));
                    (hole := !child_0); !hole end)) end) end in void)
                else (raise (Goto_while_0_break_exc void))) end
              else
               (C_43:
               begin
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (child_0 := (C_42:
                             (safe_int32_of_integer_ (C_41:
                                                     ((add_int (integer_of_int32 
@@ -3798,7 +3800,7 @@ let pop_heap_ensures_default =
                                                  ((shift a_4) (integer_of_int32 !child_0))))))) 
                      (integer_of_int32 !tmp))
                 then
-                 (let jessie_<num> =
+                 (let _jessie_<num> =
                  begin
                    (assert
                    { (JC_122:
@@ -3807,15 +3809,16 @@ let pop_heap_ensures_default =
                   (C_49:
                   begin
                     void;
-                   (let jessie_<num> =
-                   (let jessie_<num> =
+                   (let _jessie_<num> =
+                   (let _jessie_<num> =
                    (C_46:
                    ((safe_acc_ !intP_intM) (C_45:
                                            ((shift a_4) (integer_of_int32 !child_0))))) in
-                   (let jessie_<num> = a_4 in
-                   (let jessie_<num> = (integer_of_int32 !hole) in
-                   (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-                   (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
+                   (let _jessie_<num> = a_4 in
+                   (let _jessie_<num> = (integer_of_int32 !hole) in
+                   (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+                   (((safe_upd_ intP_intM) _jessie_<num>) _jessie_<num>))))) in
+                   void);
                    (assert
                    { (JC_123:
                      (integer_of_int32(select(intP_intM@init,
@@ -3829,18 +3832,18 @@ let pop_heap_ensures_default =
                    (C_52:
                    begin
                      void;
-                    (let jessie_<num> = a_4 in
-                    (let jessie_<num> = n_1_0 in
-                    (let jessie_<num> = !hole in
-                    (let jessie_<num> = !child_0 in
+                    (let _jessie_<num> = a_4 in
+                    (let _jessie_<num> = n_1_0 in
+                    (let _jessie_<num> = !hole in
+                    (let _jessie_<num> = !child_0 in
                     (JC_124:
-                    ((((pop_push_heap_copy jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+                    ((((pop_push_heap_copy _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))));
                     (hole := !child_0); !hole end)) end) end in void)
                 else void) else void); (raise (Goto_while_0_break_exc void))
               end)); (raise (Loop_continue_exc void)) end) with
-            Loop_continue_exc jessie_<num> -> void end end done;
+            Loop_continue_exc _jessie_<num> -> void end end done;
          (raise (Goto_while_0_break_exc void)) end) end))) end) with
-      Goto_while_0_break_exc jessie_<num> ->
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break:
       begin
         void;
@@ -3855,12 +3858,12 @@ let pop_heap_ensures_default =
        (C_83:
        begin
          void;
-        (let jessie_<num> =
-        (let jessie_<num> = !tmp in
-        (let jessie_<num> = a_4 in
-        (let jessie_<num> = (integer_of_int32 !hole) in
-        (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-        (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
+        (let _jessie_<num> =
+        (let _jessie_<num> = !tmp in
+        (let _jessie_<num> = a_4 in
+        (let _jessie_<num> = (integer_of_int32 !hole) in
+        (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+        (((safe_upd_ intP_intM) _jessie_<num>) _jessie_<num>))))) in void);
         (assert
         { (JC_126:
           (forall x_3:int32.
@@ -3973,15 +3976,15 @@ let pop_heap_ensures_default =
         (C_93:
         begin
           void;
-         (let jessie_<num> =
-         (let jessie_<num> = !max_1 in
-         (let jessie_<num> = a_4 in
-         (let jessie_<num> =
+         (let _jessie_<num> =
+         (let _jessie_<num> = !max_1 in
+         (let _jessie_<num> = a_4 in
+         (let _jessie_<num> =
          (integer_of_int32 (C_90:
                            (safe_int32_of_integer_ (C_89:
                                                    ((sub_int (integer_of_int32 n_1_0)) (1)))))) in
-         (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-         (((safe_upd_ intP_intM) jessie_<num>) jessie_<num>))))) in void);
+         (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+         (((safe_upd_ intP_intM) _jessie_<num>) _jessie_<num>))))) in void);
          (assert
          { (JC_131:
            (forall x_7:int32.
@@ -4047,7 +4050,7 @@ let pop_heap_induction_ensures_default =
       (C_109:
       (loop_4:
       begin
-        (let jessie_<num> = (i := (safe_int32_of_integer_ (1))) in void);
+        (let _jessie_<num> = (i := (safe_int32_of_integer_ (1))) in void);
        while true do
        { invariant
            ((JC_160:
@@ -4066,7 +4069,7 @@ let pop_heap_induction_ensures_default =
           [ { } unit { true } ];
          try
           begin
-            (let jessie_<num> =
+            (let _jessie_<num> =
             begin
               (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_2_0))
               then void else (raise (Goto_while_0_break_exc void)));
@@ -4083,9 +4086,9 @@ let pop_heap_induction_ensures_default =
                     (safe_int32_of_integer_ (C_116:
                                             ((add_int (integer_of_int32 !i)) (1))))));
               !i end) end in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done;
+          Loop_continue_exc _jessie_<num> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end)) with
-      Goto_while_0_break_exc jessie_<num> ->
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
   { (JC_144:
@@ -4109,7 +4112,7 @@ let pop_heap_induction_safety =
       (C_109:
       (loop_3:
       begin
-        (let jessie_<num> = (i := (safe_int32_of_integer_ (1))) in void);
+        (let _jessie_<num> = (i := (safe_int32_of_integer_ (1))) in void);
        while true do
        { invariant (JC_155: true)
          variant (JC_159 : sub_int(integer_of_int32(n_2_0),
@@ -4129,7 +4132,7 @@ let pop_heap_induction_safety =
                       le_int(integer_of_int32(i), integer_of_int32(n_2_0)))))) } ];
          try
           begin
-            (let jessie_<num> =
+            (let _jessie_<num> =
             begin
               (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_2_0))
               then void else (raise (Goto_while_0_break_exc void)));
@@ -4147,9 +4150,9 @@ let pop_heap_induction_safety =
                     (int32_of_integer_ (C_116:
                                        ((add_int (integer_of_int32 !i)) (1)))))));
               !i end) end in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done;
+          Loop_continue_exc _jessie_<num> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end)) with
-      Goto_while_0_break_exc jessie_<num> ->
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { true }
 
@@ -4173,9 +4176,9 @@ let pop_heap_safety =
      try
       (C_11:
       begin
-        (let jessie_<num> = a_4 in
-        (let jessie_<num> = n_1_0 in
-        (JC_51: ((pop_heap_induction_requires jessie_<num>) jessie_<num>))));
+        (let _jessie_<num> = a_4 in
+        (let _jessie_<num> = n_1_0 in
+        (JC_51: ((pop_heap_induction_requires _jessie_<num>) _jessie_<num>))));
        [ { } unit reads intP_intM
          { (JC_52:
            (forall i_16:int.
@@ -4187,14 +4190,14 @@ let pop_heap_safety =
        (C_23:
        begin
          void;
-        (let jessie_<num> =
+        (let _jessie_<num> =
         (C_13:
         (C_14:
         begin
-          (let jessie_<num> = (tmp := (safe_int32_of_integer_ (0))) in void);
+          (let _jessie_<num> = (tmp := (safe_int32_of_integer_ (0))) in void);
          (max_1 := (safe_int32_of_integer_ (0))); !max_1 end)) in void);
-        (let jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
-        (let jessie_<num> =
+        (let _jessie_<num> = (hole := (safe_int32_of_integer_ (0))) in void);
+        (let _jessie_<num> =
         (tmp := (C_19:
                 (JC_54:
                 ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) (integer_of_int32 
@@ -4205,7 +4208,7 @@ let pop_heap_safety =
                                                                     ((sub_int 
                                                                     (integer_of_int32 n_1_0)) (1))))))))))) in
         void);
-        (let jessie_<num> =
+        (let _jessie_<num> =
         (max_1 := (C_22:
                   (JC_55: (((acc_ !intP_alloc_table) !intP_intM) a_4)))) in
         void);
@@ -4267,7 +4270,7 @@ let pop_heap_safety =
            try
             (C_38:
             begin
-              (let jessie_<num> =
+              (let _jessie_<num> =
               (child_0 := (C_37:
                           (JC_69:
                           (int32_of_integer_ (C_36:
@@ -4301,7 +4304,7 @@ let pop_heap_safety =
                                                            ((sub_int 
                                                              (integer_of_int32 !child_0)) (1))))))))))))
                 then
-                 (let jessie_<num> =
+                 (let _jessie_<num> =
                  (C_59:
                  (child_0 := (C_58:
                              (JC_74:
@@ -4318,7 +4321,7 @@ let pop_heap_safety =
                                                 (integer_of_int32 !child_0)))))) 
                     (integer_of_int32 !tmp))
                then
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 begin
                   [ { } unit reads hole
                     { (JC_77:
@@ -4327,17 +4330,17 @@ let pop_heap_safety =
                  (C_72:
                  begin
                    void;
-                  (let jessie_<num> =
-                  (let jessie_<num> =
+                  (let _jessie_<num> =
+                  (let _jessie_<num> =
                   (C_69:
                   (JC_78:
                   ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
                    (integer_of_int32 !child_0)))) in
-                  (let jessie_<num> = a_4 in
-                  (let jessie_<num> = (integer_of_int32 !hole) in
-                  (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+                  (let _jessie_<num> = a_4 in
+                  (let _jessie_<num> = (integer_of_int32 !hole) in
+                  (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
                   (JC_79:
-                  (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+                  (((((offset_upd_ !intP_alloc_table) intP_intM) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
                   void);
                   [ { } unit reads intP_intM
                     { (JC_80:
@@ -4351,18 +4354,18 @@ let pop_heap_safety =
                   (C_75:
                   begin
                     void;
-                   (let jessie_<num> = a_4 in
-                   (let jessie_<num> = n_1_0 in
-                   (let jessie_<num> = !hole in
-                   (let jessie_<num> = !child_0 in
+                   (let _jessie_<num> = a_4 in
+                   (let _jessie_<num> = n_1_0 in
+                   (let _jessie_<num> = !hole in
+                   (let _jessie_<num> = !child_0 in
                    (JC_81:
-                   ((((pop_push_heap_copy_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+                   ((((pop_push_heap_copy_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))));
                    (hole := !child_0); !hole end)) end) end in void)
                else (raise (Goto_while_0_break_exc void))) end
              else
               (C_43:
               begin
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (child_0 := (C_42:
                             (JC_83:
                             (int32_of_integer_ (C_41:
@@ -4388,7 +4391,7 @@ let pop_heap_safety =
                                                  (integer_of_int32 !child_0)))))) 
                      (integer_of_int32 !tmp))
                 then
-                 (let jessie_<num> =
+                 (let _jessie_<num> =
                  begin
                    [ { } unit reads hole
                      { (JC_86:
@@ -4397,17 +4400,17 @@ let pop_heap_safety =
                   (C_49:
                   begin
                     void;
-                   (let jessie_<num> =
-                   (let jessie_<num> =
+                   (let _jessie_<num> =
+                   (let _jessie_<num> =
                    (C_46:
                    (JC_87:
                    ((((offset_acc_ !intP_alloc_table) !intP_intM) a_4) 
                     (integer_of_int32 !child_0)))) in
-                   (let jessie_<num> = a_4 in
-                   (let jessie_<num> = (integer_of_int32 !hole) in
-                   (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+                   (let _jessie_<num> = a_4 in
+                   (let _jessie_<num> = (integer_of_int32 !hole) in
+                   (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
                    (JC_88:
-                   (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+                   (((((offset_upd_ !intP_alloc_table) intP_intM) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
                    void);
                    [ { } unit reads intP_intM
                      { (JC_89:
@@ -4423,18 +4426,18 @@ let pop_heap_safety =
                    (C_52:
                    begin
                      void;
-                    (let jessie_<num> = a_4 in
-                    (let jessie_<num> = n_1_0 in
-                    (let jessie_<num> = !hole in
-                    (let jessie_<num> = !child_0 in
+                    (let _jessie_<num> = a_4 in
+                    (let _jessie_<num> = n_1_0 in
+                    (let _jessie_<num> = !hole in
+                    (let _jessie_<num> = !child_0 in
                     (JC_90:
-                    ((((pop_push_heap_copy_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>))))));
+                    ((((pop_push_heap_copy_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) _jessie_<num>))))));
                     (hole := !child_0); !hole end)) end) end in void)
                 else void) else void); (raise (Goto_while_0_break_exc void))
               end)); (raise (Loop_continue_exc void)) end) with
-            Loop_continue_exc jessie_<num> -> void end end done;
+            Loop_continue_exc _jessie_<num> -> void end end done;
          (raise (Goto_while_0_break_exc void)) end) end))) end) with
-      Goto_while_0_break_exc jessie_<num> ->
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break:
       begin
         void;
@@ -4449,13 +4452,13 @@ let pop_heap_safety =
        (C_83:
        begin
          void;
-        (let jessie_<num> =
-        (let jessie_<num> = !tmp in
-        (let jessie_<num> = a_4 in
-        (let jessie_<num> = (integer_of_int32 !hole) in
-        (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+        (let _jessie_<num> =
+        (let _jessie_<num> = !tmp in
+        (let _jessie_<num> = a_4 in
+        (let _jessie_<num> = (integer_of_int32 !hole) in
+        (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
         (JC_93:
-        (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+        (((((offset_upd_ !intP_alloc_table) intP_intM) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
         void);
         [ { } unit reads hole,intP_intM
           { (JC_94:
@@ -4575,17 +4578,17 @@ let pop_heap_safety =
         (C_93:
         begin
           void;
-         (let jessie_<num> =
-         (let jessie_<num> = !max_1 in
-         (let jessie_<num> = a_4 in
-         (let jessie_<num> =
+         (let _jessie_<num> =
+         (let _jessie_<num> = !max_1 in
+         (let _jessie_<num> = a_4 in
+         (let _jessie_<num> =
          (integer_of_int32 (C_90:
                            (JC_99:
                            (int32_of_integer_ (C_89:
                                               ((sub_int (integer_of_int32 n_1_0)) (1))))))) in
-         (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+         (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
          (JC_100:
-         (((((offset_upd_ !intP_alloc_table) intP_intM) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+         (((((offset_upd_ !intP_alloc_table) intP_intM) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
          void);
          [ { } unit reads intP_intM
            { (JC_101:

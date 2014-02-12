@@ -313,17 +313,60 @@ behavior permutation:
    }
 }
 ========== file tests/c/quick_sort.jessie/quick_sort.cloc ==========
-[C_50]
+[quick_sort]
+name = "Function quick_sort"
 file = "HOME/tests/c/quick_sort.c"
-line = 82
-begin = 14
-end = 17
+line = 91
+begin = 5
+end = 15
 
-[C_51]
+[C_15]
 file = "HOME/tests/c/quick_sort.c"
-line = 82
+line = 38
+begin = 13
+end = 24
+
+[C_11]
+file = "HOME/tests/c/quick_sort.c"
+line = 45
+begin = 9
+end = 12
+
+[C_1]
+file = "HOME/tests/c/quick_sort.c"
+line = 43
+begin = 12
+end = 13
+
+[C_55]
+file = "HOME/tests/c/quick_sort.c"
+line = 49
+begin = 13
+end = 32
+
+[C_33]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 43
+end = 51
+
+[C_64]
+file = "HOME/tests/c/quick_sort.c"
+line = 85
+begin = 13
+end = 34
+
+[C_9]
+file = "HOME/tests/c/quick_sort.c"
+line = 45
 begin = 2
-end = 20
+end = 3
+
+[C_10]
+file = "HOME/tests/c/quick_sort.c"
+line = 45
+begin = 9
+end = 12
 
 [quick_rec]
 name = "Function quick_rec"
@@ -332,65 +375,17 @@ line = 57
 begin = 5
 end = 14
 
-[C_52]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_53]
+[C_20]
 file = "HOME/tests/c/quick_sort.c"
-line = 53
-begin = 14
+line = 60
+begin = 6
+end = 7
+
+[C_43]
+file = "HOME/tests/c/quick_sort.c"
+line = 71
+begin = 26
 end = 29
-
-[C_54]
-file = "HOME/tests/c/quick_sort.c"
-line = 55
-begin = 14
-end = 37
-
-[C_55]
-file = "HOME/tests/c/quick_sort.c"
-line = 49
-begin = 13
-end = 32
-
-[C_56]
-file = "HOME/tests/c/quick_sort.c"
-line = 49
-begin = 13
-end = 32
-
-[C_57]
-file = "HOME/tests/c/quick_sort.c"
-line = 49
-begin = 13
-end = 32
-
-[C_58]
-file = "HOME/tests/c/quick_sort.c"
-line = 50
-begin = 14
-end = 17
-
-[C_59]
-file = "HOME/tests/c/quick_sort.c"
-line = 92
-begin = 16
-end = 19
-
-[C_60]
-file = "HOME/tests/c/quick_sort.c"
-line = 92
-begin = 2
-end = 20
-
-[C_61]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 [C_62]
 file = "HOME/tests/c/quick_sort.c"
@@ -398,222 +393,11 @@ line = 87
 begin = 14
 end = 27
 
-[C_10]
+[C_59]
 file = "HOME/tests/c/quick_sort.c"
-line = 45
-begin = 9
-end = 12
-
-[C_63]
-file = "HOME/tests/c/quick_sort.c"
-line = 89
-begin = 14
-end = 39
-
-[C_11]
-file = "HOME/tests/c/quick_sort.c"
-line = 45
-begin = 9
-end = 12
-
-[C_64]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
-
-[C_12]
-file = "HOME/tests/c/quick_sort.c"
-line = 40
-begin = 12
-end = 33
-
-[C_65]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
-
-[C_13]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 13
-end = 39
-
-[C_66]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
-
-[C_14]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 13
-end = 24
-
-[C_15]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 13
-end = 24
-
-[C_16]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 13
-end = 24
-
-[C_17]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 28
-end = 39
-
-[C_18]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 28
-end = 39
-
-[C_19]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 28
-end = 39
-
-[C_1]
-file = "HOME/tests/c/quick_sort.c"
-line = 43
-begin = 12
-end = 13
-
-[quick_sort]
-name = "Function quick_sort"
-file = "HOME/tests/c/quick_sort.c"
-line = 91
-begin = 5
-end = 15
-
-[C_2]
-file = "HOME/tests/c/quick_sort.c"
-line = 43
-begin = 12
-end = 16
-
-[C_3]
-file = "HOME/tests/c/quick_sort.c"
-line = 43
-begin = 2
-end = 5
-
-[C_4]
-file = "HOME/tests/c/quick_sort.c"
-line = 44
-begin = 9
-end = 10
-
-[C_20]
-file = "HOME/tests/c/quick_sort.c"
-line = 60
-begin = 6
-end = 7
-
-[C_5]
-file = "HOME/tests/c/quick_sort.c"
-line = 44
-begin = 9
-end = 13
-
-[C_21]
-file = "HOME/tests/c/quick_sort.c"
-line = 60
-begin = 6
-end = 10
-
-[C_6]
-file = "HOME/tests/c/quick_sort.c"
-line = 44
-begin = 2
-end = 3
-
-[C_22]
-file = "HOME/tests/c/quick_sort.c"
-line = 60
-begin = 6
-end = 10
-
-[C_7]
-file = "HOME/tests/c/quick_sort.c"
-line = 44
-begin = 9
-end = 13
-
-[C_23]
-file = "HOME/tests/c/quick_sort.c"
-line = 61
-begin = 6
-end = 7
-
-[C_8]
-file = "HOME/tests/c/quick_sort.c"
-line = 44
-begin = 9
-end = 13
-
-[C_24]
-file = "HOME/tests/c/quick_sort.c"
-line = 71
-begin = 11
-end = 16
-
-[C_9]
-file = "HOME/tests/c/quick_sort.c"
-line = 45
-begin = 2
-end = 3
-
-[C_25]
-file = "HOME/tests/c/quick_sort.c"
-line = 71
-begin = 11
-end = 16
-
-[C_26]
-file = "HOME/tests/c/quick_sort.c"
-line = 69
-begin = 19
-end = 22
-
-[C_27]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 21
-end = 51
-
-[C_28]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 21
-end = 30
-
-[C_29]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 34
-end = 51
-
-[C_30]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 34
-end = 40
-
-[C_31]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 39
-end = 51
+line = 92
+begin = 16
+end = 19
 
 [C_32]
 file = "HOME/tests/c/quick_sort.c"
@@ -621,23 +405,23 @@ line = 68
 begin = 39
 end = 44
 
-[C_33]
+[C_17]
 file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 43
-end = 51
+line = 38
+begin = 28
+end = 39
 
-[C_34]
+[C_40]
 file = "HOME/tests/c/quick_sort.c"
-line = 67
-begin = 8
-end = 31
+line = 75
+begin = 17
+end = 39
 
-[C_35]
+[C_63]
 file = "HOME/tests/c/quick_sort.c"
-line = 65
-begin = 8
-end = 50
+line = 89
+begin = 14
+end = 39
 
 [C_36]
 file = "HOME/tests/c/quick_sort.c"
@@ -645,11 +429,119 @@ line = 63
 begin = 8
 end = 50
 
-[C_37]
+[C_42]
 file = "HOME/tests/c/quick_sort.c"
-line = 74
-begin = 15
-end = 18
+line = 72
+begin = 8
+end = 12
+
+[C_5]
+file = "HOME/tests/c/quick_sort.c"
+line = 44
+begin = 9
+end = 13
+
+[C_56]
+file = "HOME/tests/c/quick_sort.c"
+line = 49
+begin = 13
+end = 32
+
+[C_34]
+file = "HOME/tests/c/quick_sort.c"
+line = 67
+begin = 8
+end = 31
+
+[C_29]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 34
+end = 51
+
+[C_61]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[C_13]
+file = "HOME/tests/c/quick_sort.c"
+line = 38
+begin = 13
+end = 39
+
+[C_45]
+file = "HOME/tests/c/quick_sort.c"
+line = 78
+begin = 13
+end = 24
+
+[C_47]
+file = "HOME/tests/c/quick_sort.c"
+line = 80
+begin = 13
+end = 34
+
+[C_54]
+file = "HOME/tests/c/quick_sort.c"
+line = 55
+begin = 14
+end = 37
+
+[C_7]
+file = "HOME/tests/c/quick_sort.c"
+line = 44
+begin = 9
+end = 13
+
+[C_22]
+file = "HOME/tests/c/quick_sort.c"
+line = 60
+begin = 6
+end = 10
+
+[C_58]
+file = "HOME/tests/c/quick_sort.c"
+line = 50
+begin = 14
+end = 17
+
+[C_14]
+file = "HOME/tests/c/quick_sort.c"
+line = 38
+begin = 13
+end = 24
+
+[C_35]
+file = "HOME/tests/c/quick_sort.c"
+line = 65
+begin = 8
+end = 50
+
+[C_52]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[C_66]
+file = "HOME/tests/c/quick_sort.c"
+line = 85
+begin = 13
+end = 34
+
+[C_25]
+file = "HOME/tests/c/quick_sort.c"
+line = 71
+begin = 11
+end = 16
+
+[C_65]
+file = "HOME/tests/c/quick_sort.c"
+line = 85
+begin = 13
+end = 34
 
 [C_38]
 file = "HOME/tests/c/quick_sort.c"
@@ -657,11 +549,95 @@ line = 74
 begin = 15
 end = 18
 
+[C_60]
+file = "HOME/tests/c/quick_sort.c"
+line = 92
+begin = 2
+end = 20
+
+[C_8]
+file = "HOME/tests/c/quick_sort.c"
+line = 44
+begin = 9
+end = 13
+
 [C_39]
 file = "HOME/tests/c/quick_sort.c"
 line = 74
 begin = 6
 end = 19
+
+[C_57]
+file = "HOME/tests/c/quick_sort.c"
+line = 49
+begin = 13
+end = 32
+
+[C_44]
+file = "HOME/tests/c/quick_sort.c"
+line = 71
+begin = 26
+end = 29
+
+[C_27]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 21
+end = 51
+
+[C_50]
+file = "HOME/tests/c/quick_sort.c"
+line = 82
+begin = 14
+end = 17
+
+[C_46]
+file = "HOME/tests/c/quick_sort.c"
+line = 79
+begin = 4
+end = 15
+
+[C_53]
+file = "HOME/tests/c/quick_sort.c"
+line = 53
+begin = 14
+end = 29
+
+[C_37]
+file = "HOME/tests/c/quick_sort.c"
+line = 74
+begin = 15
+end = 18
+
+[C_19]
+file = "HOME/tests/c/quick_sort.c"
+line = 38
+begin = 28
+end = 39
+
+[C_48]
+file = "HOME/tests/c/quick_sort.c"
+line = 81
+begin = 16
+end = 19
+
+[C_4]
+file = "HOME/tests/c/quick_sort.c"
+line = 44
+begin = 9
+end = 10
+
+[C_12]
+file = "HOME/tests/c/quick_sort.c"
+line = 40
+begin = 12
+end = 33
+
+[C_26]
+file = "HOME/tests/c/quick_sort.c"
+line = 69
+begin = 19
+end = 22
 
 [swap]
 name = "Function swap"
@@ -670,11 +646,47 @@ line = 42
 begin = 5
 end = 9
 
-[C_40]
+[C_18]
 file = "HOME/tests/c/quick_sort.c"
-line = 75
-begin = 17
+line = 38
+begin = 28
 end = 39
+
+[C_51]
+file = "HOME/tests/c/quick_sort.c"
+line = 82
+begin = 2
+end = 20
+
+[C_2]
+file = "HOME/tests/c/quick_sort.c"
+line = 43
+begin = 12
+end = 16
+
+[C_28]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 21
+end = 30
+
+[C_24]
+file = "HOME/tests/c/quick_sort.c"
+line = 71
+begin = 11
+end = 16
+
+[C_6]
+file = "HOME/tests/c/quick_sort.c"
+line = 44
+begin = 2
+end = 3
+
+[C_30]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 34
+end = 40
 
 [C_41]
 file = "HOME/tests/c/quick_sort.c"
@@ -682,53 +694,41 @@ line = 72
 begin = 8
 end = 9
 
-[C_42]
+[C_21]
 file = "HOME/tests/c/quick_sort.c"
-line = 72
-begin = 8
-end = 12
+line = 60
+begin = 6
+end = 10
 
-[C_43]
+[C_3]
 file = "HOME/tests/c/quick_sort.c"
-line = 71
-begin = 26
-end = 29
+line = 43
+begin = 2
+end = 5
 
-[C_44]
+[C_16]
 file = "HOME/tests/c/quick_sort.c"
-line = 71
-begin = 26
-end = 29
-
-[C_45]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
+line = 38
 begin = 13
 end = 24
-
-[C_46]
-file = "HOME/tests/c/quick_sort.c"
-line = 79
-begin = 4
-end = 15
-
-[C_47]
-file = "HOME/tests/c/quick_sort.c"
-line = 80
-begin = 13
-end = 34
-
-[C_48]
-file = "HOME/tests/c/quick_sort.c"
-line = 81
-begin = 16
-end = 19
 
 [C_49]
 file = "HOME/tests/c/quick_sort.c"
 line = 81
 begin = 2
 end = 20
+
+[C_31]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 39
+end = 51
+
+[C_23]
+file = "HOME/tests/c/quick_sort.c"
+line = 61
+begin = 6
+end = 7
 
 ========== jessie execution ==========
 Generating Why function swap
@@ -744,10 +744,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs quick_sort.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs quick_sort.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs quick_sort.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs quick_sort.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -892,13 +893,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: quick_sort.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: quick_sort.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: quick_sort.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include quick_sort.depend
 
@@ -909,92 +910,41 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/quick_sort.jessie/quick_sort.loc ==========
-[JC_90]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 39
-end = 44
-
-[JC_91]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 43
-end = 51
-
-[JC_92]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 21
-end = 51
-
-[JC_40]
-file = "HOME/tests/c/quick_sort.c"
-line = 53
-begin = 14
-end = 29
-
-[JC_93]
-file = "HOME/tests/c/quick_sort.c"
-line = 67
-begin = 8
-end = 31
-
-[JC_41]
-file = "HOME/tests/c/quick_sort.c"
-line = 55
-begin = 14
-end = 37
-
-[quick_rec_ensures_permutation]
-name = "Function quick_rec"
-behavior = "Behavior `permutation'"
-file = "HOME/tests/c/quick_sort.c"
-line = 57
-begin = 5
-end = 14
-
 [JC_94]
 file = "HOME/tests/c/quick_sort.c"
 line = 65
 begin = 8
 end = 50
 
-[JC_42]
+[JC_73]
 file = "HOME/tests/c/quick_sort.c"
-line = 55
-begin = 14
-end = 37
+line = 68
+begin = 43
+end = 51
 
-[JC_95]
+[JC_63]
+file = "HOME/tests/c/quick_sort.c"
+line = 50
+begin = 14
+end = 17
+
+[JC_80]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
+
+[JC_51]
 file = "HOME/tests/c/quick_sort.c"
 line = 63
 begin = 8
 end = 50
 
-[JC_43]
-kind = PointerDeref
-file = "HOME/tests/c/quick_sort.c"
-line = 60
-begin = 6
-end = 10
-
-[JC_96]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_44]
+[JC_71]
 file = "HOME/tests/c/quick_sort.c"
 line = 68
-begin = 21
-end = 30
-
-[JC_97]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1456
+begin = 34
+end = 40
 
 [JC_45]
 file = "HOME/tests/c/quick_sort.c"
@@ -1002,29 +952,65 @@ line = 68
 begin = 34
 end = 40
 
-[JC_98]
+[JC_123]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 184
+begin = 14
+end = 47
+
+[JC_106]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 21
+end = 30
+
+[JC_143]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 200
+begin = 14
+end = 51
+
+[JC_113]
+file = "HOME/tests/c/quick_sort.c"
+line = 63
+begin = 8
+end = 50
+
+[JC_116]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
 line = 131
 begin = 6
 end = 1456
 
-[JC_46]
+[JC_64]
 file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 39
-end = 44
+line = 50
+begin = 14
+end = 17
 
-[JC_1]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 13
-end = 24
+[JC_133]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_100]
+[quick_sort_ensures_default]
+name = "Function quick_sort"
+behavior = "default behavior"
 file = "HOME/tests/c/quick_sort.c"
-line = 75
-begin = 17
-end = 39
+line = 91
+begin = 5
+end = 15
+
+[quick_rec_ensures_sorted]
+name = "Function quick_rec"
+behavior = "Behavior `sorted'"
+file = "HOME/tests/c/quick_sort.c"
+line = 57
+begin = 5
+end = 14
 
 [JC_99]
 kind = UserCall
@@ -1033,23 +1019,68 @@ line = 159
 begin = 26
 end = 41
 
-[JC_47]
+[JC_85]
 file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 43
-end = 51
-
-[JC_2]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
+line = 80
 begin = 13
-end = 24
+end = 34
 
-[JC_101]
+[JC_126]
 file = "HOME/tests/c/quick_sort.c"
-line = 78
+line = 85
 begin = 13
-end = 24
+end = 34
+
+[JC_31]
+file = "HOME/tests/c/quick_sort.c"
+line = 49
+begin = 13
+end = 32
+
+[JC_17]
+file = "HOME/tests/c/quick_sort.c"
+line = 42
+begin = 5
+end = 9
+
+[JC_122]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 183
+begin = 14
+end = 47
+
+[JC_81]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 159
+begin = 26
+end = 41
+
+[JC_55]
+kind = PointerDeref
+file = "HOME/tests/c/quick_sort.c"
+line = 72
+begin = 8
+end = 12
+
+[JC_138]
+file = "HOME/tests/c/quick_sort.c"
+line = 89
+begin = 14
+end = 39
+
+[JC_134]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_137]
+file = "HOME/tests/c/quick_sort.c"
+line = 87
+begin = 14
+end = 27
 
 [JC_48]
 file = "HOME/tests/c/quick_sort.c"
@@ -1057,32 +1088,21 @@ line = 68
 begin = 21
 end = 51
 
-[JC_3]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 28
-end = 39
+[JC_23]
+kind = PointerDeref
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 100
+begin = 14
+end = 77
 
-[JC_102]
-kind = UserCall
+[JC_22]
+kind = PointerDeref
 file = "HOME/tests/c/quick_sort.c"
-line = 79
-begin = 4
-end = 15
+line = 44
+begin = 9
+end = 13
 
-[JC_49]
-file = "HOME/tests/c/quick_sort.c"
-line = 67
-begin = 8
-end = 31
-
-[JC_4]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 28
-end = 39
-
-[JC_103]
+[JC_121]
 file = "HOME/tests/c/quick_sort.c"
 line = 80
 begin = 13
@@ -1094,18 +1114,96 @@ line = 38
 begin = 13
 end = 39
 
-[JC_104]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 183
-begin = 14
-end = 47
+[JC_125]
+file = "HOME/tests/c/quick_sort.c"
+line = 85
+begin = 13
+end = 34
 
-[JC_6]
+[JC_67]
+file = "HOME/tests/c/quick_sort.c"
+line = 50
+begin = 14
+end = 17
+
+[JC_9]
+file = "HOME/tests/c/quick_sort.c"
+line = 38
+begin = 28
+end = 39
+
+[JC_75]
+file = "HOME/tests/c/quick_sort.c"
+line = 67
+begin = 8
+end = 31
+
+[JC_24]
+kind = PointerDeref
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 101
+begin = 15
+end = 52
+
+[JC_25]
+file = "HOME/tests/c/quick_sort.c"
+line = 49
+begin = 13
+end = 32
+
+[JC_78]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_41]
+file = "HOME/tests/c/quick_sort.c"
+line = 55
+begin = 14
+end = 37
+
+[JC_74]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 21
+end = 51
+
+[JC_47]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 43
+end = 51
+
+[JC_52]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_26]
+file = "HOME/tests/c/quick_sort.c"
+line = 49
+begin = 13
+end = 32
+
+[JC_8]
+file = "HOME/tests/c/quick_sort.c"
+line = 38
+begin = 13
+end = 24
+
+[JC_54]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
+
+[JC_79]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
 
 [quick_sort_ensures_sorted]
 name = "Function quick_sort"
@@ -1115,185 +1213,56 @@ line = 91
 begin = 5
 end = 15
 
-[JC_105]
+[JC_13]
+file = "HOME/tests/c/quick_sort.c"
+line = 40
+begin = 12
+end = 33
+
+[JC_130]
+file = "HOME/tests/c/quick_sort.c"
+line = 85
+begin = 13
+end = 34
+
+[JC_82]
+file = "HOME/tests/c/quick_sort.c"
+line = 75
+begin = 17
+end = 39
+
+[JC_87]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
 line = 184
 begin = 14
 end = 47
 
-[JC_7]
+[JC_11]
 file = "HOME/tests/c/quick_sort.c"
 line = 38
 begin = 13
-end = 24
+end = 39
 
-[quick_sort_safety]
-name = "Function quick_sort"
-behavior = "Safety"
-file = "HOME/tests/c/quick_sort.c"
-line = 91
-begin = 5
-end = 15
+[JC_98]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
 
-[JC_106]
+[JC_70]
 file = "HOME/tests/c/quick_sort.c"
 line = 68
 begin = 21
 end = 30
 
-[JC_8]
+[quick_rec_safety]
+name = "Function quick_rec"
+behavior = "Safety"
 file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 13
-end = 24
-
-[JC_107]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 34
-end = 40
-
-[JC_9]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 28
-end = 39
-
-[JC_108]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 39
-end = 44
-
-[JC_109]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 43
-end = 51
-
-[JC_50]
-file = "HOME/tests/c/quick_sort.c"
-line = 65
-begin = 8
-end = 50
-
-[JC_51]
-file = "HOME/tests/c/quick_sort.c"
-line = 63
-begin = 8
-end = 50
-
-[JC_52]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_53]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1456
-
-[JC_54]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1456
-
-[JC_55]
-kind = PointerDeref
-file = "HOME/tests/c/quick_sort.c"
-line = 72
-begin = 8
-end = 12
-
-[JC_56]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 159
-begin = 26
-end = 41
-
-[JC_110]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 21
-end = 51
-
-[JC_57]
-file = "HOME/tests/c/quick_sort.c"
-line = 75
-begin = 17
-end = 39
-
-[JC_111]
-file = "HOME/tests/c/quick_sort.c"
-line = 67
-begin = 8
-end = 31
-
-[JC_58]
-file = "HOME/tests/c/quick_sort.c"
-line = 69
-begin = 19
-end = 22
-
-[JC_112]
-file = "HOME/tests/c/quick_sort.c"
-line = 65
-begin = 8
-end = 50
-
-[JC_59]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 13
-end = 24
-
-[JC_113]
-file = "HOME/tests/c/quick_sort.c"
-line = 63
-begin = 8
-end = 50
-
-[JC_114]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_115]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1456
-
-[JC_116]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1456
-
-[JC_117]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 159
-begin = 26
-end = 41
-
-[JC_118]
-file = "HOME/tests/c/quick_sort.c"
-line = 75
-begin = 17
-end = 39
-
-[JC_119]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
-begin = 13
-end = 24
+line = 57
+begin = 5
+end = 14
 
 [quick_rec_ensures_default]
 name = "Function quick_rec"
@@ -1303,26 +1272,153 @@ line = 57
 begin = 5
 end = 14
 
-[swap_safety]
-name = "Function swap"
-behavior = "Safety"
+[JC_15]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 92
+begin = 9
+end = 16
+
+[JC_36]
 file = "HOME/tests/c/quick_sort.c"
-line = 42
+line = 57
 begin = 5
-end = 9
+end = 14
 
-[JC_60]
+[JC_104]
 kind = UserCall
-file = "HOME/tests/c/quick_sort.c"
-line = 79
-begin = 4
-end = 15
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 183
+begin = 14
+end = 47
 
-[JC_61]
+[JC_91]
 file = "HOME/tests/c/quick_sort.c"
-line = 80
+line = 68
+begin = 43
+end = 51
+
+[JC_39]
+file = "HOME/tests/c/quick_sort.c"
+line = 53
+begin = 14
+end = 29
+
+[JC_112]
+file = "HOME/tests/c/quick_sort.c"
+line = 65
+begin = 8
+end = 50
+
+[JC_40]
+file = "HOME/tests/c/quick_sort.c"
+line = 53
+begin = 14
+end = 29
+
+[JC_135]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_83]
+file = "HOME/tests/c/quick_sort.c"
+line = 78
+begin = 13
+end = 24
+
+[JC_35]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_132]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[quick_rec_ensures_permutation]
+name = "Function quick_rec"
+behavior = "Behavior `permutation'"
+file = "HOME/tests/c/quick_sort.c"
+line = 57
+begin = 5
+end = 14
+
+[JC_27]
+file = "HOME/tests/c/quick_sort.c"
+line = 49
+begin = 13
+end = 32
+
+[JC_115]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
+
+[JC_109]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 43
+end = 51
+
+[JC_107]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 34
+end = 40
+
+[JC_69]
+kind = VarDecr
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 184
+begin = 14
+end = 47
+
+[JC_124]
+file = "HOME/tests/c/quick_sort.c"
+line = 85
 begin = 13
 end = 34
+
+[JC_38]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_127]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 21
+end = 30
+
+[JC_4]
+file = "HOME/tests/c/quick_sort.c"
+line = 38
+begin = 28
+end = 39
 
 [JC_62]
 kind = UserCall
@@ -1331,31 +1427,91 @@ line = 183
 begin = 14
 end = 47
 
-[JC_10]
+[JC_101]
 file = "HOME/tests/c/quick_sort.c"
-line = 38
-begin = 28
-end = 39
-
-[JC_63]
-file = "HOME/tests/c/quick_sort.c"
-line = 50
-begin = 14
-end = 17
-
-[JC_11]
-file = "HOME/tests/c/quick_sort.c"
-line = 38
+line = 78
 begin = 13
-end = 39
+end = 24
 
-[JC_64]
+[JC_88]
 file = "HOME/tests/c/quick_sort.c"
-line = 50
-begin = 14
-end = 17
+line = 68
+begin = 21
+end = 30
 
-[JC_12]
+[JC_129]
+file = "HOME/tests/c/quick_sort.c"
+line = 85
+begin = 13
+end = 34
+
+[JC_42]
+file = "HOME/tests/c/quick_sort.c"
+line = 55
+begin = 14
+end = 37
+
+[swap_ensures_default]
+name = "Function swap"
+behavior = "default behavior"
+file = "HOME/tests/c/quick_sort.c"
+line = 42
+begin = 5
+end = 9
+
+[JC_110]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 21
+end = 51
+
+[JC_103]
+file = "HOME/tests/c/quick_sort.c"
+line = 80
+begin = 13
+end = 34
+
+[JC_46]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 39
+end = 44
+
+[swap_safety]
+name = "Function swap"
+behavior = "Safety"
+file = "HOME/tests/c/quick_sort.c"
+line = 42
+begin = 5
+end = 9
+
+[JC_141]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 200
+begin = 14
+end = 51
+
+[JC_61]
+file = "HOME/tests/c/quick_sort.c"
+line = 80
+begin = 13
+end = 34
+
+[JC_32]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_56]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 159
+begin = 26
+end = 41
+
+[JC_33]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1368,308 +1524,33 @@ line = 183
 begin = 14
 end = 47
 
-[JC_13]
+[JC_118]
 file = "HOME/tests/c/quick_sort.c"
-line = 40
-begin = 12
-end = 33
+line = 75
+begin = 17
+end = 39
 
-[JC_66]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 184
-begin = 14
-end = 47
-
-[JC_14]
-file = "HOME/tests/c/quick_sort.c"
-line = 42
-begin = 5
-end = 9
-
-[JC_120]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.c"
-line = 79
-begin = 4
-end = 15
-
-[JC_67]
-file = "HOME/tests/c/quick_sort.c"
-line = 50
-begin = 14
-end = 17
-
-[JC_15]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 92
-begin = 9
-end = 16
-
-[JC_121]
-file = "HOME/tests/c/quick_sort.c"
-line = 80
-begin = 13
-end = 34
-
-[quick_rec_safety]
-name = "Function quick_rec"
-behavior = "Safety"
-file = "HOME/tests/c/quick_sort.c"
-line = 57
-begin = 5
-end = 14
-
-[JC_68]
-file = "HOME/tests/c/quick_sort.c"
-line = 50
-begin = 14
-end = 17
-
-[JC_16]
-file = "HOME/tests/c/quick_sort.c"
-line = 40
-begin = 12
-end = 33
-
-[JC_122]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 183
-begin = 14
-end = 47
-
-[JC_69]
-kind = VarDecr
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 184
-begin = 14
-end = 47
-
-[JC_17]
-file = "HOME/tests/c/quick_sort.c"
-line = 42
-begin = 5
-end = 9
-
-[JC_123]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 184
-begin = 14
-end = 47
-
-[JC_18]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 92
-begin = 9
-end = 16
-
-[quick_sort_ensures_default]
+[quick_sort_safety]
 name = "Function quick_sort"
-behavior = "default behavior"
+behavior = "Safety"
 file = "HOME/tests/c/quick_sort.c"
 line = 91
 begin = 5
 end = 15
 
-[JC_124]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
-
-[JC_19]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_125]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
-
-[JC_126]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
-
-[JC_127]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_128]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
-
-[JC_129]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
-
-[JC_70]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 21
-end = 30
-
-[JC_71]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 34
-end = 40
-
-[JC_72]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 39
-end = 44
-
-[JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_73]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 43
-end = 51
-
-[JC_21]
-kind = PointerDeref
-file = "HOME/tests/c/quick_sort.c"
-line = 43
-begin = 12
-end = 16
-
-[JC_74]
-file = "HOME/tests/c/quick_sort.c"
-line = 68
-begin = 21
-end = 51
-
-[JC_22]
-kind = PointerDeref
-file = "HOME/tests/c/quick_sort.c"
-line = 44
-begin = 9
-end = 13
-
-[JC_75]
-file = "HOME/tests/c/quick_sort.c"
-line = 67
-begin = 8
-end = 31
-
-[JC_23]
-kind = PointerDeref
+[JC_105]
+kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 100
+line = 184
 begin = 14
-end = 77
+end = 47
 
-[JC_76]
-file = "HOME/tests/c/quick_sort.c"
-line = 65
-begin = 8
-end = 50
-
-[swap_ensures_default]
-name = "Function swap"
-behavior = "default behavior"
-file = "HOME/tests/c/quick_sort.c"
-line = 42
-begin = 5
-end = 9
-
-[JC_24]
-kind = PointerDeref
+[JC_140]
+kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 101
-begin = 15
-end = 52
-
-[JC_130]
-file = "HOME/tests/c/quick_sort.c"
-line = 85
-begin = 13
-end = 34
-
-[JC_77]
-file = "HOME/tests/c/quick_sort.c"
-line = 63
-begin = 8
-end = 50
-
-[JC_25]
-file = "HOME/tests/c/quick_sort.c"
-line = 49
-begin = 13
-end = 32
-
-[JC_131]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_78]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_26]
-file = "HOME/tests/c/quick_sort.c"
-line = 49
-begin = 13
-end = 32
-
-[JC_132]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_79]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
-begin = 6
-end = 1456
-
-[JC_27]
-file = "HOME/tests/c/quick_sort.c"
-line = 49
-begin = 13
-end = 32
-
-[JC_133]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_134]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+line = 200
+begin = 14
+end = 51
 
 [JC_29]
 file = "HOME/tests/c/quick_sort.c"
@@ -1677,72 +1558,42 @@ line = 49
 begin = 13
 end = 32
 
-[JC_135]
+[JC_68]
+file = "HOME/tests/c/quick_sort.c"
+line = 50
+begin = 14
+end = 17
+
+[JC_7]
+file = "HOME/tests/c/quick_sort.c"
+line = 38
+begin = 13
+end = 24
+
+[JC_16]
+file = "HOME/tests/c/quick_sort.c"
+line = 40
+begin = 12
+end = 33
+
+[JC_96]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_136]
+[JC_43]
+kind = PointerDeref
 file = "HOME/tests/c/quick_sort.c"
-line = 87
-begin = 14
-end = 27
-
-[JC_137]
-file = "HOME/tests/c/quick_sort.c"
-line = 87
-begin = 14
-end = 27
-
-[JC_138]
-file = "HOME/tests/c/quick_sort.c"
-line = 89
-begin = 14
-end = 39
-
-[JC_139]
-file = "HOME/tests/c/quick_sort.c"
-line = 89
-begin = 14
-end = 39
-
-[JC_80]
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 131
+line = 60
 begin = 6
-end = 1456
+end = 10
 
-[JC_81]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 159
-begin = 26
-end = 41
-
-[JC_82]
+[JC_2]
 file = "HOME/tests/c/quick_sort.c"
-line = 75
-begin = 17
-end = 39
-
-[JC_30]
-file = "HOME/tests/c/quick_sort.c"
-line = 49
-begin = 13
-end = 32
-
-[JC_83]
-file = "HOME/tests/c/quick_sort.c"
-line = 78
+line = 38
 begin = 13
 end = 24
-
-[JC_31]
-file = "HOME/tests/c/quick_sort.c"
-line = 49
-begin = 13
-end = 32
 
 [quick_sort_ensures_permutation]
 name = "Function quick_sort"
@@ -1752,6 +1603,24 @@ line = 91
 begin = 5
 end = 15
 
+[JC_95]
+file = "HOME/tests/c/quick_sort.c"
+line = 63
+begin = 8
+end = 50
+
+[JC_93]
+file = "HOME/tests/c/quick_sort.c"
+line = 67
+begin = 8
+end = 31
+
+[JC_97]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
+
 [JC_84]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.c"
@@ -1759,38 +1628,11 @@ line = 79
 begin = 4
 end = 15
 
-[JC_32]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[quick_rec_ensures_sorted]
-name = "Function quick_rec"
-behavior = "Behavior `sorted'"
+[JC_128]
 file = "HOME/tests/c/quick_sort.c"
-line = 57
-begin = 5
-end = 14
-
-[JC_85]
-file = "HOME/tests/c/quick_sort.c"
-line = 80
+line = 85
 begin = 13
 end = 34
-
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_86]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 183
-begin = 14
-end = 47
 
 [JC_34]
 file = "HOME/tests/c/quick_sort.c"
@@ -1798,44 +1640,86 @@ line = 57
 begin = 5
 end = 14
 
-[JC_140]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 200
-begin = 14
-end = 51
-
-[JC_87]
-kind = UserCall
-file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 184
-begin = 14
-end = 47
-
-[JC_35]
+[JC_114]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_141]
+[JC_14]
+file = "HOME/tests/c/quick_sort.c"
+line = 42
+begin = 5
+end = 9
+
+[JC_117]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 200
-begin = 14
-end = 51
+line = 159
+begin = 26
+end = 41
 
-[JC_88]
+[JC_90]
 file = "HOME/tests/c/quick_sort.c"
 line = 68
-begin = 21
-end = 30
+begin = 39
+end = 44
 
-[JC_36]
+[JC_53]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 131
+begin = 6
+end = 1456
+
+[JC_21]
+kind = PointerDeref
 file = "HOME/tests/c/quick_sort.c"
-line = 57
-begin = 5
-end = 14
+line = 43
+begin = 12
+end = 16
+
+[JC_111]
+file = "HOME/tests/c/quick_sort.c"
+line = 67
+begin = 8
+end = 31
+
+[JC_77]
+file = "HOME/tests/c/quick_sort.c"
+line = 63
+begin = 8
+end = 50
+
+[JC_49]
+file = "HOME/tests/c/quick_sort.c"
+line = 67
+begin = 8
+end = 31
+
+[JC_1]
+file = "HOME/tests/c/quick_sort.c"
+line = 38
+begin = 13
+end = 24
+
+[JC_131]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_102]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.c"
+line = 79
+begin = 4
+end = 15
+
+[JC_37]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_142]
 kind = UserCall
@@ -1844,36 +1728,153 @@ line = 200
 begin = 14
 end = 51
 
+[JC_10]
+file = "HOME/tests/c/quick_sort.c"
+line = 38
+begin = 28
+end = 39
+
+[JC_108]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 39
+end = 44
+
+[JC_57]
+file = "HOME/tests/c/quick_sort.c"
+line = 75
+begin = 17
+end = 39
+
 [JC_89]
 file = "HOME/tests/c/quick_sort.c"
 line = 68
 begin = 34
 end = 40
 
-[JC_37]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_136]
+file = "HOME/tests/c/quick_sort.c"
+line = 87
+begin = 14
+end = 27
 
-[JC_143]
+[JC_66]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 200
+line = 184
 begin = 14
-end = 51
+end = 47
 
-[JC_38]
+[JC_59]
+file = "HOME/tests/c/quick_sort.c"
+line = 78
+begin = 13
+end = 24
+
+[JC_20]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_39]
+[JC_18]
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 92
+begin = 9
+end = 16
+
+[JC_3]
 file = "HOME/tests/c/quick_sort.c"
-line = 53
+line = 38
+begin = 28
+end = 39
+
+[JC_92]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 21
+end = 51
+
+[JC_86]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
+line = 183
 begin = 14
-end = 29
+end = 47
+
+[JC_60]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.c"
+line = 79
+begin = 4
+end = 15
+
+[JC_139]
+file = "HOME/tests/c/quick_sort.c"
+line = 89
+begin = 14
+end = 39
+
+[JC_72]
+file = "HOME/tests/c/quick_sort.c"
+line = 68
+begin = 39
+end = 44
+
+[JC_19]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_119]
+file = "HOME/tests/c/quick_sort.c"
+line = 78
+begin = 13
+end = 24
+
+[JC_76]
+file = "HOME/tests/c/quick_sort.c"
+line = 65
+begin = 8
+end = 50
+
+[JC_50]
+file = "HOME/tests/c/quick_sort.c"
+line = 65
+begin = 8
+end = 50
+
+[JC_30]
+file = "HOME/tests/c/quick_sort.c"
+line = 49
+begin = 13
+end = 32
+
+[JC_120]
+kind = UserCall
+file = "HOME/tests/c/quick_sort.c"
+line = 79
+begin = 4
+end = 15
+
+[JC_58]
+file = "HOME/tests/c/quick_sort.c"
+line = 69
+begin = 19
+end = 22
+
+[JC_100]
+file = "HOME/tests/c/quick_sort.c"
+line = 75
+begin = 17
+end = 39
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/c/quick_sort.jessie/why/quick_sort.why ==========
 type charP
@@ -2371,10 +2372,10 @@ let quick_rec_ensures_default =
          begin
            (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
-          (let jessie_<num> =
+          (let _jessie_<num> =
           (v := (C_21: ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
-          void); (let jessie_<num> = (m := l_0) in void);
-          (let jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
+          void); (let _jessie_<num> = (m := l_0) in void);
+          (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
           while true do
           { invariant
               (((JC_74:
@@ -2400,7 +2401,7 @@ let quick_rec_ensures_default =
              [ { } unit { true } ];
             try
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (C_44:
                begin
                  (if ((le_int_ !i_0) r) then void
@@ -2412,25 +2413,25 @@ let quick_rec_ensures_default =
                  (L1:
                  (C_38:
                  begin
-                   (let jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
+                   (let _jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
                    void); void;
                   (C_39:
                   begin
                     void;
-                   (let jessie_<num> = t in
-                   (let jessie_<num> = !i_0 in
-                   (let jessie_<num> = !m in
+                   (let _jessie_<num> = t in
+                   (let _jessie_<num> = !i_0 in
+                   (let _jessie_<num> = !m in
                    (JC_81:
-                   (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+                   (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
                    (assert
                    { (JC_82:
                      Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) };
                    void); void end) end)) else void);
                 (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
               (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done;
+             Loop_continue_exc _jessie_<num> -> void end end done;
           (raise (Goto_while_0_break_exc void)) end)))) with
-         Goto_while_0_break_exc jessie_<num> ->
+         Goto_while_0_break_exc _jessie_<num> ->
          (while_0_break:
          begin
            void;
@@ -2439,30 +2440,30 @@ let quick_rec_ensures_default =
           (C_46:
           begin
             void;
-           (let jessie_<num> = t in
-           (let jessie_<num> = l_0 in
-           (let jessie_<num> = !m in
+           (let _jessie_<num> = t in
+           (let _jessie_<num> = l_0 in
+           (let _jessie_<num> = !m in
            (JC_84:
-           (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+           (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
            (assert
            { (JC_85: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) };
            void);
            (C_49:
            begin
              void;
-            (let jessie_<num> = t in
-            (let jessie_<num> = l_0 in
-            (let jessie_<num> = (C_48: ((sub_int !m) (1))) in
+            (let _jessie_<num> = t in
+            (let _jessie_<num> = l_0 in
+            (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
             (JC_86:
-            (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
             (C_51:
-            (let jessie_<num> = t in
-            (let jessie_<num> = (C_50: ((add_int !m) (1))) in
-            (let jessie_<num> = r in
+            (let _jessie_<num> = t in
+            (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
+            (let _jessie_<num> = r in
             (JC_87:
-            (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
+            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
            end) end)) end) end; (raise (Return_label_exc void)) end with
-      Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
+      Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end)
   { (JC_34:
     not_assigns(intP_t_5_alloc_table, intP_intM_t_5@, intP_intM_t_5,
@@ -2489,10 +2490,10 @@ let quick_rec_ensures_permutation =
          begin
            (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
-          (let jessie_<num> =
+          (let _jessie_<num> =
           (v := (C_21: ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
-          void); (let jessie_<num> = (m := l_0) in void);
-          (let jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
+          void); (let _jessie_<num> = (m := l_0) in void);
+          (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
           while true do
           { invariant (JC_115: true)  }
            begin
@@ -2515,7 +2516,7 @@ let quick_rec_ensures_permutation =
                                v))))))) } ];
             try
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (C_44:
                begin
                  (if ((le_int_ !i_0) r) then void
@@ -2527,25 +2528,25 @@ let quick_rec_ensures_permutation =
                  (L1:
                  (C_38:
                  begin
-                   (let jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
+                   (let _jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
                    void); void;
                   (C_39:
                   begin
                     void;
-                   (let jessie_<num> = t in
-                   (let jessie_<num> = !i_0 in
-                   (let jessie_<num> = !m in
+                   (let _jessie_<num> = t in
+                   (let _jessie_<num> = !i_0 in
+                   (let _jessie_<num> = !m in
                    (JC_117:
-                   (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+                   (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
                    [ { } unit reads intP_intM_t_5
                      { (JC_118:
                        Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
                    void end) end)) else void);
                 (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
               (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done;
+             Loop_continue_exc _jessie_<num> -> void end end done;
           (raise (Goto_while_0_break_exc void)) end)))) with
-         Goto_while_0_break_exc jessie_<num> ->
+         Goto_while_0_break_exc _jessie_<num> ->
          (while_0_break:
          begin
            void;
@@ -2554,29 +2555,29 @@ let quick_rec_ensures_permutation =
           (C_46:
           begin
             void;
-           (let jessie_<num> = t in
-           (let jessie_<num> = l_0 in
-           (let jessie_<num> = !m in
+           (let _jessie_<num> = t in
+           (let _jessie_<num> = l_0 in
+           (let _jessie_<num> = !m in
            (JC_120:
-           (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+           (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
            [ { } unit reads intP_intM_t_5
              { (JC_121: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
            (C_49:
            begin
              void;
-            (let jessie_<num> = t in
-            (let jessie_<num> = l_0 in
-            (let jessie_<num> = (C_48: ((sub_int !m) (1))) in
+            (let _jessie_<num> = t in
+            (let _jessie_<num> = l_0 in
+            (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
             (JC_122:
-            (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
             (C_51:
-            (let jessie_<num> = t in
-            (let jessie_<num> = (C_50: ((add_int !m) (1))) in
-            (let jessie_<num> = r in
+            (let _jessie_<num> = t in
+            (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
+            (let _jessie_<num> = r in
             (JC_123:
-            (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
+            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
            end) end)) end) end; (raise (Return_label_exc void)) end with
-      Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
+      Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end)
   { (JC_41: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@)) }
 
@@ -2601,10 +2602,10 @@ let quick_rec_ensures_sorted =
          begin
            (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
-          (let jessie_<num> =
+          (let _jessie_<num> =
           (v := (C_21: ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
-          void); (let jessie_<num> = (m := l_0) in void);
-          (let jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
+          void); (let _jessie_<num> = (m := l_0) in void);
+          (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
           while true do
           { invariant (JC_97: true)  }
            begin
@@ -2627,7 +2628,7 @@ let quick_rec_ensures_sorted =
                                v))))))) } ];
             try
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (C_44:
                begin
                  (if ((le_int_ !i_0) r) then void
@@ -2639,25 +2640,25 @@ let quick_rec_ensures_sorted =
                  (L1:
                  (C_38:
                  begin
-                   (let jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
+                   (let _jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
                    void); void;
                   (C_39:
                   begin
                     void;
-                   (let jessie_<num> = t in
-                   (let jessie_<num> = !i_0 in
-                   (let jessie_<num> = !m in
+                   (let _jessie_<num> = t in
+                   (let _jessie_<num> = !i_0 in
+                   (let _jessie_<num> = !m in
                    (JC_99:
-                   (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+                   (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
                    [ { } unit reads intP_intM_t_5
                      { (JC_100:
                        Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
                    void end) end)) else void);
                 (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
               (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done;
+             Loop_continue_exc _jessie_<num> -> void end end done;
           (raise (Goto_while_0_break_exc void)) end)))) with
-         Goto_while_0_break_exc jessie_<num> ->
+         Goto_while_0_break_exc _jessie_<num> ->
          (while_0_break:
          begin
            void;
@@ -2666,29 +2667,29 @@ let quick_rec_ensures_sorted =
           (C_46:
           begin
             void;
-           (let jessie_<num> = t in
-           (let jessie_<num> = l_0 in
-           (let jessie_<num> = !m in
+           (let _jessie_<num> = t in
+           (let _jessie_<num> = l_0 in
+           (let _jessie_<num> = !m in
            (JC_102:
-           (((((swap jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+           (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
            [ { } unit reads intP_intM_t_5
              { (JC_103: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
            (C_49:
            begin
              void;
-            (let jessie_<num> = t in
-            (let jessie_<num> = l_0 in
-            (let jessie_<num> = (C_48: ((sub_int !m) (1))) in
+            (let _jessie_<num> = t in
+            (let _jessie_<num> = l_0 in
+            (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
             (JC_104:
-            (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
             (C_51:
-            (let jessie_<num> = t in
-            (let jessie_<num> = (C_50: ((add_int !m) (1))) in
-            (let jessie_<num> = r in
+            (let _jessie_<num> = t in
+            (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
+            (let _jessie_<num> = r in
             (JC_105:
-            (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
+            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
            end) end)) end) end; (raise (Return_label_exc void)) end with
-      Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
+      Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end)
   { (JC_39: Sorted(t, l_0, add_int(r, (1)), intP_intM_t_5)) }
 
@@ -2713,12 +2714,12 @@ let quick_rec_safety =
          begin
            (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
-          (let jessie_<num> =
+          (let _jessie_<num> =
           (v := (C_21:
                 (JC_43:
                 ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) l_0)))) in
-          void); (let jessie_<num> = (m := l_0) in void);
-          (let jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
+          void); (let _jessie_<num> = (m := l_0) in void);
+          (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
           while true do
           { invariant (JC_53: true) variant (JC_58 : sub_int(r, i_0)) }
            begin
@@ -2741,7 +2742,7 @@ let quick_rec_safety =
                                v))))))) } ];
             try
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (C_44:
                begin
                  (if ((le_int_ !i_0) r) then void
@@ -2753,25 +2754,25 @@ let quick_rec_safety =
                  (L1:
                  (C_38:
                  begin
-                   (let jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
+                   (let _jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
                    void); void;
                   (C_39:
                   begin
                     void;
-                   (let jessie_<num> = t in
-                   (let jessie_<num> = !i_0 in
-                   (let jessie_<num> = !m in
+                   (let _jessie_<num> = t in
+                   (let _jessie_<num> = !i_0 in
+                   (let _jessie_<num> = !m in
                    (JC_56:
-                   (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+                   (((((swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
                    [ { } unit reads intP_intM_t_5
                      { (JC_57:
                        Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
                    void end) end)) else void);
                 (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
               (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<num> -> void end end done;
+             Loop_continue_exc _jessie_<num> -> void end end done;
           (raise (Goto_while_0_break_exc void)) end)))) with
-         Goto_while_0_break_exc jessie_<num> ->
+         Goto_while_0_break_exc _jessie_<num> ->
          (while_0_break:
          begin
            void;
@@ -2780,37 +2781,37 @@ let quick_rec_safety =
           (C_46:
           begin
             void;
-           (let jessie_<num> = t in
-           (let jessie_<num> = l_0 in
-           (let jessie_<num> = !m in
+           (let _jessie_<num> = t in
+           (let _jessie_<num> = l_0 in
+           (let _jessie_<num> = !m in
            (JC_60:
-           (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+           (((((swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
            [ { } unit reads intP_intM_t_5
              { (JC_61: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
            (C_49:
            begin
              void;
-            (let jessie_<num> = t in
-            (let jessie_<num> = l_0 in
-            (let jessie_<num> = (C_48: ((sub_int !m) (1))) in
+            (let _jessie_<num> = t in
+            (let _jessie_<num> = l_0 in
+            (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
             (JC_65:
             (check
-            { zwf_zero((JC_64 : sub_int(jessie_<num>, jessie_<num>)),
+            { zwf_zero((JC_64 : sub_int(_jessie_<num>, _jessie_<num>)),
               (JC_63 : sub_int(r, l_0))) };
             (JC_62:
-            (((((quick_rec_requires jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))))));
+            (((((quick_rec_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))))));
             (C_51:
-            (let jessie_<num> = t in
-            (let jessie_<num> = (C_50: ((add_int !m) (1))) in
-            (let jessie_<num> = r in
+            (let _jessie_<num> = t in
+            (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
+            (let _jessie_<num> = r in
             (JC_69:
             (check
-            { zwf_zero((JC_68 : sub_int(jessie_<num>, jessie_<num>)),
+            { zwf_zero((JC_68 : sub_int(_jessie_<num>, _jessie_<num>)),
               (JC_67 : sub_int(r, l_0))) };
             (JC_66:
-            (((((quick_rec_requires jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))))
+            (((((quick_rec_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))))
            end) end)) end) end; (raise (Return_label_exc void)) end with
-      Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
+      Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end) { true }
 
 let quick_sort_ensures_default =
@@ -2823,11 +2824,11 @@ let quick_sort_ensures_default =
   try
    (C_60:
    begin
-     (let jessie_<num> = t_0 in
-     (let jessie_<num> = (0) in
-     (let jessie_<num> = (C_59: ((sub_int n_1) (1))) in
+     (let _jessie_<num> = t_0 in
+     (let _jessie_<num> = (0) in
+     (let _jessie_<num> = (C_59: ((sub_int n_1) (1))) in
      (JC_141:
-     (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
+     (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_132: true) }
 
@@ -2841,11 +2842,11 @@ let quick_sort_ensures_permutation =
   try
    (C_60:
    begin
-     (let jessie_<num> = t_0 in
-     (let jessie_<num> = (0) in
-     (let jessie_<num> = (C_59: ((sub_int n_1) (1))) in
+     (let _jessie_<num> = t_0 in
+     (let _jessie_<num> = (0) in
+     (let _jessie_<num> = (C_59: ((sub_int n_1) (1))) in
      (JC_143:
-     (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
+     (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_138:
     Permut(t_0, (0), sub_int(n_1, (1)), intP_intM_t_0_6, intP_intM_t_0_6@)) }
@@ -2860,11 +2861,11 @@ let quick_sort_ensures_sorted =
   try
    (C_60:
    begin
-     (let jessie_<num> = t_0 in
-     (let jessie_<num> = (0) in
-     (let jessie_<num> = (C_59: ((sub_int n_1) (1))) in
+     (let _jessie_<num> = t_0 in
+     (let _jessie_<num> = (0) in
+     (let _jessie_<num> = (C_59: ((sub_int n_1) (1))) in
      (JC_142:
-     (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
+     (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_136: Sorted(t_0, (0), n_1, intP_intM_t_0_6)) }
 
@@ -2878,11 +2879,11 @@ let quick_sort_safety =
   try
    (C_60:
    begin
-     (let jessie_<num> = t_0 in
-     (let jessie_<num> = (0) in
-     (let jessie_<num> = (C_59: ((sub_int n_1) (1))) in
+     (let _jessie_<num> = t_0 in
+     (let _jessie_<num> = (0) in
+     (let _jessie_<num> = (C_59: ((sub_int n_1) (1))) in
      (JC_140:
-     (((((quick_rec_requires jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
+     (((((quick_rec_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let swap_ensures_default =
@@ -2900,22 +2901,22 @@ let swap_ensures_default =
      (C_8:
      (C_11:
      begin
-       (let jessie_<num> =
+       (let _jessie_<num> =
        (tmp := (C_2: ((safe_acc_ !intP_intM_t_1_4) (C_1: ((shift t_1) i))))) in
        void);
-      (let jessie_<num> =
-      (let jessie_<num> =
+      (let _jessie_<num> =
+      (let _jessie_<num> =
       (C_5: ((safe_acc_ !intP_intM_t_1_4) (C_4: ((shift t_1) j)))) in
-      (let jessie_<num> = t_1 in
-      (let jessie_<num> = i in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (((safe_upd_ intP_intM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
-      (let jessie_<num> =
-      (let jessie_<num> = !tmp in
-      (let jessie_<num> = t_1 in
-      (let jessie_<num> = j in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-      (((safe_upd_ intP_intM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
+      (let _jessie_<num> = t_1 in
+      (let _jessie_<num> = i in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (((safe_upd_ intP_intM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
+      (let _jessie_<num> =
+      (let _jessie_<num> = !tmp in
+      (let _jessie_<num> = t_1 in
+      (let _jessie_<num> = j in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (((safe_upd_ intP_intM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
       (raise Return) end)))); (raise Return) end with Return -> void end)
   { (JC_15:
     ((JC_13: Swap(t_1, i, j, intP_intM_t_1_4, intP_intM_t_1_4@))
@@ -2940,29 +2941,29 @@ let swap_safety =
      (C_8:
      (C_11:
      begin
-       (let jessie_<num> =
+       (let _jessie_<num> =
        (tmp := (C_2:
                (JC_21:
                ((((offset_acc_ intP_t_1_4_alloc_table) !intP_intM_t_1_4) t_1) i)))) in
        void);
-      (let jessie_<num> =
-      (let jessie_<num> =
+      (let _jessie_<num> =
+      (let _jessie_<num> =
       (C_5:
       (JC_22:
       ((((offset_acc_ intP_t_1_4_alloc_table) !intP_intM_t_1_4) t_1) j))) in
-      (let jessie_<num> = t_1 in
-      (let jessie_<num> = i in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (let _jessie_<num> = t_1 in
+      (let _jessie_<num> = i in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
       (JC_23:
-      (((((offset_upd_ intP_t_1_4_alloc_table) intP_intM_t_1_4) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+      (((((offset_upd_ intP_t_1_4_alloc_table) intP_intM_t_1_4) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
       void);
-      (let jessie_<num> =
-      (let jessie_<num> = !tmp in
-      (let jessie_<num> = t_1 in
-      (let jessie_<num> = j in
-      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (let _jessie_<num> =
+      (let _jessie_<num> = !tmp in
+      (let _jessie_<num> = t_1 in
+      (let _jessie_<num> = j in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
       (JC_24:
-      (((((offset_upd_ intP_t_1_4_alloc_table) intP_intM_t_1_4) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+      (((((offset_upd_ intP_t_1_4_alloc_table) intP_intM_t_1_4) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
       void); (raise Return) end)))); (raise Return) end with Return ->
    void end) { true }
 
@@ -9653,7 +9654,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (AND (<= l_0 m0) (<= m0 r))
 (>= (offset_max intP_t_5_alloc_table t) m0))))))))))))))))))))))))
 
-;; quick_rec_safety_po_14, File "why/quick_sort.why", line 920, characters 14-104
+;; quick_rec_safety_po_14, File "why/quick_sort.why", line 920, characters 14-106
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9706,7 +9707,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (<= 0 (- r l_0)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_15, File "why/quick_sort.why", line 920, characters 14-104
+;; quick_rec_safety_po_15, File "why/quick_sort.why", line 920, characters 14-106
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9812,7 +9813,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (>= (offset_max intP_t_5_alloc_table t) (- m0 1)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_17, File "why/quick_sort.why", line 930, characters 14-104
+;; quick_rec_safety_po_17, File "why/quick_sort.why", line 930, characters 14-106
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9876,7 +9877,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
                                                               (- m0 1)))))
 (<= 0 (- r l_0))))))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_18, File "why/quick_sort.why", line 930, characters 14-104
+;; quick_rec_safety_po_18, File "why/quick_sort.why", line 930, characters 14-106
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -10123,6 +10124,7 @@ intP_t_1_4_alloc_table intP_intM_t_1_4 intP_intM_t_1_4_1 (pset_union
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
+Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/quick_sort_why.sx    : ..............................?.#......................... (56/0/1/1/0)
 total   :  58

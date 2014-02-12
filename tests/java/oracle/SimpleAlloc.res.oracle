@@ -91,16 +91,7 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
-}
-
 tag String = Object with {
-}
-
-tag Throwable = Object with {
-}
-
-tag Exception = Object with {
 }
 
 tag Node = Object with {
@@ -109,6 +100,15 @@ tag Node = Object with {
 
 tag test = Object with {
   NodeM[0..] x;
+}
+
+tag Throwable = Object with {
+}
+
+tag Object = {
+}
+
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -140,9 +140,9 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
-exception Throwable of Throwable[0..]
-
 exception Exception of Exception[0..]
+
+exception Throwable of Throwable[0..]
 
 unit cons_Node(! Node[0] this_0)
 behavior default:
@@ -162,7 +162,7 @@ behavior default:
       (var Node[0] this = (new Node[1]));
       
       {  
-         (var unit tt = cons_Node(this));
+         (var unit _tt = cons_Node(this));
          this
       }
    }))
@@ -186,18 +186,17 @@ line = 46
 begin = 9
 end = 13
 
-[cons_test]
-name = "Constructor of class test"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [K_1]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[K_4]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 42
+begin = 17
+end = 24
 
 [K_2]
 file = "HOME/tests/java/SimpleAlloc.java"
@@ -205,17 +204,24 @@ line = 44
 begin = 16
 end = 23
 
+[K_6]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 47
+begin = 8
+end = 12
+
 [K_3]
 file = "HOME/tests/java/SimpleAlloc.java"
 line = 42
 begin = 28
 end = 40
 
-[K_4]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 42
-begin = 17
-end = 24
+[cons_test]
+name = "Constructor of class test"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_Node]
 name = "Constructor of class Node"
@@ -229,12 +235,6 @@ file = "HOME/tests/java/SimpleAlloc.java"
 line = 42
 begin = 17
 end = 40
-
-[K_6]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 47
-begin = 8
-end = 12
 
 [K_7]
 file = "HOME/tests/java/SimpleAlloc.java"
@@ -256,10 +256,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs SimpleAlloc.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs SimpleAlloc.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs SimpleAlloc.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs SimpleAlloc.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -404,13 +405,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: SimpleAlloc.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: SimpleAlloc.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: SimpleAlloc.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include SimpleAlloc.depend
 
@@ -421,61 +422,13 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/SimpleAlloc.loc ==========
-[JC_40]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_41]
+[cons_Node_ensures_default]
+name = "Constructor of class Node"
+behavior = "default behavior"
 file = "HOME/tests/java/SimpleAlloc.java"
 line = 36
 begin = 4
 end = 8
-
-[JC_42]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_43]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_44]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 36
-begin = 4
-end = 8
-
-[test_test_safety]
-name = "Method test"
-behavior = "Safety"
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 46
-begin = 9
-end = 13
-
-[JC_45]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_46]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 36
-begin = 4
-end = 8
-
-[JC_1]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 23
-begin = 12
-end = 22
 
 [cons_Node_safety]
 name = "Constructor of class Node"
@@ -485,17 +438,81 @@ line = 36
 begin = 4
 end = 8
 
-[JC_47]
+[JC_73]
+kind = AllocSize
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 94
+begin = 27
+end = 38
+
+[JC_63]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 46
+begin = 9
+end = 13
+
+[JC_80]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_2]
+[JC_51]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 42
+begin = 17
+end = 40
+
+[JC_71]
+kind = UserCall
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 97
+begin = 25
+end = 40
+
+[JC_45]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[test_test_safety]
+name = "Method test"
+behavior = "Safety"
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 46
+begin = 9
+end = 13
+
+[JC_64]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 46
+begin = 9
+end = 13
+
+[JC_31]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 70
+begin = 8
+end = 23
+
+[JC_17]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_81]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_55]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 42
+begin = 17
+end = 40
 
 [JC_48]
 file = "HOME/"
@@ -503,43 +520,19 @@ line = 0
 begin = -1
 end = -1
 
-[JC_3]
+[JC_23]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 23
-begin = 12
-end = 22
+line = 66
+begin = 11
+end = 103
 
-[JC_49]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 42
-begin = 17
-end = 24
-
-[JC_4]
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
 file = "HOME/"
 line = 0
 begin = -1
@@ -553,275 +546,19 @@ line = 0
 begin = -1
 end = -1
 
-[JC_9]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 57
-begin = 8
-end = 22
-
-[test_test_ensures_default]
-name = "Method test"
-behavior = "default behavior"
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 46
-begin = 9
-end = 13
-
-[JC_50]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 42
-begin = 28
-end = 40
-
-[JC_51]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 42
-begin = 17
-end = 40
-
-[JC_52]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_53]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 42
-begin = 17
-end = 24
-
-[JC_54]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 42
-begin = 28
-end = 40
-
-[JC_55]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 42
-begin = 17
-end = 40
-
-[JC_56]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_57]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 44
-begin = 16
-end = 23
-
-[JC_58]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 46
-begin = 9
-end = 13
-
-[JC_59]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 46
-begin = 9
-end = 13
-
-[JC_60]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 90
-begin = 10
-end = 35
-
-[JC_61]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 89
-begin = 9
-end = 16
-
-[JC_62]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 44
-begin = 16
-end = 23
-
-[JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_63]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 46
-begin = 9
-end = 13
-
-[JC_11]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 57
-begin = 8
-end = 22
-
-[JC_64]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 46
-begin = 9
-end = 13
-
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_65]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 90
-begin = 10
-end = 35
-
-[JC_13]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 60
-begin = 11
-end = 66
-
-[JC_66]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 89
-begin = 9
-end = 16
-
-[JC_14]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 59
-begin = 10
-end = 18
-
 [JC_67]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_15]
+[JC_9]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 60
-begin = 11
-end = 66
-
-[JC_68]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_16]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 59
-begin = 10
-end = 18
-
-[JC_69]
-kind = AllocSize
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 94
-begin = 27
-end = 38
-
-[JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_19]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 63
+line = 57
 begin = 8
-end = 31
-
-[JC_70]
-kind = IndexBounds
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 94
-begin = 7
-end = 39
-
-[JC_71]
-kind = UserCall
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 97
-begin = 24
-end = 39
-
-[JC_72]
-kind = IndexBounds
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 92
-begin = 11
-end = 177
-
-[JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_73]
-kind = AllocSize
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 94
-begin = 27
-end = 38
-
-[JC_21]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 63
-begin = 8
-end = 31
-
-[JC_74]
-kind = UserCall
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 97
-begin = 24
-end = 39
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_test_safety]
-name = "Constructor of class test"
-behavior = "Safety"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+end = 22
 
 [JC_75]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_23]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 66
-begin = 11
-end = 103
-
-[JC_76]
 file = "HOME/"
 line = 0
 begin = -1
@@ -832,20 +569,6 @@ file = "HOME/tests/java/SimpleAlloc.jc"
 line = 65
 begin = 10
 end = 18
-
-[JC_77]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_Node_ensures_default]
-name = "Constructor of class Node"
-behavior = "default behavior"
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 36
-begin = 4
-end = 8
 
 [JC_25]
 file = "HOME/tests/java/SimpleAlloc.jc"
@@ -859,11 +582,48 @@ line = 0
 begin = -1
 end = -1
 
+[JC_41]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 36
+begin = 4
+end = 8
+
+[JC_74]
+kind = UserCall
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 97
+begin = 25
+end = 40
+
+[JC_47]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_52]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_26]
 file = "HOME/tests/java/SimpleAlloc.jc"
 line = 65
 begin = 10
 end = 18
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 42
+begin = 28
+end = 40
 
 [JC_79]
 file = "HOME/"
@@ -871,35 +631,11 @@ line = 0
 begin = -1
 end = -1
 
-[JC_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_29]
+[JC_13]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 70
-begin = 8
-end = 23
-
-[JC_80]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_81]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+line = 60
+begin = 11
+end = 66
 
 [JC_82]
 file = "HOME/"
@@ -907,31 +643,38 @@ line = 0
 begin = -1
 end = -1
 
-[JC_30]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_31]
+[JC_11]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 70
+line = 57
 begin = 8
-end = 23
+end = 22
 
-[JC_32]
+[JC_70]
+kind = IndexBounds
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 94
+begin = 7
+end = 39
+
+[JC_15]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 60
+begin = 11
+end = 66
+
+[JC_36]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_39]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 36
+begin = 4
+end = 8
 
-[JC_34]
+[JC_40]
 file = "HOME/"
 line = 0
 begin = -1
@@ -943,17 +686,26 @@ line = 0
 begin = -1
 end = -1
 
-[JC_36]
+[test_test_ensures_default]
+name = "Method test"
+behavior = "default behavior"
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 46
+begin = 9
+end = 13
+
+[JC_27]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_37]
+[JC_69]
+kind = AllocSize
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 72
-begin = 11
-end = 65
+line = 94
+begin = 27
+end = 38
 
 [JC_38]
 file = "HOME/tests/java/SimpleAlloc.jc"
@@ -961,11 +713,260 @@ line = 72
 begin = 11
 end = 65
 
-[JC_39]
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
 file = "HOME/tests/java/SimpleAlloc.java"
 line = 36
 begin = 4
 end = 8
+
+[JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_62]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 44
+begin = 16
+end = 23
+
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_46]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 36
+begin = 4
+end = 8
+
+[JC_61]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 89
+begin = 9
+end = 16
+
+[JC_32]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_56]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_65]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 90
+begin = 10
+end = 35
+
+[cons_test_safety]
+name = "Constructor of class test"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_29]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 70
+begin = 8
+end = 23
+
+[JC_68]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 59
+begin = 10
+end = 18
+
+[JC_43]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 59
+begin = 10
+end = 18
+
+[JC_53]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 42
+begin = 17
+end = 24
+
+[JC_21]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 63
+begin = 8
+end = 31
+
+[JC_77]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_49]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 42
+begin = 17
+end = 24
+
+[JC_1]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 23
+begin = 12
+end = 22
+
+[JC_37]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 72
+begin = 11
+end = 65
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_57]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 44
+begin = 16
+end = 23
+
+[JC_66]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 89
+begin = 9
+end = 16
+
+[JC_59]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 46
+begin = 9
+end = 13
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 23
+begin = 12
+end = 22
+
+[JC_60]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 90
+begin = 10
+end = 35
+
+[JC_72]
+kind = IndexBounds
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 92
+begin = 11
+end = 178
+
+[JC_19]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 63
+begin = 8
+end = 31
+
+[JC_76]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_50]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 42
+begin = 28
+end = 40
+
+[JC_30]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_58]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 46
+begin = 9
+end = 13
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/SimpleAlloc.why ==========
 type Object
@@ -1679,11 +1680,12 @@ let cons_Node_ensures_default =
   (init:
   try
    begin
-     (let jessie_<num> =
-     (let jessie_<num> = (safe_int32_of_integer_ (0)) in
+     (let _jessie_<num> =
+     (let _jessie_<num> = (safe_int32_of_integer_ (0)) in
      begin
-       (let jessie_<num> = this_0 in (((safe_upd_ Node_val) jessie_<num>) jessie_<num>));
-      jessie_<num> end) in void); (raise Return) end with Return -> void end)
+       (let _jessie_<num> = this_0 in
+       (((safe_upd_ Node_val) _jessie_<num>) _jessie_<num>)); _jessie_<num> end) in void);
+    (raise Return) end with Return -> void end)
   { (JC_44:
     not_assigns(Object_alloc_table@, Node_val@, Node_val,
     pset_singleton(this_0))) }
@@ -1694,12 +1696,12 @@ let cons_Node_safety =
   (init:
   try
    begin
-     (let jessie_<num> =
-     (let jessie_<num> = (safe_int32_of_integer_ (0)) in
+     (let _jessie_<num> =
+     (let _jessie_<num> = (safe_int32_of_integer_ (0)) in
      begin
-       (let jessie_<num> = this_0 in (((safe_upd_ Node_val) jessie_<num>) jessie_<num>));
-      jessie_<num> end) in void); (raise Return) end with Return -> void end)
-  { true }
+       (let _jessie_<num> = this_0 in
+       (((safe_upd_ Node_val) _jessie_<num>) _jessie_<num>)); _jessie_<num> end) in void);
+    (raise Return) end with Return -> void end) { true }
 
 let cons_test_ensures_default =
  fun (this_3 : Object pointer) ->
@@ -1707,12 +1709,12 @@ let cons_test_ensures_default =
   (init:
   try
    begin
-     (let jessie_<num> =
-     (let jessie_<num> = null in
+     (let _jessie_<num> =
+     (let _jessie_<num> = null in
      begin
-       (let jessie_<num> = this_3 in (((safe_upd_ test_x) jessie_<num>) jessie_<num>));
-      jessie_<num> end) in void); (raise Return) end with Return -> void end)
-  { (JC_79: true) }
+       (let _jessie_<num> = this_3 in
+       (((safe_upd_ test_x) _jessie_<num>) _jessie_<num>)); _jessie_<num> end) in
+     void); (raise Return) end with Return -> void end) { (JC_79: true) }
 
 let cons_test_safety =
  fun (this_3 : Object pointer) ->
@@ -1720,12 +1722,12 @@ let cons_test_safety =
   (init:
   try
    begin
-     (let jessie_<num> =
-     (let jessie_<num> = null in
+     (let _jessie_<num> =
+     (let _jessie_<num> = null in
      begin
-       (let jessie_<num> = this_3 in (((safe_upd_ test_x) jessie_<num>) jessie_<num>));
-      jessie_<num> end) in void); (raise Return) end with Return -> void end)
-  { true }
+       (let _jessie_<num> = this_3 in
+       (((safe_upd_ test_x) _jessie_<num>) _jessie_<num>)); _jessie_<num> end) in
+     void); (raise Return) end with Return -> void end) { true }
 
 let test_test_ensures_default =
  fun (this_2 : Object pointer) ->
@@ -1738,16 +1740,16 @@ let test_test_ensures_default =
   (init:
   try
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (K_7:
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (let this =
      (JC_73: (((alloc_struct_Node (1)) Object_alloc_table) Object_tag_table)) in
-     (let tt = (let jessie_<num> = this in (JC_74: (cons_Node jessie_<num>))) in
+     (let _tt = (let _jessie_<num> = this in (JC_74: (cons_Node _jessie_<num>))) in
      this)) in
      begin
-       (let jessie_<num> = (K_6: ((safe_acc_ !test_x) this_2)) in
-       (((safe_upd_ NodeM_NodeP) jessie_<num>) jessie_<num>)); jessie_<num> end)) in
+       (let _jessie_<num> = (K_6: ((safe_acc_ !test_x) this_2)) in
+       (((safe_upd_ NodeM_NodeP) _jessie_<num>) _jessie_<num>)); _jessie_<num> end)) in
      void); (raise Return) end with Return -> void end)
   { (JC_61:
     ((JC_57: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
@@ -1769,24 +1771,24 @@ let test_test_safety =
   (init:
   try
    begin
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (K_7:
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (let this =
-     (let jessie_<num> =
+     (let _jessie_<num> =
      (JC_69:
      (((alloc_struct_Node_requires (1)) Object_alloc_table) Object_tag_table)) in
      (JC_70:
-     (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
-     jessie_<num>))) in
-     (let tt =
-     (let jessie_<num> = this in (JC_71: (cons_Node_requires jessie_<num>))) in
+     (assert { ge_int(offset_max(Object_alloc_table, _jessie_<num>), (0)) };
+     _jessie_<num>))) in
+     (let _tt =
+     (let _jessie_<num> = this in (JC_71: (cons_Node_requires _jessie_<num>))) in
      this)) in
      begin
-       (let jessie_<num> = (K_6: ((safe_acc_ !test_x) this_2)) in
+       (let _jessie_<num> = (K_6: ((safe_acc_ !test_x) this_2)) in
        (JC_72:
-       (((((lsafe_lbound_upd_ !Object_alloc_table) NodeM_NodeP) jessie_<num>) (0)) jessie_<num>)));
-      jessie_<num> end)) in void); (raise Return) end with Return -> void end)
+       (((((lsafe_lbound_upd_ !Object_alloc_table) NodeM_NodeP) _jessie_<num>) (0)) _jessie_<num>)));
+      _jessie_<num> end)) in void); (raise Return) end with Return -> void end)
   { true }
 
 
@@ -1817,11 +1819,11 @@ why --project [...] why/SimpleAlloc.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/SimpleAlloc_po6.why">
-      <location file = "why/SimpleAlloc.why" line = "810" begin = "15" end = "69"/>
+      <location file = "why/SimpleAlloc.why" line = "811" begin = "15" end = "70"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SimpleAlloc_po7.why">
-      <location file = "HOME/tests/java/SimpleAlloc.jc" line = "92" begin = "11" end = "177"/>
+      <location file = "HOME/tests/java/SimpleAlloc.jc" line = "92" begin = "11" end = "178"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
@@ -4517,7 +4519,7 @@ Object_alloc_table NodeM_NodeP NodeM_NodeP0 (pset_range
          (EQ (+ (offset_max Object_alloc_table (select test_x this_2)) 1) 10)))
 (>= 1 0)))))
 
-;; test_test_safety_po_2, File "why/SimpleAlloc.why", line 810, characters 15-69
+;; test_test_safety_po_2, File "why/SimpleAlloc.why", line 811, characters 15-70
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (FORALL (test_x)
@@ -4535,7 +4537,7 @@ Object_alloc_table NodeM_NodeP NodeM_NodeP0 (pset_range
          (instanceof Object_tag_table result Node_tag))))
 (>= (offset_max Object_alloc_table0 result) 0))))))))))
 
-;; test_test_safety_po_3, File "HOME/tests/java/SimpleAlloc.jc", line 92, characters 11-177
+;; test_test_safety_po_3, File "HOME/tests/java/SimpleAlloc.jc", line 92, characters 11-178
 (FORALL (this_2)
 (FORALL (Node_val)
 (FORALL (Object_alloc_table)
@@ -4562,6 +4564,7 @@ Object_alloc_table NodeM_NodeP NodeM_NodeP0 (pset_range
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
+Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/SimpleAlloc_why.sx   : .???..? (3/0/4/0/0)
 total   :   7

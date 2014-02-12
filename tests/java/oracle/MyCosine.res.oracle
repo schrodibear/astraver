@@ -1,42 +1,114 @@
-========== file tests/java/Fact.java ==========
+========== file tests/java/MyCosine.java ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
 
-// int model: unbounded mathematical integers
-//@+ CheckArithOverflow = no
-
-/*@ inductive isfact(integer x, integer r) {
-  @  case isfact0: isfact(0,1);
-  @  case isfactn:
-  @   \forall integer n r;
-  @     n >= 1 && isfact(n-1,r) ==> isfact(n,r*n);
-  @ }
+/*@ lemma method_error: \forall real x;
+  @     \real_abs(x) <= 0x1p-5 ==> \real_abs(1.0 - x*x*0.5 - \cos(x)) <= 0x1p-24;
   @*/
 
-public class Fact {
+class MyCosine {
 
-    /*@ requires x >= 0;
-      @ ensures isfact(x, \result);
-      @*/
-    public static int fact(int x) {
-        int a = 0, y = 1;
-        /*@ loop_invariant 0 <= a <= x && isfact(a,y);
-          @ loop_variant x-a;
-          @*/
-        while (a < x) y = y * ++a;
-        return y;
-    }
+/*@ requires \real_abs(x) <= 0x1p-5;
+  @ ensures \real_abs(\result - \cos(x)) <= 0x1p-23;
+  @*/
+static float my_cos1(float x) {
+  //@ assert \real_abs(1.0 - x*x*0.5 - \cos(x)) <= 0x1p-24;
+  return 1.0f - x * x * 0.5f;
+}
 
-}========== krakatoa execution ==========
+/* requires \real_abs(x) <= 0x1p-5 && \round_error(x) == 0.0;
+  @ ensures \real_abs(\result - \cos(x)) <= 0x1p-23;
+  @*/
+static float my_cos2(float x) {
+  // assert \exact(x) == x;
+  float r = 1.0f - x * x * 0.5f;
+  // assert \real_abs(\exact(r) - \cos(x)) <= 0x1p-24;
+  return r;
+}
+
+
+/* requires \real_abs(\exact(x)) <= 0x1p-5
+  @     && \round_error(x) <= 0x1p-20;
+  @ ensures \real_abs(\exact(\result) - \cos(\exact(x))) <= 0x1p-24
+  @     && \round_error(\result) <= \round_error(x) + 0x3p-24;
+  @*/
+static float my_cos3(float x) {
+  float r = 1.0f - x * x * 0.5f;
+  // assert \real_abs(\exact(r) - \cos(\exact(x))) <= 0x1p-24;  // by interval
+  return r;
+}
+
+/*@ requires \real_abs(x) <= 0.07 ;
+  @ ensures \real_abs(\result - \cos(x)) <= 0x1.3p-20;
+  @*/
+static float my_cos4(float x) {
+  //@ assert \real_abs(1.0 - x*x*0.5 - \cos(x)) <= 0x1.2p-20;
+  return 1.0f - x * x * 0.5f;
+}
+
+}
+
+
+/*
+Local Variables:
+compile-command: "krakatoa MyCosine.java"
+End:
+*/
+
+
+========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
-Generating JC function cons_Fact for constructor Fact
-Generating JC function Fact_fact for method Fact.fact
+Generating JC function MyCosine_my_cos2 for method MyCosine.my_cos2
+Generating JC function cons_MyCosine for constructor MyCosine
+Generating JC function MyCosine_my_cos3 for method MyCosine.my_cos3
+Generating JC function MyCosine_my_cos1 for method MyCosine.my_cos1
+Generating JC function MyCosine_my_cos4 for method MyCosine.my_cos4
 Done.
-========== file tests/java/Fact.jc ==========
+========== file tests/java/MyCosine.jc ==========
 # InvariantPolicy = Arguments
 # TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
+
+type byte = -128..127
+
+type short = -32768..32767
+
+type int32 = -2147483648..2147483647
+
+type long = -9223372036854775808..9223372036854775807
+
+type char = 0..65535
 
 predicate Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) >= 0)
@@ -47,7 +119,7 @@ String[0..] any_string()
 tag String = Object with {
 }
 
-tag Fact = Object with {
+tag MyCosine = Object with {
 }
 
 tag Throwable = Object with {
@@ -71,153 +143,233 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
-predicate isfact(integer x, integer r) {
-case isfact0: isfact(0, 1);
-  
-  case isfactn: (\forall integer n;
-                  (\forall integer r_0;
-                    (((n >= 1) && isfact((n - 1), r_0)) ==>
-                      isfact(n, (r_0 * n)))));
-  
-}
+lemma method_error :
+(\forall real x;
+  ((\real_abs(x) <= 0x1p-5) ==>
+    (\real_abs(((1.0 - ((x * x) * 0.5)) - \cos(x))) <= 0x1p-24)))
 
 exception Exception of Exception[0..]
 
 exception Throwable of Throwable[0..]
 
-unit cons_Fact(! Fact[0] this_0){()}
-
-integer Fact_fact(integer x_0)
-  requires (K_2 : (x_0 >= 0));
-behavior default:
-  ensures (K_1 : isfact(x_0, \result));
+real MyCosine_my_cos2(real x_1)
 {  
    {  
-      (var integer a = (K_13 : 0));
+      (var real r_0 = (K_3 : (1.0 - (K_2 : ((K_1 : (x_1 * x_1)) * 0.5)))));
       
-      {  
-         (var integer y = (K_12 : 1));
-         
-         {  
-            loop 
-            behavior default:
-              invariant (K_7 : ((K_6 : ((K_5 : (0 <= a)) &&
-                                         (K_4 : (a <= x_0)))) &&
-                                 (K_3 : isfact(a, y))));
-            variant (K_8 : (x_0 - a));
-            while ((K_11 : (a < x_0)))
-            {  (y = (K_10 : (y * (K_9 : (++ a)))))
-            };
-            
-            (return y)
-         }
-      }
+      (return r_0)
    }
+}
+
+unit cons_MyCosine(! MyCosine[0] this_0){()}
+
+real MyCosine_my_cos3(real x_2)
+{  
+   {  
+      (var real r = (K_6 : (1.0 - (K_5 : ((K_4 : (x_2 * x_2)) * 0.5)))));
+      
+      (return r)
+   }
+}
+
+real MyCosine_my_cos1(real x_0)
+  requires (K_8 : (\real_abs(x_0) <= 0x1p-5));
+behavior default:
+  ensures (K_7 : (\real_abs((\result - \cos(x_0))) <= 0x1p-23));
+{  (K_10 : 
+   (assert (K_9 : (\real_abs(((1.0 - ((x_0 * x_0) * 0.5)) - \cos(x_0))) <=
+                    0x1p-24))));
+   
+   (return (K_13 : (1.0 - (K_12 : ((K_11 : (x_0 * x_0)) * 0.5)))))
+}
+
+real MyCosine_my_cos4(real x_3)
+  requires (K_15 : (\real_abs(x_3) <= 0.07));
+behavior default:
+  ensures (K_14 : (\real_abs((\result - \cos(x_3))) <= 0x1.3p-20));
+{  (K_17 : 
+   (assert (K_16 : (\real_abs(((1.0 - ((x_3 * x_3) * 0.5)) - \cos(x_3))) <=
+                     0x1.2p-20))));
+   
+   (return (K_20 : (1.0 - (K_19 : ((K_18 : (x_3 * x_3)) * 0.5)))))
 }
 
 /*
 Local Variables:
 mode: java
-compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Fact.jloc tests/java/Fact.jc && make -f tests/java/Fact.makefile gui"
+compile-command: "jessie -why-opt -split-user-conj -locs tests/java/MyCosine.jloc tests/java/MyCosine.jc && make -f tests/java/MyCosine.makefile gui"
 End:
 */
-========== file tests/java/Fact.jloc ==========
+========== file tests/java/MyCosine.jloc ==========
+[K_17]
+file = "HOME/tests/java/MyCosine.java"
+line = 72
+begin = 13
+end = 60
+
 [K_11]
-file = "HOME/tests/java/Fact.java"
-line = 23
-begin = 15
-end = 20
+file = "HOME/tests/java/MyCosine.java"
+line = 43
+begin = 16
+end = 21
 
 [K_13]
-file = "HOME/tests/java/Fact.java"
-line = 19
-begin = 16
-end = 17
-
-[K_9]
-file = "HOME/tests/java/Fact.java"
-line = 23
-begin = 30
-end = 33
-
-[K_1]
-file = "HOME/tests/java/Fact.java"
-line = 16
-begin = 16
-end = 34
-
-[K_4]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 32
-end = 38
-
-[K_12]
-file = "HOME/tests/java/Fact.java"
-line = 19
-begin = 23
-end = 24
-
-[K_2]
-file = "HOME/tests/java/Fact.java"
-line = 15
-begin = 17
-end = 23
-
-[K_10]
-file = "HOME/tests/java/Fact.java"
-line = 23
-begin = 26
-end = 33
-
-[K_6]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 27
-end = 38
-
-[K_8]
-file = "HOME/tests/java/Fact.java"
-line = 21
-begin = 25
+file = "HOME/tests/java/MyCosine.java"
+line = 43
+begin = 9
 end = 28
 
-[K_3]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 42
-end = 53
+[K_9]
+file = "HOME/tests/java/MyCosine.java"
+line = 42
+begin = 13
+end = 58
 
-[cons_Fact]
-name = "Constructor of class Fact"
+[K_1]
+file = "HOME/tests/java/MyCosine.java"
+line = 51
+begin = 19
+end = 24
+
+[K_15]
+file = "HOME/tests/java/MyCosine.java"
+line = 68
+begin = 13
+end = 33
+
+[K_4]
+file = "HOME/tests/java/MyCosine.java"
+line = 63
+begin = 19
+end = 24
+
+[K_12]
+file = "HOME/tests/java/MyCosine.java"
+line = 43
+begin = 16
+end = 28
+
+[MyCosine_my_cos4]
+name = "Method my_cos4"
+file = "HOME/tests/java/MyCosine.java"
+line = 71
+begin = 13
+end = 20
+
+[K_20]
+file = "HOME/tests/java/MyCosine.java"
+line = 73
+begin = 9
+end = 28
+
+[K_2]
+file = "HOME/tests/java/MyCosine.java"
+line = 51
+begin = 19
+end = 31
+
+[MyCosine_my_cos1]
+name = "Method my_cos1"
+file = "HOME/tests/java/MyCosine.java"
+line = 41
+begin = 13
+end = 20
+
+[K_10]
+file = "HOME/tests/java/MyCosine.java"
+line = 42
+begin = 13
+end = 58
+
+[cons_MyCosine]
+name = "Constructor of class MyCosine"
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[K_5]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 27
-end = 33
+[K_6]
+file = "HOME/tests/java/MyCosine.java"
+line = 63
+begin = 12
+end = 31
 
-[Fact_fact]
-name = "Method fact"
-file = "HOME/tests/java/Fact.java"
-line = 18
-begin = 22
-end = 26
+[K_8]
+file = "HOME/tests/java/MyCosine.java"
+line = 38
+begin = 13
+end = 35
 
-[K_7]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 27
+[MyCosine_my_cos3]
+name = "Method my_cos3"
+file = "HOME/tests/java/MyCosine.java"
+line = 62
+begin = 13
+end = 20
+
+[K_3]
+file = "HOME/tests/java/MyCosine.java"
+line = 51
+begin = 12
+end = 31
+
+[MyCosine_my_cos2]
+name = "Method my_cos2"
+file = "HOME/tests/java/MyCosine.java"
+line = 49
+begin = 13
+end = 20
+
+[K_14]
+file = "HOME/tests/java/MyCosine.java"
+line = 69
+begin = 12
 end = 53
 
+[method_error]
+name = "Lemma method_error"
+file = "HOME/tests/java/MyCosine.java"
+line = 32
+begin = 10
+end = 22
+
+[K_19]
+file = "HOME/tests/java/MyCosine.java"
+line = 73
+begin = 16
+end = 28
+
+[K_5]
+file = "HOME/tests/java/MyCosine.java"
+line = 63
+begin = 19
+end = 31
+
+[K_18]
+file = "HOME/tests/java/MyCosine.java"
+line = 73
+begin = 16
+end = 21
+
+[K_7]
+file = "HOME/tests/java/MyCosine.java"
+line = 39
+begin = 12
+end = 51
+
+[K_16]
+file = "HOME/tests/java/MyCosine.java"
+line = 72
+begin = 13
+end = 60
+
 ========== jessie execution ==========
-Generating Why function cons_Fact
-Generating Why function Fact_fact
-========== file tests/java/Fact.makefile ==========
+Generating Why function MyCosine_my_cos2
+Generating Why function cons_MyCosine
+Generating Why function MyCosine_my_cos3
+Generating Why function MyCosine_my_cos1
+Generating Why function MyCosine_my_cos4
+========== file tests/java/MyCosine.makefile ==========
 # this makefile was automatically generated; do not edit 
 
 TIMEOUT ?= 10
@@ -229,9 +381,9 @@ WHYLIB ?= HOME/lib
 
 USERWHYTWOOPT= -split-user-conj
 USERWHYTHREEOPT=
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Fact.loc
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs MyCosine.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Fact.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs MyCosine.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -240,42 +392,42 @@ COQDEP = coqdep
 
 .PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
-all: simplify/Fact_why.sx
+all: simplify/MyCosine_why.sx
 
-project: why/Fact.wpr
+project: why/MyCosine.wpr
 
 why/%.wpr:  WHYOPT=--project -dir why
 why/%.wpr: why/%.why
 	@echo 'why --project [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-goals: why/Fact_ctx.why
+goals: why/MyCosine_ctx.why
 
 why/%_ctx.why: WHYOPT=--multi-why -dir why
 why/%_ctx.why: why/%.why
 	@echo 'why --multi-why [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-coq: coq/Fact_why.vo
+coq: coq/MyCosine_why.vo
 
-coq/Fact_why.v: WHYOPT=-coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
-coq/Fact_why.v: why/Fact.why
-	@echo 'why -coq [...] why/Fact.why' && $(WHY) $(JESSIELIBFILES) why/Fact.why && rm -f coq/jessie_why.v
+coq/MyCosine_why.v: WHYOPT=-coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
+coq/MyCosine_why.v: why/MyCosine.why
+	@echo 'why -coq [...] why/MyCosine.why' && $(WHY) $(JESSIELIBFILES) why/MyCosine.why && rm -f coq/jessie_why.v
 
-coq-goals: goals coq/Fact_ctx_why.vo
-	for f in why/*_po*.why; do make -f Fact.makefile coq/`basename $$f .why`_why.v ; done
+coq-goals: goals coq/MyCosine_ctx_why.vo
+	for f in why/*_po*.why; do make -f MyCosine.makefile coq/`basename $$f .why`_why.v ; done
 
-coq/Fact_ctx_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
-coq/Fact_ctx_why.v: why/Fact_ctx.why
-	@echo 'why -coq [...] why/Fact_ctx.why' && $(WHY) why/Fact_ctx.why
+coq/MyCosine_ctx_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
+coq/MyCosine_ctx_why.v: why/MyCosine_ctx.why
+	@echo 'why -coq [...] why/MyCosine_ctx.why' && $(WHY) why/MyCosine_ctx.why
 
-coq/%_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export Fact_ctx_why." -coq-tactic "intuition"
+coq/%_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export MyCosine_ctx_why." -coq-tactic "intuition"
 coq/%_why.v: why/%.why
-	@echo 'why -coq [...] why/$*.why' && $(WHY) why/Fact_ctx.why why/$*.why
+	@echo 'why -coq [...] why/$*.why' && $(WHY) why/MyCosine_ctx.why why/$*.why
 
 coq/%.vo: coq/%.v
 	coqc -I coq $<
-coq/%_po_why.vo: coq/Fact_ctx_why.vo
+coq/%_po_why.vo: coq/MyCosine_ctx_why.vo
 
-pvs: pvs/Fact_why.pvs
+pvs: pvs/MyCosine_why.pvs
 
 pvs/%_why.pvs: WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@jessie"
 pvs/%_why.pvs: why/%.why
@@ -285,42 +437,42 @@ pvs/jessie_why.pvs:WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@why"
 pvs/jessie_why.pvs:
 	$(WHY) $(JESSIELIBFILES)
 
-isabelle: isabelle/Fact_why.thy
+isabelle: isabelle/MyCosine_why.thy
 
 isabelle/%_why.thy: WHYOPT=-isabelle -dir isabelle -isabelle-base-theory jessie_why
 isabelle/%_why.thy: why/%.why
 	$(WHY) $(JESSIELIBFILES) why/$*.why
 	cp -f HOME/lib/isabelle/jessie_why.thy isabelle/
 
-simplify: simplify/Fact_why.sx
+simplify: simplify/MyCosine_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
 
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-vampire: vampire/Fact_why.vp
+vampire: vampire/MyCosine_why.vp
 	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
 
 vampire/%_why.vp: WHYOPT=-vampire -dir vampire
 vampire/%_why.vp: why/%.why
 	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-alt-ergo ergo: why/Fact_why.why
+alt-ergo ergo: why/MyCosine_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
 why/%_why.why: WHYOPT=-alt-ergo -dir why
 why/%_why.why: why/%.why
 	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-gappa: gappa/Fact_why.gappa
+gappa: gappa/MyCosine_why.gappa
 	@echo 'Running Gappa on proof obligations' && ($(DP) $^)
 
 gappa/%_why.gappa: WHYOPT=-gappa -dir gappa
 gappa/%_why.gappa: why/%.why
 	@echo 'why -gappa [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-cvcl: cvcl/Fact_why.cvc
+cvcl: cvcl/MyCosine_why.cvc
 
 	@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)
 
@@ -328,110 +480,122 @@ cvcl/%_why.cvc: WHYOPT=-cvcl -dir cvcl
 cvcl/%_why.cvc: why/%.why
 	@echo 'why -cvcl [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-harvey: harvey/Fact_why.rv
+harvey: harvey/MyCosine_why.rv
 	@echo 'Running haRVey on proof obligations' && ($(DP) $^)
 
 harvey/%_why.rv: WHYOPT=-harvey -dir harvey
 harvey/%_why.rv: why/%.why
 	@echo 'why -harvey [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-zenon: zenon/Fact_why.znn
+zenon: zenon/MyCosine_why.znn
 	@echo 'Running Zenon on proof obligations' && ($(DP) $^)
 
 zenon/%_why.znn: WHYOPT=-zenon -dir zenon
 zenon/%_why.znn: why/%.why
 	@echo 'why -zenon [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-smtlib: smtlib/Fact_why.smt
+smtlib: smtlib/MyCosine_why.smt
 	@echo 'Running Z3 on proof obligations' && ($(DP) $^)
 
 smtlib/%_why.smt:  WHYOPT=-smtlib --encoding sstrat --exp goal -dir smtlib
 smtlib/%_why.smt: why/%.why
 	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-z3: smtlib/Fact_why.smt
+z3: smtlib/MyCosine_why.smt
 	@echo 'Running Z3 on proof obligations' && ($(DP) -smt-solver z3 $^)
 
-yices: smtlib/Fact_why.smt
+yices: smtlib/MyCosine_why.smt
 	@echo 'Running Yices on proof obligations' && ($(DP) -smt-solver yices $^)
 
-cvc3: smtlib/Fact_why.smt
+cvc3: smtlib/MyCosine_why.smt
 	@echo 'Running CVC3 on proof obligations' && ($(DP) -smt-solver cvc3 $^)
 
-smtlib-v1: smtlib-v1/Fact_why.smt
+smtlib-v1: smtlib-v1/MyCosine_why.smt
 smtlib-v1/%_why.smt:  WHYOPT=-smtlib --smtlib-v1 --encoding sstrat --exp goal -dir smtlib-v1
 smtlib-v1/%_why.smt: why/%.why
 	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
-verit: smtlib-v1/Fact_why.smt
+verit: smtlib-v1/MyCosine_why.smt
 	@echo 'Running VeriT on proof obligations' && ($(DP) -smt-solver verit $^)
 
-gui stat: Fact.stat
+gui stat: MyCosine.stat
 
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
-why3: why/Fact_why3.why
+why3: why/MyCosine_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
-why3ml: Fact.mlw
+why3ml: MyCosine.mlw
 	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
-why3ide: Fact.mlw
+why3ide: MyCosine.mlw
 	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
-why3replay: Fact.mlw
+why3replay: MyCosine.mlw
 	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
--include Fact.depend
+-include MyCosine.depend
 
-depend: coq/Fact_why.v
-	-$(COQDEP) -I coq coq/Fact*_why.v > Fact.depend
+depend: coq/MyCosine_why.v
+	-$(COQDEP) -I coq coq/MyCosine*_why.v > MyCosine.depend
 
 clean:
 	rm -f coq/*.vo
 
-========== file tests/java/Fact.loc ==========
-[JC_45]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 42
-end = 53
+========== file tests/java/MyCosine.loc ==========
+[JC_51]
+file = "HOME/tests/java/MyCosine.java"
+line = 42
+begin = 13
+end = 58
 
-[cons_Fact_ensures_default]
-name = "Constructor of class Fact"
-behavior = "default behavior"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_31]
-file = "HOME/tests/java/Fact.java"
-line = 16
-begin = 16
-end = 34
-
-[cons_Fact_safety]
-name = "Constructor of class Fact"
+[cons_MyCosine_safety]
+name = "Constructor of class MyCosine"
 behavior = "Safety"
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_45]
+file = "HOME/tests/java/MyCosine.java"
+line = 38
+begin = 13
+end = 35
+
+[MyCosine_my_cos2_ensures_default]
+name = "Method my_cos2"
+behavior = "default behavior"
+file = "HOME/tests/java/MyCosine.java"
+line = 49
+begin = 13
+end = 20
+
+[JC_31]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_17]
-file = "HOME/tests/java/Fact.jc"
-line = 37
+file = "HOME/tests/java/MyCosine.jc"
+line = 47
 begin = 11
 end = 65
 
-[JC_48]
-file = "HOME/tests/java/Fact.jc"
+[JC_55]
+file = "HOME/tests/java/MyCosine.java"
 line = 68
+begin = 13
+end = 33
+
+[JC_48]
+file = "HOME/tests/java/MyCosine.java"
+line = 39
 begin = 12
-end = 372
+end = 51
 
 [JC_23]
 file = "HOME/"
@@ -452,8 +616,8 @@ begin = -1
 end = -1
 
 [JC_9]
-file = "HOME/tests/java/Fact.jc"
-line = 35
+file = "HOME/tests/java/MyCosine.jc"
+line = 45
 begin = 8
 end = 23
 
@@ -469,17 +633,47 @@ line = 0
 begin = -1
 end = -1
 
-[JC_41]
-file = "HOME/tests/java/Fact.jc"
-line = 68
-begin = 12
-end = 372
+[MyCosine_my_cos4_ensures_default]
+name = "Method my_cos4"
+behavior = "default behavior"
+file = "HOME/tests/java/MyCosine.java"
+line = 71
+begin = 13
+end = 20
 
-[JC_47]
+[JC_41]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[MyCosine_my_cos2_safety]
+name = "Method my_cos2"
+behavior = "Safety"
+file = "HOME/tests/java/MyCosine.java"
+line = 49
+begin = 13
+end = 20
+
+[MyCosine_my_cos1_safety]
+name = "Method my_cos1"
+behavior = "Safety"
+file = "HOME/tests/java/MyCosine.java"
+line = 41
+begin = 13
+end = 20
+
+[JC_47]
+file = "HOME/tests/java/MyCosine.java"
+line = 39
+begin = 12
+end = 51
+
+[JC_52]
+file = "HOME/tests/java/MyCosine.java"
+line = 42
+begin = 13
+end = 58
 
 [JC_26]
 file = "HOME/"
@@ -493,6 +687,20 @@ line = 0
 begin = -1
 end = -1
 
+[JC_54]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[MyCosine_my_cos3_safety]
+name = "Method my_cos3"
+behavior = "Safety"
+file = "HOME/tests/java/MyCosine.java"
+line = 62
+begin = 13
+end = 20
+
 [JC_13]
 file = "HOME/"
 line = 0
@@ -500,8 +708,8 @@ begin = -1
 end = -1
 
 [JC_11]
-file = "HOME/tests/java/Fact.jc"
-line = 35
+file = "HOME/tests/java/MyCosine.jc"
+line = 45
 begin = 8
 end = 23
 
@@ -512,10 +720,10 @@ begin = -1
 end = -1
 
 [JC_36]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 32
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_39]
 file = "HOME/"
@@ -524,28 +732,28 @@ begin = -1
 end = -1
 
 [JC_40]
-file = "HOME/tests/java/Fact.jc"
-line = 68
-begin = 12
-end = 372
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_35]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 27
-end = 33
+file = "HOME/tests/java/MyCosine.java"
+line = 62
+begin = 13
+end = 20
 
 [JC_27]
-file = "HOME/tests/java/Fact.java"
-line = 15
-begin = 17
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_38]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 27
-end = 53
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_12]
 file = "HOME/"
@@ -559,19 +767,11 @@ line = 0
 begin = -1
 end = -1
 
-[Fact_fact_ensures_default]
-name = "Method fact"
-behavior = "default behavior"
-file = "HOME/tests/java/Fact.java"
-line = 18
-begin = 22
-end = 26
-
 [JC_44]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 32
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_4]
 file = "HOME/"
@@ -579,23 +779,41 @@ line = 0
 begin = -1
 end = -1
 
+[JC_62]
+file = "HOME/tests/java/MyCosine.java"
+line = 72
+begin = 13
+end = 60
+
 [JC_42]
-file = "HOME/tests/java/Fact.java"
-line = 21
-begin = 25
-end = 28
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_46]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 27
-end = 53
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_61]
+file = "HOME/tests/java/MyCosine.java"
+line = 72
+begin = 13
+end = 60
 
 [JC_32]
-file = "HOME/tests/java/Fact.java"
-line = 16
-begin = 16
-end = 34
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_56]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_33]
 file = "HOME/"
@@ -603,19 +821,19 @@ line = 0
 begin = -1
 end = -1
 
-[Fact_fact_safety]
-name = "Method fact"
-behavior = "Safety"
-file = "HOME/tests/java/Fact.java"
-line = 18
-begin = 22
-end = 26
-
 [JC_29]
-file = "HOME/tests/java/Fact.java"
-line = 15
-begin = 17
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[method_error]
+name = "Lemma method_error"
+behavior = "lemma"
+file = "HOME/tests/java/MyCosine.java"
+line = 32
+begin = 10
+end = 22
 
 [JC_7]
 file = "HOME/"
@@ -629,11 +847,19 @@ line = 0
 begin = -1
 end = -1
 
+[MyCosine_my_cos4_safety]
+name = "Method my_cos4"
+behavior = "Safety"
+file = "HOME/tests/java/MyCosine.java"
+line = 71
+begin = 13
+end = 20
+
 [JC_43]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 27
-end = 33
+file = "HOME/tests/java/MyCosine.java"
+line = 38
+begin = 13
+end = 35
 
 [JC_2]
 file = "HOME/"
@@ -653,31 +879,57 @@ line = 0
 begin = -1
 end = -1
 
+[JC_53]
+file = "HOME/tests/java/MyCosine.java"
+line = 68
+begin = 13
+end = 33
+
 [JC_21]
+file = "HOME/tests/java/MyCosine.java"
+line = 49
+begin = 13
+end = 20
+
+[JC_49]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_49]
-file = "HOME/tests/java/Fact.jc"
-line = 68
-begin = 12
-end = 372
-
 [JC_1]
-file = "HOME/tests/java/Fact.jc"
-line = 10
+file = "HOME/tests/java/MyCosine.jc"
+line = 20
 begin = 12
 end = 22
 
+[cons_MyCosine_ensures_default]
+name = "Constructor of class MyCosine"
+behavior = "default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_37]
-file = "HOME/tests/java/Fact.java"
-line = 20
-begin = 42
-end = 53
+file = "HOME/tests/java/MyCosine.java"
+line = 62
+begin = 13
+end = 20
 
 [JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_57]
+file = "HOME/tests/java/MyCosine.java"
+line = 69
+begin = 12
+end = 53
+
+[JC_59]
 file = "HOME/"
 line = 0
 begin = -1
@@ -690,22 +942,42 @@ begin = -1
 end = -1
 
 [JC_18]
-file = "HOME/tests/java/Fact.jc"
-line = 37
+file = "HOME/tests/java/MyCosine.jc"
+line = 47
 begin = 11
 end = 65
 
 [JC_3]
-file = "HOME/tests/java/Fact.jc"
-line = 10
+file = "HOME/tests/java/MyCosine.jc"
+line = 20
 begin = 12
 end = 22
 
-[JC_19]
+[JC_60]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_19]
+file = "HOME/tests/java/MyCosine.java"
+line = 49
+begin = 13
+end = 20
+
+[JC_50]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[MyCosine_my_cos3_ensures_default]
+name = "Method my_cos3"
+behavior = "default behavior"
+file = "HOME/tests/java/MyCosine.java"
+line = 62
+begin = 13
+end = 20
 
 [JC_30]
 file = "HOME/"
@@ -713,16 +985,40 @@ line = 0
 begin = -1
 end = -1
 
+[JC_58]
+file = "HOME/tests/java/MyCosine.java"
+line = 69
+begin = 12
+end = 53
+
+[MyCosine_my_cos1_ensures_default]
+name = "Method my_cos1"
+behavior = "default behavior"
+file = "HOME/tests/java/MyCosine.java"
+line = 41
+begin = 13
+end = 20
+
 [JC_28]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-========== file tests/java/why/Fact.why ==========
+========== file tests/java/why/MyCosine.why ==========
 type Object
 
+type byte
+
+type char
+
+type int32
+
 type interface
+
+type long
+
+type short
 
 logic Exception_tag:  -> Object tag_id
 
@@ -730,9 +1026,9 @@ logic Object_tag:  -> Object tag_id
 
 axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
 
-logic Fact_tag:  -> Object tag_id
+logic MyCosine_tag:  -> Object tag_id
 
-axiom Fact_parenttag_Object : parenttag(Fact_tag, Object_tag)
+axiom MyCosine_parenttag_Object : parenttag(MyCosine_tag, Object_tag)
 
 predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
@@ -761,6 +1057,80 @@ logic Throwable_tag:  -> Object tag_id
 
 axiom Throwable_parenttag_Object : parenttag(Throwable_tag, Object_tag)
 
+logic integer_of_byte: byte -> int
+
+logic byte_of_integer: int -> byte
+
+axiom byte_coerce :
+ (forall x:int.
+  ((le_int((-128), x) and le_int(x, (127))) ->
+   eq_int(integer_of_byte(byte_of_integer(x)), x)))
+
+axiom byte_extensionality :
+ (forall x:byte.
+  (forall y:byte[eq_int(integer_of_byte(x), integer_of_byte(y))].
+   (eq_int(integer_of_byte(x), integer_of_byte(y)) -> (x = y))))
+
+axiom byte_range :
+ (forall x:byte.
+  (le_int((-128), integer_of_byte(x)) and le_int(integer_of_byte(x), (127))))
+
+logic integer_of_char: char -> int
+
+logic char_of_integer: int -> char
+
+axiom char_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (65535))) ->
+   eq_int(integer_of_char(char_of_integer(x)), x)))
+
+axiom char_extensionality :
+ (forall x:char.
+  (forall y:char[eq_int(integer_of_char(x), integer_of_char(y))].
+   (eq_int(integer_of_char(x), integer_of_char(y)) -> (x = y))))
+
+axiom char_range :
+ (forall x:char.
+  (le_int((0), integer_of_char(x)) and le_int(integer_of_char(x), (65535))))
+
+predicate eq_byte(x:byte, y:byte) =
+ eq_int(integer_of_byte(x), integer_of_byte(y))
+
+predicate eq_char(x:char, y:char) =
+ eq_int(integer_of_char(x), integer_of_char(y))
+
+logic integer_of_int32: int32 -> int
+
+predicate eq_int32(x:int32, y:int32) =
+ eq_int(integer_of_int32(x), integer_of_int32(y))
+
+logic integer_of_long: long -> int
+
+predicate eq_long(x:long, y:long) =
+ eq_int(integer_of_long(x), integer_of_long(y))
+
+logic integer_of_short: short -> int
+
+predicate eq_short(x:short, y:short) =
+ eq_int(integer_of_short(x), integer_of_short(y))
+
+logic int32_of_integer: int -> int32
+
+axiom int32_coerce :
+ (forall x:int.
+  ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
+   eq_int(integer_of_int32(int32_of_integer(x)), x)))
+
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32[eq_int(integer_of_int32(x), integer_of_int32(y))].
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
+axiom int32_range :
+ (forall x:int32.
+  (le_int((-2147483648), integer_of_int32(x))
+  and le_int(integer_of_int32(x), (2147483647))))
+
 logic interface_tag:  -> interface tag_id
 
 axiom interface_int : (int_of_tag(interface_tag) = (1))
@@ -778,13 +1148,6 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-inductive isfact: int, int -> prop =
- | isfact0: isfact((0), (1))
- | isfactn: (forall n:int.
-             (forall r_0:int.
-              ((ge_int(n, (1)) and isfact(sub_int(n, (1)), r_0)) ->
-               isfact(n, mul_int(r_0, n)))))
- 
 predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
@@ -793,7 +1156,7 @@ predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Fact(p:Object pointer, a:int,
+predicate left_valid_struct_MyCosine(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
@@ -808,6 +1171,23 @@ predicate left_valid_struct_Throwable(p:Object pointer, a:int,
 predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
+
+logic long_of_integer: int -> long
+
+axiom long_coerce :
+ (forall x:int.
+  ((le_int((-9223372036854775808), x) and le_int(x, (9223372036854775807))) ->
+   eq_int(integer_of_long(long_of_integer(x)), x)))
+
+axiom long_extensionality :
+ (forall x:long.
+  (forall y:long[eq_int(integer_of_long(x), integer_of_long(y))].
+   (eq_int(integer_of_long(x), integer_of_long(y)) -> (x = y))))
+
+axiom long_range :
+ (forall x:long.
+  (le_int((-9223372036854775808), integer_of_long(x))
+  and le_int(integer_of_long(x), (9223372036854775807))))
 
 axiom pointer_addr_of_Object_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(Object_of_pointer_address(p))))
@@ -824,7 +1204,7 @@ predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Fact(p:Object pointer, b:int,
+predicate right_valid_struct_MyCosine(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
@@ -839,6 +1219,23 @@ predicate right_valid_struct_Throwable(p:Object pointer, b:int,
 predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
+
+logic short_of_integer: int -> short
+
+axiom short_coerce :
+ (forall x:int.
+  ((le_int((-32768), x) and le_int(x, (32767))) ->
+   eq_int(integer_of_short(short_of_integer(x)), x)))
+
+axiom short_extensionality :
+ (forall x:short.
+  (forall y:short[eq_int(integer_of_short(x), integer_of_short(y))].
+   (eq_int(integer_of_short(x), integer_of_short(y)) -> (x = y))))
+
+axiom short_range :
+ (forall x:short.
+  (le_int((-32768), integer_of_short(x))
+  and le_int(integer_of_short(x), (32767))))
 
 predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
@@ -859,7 +1256,7 @@ predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Fact(p:Object pointer, a:int, b:int,
+predicate strict_valid_struct_MyCosine(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
@@ -895,7 +1292,7 @@ predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Fact(p:Object pointer, a:int, b:int,
+predicate valid_struct_MyCosine(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
@@ -912,17 +1309,46 @@ predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
+lemma method_error :
+ (forall x_4:real.
+  (le_real(abs_real(x_4), 0x1p-5) ->
+   le_real(abs_real(sub_real(sub_real(1.0, mul_real(mul_real(x_4, x_4), 0.5)),
+                    cos(x_4))),
+   0x1p-24)))
+
 exception Exception_exc of Object pointer
-
-parameter Fact_fact : x_0_0:int -> { } int { (JC_32: isfact(x_0_0, result)) }
-
-parameter Fact_fact_requires :
- x_0_0:int ->
-  { (JC_27: ge_int(x_0_0, (0)))} int { (JC_32: isfact(x_0_0, result)) }
 
 exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
+
+parameter MyCosine_my_cos1 :
+ x_0_0:real ->
+  { } real
+  { (JC_48: le_real(abs_real(sub_real(result, cos(x_0_0))), 0x1p-23)) }
+
+parameter MyCosine_my_cos1_requires :
+ x_0_0:real ->
+  { (JC_43: le_real(abs_real(x_0_0), 0x1p-5))} real
+  { (JC_48: le_real(abs_real(sub_real(result, cos(x_0_0))), 0x1p-23)) }
+
+parameter MyCosine_my_cos2 : x_1_0:real -> { } real { true }
+
+parameter MyCosine_my_cos2_requires : x_1_0:real -> { } real { true }
+
+parameter MyCosine_my_cos3 : x_2:real -> { } real { true }
+
+parameter MyCosine_my_cos3_requires : x_2:real -> { } real { true }
+
+parameter MyCosine_my_cos4 :
+ x_3:real ->
+  { } real
+  { (JC_58: le_real(abs_real(sub_real(result, cos(x_3))), 0x1.3p-20)) }
+
+parameter MyCosine_my_cos4_requires :
+ x_3:real ->
+  { (JC_53: le_real(abs_real(x_3), 0.07))} real
+  { (JC_58: le_real(abs_real(sub_real(result, cos(x_3))), 0x1.3p-20)) }
 
 parameter Object_alloc_table : Object alloc_table ref
 
@@ -955,28 +1381,28 @@ parameter alloc_struct_Exception_requires :
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, Exception_tag)))) }
 
-parameter alloc_struct_Fact :
+parameter alloc_struct_MyCosine :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (strict_valid_struct_Fact(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_MyCosine(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
-              and instanceof(Object_tag_table, result, Fact_tag)))) }
+              and instanceof(Object_tag_table, result, MyCosine_tag)))) }
 
-parameter alloc_struct_Fact_requires :
+parameter alloc_struct_MyCosine_requires :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (strict_valid_struct_Fact(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_MyCosine(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
-              and instanceof(Object_tag_table, result, Fact_tag)))) }
+              and instanceof(Object_tag_table, result, MyCosine_tag)))) }
 
 parameter alloc_struct_Object :
  n:int ->
@@ -1074,15 +1500,45 @@ parameter alloc_struct_interface_requires :
           and (alloc_fresh(interface_alloc_table@, result, n)
               and instanceof(interface_tag_table, result, interface_tag)))) }
 
+parameter any_byte : unit -> { } byte { true }
+
+parameter any_char : unit -> { } char { true }
+
+parameter any_int32 : unit -> { } int32 { true }
+
+parameter any_long : unit -> { } long { true }
+
+parameter any_short : unit -> { } short { true }
+
 parameter any_string_0 : tt:unit -> { } Object pointer { true }
 
 parameter any_string_0_requires : tt:unit -> { } Object pointer { true }
 
-parameter cons_Fact :
+parameter byte_of_integer_ :
+ x:int ->
+  { (le_int((-128), x) and le_int(x, (127)))} byte
+  { eq_int(integer_of_byte(result), x) }
+
+parameter char_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (65535)))} char
+  { eq_int(integer_of_char(result), x) }
+
+parameter cons_MyCosine :
  this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
-parameter cons_Fact_requires :
+parameter cons_MyCosine_requires :
  this_0:Object pointer -> { } unit reads Object_alloc_table { true }
+
+parameter int32_of_integer_ :
+ x:int ->
+  { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
+  { eq_int(integer_of_int32(result), x) }
+
+parameter long_of_integer_ :
+ x:int ->
+  { (le_int((-9223372036854775808), x) and le_int(x, (9223372036854775807)))}
+  long { eq_int(integer_of_long(result), x) }
 
 parameter non_null_Object :
  x_1:Object pointer ->
@@ -1098,141 +1554,220 @@ parameter non_null_Object_requires :
     (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
-let Fact_fact_ensures_default =
- fun (x_0_0 : int) ->
-  { (JC_29: ge_int(x_0_0, (0))) }
+parameter safe_byte_of_integer_ :
+ x:int -> { } byte { eq_int(integer_of_byte(result), x) }
+
+parameter safe_char_of_integer_ :
+ x:int -> { } char { eq_int(integer_of_char(result), x) }
+
+parameter safe_int32_of_integer_ :
+ x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
+
+parameter safe_long_of_integer_ :
+ x:int -> { } long { eq_int(integer_of_long(result), x) }
+
+parameter safe_short_of_integer_ :
+ x:int -> { } short { eq_int(integer_of_short(result), x) }
+
+parameter short_of_integer_ :
+ x:int ->
+  { (le_int((-32768), x) and le_int(x, (32767)))} short
+  { eq_int(integer_of_short(result), x) }
+
+let MyCosine_my_cos1_ensures_default =
+ fun (x_0_0 : real) ->
+  { (JC_45: le_real(abs_real(x_0_0), 0x1p-5)) }
   (init:
-  (let return = ref (any_int void) in
+  (let return = ref (any_real void) in
+  try
+   (K_10:
+   begin
+     (assert
+     { (JC_52:
+       le_real(abs_real(sub_real(sub_real(1.0,
+                                 mul_real(mul_real(x_0_0, x_0_0), 0.5)),
+                        cos(x_0_0))),
+       0x1p-24)) }; void);
+    (return := (K_13:
+               ((sub_real 1.0) (K_12:
+                               ((mul_real (K_11: ((mul_real x_0_0) x_0_0))) 0.5)))));
+    (raise Return); absurd  end) with Return -> !return end))
+  { (JC_47: le_real(abs_real(sub_real(result, cos(x_0_0))), 0x1p-23)) }
+
+let MyCosine_my_cos1_safety =
+ fun (x_0_0 : real) ->
+  { (JC_45: le_real(abs_real(x_0_0), 0x1p-5)) }
+  (init:
+  (let return = ref (any_real void) in
+  try
+   (K_10:
+   begin
+     [ { } unit
+       { (JC_51:
+         le_real(abs_real(sub_real(sub_real(1.0,
+                                   mul_real(mul_real(x_0_0, x_0_0), 0.5)),
+                          cos(x_0_0))),
+         0x1p-24)) } ];
+    (return := (K_13:
+               ((sub_real 1.0) (K_12:
+                               ((mul_real (K_11: ((mul_real x_0_0) x_0_0))) 0.5)))));
+    (raise Return); absurd  end) with Return -> !return end)) { true }
+
+let MyCosine_my_cos2_ensures_default =
+ fun (x_1_0 : real) ->
+  { (JC_22: true) }
+  (init:
+  (let return = ref (any_real void) in
   try
    begin
-     (let a = ref (K_13: (0)) in
-     (let y = ref (K_12: (1)) in
-     begin
-       try
-        (loop_2:
-        while true do
-        { invariant
-            (JC_46:
-            ((JC_43: le_int((0), a))
-            and ((JC_44: le_int(a, x_0_0)) and (JC_45: isfact(a, y))))) 
-           }
-         begin
-           [ { } unit { true } ];
-          try
-           begin
-             (if (K_11: ((lt_int_ !a) x_0_0))
-             then
-              (let _jessie_<num> =
-              begin
-                (y := (K_10:
-                      ((mul_int !y) (K_9:
-                                    begin   (a := ((add_int !a) (1))); !a end))));
-               !y end in void) else (raise (Loop_exit_exc void)));
-            (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc _jessie_<num> -> void end end done) with
-        Loop_exit_exc _jessie_<num> -> void end; (return := !y); (raise Return)
-     end)); absurd  end with Return -> !return end))
-  { (JC_31: isfact(x_0_0, result)) }
+     (let r_0 =
+     (K_3:
+     ((sub_real 1.0) (K_2: ((mul_real (K_1: ((mul_real x_1_0) x_1_0))) 0.5)))) in
+     begin   (return := r_0); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_23: true) }
 
-let Fact_fact_safety =
- fun (x_0_0 : int) ->
-  { (JC_29: ge_int(x_0_0, (0))) }
+let MyCosine_my_cos2_safety =
+ fun (x_1_0 : real) ->
+  { (JC_22: true) }
   (init:
-  (let return = ref (any_int void) in
+  (let return = ref (any_real void) in
   try
    begin
-     (let a = ref (K_13: (0)) in
-     (let y = ref (K_12: (1)) in
-     begin
-       try
-        (loop_1:
-        while true do
-        { invariant (JC_40: true) variant (JC_42 : sub_int(x_0_0, a)) }
-         begin
-           [ { } unit reads a,y
-             { (JC_38:
-               ((JC_35: le_int((0), a))
-               and ((JC_36: le_int(a, x_0_0)) and (JC_37: isfact(a, y))))) } ];
-          try
-           begin
-             (if (K_11: ((lt_int_ !a) x_0_0))
-             then
-              (let _jessie_<num> =
-              begin
-                (y := (K_10:
-                      ((mul_int !y) (K_9:
-                                    begin   (a := ((add_int !a) (1))); !a end))));
-               !y end in void) else (raise (Loop_exit_exc void)));
-            (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc _jessie_<num> -> void end end done) with
-        Loop_exit_exc _jessie_<num> -> void end; (return := !y); (raise Return)
-     end)); absurd  end with Return -> !return end)) { true }
+     (let r_0 =
+     (K_3:
+     ((sub_real 1.0) (K_2: ((mul_real (K_1: ((mul_real x_1_0) x_1_0))) 0.5)))) in
+     begin   (return := r_0); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
-let cons_Fact_ensures_default =
+let MyCosine_my_cos3_ensures_default =
+ fun (x_2 : real) ->
+  { (JC_38: true) }
+  (init:
+  (let return = ref (any_real void) in
+  try
+   begin
+     (let r =
+     (K_6:
+     ((sub_real 1.0) (K_5: ((mul_real (K_4: ((mul_real x_2) x_2))) 0.5)))) in
+     begin   (return := r); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_39: true) }
+
+let MyCosine_my_cos3_safety =
+ fun (x_2 : real) ->
+  { (JC_38: true) }
+  (init:
+  (let return = ref (any_real void) in
+  try
+   begin
+     (let r =
+     (K_6:
+     ((sub_real 1.0) (K_5: ((mul_real (K_4: ((mul_real x_2) x_2))) 0.5)))) in
+     begin   (return := r); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
+
+let MyCosine_my_cos4_ensures_default =
+ fun (x_3 : real) ->
+  { (JC_55: le_real(abs_real(x_3), 0.07)) }
+  (init:
+  (let return = ref (any_real void) in
+  try
+   (K_17:
+   begin
+     (assert
+     { (JC_62:
+       le_real(abs_real(sub_real(sub_real(1.0,
+                                 mul_real(mul_real(x_3, x_3), 0.5)),
+                        cos(x_3))),
+       0x1.2p-20)) }; void);
+    (return := (K_20:
+               ((sub_real 1.0) (K_19:
+                               ((mul_real (K_18: ((mul_real x_3) x_3))) 0.5)))));
+    (raise Return); absurd  end) with Return -> !return end))
+  { (JC_57: le_real(abs_real(sub_real(result, cos(x_3))), 0x1.3p-20)) }
+
+let MyCosine_my_cos4_safety =
+ fun (x_3 : real) ->
+  { (JC_55: le_real(abs_real(x_3), 0.07)) }
+  (init:
+  (let return = ref (any_real void) in
+  try
+   (K_17:
+   begin
+     [ { } unit
+       { (JC_61:
+         le_real(abs_real(sub_real(sub_real(1.0,
+                                   mul_real(mul_real(x_3, x_3), 0.5)),
+                          cos(x_3))),
+         0x1.2p-20)) } ];
+    (return := (K_20:
+               ((sub_real 1.0) (K_19:
+                               ((mul_real (K_18: ((mul_real x_3) x_3))) 0.5)))));
+    (raise Return); absurd  end) with Return -> !return end)) { true }
+
+let cons_MyCosine_ensures_default =
  fun (this_0 : Object pointer) ->
-  { valid_struct_Fact(this_0, (0), (0), Object_alloc_table) }
+  { valid_struct_MyCosine(this_0, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_23: true) }
+  { (JC_31: true) }
 
-let cons_Fact_safety =
+let cons_MyCosine_safety =
  fun (this_0 : Object pointer) ->
-  { valid_struct_Fact(this_0, (0), (0), Object_alloc_table) }
+  { valid_struct_MyCosine(this_0, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
   { true }
 
 
 ========== make project execution ==========
-why --project [...] why/Fact.why
-========== file tests/java/why/Fact.wpr ==========
-<project name="Fact" context="why/Fact_ctx.why">
-  <function name="Method fact">
+why --project [...] why/MyCosine.why
+========== file tests/java/why/MyCosine.wpr ==========
+<project name="MyCosine" context="why/MyCosine_ctx.why">
+  <lemma name="method_error">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <goal why_file="why/MyCosine_po1.why">
+      <location file = "HOME/tests/java/MyCosine.java" line = "32" begin = "10" end = "22"/>
+      <explain kind = "Lemma"/>
+    </goal>
+  </lemma>
+  <function name="Method my_cos4">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
-    <goal why_file="why/Fact_po1.why">
-      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "27" end = "33"/>
-      <explain kind = "LoopInvInit"/>
+    <goal why_file="why/MyCosine_po4.why">
+      <location file = "HOME/tests/java/MyCosine.java" line = "72" begin = "13" end = "60"/>
+      <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/Fact_po2.why">
-      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "32" end = "38"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Fact_po3.why">
-      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "42" end = "53"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Fact_po4.why">
-      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "27" end = "33"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Fact_po5.why">
-      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "32" end = "38"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Fact_po6.why">
-      <location file = "HOME/tests/java/Fact.java" line = "20" begin = "42" end = "53"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Fact_po7.why">
-      <location file = "HOME/tests/java/Fact.java" line = "16" begin = "16" end = "34"/>
+    <goal why_file="why/MyCosine_po5.why">
+      <location file = "HOME/tests/java/MyCosine.java" line = "69" begin = "12" end = "53"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Safety">
-    <goal why_file="why/Fact_po8.why">
-      <location file = "HOME/tests/java/Fact.java" line = "21" begin = "25" end = "28"/>
-      <explain kind = "VarDecr"/>
+  </function>
+  <function name="Method my_cos3">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+  <function name="Method my_cos2">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+  <function name="Method my_cos1">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/MyCosine_po2.why">
+      <location file = "HOME/tests/java/MyCosine.java" line = "42" begin = "13" end = "58"/>
+      <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/Fact_po9.why">
-      <location file = "HOME/tests/java/Fact.java" line = "21" begin = "25" end = "28"/>
-      <explain kind = "VarDecr"/>
+    <goal why_file="why/MyCosine_po3.why">
+      <location file = "HOME/tests/java/MyCosine.java" line = "39" begin = "12" end = "51"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
-  <function name="Constructor of class Fact">
+  <function name="Lemma method_error">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+  <function name="Constructor of class MyCosine">
     <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
-========== file tests/java/why/Fact_ctx.why ==========
+========== file tests/java/why/MyCosine_ctx.why ==========
 logic eq_unit : unit, unit -> prop
 
 logic neq_unit : unit, unit -> prop
@@ -2173,7 +2708,17 @@ axiom frame_between_sub:
 
 type Object
 
+type byte
+
+type char
+
+type int32
+
 type interface
+
+type long
+
+type short
 
 logic Exception_tag : Object tag_id
 
@@ -2181,9 +2726,9 @@ logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-logic Fact_tag : Object tag_id
+logic MyCosine_tag : Object tag_id
 
-axiom Fact_parenttag_Object: parenttag(Fact_tag, Object_tag)
+axiom MyCosine_parenttag_Object: parenttag(MyCosine_tag, Object_tag)
 
 predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
@@ -2212,6 +2757,79 @@ logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
+logic integer_of_byte : byte -> int
+
+logic byte_of_integer : int -> byte
+
+axiom byte_coerce:
+  (forall x:int.
+    ((((-128) <= x) and (x <= 127)) ->
+     (integer_of_byte(byte_of_integer(x)) = x)))
+
+axiom byte_extensionality:
+  (forall x:byte.
+    (forall y:byte [(integer_of_byte(x) = integer_of_byte(y))].
+      ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+
+axiom byte_range:
+  (forall x:byte.
+    (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
+
+logic integer_of_char : char -> int
+
+logic char_of_integer : int -> char
+
+axiom char_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
+
+axiom char_extensionality:
+  (forall x:char.
+    (forall y:char [(integer_of_char(x) = integer_of_char(y))].
+      ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
+
+axiom char_range:
+  (forall x:char.
+    ((0 <= integer_of_char(x)) and (integer_of_char(x) <= 65535)))
+
+predicate eq_byte(x: byte, y: byte) =
+  (integer_of_byte(x) = integer_of_byte(y))
+
+predicate eq_char(x: char, y: char) =
+  (integer_of_char(x) = integer_of_char(y))
+
+logic integer_of_int32 : int32 -> int
+
+predicate eq_int32(x: int32, y: int32) =
+  (integer_of_int32(x) = integer_of_int32(y))
+
+logic integer_of_long : long -> int
+
+predicate eq_long(x: long, y: long) =
+  (integer_of_long(x) = integer_of_long(y))
+
+logic integer_of_short : short -> int
+
+predicate eq_short(x: short, y: short) =
+  (integer_of_short(x) = integer_of_short(y))
+
+logic int32_of_integer : int -> int32
+
+axiom int32_coerce:
+  (forall x:int.
+    ((((-2147483648) <= x) and (x <= 2147483647)) ->
+     (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32 [(integer_of_int32(x) = integer_of_int32(y))].
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
+axiom int32_range:
+  (forall x:int32.
+    (((-2147483648) <= integer_of_int32(x)) and
+     (integer_of_int32(x) <= 2147483647)))
+
 logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
@@ -2229,14 +2847,6 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
-inductive isfact: int, int -> prop =
-  | isfact0: isfact(0, 1)
-  | isfactn: (forall n:int.
-               (forall r_0:int.
-                 (((n >= 1) and isfact((n - 1), r_0)) -> isfact(n, (r_0 * n)))))
-
-
-
 predicate left_valid_struct_Object(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
   p) <= a)
@@ -2245,7 +2855,7 @@ predicate left_valid_struct_Exception(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
 
-predicate left_valid_struct_Fact(p: Object pointer, a: int,
+predicate left_valid_struct_MyCosine(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
 
@@ -2260,6 +2870,23 @@ predicate left_valid_struct_Throwable(p: Object pointer, a: int,
 predicate left_valid_struct_interface(p: interface pointer, a: int,
   interface_alloc_table: interface alloc_table) =
   (offset_min(interface_alloc_table, p) <= a)
+
+logic long_of_integer : int -> long
+
+axiom long_coerce:
+  (forall x:int.
+    ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
+     (integer_of_long(long_of_integer(x)) = x)))
+
+axiom long_extensionality:
+  (forall x:long.
+    (forall y:long [(integer_of_long(x) = integer_of_long(y))].
+      ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+
+axiom long_range:
+  (forall x:long.
+    (((-9223372036854775808) <= integer_of_long(x)) and
+     (integer_of_long(x) <= 9223372036854775807)))
 
 axiom pointer_addr_of_Object_of_pointer_address:
   (forall p:unit pointer.
@@ -2277,7 +2904,7 @@ predicate right_valid_struct_Exception(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
   Object_alloc_table)
 
-predicate right_valid_struct_Fact(p: Object pointer, b: int,
+predicate right_valid_struct_MyCosine(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
   Object_alloc_table)
 
@@ -2292,6 +2919,22 @@ predicate right_valid_struct_Throwable(p: Object pointer, b: int,
 predicate right_valid_struct_interface(p: interface pointer, b: int,
   interface_alloc_table: interface alloc_table) =
   (offset_max(interface_alloc_table, p) >= b)
+
+logic short_of_integer : int -> short
+
+axiom short_coerce:
+  (forall x:int.
+    ((((-32768) <= x) and (x <= 32767)) ->
+     (integer_of_short(short_of_integer(x)) = x)))
+
+axiom short_extensionality:
+  (forall x:short.
+    (forall y:short [(integer_of_short(x) = integer_of_short(y))].
+      ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
+
+axiom short_range:
+  (forall x:short.
+    (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
 
 predicate strict_valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -2312,7 +2955,7 @@ predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
 
-predicate strict_valid_struct_Fact(p: Object pointer, a: int, b: int,
+predicate strict_valid_struct_MyCosine(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
 
@@ -2348,7 +2991,7 @@ predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
   Object_alloc_table)
 
-predicate valid_struct_Fact(p: Object pointer, a: int, b: int,
+predicate valid_struct_MyCosine(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
   Object_alloc_table)
 
@@ -2365,123 +3008,49 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
-========== file tests/java/why/Fact_po1.why ==========
-goal Fact_fact_ensures_default_po_1:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  ("JC_46": ("JC_43": (0 <= 0)))
+========== file tests/java/why/MyCosine_po1.why ==========
+lemma method_error:
+  (forall x_4:real.
+    ((abs_real(x_4) <= 0x1.p-5) ->
+     (abs_real(((1.0 - ((x_4 * x_4) * 0.5)) - cos(x_4))) <= 0x1.p-24)))
 
-========== file tests/java/why/Fact_po2.why ==========
-goal Fact_fact_ensures_default_po_2:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  ("JC_46": ("JC_44": (0 <= x_0_0)))
+========== file tests/java/why/MyCosine_po2.why ==========
+goal MyCosine_my_cos1_ensures_default_po_1:
+  forall x_0_0:real.
+  ("JC_45": (abs_real(x_0_0) <= 0x1.p-5)) ->
+  ("JC_52":
+  (abs_real(((1.0 - ((x_0_0 * x_0_0) * 0.5)) - cos(x_0_0))) <= 0x1.p-24))
 
-========== file tests/java/why/Fact_po3.why ==========
-goal Fact_fact_ensures_default_po_3:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  ("JC_46": ("JC_45": isfact(0, 1)))
+========== file tests/java/why/MyCosine_po3.why ==========
+goal MyCosine_my_cos1_ensures_default_po_2:
+  forall x_0_0:real.
+  ("JC_45": (abs_real(x_0_0) <= 0x1.p-5)) ->
+  ("JC_52":
+  (abs_real(((1.0 - ((x_0_0 * x_0_0) * 0.5)) - cos(x_0_0))) <= 0x1.p-24)) ->
+  forall return:real.
+  (return = (1.0 - ((x_0_0 * x_0_0) * 0.5))) ->
+  ("JC_47": (abs_real((return - cos(x_0_0))) <= 0x1.p-23))
 
-========== file tests/java/why/Fact_po4.why ==========
-goal Fact_fact_ensures_default_po_4:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_46":
-  (("JC_43": (0 <= a)) and
-   (("JC_44": (a <= x_0_0)) and ("JC_45": isfact(a, y))))) ->
-  (a < x_0_0) ->
-  forall a0:int.
-  (a0 = (a + 1)) ->
-  forall y0:int.
-  (y0 = (y * a0)) ->
-  ("JC_46": ("JC_43": (0 <= a0)))
+========== file tests/java/why/MyCosine_po4.why ==========
+goal MyCosine_my_cos4_ensures_default_po_1:
+  forall x_3:real.
+  ("JC_55": (abs_real(x_3) <= 0.07)) ->
+  ("JC_62":
+  (abs_real(((1.0 - ((x_3 * x_3) * 0.5)) - cos(x_3))) <= 0x1.2p-20))
 
-========== file tests/java/why/Fact_po5.why ==========
-goal Fact_fact_ensures_default_po_5:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_46":
-  (("JC_43": (0 <= a)) and
-   (("JC_44": (a <= x_0_0)) and ("JC_45": isfact(a, y))))) ->
-  (a < x_0_0) ->
-  forall a0:int.
-  (a0 = (a + 1)) ->
-  forall y0:int.
-  (y0 = (y * a0)) ->
-  ("JC_46": ("JC_44": (a0 <= x_0_0)))
-
-========== file tests/java/why/Fact_po6.why ==========
-goal Fact_fact_ensures_default_po_6:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_46":
-  (("JC_43": (0 <= a)) and
-   (("JC_44": (a <= x_0_0)) and ("JC_45": isfact(a, y))))) ->
-  (a < x_0_0) ->
-  forall a0:int.
-  (a0 = (a + 1)) ->
-  forall y0:int.
-  (y0 = (y * a0)) ->
-  ("JC_46": ("JC_45": isfact(a0, y0)))
-
-========== file tests/java/why/Fact_po7.why ==========
-goal Fact_fact_ensures_default_po_7:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_46":
-  (("JC_43": (0 <= a)) and
-   (("JC_44": (a <= x_0_0)) and ("JC_45": isfact(a, y))))) ->
-  (a >= x_0_0) ->
-  forall return:int.
-  (return = y) ->
-  ("JC_31": isfact(x_0_0, return))
-
-========== file tests/java/why/Fact_po8.why ==========
-goal Fact_fact_safety_po_1:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_40": true) ->
-  ("JC_38":
-  (("JC_35": (0 <= a)) and
-   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
-  (a < x_0_0) ->
-  forall a0:int.
-  (a0 = (a + 1)) ->
-  forall y0:int.
-  (y0 = (y * a0)) ->
-  (0 <= ("JC_42": (x_0_0 - a)))
-
-========== file tests/java/why/Fact_po9.why ==========
-goal Fact_fact_safety_po_2:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_40": true) ->
-  ("JC_38":
-  (("JC_35": (0 <= a)) and
-   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
-  (a < x_0_0) ->
-  forall a0:int.
-  (a0 = (a + 1)) ->
-  forall y0:int.
-  (y0 = (y * a0)) ->
-  (("JC_42": (x_0_0 - a0)) < ("JC_42": (x_0_0 - a)))
+========== file tests/java/why/MyCosine_po5.why ==========
+goal MyCosine_my_cos4_ensures_default_po_2:
+  forall x_3:real.
+  ("JC_55": (abs_real(x_3) <= 0.07)) ->
+  ("JC_62":
+  (abs_real(((1.0 - ((x_3 * x_3) * 0.5)) - cos(x_3))) <= 0x1.2p-20)) ->
+  forall return:real.
+  (return = (1.0 - ((x_3 * x_3) * 0.5))) ->
+  ("JC_57": (abs_real((return - cos(x_3))) <= 0x1.3p-20))
 
 ========== generation of Simplify VC output ==========
-why -simplify [...] why/Fact.why
-========== file tests/java/simplify/Fact_why.sx ==========
+why -simplify [...] why/MyCosine.why
+========== file tests/java/simplify/MyCosine_why.sx ==========
 
 ;; DO NOT EDIT BELOW THIS LINE
 
@@ -3312,8 +3881,8 @@ why -simplify [...] why/Fact.why
  (EQ (parenttag Exception_tag Object_tag) |@true|))
 
 (BG_PUSH
- ;; Why axiom Fact_parenttag_Object
- (EQ (parenttag Fact_tag Object_tag) |@true|))
+ ;; Why axiom MyCosine_parenttag_Object
+ (EQ (parenttag MyCosine_tag Object_tag) |@true|))
 
 (DEFPRED (Non_null_Object x_0 Object_alloc_table)
   (>= (offset_max Object_alloc_table x_0) 0))
@@ -3343,6 +3912,66 @@ why -simplify [...] why/Fact.why
  (EQ (parenttag Throwable_tag Object_tag) |@true|))
 
 (BG_PUSH
+ ;; Why axiom byte_coerce
+ (FORALL (x)
+ (IMPLIES (AND (<= (- 0 128) x) (<= x 127))
+ (EQ (integer_of_byte (byte_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom byte_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_byte x) (integer_of_byte y)) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom byte_range
+ (FORALL (x)
+ (AND (<= (- 0 128) (integer_of_byte x)) (<= (integer_of_byte x) 127))))
+
+(BG_PUSH
+ ;; Why axiom char_coerce
+ (FORALL (x)
+ (IMPLIES (AND (<= 0 x) (<= x 65535))
+ (EQ (integer_of_char (char_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom char_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_char x) (integer_of_char y)) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom char_range
+ (FORALL (x) (AND (<= 0 (integer_of_char x)) (<= (integer_of_char x) 65535))))
+
+(DEFPRED (eq_byte x y) (EQ (integer_of_byte x) (integer_of_byte y)))
+
+(DEFPRED (eq_char x y) (EQ (integer_of_char x) (integer_of_char y)))
+
+(DEFPRED (eq_int32 x y) (EQ (integer_of_int32 x) (integer_of_int32 y)))
+
+(DEFPRED (eq_long x y) (EQ (integer_of_long x) (integer_of_long y)))
+
+(DEFPRED (eq_short x y) (EQ (integer_of_short x) (integer_of_short y)))
+
+(BG_PUSH
+ ;; Why axiom int32_coerce
+ (FORALL (x)
+ (IMPLIES
+ (AND (<= (- 0 constant_too_large_2147483648) x)
+ (<= x constant_too_large_2147483647))
+ (EQ (integer_of_int32 (int32_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom int32_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_int32 x) (integer_of_int32 y)) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom int32_range
+ (FORALL (x)
+ (AND (<= (- 0 constant_too_large_2147483648) (integer_of_int32 x))
+ (<= (integer_of_int32 x) constant_too_large_2147483647))))
+
+(BG_PUSH
  ;; Why axiom interface_int
  (EQ (int_of_tag interface_tag) 1))
 
@@ -3359,33 +3988,13 @@ why -simplify [...] why/Fact.why
  (FORALL (x interface_tag_table)
  (instanceof interface_tag_table x interface_tag)))
 
-(BG_PUSH
- ;; Why axiom isfact_inversion
- (FORALL (aux_1 aux_2)
- (IMPLIES (EQ (isfact aux_1 aux_2) |@true|)
- (OR (AND (EQ aux_1 0) (EQ aux_2 1))
- (EXISTS (n)
- (EXISTS (r_0)
- (AND (AND (>= n 1) (EQ (isfact (- n 1) r_0) |@true|))
- (AND (EQ aux_1 n) (EQ aux_2 (* r_0 n))))))))))
-
-(BG_PUSH
- ;; Why axiom isfact0
- (EQ (isfact 0 1) |@true|))
-
-(BG_PUSH
- ;; Why axiom isfactn
- (FORALL (n r_0)
- (IMPLIES (AND (>= n 1) (EQ (isfact (- n 1) r_0) |@true|))
- (EQ (isfact n (* r_0 n)) |@true|))))
-
 (DEFPRED (left_valid_struct_Object p a Object_alloc_table)
   (<= (offset_min Object_alloc_table p) a))
 
 (DEFPRED (left_valid_struct_Exception p a Object_alloc_table)
   (left_valid_struct_Object p a Object_alloc_table))
 
-(DEFPRED (left_valid_struct_Fact p a Object_alloc_table)
+(DEFPRED (left_valid_struct_MyCosine p a Object_alloc_table)
   (left_valid_struct_Object p a Object_alloc_table))
 
 (DEFPRED (left_valid_struct_String p a Object_alloc_table)
@@ -3396,6 +4005,25 @@ why -simplify [...] why/Fact.why
 
 (DEFPRED (left_valid_struct_interface p a interface_alloc_table)
   (<= (offset_min interface_alloc_table p) a))
+
+(BG_PUSH
+ ;; Why axiom long_coerce
+ (FORALL (x)
+ (IMPLIES
+ (AND (<= (- 0 constant_too_large_9223372036854775808) x)
+ (<= x constant_too_large_9223372036854775807))
+ (EQ (integer_of_long (long_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom long_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_long x) (integer_of_long y)) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom long_range
+ (FORALL (x)
+ (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
+ (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
 (BG_PUSH
  ;; Why axiom pointer_addr_of_Object_of_pointer_address
@@ -3411,7 +4039,7 @@ why -simplify [...] why/Fact.why
 (DEFPRED (right_valid_struct_Exception p b Object_alloc_table)
   (right_valid_struct_Object p b Object_alloc_table))
 
-(DEFPRED (right_valid_struct_Fact p b Object_alloc_table)
+(DEFPRED (right_valid_struct_MyCosine p b Object_alloc_table)
   (right_valid_struct_Object p b Object_alloc_table))
 
 (DEFPRED (right_valid_struct_String p b Object_alloc_table)
@@ -3422,6 +4050,22 @@ why -simplify [...] why/Fact.why
 
 (DEFPRED (right_valid_struct_interface p b interface_alloc_table)
   (>= (offset_max interface_alloc_table p) b))
+
+(BG_PUSH
+ ;; Why axiom short_coerce
+ (FORALL (x)
+ (IMPLIES (AND (<= (- 0 32768) x) (<= x 32767))
+ (EQ (integer_of_short (short_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom short_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_short x) (integer_of_short y)) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom short_range
+ (FORALL (x)
+ (AND (<= (- 0 32768) (integer_of_short x)) (<= (integer_of_short x) 32767))))
 
 (DEFPRED (strict_valid_root_Object p a b Object_alloc_table)
   (AND (EQ (offset_min Object_alloc_table p) a)
@@ -3438,7 +4082,7 @@ why -simplify [...] why/Fact.why
 (DEFPRED (strict_valid_struct_Exception p a b Object_alloc_table)
   (strict_valid_struct_Object p a b Object_alloc_table))
 
-(DEFPRED (strict_valid_struct_Fact p a b Object_alloc_table)
+(DEFPRED (strict_valid_struct_MyCosine p a b Object_alloc_table)
   (strict_valid_struct_Object p a b Object_alloc_table))
 
 (DEFPRED (strict_valid_struct_String p a b Object_alloc_table)
@@ -3466,7 +4110,7 @@ why -simplify [...] why/Fact.why
 (DEFPRED (valid_struct_Exception p a b Object_alloc_table)
   (valid_struct_Object p a b Object_alloc_table))
 
-(DEFPRED (valid_struct_Fact p a b Object_alloc_table)
+(DEFPRED (valid_struct_MyCosine p a b Object_alloc_table)
   (valid_struct_Object p a b Object_alloc_table))
 
 (DEFPRED (valid_struct_String p a b Object_alloc_table)
@@ -3479,94 +4123,73 @@ why -simplify [...] why/Fact.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Fact_fact_ensures_default_po_1, File "HOME/tests/java/Fact.java", line 20, characters 27-33
-(FORALL (x_0_0) (IMPLIES (>= x_0_0 0) (<= 0 0)))
+;; method_error, File "HOME/tests/java/MyCosine.java", line 32, characters 10-22
+(FORALL (x_4)
+(IMPLIES (EQ (le_real (real_abs x_4) real_constant_0x1_pminus5) |@true|)
+(EQ (le_real
+(real_abs (real_sub (real_sub real_constant_1_0e (real_mul (real_mul x_4 x_4) real_constant_0_5e)) 
+          (cos x_4))) real_constant_0x1_pminus24) |@true|)))
 
-;; Fact_fact_ensures_default_po_2, File "HOME/tests/java/Fact.java", line 20, characters 32-38
-(FORALL (x_0_0) (IMPLIES (>= x_0_0 0) (<= 0 x_0_0)))
+(BG_PUSH
+ ;; lemma method_error as axiom
+(FORALL (x_4)
+(IMPLIES (EQ (le_real (real_abs x_4) real_constant_0x1_pminus5) |@true|)
+(EQ (le_real
+(real_abs (real_sub (real_sub real_constant_1_0e (real_mul (real_mul x_4 x_4) real_constant_0_5e)) 
+          (cos x_4))) real_constant_0x1_pminus24) |@true|))))
 
-;; Fact_fact_ensures_default_po_3, File "HOME/tests/java/Fact.java", line 20, characters 42-53
-(FORALL (x_0_0) (IMPLIES (>= x_0_0 0) (EQ (isfact 0 1) |@true|)))
-
-;; Fact_fact_ensures_default_po_4, File "HOME/tests/java/Fact.java", line 20, characters 27-33
+;; MyCosine_my_cos1_ensures_default_po_1, File "HOME/tests/java/MyCosine.java", line 42, characters 13-58
 (FORALL (x_0_0)
-(IMPLIES (>= x_0_0 0)
-(FORALL (a)
-(FORALL (y)
-(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
-(IMPLIES (< a x_0_0)
-(FORALL (a0)
-(IMPLIES (EQ a0 (+ a 1)) (FORALL (y0) (IMPLIES (EQ y0 (* y a0)) (<= 0 a0)))))))))))
+(IMPLIES (EQ (le_real (real_abs x_0_0) real_constant_0x1_pminus5) |@true|)
+(EQ (le_real
+(real_abs (real_sub (real_sub real_constant_1_0e (real_mul (real_mul x_0_0 x_0_0) real_constant_0_5e)) 
+          (cos x_0_0))) real_constant_0x1_pminus24) |@true|)))
 
-;; Fact_fact_ensures_default_po_5, File "HOME/tests/java/Fact.java", line 20, characters 32-38
+;; MyCosine_my_cos1_ensures_default_po_2, File "HOME/tests/java/MyCosine.java", line 39, characters 12-51
 (FORALL (x_0_0)
-(IMPLIES (>= x_0_0 0)
-(FORALL (a)
-(FORALL (y)
-(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
-(IMPLIES (< a x_0_0)
-(FORALL (a0)
-(IMPLIES (EQ a0 (+ a 1))
-(FORALL (y0) (IMPLIES (EQ y0 (* y a0)) (<= a0 x_0_0)))))))))))
+(IMPLIES (EQ (le_real (real_abs x_0_0) real_constant_0x1_pminus5) |@true|)
+(IMPLIES (EQ (le_real
+         (real_abs (real_sub (real_sub real_constant_1_0e (real_mul (real_mul x_0_0 x_0_0) real_constant_0_5e)) 
+                   (cos x_0_0))) real_constant_0x1_pminus24) |@true|)
+(FORALL (return)
+(IMPLIES (EQ return
+         (real_sub real_constant_1_0e (real_mul (real_mul x_0_0 x_0_0) real_constant_0_5e)))
+(EQ (le_real
+(real_abs (real_sub return (cos x_0_0))) real_constant_0x1_pminus23) |@true|))))))
 
-;; Fact_fact_ensures_default_po_6, File "HOME/tests/java/Fact.java", line 20, characters 42-53
-(FORALL (x_0_0)
-(IMPLIES (>= x_0_0 0)
-(FORALL (a)
-(FORALL (y)
-(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
-(IMPLIES (< a x_0_0)
-(FORALL (a0)
-(IMPLIES (EQ a0 (+ a 1))
-(FORALL (y0) (IMPLIES (EQ y0 (* y a0)) (EQ (isfact a0 y0) |@true|)))))))))))
+;; MyCosine_my_cos4_ensures_default_po_1, File "HOME/tests/java/MyCosine.java", line 72, characters 13-60
+(FORALL (x_3)
+(IMPLIES (EQ (le_real (real_abs x_3) real_constant_0_07e) |@true|)
+(EQ (le_real
+(real_abs (real_sub (real_sub real_constant_1_0e (real_mul (real_mul x_3 x_3) real_constant_0_5e)) 
+          (cos x_3))) real_constant_0x1_2pminus20) |@true|)))
 
-;; Fact_fact_ensures_default_po_7, File "HOME/tests/java/Fact.java", line 16, characters 16-34
-(FORALL (x_0_0)
-(IMPLIES (>= x_0_0 0)
-(FORALL (a)
-(FORALL (y)
-(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
-(IMPLIES (>= a x_0_0)
-(FORALL (return) (IMPLIES (EQ return y) (EQ (isfact x_0_0 return) |@true|)))))))))
-
-;; Fact_fact_safety_po_1, File "HOME/tests/java/Fact.java", line 21, characters 25-28
-(FORALL (x_0_0)
-(IMPLIES (>= x_0_0 0)
-(FORALL (a)
-(FORALL (y)
-(IMPLIES TRUE
-(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
-(IMPLIES (< a x_0_0)
-(FORALL (a0)
-(IMPLIES (EQ a0 (+ a 1))
-(FORALL (y0) (IMPLIES (EQ y0 (* y a0)) (<= 0 (- x_0_0 a)))))))))))))
-
-;; Fact_fact_safety_po_2, File "HOME/tests/java/Fact.java", line 21, characters 25-28
-(FORALL (x_0_0)
-(IMPLIES (>= x_0_0 0)
-(FORALL (a)
-(FORALL (y)
-(IMPLIES TRUE
-(IMPLIES (AND (<= 0 a) (AND (<= a x_0_0) (EQ (isfact a y) |@true|)))
-(IMPLIES (< a x_0_0)
-(FORALL (a0)
-(IMPLIES (EQ a0 (+ a 1))
-(FORALL (y0) (IMPLIES (EQ y0 (* y a0)) (< (- x_0_0 a0) (- x_0_0 a)))))))))))))
+;; MyCosine_my_cos4_ensures_default_po_2, File "HOME/tests/java/MyCosine.java", line 69, characters 12-53
+(FORALL (x_3)
+(IMPLIES (EQ (le_real (real_abs x_3) real_constant_0_07e) |@true|)
+(IMPLIES (EQ (le_real
+         (real_abs (real_sub (real_sub real_constant_1_0e (real_mul (real_mul x_3 x_3) real_constant_0_5e)) 
+                   (cos x_3))) real_constant_0x1_2pminus20) |@true|)
+(FORALL (return)
+(IMPLIES (EQ return
+         (real_sub real_constant_1_0e (real_mul (real_mul x_3 x_3) real_constant_0_5e)))
+(EQ (le_real
+(real_abs (real_sub return (cos x_3))) real_constant_0x1_3pminus20) |@true|))))))
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
 Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/Fact_why.sx          : ......... (9/0/0/0/0)
-total   :   9
-valid   :   9 (100%)
+simplify/MyCosine_why.sx      : ##### (0/0/0/5/0)
+total   :   5
+valid   :   0 (  0%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   0 (  0%)
+timeout :   5 (100%)
 failure :   0 (  0%)
 ========== generation of alt-ergo VC output ==========
-why -alt-ergo [...] why/Fact.why
-========== file tests/java/why/Fact_why.why ==========
+why -alt-ergo [...] why/MyCosine.why
+========== file tests/java/why/MyCosine_why.why ==========
 logic eq_unit : unit, unit -> prop
 
 logic neq_unit : unit, unit -> prop
@@ -4507,7 +5130,17 @@ axiom frame_between_sub:
 
 type Object
 
+type byte
+
+type char
+
+type int32
+
 type interface
+
+type long
+
+type short
 
 logic Exception_tag : Object tag_id
 
@@ -4515,9 +5148,9 @@ logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-logic Fact_tag : Object tag_id
+logic MyCosine_tag : Object tag_id
 
-axiom Fact_parenttag_Object: parenttag(Fact_tag, Object_tag)
+axiom MyCosine_parenttag_Object: parenttag(MyCosine_tag, Object_tag)
 
 predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
@@ -4546,6 +5179,77 @@ logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
+logic integer_of_byte : byte -> int
+
+logic byte_of_integer : int -> byte
+
+axiom byte_coerce:
+  (forall x:int.
+    ((((-128) <= x) and (x <= 127)) ->
+     (integer_of_byte(byte_of_integer(x)) = x)))
+
+axiom byte_extensionality:
+  (forall x:byte.
+    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+
+axiom byte_range:
+  (forall x:byte.
+    (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
+
+logic integer_of_char : char -> int
+
+logic char_of_integer : int -> char
+
+axiom char_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
+
+axiom char_extensionality:
+  (forall x:char.
+    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
+
+axiom char_range:
+  (forall x:char.
+    ((0 <= integer_of_char(x)) and (integer_of_char(x) <= 65535)))
+
+predicate eq_byte(x: byte, y: byte) =
+  (integer_of_byte(x) = integer_of_byte(y))
+
+predicate eq_char(x: char, y: char) =
+  (integer_of_char(x) = integer_of_char(y))
+
+logic integer_of_int32 : int32 -> int
+
+predicate eq_int32(x: int32, y: int32) =
+  (integer_of_int32(x) = integer_of_int32(y))
+
+logic integer_of_long : long -> int
+
+predicate eq_long(x: long, y: long) =
+  (integer_of_long(x) = integer_of_long(y))
+
+logic integer_of_short : short -> int
+
+predicate eq_short(x: short, y: short) =
+  (integer_of_short(x) = integer_of_short(y))
+
+logic int32_of_integer : int -> int32
+
+axiom int32_coerce:
+  (forall x:int.
+    ((((-2147483648) <= x) and (x <= 2147483647)) ->
+     (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
+axiom int32_range:
+  (forall x:int32.
+    (((-2147483648) <= integer_of_int32(x)) and
+     (integer_of_int32(x) <= 2147483647)))
+
 logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
@@ -4563,25 +5267,6 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
-logic isfact : int, int -> prop
-
-axiom isfact_inversion:
-  (forall aux_1:int.
-    (forall aux_2:int [isfact(aux_1, aux_2)].
-      (isfact(aux_1, aux_2) ->
-       (((aux_1 = 0) and (aux_2 = 1)) or
-        (exists n:int.
-          (exists r_0:int.
-            (((n >= 1) and isfact((n - 1), r_0)) and
-             ((aux_1 = n) and (aux_2 = (r_0 * n))))))))))
-
-axiom isfact0: isfact(0, 1)
-
-axiom isfactn:
-  (forall n:int.
-    (forall r_0:int.
-      (((n >= 1) and isfact((n - 1), r_0)) -> isfact(n, (r_0 * n)))))
-
 predicate left_valid_struct_Object(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
   p) <= a)
@@ -4590,7 +5275,7 @@ predicate left_valid_struct_Exception(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
 
-predicate left_valid_struct_Fact(p: Object pointer, a: int,
+predicate left_valid_struct_MyCosine(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
 
@@ -4605,6 +5290,22 @@ predicate left_valid_struct_Throwable(p: Object pointer, a: int,
 predicate left_valid_struct_interface(p: interface pointer, a: int,
   interface_alloc_table: interface alloc_table) =
   (offset_min(interface_alloc_table, p) <= a)
+
+logic long_of_integer : int -> long
+
+axiom long_coerce:
+  (forall x:int.
+    ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
+     (integer_of_long(long_of_integer(x)) = x)))
+
+axiom long_extensionality:
+  (forall x:long.
+    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+
+axiom long_range:
+  (forall x:long.
+    (((-9223372036854775808) <= integer_of_long(x)) and
+     (integer_of_long(x) <= 9223372036854775807)))
 
 axiom pointer_addr_of_Object_of_pointer_address:
   (forall p:unit pointer.
@@ -4622,7 +5323,7 @@ predicate right_valid_struct_Exception(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
   Object_alloc_table)
 
-predicate right_valid_struct_Fact(p: Object pointer, b: int,
+predicate right_valid_struct_MyCosine(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
   Object_alloc_table)
 
@@ -4637,6 +5338,22 @@ predicate right_valid_struct_Throwable(p: Object pointer, b: int,
 predicate right_valid_struct_interface(p: interface pointer, b: int,
   interface_alloc_table: interface alloc_table) =
   (offset_max(interface_alloc_table, p) >= b)
+
+logic short_of_integer : int -> short
+
+axiom short_coerce:
+  (forall x:int.
+    ((((-32768) <= x) and (x <= 32767)) ->
+     (integer_of_short(short_of_integer(x)) = x)))
+
+axiom short_extensionality:
+  (forall x:short.
+    (forall y:short.
+      ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
+
+axiom short_range:
+  (forall x:short.
+    (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
 
 predicate strict_valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -4657,7 +5374,7 @@ predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
 
-predicate strict_valid_struct_Fact(p: Object pointer, a: int, b: int,
+predicate strict_valid_struct_MyCosine(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
 
@@ -4693,7 +5410,7 @@ predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
   Object_alloc_table)
 
-predicate valid_struct_Fact(p: Object pointer, a: int, b: int,
+predicate valid_struct_MyCosine(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
   Object_alloc_table)
 
@@ -4710,108 +5427,43 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
-goal Fact_fact_ensures_default_po_1:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  ("JC_46": ("JC_43": (0 <= 0)))
+goal method_error:
+  (forall x_4:real.
+    ((abs_real(x_4) <= 0x1.p-5) ->
+     (abs_real(((1.0 - ((x_4 * x_4) * 0.5)) - cos(x_4))) <= 0x1.p-24)))
 
-goal Fact_fact_ensures_default_po_2:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  ("JC_46": ("JC_44": (0 <= x_0_0)))
+axiom method_error_as_axiom:
+  (forall x_4:real.
+    ((abs_real(x_4) <= 0x1.p-5) ->
+     (abs_real(((1.0 - ((x_4 * x_4) * 0.5)) - cos(x_4))) <= 0x1.p-24)))
 
-goal Fact_fact_ensures_default_po_3:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  ("JC_46": ("JC_45": isfact(0, 1)))
+goal MyCosine_my_cos1_ensures_default_po_1:
+  forall x_0_0:real.
+  ("JC_45": (abs_real(x_0_0) <= 0x1.p-5)) ->
+  ("JC_52":
+  (abs_real(((1.0 - ((x_0_0 * x_0_0) * 0.5)) - cos(x_0_0))) <= 0x1.p-24))
 
-goal Fact_fact_ensures_default_po_4:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_46":
-  (("JC_43": (0 <= a)) and
-   (("JC_44": (a <= x_0_0)) and ("JC_45": isfact(a, y))))) ->
-  (a < x_0_0) ->
-  forall a0:int.
-  (a0 = (a + 1)) ->
-  forall y0:int.
-  (y0 = (y * a0)) ->
-  ("JC_46": ("JC_43": (0 <= a0)))
+goal MyCosine_my_cos1_ensures_default_po_2:
+  forall x_0_0:real.
+  ("JC_45": (abs_real(x_0_0) <= 0x1.p-5)) ->
+  ("JC_52":
+  (abs_real(((1.0 - ((x_0_0 * x_0_0) * 0.5)) - cos(x_0_0))) <= 0x1.p-24)) ->
+  forall return:real.
+  (return = (1.0 - ((x_0_0 * x_0_0) * 0.5))) ->
+  ("JC_47": (abs_real((return - cos(x_0_0))) <= 0x1.p-23))
 
-goal Fact_fact_ensures_default_po_5:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_46":
-  (("JC_43": (0 <= a)) and
-   (("JC_44": (a <= x_0_0)) and ("JC_45": isfact(a, y))))) ->
-  (a < x_0_0) ->
-  forall a0:int.
-  (a0 = (a + 1)) ->
-  forall y0:int.
-  (y0 = (y * a0)) ->
-  ("JC_46": ("JC_44": (a0 <= x_0_0)))
+goal MyCosine_my_cos4_ensures_default_po_1:
+  forall x_3:real.
+  ("JC_55": (abs_real(x_3) <= 0.07)) ->
+  ("JC_62":
+  (abs_real(((1.0 - ((x_3 * x_3) * 0.5)) - cos(x_3))) <= 0x1.2p-20))
 
-goal Fact_fact_ensures_default_po_6:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_46":
-  (("JC_43": (0 <= a)) and
-   (("JC_44": (a <= x_0_0)) and ("JC_45": isfact(a, y))))) ->
-  (a < x_0_0) ->
-  forall a0:int.
-  (a0 = (a + 1)) ->
-  forall y0:int.
-  (y0 = (y * a0)) ->
-  ("JC_46": ("JC_45": isfact(a0, y0)))
-
-goal Fact_fact_ensures_default_po_7:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_46":
-  (("JC_43": (0 <= a)) and
-   (("JC_44": (a <= x_0_0)) and ("JC_45": isfact(a, y))))) ->
-  (a >= x_0_0) ->
-  forall return:int.
-  (return = y) ->
-  ("JC_31": isfact(x_0_0, return))
-
-goal Fact_fact_safety_po_1:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_40": true) ->
-  ("JC_38":
-  (("JC_35": (0 <= a)) and
-   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
-  (a < x_0_0) ->
-  forall a0:int.
-  (a0 = (a + 1)) ->
-  forall y0:int.
-  (y0 = (y * a0)) ->
-  (0 <= ("JC_42": (x_0_0 - a)))
-
-goal Fact_fact_safety_po_2:
-  forall x_0_0:int.
-  ("JC_29": (x_0_0 >= 0)) ->
-  forall a:int.
-  forall y:int.
-  ("JC_40": true) ->
-  ("JC_38":
-  (("JC_35": (0 <= a)) and
-   (("JC_36": (a <= x_0_0)) and ("JC_37": isfact(a, y))))) ->
-  (a < x_0_0) ->
-  forall a0:int.
-  (a0 = (a + 1)) ->
-  forall y0:int.
-  (y0 = (y * a0)) ->
-  (("JC_42": (x_0_0 - a0)) < ("JC_42": (x_0_0 - a)))
+goal MyCosine_my_cos4_ensures_default_po_2:
+  forall x_3:real.
+  ("JC_55": (abs_real(x_3) <= 0.07)) ->
+  ("JC_62":
+  (abs_real(((1.0 - ((x_3 * x_3) * 0.5)) - cos(x_3))) <= 0x1.2p-20)) ->
+  forall return:real.
+  (return = (1.0 - ((x_3 * x_3) * 0.5))) ->
+  ("JC_57": (abs_real((return - cos(x_3))) <= 0x1.3p-20))
 

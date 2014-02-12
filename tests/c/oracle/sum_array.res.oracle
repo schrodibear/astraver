@@ -246,32 +246,11 @@ behavior default:
    }
 }
 ========== file tests/c/sum_array.jessie/sum_array.cloc ==========
-[sum1]
-name = "Lemma sum1"
+[C_15]
 file = "HOME/tests/c/sum_array.c"
-line = 8
-begin = 6
-end = 73
-
-[sum2]
-name = "Lemma sum2"
-file = "HOME/tests/c/sum_array.c"
-line = 10
-begin = 6
-end = 104
-
-[sum3]
-name = "Lemma sum3"
-file = "HOME/tests/c/sum_array.c"
-line = 16
-begin = 4
-end = 137
-
-[C_10]
-file = "HOME/tests/c/sum_array.c"
-line = 39
-begin = 9
-end = 13
+line = 29
+begin = 12
+end = 33
 
 [C_11]
 file = "HOME/tests/c/sum_array.c"
@@ -279,35 +258,47 @@ line = 39
 begin = 4
 end = 13
 
-[C_12]
+[C_1]
 file = "HOME/tests/c/sum_array.c"
-line = 39
+line = 32
+begin = 2
+end = 5
+
+[C_33]
+file = "HOME/tests/c/sum_array.c"
+line = 58
 begin = 4
 end = 13
 
-[C_13]
+[C_9]
 file = "HOME/tests/c/sum_array.c"
-line = 37
-begin = 18
-end = 21
+line = 39
+begin = 9
+end = 10
 
-[C_14]
+[C_10]
 file = "HOME/tests/c/sum_array.c"
-line = 37
-begin = 18
-end = 21
+line = 39
+begin = 9
+end = 13
 
-[C_15]
-file = "HOME/tests/c/sum_array.c"
-line = 29
-begin = 12
-end = 33
-
-[C_16]
+[C_20]
 file = "HOME/tests/c/sum_array.c"
 line = 28
-begin = 13
+begin = 23
 end = 44
+
+[C_43]
+file = "HOME/tests/c/sum_array.c"
+line = 45
+begin = 23
+end = 44
+
+[C_32]
+file = "HOME/tests/c/sum_array.c"
+line = 58
+begin = 4
+end = 5
 
 [C_17]
 file = "HOME/tests/c/sum_array.c"
@@ -315,45 +306,28 @@ line = 28
 begin = 13
 end = 19
 
-[C_18]
+[C_40]
 file = "HOME/tests/c/sum_array.c"
-line = 28
-begin = 23
-end = 44
+line = 45
+begin = 13
+end = 19
 
-[C_19]
+[test1]
+name = "Function test1"
 file = "HOME/tests/c/sum_array.c"
-line = 28
-begin = 23
-end = 44
-
-[C_1]
-file = "HOME/tests/c/sum_array.c"
-line = 32
-begin = 2
-end = 5
-
-[C_2]
-file = "HOME/tests/c/sum_array.c"
-line = 37
-begin = 8
+line = 31
+begin = 4
 end = 9
 
-[C_3]
+[C_36]
 file = "HOME/tests/c/sum_array.c"
-line = 35
-begin = 19
-end = 22
+line = 55
+begin = 18
+end = 21
 
-[C_4]
+[C_42]
 file = "HOME/tests/c/sum_array.c"
-line = 34
-begin = 21
-end = 51
-
-[C_20]
-file = "HOME/tests/c/sum_array.c"
-line = 28
+line = 45
 begin = 23
 end = 44
 
@@ -363,77 +337,11 @@ line = 34
 begin = 21
 end = 32
 
-[C_21]
+[C_34]
 file = "HOME/tests/c/sum_array.c"
-line = 55
-begin = 8
-end = 9
-
-[C_6]
-file = "HOME/tests/c/sum_array.c"
-line = 34
-begin = 21
-end = 27
-
-[C_22]
-file = "HOME/tests/c/sum_array.c"
-line = 53
-begin = 19
-end = 22
-
-[C_7]
-file = "HOME/tests/c/sum_array.c"
-line = 34
-begin = 26
-end = 32
-
-[C_23]
-file = "HOME/tests/c/sum_array.c"
-line = 51
-begin = 21
-end = 81
-
-[C_8]
-file = "HOME/tests/c/sum_array.c"
-line = 34
-begin = 36
-end = 51
-
-[C_24]
-file = "HOME/tests/c/sum_array.c"
-line = 51
-begin = 21
-end = 32
-
-[C_9]
-file = "HOME/tests/c/sum_array.c"
-line = 39
-begin = 9
-end = 10
-
-[C_25]
-file = "HOME/tests/c/sum_array.c"
-line = 51
-begin = 21
-end = 27
-
-[C_26]
-file = "HOME/tests/c/sum_array.c"
-line = 51
-begin = 26
-end = 32
-
-[C_27]
-file = "HOME/tests/c/sum_array.c"
-line = 52
-begin = 10
-end = 45
-
-[C_28]
-file = "HOME/tests/c/sum_array.c"
-line = 57
-begin = 15
-end = 61
+line = 58
+begin = 4
+end = 13
 
 [C_29]
 file = "HOME/tests/c/sum_array.c"
@@ -441,72 +349,35 @@ line = 58
 begin = 4
 end = 5
 
-[C_30]
+[C_13]
 file = "HOME/tests/c/sum_array.c"
-line = 58
-begin = 4
-end = 8
+line = 37
+begin = 18
+end = 21
 
-[C_31]
+[C_7]
 file = "HOME/tests/c/sum_array.c"
-line = 58
-begin = 4
-end = 13
+line = 34
+begin = 26
+end = 32
 
-[C_32]
+[C_22]
 file = "HOME/tests/c/sum_array.c"
-line = 58
-begin = 4
-end = 5
+line = 53
+begin = 19
+end = 22
 
-[C_33]
+[C_14]
 file = "HOME/tests/c/sum_array.c"
-line = 58
-begin = 4
-end = 13
-
-[C_34]
-file = "HOME/tests/c/sum_array.c"
-line = 58
-begin = 4
-end = 13
+line = 37
+begin = 18
+end = 21
 
 [C_35]
 file = "HOME/tests/c/sum_array.c"
 line = 59
 begin = 15
 end = 61
-
-[C_36]
-file = "HOME/tests/c/sum_array.c"
-line = 55
-begin = 18
-end = 21
-
-[C_37]
-file = "HOME/tests/c/sum_array.c"
-line = 55
-begin = 18
-end = 21
-
-[C_38]
-file = "HOME/tests/c/sum_array.c"
-line = 47
-begin = 12
-end = 44
-
-[C_39]
-file = "HOME/tests/c/sum_array.c"
-line = 45
-begin = 13
-end = 44
-
-[test1]
-name = "Function test1"
-file = "HOME/tests/c/sum_array.c"
-line = 31
-begin = 4
-end = 9
 
 [test2]
 name = "Function test2"
@@ -515,6 +386,18 @@ line = 49
 begin = 5
 end = 10
 
+[C_25]
+file = "HOME/tests/c/sum_array.c"
+line = 51
+begin = 21
+end = 27
+
+[C_38]
+file = "HOME/tests/c/sum_array.c"
+line = 47
+begin = 12
+end = 44
+
 [sum_footprint]
 name = "Lemma sum_footprint"
 file = "HOME/tests/c/sum_array.c"
@@ -522,11 +405,103 @@ line = 22
 begin = 4
 end = 170
 
-[C_40]
+[C_8]
+file = "HOME/tests/c/sum_array.c"
+line = 34
+begin = 36
+end = 51
+
+[sum3]
+name = "Lemma sum3"
+file = "HOME/tests/c/sum_array.c"
+line = 16
+begin = 4
+end = 137
+
+[C_39]
 file = "HOME/tests/c/sum_array.c"
 line = 45
 begin = 13
-end = 19
+end = 44
+
+[C_27]
+file = "HOME/tests/c/sum_array.c"
+line = 52
+begin = 10
+end = 45
+
+[C_37]
+file = "HOME/tests/c/sum_array.c"
+line = 55
+begin = 18
+end = 21
+
+[sum2]
+name = "Lemma sum2"
+file = "HOME/tests/c/sum_array.c"
+line = 10
+begin = 6
+end = 104
+
+[C_19]
+file = "HOME/tests/c/sum_array.c"
+line = 28
+begin = 23
+end = 44
+
+[C_4]
+file = "HOME/tests/c/sum_array.c"
+line = 34
+begin = 21
+end = 51
+
+[C_12]
+file = "HOME/tests/c/sum_array.c"
+line = 39
+begin = 4
+end = 13
+
+[C_26]
+file = "HOME/tests/c/sum_array.c"
+line = 51
+begin = 26
+end = 32
+
+[C_18]
+file = "HOME/tests/c/sum_array.c"
+line = 28
+begin = 23
+end = 44
+
+[C_2]
+file = "HOME/tests/c/sum_array.c"
+line = 37
+begin = 8
+end = 9
+
+[C_28]
+file = "HOME/tests/c/sum_array.c"
+line = 57
+begin = 15
+end = 61
+
+[C_24]
+file = "HOME/tests/c/sum_array.c"
+line = 51
+begin = 21
+end = 32
+
+[C_6]
+file = "HOME/tests/c/sum_array.c"
+line = 34
+begin = 21
+end = 27
+
+[C_30]
+file = "HOME/tests/c/sum_array.c"
+line = 58
+begin = 4
+end = 8
 
 [C_41]
 file = "HOME/tests/c/sum_array.c"
@@ -534,17 +509,42 @@ line = 45
 begin = 23
 end = 44
 
-[C_42]
+[C_21]
 file = "HOME/tests/c/sum_array.c"
-line = 45
-begin = 23
+line = 55
+begin = 8
+end = 9
+
+[C_3]
+file = "HOME/tests/c/sum_array.c"
+line = 35
+begin = 19
+end = 22
+
+[C_16]
+file = "HOME/tests/c/sum_array.c"
+line = 28
+begin = 13
 end = 44
 
-[C_43]
+[C_31]
 file = "HOME/tests/c/sum_array.c"
-line = 45
-begin = 23
-end = 44
+line = 58
+begin = 4
+end = 13
+
+[sum1]
+name = "Lemma sum1"
+file = "HOME/tests/c/sum_array.c"
+line = 8
+begin = 6
+end = 73
+
+[C_23]
+file = "HOME/tests/c/sum_array.c"
+line = 51
+begin = 21
+end = 81
 
 ========== jessie execution ==========
 Generating Why function test1
@@ -559,10 +559,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs sum_array.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs sum_array.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs sum_array.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs sum_array.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -707,13 +708,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: sum_array.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: sum_array.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: sum_array.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include sum_array.depend
 
@@ -724,149 +725,11 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/sum_array.jessie/sum_array.loc ==========
-[JC_40]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_41]
+[JC_63]
 file = "HOME/tests/c/sum_array.c"
-line = 47
-begin = 12
-end = 44
-
-[JC_42]
-file = "HOME/tests/c/sum_array.c"
-line = 49
-begin = 5
-end = 10
-
-[JC_43]
-file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 112
-begin = 9
-end = 16
-
-[JC_44]
-file = "HOME/tests/c/sum_array.c"
-line = 47
-begin = 12
-end = 44
-
-[JC_45]
-file = "HOME/tests/c/sum_array.c"
-line = 49
-begin = 5
-end = 10
-
-[sum1]
-name = "Lemma sum1"
-behavior = "axiom"
-file = "HOME/tests/c/sum_array.c"
-line = 8
-begin = 6
-end = 73
-
-[JC_46]
-file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 112
-begin = 9
-end = 16
-
-[JC_1]
-file = "HOME/tests/c/sum_array.c"
-line = 28
-begin = 13
-end = 19
-
-[sum2]
-name = "Lemma sum2"
-behavior = "axiom"
-file = "HOME/tests/c/sum_array.c"
-line = 10
-begin = 6
-end = 104
-
-[JC_47]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_2]
-file = "HOME/tests/c/sum_array.c"
-line = 28
-begin = 23
-end = 44
-
-[sum3]
-name = "Lemma sum3"
-behavior = "lemma"
-file = "HOME/tests/c/sum_array.c"
-line = 16
-begin = 4
-end = 137
-
-[JC_48]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_3]
-file = "HOME/tests/c/sum_array.c"
-line = 28
-begin = 23
-end = 44
-
-[JC_49]
-file = "HOME/tests/c/sum_array.c"
-line = 51
-begin = 21
-end = 27
-
-[JC_4]
-file = "HOME/tests/c/sum_array.c"
-line = 28
-begin = 13
-end = 44
-
-[JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_6]
-file = "HOME/tests/c/sum_array.c"
-line = 28
-begin = 13
-end = 19
-
-[JC_7]
-file = "HOME/tests/c/sum_array.c"
-line = 28
-begin = 23
-end = 44
-
-[JC_8]
-file = "HOME/tests/c/sum_array.c"
-line = 28
-begin = 23
-end = 44
-
-[JC_9]
-file = "HOME/tests/c/sum_array.c"
-line = 28
-begin = 13
-end = 44
-
-[JC_50]
-file = "HOME/tests/c/sum_array.c"
-line = 51
-begin = 26
-end = 32
+line = 52
+begin = 10
+end = 45
 
 [JC_51]
 file = "HOME/tests/c/sum_array.c"
@@ -874,107 +737,11 @@ line = 52
 begin = 10
 end = 45
 
-[JC_52]
-file = "HOME/tests/c/sum_array.c"
-line = 51
-begin = 21
-end = 81
-
-[JC_53]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_54]
-file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 121
-begin = 6
-end = 2278
-
-[JC_55]
-file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 121
-begin = 6
-end = 2278
-
-[test2_ensures_default]
-name = "Function test2"
-behavior = "default behavior"
+[JC_45]
 file = "HOME/tests/c/sum_array.c"
 line = 49
 begin = 5
 end = 10
-
-[JC_56]
-file = "HOME/tests/c/sum_array.c"
-line = 57
-begin = 15
-end = 61
-
-[JC_57]
-kind = PointerDeref
-file = "HOME/tests/c/sum_array.c"
-line = 58
-begin = 4
-end = 8
-
-[JC_58]
-kind = PointerDeref
-file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 144
-begin = 24
-end = 425
-
-[JC_59]
-file = "HOME/tests/c/sum_array.c"
-line = 59
-begin = 15
-end = 61
-
-[test1_safety]
-name = "Function test1"
-behavior = "Safety"
-file = "HOME/tests/c/sum_array.c"
-line = 31
-begin = 4
-end = 9
-
-[JC_60]
-file = "HOME/tests/c/sum_array.c"
-line = 53
-begin = 19
-end = 22
-
-[JC_61]
-file = "HOME/tests/c/sum_array.c"
-line = 51
-begin = 21
-end = 27
-
-[JC_62]
-file = "HOME/tests/c/sum_array.c"
-line = 51
-begin = 26
-end = 32
-
-[JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_63]
-file = "HOME/tests/c/sum_array.c"
-line = 52
-begin = 10
-end = 45
-
-[JC_11]
-file = "HOME/tests/c/sum_array.c"
-line = 29
-begin = 12
-end = 33
 
 [JC_64]
 file = "HOME/tests/c/sum_array.c"
@@ -982,31 +749,44 @@ line = 51
 begin = 21
 end = 81
 
-[JC_12]
+[JC_31]
 file = "HOME/tests/c/sum_array.c"
-line = 29
-begin = 12
-end = 33
+line = 45
+begin = 13
+end = 19
 
-[JC_65]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_17]
+file = "HOME/tests/c/sum_array.c"
+line = 34
+begin = 36
+end = 51
 
-[JC_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_66]
+[JC_55]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
 line = 121
 begin = 6
 end = 2278
 
-[JC_14]
+[JC_48]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_23]
+file = "HOME/tests/c/sum_array.c"
+line = 35
+begin = 19
+end = 22
+
+[JC_22]
+kind = PointerDeref
+file = "HOME/tests/c/sum_array.c"
+line = 39
+begin = 9
+end = 13
+
+[JC_5]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1018,80 +798,19 @@ line = 121
 begin = 6
 end = 2278
 
-[JC_15]
-file = "HOME/tests/c/sum_array.c"
-line = 34
-begin = 21
-end = 27
-
-[JC_68]
-file = "HOME/tests/c/sum_array.c"
-line = 57
-begin = 15
-end = 61
-
-[JC_16]
-file = "HOME/tests/c/sum_array.c"
-line = 34
-begin = 26
-end = 32
-
-[JC_69]
-file = "HOME/tests/c/sum_array.c"
-line = 59
-begin = 15
-end = 61
-
-[JC_17]
-file = "HOME/tests/c/sum_array.c"
-line = 34
-begin = 36
-end = 51
-
-[JC_18]
-file = "HOME/tests/c/sum_array.c"
-line = 34
-begin = 21
-end = 51
-
-[JC_19]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[test2_safety]
-name = "Function test2"
+[test1_safety]
+name = "Function test1"
 behavior = "Safety"
 file = "HOME/tests/c/sum_array.c"
-line = 49
-begin = 5
-end = 10
+line = 31
+begin = 4
+end = 9
 
-[JC_20]
-file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 87
-begin = 6
-end = 472
-
-[JC_21]
-file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 87
-begin = 6
-end = 472
-
-[JC_22]
-kind = PointerDeref
+[JC_9]
 file = "HOME/tests/c/sum_array.c"
-line = 39
-begin = 9
-end = 13
-
-[JC_23]
-file = "HOME/tests/c/sum_array.c"
-line = 35
-begin = 19
-end = 22
+line = 28
+begin = 13
+end = 44
 
 [JC_24]
 file = "HOME/tests/c/sum_array.c"
@@ -1105,11 +824,91 @@ line = 34
 begin = 26
 end = 32
 
+[JC_41]
+file = "HOME/tests/c/sum_array.c"
+line = 47
+begin = 12
+end = 44
+
+[JC_47]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_52]
+file = "HOME/tests/c/sum_array.c"
+line = 51
+begin = 21
+end = 81
+
 [JC_26]
 file = "HOME/tests/c/sum_array.c"
 line = 34
 begin = 36
 end = 51
+
+[JC_8]
+file = "HOME/tests/c/sum_array.c"
+line = 28
+begin = 23
+end = 44
+
+[JC_54]
+file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
+line = 121
+begin = 6
+end = 2278
+
+[JC_13]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_11]
+file = "HOME/tests/c/sum_array.c"
+line = 29
+begin = 12
+end = 33
+
+[test2_safety]
+name = "Function test2"
+behavior = "Safety"
+file = "HOME/tests/c/sum_array.c"
+line = 49
+begin = 5
+end = 10
+
+[JC_15]
+file = "HOME/tests/c/sum_array.c"
+line = 34
+begin = 21
+end = 27
+
+[JC_36]
+file = "HOME/tests/c/sum_array.c"
+line = 45
+begin = 13
+end = 19
+
+[JC_39]
+file = "HOME/tests/c/sum_array.c"
+line = 45
+begin = 13
+end = 44
+
+[JC_40]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_35]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_27]
 file = "HOME/tests/c/sum_array.c"
@@ -1117,41 +916,29 @@ line = 34
 begin = 21
 end = 51
 
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_69]
+file = "HOME/tests/c/sum_array.c"
+line = 59
+begin = 15
+end = 61
 
-[JC_29]
-file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 87
-begin = 6
-end = 472
-
-[JC_30]
-file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 87
-begin = 6
-end = 472
-
-[JC_31]
+[JC_38]
 file = "HOME/tests/c/sum_array.c"
 line = 45
+begin = 23
+end = 44
+
+[JC_12]
+file = "HOME/tests/c/sum_array.c"
+line = 29
+begin = 12
+end = 33
+
+[JC_6]
+file = "HOME/tests/c/sum_array.c"
+line = 28
 begin = 13
 end = 19
-
-[JC_32]
-file = "HOME/tests/c/sum_array.c"
-line = 45
-begin = 23
-end = 44
-
-[JC_33]
-file = "HOME/tests/c/sum_array.c"
-line = 45
-begin = 23
-end = 44
 
 [sum_footprint]
 name = "Lemma sum_footprint"
@@ -1161,35 +948,155 @@ line = 22
 begin = 4
 end = 170
 
+[JC_44]
+file = "HOME/tests/c/sum_array.c"
+line = 47
+begin = 12
+end = 44
+
+[JC_4]
+file = "HOME/tests/c/sum_array.c"
+line = 28
+begin = 13
+end = 44
+
+[JC_62]
+file = "HOME/tests/c/sum_array.c"
+line = 51
+begin = 26
+end = 32
+
+[sum3]
+name = "Lemma sum3"
+behavior = "lemma"
+file = "HOME/tests/c/sum_array.c"
+line = 16
+begin = 4
+end = 137
+
+[JC_42]
+file = "HOME/tests/c/sum_array.c"
+line = 49
+begin = 5
+end = 10
+
+[JC_46]
+file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
+line = 112
+begin = 9
+end = 16
+
+[test2_ensures_default]
+name = "Function test2"
+behavior = "default behavior"
+file = "HOME/tests/c/sum_array.c"
+line = 49
+begin = 5
+end = 10
+
+[JC_61]
+file = "HOME/tests/c/sum_array.c"
+line = 51
+begin = 21
+end = 27
+
+[JC_32]
+file = "HOME/tests/c/sum_array.c"
+line = 45
+begin = 23
+end = 44
+
+[JC_56]
+file = "HOME/tests/c/sum_array.c"
+line = 57
+begin = 15
+end = 61
+
+[JC_33]
+file = "HOME/tests/c/sum_array.c"
+line = 45
+begin = 23
+end = 44
+
+[JC_65]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[sum2]
+name = "Lemma sum2"
+behavior = "axiom"
+file = "HOME/tests/c/sum_array.c"
+line = 10
+begin = 6
+end = 104
+
+[JC_29]
+file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
+line = 87
+begin = 6
+end = 472
+
+[JC_68]
+file = "HOME/tests/c/sum_array.c"
+line = 57
+begin = 15
+end = 61
+
+[JC_7]
+file = "HOME/tests/c/sum_array.c"
+line = 28
+begin = 23
+end = 44
+
+[JC_16]
+file = "HOME/tests/c/sum_array.c"
+line = 34
+begin = 26
+end = 32
+
+[JC_43]
+file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
+line = 112
+begin = 9
+end = 16
+
+[JC_2]
+file = "HOME/tests/c/sum_array.c"
+line = 28
+begin = 23
+end = 44
+
 [JC_34]
 file = "HOME/tests/c/sum_array.c"
 line = 45
 begin = 13
 end = 44
 
-[JC_35]
+[JC_14]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_36]
-file = "HOME/tests/c/sum_array.c"
-line = 45
-begin = 13
-end = 19
+[JC_53]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_37]
-file = "HOME/tests/c/sum_array.c"
-line = 45
-begin = 23
-end = 44
+[JC_21]
+file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
+line = 87
+begin = 6
+end = 472
 
-[JC_38]
+[JC_49]
 file = "HOME/tests/c/sum_array.c"
-line = 45
-begin = 23
-end = 44
+line = 51
+begin = 21
+end = 27
 
 [test1_ensures_default]
 name = "Function test1"
@@ -1199,11 +1106,105 @@ line = 31
 begin = 4
 end = 9
 
-[JC_39]
+[JC_1]
+file = "HOME/tests/c/sum_array.c"
+line = 28
+begin = 13
+end = 19
+
+[JC_37]
 file = "HOME/tests/c/sum_array.c"
 line = 45
-begin = 13
+begin = 23
 end = 44
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_57]
+kind = PointerDeref
+file = "HOME/tests/c/sum_array.c"
+line = 58
+begin = 4
+end = 8
+
+[JC_66]
+file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
+line = 121
+begin = 6
+end = 2278
+
+[JC_59]
+file = "HOME/tests/c/sum_array.c"
+line = 59
+begin = 15
+end = 61
+
+[JC_20]
+file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
+line = 87
+begin = 6
+end = 472
+
+[JC_18]
+file = "HOME/tests/c/sum_array.c"
+line = 34
+begin = 21
+end = 51
+
+[JC_3]
+file = "HOME/tests/c/sum_array.c"
+line = 28
+begin = 23
+end = 44
+
+[JC_60]
+file = "HOME/tests/c/sum_array.c"
+line = 53
+begin = 19
+end = 22
+
+[JC_19]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_50]
+file = "HOME/tests/c/sum_array.c"
+line = 51
+begin = 26
+end = 32
+
+[JC_30]
+file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
+line = 87
+begin = 6
+end = 472
+
+[sum1]
+name = "Lemma sum1"
+behavior = "axiom"
+file = "HOME/tests/c/sum_array.c"
+line = 8
+begin = 6
+end = 73
+
+[JC_58]
+kind = PointerDeref
+file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
+line = 144
+begin = 24
+end = 425
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/c/sum_array.jessie/why/sum_array.why ==========
 type charP
@@ -1666,8 +1667,8 @@ let test1_ensures_default =
       (C_2:
       (loop_2:
       begin
-        (let jessie_<num> = (s_0 := (0)) in void);
-       (let jessie_<num> = (i := (0)) in void);
+        (let _jessie_<num> = (s_0 := (0)) in void);
+       (let _jessie_<num> = (i := (0)) in void);
        while true do
        { invariant
            (JC_27:
@@ -1679,12 +1680,12 @@ let test1_ensures_default =
           [ { } unit { true } ];
          try
           begin
-            (let jessie_<num> =
+            (let _jessie_<num> =
             (C_14:
             begin
               (if ((lt_int_ !i) n_1) then void
               else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<num> =
+             (let _jessie_<num> =
              (C_12:
              begin
                (s_0 := (C_11:
@@ -1693,9 +1694,9 @@ let test1_ensures_default =
                                                                   ((shift t_0) !i)))))));
               !s_0 end) in void); (i := (C_13: ((add_int !i) (1)))); !i end) in
             void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done;
+          Loop_continue_exc _jessie_<num> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end))) with
-      Goto_while_0_break_exc jessie_<num> ->
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (return := !s_0); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_11: (result = sum(t_0, (0), n_1, intP_intM_t_2))) }
@@ -1718,8 +1719,8 @@ let test1_safety =
       (C_2:
       (loop_1:
       begin
-        (let jessie_<num> = (s_0 := (0)) in void);
-       (let jessie_<num> = (i := (0)) in void);
+        (let _jessie_<num> = (s_0 := (0)) in void);
+       (let _jessie_<num> = (i := (0)) in void);
        while true do
        { invariant (JC_20: true) variant (JC_23 : sub_int(n_1, i)) }
         begin
@@ -1730,12 +1731,12 @@ let test1_safety =
                   and (JC_17: (s_0 = sum(t_0, (0), i, intP_intM_t_2)))))) } ];
          try
           begin
-            (let jessie_<num> =
+            (let _jessie_<num> =
             (C_14:
             begin
               (if ((lt_int_ !i) n_1) then void
               else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<num> =
+             (let _jessie_<num> =
              (C_12:
              begin
                (s_0 := (C_11:
@@ -1744,9 +1745,9 @@ let test1_safety =
                                        ((((offset_acc_ intP_t_2_alloc_table) intP_intM_t_2) t_0) !i))))));
               !s_0 end) in void); (i := (C_13: ((add_int !i) (1)))); !i end) in
             void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done;
+          Loop_continue_exc _jessie_<num> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end))) with
-      Goto_while_0_break_exc jessie_<num> ->
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (return := !s_0); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -1766,7 +1767,7 @@ let test2_ensures_default =
       (C_21:
       (loop_4:
       begin
-        (let jessie_<num> = (i_0 := (0)) in void);
+        (let _jessie_<num> = (i_0 := (0)) in void);
        while true do
        { invariant
            ((JC_64:
@@ -1785,7 +1786,7 @@ let test2_ensures_default =
           [ { } unit { true } ];
          try
           begin
-            (let jessie_<num> =
+            (let _jessie_<num> =
             begin
               (if ((lt_int_ !i_0) n_2) then void
               else (raise (Goto_while_0_break_exc void)));
@@ -1805,16 +1806,16 @@ let test2_ensures_default =
              (C_34:
              begin
                void;
-              (let jessie_<num> =
-              (let jessie_<num> =
+              (let _jessie_<num> =
+              (let _jessie_<num> =
               (C_31:
               ((add_int (C_30:
                         ((safe_acc_ !intP_intM_t_0_3) (C_29:
                                                       ((shift t_0_0) !i_0))))) (1))) in
-              (let jessie_<num> = t_0_0 in
-              (let jessie_<num> = !i_0 in
-              (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-              (((safe_upd_ intP_intM_t_0_3) jessie_<num>) jessie_<num>))))) in
+              (let _jessie_<num> = t_0_0 in
+              (let _jessie_<num> = !i_0 in
+              (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+              (((safe_upd_ intP_intM_t_0_3) _jessie_<num>) _jessie_<num>))))) in
               void);
               (assert
               { (JC_69:
@@ -1833,9 +1834,9 @@ let test2_ensures_default =
               (C_37:
               begin   void; (i_0 := (C_36: ((add_int !i_0) (1)))); !i_0 end)
              end) end in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done;
+          Loop_continue_exc _jessie_<num> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end)) with
-      Goto_while_0_break_exc jessie_<num> ->
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
   { (JC_43:
@@ -1863,7 +1864,7 @@ let test2_safety =
       (C_21:
       (loop_3:
       begin
-        (let jessie_<num> = (i_0 := (0)) in void);
+        (let _jessie_<num> = (i_0 := (0)) in void);
        while true do
        { invariant (JC_54: true) variant (JC_60 : sub_int(n_2, i_0)) }
         begin
@@ -1879,7 +1880,7 @@ let test2_safety =
                                                                i_0)))))) } ];
          try
           begin
-            (let jessie_<num> =
+            (let _jessie_<num> =
             begin
               (if ((lt_int_ !i_0) n_2) then void
               else (raise (Goto_while_0_break_exc void)));
@@ -1899,17 +1900,17 @@ let test2_safety =
              (C_34:
              begin
                void;
-              (let jessie_<num> =
-              (let jessie_<num> =
+              (let _jessie_<num> =
+              (let _jessie_<num> =
               (C_31:
               ((add_int (C_30:
                         (JC_57:
                         ((((offset_acc_ intP_t_0_3_alloc_table) !intP_intM_t_0_3) t_0_0) !i_0)))) (1))) in
-              (let jessie_<num> = t_0_0 in
-              (let jessie_<num> = !i_0 in
-              (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+              (let _jessie_<num> = t_0_0 in
+              (let _jessie_<num> = !i_0 in
+              (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
               (JC_58:
-              (((((offset_upd_ intP_t_0_3_alloc_table) intP_intM_t_0_3) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+              (((((offset_upd_ intP_t_0_3_alloc_table) intP_intM_t_0_3) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
               void);
               [ { } unit reads i_0,intP_intM_t_0_3
                 { (JC_59:
@@ -1927,9 +1928,9 @@ let test2_safety =
               (C_37:
               begin   void; (i_0 := (C_36: ((add_int !i_0) (1)))); !i_0 end)
              end) end in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<num> -> void end end done;
+          Loop_continue_exc _jessie_<num> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end)) with
-      Goto_while_0_break_exc jessie_<num> ->
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { true }
 

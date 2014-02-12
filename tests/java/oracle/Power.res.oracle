@@ -12,15 +12,15 @@
   @ }
   @*/
 
-/*@ lemma power_mul: 
+/*@ lemma power_mul:
   @   \forall integer x y n; n >= 0 ==> power(x*y,n) == power(x,n)*power(y,n);
   @*/
 
-/*@ lemma power_even: 
+/*@ lemma power_even:
   @   \forall integer x n; n >= 0 && n % 2 == 0 ==> power(x,n) == power(x*x,n/2);
   @*/
 
-/*@ lemma power_odd: 
+/*@ lemma power_odd:
   @   \forall integer x n; n >= 0 && n % 2 != 0 ==> power(x,n) == x*power(x*x,n/2);
   @*/
 
@@ -50,7 +50,7 @@ class Power {
         long r = 1, p = x;
         int e = n;
 
-        /*@ loop_invariant 
+        /*@ loop_invariant
           @   0 <= e && r * power(p,e) == power(x,n);
           @ loop_variant e;
           @*/
@@ -67,21 +67,21 @@ class Power {
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
-Generating JC function Power_rec for method Power.rec
 Generating JC function Power_imp for method Power.imp
-Generating JC function cons_Power for constructor Power
-Generating JC function Object_registerNatives for method Object.registerNatives
+Generating JC function Object_clone for method Object.clone
+Generating JC function Object_notifyAll for method Object.notifyAll
 Generating JC function Object_hashCode for method Object.hashCode
 Generating JC function Object_equals for method Object.equals
-Generating JC function Object_clone for method Object.clone
-Generating JC function Object_toString for method Object.toString
-Generating JC function Object_notify for method Object.notify
-Generating JC function Object_notifyAll for method Object.notifyAll
-Generating JC function Object_wait_long for method Object.wait
-Generating JC function Object_wait_long_int for method Object.wait
 Generating JC function Object_wait for method Object.wait
-Generating JC function Object_finalize for method Object.finalize
+Generating JC function Object_notify for method Object.notify
+Generating JC function Object_wait_long for method Object.wait
+Generating JC function cons_Power for constructor Power
+Generating JC function Power_rec for method Power.rec
+Generating JC function Object_toString for method Object.toString
+Generating JC function Object_wait_long_int for method Object.wait
 Generating JC function cons_Object for constructor Object
+Generating JC function Object_finalize for method Object.finalize
+Generating JC function Object_registerNatives for method Object.registerNatives
 Done.
 ========== file tests/java/Power.jc ==========
 # InvariantPolicy = Arguments
@@ -96,19 +96,19 @@ predicate Non_null_Object{Here}(Object[0..] x) =
 String[0..] any_string()
 ;
 
-tag Object = {
+tag String = Object with {
 }
 
-tag String = Object with {
+tag Power = Object with {
 }
 
 tag Throwable = Object with {
 }
 
-tag Exception = Object with {
+tag Object = {
 }
 
-tag Power = Object with {
+tag Exception = Object with {
 }
 
 type Object = [Object]
@@ -157,55 +157,36 @@ lemma power_odd :
     (((n_3 >= 0) && ((n_3 % 2) != 0)) ==>
       (power(x_4, n_3) == (x_4 * power((x_4 * x_4), (n_3 / 2)))))))
 
-exception Throwable of Throwable[0..]
-
 exception Exception of Exception[0..]
 
-integer Power_rec(integer x_5, integer n_4)
-  requires (K_2 : (0 <= n_4));
-  decreases (K_3 : n_4);
-behavior default:
-  ensures (K_1 : (\result == power(x_5, n_4)));
-{  (if (K_4 : (n_4 == 0)) then 
-   (return 1) else ());
-   
-   {  
-      (var integer r_0 = (K_11 : Power_rec(x_5, (K_10 : (n_4 / 2)))));
-      
-      {  (if (K_7 : ((K_6 : (n_4 % 2)) == 0)) then 
-         (return (K_5 : (r_0 * r_0))) else ());
-         
-         (return (K_9 : ((K_8 : (r_0 * r_0)) * x_5)))
-      }
-   }
-}
+exception Throwable of Throwable[0..]
 
 integer Power_imp(integer x_6, integer n_5)
-  requires (K_13 : (0 <= n_5));
+  requires (K_2 : (0 <= n_5));
 behavior default:
-  ensures (K_12 : (\result == power(x_6, n_5)));
+  ensures (K_1 : (\result == power(x_6, n_5)));
 {  
    {  
-      (var integer r = (K_26 : 1));
+      (var integer r = (K_15 : 1));
       
       {  
-         (var integer p = (K_25 : x_6));
+         (var integer p = (K_14 : x_6));
          
          {  
-            (var integer e = (K_24 : n_5));
+            (var integer e = (K_13 : n_5));
             
             {  
                loop 
                behavior default:
-                 invariant (K_16 : ((K_15 : (0 <= e)) &&
-                                     (K_14 : ((r * power(p, e)) ==
-                                               power(x_6, n_5)))));
-               variant (K_17 : e);
-               while ((K_23 : (e > 0)))
+                 invariant (K_5 : ((K_4 : (0 <= e)) &&
+                                    (K_3 : ((r * power(p, e)) ==
+                                             power(x_6, n_5)))));
+               variant (K_6 : e);
+               while ((K_12 : (e > 0)))
                {  
-                  {  (if (K_20 : ((K_19 : (e % 2)) != 0)) then (K_18 : r *= p) else ());
-                     (K_21 : p *= p);
-                     (K_22 : e /= 2)
+                  {  (if (K_9 : ((K_8 : (e % 2)) != 0)) then (K_7 : r *= p) else ());
+                     (K_10 : p *= p);
+                     (K_11 : e /= 2)
                   }
                };
                
@@ -216,42 +197,61 @@ behavior default:
    }
 }
 
-unit cons_Power(! Power[0] this_1){()}
-
-unit Object_registerNatives()
+Object[0..] Object_clone(Object[0] this_2)
 ;
 
-integer Object_hashCode(Object[0] this_2)
+unit Object_notifyAll(Object[0] this_3)
 ;
 
-boolean Object_equals(Object[0] this_3, Object[0..] obj)
+integer Object_hashCode(Object[0] this_4)
 ;
 
-Object[0..] Object_clone(Object[0] this_4)
+boolean Object_equals(Object[0] this_5, Object[0..] obj)
 ;
 
-String[0..] Object_toString(Object[0] this_5)
+unit Object_wait(Object[0] this_6)
 ;
 
-unit Object_notify(Object[0] this_6)
-;
-
-unit Object_notifyAll(Object[0] this_7)
+unit Object_notify(Object[0] this_7)
 ;
 
 unit Object_wait_long(Object[0] this_8, integer timeout)
 ;
 
-unit Object_wait_long_int(Object[0] this_9, integer timeout_0, integer nanos)
+unit cons_Power(! Power[0] this_1){()}
+
+integer Power_rec(integer x_5, integer n_4)
+  requires (K_17 : (0 <= n_4));
+  decreases (K_18 : n_4);
+behavior default:
+  ensures (K_16 : (\result == power(x_5, n_4)));
+{  (if (K_19 : (n_4 == 0)) then 
+   (return 1) else ());
+   
+   {  
+      (var integer r_0 = (K_26 : Power_rec(x_5, (K_25 : (n_4 / 2)))));
+      
+      {  (if (K_22 : ((K_21 : (n_4 % 2)) == 0)) then 
+         (return (K_20 : (r_0 * r_0))) else ());
+         
+         (return (K_24 : ((K_23 : (r_0 * r_0)) * x_5)))
+      }
+   }
+}
+
+String[0..] Object_toString(Object[0] this_9)
 ;
 
-unit Object_wait(Object[0] this_10)
+unit Object_wait_long_int(Object[0] this_10, integer timeout_0, integer nanos)
 ;
+
+unit cons_Object(! Object[0] this_12){()}
 
 unit Object_finalize(Object[0] this_11)
 ;
 
-unit cons_Object(! Object[0] this_12){()}
+unit Object_registerNatives()
+;
 
 /*
 Local Variables:
@@ -260,203 +260,17 @@ compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Power.jloc t
 End:
 */
 ========== file tests/java/Power.jloc ==========
-[K_10]
-file = "HOME/tests/java/Power.java"
-line = 37
-begin = 24
-end = 27
-
-[K_11]
-file = "HOME/tests/java/Power.java"
-line = 37
-begin = 17
-end = 28
-
-[K_12]
-file = "HOME/tests/java/Power.java"
-line = 46
-begin = 16
-end = 37
-
-[K_13]
-file = "HOME/tests/java/Power.java"
-line = 45
-begin = 17
-end = 23
-
-[K_14]
-file = "HOME/tests/java/Power.java"
-line = 53
-begin = 24
-end = 52
-
-[K_15]
-file = "HOME/tests/java/Power.java"
-line = 53
-begin = 14
-end = 20
-
-[K_16]
-file = "HOME/tests/java/Power.java"
-line = 53
-begin = 14
-end = 52
-
-[K_17]
-file = "HOME/tests/java/Power.java"
-line = 54
-begin = 25
-end = 26
-
-[K_18]
-file = "HOME/tests/java/Power.java"
-line = 57
-begin = 28
-end = 34
-
-[K_19]
-file = "HOME/tests/java/Power.java"
-line = 57
-begin = 16
-end = 21
-
-[K_20]
-file = "HOME/tests/java/Power.java"
-line = 57
-begin = 16
-end = 26
-
-[K_21]
-file = "HOME/tests/java/Power.java"
-line = 58
-begin = 12
-end = 18
-
-[power_0]
-name = "Lemma power_0"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[K_22]
-file = "HOME/tests/java/Power.java"
-line = 59
-begin = 12
-end = 18
-
 [K_23]
 file = "HOME/tests/java/Power.java"
-line = 56
+line = 39
 begin = 15
-end = 20
+end = 18
 
-[K_24]
-file = "HOME/tests/java/Power.java"
-line = 50
-begin = 16
-end = 17
-
-[K_1]
-file = "HOME/tests/java/Power.java"
-line = 33
-begin = 16
-end = 37
-
-[K_25]
-file = "HOME/tests/java/Power.java"
-line = 49
-begin = 24
-end = 25
-
-[K_2]
+[K_17]
 file = "HOME/tests/java/Power.java"
 line = 31
 begin = 17
 end = 23
-
-[K_26]
-file = "HOME/tests/java/Power.java"
-line = 49
-begin = 17
-end = 18
-
-[K_3]
-file = "HOME/tests/java/Power.java"
-line = 32
-begin = 18
-end = 19
-
-[Object_equals]
-name = "Method equals"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
-
-[K_4]
-file = "HOME/tests/java/Power.java"
-line = 36
-begin = 13
-end = 19
-
-[K_5]
-file = "HOME/tests/java/Power.java"
-line = 38
-begin = 33
-end = 36
-
-[K_6]
-file = "HOME/tests/java/Power.java"
-line = 38
-begin = 13
-end = 18
-
-[K_7]
-file = "HOME/tests/java/Power.java"
-line = 38
-begin = 13
-end = 23
-
-[K_8]
-file = "HOME/tests/java/Power.java"
-line = 39
-begin = 15
-end = 18
-
-[K_9]
-file = "HOME/tests/java/Power.java"
-line = 39
-begin = 15
-end = 20
-
-[Object_notify]
-name = "Method notify"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[cons_Object]
-name = "Constructor of class Object"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Object_wait_long_int]
-name = "Method wait"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[Power_rec]
-name = "Method rec"
-file = "HOME/tests/java/Power.java"
-line = 35
-begin = 16
-end = 19
 
 [Object_wait_long]
 name = "Method wait"
@@ -465,19 +279,159 @@ line = 333
 begin = 29
 end = 33
 
-[Object_hashCode]
-name = "Method hashCode"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+[K_11]
+file = "HOME/tests/java/Power.java"
+line = 59
+begin = 12
+end = 18
 
-[Object_notifyAll]
-name = "Method notifyAll"
+[K_25]
+file = "HOME/tests/java/Power.java"
+line = 37
+begin = 24
+end = 27
+
+[K_13]
+file = "HOME/tests/java/Power.java"
+line = 50
+begin = 16
+end = 17
+
+[Object_finalize]
+name = "Method finalize"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
+line = 481
+begin = 19
+end = 27
+
+[K_9]
+file = "HOME/tests/java/Power.java"
+line = 57
+begin = 16
+end = 26
+
+[Object_wait]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[Object_notify]
+name = "Method notify"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
 begin = 29
-end = 38
+end = 35
+
+[Object_clone]
+name = "Method clone"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
+
+[cons_Object]
+name = "Constructor of class Object"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[K_1]
+file = "HOME/tests/java/Power.java"
+line = 46
+begin = 16
+end = 37
+
+[K_15]
+file = "HOME/tests/java/Power.java"
+line = 49
+begin = 17
+end = 18
+
+[K_4]
+file = "HOME/tests/java/Power.java"
+line = 53
+begin = 14
+end = 20
+
+[K_12]
+file = "HOME/tests/java/Power.java"
+line = 56
+begin = 15
+end = 20
+
+[Object_wait_long_int]
+name = "Method wait"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[Object_registerNatives]
+name = "Method registerNatives"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[K_20]
+file = "HOME/tests/java/Power.java"
+line = 38
+begin = 33
+end = 36
+
+[power_s]
+name = "Lemma power_s"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[K_2]
+file = "HOME/tests/java/Power.java"
+line = 45
+begin = 17
+end = 23
+
+[power_even]
+name = "Lemma power_even"
+file = "HOME/tests/java/Power.java"
+line = 18
+begin = 10
+end = 20
+
+[K_10]
+file = "HOME/tests/java/Power.java"
+line = 58
+begin = 12
+end = 18
+
+[K_6]
+file = "HOME/tests/java/Power.java"
+line = 54
+begin = 25
+end = 26
+
+[power_0]
+name = "Lemma power_0"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[K_8]
+file = "HOME/tests/java/Power.java"
+line = 57
+begin = 16
+end = 21
+
+[K_3]
+file = "HOME/tests/java/Power.java"
+line = 53
+begin = 24
+end = 52
 
 [cons_Power]
 name = "Constructor of class Power"
@@ -486,12 +440,56 @@ line = 0
 begin = -1
 end = -1
 
-[Object_toString]
-name = "Method toString"
+[K_21]
+file = "HOME/tests/java/Power.java"
+line = 38
+begin = 13
+end = 18
+
+[K_24]
+file = "HOME/tests/java/Power.java"
+line = 39
+begin = 15
+end = 20
+
+[K_14]
+file = "HOME/tests/java/Power.java"
+line = 49
+begin = 24
+end = 25
+
+[Object_notifyAll]
+name = "Method notifyAll"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+line = 267
+begin = 29
+end = 38
+
+[K_19]
+file = "HOME/tests/java/Power.java"
+line = 36
+begin = 13
+end = 19
+
+[power_odd]
+name = "Lemma power_odd"
+file = "HOME/tests/java/Power.java"
+line = 22
+begin = 10
+end = 19
+
+[K_5]
+file = "HOME/tests/java/Power.java"
+line = 53
+begin = 14
+end = 52
+
+[Power_rec]
+name = "Method rec"
+file = "HOME/tests/java/Power.java"
+line = 35
+begin = 16
+end = 19
 
 [Power_imp]
 name = "Method imp"
@@ -507,59 +505,61 @@ line = 14
 begin = 10
 end = 19
 
-[power_odd]
-name = "Lemma power_odd"
+[K_18]
 file = "HOME/tests/java/Power.java"
-line = 22
-begin = 10
+line = 32
+begin = 18
 end = 19
 
-[Object_registerNatives]
-name = "Method registerNatives"
+[Object_equals]
+name = "Method equals"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+line = 122
+begin = 19
+end = 25
 
-[Object_clone]
-name = "Method clone"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
+[K_7]
+file = "HOME/tests/java/Power.java"
+line = 57
 begin = 28
-end = 33
+end = 34
 
-[Object_wait]
-name = "Method wait"
+[K_26]
+file = "HOME/tests/java/Power.java"
+line = 37
+begin = 17
+end = 28
+
+[Object_hashCode]
+name = "Method hashCode"
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
+line = 74
 begin = 22
+end = 30
+
+[Object_toString]
+name = "Method toString"
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
 end = 26
 
-[power_s]
-name = "Lemma power_s"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[power_even]
-name = "Lemma power_even"
+[K_22]
 file = "HOME/tests/java/Power.java"
-line = 18
-begin = 10
-end = 20
+line = 38
+begin = 13
+end = 23
 
-[Object_finalize]
-name = "Method finalize"
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+[K_16]
+file = "HOME/tests/java/Power.java"
+line = 33
+begin = 16
+end = 37
 
 ========== jessie execution ==========
-Generating Why function Power_rec
 Generating Why function Power_imp
 Generating Why function cons_Power
+Generating Why function Power_rec
 Generating Why function cons_Object
 ========== file tests/java/Power.makefile ==========
 # this makefile was automatically generated; do not edit 
@@ -571,10 +571,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Power.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Power.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs Power.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs Power.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -719,13 +720,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: Power.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: Power.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: Power.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include Power.depend
 
@@ -736,271 +737,13 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/Power.loc ==========
-[JC_90]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_91]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Power_imp_safety]
-name = "Method imp"
-behavior = "Safety"
-file = "HOME/tests/java/Power.java"
-line = 48
-begin = 16
-end = 19
-
-[JC_92]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_40]
-file = "HOME/tests/java/Power.java"
-line = 46
-begin = 16
-end = 37
-
-[Power_rec_safety]
-name = "Method rec"
-behavior = "Safety"
-file = "HOME/tests/java/Power.java"
-line = 35
-begin = 16
-end = 19
-
-[JC_93]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
-
-[JC_41]
-file = "HOME/tests/java/Power.java"
-line = 46
-begin = 16
-end = 37
-
 [JC_94]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_42]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_95]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
+line = 333
+begin = 29
 end = 33
 
-[JC_43]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_96]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_44]
-file = "HOME/tests/java/Power.java"
-line = 53
-begin = 14
-end = 20
-
-[JC_150]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_97]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_45]
-file = "HOME/tests/java/Power.java"
-line = 53
-begin = 24
-end = 52
-
-[JC_151]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
-
-[JC_98]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_46]
-file = "HOME/tests/java/Power.java"
-line = 53
-begin = 14
-end = 52
-
-[JC_1]
-file = "HOME/tests/java/Power.jc"
-line = 10
-begin = 12
-end = 22
-
-[JC_152]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_100]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_99]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_47]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_153]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_101]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
-
-[JC_48]
-file = "HOME/tests/java/Power.jc"
-line = 112
-begin = 15
-end = 540
-
-[JC_3]
-file = "HOME/tests/java/Power.jc"
-line = 10
-begin = 12
-end = 22
-
-[JC_154]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_102]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_49]
-file = "HOME/tests/java/Power.jc"
-line = 112
-begin = 15
-end = 540
-
-[JC_4]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_155]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_103]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
-
-[JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_156]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_104]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_157]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_105]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_Object_safety]
-name = "Constructor of class Object"
-behavior = "Safety"
+[JC_73]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1012,127 +755,95 @@ line = 0
 begin = -1
 end = -1
 
+[JC_63]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_80]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_51]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_71]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_147]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_151]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[JC_45]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_123]
+kind = UserCall
+file = "HOME/tests/java/Power.java"
+line = 37
+begin = 17
+end = 28
+
 [JC_106]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_8]
+[JC_143]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_159]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_107]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/java/Power.jc"
-line = 35
-begin = 8
-end = 23
-
-[JC_108]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_109]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[power_0]
-name = "Lemma power_0"
-behavior = "axiom"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[JC_50]
-kind = DivByZero
+[JC_113]
 file = "HOME/tests/java/Power.java"
-line = 57
+line = 33
 begin = 16
-end = 21
+end = 37
 
-[JC_51]
+[JC_116]
 kind = DivByZero
-file = "HOME/tests/java/Power.jc"
-line = 122
-begin = 29
-end = 35
-
-[JC_52]
 file = "HOME/tests/java/Power.java"
-line = 54
-begin = 25
+line = 37
+begin = 24
+end = 27
+
+[JC_64]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_133]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
 end = 26
 
-[JC_53]
-file = "HOME/tests/java/Power.java"
-line = 53
-begin = 14
-end = 20
-
-[JC_54]
-file = "HOME/tests/java/Power.java"
-line = 53
-begin = 24
-end = 52
-
-[JC_160]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_55]
-file = "HOME/tests/java/Power.java"
-line = 53
-begin = 14
-end = 52
-
-[JC_161]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[cons_Power_ensures_default]
-name = "Constructor of class Power"
+[cons_Object_ensures_default]
+name = "Constructor of class Object"
 behavior = "default behavior"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_56]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_162]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_110]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1146,141 +857,217 @@ line = 0
 begin = -1
 end = -1
 
-[JC_57]
+[JC_99]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_85]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_126]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_31]
 file = "HOME/tests/java/Power.jc"
-line = 112
+line = 93
 begin = 15
-end = 540
+end = 530
 
-[JC_163]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_111]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
-
-[JC_58]
+[JC_17]
 file = "HOME/tests/java/Power.jc"
-line = 112
-begin = 15
-end = 540
+line = 37
+begin = 11
+end = 65
 
-[JC_164]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_112]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_59]
+[JC_122]
 kind = DivByZero
 file = "HOME/tests/java/Power.java"
-line = 57
+line = 37
+begin = 24
+end = 27
+
+[JC_81]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_55]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_138]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_134]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_148]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_137]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_48]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_23]
+file = "HOME/tests/java/Power.java"
+line = 46
 begin = 16
-end = 21
+end = 37
 
-[JC_113]
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_114]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_115]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_116]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_117]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[JC_118]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_119]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
-
-[JC_60]
+[JC_121]
 kind = DivByZero
-file = "HOME/tests/java/Power.jc"
-line = 122
-begin = 29
-end = 35
+file = "HOME/tests/java/Power.java"
+line = 38
+begin = 13
+end = 18
 
-[JC_61]
+[JC_5]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_62]
+[JC_125]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
+
+[JC_67]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_63]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_11]
+[JC_9]
 file = "HOME/tests/java/Power.jc"
 line = 35
 begin = 8
 end = 23
 
-[JC_64]
+[JC_75]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_12]
+[JC_24]
+file = "HOME/tests/java/Power.java"
+line = 46
+begin = 16
+end = 37
+
+[JC_25]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_65]
+[JC_78]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_41]
+file = "HOME/tests/java/Power.jc"
+line = 93
+begin = 15
+end = 530
+
+[JC_74]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_47]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Power_rec_safety]
+name = "Method rec"
+behavior = "Safety"
+file = "HOME/tests/java/Power.java"
+line = 35
+begin = 16
+end = 19
+
+[JC_52]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
+
+[JC_26]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[power_s]
+name = "Lemma power_s"
+behavior = "axiom"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[JC_154]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_54]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 267
+begin = 29
+end = 38
+
+[JC_79]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1292,29 +1079,53 @@ line = 0
 begin = -1
 end = -1
 
-[JC_66]
+[JC_130]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_14]
+[JC_82]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_120]
+[JC_163]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_67]
+[JC_153]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_87]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_11]
+file = "HOME/tests/java/Power.jc"
+line = 35
+begin = 8
+end = 23
+
+[JC_98]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_70]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
 
 [JC_15]
 file = "HOME/"
@@ -1322,73 +1133,144 @@ line = 0
 begin = -1
 end = -1
 
-[JC_121]
+[JC_36]
+file = "HOME/tests/java/Power.java"
+line = 53
+begin = 14
+end = 20
+
+[JC_104]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_68]
+[JC_91]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_16]
+[JC_39]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_122]
+[JC_112]
+file = "HOME/tests/java/Power.java"
+line = 33
+begin = 16
+end = 37
+
+[JC_40]
+file = "HOME/tests/java/Power.jc"
+line = 93
+begin = 15
+end = 530
+
+[JC_162]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_135]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[JC_83]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_35]
+file = "HOME/tests/java/Power.java"
+line = 54
+begin = 25
+end = 26
+
+[power_even]
+name = "Lemma power_even"
+behavior = "lemma"
+file = "HOME/tests/java/Power.java"
+line = 18
+begin = 10
+end = 20
+
+[JC_132]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_27]
+file = "HOME/tests/java/Power.java"
+line = 53
+begin = 14
+end = 20
+
+[JC_115]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_109]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_107]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_69]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[JC_17]
-file = "HOME/tests/java/Power.jc"
-line = 37
-begin = 11
-end = 65
-
-[JC_123]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_18]
-file = "HOME/tests/java/Power.jc"
-line = 37
-begin = 11
-end = 65
 
 [JC_124]
+kind = DivByZero
+file = "HOME/tests/java/Power.java"
+line = 38
+begin = 13
+end = 18
+
+[JC_38]
+file = "HOME/tests/java/Power.java"
+line = 53
+begin = 14
+end = 52
+
+[JC_12]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_19]
-file = "HOME/tests/java/Power.java"
-line = 31
-begin = 17
-end = 23
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_125]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
+[power_0]
+name = "Lemma power_0"
+behavior = "axiom"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
 
-[JC_126]
+[JC_156]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1396,135 +1278,61 @@ end = -1
 
 [JC_127]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
+line = 207
+begin = 18
+end = 26
+
+[JC_164]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
 end = 33
 
-[JC_128]
+[JC_155]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_129]
+[JC_4]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_70]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_71]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[JC_72]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_73]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_21]
-file = "HOME/tests/java/Power.java"
-line = 31
-begin = 17
-end = 23
-
-[JC_74]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_75]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_23]
-file = "HOME/tests/java/Power.java"
-line = 33
-begin = 16
-end = 37
-
-[JC_76]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[Power_rec_ensures_default]
-name = "Method rec"
-behavior = "default behavior"
-file = "HOME/tests/java/Power.java"
-line = 35
-begin = 16
-end = 19
-
-[JC_24]
-file = "HOME/tests/java/Power.java"
-line = 33
-begin = 16
-end = 37
-
-[cons_Object_ensures_default]
-name = "Constructor of class Object"
-behavior = "default behavior"
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_130]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_77]
+[JC_62]
 file = "HOME/lib/java_api/java/lang/Object.java"
 line = 74
 begin = 22
 end = 30
 
-[JC_25]
+[JC_101]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_131]
+[JC_88]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_78]
+[Power_imp_safety]
+name = "Method imp"
+behavior = "Safety"
+file = "HOME/tests/java/Power.java"
+line = 48
+begin = 16
+end = 19
+
+[JC_129]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1538,7 +1346,404 @@ line = 48
 begin = 16
 end = 19
 
-[JC_26]
+[JC_42]
+kind = DivByZero
+file = "HOME/tests/java/Power.java"
+line = 57
+begin = 16
+end = 21
+
+[Power_rec_ensures_default]
+name = "Method rec"
+behavior = "default behavior"
+file = "HOME/tests/java/Power.java"
+line = 35
+begin = 16
+end = 19
+
+[JC_110]
+file = "HOME/tests/java/Power.java"
+line = 31
+begin = 17
+end = 23
+
+[JC_103]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_46]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 184
+begin = 28
+end = 33
+
+[JC_141]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_61]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_32]
+file = "HOME/tests/java/Power.jc"
+line = 93
+begin = 15
+end = 530
+
+[JC_56]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_33]
+kind = DivByZero
+file = "HOME/tests/java/Power.java"
+line = 57
+begin = 16
+end = 21
+
+[JC_65]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_118]
+file = "HOME/tests/java/Power.java"
+line = 32
+begin = 18
+end = 19
+
+[JC_105]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_140]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_29]
+file = "HOME/tests/java/Power.java"
+line = 53
+begin = 14
+end = 52
+
+[JC_144]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_159]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[cons_Object_safety]
+name = "Constructor of class Object"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_68]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
+
+[JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_96]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_43]
+kind = DivByZero
+file = "HOME/tests/java/Power.jc"
+line = 103
+begin = 29
+end = 35
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Power_ensures_default]
+name = "Constructor of class Power"
+behavior = "default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_95]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_93]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_97]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_84]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
+
+[JC_160]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_128]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_34]
+kind = DivByZero
+file = "HOME/tests/java/Power.jc"
+line = 103
+begin = 29
+end = 35
+
+[JC_114]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_150]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_117]
+kind = UserCall
+file = "HOME/tests/java/Power.java"
+line = 37
+begin = 17
+end = 28
+
+[JC_90]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_53]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_157]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 22
+begin = 31
+end = 46
+
+[JC_145]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_21]
+file = "HOME/tests/java/Power.java"
+line = 45
+begin = 17
+end = 23
+
+[JC_149]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[JC_111]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_77]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_49]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_1]
+file = "HOME/tests/java/Power.jc"
+line = 10
+begin = 12
+end = 22
+
+[JC_131]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_102]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_37]
+file = "HOME/tests/java/Power.java"
+line = 53
+begin = 24
+end = 52
+
+[JC_142]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[power_odd]
+name = "Lemma power_odd"
+behavior = "lemma"
+file = "HOME/tests/java/Power.java"
+line = 22
+begin = 10
+end = 19
+
+[JC_108]
+file = "HOME/tests/java/Power.java"
+line = 31
+begin = 17
+end = 23
+
+[JC_57]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_161]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_146]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_89]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_136]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_66]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_59]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/tests/java/Power.jc"
+line = 37
+begin = 11
+end = 65
+
+[JC_3]
+file = "HOME/tests/java/Power.jc"
+line = 10
+begin = 12
+end = 22
+
+[JC_92]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[JC_152]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1552,81 +1757,17 @@ line = 14
 begin = 10
 end = 19
 
-[JC_132]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_86]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 243
+begin = 29
+end = 35
 
-[JC_79]
+[JC_60]
 file = "HOME/lib/java_api/java/lang/Object.java"
 line = 74
 begin = 22
 end = 30
-
-[JC_27]
-kind = DivByZero
-file = "HOME/tests/java/Power.java"
-line = 37
-begin = 24
-end = 27
-
-[JC_133]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[JC_28]
-kind = UserCall
-file = "HOME/tests/java/Power.java"
-line = 37
-begin = 17
-end = 28
-
-[JC_134]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_29]
-file = "HOME/tests/java/Power.java"
-line = 32
-begin = 18
-end = 19
-
-[power_odd]
-name = "Lemma power_odd"
-behavior = "lemma"
-file = "HOME/tests/java/Power.java"
-line = 22
-begin = 10
-end = 19
-
-[JC_135]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
-
-[JC_136]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_137]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_138]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 [JC_139]
 file = "HOME/"
@@ -1634,206 +1775,66 @@ line = 0
 begin = -1
 end = -1
 
-[JC_80]
+[JC_72]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_81]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_19]
+file = "HOME/tests/java/Power.java"
+line = 45
+begin = 17
+end = 23
 
-[JC_82]
+[JC_119]
+file = "HOME/tests/java/Power.java"
+line = 32
+begin = 18
+end = 19
+
+[JC_76]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_50]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_30]
-file = "HOME/tests/java/Power.java"
-line = 32
-begin = 18
-end = 19
-
-[JC_83]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_31]
+[JC_120]
 kind = VarDecr
 file = "HOME/tests/java/Power.java"
 line = 37
 begin = 17
 end = 28
 
-[JC_84]
+[JC_58]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_32]
-kind = DivByZero
-file = "HOME/tests/java/Power.java"
-line = 38
-begin = 13
-end = 18
+[JC_100]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_85]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
-
-[JC_33]
-kind = DivByZero
+[JC_28]
 file = "HOME/tests/java/Power.java"
-line = 37
+line = 53
 begin = 24
-end = 27
-
-[JC_86]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_34]
-kind = UserCall
-file = "HOME/tests/java/Power.java"
-line = 37
-begin = 17
-end = 28
-
-[JC_140]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_87]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
-
-[JC_35]
-kind = DivByZero
-file = "HOME/tests/java/Power.java"
-line = 38
-begin = 13
-end = 18
-
-[power_s]
-name = "Lemma power_s"
-behavior = "axiom"
-file = "HOME/"
-line = 0
-begin = 0
-end = 0
-
-[JC_141]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
-
-[JC_88]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_36]
-file = "HOME/tests/java/Power.java"
-line = 45
-begin = 17
-end = 23
-
-[JC_142]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_89]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_37]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_143]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
-
-[JC_38]
-file = "HOME/tests/java/Power.java"
-line = 45
-begin = 17
-end = 23
-
-[power_even]
-name = "Lemma power_even"
-behavior = "lemma"
-file = "HOME/tests/java/Power.java"
-line = 18
-begin = 10
-end = 20
-
-[JC_144]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_39]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_145]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_146]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_147]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_148]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_149]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+end = 52
 
 ========== file tests/java/why/Power.why ==========
 type Object
@@ -2060,19 +2061,19 @@ exception Loop_exit_exc of unit
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_clone :
- this_4:Object pointer ->
+ this_2:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_clone_requires :
- this_4:Object pointer ->
+ this_2:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_equals :
- this_3:Object pointer ->
+ this_5:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
 parameter Object_equals_requires :
- this_3:Object pointer ->
+ this_5:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
 parameter Object_finalize :
@@ -2082,22 +2083,22 @@ parameter Object_finalize_requires :
  this_11:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_hashCode :
- this_2:Object pointer -> { } int reads Object_alloc_table { true }
+ this_4:Object pointer -> { } int reads Object_alloc_table { true }
 
 parameter Object_hashCode_requires :
- this_2:Object pointer -> { } int reads Object_alloc_table { true }
+ this_4:Object pointer -> { } int reads Object_alloc_table { true }
 
 parameter Object_notify :
- this_6:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_7:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notifyAll :
- this_7:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_3:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notifyAll_requires :
- this_7:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_3:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_notify_requires :
- this_6:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_7:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_registerNatives : tt:unit -> { } unit { true }
 
@@ -2106,26 +2107,26 @@ parameter Object_registerNatives_requires : tt:unit -> { } unit { true }
 parameter Object_tag_table : Object tag_table ref
 
 parameter Object_toString :
- this_5:Object pointer ->
+ this_9:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_toString_requires :
- this_5:Object pointer ->
+ this_9:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
 parameter Object_wait :
- this_10:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_6:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long :
  this_8:Object pointer ->
   timeout:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_int :
- this_9:Object pointer ->
+ this_10:Object pointer ->
   timeout_0:int -> nanos:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_int_requires :
- this_9:Object pointer ->
+ this_10:Object pointer ->
   timeout_0:int -> nanos:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_long_requires :
@@ -2133,23 +2134,23 @@ parameter Object_wait_long_requires :
   timeout:int -> { } unit reads Object_alloc_table { true }
 
 parameter Object_wait_requires :
- this_10:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_6:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Power_imp :
- x_6:int -> n_5:int -> { } int { (JC_41: (result = power(x_6, n_5))) }
+ x_6:int -> n_5:int -> { } int { (JC_24: (result = power(x_6, n_5))) }
 
 parameter Power_imp_requires :
  x_6:int ->
   n_5:int ->
-   { (JC_36: le_int((0), n_5))} int { (JC_41: (result = power(x_6, n_5))) }
+   { (JC_19: le_int((0), n_5))} int { (JC_24: (result = power(x_6, n_5))) }
 
 parameter Power_rec :
- x_5:int -> n_4:int -> { } int { (JC_24: (result = power(x_5, n_4))) }
+ x_5:int -> n_4:int -> { } int { (JC_113: (result = power(x_5, n_4))) }
 
 parameter Power_rec_requires :
  x_5:int ->
   n_4:int ->
-   { (JC_19: le_int((0), n_4))} int { (JC_24: (result = power(x_5, n_4))) }
+   { (JC_108: le_int((0), n_4))} int { (JC_113: (result = power(x_5, n_4))) }
 
 exception Return_label_exc of unit
 
@@ -2329,138 +2330,140 @@ parameter non_null_Object_requires :
 
 let Power_imp_ensures_default =
  fun (x_6 : int) (n_5 : int) ->
-  { (JC_38: le_int((0), n_5)) }
+  { (JC_21: le_int((0), n_5)) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (let r = ref (K_26: (1)) in
-     (let p = ref (K_25: x_6) in
-     (let e = ref (K_24: n_5) in
+     (let r = ref (K_15: (1)) in
+     (let p = ref (K_14: x_6) in
+     (let e = ref (K_13: n_5) in
      begin
        try
         (loop_2:
         while true do
         { invariant
-            (JC_55:
-            ((JC_53: le_int((0), e))
-            and (JC_54: (mul_int(r, power(p, e)) = power(x_6, n_5))))) 
+            (JC_38:
+            ((JC_36: le_int((0), e))
+            and (JC_37: (mul_int(r, power(p, e)) = power(x_6, n_5))))) 
            }
          begin
            [ { } unit { true } ];
           try
            begin
-             (if (K_23: ((gt_int_ !e) (0)))
+             (if (K_12: ((gt_int_ !e) (0)))
              then
-              (let jessie_<num> =
-              (K_21:
-              (K_22:
+              (let _jessie_<num> =
+              (K_10:
+              (K_11:
               begin
-                (if (K_20:
-                    ((neq_int_ (K_19: (JC_59: ((computer_mod !e) (2))))) (0)))
+                (if (K_9:
+                    ((neq_int_ (K_8: (JC_42: ((computer_mod !e) (2))))) (0)))
                 then
-                 (let jessie_<num> = (K_18: (r := ((mul_int !r) !p))) in void)
+                 (let _jessie_<num> = (K_7: (r := ((mul_int !r) !p))) in void)
                 else void);
-               (let jessie_<num> = (p := ((mul_int !p) !p)) in void);
-               (e := (JC_60: ((computer_div !e) (2)))); !e end)) in void)
+               (let _jessie_<num> = (p := ((mul_int !p) !p)) in void);
+               (e := (JC_43: ((computer_div !e) (2)))); !e end)) in void)
              else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<num> -> void end end done) with
-        Loop_exit_exc jessie_<num> -> void end; (return := !r); (raise Return)
+           Loop_continue_exc _jessie_<num> -> void end end done) with
+        Loop_exit_exc _jessie_<num> -> void end; (return := !r); (raise Return)
      end))); absurd  end with Return -> !return end))
-  { (JC_40: (result = power(x_6, n_5))) }
+  { (JC_23: (result = power(x_6, n_5))) }
 
 let Power_imp_safety =
  fun (x_6 : int) (n_5 : int) ->
-  { (JC_38: le_int((0), n_5)) }
+  { (JC_21: le_int((0), n_5)) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (let r = ref (K_26: (1)) in
-     (let p = ref (K_25: x_6) in
-     (let e = ref (K_24: n_5) in
+     (let r = ref (K_15: (1)) in
+     (let p = ref (K_14: x_6) in
+     (let e = ref (K_13: n_5) in
      begin
        try
         (loop_1:
         while true do
-        { invariant (JC_48: true) variant (JC_52 : e) }
+        { invariant (JC_31: true) variant (JC_35 : e) }
          begin
            [ { } unit reads e,p,r
-             { (JC_46:
-               ((JC_44: le_int((0), e))
-               and (JC_45: (mul_int(r, power(p, e)) = power(x_6, n_5))))) } ];
+             { (JC_29:
+               ((JC_27: le_int((0), e))
+               and (JC_28: (mul_int(r, power(p, e)) = power(x_6, n_5))))) } ];
           try
            begin
-             (if (K_23: ((gt_int_ !e) (0)))
+             (if (K_12: ((gt_int_ !e) (0)))
              then
-              (let jessie_<num> =
-              (K_21:
-              (K_22:
+              (let _jessie_<num> =
+              (K_10:
+              (K_11:
               begin
-                (if (K_20:
-                    ((neq_int_ (K_19: (JC_50: ((computer_mod_ !e) (2))))) (0)))
+                (if (K_9:
+                    ((neq_int_ (K_8: (JC_33: ((computer_mod_ !e) (2))))) (0)))
                 then
-                 (let jessie_<num> = (K_18: (r := ((mul_int !r) !p))) in void)
+                 (let _jessie_<num> = (K_7: (r := ((mul_int !r) !p))) in void)
                 else void);
-               (let jessie_<num> = (p := ((mul_int !p) !p)) in void);
-               (e := (JC_51: ((computer_div_ !e) (2)))); !e end)) in void)
+               (let _jessie_<num> = (p := ((mul_int !p) !p)) in void);
+               (e := (JC_34: ((computer_div_ !e) (2)))); !e end)) in void)
              else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc jessie_<num> -> void end end done) with
-        Loop_exit_exc jessie_<num> -> void end; (return := !r); (raise Return)
+           Loop_continue_exc _jessie_<num> -> void end end done) with
+        Loop_exit_exc _jessie_<num> -> void end; (return := !r); (raise Return)
      end))); absurd  end with Return -> !return end)) { true }
 
 let Power_rec_ensures_default =
  fun (x_5 : int) (n_4 : int) ->
-  { (JC_21: le_int((0), n_4)) }
+  { (JC_110: le_int((0), n_4)) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (if (K_4: ((eq_int_ n_4) (0)))
+     (if (K_19: ((eq_int_ n_4) (0)))
      then begin   (return := (1)); (raise Return) end else void);
     (let r_0 =
-    (K_11:
-    (let jessie_<num> = x_5 in
-    (let jessie_<num> = (K_10: (JC_33: ((computer_div n_4) (2)))) in
-    (JC_34: ((Power_rec jessie_<num>) jessie_<num>))))) in
+    (K_26:
+    (let _jessie_<num> = x_5 in
+    (let _jessie_<num> = (K_25: (JC_122: ((computer_div n_4) (2)))) in
+    (JC_123: ((Power_rec _jessie_<num>) _jessie_<num>))))) in
     begin
-      (if (K_7: ((eq_int_ (K_6: (JC_35: ((computer_mod n_4) (2))))) (0)))
-      then begin   (return := (K_5: ((mul_int r_0) r_0))); (raise Return) end
+      (if (K_22: ((eq_int_ (K_21: (JC_124: ((computer_mod n_4) (2))))) (0)))
+      then
+       begin   (return := (K_20: ((mul_int r_0) r_0))); (raise Return) end
       else void);
-     (return := (K_9: ((mul_int (K_8: ((mul_int r_0) r_0))) x_5)));
+     (return := (K_24: ((mul_int (K_23: ((mul_int r_0) r_0))) x_5)));
      (raise Return) end); absurd  end with Return -> !return end))
-  { (JC_23: (result = power(x_5, n_4))) }
+  { (JC_112: (result = power(x_5, n_4))) }
 
 let Power_rec_safety =
  fun (x_5 : int) (n_4 : int) ->
-  { (JC_21: le_int((0), n_4)) }
+  { (JC_110: le_int((0), n_4)) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (if (K_4: ((eq_int_ n_4) (0)))
+     (if (K_19: ((eq_int_ n_4) (0)))
      then begin   (return := (1)); (raise Return) end else void);
     (let r_0 =
-    (K_11:
-    (let jessie_<num> = x_5 in
-    (let jessie_<num> = (K_10: (JC_27: ((computer_div_ n_4) (2)))) in
-    (JC_31:
-    (check { zwf_zero((JC_30 : jessie_<num>), (JC_29 : n_4)) };
-    (JC_28: ((Power_rec_requires jessie_<num>) jessie_<num>))))))) in
+    (K_26:
+    (let _jessie_<num> = x_5 in
+    (let _jessie_<num> = (K_25: (JC_116: ((computer_div_ n_4) (2)))) in
+    (JC_120:
+    (check { zwf_zero((JC_119 : _jessie_<num>), (JC_118 : n_4)) };
+    (JC_117: ((Power_rec_requires _jessie_<num>) _jessie_<num>))))))) in
     begin
-      (if (K_7: ((eq_int_ (K_6: (JC_32: ((computer_mod_ n_4) (2))))) (0)))
-      then begin   (return := (K_5: ((mul_int r_0) r_0))); (raise Return) end
+      (if (K_22: ((eq_int_ (K_21: (JC_121: ((computer_mod_ n_4) (2))))) (0)))
+      then
+       begin   (return := (K_20: ((mul_int r_0) r_0))); (raise Return) end
       else void);
-     (return := (K_9: ((mul_int (K_8: ((mul_int r_0) r_0))) x_5)));
+     (return := (K_24: ((mul_int (K_23: ((mul_int r_0) r_0))) x_5)));
      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let cons_Object_ensures_default =
  fun (this_12 : Object pointer) ->
   { valid_struct_Object(this_12, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_161: true) }
+  { (JC_145: true) }
 
 let cons_Object_safety =
  fun (this_12 : Object pointer) ->
@@ -2472,7 +2475,7 @@ let cons_Power_ensures_default =
  fun (this_1 : Object pointer) ->
   { valid_struct_Power(this_1, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_65: true) }
+  { (JC_104: true) }
 
 let cons_Power_safety =
  fun (this_1 : Object pointer) ->
@@ -2529,11 +2532,11 @@ why --project [...] why/Power.why
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/Power_po19.why">
-      <location file = "why/Power.why" line = "612" begin = "13" end = "56"/>
+      <location file = "why/Power.why" line = "613" begin = "13" end = "60"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/Power_po20.why">
-      <location file = "why/Power.why" line = "612" begin = "13" end = "56"/>
+      <location file = "why/Power.why" line = "613" begin = "13" end = "60"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/Power_po21.why">
@@ -3756,13 +3759,13 @@ lemma power_mul:
 goal Power_imp_safety_po_1:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_48": true) ->
-  ("JC_46":
-  (("JC_44": (0 <= e)) and ("JC_45": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_31": true) ->
+  ("JC_29":
+  (("JC_27": (0 <= e)) and ("JC_28": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (2 <> 0)
 
@@ -3770,13 +3773,13 @@ goal Power_imp_safety_po_1:
 goal Power_imp_safety_po_2:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_48": true) ->
-  ("JC_46":
-  (("JC_44": (0 <= e)) and ("JC_45": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_31": true) ->
+  ("JC_29":
+  (("JC_27": (0 <= e)) and ("JC_28": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (2 <> 0) ->
   forall result:int.
@@ -3791,19 +3794,19 @@ goal Power_imp_safety_po_2:
   (result0 = computer_div(e, 2)) ->
   forall e0:int.
   (e0 = result0) ->
-  (0 <= ("JC_52": e))
+  (0 <= ("JC_35": e))
 
 ========== file tests/java/why/Power_po12.why ==========
 goal Power_imp_safety_po_3:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_48": true) ->
-  ("JC_46":
-  (("JC_44": (0 <= e)) and ("JC_45": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_31": true) ->
+  ("JC_29":
+  (("JC_27": (0 <= e)) and ("JC_28": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (2 <> 0) ->
   forall result:int.
@@ -3818,19 +3821,19 @@ goal Power_imp_safety_po_3:
   (result0 = computer_div(e, 2)) ->
   forall e0:int.
   (e0 = result0) ->
-  (("JC_52": e0) < ("JC_52": e))
+  (("JC_35": e0) < ("JC_35": e))
 
 ========== file tests/java/why/Power_po13.why ==========
 goal Power_imp_safety_po_4:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_48": true) ->
-  ("JC_46":
-  (("JC_44": (0 <= e)) and ("JC_45": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_31": true) ->
+  ("JC_29":
+  (("JC_27": (0 <= e)) and ("JC_28": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (2 <> 0) ->
   forall result:int.
@@ -3843,19 +3846,19 @@ goal Power_imp_safety_po_4:
   (result0 = computer_div(e, 2)) ->
   forall e0:int.
   (e0 = result0) ->
-  (0 <= ("JC_52": e))
+  (0 <= ("JC_35": e))
 
 ========== file tests/java/why/Power_po14.why ==========
 goal Power_imp_safety_po_5:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_48": true) ->
-  ("JC_46":
-  (("JC_44": (0 <= e)) and ("JC_45": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_31": true) ->
+  ("JC_29":
+  (("JC_27": (0 <= e)) and ("JC_28": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (2 <> 0) ->
   forall result:int.
@@ -3868,60 +3871,60 @@ goal Power_imp_safety_po_5:
   (result0 = computer_div(e, 2)) ->
   forall e0:int.
   (e0 = result0) ->
-  (("JC_52": e0) < ("JC_52": e))
+  (("JC_35": e0) < ("JC_35": e))
 
 ========== file tests/java/why/Power_po15.why ==========
 goal Power_rec_ensures_default_po_1:
   forall x_5:int.
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 = 0) ->
   forall return:int.
   (return = 1) ->
-  ("JC_23": (return = power(x_5, n_4)))
+  ("JC_112": (return = power(x_5, n_4)))
 
 ========== file tests/java/why/Power_po16.why ==========
 goal Power_rec_ensures_default_po_2:
   forall x_5:int.
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   forall result:int.
-  ("JC_24": (result = power(x_5, computer_div(n_4, 2)))) ->
+  ("JC_113": (result = power(x_5, computer_div(n_4, 2)))) ->
   (computer_mod(n_4, 2) = 0) ->
   forall return:int.
   (return = (result * result)) ->
-  ("JC_23": (return = power(x_5, n_4)))
+  ("JC_112": (return = power(x_5, n_4)))
 
 ========== file tests/java/why/Power_po17.why ==========
 goal Power_rec_ensures_default_po_3:
   forall x_5:int.
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   forall result:int.
-  ("JC_24": (result = power(x_5, computer_div(n_4, 2)))) ->
+  ("JC_113": (result = power(x_5, computer_div(n_4, 2)))) ->
   (computer_mod(n_4, 2) <> 0) ->
   forall return:int.
   (return = ((result * result) * x_5)) ->
-  ("JC_23": (return = power(x_5, n_4)))
+  ("JC_112": (return = power(x_5, n_4)))
 
 ========== file tests/java/why/Power_po18.why ==========
 goal Power_rec_safety_po_1:
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   (2 <> 0)
 
 ========== file tests/java/why/Power_po19.why ==========
 goal Power_rec_safety_po_2:
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   (2 <> 0) ->
   forall result:int.
   (result = computer_div(n_4, 2)) ->
-  (0 <= ("JC_29": n_4))
+  (0 <= ("JC_118": n_4))
 
 ========== file tests/java/why/Power_po2.why ==========
 lemma power_even:
@@ -3933,22 +3936,22 @@ lemma power_even:
 ========== file tests/java/why/Power_po20.why ==========
 goal Power_rec_safety_po_3:
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   (2 <> 0) ->
   forall result:int.
   (result = computer_div(n_4, 2)) ->
-  (("JC_30": result) < ("JC_29": n_4))
+  (("JC_119": result) < ("JC_118": n_4))
 
 ========== file tests/java/why/Power_po21.why ==========
 goal Power_rec_safety_po_4:
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   (2 <> 0) ->
   forall result:int.
   (result = computer_div(n_4, 2)) ->
-  ("JC_19": (0 <= result))
+  ("JC_108": (0 <= result))
 
 ========== file tests/java/why/Power_po3.why ==========
 lemma power_odd:
@@ -3961,19 +3964,19 @@ lemma power_odd:
 goal Power_imp_ensures_default_po_1:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
-  ("JC_55": ("JC_54": ((1 * power(x_6, n_5)) = power(x_6, n_5))))
+  ("JC_21": (0 <= n_5)) ->
+  ("JC_38": ("JC_37": ((1 * power(x_6, n_5)) = power(x_6, n_5))))
 
 ========== file tests/java/why/Power_po5.why ==========
 goal Power_imp_ensures_default_po_2:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_55":
-  (("JC_53": (0 <= e)) and ("JC_54": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_38":
+  (("JC_36": (0 <= e)) and ("JC_37": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (computer_mod(e, 2) <> 0) ->
   forall r0:int.
@@ -3982,18 +3985,18 @@ goal Power_imp_ensures_default_po_2:
   (p0 = (p * p)) ->
   forall e0:int.
   (e0 = computer_div(e, 2)) ->
-  ("JC_55": ("JC_53": (0 <= e0)))
+  ("JC_38": ("JC_36": (0 <= e0)))
 
 ========== file tests/java/why/Power_po6.why ==========
 goal Power_imp_ensures_default_po_3:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_55":
-  (("JC_53": (0 <= e)) and ("JC_54": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_38":
+  (("JC_36": (0 <= e)) and ("JC_37": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (computer_mod(e, 2) <> 0) ->
   forall r0:int.
@@ -4002,58 +4005,58 @@ goal Power_imp_ensures_default_po_3:
   (p0 = (p * p)) ->
   forall e0:int.
   (e0 = computer_div(e, 2)) ->
-  ("JC_55": ("JC_54": ((r0 * power(p0, e0)) = power(x_6, n_5))))
+  ("JC_38": ("JC_37": ((r0 * power(p0, e0)) = power(x_6, n_5))))
 
 ========== file tests/java/why/Power_po7.why ==========
 goal Power_imp_ensures_default_po_4:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_55":
-  (("JC_53": (0 <= e)) and ("JC_54": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_38":
+  (("JC_36": (0 <= e)) and ("JC_37": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (computer_mod(e, 2) = 0) ->
   forall p0:int.
   (p0 = (p * p)) ->
   forall e0:int.
   (e0 = computer_div(e, 2)) ->
-  ("JC_55": ("JC_53": (0 <= e0)))
+  ("JC_38": ("JC_36": (0 <= e0)))
 
 ========== file tests/java/why/Power_po8.why ==========
 goal Power_imp_ensures_default_po_5:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_55":
-  (("JC_53": (0 <= e)) and ("JC_54": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_38":
+  (("JC_36": (0 <= e)) and ("JC_37": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (computer_mod(e, 2) = 0) ->
   forall p0:int.
   (p0 = (p * p)) ->
   forall e0:int.
   (e0 = computer_div(e, 2)) ->
-  ("JC_55": ("JC_54": ((r * power(p0, e0)) = power(x_6, n_5))))
+  ("JC_38": ("JC_37": ((r * power(p0, e0)) = power(x_6, n_5))))
 
 ========== file tests/java/why/Power_po9.why ==========
 goal Power_imp_ensures_default_po_6:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_55":
-  (("JC_53": (0 <= e)) and ("JC_54": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_38":
+  (("JC_36": (0 <= e)) and ("JC_37": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e <= 0) ->
   forall return:int.
   (return = r) ->
-  ("JC_40": (return = power(x_6, n_5)))
+  ("JC_23": (return = power(x_6, n_5)))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Power.why
@@ -5287,14 +5290,14 @@ why -simplify [...] why/Power.why
 ;; Power_rec_safety_po_1, File "HOME/tests/java/Power.java", line 37, characters 24-27
 (FORALL (n_4) (IMPLIES (<= 0 n_4) (IMPLIES (NEQ n_4 0) (NEQ 2 0))))
 
-;; Power_rec_safety_po_2, File "why/Power.why", line 612, characters 13-56
+;; Power_rec_safety_po_2, File "why/Power.why", line 613, characters 13-60
 (FORALL (n_4)
 (IMPLIES (<= 0 n_4)
 (IMPLIES (NEQ n_4 0)
 (IMPLIES (NEQ 2 0)
 (FORALL (result) (IMPLIES (EQ result (computer_div n_4 2)) (<= 0 n_4)))))))
 
-;; Power_rec_safety_po_3, File "why/Power.why", line 612, characters 13-56
+;; Power_rec_safety_po_3, File "why/Power.why", line 613, characters 13-60
 (FORALL (n_4)
 (IMPLIES (<= 0 n_4)
 (IMPLIES (NEQ n_4 0)
@@ -5310,6 +5313,7 @@ why -simplify [...] why/Power.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
+Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Power_why.sx         : ###.#####..#.#.##.... (9/0/0/12/0)
 total   :  21
@@ -6494,18 +6498,18 @@ axiom power_odd_as_axiom:
 goal Power_imp_ensures_default_po_1:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
-  ("JC_55": ("JC_54": ((1 * power(x_6, n_5)) = power(x_6, n_5))))
+  ("JC_21": (0 <= n_5)) ->
+  ("JC_38": ("JC_37": ((1 * power(x_6, n_5)) = power(x_6, n_5))))
 
 goal Power_imp_ensures_default_po_2:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_55":
-  (("JC_53": (0 <= e)) and ("JC_54": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_38":
+  (("JC_36": (0 <= e)) and ("JC_37": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (computer_mod(e, 2) <> 0) ->
   forall r0:int.
@@ -6514,17 +6518,17 @@ goal Power_imp_ensures_default_po_2:
   (p0 = (p * p)) ->
   forall e0:int.
   (e0 = computer_div(e, 2)) ->
-  ("JC_55": ("JC_53": (0 <= e0)))
+  ("JC_38": ("JC_36": (0 <= e0)))
 
 goal Power_imp_ensures_default_po_3:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_55":
-  (("JC_53": (0 <= e)) and ("JC_54": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_38":
+  (("JC_36": (0 <= e)) and ("JC_37": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (computer_mod(e, 2) <> 0) ->
   forall r0:int.
@@ -6533,79 +6537,79 @@ goal Power_imp_ensures_default_po_3:
   (p0 = (p * p)) ->
   forall e0:int.
   (e0 = computer_div(e, 2)) ->
-  ("JC_55": ("JC_54": ((r0 * power(p0, e0)) = power(x_6, n_5))))
+  ("JC_38": ("JC_37": ((r0 * power(p0, e0)) = power(x_6, n_5))))
 
 goal Power_imp_ensures_default_po_4:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_55":
-  (("JC_53": (0 <= e)) and ("JC_54": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_38":
+  (("JC_36": (0 <= e)) and ("JC_37": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (computer_mod(e, 2) = 0) ->
   forall p0:int.
   (p0 = (p * p)) ->
   forall e0:int.
   (e0 = computer_div(e, 2)) ->
-  ("JC_55": ("JC_53": (0 <= e0)))
+  ("JC_38": ("JC_36": (0 <= e0)))
 
 goal Power_imp_ensures_default_po_5:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_55":
-  (("JC_53": (0 <= e)) and ("JC_54": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_38":
+  (("JC_36": (0 <= e)) and ("JC_37": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (computer_mod(e, 2) = 0) ->
   forall p0:int.
   (p0 = (p * p)) ->
   forall e0:int.
   (e0 = computer_div(e, 2)) ->
-  ("JC_55": ("JC_54": ((r * power(p0, e0)) = power(x_6, n_5))))
+  ("JC_38": ("JC_37": ((r * power(p0, e0)) = power(x_6, n_5))))
 
 goal Power_imp_ensures_default_po_6:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_55":
-  (("JC_53": (0 <= e)) and ("JC_54": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_38":
+  (("JC_36": (0 <= e)) and ("JC_37": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e <= 0) ->
   forall return:int.
   (return = r) ->
-  ("JC_40": (return = power(x_6, n_5)))
+  ("JC_23": (return = power(x_6, n_5)))
 
 goal Power_imp_safety_po_1:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_48": true) ->
-  ("JC_46":
-  (("JC_44": (0 <= e)) and ("JC_45": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_31": true) ->
+  ("JC_29":
+  (("JC_27": (0 <= e)) and ("JC_28": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (2 <> 0)
 
 goal Power_imp_safety_po_2:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_48": true) ->
-  ("JC_46":
-  (("JC_44": (0 <= e)) and ("JC_45": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_31": true) ->
+  ("JC_29":
+  (("JC_27": (0 <= e)) and ("JC_28": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (2 <> 0) ->
   forall result:int.
@@ -6620,18 +6624,18 @@ goal Power_imp_safety_po_2:
   (result0 = computer_div(e, 2)) ->
   forall e0:int.
   (e0 = result0) ->
-  (0 <= ("JC_52": e))
+  (0 <= ("JC_35": e))
 
 goal Power_imp_safety_po_3:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_48": true) ->
-  ("JC_46":
-  (("JC_44": (0 <= e)) and ("JC_45": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_31": true) ->
+  ("JC_29":
+  (("JC_27": (0 <= e)) and ("JC_28": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (2 <> 0) ->
   forall result:int.
@@ -6646,18 +6650,18 @@ goal Power_imp_safety_po_3:
   (result0 = computer_div(e, 2)) ->
   forall e0:int.
   (e0 = result0) ->
-  (("JC_52": e0) < ("JC_52": e))
+  (("JC_35": e0) < ("JC_35": e))
 
 goal Power_imp_safety_po_4:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_48": true) ->
-  ("JC_46":
-  (("JC_44": (0 <= e)) and ("JC_45": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_31": true) ->
+  ("JC_29":
+  (("JC_27": (0 <= e)) and ("JC_28": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (2 <> 0) ->
   forall result:int.
@@ -6670,18 +6674,18 @@ goal Power_imp_safety_po_4:
   (result0 = computer_div(e, 2)) ->
   forall e0:int.
   (e0 = result0) ->
-  (0 <= ("JC_52": e))
+  (0 <= ("JC_35": e))
 
 goal Power_imp_safety_po_5:
   forall x_6:int.
   forall n_5:int.
-  ("JC_38": (0 <= n_5)) ->
+  ("JC_21": (0 <= n_5)) ->
   forall e:int.
   forall p:int.
   forall r:int.
-  ("JC_48": true) ->
-  ("JC_46":
-  (("JC_44": (0 <= e)) and ("JC_45": ((r * power(p, e)) = power(x_6, n_5))))) ->
+  ("JC_31": true) ->
+  ("JC_29":
+  (("JC_27": (0 <= e)) and ("JC_28": ((r * power(p, e)) = power(x_6, n_5))))) ->
   (e > 0) ->
   (2 <> 0) ->
   forall result:int.
@@ -6694,71 +6698,71 @@ goal Power_imp_safety_po_5:
   (result0 = computer_div(e, 2)) ->
   forall e0:int.
   (e0 = result0) ->
-  (("JC_52": e0) < ("JC_52": e))
+  (("JC_35": e0) < ("JC_35": e))
 
 goal Power_rec_ensures_default_po_1:
   forall x_5:int.
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 = 0) ->
   forall return:int.
   (return = 1) ->
-  ("JC_23": (return = power(x_5, n_4)))
+  ("JC_112": (return = power(x_5, n_4)))
 
 goal Power_rec_ensures_default_po_2:
   forall x_5:int.
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   forall result:int.
-  ("JC_24": (result = power(x_5, computer_div(n_4, 2)))) ->
+  ("JC_113": (result = power(x_5, computer_div(n_4, 2)))) ->
   (computer_mod(n_4, 2) = 0) ->
   forall return:int.
   (return = (result * result)) ->
-  ("JC_23": (return = power(x_5, n_4)))
+  ("JC_112": (return = power(x_5, n_4)))
 
 goal Power_rec_ensures_default_po_3:
   forall x_5:int.
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   forall result:int.
-  ("JC_24": (result = power(x_5, computer_div(n_4, 2)))) ->
+  ("JC_113": (result = power(x_5, computer_div(n_4, 2)))) ->
   (computer_mod(n_4, 2) <> 0) ->
   forall return:int.
   (return = ((result * result) * x_5)) ->
-  ("JC_23": (return = power(x_5, n_4)))
+  ("JC_112": (return = power(x_5, n_4)))
 
 goal Power_rec_safety_po_1:
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   (2 <> 0)
 
 goal Power_rec_safety_po_2:
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   (2 <> 0) ->
   forall result:int.
   (result = computer_div(n_4, 2)) ->
-  (0 <= ("JC_29": n_4))
+  (0 <= ("JC_118": n_4))
 
 goal Power_rec_safety_po_3:
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   (2 <> 0) ->
   forall result:int.
   (result = computer_div(n_4, 2)) ->
-  (("JC_30": result) < ("JC_29": n_4))
+  (("JC_119": result) < ("JC_118": n_4))
 
 goal Power_rec_safety_po_4:
   forall n_4:int.
-  ("JC_21": (0 <= n_4)) ->
+  ("JC_110": (0 <= n_4)) ->
   (n_4 <> 0) ->
   (2 <> 0) ->
   forall result:int.
   (result = computer_div(n_4, 2)) ->
-  ("JC_19": (0 <= result))
+  ("JC_108": (0 <= result))
 

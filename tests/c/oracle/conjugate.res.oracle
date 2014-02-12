@@ -245,18 +245,11 @@ behavior default:
    }
 }
 ========== file tests/c/conjugate.jessie/conjugate.cloc ==========
-[conjgte]
-name = "Function conjgte"
+[C_15]
 file = "HOME/tests/c/conjugate.c"
-line = 49
-begin = 5
-end = 12
-
-[C_10]
-file = "HOME/tests/c/conjugate.c"
-line = 58
-begin = 9
-end = 17
+line = 62
+begin = 23
+end = 99
 
 [C_11]
 file = "HOME/tests/c/conjugate.c"
@@ -264,185 +257,11 @@ line = 60
 begin = 11
 end = 12
 
-[C_12]
-file = "HOME/tests/c/conjugate.c"
-line = 60
-begin = 11
-end = 19
-
-[C_13]
-file = "HOME/tests/c/conjugate.c"
-line = 60
-begin = 11
-end = 19
-
-[C_14]
-file = "HOME/tests/c/conjugate.c"
-line = 64
-begin = 21
-end = 32
-
-[C_15]
-file = "HOME/tests/c/conjugate.c"
-line = 62
-begin = 23
-end = 99
-
-[C_16]
-file = "HOME/tests/c/conjugate.c"
-line = 61
-begin = 23
-end = 57
-
-[C_17]
-file = "HOME/tests/c/conjugate.c"
-line = 61
-begin = 23
-end = 48
-
-[C_18]
-file = "HOME/tests/c/conjugate.c"
-line = 61
-begin = 43
-end = 57
-
-[C_19]
-file = "HOME/tests/c/conjugate.c"
-line = 67
-begin = 14
-end = 23
-
 [C_1]
 file = "HOME/tests/c/conjugate.c"
 line = 50
 begin = 2
 end = 5
-
-[C_2]
-file = "HOME/tests/c/conjugate.c"
-line = 50
-begin = 2
-end = 5
-
-[C_3]
-file = "HOME/tests/c/conjugate.c"
-line = 56
-begin = 19
-end = 30
-
-[C_4]
-file = "HOME/tests/c/conjugate.c"
-line = 54
-begin = 21
-end = 76
-
-[C_20]
-file = "HOME/tests/c/conjugate.c"
-line = 67
-begin = 14
-end = 23
-
-[C_5]
-file = "HOME/tests/c/conjugate.c"
-line = 52
-begin = 21
-end = 90
-
-[C_21]
-file = "HOME/tests/c/conjugate.c"
-line = 67
-begin = 14
-end = 23
-
-[C_6]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 21
-end = 37
-
-[C_22]
-file = "HOME/tests/c/conjugate.c"
-line = 68
-begin = 11
-end = 12
-
-[C_7]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 21
-end = 31
-
-[C_23]
-file = "HOME/tests/c/conjugate.c"
-line = 68
-begin = 11
-end = 19
-
-[C_8]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 26
-end = 37
-
-[C_24]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 14
-
-[C_9]
-file = "HOME/tests/c/conjugate.c"
-line = 58
-begin = 9
-end = 10
-
-[C_25]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 21
-
-[C_26]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 25
-
-[C_27]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 25
-
-[C_28]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 25
-
-[C_29]
-file = "HOME/tests/c/conjugate.c"
-line = 74
-begin = 21
-end = 27
-
-[C_30]
-file = "HOME/tests/c/conjugate.c"
-line = 72
-begin = 23
-end = 88
-
-[C_31]
-file = "HOME/tests/c/conjugate.c"
-line = 70
-begin = 23
-end = 94
-
-[C_32]
-file = "HOME/tests/c/conjugate.c"
-line = 69
-begin = 23
-end = 29
 
 [C_33]
 file = "HOME/tests/c/conjugate.c"
@@ -450,59 +269,23 @@ line = 77
 begin = 13
 end = 22
 
-[C_34]
+[C_9]
 file = "HOME/tests/c/conjugate.c"
-line = 77
-begin = 13
-end = 22
+line = 58
+begin = 9
+end = 10
 
-[C_35]
+[C_10]
 file = "HOME/tests/c/conjugate.c"
-line = 77
-begin = 6
-end = 7
+line = 58
+begin = 9
+end = 17
 
-[C_36]
+[C_20]
 file = "HOME/tests/c/conjugate.c"
-line = 77
-begin = 13
-end = 22
-
-[C_37]
-file = "HOME/tests/c/conjugate.c"
-line = 77
-begin = 13
-end = 22
-
-[C_38]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 38
-end = 41
-
-[C_39]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 38
-end = 41
-
-[C_40]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 38
-end = 41
-
-[C_41]
-file = "HOME/tests/c/conjugate.c"
-line = 47
-begin = 12
-end = 29
-
-[C_42]
-file = "HOME/tests/c/conjugate.c"
-line = 45
-begin = 13
-end = 28
+line = 67
+begin = 14
+end = 23
 
 [C_43]
 file = "HOME/tests/c/conjugate.c"
@@ -510,19 +293,61 @@ line = 44
 begin = 13
 end = 58
 
-[C_44]
+[C_32]
 file = "HOME/tests/c/conjugate.c"
-line = 42
+line = 69
+begin = 23
+end = 29
+
+[C_17]
+file = "HOME/tests/c/conjugate.c"
+line = 61
+begin = 23
+end = 48
+
+[C_40]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 38
+end = 41
+
+[C_36]
+file = "HOME/tests/c/conjugate.c"
+line = 77
 begin = 13
-end = 38
+end = 22
+
+[C_42]
+file = "HOME/tests/c/conjugate.c"
+line = 45
+begin = 13
+end = 28
+
+[C_5]
+file = "HOME/tests/c/conjugate.c"
+line = 52
+begin = 21
+end = 90
+
+[C_34]
+file = "HOME/tests/c/conjugate.c"
+line = 77
+begin = 13
+end = 22
+
+[C_29]
+file = "HOME/tests/c/conjugate.c"
+line = 74
+begin = 21
+end = 27
+
+[C_13]
+file = "HOME/tests/c/conjugate.c"
+line = 60
+begin = 11
+end = 19
 
 [C_45]
-file = "HOME/tests/c/conjugate.c"
-line = 42
-begin = 13
-end = 38
-
-[C_46]
 file = "HOME/tests/c/conjugate.c"
 line = 42
 begin = 13
@@ -534,17 +359,192 @@ line = 41
 begin = 13
 end = 38
 
+[C_7]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 21
+end = 31
+
+[C_22]
+file = "HOME/tests/c/conjugate.c"
+line = 68
+begin = 11
+end = 12
+
+[C_14]
+file = "HOME/tests/c/conjugate.c"
+line = 64
+begin = 21
+end = 32
+
+[C_35]
+file = "HOME/tests/c/conjugate.c"
+line = 77
+begin = 6
+end = 7
+
+[conjgte]
+name = "Function conjgte"
+file = "HOME/tests/c/conjugate.c"
+line = 49
+begin = 5
+end = 12
+
+[C_25]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 21
+
+[C_38]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 38
+end = 41
+
+[C_8]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 26
+end = 37
+
+[C_39]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 38
+end = 41
+
+[C_44]
+file = "HOME/tests/c/conjugate.c"
+line = 42
+begin = 13
+end = 38
+
+[C_27]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 25
+
+[C_46]
+file = "HOME/tests/c/conjugate.c"
+line = 42
+begin = 13
+end = 38
+
+[C_37]
+file = "HOME/tests/c/conjugate.c"
+line = 77
+begin = 13
+end = 22
+
+[C_19]
+file = "HOME/tests/c/conjugate.c"
+line = 67
+begin = 14
+end = 23
+
 [C_48]
 file = "HOME/tests/c/conjugate.c"
 line = 41
 begin = 13
 end = 38
 
+[C_4]
+file = "HOME/tests/c/conjugate.c"
+line = 54
+begin = 21
+end = 76
+
+[C_12]
+file = "HOME/tests/c/conjugate.c"
+line = 60
+begin = 11
+end = 19
+
+[C_26]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 25
+
+[C_18]
+file = "HOME/tests/c/conjugate.c"
+line = 61
+begin = 43
+end = 57
+
+[C_2]
+file = "HOME/tests/c/conjugate.c"
+line = 50
+begin = 2
+end = 5
+
+[C_28]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 25
+
+[C_24]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 14
+
+[C_6]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 21
+end = 37
+
+[C_30]
+file = "HOME/tests/c/conjugate.c"
+line = 72
+begin = 23
+end = 88
+
+[C_41]
+file = "HOME/tests/c/conjugate.c"
+line = 47
+begin = 12
+end = 29
+
+[C_21]
+file = "HOME/tests/c/conjugate.c"
+line = 67
+begin = 14
+end = 23
+
+[C_3]
+file = "HOME/tests/c/conjugate.c"
+line = 56
+begin = 19
+end = 30
+
+[C_16]
+file = "HOME/tests/c/conjugate.c"
+line = 61
+begin = 23
+end = 57
+
 [C_49]
 file = "HOME/tests/c/conjugate.c"
 line = 41
 begin = 13
 end = 38
+
+[C_31]
+file = "HOME/tests/c/conjugate.c"
+line = 70
+begin = 23
+end = 94
+
+[C_23]
+file = "HOME/tests/c/conjugate.c"
+line = 68
+begin = 11
+end = 19
 
 ========== jessie execution ==========
 Generating Why function conjgte
@@ -558,10 +558,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs conjugate.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs conjugate.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs conjugate.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs conjugate.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -706,13 +707,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: conjugate.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: conjugate.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: conjugate.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include conjugate.depend
 
@@ -723,125 +724,13 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/conjugate.jessie/conjugate.loc ==========
-[JC_40]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 105
-begin = 15
-end = 823
-
-[JC_41]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 105
-begin = 15
-end = 823
-
-[JC_42]
-kind = ArithOverflow
-file = "HOME/tests/c/conjugate.c"
-line = 67
-begin = 14
-end = 23
-
-[JC_43]
-kind = PointerDeref
-file = "HOME/tests/c/conjugate.c"
-line = 68
-begin = 11
-end = 19
-
-[JC_44]
-file = "HOME/tests/c/conjugate.c"
-line = 64
-begin = 21
-end = 32
-
-[JC_45]
-kind = PointerDeref
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 21
-
-[JC_46]
-kind = ArithOverflow
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 25
-
-[JC_1]
-file = "HOME/tests/c/conjugate.c"
-line = 41
-begin = 13
-end = 38
-
-[JC_47]
+[JC_73]
 file = "HOME/tests/c/conjugate.c"
 line = 72
 begin = 23
 end = 88
 
-[JC_2]
-file = "HOME/tests/c/conjugate.c"
-line = 41
-begin = 13
-end = 38
-
-[JC_48]
-file = "HOME/tests/c/conjugate.c"
-line = 70
-begin = 23
-end = 94
-
-[JC_3]
-file = "HOME/tests/c/conjugate.c"
-line = 42
-begin = 13
-end = 38
-
-[JC_49]
-file = "HOME/tests/c/conjugate.c"
-line = 69
-begin = 23
-end = 29
-
-[JC_4]
-file = "HOME/tests/c/conjugate.c"
-line = 42
-begin = 13
-end = 38
-
-[JC_5]
-file = "HOME/tests/c/conjugate.c"
-line = 44
-begin = 13
-end = 58
-
-[JC_6]
-file = "HOME/tests/c/conjugate.c"
-line = 45
-begin = 13
-end = 28
-
-[JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
-file = "HOME/tests/c/conjugate.c"
-line = 41
-begin = 13
-end = 38
-
-[JC_50]
+[JC_63]
 file = "HOME/"
 line = 0
 begin = -1
@@ -853,25 +742,36 @@ line = 126
 begin = 15
 end = 1234
 
-[JC_52]
+[JC_71]
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 126
+line = 105
 begin = 15
-end = 1234
+end = 823
 
-[JC_53]
-kind = ArithOverflow
-file = "HOME/tests/c/conjugate.c"
-line = 77
-begin = 13
-end = 22
-
-[JC_54]
+[JC_45]
 kind = PointerDeref
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 21
+
+[JC_64]
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 143
-begin = 30
-end = 296
+line = 85
+begin = 6
+end = 3173
+
+[JC_31]
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 85
+begin = 6
+end = 3173
+
+[JC_17]
+file = "HOME/tests/c/conjugate.c"
+line = 47
+begin = 12
+end = 29
 
 [JC_55]
 kind = ArithOverflow
@@ -880,219 +780,11 @@ line = 76
 begin = 38
 end = 41
 
-[JC_56]
-file = "HOME/tests/c/conjugate.c"
-line = 74
-begin = 21
-end = 27
-
-[JC_57]
-file = "HOME/tests/c/conjugate.c"
-line = 56
-begin = 19
-end = 30
-
-[JC_58]
-file = "HOME/tests/c/conjugate.c"
-line = 54
-begin = 21
-end = 76
-
-[JC_59]
-file = "HOME/tests/c/conjugate.c"
-line = 52
-begin = 21
-end = 90
-
-[conjgte_safety]
-name = "Function conjgte"
-behavior = "Safety"
-file = "HOME/tests/c/conjugate.c"
-line = 49
-begin = 5
-end = 12
-
-[conjgte_ensures_default]
-name = "Function conjgte"
-behavior = "default behavior"
-file = "HOME/tests/c/conjugate.c"
-line = 49
-begin = 5
-end = 12
-
-[JC_60]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 21
-end = 31
-
-[JC_61]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 26
-end = 37
-
-[JC_62]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 21
-end = 37
-
-[JC_10]
-file = "HOME/tests/c/conjugate.c"
-line = 41
-begin = 13
-end = 38
-
-[JC_63]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_11]
-file = "HOME/tests/c/conjugate.c"
-line = 42
-begin = 13
-end = 38
-
-[JC_64]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 85
-begin = 6
-end = 3173
-
-[JC_12]
-file = "HOME/tests/c/conjugate.c"
-line = 42
-begin = 13
-end = 38
-
-[JC_65]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 85
-begin = 6
-end = 3173
-
-[JC_13]
-file = "HOME/tests/c/conjugate.c"
-line = 44
-begin = 13
-end = 58
-
-[JC_66]
-file = "HOME/tests/c/conjugate.c"
-line = 62
-begin = 23
-end = 99
-
-[JC_14]
-file = "HOME/tests/c/conjugate.c"
-line = 45
-begin = 13
-end = 28
-
-[JC_67]
-file = "HOME/tests/c/conjugate.c"
-line = 61
-begin = 23
-end = 48
-
-[JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_68]
-file = "HOME/tests/c/conjugate.c"
-line = 61
-begin = 43
-end = 57
-
-[JC_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_69]
-file = "HOME/tests/c/conjugate.c"
-line = 61
-begin = 23
-end = 57
-
-[JC_17]
-file = "HOME/tests/c/conjugate.c"
-line = 47
-begin = 12
-end = 29
-
-[JC_18]
-file = "HOME/tests/c/conjugate.c"
-line = 49
-begin = 5
-end = 12
-
-[JC_19]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 72
-begin = 9
-end = 16
-
-[JC_70]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_71]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 105
-begin = 15
-end = 823
-
-[JC_72]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 105
-begin = 15
-end = 823
-
-[JC_20]
-file = "HOME/tests/c/conjugate.c"
-line = 47
-begin = 12
-end = 29
-
-[JC_73]
-file = "HOME/tests/c/conjugate.c"
-line = 72
-begin = 23
-end = 88
-
-[JC_21]
-file = "HOME/tests/c/conjugate.c"
-line = 49
-begin = 5
-end = 12
-
-[JC_74]
+[JC_48]
 file = "HOME/tests/c/conjugate.c"
 line = 70
 begin = 23
 end = 94
-
-[JC_22]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 72
-begin = 9
-end = 16
-
-[JC_75]
-file = "HOME/tests/c/conjugate.c"
-line = 69
-begin = 23
-end = 29
 
 [JC_23]
 file = "HOME/"
@@ -1100,23 +792,41 @@ line = 0
 begin = -1
 end = -1
 
-[JC_76]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[JC_22]
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 72
+begin = 9
+end = 16
+
+[JC_5]
+file = "HOME/tests/c/conjugate.c"
+line = 44
+begin = 13
+end = 58
+
+[JC_67]
+file = "HOME/tests/c/conjugate.c"
+line = 61
+begin = 23
+end = 48
+
+[JC_9]
+file = "HOME/tests/c/conjugate.c"
+line = 41
+begin = 13
+end = 38
+
+[JC_75]
+file = "HOME/tests/c/conjugate.c"
+line = 69
+begin = 23
+end = 29
 
 [JC_24]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_77]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 126
-begin = 15
-end = 1234
 
 [JC_25]
 file = "HOME/tests/c/conjugate.c"
@@ -1130,67 +840,80 @@ line = 126
 begin = 15
 end = 1234
 
+[JC_41]
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 105
+begin = 15
+end = 823
+
+[JC_74]
+file = "HOME/tests/c/conjugate.c"
+line = 70
+begin = 23
+end = 94
+
+[JC_47]
+file = "HOME/tests/c/conjugate.c"
+line = 72
+begin = 23
+end = 88
+
+[JC_52]
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 126
+begin = 15
+end = 1234
+
 [JC_26]
 file = "HOME/tests/c/conjugate.c"
 line = 52
 begin = 21
 end = 90
 
-[JC_27]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 21
-end = 31
-
-[JC_28]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 26
-end = 37
-
-[JC_29]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 21
-end = 37
-
-[JC_30]
+[JC_8]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_31]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 85
-begin = 6
-end = 3173
+[conjgte_ensures_default]
+name = "Function conjgte"
+behavior = "default behavior"
+file = "HOME/tests/c/conjugate.c"
+line = 49
+begin = 5
+end = 12
 
-[JC_32]
-file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 85
-begin = 6
-end = 3173
-
-[JC_33]
+[JC_54]
 kind = PointerDeref
-file = "HOME/tests/c/conjugate.c"
-line = 58
-begin = 9
-end = 17
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 143
+begin = 30
+end = 296
 
-[JC_34]
-kind = PointerDeref
+[JC_13]
 file = "HOME/tests/c/conjugate.c"
-line = 60
-begin = 11
-end = 19
+line = 44
+begin = 13
+end = 58
 
-[JC_35]
+[JC_11]
 file = "HOME/tests/c/conjugate.c"
-line = 62
-begin = 23
-end = 99
+line = 42
+begin = 13
+end = 38
+
+[JC_70]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_15]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_36]
 file = "HOME/tests/c/conjugate.c"
@@ -1198,10 +921,34 @@ line = 61
 begin = 23
 end = 48
 
-[JC_37]
+[JC_39]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_40]
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 105
+begin = 15
+end = 823
+
+[JC_35]
+file = "HOME/tests/c/conjugate.c"
+line = 62
+begin = 23
+end = 99
+
+[JC_27]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 21
+end = 31
+
+[JC_69]
 file = "HOME/tests/c/conjugate.c"
 line = 61
-begin = 43
+begin = 23
 end = 57
 
 [JC_38]
@@ -1210,11 +957,265 @@ line = 61
 begin = 23
 end = 57
 
-[JC_39]
+[JC_12]
+file = "HOME/tests/c/conjugate.c"
+line = 42
+begin = 13
+end = 38
+
+[JC_6]
+file = "HOME/tests/c/conjugate.c"
+line = 45
+begin = 13
+end = 28
+
+[JC_44]
+file = "HOME/tests/c/conjugate.c"
+line = 64
+begin = 21
+end = 32
+
+[JC_4]
+file = "HOME/tests/c/conjugate.c"
+line = 42
+begin = 13
+end = 38
+
+[JC_62]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 21
+end = 37
+
+[JC_42]
+kind = ArithOverflow
+file = "HOME/tests/c/conjugate.c"
+line = 67
+begin = 14
+end = 23
+
+[JC_46]
+kind = ArithOverflow
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 25
+
+[JC_61]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 26
+end = 37
+
+[JC_32]
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 85
+begin = 6
+end = 3173
+
+[JC_56]
+file = "HOME/tests/c/conjugate.c"
+line = 74
+begin = 21
+end = 27
+
+[JC_33]
+kind = PointerDeref
+file = "HOME/tests/c/conjugate.c"
+line = 58
+begin = 9
+end = 17
+
+[JC_65]
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 85
+begin = 6
+end = 3173
+
+[JC_29]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 21
+end = 37
+
+[JC_68]
+file = "HOME/tests/c/conjugate.c"
+line = 61
+begin = 43
+end = 57
+
+[JC_7]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_43]
+kind = PointerDeref
+file = "HOME/tests/c/conjugate.c"
+line = 68
+begin = 11
+end = 19
+
+[JC_2]
+file = "HOME/tests/c/conjugate.c"
+line = 41
+begin = 13
+end = 38
+
+[JC_34]
+kind = PointerDeref
+file = "HOME/tests/c/conjugate.c"
+line = 60
+begin = 11
+end = 19
+
+[JC_14]
+file = "HOME/tests/c/conjugate.c"
+line = 45
+begin = 13
+end = 28
+
+[JC_53]
+kind = ArithOverflow
+file = "HOME/tests/c/conjugate.c"
+line = 77
+begin = 13
+end = 22
+
+[JC_21]
+file = "HOME/tests/c/conjugate.c"
+line = 49
+begin = 5
+end = 12
+
+[conjgte_safety]
+name = "Function conjgte"
+behavior = "Safety"
+file = "HOME/tests/c/conjugate.c"
+line = 49
+begin = 5
+end = 12
+
+[JC_77]
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 126
+begin = 15
+end = 1234
+
+[JC_49]
+file = "HOME/tests/c/conjugate.c"
+line = 69
+begin = 23
+end = 29
+
+[JC_1]
+file = "HOME/tests/c/conjugate.c"
+line = 41
+begin = 13
+end = 38
+
+[JC_37]
+file = "HOME/tests/c/conjugate.c"
+line = 61
+begin = 43
+end = 57
+
+[JC_10]
+file = "HOME/tests/c/conjugate.c"
+line = 41
+begin = 13
+end = 38
+
+[JC_57]
+file = "HOME/tests/c/conjugate.c"
+line = 56
+begin = 19
+end = 30
+
+[JC_66]
+file = "HOME/tests/c/conjugate.c"
+line = 62
+begin = 23
+end = 99
+
+[JC_59]
+file = "HOME/tests/c/conjugate.c"
+line = 52
+begin = 21
+end = 90
+
+[JC_20]
+file = "HOME/tests/c/conjugate.c"
+line = 47
+begin = 12
+end = 29
+
+[JC_18]
+file = "HOME/tests/c/conjugate.c"
+line = 49
+begin = 5
+end = 12
+
+[JC_3]
+file = "HOME/tests/c/conjugate.c"
+line = 42
+begin = 13
+end = 38
+
+[JC_60]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 21
+end = 31
+
+[JC_72]
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 105
+begin = 15
+end = 823
+
+[JC_19]
+file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
+line = 72
+begin = 9
+end = 16
+
+[JC_76]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_50]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_30]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_58]
+file = "HOME/tests/c/conjugate.c"
+line = 54
+begin = 21
+end = 76
+
+[JC_28]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 26
+end = 37
 
 ========== file tests/c/conjugate.jessie/why/conjugate.why ==========
 type charP
@@ -1750,8 +1751,8 @@ let conjgte_ensures_default =
       (C_2:
       (loop_4:
       begin
-        (let jessie_<num> = (partc := (safe_int32_of_integer_ (1))) in void);
-       (let jessie_<num> = (edge := (safe_int32_of_integer_ (0))) in void);
+        (let _jessie_<num> = (partc := (safe_int32_of_integer_ (1))) in void);
+       (let _jessie_<num> = (edge := (safe_int32_of_integer_ (0))) in void);
        while true do
        { invariant
            (((JC_58:
@@ -1793,7 +1794,7 @@ let conjgte_ensures_default =
                  (C_13:
                  (loop_5:
                  begin
-                   (let jessie_<num> =
+                   (let _jessie_<num> =
                    (edge := (C_12:
                             ((safe_acc_ intP_intM_A_5) (C_11:
                                                        ((shift A) (integer_of_int32 !partc)))))) in
@@ -1822,7 +1823,7 @@ let conjgte_ensures_default =
                     try
                      (C_21:
                      begin
-                       (let jessie_<num> =
+                       (let _jessie_<num> =
                        (partc := (C_20:
                                  (safe_int32_of_integer_ (C_19:
                                                          ((add_int (integer_of_int32 !partc)) (1)))))) in
@@ -1834,14 +1835,14 @@ let conjgte_ensures_default =
                            (integer_of_int32 !edge)) then void
                       else (raise (Goto_while_1_break_exc void)));
                       (raise (Loop_continue_exc void)) end) with
-                     Loop_continue_exc jessie_<num> -> void end end done;
+                     Loop_continue_exc _jessie_<num> -> void end end done;
                   (raise (Goto_while_1_break_exc void)) end)) with
-                 Goto_while_1_break_exc jessie_<num> ->
+                 Goto_while_1_break_exc _jessie_<num> ->
                  (while_1_break:
                  (C_28:
                  begin
                    void;
-                  (let jessie_<num> =
+                  (let _jessie_<num> =
                   (i := (C_27:
                         (safe_int32_of_integer_ (C_26:
                                                 ((add_int (integer_of_int32 
@@ -1883,34 +1884,34 @@ let conjgte_ensures_default =
                      [ { } unit { true } ];
                     try
                      begin
-                       (let jessie_<num> =
+                       (let _jessie_<num> =
                        (C_37:
                        (C_40:
                        begin
                          (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 !edge))
                          then void
                          else (raise (Goto_while_2_break_exc void)));
-                        (let jessie_<num> =
-                        (let jessie_<num> =
+                        (let _jessie_<num> =
+                        (let _jessie_<num> =
                         (C_34:
                         (safe_int32_of_integer_ (C_33:
                                                 ((sub_int (integer_of_int32 !partc)) (1))))) in
-                        (let jessie_<num> = B in
-                        (let jessie_<num> = (integer_of_int32 !i) in
-                        (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-                        (((safe_upd_ intP_intM_B_6) jessie_<num>) jessie_<num>))))) in
+                        (let _jessie_<num> = B in
+                        (let _jessie_<num> = (integer_of_int32 !i) in
+                        (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+                        (((safe_upd_ intP_intM_B_6) _jessie_<num>) _jessie_<num>))))) in
                         void);
                         (i := (C_39:
                               (safe_int32_of_integer_ (C_38:
                                                       ((add_int (integer_of_int32 !i)) (1))))));
                         !i end)) in void); (raise (Loop_continue_exc void))
-                     end with Loop_continue_exc jessie_<num> -> void end end done)
-                 end)) end; (raise (Goto_while_2_break_exc void)) end with
-              Goto_while_2_break_exc jessie_<num> -> (while_2_break: void) end;
-            (raise (Loop_continue_exc void)) end) end with
-          Loop_continue_exc jessie_<num> -> void end end done;
+                     end with Loop_continue_exc _jessie_<num> -> void end end
+                  done) end)) end; (raise (Goto_while_2_break_exc void)) end
+              with Goto_while_2_break_exc _jessie_<num> ->
+              (while_2_break: void) end; (raise (Loop_continue_exc void)) end)
+          end with Loop_continue_exc _jessie_<num> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end))) with
-      Goto_while_0_break_exc jessie_<num> ->
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end)));
     (raise Return) end with Return -> void end)
   { (JC_19:
@@ -1950,8 +1951,8 @@ let conjgte_safety =
       (C_2:
       (loop_1:
       begin
-        (let jessie_<num> = (partc := (safe_int32_of_integer_ (1))) in void);
-       (let jessie_<num> = (edge := (safe_int32_of_integer_ (0))) in void);
+        (let _jessie_<num> = (partc := (safe_int32_of_integer_ (1))) in void);
+       (let _jessie_<num> = (edge := (safe_int32_of_integer_ (0))) in void);
        while true do
        { invariant (JC_31: true)
          variant (JC_57 : sub_int((100), integer_of_int32(partc))) }
@@ -1994,7 +1995,7 @@ let conjgte_safety =
                  (C_13:
                  (loop_2:
                  begin
-                   (let jessie_<num> =
+                   (let _jessie_<num> =
                    (edge := (C_12:
                             (JC_34:
                             ((((offset_acc_ intP_A_5_alloc_table) intP_intM_A_5) A) 
@@ -2020,7 +2021,7 @@ let conjgte_safety =
                     try
                      (C_21:
                      begin
-                       (let jessie_<num> =
+                       (let _jessie_<num> =
                        (partc := (C_20:
                                  (JC_42:
                                  (int32_of_integer_ (C_19:
@@ -2033,14 +2034,14 @@ let conjgte_safety =
                            (integer_of_int32 !edge)) then void
                       else (raise (Goto_while_1_break_exc void)));
                       (raise (Loop_continue_exc void)) end) with
-                     Loop_continue_exc jessie_<num> -> void end end done;
+                     Loop_continue_exc _jessie_<num> -> void end end done;
                   (raise (Goto_while_1_break_exc void)) end)) with
-                 Goto_while_1_break_exc jessie_<num> ->
+                 Goto_while_1_break_exc _jessie_<num> ->
                  (while_1_break:
                  (C_28:
                  begin
                    void;
-                  (let jessie_<num> =
+                  (let _jessie_<num> =
                   (i := (C_27:
                         (JC_46:
                         (int32_of_integer_ (C_26:
@@ -2080,37 +2081,37 @@ let conjgte_safety =
                              and (JC_49: le_int((1), integer_of_int32(i))))) } ];
                     try
                      begin
-                       (let jessie_<num> =
+                       (let _jessie_<num> =
                        (C_37:
                        (C_40:
                        begin
                          (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 !edge))
                          then void
                          else (raise (Goto_while_2_break_exc void)));
-                        (let jessie_<num> =
-                        (let jessie_<num> =
+                        (let _jessie_<num> =
+                        (let _jessie_<num> =
                         (C_34:
                         (JC_53:
                         (int32_of_integer_ (C_33:
                                            ((sub_int (integer_of_int32 !partc)) (1)))))) in
-                        (let jessie_<num> = B in
-                        (let jessie_<num> = (integer_of_int32 !i) in
-                        (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+                        (let _jessie_<num> = B in
+                        (let _jessie_<num> = (integer_of_int32 !i) in
+                        (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
                         (JC_54:
-                        (((((offset_upd_ intP_B_6_alloc_table) intP_intM_B_6) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+                        (((((offset_upd_ intP_B_6_alloc_table) intP_intM_B_6) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
                         void);
                         (i := (C_39:
                               (JC_55:
                               (int32_of_integer_ (C_38:
                                                  ((add_int (integer_of_int32 !i)) (1)))))));
                         !i end)) in void); (raise (Loop_continue_exc void))
-                     end with Loop_continue_exc jessie_<num> -> void end end done)
-                 end)) end; (raise (Goto_while_2_break_exc void)) end with
-              Goto_while_2_break_exc jessie_<num> -> (while_2_break: void) end;
-            (raise (Loop_continue_exc void)) end) end with
-          Loop_continue_exc jessie_<num> -> void end end done;
+                     end with Loop_continue_exc _jessie_<num> -> void end end
+                  done) end)) end; (raise (Goto_while_2_break_exc void)) end
+              with Goto_while_2_break_exc _jessie_<num> ->
+              (while_2_break: void) end; (raise (Loop_continue_exc void)) end)
+          end with Loop_continue_exc _jessie_<num> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end))) with
-      Goto_while_0_break_exc jessie_<num> ->
+      Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end)));
     (raise Return) end with Return -> void end) { true }
 

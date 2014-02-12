@@ -176,18 +176,11 @@ behavior not_exists:
    }
 }
 ========== file tests/c/find_array.jessie/find_array.cloc ==========
-[find_array]
-name = "Function find_array"
-file = "HOME/tests/c/find_array.c"
-line = 27
-begin = 4
-end = 14
-
-[C_10]
+[C_15]
 file = "HOME/tests/c/find_array.c"
 line = 38
-begin = 22
-end = 31
+begin = 15
+end = 36
 
 [C_11]
 file = "HOME/tests/c/find_array.c"
@@ -195,77 +188,36 @@ line = 38
 begin = 22
 end = 31
 
-[C_12]
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 21
-end = 36
-
-[C_13]
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 21
-end = 36
-
-[C_14]
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 15
-end = 36
-
-[C_15]
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 15
-end = 36
-
-[C_16]
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 4
-end = 7
-
-[C_17]
-file = "HOME/tests/c/find_array.c"
-line = 39
-begin = 28
-end = 40
-
-[C_18]
-file = "HOME/tests/c/find_array.c"
-line = 39
-begin = 8
-end = 11
-
-[C_19]
-file = "HOME/tests/c/find_array.c"
-line = 39
-begin = 8
-end = 17
-
 [C_1]
 file = "HOME/tests/c/find_array.c"
 line = 28
 begin = 2
 end = 5
 
-[C_2]
+[C_33]
 file = "HOME/tests/c/find_array.c"
-line = 29
-begin = 13
-end = 23
+line = 15
+begin = 11
+end = 38
 
-[C_3]
+[C_9]
 file = "HOME/tests/c/find_array.c"
-line = 29
-begin = 13
-end = 23
+line = 31
+begin = 19
+end = 27
 
-[C_4]
+[C_10]
 file = "HOME/tests/c/find_array.c"
-line = 29
-begin = 2
-end = 5
+line = 38
+begin = 22
+end = 31
+
+[find_array]
+name = "Function find_array"
+file = "HOME/tests/c/find_array.c"
+line = 27
+begin = 4
+end = 14
 
 [C_20]
 file = "HOME/tests/c/find_array.c"
@@ -273,29 +225,47 @@ line = 41
 begin = 16
 end = 24
 
+[C_32]
+file = "HOME/tests/c/find_array.c"
+line = 15
+begin = 11
+end = 38
+
+[C_17]
+file = "HOME/tests/c/find_array.c"
+line = 39
+begin = 28
+end = 40
+
+[C_36]
+file = "HOME/tests/c/find_array.c"
+line = 13
+begin = 11
+end = 29
+
 [C_5]
 file = "HOME/tests/c/find_array.c"
 line = 35
 begin = 17
 end = 27
 
-[C_21]
+[C_34]
 file = "HOME/tests/c/find_array.c"
-line = 41
-begin = 16
-end = 24
+line = 15
+begin = 11
+end = 38
 
-[C_6]
-file = "HOME/tests/c/find_array.c"
-line = 34
-begin = 19
-end = 74
+[C_29]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[C_22]
+[C_13]
 file = "HOME/tests/c/find_array.c"
-line = 41
-begin = 16
-end = 24
+line = 38
+begin = 21
+end = 36
 
 [C_7]
 file = "HOME/tests/c/find_array.c"
@@ -303,7 +273,25 @@ line = 33
 begin = 19
 end = 69
 
-[C_23]
+[C_22]
+file = "HOME/tests/c/find_array.c"
+line = 41
+begin = 16
+end = 24
+
+[C_14]
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 15
+end = 36
+
+[C_35]
+file = "HOME/tests/c/find_array.c"
+line = 14
+begin = 11
+end = 22
+
+[C_25]
 file = "HOME/tests/c/find_array.c"
 line = 40
 begin = 33
@@ -315,23 +303,29 @@ line = 32
 begin = 19
 end = 32
 
-[C_24]
+[C_27]
 file = "HOME/tests/c/find_array.c"
 line = 40
-begin = 33
-end = 41
+begin = 8
+end = 17
 
-[C_9]
+[C_19]
 file = "HOME/tests/c/find_array.c"
-line = 31
-begin = 19
-end = 27
+line = 39
+begin = 8
+end = 17
 
-[C_25]
+[C_4]
 file = "HOME/tests/c/find_array.c"
-line = 40
-begin = 33
-end = 41
+line = 29
+begin = 2
+end = 5
+
+[C_12]
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 21
+end = 36
 
 [C_26]
 file = "HOME/tests/c/find_array.c"
@@ -339,11 +333,17 @@ line = 40
 begin = 8
 end = 11
 
-[C_27]
+[C_18]
 file = "HOME/tests/c/find_array.c"
-line = 40
+line = 39
 begin = 8
-end = 17
+end = 11
+
+[C_2]
+file = "HOME/tests/c/find_array.c"
+line = 29
+begin = 13
+end = 23
 
 [C_28]
 file = "HOME/tests/c/find_array.c"
@@ -351,11 +351,17 @@ line = 43
 begin = 2
 end = 12
 
-[C_29]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[C_24]
+file = "HOME/tests/c/find_array.c"
+line = 40
+begin = 33
+end = 41
+
+[C_6]
+file = "HOME/tests/c/find_array.c"
+line = 34
+begin = 19
+end = 74
 
 [C_30]
 file = "HOME/tests/c/find_array.c"
@@ -363,41 +369,35 @@ line = 21
 begin = 12
 end = 33
 
+[C_21]
+file = "HOME/tests/c/find_array.c"
+line = 41
+begin = 16
+end = 24
+
+[C_3]
+file = "HOME/tests/c/find_array.c"
+line = 29
+begin = 13
+end = 23
+
+[C_16]
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 4
+end = 7
+
 [C_31]
 file = "HOME/tests/c/find_array.c"
 line = 25
 begin = 12
 end = 25
 
-[C_32]
+[C_23]
 file = "HOME/tests/c/find_array.c"
-line = 15
-begin = 11
-end = 38
-
-[C_33]
-file = "HOME/tests/c/find_array.c"
-line = 15
-begin = 11
-end = 38
-
-[C_34]
-file = "HOME/tests/c/find_array.c"
-line = 15
-begin = 11
-end = 38
-
-[C_35]
-file = "HOME/tests/c/find_array.c"
-line = 14
-begin = 11
-end = 22
-
-[C_36]
-file = "HOME/tests/c/find_array.c"
-line = 13
-begin = 11
-end = 29
+line = 40
+begin = 33
+end = 41
 
 ========== jessie execution ==========
 Generating Why function find_array
@@ -411,10 +411,11 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-USERWHYDEUXOPT= -split-user-conj
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs find_array.loc
+USERWHYTWOOPT= -split-user-conj
+USERWHYTHREEOPT=
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs find_array.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYDEUXOPT) -explain -locs find_array.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) $(USERWHYTWOOPT) -explain -locs find_array.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
@@ -559,13 +560,13 @@ why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ml: find_array.mlw
-	 why3 --extra-config $(JESSIE3CONF) $<
+	 why3 $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3ide: find_array.mlw
-	 why3ide --extra-config $(JESSIE3CONF) $<
+	 why3ide $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 why3replay: find_array.mlw
-	 why3replayer --extra-config $(JESSIE3CONF) $<
+	 why3replayer $(USERWHYTHREEOPT) --extra-config $(JESSIE3CONF) $<
 
 -include find_array.depend
 
@@ -576,126 +577,12 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/c/find_array.jessie/find_array.loc ==========
-[JC_40]
-file = "HOME/tests/c/find_array.c"
-line = 34
-begin = 19
-end = 74
-
-[JC_41]
-file = "HOME/tests/c/find_array.c"
-line = 33
-begin = 19
-end = 69
-
-[JC_42]
-file = "HOME/tests/c/find_array.c"
-line = 32
-begin = 19
-end = 32
-
-[JC_43]
-file = "HOME/tests/c/find_array.c"
-line = 31
-begin = 19
-end = 27
-
-[JC_44]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_45]
-file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 78
-begin = 6
-end = 1614
-
-[JC_46]
-file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 78
-begin = 6
-end = 1614
-
-[JC_1]
-file = "HOME/tests/c/find_array.c"
-line = 13
-begin = 11
-end = 29
-
-[JC_47]
+[JC_63]
 kind = DivByZero
 file = "HOME/tests/c/find_array.c"
 line = 38
 begin = 21
 end = 36
-
-[JC_2]
-file = "HOME/tests/c/find_array.c"
-line = 14
-begin = 11
-end = 22
-
-[JC_48]
-file = "HOME/tests/c/find_array.c"
-line = 34
-begin = 19
-end = 74
-
-[JC_3]
-file = "HOME/tests/c/find_array.c"
-line = 15
-begin = 11
-end = 38
-
-[JC_49]
-file = "HOME/tests/c/find_array.c"
-line = 33
-begin = 19
-end = 69
-
-[JC_4]
-file = "HOME/tests/c/find_array.c"
-line = 15
-begin = 11
-end = 38
-
-[JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_7]
-file = "HOME/tests/c/find_array.c"
-line = 13
-begin = 11
-end = 29
-
-[JC_8]
-file = "HOME/tests/c/find_array.c"
-line = 14
-begin = 11
-end = 22
-
-[JC_9]
-file = "HOME/tests/c/find_array.c"
-line = 15
-begin = 11
-end = 38
-
-[JC_50]
-file = "HOME/tests/c/find_array.c"
-line = 32
-begin = 19
-end = 32
 
 [JC_51]
 file = "HOME/tests/c/find_array.c"
@@ -703,23 +590,24 @@ line = 31
 begin = 19
 end = 27
 
-[JC_52]
+[JC_45]
+file = "HOME/tests/c/find_array.jessie/find_array.jc"
+line = 78
+begin = 6
+end = 1614
+
+[JC_31]
+kind = ArithOverflow
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 22
+end = 31
+
+[JC_17]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_53]
-file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 78
-begin = 6
-end = 1614
-
-[JC_54]
-file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 78
-begin = 6
-end = 1614
 
 [JC_55]
 kind = DivByZero
@@ -728,140 +616,11 @@ line = 38
 begin = 21
 end = 36
 
-[JC_56]
+[JC_48]
 file = "HOME/tests/c/find_array.c"
 line = 34
 begin = 19
 end = 74
-
-[JC_57]
-file = "HOME/tests/c/find_array.c"
-line = 33
-begin = 19
-end = 69
-
-[JC_58]
-file = "HOME/tests/c/find_array.c"
-line = 32
-begin = 19
-end = 32
-
-[JC_59]
-file = "HOME/tests/c/find_array.c"
-line = 31
-begin = 19
-end = 27
-
-[JC_60]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_61]
-file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 78
-begin = 6
-end = 1614
-
-[JC_62]
-file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 78
-begin = 6
-end = 1614
-
-[JC_10]
-file = "HOME/tests/c/find_array.c"
-line = 15
-begin = 11
-end = 38
-
-[JC_63]
-kind = DivByZero
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 21
-end = 36
-
-[JC_11]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[find_array_ensures_exists]
-name = "Function find_array"
-behavior = "Behavior `exists'"
-file = "HOME/tests/c/find_array.c"
-line = 27
-begin = 4
-end = 14
-
-[JC_14]
-file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 58
-begin = 10
-end = 18
-
-[JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_16]
-file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 58
-begin = 10
-end = 18
-
-[JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_19]
-file = "HOME/tests/c/find_array.c"
-line = 21
-begin = 12
-end = 33
-
-[JC_20]
-file = "HOME/tests/c/find_array.c"
-line = 21
-begin = 12
-end = 33
-
-[JC_21]
-file = "HOME/tests/c/find_array.c"
-line = 25
-begin = 12
-end = 25
-
-[JC_22]
-file = "HOME/tests/c/find_array.c"
-line = 25
-begin = 12
-end = 25
 
 [JC_23]
 kind = ArithOverflow
@@ -869,6 +628,32 @@ file = "HOME/tests/c/find_array.c"
 line = 29
 begin = 13
 end = 23
+
+[JC_22]
+file = "HOME/tests/c/find_array.c"
+line = 25
+begin = 12
+end = 25
+
+[JC_5]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[find_array_safety]
+name = "Function find_array"
+behavior = "Safety"
+file = "HOME/tests/c/find_array.c"
+line = 27
+begin = 4
+end = 14
+
+[JC_9]
+file = "HOME/tests/c/find_array.c"
+line = 15
+begin = 11
+end = 38
 
 [JC_24]
 file = "HOME/tests/c/find_array.c"
@@ -882,13 +667,24 @@ line = 33
 begin = 19
 end = 69
 
-[find_array_ensures_default]
-name = "Function find_array"
-behavior = "default behavior"
+[JC_41]
 file = "HOME/tests/c/find_array.c"
-line = 27
-begin = 4
-end = 14
+line = 33
+begin = 19
+end = 69
+
+[JC_47]
+kind = DivByZero
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 21
+end = 36
+
+[JC_52]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_26]
 file = "HOME/tests/c/find_array.c"
@@ -896,19 +692,13 @@ line = 32
 begin = 19
 end = 32
 
-[JC_27]
+[JC_8]
 file = "HOME/tests/c/find_array.c"
-line = 31
-begin = 19
-end = 27
+line = 14
+begin = 11
+end = 22
 
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_29]
+[JC_54]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
 line = 78
 begin = 6
@@ -922,54 +712,23 @@ line = 27
 begin = 4
 end = 14
 
-[find_array_safety]
-name = "Function find_array"
-behavior = "Safety"
-file = "HOME/tests/c/find_array.c"
-line = 27
-begin = 4
-end = 14
+[JC_13]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_30]
-file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 78
-begin = 6
-end = 1614
+[JC_11]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[JC_31]
-kind = ArithOverflow
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 22
-end = 31
-
-[JC_32]
-kind = DivByZero
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 21
-end = 36
-
-[JC_33]
-kind = ArithOverflow
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 21
-end = 36
-
-[JC_34]
-kind = ArithOverflow
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 15
-end = 36
-
-[JC_35]
-kind = PointerDeref
-file = "HOME/tests/c/find_array.c"
-line = 39
-begin = 8
-end = 17
+[JC_15]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_36]
 kind = PointerDeref
@@ -978,12 +737,30 @@ line = 40
 begin = 8
 end = 17
 
-[JC_37]
-kind = ArithOverflow
+[JC_39]
 file = "HOME/tests/c/find_array.c"
-line = 40
-begin = 33
-end = 41
+line = 35
+begin = 17
+end = 27
+
+[JC_40]
+file = "HOME/tests/c/find_array.c"
+line = 34
+begin = 19
+end = 74
+
+[JC_35]
+kind = PointerDeref
+file = "HOME/tests/c/find_array.c"
+line = 39
+begin = 8
+end = 17
+
+[JC_27]
+file = "HOME/tests/c/find_array.c"
+line = 31
+begin = 19
+end = 27
 
 [JC_38]
 kind = ArithOverflow
@@ -992,11 +769,235 @@ line = 41
 begin = 16
 end = 24
 
-[JC_39]
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_4]
 file = "HOME/tests/c/find_array.c"
-line = 35
-begin = 17
+line = 15
+begin = 11
+end = 38
+
+[JC_62]
+file = "HOME/tests/c/find_array.jessie/find_array.jc"
+line = 78
+begin = 6
+end = 1614
+
+[JC_42]
+file = "HOME/tests/c/find_array.c"
+line = 32
+begin = 19
+end = 32
+
+[JC_46]
+file = "HOME/tests/c/find_array.jessie/find_array.jc"
+line = 78
+begin = 6
+end = 1614
+
+[JC_61]
+file = "HOME/tests/c/find_array.jessie/find_array.jc"
+line = 78
+begin = 6
+end = 1614
+
+[JC_32]
+kind = DivByZero
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 21
+end = 36
+
+[JC_56]
+file = "HOME/tests/c/find_array.c"
+line = 34
+begin = 19
+end = 74
+
+[JC_33]
+kind = ArithOverflow
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 21
+end = 36
+
+[JC_29]
+file = "HOME/tests/c/find_array.jessie/find_array.jc"
+line = 78
+begin = 6
+end = 1614
+
+[JC_7]
+file = "HOME/tests/c/find_array.c"
+line = 13
+begin = 11
+end = 29
+
+[JC_16]
+file = "HOME/tests/c/find_array.jessie/find_array.jc"
+line = 58
+begin = 10
+end = 18
+
+[JC_43]
+file = "HOME/tests/c/find_array.c"
+line = 31
+begin = 19
 end = 27
+
+[JC_2]
+file = "HOME/tests/c/find_array.c"
+line = 14
+begin = 11
+end = 22
+
+[JC_34]
+kind = ArithOverflow
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 15
+end = 36
+
+[JC_14]
+file = "HOME/tests/c/find_array.jessie/find_array.jc"
+line = 58
+begin = 10
+end = 18
+
+[JC_53]
+file = "HOME/tests/c/find_array.jessie/find_array.jc"
+line = 78
+begin = 6
+end = 1614
+
+[JC_21]
+file = "HOME/tests/c/find_array.c"
+line = 25
+begin = 12
+end = 25
+
+[JC_49]
+file = "HOME/tests/c/find_array.c"
+line = 33
+begin = 19
+end = 69
+
+[JC_1]
+file = "HOME/tests/c/find_array.c"
+line = 13
+begin = 11
+end = 29
+
+[JC_37]
+kind = ArithOverflow
+file = "HOME/tests/c/find_array.c"
+line = 40
+begin = 33
+end = 41
+
+[JC_10]
+file = "HOME/tests/c/find_array.c"
+line = 15
+begin = 11
+end = 38
+
+[JC_57]
+file = "HOME/tests/c/find_array.c"
+line = 33
+begin = 19
+end = 69
+
+[JC_59]
+file = "HOME/tests/c/find_array.c"
+line = 31
+begin = 19
+end = 27
+
+[find_array_ensures_default]
+name = "Function find_array"
+behavior = "default behavior"
+file = "HOME/tests/c/find_array.c"
+line = 27
+begin = 4
+end = 14
+
+[JC_20]
+file = "HOME/tests/c/find_array.c"
+line = 21
+begin = 12
+end = 33
+
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/c/find_array.c"
+line = 15
+begin = 11
+end = 38
+
+[JC_60]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_19]
+file = "HOME/tests/c/find_array.c"
+line = 21
+begin = 12
+end = 33
+
+[find_array_ensures_exists]
+name = "Function find_array"
+behavior = "Behavior `exists'"
+file = "HOME/tests/c/find_array.c"
+line = 27
+begin = 4
+end = 14
+
+[JC_50]
+file = "HOME/tests/c/find_array.c"
+line = 32
+begin = 19
+end = 32
+
+[JC_30]
+file = "HOME/tests/c/find_array.jessie/find_array.jc"
+line = 78
+begin = 6
+end = 1614
+
+[JC_58]
+file = "HOME/tests/c/find_array.c"
+line = 32
+begin = 19
+end = 32
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/c/find_array.jessie/why/find_array.why ==========
 type charP
@@ -1494,8 +1495,8 @@ let find_array_ensures_default =
          (C_4:
          (loop_2:
          begin
-           (let jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
-          (let jessie_<num> =
+           (let _jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
+          (let _jessie_<num> =
           (high := (C_3:
                    (safe_int32_of_integer_ (C_2:
                                            ((sub_int (integer_of_int32 length_1)) (1)))))) in
@@ -1525,12 +1526,12 @@ let find_array_ensures_default =
              [ { } unit { true } ];
             try
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (C_16:
                begin
                  (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
                  then void else (raise (Goto_while_0_break_exc void)));
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (mean := (C_15:
                          (safe_int32_of_integer_ (C_14:
                                                  ((add_int (integer_of_int32 !low)) 
@@ -1555,7 +1556,7 @@ let find_array_ensures_default =
                 then
                  (C_17:
                  begin
-                   (let jessie_<num> = (__retres := !mean) in void);
+                   (let _jessie_<num> = (__retres := !mean) in void);
                   (raise (Return_label_exc void)) end) else void);
                 (if ((lt_int_ (integer_of_int32 (C_27:
                                                 ((safe_acc_ intP_intM_arr_3) 
@@ -1576,16 +1577,16 @@ let find_array_ensures_default =
                             (safe_int32_of_integer_ (C_20:
                                                     ((sub_int (integer_of_int32 !mean)) (1))))));
                   !high end)) end) in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc jessie_<num> -> void end end done;
+             end with Loop_continue_exc _jessie_<num> -> void end end done;
           (raise (Goto_while_0_break_exc void)) end))) with
-         Goto_while_0_break_exc jessie_<num> ->
-         (let jessie_<num> =
+         Goto_while_0_break_exc _jessie_<num> ->
+         (let _jessie_<num> =
          (while_0_break:
          (C_28:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
           !__retres end)) in void) end; (raise (Return_label_exc void)) end
-      with Return_label_exc jessie_<num> ->
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { (JC_14: true) }
 
@@ -1615,8 +1616,8 @@ let find_array_ensures_exists =
          (C_4:
          (loop_3:
          begin
-           (let jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
-          (let jessie_<num> =
+           (let _jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
+          (let _jessie_<num> =
           (high := (C_3:
                    (safe_int32_of_integer_ (C_2:
                                            ((sub_int (integer_of_int32 length_1)) (1)))))) in
@@ -1645,12 +1646,12 @@ let find_array_ensures_exists =
                          and (JC_51: le_int((0), integer_of_int32(low)))))) } ];
             try
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (C_16:
                begin
                  (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
                  then void else (raise (Goto_while_0_break_exc void)));
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (mean := (C_15:
                          (safe_int32_of_integer_ (C_14:
                                                  ((add_int (integer_of_int32 !low)) 
@@ -1675,7 +1676,7 @@ let find_array_ensures_exists =
                 then
                  (C_17:
                  begin
-                   (let jessie_<num> = (__retres := !mean) in void);
+                   (let _jessie_<num> = (__retres := !mean) in void);
                   (raise (Return_label_exc void)) end) else void);
                 (if ((lt_int_ (integer_of_int32 (C_27:
                                                 ((safe_acc_ intP_intM_arr_3) 
@@ -1696,16 +1697,16 @@ let find_array_ensures_exists =
                             (safe_int32_of_integer_ (C_20:
                                                     ((sub_int (integer_of_int32 !mean)) (1))))));
                   !high end)) end) in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc jessie_<num> -> void end end done;
+             end with Loop_continue_exc _jessie_<num> -> void end end done;
           (raise (Goto_while_0_break_exc void)) end))) with
-         Goto_while_0_break_exc jessie_<num> ->
-         (let jessie_<num> =
+         Goto_while_0_break_exc _jessie_<num> ->
+         (let _jessie_<num> =
          (while_0_break:
          (C_28:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
           !__retres end)) in void) end; (raise (Return_label_exc void)) end
-      with Return_label_exc jessie_<num> ->
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_19:
@@ -1738,8 +1739,8 @@ let find_array_ensures_not_exists =
          (C_4:
          (loop_4:
          begin
-           (let jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
-          (let jessie_<num> =
+           (let _jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
+          (let _jessie_<num> =
           (high := (C_3:
                    (safe_int32_of_integer_ (C_2:
                                            ((sub_int (integer_of_int32 length_1)) (1)))))) in
@@ -1768,12 +1769,12 @@ let find_array_ensures_not_exists =
                          and (JC_59: le_int((0), integer_of_int32(low)))))) } ];
             try
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (C_16:
                begin
                  (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
                  then void else (raise (Goto_while_0_break_exc void)));
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (mean := (C_15:
                          (safe_int32_of_integer_ (C_14:
                                                  ((add_int (integer_of_int32 !low)) 
@@ -1798,7 +1799,7 @@ let find_array_ensures_not_exists =
                 then
                  (C_17:
                  begin
-                   (let jessie_<num> = (__retres := !mean) in void);
+                   (let _jessie_<num> = (__retres := !mean) in void);
                   (raise (Return_label_exc void)) end) else void);
                 (if ((lt_int_ (integer_of_int32 (C_27:
                                                 ((safe_acc_ intP_intM_arr_3) 
@@ -1819,16 +1820,16 @@ let find_array_ensures_not_exists =
                             (safe_int32_of_integer_ (C_20:
                                                     ((sub_int (integer_of_int32 !mean)) (1))))));
                   !high end)) end) in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc jessie_<num> -> void end end done;
+             end with Loop_continue_exc _jessie_<num> -> void end end done;
           (raise (Goto_while_0_break_exc void)) end))) with
-         Goto_while_0_break_exc jessie_<num> ->
-         (let jessie_<num> =
+         Goto_while_0_break_exc _jessie_<num> ->
+         (let _jessie_<num> =
          (while_0_break:
          (C_28:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
           !__retres end)) in void) end; (raise (Return_label_exc void)) end
-      with Return_label_exc jessie_<num> ->
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_21: (integer_of_int32(result) = neg_int((1)))) }
@@ -1857,8 +1858,8 @@ let find_array_safety =
          (C_4:
          (loop_1:
          begin
-           (let jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
-          (let jessie_<num> =
+           (let _jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
+          (let _jessie_<num> =
           (high := (C_3:
                    (JC_23:
                    (int32_of_integer_ (C_2:
@@ -1890,12 +1891,12 @@ let find_array_safety =
                          and (JC_27: le_int((0), integer_of_int32(low)))))) } ];
             try
              begin
-               (let jessie_<num> =
+               (let _jessie_<num> =
                (C_16:
                begin
                  (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
                  then void else (raise (Goto_while_0_break_exc void)));
-                (let jessie_<num> =
+                (let _jessie_<num> =
                 (mean := (C_15:
                          (JC_34:
                          (int32_of_integer_ (C_14:
@@ -1923,7 +1924,7 @@ let find_array_safety =
                 then
                  (C_17:
                  begin
-                   (let jessie_<num> = (__retres := !mean) in void);
+                   (let _jessie_<num> = (__retres := !mean) in void);
                   (raise (Return_label_exc void)) end) else void);
                 (if ((lt_int_ (integer_of_int32 (C_27:
                                                 (JC_36:
@@ -1946,16 +1947,16 @@ let find_array_safety =
                             (int32_of_integer_ (C_20:
                                                ((sub_int (integer_of_int32 !mean)) (1)))))));
                   !high end)) end) in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc jessie_<num> -> void end end done;
+             end with Loop_continue_exc _jessie_<num> -> void end end done;
           (raise (Goto_while_0_break_exc void)) end))) with
-         Goto_while_0_break_exc jessie_<num> ->
-         (let jessie_<num> =
+         Goto_while_0_break_exc _jessie_<num> ->
+         (let _jessie_<num> =
          (while_0_break:
          (C_28:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
           !__retres end)) in void) end; (raise (Return_label_exc void)) end
-      with Return_label_exc jessie_<num> ->
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { true }
 
