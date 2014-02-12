@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
-  name="CVC3"
-  version="2.4.1"/>
+  name="CVC4"
+  version="1.3"/>
  <prover
   id="3"
   name="Z3"
@@ -43,29 +43,23 @@
     locfile="../../fresh2_sep.c"
     loclnum="15" loccnumb="4" loccnume="10"
     expl="VC for create_ensures_default"
-    sum="f8c0d23102c91d8594709b6b5ee2a110"
+    sum="a9c82ec035ca2dc49d2a89ae4412ffaa"
     proved="true"
-    expanded="true"
-    shape="avalidV0V5NAainfix &gt;=aoffset_maxV2V5c0Aainfix &lt;=aoffset_minV2V5c0Iainfix =V5V4FIainfix =V4V3FIainstanceofV1V3a_Str_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_StrV3c0ainfix -c1c1V2FFF">
+    expanded="false"
+    shape="NavalidV0V5Aainfix &gt;=aoffset_maxV2V5c0Aainfix &lt;=aoffset_minV2V5c0Iainfix =V5V4FIainfix =V4V3FIainstanceofV1V3a_Str_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_StrV3c0ainfix -c1c1V2FFF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function create, default behavior"/>
     <label
      name="expl:VC for create_ensures_default"/>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.04"/>
-    </proof>
     <proof
      prover="1"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.09"/>
     </proof>
     <proof
      prover="2"
@@ -75,31 +69,15 @@
      archived="false">
      <result status="valid" time="0.09"/>
     </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.11"/>
-    </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="1.48"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter create_safety"
     locfile="../../fresh2_sep.c"
     loclnum="15" loccnumb="4" loccnume="10"
     expl="VC for create_safety"
-    sum="ec1bbb44bbca6c31f437aed71ad7b2d3"
+    sum="30288d7748a3ae39d5cd7bfedd30bccd"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix &gt;=c1c0">
     <label
      name="expl:Function create, Safety"/>
@@ -119,7 +97,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"
@@ -127,7 +105,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="3"
@@ -151,10 +129,12 @@
     locfile="../../fresh2_sep.c"
     loclnum="29" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_ensures_default"
-    sum="eb32b7ef4669e23fa88c04392483a9c6"
+    sum="c01d3bf2fb028ee8eae854a0b59b5af7"
     proved="false"
     expanded="true"
-    shape="ainfix =c0c1Iainfix =V6V5FIavalidV1V5NAainfix &gt;=aoffset_maxV4V5c0Aainfix &lt;=aoffset_minV4V5c0FFIainfix =V3V2FIavalidV0V2NAainfix &gt;=aoffset_maxV1V2c0Aainfix &lt;=aoffset_minV1V2c0FFF">
+    shape="ainfix =c0c1Iainfix =V6V5FINavalidV1V5Aainfix &gt;=aoffset_maxV4V5c0Aainfix &lt;=aoffset_minV4V5c0FFIainfix =V3V2FINavalidV0V2Aainfix &gt;=aoffset_maxV1V2c0Aainfix &lt;=aoffset_minV1V2c0FFF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function smoke_detector, default behavior"/>
     <label
@@ -173,7 +153,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="1.17"/>
+     <result status="timeout" time="5.16"/>
     </proof>
     <proof
      prover="2"
@@ -181,7 +161,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.16"/>
+     <result status="timeout" time="4.98"/>
     </proof>
     <proof
      prover="3"
@@ -205,9 +185,9 @@
     locfile="../../fresh2_sep.c"
     loclnum="29" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_safety"
-    sum="701d2d09a3c0e820ddf6fbe0c7b2f1c4"
+    sum="daa6ea3e790587265d4aa6b85000c7fe"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:Function smoke_detector, Safety"/>
@@ -227,7 +207,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"
@@ -235,7 +215,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="3"
@@ -259,10 +239,12 @@
     locfile="../../fresh2_sep.c"
     loclnum="23" loccnumb="5" loccnume="9"
     expl="VC for test_ensures_default"
-    sum="05a928c5be67388f7011fefd6530fdc3"
+    sum="d73c482196d52c096673949e1da987aa"
     proved="true"
-    expanded="true"
-    shape="ainfix =V0V4NIainfix =V4V3FIavalidV1V3NAainfix &gt;=aoffset_maxV2V3c0Aainfix &lt;=aoffset_minV2V3c0FFIainfix &gt;=aoffset_maxV1V0c0Aainfix &lt;=aoffset_minV1V0c0FF">
+    expanded="false"
+    shape="Nainfix =V0V4Iainfix =V4V3FINavalidV1V3Aainfix &gt;=aoffset_maxV2V3c0Aainfix &lt;=aoffset_minV2V3c0FFIainfix &gt;=aoffset_maxV1V0c0Aainfix &lt;=aoffset_minV1V0c0FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function test, default behavior"/>
     <label
@@ -281,7 +263,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"
@@ -289,7 +271,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="3"
@@ -313,9 +295,9 @@
     locfile="../../fresh2_sep.c"
     loclnum="23" loccnumb="5" loccnume="9"
     expl="VC for test_safety"
-    sum="701d2d09a3c0e820ddf6fbe0c7b2f1c4"
+    sum="daa6ea3e790587265d4aa6b85000c7fe"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
     <label
      name="expl:Function test, Safety"/>
@@ -335,7 +317,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"
@@ -343,7 +325,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="3"

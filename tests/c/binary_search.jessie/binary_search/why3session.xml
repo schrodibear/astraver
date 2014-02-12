@@ -4,7 +4,7 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.95.1"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
@@ -80,6 +80,8 @@
     expanded="false"
     shape="iainfix &lt;ainteger_of_int32V13ainteger_of_int32V1Aainfix &lt;=aprefix -c1ainteger_of_int32V13Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1Fiiainfix &lt;ainteger_of_int32V18ainteger_of_int32V1Aainfix &lt;=aprefix -c1ainteger_of_int32V18Iainfix =V18V17FIainfix =V17V16Fainfix &lt;=ainteger_of_int32V20ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V16c1Fainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2ainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V22Iainfix =V22V21FIainfix =ainteger_of_int32V21ainfix +ainteger_of_int32V16c1Fainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2Aainfix &lt;=ainteger_of_int32V16ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15adivainteger_of_int32V14c2FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V10ainteger_of_int32V9Fainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FAainfix &lt;=ainteger_of_int32V8ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V6Iainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Function binary_search, default behavior"/>
     <label
      name="expl:VC for binary_search_ensures_default"/>
@@ -89,7 +91,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.34"/>
+     <result status="valid" time="0.67"/>
     </proof>
     <proof
      prover="1"
@@ -97,7 +99,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.74"/>
+     <result status="valid" time="1.31"/>
     </proof>
     <proof
      prover="3"
@@ -118,6 +120,8 @@
     expanded="false"
     shape="iNainfix =ainteger_of_int32aselectV4ashiftV0V14ainteger_of_int32V2Iainfix &lt;V14ainteger_of_int32V1Aainfix &lt;=c0V14FIainfix =ainteger_of_int32V13aprefix -c1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1FiiNainfix =ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix &lt;V20ainteger_of_int32V1Aainfix &lt;=c0V20FIainfix =ainteger_of_int32V19aprefix -c1Iainfix =V19V18FIainfix =V18V17Fainfix &lt;=V23ainteger_of_int32V22Aainfix &lt;=ainteger_of_int32V10V23Iainfix =ainteger_of_int32aselectV4ashiftV0V23ainteger_of_int32V2Aainfix &lt;V23ainteger_of_int32V1Aainfix &lt;=c0V23FIainfix =V22V21FIainfix =ainteger_of_int32V21ainfix -ainteger_of_int32V17c1Fainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V17ainteger_of_int32V2ainfix &lt;=V26ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V25V26Iainfix =ainteger_of_int32aselectV4ashiftV0V26ainteger_of_int32V2Aainfix &lt;V26ainteger_of_int32V1Aainfix &lt;=c0V26FIainfix =V25V24FIainfix =ainteger_of_int32V24ainfix +ainteger_of_int32V17c1Fainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V17ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V17ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V17Iainfix =V17V16FIainfix =ainteger_of_int32V16adivainteger_of_int32V15c2FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V10ainteger_of_int32V9Fainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10Iainfix &lt;=V27ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10V27Iainfix =ainteger_of_int32aselectV4ashiftV0V27ainteger_of_int32V2Aainfix &lt;V27ainteger_of_int32V1Aainfix &lt;=c0V27FFAainfix &lt;=V28ainteger_of_int32V8Aainfix &lt;=ainteger_of_int32V6V28Iainfix =ainteger_of_int32aselectV4ashiftV0V28ainteger_of_int32V2Aainfix &lt;V28ainteger_of_int32V1Aainfix &lt;=c0V28FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4F">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Function binary_search, Behavior `failure&apos;"/>
     <label
      name="expl:VC for binary_search_ensures_failure"/>
@@ -127,7 +131,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.12"/>
+     <result status="valid" time="2.25"/>
     </proof>
    </goal>
    <goal
@@ -139,6 +143,8 @@
     proved="true"
     expanded="false"
     shape="iainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2Iainfix &gt;=ainteger_of_int32V13c0Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1Fainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V18ainteger_of_int32V2Iainfix &gt;=ainteger_of_int32V18c0Iainfix =V18V17FIainfix =V17V16FINainfix &gt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2INainfix &lt;ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15adivainteger_of_int32V14c2FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V10ainteger_of_int32V9Fainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix &lt;=c0ainteger_of_int32V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix &gt;=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV3V0c0Aainfix &gt;=ainteger_of_int32V1c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function binary_search, Behavior `success&apos;"/>
     <label

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="Coq"
-  version="8.4"/>
+  version="8.4pl2"/>
  <file
   name="../power.mlw"
   verified="true"
@@ -24,7 +24,7 @@
     locfile="../../power.c"
     loclnum="10" loccnumb="4" loccnume="33"
     expl="Lemma L, lemma"
-    sum="593a47650990663e1146b07b100ec207"
+    sum="e597a0eb659c341e9d10071835b7e80b"
     proved="true"
     expanded="true"
     shape="ainfix =apowerc2.0c2c4.0">
@@ -45,7 +45,7 @@
      edited="power_Jessie_model__L_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.83"/>
+     <result status="valid" time="0.98"/>
     </proof>
    </goal>
   </theory>

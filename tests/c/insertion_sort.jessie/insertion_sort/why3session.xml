@@ -4,15 +4,15 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
-  name="CVC3"
-  version="2.4.1"/>
+  name="CVC4"
+  version="1.3"/>
  <prover
   id="3"
   name="Z3"
@@ -45,8 +45,10 @@
     expl="VC for insert_sort_ensures_default"
     sum="48eb98416c6fc3aa51dd345e7d24ec14"
     proved="true"
-    expanded="false"
+    expanded="true"
     shape="iia_SortedV0c0ainfix -V1c1V6iainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7Fiainfix &lt;=V14V5Aainfix &lt;=c0V14Aa_SortedV0c0V5V13Iainfix =V14V5Aa_SortedV0c0ainfix +V5c1V13Iainfix &lt;V14V5Aainfix &gt;aselectV13ashiftV0V15V7Iainfix &lt;V15V5Aainfix &lt;=V14V15FIainfix =V14ainfix -V9c1FIainfix =V13astoreV10ashiftV0V9aselectV10ashiftV0ainfix -V9c1Fainfix &lt;=V17V1Aainfix &lt;=c0V17Aa_SortedV0c0V17V16Iainfix =V17ainfix +V5c1FIainfix =V16astoreV10ashiftV0V9V7Fainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7ainfix &gt;V9c0Iainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V18V7Iainfix &lt;V18V5Aainfix &lt;=V9V18FFAainfix &lt;=V8V5Aainfix &lt;=c0V8Aa_SortedV0c0V5V6Iainfix =V8V5Aa_SortedV0c0ainfix +V5c1V6Iainfix &lt;V8V5Aainfix &gt;aselectV6ashiftV0V19V7Iainfix &lt;V19V5Aainfix &lt;=V8V19FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FAainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V2Iainfix =V4c1Fa_SortedV0c0ainfix -V1c1V2ainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV3V0ainfix -V1c1Aainfix &lt;=aoffset_minV3V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function insert_sort, default behavior"/>
     <label
@@ -54,7 +56,7 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter insert_sort_ensures_default.1"
       locfile="../../insertion_sort.c"
@@ -64,6 +66,8 @@
       proved="true"
       expanded="false"
       shape="postconditiona_SortedV0c0ainfix -V1c1V2Iainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV3V0ainfix -V1c1Aainfix &lt;=aoffset_minV3V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function insert_sort, default behavior"/>
       <label
@@ -82,7 +86,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="2"
@@ -90,7 +94,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.14"/>
       </proof>
       <proof
        prover="3"
@@ -119,6 +123,8 @@
       expanded="false"
       shape="loop invariant initainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V2Iainfix =V4c1FINainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV3V0ainfix -V1c1Aainfix &lt;=aoffset_minV3V0c0F">
       <label
+       name="W:diverges:N"/>
+      <label
        name="expl:Function insert_sort, default behavior"/>
       <label
        name="expl:VC for insert_sort_ensures_default"/>
@@ -136,7 +142,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="2"
@@ -144,7 +150,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
        prover="3"
@@ -173,6 +179,8 @@
       expanded="false"
       shape="loop invariant initainfix &lt;=V8V5Aainfix &lt;=c0V8Aa_SortedV0c0V5V6Iainfix =V8V5Aa_SortedV0c0ainfix +V5c1V6Iainfix &lt;V8V5Aainfix &gt;aselectV6ashiftV0V9V7Iainfix &lt;V9V5Aainfix &lt;=V8V9FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FINainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV3V0ainfix -V1c1Aainfix &lt;=aoffset_minV3V0c0F">
       <label
+       name="W:diverges:N"/>
+      <label
        name="expl:Function insert_sort, default behavior"/>
       <label
        name="expl:VC for insert_sort_ensures_default"/>
@@ -190,7 +198,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="2"
@@ -227,6 +235,8 @@
       expanded="false"
       shape="loop invariant preservationainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7FIainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7Iainfix &gt;V9c0Iainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V9V13FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FINainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV3V0ainfix -V1c1Aainfix &lt;=aoffset_minV3V0c0F">
       <label
+       name="W:diverges:N"/>
+      <label
        name="expl:Function insert_sort, default behavior"/>
       <label
        name="expl:VC for insert_sort_ensures_default"/>
@@ -236,15 +246,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.42"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.21"/>
+       <result status="valid" time="0.87"/>
       </proof>
       <proof
        prover="2"
@@ -252,7 +254,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.13"/>
+       <result status="valid" time="0.23"/>
       </proof>
       <proof
        prover="3"
@@ -281,32 +283,18 @@
       expanded="false"
       shape="loop invariant preservationainfix &lt;=V12V5Aainfix &lt;=c0V12Aa_SortedV0c0V5V11Iainfix =V12V5Aa_SortedV0c0ainfix +V5c1V11Iainfix &lt;V12V5Aainfix &gt;aselectV11ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V12V13FIainfix =V12ainfix -V9c1FIainfix =V11astoreV10ashiftV0V9aselectV10ashiftV0ainfix -V9c1FINainfix &lt;=aselectV10ashiftV0ainfix -V9c1V7Iainfix &gt;V9c0Iainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V14V7Iainfix &lt;V14V5Aainfix &lt;=V9V14FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FINainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV3V0ainfix -V1c1Aainfix &lt;=aoffset_minV3V0c0F">
       <label
+       name="W:diverges:N"/>
+      <label
        name="expl:Function insert_sort, default behavior"/>
       <label
        name="expl:VC for insert_sort_ensures_default"/>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.12"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.27"/>
-      </proof>
       <proof
        prover="2"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.13"/>
+       <result status="valid" time="0.30"/>
       </proof>
       <proof
        prover="3"
@@ -335,6 +323,8 @@
       expanded="false"
       shape="loop invariant preservationainfix &lt;=V12V1Aainfix &lt;=c0V12Aa_SortedV0c0V12V11Iainfix =V12ainfix +V5c1FIainfix =V11astoreV10ashiftV0V9V7FINainfix &gt;V9c0Iainfix &lt;=V9V5Aainfix &lt;=c0V9Aa_SortedV0c0V5V10Iainfix =V9V5Aa_SortedV0c0ainfix +V5c1V10Iainfix &lt;V9V5Aainfix &gt;aselectV10ashiftV0V13V7Iainfix &lt;V13V5Aainfix &lt;=V9V13FFIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FINainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV3V0ainfix -V1c1Aainfix &lt;=aoffset_minV3V0c0F">
       <label
+       name="W:diverges:N"/>
+      <label
        name="expl:Function insert_sort, default behavior"/>
       <label
        name="expl:VC for insert_sort_ensures_default"/>
@@ -344,15 +334,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.70"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.22"/>
+       <result status="valid" time="0.30"/>
       </proof>
       <proof
        prover="2"
@@ -360,7 +342,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.17"/>
+       <result status="valid" time="0.12"/>
       </proof>
       <proof
        prover="3"
@@ -369,14 +351,6 @@
        obsolete="false"
        archived="false">
        <result status="valid" time="0.08"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.16"/>
       </proof>
      </goal>
      <goal
@@ -388,6 +362,8 @@
       proved="true"
       expanded="false"
       shape="postconditiona_SortedV0c0ainfix -V1c1V6INainfix &lt;V5V1Iainfix &lt;=V5V1Aainfix &lt;=c0V5Aa_SortedV0c0V5V6FIainfix =V4c1FINainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV3V0ainfix -V1c1Aainfix &lt;=aoffset_minV3V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function insert_sort, default behavior"/>
       <label
@@ -406,7 +382,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="2"
@@ -414,7 +390,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.13"/>
       </proof>
       <proof
        prover="3"
@@ -442,7 +418,7 @@
     expl="VC for insert_sort_safety"
     sum="0d78b7d915fc18206baa8677f9e189b2"
     proved="true"
-    expanded="false"
+    expanded="true"
     shape="iainfix &lt;ainfix -V1V11ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V11ainfix +V4c1FIainfix =V10astoreV9ashiftV0V8V6FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8iainfix &lt;V15V8Aainfix &lt;=c0V8Iainfix =V15ainfix -V8c1FIainfix =V14astoreV9ashiftV0V8aselectV9ashiftV0V13FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Aainfix &lt;=V13aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V13Lainfix -V8c1ainfix &lt;ainfix -V1V17ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V17ainfix +V4c1FIainfix =V16astoreV9ashiftV0V8V6FAainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8ainfix &lt;=aselectV9ashiftV0V12V6Aainfix &lt;=V12aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V12Lainfix -V8c1ainfix &gt;V8c0Iainfix &lt;=V8V4Aainfix &lt;=c0V8Aa_SortedV0c0V4V9Iainfix =V8V4Aa_SortedV0c0ainfix +V4c1V9Iainfix &lt;V8V4Aainfix &gt;aselectV9ashiftV0V18V6Iainfix &lt;V18V4Aainfix &lt;=V8V18FFIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Iainfix &lt;V4V1Iainfix &lt;=V4V1Aainfix &lt;=c0V4Aa_SortedV0c0V4V5FIainfix =V3c1FINainfix &lt;=V1c1Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0F">
     <label
      name="expl:Function insert_sort, Safety"/>
@@ -462,7 +438,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.10"/>
     </proof>
     <proof
      prover="2"
@@ -470,7 +446,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="3"

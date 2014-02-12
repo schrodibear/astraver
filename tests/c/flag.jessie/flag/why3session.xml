@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
- <prover
-  id="2"
-  name="CVC3"
   version="2.4.1"/>
  <prover
-  id="3"
+  id="2"
   name="Z3"
   version="3.2"/>
  <prover
-  id="4"
+  id="3"
   name="Z3"
   version="4.3.1"/>
  <file
@@ -43,10 +39,12 @@
     locfile="../../flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="VC for flag_ensures_default"
-    sum="f675c97d6da1aee9dffcbe48cbf681a5"
+    sum="3ecffb8b71267acd52caa496d60f1857"
     proved="true"
-    expanded="true"
-    shape="iainfix =V11c1ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c1Oainfix =V11c2ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V17c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V17V7Aainfix &lt;=V9V17Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V17ainfix +V8c1Fiainfix =V11c1Oainfix =V11c2Oainfix =V11c3ais_monochromeV0V18V1c3V19Aais_monochromeV0V9V8c2V19Aais_monochromeV0c0V9c1V19Aainfix &lt;=V18V1Aainfix &lt;=V8V18Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V19Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FIainfix =V18ainfix -V7c1Fais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FAais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+    expanded="false"
+    shape="iiiais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10ais_monochromeV0V12V1c3V13Aais_monochromeV0V9V8c2V13Aais_monochromeV0c0V9c1V13Aainfix &lt;=V12V1Aainfix &lt;=V8V12Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V13Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1Fainfix =V11c1Oainfix =V11c2Oainfix =V11c3ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V14c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V14V7Aainfix &lt;=V9V14Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10Iainfix =V14ainfix +V8c1Fainfix =V11c1Oainfix =V11c2ais_monochromeV0V7V1c3V19Aais_monochromeV0V18V16c2V19Aais_monochromeV0c0V18c1V19Aainfix &lt;=V7V1Aainfix &lt;=V16V7Aainfix &lt;=V18V16Aainfix &lt;=c0V18Aais_color_arrayV0V1V3V19Ianot_assignsV3V10V19apset_unionapset_rangeapset_singletonV0V15V15apset_rangeapset_singletonV0V17V17Aainfix =aselectV19ashiftV0V15aselectV10ashiftV0V17Aainfix =aselectV19ashiftV0V17aselectV10ashiftV0V15FIainfix =V18ainfix +V9c1FIainfix =V17V9FIainfix =V16ainfix +V8c1FIainfix =V15V8Fainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FAais_monochromeV0V6V1c3V2Aais_monochromeV0V4V5c2V2Aais_monochromeV0c0V4c1V2Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V3V2Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function flag, default behavior"/>
     <label
@@ -54,16 +52,18 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter flag_ensures_default.1"
       locfile="../../flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="1. loop invariant init"
-      sum="8ce9ef53957e79da5fee6e4a758e8ec8"
+      sum="bddf6da19ed502214d0be94706bdd8c4"
       proved="true"
-      expanded="true"
-      shape="ais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+      expanded="false"
+      shape="loop invariant initais_monochromeV0V6V1c3V2Aais_monochromeV0V4V5c2V2Aais_monochromeV0c0V4c1V2Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V3V2Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function flag, default behavior"/>
       <label
@@ -79,10 +79,10 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="2"
@@ -90,18 +90,10 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -114,10 +106,12 @@
       locfile="../../flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="2. loop invariant preservation"
-      sum="7c3934bc7f457a40b58d7d78c89676f0"
+      sum="6a9673811407e0399d6beda0e8c4665b"
       proved="true"
-      expanded="true"
-      shape="ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+      expanded="false"
+      shape="loop invariant preservationais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V3V16Ianot_assignsV3V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function flag, default behavior"/>
       <label
@@ -125,16 +119,18 @@
       <transf
        name="split_goal"
        proved="true"
-       expanded="true">
+       expanded="false">
        <goal
         name="WP_parameter flag_ensures_default.2.1"
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="1."
-        sum="e2456225beec0ce4af35f1afc679f2d7"
+        sum="9359597b89c85c1dffb7e301cba54032"
         proved="true"
-        expanded="true"
-        shape="ais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ais_color_arrayV0V1V3V16Ianot_assignsV3V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -145,7 +141,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.56"/>
+         <result status="valid" time="2.54"/>
         </proof>
         <proof
          prover="1"
@@ -153,7 +149,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.26"/>
+         <result status="valid" time="1.33"/>
         </proof>
         <proof
          prover="2"
@@ -161,7 +157,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.33"/>
+         <result status="valid" time="0.29"/>
         </proof>
         <proof
          prover="3"
@@ -169,15 +165,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.22"/>
+         <result status="valid" time="1.62"/>
         </proof>
        </goal>
        <goal
@@ -185,10 +173,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="2."
-        sum="6497b1958e8bdc78441e8b299ec04b56"
+        sum="5e22e4dd1f89e2f17b20f42591ee9d7a"
         proved="true"
-        expanded="true"
-        shape="ainfix &lt;=c0V15Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ainfix &lt;=c0V15Ianot_assignsV3V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -207,7 +197,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.07"/>
         </proof>
         <proof
          prover="2"
@@ -223,14 +213,6 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.07"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.06"/>
         </proof>
        </goal>
@@ -239,10 +221,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="3."
-        sum="87104522fa717053cd4a76df3f83eb23"
+        sum="bde7f20c91f8572060c4a12622c2bcc3"
         proved="true"
-        expanded="true"
-        shape="ainfix &lt;=V15V13Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ainfix &lt;=V15V13Ianot_assignsV3V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -261,7 +245,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.08"/>
         </proof>
         <proof
          prover="2"
@@ -277,14 +261,6 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.07"/>
         </proof>
        </goal>
@@ -293,10 +269,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="4."
-        sum="433e8590080fe4c522e1215b76e94377"
+        sum="e1b854f7732f232abb367a3e6a7e9a49"
         proved="true"
-        expanded="true"
-        shape="ainfix &lt;=V13V7Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ainfix &lt;=V13V7Ianot_assignsV3V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -315,7 +293,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.07"/>
         </proof>
         <proof
          prover="2"
@@ -323,18 +301,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.07"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.06"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          memlimit="1000"
          obsolete="false"
@@ -347,10 +317,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="5."
-        sum="f0f222cdb10b7a495292a804f01546ba"
+        sum="c3aef0bda8cbcff3a79faaee07870195"
         proved="true"
-        expanded="true"
-        shape="ainfix &lt;=V7V1Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ainfix &lt;=V7V1Ianot_assignsV3V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -369,7 +341,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.07"/>
+         <result status="valid" time="0.06"/>
         </proof>
         <proof
          prover="2"
@@ -377,18 +349,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.04"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          memlimit="1000"
          obsolete="false"
@@ -401,10 +365,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="6."
-        sum="d78e88da0aab9c3986fcaf429752e917"
+        sum="c679598ba0655348147d79a235381483"
         proved="true"
-        expanded="true"
-        shape="ais_monochromeV0c0V15c1V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ais_monochromeV0c0V15c1V16Ianot_assignsV3V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -415,7 +381,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.70"/>
+         <result status="valid" time="1.10"/>
         </proof>
         <proof
          prover="1"
@@ -423,18 +389,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.39"/>
+         <result status="valid" time="0.69"/>
         </proof>
         <proof
          prover="2"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="1.17"/>
-        </proof>
-        <proof
-         prover="3"
          timelimit="5"
          memlimit="1000"
          obsolete="false"
@@ -442,12 +400,12 @@
          <result status="valid" time="0.09"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.11"/>
+         <result status="valid" time="0.22"/>
         </proof>
        </goal>
        <goal
@@ -455,10 +413,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="7."
-        sum="46da4c57378408310732e16bb9b2f634"
+        sum="ac49bc2bc7b680318a4fb62abe54aedc"
         proved="true"
-        expanded="true"
-        shape="ais_monochromeV0V15V13c2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ais_monochromeV0V15V13c2V16Ianot_assignsV3V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -469,7 +429,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.70"/>
+         <result status="valid" time="1.22"/>
         </proof>
         <proof
          prover="1"
@@ -477,7 +437,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.86"/>
+         <result status="valid" time="1.94"/>
         </proof>
         <proof
          prover="2"
@@ -485,7 +445,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.60"/>
+         <result status="valid" time="0.67"/>
         </proof>
         <proof
          prover="3"
@@ -493,15 +453,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.15"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.18"/>
+         <result status="valid" time="2.09"/>
         </proof>
        </goal>
        <goal
@@ -509,10 +461,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="8."
-        sum="efe98b3c79677e0d55b827436afb3033"
+        sum="f3f9b233823620443913c07b543603ed"
         proved="true"
-        expanded="true"
-        shape="ais_monochromeV0V7V1c3V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ais_monochromeV0V7V1c3V16Ianot_assignsV3V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -523,7 +477,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.72"/>
+         <result status="valid" time="1.30"/>
         </proof>
         <proof
          prover="1"
@@ -531,7 +485,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.40"/>
+         <result status="valid" time="0.85"/>
         </proof>
         <proof
          prover="2"
@@ -539,7 +493,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.76"/>
+         <result status="valid" time="0.08"/>
         </proof>
         <proof
          prover="3"
@@ -547,15 +501,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.23"/>
+         <result status="valid" time="2.25"/>
         </proof>
        </goal>
       </transf>
@@ -565,10 +511,12 @@
       locfile="../../flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="3. loop invariant preservation"
-      sum="e370980cb4dbfeb5ac2f3a41e4b59502"
+      sum="913319960d5df218be70ad45d112c00c"
       proved="true"
-      expanded="true"
-      shape="ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V12c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V12V7Aainfix &lt;=V9V12Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V12ainfix +V8c1FIainfix =V11c1Oainfix =V11c2Iainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+      expanded="false"
+      shape="loop invariant preservationais_monochromeV0V7V1c3V10Aais_monochromeV0V9V12c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V12V7Aainfix &lt;=V9V12Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10Iainfix =V12ainfix +V8c1FIainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function flag, default behavior"/>
       <label
@@ -595,7 +543,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="3"
@@ -605,24 +553,18 @@
        archived="false">
        <result status="valid" time="0.06"/>
       </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="timeout" time="5.21"/>
-      </proof>
      </goal>
      <goal
       name="WP_parameter flag_ensures_default.4"
       locfile="../../flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="4. loop invariant preservation"
-      sum="97b83d4542c5674d087cf3b982f9a3ab"
+      sum="cee9fe35e7b51ca78272012252330c59"
       proved="true"
-      expanded="true"
-      shape="ais_monochromeV0V12V1c3V13Aais_monochromeV0V9V8c2V13Aais_monochromeV0c0V9c1V13Aainfix &lt;=V12V1Aainfix &lt;=V8V12Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+      expanded="false"
+      shape="loop invariant preservationais_monochromeV0V12V1c3V13Aais_monochromeV0V9V8c2V13Aais_monochromeV0c0V9c1V13Aainfix &lt;=V12V1Aainfix &lt;=V8V12Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V13Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3INainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function flag, default behavior"/>
       <label
@@ -630,16 +572,18 @@
       <transf
        name="split_goal"
        proved="true"
-       expanded="true">
+       expanded="false">
        <goal
         name="WP_parameter flag_ensures_default.4.1"
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="1."
-        sum="c4174ac3bf4f7712e4040c2142545c57"
+        sum="17fae26aeff58a2ef95fd4066e3ed980"
         proved="true"
-        expanded="true"
-        shape="ais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ais_color_arrayV0V1V3V13Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3INainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -650,7 +594,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.58"/>
+         <result status="valid" time="1.67"/>
         </proof>
         <proof
          prover="1"
@@ -658,7 +602,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.46"/>
+         <result status="valid" time="1.12"/>
         </proof>
         <proof
          prover="2"
@@ -666,7 +610,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.47"/>
+         <result status="valid" time="0.24"/>
         </proof>
         <proof
          prover="3"
@@ -674,15 +618,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.11"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="4.00"/>
+         <result status="valid" time="0.63"/>
         </proof>
        </goal>
        <goal
@@ -690,10 +626,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="2."
-        sum="9668f04ca5f495069f3e55340cc59cc0"
+        sum="e0d48ceacae8b2b505729055356550af"
         proved="true"
-        expanded="true"
-        shape="ainfix &lt;=c0V9Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ainfix &lt;=c0V9Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3INainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -712,7 +650,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.07"/>
         </proof>
         <proof
          prover="2"
@@ -720,18 +658,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.07"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.03"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          memlimit="1000"
          obsolete="false"
@@ -744,10 +674,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="3."
-        sum="4ba91761185329b054f55c40f258f98b"
+        sum="03317c224f72615af231845263d54511"
         proved="true"
-        expanded="true"
-        shape="ainfix &lt;=V9V8Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ainfix &lt;=V9V8Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3INainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -766,7 +698,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.06"/>
         </proof>
         <proof
          prover="2"
@@ -774,18 +706,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.03"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          memlimit="1000"
          obsolete="false"
@@ -798,10 +722,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="4."
-        sum="525ae8210068864f0cb3ba0bdc485857"
+        sum="e38306b5308b0075984f21628ec6457d"
         proved="true"
-        expanded="true"
-        shape="ainfix &lt;=V8V12Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ainfix &lt;=V8V12Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3INainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -820,7 +746,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.08"/>
         </proof>
         <proof
          prover="2"
@@ -828,18 +754,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.06"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          memlimit="1000"
          obsolete="false"
@@ -852,10 +770,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="5."
-        sum="a782723e9264ad8e7c89a650d38a1b18"
+        sum="19038e7edeaf8fd57a52d8bf77191dc7"
         proved="true"
-        expanded="true"
-        shape="ainfix &lt;=V12V1Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ainfix &lt;=V12V1Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3INainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -874,7 +794,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.06"/>
         </proof>
         <proof
          prover="2"
@@ -882,18 +802,10 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
-         prover="3"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
          <result status="valid" time="0.07"/>
         </proof>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          memlimit="1000"
          obsolete="false"
@@ -906,10 +818,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="6."
-        sum="5d003a21d0a466bbdca8c63cb0bac4a5"
+        sum="579db2b37feedf15eda9f84da2fc6b5b"
         proved="true"
-        expanded="true"
-        shape="ais_monochromeV0c0V9c1V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ais_monochromeV0c0V9c1V13Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3INainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -920,7 +834,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.50"/>
+         <result status="valid" time="0.76"/>
         </proof>
         <proof
          prover="1"
@@ -928,7 +842,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.48"/>
+         <result status="valid" time="0.72"/>
         </proof>
         <proof
          prover="2"
@@ -936,7 +850,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.41"/>
+         <result status="valid" time="0.10"/>
         </proof>
         <proof
          prover="3"
@@ -944,15 +858,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.10"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.22"/>
+         <result status="valid" time="0.08"/>
         </proof>
        </goal>
        <goal
@@ -960,10 +866,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="7."
-        sum="72193ebb378960df1be8e1f18874f002"
+        sum="35304b20a25b8eb5b4ebc7220d163da8"
         proved="true"
-        expanded="true"
-        shape="ais_monochromeV0V9V8c2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ais_monochromeV0V9V8c2V13Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3INainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -974,7 +882,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.38"/>
+         <result status="valid" time="0.80"/>
         </proof>
         <proof
          prover="1"
@@ -982,7 +890,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.27"/>
+         <result status="valid" time="0.83"/>
         </proof>
         <proof
          prover="2"
@@ -990,7 +898,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.38"/>
+         <result status="valid" time="0.10"/>
         </proof>
         <proof
          prover="3"
@@ -998,15 +906,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.10"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.26"/>
+         <result status="valid" time="0.14"/>
         </proof>
        </goal>
        <goal
@@ -1014,10 +914,12 @@
         locfile="../../flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="8."
-        sum="212bd4518618d3e0083ebf68371cd355"
+        sum="0a7f90c0a4a5534ee96aed9623febb20"
         proved="true"
-        expanded="true"
-        shape="ais_monochromeV0V12V1c3V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+        expanded="false"
+        shape="ais_monochromeV0V12V1c3V13Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3INainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+        <label
+         name="W:diverges:N"/>
         <label
          name="expl:Function flag, default behavior"/>
         <label
@@ -1036,7 +938,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.40"/>
+         <result status="valid" time="1.31"/>
         </proof>
         <proof
          prover="2"
@@ -1044,7 +946,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.31"/>
+         <result status="valid" time="0.13"/>
         </proof>
         <proof
          prover="3"
@@ -1052,15 +954,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.13"/>
-        </proof>
-        <proof
-         prover="4"
-         timelimit="5"
-         memlimit="1000"
-         obsolete="false"
-         archived="false">
-         <result status="timeout" time="5.17"/>
+         <result status="valid" time="1.13"/>
         </proof>
        </goal>
       </transf>
@@ -1070,10 +964,12 @@
       locfile="../../flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="5. loop invariant preservation"
-      sum="38228da40aa23d0d1442294ae5d5a139"
+      sum="5b74eff7fad122ee078c7368c093b377"
       proved="true"
-      expanded="true"
-      shape="ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V11c1Oainfix =V11c2Oainfix =V11c3NIainfix =V11c1Oainfix =V11c2NIainfix =V11c1NLaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+      expanded="false"
+      shape="loop invariant preservationais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10INainfix =V11c1Oainfix =V11c2Oainfix =V11c3INainfix =V11c1Oainfix =V11c2INainfix =V11c1LaselectV10ashiftV0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function flag, default behavior"/>
       <label
@@ -1100,18 +996,10 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -1126,10 +1014,12 @@
     locfile="../../flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="VC for flag_ensures_sorts"
-    sum="e456ed97beb0a67aa784383a5e2bb8c5"
+    sum="95b745976692603b2166766a596c8c08"
     proved="true"
-    expanded="true"
-    shape="ais_monochromeV0V12V1c3V10Aais_monochromeV0V11V12c2V10Aais_monochromeV0c0V11c1V10EEIainfix &lt;V8V7NIais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+    expanded="false"
+    shape="ais_monochromeV0V12V1c3V10Aais_monochromeV0V11V12c2V10Aais_monochromeV0c0V11c1V10EEINainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function flag, Behavior `sorts&apos;"/>
     <label
@@ -1148,30 +1038,6 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.06"/>
     </proof>
    </goal>
@@ -1180,10 +1046,10 @@
     locfile="../../flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="VC for flag_safety"
-    sum="d4d6f4f1f37cf5d5bea38657461100c6"
+    sum="12caa02a6fb33a58b04d4ef734388fe1"
     proved="true"
-    expanded="true"
-    shape="iainfix =V11c1ainfix &lt;ainfix -V7V13ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FAainfix &gt;=aoffset_maxV2V0V12Aainfix &lt;=aoffset_minV2V0V12Aainfix &gt;=aoffset_maxV2V0V14Aainfix &lt;=aoffset_minV2V0V14Iainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c1Oainfix =V11c2ainfix &lt;ainfix -V7V17ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Iainfix =V17ainfix +V8c1Fiainfix =V11c1Oainfix =V11c2Oainfix =V11c3ainfix &lt;ainfix -V18V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FAainfix &gt;=aoffset_maxV2V0V8Aainfix &lt;=aoffset_minV2V0V8Aainfix &gt;=aoffset_maxV2V0V18Aainfix &lt;=aoffset_minV2V0V18Iainfix =V18ainfix -V7c1Fainfix &lt;ainfix -V7V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8LaselectV10ashiftV0V8Aainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FF">
+    expanded="false"
+    shape="iiiainfix &lt;ainfix -V7V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8ainfix &lt;ainfix -V12V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV3V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FAainfix &gt;=aoffset_maxV3V0V8Aainfix &lt;=aoffset_minV3V0V8Aainfix &gt;=aoffset_maxV3V0V12Aainfix &lt;=aoffset_minV3V0V12Iainfix =V12ainfix -V7c1Fainfix =V11c1Oainfix =V11c2Oainfix =V11c3ainfix &lt;ainfix -V7V14ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Iainfix =V14ainfix +V8c1Fainfix =V11c1Oainfix =V11c2ainfix &lt;ainfix -V7V16ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV3V10V19apset_unionapset_rangeapset_singletonV0V15V15apset_rangeapset_singletonV0V17V17Aainfix =aselectV19ashiftV0V15aselectV10ashiftV0V17Aainfix =aselectV19ashiftV0V17aselectV10ashiftV0V15FAainfix &gt;=aoffset_maxV3V0V15Aainfix &lt;=aoffset_minV3V0V15Aainfix &gt;=aoffset_maxV3V0V17Aainfix &lt;=aoffset_minV3V0V17Iainfix =V18ainfix +V9c1FIainfix =V17V9FIainfix =V16ainfix +V8c1FIainfix =V15V8Fainfix =V11c1LaselectV10ashiftV0V8Aainfix &lt;=V8aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V3V10FIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V3V2Aainfix &gt;=V1c0F">
     <label
      name="expl:Function flag, Safety"/>
     <label
@@ -1202,7 +1068,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="2"
@@ -1210,18 +1076,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.08"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -1234,10 +1092,12 @@
     locfile="../../flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="VC for isMonochrome_ensures_decides_monochromatic"
-    sum="88075f81e6c6621d25e7db92a19ef1ec"
+    sum="e34024055eb430e66b5b552ebbd3e4c4"
     proved="true"
-    expanded="true"
-    shape="iainfix &lt;V7V2ais_monochromeV0V1V2V3V5qainfix =V9c0NIainfix =V9V8FIainfix =V8c0FIainfix =aselectV5ashiftV0V7V3Nais_monochromeV0V1V2V3V5qainfix =V11c0NIainfix =V11V10FIainfix =V10c1FIainfix =aselectV5ashiftV0V12V3Iainfix &lt;V12V7Aainfix &lt;=V1V12FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+    expanded="false"
+    shape="iais_monochromeV0V1V2V3V5qNainfix =V9c0Iainfix =V9V8FIainfix =V8c1Fais_monochromeV0V1V2V3V5qNainfix =V11c0Iainfix =V11V10FIainfix =V10c0FINainfix =aselectV5ashiftV0V7V3ainfix &lt;V7V2Iainfix =aselectV5ashiftV0V12V3Iainfix &lt;V12V7Aainfix &lt;=V1V12FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function isMonochrome, Behavior `decides_monochromatic&apos;"/>
     <label
@@ -1256,7 +1116,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="2"
@@ -1264,18 +1124,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.07"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -1288,10 +1140,12 @@
     locfile="../../flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="VC for isMonochrome_ensures_default"
-    sum="58e69527b406b9153ea92a1be6ecb469"
+    sum="edede241c8d6f7da53cca8312625394c"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix =aselectV5ashiftV0V9V3Iainfix &lt;V9V8Aainfix &lt;=V1V9FAainfix &lt;=V1V8Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Iainfix &lt;V7V2Iainfix =aselectV5ashiftV0V10V3Iainfix &lt;V10V7Aainfix &lt;=V1V10FAainfix &lt;=V1V7FAainfix =aselectV5ashiftV0V11V3Iainfix &lt;V11V6Aainfix &lt;=V1V11FAainfix &lt;=V1V6Iainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function isMonochrome, default behavior"/>
     <label
@@ -1310,7 +1164,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="2"
@@ -1328,23 +1182,15 @@
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter isMonochrome_safety"
     locfile="../../flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="VC for isMonochrome_safety"
-    sum="7c69573316b7d1f8515e401f7e6c857a"
+    sum="4d56ec317fb0828fe8da6e948eb01905"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix &lt;ainfix -V2V8ainfix -V2V7Aainfix &lt;=c0ainfix -V2V7Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Aainfix &lt;=V7aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V7Iainfix &lt;V7V2Iainfix =aselectV5ashiftV0V9V3Iainfix &lt;V9V7Aainfix &lt;=V1V9FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
     <label
      name="expl:Function isMonochrome, Safety"/>
@@ -1364,7 +1210,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="2"
@@ -1382,24 +1228,18 @@
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
    </goal>
    <goal
     name="WP_parameter swap_ensures_default"
     locfile="../../flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
     expl="VC for swap_ensures_default"
-    sum="39276aabdd1f80a6c7d93e4ac366b093"
+    sum="1640796bf818ef60061e6f3f527bd135"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function swap, default behavior"/>
     <label
@@ -1426,18 +1266,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -1450,10 +1282,12 @@
     locfile="../../flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
     expl="VC for swap_ensures_i_j_swapped"
-    sum="29156bf574620b320cc9947fd4b0571e"
+    sum="199ff6df19d5b1420573fe12a78c0f7d"
     proved="true"
-    expanded="true"
-    shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV7ashiftV0V2aselectV4ashiftV0V1Aainfix =aselectV7ashiftV0V1aselectV4ashiftV0V2Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
+    expanded="false"
+    shape="anot_assignsV4V3V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV7ashiftV0V2aselectV3ashiftV0V1Aainfix =aselectV7ashiftV0V1aselectV3ashiftV0V2Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV3ashiftV0V1aselectV3ashiftV0V2FIainfix =V5aselectV3ashiftV0V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V2Aainfix &gt;=aoffset_maxV4V0V1Aainfix &lt;=aoffset_minV4V0V1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function swap, Behavior `i_j_swapped&apos;"/>
     <label
@@ -1472,7 +1306,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.64"/>
+     <result status="valid" time="0.47"/>
     </proof>
     <proof
      prover="2"
@@ -1480,18 +1314,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.69"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.07"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -1504,10 +1330,10 @@
     locfile="../../flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
     expl="VC for swap_safety"
-    sum="cec19aff3cfe4410bb7b75efba1bcf1b"
+    sum="35963d9961e86b3d5eb6d9fd0299d0bf"
     proved="true"
-    expanded="true"
-    shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
+    expanded="false"
+    shape="ainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Iainfix =V6astoreV3ashiftV0V1aselectV3ashiftV0V2FAainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Aainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Iainfix =V5aselectV3ashiftV0V1FAainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V2Aainfix &gt;=aoffset_maxV4V0V1Aainfix &lt;=aoffset_minV4V0V1F">
     <label
      name="expl:Function swap, Safety"/>
     <label
@@ -1526,7 +1352,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="2"
@@ -1534,18 +1360,10 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"

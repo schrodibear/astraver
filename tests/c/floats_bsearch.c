@@ -65,7 +65,12 @@ int binary_search(double t[], int n, double v) {
     if (t[m] < v) l = m + 1;
     else if (t[m] > v) u = m - 1;
     else
-      return m;
+      {
+        //@ assert ! \is_NaN(t[m]);
+        //@ assert t[m] <= v;
+        //@ assert t[m] >= v;
+        return m;
+      }
   }
   return -1;
 }
