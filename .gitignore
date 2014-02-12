@@ -41,6 +41,10 @@
 /bin/why-stat.opt
 /bin/why.opt
 /bin/why2html.opt
+/bin/gwhy.byte
+/bin/jessie.byte
+/bin/krakatoa.byte
+/bin/why.byte
 
 /lib/coq/WhyCoqCompat.v
 /lib/why3/why3.conf

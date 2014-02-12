@@ -3934,7 +3934,8 @@ let tr_fun f funpos spec body acc =
 		if Jc_options.verify_invariants_only then acc else
                   Def(
                     id_no_loc newid,
-                    false, (* we require termination proofs *)
+                    !Jc_options.termination_policy <> TPalways,
+                    (* false = we require termination proofs *)
                     mk_expr (Fun(
                       params,
                       internal_requires,
