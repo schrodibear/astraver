@@ -4,29 +4,21 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
- <prover
-  id="1"
-  name="Alt-Ergo"
   version="0.95.2"/>
  <prover
-  id="2"
-  name="CVC3"
-  version="2.2"/>
- <prover
-  id="3"
+  id="1"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="4"
+  id="2"
   name="CVC4"
   version="1.3"/>
  <prover
-  id="5"
+  id="3"
   name="Z3"
   version="3.2"/>
  <prover
-  id="6"
+  id="4"
   name="Z3"
   version="4.3.1"/>
  <file
@@ -56,6 +48,8 @@
     expanded="true"
     shape="NavalidV0V4Iainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFF">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Method create, default behavior"/>
     <label
      name="expl:VC for _Fresh_create_ensures_default"/>
@@ -65,7 +59,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.03"/>
+     <result status="valid" time="0.10"/>
     </proof>
     <proof
      prover="2"
@@ -74,30 +68,6 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.10"/>
-    </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.08"/>
-    </proof>
-    <proof
-     prover="6"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="4.99"/>
     </proof>
    </goal>
    <goal
@@ -122,7 +92,7 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -138,15 +108,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="6"
+     prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -164,6 +126,8 @@
     expanded="true"
     shape="Nainfix =V0V2INavalidV1V2FIavalid_struct_FreshV0c0c0V1FF">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Method test, default behavior"/>
     <label
      name="expl:VC for _Fresh_test_ensures_default"/>
@@ -176,7 +140,7 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -192,15 +156,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="5"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="6"
+     prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -230,15 +186,7 @@
      <result status="valid" time="0.01"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="3"
+     prover="1"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -246,7 +194,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="5"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -254,7 +202,7 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -264,13 +212,15 @@
    </goal>
    <goal
     name="WP_parameter cons_Fresh_ensures_default"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fresh_ensures_default"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Fresh, default behavior"/>
     <label
@@ -284,15 +234,7 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="3"
+     prover="1"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -300,7 +242,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="5"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -308,7 +250,7 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -318,7 +260,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Fresh_safety"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Fresh_safety"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
@@ -338,15 +280,7 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="3"
+     prover="1"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -354,7 +288,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="5"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -362,7 +296,7 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -372,13 +306,15 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Object, default behavior"/>
     <label
@@ -392,15 +328,7 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="3"
+     prover="1"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -408,7 +336,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="5"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -416,7 +344,7 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -426,7 +354,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
     sum="f1b4716fcef6cc37a47f08462fbd16cd"
@@ -446,15 +374,7 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="3"
+     prover="1"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -462,7 +382,7 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="5"
+     prover="3"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -470,7 +390,7 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="6"
+     prover="4"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
