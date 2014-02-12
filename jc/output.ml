@@ -164,6 +164,7 @@ let why3ident s =
     | "abs_int" -> "AbsInt.abs"
     | "abs_real" -> "AbsReal.abs"
     | "sqrt_real" -> "Square.sqrt"
+    | "pow_int" -> "Power.power"
     | "pow_real" -> "PowerReal.pow"
     | "pow_real_int" -> "PowerInt.power"
     | "exp" -> "ExpLog.exp"
@@ -228,6 +229,7 @@ let why3_reals = ref false
 let why3_FromInt = ref false
 let why3_Truncate = ref false
 let why3_Square = ref false
+let why3_Power = ref false
 let why3_PowerInt = ref false
 let why3_PowerReal = ref false
 let why3_RealMinMax = ref false
@@ -248,6 +250,7 @@ let compute_why3_dependencies f =
     | "mul_real"
     | "div_real" -> why3_reals := true
     | "sqrt_real" -> why3_Square := true
+    | "pow_int" -> why3_Power := true
     | "pow_real_int" -> why3_PowerInt := true
     | "pow_real" -> why3_PowerReal := true
     | "real_of_int" -> why3_FromInt := true
@@ -1690,6 +1693,8 @@ let output_why3_imports form use_floats float_model =
     fprintf form "use real.Truncate@\n@\n";
   if !why3_Square then
     fprintf form "use real.Square@\n@\n";
+  if !why3_Power then
+    fprintf form "use int.Power@\n@\n";
   if !why3_PowerInt then
     fprintf form "use real.PowerInt@\n@\n";
   if !why3_PowerReal then
