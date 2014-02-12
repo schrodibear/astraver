@@ -2365,105 +2365,116 @@ let quick_rec_ensures_default =
      try
       begin
         try
-         (C_22:
-         (C_23:
-         (C_25:
-         (loop_2:
          begin
            (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
-          (let _jessie_<num> =
-          (v := (C_21: ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
-          void); (let _jessie_<num> = (m := l_0) in void);
-          (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
-          while true do
-          { invariant
-              (((JC_74:
-                ((JC_70: (select(intP_intM_t_5, shift(t, l_0)) = v))
-                and ((JC_71: le_int(l_0, m))
-                    and ((JC_72: lt_int(m, i_0))
-                        and (JC_73: le_int(i_0, add_int(r, (1))))))))
-               and ((JC_75:
-                    Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@init))
-                   and ((JC_76:
-                        (forall j_4:int.
-                         ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
-                          ge_int(select(intP_intM_t_5, shift(t, j_4)), v))))
-                       and (JC_77:
-                           (forall j_3:int.
-                            ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
-                             lt_int(select(intP_intM_t_5, shift(t, j_3)), v)))))))
-              and (JC_79:
-                  not_assigns(intP_t_5_alloc_table, intP_intM_t_5@init,
-                  intP_intM_t_5, pset_range(pset_singleton(t), l_0, r)))) 
-             }
+          (C_22:
+          begin
+            (let _jessie_<num> =
+            (v := (C_21:
+                  ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
+            void);
+           (C_23:
            begin
-             [ { } unit { true } ];
-            try
+             (let _jessie_<num> = (m := l_0) in void);
+            (C_25:
+            begin
+              (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
+             (loop_2:
              begin
-               (let _jessie_<num> =
-               (C_44:
-               begin
-                 (if ((le_int_ !i_0) r) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((lt_int_ (C_42:
-                              ((safe_acc_ !intP_intM_t_5) (C_41:
-                                                          ((shift t) !i_0))))) !v)
-                then
-                 (L1:
-                 (C_38:
-                 begin
-                   (let _jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
-                   void); void;
-                  (C_39:
+               while true do
+               { invariant
+                   (((JC_74:
+                     ((JC_70: (select(intP_intM_t_5, shift(t, l_0)) = v))
+                     and ((JC_71: le_int(l_0, m))
+                         and ((JC_72: lt_int(m, i_0))
+                             and (JC_73: le_int(i_0, add_int(r, (1))))))))
+                    and ((JC_75:
+                         Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@init))
+                        and ((JC_76:
+                             (forall j_4:int.
+                              ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
+                               ge_int(select(intP_intM_t_5, shift(t, j_4)),
+                               v))))
+                            and (JC_77:
+                                (forall j_3:int.
+                                 ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
+                                  lt_int(select(intP_intM_t_5, shift(t, j_3)),
+                                  v)))))))
+                   and (JC_79:
+                       not_assigns(intP_t_5_alloc_table, intP_intM_t_5@init,
+                       intP_intM_t_5, pset_range(pset_singleton(t), l_0, r))))
+                  }
+                begin
+                  [ { } unit { true } ];
+                 try
                   begin
-                    void;
-                   (let _jessie_<num> = t in
-                   (let _jessie_<num> = !i_0 in
-                   (let _jessie_<num> = !m in
-                   (JC_81:
-                   (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-                   (assert
-                   { (JC_82:
-                     Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) };
-                   void); void end) end)) else void);
-                (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end)))) with
-         Goto_while_0_break_exc _jessie_<num> ->
+                    (let _jessie_<num> =
+                    begin
+                      (if ((le_int_ !i_0) r) then void
+                      else (raise (Goto_while_0_break_exc void)));
+                     (if ((lt_int_ (C_42:
+                                   ((safe_acc_ !intP_intM_t_5) (C_41:
+                                                               ((shift t) !i_0))))) !v)
+                     then
+                      (L1:
+                      (C_38:
+                      begin
+                        (let _jessie_<num> =
+                        (m := (C_37: ((add_int !m) (1)))) in void); void;
+                       begin
+                         void;
+                        (C_39:
+                        begin
+                          (let _jessie_<num> = t in
+                          (let _jessie_<num> = !i_0 in
+                          (let _jessie_<num> = !m in
+                          (JC_81:
+                          (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+                         (assert
+                         { (JC_82:
+                           Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) };
+                         void); void end) end end)) else void);
+                     (C_44:
+                     begin   (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end)
+                    end in void); (raise (Loop_continue_exc void)) end with
+                  Loop_continue_exc _jessie_<num> -> void end end done;
+              (raise (Goto_while_0_break_exc void)) end) end) end) end) end
+         with Goto_while_0_break_exc _jessie_<num> ->
          (while_0_break:
          begin
            void;
           (assert { (JC_83: (le_int(l_0, m) and le_int(m, r))) }; void);
-          (L:
-          (C_46:
           begin
             void;
-           (let _jessie_<num> = t in
-           (let _jessie_<num> = l_0 in
-           (let _jessie_<num> = !m in
-           (JC_84:
-           (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-           (assert
-           { (JC_85: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) };
-           void);
-           (C_49:
+           (L:
+           (C_46:
            begin
-             void;
-            (let _jessie_<num> = t in
-            (let _jessie_<num> = l_0 in
-            (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
-            (JC_86:
-            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-            (C_51:
-            (let _jessie_<num> = t in
-            (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
-            (let _jessie_<num> = r in
-            (JC_87:
-            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
-           end) end)) end) end; (raise (Return_label_exc void)) end with
-      Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
+             (let _jessie_<num> = t in
+             (let _jessie_<num> = l_0 in
+             (let _jessie_<num> = !m in
+             (JC_84:
+             (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+            (assert
+            { (JC_85: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) };
+            void);
+            begin
+              void;
+             (C_49:
+             begin
+               (let _jessie_<num> = t in
+               (let _jessie_<num> = l_0 in
+               (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
+               (JC_86:
+               (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+              (C_51:
+              (let _jessie_<num> = t in
+              (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
+              (let _jessie_<num> = r in
+              (JC_87:
+              (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
+             end) end end)) end end) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end)
   { (JC_34:
     not_assigns(intP_t_5_alloc_table, intP_intM_t_5@, intP_intM_t_5,
@@ -2483,101 +2494,115 @@ let quick_rec_ensures_permutation =
      try
       begin
         try
-         (C_22:
-         (C_23:
-         (C_25:
-         (loop_4:
          begin
            (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
-          (let _jessie_<num> =
-          (v := (C_21: ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
-          void); (let _jessie_<num> = (m := l_0) in void);
-          (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
-          while true do
-          { invariant (JC_115: true)  }
+          (C_22:
+          begin
+            (let _jessie_<num> =
+            (v := (C_21:
+                  ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
+            void);
+           (C_23:
            begin
-             [ { } unit reads i_0,intP_intM_t_5,m,v
-               { ((JC_110:
-                  ((JC_106: (select(intP_intM_t_5, shift(t, l_0)) = v))
-                  and ((JC_107: le_int(l_0, m))
-                      and ((JC_108: lt_int(m, i_0))
-                          and (JC_109: le_int(i_0, add_int(r, (1))))))))
-                 and ((JC_111:
-                      Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@init))
-                     and ((JC_112:
-                          (forall j_4:int.
-                           ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
-                            ge_int(select(intP_intM_t_5, shift(t, j_4)), v))))
-                         and (JC_113:
-                             (forall j_3:int.
-                              ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
-                               lt_int(select(intP_intM_t_5, shift(t, j_3)),
-                               v))))))) } ];
-            try
+             (let _jessie_<num> = (m := l_0) in void);
+            (C_25:
+            begin
+              (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in
+              void);
+             (loop_4:
              begin
-               (let _jessie_<num> =
-               (C_44:
-               begin
-                 (if ((le_int_ !i_0) r) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((lt_int_ (C_42:
-                              ((safe_acc_ !intP_intM_t_5) (C_41:
-                                                          ((shift t) !i_0))))) !v)
-                then
-                 (L1:
-                 (C_38:
-                 begin
-                   (let _jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
-                   void); void;
-                  (C_39:
+               while true do
+               { invariant (JC_115: true)  }
+                begin
+                  [ { } unit reads i_0,intP_intM_t_5,m,v
+                    { ((JC_110:
+                       ((JC_106: (select(intP_intM_t_5, shift(t, l_0)) = v))
+                       and ((JC_107: le_int(l_0, m))
+                           and ((JC_108: lt_int(m, i_0))
+                               and (JC_109: le_int(i_0, add_int(r, (1))))))))
+                      and ((JC_111:
+                           Permut(t, l_0, r, intP_intM_t_5,
+                           intP_intM_t_5@init))
+                          and ((JC_112:
+                               (forall j_4:int.
+                                ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
+                                 ge_int(select(intP_intM_t_5, shift(t, j_4)),
+                                 v))))
+                              and (JC_113:
+                                  (forall j_3:int.
+                                   ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
+                                    lt_int(select(intP_intM_t_5,
+                                           shift(t, j_3)),
+                                    v))))))) } ];
+                 try
                   begin
-                    void;
-                   (let _jessie_<num> = t in
-                   (let _jessie_<num> = !i_0 in
-                   (let _jessie_<num> = !m in
-                   (JC_117:
-                   (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-                   [ { } unit reads intP_intM_t_5
-                     { (JC_118:
-                       Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
-                   void end) end)) else void);
-                (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end)))) with
-         Goto_while_0_break_exc _jessie_<num> ->
+                    (let _jessie_<num> =
+                    begin
+                      (if ((le_int_ !i_0) r) then void
+                      else (raise (Goto_while_0_break_exc void)));
+                     (if ((lt_int_ (C_42:
+                                   ((safe_acc_ !intP_intM_t_5) (C_41:
+                                                               ((shift t) !i_0))))) !v)
+                     then
+                      (L1:
+                      (C_38:
+                      begin
+                        (let _jessie_<num> =
+                        (m := (C_37: ((add_int !m) (1)))) in void); void;
+                       begin
+                         void;
+                        (C_39:
+                        begin
+                          (let _jessie_<num> = t in
+                          (let _jessie_<num> = !i_0 in
+                          (let _jessie_<num> = !m in
+                          (JC_117:
+                          (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+                         [ { } unit reads intP_intM_t_5
+                           { (JC_118:
+                             Permut(t, l_0, r, intP_intM_t_5,
+                             intP_intM_t_5@L1)) } ]; void end) end end))
+                     else void);
+                     (C_44:
+                     begin   (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end)
+                    end in void); (raise (Loop_continue_exc void)) end with
+                  Loop_continue_exc _jessie_<num> -> void end end done;
+              (raise (Goto_while_0_break_exc void)) end) end) end) end) end
+         with Goto_while_0_break_exc _jessie_<num> ->
          (while_0_break:
          begin
            void;
           [ { } unit reads m { (JC_119: (le_int(l_0, m) and le_int(m, r))) } ];
-          (L:
-          (C_46:
           begin
             void;
-           (let _jessie_<num> = t in
-           (let _jessie_<num> = l_0 in
-           (let _jessie_<num> = !m in
-           (JC_120:
-           (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-           [ { } unit reads intP_intM_t_5
-             { (JC_121: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
-           (C_49:
+           (L:
+           (C_46:
            begin
-             void;
-            (let _jessie_<num> = t in
-            (let _jessie_<num> = l_0 in
-            (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
-            (JC_122:
-            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-            (C_51:
-            (let _jessie_<num> = t in
-            (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
-            (let _jessie_<num> = r in
-            (JC_123:
-            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
-           end) end)) end) end; (raise (Return_label_exc void)) end with
-      Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
+             (let _jessie_<num> = t in
+             (let _jessie_<num> = l_0 in
+             (let _jessie_<num> = !m in
+             (JC_120:
+             (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+            [ { } unit reads intP_intM_t_5
+              { (JC_121: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
+            begin
+              void;
+             (C_49:
+             begin
+               (let _jessie_<num> = t in
+               (let _jessie_<num> = l_0 in
+               (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
+               (JC_122:
+               (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+              (C_51:
+              (let _jessie_<num> = t in
+              (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
+              (let _jessie_<num> = r in
+              (JC_123:
+              (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
+             end) end end)) end end) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end)
   { (JC_41: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@)) }
 
@@ -2595,101 +2620,114 @@ let quick_rec_ensures_sorted =
      try
       begin
         try
-         (C_22:
-         (C_23:
-         (C_25:
-         (loop_3:
          begin
            (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
-          (let _jessie_<num> =
-          (v := (C_21: ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
-          void); (let _jessie_<num> = (m := l_0) in void);
-          (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
-          while true do
-          { invariant (JC_97: true)  }
+          (C_22:
+          begin
+            (let _jessie_<num> =
+            (v := (C_21:
+                  ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
+            void);
+           (C_23:
            begin
-             [ { } unit reads i_0,intP_intM_t_5,m,v
-               { ((JC_92:
-                  ((JC_88: (select(intP_intM_t_5, shift(t, l_0)) = v))
-                  and ((JC_89: le_int(l_0, m))
-                      and ((JC_90: lt_int(m, i_0))
-                          and (JC_91: le_int(i_0, add_int(r, (1))))))))
-                 and ((JC_93:
-                      Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@init))
-                     and ((JC_94:
-                          (forall j_4:int.
-                           ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
-                            ge_int(select(intP_intM_t_5, shift(t, j_4)), v))))
-                         and (JC_95:
-                             (forall j_3:int.
-                              ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
-                               lt_int(select(intP_intM_t_5, shift(t, j_3)),
-                               v))))))) } ];
-            try
+             (let _jessie_<num> = (m := l_0) in void);
+            (C_25:
+            begin
+              (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
+             (loop_3:
              begin
-               (let _jessie_<num> =
-               (C_44:
-               begin
-                 (if ((le_int_ !i_0) r) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((lt_int_ (C_42:
-                              ((safe_acc_ !intP_intM_t_5) (C_41:
-                                                          ((shift t) !i_0))))) !v)
-                then
-                 (L1:
-                 (C_38:
-                 begin
-                   (let _jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
-                   void); void;
-                  (C_39:
+               while true do
+               { invariant (JC_97: true)  }
+                begin
+                  [ { } unit reads i_0,intP_intM_t_5,m,v
+                    { ((JC_92:
+                       ((JC_88: (select(intP_intM_t_5, shift(t, l_0)) = v))
+                       and ((JC_89: le_int(l_0, m))
+                           and ((JC_90: lt_int(m, i_0))
+                               and (JC_91: le_int(i_0, add_int(r, (1))))))))
+                      and ((JC_93:
+                           Permut(t, l_0, r, intP_intM_t_5,
+                           intP_intM_t_5@init))
+                          and ((JC_94:
+                               (forall j_4:int.
+                                ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
+                                 ge_int(select(intP_intM_t_5, shift(t, j_4)),
+                                 v))))
+                              and (JC_95:
+                                  (forall j_3:int.
+                                   ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
+                                    lt_int(select(intP_intM_t_5,
+                                           shift(t, j_3)),
+                                    v))))))) } ];
+                 try
                   begin
-                    void;
-                   (let _jessie_<num> = t in
-                   (let _jessie_<num> = !i_0 in
-                   (let _jessie_<num> = !m in
-                   (JC_99:
-                   (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-                   [ { } unit reads intP_intM_t_5
-                     { (JC_100:
-                       Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
-                   void end) end)) else void);
-                (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end)))) with
-         Goto_while_0_break_exc _jessie_<num> ->
+                    (let _jessie_<num> =
+                    begin
+                      (if ((le_int_ !i_0) r) then void
+                      else (raise (Goto_while_0_break_exc void)));
+                     (if ((lt_int_ (C_42:
+                                   ((safe_acc_ !intP_intM_t_5) (C_41:
+                                                               ((shift t) !i_0))))) !v)
+                     then
+                      (L1:
+                      (C_38:
+                      begin
+                        (let _jessie_<num> =
+                        (m := (C_37: ((add_int !m) (1)))) in void); void;
+                       begin
+                         void;
+                        (C_39:
+                        begin
+                          (let _jessie_<num> = t in
+                          (let _jessie_<num> = !i_0 in
+                          (let _jessie_<num> = !m in
+                          (JC_99:
+                          (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+                         [ { } unit reads intP_intM_t_5
+                           { (JC_100:
+                             Permut(t, l_0, r, intP_intM_t_5,
+                             intP_intM_t_5@L1)) } ]; void end) end end))
+                     else void);
+                     (C_44:
+                     begin   (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end)
+                    end in void); (raise (Loop_continue_exc void)) end with
+                  Loop_continue_exc _jessie_<num> -> void end end done;
+              (raise (Goto_while_0_break_exc void)) end) end) end) end) end
+         with Goto_while_0_break_exc _jessie_<num> ->
          (while_0_break:
          begin
            void;
           [ { } unit reads m { (JC_101: (le_int(l_0, m) and le_int(m, r))) } ];
-          (L:
-          (C_46:
           begin
             void;
-           (let _jessie_<num> = t in
-           (let _jessie_<num> = l_0 in
-           (let _jessie_<num> = !m in
-           (JC_102:
-           (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-           [ { } unit reads intP_intM_t_5
-             { (JC_103: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
-           (C_49:
+           (L:
+           (C_46:
            begin
-             void;
-            (let _jessie_<num> = t in
-            (let _jessie_<num> = l_0 in
-            (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
-            (JC_104:
-            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-            (C_51:
-            (let _jessie_<num> = t in
-            (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
-            (let _jessie_<num> = r in
-            (JC_105:
-            (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
-           end) end)) end) end; (raise (Return_label_exc void)) end with
-      Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
+             (let _jessie_<num> = t in
+             (let _jessie_<num> = l_0 in
+             (let _jessie_<num> = !m in
+             (JC_102:
+             (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+            [ { } unit reads intP_intM_t_5
+              { (JC_103: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
+            begin
+              void;
+             (C_49:
+             begin
+               (let _jessie_<num> = t in
+               (let _jessie_<num> = l_0 in
+               (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
+               (JC_104:
+               (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+              (C_51:
+              (let _jessie_<num> = t in
+              (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
+              (let _jessie_<num> = r in
+              (JC_105:
+              (((((quick_rec _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
+             end) end end)) end end) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end)
   { (JC_39: Sorted(t, l_0, add_int(r, (1)), intP_intM_t_5)) }
 
@@ -2707,111 +2745,123 @@ let quick_rec_safety =
      try
       begin
         try
-         (C_22:
-         (C_23:
-         (C_25:
-         (loop_1:
          begin
            (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
-          (let _jessie_<num> =
-          (v := (C_21:
-                (JC_43:
-                ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) l_0)))) in
-          void); (let _jessie_<num> = (m := l_0) in void);
-          (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
-          while true do
-          { invariant (JC_53: true) variant (JC_58 : sub_int(r, i_0)) }
+          (C_22:
+          begin
+            (let _jessie_<num> =
+            (v := (C_21:
+                  (JC_43:
+                  ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) l_0)))) in
+            void);
+           (C_23:
            begin
-             [ { } unit reads i_0,intP_intM_t_5,m,v
-               { ((JC_48:
-                  ((JC_44: (select(intP_intM_t_5, shift(t, l_0)) = v))
-                  and ((JC_45: le_int(l_0, m))
-                      and ((JC_46: lt_int(m, i_0))
-                          and (JC_47: le_int(i_0, add_int(r, (1))))))))
-                 and ((JC_49:
-                      Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@init))
-                     and ((JC_50:
-                          (forall j_4:int.
-                           ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
-                            ge_int(select(intP_intM_t_5, shift(t, j_4)), v))))
-                         and (JC_51:
-                             (forall j_3:int.
-                              ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
-                               lt_int(select(intP_intM_t_5, shift(t, j_3)),
-                               v))))))) } ];
-            try
+             (let _jessie_<num> = (m := l_0) in void);
+            (C_25:
+            begin
+              (let _jessie_<num> = (i_0 := (C_24: ((add_int l_0) (1)))) in void);
+             (loop_1:
              begin
-               (let _jessie_<num> =
-               (C_44:
-               begin
-                 (if ((le_int_ !i_0) r) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((lt_int_ (C_42:
-                              (JC_55:
-                              ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) !i_0)))) !v)
-                then
-                 (L1:
-                 (C_38:
-                 begin
-                   (let _jessie_<num> = (m := (C_37: ((add_int !m) (1)))) in
-                   void); void;
-                  (C_39:
+               while true do
+               { invariant (JC_53: true) variant (JC_58 : sub_int(r, i_0)) }
+                begin
+                  [ { } unit reads i_0,intP_intM_t_5,m,v
+                    { ((JC_48:
+                       ((JC_44: (select(intP_intM_t_5, shift(t, l_0)) = v))
+                       and ((JC_45: le_int(l_0, m))
+                           and ((JC_46: lt_int(m, i_0))
+                               and (JC_47: le_int(i_0, add_int(r, (1))))))))
+                      and ((JC_49:
+                           Permut(t, l_0, r, intP_intM_t_5,
+                           intP_intM_t_5@init))
+                          and ((JC_50:
+                               (forall j_4:int.
+                                ((lt_int(m, j_4) and lt_int(j_4, i_0)) ->
+                                 ge_int(select(intP_intM_t_5, shift(t, j_4)),
+                                 v))))
+                              and (JC_51:
+                                  (forall j_3:int.
+                                   ((lt_int(l_0, j_3) and le_int(j_3, m)) ->
+                                    lt_int(select(intP_intM_t_5,
+                                           shift(t, j_3)),
+                                    v))))))) } ];
+                 try
                   begin
-                    void;
-                   (let _jessie_<num> = t in
-                   (let _jessie_<num> = !i_0 in
-                   (let _jessie_<num> = !m in
-                   (JC_56:
-                   (((((swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-                   [ { } unit reads intP_intM_t_5
-                     { (JC_57:
-                       Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
-                   void end) end)) else void);
-                (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end) in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end)))) with
-         Goto_while_0_break_exc _jessie_<num> ->
+                    (let _jessie_<num> =
+                    begin
+                      (if ((le_int_ !i_0) r) then void
+                      else (raise (Goto_while_0_break_exc void)));
+                     (if ((lt_int_ (C_42:
+                                   (JC_55:
+                                   ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) !i_0)))) !v)
+                     then
+                      (L1:
+                      (C_38:
+                      begin
+                        (let _jessie_<num> =
+                        (m := (C_37: ((add_int !m) (1)))) in void); void;
+                       begin
+                         void;
+                        (C_39:
+                        begin
+                          (let _jessie_<num> = t in
+                          (let _jessie_<num> = !i_0 in
+                          (let _jessie_<num> = !m in
+                          (JC_56:
+                          (((((swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+                         [ { } unit reads intP_intM_t_5
+                           { (JC_57:
+                             Permut(t, l_0, r, intP_intM_t_5,
+                             intP_intM_t_5@L1)) } ]; void end) end end))
+                     else void);
+                     (C_44:
+                     begin   (i_0 := (C_43: ((add_int !i_0) (1)))); !i_0 end)
+                    end in void); (raise (Loop_continue_exc void)) end with
+                  Loop_continue_exc _jessie_<num> -> void end end done;
+              (raise (Goto_while_0_break_exc void)) end) end) end) end) end
+         with Goto_while_0_break_exc _jessie_<num> ->
          (while_0_break:
          begin
            void;
           [ { } unit reads m { (JC_59: (le_int(l_0, m) and le_int(m, r))) } ];
-          (L:
-          (C_46:
           begin
             void;
-           (let _jessie_<num> = t in
-           (let _jessie_<num> = l_0 in
-           (let _jessie_<num> = !m in
-           (JC_60:
-           (((((swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
-           [ { } unit reads intP_intM_t_5
-             { (JC_61: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
-           (C_49:
+           (L:
+           (C_46:
            begin
-             void;
-            (let _jessie_<num> = t in
-            (let _jessie_<num> = l_0 in
-            (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
-            (JC_65:
-            (check
-            { zwf_zero((JC_64 : sub_int(_jessie_<num>, _jessie_<num>)),
-              (JC_63 : sub_int(r, l_0))) };
-            (JC_62:
-            (((((quick_rec_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))))));
-            (C_51:
-            (let _jessie_<num> = t in
-            (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
-            (let _jessie_<num> = r in
-            (JC_69:
-            (check
-            { zwf_zero((JC_68 : sub_int(_jessie_<num>, _jessie_<num>)),
-              (JC_67 : sub_int(r, l_0))) };
-            (JC_66:
-            (((((quick_rec_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))))
-           end) end)) end) end; (raise (Return_label_exc void)) end with
-      Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
+             (let _jessie_<num> = t in
+             (let _jessie_<num> = l_0 in
+             (let _jessie_<num> = !m in
+             (JC_60:
+             (((((swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))));
+            [ { } unit reads intP_intM_t_5
+              { (JC_61: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L)) } ];
+            begin
+              void;
+             (C_49:
+             begin
+               (let _jessie_<num> = t in
+               (let _jessie_<num> = l_0 in
+               (let _jessie_<num> = (C_48: ((sub_int !m) (1))) in
+               (JC_65:
+               (check
+               { zwf_zero((JC_64 : sub_int(_jessie_<num>, _jessie_<num>)),
+                 (JC_63 : sub_int(r, l_0))) };
+               (JC_62:
+               (((((quick_rec_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table)))))));
+              (C_51:
+              (let _jessie_<num> = t in
+              (let _jessie_<num> = (C_50: ((add_int !m) (1))) in
+              (let _jessie_<num> = r in
+              (JC_69:
+              (check
+              { zwf_zero((JC_68 : sub_int(_jessie_<num>, _jessie_<num>)),
+                (JC_67 : sub_int(r, l_0))) };
+              (JC_66:
+              (((((quick_rec_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))))
+             end) end end)) end end) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end) { true }
 
 let quick_sort_ensures_default =
@@ -2898,26 +2948,29 @@ let swap_ensures_default =
    begin
      (let tmp = ref (any_int void) in
      (C_3:
-     (C_8:
-     (C_11:
      begin
        (let _jessie_<num> =
        (tmp := (C_2: ((safe_acc_ !intP_intM_t_1_4) (C_1: ((shift t_1) i))))) in
        void);
-      (let _jessie_<num> =
-      (let _jessie_<num> =
-      (C_5: ((safe_acc_ !intP_intM_t_1_4) (C_4: ((shift t_1) j)))) in
-      (let _jessie_<num> = t_1 in
-      (let _jessie_<num> = i in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (((safe_upd_ intP_intM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
-      (let _jessie_<num> =
-      (let _jessie_<num> = !tmp in
-      (let _jessie_<num> = t_1 in
-      (let _jessie_<num> = j in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (((safe_upd_ intP_intM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
-      (raise Return) end)))); (raise Return) end with Return -> void end)
+      (C_8:
+      begin
+        (let _jessie_<num> =
+        (let _jessie_<num> =
+        (C_5: ((safe_acc_ !intP_intM_t_1_4) (C_4: ((shift t_1) j)))) in
+        (let _jessie_<num> = t_1 in
+        (let _jessie_<num> = i in
+        (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+        (((safe_upd_ intP_intM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
+       (C_11:
+       begin
+         (let _jessie_<num> =
+         (let _jessie_<num> = !tmp in
+         (let _jessie_<num> = t_1 in
+         (let _jessie_<num> = j in
+         (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+         (((safe_upd_ intP_intM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
+        (raise Return) end) end) end)); (raise Return) end with Return ->
+   void end)
   { (JC_15:
     ((JC_13: Swap(t_1, i, j, intP_intM_t_1_4, intP_intM_t_1_4@))
     and (JC_14:
@@ -2938,34 +2991,36 @@ let swap_safety =
    begin
      (let tmp = ref (any_int void) in
      (C_3:
-     (C_8:
-     (C_11:
      begin
        (let _jessie_<num> =
        (tmp := (C_2:
                (JC_21:
                ((((offset_acc_ intP_t_1_4_alloc_table) !intP_intM_t_1_4) t_1) i)))) in
        void);
-      (let _jessie_<num> =
-      (let _jessie_<num> =
-      (C_5:
-      (JC_22:
-      ((((offset_acc_ intP_t_1_4_alloc_table) !intP_intM_t_1_4) t_1) j))) in
-      (let _jessie_<num> = t_1 in
-      (let _jessie_<num> = i in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (JC_23:
-      (((((offset_upd_ intP_t_1_4_alloc_table) intP_intM_t_1_4) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
-      void);
-      (let _jessie_<num> =
-      (let _jessie_<num> = !tmp in
-      (let _jessie_<num> = t_1 in
-      (let _jessie_<num> = j in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (JC_24:
-      (((((offset_upd_ intP_t_1_4_alloc_table) intP_intM_t_1_4) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
-      void); (raise Return) end)))); (raise Return) end with Return ->
-   void end) { true }
+      (C_8:
+      begin
+        (let _jessie_<num> =
+        (let _jessie_<num> =
+        (C_5:
+        (JC_22:
+        ((((offset_acc_ intP_t_1_4_alloc_table) !intP_intM_t_1_4) t_1) j))) in
+        (let _jessie_<num> = t_1 in
+        (let _jessie_<num> = i in
+        (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+        (JC_23:
+        (((((offset_upd_ intP_t_1_4_alloc_table) intP_intM_t_1_4) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+        void);
+       (C_11:
+       begin
+         (let _jessie_<num> =
+         (let _jessie_<num> = !tmp in
+         (let _jessie_<num> = t_1 in
+         (let _jessie_<num> = j in
+         (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+         (JC_24:
+         (((((offset_upd_ intP_t_1_4_alloc_table) intP_intM_t_1_4) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+         void); (raise Return) end) end) end)); (raise Return) end with
+   Return -> void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========
@@ -9654,7 +9709,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (AND (<= l_0 m0) (<= m0 r))
 (>= (offset_max intP_t_5_alloc_table t) m0))))))))))))))))))))))))
 
-;; quick_rec_safety_po_14, File "why/quick_sort.why", line 920, characters 14-106
+;; quick_rec_safety_po_14, File "why/quick_sort.why", line 970, characters 17-112
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9707,7 +9762,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (<= 0 (- r l_0)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_15, File "why/quick_sort.why", line 920, characters 14-106
+;; quick_rec_safety_po_15, File "why/quick_sort.why", line 970, characters 17-112
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9813,7 +9868,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (>= (offset_max intP_t_5_alloc_table t) (- m0 1)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_17, File "why/quick_sort.why", line 930, characters 14-106
+;; quick_rec_safety_po_17, File "why/quick_sort.why", line 980, characters 16-110
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9877,7 +9932,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
                                                               (- m0 1)))))
 (<= 0 (- r l_0))))))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_18, File "why/quick_sort.why", line 930, characters 14-106
+;; quick_rec_safety_po_18, File "why/quick_sort.why", line 980, characters 16-110
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)

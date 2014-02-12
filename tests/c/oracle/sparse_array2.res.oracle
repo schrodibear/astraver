@@ -3626,43 +3626,48 @@ let create_ensures_default =
    begin
      (let a_1_1 = ref (any_pointer void) in
      (C_3:
-     (C_6:
-     (C_9:
-     (C_12:
-     (C_14:
-     (C_16:
      begin
        (let _jessie_<num> =
        (a_1_1 := (C_2:
                  (JC_50:
                  (((alloc_struct_SparseArray (1)) SparseArray_result_6_alloc_table) SparseArray_result_6_tag_table)))) in
        void);
-      (let _jessie_<num> =
-      (C_4:
-      (JC_51:
-      (((alloc_struct_intP (integer_of_uint32 sz)) intP_val_20_alloc_table) intP_val_20_tag_table))) in
-      (let _jessie_<num> = !a_1_1 in
-      (((safe_upd_ SparseArray_val_result_6) _jessie_<num>) _jessie_<num>)));
-      (let _jessie_<num> =
-      (C_7:
-      (JC_52:
-      (((alloc_struct_unsigned_intP (integer_of_uint32 sz)) unsigned_intP_idx_22_alloc_table) unsigned_intP_idx_22_tag_table))) in
-      (let _jessie_<num> = !a_1_1 in
-      (((safe_upd_ SparseArray_idx_result_6) _jessie_<num>) _jessie_<num>)));
-      (let _jessie_<num> =
-      (C_10:
-      (JC_53:
-      (((alloc_struct_unsigned_intP (integer_of_uint32 sz)) unsigned_intP_back_24_alloc_table) unsigned_intP_back_24_tag_table))) in
-      (let _jessie_<num> = !a_1_1 in
-      (((safe_upd_ SparseArray_back_result_6) _jessie_<num>) _jessie_<num>)));
-      (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
-      (let _jessie_<num> = !a_1_1 in
-      (((safe_upd_ SparseArray_n_1_result_6) _jessie_<num>) _jessie_<num>)));
-      (let _jessie_<num> = sz in
-      (let _jessie_<num> = !a_1_1 in
-      (((safe_upd_ SparseArray_sz_0_result_6) _jessie_<num>) _jessie_<num>)));
-      (return := !a_1_1); (raise Return) end))))))); absurd  end with
-   Return -> !return end))
+      (C_6:
+      begin
+        (let _jessie_<num> =
+        (C_4:
+        (JC_51:
+        (((alloc_struct_intP (integer_of_uint32 sz)) intP_val_20_alloc_table) intP_val_20_tag_table))) in
+        (let _jessie_<num> = !a_1_1 in
+        (((safe_upd_ SparseArray_val_result_6) _jessie_<num>) _jessie_<num>)));
+       (C_9:
+       begin
+         (let _jessie_<num> =
+         (C_7:
+         (JC_52:
+         (((alloc_struct_unsigned_intP (integer_of_uint32 sz)) unsigned_intP_idx_22_alloc_table) unsigned_intP_idx_22_tag_table))) in
+         (let _jessie_<num> = !a_1_1 in
+         (((safe_upd_ SparseArray_idx_result_6) _jessie_<num>) _jessie_<num>)));
+        (C_12:
+        begin
+          (let _jessie_<num> =
+          (C_10:
+          (JC_53:
+          (((alloc_struct_unsigned_intP (integer_of_uint32 sz)) unsigned_intP_back_24_alloc_table) unsigned_intP_back_24_tag_table))) in
+          (let _jessie_<num> = !a_1_1 in
+          (((safe_upd_ SparseArray_back_result_6) _jessie_<num>) _jessie_<num>)));
+         (C_14:
+         begin
+           (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
+           (let _jessie_<num> = !a_1_1 in
+           (((safe_upd_ SparseArray_n_1_result_6) _jessie_<num>) _jessie_<num>)));
+          (C_16:
+          begin
+            (let _jessie_<num> = sz in
+            (let _jessie_<num> = !a_1_1 in
+            (((safe_upd_ SparseArray_sz_0_result_6) _jessie_<num>) _jessie_<num>)));
+           (return := !a_1_1); (raise Return) end) end) end) end) end) end));
+    absurd  end with Return -> !return end))
   { (JC_26:
     ((JC_19:
      ((JC_15: (not valid(SparseArray_result_6_alloc_table@, result)))
@@ -3713,48 +3718,53 @@ let create_safety =
    begin
      (let a_1_1 = ref (any_pointer void) in
      (C_3:
-     (C_6:
-     (C_9:
-     (C_12:
-     (C_14:
-     (C_16:
      begin
        (let _jessie_<num> =
        (a_1_1 := (C_2:
                  (JC_41:
                  (((alloc_struct_SparseArray_requires (1)) SparseArray_result_6_alloc_table) SparseArray_result_6_tag_table)))) in
        void);
-      (let _jessie_<num> =
-      (C_4:
-      (JC_42:
-      (((alloc_struct_intP_requires (integer_of_uint32 sz)) intP_val_20_alloc_table) intP_val_20_tag_table))) in
-      (let _jessie_<num> = !a_1_1 in
-      (JC_45:
-      ((((upd_ !SparseArray_result_6_alloc_table) SparseArray_val_result_6) _jessie_<num>) _jessie_<num>))));
-      (let _jessie_<num> =
-      (C_7:
-      (JC_43:
-      (((alloc_struct_unsigned_intP_requires (integer_of_uint32 sz)) unsigned_intP_idx_22_alloc_table) unsigned_intP_idx_22_tag_table))) in
-      (let _jessie_<num> = !a_1_1 in
-      (JC_46:
-      ((((upd_ !SparseArray_result_6_alloc_table) SparseArray_idx_result_6) _jessie_<num>) _jessie_<num>))));
-      (let _jessie_<num> =
-      (C_10:
-      (JC_44:
-      (((alloc_struct_unsigned_intP_requires (integer_of_uint32 sz)) unsigned_intP_back_24_alloc_table) unsigned_intP_back_24_tag_table))) in
-      (let _jessie_<num> = !a_1_1 in
-      (JC_47:
-      ((((upd_ !SparseArray_result_6_alloc_table) SparseArray_back_result_6) _jessie_<num>) _jessie_<num>))));
-      (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
-      (let _jessie_<num> = !a_1_1 in
-      (JC_48:
-      ((((upd_ !SparseArray_result_6_alloc_table) SparseArray_n_1_result_6) _jessie_<num>) _jessie_<num>))));
-      (let _jessie_<num> = sz in
-      (let _jessie_<num> = !a_1_1 in
-      (JC_49:
-      ((((upd_ !SparseArray_result_6_alloc_table) SparseArray_sz_0_result_6) _jessie_<num>) _jessie_<num>))));
-      (return := !a_1_1); (raise Return) end))))))); absurd  end with
-   Return -> !return end)) { true }
+      (C_6:
+      begin
+        (let _jessie_<num> =
+        (C_4:
+        (JC_42:
+        (((alloc_struct_intP_requires (integer_of_uint32 sz)) intP_val_20_alloc_table) intP_val_20_tag_table))) in
+        (let _jessie_<num> = !a_1_1 in
+        (JC_45:
+        ((((upd_ !SparseArray_result_6_alloc_table) SparseArray_val_result_6) _jessie_<num>) _jessie_<num>))));
+       (C_9:
+       begin
+         (let _jessie_<num> =
+         (C_7:
+         (JC_43:
+         (((alloc_struct_unsigned_intP_requires (integer_of_uint32 sz)) unsigned_intP_idx_22_alloc_table) unsigned_intP_idx_22_tag_table))) in
+         (let _jessie_<num> = !a_1_1 in
+         (JC_46:
+         ((((upd_ !SparseArray_result_6_alloc_table) SparseArray_idx_result_6) _jessie_<num>) _jessie_<num>))));
+        (C_12:
+        begin
+          (let _jessie_<num> =
+          (C_10:
+          (JC_44:
+          (((alloc_struct_unsigned_intP_requires (integer_of_uint32 sz)) unsigned_intP_back_24_alloc_table) unsigned_intP_back_24_tag_table))) in
+          (let _jessie_<num> = !a_1_1 in
+          (JC_47:
+          ((((upd_ !SparseArray_result_6_alloc_table) SparseArray_back_result_6) _jessie_<num>) _jessie_<num>))));
+         (C_14:
+         begin
+           (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
+           (let _jessie_<num> = !a_1_1 in
+           (JC_48:
+           ((((upd_ !SparseArray_result_6_alloc_table) SparseArray_n_1_result_6) _jessie_<num>) _jessie_<num>))));
+          (C_16:
+          begin
+            (let _jessie_<num> = sz in
+            (let _jessie_<num> = !a_1_1 in
+            (JC_49:
+            ((((upd_ !SparseArray_result_6_alloc_table) SparseArray_sz_0_result_6) _jessie_<num>) _jessie_<num>))));
+           (return := !a_1_1); (raise Return) end) end) end) end) end) end));
+    absurd  end with Return -> !return end)) { true }
 
 let get_ensures_default =
  fun (a_1 : SparseArray pointer) (i : uint32) (SparseArray_a_8_alloc_table : SparseArray alloc_table) (intP_val_28_alloc_table : intP alloc_table) (unsigned_intP_idx_26_alloc_table : unsigned_intP alloc_table) (unsigned_intP_back_27_alloc_table : unsigned_intP alloc_table) (unsigned_intP_unsigned_intM_idx_26 : (unsigned_intP, uint32) memory) (unsigned_intP_unsigned_intM_back_27 : (unsigned_intP, uint32) memory) (intP_intM_val_28 : (intP, int32) memory) (SparseArray_val_a_8 : (SparseArray, intP pointer) memory) (SparseArray_idx_a_8 : (SparseArray, unsigned_intP pointer) memory) (SparseArray_back_a_8 : (SparseArray, unsigned_intP pointer) memory) (SparseArray_n_1_a_8 : (SparseArray, uint32) memory) (SparseArray_sz_0_a_8 : (SparseArray, uint32) memory) ->
@@ -3967,9 +3977,6 @@ let main_ensures_default =
      (let y = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      (C_89:
-     (C_91:
-     (C_93:
-     (C_95:
      begin
        (let _jessie_<num> =
        (a_2_0 := (C_88:
@@ -3977,93 +3984,107 @@ let main_ensures_default =
                  (JC_158:
                  (((((((((((((((((create _jessie_<num>) unsigned_intP_back_143_alloc_table) unsigned_intP_idx_144_alloc_table) intP_val_142_alloc_table) SparseArray_a_2_32_alloc_table) unsigned_intP_back_143_tag_table) unsigned_intP_idx_144_tag_table) intP_val_142_tag_table) SparseArray_a_2_32_tag_table) SparseArray_sz_0_a_2_32) SparseArray_n_1_a_2_32) SparseArray_back_a_2_32) SparseArray_idx_a_2_32) SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144))))) in
        void);
-      (let _jessie_<num> =
-      (b := (C_90:
-            (let _jessie_<num> = (safe_uint32_of_integer_ (20)) in
-            (JC_159:
-            (((((((((((((((((create _jessie_<num>) unsigned_intP_back_147_alloc_table) unsigned_intP_idx_148_alloc_table) intP_val_146_alloc_table) SparseArray_b_33_alloc_table) unsigned_intP_back_147_tag_table) unsigned_intP_idx_148_tag_table) intP_val_146_tag_table) SparseArray_b_33_tag_table) SparseArray_sz_0_b_33) SparseArray_n_1_b_33) SparseArray_back_b_33) SparseArray_idx_b_33) SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148))))) in
-      void);
-      (let _jessie_<num> =
-      (x_0 := (C_92:
-              (let _jessie_<num> = !a_2_0 in
-              (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
-              (JC_160:
-              ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
-      void);
-      (let _jessie_<num> =
-      (y := (C_94:
-            (let _jessie_<num> = !b in
-            (let _jessie_<num> = (safe_uint32_of_integer_ (7)) in
-            (JC_161:
-            ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
-      void);
-      (assert
-      { (JC_162:
-        ((integer_of_int32(x_0) = (0)) and (integer_of_int32(y) = (0)))) };
-      void);
-      (C_97:
-      (C_98:
-      (C_100:
-      (C_102:
+      (C_91:
       begin
-        void;
-       (let _jessie_<num> = !a_2_0 in
-       (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
-       (let _jessie_<num> = (safe_int32_of_integer_ (1)) in
-       (JC_163:
-       (((((((((((((((set _jessie_<num>) _jessie_<num>) _jessie_<num>) SparseArray_n_1_a_2_32) intP_intM_val_142) unsigned_intP_unsigned_intM_back_143) unsigned_intP_unsigned_intM_idx_144) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32)))));
-       (let _jessie_<num> = !b in
-       (let _jessie_<num> = (safe_uint32_of_integer_ (7)) in
-       (let _jessie_<num> = (safe_int32_of_integer_ (2)) in
-       (JC_164:
-       (((((((((((((((set _jessie_<num>) _jessie_<num>) _jessie_<num>) SparseArray_n_1_b_33) intP_intM_val_146) unsigned_intP_unsigned_intM_back_147) unsigned_intP_unsigned_intM_idx_148) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33)))));
-       (let _jessie_<num> =
-       (x_0 := (C_99:
-               (let _jessie_<num> = !a_2_0 in
-               (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
-               (JC_165:
-               ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
-       void);
-       (let _jessie_<num> =
-       (y := (C_101:
+        (let _jessie_<num> =
+        (b := (C_90:
+              (let _jessie_<num> = (safe_uint32_of_integer_ (20)) in
+              (JC_159:
+              (((((((((((((((((create _jessie_<num>) unsigned_intP_back_147_alloc_table) unsigned_intP_idx_148_alloc_table) intP_val_146_alloc_table) SparseArray_b_33_alloc_table) unsigned_intP_back_147_tag_table) unsigned_intP_idx_148_tag_table) intP_val_146_tag_table) SparseArray_b_33_tag_table) SparseArray_sz_0_b_33) SparseArray_n_1_b_33) SparseArray_back_b_33) SparseArray_idx_b_33) SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148))))) in
+        void);
+       (C_93:
+       begin
+         (let _jessie_<num> =
+         (x_0 := (C_92:
+                 (let _jessie_<num> = !a_2_0 in
+                 (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
+                 (JC_160:
+                 ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
+         void);
+        (C_95:
+        begin
+          (let _jessie_<num> =
+          (y := (C_94:
+                (let _jessie_<num> = !b in
+                (let _jessie_<num> = (safe_uint32_of_integer_ (7)) in
+                (JC_161:
+                ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
+          void);
+         (assert
+         { (JC_162:
+           ((integer_of_int32(x_0) = (0)) and (integer_of_int32(y) = (0)))) };
+         void);
+         begin
+           void;
+          (C_97:
+          begin
+            (let _jessie_<num> = !a_2_0 in
+            (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
+            (let _jessie_<num> = (safe_int32_of_integer_ (1)) in
+            (JC_163:
+            (((((((((((((((set _jessie_<num>) _jessie_<num>) _jessie_<num>) SparseArray_n_1_a_2_32) intP_intM_val_142) unsigned_intP_unsigned_intM_back_143) unsigned_intP_unsigned_intM_idx_144) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32)))));
+           (C_98:
+           begin
              (let _jessie_<num> = !b in
              (let _jessie_<num> = (safe_uint32_of_integer_ (7)) in
-             (JC_166:
-             ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
-       void);
-       (assert
-       { (JC_167:
-         ((integer_of_int32(x_0) = (1)) and (integer_of_int32(y) = (2)))) };
-       void);
-       (C_105:
-       (C_107:
-       begin
-         void;
-        (let _jessie_<num> =
-        (x_0 := (C_104:
-                (let _jessie_<num> = !a_2_0 in
-                (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
-                (JC_168:
-                ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
-        void);
-        (let _jessie_<num> =
-        (y := (C_106:
-              (let _jessie_<num> = !b in
-              (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
-              (JC_169:
-              ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
-        void);
-        (assert
-        { (JC_170:
-          ((integer_of_int32(x_0) = (0)) and (integer_of_int32(y) = (0)))) };
-        void);
-        (C_109:
-        begin
-          void;
-         (let _jessie_<num> = (__retres_0 := (safe_int32_of_integer_ (0))) in
-         void); (return := !__retres_0); (raise Return) end) end)) end))))
-     end))))))))))))))))))))))))))))))))))))))))); absurd  end with Return ->
-   !return end)) { (JC_141: true) }
+             (let _jessie_<num> = (safe_int32_of_integer_ (2)) in
+             (JC_164:
+             (((((((((((((((set _jessie_<num>) _jessie_<num>) _jessie_<num>) SparseArray_n_1_b_33) intP_intM_val_146) unsigned_intP_unsigned_intM_back_147) unsigned_intP_unsigned_intM_idx_148) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33)))));
+            (C_100:
+            begin
+              (let _jessie_<num> =
+              (x_0 := (C_99:
+                      (let _jessie_<num> = !a_2_0 in
+                      (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
+                      (JC_165:
+                      ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
+              void);
+             (C_102:
+             begin
+               (let _jessie_<num> =
+               (y := (C_101:
+                     (let _jessie_<num> = !b in
+                     (let _jessie_<num> = (safe_uint32_of_integer_ (7)) in
+                     (JC_166:
+                     ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
+               void);
+              (assert
+              { (JC_167:
+                ((integer_of_int32(x_0) = (1))
+                and (integer_of_int32(y) = (2)))) }; void);
+              begin
+                void;
+               (C_105:
+               begin
+                 (let _jessie_<num> =
+                 (x_0 := (C_104:
+                         (let _jessie_<num> = !a_2_0 in
+                         (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
+                         (JC_168:
+                         ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
+                 void);
+                (C_107:
+                begin
+                  (let _jessie_<num> =
+                  (y := (C_106:
+                        (let _jessie_<num> = !b in
+                        (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
+                        (JC_169:
+                        ((((((((((((((get _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
+                  void);
+                 (assert
+                 { (JC_170:
+                   ((integer_of_int32(x_0) = (0))
+                   and (integer_of_int32(y) = (0)))) }; void);
+                 begin
+                   void;
+                  (C_109:
+                  begin
+                    (let _jessie_<num> =
+                    (__retres_0 := (safe_int32_of_integer_ (0))) in void);
+                   (return := !__retres_0); (raise Return) end) end end) end)
+              end end) end) end) end) end end) end) end) end))))))))))))))))))))))))))))))))))))));
+    absurd  end with Return -> !return end)) { (JC_141: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -4110,9 +4131,6 @@ let main_safety =
      (let y = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      (C_89:
-     (C_91:
-     (C_93:
-     (C_95:
      begin
        (let _jessie_<num> =
        (a_2_0 := (C_88:
@@ -4120,90 +4138,106 @@ let main_safety =
                  (JC_145:
                  (((((((((((((((((create_requires _jessie_<num>) unsigned_intP_back_143_alloc_table) unsigned_intP_idx_144_alloc_table) intP_val_142_alloc_table) SparseArray_a_2_32_alloc_table) unsigned_intP_back_143_tag_table) unsigned_intP_idx_144_tag_table) intP_val_142_tag_table) SparseArray_a_2_32_tag_table) SparseArray_sz_0_a_2_32) SparseArray_n_1_a_2_32) SparseArray_back_a_2_32) SparseArray_idx_a_2_32) SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144))))) in
        void);
-      (let _jessie_<num> =
-      (b := (C_90:
-            (let _jessie_<num> = (safe_uint32_of_integer_ (20)) in
-            (JC_146:
-            (((((((((((((((((create_requires _jessie_<num>) unsigned_intP_back_147_alloc_table) unsigned_intP_idx_148_alloc_table) intP_val_146_alloc_table) SparseArray_b_33_alloc_table) unsigned_intP_back_147_tag_table) unsigned_intP_idx_148_tag_table) intP_val_146_tag_table) SparseArray_b_33_tag_table) SparseArray_sz_0_b_33) SparseArray_n_1_b_33) SparseArray_back_b_33) SparseArray_idx_b_33) SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148))))) in
-      void);
-      (let _jessie_<num> =
-      (x_0 := (C_92:
-              (let _jessie_<num> = !a_2_0 in
-              (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
-              (JC_147:
-              ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
-      void);
-      (let _jessie_<num> =
-      (y := (C_94:
-            (let _jessie_<num> = !b in
-            (let _jessie_<num> = (safe_uint32_of_integer_ (7)) in
-            (JC_148:
-            ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
-      void);
-      [ { } unit reads x_0,y
-        { (JC_149:
-          ((integer_of_int32(x_0) = (0)) and (integer_of_int32(y) = (0)))) } ];
-      (C_97:
-      (C_98:
-      (C_100:
-      (C_102:
+      (C_91:
       begin
-        void;
-       (let _jessie_<num> = !a_2_0 in
-       (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
-       (let _jessie_<num> = (safe_int32_of_integer_ (1)) in
-       (JC_150:
-       (((((((((((((((set_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) SparseArray_n_1_a_2_32) intP_intM_val_142) unsigned_intP_unsigned_intM_back_143) unsigned_intP_unsigned_intM_idx_144) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32)))));
-       (let _jessie_<num> = !b in
-       (let _jessie_<num> = (safe_uint32_of_integer_ (7)) in
-       (let _jessie_<num> = (safe_int32_of_integer_ (2)) in
-       (JC_151:
-       (((((((((((((((set_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) SparseArray_n_1_b_33) intP_intM_val_146) unsigned_intP_unsigned_intM_back_147) unsigned_intP_unsigned_intM_idx_148) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33)))));
-       (let _jessie_<num> =
-       (x_0 := (C_99:
-               (let _jessie_<num> = !a_2_0 in
-               (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
-               (JC_152:
-               ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
-       void);
-       (let _jessie_<num> =
-       (y := (C_101:
+        (let _jessie_<num> =
+        (b := (C_90:
+              (let _jessie_<num> = (safe_uint32_of_integer_ (20)) in
+              (JC_146:
+              (((((((((((((((((create_requires _jessie_<num>) unsigned_intP_back_147_alloc_table) unsigned_intP_idx_148_alloc_table) intP_val_146_alloc_table) SparseArray_b_33_alloc_table) unsigned_intP_back_147_tag_table) unsigned_intP_idx_148_tag_table) intP_val_146_tag_table) SparseArray_b_33_tag_table) SparseArray_sz_0_b_33) SparseArray_n_1_b_33) SparseArray_back_b_33) SparseArray_idx_b_33) SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148))))) in
+        void);
+       (C_93:
+       begin
+         (let _jessie_<num> =
+         (x_0 := (C_92:
+                 (let _jessie_<num> = !a_2_0 in
+                 (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
+                 (JC_147:
+                 ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
+         void);
+        (C_95:
+        begin
+          (let _jessie_<num> =
+          (y := (C_94:
+                (let _jessie_<num> = !b in
+                (let _jessie_<num> = (safe_uint32_of_integer_ (7)) in
+                (JC_148:
+                ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
+          void);
+         [ { } unit reads x_0,y
+           { (JC_149:
+             ((integer_of_int32(x_0) = (0)) and (integer_of_int32(y) = (0)))) } ];
+         begin
+           void;
+          (C_97:
+          begin
+            (let _jessie_<num> = !a_2_0 in
+            (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
+            (let _jessie_<num> = (safe_int32_of_integer_ (1)) in
+            (JC_150:
+            (((((((((((((((set_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) SparseArray_n_1_a_2_32) intP_intM_val_142) unsigned_intP_unsigned_intM_back_143) unsigned_intP_unsigned_intM_idx_144) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32)))));
+           (C_98:
+           begin
              (let _jessie_<num> = !b in
              (let _jessie_<num> = (safe_uint32_of_integer_ (7)) in
-             (JC_153:
-             ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
-       void);
-       [ { } unit reads x_0,y
-         { (JC_154:
-           ((integer_of_int32(x_0) = (1)) and (integer_of_int32(y) = (2)))) } ];
-       (C_105:
-       (C_107:
-       begin
-         void;
-        (let _jessie_<num> =
-        (x_0 := (C_104:
-                (let _jessie_<num> = !a_2_0 in
-                (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
-                (JC_155:
-                ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
-        void);
-        (let _jessie_<num> =
-        (y := (C_106:
-              (let _jessie_<num> = !b in
-              (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
-              (JC_156:
-              ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
-        void);
-        [ { } unit reads x_0,y
-          { (JC_157:
-            ((integer_of_int32(x_0) = (0)) and (integer_of_int32(y) = (0)))) } ];
-        (C_109:
-        begin
-          void;
-         (let _jessie_<num> = (__retres_0 := (safe_int32_of_integer_ (0))) in
-         void); (return := !__retres_0); (raise Return) end) end)) end))))
-     end))))))))))))))))))))))))))))))))))))))))); absurd  end with Return ->
-   !return end)) { true }
+             (let _jessie_<num> = (safe_int32_of_integer_ (2)) in
+             (JC_151:
+             (((((((((((((((set_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) SparseArray_n_1_b_33) intP_intM_val_146) unsigned_intP_unsigned_intM_back_147) unsigned_intP_unsigned_intM_idx_148) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33)))));
+            (C_100:
+            begin
+              (let _jessie_<num> =
+              (x_0 := (C_99:
+                      (let _jessie_<num> = !a_2_0 in
+                      (let _jessie_<num> = (safe_uint32_of_integer_ (5)) in
+                      (JC_152:
+                      ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
+              void);
+             (C_102:
+             begin
+               (let _jessie_<num> =
+               (y := (C_101:
+                     (let _jessie_<num> = !b in
+                     (let _jessie_<num> = (safe_uint32_of_integer_ (7)) in
+                     (JC_153:
+                     ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
+               void);
+              [ { } unit reads x_0,y
+                { (JC_154:
+                  ((integer_of_int32(x_0) = (1))
+                  and (integer_of_int32(y) = (2)))) } ];
+              begin
+                void;
+               (C_105:
+               begin
+                 (let _jessie_<num> =
+                 (x_0 := (C_104:
+                         (let _jessie_<num> = !a_2_0 in
+                         (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
+                         (JC_155:
+                         ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_143_alloc_table) !unsigned_intP_idx_144_alloc_table) !intP_val_142_alloc_table) !SparseArray_a_2_32_alloc_table) !SparseArray_sz_0_a_2_32) !SparseArray_n_1_a_2_32) !SparseArray_back_a_2_32) !SparseArray_idx_a_2_32) !SparseArray_val_a_2_32) !intP_intM_val_142) !unsigned_intP_unsigned_intM_back_143) !unsigned_intP_unsigned_intM_idx_144)))))) in
+                 void);
+                (C_107:
+                begin
+                  (let _jessie_<num> =
+                  (y := (C_106:
+                        (let _jessie_<num> = !b in
+                        (let _jessie_<num> = (safe_uint32_of_integer_ (0)) in
+                        (JC_156:
+                        ((((((((((((((get_requires _jessie_<num>) _jessie_<num>) !unsigned_intP_back_147_alloc_table) !unsigned_intP_idx_148_alloc_table) !intP_val_146_alloc_table) !SparseArray_b_33_alloc_table) !SparseArray_sz_0_b_33) !SparseArray_n_1_b_33) !SparseArray_back_b_33) !SparseArray_idx_b_33) !SparseArray_val_b_33) !intP_intM_val_146) !unsigned_intP_unsigned_intM_back_147) !unsigned_intP_unsigned_intM_idx_148)))))) in
+                  void);
+                 [ { } unit reads x_0,y
+                   { (JC_157:
+                     ((integer_of_int32(x_0) = (0))
+                     and (integer_of_int32(y) = (0)))) } ];
+                 begin
+                   void;
+                  (C_109:
+                  begin
+                    (let _jessie_<num> =
+                    (__retres_0 := (safe_int32_of_integer_ (0))) in void);
+                   (return := !__retres_0); (raise Return) end) end end) end)
+              end end) end) end) end) end end) end) end) end))))))))))))))))))))))))))))))))))))));
+    absurd  end with Return -> !return end)) { true }
 
 let set_ensures_default =
  fun (a_0_0 : SparseArray pointer) (i_0 : uint32) (v : int32) (unsigned_intP_unsigned_intM_idx_30 : (unsigned_intP, uint32) memory ref) (unsigned_intP_unsigned_intM_back_31 : (unsigned_intP, uint32) memory ref) (intP_intM_val_29 : (intP, int32) memory ref) (SparseArray_n_1_a_0_9 : (SparseArray, uint32) memory ref) (SparseArray_a_0_9_alloc_table : SparseArray alloc_table) (intP_val_29_alloc_table : intP alloc_table) (unsigned_intP_idx_30_alloc_table : unsigned_intP alloc_table) (unsigned_intP_back_31_alloc_table : unsigned_intP alloc_table) (SparseArray_val_a_0_9 : (SparseArray, intP pointer) memory) (SparseArray_idx_a_0_9 : (SparseArray, unsigned_intP pointer) memory) (SparseArray_back_a_0_9 : (SparseArray, unsigned_intP pointer) memory) (SparseArray_sz_0_a_0_9 : (SparseArray, uint32) memory) ->
@@ -4274,39 +4308,41 @@ let set_ensures_default =
              lt_int(integer_of_uint32(select(SparseArray_n_1_a_0_9, a_0_0)),
              integer_of_uint32(select(SparseArray_sz_0_a_0_9, a_0_0)))) };
            void);
-          (C_67:
-          (C_72:
           begin
             void;
-           (let _jessie_<num> =
-           (let _jessie_<num> =
-           (C_63: ((safe_acc_ !SparseArray_n_1_a_0_9) a_0_0)) in
-           (let _jessie_<num> =
-           (C_64: ((safe_acc_ SparseArray_idx_a_0_9) a_0_0)) in
-           (let _jessie_<num> = (integer_of_uint32 i_0) in
-           (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-           (((safe_upd_ unsigned_intP_unsigned_intM_idx_30) _jessie_<num>) _jessie_<num>))))) in
-           void);
-           (let _jessie_<num> =
-           (let _jessie_<num> = i_0 in
-           (let _jessie_<num> =
-           (C_69: ((safe_acc_ SparseArray_back_a_0_9) a_0_0)) in
-           (let _jessie_<num> =
-           (integer_of_uint32 (C_68:
-                              ((safe_acc_ !SparseArray_n_1_a_0_9) a_0_0))) in
-           (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-           (((safe_upd_ unsigned_intP_unsigned_intM_back_31) _jessie_<num>) _jessie_<num>))))) in
-           void);
-           (C_77:
-           (let _jessie_<num> =
-           (C_75:
-           (safe_uint32_of_integer_ (C_74:
-                                    ((add_int (integer_of_uint32 (C_73:
-                                                                 ((safe_acc_ !SparseArray_n_1_a_0_9) a_0_0)))) (1))))) in
+           (C_67:
            begin
-             (let _jessie_<num> = a_0_0 in
-             (((safe_upd_ SparseArray_n_1_a_0_9) _jessie_<num>) _jessie_<num>));
-            _jessie_<num> end)) end)) end) in void) end;
+             (let _jessie_<num> =
+             (let _jessie_<num> =
+             (C_63: ((safe_acc_ !SparseArray_n_1_a_0_9) a_0_0)) in
+             (let _jessie_<num> =
+             (C_64: ((safe_acc_ SparseArray_idx_a_0_9) a_0_0)) in
+             (let _jessie_<num> = (integer_of_uint32 i_0) in
+             (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+             (((safe_upd_ unsigned_intP_unsigned_intM_idx_30) _jessie_<num>) _jessie_<num>))))) in
+             void);
+            (C_72:
+            begin
+              (let _jessie_<num> =
+              (let _jessie_<num> = i_0 in
+              (let _jessie_<num> =
+              (C_69: ((safe_acc_ SparseArray_back_a_0_9) a_0_0)) in
+              (let _jessie_<num> =
+              (integer_of_uint32 (C_68:
+                                 ((safe_acc_ !SparseArray_n_1_a_0_9) a_0_0))) in
+              (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+              (((safe_upd_ unsigned_intP_unsigned_intM_back_31) _jessie_<num>) _jessie_<num>))))) in
+              void);
+             (C_77:
+             (let _jessie_<num> =
+             (C_75:
+             (safe_uint32_of_integer_ (C_74:
+                                      ((add_int (integer_of_uint32 (C_73:
+                                                                   ((safe_acc_ !SparseArray_n_1_a_0_9) a_0_0)))) (1))))) in
+             begin
+               (let _jessie_<num> = a_0_0 in
+               (((safe_upd_ SparseArray_n_1_a_0_9) _jessie_<num>) _jessie_<num>));
+              _jessie_<num> end)) end) end) end end) in void) end;
        (raise (Goto__LAND_0_exc void)) end with Goto__LAND_0_exc _jessie_<num> ->
       (_LAND_0: begin   void; (raise Return) end) end; (raise Return) end
    with Return -> void end)
@@ -4437,51 +4473,53 @@ let set_safety =
              { (JC_126:
                lt_int(integer_of_uint32(select(SparseArray_n_1_a_0_9, a_0_0)),
                integer_of_uint32(select(SparseArray_sz_0_a_0_9, a_0_0)))) } ];
-          (C_67:
-          (C_72:
           begin
             void;
-           (let _jessie_<num> =
-           (let _jessie_<num> =
-           (C_63:
-           (JC_127:
-           (((acc_ SparseArray_a_0_9_alloc_table) !SparseArray_n_1_a_0_9) a_0_0))) in
-           (let _jessie_<num> =
-           (C_64:
-           (JC_128:
-           (((acc_ SparseArray_a_0_9_alloc_table) SparseArray_idx_a_0_9) a_0_0))) in
-           (let _jessie_<num> = (integer_of_uint32 i_0) in
-           (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-           (JC_129:
-           (((((offset_upd_ unsigned_intP_idx_30_alloc_table) unsigned_intP_unsigned_intM_idx_30) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
-           void);
-           (let _jessie_<num> =
-           (let _jessie_<num> = i_0 in
-           (let _jessie_<num> =
-           (C_69:
-           (JC_130:
-           (((acc_ SparseArray_a_0_9_alloc_table) SparseArray_back_a_0_9) a_0_0))) in
-           (let _jessie_<num> =
-           (integer_of_uint32 (C_68:
-                              (JC_131:
-                              (((acc_ SparseArray_a_0_9_alloc_table) !SparseArray_n_1_a_0_9) a_0_0)))) in
-           (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-           (JC_132:
-           (((((offset_upd_ unsigned_intP_back_31_alloc_table) unsigned_intP_unsigned_intM_back_31) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
-           void);
-           (C_77:
-           (let _jessie_<num> =
-           (C_75:
-           (JC_134:
-           (uint32_of_integer_ (C_74:
-                               ((add_int (integer_of_uint32 (C_73:
-                                                            (JC_133:
-                                                            (((acc_ SparseArray_a_0_9_alloc_table) !SparseArray_n_1_a_0_9) a_0_0))))) (1)))))) in
+           (C_67:
            begin
-             (let _jessie_<num> = a_0_0 in
-             (JC_135:
-             ((((upd_ SparseArray_a_0_9_alloc_table) SparseArray_n_1_a_0_9) _jessie_<num>) _jessie_<num>)));
-            _jessie_<num> end)) end)) end) in void) end;
+             (let _jessie_<num> =
+             (let _jessie_<num> =
+             (C_63:
+             (JC_127:
+             (((acc_ SparseArray_a_0_9_alloc_table) !SparseArray_n_1_a_0_9) a_0_0))) in
+             (let _jessie_<num> =
+             (C_64:
+             (JC_128:
+             (((acc_ SparseArray_a_0_9_alloc_table) SparseArray_idx_a_0_9) a_0_0))) in
+             (let _jessie_<num> = (integer_of_uint32 i_0) in
+             (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+             (JC_129:
+             (((((offset_upd_ unsigned_intP_idx_30_alloc_table) unsigned_intP_unsigned_intM_idx_30) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+             void);
+            (C_72:
+            begin
+              (let _jessie_<num> =
+              (let _jessie_<num> = i_0 in
+              (let _jessie_<num> =
+              (C_69:
+              (JC_130:
+              (((acc_ SparseArray_a_0_9_alloc_table) SparseArray_back_a_0_9) a_0_0))) in
+              (let _jessie_<num> =
+              (integer_of_uint32 (C_68:
+                                 (JC_131:
+                                 (((acc_ SparseArray_a_0_9_alloc_table) !SparseArray_n_1_a_0_9) a_0_0)))) in
+              (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+              (JC_132:
+              (((((offset_upd_ unsigned_intP_back_31_alloc_table) unsigned_intP_unsigned_intM_back_31) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+              void);
+             (C_77:
+             (let _jessie_<num> =
+             (C_75:
+             (JC_134:
+             (uint32_of_integer_ (C_74:
+                                 ((add_int (integer_of_uint32 (C_73:
+                                                              (JC_133:
+                                                              (((acc_ SparseArray_a_0_9_alloc_table) !SparseArray_n_1_a_0_9) a_0_0))))) (1)))))) in
+             begin
+               (let _jessie_<num> = a_0_0 in
+               (JC_135:
+               ((((upd_ SparseArray_a_0_9_alloc_table) SparseArray_n_1_a_0_9) _jessie_<num>) _jessie_<num>)));
+              _jessie_<num> end)) end) end) end end) in void) end;
        (raise (Goto__LAND_0_exc void)) end with Goto__LAND_0_exc _jessie_<num> ->
       (_LAND_0: begin   void; (raise Return) end) end; (raise Return) end
    with Return -> void end) { true }

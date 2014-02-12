@@ -2733,8 +2733,6 @@ let Fresh3_smoke_detector_ensures_default =
    begin
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
-     (K_13:
-     (K_14:
      begin
        (let _jessie_<num> =
        (s1_1 := (let this_1 =
@@ -2750,9 +2748,13 @@ let Fresh3_smoke_detector_ensures_default =
                (let _tt_1 =
                (let _jessie_<num> = this_2 in
                (JC_197: (cons_Fresh3 _jessie_<num>))) in this_2))) in void);
-      (let _jessie_<num> = !s1_1 in (JC_198: (Fresh3_create _jessie_<num>)));
-      (let _jessie_<num> = !s2_1 in (JC_199: (Fresh3_create _jessie_<num>)));
-      (K_16: (assert { (JC_200: ((0) = (1))) }; void)) end))));
+      (K_13:
+      begin
+        (let _jessie_<num> = !s1_1 in (JC_198: (Fresh3_create _jessie_<num>)));
+       (K_14:
+       begin
+         (let _jessie_<num> = !s2_1 in (JC_199: (Fresh3_create _jessie_<num>)));
+        (K_16: (assert { (JC_200: ((0) = (1))) }; void)) end) end) end));
     (raise Return) end with Return -> void end) { (JC_179: true) }
 
 let Fresh3_smoke_detector_safety =
@@ -2763,8 +2765,6 @@ let Fresh3_smoke_detector_safety =
    begin
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
-     (K_13:
-     (K_14:
      begin
        (let _jessie_<num> =
        (s1_1 := (let this_1 =
@@ -2792,16 +2792,20 @@ let Fresh3_smoke_detector_safety =
                (let _jessie_<num> = this_2 in
                (JC_188: (cons_Fresh3_requires _jessie_<num>))) in this_2))) in
       void);
-      (let _jessie_<num> = !s1_1 in
-      (JC_190:
-      (assert { ge_int(offset_max(Object_alloc_table, _jessie_<num>), (0)) };
-      (JC_189: (Fresh3_create_requires _jessie_<num>)))));
-      (let _jessie_<num> = !s2_1 in
-      (JC_192:
-      (assert { ge_int(offset_max(Object_alloc_table, _jessie_<num>), (0)) };
-      (JC_191: (Fresh3_create_requires _jessie_<num>)))));
-      (K_16: [ { } unit { (JC_193: ((0) = (1))) } ]) end)))); (raise Return)
-   end with Return -> void end) { true }
+      (K_13:
+      begin
+        (let _jessie_<num> = !s1_1 in
+        (JC_190:
+        (assert { ge_int(offset_max(Object_alloc_table, _jessie_<num>), (0)) };
+        (JC_189: (Fresh3_create_requires _jessie_<num>)))));
+       (K_14:
+       begin
+         (let _jessie_<num> = !s2_1 in
+         (JC_192:
+         (assert { ge_int(offset_max(Object_alloc_table, _jessie_<num>), (0)) };
+         (JC_191: (Fresh3_create_requires _jessie_<num>)))));
+        (K_16: [ { } unit { (JC_193: ((0) = (1))) } ]) end) end) end));
+    (raise Return) end with Return -> void end) { true }
 
 let Fresh3_test_ensures_default =
  fun (this_3 : Object pointer) (f : Object pointer) ->
@@ -2927,7 +2931,7 @@ why --project [...] why/Fresh3.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/Fresh3_po14.why">
-      <location file = "why/Fresh3.why" line = "892" begin = "15" end = "70"/>
+      <location file = "why/Fresh3.why" line = "896" begin = "15" end = "70"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -2955,11 +2959,11 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Fresh3_po11.why">
-      <location file = "why/Fresh3.why" line = "846" begin = "16" end = "71"/>
+      <location file = "why/Fresh3.why" line = "848" begin = "18" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Fresh3_po12.why">
-      <location file = "why/Fresh3.why" line = "850" begin = "16" end = "71"/>
+      <location file = "why/Fresh3.why" line = "854" begin = "19" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -5862,7 +5866,7 @@ why -simplify [...] why/Fresh3.why
          (instanceof Object_tag_table0 result0 Fresh3_tag))))
 (>= (offset_max Object_alloc_table1 result0) 0))))))))))))))))
 
-;; Fresh3_smoke_detector_safety_po_4, File "why/Fresh3.why", line 846, characters 16-71
+;; Fresh3_smoke_detector_safety_po_4, File "why/Fresh3.why", line 848, characters 18-73
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -5892,7 +5896,7 @@ why -simplify [...] why/Fresh3.why
 (FORALL (s2_1)
 (IMPLIES (EQ s2_1 result0) (>= (offset_max Object_alloc_table1 s1_1) 0)))))))))))))))))))
 
-;; Fresh3_smoke_detector_safety_po_5, File "why/Fresh3.why", line 850, characters 16-71
+;; Fresh3_smoke_detector_safety_po_5, File "why/Fresh3.why", line 854, characters 19-74
 (FORALL (Int_f)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
@@ -5957,7 +5961,7 @@ why -simplify [...] why/Fresh3.why
          Object_alloc_table Fresh3_i Fresh3_i0 (pset_singleton f))))
 (NEQ (select Fresh3_i0 this_3) (select Fresh3_i0 f))))))))))))
 
-;; Fresh3_test_safety_po_1, File "why/Fresh3.why", line 892, characters 15-70
+;; Fresh3_test_safety_po_1, File "why/Fresh3.why", line 896, characters 15-70
 (FORALL (this_3)
 (FORALL (f)
 (FORALL (Fresh3_i)

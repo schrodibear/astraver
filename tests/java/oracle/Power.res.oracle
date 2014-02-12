@@ -2354,17 +2354,18 @@ let Power_imp_ensures_default =
              (if (K_12: ((gt_int_ !e) (0)))
              then
               (let _jessie_<num> =
-              (K_10:
-              (K_11:
               begin
                 (if (K_9:
                     ((neq_int_ (K_8: (JC_42: ((computer_mod !e) (2))))) (0)))
                 then
                  (let _jessie_<num> = (K_7: (r := ((mul_int !r) !p))) in void)
                 else void);
-               (let _jessie_<num> = (p := ((mul_int !p) !p)) in void);
-               (e := (JC_43: ((computer_div !e) (2)))); !e end)) in void)
-             else (raise (Loop_exit_exc void)));
+               (K_10:
+               begin
+                 (let _jessie_<num> = (p := ((mul_int !p) !p)) in void);
+                (K_11:
+                begin   (e := (JC_43: ((computer_div !e) (2)))); !e end) end)
+              end in void) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
            Loop_continue_exc _jessie_<num> -> void end end done) with
         Loop_exit_exc _jessie_<num> -> void end; (return := !r); (raise Return)
@@ -2396,17 +2397,18 @@ let Power_imp_safety =
              (if (K_12: ((gt_int_ !e) (0)))
              then
               (let _jessie_<num> =
-              (K_10:
-              (K_11:
               begin
                 (if (K_9:
                     ((neq_int_ (K_8: (JC_33: ((computer_mod_ !e) (2))))) (0)))
                 then
                  (let _jessie_<num> = (K_7: (r := ((mul_int !r) !p))) in void)
                 else void);
-               (let _jessie_<num> = (p := ((mul_int !p) !p)) in void);
-               (e := (JC_34: ((computer_div_ !e) (2)))); !e end)) in void)
-             else (raise (Loop_exit_exc void)));
+               (K_10:
+               begin
+                 (let _jessie_<num> = (p := ((mul_int !p) !p)) in void);
+                (K_11:
+                begin   (e := (JC_34: ((computer_div_ !e) (2)))); !e end) end)
+              end in void) else (raise (Loop_exit_exc void)));
             (raise (Loop_continue_exc void)) end with
            Loop_continue_exc _jessie_<num> -> void end end done) with
         Loop_exit_exc _jessie_<num> -> void end; (return := !r); (raise Return)
@@ -2532,11 +2534,11 @@ why --project [...] why/Power.why
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/Power_po19.why">
-      <location file = "why/Power.why" line = "613" begin = "13" end = "60"/>
+      <location file = "why/Power.why" line = "615" begin = "13" end = "60"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/Power_po20.why">
-      <location file = "why/Power.why" line = "613" begin = "13" end = "60"/>
+      <location file = "why/Power.why" line = "615" begin = "13" end = "60"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/Power_po21.why">
@@ -5290,14 +5292,14 @@ why -simplify [...] why/Power.why
 ;; Power_rec_safety_po_1, File "HOME/tests/java/Power.java", line 37, characters 24-27
 (FORALL (n_4) (IMPLIES (<= 0 n_4) (IMPLIES (NEQ n_4 0) (NEQ 2 0))))
 
-;; Power_rec_safety_po_2, File "why/Power.why", line 613, characters 13-60
+;; Power_rec_safety_po_2, File "why/Power.why", line 615, characters 13-60
 (FORALL (n_4)
 (IMPLIES (<= 0 n_4)
 (IMPLIES (NEQ n_4 0)
 (IMPLIES (NEQ 2 0)
 (FORALL (result) (IMPLIES (EQ result (computer_div n_4 2)) (<= 0 n_4)))))))
 
-;; Power_rec_safety_po_3, File "why/Power.why", line 613, characters 13-60
+;; Power_rec_safety_po_3, File "why/Power.why", line 615, characters 13-60
 (FORALL (n_4)
 (IMPLIES (<= 0 n_4)
 (IMPLIES (NEQ n_4 0)

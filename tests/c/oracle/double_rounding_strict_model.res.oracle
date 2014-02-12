@@ -750,21 +750,23 @@ let doublerounding_ensures_default =
      (let y = ref (any_double void) in
      (let z = ref (any_double void) in
      (C_1:
-     (C_3:
-     (C_5:
      begin
        (let _jessie_<num> = (x_0 := (double_of_real_exact 1.0)) in void);
-      (let _jessie_<num> =
-      (y := (C_2:
-            (JC_14:
-            (((add_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1p-53)) 
-             ((double_of_real_safe nearest_even) 0x1p-64))))) in void);
-      (let _jessie_<num> =
-      (z := (C_4: (JC_15: (((add_double_safe nearest_even) !x_0) !y)))) in
-      void);
-      (assert { (JC_16: (double_value(z) = add_real(1.0, 0x1p-52))) }; void);
-      void; (return := !z); (raise Return) end)))))); absurd  end with
-   Return -> !return end)) { (JC_5: true) }
+      (C_3:
+      begin
+        (let _jessie_<num> =
+        (y := (C_2:
+              (JC_14:
+              (((add_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1p-53)) 
+               ((double_of_real_safe nearest_even) 0x1p-64))))) in void);
+       (C_5:
+       begin
+         (let _jessie_<num> =
+         (z := (C_4: (JC_15: (((add_double_safe nearest_even) !x_0) !y)))) in
+         void);
+        (assert { (JC_16: (double_value(z) = add_real(1.0, 0x1p-52))) };
+        void); void; (return := !z); (raise Return) end) end) end)))); 
+    absurd  end with Return -> !return end)) { (JC_5: true) }
 
 let doublerounding_safety =
  fun (tt : unit) ->
@@ -777,22 +779,25 @@ let doublerounding_safety =
      (let y = ref (any_double void) in
      (let z = ref (any_double void) in
      (C_1:
-     (C_3:
-     (C_5:
      begin
        (let _jessie_<num> = (x_0 := (double_of_real_exact 1.0)) in void);
-      (let _jessie_<num> =
-      (y := (C_2:
-            (JC_11:
-            (((add_double nearest_even) (JC_9:
-                                        ((double_of_real nearest_even) 0x1p-53))) 
-             (JC_10: ((double_of_real nearest_even) 0x1p-64)))))) in void);
-      (let _jessie_<num> =
-      (z := (C_4: (JC_12: (((add_double nearest_even) !x_0) !y)))) in void);
-      [ { } unit reads z
-        { (JC_13: (double_value(z) = add_real(1.0, 0x1p-52))) } ]; void;
-      (return := !z); (raise Return) end)))))); absurd  end with Return ->
-   !return end)) { true }
+      (C_3:
+      begin
+        (let _jessie_<num> =
+        (y := (C_2:
+              (JC_11:
+              (((add_double nearest_even) (JC_9:
+                                          ((double_of_real nearest_even) 0x1p-53))) 
+               (JC_10: ((double_of_real nearest_even) 0x1p-64)))))) in void);
+       (C_5:
+       begin
+         (let _jessie_<num> =
+         (z := (C_4: (JC_12: (((add_double nearest_even) !x_0) !y)))) in
+         void);
+        [ { } unit reads z
+          { (JC_13: (double_value(z) = add_real(1.0, 0x1p-52))) } ]; void;
+        (return := !z); (raise Return) end) end) end)))); absurd  end with
+   Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========

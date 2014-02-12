@@ -1631,12 +1631,6 @@ let SideEffects_m1_ensures_default =
    begin
      (let i = ref (K_36: (0)) in
      (K_3:
-     (K_7:
-     (K_9:
-     (K_15:
-     (K_17:
-     (K_25:
-     (K_27:
      begin
        (let _jessie_<num> =
        (let _jessie_<num> = (1) in
@@ -1649,52 +1643,67 @@ let SideEffects_m1_ensures_default =
         _jessie_<num> end)) in
        (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
        (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
-      (assert
-      { (JC_78:
-        ((JC_76: (select(intM_intP, shift(t, (0))) = (1)))
-        and (JC_77: (i = (1))))) }; void);
-      (let _jessie_<num> =
-      (let _jessie_<num> = (2) in
-      (let _jessie_<num> = t in
-      (let _jessie_<num> = (K_8: begin   (i := ((add_int !i) (1))); !i end) in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
-      (assert
-      { (JC_82:
-        ((JC_79: (select(intM_intP, shift(t, (0))) = (1)))
-        and ((JC_80: (select(intM_intP, shift(t, (2))) = (2)))
-            and (JC_81: (i = (2)))))) }; void);
-      (let _jessie_<num> =
-      (let _jessie_<num> = (3) in
-      (let _jessie_<num> = t in
-      (let _jessie_<num> = (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
-      (assert
-      { (JC_87:
-        ((JC_83: (select(intM_intP, shift(t, (0))) = (1)))
-        and ((JC_84: (select(intM_intP, shift(t, (2))) = (2)))
-            and ((JC_85: (select(intM_intP, shift(t, (1))) = (3)))
-                and (JC_86: (i = (1))))))) }; void);
-      (let _jessie_<num> =
-      (let _jessie_<num> = (4) in
-      (let _jessie_<num> = t in
-      (let _jessie_<num> =
-      (K_26:
-      (let _jessie_<num> = !i in
+      (K_7:
       begin
-        (let _jessie_<num> = (i := ((sub_int _jessie_<num>) (1))) in void);
-       _jessie_<num> end)) in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
-      (K_35:
-      (assert
-      { (JC_92:
-        ((JC_88: (select(intM_intP, shift(t, (0))) = (1)))
-        and ((JC_89: (select(intM_intP, shift(t, (2))) = (2)))
-            and ((JC_90: (select(intM_intP, shift(t, (1))) = (4)))
-                and (JC_91: (i = (0))))))) }; void)) end))))))));
-    (raise Return) end with Return -> void end) { (JC_51: true) }
+        (assert
+        { (JC_78:
+          ((JC_76: (select(intM_intP, shift(t, (0))) = (1)))
+          and (JC_77: (i = (1))))) }; void);
+       (K_9:
+       begin
+         (let _jessie_<num> =
+         (let _jessie_<num> = (2) in
+         (let _jessie_<num> = t in
+         (let _jessie_<num> =
+         (K_8: begin   (i := ((add_int !i) (1))); !i end) in
+         (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+         (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
+        (K_15:
+        begin
+          (assert
+          { (JC_82:
+            ((JC_79: (select(intM_intP, shift(t, (0))) = (1)))
+            and ((JC_80: (select(intM_intP, shift(t, (2))) = (2)))
+                and (JC_81: (i = (2)))))) }; void);
+         (K_17:
+         begin
+           (let _jessie_<num> =
+           (let _jessie_<num> = (3) in
+           (let _jessie_<num> = t in
+           (let _jessie_<num> =
+           (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
+           (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+           (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
+          (K_25:
+          begin
+            (assert
+            { (JC_87:
+              ((JC_83: (select(intM_intP, shift(t, (0))) = (1)))
+              and ((JC_84: (select(intM_intP, shift(t, (2))) = (2)))
+                  and ((JC_85: (select(intM_intP, shift(t, (1))) = (3)))
+                      and (JC_86: (i = (1))))))) }; void);
+           (K_27:
+           begin
+             (let _jessie_<num> =
+             (let _jessie_<num> = (4) in
+             (let _jessie_<num> = t in
+             (let _jessie_<num> =
+             (K_26:
+             (let _jessie_<num> = !i in
+             begin
+               (let _jessie_<num> = (i := ((sub_int _jessie_<num>) (1))) in void);
+              _jessie_<num> end)) in
+             (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+             (((safe_upd_ intM_intP) _jessie_<num>) _jessie_<num>))))) in void);
+            (K_35:
+            (assert
+            { (JC_92:
+              ((JC_88: (select(intM_intP, shift(t, (0))) = (1)))
+              and ((JC_89: (select(intM_intP, shift(t, (2))) = (2)))
+                  and ((JC_90: (select(intM_intP, shift(t, (1))) = (4)))
+                      and (JC_91: (i = (0))))))) }; void)) end) end) end) end)
+       end) end) end)); (raise Return) end with Return -> void end)
+  { (JC_51: true) }
 
 let SideEffects_m1_safety =
  fun (this_0 : Object pointer) (t : Object pointer) ->
@@ -1707,12 +1716,6 @@ let SideEffects_m1_safety =
    begin
      (let i = ref (K_36: (0)) in
      (K_3:
-     (K_7:
-     (K_9:
-     (K_15:
-     (K_17:
-     (K_25:
-     (K_27:
      begin
        (let _jessie_<num> =
        (let _jessie_<num> = (1) in
@@ -1727,58 +1730,72 @@ let SideEffects_m1_safety =
        (JC_55:
        (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
        void);
-      [ { } unit reads i,intM_intP
-        { (JC_58:
-          ((JC_56: (select(intM_intP, shift(t, (0))) = (1)))
-          and (JC_57: (i = (1))))) } ];
-      (let _jessie_<num> =
-      (let _jessie_<num> = (2) in
-      (let _jessie_<num> = t in
-      (let _jessie_<num> = (K_8: begin   (i := ((add_int !i) (1))); !i end) in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (JC_59:
-      (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
-      void);
-      [ { } unit reads i,intM_intP
-        { (JC_63:
-          ((JC_60: (select(intM_intP, shift(t, (0))) = (1)))
-          and ((JC_61: (select(intM_intP, shift(t, (2))) = (2)))
-              and (JC_62: (i = (2)))))) } ];
-      (let _jessie_<num> =
-      (let _jessie_<num> = (3) in
-      (let _jessie_<num> = t in
-      (let _jessie_<num> = (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (JC_64:
-      (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
-      void);
-      [ { } unit reads i,intM_intP
-        { (JC_69:
-          ((JC_65: (select(intM_intP, shift(t, (0))) = (1)))
-          and ((JC_66: (select(intM_intP, shift(t, (2))) = (2)))
-              and ((JC_67: (select(intM_intP, shift(t, (1))) = (3)))
-                  and (JC_68: (i = (1))))))) } ];
-      (let _jessie_<num> =
-      (let _jessie_<num> = (4) in
-      (let _jessie_<num> = t in
-      (let _jessie_<num> =
-      (K_26:
-      (let _jessie_<num> = !i in
+      (K_7:
       begin
-        (let _jessie_<num> = (i := ((sub_int _jessie_<num>) (1))) in void);
-       _jessie_<num> end)) in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (JC_70:
-      (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
-      void);
-      (K_35:
-      [ { } unit reads i,intM_intP
-        { (JC_75:
-          ((JC_71: (select(intM_intP, shift(t, (0))) = (1)))
-          and ((JC_72: (select(intM_intP, shift(t, (2))) = (2)))
-              and ((JC_73: (select(intM_intP, shift(t, (1))) = (4)))
-                  and (JC_74: (i = (0))))))) } ]) end)))))))); (raise Return)
-   end with Return -> void end) { true }
+        [ { } unit reads i,intM_intP
+          { (JC_58:
+            ((JC_56: (select(intM_intP, shift(t, (0))) = (1)))
+            and (JC_57: (i = (1))))) } ];
+       (K_9:
+       begin
+         (let _jessie_<num> =
+         (let _jessie_<num> = (2) in
+         (let _jessie_<num> = t in
+         (let _jessie_<num> =
+         (K_8: begin   (i := ((add_int !i) (1))); !i end) in
+         (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+         (JC_59:
+         (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+         void);
+        (K_15:
+        begin
+          [ { } unit reads i,intM_intP
+            { (JC_63:
+              ((JC_60: (select(intM_intP, shift(t, (0))) = (1)))
+              and ((JC_61: (select(intM_intP, shift(t, (2))) = (2)))
+                  and (JC_62: (i = (2)))))) } ];
+         (K_17:
+         begin
+           (let _jessie_<num> =
+           (let _jessie_<num> = (3) in
+           (let _jessie_<num> = t in
+           (let _jessie_<num> =
+           (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
+           (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+           (JC_64:
+           (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+           void);
+          (K_25:
+          begin
+            [ { } unit reads i,intM_intP
+              { (JC_69:
+                ((JC_65: (select(intM_intP, shift(t, (0))) = (1)))
+                and ((JC_66: (select(intM_intP, shift(t, (2))) = (2)))
+                    and ((JC_67: (select(intM_intP, shift(t, (1))) = (3)))
+                        and (JC_68: (i = (1))))))) } ];
+           (K_27:
+           begin
+             (let _jessie_<num> =
+             (let _jessie_<num> = (4) in
+             (let _jessie_<num> = t in
+             (let _jessie_<num> =
+             (K_26:
+             (let _jessie_<num> = !i in
+             begin
+               (let _jessie_<num> = (i := ((sub_int _jessie_<num>) (1))) in void);
+              _jessie_<num> end)) in
+             (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+             (JC_70:
+             (((((offset_upd_ !Object_alloc_table) intM_intP) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+             void);
+            (K_35:
+            [ { } unit reads i,intM_intP
+              { (JC_75:
+                ((JC_71: (select(intM_intP, shift(t, (0))) = (1)))
+                and ((JC_72: (select(intM_intP, shift(t, (2))) = (2)))
+                    and ((JC_73: (select(intM_intP, shift(t, (1))) = (4)))
+                        and (JC_74: (i = (0))))))) } ]) end) end) end) end)
+       end) end) end)); (raise Return) end with Return -> void end) { true }
 
 let cons_SideEffects_ensures_default =
  fun (this_1 : Object pointer) ->

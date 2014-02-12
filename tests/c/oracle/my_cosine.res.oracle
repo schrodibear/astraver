@@ -1647,20 +1647,21 @@ let my_cos1_ensures_default =
                                    0.5)),
                           cos(single_value(x_0)))),
          0x1p-24)) }; void);
-      (C_5:
       begin
         void;
-       (let _jessie_<num> =
-       (__retres := (C_4:
-                    (JC_16:
-                    (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                     (C_3:
-                     (JC_15:
-                     (((mul_single_safe nearest_even) (C_2:
-                                                      (JC_14:
-                                                      (((mul_single_safe nearest_even) x_0) x_0)))) 
-                      (single_of_real_exact 0.5)))))))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
+       (C_5:
+       begin
+         (let _jessie_<num> =
+         (__retres := (C_4:
+                      (JC_16:
+                      (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+                       (C_3:
+                       (JC_15:
+                       (((mul_single_safe nearest_even) (C_2:
+                                                        (JC_14:
+                                                        (((mul_single_safe nearest_even) x_0) x_0)))) 
+                        (single_of_real_exact 0.5)))))))) in void);
+        (return := !__retres); (raise Return) end) end end); absurd  end with
    Return -> !return end))
   { (JC_5:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
@@ -1683,20 +1684,21 @@ let my_cos1_safety =
                                      0.5)),
                             cos(single_value(x_0)))),
            0x1p-24)) } ];
-      (C_5:
       begin
         void;
-       (let _jessie_<num> =
-       (__retres := (C_4:
-                    (JC_12:
-                    (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                     (C_3:
-                     (JC_11:
-                     (((mul_single nearest_even) (C_2:
-                                                 (JC_10:
-                                                 (((mul_single nearest_even) x_0) x_0)))) 
-                      (single_of_real_exact 0.5)))))))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
+       (C_5:
+       begin
+         (let _jessie_<num> =
+         (__retres := (C_4:
+                      (JC_12:
+                      (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+                       (C_3:
+                       (JC_11:
+                       (((mul_single nearest_even) (C_2:
+                                                   (JC_10:
+                                                   (((mul_single nearest_even) x_0) x_0)))) 
+                        (single_of_real_exact 0.5)))))))) in void);
+        (return := !__retres); (raise Return) end) end end); absurd  end with
    Return -> !return end)) { true }
 
 let my_cos2_ensures_default =
@@ -1846,21 +1848,22 @@ let my_cos4_ensures_default =
                                    0.5)),
                           cos(single_value(x_2)))),
          0x1.2p-20)) }; void);
-      (C_33:
       begin
         void;
-       (let _jessie_<num> =
-       (__retres_0 := (C_32:
-                      (JC_78:
-                      (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                       (C_31:
-                       (JC_77:
-                       (((mul_single_safe nearest_even) (C_30:
-                                                        (JC_76:
-                                                        (((mul_single_safe nearest_even) x_2) x_2)))) 
-                        (single_of_real_exact 0.5)))))))) in void);
-       (return := !__retres_0); (raise Return) end) end); absurd  end with
-   Return -> !return end))
+       (C_33:
+       begin
+         (let _jessie_<num> =
+         (__retres_0 := (C_32:
+                        (JC_78:
+                        (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+                         (C_31:
+                         (JC_77:
+                         (((mul_single_safe nearest_even) (C_30:
+                                                          (JC_76:
+                                                          (((mul_single_safe nearest_even) x_2) x_2)))) 
+                          (single_of_real_exact 0.5)))))))) in void);
+        (return := !__retres_0); (raise Return) end) end end); absurd  end
+   with Return -> !return end))
   { (JC_67:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
     0x1.3p-20)) }
@@ -1882,21 +1885,22 @@ let my_cos4_safety =
                                      0.5)),
                             cos(single_value(x_2)))),
            0x1.2p-20)) } ];
-      (C_33:
       begin
         void;
-       (let _jessie_<num> =
-       (__retres_0 := (C_32:
-                      (JC_74:
-                      (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                       (C_31:
-                       (JC_73:
-                       (((mul_single nearest_even) (C_30:
-                                                   (JC_72:
-                                                   (((mul_single nearest_even) x_2) x_2)))) 
-                        (single_of_real_exact 0.5)))))))) in void);
-       (return := !__retres_0); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { true }
+       (C_33:
+       begin
+         (let _jessie_<num> =
+         (__retres_0 := (C_32:
+                        (JC_74:
+                        (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+                         (C_31:
+                         (JC_73:
+                         (((mul_single nearest_even) (C_30:
+                                                     (JC_72:
+                                                     (((mul_single nearest_even) x_2) x_2)))) 
+                          (single_of_real_exact 0.5)))))))) in void);
+        (return := !__retres_0); (raise Return) end) end end); absurd  end
+   with Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========

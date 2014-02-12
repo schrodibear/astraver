@@ -1583,7 +1583,6 @@ let tree_max_ensures_default =
       then
        (let _jessie_<num> =
        (C_6:
-       (C_8:
        begin
          (let _jessie_<num> =
          (tmp := (C_5:
@@ -1591,16 +1590,17 @@ let tree_max_ensures_default =
                  (JC_36:
                  (((((tree_max _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
          void);
-        (m := (C_7:
-              (let _jessie_<num> = !m in
-              (let _jessie_<num> = !tmp in
-              (JC_37: ((max _jessie_<num>) _jessie_<num>)))))); !m end)) in void)
-      else void);
+        (C_8:
+        begin
+          (m := (C_7:
+                (let _jessie_<num> = !m in
+                (let _jessie_<num> = !tmp in
+                (JC_37: ((max _jessie_<num>) _jessie_<num>)))))); !m end) end) in
+       void) else void);
       (if ((safe_neq_pointer (C_15: ((safe_acc_ Tree_right_t_6) t_0))) null)
       then
        (let _jessie_<num> =
        (C_12:
-       (C_14:
        begin
          (let _jessie_<num> =
          (tmp_0 := (C_11:
@@ -1609,12 +1609,14 @@ let tree_max_ensures_default =
                    (JC_38:
                    (((((tree_max _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
          void);
-        (m := (C_13:
-              (let _jessie_<num> = !m in
-              (let _jessie_<num> = !tmp_0 in
-              (JC_39: ((max _jessie_<num>) _jessie_<num>)))))); !m end)) in void)
-      else void); (return := !m); (raise Return) end)))); absurd  end with
-   Return -> !return end))
+        (C_14:
+        begin
+          (m := (C_13:
+                (let _jessie_<num> = !m in
+                (let _jessie_<num> = !tmp_0 in
+                (JC_39: ((max _jessie_<num>) _jessie_<num>)))))); !m end) end) in
+       void) else void); (return := !m); (raise Return) end)))); absurd  end
+   with Return -> !return end))
   { (JC_21:
     ((JC_19: mem(result, t_0, Tree_right_t_6, Tree_left_t_6, Tree_value_t_6))
     and (JC_20:
@@ -1647,7 +1649,6 @@ let tree_max_safety =
       then
        (let _jessie_<num> =
        (C_6:
-       (C_8:
        begin
          (let _jessie_<num> =
          (tmp := (C_5:
@@ -1657,18 +1658,19 @@ let tree_max_safety =
                  (JC_30:
                  (((((tree_max_requires _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
          void);
-        (m := (C_7:
-              (let _jessie_<num> = !m in
-              (let _jessie_<num> = !tmp in
-              (JC_31: ((max_requires _jessie_<num>) _jessie_<num>)))))); !m end)) in
-       void) else void);
+        (C_8:
+        begin
+          (m := (C_7:
+                (let _jessie_<num> = !m in
+                (let _jessie_<num> = !tmp in
+                (JC_31: ((max_requires _jessie_<num>) _jessie_<num>)))))); !m end)
+       end) in void) else void);
       (if ((neq_pointer (C_15:
                         (JC_32:
                         (((acc_ Tree_t_6_alloc_table) Tree_right_t_6) t_0)))) null)
       then
        (let _jessie_<num> =
        (C_12:
-       (C_14:
        begin
          (let _jessie_<num> =
          (tmp_0 := (C_11:
@@ -1679,12 +1681,14 @@ let tree_max_safety =
                    (JC_34:
                    (((((tree_max_requires _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
          void);
-        (m := (C_13:
-              (let _jessie_<num> = !m in
-              (let _jessie_<num> = !tmp_0 in
-              (JC_35: ((max_requires _jessie_<num>) _jessie_<num>)))))); !m end)) in
-       void) else void); (return := !m); (raise Return) end)))); absurd  end
-   with Return -> !return end)) { true }
+        (C_14:
+        begin
+          (m := (C_13:
+                (let _jessie_<num> = !m in
+                (let _jessie_<num> = !tmp_0 in
+                (JC_35: ((max_requires _jessie_<num>) _jessie_<num>)))))); !m end)
+       end) in void) else void); (return := !m); (raise Return) end))));
+    absurd  end with Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========
