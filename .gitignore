@@ -11,6 +11,8 @@
 *.o
 *.log
 *.output
+*.glob
+*.vo
 
 /.depend
 /.depend.coq
@@ -19,6 +21,10 @@
 /bench/bench
 /config.status
 /configure
+
+/jessie2-regtests.err
+/jessie2-regtests.out
+/regtest.opt
 
 /doc/version.tex
 
@@ -36,8 +42,8 @@
 /bin/why.opt
 /bin/why2html.opt
 
-/lib/coq/*.vo
-/lib/coq/*.glob
+/lib/coq/WhyCoqCompat.v
+/lib/why3/why3.conf
 
 /src/lexer.ml
 /src/linenum.ml
@@ -105,6 +111,8 @@
 /tests/java/*.loc
 /tests/java/*.jloc
 /tests/java/*.makefile
+/tests/java/simplify/
+/tests/java/why/
 
 /tests/c/*.jessie/*.jc
 /tests/c/*.jessie/*.mlw
@@ -113,6 +121,7 @@
 /tests/c/*.jessie/*.makefile
 /tests/c/*.jessie/why
 /tests/c/*.jessie/simplify
+/tests/c/*.jessie/gappa
 
 /frama-c-plugin/tests/jessie/*.jessie/*.jc
 /frama-c-plugin/tests/jessie/*.jessie/*.mlw
@@ -121,3 +130,4 @@
 /frama-c-plugin/tests/jessie/*.jessie/*.makefile
 /frama-c-plugin/tests/jessie/*.jessie/why
 /frama-c-plugin/tests/jessie/*.jessie/simplify
+/frama-c-plugin/tests/jessie/*.jessie/gappa
