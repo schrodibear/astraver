@@ -4,21 +4,17 @@
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
- <prover
-  id="2"
-  name="CVC3"
   version="2.4.1"/>
  <prover
-  id="3"
+  id="2"
   name="Z3"
   version="3.2"/>
  <prover
-  id="4"
+  id="3"
   name="Z3"
   version="4.3.1"/>
  <file
@@ -42,46 +38,6 @@
     shape="ainfix =apowerainfix *V0V1V2ainfix *apowerV0V2apowerV1V2Iainfix &gt;=V2c0FFF">
     <label
      name="expl:Lemma power_mul, lemma"/>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.12"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.13"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.32"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.13"/>
-    </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.14"/>
-    </proof>
    </goal>
    <goal
     name="power_even"
@@ -94,46 +50,6 @@
     shape="ainfix =apowerV0V1apowerainfix *V0V0adivV1c2Iainfix =amodV1c2c0Aainfix &gt;=V1c0FF">
     <label
      name="expl:Lemma power_even, lemma"/>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.10"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.18"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="unknown" time="0.16"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.18"/>
-    </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.20"/>
-    </proof>
    </goal>
    <goal
     name="power_odd"
@@ -146,46 +62,6 @@
     shape="ainfix =apowerV0V1ainfix *V0apowerainfix *V0V0adivV1c2INainfix =amodV1c2c0Aainfix &gt;=V1c0FF">
     <label
      name="expl:Lemma power_odd, lemma"/>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.13"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.13"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.13"/>
-    </proof>
-    <proof
-     prover="3"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.09"/>
-    </proof>
-    <proof
-     prover="4"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.17"/>
-    </proof>
    </goal>
   </theory>
   <theory
@@ -204,19 +80,13 @@
     expanded="false"
     shape="iainfix =V5apowerV0V1Iainfix =V5V4Fiainfix =ainfix *V4apowerV6V7apowerV0V1Aainfix &lt;=c0V7Iainfix =V7adivV2c2FIainfix =V6ainfix *V3V3Fainfix =ainfix *V8apowerV9V10apowerV0V1Aainfix &lt;=c0V10Iainfix =V10adivV2c2FIainfix =V9ainfix *V3V3FIainfix =V8ainfix *V4V3FNainfix =amodV2c2c0ainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FAainfix =ainfix *c1apowerV0V1apowerV0V1Aainfix &lt;=c0V1Iainfix &lt;=c0V1F">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Method imp, default behavior"/>
     <label
      name="expl:VC for _Power_imp_ensures_default"/>
     <proof
      prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-    <proof
-     prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
@@ -237,6 +107,8 @@
       expanded="false"
       shape="loop invariant initainfix =ainfix *c1apowerV0V1apowerV0V1Aainfix &lt;=c0V1Iainfix &lt;=c0V1F">
       <label
+       name="W:diverges:N"/>
+      <label
        name="expl:Method imp, default behavior"/>
       <label
        name="expl:VC for _Power_imp_ensures_default"/>
@@ -254,7 +126,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="2"
@@ -262,18 +134,10 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="3"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -291,27 +155,13 @@
       expanded="false"
       shape="loop invariant preservationainfix =ainfix *V5apowerV6V7apowerV0V1Aainfix &lt;=c0V7Iainfix =V7adivV2c2FIainfix =V6ainfix *V3V3FIainfix =V5ainfix *V4V3FINainfix =amodV2c2c0Iainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
       <label
+       name="W:diverges:N"/>
+      <label
        name="expl:Method imp, default behavior"/>
       <label
        name="expl:VC for _Power_imp_ensures_default"/>
       <proof
-       prover="0"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.45"/>
-      </proof>
-      <proof
        prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="2"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -329,6 +179,8 @@
       expanded="false"
       shape="loop invariant preservationainfix =ainfix *V4apowerV5V6apowerV0V1Aainfix &lt;=c0V6Iainfix =V6adivV2c2FIainfix =V5ainfix *V3V3FINNainfix =amodV2c2c0Iainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
       <label
+       name="W:diverges:N"/>
+      <label
        name="expl:Method imp, default behavior"/>
       <label
        name="expl:VC for _Power_imp_ensures_default"/>
@@ -338,18 +190,10 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.59"/>
       </proof>
       <proof
        prover="1"
-       timelimit="5"
-       memlimit="1000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
-       prover="2"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -366,6 +210,8 @@
       proved="true"
       expanded="false"
       shape="postconditionainfix =V5apowerV0V1Iainfix =V5V4FINainfix &gt;V2c0Iainfix =ainfix *V4apowerV3V2apowerV0V1Aainfix &lt;=c0V2FIainfix &lt;=c0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method imp, default behavior"/>
       <label
@@ -413,6 +259,8 @@
     expanded="false"
     shape="iiainfix =V3apowerV0V1Iainfix =V3ainfix *ainfix *V2V2V0Fainfix =V4apowerV0V1Iainfix =V4ainfix *V2V2Fainfix =amodV1c2c0LapowerV0adivV1c2ainfix =V5apowerV0V1Iainfix =V5c1Fainfix =V1c0Iainfix &lt;=c0V1F">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Method rec, default behavior"/>
     <label
      name="expl:VC for _Power_rec_ensures_default"/>
@@ -429,6 +277,8 @@
       proved="true"
       expanded="false"
       shape="postconditionainfix =V2apowerV0V1Iainfix =V2c1FIainfix =V1c0Iainfix &lt;=c0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method rec, default behavior"/>
       <label
@@ -452,6 +302,8 @@
       expanded="false"
       shape="postconditionainfix =V3apowerV0V1Iainfix =V3ainfix *V2V2FIainfix =amodV1c2c0LapowerV0adivV1c2INainfix =V1c0Iainfix &lt;=c0V1F">
       <label
+       name="W:diverges:N"/>
+      <label
        name="expl:Method rec, default behavior"/>
       <label
        name="expl:VC for _Power_rec_ensures_default"/>
@@ -464,7 +316,7 @@
        <result status="valid" time="0.16"/>
       </proof>
       <proof
-       prover="3"
+       prover="2"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -472,7 +324,7 @@
        <result status="valid" time="0.08"/>
       </proof>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -490,6 +342,8 @@
       expanded="false"
       shape="postconditionainfix =V3apowerV0V1Iainfix =V3ainfix *ainfix *V2V2V0FINainfix =amodV1c2c0LapowerV0adivV1c2INainfix =V1c0Iainfix &lt;=c0V1F">
       <label
+       name="W:diverges:N"/>
+      <label
        name="expl:Method rec, default behavior"/>
       <label
        name="expl:VC for _Power_rec_ensures_default"/>
@@ -499,7 +353,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.32"/>
+       <result status="valid" time="2.00"/>
       </proof>
      </goal>
     </transf>
@@ -528,13 +382,15 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
     sum="8e47d78bfaa5cc47376251c26591337c"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Object, default behavior"/>
     <label
@@ -550,7 +406,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
     sum="8e47d78bfaa5cc47376251c26591337c"
@@ -572,13 +428,15 @@
    </goal>
    <goal
     name="WP_parameter cons_Power_ensures_default"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Power_ensures_default"
     sum="8e47d78bfaa5cc47376251c26591337c"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Power, default behavior"/>
     <label
@@ -594,7 +452,7 @@
    </goal>
    <goal
     name="WP_parameter cons_Power_safety"
-    locfile=".."
+    locfile="../../.."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Power_safety"
     sum="8e47d78bfaa5cc47376251c26591337c"

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
   name="CVC3"
-  version="2.2"/>
+  version="2.4.1"/>
  <prover
   id="2"
-  name="CVC3"
-  version="2.4.1"/>
+  name="CVC4"
+  version="1.3"/>
  <prover
   id="3"
   name="Z3"
@@ -43,10 +43,12 @@
     locfile="../../quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="VC for quick_rec_ensures_default"
-    sum="c23df2eb358d33fbf9e68a895bc5e18a"
+    sum="b4461516af879ac3b4a119f86656fb11"
     proved="true"
-    expanded="true"
-    shape="iainfix &gt;=V1V2anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2iainfix &lt;=V8V2iainfix &lt;aselectV10ashiftV0V8V5anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV12ashiftV0V14V5Iainfix &lt;=V14V11Aainfix &lt;V1V14FAainfix &gt;=aselectV12ashiftV0V15V5Iainfix &lt;V15V13Aainfix &lt;V11V15FAa_PermutV0V1V2V12V4Aainfix &lt;=V13ainfix +V2c1Aainfix &lt;V11V13Aainfix &lt;=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FAa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1Fanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V17V5Iainfix &lt;=V17V9Aainfix &lt;V1V17FAainfix &gt;=aselectV10ashiftV0V18V5Iainfix &lt;V18V16Aainfix &lt;V9V18FAa_PermutV0V1V2V10V4Aainfix &lt;=V16ainfix +V2c1Aainfix &lt;V9V16Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V16ainfix +V8c1Fanot_assignsV3V4V21apset_rangeapset_singletonV0V1V2Ianot_assignsV3V20V21apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V21Aa_PermutV0ainfix +V9c1V2V21V20FIanot_assignsV3V19V20apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V20Aa_PermutV0V1ainfix -V9c1V20V19FAa_PermutV0V1V2V19V10Ianot_assignsV3V10V19apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V19V10FAainfix &lt;=V9V2Aainfix &lt;=V1V9Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V22V5Iainfix &lt;=V22V9Aainfix &lt;V1V22FAainfix &gt;=aselectV10ashiftV0V23V5Iainfix &lt;V23V8Aainfix &lt;V9V23FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FAanot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV4ashiftV0V24V5Iainfix &lt;=V24V6Aainfix &lt;V1V24FAainfix &gt;=aselectV4ashiftV0V25V5Iainfix &lt;V25V7Aainfix &lt;V6V25FAa_PermutV0V1V2V4V4Aainfix &lt;=V7ainfix +V2c1Aainfix &lt;V6V7Aainfix &lt;=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+    expanded="false"
+    shape="iianot_assignsV4V3V15apset_rangeapset_singletonV0V1V2Ianot_assignsV4V13V15apset_rangeapset_singletonV0V14V2Aa_SortedV0V14ainfix +V2c1V15Aa_PermutV0V14V2V15V13FLainfix +V9c1Ianot_assignsV4V11V13apset_rangeapset_singletonV0V1V12Aa_SortedV0V1ainfix +V12c1V13Aa_PermutV0V1V12V13V11FLainfix -V9c1Aa_PermutV0V1V2V11V10Ianot_assignsV4V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FAainfix &lt;=V9V2Aainfix &lt;=V1V9ianot_assignsV4V3V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V17V5Iainfix &lt;=V17V9Aainfix &lt;V1V17FAainfix &gt;=aselectV10ashiftV0V18V5Iainfix &lt;V18V16Aainfix &lt;V9V18FAa_PermutV0V1V2V10V3Aainfix &lt;=V16ainfix +V2c1Aainfix &lt;V9V16Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V16ainfix +V8c1Fanot_assignsV4V3V20apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV20ashiftV0V22V5Iainfix &lt;=V22V19Aainfix &lt;V1V22FAainfix &gt;=aselectV20ashiftV0V23V5Iainfix &lt;V23V21Aainfix &lt;V19V23FAa_PermutV0V1V2V20V3Aainfix &lt;=V21ainfix +V2c1Aainfix &lt;V19V21Aainfix &lt;=V1V19Aainfix =aselectV20ashiftV0V1V5Iainfix =V21ainfix +V8c1FAa_PermutV0V1V2V20V10Ianot_assignsV4V10V20apset_unionapset_rangeapset_singletonV0V19V19apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V19V20V10FIainfix =V19ainfix +V9c1Fainfix &lt;aselectV10ashiftV0V8V5ainfix &lt;=V8V2Ianot_assignsV4V3V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V24V5Iainfix &lt;=V24V9Aainfix &lt;V1V24FAainfix &gt;=aselectV10ashiftV0V25V5Iainfix &lt;V25V8Aainfix &lt;V9V25FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FAanot_assignsV4V3V3apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV3ashiftV0V26V5Iainfix &lt;=V26V6Aainfix &lt;V1V26FAainfix &gt;=aselectV3ashiftV0V27V5Iainfix &lt;V27V7Aainfix &lt;V6V27FAa_PermutV0V1V2V3V3Aainfix &lt;=V7ainfix +V2c1Aainfix &lt;V6V7Aainfix &lt;=V1V6Aainfix =aselectV3ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1Fanot_assignsV4V3V3apset_rangeapset_singletonV0V1V2ainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function quick_rec, default behavior"/>
     <label
@@ -54,16 +56,18 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter quick_rec_ensures_default.1"
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="1. postcondition"
-      sum="58c9a142c4e46e475e517ae5d8240ce3"
+      sum="74a29373373bc9f3c039fbd28aa130d2"
       proved="true"
       expanded="false"
-      shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="postconditionanot_assignsV4V3V3apset_rangeapset_singletonV0V1V2Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
       <label
@@ -74,7 +78,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="1"
@@ -82,7 +86,47 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter quick_rec_ensures_default.2"
+      locfile="../../quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
+      expl="2. loop invariant init"
+      sum="b30b402900bea87d1ce5cb92b3813e71"
+      proved="true"
+      expanded="false"
+      shape="loop invariant initanot_assignsV4V3V3apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV3ashiftV0V8V5Iainfix &lt;=V8V6Aainfix &lt;V1V8FAainfix &gt;=aselectV3ashiftV0V9V5Iainfix &lt;V9V7Aainfix &lt;V6V9FAa_PermutV0V1V2V3V3Aainfix &lt;=V7ainfix +V2c1Aainfix &lt;V6V7Aainfix &lt;=V1V6Aainfix =aselectV3ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1FINainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
+      <label
+       name="expl:Function quick_rec, default behavior"/>
+      <label
+       name="expl:VC for quick_rec_ensures_default"/>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
        prover="4"
@@ -94,52 +138,16 @@
       </proof>
      </goal>
      <goal
-      name="WP_parameter quick_rec_ensures_default.2"
-      locfile="../../quick_sort.c"
-      loclnum="57" loccnumb="5" loccnume="14"
-      expl="2. loop invariant init"
-      sum="a338424f5da450e7fbeb9998a97e2454"
-      proved="true"
-      expanded="false"
-      shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV4ashiftV0V8V5Iainfix &lt;=V8V6Aainfix &lt;V1V8FAainfix &gt;=aselectV4ashiftV0V9V5Iainfix &lt;V9V7Aainfix &lt;V6V9FAa_PermutV0V1V2V4V4Aainfix &lt;=V7ainfix +V2c1Aainfix &lt;V6V7Aainfix &lt;=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
-      <label
-       name="expl:Function quick_rec, default behavior"/>
-      <label
-       name="expl:VC for quick_rec_ensures_default"/>
-      <proof
-       prover="0"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.08"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="0"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-     </goal>
-     <goal
       name="WP_parameter quick_rec_ensures_default.3"
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="3. assertion"
-      sum="c9a896e52b997dcd59f46742195b29c5"
+      sum="b727efadabce5e014df8ec13238fa5e2"
       proved="true"
       expanded="false"
-      shape="a_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V13V5Iainfix &lt;=V13V9Aainfix &lt;V1V13FAainfix &gt;=aselectV10ashiftV0V14V5Iainfix &lt;V14V8Aainfix &lt;V9V14FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="assertiona_PermutV0V1V2V12V10Ianot_assignsV4V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV4V3V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V13V5Iainfix &lt;=V13V9Aainfix &lt;V1V13FAainfix &gt;=aselectV10ashiftV0V14V5Iainfix &lt;V14V8Aainfix &lt;V9V14FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1FINainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
       <label
@@ -159,6 +167,14 @@
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
       </proof>
       <proof
        prover="4"
@@ -174,21 +190,31 @@
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="4. loop invariant preservation"
-      sum="cb200c38885553f945a663bd313503f5"
+      sum="4b70ad6b99122c77a0a3def48bd0ccf3"
       proved="true"
       expanded="false"
-      shape="anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV12ashiftV0V14V5Iainfix &lt;=V14V11Aainfix &lt;V1V14FAainfix &gt;=aselectV12ashiftV0V15V5Iainfix &lt;V15V13Aainfix &lt;V11V15FAa_PermutV0V1V2V12V4Aainfix &lt;=V13ainfix +V2c1Aainfix &lt;V11V13Aainfix &lt;=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V16V5Iainfix &lt;=V16V9Aainfix &lt;V1V16FAainfix &gt;=aselectV10ashiftV0V17V5Iainfix &lt;V17V8Aainfix &lt;V9V17FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="loop invariant preservationanot_assignsV4V3V12apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV12ashiftV0V14V5Iainfix &lt;=V14V11Aainfix &lt;V1V14FAainfix &gt;=aselectV12ashiftV0V15V5Iainfix &lt;V15V13Aainfix &lt;V11V15FAa_PermutV0V1V2V12V3Aainfix &lt;=V13ainfix +V2c1Aainfix &lt;V11V13Aainfix &lt;=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV4V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV4V3V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V16V5Iainfix &lt;=V16V9Aainfix &lt;V1V16FAainfix &gt;=aselectV10ashiftV0V17V5Iainfix &lt;V17V8Aainfix &lt;V9V17FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1FINainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
       <label
        name="expl:VC for quick_rec_ensures_default"/>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="2.36"/>
+      </proof>
       <proof
        prover="4"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="3.58"/>
+       <result status="valid" time="0.19"/>
       </proof>
      </goal>
      <goal
@@ -196,10 +222,12 @@
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="5. loop invariant preservation"
-      sum="0dcf9544672a3d34ae17b98fb7c1f3d6"
+      sum="02f13ed1cfb482ec2b057d44299408c5"
       proved="true"
       expanded="false"
-      shape="anot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V12V5Iainfix &lt;=V12V9Aainfix &lt;V1V12FAainfix &gt;=aselectV10ashiftV0V13V5Iainfix &lt;V13V11Aainfix &lt;V9V13FAa_PermutV0V1V2V10V4Aainfix &lt;=V11ainfix +V2c1Aainfix &lt;V9V11Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V11ainfix +V8c1FIainfix &lt;aselectV10ashiftV0V8V5NIainfix &lt;=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="loop invariant preservationanot_assignsV4V3V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V12V5Iainfix &lt;=V12V9Aainfix &lt;V1V12FAainfix &gt;=aselectV10ashiftV0V13V5Iainfix &lt;V13V11Aainfix &lt;V9V13FAa_PermutV0V1V2V10V3Aainfix &lt;=V11ainfix +V2c1Aainfix &lt;V9V11Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V11ainfix +V8c1FINainfix &lt;aselectV10ashiftV0V8V5Iainfix &lt;=V8V2Ianot_assignsV4V3V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1FINainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
       <label
@@ -210,7 +238,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="1"
@@ -218,7 +246,15 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.16"/>
       </proof>
       <proof
        prover="4"
@@ -226,7 +262,7 @@
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.85"/>
+       <result status="valid" time="0.35"/>
       </proof>
      </goal>
      <goal
@@ -234,10 +270,12 @@
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="6. assertion"
-      sum="032018d45187725b74168bb2897bdc7b"
+      sum="b410d89d58cd239f5ab934bb46f7fe4d"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V11V5Iainfix &lt;=V11V9Aainfix &lt;V1V11FAainfix &gt;=aselectV10ashiftV0V12V5Iainfix &lt;V12V8Aainfix &lt;V9V12FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="assertionainfix &lt;=V9V2Aainfix &lt;=V1V9INainfix &lt;=V8V2Ianot_assignsV4V3V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V11V5Iainfix &lt;=V11V9Aainfix &lt;V1V11FAainfix &gt;=aselectV10ashiftV0V12V5Iainfix &lt;V12V8Aainfix &lt;V9V12FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1FINainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
       <label
@@ -259,6 +297,14 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
        prover="4"
        timelimit="5"
        memlimit="0"
@@ -272,10 +318,12 @@
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="7. assertion"
-      sum="8911688d0e2cdb2ebc6be2f821d08437"
+      sum="1d11ab1efae03403cfe4136eaa120143"
       proved="true"
       expanded="false"
-      shape="a_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V12V5Iainfix &lt;=V12V9Aainfix &lt;V1V12FAainfix &gt;=aselectV10ashiftV0V13V5Iainfix &lt;V13V8Aainfix &lt;V9V13FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="assertiona_PermutV0V1V2V11V10Ianot_assignsV4V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9INainfix &lt;=V8V2Ianot_assignsV4V3V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V12V5Iainfix &lt;=V12V9Aainfix &lt;V1V12FAainfix &gt;=aselectV10ashiftV0V13V5Iainfix &lt;V13V8Aainfix &lt;V9V13FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1FINainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
       <label
@@ -297,6 +345,14 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
        prover="4"
        timelimit="5"
        memlimit="0"
@@ -310,21 +366,23 @@
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="8. postcondition"
-      sum="237006c37ca55443ea83ab0522907b1c"
+      sum="404233de07b3970c1380835b887c91b4"
       proved="true"
       expanded="false"
-      shape="anot_assignsV3V4V13apset_rangeapset_singletonV0V1V2Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="postconditionanot_assignsV4V3V15apset_rangeapset_singletonV0V1V2Ianot_assignsV4V13V15apset_rangeapset_singletonV0V14V2Aa_SortedV0V14ainfix +V2c1V15Aa_PermutV0V14V2V15V13FLainfix +V9c1Ianot_assignsV4V11V13apset_rangeapset_singletonV0V1V12Aa_SortedV0V1ainfix +V12c1V13Aa_PermutV0V1V12V13V11FLainfix -V9c1Ia_PermutV0V1V2V11V10Ianot_assignsV4V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9INainfix &lt;=V8V2Ianot_assignsV4V3V10apset_rangeapset_singletonV0V1V2Aainfix &lt;aselectV10ashiftV0V16V5Iainfix &lt;=V16V9Aainfix &lt;V1V16FAainfix &gt;=aselectV10ashiftV0V17V5Iainfix &lt;V17V8Aainfix &lt;V9V17FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1FINainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, default behavior"/>
       <label
        name="expl:VC for quick_rec_ensures_default"/>
       <proof
-       prover="4"
+       prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.80"/>
+       <result status="valid" time="1.16"/>
       </proof>
      </goal>
     </transf>
@@ -334,10 +392,12 @@
     locfile="../../quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="VC for quick_rec_ensures_permutation"
-    sum="9904f260db809ad2818390d65bd3eac5"
+    sum="b9464bdae4a6bc8877739a8444931b3f"
     proved="false"
     expanded="true"
-    shape="iainfix &gt;=V1V2a_PermutV0V1V2V4V4a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+    shape="ia_PermutV0V1V2V15V3Ianot_assignsV4V13V15apset_rangeapset_singletonV0V14V2Aa_SortedV0V14ainfix +V2c1V15Aa_PermutV0V14V2V15V13FLainfix +V9c1Ianot_assignsV4V11V13apset_rangeapset_singletonV0V1V12Aa_SortedV0V1ainfix +V12c1V13Aa_PermutV0V1V12V13V11FLainfix -V9c1Ia_PermutV0V1V2V11V10Ianot_assignsV4V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9INainfix &lt;=V8V2Iainfix &lt;aselectV10ashiftV0V16V5Iainfix &lt;=V16V9Aainfix &lt;V1V16FAainfix &gt;=aselectV10ashiftV0V17V5Iainfix &lt;V17V8Aainfix &lt;V9V17FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1Fa_PermutV0V1V2V3V3ainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function quick_rec, Behavior `permutation&apos;"/>
     <label
@@ -351,10 +411,12 @@
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="1. postcondition"
-      sum="7adad59e6fd904f7ee3d5251d06cc5c4"
+      sum="25a6e6acf3febd7933849096ed974ebe"
       proved="true"
       expanded="false"
-      shape="a_PermutV0V1V2V4V4Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="postconditiona_PermutV0V1V2V3V3Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, Behavior `permutation&apos;"/>
       <label
@@ -376,6 +438,14 @@
        <result status="valid" time="0.05"/>
       </proof>
       <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
        prover="4"
        timelimit="5"
        memlimit="0"
@@ -389,10 +459,12 @@
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="2. postcondition"
-      sum="c5a718cfe01cbd562e85cdf9d3f30014"
+      sum="cdf021f2d41bcb63ecb4c37548ec5519"
       proved="false"
       expanded="true"
-      shape="a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="postconditiona_PermutV0V1V2V15V3Ianot_assignsV4V13V15apset_rangeapset_singletonV0V14V2Aa_SortedV0V14ainfix +V2c1V15Aa_PermutV0V14V2V15V13FLainfix +V9c1Ianot_assignsV4V11V13apset_rangeapset_singletonV0V1V12Aa_SortedV0V1ainfix +V12c1V13Aa_PermutV0V1V12V13V11FLainfix -V9c1Ia_PermutV0V1V2V11V10Ianot_assignsV4V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9INainfix &lt;=V8V2Iainfix &lt;aselectV10ashiftV0V16V5Iainfix &lt;=V16V9Aainfix &lt;V1V16FAainfix &gt;=aselectV10ashiftV0V17V5Iainfix &lt;V17V8Aainfix &lt;V9V17FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1FINainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, Behavior `permutation&apos;"/>
       <label
@@ -400,26 +472,26 @@
       <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="6.16"/>
+       <result status="unknown" time="0.80"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.77"/>
+       <result status="timeout" time="5.43"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.43"/>
+       <result status="timeout" time="4.98"/>
       </proof>
       <proof
        prover="3"
@@ -432,10 +504,10 @@
       <proof
        prover="4"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="6.00"/>
+       <result status="timeout" time="4.98"/>
       </proof>
      </goal>
     </transf>
@@ -445,10 +517,12 @@
     locfile="../../quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="VC for quick_rec_ensures_sorted"
-    sum="6479c8496ccc20fa2e27156c43f10475"
+    sum="83621251e8e0d22246dc50f56f91dea2"
     proved="false"
     expanded="true"
-    shape="iainfix &gt;=V1V2a_SortedV0V1ainfix +V2c1V4a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+    shape="ia_SortedV0V1ainfix +V2c1V15Ianot_assignsV4V13V15apset_rangeapset_singletonV0V14V2Aa_SortedV0V14ainfix +V2c1V15Aa_PermutV0V14V2V15V13FLainfix +V9c1Ianot_assignsV4V11V13apset_rangeapset_singletonV0V1V12Aa_SortedV0V1ainfix +V12c1V13Aa_PermutV0V1V12V13V11FLainfix -V9c1Ia_PermutV0V1V2V11V10Ianot_assignsV4V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9INainfix &lt;=V8V2Iainfix &lt;aselectV10ashiftV0V16V5Iainfix &lt;=V16V9Aainfix &lt;V1V16FAainfix &gt;=aselectV10ashiftV0V17V5Iainfix &lt;V17V8Aainfix &lt;V9V17FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1Fa_SortedV0V1ainfix +V2c1V3ainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function quick_rec, Behavior `sorted&apos;"/>
     <label
@@ -462,10 +536,12 @@
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="1. postcondition"
-      sum="6b33982c710ab661fa5f9b0679b6f0c4"
+      sum="366fb5f5b9bda5cad0300d90d6a535a3"
       proved="true"
       expanded="false"
-      shape="a_SortedV0V1ainfix +V2c1V4Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="postconditiona_SortedV0V1ainfix +V2c1V3Iainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, Behavior `sorted&apos;"/>
       <label
@@ -487,12 +563,20 @@
        <result status="valid" time="0.04"/>
       </proof>
       <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
        prover="4"
        timelimit="5"
        memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.19"/>
+       <result status="valid" time="0.03"/>
       </proof>
      </goal>
      <goal
@@ -500,10 +584,12 @@
       locfile="../../quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="2. postcondition"
-      sum="1d646841a0a4d035ee80bf5de9bc4732"
+      sum="d65eb70e54ffc33389ac89da075c31ba"
       proved="false"
       expanded="true"
-      shape="a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;=V8V2NIainfix &lt;aselectV10ashiftV0V14V5Iainfix &lt;=V14V9Aainfix &lt;V1V14FAainfix &gt;=aselectV10ashiftV0V15V5Iainfix &lt;V15V8Aainfix &lt;V9V15FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+      shape="postconditiona_SortedV0V1ainfix +V2c1V15Ianot_assignsV4V13V15apset_rangeapset_singletonV0V14V2Aa_SortedV0V14ainfix +V2c1V15Aa_PermutV0V14V2V15V13FLainfix +V9c1Ianot_assignsV4V11V13apset_rangeapset_singletonV0V1V12Aa_SortedV0V1ainfix +V12c1V13Aa_PermutV0V1V12V13V11FLainfix -V9c1Ia_PermutV0V1V2V11V10Ianot_assignsV4V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix &lt;=V9V2Aainfix &lt;=V1V9INainfix &lt;=V8V2Iainfix &lt;aselectV10ashiftV0V16V5Iainfix &lt;=V16V9Aainfix &lt;V1V16FAainfix &gt;=aselectV10ashiftV0V17V5Iainfix &lt;V17V8Aainfix &lt;V9V17FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1FINainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function quick_rec, Behavior `sorted&apos;"/>
       <label
@@ -511,7 +597,7 @@
       <proof
        prover="0"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="timeout" time="5.14"/>
@@ -519,18 +605,18 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.03"/>
+       <result status="timeout" time="5.18"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.18"/>
+       <result status="timeout" time="4.98"/>
       </proof>
       <proof
        prover="3"
@@ -543,7 +629,7 @@
       <proof
        prover="4"
        timelimit="5"
-       memlimit="0"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="timeout" time="5.14"/>
@@ -556,10 +642,10 @@
     locfile="../../quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
     expl="VC for quick_rec_safety"
-    sum="28b74d390e87c00d3c4325fb6b2a77ae"
+    sum="70fd747914a15e4204e7b2dce257cfcc"
     proved="true"
     expanded="false"
-    shape="iainfix &lt;=V8V2iainfix &lt;aselectV10ashiftV0V8V5ainfix &lt;ainfix -V2V13ainfix -V2V8Aainfix &lt;=c0ainfix -V2V8Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FAainfix &gt;=aoffset_maxV3V0V11Aainfix &lt;=aoffset_minV3V0V11Aainfix &gt;=aoffset_maxV3V0V8Aainfix &lt;=aoffset_minV3V0V8Iainfix =V11ainfix +V9c1Fainfix &lt;ainfix -V2V14ainfix -V2V8Aainfix &lt;=c0ainfix -V2V8Iainfix =V14ainfix +V8c1FAainfix &lt;=V8aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V8ainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0ainfix +V9c1Aazwf_zeroainfix -V2ainfix +V9c1ainfix -V2V1Ianot_assignsV3V15V16apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V16Aa_PermutV0V1ainfix -V9c1V16V15FAainfix &gt;=aoffset_maxV3V0ainfix -V9c1Aainfix &lt;=aoffset_minV3V0V1Aazwf_zeroainfix -ainfix -V9c1V1ainfix -V2V1Ia_PermutV0V1V2V15V10Ianot_assignsV3V10V15apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V15V10FAainfix &gt;=aoffset_maxV3V0V9Aainfix &lt;=aoffset_minV3V0V9Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1Iainfix &lt;=V9V2Aainfix &lt;=V1V9Iainfix &lt;aselectV10ashiftV0V17V5Iainfix &lt;=V17V9Aainfix &lt;V1V17FAainfix &gt;=aselectV10ashiftV0V18V5Iainfix &lt;V18V8Aainfix &lt;V9V18FAa_PermutV0V1V2V10V4Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=V1V2NIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V1FF">
+    shape="iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V14Aazwf_zeroainfix -V2V14ainfix -V2V1Lainfix +V9c1Ianot_assignsV4V11V13apset_rangeapset_singletonV0V1V12Aa_SortedV0V1ainfix +V12c1V13Aa_PermutV0V1V12V13V11FAainfix &gt;=aoffset_maxV4V0V12Aainfix &lt;=aoffset_minV4V0V1Aazwf_zeroainfix -V12V1ainfix -V2V1Lainfix -V9c1Ia_PermutV0V1V2V11V10Ianot_assignsV4V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FAainfix &gt;=aoffset_maxV4V0V9Aainfix &lt;=aoffset_minV4V0V9Aainfix &gt;=aoffset_maxV4V0V1Aainfix &lt;=aoffset_minV4V0V1Iainfix &lt;=V9V2Aainfix &lt;=V1V9iainfix &lt;ainfix -V2V15ainfix -V2V8Aainfix &lt;=c0ainfix -V2V8Iainfix =V15ainfix +V8c1Fainfix &lt;ainfix -V2V18ainfix -V2V8Aainfix &lt;=c0ainfix -V2V8Iainfix =V18ainfix +V8c1FIa_PermutV0V1V2V17V10Ianot_assignsV4V10V17apset_unionapset_rangeapset_singletonV0V16V16apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V16V17V10FAainfix &gt;=aoffset_maxV4V0V16Aainfix &lt;=aoffset_minV4V0V16Aainfix &gt;=aoffset_maxV4V0V8Aainfix &lt;=aoffset_minV4V0V8Iainfix =V16ainfix +V9c1Fainfix &lt;aselectV10ashiftV0V8V5Aainfix &lt;=V8aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V8ainfix &lt;=V8V2Iainfix &lt;aselectV10ashiftV0V19V5Iainfix &lt;=V19V9Aainfix &lt;V1V19FAainfix &gt;=aselectV10ashiftV0V20V5Iainfix &lt;V20V8Aainfix &lt;V9V20FAa_PermutV0V1V2V10V3Aainfix &lt;=V8ainfix +V2c1Aainfix &lt;V9V8Aainfix &lt;=V1V9Aainfix =aselectV10ashiftV0V1V5FIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV3ashiftV0V1FAainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1INainfix &gt;=V1V2Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1F">
     <label
      name="expl:Function quick_rec, Safety"/>
     <label
@@ -581,6 +667,14 @@
      <result status="valid" time="0.08"/>
     </proof>
     <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.12"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
      memlimit="0"
@@ -594,10 +688,12 @@
     locfile="../../quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="VC for quick_sort_ensures_default"
-    sum="24148504435637276ef3983247fd7ae9"
+    sum="8a0337983d21be540e066892abfd3aa2"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function quick_sort, default behavior"/>
     <label
@@ -619,6 +715,14 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
      memlimit="0"
@@ -632,10 +736,12 @@
     locfile="../../quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="VC for quick_sort_ensures_permutation"
-    sum="40288d30d356501490118ca4a78cb27a"
+    sum="8cea801ad160b98a6e6802f6f65e9877"
     proved="true"
     expanded="false"
-    shape="a_PermutV0c0ainfix -V1c1V4V3Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
+    shape="a_PermutV0c0ainfix -V1c1V5V2Ianot_assignsV3V2V5apset_rangeapset_singletonV0c0V4Aa_SortedV0c0ainfix +V4c1V5Aa_PermutV0c0V4V5V2FLainfix -V1c1Iainfix &gt;=aoffset_maxV3V0ainfix -V1c1Aainfix &lt;=aoffset_minV3V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function quick_sort, Behavior `permutation&apos;"/>
     <label
@@ -657,6 +763,14 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
      memlimit="0"
@@ -670,10 +784,12 @@
     locfile="../../quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="VC for quick_sort_ensures_sorted"
-    sum="7e87f075199ee4ceee6b8b73ff45a61d"
+    sum="3e540633bd0a1e8c5d6a58b8b492052c"
     proved="true"
     expanded="false"
-    shape="a_SortedV0c0V1V4Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FF">
+    shape="a_SortedV0c0V1V5Ianot_assignsV3V2V5apset_rangeapset_singletonV0c0V4Aa_SortedV0c0ainfix +V4c1V5Aa_PermutV0c0V4V5V2FLainfix -V1c1Iainfix &gt;=aoffset_maxV3V0ainfix -V1c1Aainfix &lt;=aoffset_minV3V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function quick_sort, Behavior `sorted&apos;"/>
     <label
@@ -695,6 +811,14 @@
      <result status="valid" time="0.04"/>
     </proof>
     <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
      memlimit="0"
@@ -708,7 +832,7 @@
     locfile="../../quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="VC for quick_sort_safety"
-    sum="5ea33fbbef03502b8181b044bc78d1f4"
+    sum="7d630025d7ce32bd43771836d9cb611e"
     proved="true"
     expanded="false"
     shape="ainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0F">
@@ -733,6 +857,14 @@
      <result status="valid" time="0.03"/>
     </proof>
     <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
      prover="4"
      timelimit="5"
      memlimit="0"
@@ -746,10 +878,12 @@
     locfile="../../quick_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="VC for swap_ensures_default"
-    sum="a3f07b8e1b3bf692c943583e19854410"
+    sum="1b4922b405977abf0f561399cd7a3007"
     proved="true"
     expanded="false"
-    shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
+    shape="anot_assignsV4V3V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V3Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV3ashiftV0V1aselectV3ashiftV0V2FIainfix =V5aselectV3ashiftV0V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V2Aainfix &gt;=aoffset_maxV4V0V1Aainfix &lt;=aoffset_minV4V0V1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function swap, default behavior"/>
     <label
@@ -760,7 +894,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.08"/>
+     <result status="valid" time="0.59"/>
     </proof>
     <proof
      prover="1"
@@ -768,7 +902,15 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.85"/>
+     <result status="valid" time="0.43"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.54"/>
     </proof>
     <proof
      prover="4"
@@ -776,7 +918,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.67"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
    <goal
@@ -784,10 +926,10 @@
     locfile="../../quick_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="VC for swap_safety"
-    sum="e2e73b55bf034ee705fad1f6e29fa8f8"
+    sum="cb6481effdffa17739ddb22987f4a657"
     proved="true"
     expanded="false"
-    shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FF">
+    shape="ainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Iainfix =V6astoreV3ashiftV0V1aselectV3ashiftV0V2FAainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Aainfix &lt;=V2aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V2Iainfix =V5aselectV3ashiftV0V1FAainfix &lt;=V1aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V1Iainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V2Aainfix &gt;=aoffset_maxV4V0V1Aainfix &lt;=aoffset_minV4V0V1F">
     <label
      name="expl:Function swap, Safety"/>
     <label
@@ -807,6 +949,14 @@
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="4"
