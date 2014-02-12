@@ -129,7 +129,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.19"/>
+         <result status="valid" time="0.07"/>
         </proof>
        </goal>
        <goal
@@ -281,7 +281,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.40"/>
+         <result status="valid" time="0.22"/>
         </proof>
        </goal>
        <goal
@@ -411,7 +411,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.43"/>
+     <result status="valid" time="0.18"/>
     </proof>
     <proof
      prover="3"
@@ -497,7 +497,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.52"/>
+     <result status="valid" time="0.22"/>
     </proof>
     <proof
      prover="3"
@@ -505,7 +505,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.80"/>
+     <result status="valid" time="0.36"/>
     </proof>
     <proof
      prover="4"
@@ -543,7 +543,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.58"/>
+     <result status="valid" time="0.26"/>
     </proof>
     <proof
      prover="4"
@@ -551,7 +551,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.33"/>
+     <result status="valid" time="0.11"/>
     </proof>
    </goal>
    <goal
@@ -594,7 +594,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.44"/>
+       <result status="valid" time="0.74"/>
       </proof>
       <proof
        prover="3"
@@ -602,7 +602,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.27"/>
+       <result status="valid" time="0.12"/>
       </proof>
      </goal>
      <goal
@@ -693,7 +693,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.40"/>
+         <result status="valid" time="0.19"/>
         </proof>
        </goal>
        <goal
@@ -717,7 +717,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.45"/>
+         <result status="valid" time="0.20"/>
         </proof>
         <proof
          prover="3"
@@ -757,7 +757,7 @@
          memlimit="1000"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.46"/>
+         <result status="valid" time="0.27"/>
         </proof>
         <proof
          prover="3"
@@ -919,13 +919,13 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="0.67"/>
+       <result status="unknown" time="0.32"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        memlimit="1000"
-       obsolete="true"
+       obsolete="false"
        archived="false">
        <result status="timeout" time="5.18"/>
       </proof>
@@ -975,7 +975,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.39"/>
+       <result status="valid" time="0.17"/>
       </proof>
      </goal>
     </transf>
@@ -999,7 +999,7 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.45"/>
+     <result status="valid" time="0.22"/>
     </proof>
     <proof
      prover="2"

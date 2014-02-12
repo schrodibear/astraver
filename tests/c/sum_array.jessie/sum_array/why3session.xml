@@ -52,13 +52,13 @@
      memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="2.12"/>
+     <result status="unknown" time="1.77"/>
     </proof>
     <proof
      prover="1"
      timelimit="3"
      memlimit="0"
-     obsolete="true"
+     obsolete="false"
      archived="false">
      <result status="timeout" time="3.01"/>
     </proof>
@@ -118,7 +118,7 @@
      prover="1"
      timelimit="3"
      memlimit="0"
-     obsolete="true"
+     obsolete="false"
      archived="false">
      <result status="timeout" time="3.11"/>
     </proof>
@@ -621,7 +621,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.39"/>
+       <result status="valid" time="0.24"/>
       </proof>
      </goal>
      <goal
@@ -645,7 +645,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="4.83"/>
+       <result status="valid" time="3.69"/>
       </proof>
       <proof
        prover="3"
