@@ -379,10 +379,10 @@ let f_ensures_default =
      (let i = ref (any_int void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (i := (C_2:
-             (let jessie_<somenum> = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
+             (let _jessie_<somenum> = (C_1: (double_value x_0)) in
+             (truncate_real_to_int _jessie_<somenum>)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(real_of_int(result), double_value(x_0))), 1.0)) }
@@ -398,10 +398,10 @@ let f_ensures_negative =
      (let i = ref (any_int void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (i := (C_2:
-             (let jessie_<somenum> = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
+             (let _jessie_<somenum> = (C_1: (double_value x_0)) in
+             (truncate_real_to_int _jessie_<somenum>)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int((0), result))
@@ -426,10 +426,10 @@ let f_ensures_positive =
      (let i = ref (any_int void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (i := (C_2:
-             (let jessie_<somenum> = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
+             (let _jessie_<somenum> = (C_1: (double_value x_0)) in
+             (truncate_real_to_int _jessie_<somenum>)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_int((0), result))
@@ -453,10 +453,10 @@ let f_safety =
      (let i = ref (any_int void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (i := (C_2:
-             (let jessie_<somenum> = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
+             (let _jessie_<somenum> = (C_1: (double_value x_0)) in
+             (truncate_real_to_int _jessie_<somenum>)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 

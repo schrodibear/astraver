@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only adr_local.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD adr_local.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only adr_local.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/adr_local.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir adr_local.jessie
 [jessie] File adr_local.jessie/adr_local.jc written.
@@ -590,26 +590,32 @@ let f_ensures_default =
      (let tmp = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_3:
-     (C_4:
-     (C_5:
-     (C_7:
-     (C_8:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (tmp := (C_2:
                (JC_<somenum>:
                (((alloc_struct_charP (1)) charP_alloc_table) charP_tag_table)))) in
        void);
-      (let jessie_<somenum> = (res_0 := (safe_uint32_of_integer_ (0))) in void);
-      (let jessie_<somenum> = a_0 in
-      (let jessie_<somenum> = b_0 in
-      (let jessie_<somenum> = !tmp in
-      (JC_<somenum>: (((comp jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))));
-      (let jessie_<somenum> =
-      (__retres := (C_6: (safe_int32_of_integer_ (integer_of_uint32 !res_0)))) in
-      void); ((safe_free_parameter charP_alloc_table) !tmp);
-      (return := !__retres); (raise Return) end)))))))); absurd  end with
-   Return -> !return end))
+      (C_4:
+      begin
+        (let _jessie_<somenum> = (res_0 := (safe_uint32_of_integer_ (0))) in void);
+       (C_5:
+       begin
+         (let _jessie_<somenum> = a_0 in
+         (let _jessie_<somenum> = b_0 in
+         (let _jessie_<somenum> = !tmp in
+         (JC_<somenum>: (((comp _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))));
+        (C_7:
+        begin
+          (let _jessie_<somenum> =
+          (__retres := (C_6:
+                       (safe_int32_of_integer_ (integer_of_uint32 !res_0)))) in
+          void);
+         (C_8:
+         begin
+           ((safe_free_parameter charP_alloc_table) !tmp);
+          (return := !__retres); (raise Return) end) end) end) end) end))));
+    absurd  end with Return -> !return end))
   { (JC_<somenum>:
     not_assigns(charP_alloc_table@, charP_charM@, charP_charM, pset_empty)) }
 
@@ -625,30 +631,36 @@ let f_safety =
      (let tmp = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_3:
-     (C_4:
-     (C_5:
-     (C_7:
-     (C_8:
      begin
-       (let jessie_<somenum> =
-       (tmp := (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (tmp := (let _jessie_<somenum> =
                (C_2:
                (JC_<somenum>:
                (((alloc_struct_charP_requires (1)) charP_alloc_table) charP_tag_table))) in
                (JC_<somenum>:
                (assert
-               { ge_int(offset_max(charP_alloc_table, jessie_<somenum>), (0)) };
-               jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (res_0 := (safe_uint32_of_integer_ (0))) in void);
-      (let jessie_<somenum> = a_0 in
-      (let jessie_<somenum> = b_0 in
-      (let jessie_<somenum> = !tmp in
-      (JC_<somenum>: (((comp_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))));
-      (let jessie_<somenum> =
-      (__retres := (C_6:
-                   (JC_<somenum>: (int32_of_integer_ (integer_of_uint32 !res_0))))) in
-      void); ((free_parameter charP_alloc_table) !tmp);
-      (return := !__retres); (raise Return) end)))))))); absurd  end with
+               { ge_int(offset_max(charP_alloc_table, _jessie_<somenum>), (0)) };
+               _jessie_<somenum>)))) in void);
+      (C_4:
+      begin
+        (let _jessie_<somenum> = (res_0 := (safe_uint32_of_integer_ (0))) in void);
+       (C_5:
+       begin
+         (let _jessie_<somenum> = a_0 in
+         (let _jessie_<somenum> = b_0 in
+         (let _jessie_<somenum> = !tmp in
+         (JC_<somenum>: (((comp_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))));
+        (C_7:
+        begin
+          (let _jessie_<somenum> =
+          (__retres := (C_6:
+                       (JC_<somenum>:
+                       (int32_of_integer_ (integer_of_uint32 !res_0))))) in
+          void);
+         (C_8:
+         begin
+           ((free_parameter charP_alloc_table) !tmp); (return := !__retres);
+          (raise Return) end) end) end) end) end)))); absurd  end with
    Return -> !return end)) { true }
 
 
@@ -670,7 +682,7 @@ why --project [...] why/adr_local.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/adr_local_po3.why">
-      <location file = "why/adr_local.why" line = "562" begin = "17" end = "69"/>
+      <location file = "why/adr_local.why" line = "564" begin = "17" end = "70"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/adr_local_po4.why">
@@ -684,7 +696,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/adr_local_po6.why">
-      <location file = "why/adr_local.why" line = "572" begin = "14" end = "53"/>
+      <location file = "why/adr_local.why" line = "584" begin = "12" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

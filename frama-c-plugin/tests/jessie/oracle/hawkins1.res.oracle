@@ -510,12 +510,12 @@ let f_ensures_default =
   try
    (C_4:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (safe_uint32_of_integer_ (C_2:
-                              (let jessie_<somenum> = (C_1: (double_value b)) in
-                              (truncate_real_to_int jessie_<somenum>)))) in
-     (let jessie_<somenum> = a in
-     (((safe_upd_ unsigned_intP_unsigned_intM_a_1) jessie_<somenum>) jessie_<somenum>)));
+                              (let _jessie_<somenum> = (C_1: (double_value b)) in
+                              (truncate_real_to_int _jessie_<somenum>)))) in
+     (let _jessie_<somenum> = a in
+     (((safe_upd_ unsigned_intP_unsigned_intM_a_1) _jessie_<somenum>) _jessie_<somenum>)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: true) }
 
@@ -526,14 +526,14 @@ let f_safety =
   try
    (C_4:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (JC_<somenum>:
      (uint32_of_integer_ (C_2:
-                         (let jessie_<somenum> = (C_1: (double_value b)) in
-                         (truncate_real_to_int jessie_<somenum>))))) in
-     (let jessie_<somenum> = a in
+                         (let _jessie_<somenum> = (C_1: (double_value b)) in
+                         (truncate_real_to_int _jessie_<somenum>))))) in
+     (let _jessie_<somenum> = a in
      (JC_<somenum>:
-     ((((upd_ !unsigned_intP_a_1_alloc_table) unsigned_intP_unsigned_intM_a_1) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ !unsigned_intP_a_1_alloc_table) unsigned_intP_unsigned_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 

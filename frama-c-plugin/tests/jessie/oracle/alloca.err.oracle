@@ -1,20 +1,20 @@
-File "why/alloca.why", line 1022, characters 8-1431:
+File "why/alloca.why", line 1057, characters 13-1650:
 warning: mutable intP_intM_t_2_11 is not declared in effect; added as read
-File "why/alloca.why", line 1022, characters 8-1431:
+File "why/alloca.why", line 1057, characters 13-1650:
 warning: mutable intP_intM_u_0_12 is not declared in effect; added as read
-File "why/alloca.why", line 1022, characters 8-1431:
+File "why/alloca.why", line 1057, characters 13-1650:
 warning: mutable intP_u_0_12_alloc_table is not declared in effect; added as read
-File "why/alloca.why", line 1022, characters 8-1431:
+File "why/alloca.why", line 1057, characters 13-1650:
 warning: mutable t_2_0 is not declared in effect; added as read
-File "why/alloca.why", line 1022, characters 8-1431:
+File "why/alloca.why", line 1057, characters 13-1650:
 warning: mutable u_0_0 is not declared in effect; added as read
-File "why/alloca.why", line 1248, characters 8-1430:
+File "why/alloca.why", line 1308, characters 13-1649:
 warning: mutable intP_intM_t_2_11 is not declared in effect; added as read
-File "why/alloca.why", line 1248, characters 8-1430:
+File "why/alloca.why", line 1308, characters 13-1649:
 warning: mutable intP_intM_u_0_12 is not declared in effect; added as read
-File "why/alloca.why", line 1248, characters 8-1430:
+File "why/alloca.why", line 1308, characters 13-1649:
 warning: mutable intP_u_0_12_alloc_table is not declared in effect; added as read
-File "why/alloca.why", line 1248, characters 8-1430:
+File "why/alloca.why", line 1308, characters 13-1649:
 warning: mutable t_2_0 is not declared in effect; added as read
-File "why/alloca.why", line 1248, characters 8-1430:
+File "why/alloca.why", line 1308, characters 13-1649:
 warning: mutable u_0_0 is not declared in effect; added as read

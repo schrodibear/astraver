@@ -339,24 +339,26 @@ let fact_ensures_default =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (C_4:
       begin
         (if ((eq_int_ n_1) (0))
         then
          (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (1)) in void);
+           (let _jessie_<somenum> = (__retres := (1)) in void);
           (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> =
-       (tmp := (C_3:
-               (let jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
-               (JC_<somenum>: (fact jessie_<somenum>))))) in void);
-       (C_6:
+       (C_4:
        begin
-         void;
-        (let jessie_<somenum> = (__retres := (C_5: ((mul_int n_1) !tmp))) in void);
-        (raise (Return_label_exc void)) end) end) with
-      Return_label_exc jessie_<somenum> ->
+         (let _jessie_<somenum> =
+         (tmp := (C_3:
+                 (let _jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
+                 (JC_<somenum>: (fact _jessie_<somenum>))))) in void);
+        begin
+          void;
+         (C_6:
+         begin
+           (let _jessie_<somenum> = (__retres := (C_5: ((mul_int n_1) !tmp))) in
+           void); (raise (Return_label_exc void)) end) end end) end with
+      Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>: is_prod((1), n_1, result)) }
@@ -371,26 +373,28 @@ let fact_safety =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (C_4:
       begin
         (if ((eq_int_ n_1) (0))
         then
          (C_1:
          begin
-           (let jessie_<somenum> = (__retres := (1)) in void);
+           (let _jessie_<somenum> = (__retres := (1)) in void);
           (raise (Return_label_exc void)) end) else void);
-       (let jessie_<somenum> =
-       (tmp := (C_3:
-               (let jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
-               (JC_<somenum>:
-               (check { zwf_zero((JC_<somenum> : jessie_<somenum>), (JC_<somenum> : n_1)) };
-               (JC_<somenum>: (fact_requires jessie_<somenum>))))))) in void);
-       (C_6:
+       (C_4:
        begin
-         void;
-        (let jessie_<somenum> = (__retres := (C_5: ((mul_int n_1) !tmp))) in void);
-        (raise (Return_label_exc void)) end) end) with
-      Return_label_exc jessie_<somenum> ->
+         (let _jessie_<somenum> =
+         (tmp := (C_3:
+                 (let _jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
+                 (JC_<somenum>:
+                 (check { zwf_zero((JC_<somenum> : _jessie_<somenum>), (JC_<somenum> : n_1)) };
+                 (JC_<somenum>: (fact_requires _jessie_<somenum>))))))) in void);
+        begin
+          void;
+         (C_6:
+         begin
+           (let _jessie_<somenum> = (__retres := (C_5: ((mul_int n_1) !tmp))) in
+           void); (raise (Return_label_exc void)) end) end end) end with
+      Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -408,11 +412,11 @@ why --project [...] why/fact.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/fact_po2.why">
-      <location file = "why/fact.why" line = "314" begin = "24" end = "67"/>
+      <location file = "why/fact.why" line = "317" begin = "26" end = "70"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/fact_po3.why">
-      <location file = "why/fact.why" line = "314" begin = "24" end = "67"/>
+      <location file = "why/fact.why" line = "317" begin = "26" end = "70"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/fact_po4.why">

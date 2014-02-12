@@ -467,7 +467,7 @@ let f_ensures_default =
      (let i = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (i := (C_2:
              (JC_<somenum>:
              (((alloc_struct_charP (integer_of_uint32 (C_1:
@@ -491,7 +491,7 @@ let f_safety =
      (let i = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (i := (C_2:
              (JC_<somenum>:
              (((alloc_struct_charP_requires (integer_of_uint32 (C_1:

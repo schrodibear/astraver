@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only stack.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD stack.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -add-symbolic-path PPCHOME:PPCHOME -jessie -jessie-gen-only stack.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD PPCHOME/tests/jessie/stack.c"
 [jessie] Starting Jessie translation
 [jessie] warning: \separated is not supported by Jessie. This predicate will be ignored
 [jessie] Producing Jessie files in subdir stack.jessie
@@ -770,10 +770,10 @@ let bar_ensures_default =
   try
    (C_17:
    begin
-     (let jessie_<somenum> = x_1 in
-     (let jessie_<somenum> = i in
+     (let _jessie_<somenum> = x_1 in
+     (let _jessie_<somenum> = i in
      (JC_<somenum>:
-     (((((((foo jessie_<somenum>) jessie_<somenum>) intP_intM_a_6) intP_a_6_alloc_table) A_x_2_alloc_table) A_a_x_2) A_n_1_x_2))));
+     (((((((foo _jessie_<somenum>) _jessie_<somenum>) intP_intM_a_6) intP_a_6_alloc_table) A_x_2_alloc_table) A_a_x_2) A_n_1_x_2))));
     (assert { (JC_<somenum>: (select(A_a_y_3, y) = select(A_a_y_3, y))) }; void);
     void; (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: true) }
@@ -814,10 +814,10 @@ let bar_safety =
   try
    (C_17:
    begin
-     (let jessie_<somenum> = x_1 in
-     (let jessie_<somenum> = i in
+     (let _jessie_<somenum> = x_1 in
+     (let _jessie_<somenum> = i in
      (JC_<somenum>:
-     (((((((foo_requires jessie_<somenum>) jessie_<somenum>) intP_intM_a_6) intP_a_6_alloc_table) A_x_2_alloc_table) A_a_x_2) A_n_1_x_2))));
+     (((((((foo_requires _jessie_<somenum>) _jessie_<somenum>) intP_intM_a_6) intP_a_6_alloc_table) A_x_2_alloc_table) A_a_x_2) A_n_1_x_2))));
     [ { } unit { (JC_<somenum>: (select(A_a_y_3, y) = select(A_a_y_3, y))) } ];
     void; (raise Return); (raise Return) end) with Return -> void end)
   { true }
@@ -849,13 +849,13 @@ let foo_ensures_assign_nth =
       (if ((lt_int_ (integer_of_int32 i_0)) (integer_of_int32 (C_5:
                                                               ((safe_acc_ A_n_1_x_0_1) x_0))))
       then
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (C_4:
-       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-       (let jessie_<somenum> = (C_1: ((safe_acc_ A_a_x_0_1) x_0)) in
-       (let jessie_<somenum> = (integer_of_int32 i_0) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       (((safe_upd_ intP_intM_a_4) jessie_<somenum>) jessie_<somenum>)))))) in void)
+       (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+       (let _jessie_<somenum> = (C_1: ((safe_acc_ A_a_x_0_1) x_0)) in
+       (let _jessie_<somenum> = (integer_of_int32 i_0) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+       (((safe_upd_ intP_intM_a_4) _jessie_<somenum>) _jessie_<somenum>)))))) in void)
       else void) else void); (raise Return); (raise Return) end with
    Return -> void end)
   { (JC_<somenum>:
@@ -889,13 +889,13 @@ let foo_ensures_assign_sth =
       (if ((lt_int_ (integer_of_int32 i_0)) (integer_of_int32 (C_5:
                                                               ((safe_acc_ A_n_1_x_0_1) x_0))))
       then
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (C_4:
-       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-       (let jessie_<somenum> = (C_1: ((safe_acc_ A_a_x_0_1) x_0)) in
-       (let jessie_<somenum> = (integer_of_int32 i_0) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       (((safe_upd_ intP_intM_a_4) jessie_<somenum>) jessie_<somenum>)))))) in void)
+       (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+       (let _jessie_<somenum> = (C_1: ((safe_acc_ A_a_x_0_1) x_0)) in
+       (let _jessie_<somenum> = (integer_of_int32 i_0) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+       (((safe_upd_ intP_intM_a_4) _jessie_<somenum>) _jessie_<somenum>)))))) in void)
       else void) else void); (raise Return); (raise Return) end with
    Return -> void end)
   { (JC_<somenum>:
@@ -942,13 +942,13 @@ let foo_ensures_default =
      (if ((lt_int_ (integer_of_int32 i_0)) (integer_of_int32 (C_5:
                                                              ((safe_acc_ A_n_1_x_0_1) x_0))))
      then
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_4:
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = (C_1: ((safe_acc_ A_a_x_0_1) x_0)) in
-      (let jessie_<somenum> = (integer_of_int32 i_0) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (((safe_upd_ intP_intM_a_4) jessie_<somenum>) jessie_<somenum>)))))) in void)
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let _jessie_<somenum> = (C_1: ((safe_acc_ A_a_x_0_1) x_0)) in
+      (let _jessie_<somenum> = (integer_of_int32 i_0) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (((safe_upd_ intP_intM_a_4) _jessie_<somenum>) _jessie_<somenum>)))))) in void)
      else void) else void); (raise Return); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
@@ -979,15 +979,15 @@ let foo_safety =
                                                               (JC_<somenum>:
                                                               (((acc_ A_x_0_1_alloc_table) A_n_1_x_0_1) x_0)))))
       then
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (C_4:
-       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+       (let _jessie_<somenum> =
        (C_1: (JC_<somenum>: (((acc_ A_x_0_1_alloc_table) A_a_x_0_1) x_0))) in
-       (let jessie_<somenum> = (integer_of_int32 i_0) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+       (let _jessie_<somenum> = (integer_of_int32 i_0) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
        (JC_<somenum>:
-       (((((offset_upd_ intP_a_4_alloc_table) intP_intM_a_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
+       (((((offset_upd_ intP_a_4_alloc_table) intP_intM_a_4) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>))))))) in
        void) else void) else void); (raise Return); (raise Return) end with
    Return -> void end) { true }
 

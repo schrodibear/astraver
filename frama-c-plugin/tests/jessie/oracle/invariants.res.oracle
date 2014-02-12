@@ -649,7 +649,7 @@ let f_ensures_default =
      (let t = ref (any_int32 void) in
      (C_4:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (t := (C_3:
              (safe_int32_of_integer_ (C_2:
                                      ((add_int (integer_of_int32 (C_1:
@@ -663,16 +663,17 @@ let f_ensures_default =
                                                                  (C_10:
                                                                  ((safe_acc_ !s_0_y_s_1) s_0)))) (20)))))))
       then
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (C_7:
        (safe_int32_of_integer_ (C_6:
                                ((add_int (integer_of_int32 !t)) (integer_of_int32 
                                                                  (C_5:
                                                                  ((safe_acc_ !intP_intM_c_2) 
                                                                   ((shift c) (0))))))))) in
-       (let jessie_<somenum> = s_0 in (((safe_upd_ s_0_x_s_1) jessie_<somenum>) jessie_<somenum>)))
-      else void); (raise Return) end)); (raise Return) end with Return ->
-   void end) { (JC_<somenum>: true) }
+       (let _jessie_<somenum> = s_0 in
+       (((safe_upd_ s_0_x_s_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
+      (raise Return) end)); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (n_1 : int32) ->
@@ -688,7 +689,7 @@ let f_safety =
      (let t = ref (any_int32 void) in
      (C_4:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (t := (C_3:
              (JC_<somenum>:
              (int32_of_integer_ (C_2:
@@ -704,7 +705,7 @@ let f_safety =
                                                                  (C_10:
                                                                  ((safe_acc_ !s_0_y_s_1) s_0)))) (20))))))))
       then
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (C_7:
        (JC_<somenum>:
        (int32_of_integer_ (C_6:
@@ -712,7 +713,7 @@ let f_safety =
                                                             (C_5:
                                                             ((safe_acc_ !intP_intM_c_2) 
                                                              ((shift c) (0)))))))))) in
-       (let jessie_<somenum> = s_0 in (((safe_upd_ s_0_x_s_1) jessie_<somenum>) jessie_<somenum>)))
+       (let _jessie_<somenum> = s_0 in (((safe_upd_ s_0_x_s_1) _jessie_<somenum>) _jessie_<somenum>)))
       else void); (raise Return) end)); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:

@@ -396,7 +396,7 @@ let f_ensures_default =
    begin
      (let __retres = ref (any_double void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (assert { true };
        ((C_1:
         begin   (__retres := (double_of_real_exact 1.0)); !__retres end))
@@ -414,12 +414,13 @@ let f_safety =
    begin
      (let __retres = ref (any_double void) in
      begin
-       (let jessie_<somenum> =
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (let _jessie_<somenum> =
        (assert { true };
        ((C_1:
         begin   (__retres := (double_of_real_exact 1.0)); !__retres end))) in
-       begin   [ { } unit { (JC_<somenum>: (true = true)) } ]; jessie_<somenum> end) in void);
+       begin   [ { } unit { (JC_<somenum>: (true = true)) } ]; _jessie_<somenum> end) in
+       void);
       [ { } unit reads __retres { (JC_<somenum>: (double_value(__retres) = 1.0)) } ];
       void; (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { true }

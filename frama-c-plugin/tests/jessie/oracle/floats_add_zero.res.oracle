@@ -419,18 +419,19 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (y := (C_1:
              (JC_<somenum>:
              (((add_double_safe nearest_even) x_0) (double_of_real_exact 0.0))))) in
        void);
       (assert { (JC_<somenum>: (double_value(y) = double_value(x_0))) }; void);
-      (C_4:
       begin
         void;
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end)))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+       (C_4:
+       begin
+         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres); (raise Return) end) end end)))); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -444,18 +445,19 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (y := (C_1:
              (JC_<somenum>:
              (((add_double nearest_even) x_0) (double_of_real_exact 0.0))))) in
        void);
       [ { } unit reads y { (JC_<somenum>: (double_value(y) = double_value(x_0))) } ];
-      (C_4:
       begin
         void;
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end)))); absurd  end with
-   Return -> !return end)) { true }
+       (C_4:
+       begin
+         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres); (raise Return) end) end end)))); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C floats_add_zero.jessie --quiet -f floats_add_zero.makefile project

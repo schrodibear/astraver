@@ -439,7 +439,7 @@ let ftest2_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (if ((lt_int_ (integer_of_int32 y)) (10))
@@ -459,7 +459,7 @@ let ftest2_ensures_ko =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (if ((lt_int_ (integer_of_int32 y)) (10))
@@ -478,7 +478,7 @@ let ftest2_ensures_ok =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (if ((lt_int_ (integer_of_int32 y)) (10))
@@ -497,7 +497,7 @@ let ftest2_safety =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (if ((lt_int_ (integer_of_int32 y)) (10))

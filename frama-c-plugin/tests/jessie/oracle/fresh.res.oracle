@@ -512,14 +512,16 @@ let g_ensures_default =
      (let intP_p_3_alloc_table = (any_alloc_table void) in
      (let p = ref (any_pointer void) in
      (C_7:
-     (C_9:
      begin
-       (let jessie_<somenum> = (p := (C_6: (JC_<somenum>: (f intP_p_3_alloc_table)))) in
+       (let _jessie_<somenum> = (p := (C_6: (JC_<somenum>: (f intP_p_3_alloc_table)))) in
        void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !p in
-      (((safe_upd_ intP_intM_p_3) jessie_<somenum>) jessie_<somenum>))); (raise Return) end)))));
-    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
+      (C_9:
+      begin
+        (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+        (let _jessie_<somenum> = !p in
+        (((safe_upd_ intP_intM_p_3) _jessie_<somenum>) _jessie_<somenum>))); (raise Return)
+      end) end)))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let g_safety =
  fun (tt : unit) ->
@@ -531,16 +533,17 @@ let g_safety =
      (let intP_p_3_alloc_table = (any_alloc_table void) in
      (let p = ref (any_pointer void) in
      (C_7:
-     (C_9:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (p := (C_6: (JC_<somenum>: (f_requires intP_p_3_alloc_table)))) in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !p in
-      (JC_<somenum>:
-      ((((upd_ intP_p_3_alloc_table) intP_intM_p_3) jessie_<somenum>) jessie_<somenum>))));
-      (raise Return) end))))); (raise Return) end with Return -> void end)
-  { true }
+      (C_9:
+      begin
+        (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+        (let _jessie_<somenum> = !p in
+        (JC_<somenum>:
+        ((((upd_ intP_p_3_alloc_table) intP_intM_p_3) _jessie_<somenum>) _jessie_<somenum>))));
+       (raise Return) end) end)))); (raise Return) end with Return ->
+   void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fresh.jessie --quiet -f fresh.makefile project

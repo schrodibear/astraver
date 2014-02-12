@@ -401,7 +401,7 @@ let cosine1a_ensures_default =
      (let r = ref (any_single void) in
      (C_4:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (r := (C_3:
              (JC_<somenum>:
              (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
@@ -432,7 +432,7 @@ let cosine1a_safety =
      (let r = ref (any_single void) in
      (C_4:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (r := (C_3:
              (JC_<somenum>:
              (((sub_single nearest_even) (single_of_real_exact 1.0)) 

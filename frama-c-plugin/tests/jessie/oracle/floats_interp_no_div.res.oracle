@@ -514,7 +514,7 @@ let interp_lin_ensures_default =
      (let __retres = ref (any_double void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (a := (C_1: (JC_<somenum>: (((sub_double_safe nearest_even) z_0) x1)))) in
        void);
       (assert
@@ -525,7 +525,7 @@ let interp_lin_ensures_default =
         abs_real(sub_real(double_value(z_0), double_value(x1)))))) }; void);
       void; (assert { (JC_<somenum>: bounded(double_value(a), 0x1p502)) }; void);
       void;
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_6:
       begin
         (b := (C_5: (JC_<somenum>: (((mul_double_safe nearest_even) v) !a)))); !b
@@ -549,13 +549,15 @@ let interp_lin_ensures_default =
          abs_real(mul_real(slope,
                   sub_real(double_value(z_0), double_value(x1)))))))) };
       void);
-      (C_10:
       begin
         void;
-       (let jessie_<somenum> =
-       (__retres := (C_9: (JC_<somenum>: (((add_double_safe nearest_even) y1) !b)))) in
-       void); (return := !__retres); (raise Return) end) end)))); absurd  end
-   with Return -> !return end))
+       (C_10:
+       begin
+         (let _jessie_<somenum> =
+         (__retres := (C_9:
+                      (JC_<somenum>: (((add_double_safe nearest_even) y1) !b)))) in
+         void); (return := !__retres); (raise Return) end) end end))));
+    absurd  end with Return -> !return end))
   { (JC_<somenum>:
     (let slope_1 =
           div_real(sub_real(double_value(y2), double_value(y1)),
@@ -591,7 +593,7 @@ let interp_lin_safety =
      (let __retres = ref (any_double void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (a := (C_1: (JC_<somenum>: (((sub_double nearest_even) z_0) x1)))) in void);
       [ { } unit reads a
         { (JC_<somenum>:
@@ -602,7 +604,7 @@ let interp_lin_safety =
       void;
       [ { } unit reads a { (JC_<somenum>: bounded(double_value(a), 0x1p502)) } ];
       void;
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_6:
       begin   (b := (C_5: (JC_<somenum>: (((mul_double nearest_even) v) !a)))); !b
       end) in void);
@@ -623,13 +625,14 @@ let interp_lin_safety =
            mul_real(0x1p-25,
            abs_real(mul_real(slope,
                     sub_real(double_value(z_0), double_value(x1)))))))) } ];
-      (C_10:
       begin
         void;
-       (let jessie_<somenum> =
-       (__retres := (C_9: (JC_<somenum>: (((add_double nearest_even) y1) !b)))) in
-       void); (return := !__retres); (raise Return) end) end)))); absurd  end
-   with Return -> !return end)) { true }
+       (C_10:
+       begin
+         (let _jessie_<somenum> =
+         (__retres := (C_9: (JC_<somenum>: (((add_double nearest_even) y1) !b)))) in
+         void); (return := !__retres); (raise Return) end) end end))));
+    absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C floats_interp_no_div.jessie --quiet -f floats_interp_no_div.makefile project

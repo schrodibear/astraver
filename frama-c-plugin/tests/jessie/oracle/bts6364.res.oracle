@@ -494,11 +494,12 @@ let f_ensures_default =
      (let __retres = ref (any_int8 void) in
      begin
        (assert { (JC_<somenum>: (p1 <> p2)) }; void);
-      (C_2:
       begin
         void;
-       (let jessie_<somenum> = (__retres := (safe_int8_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
+       (C_2:
+       begin
+         (let _jessie_<somenum> = (__retres := (safe_int8_of_integer_ (0))) in void);
+        (return := !__retres); (raise Return) end) end end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
@@ -511,11 +512,12 @@ let f_safety =
      (let __retres = ref (any_int8 void) in
      begin
        [ { } unit { (JC_<somenum>: (p1 <> p2)) } ];
-      (C_2:
       begin
         void;
-       (let jessie_<somenum> = (__retres := (safe_int8_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
+       (C_2:
+       begin
+         (let _jessie_<somenum> = (__retres := (safe_int8_of_integer_ (0))) in void);
+        (return := !__retres); (raise Return) end) end end); absurd  end with
    Return -> !return end)) { true }
 
 

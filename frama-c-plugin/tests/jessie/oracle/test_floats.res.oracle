@@ -396,7 +396,7 @@ let test1_ensures_default =
      (let __retres = ref (any_double void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_1:
                     (JC_<somenum>:
                     (((mul_double_safe nearest_even) (double_of_real_exact 2.0)) 
@@ -414,7 +414,7 @@ let test1_safety =
      (let __retres = ref (any_double void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_1:
                     (JC_<somenum>:
                     (((mul_double nearest_even) (double_of_real_exact 2.0)) 
@@ -432,7 +432,7 @@ let test2_ensures_default =
      (let __retres_0 = ref (any_single void) in
      (C_4:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres_0 := (single_of_real_exact 0x1.99999ap-4)) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end))
@@ -448,7 +448,7 @@ let test2_safety =
      (let __retres_0 = ref (any_single void) in
      (C_4:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres_0 := (single_of_real_exact 0x1.99999ap-4)) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }

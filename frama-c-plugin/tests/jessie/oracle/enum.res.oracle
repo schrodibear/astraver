@@ -819,13 +819,13 @@ let enum_as_array_index_ensures_default =
   try
    (C_18:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let jessie_<somenum> = t in
-     (let jessie_<somenum> = (1) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-     (((safe_upd_ intP_intM_t_2) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
-    (raise Return) end) with Return -> void end)
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let _jessie_<somenum> = t in
+     (let _jessie_<somenum> = (1) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+     (((safe_upd_ intP_intM_t_2) _jessie_<somenum>) _jessie_<somenum>))))));
+    (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM_t_2,
                       shift(t, integer_of_I(I_of_integer((1)))))) = (0))) }
@@ -843,13 +843,13 @@ let enum_as_array_index_safety =
   try
    (C_18:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let jessie_<somenum> = t in
-     (let jessie_<somenum> = (1) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let _jessie_<somenum> = t in
+     (let _jessie_<somenum> = (1) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
      (JC_<somenum>:
-     ((((upd_ intP_t_2_alloc_table) intP_intM_t_2) jessie_<somenum>) jessie_<somenum>)))))));
+     ((((upd_ intP_t_2_alloc_table) intP_intM_t_2) _jessie_<somenum>) _jessie_<somenum>)))))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let f_ensures_default =
@@ -876,7 +876,7 @@ let g_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_2: (safe_int32_of_integer_ (integer_of_E e)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
@@ -894,7 +894,7 @@ let g_safety =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_2: (JC_<somenum>: (int32_of_integer_ (integer_of_E e))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
@@ -911,15 +911,15 @@ let h_ensures_default =
   try
    (C_11:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_8:
      ((safe_acc_ !enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) 
       (C_7: ((shift t_0) (0))))) in
-     (let jessie_<somenum> = t_0 in
-     (let jessie_<somenum> = (2) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-     (((safe_upd_ enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) jessie_<somenum>) jessie_<somenum>))))));
+     (let _jessie_<somenum> = t_0 in
+     (let _jessie_<somenum> = (2) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
+     (((safe_upd_ enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) _jessie_<somenum>) _jessie_<somenum>))))));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     ((integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
@@ -944,16 +944,16 @@ let h_safety =
   try
    (C_11:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_8:
      (JC_<somenum>:
      (((acc_ enum___anonenum_color_1P_t_0_1_alloc_table) !enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) t_0))) in
-     (let jessie_<somenum> = t_0 in
-     (let jessie_<somenum> = (2) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+     (let _jessie_<somenum> = t_0 in
+     (let _jessie_<somenum> = (2) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+     (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
      (JC_<somenum>:
-     ((((upd_ enum___anonenum_color_1P_t_0_1_alloc_table) enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) jessie_<somenum>) jessie_<somenum>)))))));
+     ((((upd_ enum___anonenum_color_1P_t_0_1_alloc_table) enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) _jessie_<somenum>) _jessie_<somenum>)))))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 

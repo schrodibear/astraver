@@ -406,7 +406,7 @@ let ftest_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((eq_int_ (integer_of_int32 a)) (4))
        then (C_2: begin   (tmp := (safe_int32_of_integer_ (5))); !tmp end)
        else (C_1: begin   (tmp := a); !tmp end)) in void); (return := !tmp);
@@ -422,7 +422,7 @@ let ftest_safety =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((eq_int_ (integer_of_int32 a)) (4))
        then (C_2: begin   (tmp := (safe_int32_of_integer_ (5))); !tmp end)
        else (C_1: begin   (tmp := a); !tmp end)) in void); (return := !tmp);

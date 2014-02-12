@@ -417,10 +417,11 @@ let abs1_ensures_default =
    begin
      (if ((lt_int_ (C_5: ((safe_acc_ !intP_intM_p_1) p))) (0))
      then
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_2: (neg_int (C_1: ((safe_acc_ !intP_intM_p_1) p)))) in
-      (let jessie_<somenum> = p in (((safe_upd_ intP_intM_p_1) jessie_<somenum>) jessie_<somenum>)))
-     else void); (raise Return); (raise Return) end with Return -> void end)
+      (let _jessie_<somenum> = p in
+      (((safe_upd_ intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: ge_int(select(intP_intM_p_1, p), (0))) }
 
 let abs1_safety =
@@ -432,13 +433,13 @@ let abs1_safety =
      (if ((lt_int_ (C_5:
                    (JC_<somenum>: (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p)))) (0))
      then
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_2:
       (neg_int (C_1:
                (JC_<somenum>: (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p))))) in
-      (let jessie_<somenum> = p in
+      (let _jessie_<somenum> = p in
       (JC_<somenum>:
-      ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) jessie_<somenum>) jessie_<somenum>))))
+      ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))))
      else void); (raise Return); (raise Return) end with Return -> void end)
   { true }
 
@@ -452,10 +453,10 @@ let abs2_ensures_default =
    begin
      (if ((lt_int_ (C_11: ((safe_acc_ !intP_intM_p_0_2) p_0))) (0))
      then
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_8: (neg_int (C_7: ((safe_acc_ !intP_intM_p_0_2) p_0)))) in
-      (let jessie_<somenum> = p_0 in
-      (((safe_upd_ intP_intM_p_0_2) jessie_<somenum>) jessie_<somenum>))) else void);
+      (let _jessie_<somenum> = p_0 in
+      (((safe_upd_ intP_intM_p_0_2) _jessie_<somenum>) _jessie_<somenum>))) else void);
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: ge_int(select(intP_intM_p_0_2, p_0), (0))) }
 
@@ -471,14 +472,14 @@ let abs2_safety =
                    (JC_<somenum>:
                    (((acc_ intP_p_0_2_alloc_table) !intP_intM_p_0_2) p_0)))) (0))
      then
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_8:
       (neg_int (C_7:
                (JC_<somenum>:
                (((acc_ intP_p_0_2_alloc_table) !intP_intM_p_0_2) p_0))))) in
-      (let jessie_<somenum> = p_0 in
+      (let _jessie_<somenum> = p_0 in
       (JC_<somenum>:
-      ((((upd_ intP_p_0_2_alloc_table) intP_intM_p_0_2) jessie_<somenum>) jessie_<somenum>))))
+      ((((upd_ intP_p_0_2_alloc_table) intP_intM_p_0_2) _jessie_<somenum>) _jessie_<somenum>))))
      else void); (raise Return); (raise Return) end with Return -> void end)
   { true }
 

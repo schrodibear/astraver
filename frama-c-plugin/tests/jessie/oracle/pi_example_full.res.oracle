@@ -456,14 +456,14 @@ let Perimeter_ensures_default =
      (let r = ref (any_single void) in
      (C_1:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (a := (JC_<somenum>: ((single_of_real nearest_even) 6.28))) in void);
       (assert { (JC_<somenum>: single_is_finite(a)) }; void); void;
       (assert
       { (JC_<somenum>:
         (le_real(6.27, single_value(a)) and le_real(single_value(a), 6.29))) };
       void); void;
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_5:
       begin
         (r := (C_4: (JC_<somenum>: (((mul_single nearest_even) !a) radius)))); !r
@@ -497,14 +497,14 @@ let Perimeter_safety =
      (let r = ref (any_single void) in
      (C_1:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (a := (JC_<somenum>: ((single_of_real nearest_even) 6.28))) in void);
       [ { } unit reads a { (JC_<somenum>: single_is_finite(a)) } ]; void;
       [ { } unit reads a
         { (JC_<somenum>:
           (le_real(6.27, single_value(a)) and le_real(single_value(a), 6.29))) } ];
       void;
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_5:
       begin
         (r := (C_4: (JC_<somenum>: (((mul_single nearest_even) !a) radius)))); !r

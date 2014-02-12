@@ -446,7 +446,7 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (v := (JC_<somenum>: ((double_of_real nearest_even) 0x1.0p600))) in void);
       (assert { (JC_<somenum>: (double_value(v) = double_exact(v))) }; void); void;
       (assert { (JC_<somenum>: double_is_finite(v)) }; void); void;
@@ -455,7 +455,7 @@ let main_ensures_default =
       { (JC_<somenum>:
         (not no_overflow_double(nearest_even,
              mul_real(double_value(v), double_value(v))))) }; void); void;
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_8:
       begin
         (x_0 := (C_7:
@@ -465,12 +465,13 @@ let main_ensures_default =
                                             (((mul_double nearest_even) !v) !v)))) !v))));
        !x_0 end) in void);
       (assert { (JC_<somenum>: double_is_plus_infinity(x_0)) }; void);
-      (C_10:
       begin
         void;
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end)))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+       (C_10:
+       begin
+         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+         void); (return := !__retres); (raise Return) end) end end))));
+    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -484,7 +485,7 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (v := (JC_<somenum>: ((double_of_real nearest_even) 0x1.0p600))) in void);
       [ { } unit reads v { (JC_<somenum>: (double_value(v) = double_exact(v))) } ];
       void; [ { } unit reads v { (JC_<somenum>: double_is_finite(v)) } ]; void;
@@ -493,7 +494,7 @@ let main_safety =
         { (JC_<somenum>:
           (not no_overflow_double(nearest_even,
                mul_real(double_value(v), double_value(v))))) } ]; void;
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (C_8:
       begin
         (x_0 := (C_7:
@@ -503,12 +504,13 @@ let main_safety =
                                             (((mul_double nearest_even) !v) !v)))) !v))));
        !x_0 end) in void);
       [ { } unit reads x_0 { (JC_<somenum>: double_is_plus_infinity(x_0)) } ];
-      (C_10:
       begin
         void;
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end)))); absurd  end with
-   Return -> !return end)) { true }
+       (C_10:
+       begin
+         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres); (raise Return) end) end end)))); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fp-intel.jessie --quiet -f fp-intel.makefile project

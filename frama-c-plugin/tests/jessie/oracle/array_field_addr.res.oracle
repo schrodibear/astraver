@@ -750,9 +750,9 @@ let f_ensures_default =
   try
    (C_9:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_8: ((shift (C_7: ((safe_acc_ t_tab_a_2) a))) (0))) in
-     (JC_<somenum>: (((g jessie_<somenum>) intP_intM_a_2) intP_a_2_alloc_table)));
+     (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_a_2) intP_a_2_alloc_table)));
     (assert
     { (JC_<somenum>:
       (integer_of_int32(select(intP_intM_a_2,
@@ -775,10 +775,10 @@ let f_safety =
   try
    (C_9:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_8:
      ((shift (C_7: (JC_<somenum>: (((acc_ t_a_2_alloc_table) t_tab_a_2) a)))) (0))) in
-     (JC_<somenum>: (((g_requires jessie_<somenum>) intP_intM_a_2) intP_a_2_alloc_table)));
+     (JC_<somenum>: (((g_requires _jessie_<somenum>) intP_intM_a_2) intP_a_2_alloc_table)));
     [ { } unit reads intP_intM_a_2
       { (JC_<somenum>:
         (integer_of_int32(select(intP_intM_a_2,
@@ -795,8 +795,8 @@ let g_ensures_default =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = i in (((safe_upd_ intP_intM_i_1) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = i in (((safe_upd_ intP_intM_i_1) _jessie_<somenum>) _jessie_<somenum>)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: (integer_of_int32(select(intP_intM_i_1, i)) = (1))) }
 
@@ -809,10 +809,10 @@ let g_safety =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = i in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = i in
      (JC_<somenum>:
-     ((((upd_ intP_i_1_alloc_table) intP_intM_i_1) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ intP_i_1_alloc_table) intP_intM_i_1) _jessie_<somenum>) _jessie_<somenum>))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 

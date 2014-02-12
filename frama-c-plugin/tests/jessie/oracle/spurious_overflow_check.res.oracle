@@ -407,7 +407,7 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_1:
                     (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 x_0)) 
                                                  (integer_of_int32 y))
@@ -425,7 +425,7 @@ let f_safety =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_1:
                     (JC_<somenum>:
                     (int32_of_integer_ (if ((neq_int_ (integer_of_int32 x_0)) 

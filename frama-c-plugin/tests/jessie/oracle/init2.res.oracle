@@ -741,7 +741,7 @@ let f_ensures_default =
      (let varloc = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (varloc := (safe_int32_of_integer_ (4))) in void);
+       (let _jessie_<somenum> = (varloc := (safe_int32_of_integer_ (4))) in void);
       (return := !varloc); (raise Return) end)); absurd  end with Return ->
    !return end))
   { (JC_<somenum>:
@@ -763,7 +763,7 @@ let f_safety =
      (let varloc = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (varloc := (safe_int32_of_integer_ (4))) in void);
+       (let _jessie_<somenum> = (varloc := (safe_int32_of_integer_ (4))) in void);
       (return := !varloc); (raise Return) end)); absurd  end with Return ->
    !return end))
   { (JC_<somenum>: valid_ls(__anonstruct_lastruct2_2_ls_1_alloc_table)) }

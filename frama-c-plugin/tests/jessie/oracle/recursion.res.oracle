@@ -528,22 +528,24 @@ let cons_ensures_default =
    begin
      (let hd = ref (any_pointer void) in
      (C_2:
-     (C_4:
-     (C_6:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (hd := (C_1:
               (JC_<somenum>:
               (((alloc_struct__List (1)) _List_result_4_alloc_table) _List_result_4_tag_table)))) in
        void);
-      (let jessie_<somenum> = elem in
-      (let jessie_<somenum> = !hd in
-      (((safe_upd_ _List_elem_0_result_4) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = x_1 in
-      (let jessie_<somenum> = !hd in
-      (((safe_upd_ _List_next_result_4) jessie_<somenum>) jessie_<somenum>)));
-      (return := !hd); (raise Return) end)))); absurd  end with Return ->
-   !return end))
+      (C_4:
+      begin
+        (let _jessie_<somenum> = elem in
+        (let _jessie_<somenum> = !hd in
+        (((safe_upd_ _List_elem_0_result_4) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_6:
+       begin
+         (let _jessie_<somenum> = x_1 in
+         (let _jessie_<somenum> = !hd in
+         (((safe_upd_ _List_next_result_4) _jessie_<somenum>) _jessie_<somenum>)));
+        (return := !hd); (raise Return) end) end) end)); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: is_list(result))
     and (JC_<somenum>: (list_length(result) = add_int(list_length(x_1), (1)))))) }
@@ -557,24 +559,26 @@ let cons_safety =
    begin
      (let hd = ref (any_pointer void) in
      (C_2:
-     (C_4:
-     (C_6:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (hd := (C_1:
               (JC_<somenum>:
               (((alloc_struct__List_requires (1)) _List_result_4_alloc_table) _List_result_4_tag_table)))) in
        void);
-      (let jessie_<somenum> = elem in
-      (let jessie_<somenum> = !hd in
-      (JC_<somenum>:
-      ((((upd_ !_List_result_4_alloc_table) _List_elem_0_result_4) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = x_1 in
-      (let jessie_<somenum> = !hd in
-      (JC_<somenum>:
-      ((((upd_ !_List_result_4_alloc_table) _List_next_result_4) jessie_<somenum>) jessie_<somenum>))));
-      (return := !hd); (raise Return) end)))); absurd  end with Return ->
-   !return end)) { true }
+      (C_4:
+      begin
+        (let _jessie_<somenum> = elem in
+        (let _jessie_<somenum> = !hd in
+        (JC_<somenum>:
+        ((((upd_ !_List_result_4_alloc_table) _List_elem_0_result_4) _jessie_<somenum>) _jessie_<somenum>))));
+       (C_6:
+       begin
+         (let _jessie_<somenum> = x_1 in
+         (let _jessie_<somenum> = !hd in
+         (JC_<somenum>:
+         ((((upd_ !_List_result_4_alloc_table) _List_next_result_4) _jessie_<somenum>) _jessie_<somenum>))));
+        (return := !hd); (raise Return) end) end) end)); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C recursion.jessie --quiet -f recursion.makefile project

@@ -446,18 +446,18 @@ let f_ensures_b =
    begin
      (let x_0 = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        begin
          [ { } unit { true } ];
-        (let jessie_<somenum> =
+        (let _jessie_<somenum> =
         (assert { true };
         ((C_1: begin   (x_0 := (safe_int32_of_integer_ (0))); !x_0 end))) in
         [ { } int32 { (JC_<somenum>: (integer_of_int32(x_0) = (0))) } ]) end in
        void);
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       begin
         [ { } unit { true } ];
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (assert { true };
        ((C_3: begin   (x_0 := (safe_int32_of_integer_ (1))); !x_0 end))) in
        [ { } int32 { (JC_<somenum>: (integer_of_int32(x_0) = (1))) } ]) end in void);
@@ -472,11 +472,11 @@ let f_ensures_default =
    begin
      (let x_0 = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (assert { true };
        ((C_1: begin   (x_0 := (safe_int32_of_integer_ (0))); !x_0 end))
        {{ (JC_<somenum>: (integer_of_int32(x_0) = (0))) }}) in void);
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
       (assert { true };
       ((C_3: begin   (x_0 := (safe_int32_of_integer_ (1))); !x_0 end))
       {{ (JC_<somenum>: (integer_of_int32(x_0) = (1))) }}) in void); void;
@@ -491,21 +491,21 @@ let f_safety =
    begin
      (let x_0 = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (let _jessie_<somenum> =
        (assert { true };
        ((C_1: begin   (x_0 := (safe_int32_of_integer_ (0))); !x_0 end))) in
        begin
-         [ { } unit { (JC_<somenum>: (integer_of_int32(x_0) = (0))) } ]; jessie_<somenum>
+         [ { } unit { (JC_<somenum>: (integer_of_int32(x_0) = (0))) } ]; _jessie_<somenum>
        end) in void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> =
+      (let _jessie_<somenum> =
+      (let _jessie_<somenum> =
       (assert { true };
       ((C_3: begin   (x_0 := (safe_int32_of_integer_ (1))); !x_0 end))) in
       begin
-        [ { } unit { (JC_<somenum>: (integer_of_int32(x_0) = (1))) } ]; jessie_<somenum> end) in
-      void); void; (raise Return) end); (raise Return) end with Return ->
-   void end) { true }
+        [ { } unit { (JC_<somenum>: (integer_of_int32(x_0) = (1))) } ]; _jessie_<somenum>
+      end) in void); void; (raise Return) end); (raise Return) end with
+   Return -> void end) { true }
 
 let myfun_ensures_default =
  fun (p : int32) ->
@@ -515,8 +515,8 @@ let myfun_ensures_default =
   try
    (C_8:
    begin
-     (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
-    (let jessie_<somenum> =
+     (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
+    (let _jessie_<somenum> =
     begin
       [ { } unit { (JC_<somenum>: (integer_of_int32(mutable_p) = (1))) } ];
      (assert { true };
@@ -536,9 +536,9 @@ let myfun_safety =
   try
    (C_8:
    begin
-     (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
-    (let jessie_<somenum> =
-    (let jessie_<somenum> =
+     (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
+    (let _jessie_<somenum> =
+    (let _jessie_<somenum> =
     (assert { (JC_<somenum>: (integer_of_int32(mutable_p) = (1))) };
     ((C_9:
      begin   (mutable_p := (safe_int32_of_integer_ (2))); !mutable_p end))) in
@@ -546,8 +546,9 @@ let myfun_safety =
       [ { } unit
         { (JC_<somenum>:
           (integer_of_int32(mutable_p@) = sub_int(integer_of_int32(mutable_p),
-                                          (1)))) } ]; jessie_<somenum> end) in void);
-    (raise Return); (raise Return) end) with Return -> void end)) { true }
+                                          (1)))) } ]; _jessie_<somenum> end) in
+    void); (raise Return); (raise Return) end) with Return -> void end))
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C statement_contracts.jessie --quiet -f statement_contracts.makefile project

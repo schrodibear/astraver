@@ -691,9 +691,9 @@ let ftest_ensures_default =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_uint32_of_integer_ (123)) in
-     (let jessie_<somenum> = y in
-     (((safe_upd_ unsigned_intP_unsigned_intM) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = (safe_uint32_of_integer_ (123)) in
+     (let _jessie_<somenum> = y in
+     (((safe_upd_ unsigned_intP_unsigned_intM) _jessie_<somenum>) _jessie_<somenum>)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM, x_0)) = integer_of_int32(select(intP_intM@,
@@ -711,10 +711,10 @@ let ftest_safety =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_uint32_of_integer_ (123)) in
-     (let jessie_<somenum> = y in
+     (let _jessie_<somenum> = (safe_uint32_of_integer_ (123)) in
+     (let _jessie_<somenum> = y in
      (JC_<somenum>:
-     ((((upd_ !unsigned_intP_alloc_table) unsigned_intP_unsigned_intM) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ !unsigned_intP_alloc_table) unsigned_intP_unsigned_intM) _jessie_<somenum>) _jessie_<somenum>))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let main_ensures_default =
@@ -731,12 +731,13 @@ let main_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_10:
-     (C_11:
      begin
-       (let jessie_<somenum> = p in
-       (let jessie_<somenum> = q in (JC_<somenum>: ((ftest jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
+       (let _jessie_<somenum> = p in
+       (let _jessie_<somenum> = q in (JC_<somenum>: ((ftest _jessie_<somenum>) _jessie_<somenum>))));
+      (C_11:
+      begin
+        (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM, p)) = integer_of_int32(select(intP_intM@,
@@ -756,12 +757,14 @@ let main_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_10:
-     (C_11:
      begin
-       (let jessie_<somenum> = p in
-       (let jessie_<somenum> = q in (JC_<somenum>: ((ftest_requires jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
+       (let _jessie_<somenum> = p in
+       (let _jessie_<somenum> = q in
+       (JC_<somenum>: ((ftest_requires _jessie_<somenum>) _jessie_<somenum>))));
+      (C_11:
+      begin
+        (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end)); absurd  end with
    Return -> !return end)) { true }
 
 

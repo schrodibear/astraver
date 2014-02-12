@@ -406,10 +406,11 @@ let f_ensures_default =
   try
    (C_3:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (a := (safe_int32_of_integer_ (C_2:
-                                   (let jessie_<somenum> = (C_1: (double_value b)) in
-                                   (truncate_real_to_int jessie_<somenum>))))) in
+                                   (let _jessie_<somenum> =
+                                   (C_1: (double_value b)) in
+                                   (truncate_real_to_int _jessie_<somenum>))))) in
      void); (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: true) }
 
@@ -420,11 +421,11 @@ let f_safety =
   try
    (C_3:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (a := (JC_<somenum>:
            (int32_of_integer_ (C_2:
-                              (let jessie_<somenum> = (C_1: (double_value b)) in
-                              (truncate_real_to_int jessie_<somenum>)))))) in void);
+                              (let _jessie_<somenum> = (C_1: (double_value b)) in
+                              (truncate_real_to_int _jessie_<somenum>)))))) in void);
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 

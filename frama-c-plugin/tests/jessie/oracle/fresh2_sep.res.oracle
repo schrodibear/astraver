@@ -567,7 +567,7 @@ let create_ensures_default =
      (let s_0 = ref (any_pointer void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (s_0 := (C_1:
                (JC_<somenum>:
                (((alloc_struct_Str (1)) Str_alloc_table) Str_tag_table)))) in
@@ -588,7 +588,7 @@ let create_safety =
      (let s_0 = ref (any_pointer void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (s_0 := (C_1:
                (JC_<somenum>:
                (((alloc_struct_Str_requires (1)) Str_alloc_table) Str_tag_table)))) in
@@ -604,11 +604,12 @@ let smoke_detector_ensures_default =
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
      (C_16:
-     (C_18:
      begin
-       (let jessie_<somenum> = (s1_1 := (C_15: (JC_<somenum>: (create void)))) in void);
-      (let jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create void)))) in void);
-      (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return) end))));
+       (let _jessie_<somenum> = (s1_1 := (C_15: (JC_<somenum>: (create void)))) in void);
+      (C_18:
+      begin
+        (let _jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create void)))) in void);
+       (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return) end) end)));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let smoke_detector_safety =
@@ -620,12 +621,14 @@ let smoke_detector_safety =
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
      (C_16:
-     (C_18:
      begin
-       (let jessie_<somenum> = (s1_1 := (C_15: (JC_<somenum>: (create_requires void)))) in
+       (let _jessie_<somenum> = (s1_1 := (C_15: (JC_<somenum>: (create_requires void)))) in
        void);
-      (let jessie_<somenum> = (s2_1 := (C_17: (JC_<somenum>: (create_requires void)))) in
-      void); [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return) end))));
+      (C_18:
+      begin
+        (let _jessie_<somenum> =
+        (s2_1 := (C_17: (JC_<somenum>: (create_requires void)))) in void);
+       [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return) end) end)));
     (raise Return) end with Return -> void end) { true }
 
 let test_ensures_default =
@@ -639,7 +642,7 @@ let test_ensures_default =
      (let f = ref (any_pointer void) in
      (C_9:
      begin
-       (let jessie_<somenum> = (f := (C_8: (JC_<somenum>: (create void)))) in void);
+       (let _jessie_<somenum> = (f := (C_8: (JC_<somenum>: (create void)))) in void);
       (assert { (JC_<somenum>: (this <> f)) }; void); void; (raise Return) end));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
@@ -654,9 +657,10 @@ let test_safety =
      (let f = ref (any_pointer void) in
      (C_9:
      begin
-       (let jessie_<somenum> = (f := (C_8: (JC_<somenum>: (create_requires void)))) in void);
-      [ { } unit reads f { (JC_<somenum>: (this <> f)) } ]; void; (raise Return) end));
-    (raise Return) end with Return -> void end) { true }
+       (let _jessie_<somenum> = (f := (C_8: (JC_<somenum>: (create_requires void)))) in
+       void); [ { } unit reads f { (JC_<somenum>: (this <> f)) } ]; void;
+      (raise Return) end)); (raise Return) end with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fresh2_sep.jessie --quiet -f fresh2_sep.makefile project

@@ -430,10 +430,10 @@ let f_ensures_default =
      (let charP_null_2_alloc_table = (any_alloc_table void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
-       (let jessie_<somenum> = null in
+       (let _jessie_<somenum> =
+       (let _jessie_<somenum> = null in
        (JC_<somenum>:
-       (((atoi jessie_<somenum>) charP_charM_null_2) charP_null_2_alloc_table))) in
+       (((atoi _jessie_<somenum>) charP_charM_null_2) charP_null_2_alloc_table))) in
        void); (raise Return) end))); (raise Return) end with Return ->
    void end) { (JC_<somenum>: true) }
 
@@ -447,10 +447,10 @@ let f_safety =
      (let charP_null_2_alloc_table = (any_alloc_table void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
-       (let jessie_<somenum> = null in
+       (let _jessie_<somenum> =
+       (let _jessie_<somenum> = null in
        (JC_<somenum>:
-       (((atoi_requires jessie_<somenum>) charP_charM_null_2) charP_null_2_alloc_table))) in
+       (((atoi_requires _jessie_<somenum>) charP_charM_null_2) charP_null_2_alloc_table))) in
        void); (raise Return) end))); (raise Return) end with Return ->
    void end) { true }
 

@@ -532,14 +532,14 @@ let main_ensures_default =
   try
    (C_4:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = s_0 in
-     (((safe_upd_ intP_intM_s_1) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = s_0 in
+     (((safe_upd_ intP_intM_s_1) _jessie_<somenum>) _jessie_<somenum>)));
     (assert { true };
     ((C_5:
      begin
-       (let jessie_<somenum> = s_0 in (JC_<somenum>: (f1 jessie_<somenum>)));
-      (C_6: (let jessie_<somenum> = s_0 in (JC_<somenum>: (f2 jessie_<somenum>)))) end))
+       (let _jessie_<somenum> = s_0 in (JC_<somenum>: (f1 _jessie_<somenum>)));
+      (C_6: (let _jessie_<somenum> = s_0 in (JC_<somenum>: (f2 _jessie_<somenum>)))) end))
     {{ (JC_<somenum>: (true = true)) }});
     (assert
     { (JC_<somenum>: (integer_of_int32(select(intP_intM_s_1, s_0)) = (1))) }; void);
@@ -553,15 +553,16 @@ let main_safety =
   try
    (C_4:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = s_0 in (((safe_upd_ intP_intM_s_1) jessie_<somenum>) jessie_<somenum>)));
-    (let jessie_<somenum> =
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = s_0 in
+     (((safe_upd_ intP_intM_s_1) _jessie_<somenum>) _jessie_<somenum>)));
+    (let _jessie_<somenum> =
     (assert { true };
     ((C_5:
      begin
-       (let jessie_<somenum> = s_0 in (JC_<somenum>: (f1_requires jessie_<somenum>)));
-      (C_6: (let jessie_<somenum> = s_0 in (JC_<somenum>: (f2_requires jessie_<somenum>)))) end))) in
-    begin   [ { } unit { (JC_<somenum>: (true = true)) } ]; jessie_<somenum> end);
+       (let _jessie_<somenum> = s_0 in (JC_<somenum>: (f1_requires _jessie_<somenum>)));
+      (C_6: (let _jessie_<somenum> = s_0 in (JC_<somenum>: (f2_requires _jessie_<somenum>)))) end))) in
+    begin   [ { } unit { (JC_<somenum>: (true = true)) } ]; _jessie_<somenum> end);
     [ { } unit reads intP_intM_s_1
       { (JC_<somenum>: (integer_of_int32(select(intP_intM_s_1, s_0)) = (1))) } ];
     void; (raise Return); (raise Return) end) with Return -> void end)

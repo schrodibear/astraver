@@ -602,7 +602,7 @@ let f2_ensures_default =
      (let p_0 = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_<somenum> = (p_0 := null) in void); (return := !p_0);
+       (let _jessie_<somenum> = (p_0 := null) in void); (return := !p_0);
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_<somenum>: (result = null)) }
 
@@ -616,7 +616,7 @@ let f2_safety =
      (let p_0 = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_<somenum> = (p_0 := null) in void); (return := !p_0);
+       (let _jessie_<somenum> = (p_0 := null) in void); (return := !p_0);
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 
@@ -630,7 +630,7 @@ let f_ensures_default =
      (let p = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (p := null) in void); (return := !p); (raise Return)
+       (let _jessie_<somenum> = (p := null) in void); (return := !p); (raise Return)
      end)); absurd  end with Return -> !return end))
   { (JC_<somenum>: (result = null)) }
 
@@ -644,7 +644,7 @@ let f_safety =
      (let p = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (p := null) in void); (return := !p); (raise Return)
+       (let _jessie_<somenum> = (p := null) in void); (return := !p); (raise Return)
      end)); absurd  end with Return -> !return end)) { true }
 
 let g_ensures_default =
@@ -657,7 +657,7 @@ let g_ensures_default =
      (let p_1 = ref (any_pointer void) in
      (C_5:
      begin
-       (let jessie_<somenum> = (p_1 := null) in void); (return := !p_1);
+       (let _jessie_<somenum> = (p_1 := null) in void); (return := !p_1);
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_<somenum>: (result = null)) }
 
@@ -671,7 +671,7 @@ let g_safety =
      (let p_1 = ref (any_pointer void) in
      (C_5:
      begin
-       (let jessie_<somenum> = (p_1 := null) in void); (return := !p_1);
+       (let _jessie_<somenum> = (p_1 := null) in void); (return := !p_1);
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 

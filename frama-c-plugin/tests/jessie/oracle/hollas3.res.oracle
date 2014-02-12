@@ -453,7 +453,7 @@ let foo_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_5:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_4:
                     (safe_int32_of_integer_ (C_3:
                                             (JC_<somenum>:
@@ -480,7 +480,7 @@ let foo_safety =
      (let __retres = ref (any_int32 void) in
      (C_5:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_4:
                     (JC_<somenum>:
                     (int32_of_integer_ (C_3:

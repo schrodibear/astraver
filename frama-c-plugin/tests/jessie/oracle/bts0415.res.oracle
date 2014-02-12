@@ -552,26 +552,26 @@ let ftest_ensures_default =
    begin
      try
       begin
-        (let jessie_<somenum> = n_1 in
-        (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (8))
+        (let _jessie_<somenum> = n_1 in
+        (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (8))
         then
          begin
            (assert { (JC_<somenum>: le_int(neg_int((2147483648)), (0))) }; void);
           void; (raise (Goto_switch_0_break_exc void)) end
         else
-         (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (7))
+         (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (7))
          then
           begin
             (assert { (JC_<somenum>: le_int(neg_int((2147483647)), (0))) }; void);
            void; (raise (Goto_switch_0_break_exc void)) end
          else
-          (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (6))
+          (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (6))
           then
            begin
              (assert { (JC_<somenum>: le_int(neg_int((2147483646)), (0))) }; void);
             void; (raise (Goto_switch_0_break_exc void)) end else void))));
        (raise (Goto_switch_0_break_exc void)) end with
-      Goto_switch_0_break_exc jessie_<somenum> ->
+      Goto_switch_0_break_exc _jessie_<somenum> ->
       (switch_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { (JC_<somenum>: true) }
 
@@ -583,26 +583,26 @@ let ftest_safety =
    begin
      try
       begin
-        (let jessie_<somenum> = n_1 in
-        (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (8))
+        (let _jessie_<somenum> = n_1 in
+        (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (8))
         then
          begin
            [ { } unit { (JC_<somenum>: le_int(neg_int((2147483648)), (0))) } ];
           void; (raise (Goto_switch_0_break_exc void)) end
         else
-         (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (7))
+         (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (7))
          then
           begin
             [ { } unit { (JC_<somenum>: le_int(neg_int((2147483647)), (0))) } ];
            void; (raise (Goto_switch_0_break_exc void)) end
          else
-          (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (6))
+          (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (6))
           then
            begin
              [ { } unit { (JC_<somenum>: le_int(neg_int((2147483646)), (0))) } ];
             void; (raise (Goto_switch_0_break_exc void)) end else void))));
        (raise (Goto_switch_0_break_exc void)) end with
-      Goto_switch_0_break_exc jessie_<somenum> ->
+      Goto_switch_0_break_exc _jessie_<somenum> ->
       (switch_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { true }
 

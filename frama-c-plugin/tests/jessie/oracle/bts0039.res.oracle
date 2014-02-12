@@ -590,10 +590,10 @@ let f_ensures_default =
   try
    (C_15:
    begin
-     (let jessie_<somenum> = (C_13: ((safe_acc_ __anonstruct_las_1_i_p_3) p)) in
-     (let jessie_<somenum> = (C_14: ((safe_acc_ __anonstruct_las_1_j_p_3) p)) in
+     (let _jessie_<somenum> = (C_13: ((safe_acc_ __anonstruct_las_1_i_p_3) p)) in
+     (let _jessie_<somenum> = (C_14: ((safe_acc_ __anonstruct_las_1_j_p_3) p)) in
      (JC_<somenum>:
-     ((((((g jessie_<somenum>) jessie_<somenum>) intP_intM_p_3) intP_intM_p_3) intP_p_3_alloc_table) intP_p_3_alloc_table))));
+     ((((((g _jessie_<somenum>) _jessie_<somenum>) intP_intM_p_3) intP_intM_p_3) intP_p_3_alloc_table) intP_p_3_alloc_table))));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     not_assigns(intP_p_3_alloc_table, intP_intM_p_3@, intP_intM_p_3,
@@ -610,16 +610,16 @@ let f_safety =
   try
    (C_15:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_13:
      (JC_<somenum>:
      (((acc_ __anonstruct_las_1_p_3_alloc_table) __anonstruct_las_1_i_p_3) p))) in
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_14:
      (JC_<somenum>:
      (((acc_ __anonstruct_las_1_p_3_alloc_table) __anonstruct_las_1_j_p_3) p))) in
      (JC_<somenum>:
-     ((((((g_requires jessie_<somenum>) jessie_<somenum>) intP_intM_p_3) intP_intM_p_3) intP_p_3_alloc_table) intP_p_3_alloc_table))));
+     ((((((g_requires _jessie_<somenum>) _jessie_<somenum>) intP_intM_p_3) intP_intM_p_3) intP_p_3_alloc_table) intP_p_3_alloc_table))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let g_ensures_default =
@@ -632,13 +632,16 @@ let g_ensures_default =
   (init:
   try
    (C_2:
-   (C_4:
    begin
-     (let jessie_<somenum> = (11) in
-     (let jessie_<somenum> = a in (((safe_upd_ intP_intM_a_1) jessie_<somenum>) jessie_<somenum>)));
-    (let jessie_<somenum> = (15) in
-    (let jessie_<somenum> = b in (((safe_upd_ intP_intM_b_2) jessie_<somenum>) jessie_<somenum>)));
-    (raise Return); (raise Return) end)) with Return -> void end)
+     (let _jessie_<somenum> = (11) in
+     (let _jessie_<somenum> = a in
+     (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>)));
+    (C_4:
+    begin
+      (let _jessie_<somenum> = (15) in
+      (let _jessie_<somenum> = b in
+      (((safe_upd_ intP_intM_b_2) _jessie_<somenum>) _jessie_<somenum>))); (raise Return);
+     (raise Return) end) end) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      not_assigns(intP_a_1_alloc_table, intP_intM_a_1@, intP_intM_a_1,
@@ -657,17 +660,19 @@ let g_safety =
   (init:
   try
    (C_2:
-   (C_4:
    begin
-     (let jessie_<somenum> = (11) in
-     (let jessie_<somenum> = a in
+     (let _jessie_<somenum> = (11) in
+     (let _jessie_<somenum> = a in
      (JC_<somenum>:
-     ((((upd_ intP_a_1_alloc_table) intP_intM_a_1) jessie_<somenum>) jessie_<somenum>))));
-    (let jessie_<somenum> = (15) in
-    (let jessie_<somenum> = b in
-    (JC_<somenum>:
-    ((((upd_ intP_b_2_alloc_table) intP_intM_b_2) jessie_<somenum>) jessie_<somenum>))));
-    (raise Return); (raise Return) end)) with Return -> void end) { true }
+     ((((upd_ intP_a_1_alloc_table) intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))));
+    (C_4:
+    begin
+      (let _jessie_<somenum> = (15) in
+      (let _jessie_<somenum> = b in
+      (JC_<somenum>:
+      ((((upd_ intP_b_2_alloc_table) intP_intM_b_2) _jessie_<somenum>) _jessie_<somenum>))));
+     (raise Return); (raise Return) end) end) with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0039.jessie --quiet -f bts0039.makefile project

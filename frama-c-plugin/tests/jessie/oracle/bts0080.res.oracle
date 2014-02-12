@@ -582,18 +582,21 @@ let Swap_ensures_default =
    begin
      (let temp = ref (any_int32 void) in
      (C_2:
-     (C_5:
-     (C_7:
      begin
-       (let jessie_<somenum> = (temp := (C_1: ((safe_acc_ !intP_intM_p_1) p))) in
+       (let _jessie_<somenum> = (temp := (C_1: ((safe_acc_ !intP_intM_p_1) p))) in
        void);
-      (let jessie_<somenum> = (C_3: ((safe_acc_ !intP_intM_q_2) q)) in
-      (let jessie_<somenum> = p in
-      (((safe_upd_ intP_intM_p_1) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = !temp in
-      (let jessie_<somenum> = q in
-      (((safe_upd_ intP_intM_q_2) jessie_<somenum>) jessie_<somenum>))); (raise Return) end))));
-    (raise Return) end with Return -> void end)
+      (C_5:
+      begin
+        (let _jessie_<somenum> = (C_3: ((safe_acc_ !intP_intM_q_2) q)) in
+        (let _jessie_<somenum> = p in
+        (((safe_upd_ intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_7:
+       begin
+         (let _jessie_<somenum> = !temp in
+         (let _jessie_<somenum> = q in
+         (((safe_upd_ intP_intM_q_2) _jessie_<somenum>) _jessie_<somenum>)));
+        (raise Return) end) end) end)); (raise Return) end with Return ->
+   void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
@@ -623,24 +626,26 @@ let Swap_safety =
    begin
      (let temp = ref (any_int32 void) in
      (C_2:
-     (C_5:
-     (C_7:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (temp := (C_1:
                 (JC_<somenum>: (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p)))) in
        void);
-      (let jessie_<somenum> =
-      (C_3: (JC_<somenum>: (((acc_ intP_q_2_alloc_table) !intP_intM_q_2) q))) in
-      (let jessie_<somenum> = p in
-      (JC_<somenum>:
-      ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = !temp in
-      (let jessie_<somenum> = q in
-      (JC_<somenum>:
-      ((((upd_ intP_q_2_alloc_table) intP_intM_q_2) jessie_<somenum>) jessie_<somenum>))));
-      (raise Return) end)))); (raise Return) end with Return -> void end)
-  { true }
+      (C_5:
+      begin
+        (let _jessie_<somenum> =
+        (C_3: (JC_<somenum>: (((acc_ intP_q_2_alloc_table) !intP_intM_q_2) q))) in
+        (let _jessie_<somenum> = p in
+        (JC_<somenum>:
+        ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))));
+       (C_7:
+       begin
+         (let _jessie_<somenum> = !temp in
+         (let _jessie_<somenum> = q in
+         (JC_<somenum>:
+         ((((upd_ intP_q_2_alloc_table) intP_intM_q_2) _jessie_<somenum>) _jessie_<somenum>))));
+        (raise Return) end) end) end)); (raise Return) end with Return ->
+   void end) { true }
 
 let foo_ensures_default =
  fun (a : intP pointer) (k : int32) (intP_intM_a_3 : (intP, int32) memory ref) (intP_a_3_alloc_table : intP alloc_table) ->
@@ -652,10 +657,10 @@ let foo_ensures_default =
   try
    (C_20:
    begin
-     (let jessie_<somenum> = (C_18: ((shift a) (0))) in
-     (let jessie_<somenum> = (C_19: ((shift a) (integer_of_int32 k))) in
+     (let _jessie_<somenum> = (C_18: ((shift a) (0))) in
+     (let _jessie_<somenum> = (C_19: ((shift a) (integer_of_int32 k))) in
      (JC_<somenum>:
-     ((((((Swap jessie_<somenum>) jessie_<somenum>) intP_intM_a_3) intP_intM_a_3) intP_a_3_alloc_table) intP_a_3_alloc_table))));
+     ((((((Swap _jessie_<somenum>) _jessie_<somenum>) intP_intM_a_3) intP_intM_a_3) intP_a_3_alloc_table) intP_a_3_alloc_table))));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: true) }
 
@@ -669,10 +674,10 @@ let foo_safety =
   try
    (C_20:
    begin
-     (let jessie_<somenum> = (C_18: ((shift a) (0))) in
-     (let jessie_<somenum> = (C_19: ((shift a) (integer_of_int32 k))) in
+     (let _jessie_<somenum> = (C_18: ((shift a) (0))) in
+     (let _jessie_<somenum> = (C_19: ((shift a) (integer_of_int32 k))) in
      (JC_<somenum>:
-     ((((((Swap_requires jessie_<somenum>) jessie_<somenum>) intP_intM_a_3) intP_intM_a_3) intP_a_3_alloc_table) intP_a_3_alloc_table))));
+     ((((((Swap_requires _jessie_<somenum>) _jessie_<somenum>) intP_intM_a_3) intP_intM_a_3) intP_a_3_alloc_table) intP_a_3_alloc_table))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 

@@ -426,21 +426,22 @@ let f_ensures_default =
      (let y = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (y := !x_0) in void);
-      (let jessie_<somenum> =
+       (let _jessie_<somenum> = (y := !x_0) in void);
+      (let _jessie_<somenum> =
       (C_4:
-      (C_7:
       begin
-        (let jessie_<somenum> =
+        (let _jessie_<somenum> =
         (y := (C_3:
               (safe_int32_of_integer_ (C_2:
                                       ((add_int (integer_of_int32 !y)) (1)))))) in
         void);
-       (x_0 := (C_6:
-               (safe_int32_of_integer_ (C_5:
-                                       ((add_int (integer_of_int32 !x_0)) (1))))));
-       !x_0 end)) in void);
-      (let jessie_<somenum> =
+       (C_7:
+       begin
+         (x_0 := (C_6:
+                 (safe_int32_of_integer_ (C_5:
+                                         ((add_int (integer_of_int32 !x_0)) (1))))));
+        !x_0 end) end) in void);
+      (let _jessie_<somenum> =
       (assert { true };
       ((C_10:
        begin
@@ -467,23 +468,24 @@ let f_safety =
      (let y = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (y := !x_0) in void);
-      (let jessie_<somenum> =
+       (let _jessie_<somenum> = (y := !x_0) in void);
+      (let _jessie_<somenum> =
       (C_4:
-      (C_7:
       begin
-        (let jessie_<somenum> =
+        (let _jessie_<somenum> =
         (y := (C_3:
               (JC_<somenum>:
               (int32_of_integer_ (C_2: ((add_int (integer_of_int32 !y)) (1))))))) in
         void);
-       (x_0 := (C_6:
-               (JC_<somenum>:
-               (int32_of_integer_ (C_5:
-                                  ((add_int (integer_of_int32 !x_0)) (1)))))));
-       !x_0 end)) in void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> =
+       (C_7:
+       begin
+         (x_0 := (C_6:
+                 (JC_<somenum>:
+                 (int32_of_integer_ (C_5:
+                                    ((add_int (integer_of_int32 !x_0)) (1)))))));
+        !x_0 end) end) in void);
+      (let _jessie_<somenum> =
+      (let _jessie_<somenum> =
       (assert { true };
       ((C_10:
        begin
@@ -500,7 +502,7 @@ let f_safety =
             and (JC_<somenum>:
                 (add_int(integer_of_int32(x_0@), (1)) = add_int(integer_of_int32(x_0@init),
                                                         (2)))))) } ];
-       jessie_<somenum> end) in void); (return := !y); (raise Return) end)); 
+       _jessie_<somenum> end) in void); (return := !y); (raise Return) end)); 
     absurd  end with Return -> !return end)) { true }
 
 

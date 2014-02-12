@@ -984,54 +984,61 @@ let phase1_ensures_default =
      ref (any_alloc_table void) in
      (let Rl_Status = ref (any_pointer void) in
      (C_10:
-     (C_12:
-     (C_13:
-     (C_14:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (Rl_Status := (C_9:
                      (JC_<somenum>:
                      (((alloc_struct_enum___anonenum_T_RESULTAT_1P (1)) enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table) enum___anonenum_T_RESULTAT_1P_Rl_Status_8_tag_table)))) in
        void);
-      (let jessie_<somenum> = (safe___anonenum_T_RESULTAT_1_of_integer_ (1)) in
-      (let jessie_<somenum> = !Rl_Status in
-      (((safe_upd_ enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (__ConsignerPanne_cpt_t0 := !__ConsignerPanne_cpt) in
-      void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> = !Rl_Status in
-      (let jessie_<somenum> = (safe___anonenum_T_ID_TEST_2_of_integer_ (0)) in
-      (JC_<somenum>:
-      ((((TesterOK jessie_<somenum>) jessie_<somenum>) enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table)))) in
-      void);
-      (assert
-      { (JC_<somenum>:
-        (f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@init),
-         integer_of_uint32(__ConsignerPanne_cpt_t0),
-         enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___TT0_v0_2,
-         enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___ConsignerPanne_v0_1) ->
-         (integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8,
-                                             Rl_Status)) = integer_of___anonenum_T_RESULTAT_1(
-                                                           __anonenum_T_RESULTAT_1_of_integer((1)))))) };
-      void);
-      (C_16:
-      (C_17:
-      (C_18:
+      (C_12:
       begin
-        void;
-       (let jessie_<somenum> = (__ConsignerPanne_cpt_t1 := !__ConsignerPanne_cpt) in
-       void);
-       (let jessie_<somenum> =
-       (let jessie_<somenum> = !Rl_Status in
-       (let jessie_<somenum> = (safe___anonenum_T_ID_TEST_2_of_integer_ (1)) in
-       (JC_<somenum>:
-       ((((TesterOK jessie_<somenum>) jessie_<somenum>) enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table)))) in
-       void);
-       ((safe_free_parameter enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table) !Rl_Status);
-       (return := (C_19:
-                  ((safe_acc_ !enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !Rl_Status)));
-       (raise Return) end))) end)))))))); absurd  end with Return ->
-   !return end))
+        (let _jessie_<somenum> = (safe___anonenum_T_RESULTAT_1_of_integer_ (1)) in
+        (let _jessie_<somenum> = !Rl_Status in
+        (((safe_upd_ enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_13:
+       begin
+         (let _jessie_<somenum> =
+         (__ConsignerPanne_cpt_t0 := !__ConsignerPanne_cpt) in void);
+        (C_14:
+        begin
+          (let _jessie_<somenum> =
+          (let _jessie_<somenum> = !Rl_Status in
+          (let _jessie_<somenum> = (safe___anonenum_T_ID_TEST_2_of_integer_ (0)) in
+          (JC_<somenum>:
+          ((((TesterOK _jessie_<somenum>) _jessie_<somenum>) enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table)))) in
+          void);
+         (assert
+         { (JC_<somenum>:
+           (f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@init),
+            integer_of_uint32(__ConsignerPanne_cpt_t0),
+            enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___TT0_v0_2,
+            enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___ConsignerPanne_v0_1) ->
+            (integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8,
+                                                Rl_Status)) = integer_of___anonenum_T_RESULTAT_1(
+                                                              __anonenum_T_RESULTAT_1_of_integer((1)))))) };
+         void);
+         begin
+           void;
+          (C_16:
+          begin
+            (let _jessie_<somenum> =
+            (__ConsignerPanne_cpt_t1 := !__ConsignerPanne_cpt) in void);
+           (C_17:
+           begin
+             (let _jessie_<somenum> =
+             (let _jessie_<somenum> = !Rl_Status in
+             (let _jessie_<somenum> =
+             (safe___anonenum_T_ID_TEST_2_of_integer_ (1)) in
+             (JC_<somenum>:
+             ((((TesterOK _jessie_<somenum>) _jessie_<somenum>) enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table)))) in
+             void);
+            (C_18:
+            begin
+              ((safe_free_parameter enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table) !Rl_Status);
+             (return := (C_19:
+                        ((safe_acc_ !enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !Rl_Status)));
+             (raise Return) end) end) end) end end) end) end) end)))));
+    absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@),
       integer_of_uint32(__ConsignerPanne_cpt_t0),
@@ -1083,59 +1090,66 @@ let phase1_safety =
      ref (any_alloc_table void) in
      (let Rl_Status = ref (any_pointer void) in
      (C_10:
-     (C_12:
-     (C_13:
-     (C_14:
      begin
-       (let jessie_<somenum> =
-       (Rl_Status := (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (Rl_Status := (let _jessie_<somenum> =
                      (C_9:
                      (JC_<somenum>:
                      (((alloc_struct_enum___anonenum_T_RESULTAT_1P_requires (1)) enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table) enum___anonenum_T_RESULTAT_1P_Rl_Status_8_tag_table))) in
                      (JC_<somenum>:
                      (assert
                      { ge_int(offset_max(enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table,
-                              jessie_<somenum>),
-                       (0)) }; jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe___anonenum_T_RESULTAT_1_of_integer_ (1)) in
-      (let jessie_<somenum> = !Rl_Status in
-      (((safe_upd_ enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (__ConsignerPanne_cpt_t0 := !__ConsignerPanne_cpt) in
-      void);
-      (let jessie_<somenum> =
-      (let jessie_<somenum> = !Rl_Status in
-      (let jessie_<somenum> = (safe___anonenum_T_ID_TEST_2_of_integer_ (0)) in
-      (JC_<somenum>:
-      ((((TesterOK_requires jessie_<somenum>) jessie_<somenum>) enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table)))) in
-      void);
-      [ { } unit
-        reads Rl_Status,__ConsignerPanne_cpt_t0,__TT0_cpt,enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8,enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___ConsignerPanne_v0_1,enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___TT0_v0_2
-        { (JC_<somenum>:
-          (f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@init),
-           integer_of_uint32(__ConsignerPanne_cpt_t0),
-           enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___TT0_v0_2,
-           enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___ConsignerPanne_v0_1) ->
-           (integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8,
-                                               Rl_Status)) = integer_of___anonenum_T_RESULTAT_1(
-                                                             __anonenum_T_RESULTAT_1_of_integer((1)))))) } ];
-      (C_16:
-      (C_17:
-      (C_18:
+                              _jessie_<somenum>),
+                       (0)) }; _jessie_<somenum>)))) in void);
+      (C_12:
       begin
-        void;
-       (let jessie_<somenum> = (__ConsignerPanne_cpt_t1 := !__ConsignerPanne_cpt) in
-       void);
-       (let jessie_<somenum> =
-       (let jessie_<somenum> = !Rl_Status in
-       (let jessie_<somenum> = (safe___anonenum_T_ID_TEST_2_of_integer_ (1)) in
-       (JC_<somenum>:
-       ((((TesterOK_requires jessie_<somenum>) jessie_<somenum>) enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table)))) in
-       void);
-       ((free_parameter enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table) !Rl_Status);
-       (return := (C_19:
-                  ((safe_acc_ !enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !Rl_Status)));
-       (raise Return) end))) end)))))))); absurd  end with Return ->
-   !return end)) { true }
+        (let _jessie_<somenum> = (safe___anonenum_T_RESULTAT_1_of_integer_ (1)) in
+        (let _jessie_<somenum> = !Rl_Status in
+        (((safe_upd_ enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_13:
+       begin
+         (let _jessie_<somenum> =
+         (__ConsignerPanne_cpt_t0 := !__ConsignerPanne_cpt) in void);
+        (C_14:
+        begin
+          (let _jessie_<somenum> =
+          (let _jessie_<somenum> = !Rl_Status in
+          (let _jessie_<somenum> = (safe___anonenum_T_ID_TEST_2_of_integer_ (0)) in
+          (JC_<somenum>:
+          ((((TesterOK_requires _jessie_<somenum>) _jessie_<somenum>) enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table)))) in
+          void);
+         [ { } unit
+           reads Rl_Status,__ConsignerPanne_cpt_t0,__TT0_cpt,enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8,enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___ConsignerPanne_v0_1,enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___TT0_v0_2
+           { (JC_<somenum>:
+             (f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@init),
+              integer_of_uint32(__ConsignerPanne_cpt_t0),
+              enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___TT0_v0_2,
+              enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M___ConsignerPanne_v0_1) ->
+              (integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8,
+                                                  Rl_Status)) = integer_of___anonenum_T_RESULTAT_1(
+                                                                __anonenum_T_RESULTAT_1_of_integer((1)))))) } ];
+         begin
+           void;
+          (C_16:
+          begin
+            (let _jessie_<somenum> =
+            (__ConsignerPanne_cpt_t1 := !__ConsignerPanne_cpt) in void);
+           (C_17:
+           begin
+             (let _jessie_<somenum> =
+             (let _jessie_<somenum> = !Rl_Status in
+             (let _jessie_<somenum> =
+             (safe___anonenum_T_ID_TEST_2_of_integer_ (1)) in
+             (JC_<somenum>:
+             ((((TesterOK_requires _jessie_<somenum>) _jessie_<somenum>) enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table)))) in
+             void);
+            (C_18:
+            begin
+              ((free_parameter enum___anonenum_T_RESULTAT_1P_Rl_Status_8_alloc_table) !Rl_Status);
+             (return := (C_19:
+                        ((safe_acc_ !enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_Rl_Status_8) !Rl_Status)));
+             (raise Return) end) end) end) end end) end) end) end)))));
+    absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C phase12.jessie --quiet -f phase12.makefile project
@@ -1160,7 +1174,7 @@ why --project [...] why/phase12.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/phase12_po4.why">
-      <location file = "why/phase12.why" line = "936" begin = "23" end = "164"/>
+      <location file = "why/phase12.why" line = "940" begin = "23" end = "165"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/phase12_po5.why">
@@ -1184,7 +1198,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po9.why">
-      <location file = "why/phase12.why" line = "973" begin = "8" end = "89"/>
+      <location file = "why/phase12.why" line = "987" begin = "15" end = "96"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

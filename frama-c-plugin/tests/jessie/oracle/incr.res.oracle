@@ -523,24 +523,26 @@ let f_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (C_1:
-       (C_4:
        begin
-         (let jessie_<somenum> = (tmp := !b) in void);
-        (let jessie_<somenum> =
-        (b := (C_3:
-              (safe_int32_of_integer_ (C_2:
-                                      ((add_int (integer_of_int32 !b)) (1)))))) in
-        void);
-        (C_6:
-        (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-        (let jessie_<somenum> = t in
-        (let jessie_<somenum> = (integer_of_int32 !tmp) in
-        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-        begin   (((safe_upd_ intP_intM_t_1) jessie_<somenum>) jessie_<somenum>); jessie_<somenum>
-        end))))) end)) in void); (raise Return) end); (raise Return) end with
-   Return -> void end) { (JC_<somenum>: (integer_of_int32(b) = (1))) }
+         (let _jessie_<somenum> = (tmp := !b) in void);
+        (C_4:
+        begin
+          (let _jessie_<somenum> =
+          (b := (C_3:
+                (safe_int32_of_integer_ (C_2:
+                                        ((add_int (integer_of_int32 !b)) (1)))))) in
+          void);
+         (C_6:
+         (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+         (let _jessie_<somenum> = t in
+         (let _jessie_<somenum> = (integer_of_int32 !tmp) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+         begin
+           (((safe_upd_ intP_intM_t_1) _jessie_<somenum>) _jessie_<somenum>); _jessie_<somenum>
+         end))))) end) end) in void); (raise Return) end); (raise Return) end
+   with Return -> void end) { (JC_<somenum>: (integer_of_int32(b) = (1))) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -552,25 +554,27 @@ let f_safety =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (C_1:
-       (C_4:
        begin
-         (let jessie_<somenum> = (tmp := !b) in void);
-        (let jessie_<somenum> =
-        (b := (C_3:
-              (JC_<somenum>:
-              (int32_of_integer_ (C_2: ((add_int (integer_of_int32 !b)) (1))))))) in
-        void);
-        (C_6:
-        (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-        (let jessie_<somenum> = t in
-        (let jessie_<somenum> = (integer_of_int32 !tmp) in
-        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-        (JC_<somenum>:
+         (let _jessie_<somenum> = (tmp := !b) in void);
+        (C_4:
         begin
-          (((((offset_upd_ !intP_t_1_alloc_table) intP_intM_t_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>);
-         jessie_<somenum> end)))))) end)) in void); (raise Return) end);
+          (let _jessie_<somenum> =
+          (b := (C_3:
+                (JC_<somenum>:
+                (int32_of_integer_ (C_2:
+                                   ((add_int (integer_of_int32 !b)) (1))))))) in
+          void);
+         (C_6:
+         (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+         (let _jessie_<somenum> = t in
+         (let _jessie_<somenum> = (integer_of_int32 !tmp) in
+         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+         (JC_<somenum>:
+         begin
+           (((((offset_upd_ !intP_t_1_alloc_table) intP_intM_t_1) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>);
+          _jessie_<somenum> end)))))) end) end) in void); (raise Return) end);
     (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_t(intP_t_1_alloc_table)) }
 
@@ -598,12 +602,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/incr_po4.why">
-      <location file = "why/incr.why" line = "501" begin = "11" end = "93"/>
+      <location file = "why/incr.why" line = "505" begin = "12" end = "97"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/incr_po5.why">
-      <location file = "why/incr.why" line = "501" begin = "11" end = "93"/>
+      <location file = "why/incr.why" line = "505" begin = "12" end = "97"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

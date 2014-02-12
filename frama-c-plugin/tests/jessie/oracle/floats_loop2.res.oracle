@@ -526,63 +526,71 @@ let f_single_ensures_default =
      (let i = ref (any_int32 void) in
      try
       (C_1:
-      (C_2:
-      (loop_2:
       begin
-        (let jessie_<somenum> = (t := (single_of_real_exact 0.0)) in void);
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       while true do
-       { invariant
-           ((JC_<somenum>:
-            le_real(abs_real(sub_real(single_value(t),
-                             mul_real(real_of_int(integer_of_int32(i)), 0.1))),
-            mul_real(real_of_int(integer_of_int32(i)),
-            add_real(0x1p-8, 1.49012e-09))))
-           and (JC_<somenum>:
-               ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-               and (JC_<somenum>:
-                   le_int(integer_of_int32(i), integer_of_int32(n_1)))))) 
-          }
+        (let _jessie_<somenum> = (t := (single_of_real_exact 0.0)) in void);
+       (C_2:
+       begin
+         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+        (loop_2:
         begin
-          [ { } unit { true } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (L:
-            begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
-             begin
-               (assert
-               { (JC_<somenum>:
-                 (le_real(0.0, single_value(t))
-                 and le_real(single_value(t),
-                     mul_real(1000000.0,
-                     add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) };
-               void);
-              (C_10:
-              begin
-                void;
-               (t := (C_9:
-                     (JC_<somenum>:
-                     (((add_single_safe nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
-               !t end) end in void);
-             (assert
-             { (JC_<somenum>:
+          while true do
+          { invariant
+              ((JC_<somenum>:
                le_real(abs_real(sub_real(single_value(t),
-                                add_real(single_value(t@L), 0x1.99999ap-4))),
-               0x1p-8)) }; void);
-             (C_14:
+                                mul_real(real_of_int(integer_of_int32(i)),
+                                0.1))),
+               mul_real(real_of_int(integer_of_int32(i)),
+               add_real(0x1p-8, 1.49012e-09))))
+              and (JC_<somenum>:
+                  ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                  and (JC_<somenum>:
+                      le_int(integer_of_int32(i), integer_of_int32(n_1))))))
+             }
+           begin
+             [ { } unit { true } ];
+            try
              begin
-               void;
-              (i := (C_13:
-                    (safe_int32_of_integer_ (C_12:
-                                            ((add_int (integer_of_int32 !i)) (1))))));
-              !i end) end) in void); (raise (Loop_continue_exc void)) end
-          with Loop_continue_exc jessie_<somenum> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end))) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+               (let _jessie_<somenum> =
+               begin
+                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                (L:
+                begin
+                  (let _jessie_<somenum> =
+                  begin
+                    (assert
+                    { (JC_<somenum>:
+                      (le_real(0.0, single_value(t))
+                      and le_real(single_value(t),
+                          mul_real(1000000.0,
+                          add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) };
+                    void);
+                   begin
+                     void;
+                    (C_10:
+                    begin
+                      (t := (C_9:
+                            (JC_<somenum>:
+                            (((add_single_safe nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
+                     !t end) end end in void);
+                 (assert
+                 { (JC_<somenum>:
+                   le_real(abs_real(sub_real(single_value(t),
+                                    add_real(single_value(t@L),
+                                    0x1.99999ap-4))),
+                   0x1p-8)) }; void);
+                 begin
+                   void;
+                  (C_14:
+                  begin
+                    (i := (C_13:
+                          (safe_int32_of_integer_ (C_12:
+                                                  ((add_int (integer_of_int32 !i)) (1))))));
+                   !i end) end end) end in void);
+              (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc _jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !t); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -604,64 +612,72 @@ let f_single_safety =
      (let i = ref (any_int32 void) in
      try
       (C_1:
-      (C_2:
-      (loop_1:
       begin
-        (let jessie_<somenum> = (t := (single_of_real_exact 0.0)) in void);
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       while true do
-       { invariant (JC_<somenum>: true)
-         variant (JC_<somenum> : sub_int(integer_of_int32(n_1), integer_of_int32(i))) }
+        (let _jessie_<somenum> = (t := (single_of_real_exact 0.0)) in void);
+       (C_2:
+       begin
+         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+        (loop_1:
         begin
-          [ { } unit reads i,t
-            { ((JC_<somenum>:
-               le_real(abs_real(sub_real(single_value(t),
-                                mul_real(real_of_int(integer_of_int32(i)),
-                                0.1))),
-               mul_real(real_of_int(integer_of_int32(i)),
-               add_real(0x1p-8, 1.49012e-09))))
-              and (JC_<somenum>:
-                  ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-                  and (JC_<somenum>:
-                      le_int(integer_of_int32(i), integer_of_int32(n_1)))))) } ];
-         try
-          begin
-            (let jessie_<somenum> =
-            (L:
-            begin
-              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
-              then void else (raise (Goto_while_0_break_exc void)));
-             (let jessie_<somenum> =
+          while true do
+          { invariant (JC_<somenum>: true)
+            variant (JC_<somenum> : sub_int(integer_of_int32(n_1),
+                             integer_of_int32(i))) }
+           begin
+             [ { } unit reads i,t
+               { ((JC_<somenum>:
+                  le_real(abs_real(sub_real(single_value(t),
+                                   mul_real(real_of_int(integer_of_int32(i)),
+                                   0.1))),
+                  mul_real(real_of_int(integer_of_int32(i)),
+                  add_real(0x1p-8, 1.49012e-09))))
+                 and (JC_<somenum>:
+                     ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                     and (JC_<somenum>:
+                         le_int(integer_of_int32(i), integer_of_int32(n_1)))))) } ];
+            try
              begin
-               [ { } unit reads t
-                 { (JC_<somenum>:
-                   (le_real(0.0, single_value(t))
-                   and le_real(single_value(t),
-                       mul_real(1000000.0,
-                       add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) } ];
-              (C_10:
-              begin
-                void;
-               (t := (C_9:
-                     (JC_<somenum>:
-                     (((add_single nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
-               !t end) end in void);
-             [ { } unit reads t
-               { (JC_<somenum>:
-                 le_real(abs_real(sub_real(single_value(t),
-                                  add_real(single_value(t@L), 0x1.99999ap-4))),
-                 0x1p-8)) } ];
-             (C_14:
-             begin
-               void;
-              (i := (C_13:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (C_12:
-                                       ((add_int (integer_of_int32 !i)) (1)))))));
-              !i end) end) in void); (raise (Loop_continue_exc void)) end
-          with Loop_continue_exc jessie_<somenum> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end))) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+               (let _jessie_<somenum> =
+               begin
+                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
+                 then void else (raise (Goto_while_0_break_exc void)));
+                (L:
+                begin
+                  (let _jessie_<somenum> =
+                  begin
+                    [ { } unit reads t
+                      { (JC_<somenum>:
+                        (le_real(0.0, single_value(t))
+                        and le_real(single_value(t),
+                            mul_real(1000000.0,
+                            add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) } ];
+                   begin
+                     void;
+                    (C_10:
+                    begin
+                      (t := (C_9:
+                            (JC_<somenum>:
+                            (((add_single nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
+                     !t end) end end in void);
+                 [ { } unit reads t
+                   { (JC_<somenum>:
+                     le_real(abs_real(sub_real(single_value(t),
+                                      add_real(single_value(t@L),
+                                      0x1.99999ap-4))),
+                     0x1p-8)) } ];
+                 begin
+                   void;
+                  (C_14:
+                  begin
+                    (i := (C_13:
+                          (JC_<somenum>:
+                          (int32_of_integer_ (C_12:
+                                             ((add_int (integer_of_int32 !i)) (1)))))));
+                   !i end) end end) end in void);
+              (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc _jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end) end) with
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !t); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -674,13 +690,14 @@ let main_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_19:
-     (C_20:
      begin
-       (let jessie_<somenum> =
-       (let jessie_<somenum> = (safe_int32_of_integer_ (100)) in
-       (JC_<somenum>: (f_single jessie_<somenum>))) in void);
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
+       (let _jessie_<somenum> =
+       (let _jessie_<somenum> = (safe_int32_of_integer_ (100)) in
+       (JC_<somenum>: (f_single _jessie_<somenum>))) in void);
+      (C_20:
+      begin
+        (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
@@ -692,13 +709,14 @@ let main_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_19:
-     (C_20:
      begin
-       (let jessie_<somenum> =
-       (let jessie_<somenum> = (safe_int32_of_integer_ (100)) in
-       (JC_<somenum>: (f_single_requires jessie_<somenum>))) in void);
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
+       (let _jessie_<somenum> =
+       (let _jessie_<somenum> = (safe_int32_of_integer_ (100)) in
+       (JC_<somenum>: (f_single_requires _jessie_<somenum>))) in void);
+      (C_20:
+      begin
+        (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end)); absurd  end with
    Return -> !return end)) { true }
 
 

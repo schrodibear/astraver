@@ -395,7 +395,7 @@ let diff_ensures_default =
      (let __retres = ref (any_single void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_1: (JC_<somenum>: (((sub_single_safe nearest_even) x_0) y)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
@@ -416,7 +416,7 @@ let diff_safety =
      (let __retres = ref (any_single void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_1: (JC_<somenum>: (((sub_single nearest_even) x_0) y)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }

@@ -530,7 +530,7 @@ let ftest_ensures_default =
   try
    (C_1:
    begin
-     (let jessie_<somenum> = (asg := src) in void);
+     (let _jessie_<somenum> = (asg := src) in void);
     (assert
     { (JC_<somenum>:
       (le_int(offset_min(intP_asg_1_alloc_table, asg), (0))
@@ -565,7 +565,7 @@ let ftest_safety =
   try
    (C_1:
    begin
-     (let jessie_<somenum> = (asg := src) in void);
+     (let _jessie_<somenum> = (asg := src) in void);
     [ { } unit reads asg,intP_asg_1_alloc_table
       { (JC_<somenum>:
         (le_int(offset_min(intP_asg_1_alloc_table, asg), (0))

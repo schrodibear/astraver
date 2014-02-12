@@ -1,10 +1,10 @@
-File "why/floats_interp2.why", line 896, characters 5-16:
+File "why/floats_interp2.why", line 903, characters 5-16:
 warning: no postcondition for exception Return_label_exc; false inserted
-File "why/floats_interp2.why", line 1152, characters 5-2455:
+File "why/floats_interp2.why", line 1164, characters 5-2455:
 warning: no postcondition for exception Return_label_exc; false inserted
-File "why/floats_interp2.why", line 1449, characters 5-211:
+File "why/floats_interp2.why", line 1466, characters 5-211:
 warning: no postcondition for exception Return_label_exc; false inserted
-File "why/floats_interp2.why", line 1705, characters 5-138:
+File "why/floats_interp2.why", line 1727, characters 5-138:
 warning: no postcondition for exception Return_label_exc; false inserted
-File "why/floats_interp2.why", line 1954, characters 70-74:
+File "why/floats_interp2.why", line 1983, characters 4-8:
 warning: no postcondition for exception Return_label_exc; false inserted

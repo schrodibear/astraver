@@ -545,19 +545,21 @@ let f_ensures_default =
      (let intP_i_2_alloc_table = ref (any_alloc_table void) in
      (let i = ref (any_pointer void) in
      (C_8:
-     (C_9:
-     (C_10:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (i := (C_7:
              (JC_<somenum>:
              (((alloc_struct_intP (1)) intP_i_2_alloc_table) intP_i_2_tag_table)))) in
        void);
-      (let jessie_<somenum> = !i in
-      (JC_<somenum>: (((g jessie_<somenum>) intP_intM_i_2) !intP_i_2_alloc_table)));
-      ((safe_free_parameter intP_i_2_alloc_table) !i);
-      (return := (C_11: ((safe_acc_ !intP_intM_i_2) !i))); (raise Return) end)))))));
-    absurd  end with Return -> !return end))
+      (C_9:
+      begin
+        (let _jessie_<somenum> = !i in
+        (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_i_2) !intP_i_2_alloc_table)));
+       (C_10:
+       begin
+         ((safe_free_parameter intP_i_2_alloc_table) !i);
+        (return := (C_11: ((safe_acc_ !intP_intM_i_2) !i))); (raise Return)
+       end) end) end))))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_int32(result) = (1)))
     and (JC_<somenum>:
@@ -576,23 +578,26 @@ let f_safety =
      (let intP_i_2_alloc_table = ref (any_alloc_table void) in
      (let i = ref (any_pointer void) in
      (C_8:
-     (C_9:
-     (C_10:
      begin
-       (let jessie_<somenum> =
-       (i := (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (i := (let _jessie_<somenum> =
              (C_7:
              (JC_<somenum>:
              (((alloc_struct_intP_requires (1)) intP_i_2_alloc_table) intP_i_2_tag_table))) in
              (JC_<somenum>:
              (assert
-             { ge_int(offset_max(intP_i_2_alloc_table, jessie_<somenum>), (0)) };
-             jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = !i in
-      (JC_<somenum>: (((g_requires jessie_<somenum>) intP_intM_i_2) !intP_i_2_alloc_table)));
-      ((free_parameter intP_i_2_alloc_table) !i);
-      (return := (C_11: ((safe_acc_ !intP_intM_i_2) !i))); (raise Return) end)))))));
-    absurd  end with Return -> !return end)) { true }
+             { ge_int(offset_max(intP_i_2_alloc_table, _jessie_<somenum>), (0)) };
+             _jessie_<somenum>)))) in void);
+      (C_9:
+      begin
+        (let _jessie_<somenum> = !i in
+        (JC_<somenum>:
+        (((g_requires _jessie_<somenum>) intP_intM_i_2) !intP_i_2_alloc_table)));
+       (C_10:
+       begin
+         ((free_parameter intP_i_2_alloc_table) !i);
+        (return := (C_11: ((safe_acc_ !intP_intM_i_2) !i))); (raise Return)
+       end) end) end))))); absurd  end with Return -> !return end)) { true }
 
 let g_ensures_default =
  fun (p : intP pointer) (intP_intM_p_1 : (intP, int32) memory ref) (intP_p_1_alloc_table : intP alloc_table) ->
@@ -603,8 +608,8 @@ let g_ensures_default =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = p in (((safe_upd_ intP_intM_p_1) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = p in (((safe_upd_ intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_int32(select(intP_intM_p_1, p)) = (1)))
@@ -621,10 +626,10 @@ let g_safety =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = p in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = p in
      (JC_<somenum>:
-     ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 

@@ -670,12 +670,12 @@ let f_ensures_default =
   try
    (C_5:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_4:
      ((shift t) (integer_of_int32 (C_3:
                                   (safe_int32_of_integer_ (C_2:
                                                           ((mul_int (1)) (3)))))))) in
-     (JC_<somenum>: (((h jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
+     (JC_<somenum>: (((h _jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: true) }
 
@@ -695,12 +695,12 @@ let f_safety =
   try
    (C_5:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_4:
      ((shift t) (integer_of_int32 (C_3:
                                   (safe_int32_of_integer_ (C_2:
                                                           ((mul_int (1)) (3)))))))) in
-     (JC_<somenum>: (((h_requires jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
+     (JC_<somenum>: (((h_requires _jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_t2(intP_t2_2_alloc_table))
@@ -722,12 +722,12 @@ let g_ensures_default =
   try
    (C_13:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_12:
      ((shift t) (integer_of_int32 (C_11:
                                   (safe_int32_of_integer_ (C_10:
                                                           ((mul_int (1)) (3)))))))) in
-     (JC_<somenum>: (((h jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
+     (JC_<somenum>: (((h _jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: true) }
 
@@ -747,12 +747,12 @@ let g_safety =
   try
    (C_13:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_12:
      ((shift t) (integer_of_int32 (C_11:
                                   (safe_int32_of_integer_ (C_10:
                                                           ((mul_int (1)) (3)))))))) in
-     (JC_<somenum>: (((h_requires jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
+     (JC_<somenum>: (((h_requires _jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_t2(intP_t2_2_alloc_table))
@@ -767,7 +767,7 @@ let m_ensures_default =
   try
    (C_23:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_22:
      ((shift t2) (integer_of_int32 (C_21:
                                    (safe_int32_of_integer_ (C_20:
@@ -777,7 +777,7 @@ let m_ensures_default =
                                                               (safe_int32_of_integer_ 
                                                                (C_18:
                                                                ((mul_int (1)) (3))))))) (2)))))))) in
-     (JC_<somenum>: (((h jessie_<somenum>) intP_intM_t2_2) !intP_t2_2_alloc_table)));
+     (JC_<somenum>: (((h _jessie_<somenum>) intP_intM_t2_2) !intP_t2_2_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     (integer_of_int32(deref(shift(t2, add_int(mul_int((1), (3)), (2))),
@@ -792,7 +792,7 @@ let m_safety =
   try
    (C_23:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_22:
      ((shift t2) (integer_of_int32 (C_21:
                                    (safe_int32_of_integer_ (C_20:
@@ -802,7 +802,8 @@ let m_safety =
                                                               (safe_int32_of_integer_ 
                                                                (C_18:
                                                                ((mul_int (1)) (3))))))) (2)))))))) in
-     (JC_<somenum>: (((h_requires jessie_<somenum>) intP_intM_t2_2) !intP_t2_2_alloc_table)));
+     (JC_<somenum>:
+     (((h_requires _jessie_<somenum>) intP_intM_t2_2) !intP_t2_2_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_t2(intP_t2_2_alloc_table))

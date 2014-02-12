@@ -438,27 +438,28 @@ let sizetype_normalize_ensures_default =
      (let min_mantissa = ref (any_int void) in
      (let __retres = ref (any_int void) in
      (C_1:
-     (C_11:
      begin
-       (let jessie_<somenum> = (min_mantissa := (2097152)) in void);
+       (let _jessie_<somenum> = (min_mantissa := (2097152)) in void);
       (if ((lt_int_ (C_10: ((safe_acc_ !s1_mantissa_e_1) e))) !min_mantissa)
       then
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (C_5:
        begin
-         (let jessie_<somenum> =
+         (let _jessie_<somenum> =
          (C_3: ((mul_int (C_2: ((safe_acc_ !s1_mantissa_e_1) e))) (256))) in
-         (let jessie_<somenum> = e in
-         (((safe_upd_ s1_mantissa_e_1) jessie_<somenum>) jessie_<somenum>)));
+         (let _jessie_<somenum> = e in
+         (((safe_upd_ s1_mantissa_e_1) _jessie_<somenum>) _jessie_<somenum>)));
         (C_9:
-        (let jessie_<somenum> =
+        (let _jessie_<somenum> =
         (C_7: ((sub_int (C_6: ((safe_acc_ !s1_exponent_e_1) e))) (8))) in
         begin
-          (let jessie_<somenum> = e in
-          (((safe_upd_ s1_exponent_e_1) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
-       end) in void) else void); (let jessie_<somenum> = (__retres := (0)) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end))
+          (let _jessie_<somenum> = e in
+          (((safe_upd_ s1_exponent_e_1) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum>
+        end)) end) in void) else void);
+      (C_11:
+      begin
+        (let _jessie_<somenum> = (__retres := (0)) in void); (return := !__retres);
+       (raise Return) end) end))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     (mul_int(select(s1_mantissa_e_1, e),
      lsl((1), select(s1_exponent_e_1, e))) = mul_int(select(s1_mantissa_e_1@,
@@ -482,34 +483,35 @@ let sizetype_normalize_safety =
      (let min_mantissa = ref (any_int void) in
      (let __retres = ref (any_int void) in
      (C_1:
-     (C_11:
      begin
-       (let jessie_<somenum> = (min_mantissa := (2097152)) in void);
+       (let _jessie_<somenum> = (min_mantissa := (2097152)) in void);
       (if ((lt_int_ (C_10:
                     (JC_<somenum>: (((acc_ s1_e_1_alloc_table) !s1_mantissa_e_1) e)))) !min_mantissa)
       then
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (C_5:
        begin
-         (let jessie_<somenum> =
+         (let _jessie_<somenum> =
          (C_3:
          ((mul_int (C_2:
                    (JC_<somenum>: (((acc_ s1_e_1_alloc_table) !s1_mantissa_e_1) e)))) (256))) in
-         (let jessie_<somenum> = e in
+         (let _jessie_<somenum> = e in
          (JC_<somenum>:
-         ((((upd_ s1_e_1_alloc_table) s1_mantissa_e_1) jessie_<somenum>) jessie_<somenum>))));
+         ((((upd_ s1_e_1_alloc_table) s1_mantissa_e_1) _jessie_<somenum>) _jessie_<somenum>))));
         (C_9:
-        (let jessie_<somenum> =
+        (let _jessie_<somenum> =
         (C_7:
         ((sub_int (C_6:
                   (JC_<somenum>: (((acc_ s1_e_1_alloc_table) !s1_exponent_e_1) e)))) (8))) in
         begin
-          (let jessie_<somenum> = e in
+          (let _jessie_<somenum> = e in
           (JC_<somenum>:
-          ((((upd_ s1_e_1_alloc_table) s1_exponent_e_1) jessie_<somenum>) jessie_<somenum>)));
-         jessie_<somenum> end)) end) in void) else void);
-      (let jessie_<somenum> = (__retres := (0)) in void); (return := !__retres);
-      (raise Return) end)))); absurd  end with Return -> !return end))
+          ((((upd_ s1_e_1_alloc_table) s1_exponent_e_1) _jessie_<somenum>) _jessie_<somenum>)));
+         _jessie_<somenum> end)) end) in void) else void);
+      (C_11:
+      begin
+        (let _jessie_<somenum> = (__retres := (0)) in void); (return := !__retres);
+       (raise Return) end) end))); absurd  end with Return -> !return end))
   { true }
 
 

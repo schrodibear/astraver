@@ -515,8 +515,8 @@ let f_ensures_default =
   try
    (C_4:
    begin
-     (let jessie_<somenum> = a in
-     (JC_<somenum>: (((g jessie_<somenum>) intP_intM_a_1) !intP_a_1_alloc_table)));
+     (let _jessie_<somenum> = a in
+     (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_a_1) !intP_a_1_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: true) }
 
@@ -527,8 +527,8 @@ let f_safety =
   try
    (C_4:
    begin
-     (let jessie_<somenum> = a in
-     (JC_<somenum>: (((g_requires jessie_<somenum>) intP_intM_a_1) !intP_a_1_alloc_table)));
+     (let _jessie_<somenum> = a in
+     (JC_<somenum>: (((g_requires _jessie_<somenum>) intP_intM_a_1) !intP_a_1_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let g_ensures_default =
@@ -538,10 +538,10 @@ let g_ensures_default =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = ip in (((safe_upd_ intP_intM_ip_2) jessie_<somenum>) jessie_<somenum>)));
-    (raise Return); (raise Return) end) with Return -> void end)
-  { (JC_<somenum>: true) }
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = ip in
+     (((safe_upd_ intP_intM_ip_2) _jessie_<somenum>) _jessie_<somenum>))); (raise Return);
+    (raise Return) end) with Return -> void end) { (JC_<somenum>: true) }
 
 let g_safety =
  fun (ip : intP pointer) (intP_intM_ip_2 : (intP, int32) memory ref) (intP_ip_2_alloc_table : intP alloc_table) ->
@@ -550,10 +550,10 @@ let g_safety =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let jessie_<somenum> = ip in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let _jessie_<somenum> = ip in
      (JC_<somenum>:
-     ((((upd_ intP_ip_2_alloc_table) intP_intM_ip_2) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ intP_ip_2_alloc_table) intP_intM_ip_2) _jessie_<somenum>) _jessie_<somenum>))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 

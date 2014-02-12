@@ -752,28 +752,37 @@ let f_ensures_default =
    begin
      (let tmp = ref (any_pointer void) in
      (C_2:
-     (C_5:
-     (C_8:
-     (C_12:
-     (C_14:
-     (C_17:
      begin
-       (let jessie_<somenum> = (tmp := (C_1: ((safe_acc_ !S_p_s_1) s_0))) in void);
-      (let jessie_<somenum> = (C_3: ((safe_acc_ S_i_s_1) s_0)) in
-      (let jessie_<somenum> = s_0 in (((safe_upd_ S_p_s_1) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-      (let jessie_<somenum> = (C_6: ((safe_acc_ S_i_s_1) s_0)) in
-      (((safe_upd_ intP_intM_s_1) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> =
-      (C_10: ((safe_acc_ !intP_intM_s_1) (C_9: ((safe_acc_ !S_p_s_1) s_0)))) in
-      (let jessie_<somenum> = !tmp in
-      (((safe_upd_ intP_intM_s_1) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = !tmp in
-      (let jessie_<somenum> = s_0 in (((safe_upd_ S_p_s_1) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = (C_15: ((safe_acc_ S_i_s_1) s_0)) in
-      (((safe_upd_ intP_intM_s_1) jessie_<somenum>) jessie_<somenum>))); (raise Return) end)))))));
-    (raise Return) end with Return -> void end)
+       (let _jessie_<somenum> = (tmp := (C_1: ((safe_acc_ !S_p_s_1) s_0))) in void);
+      (C_5:
+      begin
+        (let _jessie_<somenum> = (C_3: ((safe_acc_ S_i_s_1) s_0)) in
+        (let _jessie_<somenum> = s_0 in
+        (((safe_upd_ S_p_s_1) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_8:
+       begin
+         (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+         (let _jessie_<somenum> = (C_6: ((safe_acc_ S_i_s_1) s_0)) in
+         (((safe_upd_ intP_intM_s_1) _jessie_<somenum>) _jessie_<somenum>)));
+        (C_12:
+        begin
+          (let _jessie_<somenum> =
+          (C_10:
+          ((safe_acc_ !intP_intM_s_1) (C_9: ((safe_acc_ !S_p_s_1) s_0)))) in
+          (let _jessie_<somenum> = !tmp in
+          (((safe_upd_ intP_intM_s_1) _jessie_<somenum>) _jessie_<somenum>)));
+         (C_14:
+         begin
+           (let _jessie_<somenum> = !tmp in
+           (let _jessie_<somenum> = s_0 in
+           (((safe_upd_ S_p_s_1) _jessie_<somenum>) _jessie_<somenum>)));
+          (C_17:
+          begin
+            (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+            (let _jessie_<somenum> = (C_15: ((safe_acc_ S_i_s_1) s_0)) in
+            (((safe_upd_ intP_intM_s_1) _jessie_<somenum>) _jessie_<somenum>)));
+           (raise Return) end) end) end) end) end) end)); (raise Return) end
+   with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      (integer_of_int32(select(intP_intM_s_1, select(S_i_s_1, s_0))) = (1)))
@@ -796,40 +805,47 @@ let f_safety =
    begin
      (let tmp = ref (any_pointer void) in
      (C_2:
-     (C_5:
-     (C_8:
-     (C_12:
-     (C_14:
-     (C_17:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (tmp := (C_1: (JC_<somenum>: (((acc_ S_s_1_alloc_table) !S_p_s_1) s_0)))) in
        void);
-      (let jessie_<somenum> =
-      (C_3: (JC_<somenum>: (((acc_ S_s_1_alloc_table) S_i_s_1) s_0))) in
-      (let jessie_<somenum> = s_0 in
-      (JC_<somenum>: ((((upd_ S_s_1_alloc_table) S_p_s_1) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-      (let jessie_<somenum> =
-      (C_6: (JC_<somenum>: (((acc_ S_s_1_alloc_table) S_i_s_1) s_0))) in
-      (((safe_upd_ intP_intM_s_1) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> =
-      (C_10:
-      (JC_<somenum>:
-      (((acc_ intP_s_1_alloc_table) !intP_intM_s_1) (C_9:
-                                                    (JC_<somenum>:
-                                                    (((acc_ S_s_1_alloc_table) !S_p_s_1) s_0)))))) in
-      (let jessie_<somenum> = !tmp in
-      (JC_<somenum>:
-      ((((upd_ intP_s_1_alloc_table) intP_intM_s_1) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = !tmp in
-      (let jessie_<somenum> = s_0 in
-      (JC_<somenum>: ((((upd_ S_s_1_alloc_table) S_p_s_1) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> =
-      (C_15: (JC_<somenum>: (((acc_ S_s_1_alloc_table) S_i_s_1) s_0))) in
-      (((safe_upd_ intP_intM_s_1) jessie_<somenum>) jessie_<somenum>))); (raise Return) end)))))));
-    (raise Return) end with Return -> void end) { true }
+      (C_5:
+      begin
+        (let _jessie_<somenum> =
+        (C_3: (JC_<somenum>: (((acc_ S_s_1_alloc_table) S_i_s_1) s_0))) in
+        (let _jessie_<somenum> = s_0 in
+        (JC_<somenum>: ((((upd_ S_s_1_alloc_table) S_p_s_1) _jessie_<somenum>) _jessie_<somenum>))));
+       (C_8:
+       begin
+         (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+         (let _jessie_<somenum> =
+         (C_6: (JC_<somenum>: (((acc_ S_s_1_alloc_table) S_i_s_1) s_0))) in
+         (((safe_upd_ intP_intM_s_1) _jessie_<somenum>) _jessie_<somenum>)));
+        (C_12:
+        begin
+          (let _jessie_<somenum> =
+          (C_10:
+          (JC_<somenum>:
+          (((acc_ intP_s_1_alloc_table) !intP_intM_s_1) (C_9:
+                                                        (JC_<somenum>:
+                                                        (((acc_ S_s_1_alloc_table) !S_p_s_1) s_0)))))) in
+          (let _jessie_<somenum> = !tmp in
+          (JC_<somenum>:
+          ((((upd_ intP_s_1_alloc_table) intP_intM_s_1) _jessie_<somenum>) _jessie_<somenum>))));
+         (C_14:
+         begin
+           (let _jessie_<somenum> = !tmp in
+           (let _jessie_<somenum> = s_0 in
+           (JC_<somenum>:
+           ((((upd_ S_s_1_alloc_table) S_p_s_1) _jessie_<somenum>) _jessie_<somenum>))));
+          (C_17:
+          begin
+            (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+            (let _jessie_<somenum> =
+            (C_15: (JC_<somenum>: (((acc_ S_s_1_alloc_table) S_i_s_1) s_0))) in
+            (((safe_upd_ intP_intM_s_1) _jessie_<somenum>) _jessie_<somenum>)));
+           (raise Return) end) end) end) end) end) end)); (raise Return) end
+   with Return -> void end) { true }
 
 let fc_ensures_default =
  fun (t : T pointer) (T_ti_t_2 : (T, int32) memory ref) (T_tj_t_2 : (T, int32) memory ref) (T_t_2_alloc_table : T alloc_table) ->
@@ -845,33 +861,39 @@ let fc_ensures_default =
      (let T_tmp_0_5_alloc_table = ref (any_alloc_table void) in
      (let tmp_0 = ref (any_pointer void) in
      (C_29:
-     (C_31:
-     (C_33:
-     (C_40:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (tmp_0 := (C_28:
                  (JC_<somenum>:
                  (((alloc_struct_T (1)) T_tmp_0_5_alloc_table) T_tmp_0_5_tag_table)))) in
        void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = !tmp_0 in
-      (((safe_upd_ T_ti_tmp_0_5) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-      (let jessie_<somenum> = !tmp_0 in
-      (((safe_upd_ T_tj_tmp_0_5) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> =
-      (C_36:
+      (C_31:
       begin
-        (let jessie_<somenum> = (C_34: ((safe_acc_ !T_ti_tmp_0_5) !tmp_0)) in
-        (let jessie_<somenum> = t in (((safe_upd_ T_ti_t_2) jessie_<somenum>) jessie_<somenum>)));
-       (C_39:
-       (let jessie_<somenum> = (C_37: ((safe_acc_ !T_tj_tmp_0_5) !tmp_0)) in
+        (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+        (let _jessie_<somenum> = !tmp_0 in
+        (((safe_upd_ T_ti_tmp_0_5) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_33:
        begin
-         (let jessie_<somenum> = t in (((safe_upd_ T_tj_t_2) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end)) end) in void);
-      ((safe_free_parameter T_tmp_0_5_alloc_table) !tmp_0); (raise Return)
-     end))))))))); (raise Return) end with Return -> void end)
+         (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+         (let _jessie_<somenum> = !tmp_0 in
+         (((safe_upd_ T_tj_tmp_0_5) _jessie_<somenum>) _jessie_<somenum>)));
+        (let _jessie_<somenum> =
+        (C_36:
+        begin
+          (let _jessie_<somenum> = (C_34: ((safe_acc_ !T_ti_tmp_0_5) !tmp_0)) in
+          (let _jessie_<somenum> = t in
+          (((safe_upd_ T_ti_t_2) _jessie_<somenum>) _jessie_<somenum>)));
+         (C_39:
+         (let _jessie_<somenum> = (C_37: ((safe_acc_ !T_tj_tmp_0_5) !tmp_0)) in
+         begin
+           (let _jessie_<somenum> = t in
+           (((safe_upd_ T_tj_t_2) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum> end))
+        end) in void);
+        (C_40:
+        begin
+          ((safe_free_parameter T_tmp_0_5_alloc_table) !tmp_0);
+         (raise Return) end) end) end) end)))))); (raise Return) end with
+   Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_int32(select(T_ti_t_2, t)) = (1)))
     and (JC_<somenum>: (integer_of_int32(select(T_tj_t_2, t)) = (2))))) }
@@ -890,39 +912,45 @@ let fc_safety =
      (let T_tmp_0_5_alloc_table = ref (any_alloc_table void) in
      (let tmp_0 = ref (any_pointer void) in
      (C_29:
-     (C_31:
-     (C_33:
-     (C_40:
      begin
-       (let jessie_<somenum> =
-       (tmp_0 := (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (tmp_0 := (let _jessie_<somenum> =
                  (C_28:
                  (JC_<somenum>:
                  (((alloc_struct_T_requires (1)) T_tmp_0_5_alloc_table) T_tmp_0_5_tag_table))) in
                  (JC_<somenum>:
                  (assert
-                 { ge_int(offset_max(T_tmp_0_5_alloc_table, jessie_<somenum>), (0)) };
-                 jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = !tmp_0 in
-      (((safe_upd_ T_ti_tmp_0_5) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-      (let jessie_<somenum> = !tmp_0 in
-      (((safe_upd_ T_tj_tmp_0_5) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> =
-      (C_36:
+                 { ge_int(offset_max(T_tmp_0_5_alloc_table, _jessie_<somenum>), (0)) };
+                 _jessie_<somenum>)))) in void);
+      (C_31:
       begin
-        (let jessie_<somenum> = (C_34: ((safe_acc_ !T_ti_tmp_0_5) !tmp_0)) in
-        (let jessie_<somenum> = t in
-        (JC_<somenum>: ((((upd_ T_t_2_alloc_table) T_ti_t_2) jessie_<somenum>) jessie_<somenum>))));
-       (C_39:
-       (let jessie_<somenum> = (C_37: ((safe_acc_ !T_tj_tmp_0_5) !tmp_0)) in
+        (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+        (let _jessie_<somenum> = !tmp_0 in
+        (((safe_upd_ T_ti_tmp_0_5) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_33:
        begin
-         (let jessie_<somenum> = t in
-         (JC_<somenum>: ((((upd_ T_t_2_alloc_table) T_tj_t_2) jessie_<somenum>) jessie_<somenum>)));
-        jessie_<somenum> end)) end) in void);
-      ((free_parameter T_tmp_0_5_alloc_table) !tmp_0); (raise Return) end)))))))));
-    (raise Return) end with Return -> void end) { true }
+         (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+         (let _jessie_<somenum> = !tmp_0 in
+         (((safe_upd_ T_tj_tmp_0_5) _jessie_<somenum>) _jessie_<somenum>)));
+        (let _jessie_<somenum> =
+        (C_36:
+        begin
+          (let _jessie_<somenum> = (C_34: ((safe_acc_ !T_ti_tmp_0_5) !tmp_0)) in
+          (let _jessie_<somenum> = t in
+          (JC_<somenum>:
+          ((((upd_ T_t_2_alloc_table) T_ti_t_2) _jessie_<somenum>) _jessie_<somenum>))));
+         (C_39:
+         (let _jessie_<somenum> = (C_37: ((safe_acc_ !T_tj_tmp_0_5) !tmp_0)) in
+         begin
+           (let _jessie_<somenum> = t in
+           (JC_<somenum>:
+           ((((upd_ T_t_2_alloc_table) T_tj_t_2) _jessie_<somenum>) _jessie_<somenum>)));
+          _jessie_<somenum> end)) end) in void);
+        (C_40:
+        begin
+          ((free_parameter T_tmp_0_5_alloc_table) !tmp_0); (raise Return) end)
+       end) end) end)))))); (raise Return) end with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C compound_local.jessie --quiet -f compound_local.makefile project
@@ -947,7 +975,7 @@ why --project [...] why/compound_local.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/compound_local_po24.why">
-      <location file = "why/compound_local.why" line = "797" begin = "19" end = "76"/>
+      <location file = "why/compound_local.why" line = "816" begin = "19" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/compound_local_po25.why">
@@ -971,7 +999,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po29.why">
-      <location file = "why/compound_local.why" line = "817" begin = "7" end = "52"/>
+      <location file = "why/compound_local.why" line = "844" begin = "11" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

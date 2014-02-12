@@ -538,9 +538,9 @@ let f_ensures_az =
    begin
      (if ((neq_int_ (integer_of_int32 (C_3: ((safe_acc_ !intP_intM_a_1) a)))) (0))
      then
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = a in
-      (((safe_upd_ intP_intM_a_1) jessie_<somenum>) jessie_<somenum>))) else void);
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let _jessie_<somenum> = a in
+      (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: (integer_of_int32(select(intP_intM_a_1, a)) = (0))) }
 
@@ -554,9 +554,10 @@ let f_ensures_default =
    begin
      (if ((neq_int_ (integer_of_int32 (C_3: ((safe_acc_ !intP_intM_a_1) a)))) (0))
      then
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = a in (((safe_upd_ intP_intM_a_1) jessie_<somenum>) jessie_<somenum>)))
-     else void); (raise Return); (raise Return) end with Return -> void end)
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let _jessie_<somenum> = a in
+      (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -571,10 +572,10 @@ let f_safety =
                                       (JC_<somenum>:
                                       (((acc_ intP_a_1_alloc_table) !intP_intM_a_1) a))))) (0))
      then
-      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = a in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let _jessie_<somenum> = a in
       (JC_<somenum>:
-      ((((upd_ intP_a_1_alloc_table) intP_intM_a_1) jessie_<somenum>) jessie_<somenum>))))
+      ((((upd_ intP_a_1_alloc_table) intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))))
      else void); (raise Return); (raise Return) end with Return -> void end)
   { true }
 
@@ -587,8 +588,8 @@ let g_ensures_default =
   try
    (C_9:
    begin
-     (let jessie_<somenum> = a_0 in
-     (JC_<somenum>: (((f jessie_<somenum>) intP_intM_a_0_2) intP_a_0_2_alloc_table)));
+     (let _jessie_<somenum> = a_0 in
+     (JC_<somenum>: (((f _jessie_<somenum>) intP_intM_a_0_2) intP_a_0_2_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     ((integer_of_int32(select(intP_intM_a_0_2@, a_0)) = (0)) ->
@@ -603,9 +604,9 @@ let g_safety =
   try
    (C_9:
    begin
-     (let jessie_<somenum> = a_0 in
+     (let _jessie_<somenum> = a_0 in
      (JC_<somenum>:
-     (((f_requires jessie_<somenum>) intP_intM_a_0_2) intP_a_0_2_alloc_table)));
+     (((f_requires _jessie_<somenum>) intP_intM_a_0_2) intP_a_0_2_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 

@@ -409,7 +409,7 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_1: (safe_int32_of_integer_ (integer_of_uint8 x_0)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: ge_int(integer_of_int32(result), (0))) }
@@ -424,7 +424,7 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_1: (JC_<somenum>: (int32_of_integer_ (integer_of_uint8 x_0))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }

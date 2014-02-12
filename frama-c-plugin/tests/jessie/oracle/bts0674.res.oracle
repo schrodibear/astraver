@@ -415,12 +415,12 @@ let helper_ensures_default =
    begin
      try
       begin
-        (let jessie_<somenum> = x_0 in
-        (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (2))
+        (let _jessie_<somenum> = x_0 in
+        (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (2))
         then (raise (Goto_switch_0_break_exc void))
         else (if true then void else void)));
        (raise (Goto_switch_0_break_exc void)) end with
-      Goto_switch_0_break_exc jessie_<somenum> ->
+      Goto_switch_0_break_exc _jessie_<somenum> ->
       (switch_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { (JC_<somenum>: true) }
 
@@ -432,12 +432,12 @@ let helper_safety =
    begin
      try
       begin
-        (let jessie_<somenum> = x_0 in
-        (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (2))
+        (let _jessie_<somenum> = x_0 in
+        (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (2))
         then (raise (Goto_switch_0_break_exc void))
         else (if true then void else void)));
        (raise (Goto_switch_0_break_exc void)) end with
-      Goto_switch_0_break_exc jessie_<somenum> ->
+      Goto_switch_0_break_exc _jessie_<somenum> ->
       (switch_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { true }
 

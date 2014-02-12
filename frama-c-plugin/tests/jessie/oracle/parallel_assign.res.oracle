@@ -521,26 +521,23 @@ let f_ensures_default =
   (init:
   try
    (C_2:
-   (C_4:
    begin
-     (let jessie_<somenum> = (double_of_real_exact 1.0) in
-     (let jessie_<somenum> = t in
-     (let jessie_<somenum> = (double_of_real_exact 2.0) in
-     (let jessie_<somenum> = t in
-     (let jessie_<somenum> = (1) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     [ { } unit reads doubleP_doubleM_t_1,doubleP_t_1_alloc_table
-       writes doubleP_doubleM_t_1
-       { (not_assigns(doubleP_t_1_alloc_table, doubleP_doubleM_t_1@,
-          doubleP_doubleM_t_1,
-          pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-         and ((select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-             and (select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-    (assert
-    { (JC_<somenum>:
-      (double_value(select(doubleP_doubleM_t_1, shift(t, (0)))) = 1.0)) };
-    void); void; (raise Return); (raise Return) end)) with Return -> void end)
-  { (JC_<somenum>: true) }
+     (let _jessie_<somenum> = (double_of_real_exact 1.0) in
+     (let _jessie_<somenum> = t in
+     (((safe_upd_ doubleP_doubleM_t_1) _jessie_<somenum>) _jessie_<somenum>)));
+    (C_4:
+    begin
+      (let _jessie_<somenum> = (double_of_real_exact 2.0) in
+      (let _jessie_<somenum> = t in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+      (((safe_upd_ doubleP_doubleM_t_1) _jessie_<somenum>) _jessie_<somenum>))))));
+     (assert
+     { (JC_<somenum>:
+       (double_value(select(doubleP_doubleM_t_1, shift(t, (0)))) = 1.0)) };
+     void); void; (raise Return); (raise Return) end) end) with Return ->
+   void end) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -548,25 +545,22 @@ let f_safety =
   (init:
   try
    (C_2:
-   (C_4:
    begin
-     (let jessie_<somenum> = (double_of_real_exact 1.0) in
-     (let jessie_<somenum> = t in
-     (let jessie_<somenum> = (double_of_real_exact 2.0) in
-     (let jessie_<somenum> = t in
-     (let jessie_<somenum> = (1) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     [ { } unit reads doubleP_doubleM_t_1,doubleP_t_1_alloc_table
-       writes doubleP_doubleM_t_1
-       { (not_assigns(doubleP_t_1_alloc_table, doubleP_doubleM_t_1@,
-          doubleP_doubleM_t_1,
-          pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-         and ((select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-             and (select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
-    [ { } unit reads doubleP_doubleM_t_1
-      { (JC_<somenum>:
-        (double_value(select(doubleP_doubleM_t_1, shift(t, (0)))) = 1.0)) } ];
-    void; (raise Return); (raise Return) end)) with Return -> void end)
+     (let _jessie_<somenum> = (double_of_real_exact 1.0) in
+     (let _jessie_<somenum> = t in
+     (((safe_upd_ doubleP_doubleM_t_1) _jessie_<somenum>) _jessie_<somenum>)));
+    (C_4:
+    begin
+      (let _jessie_<somenum> = (double_of_real_exact 2.0) in
+      (let _jessie_<somenum> = t in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+      (((safe_upd_ doubleP_doubleM_t_1) _jessie_<somenum>) _jessie_<somenum>))))));
+     [ { } unit reads doubleP_doubleM_t_1
+       { (JC_<somenum>:
+         (double_value(select(doubleP_doubleM_t_1, shift(t, (0)))) = 1.0)) } ];
+     void; (raise Return); (raise Return) end) end) with Return -> void end)
   { (JC_<somenum>: valid_t(doubleP_t_1_alloc_table)) }
 
 let g_ensures_default =
@@ -581,31 +575,31 @@ let g_ensures_default =
   (init:
   try
    (C_9:
-   (C_12:
-   (C_15:
    begin
-     (let jessie_<somenum> = (double_of_real_exact 1.0) in
-     (let jessie_<somenum> = t_0 in
-     (let jessie_<somenum> = (double_of_real_exact 2.0) in
-     (let jessie_<somenum> = t_0 in
-     (let jessie_<somenum> = (1) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     (let jessie_<somenum> = (double_of_real_exact 3.0) in
-     (let jessie_<somenum> = t_0 in
-     (let jessie_<somenum> = (2) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     [ { } unit reads doubleP_doubleM_t_0_2 writes doubleP_doubleM_t_0_2
-       { (not_assigns(doubleP_t_0_2_alloc_table, doubleP_doubleM_t_0_2@,
-          doubleP_doubleM_t_0_2,
-          pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-         and ((select(doubleP_doubleM_t_0_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-             and ((select(doubleP_doubleM_t_0_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                 and (select(doubleP_doubleM_t_0_2, shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-    (assert
-    { (JC_<somenum>:
-      (double_value(select(doubleP_doubleM_t_0_2, shift(t_0, (0)))) = 1.0)) };
-    void); void; (raise Return); (raise Return) end))) with Return ->
-   void end) { (JC_<somenum>: true) }
+     (let _jessie_<somenum> = (double_of_real_exact 1.0) in
+     (let _jessie_<somenum> = t_0 in
+     (((safe_upd_ doubleP_doubleM_t_0_2) _jessie_<somenum>) _jessie_<somenum>)));
+    (C_12:
+    begin
+      (let _jessie_<somenum> = (double_of_real_exact 2.0) in
+      (let _jessie_<somenum> = t_0 in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+      (((safe_upd_ doubleP_doubleM_t_0_2) _jessie_<somenum>) _jessie_<somenum>))))));
+     (C_15:
+     begin
+       (let _jessie_<somenum> = (double_of_real_exact 3.0) in
+       (let _jessie_<somenum> = t_0 in
+       (let _jessie_<somenum> = (2) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
+       (((safe_upd_ doubleP_doubleM_t_0_2) _jessie_<somenum>) _jessie_<somenum>))))));
+      (assert
+      { (JC_<somenum>:
+        (double_value(select(doubleP_doubleM_t_0_2, shift(t_0, (0)))) = 1.0)) };
+      void); void; (raise Return); (raise Return) end) end) end) with
+   Return -> void end) { (JC_<somenum>: true) }
 
 let g_safety =
  fun (t_0 : doubleP pointer) (doubleP_doubleM_t_0_2 : (doubleP, double) memory ref) (doubleP_t_0_2_alloc_table : doubleP alloc_table) ->
@@ -619,33 +613,33 @@ let g_safety =
   (init:
   try
    (C_9:
-   (C_12:
-   (C_15:
    begin
-     (let jessie_<somenum> = (double_of_real_exact 1.0) in
-     (let jessie_<somenum> = t_0 in
-     (let jessie_<somenum> = (double_of_real_exact 2.0) in
-     (let jessie_<somenum> = t_0 in
-     (let jessie_<somenum> = (1) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     (let jessie_<somenum> = (double_of_real_exact 3.0) in
-     (let jessie_<somenum> = t_0 in
-     (let jessie_<somenum> = (2) in
-     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-     [ { (le_int((2), offset_max(doubleP_t_0_2_alloc_table, jessie_<somenum>))
-         and le_int((1), offset_max(doubleP_t_0_2_alloc_table, jessie_<somenum>)))}
-       unit reads doubleP_doubleM_t_0_2 writes doubleP_doubleM_t_0_2
-       { (not_assigns(doubleP_t_0_2_alloc_table, doubleP_doubleM_t_0_2@,
-          doubleP_doubleM_t_0_2,
-          pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-         and ((select(doubleP_doubleM_t_0_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-             and ((select(doubleP_doubleM_t_0_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                 and (select(doubleP_doubleM_t_0_2, shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
-    [ { } unit reads doubleP_doubleM_t_0_2
-      { (JC_<somenum>:
-        (double_value(select(doubleP_doubleM_t_0_2, shift(t_0, (0)))) = 1.0)) } ];
-    void; (raise Return); (raise Return) end))) with Return -> void end)
-  { (JC_<somenum>: valid_t(doubleP_t_1_alloc_table)) }
+     (let _jessie_<somenum> = (double_of_real_exact 1.0) in
+     (let _jessie_<somenum> = t_0 in
+     (((safe_upd_ doubleP_doubleM_t_0_2) _jessie_<somenum>) _jessie_<somenum>)));
+    (C_12:
+    begin
+      (let _jessie_<somenum> = (double_of_real_exact 2.0) in
+      (let _jessie_<somenum> = t_0 in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+      (JC_<somenum>:
+      (((((lsafe_lbound_upd_ doubleP_t_0_2_alloc_table) doubleP_doubleM_t_0_2) _jessie_<somenum>) (1)) _jessie_<somenum>)))))));
+     (C_15:
+     begin
+       (let _jessie_<somenum> = (double_of_real_exact 3.0) in
+       (let _jessie_<somenum> = t_0 in
+       (let _jessie_<somenum> = (2) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
+       (JC_<somenum>:
+       (((((lsafe_lbound_upd_ doubleP_t_0_2_alloc_table) doubleP_doubleM_t_0_2) _jessie_<somenum>) (2)) _jessie_<somenum>)))))));
+      [ { } unit reads doubleP_doubleM_t_0_2
+        { (JC_<somenum>:
+          (double_value(select(doubleP_doubleM_t_0_2, shift(t_0, (0)))) = 1.0)) } ];
+      void; (raise Return); (raise Return) end) end) end) with Return ->
+   void end) { (JC_<somenum>: valid_t(doubleP_t_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C parallel_assign.jessie --quiet -f parallel_assign.makefile project
@@ -661,6 +655,16 @@ why --project [...] why/parallel_assign.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/parallel_assign_po3.why">
+      <location file = "PPCHOME/tests/jessie/parallel_assign.jessie/parallel_assign.jc" line = "69" begin = "15" end = "68"/>
+      <explain kind = "Pre"
+text = "IndexBounds"/>
+    </goal>
+    <goal why_file="why/parallel_assign_po4.why">
+      <location file = "PPCHOME/tests/jessie/parallel_assign.jessie/parallel_assign.jc" line = "70" begin = "15" end = "68"/>
+      <explain kind = "Pre"
+text = "IndexBounds"/>
+    </goal>
+    <goal why_file="why/parallel_assign_po5.why">
       <location file = "PPCHOME/tests/jessie/parallel_assign.c" line = "11" begin = "5" end = "6"/>
       <explain kind = "Post"/>
     </goal>

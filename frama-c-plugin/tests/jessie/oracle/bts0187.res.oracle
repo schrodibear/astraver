@@ -411,7 +411,7 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end)) { (JC_<somenum>: true) }
 
@@ -425,7 +425,7 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 

@@ -547,12 +547,12 @@ let ftest_ensures_default =
      (M:
      (C_3:
      begin
-       (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
-       (let jessie_<somenum> = b in
-       (let jessie_<somenum> = (4) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) (4)) in
-       (((safe_upd_ intP_intM_b_2) jessie_<somenum>) jessie_<somenum>))))));
+       (let _jessie_<somenum> = (safe_int32_of_integer_ (5)) in
+       (let _jessie_<somenum> = b in
+       (let _jessie_<somenum> = (4) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) (4)) in
+       (((safe_upd_ intP_intM_b_2) _jessie_<somenum>) _jessie_<somenum>))))));
       (assert
       { (JC_<somenum>:
         (forall c:intP pointer.
@@ -576,13 +576,13 @@ let ftest_safety =
      (M:
      (C_3:
      begin
-       (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
-       (let jessie_<somenum> = b in
-       (let jessie_<somenum> = (4) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) (4)) in
+       (let _jessie_<somenum> = (safe_int32_of_integer_ (5)) in
+       (let _jessie_<somenum> = b in
+       (let _jessie_<somenum> = (4) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) (4)) in
        (JC_<somenum>:
-       (((((lsafe_lbound_upd_ intP_b_2_alloc_table) intP_intM_b_2) jessie_<somenum>) (4)) jessie_<somenum>)))))));
+       (((((lsafe_lbound_upd_ intP_b_2_alloc_table) intP_intM_b_2) _jessie_<somenum>) (4)) _jessie_<somenum>)))))));
       [ { } unit
         { (JC_<somenum>:
           (forall c:intP pointer.

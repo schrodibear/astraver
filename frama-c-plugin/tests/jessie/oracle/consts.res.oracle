@@ -425,7 +425,7 @@ let f1_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (18))) in void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (18))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end)) { (JC_<somenum>: (integer_of_int32(result) = (18))) }
 
@@ -439,7 +439,7 @@ let f1_safety =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (18))) in void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (18))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 
@@ -453,7 +453,7 @@ let f2_ensures_default =
      (let i = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (neg_int (65536)))) in
+       (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (neg_int (65536)))) in
        void); (return := !i); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -467,7 +467,7 @@ let f2_safety =
      (let i = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (neg_int (65536)))) in
+       (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (neg_int (65536)))) in
        void); (return := !i); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 

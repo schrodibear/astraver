@@ -410,8 +410,8 @@ let myfun_ensures_default =
   try
    (C_1:
    begin
-     (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
-    (let jessie_<somenum> =
+     (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
+    (let _jessie_<somenum> =
     begin
       [ { } unit { (JC_<somenum>: (integer_of_int32(mutable_p) = (1))) } ];
      (assert { true };
@@ -431,9 +431,9 @@ let myfun_safety =
   try
    (C_1:
    begin
-     (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
-    (let jessie_<somenum> =
-    (let jessie_<somenum> =
+     (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
+    (let _jessie_<somenum> =
+    (let _jessie_<somenum> =
     (assert { (JC_<somenum>: (integer_of_int32(mutable_p) = (1))) };
     ((C_2:
      begin   (mutable_p := (safe_int32_of_integer_ (2))); !mutable_p end))) in
@@ -441,7 +441,7 @@ let myfun_safety =
       [ { } unit
         { (JC_<somenum>:
           (integer_of_int32(mutable_p@) = sub_int(integer_of_int32(mutable_p),
-                                          (1)))) } ]; jessie_<somenum> end) in void);
+                                          (1)))) } ]; _jessie_<somenum> end) in void);
     (raise Return); (raise Return) end) with Return -> void end)) { true }
 
 

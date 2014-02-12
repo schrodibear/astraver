@@ -458,7 +458,7 @@ let and_0_ensures_default =
    begin
      (let ret = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 i)) (0))
        then
         (if ((neq_int_ (integer_of_int32 j)) (0))
@@ -480,7 +480,7 @@ let and_0_safety =
    begin
      (let ret = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 i)) (0))
        then
         (if ((neq_int_ (integer_of_int32 j)) (0))
@@ -499,23 +499,25 @@ let or_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_7:
       begin
         (if ((neq_int_ (integer_of_int32 i_0)) (0))
         then
          (C_6:
          begin
-           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+           (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
            void); (raise (Return_label_exc void)) end)
         else
          (if ((neq_int_ (integer_of_int32 j_0)) (0))
          then
           (C_5:
           begin
-            (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+            (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
             void); (raise (Return_label_exc void)) end) else void));
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+       (C_7:
+       begin
+         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+         void); (raise (Return_label_exc void)) end) end with
+      Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -531,23 +533,25 @@ let or_safety =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (C_7:
       begin
         (if ((neq_int_ (integer_of_int32 i_0)) (0))
         then
          (C_6:
          begin
-           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+           (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
            void); (raise (Return_label_exc void)) end)
         else
          (if ((neq_int_ (integer_of_int32 j_0)) (0))
          then
           (C_5:
           begin
-            (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
+            (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
             void); (raise (Return_label_exc void)) end) else void));
-       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
+       (C_7:
+       begin
+         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+         void); (raise (Return_label_exc void)) end) end with
+      Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 

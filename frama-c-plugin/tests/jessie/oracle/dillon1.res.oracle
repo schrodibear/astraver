@@ -566,8 +566,8 @@ let f2_ensures_default =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-     (let jessie_<somenum> = p in (((safe_upd_ intP_intM_p_1) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+     (let _jessie_<somenum> = p in (((safe_upd_ intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     not_assigns(intP_p_1_alloc_table, intP_intM_p_1@, intP_intM_p_1,
@@ -582,10 +582,10 @@ let f2_safety =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-     (let jessie_<somenum> = p in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+     (let _jessie_<somenum> = p in
      (JC_<somenum>:
-     ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let f2b_ensures_default =
@@ -599,19 +599,21 @@ let f2b_ensures_default =
      (let intP_t_4_alloc_table = ref (any_alloc_table void) in
      (let t = ref (any_pointer void) in
      (C_15:
-     (C_17:
-     (C_18:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (t := (C_14:
              (JC_<somenum>:
              (((alloc_struct_intP (2)) intP_t_4_alloc_table) intP_t_4_tag_table)))) in
        void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-      (let jessie_<somenum> = !t in
-      (((safe_upd_ intP_intM_t_4) jessie_<somenum>) jessie_<somenum>)));
-      ((safe_free_parameter intP_t_4_alloc_table) !t); (raise Return) end)))))));
-    (raise Return) end with Return -> void end)
+      (C_17:
+      begin
+        (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+        (let _jessie_<somenum> = !t in
+        (((safe_upd_ intP_intM_t_4) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_18:
+       begin
+         ((safe_free_parameter intP_t_4_alloc_table) !t); (raise Return) end)
+      end) end))))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     not_assigns(intP_t_4_alloc_table@, intP_intM_t_4@, intP_intM_t_4,
     pset_empty)) }
@@ -627,23 +629,24 @@ let f2b_safety =
      (let intP_t_4_alloc_table = ref (any_alloc_table void) in
      (let t = ref (any_pointer void) in
      (C_15:
-     (C_17:
-     (C_18:
      begin
-       (let jessie_<somenum> =
-       (t := (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (t := (let _jessie_<somenum> =
              (C_14:
              (JC_<somenum>:
              (((alloc_struct_intP_requires (2)) intP_t_4_alloc_table) intP_t_4_tag_table))) in
              (JC_<somenum>:
              (assert
-             { ge_int(offset_max(intP_t_4_alloc_table, jessie_<somenum>), (1)) };
-             jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-      (let jessie_<somenum> = !t in
-      (((safe_upd_ intP_intM_t_4) jessie_<somenum>) jessie_<somenum>)));
-      ((free_parameter intP_t_4_alloc_table) !t); (raise Return) end)))))));
-    (raise Return) end with Return -> void end) { true }
+             { ge_int(offset_max(intP_t_4_alloc_table, _jessie_<somenum>), (1)) };
+             _jessie_<somenum>)))) in void);
+      (C_17:
+      begin
+        (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+        (let _jessie_<somenum> = !t in
+        (((safe_upd_ intP_intM_t_4) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_18:
+       begin   ((free_parameter intP_t_4_alloc_table) !t); (raise Return) end)
+      end) end))))); (raise Return) end with Return -> void end) { true }
 
 let main2_ensures_default =
  fun (tt : unit) ->
@@ -656,22 +659,25 @@ let main2_ensures_default =
      (let intP_c_2_alloc_table = ref (any_alloc_table void) in
      (let c = ref (any_pointer void) in
      (C_8:
-     (C_10:
-     (C_11:
-     (C_12:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (c := (C_7:
              (JC_<somenum>:
              (((alloc_struct_intP (1)) intP_c_2_alloc_table) intP_c_2_tag_table)))) in
        void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-      (let jessie_<somenum> = !c in
-      (((safe_upd_ intP_intM_c_2) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = !c in
-      (JC_<somenum>: (((f2 jessie_<somenum>) intP_intM_c_2) !intP_c_2_alloc_table)));
-      ((safe_free_parameter intP_c_2_alloc_table) !c); (raise Return) end))))))));
-    (raise Return) end with Return -> void end)
+      (C_10:
+      begin
+        (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+        (let _jessie_<somenum> = !c in
+        (((safe_upd_ intP_intM_c_2) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_11:
+       begin
+         (let _jessie_<somenum> = !c in
+         (JC_<somenum>: (((f2 _jessie_<somenum>) intP_intM_c_2) !intP_c_2_alloc_table)));
+        (C_12:
+        begin
+          ((safe_free_parameter intP_c_2_alloc_table) !c); (raise Return) end)
+       end) end) end))))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     not_assigns(intP_c_2_alloc_table@, intP_intM_c_2@, intP_intM_c_2,
     pset_empty)) }
@@ -687,27 +693,30 @@ let main2_safety =
      (let intP_c_2_alloc_table = ref (any_alloc_table void) in
      (let c = ref (any_pointer void) in
      (C_8:
-     (C_10:
-     (C_11:
-     (C_12:
      begin
-       (let jessie_<somenum> =
-       (c := (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (c := (let _jessie_<somenum> =
              (C_7:
              (JC_<somenum>:
              (((alloc_struct_intP_requires (1)) intP_c_2_alloc_table) intP_c_2_tag_table))) in
              (JC_<somenum>:
              (assert
-             { ge_int(offset_max(intP_c_2_alloc_table, jessie_<somenum>), (0)) };
-             jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-      (let jessie_<somenum> = !c in
-      (((safe_upd_ intP_intM_c_2) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = !c in
-      (JC_<somenum>:
-      (((f2_requires jessie_<somenum>) intP_intM_c_2) !intP_c_2_alloc_table)));
-      ((free_parameter intP_c_2_alloc_table) !c); (raise Return) end))))))));
-    (raise Return) end with Return -> void end) { true }
+             { ge_int(offset_max(intP_c_2_alloc_table, _jessie_<somenum>), (0)) };
+             _jessie_<somenum>)))) in void);
+      (C_10:
+      begin
+        (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+        (let _jessie_<somenum> = !c in
+        (((safe_upd_ intP_intM_c_2) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_11:
+       begin
+         (let _jessie_<somenum> = !c in
+         (JC_<somenum>:
+         (((f2_requires _jessie_<somenum>) intP_intM_c_2) !intP_c_2_alloc_table)));
+        (C_12:
+        begin   ((free_parameter intP_c_2_alloc_table) !c); (raise Return)
+        end) end) end) end))))); (raise Return) end with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C dillon1.jessie --quiet -f dillon1.makefile project

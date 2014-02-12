@@ -409,17 +409,19 @@ let myfun_ensures_default =
   (init:
   try
    (C_1:
-   (Mylabel:
-   (C_2:
    begin
-     (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
-    void;
-    (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (2))) in void);
-    (assert
-    { (JC_<somenum>:
-      (integer_of_int32(mutable_p@Mylabel) = sub_int(integer_of_int32(mutable_p),
-                                             (1)))) }; void); void;
-    (raise Return); (raise Return) end))) with Return -> void end))
+     (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
+    (Mylabel:
+    begin
+      void;
+     (C_2:
+     begin
+       (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (2))) in void);
+      (assert
+      { (JC_<somenum>:
+        (integer_of_int32(mutable_p@Mylabel) = sub_int(integer_of_int32(mutable_p),
+                                               (1)))) }; void); void;
+      (raise Return); (raise Return) end) end) end) with Return -> void end))
   { (JC_<somenum>: true) }
 
 let myfun_safety =
@@ -429,17 +431,20 @@ let myfun_safety =
   (init:
   try
    (C_1:
-   (Mylabel:
-   (C_2:
    begin
-     (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
-    void;
-    (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (2))) in void);
-    [ { } unit reads mutable_p
-      { (JC_<somenum>:
-        (integer_of_int32(mutable_p@Mylabel) = sub_int(integer_of_int32(mutable_p),
-                                               (1)))) } ]; void;
-    (raise Return); (raise Return) end))) with Return -> void end)) { true }
+     (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
+    (Mylabel:
+    begin
+      void;
+     (C_2:
+     begin
+       (let _jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (2))) in void);
+      [ { } unit reads mutable_p
+        { (JC_<somenum>:
+          (integer_of_int32(mutable_p@Mylabel) = sub_int(integer_of_int32(mutable_p),
+                                                 (1)))) } ]; void;
+      (raise Return); (raise Return) end) end) end) with Return -> void end))
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0071.jessie --quiet -f bts0071.makefile project

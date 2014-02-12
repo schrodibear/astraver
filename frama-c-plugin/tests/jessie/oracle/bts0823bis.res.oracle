@@ -505,8 +505,9 @@ let ftest_ensures_default =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = null in
-     (let jessie_<somenum> = b in (((safe_upd_ _elem_next_a_1) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = null in
+     (let _jessie_<somenum> = b in
+     (((safe_upd_ _elem_next_a_1) _jessie_<somenum>) _jessie_<somenum>)));
     (assert
     { (JC_<somenum>: (select(_elem_next_a_1@init, b) = select(_elem_next_a_1, b))) };
     void); void; (raise Return); (raise Return) end) with Return -> void end)
@@ -524,10 +525,10 @@ let ftest_safety =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = null in
-     (let jessie_<somenum> = b in
+     (let _jessie_<somenum> = null in
+     (let _jessie_<somenum> = b in
      (JC_<somenum>:
-     ((((upd_ _elem_a_1_alloc_table) _elem_next_a_1) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ _elem_a_1_alloc_table) _elem_next_a_1) _jessie_<somenum>) _jessie_<somenum>))));
     [ { } unit reads _elem_next_a_1
       { (JC_<somenum>: (select(_elem_next_a_1@init, b) = select(_elem_next_a_1, b))) } ];
     void; (raise Return); (raise Return) end) with Return -> void end)

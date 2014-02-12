@@ -553,8 +553,8 @@ let f_ensures_default =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (42)) in
-     (let jessie_<somenum> = q in (((safe_upd_ intP_intM_q_2) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (42)) in
+     (let _jessie_<somenum> = q in (((safe_upd_ intP_intM_q_2) _jessie_<somenum>) _jessie_<somenum>)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     not_assigns(intP_q_2_alloc_table, intP_intM_q_2@, intP_intM_q_2,
@@ -569,10 +569,10 @@ let f_safety =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (42)) in
-     (let jessie_<somenum> = q in
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (42)) in
+     (let _jessie_<somenum> = q in
      (JC_<somenum>:
-     ((((upd_ intP_q_2_alloc_table) intP_intM_q_2) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ intP_q_2_alloc_table) intP_intM_q_2) _jessie_<somenum>) _jessie_<somenum>))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let g_ensures_default =
@@ -586,18 +586,20 @@ let g_ensures_default =
    begin
      (let i = ref (any_pointer void) in
      (C_8:
-     (C_11:
-     (C_12:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (i := (C_7:
              (JC_<somenum>:
              (((alloc_struct_intP (2)) intP_p_1_alloc_table) intP_p_1_tag_table)))) in
        void); (assert { (JC_<somenum>: (p <> i)) }; void);
-      (let jessie_<somenum> = (C_10: ((shift !i) (1))) in
-      (JC_<somenum>: (((f jessie_<somenum>) intP_intM_p_1) !intP_p_1_alloc_table)));
-      ((safe_free_parameter intP_p_1_alloc_table) !i); (raise Return) end))));
-    (raise Return) end with Return -> void end)
+      (C_11:
+      begin
+        (let _jessie_<somenum> = (C_10: ((shift !i) (1))) in
+        (JC_<somenum>: (((f _jessie_<somenum>) intP_intM_p_1) !intP_p_1_alloc_table)));
+       (C_12:
+       begin
+         ((safe_free_parameter intP_p_1_alloc_table) !i); (raise Return) end)
+      end) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>: (integer_of_int32(select(intP_intM_p_1, p)) = (0))) }
 
 let g_safety =
@@ -611,23 +613,25 @@ let g_safety =
    begin
      (let i = ref (any_pointer void) in
      (C_8:
-     (C_11:
-     (C_12:
      begin
-       (let jessie_<somenum> =
-       (i := (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (i := (let _jessie_<somenum> =
              (C_7:
              (JC_<somenum>:
              (((alloc_struct_intP_requires (2)) intP_p_1_alloc_table) intP_p_1_tag_table))) in
              (JC_<somenum>:
              (assert
-             { ge_int(offset_max(intP_p_1_alloc_table, jessie_<somenum>), (1)) };
-             jessie_<somenum>)))) in void);
+             { ge_int(offset_max(intP_p_1_alloc_table, _jessie_<somenum>), (1)) };
+             _jessie_<somenum>)))) in void);
       [ { } unit reads i { (JC_<somenum>: (p <> i)) } ];
-      (let jessie_<somenum> = (C_10: ((shift !i) (1))) in
-      (JC_<somenum>: (((f_requires jessie_<somenum>) intP_intM_p_1) !intP_p_1_alloc_table)));
-      ((free_parameter intP_p_1_alloc_table) !i); (raise Return) end))));
-    (raise Return) end with Return -> void end) { true }
+      (C_11:
+      begin
+        (let _jessie_<somenum> = (C_10: ((shift !i) (1))) in
+        (JC_<somenum>:
+        (((f_requires _jessie_<somenum>) intP_intM_p_1) !intP_p_1_alloc_table)));
+       (C_12:
+       begin   ((free_parameter intP_p_1_alloc_table) !i); (raise Return) end)
+      end) end)); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C roux.jessie --quiet -f roux.makefile project
@@ -652,7 +656,7 @@ why --project [...] why/roux.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/roux_po7.why">
-      <location file = "why/roux.why" line = "540" begin = "15" end = "71"/>
+      <location file = "why/roux.why" line = "540" begin = "15" end = "72"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/roux_po8.why">
@@ -666,7 +670,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/roux_po10.why">
-      <location file = "why/roux.why" line = "545" begin = "7" end = "47"/>
+      <location file = "why/roux.why" line = "549" begin = "16" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

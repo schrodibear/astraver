@@ -704,8 +704,8 @@ let f2_ensures_default =
   try
    (C_9:
    begin
-     (let jessie_<somenum> = (C_8: ((safe_acc_ __anonstruct_las_1_c_x_3) x_0)) in
-     (JC_<somenum>: (((g jessie_<somenum>) intP_intM_x_3) intP_x_3_alloc_table)));
+     (let _jessie_<somenum> = (C_8: ((safe_acc_ __anonstruct_las_1_c_x_3) x_0)) in
+     (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_x_3) intP_x_3_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: true) }
 
@@ -722,11 +722,11 @@ let f2_safety =
   try
    (C_9:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_8:
      (JC_<somenum>:
      (((acc_ __anonstruct_las_1_x_3_alloc_table) __anonstruct_las_1_c_x_3) x_0))) in
-     (JC_<somenum>: (((g_requires jessie_<somenum>) intP_intM_x_3) intP_x_3_alloc_table)));
+     (JC_<somenum>: (((g_requires _jessie_<somenum>) intP_intM_x_3) intP_x_3_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
@@ -737,8 +737,8 @@ let f_ensures_default =
   try
    (C_6:
    begin
-     (let jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
-     (JC_<somenum>: (((g jessie_<somenum>) intP_intM_v_1) !intP_v_1_alloc_table)));
+     (let _jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
+     (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_v_1) !intP_v_1_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: true) }
 
@@ -749,8 +749,8 @@ let f_safety =
   try
    (C_6:
    begin
-     (let jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
-     (JC_<somenum>: (((g_requires jessie_<somenum>) intP_intM_v_1) !intP_v_1_alloc_table)));
+     (let _jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
+     (JC_<somenum>: (((g_requires _jessie_<somenum>) intP_intM_v_1) !intP_v_1_alloc_table)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 

@@ -445,7 +445,7 @@ let f_ensures_default =
            [ { } unit { true } ];
           try
            begin
-             (let jessie_<somenum> =
+             (let _jessie_<somenum> =
              begin
                (if ((gt_int_ (integer_of_int32 !i)) (0)) then void
                else (raise (Goto_while_0_break_exc void)));
@@ -465,9 +465,9 @@ let f_ensures_default =
                        (safe_int32_of_integer_ (C_3:
                                                ((sub_int (integer_of_int32 !i)) (1))))));
                 !i end)) end in void); (raise (Loop_continue_exc void)) end
-           with Loop_continue_exc jessie_<somenum> -> void end end done;
+           with Loop_continue_exc _jessie_<somenum> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { (JC_<somenum>: (integer_of_int32(i) = (0))) }
 
@@ -488,7 +488,7 @@ let f_safety =
            [ { } unit reads i { (JC_<somenum>: ge_int(integer_of_int32(i), (0))) } ];
           try
            begin
-             (let jessie_<somenum> =
+             (let _jessie_<somenum> =
              begin
                (if ((gt_int_ (integer_of_int32 !i)) (0)) then void
                else (raise (Goto_while_0_break_exc void)));
@@ -509,9 +509,9 @@ let f_safety =
                        (int32_of_integer_ (C_3:
                                           ((sub_int (integer_of_int32 !i)) (1)))))));
                 !i end)) end in void); (raise (Loop_continue_exc void)) end
-           with Loop_continue_exc jessie_<somenum> -> void end end done;
+           with Loop_continue_exc _jessie_<somenum> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { true }
 

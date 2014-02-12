@@ -452,15 +452,16 @@ let f_ensures_default =
      (let charP_charM_foo_5 = (any_memory void) in
      (let tmp = ref (any_int32 void) in
      (C_1:
-     (C_4:
      begin
-       (let jessie_<somenum> = (tmp := !mutable_x_1) in void);
-      (let jessie_<somenum> =
-      (mutable_x_1 := (C_3:
-                      (safe_int32_of_integer_ (C_2:
-                                              ((add_int (integer_of_int32 !mutable_x_1)) (1)))))) in
-      void); void; (return := !tmp); (raise Return) end))))); absurd  end
-   with Return -> !return end)))
+       (let _jessie_<somenum> = (tmp := !mutable_x_1) in void);
+      (C_4:
+      begin
+        (let _jessie_<somenum> =
+        (mutable_x_1 := (C_3:
+                        (safe_int32_of_integer_ (C_2:
+                                                ((add_int (integer_of_int32 !mutable_x_1)) (1)))))) in
+        void); void; (return := !tmp); (raise Return) end) end)))); absurd 
+   end with Return -> !return end)))
   { (JC_<somenum>:
     strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(result)),
     charP_charM_foo_6, charP_charM_foo_5)) }
@@ -477,16 +478,17 @@ let f_safety =
      (let charP_charM_foo_5 = (any_memory void) in
      (let tmp = ref (any_int32 void) in
      (C_1:
-     (C_4:
      begin
-       (let jessie_<somenum> = (tmp := !mutable_x_1) in void);
-      (let jessie_<somenum> =
-      (mutable_x_1 := (C_3:
-                      (JC_<somenum>:
-                      (int32_of_integer_ (C_2:
-                                         ((add_int (integer_of_int32 !mutable_x_1)) (1))))))) in
-      void); void; (return := !tmp); (raise Return) end))))); absurd  end
-   with Return -> !return end))) { true }
+       (let _jessie_<somenum> = (tmp := !mutable_x_1) in void);
+      (C_4:
+      begin
+        (let _jessie_<somenum> =
+        (mutable_x_1 := (C_3:
+                        (JC_<somenum>:
+                        (int32_of_integer_ (C_2:
+                                           ((add_int (integer_of_int32 !mutable_x_1)) (1))))))) in
+        void); void; (return := !tmp); (raise Return) end) end)))); absurd 
+   end with Return -> !return end))) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0092.jessie --quiet -f bts0092.makefile project

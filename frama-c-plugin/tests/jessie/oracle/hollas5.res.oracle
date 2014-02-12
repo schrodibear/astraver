@@ -427,26 +427,26 @@ let setFoo_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_3:
-     (C_6:
-     (C_7:
      begin
-       (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-       (let jessie_<somenum> = msg in
-       (let jessie_<somenum> = (4) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-       (let jessie_<somenum> = msg in
-       (let jessie_<somenum> = (3) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       [ { } unit reads charP_charM_msg_1 writes charP_charM_msg_1
-         { (not_assigns(charP_msg_1_alloc_table, charP_charM_msg_1@,
-            charP_charM_msg_1,
-            pset_range(pset_singleton(jessie_<somenum>), (3), (4)))
-           and ((select(charP_charM_msg_1, shift(jessie_<somenum>, (3))) = jessie_<somenum>)
-               and (select(charP_charM_msg_1, shift(jessie_<somenum>, (4))) = jessie_<somenum>))) } ]))))))));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end))
+       (let _jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+       (let _jessie_<somenum> = msg in
+       (let _jessie_<somenum> = (4) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) (4)) in
+       (((safe_upd_ charP_charM_msg_1) _jessie_<somenum>) _jessie_<somenum>))))));
+      (C_6:
+      begin
+        (let _jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+        (let _jessie_<somenum> = msg in
+        (let _jessie_<somenum> = (3) in
+        (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+        (let _jessie_<somenum> = ((shift _jessie_<somenum>) (3)) in
+        (((safe_upd_ charP_charM_msg_1) _jessie_<somenum>) _jessie_<somenum>))))));
+       (C_7:
+       begin
+         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+         void); (return := !__retres); (raise Return) end) end) end)); 
+    absurd  end with Return -> !return end))
   { (JC_<somenum>:
     (integer_of_int8(select(charP_charM_msg_1, shift(msg, (4)))) = (0))) }
 
@@ -461,32 +461,28 @@ let setFoo_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_3:
-     (C_6:
-     (C_7:
      begin
-       (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-       (let jessie_<somenum> = msg in
-       (let jessie_<somenum> = (4) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-       (let jessie_<somenum> = msg in
-       (let jessie_<somenum> = (3) in
-       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       [ { (le_int(offset_min(charP_msg_1_alloc_table, jessie_<somenum>), (4))
-           and (le_int((4), offset_max(charP_msg_1_alloc_table, jessie_<somenum>))
-               and (le_int(offset_min(charP_msg_1_alloc_table, jessie_<somenum>),
-                    (3))
-                   and le_int((3),
-                       offset_max(charP_msg_1_alloc_table, jessie_<somenum>)))))}
-         unit reads charP_charM_msg_1 writes charP_charM_msg_1
-         { (not_assigns(charP_msg_1_alloc_table, charP_charM_msg_1@,
-            charP_charM_msg_1,
-            pset_range(pset_singleton(jessie_<somenum>), (3), (4)))
-           and ((select(charP_charM_msg_1, shift(jessie_<somenum>, (3))) = jessie_<somenum>)
-               and (select(charP_charM_msg_1, shift(jessie_<somenum>, (4))) = jessie_<somenum>))) } ]))))))));
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { true }
+       (let _jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+       (let _jessie_<somenum> = msg in
+       (let _jessie_<somenum> = (4) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+       (let _jessie_<somenum> = ((shift _jessie_<somenum>) (4)) in
+       (JC_<somenum>:
+       ((((upd_ charP_msg_1_alloc_table) charP_charM_msg_1) _jessie_<somenum>) _jessie_<somenum>)))))));
+      (C_6:
+      begin
+        (let _jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+        (let _jessie_<somenum> = msg in
+        (let _jessie_<somenum> = (3) in
+        (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+        (let _jessie_<somenum> = ((shift _jessie_<somenum>) (3)) in
+        (JC_<somenum>:
+        ((((upd_ charP_msg_1_alloc_table) charP_charM_msg_1) _jessie_<somenum>) _jessie_<somenum>)))))));
+       (C_7:
+       begin
+         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+         void); (return := !__retres); (raise Return) end) end) end)); 
+    absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C hollas5.jessie --quiet -f hollas5.makefile project
@@ -498,6 +494,28 @@ why --project [...] why/hollas5.why
     <goal why_file="why/hollas5_po1.why">
       <location file = "PPCHOME/tests/jessie/hollas5.c" line = "6" begin = "12" end = "26"/>
       <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/hollas5_po2.why">
+      <location file = "PPCHOME/tests/jessie/hollas5.jessie/hollas5.jc" line = "44" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/hollas5_po3.why">
+      <location file = "PPCHOME/tests/jessie/hollas5.jessie/hollas5.jc" line = "44" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/hollas5_po4.why">
+      <location file = "PPCHOME/tests/jessie/hollas5.jessie/hollas5.jc" line = "45" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/hollas5_po5.why">
+      <location file = "PPCHOME/tests/jessie/hollas5.jessie/hollas5.jc" line = "45" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
   </function>

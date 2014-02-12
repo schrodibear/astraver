@@ -517,7 +517,7 @@ let strerror_ensures_default =
      (let __retres = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_2:
                     ((safe_acc_ !char_const_xP_char_const_xM__sys_errlist_1) 
                      (C_1: ((shift _sys_errlist) (integer_of_int32 errnum)))))) in
@@ -534,7 +534,7 @@ let strerror_safety =
      (let __retres = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (__retres := (C_2:
                     (JC_<somenum>:
                     ((((offset_acc_ !char_const_xP__sys_errlist_1_alloc_table) !char_const_xP_char_const_xM__sys_errlist_1) _sys_errlist) 

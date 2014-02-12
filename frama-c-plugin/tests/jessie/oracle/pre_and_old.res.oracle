@@ -325,14 +325,16 @@ let g_ensures_default =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      (C_1:
-     (C_2:
-     (C_4:
      begin
-       (let jessie_<somenum> = (tmp := !y) in void);
-      (let jessie_<somenum> = (y := (12)) in void);
-      (let jessie_<somenum> = (__retres := (C_3: ((add_int x_0) !tmp))) in void);
-      (return := !__retres); (raise Return) end))))); absurd  end with
-   Return -> !return end))
+       (let _jessie_<somenum> = (tmp := !y) in void);
+      (C_2:
+      begin
+        (let _jessie_<somenum> = (y := (12)) in void);
+       (C_4:
+       begin
+         (let _jessie_<somenum> = (__retres := (C_3: ((add_int x_0) !tmp))) in void);
+        (return := !__retres); (raise Return) end) end) end))); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: (result = f(x_0, y@)))
     and ((JC_<somenum>: (result = f(x_0, y@))) and (JC_<somenum>: (result = f(x_0, y@)))))) }
@@ -347,14 +349,16 @@ let g_safety =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      (C_1:
-     (C_2:
-     (C_4:
      begin
-       (let jessie_<somenum> = (tmp := !y) in void);
-      (let jessie_<somenum> = (y := (12)) in void);
-      (let jessie_<somenum> = (__retres := (C_3: ((add_int x_0) !tmp))) in void);
-      (return := !__retres); (raise Return) end))))); absurd  end with
-   Return -> !return end)) { true }
+       (let _jessie_<somenum> = (tmp := !y) in void);
+      (C_2:
+      begin
+        (let _jessie_<somenum> = (y := (12)) in void);
+       (C_4:
+       begin
+         (let _jessie_<somenum> = (__retres := (C_3: ((add_int x_0) !tmp))) in void);
+        (return := !__retres); (raise Return) end) end) end))); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C pre_and_old.jessie --quiet -f pre_and_old.makefile project

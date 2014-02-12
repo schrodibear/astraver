@@ -437,7 +437,7 @@ let f_ensures_default =
   try
    (C_1:
    begin
-     (let jessie_<somenum> = (g := (safe_int32_of_integer_ (0))) in void);
+     (let _jessie_<somenum> = (g := (safe_int32_of_integer_ (0))) in void);
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: ((JC_<somenum>: gzero(g)) and (JC_<somenum>: (integer_of_int32(g) = (0))))) }
 
@@ -448,7 +448,7 @@ let f_safety =
   try
    (C_1:
    begin
-     (let jessie_<somenum> = (g := (safe_int32_of_integer_ (0))) in void);
+     (let _jessie_<somenum> = (g := (safe_int32_of_integer_ (0))) in void);
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let h_ensures_default =

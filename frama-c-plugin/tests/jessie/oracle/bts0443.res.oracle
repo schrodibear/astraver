@@ -512,8 +512,8 @@ let f_ensures_default =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-     (let jessie_<somenum> = a in (((safe_upd_ intP_intM_a_1) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+     (let _jessie_<somenum> = a in (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     not_assigns(intP_a_1_alloc_table@, intP_intM_a_1@, intP_intM_a_1,
@@ -526,8 +526,8 @@ let f_safety =
   try
    (C_2:
    begin
-     (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-     (let jessie_<somenum> = a in (((safe_upd_ intP_intM_a_1) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+     (let _jessie_<somenum> = a in (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: valid_a(intP_a_1_alloc_table)) }
 

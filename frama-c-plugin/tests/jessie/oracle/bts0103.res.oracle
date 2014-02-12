@@ -525,30 +525,33 @@ let g_ensures_default =
      (let i = ref (any_int32 void) in
      try
       (C_1:
-      (loop_2:
       begin
-        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       while true do
-       { invariant
-           (JC_<somenum>:
-           not_assigns(intP_p_1_alloc_table, intP_intM_p_1@init,
-           intP_intM_p_1, pset_singleton(p)))  }
-        begin
-          [ { } unit { true } ];
-         try
+        (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_2:
+       begin
+         while true do
+         { invariant
+             (JC_<somenum>:
+             not_assigns(intP_p_1_alloc_table, intP_intM_p_1@init,
+             intP_intM_p_1, pset_singleton(p)))  }
           begin
-            (let jessie_<somenum> =
+            [ { } unit { true } ];
+           try
             begin
-              (if true then void else (raise (Goto_while_0_break_exc void)));
-             (C_3:
-             (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-             begin
-               (let jessie_<somenum> = p in
-               (((safe_upd_ intP_intM_p_1) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum>
-             end)) end in void); (raise (Loop_continue_exc void)) end with
-          Loop_continue_exc jessie_<somenum> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end)) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+              (let _jessie_<somenum> =
+              begin
+                (if true then void
+                else (raise (Goto_while_0_break_exc void)));
+               (C_3:
+               (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+               begin
+                 (let _jessie_<somenum> = p in
+                 (((safe_upd_ intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>));
+                _jessie_<somenum> end)) end in void);
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end) with
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
   { (JC_<somenum>:
@@ -568,28 +571,31 @@ let g_safety =
      (let i = ref (any_int32 void) in
      try
       (C_1:
-      (loop_1:
       begin
-        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       while true do
-       { invariant (JC_<somenum>: true) variant (0) }
-        begin
-          [ { } unit { true } ];
-         try
+        (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_1:
+       begin
+         while true do
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
-            (let jessie_<somenum> =
+            [ { } unit { true } ];
+           try
             begin
-              (if true then void else (raise (Goto_while_0_break_exc void)));
-             (C_3:
-             (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-             begin
-               (let jessie_<somenum> = p in
-               (JC_<somenum>:
-               ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) jessie_<somenum>) jessie_<somenum>)));
-              jessie_<somenum> end)) end in void); (raise (Loop_continue_exc void))
-          end with Loop_continue_exc jessie_<somenum> -> void end end done;
-       (raise (Goto_while_0_break_exc void)) end)) with
-      Goto_while_0_break_exc jessie_<somenum> ->
+              (let _jessie_<somenum> =
+              begin
+                (if true then void
+                else (raise (Goto_while_0_break_exc void)));
+               (C_3:
+               (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+               begin
+                 (let _jessie_<somenum> = p in
+                 (JC_<somenum>:
+                 ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>)));
+                _jessie_<somenum> end)) end in void);
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end) with
+      Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { true }
 
@@ -629,11 +635,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0103_po7.why">
-      <location file = "why/bts0103.why" line = "501" begin = "42" end = "43"/>
+      <location file = "why/bts0103.why" line = "505" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0103_po8.why">
-      <location file = "why/bts0103.why" line = "501" begin = "42" end = "43"/>
+      <location file = "why/bts0103.why" line = "505" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

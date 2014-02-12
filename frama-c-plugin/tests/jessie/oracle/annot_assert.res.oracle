@@ -457,7 +457,7 @@ let ff_ensures_default =
      (let j = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_<somenum> = (j := (safe_int32_of_integer_ (1))) in void);
+       (let _jessie_<somenum> = (j := (safe_int32_of_integer_ (1))) in void);
       (assert
       { (JC_<somenum>:
         gt_int(add_int(integer_of_int32(i_0), integer_of_int32(j)), (0))) };
@@ -474,7 +474,7 @@ let ff_safety =
      (let j = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_<somenum> = (j := (safe_int32_of_integer_ (1))) in void);
+       (let _jessie_<somenum> = (j := (safe_int32_of_integer_ (1))) in void);
       [ { } unit reads j
         { (JC_<somenum>:
           gt_int(add_int(integer_of_int32(i_0), integer_of_int32(j)), (0))) } ];

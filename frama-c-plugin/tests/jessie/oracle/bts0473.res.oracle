@@ -412,17 +412,18 @@ let main_ensures_default =
      (let x_0 = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
+       (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
       (assert { (JC_<somenum>: (integer_of_int32(x_0) = (2))) }; void);
-      (C_5:
       begin
         void;
-       (let jessie_<somenum> =
-       (x_0 := (C_4:
-               (safe_int32_of_integer_ (C_3:
-                                       (JC_<somenum>: ((computer_div (1)) (0))))))) in
-       void); (raise Return) end) end)); (raise Return) end with Return ->
-   void end) { (JC_<somenum>: true) }
+       (C_5:
+       begin
+         (let _jessie_<somenum> =
+         (x_0 := (C_4:
+                 (safe_int32_of_integer_ (C_3:
+                                         (JC_<somenum>: ((computer_div (1)) (0))))))) in
+         void); (raise Return) end) end end)); (raise Return) end with
+   Return -> void end) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -433,17 +434,18 @@ let main_safety =
      (let x_0 = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
+       (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
       [ { } unit reads x_0 { (JC_<somenum>: (integer_of_int32(x_0) = (2))) } ];
-      (C_5:
       begin
         void;
-       (let jessie_<somenum> =
-       (x_0 := (C_4:
-               (JC_<somenum>:
-               (int32_of_integer_ (C_3: (JC_<somenum>: ((computer_div_ (1)) (0)))))))) in
-       void); (raise Return) end) end)); (raise Return) end with Return ->
-   void end) { true }
+       (C_5:
+       begin
+         (let _jessie_<somenum> =
+         (x_0 := (C_4:
+                 (JC_<somenum>:
+                 (int32_of_integer_ (C_3: (JC_<somenum>: ((computer_div_ (1)) (0)))))))) in
+         void); (raise Return) end) end end)); (raise Return) end with
+   Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0473.jessie --quiet -f bts0473.makefile project

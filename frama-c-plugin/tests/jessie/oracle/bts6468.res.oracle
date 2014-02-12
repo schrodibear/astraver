@@ -519,29 +519,34 @@ let main_ensures_default =
      (let str = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_17:
-     (C_19:
-     (C_20:
-     (C_21:
-     (C_22:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (str := (C_16:
                (JC_<somenum>:
                (((alloc_struct_charP (2)) charP_str_9_alloc_table) charP_str_9_tag_table)))) in
        void);
-      (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-      (let jessie_<somenum> = !str in
-      (((safe_upd_ charP_charM_str_9) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> =
-      (let jessie_<somenum> = !str in
-      (let jessie_<somenum> = __string__ in
-      (JC_<somenum>:
-      ((((((strcat jessie_<somenum>) jessie_<somenum>) charP_charM_str_9) !charP___string___1_alloc_table) !charP_str_9_alloc_table) !charP_charM___string___1)))) in
-      void);
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      ((safe_free_parameter charP_str_9_alloc_table) !str);
-      (return := !__retres); (raise Return) end)))))))))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+      (C_19:
+      begin
+        (let _jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+        (let _jessie_<somenum> = !str in
+        (((safe_upd_ charP_charM_str_9) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_20:
+       begin
+         (let _jessie_<somenum> =
+         (let _jessie_<somenum> = !str in
+         (let _jessie_<somenum> = __string__ in
+         (JC_<somenum>:
+         ((((((strcat _jessie_<somenum>) _jessie_<somenum>) charP_charM_str_9) !charP___string___1_alloc_table) !charP_str_9_alloc_table) !charP_charM___string___1)))) in
+         void);
+        (C_21:
+        begin
+          (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+          void);
+         (C_22:
+         begin
+           ((safe_free_parameter charP_str_9_alloc_table) !str);
+          (return := !__retres); (raise Return) end) end) end) end) end))))));
+    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -556,32 +561,38 @@ let main_safety =
      (let str = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_17:
-     (C_19:
-     (C_20:
-     (C_21:
-     (C_22:
      begin
-       (let jessie_<somenum> =
-       (str := (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (str := (let _jessie_<somenum> =
                (C_16:
                (JC_<somenum>:
                (((alloc_struct_charP_requires (2)) charP_str_9_alloc_table) charP_str_9_tag_table))) in
                (JC_<somenum>:
                (assert
-               { ge_int(offset_max(charP_str_9_alloc_table, jessie_<somenum>), (1)) };
-               jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-      (let jessie_<somenum> = !str in
-      (((safe_upd_ charP_charM_str_9) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> =
-      (let jessie_<somenum> = !str in
-      (let jessie_<somenum> = __string__ in
-      (JC_<somenum>:
-      ((((((strcat_requires jessie_<somenum>) jessie_<somenum>) charP_charM_str_9) !charP___string___1_alloc_table) !charP_str_9_alloc_table) !charP_charM___string___1)))) in
-      void);
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      ((free_parameter charP_str_9_alloc_table) !str); (return := !__retres);
-      (raise Return) end)))))))))); absurd  end with Return -> !return end))
+               { ge_int(offset_max(charP_str_9_alloc_table, _jessie_<somenum>), (1)) };
+               _jessie_<somenum>)))) in void);
+      (C_19:
+      begin
+        (let _jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+        (let _jessie_<somenum> = !str in
+        (((safe_upd_ charP_charM_str_9) _jessie_<somenum>) _jessie_<somenum>)));
+       (C_20:
+       begin
+         (let _jessie_<somenum> =
+         (let _jessie_<somenum> = !str in
+         (let _jessie_<somenum> = __string__ in
+         (JC_<somenum>:
+         ((((((strcat_requires _jessie_<somenum>) _jessie_<somenum>) charP_charM_str_9) !charP___string___1_alloc_table) !charP_str_9_alloc_table) !charP_charM___string___1)))) in
+         void);
+        (C_21:
+        begin
+          (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
+          void);
+         (C_22:
+         begin
+           ((free_parameter charP_str_9_alloc_table) !str);
+          (return := !__retres); (raise Return) end) end) end) end) end))))));
+    absurd  end with Return -> !return end))
   { (JC_<somenum>: valid___string__(charP___string___1_alloc_table)) }
 
 let strcat_ensures_default =
@@ -601,27 +612,29 @@ let strcat_ensures_default =
       begin
         try
          (C_1:
-         (loop_3:
          begin
-           (let jessie_<somenum> = (ret := !mutable_dest_1) in void);
-          while true do
-          { invariant (JC_<somenum>: true)  }
-           begin
-             [ { } unit { true } ];
-            try
+           (let _jessie_<somenum> = (ret := !mutable_dest_1) in void);
+          (loop_3:
+          begin
+            while true do
+            { invariant (JC_<somenum>: true)  }
              begin
-               (let jessie_<somenum> =
-               (C_4:
+               [ { } unit { true } ];
+              try
                begin
-                 (if ((neq_int_ (integer_of_int8 (C_2:
-                                                 ((safe_acc_ !charP_charM_dest_1_2) !mutable_dest_1)))) (0))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (mutable_dest_1 := (C_3: ((shift !mutable_dest_1) (1))));
-                !mutable_dest_1 end) in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<somenum> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end)) with
-         Goto_while_0_break_exc jessie_<somenum> ->
+                 (let _jessie_<somenum> =
+                 begin
+                   (if ((neq_int_ (integer_of_int8 (C_2:
+                                                   ((safe_acc_ !charP_charM_dest_1_2) !mutable_dest_1)))) (0))
+                   then void else (raise (Goto_while_0_break_exc void)));
+                  (C_4:
+                  begin
+                    (mutable_dest_1 := (C_3: ((shift !mutable_dest_1) (1))));
+                   !mutable_dest_1 end) end in void);
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) with
+         Goto_while_0_break_exc _jessie_<somenum> ->
          (while_0_break:
          begin
            void;
@@ -631,32 +644,39 @@ let strcat_ensures_default =
            begin
              [ { } unit { true } ];
             try
-             (C_14:
              begin
-               (let jessie_<somenum> =
+               (let _jessie_<somenum> =
                (C_5:
-               (C_7:
-               (C_8:
-               (C_10:
-               (C_12:
                begin
-                 (let jessie_<somenum> = (tmp := !mutable_dest_1) in void);
-                (let jessie_<somenum> =
-                (mutable_dest_1 := (C_6: ((shift !mutable_dest_1) (1)))) in
-                void); (let jessie_<somenum> = (tmp_1 := !mutable_src) in void);
-                (let jessie_<somenum> =
-                (mutable_src := (C_9: ((shift !mutable_src) (1)))) in void);
-                (tmp_0 := (C_11: ((safe_acc_ charP_charM_src_3) !tmp_1)));
-                !tmp_0 end))))) in void);
-              (let jessie_<somenum> = !tmp_0 in
-              (let jessie_<somenum> = !tmp in
-              (((safe_upd_ charP_charM_dest_1_2) jessie_<somenum>) jessie_<somenum>)));
-              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
-              else (raise (Goto_while_1_break_exc void)));
-              (raise (Loop_continue_exc void)) end) with
-             Loop_continue_exc jessie_<somenum> -> void end end done) end) end;
+                 (let _jessie_<somenum> = (tmp := !mutable_dest_1) in void);
+                (C_7:
+                begin
+                  (let _jessie_<somenum> =
+                  (mutable_dest_1 := (C_6: ((shift !mutable_dest_1) (1)))) in
+                  void);
+                 (C_8:
+                 begin
+                   (let _jessie_<somenum> = (tmp_1 := !mutable_src) in void);
+                  (C_10:
+                  begin
+                    (let _jessie_<somenum> =
+                    (mutable_src := (C_9: ((shift !mutable_src) (1)))) in
+                    void);
+                   (C_12:
+                   begin
+                     (tmp_0 := (C_11: ((safe_acc_ charP_charM_src_3) !tmp_1)));
+                    !tmp_0 end) end) end) end) end) in void);
+              (C_14:
+              begin
+                (let _jessie_<somenum> = !tmp_0 in
+                (let _jessie_<somenum> = !tmp in
+                (((safe_upd_ charP_charM_dest_1_2) _jessie_<somenum>) _jessie_<somenum>)));
+               (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
+               else (raise (Goto_while_1_break_exc void)));
+               (raise (Loop_continue_exc void)) end) end with
+             Loop_continue_exc _jessie_<somenum> -> void end end done) end) end;
        (raise (Goto_while_1_break_exc void)) end with
-      Goto_while_1_break_exc jessie_<somenum> ->
+      Goto_while_1_break_exc _jessie_<somenum> ->
       (while_1_break: begin   void; (return := !ret); (raise Return) end) end))));
     absurd  end with Return -> !return end)))) { (JC_<somenum>: true) }
 
@@ -677,28 +697,30 @@ let strcat_safety =
       begin
         try
          (C_1:
-         (loop_1:
          begin
-           (let jessie_<somenum> = (ret := !mutable_dest_1) in void);
-          while true do
-          { invariant (JC_<somenum>: true)  }
-           begin
-             [ { } unit { true } ];
-            try
+           (let _jessie_<somenum> = (ret := !mutable_dest_1) in void);
+          (loop_1:
+          begin
+            while true do
+            { invariant (JC_<somenum>: true)  }
              begin
-               (let jessie_<somenum> =
-               (C_4:
+               [ { } unit { true } ];
+              try
                begin
-                 (if ((neq_int_ (integer_of_int8 (C_2:
-                                                 (JC_<somenum>:
-                                                 (((acc_ charP_dest_1_2_alloc_table) !charP_charM_dest_1_2) !mutable_dest_1))))) (0))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (mutable_dest_1 := (C_3: ((shift !mutable_dest_1) (1))));
-                !mutable_dest_1 end) in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc jessie_<somenum> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end)) with
-         Goto_while_0_break_exc jessie_<somenum> ->
+                 (let _jessie_<somenum> =
+                 begin
+                   (if ((neq_int_ (integer_of_int8 (C_2:
+                                                   (JC_<somenum>:
+                                                   (((acc_ charP_dest_1_2_alloc_table) !charP_charM_dest_1_2) !mutable_dest_1))))) (0))
+                   then void else (raise (Goto_while_0_break_exc void)));
+                  (C_4:
+                  begin
+                    (mutable_dest_1 := (C_3: ((shift !mutable_dest_1) (1))));
+                   !mutable_dest_1 end) end in void);
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end) with
+         Goto_while_0_break_exc _jessie_<somenum> ->
          (while_0_break:
          begin
            void;
@@ -708,35 +730,42 @@ let strcat_safety =
            begin
              [ { } unit { true } ];
             try
-             (C_14:
              begin
-               (let jessie_<somenum> =
+               (let _jessie_<somenum> =
                (C_5:
-               (C_7:
-               (C_8:
-               (C_10:
-               (C_12:
                begin
-                 (let jessie_<somenum> = (tmp := !mutable_dest_1) in void);
-                (let jessie_<somenum> =
-                (mutable_dest_1 := (C_6: ((shift !mutable_dest_1) (1)))) in
-                void); (let jessie_<somenum> = (tmp_1 := !mutable_src) in void);
-                (let jessie_<somenum> =
-                (mutable_src := (C_9: ((shift !mutable_src) (1)))) in void);
-                (tmp_0 := (C_11:
-                          (JC_<somenum>:
-                          (((acc_ charP_src_3_alloc_table) charP_charM_src_3) !tmp_1))));
-                !tmp_0 end))))) in void);
-              (let jessie_<somenum> = !tmp_0 in
-              (let jessie_<somenum> = !tmp in
-              (JC_<somenum>:
-              ((((upd_ charP_dest_1_2_alloc_table) charP_charM_dest_1_2) jessie_<somenum>) jessie_<somenum>))));
-              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
-              else (raise (Goto_while_1_break_exc void)));
-              (raise (Loop_continue_exc void)) end) with
-             Loop_continue_exc jessie_<somenum> -> void end end done) end) end;
+                 (let _jessie_<somenum> = (tmp := !mutable_dest_1) in void);
+                (C_7:
+                begin
+                  (let _jessie_<somenum> =
+                  (mutable_dest_1 := (C_6: ((shift !mutable_dest_1) (1)))) in
+                  void);
+                 (C_8:
+                 begin
+                   (let _jessie_<somenum> = (tmp_1 := !mutable_src) in void);
+                  (C_10:
+                  begin
+                    (let _jessie_<somenum> =
+                    (mutable_src := (C_9: ((shift !mutable_src) (1)))) in
+                    void);
+                   (C_12:
+                   begin
+                     (tmp_0 := (C_11:
+                               (JC_<somenum>:
+                               (((acc_ charP_src_3_alloc_table) charP_charM_src_3) !tmp_1))));
+                    !tmp_0 end) end) end) end) end) in void);
+              (C_14:
+              begin
+                (let _jessie_<somenum> = !tmp_0 in
+                (let _jessie_<somenum> = !tmp in
+                (JC_<somenum>:
+                ((((upd_ charP_dest_1_2_alloc_table) charP_charM_dest_1_2) _jessie_<somenum>) _jessie_<somenum>))));
+               (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
+               else (raise (Goto_while_1_break_exc void)));
+               (raise (Loop_continue_exc void)) end) end with
+             Loop_continue_exc _jessie_<somenum> -> void end end done) end) end;
        (raise (Goto_while_1_break_exc void)) end with
-      Goto_while_1_break_exc jessie_<somenum> ->
+      Goto_while_1_break_exc _jessie_<somenum> ->
       (while_1_break: begin   void; (return := !ret); (raise Return) end) end))));
     absurd  end with Return -> !return end))))
   { (JC_<somenum>: valid___string__(charP___string___1_alloc_table)) }
@@ -789,11 +818,11 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts6468_po2.why">
-      <location file = "why/bts6468.why" line = "457" begin = "17" end = "76"/>
+      <location file = "why/bts6468.why" line = "458" begin = "17" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts6468_po3.why">
-      <location file = "why/bts6468.why" line = "469" begin = "7" end = "52"/>
+      <location file = "why/bts6468.why" line = "479" begin = "12" end = "57"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

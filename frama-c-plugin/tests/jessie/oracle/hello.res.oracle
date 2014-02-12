@@ -422,7 +422,7 @@ let max_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((lt_int_ (integer_of_int32 i)) (integer_of_int32 j))
        then (C_2: begin   (tmp := j); !tmp end)
        else (C_1: begin   (tmp := i); !tmp end)) in void); (return := !tmp);
@@ -441,7 +441,7 @@ let max_safety =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (if ((lt_int_ (integer_of_int32 i)) (integer_of_int32 j))
        then (C_2: begin   (tmp := j); !tmp end)
        else (C_1: begin   (tmp := i); !tmp end)) in void); (return := !tmp);

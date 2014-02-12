@@ -565,16 +565,19 @@ let g_ensures_default =
      (let intP_i_3_alloc_table = ref (any_alloc_table void) in
      (let i = ref (any_pointer void) in
      (C_8:
-     (C_9:
-     (C_10:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (i := (C_7:
              (JC_<somenum>:
              (((alloc_struct_intP (1)) intP_i_3_alloc_table) intP_i_3_tag_table)))) in
-       void); (let jessie_<somenum> = !i in (JC_<somenum>: (f jessie_<somenum>)));
-      ((safe_free_parameter intP_i_3_alloc_table) !i); (raise Return) end))))));
-    (raise Return) end with Return -> void end)
+       void);
+      (C_9:
+      begin
+        (let _jessie_<somenum> = !i in (JC_<somenum>: (f _jessie_<somenum>)));
+       (C_10:
+       begin
+         ((safe_free_parameter intP_i_3_alloc_table) !i); (raise Return) end)
+      end) end)))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(intP_p_1_alloc_table, p), (0)))
     and (JC_<somenum>: ge_int(offset_max(intP_p_1_alloc_table, p), (0))))) }
@@ -591,21 +594,22 @@ let g_safety =
      (let intP_i_3_alloc_table = ref (any_alloc_table void) in
      (let i = ref (any_pointer void) in
      (C_8:
-     (C_9:
-     (C_10:
      begin
-       (let jessie_<somenum> =
-       (i := (let jessie_<somenum> =
+       (let _jessie_<somenum> =
+       (i := (let _jessie_<somenum> =
              (C_7:
              (JC_<somenum>:
              (((alloc_struct_intP_requires (1)) intP_i_3_alloc_table) intP_i_3_tag_table))) in
              (JC_<somenum>:
              (assert
-             { ge_int(offset_max(intP_i_3_alloc_table, jessie_<somenum>), (0)) };
-             jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = !i in (JC_<somenum>: (f_requires jessie_<somenum>)));
-      ((free_parameter intP_i_3_alloc_table) !i); (raise Return) end))))));
-    (raise Return) end with Return -> void end) { true }
+             { ge_int(offset_max(intP_i_3_alloc_table, _jessie_<somenum>), (0)) };
+             _jessie_<somenum>)))) in void);
+      (C_9:
+      begin
+        (let _jessie_<somenum> = !i in (JC_<somenum>: (f_requires _jessie_<somenum>)));
+       (C_10:
+       begin   ((free_parameter intP_i_3_alloc_table) !i); (raise Return) end)
+      end) end)))); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C roux2.jessie --quiet -f roux2.makefile project
@@ -620,11 +624,11 @@ why --project [...] why/roux2.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/roux2_po2.why">
-      <location file = "why/roux2.why" line = "524" begin = "15" end = "70"/>
+      <location file = "why/roux2.why" line = "525" begin = "15" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/roux2_po3.why">
-      <location file = "why/roux2.why" line = "527" begin = "7" end = "47"/>
+      <location file = "why/roux2.why" line = "531" begin = "16" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

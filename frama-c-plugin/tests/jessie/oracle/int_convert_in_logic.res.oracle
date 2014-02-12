@@ -529,7 +529,7 @@ let f_ensures_default =
      (let r = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (r := (C_2: ((safe_acc_ intP_intM_a_4) (C_1: ((shift a_2) (0)))))) in
        void); (return := !r); (raise Return) end))))); absurd  end with
    Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (4))) }
@@ -547,7 +547,7 @@ let f_safety =
      (let r = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_<somenum> =
+       (let _jessie_<somenum> =
        (r := (C_2: (JC_<somenum>: (((acc_ intP_a_4_alloc_table) intP_intM_a_4) a_2)))) in
        void); (return := !r); (raise Return) end))))); absurd  end with
    Return -> !return end)) { true }

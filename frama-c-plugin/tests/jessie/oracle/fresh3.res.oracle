@@ -690,10 +690,10 @@ let create_ensures_default =
   try
    (C_3:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_1:
      (JC_<somenum>: (((alloc_struct_intP (1)) intP_alloc_table) intP_tag_table))) in
-     (let jessie_<somenum> = s_0 in (((safe_upd_ Str_x) jessie_<somenum>) jessie_<somenum>)));
+     (let _jessie_<somenum> = s_0 in (((safe_upd_ Str_x) _jessie_<somenum>) _jessie_<somenum>)));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
@@ -713,12 +713,12 @@ let create_safety =
   try
    (C_3:
    begin
-     (let jessie_<somenum> =
+     (let _jessie_<somenum> =
      (C_1:
      (JC_<somenum>:
      (((alloc_struct_intP_requires (1)) intP_alloc_table) intP_tag_table))) in
-     (let jessie_<somenum> = s_0 in
-     (JC_<somenum>: ((((upd_ !Str_alloc_table) Str_x) jessie_<somenum>) jessie_<somenum>))));
+     (let _jessie_<somenum> = s_0 in
+     (JC_<somenum>: ((((upd_ !Str_alloc_table) Str_x) _jessie_<somenum>) _jessie_<somenum>))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let smoke_detector_ensures_default =
@@ -731,12 +731,13 @@ let smoke_detector_ensures_default =
   (init:
   try
    (C_27:
-   (C_28:
    begin
-     (let jessie_<somenum> = s1_1 in (JC_<somenum>: (create jessie_<somenum>)));
-    (let jessie_<somenum> = s2_1 in (JC_<somenum>: (create jessie_<somenum>)));
-    (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return);
-    (raise Return) end)) with Return -> void end) { (JC_<somenum>: true) }
+     (let _jessie_<somenum> = s1_1 in (JC_<somenum>: (create _jessie_<somenum>)));
+    (C_28:
+    begin
+      (let _jessie_<somenum> = s2_1 in (JC_<somenum>: (create _jessie_<somenum>)));
+     (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return);
+     (raise Return) end) end) with Return -> void end) { (JC_<somenum>: true) }
 
 let smoke_detector_safety =
  fun (tt : unit) ->
@@ -748,12 +749,13 @@ let smoke_detector_safety =
   (init:
   try
    (C_27:
-   (C_28:
    begin
-     (let jessie_<somenum> = s1_1 in (JC_<somenum>: (create_requires jessie_<somenum>)));
-    (let jessie_<somenum> = s2_1 in (JC_<somenum>: (create_requires jessie_<somenum>)));
-    [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return);
-    (raise Return) end)) with Return -> void end) { true }
+     (let _jessie_<somenum> = s1_1 in (JC_<somenum>: (create_requires _jessie_<somenum>)));
+    (C_28:
+    begin
+      (let _jessie_<somenum> = s2_1 in (JC_<somenum>: (create_requires _jessie_<somenum>)));
+     [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return);
+     (raise Return) end) end) with Return -> void end) { true }
 
 let test_ensures_default =
  fun (this : Str pointer) ->
@@ -774,7 +776,7 @@ let test_ensures_default =
   try
    (C_12:
    begin
-     (let jessie_<somenum> = f in (JC_<somenum>: (create jessie_<somenum>)));
+     (let _jessie_<somenum> = f in (JC_<somenum>: (create _jessie_<somenum>)));
     (assert { (JC_<somenum>: (select(Str_x, this) <> select(Str_x, f))) }; void);
     void; (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>: true) }
@@ -798,7 +800,7 @@ let test_safety =
   try
    (C_12:
    begin
-     (let jessie_<somenum> = f in (JC_<somenum>: (create_requires jessie_<somenum>)));
+     (let _jessie_<somenum> = f in (JC_<somenum>: (create_requires _jessie_<somenum>)));
     [ { } unit reads Str_x
       { (JC_<somenum>: (select(Str_x, this) <> select(Str_x, f))) } ]; void;
     (raise Return); (raise Return) end) with Return -> void end) { true }

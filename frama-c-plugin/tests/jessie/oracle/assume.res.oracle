@@ -505,9 +505,9 @@ let f_ensures_anz =
    begin
      (if ((neq_int_ (integer_of_int32 (C_3: ((safe_acc_ !intP_intM_a_1) a)))) (0))
      then
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = a in
-      (((safe_upd_ intP_intM_a_1) jessie_<somenum>) jessie_<somenum>))) else void);
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let _jessie_<somenum> = a in
+      (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: (integer_of_int32(select(intP_intM_a_1, a)) = (0))) }
 
@@ -521,9 +521,10 @@ let f_ensures_default =
    begin
      (if ((neq_int_ (integer_of_int32 (C_3: ((safe_acc_ !intP_intM_a_1) a)))) (0))
      then
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = a in (((safe_upd_ intP_intM_a_1) jessie_<somenum>) jessie_<somenum>)))
-     else void); (raise Return); (raise Return) end with Return -> void end)
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let _jessie_<somenum> = a in
+      (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -538,10 +539,10 @@ let f_safety =
                                       (JC_<somenum>:
                                       (((acc_ intP_a_1_alloc_table) !intP_intM_a_1) a))))) (0))
      then
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = a in
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let _jessie_<somenum> = a in
       (JC_<somenum>:
-      ((((upd_ intP_a_1_alloc_table) intP_intM_a_1) jessie_<somenum>) jessie_<somenum>))))
+      ((((upd_ intP_a_1_alloc_table) intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>))))
      else void); (raise Return); (raise Return) end with Return -> void end)
   { true }
 
