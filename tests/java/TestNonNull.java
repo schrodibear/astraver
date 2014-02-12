@@ -50,9 +50,9 @@ class TestNonNull {
 
     //@ requires t.length >= 4;
     void test(int[] t) {
-	int i = t[3];
+	int _i = t[3];
 	t[2] = 1;
-	int j = t[N];
+	int _j = t[N];
 	t[N + 1] = 1;
 	st[3] == 1;
     }

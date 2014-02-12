@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
-<why3session shape_version="2">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.94"/>
+  version="0.95.2"/>
  <prover
   id="1"
-  name="Alt-Ergo"
-  version="0.95.1"/>
+  name="Gappa"
+  version="0.16.0"/>
  <prover
   id="2"
   name="Gappa"
-  version="0.16.6"/>
+  version="0.16.1"/>
+ <prover
+  id="3"
+  name="Gappa"
+  version="1.0.0"/>
+ <prover
+  id="4"
+  name="Gappa"
+  version="1.1.0"/>
  <file
   name="../cd1d.mlw"
   verified="true"
@@ -28,7 +36,7 @@
     locfile="../../cd1d.c"
     loclnum="10" loccnumb="4" loccnume="97"
     expl="Lemma completeness, lemma"
-    sum="253fa846d85ef06613fc2aefd4d1ebff"
+    sum="1fe179a70ff2dfd567c703866d840891"
     proved="true"
     expanded="true"
     shape="acd1dV0V1IaconflictV0V1Iainfix &gt;=V1c0.0FF">
@@ -36,19 +44,11 @@
      name="expl:Lemma completeness, lemma"/>
     <proof
      prover="0"
-     timelimit="3"
-     memlimit="1000"
+     timelimit="5"
+     memlimit="4000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="3"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
   </theory>
@@ -63,10 +63,12 @@
     locfile="../../cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
     expl="VC for cd1d_double_ensures_completeness"
-    sum="548819f01a12fba7412d55433d37d138"
+    sum="84192f75d5389c8da0da971d6bf9c489"
     proved="true"
     expanded="true"
-    shape="iainfix =V8aTrueainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1Fainfix =ainteger_of_int32V14c1Iainfix =V14V13FIainfix =V13V12FIainfix =ainteger_of_int32V12c0FIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
+    shape="iainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c0Fainfix =ainteger_of_int32V14c1Iainfix =V14V13FIainfix =V13V12FIainfix =ainteger_of_int32V12c1Fainfix =V8aTrueIiainfix &lt;=avalueV7avalueV0ainfix &gt;avalueV7avalueV0ainfix =V8aTrueFIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
     <label
@@ -80,21 +82,55 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="1. postcondition"
-      sum="c74981e832c9bfb6779b1d5abc13b189"
+      sum="c624c2fb6ade6a1d328d6a10117da073"
       proved="true"
       expanded="false"
-      shape="ainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1FIainfix =V8aTrueIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
+      shape="postconditionainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1FIainfix =V8aTrueIiainfix &lt;=avalueV7avalueV0ainfix &gt;avalueV7avalueV0ainfix =V8aTrueFIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
       <label
        name="expl:VC for cd1d_double_ensures_completeness"/>
       <proof
-       prover="2"
-       timelimit="3"
+       prover="0"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
@@ -102,21 +138,47 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="2. postcondition"
-      sum="cbdf4262223b72db621ff49b532b07c9"
+      sum="77a831058d5b7e3c230fbcdb10c02626"
       proved="true"
       expanded="true"
-      shape="ainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8aTrueNIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
+      shape="postconditionainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FINainfix =V8aTrueIiainfix &lt;=avalueV7avalueV0ainfix &gt;avalueV7avalueV0ainfix =V8aTrueFIaadd_postaNearestTiesToEvenV6V3V7FIaadd_postaNearestTiesToEvenV5V4V6FIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIamul_postaNearestTiesToEvenV2V1V3FIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
       <label
        name="expl:VC for cd1d_double_ensures_completeness"/>
       <proof
-       prover="2"
-       timelimit="3"
+       prover="1"
+       timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.00"/>
       </proof>
      </goal>
     </transf>
@@ -126,18 +188,52 @@
     locfile="../../cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
     expl="VC for cd1d_double_ensures_default"
-    sum="a987d7431cc39a8427091574fe12e963"
+    sum="ede22c5884bae9d3ea2a752b11fafdf2"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function cd1d_double, default behavior"/>
     <label
      name="expl:VC for cd1d_double_ensures_default"/>
     <proof
-     prover="2"
-     timelimit="3"
+     prover="0"
+     timelimit="5"
+     memlimit="4000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
      memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="4000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="4000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="4000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -148,10 +244,10 @@
     locfile="../../cd1d.c"
     loclnum="22" loccnumb="4" loccnume="15"
     expl="VC for cd1d_double_safety"
-    sum="8995c1e4dfe4ee593ba850dd34a8edc0"
+    sum="05be609e992951a813aa051626d6e726"
     proved="true"
     expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV3amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV9avalueV4amax_doubleIaadd_postV8V7V6V9FAainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV6amax_doubleLaNearestTiesToEvenIainfix =amodelV7c10.0Aainfix =aexactV7c10.0Aainfix =avalueV7c10.0FIaof_real_postV5c0x1.p-49V6FAainfix &lt;=aabsaroundV5c0x1.p-49amax_doubleLaNearestTiesToEvenIamul_postV3V2V1V4FAainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV1amax_doubleLaNearestTiesToEvenIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
     <label
      name="expl:Function cd1d_double, Safety"/>
     <label
@@ -165,18 +261,50 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="1. floating-point overflow"
-      sum="5682b36503354d88f79e054671aa8d88"
+      sum="35c9533fb5f4f655424a8e2d5b063b1a"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV1amax_doubleLaNearestTiesToEvenIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
        name="expl:VC for cd1d_double_safety"/>
       <proof
-       prover="2"
-       timelimit="3"
+       prover="0"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
        memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="4000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -187,21 +315,45 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="2. floating-point overflow"
-      sum="60f6183880036513be531d5d584a80ce"
+      sum="78a6a076e98a0ac2f0b2eec20d54b7ef"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV5c0x1.p-49amax_doubleLaNearestTiesToEvenIamul_postV3V2V1V4FIainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV1amax_doubleLaNearestTiesToEvenIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
        name="expl:VC for cd1d_double_safety"/>
       <proof
-       prover="2"
-       timelimit="3"
+       prover="1"
+       timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
@@ -209,21 +361,45 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="3. floating-point overflow"
-      sum="e2724ee5325c4b63f57945b8012e4e3c"
+      sum="a3a07c789c4c5825db40100bd8e5a306"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV6amax_doubleLaNearestTiesToEvenIainfix =amodelV7c10.0Aainfix =aexactV7c10.0Aainfix =avalueV7c10.0FIaof_real_postV5c0x1.p-49V6FIainfix &lt;=aabsaroundV5c0x1.p-49amax_doubleLaNearestTiesToEvenIamul_postV3V2V1V4FIainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV1amax_doubleLaNearestTiesToEvenIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
        name="expl:VC for cd1d_double_safety"/>
       <proof
-       prover="2"
-       timelimit="3"
+       prover="1"
+       timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
@@ -231,21 +407,45 @@
       locfile="../../cd1d.c"
       loclnum="22" loccnumb="4" loccnume="15"
       expl="4. floating-point overflow"
-      sum="a6061a9fbea440aacb26b838bdb67c55"
+      sum="cb91611baecfd770cdbf106fdc14d21e"
       proved="true"
       expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV3amax_doubleIaadd_postaNearestTiesToEvenV5V4V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV5avalueV4amax_doubleIainfix =amodelV5c10.0Aainfix =aexactV5c10.0Aainfix =avalueV5c10.0FIaof_real_postaNearestTiesToEvenc0x1.p-49V4FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIamul_postaNearestTiesToEvenV2V1V3FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV1amax_doubleIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV9avalueV4amax_doubleIaadd_postV8V7V6V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV6amax_doubleLaNearestTiesToEvenIainfix =amodelV7c10.0Aainfix =aexactV7c10.0Aainfix =avalueV7c10.0FIaof_real_postV5c0x1.p-49V6FIainfix &lt;=aabsaroundV5c0x1.p-49amax_doubleLaNearestTiesToEvenIamul_postV3V2V1V4FIainfix &lt;=aabsaroundV3ainfix *avalueV2avalueV1amax_doubleLaNearestTiesToEvenIainfix =amodelV2c1.0Aainfix =aexactV2c1.0Aainfix =avalueV2c1.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0F">
       <label
        name="expl:Function cd1d_double, Safety"/>
       <label
        name="expl:VC for cd1d_double_safety"/>
       <proof
-       prover="2"
-       timelimit="3"
+       prover="1"
+       timelimit="5"
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="4000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
     </transf>
