@@ -385,7 +385,7 @@ let pred_bin_op: pred_bin_op -> string = function
   | `Bimplies, `Boolean -> assert false (* TODO *)
       (* boolean *)
   | `Beq, `Boolean -> "eq"
-  | `Bneq, `Boolean -> "eq"
+  | `Bneq, `Boolean -> "neq"
   | op, opty ->
       Jc_typing.typing_error Loc.dummy_position
         "Can't use operator %s with type %s in assertions"
