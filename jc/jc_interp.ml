@@ -2287,12 +2287,14 @@ and expr e =
         let e1' = expr e1 in
         let e2' = expr e2 in
         (* lazy conjunction *)
-        mk_expr (And(e1',e2'))
+        mk_expr
+          (And (make_check ~mark:e1#mark e1#pos e1', make_check ~mark:e2#mark e2#pos e2'))
     | JCEbinary(e1,(`Blor,_),e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
         (* lazy disjunction *)
-        mk_expr (Or(e1',e2'))
+        mk_expr
+          (Or (make_check ~mark:e1#mark e1#pos e1', make_check ~mark:e2#mark e2#pos e2'))
     | JCEbinary(e1,(#arithmetic_op as op,(`Double|`Float|`Binary80 as format)),e2) ->
 	let e1' = expr e1 in
         let e2' = expr e2 in
@@ -2325,7 +2327,7 @@ and expr e =
         let e1' = expr e1 in
         let e2' = expr e2 in
         let e3' = expr e3 in
-        mk_expr (If(e1',e2',e3'))
+        mk_expr (If(make_check ~mark:e1#mark e1#pos e1',e2',e3'))
     | JCEoffset(k,e1,st) ->
 	let ac = deref_alloc_class ~type_safe:false e1 in
         let alloc = alloc_table_var (ac,e1#region) in

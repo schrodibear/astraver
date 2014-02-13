@@ -1606,7 +1606,7 @@ let rec expr e =
 (* Function called when expecting a boolean in Jessie, i.e. when translating
    a test or a sub-expression of an "or" or "and".
 *)
-and boolean_expr e =
+and boolean_expr ?(to_locate=false) e =
   let boolean_node_from_expr ty e =
     if isPointerType ty then JCPEbinary(e,`Bneq,null_expr)
     else if isArithmeticType ty then JCPEbinary (e,`Bneq,zero_expr)
@@ -1621,7 +1621,7 @@ and boolean_expr e =
     | UnOp(LNot,e,_typ) -> JCPEunary(unop LNot,boolean_expr e)
 
     | BinOp((LAnd | LOr) as op,e1,e2,_typ) ->
-        JCPEbinary(boolean_expr e1,binop op,boolean_expr e2)
+        JCPEbinary (boolean_expr ~to_locate:true e1, binop op, boolean_expr ~to_locate:true e2)
 
     | BinOp((Eq | Ne) as op,e1,e2,_typ) ->
         JCPEbinary(expr e1,binop op,expr e2)
@@ -1637,7 +1637,8 @@ and boolean_expr e =
 
     | _ -> boolean_node_from_expr (typeOf e) (expr e)
   in
-  mkexpr enode e.eloc
+  let e' = mkexpr enode e.eloc in
+  if to_locate then locate e' else e'
 
 (* Function called instead of plain [expr] when the evaluation result should
  * fit in a C integral type.
@@ -2004,7 +2005,7 @@ let rec statement s =
         assert false (* Should not occur after [prepareCFG] *)
 
     | If(e,bl1,bl2,_) ->
-        JCPEif(boolean_expr e,block bl1,block bl2)
+        JCPEif(boolean_expr ~to_locate:true e, block bl1, block bl2)
 
     | Switch(e,bl,slist,pos) ->
         let case_blocks stat_list case_list =
