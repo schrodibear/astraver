@@ -1,41 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
-<why3session
- name="overflow_level/why3session.xml">
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
  <prover
   id="0"
   name="Gappa"
-  version="0.16.0"/>
+  version="0.16.1"/>
+ <prover
+  id="1"
+  name="Gappa"
+  version="1.1.0"/>
  <file
   name="../overflow_level.mlw"
   verified="false"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="overflow_level/../overflow_level.mlw"
+   locfile="../overflow_level.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
-   name="WP Jessie_program"
-   locfile="overflow_level/../overflow_level.mlw"
-   loclnum="134" loccnumb="7" loccnume="21"
+   name="Jessie_program"
+   locfile="../overflow_level.mlw"
+   loclnum="205" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
    <goal
     name="WP_parameter f_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/overflow_level.c"
+    locfile="../../overflow_level.c"
     loclnum="3" loccnumb="5" loccnume="6"
-    expl="Function f, default behavior"
-    sum="36b80a67e6f0b10e32c61340bb5d25e8"
-    proved="false"
+    expl="VC for f_ensures_default"
+    sum="c704e4d7e07aebef533d9f5ce5b83bb4"
+    proved="true"
     expanded="true"
     shape="t">
     <label
+     name="W:diverges:N"/>
+    <label
      name="expl:Function f, default behavior"/>
     <label
-     name="expl:parameter f_ensures_default"/>
+     name="expl:VC for f_ensures_default"/>
     <transf
      name="split_goal"
      proved="true"
@@ -44,34 +49,34 @@
    </goal>
    <goal
     name="WP_parameter f_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/overflow_level.c"
+    locfile="../../overflow_level.c"
     loclnum="3" loccnumb="5" loccnume="6"
-    expl="Function f, Safety"
-    sum="6ee3fcd35434d5b468e26107aa97bb50"
+    expl="VC for f_safety"
+    sum="f08b21c108e64eea8104eafb3956221d"
     proved="false"
     expanded="true"
-    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV8amax_doubleIaof_real_postaNearestTiesToEvenc1.e-6V8FAainfix &lt;=aabsaroundaNearestTiesToEvenc1.e-6amax_doubleIainfix =V7V6FIaadd_postaNearestTiesToEvenax_0ax_0V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueax_0amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenax_0V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc1.e292V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc1.e292amax_doubleIainfix =V2V1FIaadd_postaNearestTiesToEvenax_0V0V1FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.e291V0FAainfix &lt;=aabsaroundaNearestTiesToEvenc1.e291amax_double">
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV18amax_doubleIaof_real_postV17c1.e-6V18FAainfix &lt;=aabsaroundV17c1.e-6amax_doubleLaNearestTiesToEvenIainfix =V16V15FIaadd_postV14V13V12V15FAainfix &lt;=aabsaroundV14ainfix +avalueV13avalueV12amax_doubleLaNearestTiesToEvenLax_0Lax_0Iainfix =V11V10FIaadd_postV9V8V7V10FAainfix &lt;=aabsaroundV9ainfix +avalueV8avalueV7amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV6c1.e292V7FAainfix &lt;=aabsaroundV6c1.e292amax_doubleLaNearestTiesToEvenIainfix =V5V4FIaadd_postV3V2V1V4FAainfix &lt;=aabsaroundV3ainfix +avalueV2avalueV1amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV0c1.e291V1FAainfix &lt;=aabsaroundV0c1.e291amax_doubleLaNearestTiesToEven">
     <label
      name="expl:Function f, Safety"/>
     <label
-     name="expl:parameter f_safety"/>
+     name="expl:VC for f_safety"/>
     <transf
      name="split_goal"
      proved="false"
      expanded="true">
      <goal
-      name="WP_parameter f_safety.0"
-      locfile="/home/marche/why2-nitrogen/tests/c/overflow_level.c"
+      name="WP_parameter f_safety.1"
+      locfile="../../overflow_level.c"
       loclnum="3" loccnumb="5" loccnume="6"
-      expl="floating-point overflow"
-      sum="128a093d3ce5d6376119db516c219d41"
+      expl="1. floating-point overflow"
+      sum="cb36bcf7e4dc9580e9f6317b44503075"
       proved="true"
-      expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc1.e291amax_double">
+      expanded="true"
+      shape="floating-point overflowainfix &lt;=aabsaroundV0c1.e291amax_doubleLaNearestTiesToEven">
       <label
        name="expl:Function f, Safety"/>
       <label
-       name="expl:parameter f_safety"/>
+       name="expl:VC for f_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -80,22 +85,8 @@
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
-     </goal>
-     <goal
-      name="WP_parameter f_safety.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/overflow_level.c"
-      loclnum="3" loccnumb="5" loccnume="6"
-      expl="floating-point overflow"
-      sum="0b10ae59fa76a8907c2ba52ba447b399"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.e291V0FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e291amax_double">
-      <label
-       name="expl:Function f, Safety"/>
-      <label
-       name="expl:parameter f_safety"/>
       <proof
-       prover="0"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -105,19 +96,27 @@
      </goal>
      <goal
       name="WP_parameter f_safety.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/overflow_level.c"
+      locfile="../../overflow_level.c"
       loclnum="3" loccnumb="5" loccnume="6"
-      expl="floating-point overflow"
-      sum="2a50e79b1b0b78be5bff844f1fdb2aa0"
+      expl="2. floating-point overflow"
+      sum="11f346d40afff085f770a9ddf7e5dcc5"
       proved="true"
       expanded="true"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc1.e292amax_doubleIainfix =V2V1FIaadd_postaNearestTiesToEvenax_0V0V1FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.e291V0FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e291amax_double">
+      shape="floating-point overflowainfix &lt;=aabsaroundV3ainfix +avalueV2avalueV1amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV0c1.e291V1FIainfix &lt;=aabsaroundV0c1.e291amax_doubleLaNearestTiesToEven">
       <label
        name="expl:Function f, Safety"/>
       <label
-       name="expl:parameter f_safety"/>
+       name="expl:VC for f_safety"/>
       <proof
        prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -127,17 +126,47 @@
      </goal>
      <goal
       name="WP_parameter f_safety.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/overflow_level.c"
+      locfile="../../overflow_level.c"
       loclnum="3" loccnumb="5" loccnume="6"
-      expl="floating-point overflow"
-      sum="d4f70792848c3a2711ad458a601c7586"
-      proved="false"
-      expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc1.e292V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e292amax_doubleIainfix =V2V1FIaadd_postaNearestTiesToEvenax_0V0V1FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.e291V0FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e291amax_double">
+      expl="3. floating-point overflow"
+      sum="4110bce5122f80aa1dd67ca634d1a2ed"
+      proved="true"
+      expanded="true"
+      shape="floating-point overflowainfix &lt;=aabsaroundV6c1.e292amax_doubleLaNearestTiesToEvenIainfix =V5V4FIaadd_postV3V2V1V4FIainfix &lt;=aabsaroundV3ainfix +avalueV2avalueV1amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV0c1.e291V1FIainfix &lt;=aabsaroundV0c1.e291amax_doubleLaNearestTiesToEven">
       <label
        name="expl:Function f, Safety"/>
       <label
-       name="expl:parameter f_safety"/>
+       name="expl:VC for f_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter f_safety.4"
+      locfile="../../overflow_level.c"
+      loclnum="3" loccnumb="5" loccnume="6"
+      expl="4. floating-point overflow"
+      sum="cfc61ad00dee0ef57d73cab6cdb0b405"
+      proved="false"
+      expanded="true"
+      shape="floating-point overflowainfix &lt;=aabsaroundV9ainfix +avalueV8avalueV7amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV6c1.e292V7FIainfix &lt;=aabsaroundV6c1.e292amax_doubleLaNearestTiesToEvenIainfix =V5V4FIaadd_postV3V2V1V4FIainfix &lt;=aabsaroundV3ainfix +avalueV2avalueV1amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV0c1.e291V1FIainfix &lt;=aabsaroundV0c1.e291amax_doubleLaNearestTiesToEven">
+      <label
+       name="expl:Function f, Safety"/>
+      <label
+       name="expl:VC for f_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -146,22 +175,8 @@
        archived="false">
        <result status="unknown" time="0.00"/>
       </proof>
-     </goal>
-     <goal
-      name="WP_parameter f_safety.4"
-      locfile="/home/marche/why2-nitrogen/tests/c/overflow_level.c"
-      loclnum="3" loccnumb="5" loccnume="6"
-      expl="floating-point overflow"
-      sum="4aea1589dda7f4b96b40eefd6af34ed2"
-      proved="false"
-      expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueax_0amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenax_0V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc1.e292V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e292amax_doubleIainfix =V2V1FIaadd_postaNearestTiesToEvenax_0V0V1FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.e291V0FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e291amax_double">
-      <label
-       name="expl:Function f, Safety"/>
-      <label
-       name="expl:parameter f_safety"/>
       <proof
-       prover="0"
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -171,17 +186,47 @@
      </goal>
      <goal
       name="WP_parameter f_safety.5"
-      locfile="/home/marche/why2-nitrogen/tests/c/overflow_level.c"
+      locfile="../../overflow_level.c"
       loclnum="3" loccnumb="5" loccnume="6"
-      expl="floating-point overflow"
-      sum="e54324fe790f16d78bc2f9596e6859bc"
-      proved="true"
-      expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc1.e-6amax_doubleIainfix =V7V6FIaadd_postaNearestTiesToEvenax_0ax_0V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueax_0amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenax_0V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc1.e292V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e292amax_doubleIainfix =V2V1FIaadd_postaNearestTiesToEvenax_0V0V1FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.e291V0FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e291amax_double">
+      expl="5. floating-point overflow"
+      sum="b1e001ca6c27a6ab83a0ed3c58db59f1"
+      proved="false"
+      expanded="true"
+      shape="floating-point overflowainfix &lt;=aabsaroundV14ainfix +avalueV13avalueV12amax_doubleLaNearestTiesToEvenLax_0Lax_0Iainfix =V11V10FIaadd_postV9V8V7V10FIainfix &lt;=aabsaroundV9ainfix +avalueV8avalueV7amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV6c1.e292V7FIainfix &lt;=aabsaroundV6c1.e292amax_doubleLaNearestTiesToEvenIainfix =V5V4FIaadd_postV3V2V1V4FIainfix &lt;=aabsaroundV3ainfix +avalueV2avalueV1amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV0c1.e291V1FIainfix &lt;=aabsaroundV0c1.e291amax_doubleLaNearestTiesToEven">
       <label
        name="expl:Function f, Safety"/>
       <label
-       name="expl:parameter f_safety"/>
+       name="expl:VC for f_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.00"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter f_safety.6"
+      locfile="../../overflow_level.c"
+      loclnum="3" loccnumb="5" loccnume="6"
+      expl="6. floating-point overflow"
+      sum="39a2e88e9a35ff173a939f4eed28728d"
+      proved="true"
+      expanded="true"
+      shape="floating-point overflowainfix &lt;=aabsaroundV17c1.e-6amax_doubleLaNearestTiesToEvenIainfix =V16V15FIaadd_postV14V13V12V15FIainfix &lt;=aabsaroundV14ainfix +avalueV13avalueV12amax_doubleLaNearestTiesToEvenLax_0Lax_0Iainfix =V11V10FIaadd_postV9V8V7V10FIainfix &lt;=aabsaroundV9ainfix +avalueV8avalueV7amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV6c1.e292V7FIainfix &lt;=aabsaroundV6c1.e292amax_doubleLaNearestTiesToEvenIainfix =V5V4FIaadd_postV3V2V1V4FIainfix &lt;=aabsaroundV3ainfix +avalueV2avalueV1amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV0c1.e291V1FIainfix &lt;=aabsaroundV0c1.e291amax_doubleLaNearestTiesToEven">
+      <label
+       name="expl:Function f, Safety"/>
+      <label
+       name="expl:VC for f_safety"/>
       <proof
        prover="0"
        timelimit="5"
@@ -190,22 +235,38 @@
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
      </goal>
      <goal
-      name="WP_parameter f_safety.6"
-      locfile="/home/marche/why2-nitrogen/tests/c/overflow_level.c"
+      name="WP_parameter f_safety.7"
+      locfile="../../overflow_level.c"
       loclnum="3" loccnumb="5" loccnume="6"
-      expl="floating-point overflow"
-      sum="b806e6752615490a52969dadba805d37"
+      expl="7. floating-point overflow"
+      sum="fce89719a1981d837d7f1ae8c3628da9"
       proved="true"
-      expanded="false"
-      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV8amax_doubleIaof_real_postaNearestTiesToEvenc1.e-6V8FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e-6amax_doubleIainfix =V7V6FIaadd_postaNearestTiesToEvenax_0ax_0V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueax_0amax_doubleIainfix =V5V4FIaadd_postaNearestTiesToEvenax_0V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc1.e292V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e292amax_doubleIainfix =V2V1FIaadd_postaNearestTiesToEvenax_0V0V1FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV0amax_doubleIaof_real_postaNearestTiesToEvenc1.e291V0FIainfix &lt;=aabsaroundaNearestTiesToEvenc1.e291amax_double">
+      expanded="true"
+      shape="floating-point overflowainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueax_0avalueV18amax_doubleIaof_real_postV17c1.e-6V18FIainfix &lt;=aabsaroundV17c1.e-6amax_doubleLaNearestTiesToEvenIainfix =V16V15FIaadd_postV14V13V12V15FIainfix &lt;=aabsaroundV14ainfix +avalueV13avalueV12amax_doubleLaNearestTiesToEvenLax_0Lax_0Iainfix =V11V10FIaadd_postV9V8V7V10FIainfix &lt;=aabsaroundV9ainfix +avalueV8avalueV7amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV6c1.e292V7FIainfix &lt;=aabsaroundV6c1.e292amax_doubleLaNearestTiesToEvenIainfix =V5V4FIaadd_postV3V2V1V4FIainfix &lt;=aabsaroundV3ainfix +avalueV2avalueV1amax_doubleLaNearestTiesToEvenLax_0Iaof_real_postV0c1.e291V1FIainfix &lt;=aabsaroundV0c1.e291amax_doubleLaNearestTiesToEven">
       <label
        name="expl:Function f, Safety"/>
       <label
-       name="expl:parameter f_safety"/>
+       name="expl:VC for f_safety"/>
       <proof
        prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="1"
        timelimit="5"
        memlimit="1000"
        obsolete="false"

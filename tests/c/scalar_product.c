@@ -36,7 +36,7 @@
 
 
 /*@ requires 0 <= n <= NMAX;
-  @ requires \valid_range(x,0,n-1) && \valid_range(y,0,n-1) ;
+  @ requires \valid(x+(0..n-1)) && \valid(y+(0.. n-1)) ;
   @ requires \forall integer i; 0 <= i < n ==>
   @          \abs(x[i]) <= 1.0 && \abs(y[i]) <= 1.0 ;
   @ ensures
@@ -86,7 +86,7 @@ double scalar_product(double x[], double y[], int n) {
 
 /*
 Local Variables:
-compile-command: "make clock_drift.why3ide"
+compile-command: "make scalar_product.why3ide"
 End:
 */
 

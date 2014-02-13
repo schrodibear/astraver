@@ -8,17 +8,13 @@
  <prover
   id="1"
   name="Gappa"
-  version="0.16.0"/>
+  version="0.16.1"/>
  <prover
   id="2"
   name="Gappa"
-  version="0.16.1"/>
- <prover
-  id="3"
-  name="Gappa"
   version="1.0.0"/>
  <prover
-  id="4"
+  id="3"
   name="Gappa"
   version="1.1.0"/>
  <file
@@ -103,7 +99,7 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="1000"
+       memlimit="4000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -118,14 +114,6 @@
       </proof>
       <proof
        prover="3"
-       timelimit="5"
-       memlimit="4000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="4000"
        obsolete="false"
@@ -151,7 +139,7 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="1000"
+       memlimit="4000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -159,26 +147,18 @@
       <proof
        prover="2"
        timelimit="5"
-       memlimit="4000"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.00"/>
+       <result status="unknown" time="0.01"/>
       </proof>
       <proof
        prover="3"
        timelimit="5"
-       memlimit="4000"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
-       memlimit="4000"
-       obsolete="false"
-       archived="false">
-       <result status="unknown" time="0.00"/>
+       <result status="unknown" time="0.01"/>
       </proof>
      </goal>
     </transf>
@@ -209,7 +189,7 @@
     <proof
      prover="1"
      timelimit="5"
-     memlimit="1000"
+     memlimit="4000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -224,14 +204,6 @@
     </proof>
     <proof
      prover="3"
-     timelimit="5"
-     memlimit="4000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="4"
      timelimit="5"
      memlimit="4000"
      obsolete="false"
@@ -280,7 +252,7 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="1000"
+       memlimit="4000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -295,14 +267,6 @@
       </proof>
       <proof
        prover="3"
-       timelimit="5"
-       memlimit="4000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="4000"
        obsolete="false"
@@ -326,7 +290,7 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="1000"
+       memlimit="4000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -341,14 +305,6 @@
       </proof>
       <proof
        prover="3"
-       timelimit="5"
-       memlimit="4000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="4000"
        obsolete="false"
@@ -372,7 +328,7 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="1000"
+       memlimit="4000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -387,14 +343,6 @@
       </proof>
       <proof
        prover="3"
-       timelimit="5"
-       memlimit="4000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="4000"
        obsolete="false"
@@ -418,7 +366,7 @@
       <proof
        prover="1"
        timelimit="5"
-       memlimit="1000"
+       memlimit="4000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -433,14 +381,6 @@
       </proof>
       <proof
        prover="3"
-       timelimit="5"
-       memlimit="4000"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        memlimit="4000"
        obsolete="false"

@@ -7943,7 +7943,6 @@ intP_t_0_4_alloc_table intP_intM_t_0_4 intP_intM_t_0_4_1 (pset_union
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/selection_sort_why.sx: .............................................. (46/0/0/0/0)
 total   :  46

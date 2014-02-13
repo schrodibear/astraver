@@ -7,36 +7,52 @@
   version="0.94"/>
  <prover
   id="1"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="2"
   name="Gappa"
   version="1.1.0"/>
+ <prover
+  id="3"
+  name="Z3"
+  version="4.3.1"/>
  <file
   name="../scalar_product.mlw"
-  verified="false"
-  expanded="false">
+  verified="true"
+  expanded="true">
   <theory
    name="Jessie_model"
    locfile="../scalar_product.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
-   verified="false"
-   expanded="false">
+   verified="true"
+   expanded="true">
    <goal
     name="bound_int_to_real"
     locfile="../../scalar_product.c"
     loclnum="33" loccnumb="4" loccnume="76"
     expl="Lemma bound_int_to_real, lemma"
     sum="b1f4817f33a0886c8105acb45942176f"
-    proved="false"
+    proved="true"
     expanded="false"
     shape="ainfix &lt;=afrom_intV0c10.0Iainfix &lt;=V0c10F">
     <label
      name="expl:Lemma bound_int_to_real, lemma"/>
     <proof
      prover="1"
-     timelimit="3"
-     memlimit="0"
+     timelimit="5"
+     memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="0.00"/>
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>
@@ -177,7 +193,7 @@
       <label
        name="expl:VC for scalar_product_ensures_default"/>
       <proof
-       prover="1"
+       prover="2"
        timelimit="3"
        memlimit="0"
        obsolete="false"
@@ -475,7 +491,7 @@
       <label
        name="expl:VC for scalar_product_safety"/>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -497,7 +513,7 @@
       <label
        name="expl:VC for scalar_product_safety"/>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
        memlimit="0"
        obsolete="false"

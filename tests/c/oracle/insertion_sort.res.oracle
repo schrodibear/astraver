@@ -6484,7 +6484,6 @@ why -simplify [...] why/insertion_sort.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/insertion_sort_why.sx: .................................... (36/0/0/0/0)
 total   :  36

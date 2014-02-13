@@ -289,37 +289,21 @@
     locfile="../../bts1251.c"
     loclnum="39" loccnumb="4" loccnume="8"
     expl="VC for main_safety"
-    sum="38e891f24a44032809c706dd750f633c"
+    sum="462056c5301c58eaf9e969591817619e"
     proved="true"
     expanded="true"
-    shape="ainfix &gt;=aoffset_maxV2V5c0Oainfix =V5anullIainfix =V18V17FIainfix =ainteger_of_int32V17c0FIainfix =V16V15FIainfix =ainteger_of_int32aselectV12ashiftV5ainteger_of_int32V15ainteger_of_int32V14Aainfix &lt;=ainteger_of_int32V15ainfix -ainteger_of_int32V13c1Aainfix &lt;=c0ainteger_of_int32V15Iainfix =ainteger_of_int32aselectV12ashiftV5V19ainteger_of_int32V14Aainfix &lt;=V19ainfix -ainteger_of_int32V13c1Aainfix &lt;=c0V19EAainfix =ainteger_of_int32V15aprefix -c1INainfix =ainteger_of_int32aselectV12ashiftV5V20ainteger_of_int32V14Aainfix &lt;=V20ainfix -ainteger_of_int32V13c1Aainfix &lt;=c0V20EFAa_SortedV5c0ainfix -ainteger_of_int32V13c1V12Aainfix &gt;=ainteger_of_int32V13c0Aainfix &gt;=aoffset_maxV2V5ainfix -ainteger_of_int32V13c1Aainfix &lt;=aoffset_minV2V5c0Iainfix =ainteger_of_int32V14aprefix -c8FIainfix =ainteger_of_int32V13c6FIainfix =aselectV12ashiftV5c5V11Aainfix =aselectV12ashiftV5c4V10Aainfix =aselectV12ashiftV5c3V9Aainfix =aselectV12ashiftV5c2V8Aainfix =aselectV12ashiftV5c1V7Aainfix =aselectV12ashiftV5c0V6Aanot_assignsV2V0V12apset_rangeapset_singletonV5c0c5FIainfix =ainteger_of_int32V11c19FIainfix =ainteger_of_int32V10c8FIainfix =ainteger_of_int32V9c6FIainfix =ainteger_of_int32V8c4FIainfix =ainteger_of_int32V7c3FIainfix =ainteger_of_int32V6c1FIainfix =V5V4FAainfix &gt;=aoffset_maxV2V4c5IainstanceofV3V4aintP_tagAaalloc_freshV1V4c6Aaalloc_extendsV1V2Aastrict_valid_struct_intPV4c0ainfix -c6c1V2FFAainfix &gt;=c6c0FF">
+    shape="ainfix &gt;=aoffset_maxV2V5c0Oainfix =V5anullIainfix =V23V22FIainfix =ainteger_of_int32V22c0FIainfix =V21V20FIainfix =ainteger_of_int32aselectV17ashiftV5ainteger_of_int32V20ainteger_of_int32V19Aainfix &lt;=ainteger_of_int32V20ainfix -ainteger_of_int32V18c1Aainfix &lt;=c0ainteger_of_int32V20Iainfix =ainteger_of_int32aselectV17ashiftV5V24ainteger_of_int32V19Aainfix &lt;=V24ainfix -ainteger_of_int32V18c1Aainfix &lt;=c0V24EAainfix =ainteger_of_int32V20aprefix -c1INainfix =ainteger_of_int32aselectV17ashiftV5V25ainteger_of_int32V19Aainfix &lt;=V25ainfix -ainteger_of_int32V18c1Aainfix &lt;=c0V25EFAa_SortedV5c0ainfix -ainteger_of_int32V18c1V17Aainfix &gt;=ainteger_of_int32V18c0Aainfix &gt;=aoffset_maxV2V5ainfix -ainteger_of_int32V18c1Aainfix &lt;=aoffset_minV2V5c0Iainfix =ainteger_of_int32V19aprefix -c8FIainfix =ainteger_of_int32V18c6FIainfix =V17astoreV15ashiftV5c5V16FIainfix =ainteger_of_int32V16c19FIainfix =V15astoreV13ashiftV5c4V14FIainfix =ainteger_of_int32V14c8FIainfix =V13astoreV11ashiftV5c3V12FIainfix =ainteger_of_int32V12c6FIainfix =V11astoreV9ashiftV5c2V10FIainfix =ainteger_of_int32V10c4FIainfix =V9astoreV7ashiftV5c1V8FIainfix =ainteger_of_int32V8c3FIainfix =V7astoreV0V5V6FIainfix =ainteger_of_int32V6c1FIainfix =V5V4FAainfix &gt;=aoffset_maxV2V4c5IainstanceofV3V4aintP_tagAaalloc_freshV1V4c6Aaalloc_extendsV1V2Aastrict_valid_struct_intPV4c0ainfix -c6c1V2FFAainfix &gt;=c6c0FF">
     <label
      name="expl:Function main, Safety"/>
     <label
      name="expl:VC for main_safety"/>
-    <proof
-     prover="0"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.18"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     memlimit="1000"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.71"/>
-    </proof>
     <proof
      prover="2"
      timelimit="5"
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.26"/>
+     <result status="valid" time="0.59"/>
     </proof>
     <proof
      prover="3"
@@ -327,8 +311,189 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.13"/>
+     <result status="valid" time="0.34"/>
     </proof>
+    <transf
+     name="split_goal_wp"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter main_safety.1"
+      locfile="../../bts1251.c"
+      loclnum="39" loccnumb="4" loccnume="8"
+      expl="1. allocation size"
+      sum="d2fe036750feb00fa3ee506897aa47e2"
+      proved="true"
+      expanded="false"
+      shape="allocation sizeainfix &gt;=c6c0FF">
+      <label
+       name="expl:Function main, Safety"/>
+      <label
+       name="expl:VC for main_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter main_safety.2"
+      locfile="../../bts1251.c"
+      loclnum="39" loccnumb="4" loccnume="8"
+      expl="2. assertion"
+      sum="302bb45e51dfd1f6697fbe592411a17d"
+      proved="true"
+      expanded="false"
+      shape="assertionainfix &gt;=aoffset_maxV2V4c5IainstanceofV3V4aintP_tagAaalloc_freshV1V4c6Aaalloc_extendsV1V2Aastrict_valid_struct_intPV4c0ainfix -c6c1V2FFIainfix &gt;=c6c0FF">
+      <label
+       name="expl:Function main, Safety"/>
+      <label
+       name="expl:VC for main_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter main_safety.3"
+      locfile="../../bts1251.c"
+      loclnum="39" loccnumb="4" loccnume="8"
+      expl="3. precondition for call"
+      sum="cf5d31f5b28ab2e2d6f327cc39092640"
+      proved="true"
+      expanded="false"
+      shape="precondition for calla_SortedV5c0ainfix -ainteger_of_int32V18c1V17Aainfix &gt;=ainteger_of_int32V18c0Aainfix &gt;=aoffset_maxV2V5ainfix -ainteger_of_int32V18c1Aainfix &lt;=aoffset_minV2V5c0Iainfix =ainteger_of_int32V19aprefix -c8FIainfix =ainteger_of_int32V18c6FIainfix =V17astoreV15ashiftV5c5V16FIainfix =ainteger_of_int32V16c19FIainfix =V15astoreV13ashiftV5c4V14FIainfix =ainteger_of_int32V14c8FIainfix =V13astoreV11ashiftV5c3V12FIainfix =ainteger_of_int32V12c6FIainfix =V11astoreV9ashiftV5c2V10FIainfix =ainteger_of_int32V10c4FIainfix =V9astoreV7ashiftV5c1V8FIainfix =ainteger_of_int32V8c3FIainfix =V7astoreV0V5V6FIainfix =ainteger_of_int32V6c1FIainfix =V5V4FIainfix &gt;=aoffset_maxV2V4c5IainstanceofV3V4aintP_tagAaalloc_freshV1V4c6Aaalloc_extendsV1V2Aastrict_valid_struct_intPV4c0ainfix -c6c1V2FFIainfix &gt;=c6c0FF">
+      <label
+       name="expl:Function main, Safety"/>
+      <label
+       name="expl:VC for main_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.68"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.36"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="4.97"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter main_safety.4"
+      locfile="../../bts1251.c"
+      loclnum="39" loccnumb="4" loccnume="8"
+      expl="4. precondition"
+      sum="c780580e798b493e03ff3136f6b79ede"
+      proved="true"
+      expanded="false"
+      shape="preconditionainfix &gt;=aoffset_maxV2V5c0Oainfix =V5anullIainfix =V23V22FIainfix =ainteger_of_int32V22c0FIainfix =V21V20FIainfix =ainteger_of_int32aselectV17ashiftV5ainteger_of_int32V20ainteger_of_int32V19Aainfix &lt;=ainteger_of_int32V20ainfix -ainteger_of_int32V18c1Aainfix &lt;=c0ainteger_of_int32V20Iainfix =ainteger_of_int32aselectV17ashiftV5V24ainteger_of_int32V19Aainfix &lt;=V24ainfix -ainteger_of_int32V18c1Aainfix &lt;=c0V24EAainfix =ainteger_of_int32V20aprefix -c1INainfix =ainteger_of_int32aselectV17ashiftV5V25ainteger_of_int32V19Aainfix &lt;=V25ainfix -ainteger_of_int32V18c1Aainfix &lt;=c0V25EFIa_SortedV5c0ainfix -ainteger_of_int32V18c1V17Aainfix &gt;=ainteger_of_int32V18c0Aainfix &gt;=aoffset_maxV2V5ainfix -ainteger_of_int32V18c1Aainfix &lt;=aoffset_minV2V5c0Iainfix =ainteger_of_int32V19aprefix -c8FIainfix =ainteger_of_int32V18c6FIainfix =V17astoreV15ashiftV5c5V16FIainfix =ainteger_of_int32V16c19FIainfix =V15astoreV13ashiftV5c4V14FIainfix =ainteger_of_int32V14c8FIainfix =V13astoreV11ashiftV5c3V12FIainfix =ainteger_of_int32V12c6FIainfix =V11astoreV9ashiftV5c2V10FIainfix =ainteger_of_int32V10c4FIainfix =V9astoreV7ashiftV5c1V8FIainfix =ainteger_of_int32V8c3FIainfix =V7astoreV0V5V6FIainfix =ainteger_of_int32V6c1FIainfix =V5V4FIainfix &gt;=aoffset_maxV2V4c5IainstanceofV3V4aintP_tagAaalloc_freshV1V4c6Aaalloc_extendsV1V2Aastrict_valid_struct_intPV4c0ainfix -c6c1V2FFIainfix &gt;=c6c0FF">
+      <label
+       name="expl:Function main, Safety"/>
+      <label
+       name="expl:VC for main_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+    </transf>
    </goal>
   </theory>
  </file>

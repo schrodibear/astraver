@@ -8,10 +8,18 @@
  <prover
   id="1"
   name="Gappa"
+  version="0.16.1"/>
+ <prover
+  id="2"
+  name="Gappa"
   version="1.0.0"/>
+ <prover
+  id="3"
+  name="Gappa"
+  version="1.1.0"/>
  <file
   name="../array_double.mlw"
-  verified="true"
+  verified="false"
   expanded="true">
   <theory
    name="Jessie_model"
@@ -24,17 +32,17 @@
    name="Jessie_program"
    locfile="../array_double.mlw"
    loclnum="277" loccnumb="7" loccnume="21"
-   verified="true"
+   verified="false"
    expanded="true">
    <goal
     name="WP_parameter test_ensures_default"
     locfile="../../array_double.c"
     loclnum="18" loccnumb="5" loccnume="9"
     expl="VC for test_ensures_default"
-    sum="caf41563c4ff198c0c4f5e15e08b16ba"
-    proved="true"
+    sum="55e0c2b5daf309a04f06163b56b4352e"
+    proved="false"
     expanded="true"
-    shape="ainfix &lt;=aabsainfix -avalueaselectV9ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV9ashiftV7c1V8Aainfix =aselectV9ashiftV7c0V6Aanot_assignsV5V2V9apset_rangeapset_singletonV7c0c1FIaadd_postaNearestTiesToEvenaselectV1ashiftabc1aselectV0ashiftacc1V8FLaaIaadd_postaNearestTiesToEvenaselectV1ashiftabc0aselectV0ashiftacc0V6FIavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
+    shape="ainfix &lt;=aabsainfix -avalueaselectV9ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =V9astoreV7ashiftaac1V8FIaadd_postaNearestTiesToEvenaselectV1ashiftabc1aselectV0ashiftacc1V8FIainfix =V7astoreV2aaV6FIaadd_postaNearestTiesToEvenaselectV1ashiftabc0aselectV0ashiftacc0V6FIavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
     <label
      name="W:diverges:N"/>
     <label
@@ -47,7 +55,23 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="unknown" time="0.00"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.00"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.00"/>
     </proof>
    </goal>
    <goal
@@ -55,10 +79,10 @@
     locfile="../../array_double.c"
     loclnum="18" loccnumb="5" loccnume="9"
     expl="VC for test_safety"
-    sum="6bd184b9213429d0799e7885c8eb6438"
+    sum="a03014a86de8ff2d6472215e5999c77b"
     proved="true"
     expanded="true"
-    shape="avalid_aV5Aavalid_bV4Aavalid_cV3Iainfix &lt;=aabsainfix -avalueaselectV15ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV15ashiftV10c1V14Aainfix =aselectV15ashiftV10c0V9Aanot_assignsV5V2V15apset_rangeapset_singletonV10c0c1FIaadd_postV13V12V11V14FAainfix &lt;=aabsaroundV13ainfix +avalueV12avalueV11amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc1LaselectV0ashiftacc1LaaIaadd_postV8V7V6V9FAainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV6amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
+    shape="avalid_aV5Aavalid_bV4Aavalid_cV3Iainfix &lt;=aabsainfix -avalueaselectV15ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =V15astoreV10ashiftaac1V14FIaadd_postV13V12V11V14FAainfix &lt;=aabsaroundV13ainfix +avalueV12avalueV11amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc1LaselectV0ashiftacc1Iainfix =V10astoreV2aaV9FIaadd_postV8V7V6V9FAainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV6amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
     <label
      name="expl:Function test, Safety"/>
     <label
@@ -81,7 +105,7 @@
       <label
        name="expl:VC for test_safety"/>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -94,16 +118,16 @@
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
       expl="2. floating-point overflow"
-      sum="64d7695751fde450790efc6a138de547"
+      sum="49bd8612a2ac20d8dff519be77454ecf"
       proved="true"
       expanded="true"
-      shape="floating-point overflowainfix &lt;=aabsaroundV13ainfix +avalueV12avalueV11amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc1LaselectV0ashiftacc1LaaIaadd_postV8V7V6V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV6amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
+      shape="floating-point overflowainfix &lt;=aabsaroundV13ainfix +avalueV12avalueV11amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc1LaselectV0ashiftacc1Iainfix =V10astoreV2aaV9FIaadd_postV8V7V6V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV6amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
       <label
        name="expl:Function test, Safety"/>
       <label
        name="expl:VC for test_safety"/>
       <proof
-       prover="1"
+       prover="2"
        timelimit="5"
        memlimit="1000"
        obsolete="false"
@@ -116,10 +140,10 @@
       locfile="../../array_double.c"
       loclnum="18" loccnumb="5" loccnume="9"
       expl="3. postcondition"
-      sum="1a9bb370c415b6a21f0f1d96abbac3a1"
+      sum="c4ebe11366f9680c59f51caf61a46edb"
       proved="true"
       expanded="true"
-      shape="postconditionavalid_aV5Aavalid_bV4Aavalid_cV3Iainfix &lt;=aabsainfix -avalueaselectV15ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV15ashiftV10c1V14Aainfix =aselectV15ashiftV10c0V9Aanot_assignsV5V2V15apset_rangeapset_singletonV10c0c1FIaadd_postV13V12V11V14FIainfix &lt;=aabsaroundV13ainfix +avalueV12avalueV11amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc1LaselectV0ashiftacc1LaaIaadd_postV8V7V6V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV6amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
+      shape="postconditionavalid_aV5Aavalid_bV4Aavalid_cV3Iainfix &lt;=aabsainfix -avalueaselectV15ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =V15astoreV10ashiftaac1V14FIaadd_postV13V12V11V14FIainfix &lt;=aabsaroundV13ainfix +avalueV12avalueV11amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc1LaselectV0ashiftacc1Iainfix =V10astoreV2aaV9FIaadd_postV8V7V6V9FIainfix &lt;=aabsaroundV8ainfix +avalueV7avalueV6amax_doubleLaNearestTiesToEvenLaselectV1ashiftabc0LaselectV0ashiftacc0Iavalid_aV5Aavalid_bV4Aavalid_cV3Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0F">
       <label
        name="expl:Function test, Safety"/>
       <label

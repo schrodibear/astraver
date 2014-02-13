@@ -28,7 +28,7 @@
     locfile="../MyCosine.java"
     loclnum="32" loccnumb="10" loccnume="22"
     expl="Lemma method_error, lemma"
-    sum="2386621aae15c7e96b9c5a083af77ace"
+    sum="b2e96b48cf83a6566aff121e9be92e8b"
     proved="false"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.p-24Iainfix &lt;=aabsV0c0x1.p-5F">
@@ -63,10 +63,12 @@
     locfile="../MyCosine.java"
     loclnum="41" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos1_ensures_default"
-    sum="96f3cfd9c6f226107fa51d94040302f8"
+    sum="c772ad1f4b68cbd5e2554a9768f59201"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -V1acosV0c0x1.p-23Iainfix =V1ainfix -c1.0ainfix *ainfix *V0V0c0.5FAainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.p-24Iainfix &lt;=aabsV0c0x1.p-5F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method my_cos1, default behavior"/>
     <label
@@ -101,7 +103,7 @@
     locfile="../MyCosine.java"
     loclnum="41" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos1_safety"
-    sum="022019d1b6f701e3580f6cb1c9ff4b4b"
+    sum="770aaa82ad5b16b80f6196f5669e840e"
     proved="true"
     expanded="true"
     shape="t">
@@ -139,10 +141,12 @@
     locfile="../MyCosine.java"
     loclnum="49" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos2_ensures_default"
-    sum="022019d1b6f701e3580f6cb1c9ff4b4b"
+    sum="770aaa82ad5b16b80f6196f5669e840e"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method my_cos2, default behavior"/>
     <label
@@ -177,7 +181,7 @@
     locfile="../MyCosine.java"
     loclnum="49" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos2_safety"
-    sum="022019d1b6f701e3580f6cb1c9ff4b4b"
+    sum="770aaa82ad5b16b80f6196f5669e840e"
     proved="true"
     expanded="true"
     shape="t">
@@ -215,10 +219,12 @@
     locfile="../MyCosine.java"
     loclnum="62" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos3_ensures_default"
-    sum="022019d1b6f701e3580f6cb1c9ff4b4b"
+    sum="770aaa82ad5b16b80f6196f5669e840e"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method my_cos3, default behavior"/>
     <label
@@ -253,7 +259,7 @@
     locfile="../MyCosine.java"
     loclnum="62" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos3_safety"
-    sum="022019d1b6f701e3580f6cb1c9ff4b4b"
+    sum="770aaa82ad5b16b80f6196f5669e840e"
     proved="true"
     expanded="true"
     shape="t">
@@ -291,10 +297,12 @@
     locfile="../MyCosine.java"
     loclnum="71" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos4_ensures_default"
-    sum="7ac9c42a987672ecb081681bc231824e"
+    sum="beee3aed1c6465a579d19febbeb39555"
     proved="false"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -V1acosV0c0x1.3p-20Iainfix =V1ainfix -c1.0ainfix *ainfix *V0V0c0.5FAainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.2p-20Iainfix &lt;=aabsV0c0.07F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method my_cos4, default behavior"/>
     <label
@@ -305,7 +313,7 @@
      memlimit="1000"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="3.68"/>
+     <result status="timeout" time="5.00"/>
     </proof>
     <proof
      prover="1"
@@ -329,7 +337,7 @@
     locfile="../MyCosine.java"
     loclnum="71" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos4_safety"
-    sum="022019d1b6f701e3580f6cb1c9ff4b4b"
+    sum="770aaa82ad5b16b80f6196f5669e840e"
     proved="true"
     expanded="true"
     shape="t">
@@ -364,13 +372,15 @@
    </goal>
    <goal
     name="WP_parameter cons_MyCosine_ensures_default"
-    locfile="../../.."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_MyCosine_ensures_default"
-    sum="022019d1b6f701e3580f6cb1c9ff4b4b"
+    sum="770aaa82ad5b16b80f6196f5669e840e"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class MyCosine, default behavior"/>
     <label
@@ -402,10 +412,10 @@
    </goal>
    <goal
     name="WP_parameter cons_MyCosine_safety"
-    locfile="../../.."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_MyCosine_safety"
-    sum="022019d1b6f701e3580f6cb1c9ff4b4b"
+    sum="770aaa82ad5b16b80f6196f5669e840e"
     proved="true"
     expanded="true"
     shape="t">

@@ -39,10 +39,12 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="44" loccnumb="8" loccnume="22"
     expl="VC for compute_trans2_ensures_default"
-    sum="34bd0adcc4c3832cfc0294f9b74b7238"
+    sum="c2aa0d4933f24fc472efd83dfcef3318"
     proved="true"
     expanded="true"
     shape="ainfix &gt;ainteger_of_int32V0c5Oainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Oainfix &lt;ainteger_of_int32V0c0ANainfix &lt;ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;ainteger_of_int32V0c0Aainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function compute_trans2, default behavior"/>
     <label
@@ -61,10 +63,12 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="44" loccnumb="8" loccnume="22"
     expl="VC for compute_trans2_ensures_less_than_five"
-    sum="89d81acbb20f9f57e047a6fb3e220c2a"
+    sum="0491544e6acf9c983bcac26b3976f4e4"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function compute_trans2, Behavior `less_than_five&apos;"/>
     <label
@@ -83,10 +87,12 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="44" loccnumb="8" loccnume="22"
     expl="VC for compute_trans2_ensures_more_than_five"
-    sum="c9107c24f7c9230d24a9902052a04040"
+    sum="5eb3a9cb25fe5d39a6adb9976bb066e5"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1Iainfix &gt;ainteger_of_int32V0c5Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1Iainfix &gt;ainteger_of_int32V0c5Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1Iainfix &gt;ainteger_of_int32V0c5Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function compute_trans2, Behavior `more_than_five&apos;"/>
     <label
@@ -105,10 +111,12 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="44" loccnumb="8" loccnume="22"
     expl="VC for compute_trans2_ensures_none"
-    sum="2fc4ffe979c1afc8f0aa4e5e47499f21"
+    sum="01e9f092472ef8b2464eeb489d6fab13"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0Iainfix &lt;ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0Iainfix &lt;ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0Iainfix &lt;ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;ainteger_of_int32V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function compute_trans2, Behavior `none&apos;"/>
     <label
@@ -127,7 +135,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="44" loccnumb="8" loccnume="22"
     expl="VC for compute_trans2_safety"
-    sum="1987975682a6dc2639a095f687c45d9f"
+    sum="d64e21af105f5527e8064209feb56904"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,10 +157,12 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="19" loccnumb="8" loccnume="21"
     expl="VC for compute_trans_ensures_default"
-    sum="34bd0adcc4c3832cfc0294f9b74b7238"
+    sum="c2aa0d4933f24fc472efd83dfcef3318"
     proved="true"
     expanded="true"
     shape="ainfix &gt;ainteger_of_int32V0c5Oainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Oainfix &lt;ainteger_of_int32V0c0ANainfix &lt;ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;ainteger_of_int32V0c0Aainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function compute_trans, default behavior"/>
     <label
@@ -171,10 +181,12 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="19" loccnumb="8" loccnume="21"
     expl="VC for compute_trans_ensures_less_than_five"
-    sum="40a9f0311547453af7c5568a05494ba8"
+    sum="71fa8eac01b750a5dee87c03cd369cc1"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function compute_trans, Behavior `less_than_five&apos;"/>
     <label
@@ -193,10 +205,12 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="19" loccnumb="8" loccnume="21"
     expl="VC for compute_trans_ensures_more_than_five"
-    sum="6df97889fb7f5b0d97673971f7d3c18c"
+    sum="3538b58b71b45593f4065fe4aed9d70e"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function compute_trans, Behavior `more_than_five&apos;"/>
     <label
@@ -215,10 +229,12 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="19" loccnumb="8" loccnume="21"
     expl="VC for compute_trans_ensures_none"
-    sum="a66cd646652cb8e623ff405157f7365a"
+    sum="4d6d4aa806b176e8270b0b590dec65e1"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;ainteger_of_int32V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function compute_trans, Behavior `none&apos;"/>
     <label
@@ -237,7 +253,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="19" loccnumb="8" loccnume="21"
     expl="VC for compute_trans_safety"
-    sum="1987975682a6dc2639a095f687c45d9f"
+    sum="d64e21af105f5527e8064209feb56904"
     proved="true"
     expanded="true"
     shape="t">
@@ -259,10 +275,12 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="56" loccnumb="4" loccnume="8"
     expl="VC for main_ensures_default"
-    sum="75841d8051765ea7f8d45b3e4209e8b5"
+    sum="115b3a18197b868437599d0e8b0d4ac8"
     proved="false"
     expanded="true"
     shape="iiiiainfix =ainteger_of_int32V11c2Oainfix =ainteger_of_int32V11c1Oainfix =ainteger_of_int32V11aprefix -c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9aprefix -c1Fainfix =ainteger_of_int32V14c2Oainfix =ainteger_of_int32V14c1Oainfix =ainteger_of_int32V14aprefix -c1Iainfix =V14V13FIainfix =V13V12FIainfix =ainteger_of_int32V12c2Fainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V8Iainfix =ainteger_of___anonenum_trans_t_1V8c1Fainfix =ainteger_of_int32V17c2Oainfix =ainteger_of_int32V17c1Oainfix =ainteger_of_int32V17aprefix -c1Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15c2Fainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2Fainfix =ainteger_of_int32V20c2Oainfix =ainteger_of_int32V20c1Oainfix =ainteger_of_int32V20aprefix -c1Iainfix =V20V19FIainfix =V19V18FIainfix =ainteger_of_int32V18c1Fainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1Fainfix =ainteger_of_int32V23c2Oainfix =ainteger_of_int32V23c1Oainfix =ainteger_of_int32V23aprefix -c1Iainfix =V23V22FIainfix =V22V21FIainfix =ainteger_of_int32V21aprefix -c1FAainfix =c1c2ainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function main, default behavior"/>
     <label
@@ -284,10 +302,12 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="1. assertion"
-      sum="afb3b496fb351eaac265854d4d248a71"
+      sum="5b9e32b81d481bffaf0d75e66f4c05e9"
       proved="false"
       expanded="true"
       shape="assertionainfix =c1c2Iainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function main, default behavior"/>
       <label
@@ -330,10 +350,12 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="2. postcondition"
-      sum="45cfc0954369a052fa492874e244ae8b"
+      sum="4c263aa704041d0229906297d69fd1e8"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V8c2Oainfix =ainteger_of_int32V8c1Oainfix =ainteger_of_int32V8aprefix -c1Iainfix =V8V7FIainfix =V7V6FIainfix =ainteger_of_int32V6aprefix -c1FIainfix =c1c2Iainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function main, default behavior"/>
       <label
@@ -352,10 +374,12 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="3. postcondition"
-      sum="c2d4fb40ee9451381d2ecf21e5c38a3b"
+      sum="84a018a189627e8490bd9fb4b84a580f"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V9c2Oainfix =ainteger_of_int32V9c1Oainfix =ainteger_of_int32V9aprefix -c1Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c1FIainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function main, default behavior"/>
       <label
@@ -374,10 +398,12 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="4. postcondition"
-      sum="91b8b4994f6354504bf1a39c912e6d02"
+      sum="66c333873baeb7950be0a8502f9685bb"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V10c2Oainfix =ainteger_of_int32V10c1Oainfix =ainteger_of_int32V10aprefix -c1Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8c2FIainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function main, default behavior"/>
       <label
@@ -396,10 +422,12 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="5. postcondition"
-      sum="f4e6a42d8276887e9ed0bdffeb3454de"
+      sum="b87e0016a2a6dc01b49bd756214abb70"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V11c2Oainfix =ainteger_of_int32V11c1Oainfix =ainteger_of_int32V11aprefix -c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c2FIainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V8Iainfix =ainteger_of___anonenum_trans_t_1V8c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function main, default behavior"/>
       <label
@@ -418,10 +446,12 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="6. postcondition"
-      sum="1d605433f14a4a23667ca3fdbf9fc929"
+      sum="c6ed9b7bc7bdfad9abce210370fe78f3"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V11c2Oainfix =ainteger_of_int32V11c1Oainfix =ainteger_of_int32V11aprefix -c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9aprefix -c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V8Iainfix =ainteger_of___anonenum_trans_t_1V8c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function main, default behavior"/>
       <label
@@ -442,7 +472,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="56" loccnumb="4" loccnume="8"
     expl="VC for main_safety"
-    sum="1987975682a6dc2639a095f687c45d9f"
+    sum="d64e21af105f5527e8064209feb56904"
     proved="true"
     expanded="true"
     shape="t">

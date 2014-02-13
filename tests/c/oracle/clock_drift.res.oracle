@@ -3262,6 +3262,5 @@ why -gappa [...] why/clock_drift.why
 ========== running Gappa ==========
 why -gappa [...] why/clock_drift.why
 Running Gappa on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 gappa/clock_drift_why.gappa   : 

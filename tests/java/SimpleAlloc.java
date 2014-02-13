@@ -32,16 +32,20 @@
 class Node {
     int val;
 
-    //@ assigns this.val;
+    /*@ assigns \nothing;
+      @ allocates this;
+      @ ensures this.val == 0;
+      @*/
     Node(){}
 }
 
 class test {
     Node[] x;
 
-    /*@ requires x!=null && x.length==10  ;
+    /*@ requires x != null && x.length == 10  ;
       @ assigns x[0];
-      @ ensures x!=null;
+      @ allocates x[0];
+      @ ensures x[0] != null;
       @*/
     void test() {
         x[0]=new Node();

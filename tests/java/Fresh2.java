@@ -6,6 +6,7 @@ class Fresh2 {
     int x;
 
     /*@ assigns \nothing;
+      @ allocates this;
       @ ensures \fresh(this);
       @*/
     Fresh2 ();
@@ -25,8 +26,8 @@ class Fresh2 {
     }
 
     static void smoke_detector() {
-        Fresh2 s1 = create ();
-        Fresh2 s2 = create ();
+        Fresh2 _s1 = create ();
+        Fresh2 _s2 = create ();
         //@ assert 0 == 1;
     }
 

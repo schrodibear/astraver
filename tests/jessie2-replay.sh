@@ -1,26 +1,32 @@
 #!/bin/bash
 
-JAVA="AllZeros ArrayMax Arrays BinarySearch Counter Creation
+JAVA="AllZeros ArrayMax Arrays Assertion \
+      BinarySearch Counter Creation
       Fact Fibonacci FlagStatic Fresh Gcd Hello \
-      Isqrt Literals MacCarthy Muller NameConflicts Negate \
-      Power PreAndOld Purse SelectionSort \
-      SideEffects SimpleAlloc Switch \
+      Isqrt Literals MacCarthy Muller MyCosine \
+      NameConflicts Negate \
+      Power PreAndOld Purse Sort Sort2 SelectionSort \
+      SideEffects Switch \
       Termination TestNonNull TreeMax"
 
-JAVATODO="Duplets SimpleApplet Sort2 Sort"
+JAVATODO="Duplets Fresh2 Fresh3 SimpleAlloc SimpleApplet"
 
 C="array_double array_max binary_search cd1d clock_drift \
    double_rounding_strict_model double_rounding_multirounding_model \
    duplets \
    eps_line1 eps_line2 exp \
    find_array flag floats_bsearch float_sqrt \
-   insertion_sort interval_arith isqrt minmax muller my_cosine quick_sort \
+   insertion_sort interval_arith isqrt minmax muller my_cosine \
+   overflow_level power quick_sort \
    rec scalar_product selection_sort sparse_array2 \
    Sterbenz sum_array swap tree_max"
 
-CTODO="binary_heap float_array maze popHeap sparse_array heap_sort"
+CTODO="binary_heap conjugate float_array maze popHeap sparse_array heap_sort"
 
-FRAMA="bts1251 fresh2 fresh2_sep hollas_floats power strprevchr binary-search-hollas"
+FRAMA="bts1251 fresh2 fresh2_sep hollas_floats power strprevchr \
+       binary-search-hollas bts12891 jessie_label_bug bool_bug \
+       q19_switch_fun_call"
+
 
 case "$1" in
   "-force")
