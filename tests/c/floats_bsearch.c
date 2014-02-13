@@ -35,7 +35,7 @@
   @    \forall integer i,j; a <= i <= j <= b ==> \le_float(t[i],t[j]);
   @*/
 
-/*@ requires n >= 0 && \valid_range(t,0,n-1);
+/*@ requires n >= 0 && \valid(t + (0 .. n-1));
   @ requires ! \is_NaN(v);
   @ requires \forall integer i; 0 <= i <= n-1 ==> ! \is_NaN(t[i]);
   @ ensures -1 <= \result < n;
@@ -66,9 +66,9 @@ int binary_search(double t[], int n, double v) {
     else if (t[m] > v) u = m - 1;
     else
       {
-        //@ assert ! \is_NaN(t[m]);
-        //@ assert t[m] <= v;
-        //@ assert t[m] >= v;
+        // assert ! \is_NaN(t[m]);
+        // assert \le_float(t[m],v);
+        // assert \ge_float(t[m],v);
         return m;
       }
   }

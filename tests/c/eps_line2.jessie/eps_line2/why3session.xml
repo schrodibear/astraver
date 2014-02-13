@@ -187,7 +187,7 @@
       <proof
        prover="6"
        timelimit="5"
-       memlimit="4000"
+       memlimit="1000"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -196,10 +196,9 @@
        prover="8"
        timelimit="5"
        memlimit="1000"
-       edited="eps_line2-Jessie_program-WP_parameter_eps_line_safety_2.gappa"
        obsolete="false"
        archived="false">
-       <undone/>
+       <result status="unknown" time="0.01"/>
       </proof>
      </goal>
      <goal
@@ -366,19 +365,18 @@
       <proof
        prover="6"
        timelimit="5"
-       memlimit="4000"
+       memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.42"/>
+       <result status="valid" time="0.39"/>
       </proof>
       <proof
        prover="8"
        timelimit="5"
        memlimit="1000"
-       edited="eps_line2-Jessie_program-WP_parameter_eps_line_safety_1.gappa"
        obsolete="false"
        archived="false">
-       <undone/>
+       <result status="timeout" time="4.99"/>
       </proof>
      </goal>
      <goal

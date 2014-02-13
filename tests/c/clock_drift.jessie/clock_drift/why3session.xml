@@ -28,13 +28,17 @@
  <prover
   id="6"
   name="Gappa"
-  version="1.1.0"/>
+  version="1.0.0"/>
  <prover
   id="7"
+  name="Gappa"
+  version="1.1.0"/>
+ <prover
+  id="8"
   name="Z3"
   version="3.2"/>
  <prover
-  id="8"
+  id="9"
   name="Z3"
   version="4.3.1"/>
  <file
@@ -85,16 +89,15 @@
     <proof
      prover="5"
      timelimit="5"
-     memlimit="4000"
-     edited="clock_drift-Jessie_model-real_of_int_inf_NMAX_1.gappa"
-     obsolete="true"
+     memlimit="1000"
+     obsolete="false"
      archived="false">
-     <undone/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="6"
      timelimit="5"
-     memlimit="4000"
+     memlimit="1000"
      obsolete="false"
      archived="false">
      <result status="unknown" time="0.00"/>
@@ -102,13 +105,21 @@
     <proof
      prover="7"
      timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.00"/>
+    </proof>
+    <proof
+     prover="8"
+     timelimit="5"
      memlimit="4000"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="8"
+     prover="9"
      timelimit="5"
      memlimit="4000"
      obsolete="false"
@@ -136,7 +147,7 @@
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="6"
+     prover="7"
      timelimit="5"
      memlimit="4000"
      obsolete="false"
@@ -144,7 +155,7 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="7"
+     prover="8"
      timelimit="6"
      memlimit="0"
      obsolete="false"
@@ -152,7 +163,7 @@
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="8"
+     prover="9"
      timelimit="5"
      memlimit="0"
      obsolete="false"
@@ -226,7 +237,7 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="6"
+       prover="7"
        timelimit="5"
        memlimit="4000"
        obsolete="false"
@@ -234,7 +245,7 @@
        <result status="valid" time="0.00"/>
       </proof>
       <proof
-       prover="7"
+       prover="8"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -242,7 +253,7 @@
        <result status="valid" time="0.08"/>
       </proof>
       <proof
-       prover="8"
+       prover="9"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -306,7 +317,7 @@
       <label
        name="expl:VC for f_single_ensures_default"/>
       <proof
-       prover="6"
+       prover="7"
        timelimit="5"
        memlimit="4000"
        obsolete="false"
@@ -443,7 +454,7 @@
        <result status="valid" time="0.17"/>
       </proof>
       <proof
-       prover="6"
+       prover="7"
        timelimit="5"
        memlimit="4000"
        obsolete="false"
@@ -489,7 +500,7 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="7"
+       prover="8"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -497,7 +508,7 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="8"
+       prover="9"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -543,7 +554,7 @@
        <result status="valid" time="0.08"/>
       </proof>
       <proof
-       prover="7"
+       prover="8"
        timelimit="5"
        memlimit="0"
        obsolete="false"
@@ -551,7 +562,7 @@
        <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="8"
+       prover="9"
        timelimit="5"
        memlimit="0"
        obsolete="false"
