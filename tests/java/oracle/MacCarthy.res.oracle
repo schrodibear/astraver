@@ -4945,7 +4945,6 @@ why -simplify [...] why/MacCarthy.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/MacCarthy_why.sx     : .....?....?. (10/0/2/0/0)
 total   :  12

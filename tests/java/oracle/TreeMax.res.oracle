@@ -6157,7 +6157,6 @@ return this_2 Object_alloc_table Tree_right Tree_left Tree_value) |@true|)))))))
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/TreeMax_why.sx       : .......?... (10/0/1/0/0)
 total   :  11

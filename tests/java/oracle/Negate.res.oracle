@@ -4750,7 +4750,6 @@ Object_alloc_table intM_intP intM_intP1 (pset_range
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Negate_why.sx        : ............... (15/0/0/0/0)
 total   :  15

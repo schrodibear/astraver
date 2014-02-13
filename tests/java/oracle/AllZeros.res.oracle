@@ -5281,7 +5281,6 @@ why -simplify [...] why/AllZeros.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/AllZeros_why.sx      : .................?? (17/0/2/0/0)
 total   :  19

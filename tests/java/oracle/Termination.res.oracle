@@ -4008,7 +4008,6 @@ why -simplify [...] why/Termination.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Termination_why.sx   : ........... (11/0/0/0/0)
 total   :  11

@@ -255,7 +255,7 @@ let compute_why3_dependencies f =
     | "pow_real" -> why3_PowerReal := true
     | "real_of_int" -> why3_FromInt := true
     | "truncate_real_to_int" -> why3_Truncate := true
-    | "real_min" 
+    | "real_min"
     | "real_max" -> why3_RealMinMax := true
     | "abs_int" -> why3_AbsInt := true
     | "abs_real" -> why3_AbsReal := true
@@ -443,7 +443,7 @@ let add_why3_local id = Hashtbl.add why3_locals id ()
 
 let () = add_why3_local "result"
 
-let remove_why3_local id = Hashtbl.remove why3_locals id 
+let remove_why3_local id = Hashtbl.remove why3_locals id
 
 type logic_type =
     { logic_type_name : string;
@@ -674,7 +674,7 @@ let rec fprintf_term form t =
       else
         fprintf form "(%s : %a)" lab fprintf_term t
   | TIf(t1,t2,t3) ->
-    if !why3syntax then 
+    if !why3syntax then
       let f = bool_to_prop t1 in
       fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]"
         fprintf_assertion f fprintf_term t2 fprintf_term t3
@@ -1103,10 +1103,10 @@ let rec fprintf_expr_node in_app form e =
 	fprintf form "@[<hov 1>(%a <> %a)@]" fprintf_expr e1 fprintf_expr e2
     | App(e1,e2,ty) when !why3syntax ->
         if in_app then
-	  fprintf form "@[<hov 1>%a %a@]" 
+	  fprintf form "@[<hov 1>%a %a@]"
             (fprintf_expr_gen true) e1 fprintf_expr e2
         else
-	  fprintf form "@[<hov 1>(%a %a%a)@]" 
+	  fprintf form "@[<hov 1>(%a %a%a)@]"
             (fprintf_expr_gen true) e1 fprintf_expr e2
             (Pp.print_option (fprintf_type ~need_colon:true false)) ty
     | App(e1,e2,_) ->
@@ -1196,7 +1196,7 @@ let rec fprintf_expr_node in_app form e =
           begin
             match exceps with
 	      | [] ->
-                fprintf form "let _ = %a in assert { %a }" 
+                fprintf form "let _ = %a in assert { %a }"
                   fprintf_expr e
 		  fprintf_assertion post
               | _ -> assert false (* TODO *)
@@ -1206,7 +1206,7 @@ let rec fprintf_expr_node in_app form e =
           fprintf form "(%a)@ " fprintf_expr e;
 	  match exceps with
 	    | [] ->
-		(if o then 
+		(if o then
                     fprintf form "{{ %a }}" else fprintf form "{ %a }")
 		  fprintf_assertion post
 	    | l ->
@@ -1353,8 +1353,10 @@ let append_list e l =
     | e'::rem ->
         match e.expr_node,e'.expr_node with
           | MultiAssign(mark1,pos1,lets1,isrefa1,ta1,a1,tmpe1,e1,f1,l1),
-            MultiAssign(_,_,lets2,_isrefa2,_ta2,a2,_tmpe2,e2,f2,l2) 
-            when e'.expr_labels = [] ->
+            MultiAssign(_,_,lets2,_isrefa2,_ta2,a2,_tmpe2,e2,f2,l2)
+              (* condition disabled since it prevents parallelization
+                 of array assignments *)
+              (* when e'.expr_labels = [] *) ->
               (*
                 Format.eprintf
                 "Found multi-assigns: a1=%a, a2=%a, e1=%a, e2=%a, f1=%s,f2=%s@."
@@ -1368,7 +1370,7 @@ let append_list e l =
                     (*
                       Format.eprintf "append_list, merge successful!@.";
                     *)
-                    { expr_labels = e.expr_labels;
+                    { expr_labels = e.expr_labels @ e'.expr_labels;
                       expr_node =
                         MultiAssign(mark1,pos1,lets1@lets2,isrefa1,ta1,a1,tmpe1,e1,f1,l) }
                     ::rem
@@ -1792,7 +1794,7 @@ let fprintf_why_decls ?(why3=false) ?(use_floats=false)
     end;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
-  if why3 then 
+  if why3 then
     begin
       fprintf form "end@\n@\n";
       fprintf form "module Jessie_program@\n@\n";

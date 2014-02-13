@@ -6880,7 +6880,6 @@ why -simplify [...] why/ArrayMax.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/ArrayMax_why.sx      : ............................. (29/0/0/0/0)
 total   :  29

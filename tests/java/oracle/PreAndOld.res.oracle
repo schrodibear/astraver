@@ -3290,7 +3290,6 @@ why -simplify [...] why/PreAndOld.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/PreAndOld_why.sx     : ... (3/0/0/0/0)
 total   :   3

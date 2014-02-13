@@ -10324,7 +10324,6 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Arrays_why.sx        : ......................................................................... (73/0/0/0/0)
 total   :  73

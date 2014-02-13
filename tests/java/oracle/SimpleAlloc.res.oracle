@@ -4564,7 +4564,6 @@ Object_alloc_table NodeM_NodeP NodeM_NodeP0 (pset_range
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/SimpleAlloc_why.sx   : .???..? (3/0/4/0/0)
 total   :   7

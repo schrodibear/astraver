@@ -5447,7 +5447,6 @@ Object_alloc_table Creation_simple_val Creation_simple_val1 (pset_singleton
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Creation_why.sx      : .........?....... (16/0/1/0/0)
 total   :  17

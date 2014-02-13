@@ -5242,7 +5242,6 @@ why -simplify [...] why/Gcd.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Gcd_why.sx           : ??????..##............ (14/0/6/2/0)
 total   :  22

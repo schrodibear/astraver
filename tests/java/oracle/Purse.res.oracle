@@ -6525,7 +6525,6 @@ Object_alloc_table Purse_balance Purse_balance1 (pset_singleton this_7))))))))))
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Purse_why.sx         : ................. (17/0/0/0/0)
 total   :  17

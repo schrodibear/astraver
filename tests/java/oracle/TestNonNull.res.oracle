@@ -4739,7 +4739,6 @@ why -simplify [...] why/TestNonNull.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/TestNonNull_why.sx   : ........?. (9/0/1/0/0)
 total   :  10

@@ -3405,7 +3405,6 @@ why -simplify [...] why/Counter.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Counter_why.sx       : .. (2/0/0/0/0)
 total   :   2

@@ -7885,7 +7885,6 @@ why -simplify [...] why/BinarySearch.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/BinarySearch_why.sx  : .....................#..?.........?... (35/0/2/1/0)
 total   :  38
@@ -13129,7 +13128,6 @@ goal BinarySearch_binary_search_safety_po_18:
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/BinarySearch_why.sx  : .....................#..?.........?... (35/0/2/1/0)
 total   :  38

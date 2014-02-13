@@ -5975,7 +5975,6 @@ why -simplify [...] why/Fresh3.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Fresh3_why.sx        : .??...?....??. (9/0/5/0/0)
 total   :  14

@@ -12062,7 +12062,6 @@ why -simplify [...] why/SimpleApplet.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/SimpleApplet_why.sx  : ..??.???.?? (4/0/7/0/0)
 total   :  11

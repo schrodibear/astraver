@@ -4629,7 +4629,6 @@ why -simplify [...] why/Switch.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Switch_why.sx        : .................... (20/0/0/0/0)
 total   :  20

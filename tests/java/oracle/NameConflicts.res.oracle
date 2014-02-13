@@ -3825,7 +3825,6 @@ why -simplify [...] why/NameConflicts.why
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
-Unknown section [Zenon] in config file '/home/cmarche/.whyrc'
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/NameConflicts_why.sx : . (1/0/0/0/0)
 total   :   1
