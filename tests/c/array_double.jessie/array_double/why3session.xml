@@ -53,9 +53,9 @@
      prover="1"
      timelimit="5"
      memlimit="1000"
-     obsolete="true"
+     obsolete="false"
      archived="false">
-     <result status="unknown" time="0.00"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="2"
@@ -69,9 +69,9 @@
      prover="3"
      timelimit="5"
      memlimit="1000"
-     obsolete="true"
+     obsolete="false"
      archived="false">
-     <result status="unknown" time="0.00"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
