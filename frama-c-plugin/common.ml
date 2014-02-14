@@ -425,8 +425,8 @@ let blockfuns_include_file_name = "jessie_spec_prolog.h"
 
 let unique_name_generator is_exception =
   let unique_names = Hashtbl.create 127 in
-  let rec aux s =
-    if is_exception s then s else
+  let rec aux ?(force=false) s =
+    if not force && is_exception s then s else
       try
 	let s = if s = "" then "unnamed" else s in
 	let count = Hashtbl.find unique_names s in
@@ -449,6 +449,8 @@ let unique_name, add_unique_name =
 let unique_logic_name, add_unique_logic_name =
 (*  let u = *) unique_name_generator (fun _ -> false)
 (* in (fun s -> let s' = u s in s')*)
+
+let unique_logic_name = unique_logic_name ~force:true
 
 let unique_name_if_empty s =
   if s = "" then unique_name "unnamed" else s

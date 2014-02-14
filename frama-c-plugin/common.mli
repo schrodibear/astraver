@@ -69,7 +69,7 @@ val logic_type_name:  Cil_types.logic_type -> string
 
 (* unique names generation *)
 
-val unique_name : string -> string
+val unique_name : ?force:bool -> string -> string
 
 val unique_logic_name : string -> string
 

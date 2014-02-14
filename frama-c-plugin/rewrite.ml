@@ -94,12 +94,12 @@ class renameEntities
   (add_variable : varinfo -> unit) (add_logic_variable : logic_var -> unit) =
   let types = Typ.Hashtbl.create 17 in
   let add_field fi =
-    fi.fname <- unique_name fi.fname
+    fi.fname <- unique_name ~force:true fi.fname
   in
   let add_type ty =
     if Typ.Hashtbl.mem types ty then () else
       let compinfo = get_struct_info ty in
-      compinfo.cname <- unique_name compinfo.cname;
+      compinfo.cname <- unique_name ~force:true compinfo.cname;
       List.iter add_field compinfo.cfields;
       Typ.Hashtbl.add types ty ()
   in
@@ -1337,6 +1337,31 @@ end
 let eliminate_fps file =
   visit_and_update_globals (new fp_eliminating_visitor) file;
   visitFramacFile (new fptr_to_pvoid_visitor) file;
+  Ast.clear_last_decl ()
+
+(*****************************************************************************)
+(*  Add dummy definitions for structures only used in pointer types.         *)
+(*****************************************************************************)
+
+class dummy_struct_definer = object(self)
+  inherit frama_c_inplace
+
+  method vcompinfo ci =
+    if ci.cdefined = false && ci.cfields = [] then begin
+      attach_global @@ GCompTag (ci, Location.unknown);
+      ci.cdefined <- true
+    end;
+    DoChildren
+
+  method vglob_aux = function
+   | GCompTagDecl (ci, _) -> 
+       ignore (self#vcompinfo ci);
+       DoChildren
+   | _ -> DoChildren
+end
+
+let define_dummy_structs file =
+  visit_and_update_globals (new dummy_struct_definer) file;
   Ast.clear_last_decl ()
 
 (*****************************************************************************)
@@ -2798,6 +2823,12 @@ let from_comprehension_to_range behavior file =
 (*****************************************************************************)
 
 let rewrite file =
+  if Jessie_options.Extract.get () then
+    begin
+      Jessie_options.debug "Define dummy structs";
+      define_dummy_structs file;
+      if checking then check_types file
+    end;
   if checking then check_types file;
   (* Eliminate function pointers through dummy variables, assertions and if-then-else statements *)
   Jessie_options.debug "Eliminate function pointers";
