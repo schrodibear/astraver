@@ -29,26 +29,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-include Plugin.S
+open Cil_types
 
-module ProjectName: Plugin.String
-module Behavior: Plugin.String
-module Analysis: Plugin.Bool
-module WhyOpt: Plugin.String_set
-module Why3Opt: Plugin.String_set
-module JcOpt: Plugin.String_set
-module GenOnly: Plugin.Bool
-module InferAnnot: Plugin.String
-module AbsDomain: Plugin.String
-module Atp: Plugin.String
-module CpuLimit: Plugin.Int
-module HintLevel: Plugin.Int
-module SpecBlockFuncs : Plugin.Bool
-module VoidSupertype : Plugin.Bool
-module Extract : Plugin.Bool
-
-(*
-Local Variables:
-compile-command: "LC_ALL=C make"
-End:
-*)
+val extract : fundec list -> file -> unit
+val get_funs : unit -> fundec list

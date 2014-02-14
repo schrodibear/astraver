@@ -192,6 +192,13 @@ module VoidSupertype =
       let option_name = "-jessie-void-supertype"
       let help = "don't rewrite void * into char *, so that void * becomes a supertype for all types"
      end)
+
+module Extract =
+  False
+    (struct
+      let option_name = "-jessie-extract"
+      let help = "process only explicitly annotated functions with their dependencies"
+     end)
 (*
 Local Variables:
 compile-command: "make"

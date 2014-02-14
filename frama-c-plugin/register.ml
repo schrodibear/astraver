@@ -146,6 +146,12 @@ let run () =
     steal_annots ();
     Jessie_options.debug "After steal_annots";
     if checking then check_types file;
+    (* Extract relevant globals *)
+    if Jessie_options.Extract.get () then begin
+      Jessie_options.debug "Extract relevant globals";
+      Extractor.extract (Extractor.get_funs ()) file;
+      if checking then check_types file
+    end;
     (* Rewrite ranges in logic annotations by comprehesion *)
     Jessie_options.debug "from range to comprehension";
     Rewrite.from_range_to_comprehension

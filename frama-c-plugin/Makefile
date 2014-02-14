@@ -41,7 +41,7 @@ JCCMO		?= $(WHY_DISTRIB)/jc/jc.cmo
 JCCMX		?= $(JCCMO:.cmo=.cmx)
 
 PLUGIN_NAME:=Jessie
-PLUGIN_CMO:= jessie_config jessie_options jessie_integer common rewrite \
+PLUGIN_CMO:= jessie_config jessie_options extractor jessie_integer common rewrite \
              norm retype interp register
 PLUGIN_HAS_MLI:=yes
 PLUGIN_BFLAGS:=$(JESSIE_INCLUDES)
