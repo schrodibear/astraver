@@ -623,6 +623,16 @@ let raw_tag_compare tag1 tag2 =
         if compst = 0 then TermOrd.compare t1 t2 else compst
   | _ -> tag_num tag2 - tag_num tag1
 
+(* Special comparison for enum_infos (contains Num i.e. an external data type!) *)
+
+module EnumInfo = struct
+    let equal ?(by_name=true) ei1 ei2 =
+      String.compare ei1.jc_enum_info_name ei2.jc_enum_info_name = 0 &&
+      (by_name ||
+        ei1.jc_enum_info_min =/ ei2.jc_enum_info_min &&
+        ei1.jc_enum_info_max =/ ei2.jc_enum_info_max)
+    let (=) = equal ~by_name:true
+end
 
 (* Comparison based only on assertion structure, not locations. *)
 module AssertionOrd = struct

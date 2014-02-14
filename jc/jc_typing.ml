@@ -302,7 +302,7 @@ let mintype loc t1 t2 =
         if n1=n2 then t1 else raise Not_found
           (* TODO: integer is subtype of real *)
     | JCTenum e1, JCTenum e2 ->
-        if e1=e2 then t1 else  Jc_pervasives.integer_type
+        if EnumInfo.(e1 = e2) then t1 else  Jc_pervasives.integer_type
     | (JCTenum _ | JCTnative Tinteger), (JCTenum _| JCTnative Tinteger) ->
         Jc_pervasives.integer_type
     | JCTlogic s1, JCTlogic s2 ->

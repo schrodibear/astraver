@@ -213,6 +213,11 @@ sig
   val iter: (int -> 'a -> unit) -> 'a t -> unit
 end
 
+module EnumInfo : sig
+    val equal : ?by_name:bool -> enum_info -> enum_info -> bool
+    val (=) : enum_info -> enum_info -> bool
+end
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
