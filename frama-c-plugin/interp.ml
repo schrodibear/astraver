@@ -94,7 +94,7 @@ let mkdecl dnode pos = new decl ~pos dnode
 (*****************************************************************************)
 
 let reg_position ?id ?kind ?name pos =
-  Output.old_reg_pos "C" ?id ?kind ?name (Loc.extract pos)
+  Output.old_reg_pos "_C" ?id ?kind ?name (Loc.extract pos)
 
 (* [locate] should be called on every Jessie expression which we would like to
  * locate in the original source program.

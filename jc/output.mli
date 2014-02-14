@@ -171,8 +171,9 @@ type expr_node =
   | Absurd
   | Loc of Lexing.position * expr
 
-and expr =
+and expr = 
     { expr_labels : string list;
+      expr_loc_labels : string list;
       expr_node : expr_node;
     }
 
@@ -182,7 +183,9 @@ val mk_expr : expr_node -> expr
 val mk_var : string -> expr
 val void : expr
 
-val make_block : string list -> expr list -> expr
+(*
+val make_block : string list -> string list -> expr list -> expr
+*)
 
 val fprintf_expr : Format.formatter -> expr -> unit
 

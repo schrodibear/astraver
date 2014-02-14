@@ -968,11 +968,12 @@ type expr_node =
 
 and expr =
     { expr_labels : string list;
+      expr_loc_labels : string list;
       expr_node : expr_node;
     }
 ;;
 
-let mk_expr e = { expr_labels = []; expr_node = e }
+let mk_expr e = { expr_labels = []; expr_loc_labels = []; expr_node = e }
 let mk_var s = mk_expr (Var s)
 let void = mk_expr Void
 
@@ -1332,6 +1333,10 @@ let make_label label e =
 (*
   if label = "L2" then Format.eprintf "Output.make_label: adding label %s@." label;
 *)
+  assert (String.length label > 0);
+  if label.[0] = '_' then
+  { e with expr_loc_labels = label :: e.expr_loc_labels }
+  else
   { e with expr_labels = label :: e.expr_labels }
 
 let make_pre pre e =  mk_expr (Triple(false,pre,e,LTrue,[]))
@@ -1354,9 +1359,7 @@ let append_list e l =
         match e.expr_node,e'.expr_node with
           | MultiAssign(mark1,pos1,lets1,isrefa1,ta1,a1,tmpe1,e1,f1,l1),
             MultiAssign(_,_,lets2,_isrefa2,_ta2,a2,_tmpe2,e2,f2,l2)
-              (* condition disabled since it prevents parallelization
-                 of array assignments *)
-              (* when e'.expr_labels = [] *) ->
+            when e'.expr_labels = [] ->
               (*
                 Format.eprintf
                 "Found multi-assigns: a1=%a, a2=%a, e1=%a, e2=%a, f1=%s,f2=%s@."
@@ -1370,7 +1373,8 @@ let append_list e l =
                     (*
                       Format.eprintf "append_list, merge successful!@.";
                     *)
-                    { expr_labels = e.expr_labels @ e'.expr_labels;
+                    { expr_labels = e.expr_labels;
+                      expr_loc_labels = e.expr_loc_labels @ e'.expr_loc_labels;
                       expr_node =
                         MultiAssign(mark1,pos1,lets1@lets2,isrefa1,ta1,a1,tmpe1,e1,f1,l) }
                     ::rem
@@ -1405,11 +1409,12 @@ let append_list e l =
               e::l
 
 
-let make_block labels l =
+let make_block labels loc_labels l =
   match l with
       | [] -> assert false
-      | [e] -> {e with expr_labels = labels @ e.expr_labels }
-      | _ -> { expr_labels = labels ; expr_node = Block l }
+      | [e] -> {e with expr_labels = labels @ e.expr_labels ; 
+                       expr_loc_labels = loc_labels @ e.expr_loc_labels }
+      | _ -> { expr_labels = labels ; expr_loc_labels = loc_labels ; expr_node = Block l }
 
 (** Try hard to keep the labels visible by all the instructions that follow
     but also to remove unneeded block
@@ -1423,21 +1428,21 @@ let rec append' e1 e2 =
     | _,Void -> assert (e2.expr_labels = []); [e1]
     | Block(_),Block([]) -> [e1]
     | Block(l1),_ ->
-      [make_block e1.expr_labels (concat l1 e2)]
+      [make_block e1.expr_labels e1.expr_loc_labels (concat l1 e2)]
     | _,Block(l2) ->
       begin match e1.expr_labels, e2.expr_labels with
         | [], [] -> append_list e1 l2
         | labels1, [] ->
-          [make_block labels1 (append_list {e1 with expr_labels = []} l2)]
+          [make_block labels1 e1.expr_loc_labels (append_list {e1 with expr_labels = []} l2)]
         | labels1, _ ->
-          [make_block labels1 (append_list {e1 with expr_labels = []} [e2])]
+          [make_block labels1 e1.expr_loc_labels (append_list {e1 with expr_labels = []} [e2])]
       end
     | _ ->
       if e1.expr_labels = [] then
         append_list e1 [e2]
       else
         let e1' = {e1 with expr_labels = []} in
-        [make_block e1.expr_labels (append_list e1' [e2])]
+        [make_block e1.expr_labels [] (append_list e1' [e2])]
 
 and concat l1 e2 =
   match l1 with
@@ -1446,7 +1451,7 @@ and concat l1 e2 =
   | a1::l1 -> a1::(concat l1 e2)
 
 let append e1 e2 =
-  make_block [] (append' e1 e2)
+  make_block [] [] (append' e1 e2)
 
 type goal_kind = KAxiom | KLemma | KGoal
 
