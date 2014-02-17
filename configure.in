@@ -340,7 +340,12 @@ else
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
       AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
-        Fluorine-20130601+dev)
+        Neon-rc1)
+           FRAMACPLUGIN=yes
+           ;;
+        Neon-*)
+	   FRAMACMSG="Found unknown variant of Frama-C Neon (hope this works)"
+           AC_MSG_WARN($FRAMACMSG)
            FRAMACPLUGIN=yes
            ;;
         *) FRAMACMSG="you need Frama-C version Fluorine-2013(04|05|06)01"
@@ -583,6 +588,9 @@ fi
 echo "Frama-C plugin           : $FRAMACPLUGIN"
 if test "$FRAMACPLUGIN" = "yes" ; then
    echo "    Frama-C version      : $FRAMACVERSION"
+   if test -n "$FRAMACMSG" ; then
+      echo "    $FRAMACMSG"
+   fi
 else
    echo "    $FRAMACMSG"
 fi
