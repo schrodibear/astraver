@@ -180,11 +180,9 @@ let extract funs =
 
 let get_funs () =
   Globals.Functions.fold (fun ({ spec } as kf) acc ->
-    if spec.spec_behavior <> [] ||
-       spec.spec_variant <> None ||
-       spec.spec_terminates <> None ||
-       spec.spec_complete_behaviors <> [] ||
-       spec.spec_disjoint_behaviors <> [] then
+    if not (is_empty_funspec spec)  ||
+       Annotations.code_annot_of_kf kf <> []
+    then
       try Kernel_function.get_definition kf :: acc
       with Kernel_function.No_Definition -> acc
     else acc)
