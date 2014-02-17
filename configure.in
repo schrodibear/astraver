@@ -370,17 +370,38 @@ else
      AC_MSG_RESULT(ok)
 fi
 
-dnl AC_CHECK_PROG(CAMLP4OOPT,camlp4o.opt,camlp4o.opt,no)
-dnl if test "CAMLP4OOPT" != no ; then
-dnl      AC_MSG_CHECKING(camlp4o.opt version)
-dnl      TMPVERSION=`$CAMLP4OOPT -v 2>&1 |sed -n -e 's|.*version *\(.*\)$|\1|p'`
-dnl      if test "$TMPVERSION" != $CAMLP4VERSION ; then
-dnl 	  AC_MSG_RESULT(differs from camlp4o; camlp4o.opt discarded.)
-dnl      else
-dnl  	  AC_MSG_RESULT(ok)
-dnl  	  CAMLP4O=$CAMLP4OOPT
-dnl      fi
-dnl fi
+# Why3
+
+AC_CHECK_PROG(WHY3,why3,yes,no)
+if test "$WHY3" = no ; then
+  WHY3MSG="command 'why3' not found"
+  AC_MSG_WARN($WHY3MSG)
+else
+  AC_MSG_CHECKING(Why3 version)
+  WHY3VERSION=`why3 --version | sed -n -e 's|.*version \([[^ ]]\+\) .*$|\1|p'`
+  case $WHY3VERSION in
+  0.90)
+      AC_MSG_RESULT($WHY3VERSION)
+      ;;
+  0.82+git|0.9*)
+      AC_MSG_RESULT($WHY3VERSION)
+      WHY3MSG="(version not guaranteed to be supported, hope this works)"
+      AC_MSG_WARN($WHY3MSG)
+      ;;
+  0.6*|0.7*|0.8*)
+      AC_MSG_RESULT($WHY3VERSION)
+      WHY3="no"
+      WHY3MSG="version $WHY3VERSION too old, why3 support discarded"
+      AC_MSG_WARN($WHY3MSG)
+      ;;
+  *)
+      AC_MSG_RESULT($WHY3VERSION)
+      WHY3="no"
+      WHY3MSG="unknown version $WHY3VERSION, why3 support discarded"
+      AC_MSG_WARN($WHY3MSG)
+      ;;
+  esac
+fi
 
 
 WHYFLOATS=
@@ -398,7 +419,7 @@ else
     fi
     COQLIB=`$COQC -where | sed -e 's|\\\|/|g' -e 's| |\\ |g'`
     AC_MSG_CHECKING(Coq version)
-    COQVERSION=`$COQC -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
+    COQVERSION=`$COQC -v | sed -n -e 's|.*version \([[^ ]]\+\) .*$|\1|p' `
 
     case $COQVERSION in
     7.4*)
@@ -445,12 +466,9 @@ else
 	  COQFLOATSLEGACYMSG="no (Coq library AllFloat.vo not found)"
 	fi
 
-	AC_CHECK_PROG(WHY3,why3,why3,no)
-	if test "$WHY3" = no ; then
-	  AC_MSG_WARN(Cannot find why3.)
-	else
+	if test "$WHY3" != no ; then
 	  AC_MSG_CHECKING(Coq realizations for Why3)
-	  WHY3COQPATH=`$WHY3 --print-libdir`/coq
+	  WHY3COQPATH=`why3 --print-libdir`/coq
 	  if test -f "$WHY3COQPATH/int/Int.vo"; then
 	    AC_MSG_RESULT(yes)
 	    JESSIEWHY3LIBCOQ="lib/coq/Jessie_memory_model.vo"
@@ -461,7 +479,7 @@ else
 	;;
     *)
 	COQ=no
-	AC_MSG_WARN(You need Coq 7.4 or later; Coq discarded);;
+	AC_MSG_WARN(You need Coq 7.4 or later; Coq support discarded);;
     esac
 fi
 
@@ -584,6 +602,13 @@ echo "Verbose make             : $VERBOSEMAKE"
 echo "Inference of annotations : $enable_apron"
 if test "$enable_apron" = "yes" ; then
    echo "    APRON lib            : $APRONLIB"
+fi
+echo "Why3 support             : $WHY3"
+if test "$WHY3" = "yes" ; then
+   echo "    Version              : $WHY3VERSION"
+fi
+if test -n "$WHY3MSG" ; then
+   echo "    $WHY3MSG"
 fi
 echo "Frama-C plugin           : $FRAMACPLUGIN"
 if test "$FRAMACPLUGIN" = "yes" ; then
