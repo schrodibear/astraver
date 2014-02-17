@@ -92,13 +92,22 @@ let normalize_switch pos e caselist =
    * with the control-flow, when its value is tested.
    *)
   let epos = e#pos in
+  let label eold enew =
+    match eold#node with
+      | JCPElabel (label, _) ->
+          begin match enew#node with
+            | JCPEbinary (_, (`Bland | `Blor), _) -> enew
+            | _ -> mklabel ~label ~expr:enew ~pos:enew#pos ()
+          end
+      | _ -> enew
+  in
   let tmpname = tmp_var_name () in
   let tmpvar = mkvar ~pos:epos ~name:tmpname () in
   let has_default c = List.exists (fun c -> c = None) c in
   (* Test for case considered *)
   let test_one_case ~(neg:bool) c =
     let op = if neg then `Bneq else `Beq in
-    mkbinary ~pos:epos ~expr1:tmpvar ~op ~expr2:c ()
+    label c (mkbinary ~pos ~expr1:tmpvar ~op ~expr2:c ())
   in
   (* Collect negative tests for [default] case *)
   let all_neg_cases () =
@@ -137,7 +146,7 @@ let normalize_switch pos e caselist =
     function [] -> List.rev acc | (c,e) :: next_cases ->
       (* No need to test on previous values if default present *)
       let current_c = if has_default c then c else previous_c @ c in
-      let teste = test_case_or_default current_c in
+      let teste = label e (test_case_or_default current_c) in
       (* Case translated into if-statement *)
       if cannot_fall_trough e then
 	let nexte = start_fold_case next_cases in

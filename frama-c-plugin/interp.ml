@@ -2040,7 +2040,7 @@ let rec statement s =
         in
         let switch_label = function
           | Label _ -> assert false
-          | Case(e,_) -> Some(expr e)
+          | Case(e,_) -> Some (locate (expr e))
           | Default _ -> None
         in
         let case = function
