@@ -1185,13 +1185,14 @@ let rec fprintf_expr_node in_app form e =
       if !why3syntax then
         if o then
           begin
-            fprintf form "abstract %a@ ensures {@ %a }@ "
-              fprintf_expr e
+            fprintf form "abstract@ ensures {@ %a }@ "
 	      fprintf_assertion post;
             List.iter
               (fun (e,r) ->
                 fprintf form "@[<hov 2>raises { %s ->@ %a }@]" e fprintf_assertion r)
               exceps;
+            fprintf form "@ %a@ end"
+              fprintf_expr e
           end
         else
           begin
