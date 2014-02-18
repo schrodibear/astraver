@@ -1009,7 +1009,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	      begin match te1#typ with
 		| JCTpointer(st1, a, b) ->
 		    if superstruct st st1 then
-		      (te1#typ,
+		      (ty,
 		       te1#region,
 		       te1#node)
 		    else if substruct st st1 then
@@ -2152,7 +2152,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	      begin match te1#typ with
 		| JCTpointer(st1, a, b) ->
 		    if superstruct st st1 then
-		      (te1#typ,
+		      (ty,
 		       te1#region,
 		       te1#node)
 		    else if substruct st st1 then
