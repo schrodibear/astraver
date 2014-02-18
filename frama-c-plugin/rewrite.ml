@@ -1348,6 +1348,9 @@ class dummy_struct_definer = object(self)
 
   method vcompinfo ci =
     if ci.cdefined = false && ci.cfields = [] then begin
+      Jessie_options.warning
+        "Defining dummy composite tag for %s in extract mode (enabled by -jessie-extract)"
+        (compFullName ci);
       attach_global @@ GCompTag (ci, Location.unknown);
       ci.cdefined <- true
     end;
@@ -2429,6 +2432,50 @@ let rewrite_void_pointer file =
   let visitor = new rewriteVoidPointer in
   visitFramacFile visitor file
 
+(*****************************************************************************)
+(* Rewrite type char* into void* in successive castings.                     *)
+(*****************************************************************************)
+
+class char_pointer_rewriter =
+object
+  inherit frama_c_inplace
+
+  method vexpr e =
+    let void_ptr_with_attrs t = typeAddAttributes (typeAttrs t) voidPtrType in
+    match e.enode with
+    | CastE (tcharp, ein)
+      when isCharPtrType tcharp ->
+        ChangeTo ({ e with enode = CastE (void_ptr_with_attrs tcharp, ein)})
+    | BinOp _ ->
+        DoChildrenPost (function
+          | { enode = BinOp (op, e1, e2, _); eloc } -> mkBinOp ~loc:eloc op e1 e2
+          | e -> fatal "Unexpected transformation of BinOp to: %a" Printer.pp_exp e)
+    | UnOp (op, ( { eloc } as e), typ) when isCharPtrType typ ->
+        ChangeDoChildrenPost (new_exp ~loc:eloc (UnOp (op, e, void_ptr_with_attrs typ)), id)
+    | _ -> DoChildren
+end
+
+class side_cast_rewriter =
+  let rewrite_char_pointers = visitFramacExpr (new char_pointer_rewriter) in
+object
+  inherit frama_c_inplace
+
+  method vexpr e = match e.enode with
+    | CastE (tto, efrom)
+      when isPointerType tto &&
+           not (isCharPtrType tto) &&
+           not (isVoidPtrType tto) ->
+        let tfrom = typeOf efrom in
+        if isCharPtrType tfrom then
+          ChangeTo ({ e with enode = CastE (tto, rewrite_char_pointers efrom) })
+        else
+          DoChildren
+    | _ -> DoChildren
+end
+
+let rewrite_side_casts file =
+  visitFramacFile (new side_cast_rewriter) file
+
 (* Jessie/Why has trouble with Pre labels inside function contracts. *)
 class rewritePreOld : Visitor.frama_c_visitor =
 object(self)
@@ -2823,13 +2870,13 @@ let from_comprehension_to_range behavior file =
 (*****************************************************************************)
 
 let rewrite file =
+  (* Add definitions for undefined composite tags in extract mode. *)
   if Jessie_options.Extract.get () then
-    begin
-      Jessie_options.debug "Define dummy structs";
-      define_dummy_structs file;
-      if checking then check_types file
-    end;
-  if checking then check_types file;
+   begin
+     Jessie_options.debug "Define dummy structs";
+     define_dummy_structs file;
+     if checking then check_types file
+   end;
   (* Eliminate function pointers through dummy variables, assertions and if-then-else statements *)
   Jessie_options.debug "Eliminate function pointers";
   eliminate_fps file;
@@ -2900,7 +2947,13 @@ let rewrite file =
     begin
       (* Rewrite type void* and (un)signed char* into char*. *)
       Jessie_options.debug "Rewrite type void* and (un)signed char* into char*";
-      rewrite_void_pointer file;
+      rewrite_void_pointer file
+    end
+  else
+    begin
+      (* Rewrite char * into void * in successive casts. *)
+      Jessie_options.debug "Rewrite type char* into void* in successive casts";
+      rewrite_side_casts file
     end;
   if checking then check_types file;
   Jessie_options.debug "Rewrite Pre as Old in funspec";
