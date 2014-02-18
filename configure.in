@@ -340,7 +340,7 @@ else
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
       AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
-        Neon-rc1)
+        Neon-rc1|Neon-rc2|Neon-rc3)
            FRAMACPLUGIN=yes
            ;;
         Neon-*)
