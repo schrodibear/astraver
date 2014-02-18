@@ -2490,7 +2490,7 @@ let global vardefs g =
         in
         let union_tag = JCDtag(compinfo.cname,[],None,padding,[]) in
         let fields = List.map field compinfo.cfields in
-        let rec has_pointer ty =
+        (*let rec has_pointer ty =
           match unrollType ty with
             | TComp(compinfo,_,_) ->
                 List.exists (fun fi -> has_pointer fi.ftype) compinfo.cfields
@@ -2509,11 +2509,11 @@ let global vardefs g =
                   Printer.pp_typ ty (compFullName compinfo)
             | TNamed _ -> assert false
             | TBuiltin_va_list _ -> assert false (* not supported *)
-        in
+        in*)
         (* Union type with pointer as sub-field should be used as a
            discriminated union *)
-        let discr = has_pointer (TComp(compinfo, empty_size_cache (),[])) in
-        [JCDunion_type(compinfo.cname,discr,union_id :: fields); union_tag]
+        (*let discr = has_pointer (TComp(compinfo, empty_size_cache (),[])) in*)
+        [(*JCDunion_type*)JCDvariant_type(compinfo.cname,(*discr,*)union_id :: fields); union_tag]
 
     | GCompTagDecl _ -> [] (* No struct/union declaration in Jessie *)
 
