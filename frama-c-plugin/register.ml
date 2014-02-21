@@ -149,7 +149,7 @@ let run () =
     (* Extract relevant globals *)
     if Jessie_options.Extract.get () then begin
       Jessie_options.debug "Extract relevant globals";
-      Extractor.extract (Extractor.get_funs ()) file;
+      Extractor.extract file;
       if checking then check_types file
     end;
     (* Rewrite ranges in logic annotations by comprehesion *)

@@ -31,5 +31,4 @@
 
 open Cil_types
 
-val extract : fundec list -> file -> unit
-val get_funs : unit -> fundec list
+val extract : file -> unit

@@ -29,24 +29,26 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Extlib
+
 open Cil_types
 open Cil
 open Visitor
 
 module Q = Queue
 module Queue = struct
-    type 'a t = 'a Q.t
-    let create () = Q.create ()
-    let add q e = Q.add e q
-    let take q = Q.take q
-    let is_empty q = Q.is_empty q
+  type 'a t = 'a Q.t
+  let create () = Q.create ()
+  let add q e = Q.add e q
+  let take q = Q.take q
+  let is_empty q = Q.is_empty q
 end
 
 module Set_of_hashtbl (H : Hashtbl.S) = struct
-    type t = unit H.t
-    let create () = H.create 100
-    let add t k = H.replace t k ()
-    let mem t k = H.mem t k
+  type t = unit H.t
+  let create () = H.create 100
+  let add t k = H.replace t k ()
+  let mem t k = H.mem t k
 end
 
 module T_set = Set_of_hashtbl(Cil_datatype.Typeinfo.Hashtbl)
@@ -55,71 +57,211 @@ module E_set = Set_of_hashtbl(Cil_datatype.Enuminfo.Hashtbl)
 module V_set = Set_of_hashtbl(Cil_datatype.Varinfo.Hashtbl)
 
 module State = struct
-  type state =
-    { types : T_set.t;
-      comps : C_set.t;
-      enums : E_set.t;
-      vars  : V_set.t;
-      fun_queue : fundec Queue.t;
-      typ_queue : typeinfo Queue.t;
-      comp_queue : compinfo Queue.t }
+  type state = {
+    types : T_set.t;
+    comps : C_set.t;
+    enums : E_set.t;
+    vars  : V_set.t;
+    fun_queue : fundec Queue.t;
+    typ_queue : typeinfo Queue.t;
+    comp_queue : compinfo Queue.t
+  }
 end
 
 module Result = struct
-  type result =
-    { types : T_set.t;
-      comps : C_set.t;
-      enums : E_set.t;
-      vars  : V_set.t }
+  type result = {
+    types : T_set.t;
+    comps : C_set.t;
+    enums : E_set.t;
+    vars  : V_set.t
+  }
 end
 
-class relevant_type_visitor { State. types; comps; enums; typ_queue; comp_queue } = object
+class relevant_type_visitor
+        { State. types; comps; enums; typ_queue; comp_queue }
+= object
   inherit frama_c_inplace
 
-  method vtype t =
+  method! vtype t =
     begin match t with
-      | TNamed (ti, _) ->
-          if not (T_set.mem types ti) then begin
-            T_set.add types ti;
-            Queue.add typ_queue ti
-          end
-      | TComp (ci, _, _) ->
-          if not (C_set.mem comps ci) then begin
-            C_set.add comps ci;
-            Queue.add comp_queue ci
-          end
-      | TEnum (ei, _) ->
-          E_set.add enums ei
-      | _ -> ()
+    | TNamed (ti, _) ->
+      if not (T_set.mem types ti) then begin
+        T_set.add types ti;
+        Queue.add typ_queue ti
+      end
+    | TComp (ci, _, _) ->
+      if not (C_set.mem comps ci) then begin
+        C_set.add comps ci;
+        Queue.add comp_queue ci
+      end
+    | TEnum (ei, _) ->
+      E_set.add enums ei
+    | _ -> ()
     end;
     DoChildren
 end
 
-class relevant_function_visitor { State. vars; fun_queue } add_from_type = object
+let fatal_offset =
+  Jessie_options.fatal
+    "Encountered function type with offset: %a"
+    Printer.pp_exp
+
+(* Helper function to extract functions occurring as variables. *)
+let do_expr_post f do_not_touch e =
+  if !do_not_touch = Some e.eid then (do_not_touch := None; e)
+  else match e.enode with
+  | Lval (Var vi, NoOffset) | AddrOf (Var vi, NoOffset)
+    when isFunctionType vi.vtype ->
+    f vi;
+    e
+  | Lval (Var vi, _) | AddrOf (Var vi, _)
+    when isFunctionType vi.vtype ->
+    fatal_offset e
+  | _ -> e
+
+(* Add the function to the queue for traversal. *)
+let do_fun { State. vars; fun_queue } add_from_type (vi, kf_opt) =
+  if not (V_set.mem vars vi) then begin
+    V_set.add vars vi;
+    let kf = opt_conv (Globals.Functions.get vi) kf_opt in
+    Kernel_function.(
+     try Queue.add fun_queue (get_definition kf)
+     with No_Definition ->
+       List.iter (fun vi -> add_from_type vi.vtype) (get_formals kf))
+  end
+
+class relevant_function_visitor state add_from_type =
+  let do_fun = do_fun state add_from_type in
+  (* For marking function expressions in explicit function calls. *)
+  let do_not_touch = ref None in
+  (* Adds all functions occurring as variables to the queue. *)
+  let do_expr_post = do_expr_post (fun vi -> do_fun (vi, None)) do_not_touch in
+object
   inherit frama_c_inplace
 
-  method vvrbl vi =
-    if vi.vglob then V_set.add vars vi;
+  method! vexpr _ = DoChildrenPost (do_expr_post)
+
+  method! vterm = Common.do_on_term (None, Some do_expr_post)
+
+  method! vvrbl vi =
+    if vi.vglob then V_set.add state.State.vars vi;
     DoChildren
 
-  method vinst = function
-    | Call (_, { enode = Lval (Var vi, NoOffset) }, _, _) ->
-        if not (V_set.mem vars vi) then begin
-          V_set.add vars vi;
-          let kf = Globals.Functions.get vi in
-          let open Kernel_function in
-          try Queue.add fun_queue (get_definition kf)
-          with No_Definition -> List.iter (fun vi -> add_from_type vi.vtype) (get_formals kf)
-        end;
-        DoChildren
+  method! vinst =
+    function
+    | Call (_, { eid; enode = Lval (Var vi, NoOffset) }, _, _) ->
+      do_not_touch := Some eid;
+      do_fun (vi, None);
+      DoChildren
+    | Call (_, ({ enode = Lval (Var vi, _) } as e), _, _)
+      when isFunctionType vi.vtype ->
+      fatal_offset e
+    | Call (_, f, _, _) -> 
+      let types =
+        match unrollType (typeOf f) with
+        | TFun (rt, ao, _, _) | TPtr (TFun (rt, ao, _, _), _) ->
+          rt :: (List.map (fun (_, t, _) -> t) (opt_conv [] ao))
+        | t ->
+          Jessie_options.fatal
+            "Non-function (%a) called as function: %a"
+            Printer.pp_typ t Printer.pp_exp f
+      in
+      List.iter do_fun @@
+        Globals.Functions.fold
+          (fun kf acc ->
+            let vi = Kernel_function.get_vi kf in
+            if
+              vi.vaddrof &&
+              let types' =
+                Kernel_function.(
+                  get_return_type kf
+                  :: List.map (fun vi -> vi.vtype) (get_formals kf))
+              in
+              List.(length types = length types' &&
+                    not @@ exists2 need_cast types types')
+            then (vi, Some kf) :: acc
+            else acc)
+          [];
+      DoChildren
     | _ -> DoChildren
 
-  method vtype t =
+  method! vtype t =
     add_from_type t;
     SkipChildren
 end
 
-let do_funs funs =
+(* Visit all anotation in the file, add necessary types and variables. *)
+class annotation_visitor state add_from_type =
+  let do_fun = do_fun state add_from_type in
+  (* There are no explicit function calls from annotations. *)
+  let do_expr_post = do_expr_post (fun vi -> do_fun (vi, None)) (ref None) in
+object
+  inherit frama_c_inplace
+
+  method! vterm = Common.do_on_term (None, Some do_expr_post)
+
+  method! vmodel_info { mi_base_type } =
+    add_from_type mi_base_type;
+    DoChildren
+
+  method! vlogic_type t =
+    ignore @@ visitFramacLogicType
+      (object
+        inherit frama_c_inplace
+
+        method! vtype t =
+          add_from_type t;
+          SkipChildren
+       end)
+      t;
+    DoChildren
+
+  method! vlogic_var_decl =
+    function
+    | { lv_origin = Some vi } ->
+      if vi.vglob then V_set.add state.State.vars vi;
+      DoChildren
+    | _ -> DoChildren
+end
+
+class fun_vaddrof_visitor =
+  (* To mark function expressions in explicit function calls. *)
+  let do_not_touch = ref None in
+  let do_expr_post = do_expr_post (fun vi -> vi.vaddrof <- true) do_not_touch in
+object
+  inherit frama_c_inplace
+
+  method! vexpr _ = DoChildrenPost (do_expr_post)
+
+  method! vterm = Common.do_on_term (None, Some do_expr_post)
+
+  method! vstmt_aux s =
+    match s.skind with
+    | Instr (
+        Call (_, ({ eid; enode = Lval (Var { vtype }, NoOffset) }), _, _))
+      when isFunctionType vtype ->
+      (* Will be handled in the function expression child *)
+      do_not_touch := Some eid;
+      DoChildren
+    | Instr (Call (_, ({ enode = Lval (Var { vtype }, _) } as e), _, _))
+      when isFunctionType vtype ->
+      fatal_offset e
+    | _ -> DoChildren
+end
+
+let get_annotated_funs () =
+  Globals.Functions.fold
+    (fun kf acc ->
+      if Annotations.(
+           not (is_empty_funspec (funspec kf)) ||
+           code_annot_of_kf kf <> [])
+      then
+        Kernel_function.(try get_definition kf :: acc
+                         with No_Definition -> acc)
+      else acc)
+    []
+
+let collect file =
   let { State.
         types;
         comps;
@@ -137,14 +279,26 @@ let do_funs funs =
         typ_queue = Queue.create ();
         comp_queue = Queue.create () }
   in
-  let add_from_type t = ignore (visitFramacType (new relevant_type_visitor state) t) in
+  let add_from_type t =
+    ignore
+      (visitFramacType (new relevant_type_visitor state) t)
+  in
   let do_type ti = add_from_type ti.ttype in
   let do_comp ci = List.iter (fun fi -> add_from_type fi.ftype) ci.cfields in
-  let do_fun f = ignore (visitFramacFunction (new relevant_function_visitor state add_from_type) f) in
-  List.iter (fun fundec ->
-               V_set.add vars fundec.svar;
-               Queue.add fun_queue fundec)
-            funs;
+  let do_fun f =
+    ignore @@
+      visitFramacFunction (new relevant_function_visitor state add_from_type) f
+  in
+  (* Mark all addressed functions in their vaddrof field. *)
+  visitFramacFile (new fun_vaddrof_visitor) file;
+  (* First add variables and functions occuring in annotations. *)
+  visitFramacFile (new annotation_visitor state add_from_type) file;
+  (* Now add all annotated functions. *)
+  List.iter
+    (fun fundec ->
+       V_set.add vars fundec.svar;
+       Queue.add fun_queue fundec)
+    (get_annotated_funs ());
   while not (Queue.is_empty fun_queue) do
     do_fun (Queue.take fun_queue)
   done;
@@ -160,11 +314,15 @@ let do_funs funs =
 
 class extractor { Result. types; comps; enums; vars } = object
   inherit frama_c_inplace
-  method vglob_aux = function
+  method! vglob_aux =
+    function
     | GType (ti, _) when T_set.mem types ti -> SkipChildren
-    | GCompTag (ci, _) | GCompTagDecl (ci, _) when C_set.mem comps ci -> SkipChildren
-    | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when E_set.mem enums ei -> SkipChildren
-    | GVarDecl (_, vi, _) | GVar (vi, _, _) when V_set.mem vars vi -> SkipChildren
+    | GCompTag (ci, _) | GCompTagDecl (ci, _) when C_set.mem comps ci ->
+      SkipChildren
+    | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when E_set.mem enums ei ->
+      SkipChildren
+    | GVarDecl (_, vi, _) | GVar (vi, _, _) when V_set.mem vars vi ->
+      SkipChildren
     | GFun ( { svar }, _) when V_set.mem vars svar -> SkipChildren
     | GPragma _ -> SkipChildren
     | GText _ -> SkipChildren
@@ -172,18 +330,8 @@ class extractor { Result. types; comps; enums; vars } = object
     | _ -> ChangeTo []
 end
 
-let extract funs =
-  let result = do_funs funs in
-  fun file ->
-  visitFramacFile (new extractor result) file;
+let extract file =
+  visitFramacFile (new extractor (collect file)) file;
   Ast.compute ()
 
-let get_funs () =
-  Globals.Functions.fold (fun ({ spec } as kf) acc ->
-    if not (is_empty_funspec spec)  ||
-       Annotations.code_annot_of_kf kf <> []
-    then
-      try Kernel_function.get_definition kf :: acc
-      with Kernel_function.No_Definition -> acc
-    else acc)
-    []
+
