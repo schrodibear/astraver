@@ -1445,12 +1445,30 @@ let make_conversion_params pc =
 		   let off =
 		     match field_offset_in_bytes fi with
 		       | Some x -> x
-		       | None ->  assert false
+		       | None ->
+                          Jc_typing.typing_error
+                            Loc.dummy_position
+                            "Field %s of structure %s \
+has bitvector representation, but its bit offset (%d) is not a multiple of 8. \
+The axioms for pointer-arithmetic operations with pointers to structure %s \
+thus turn out to be considerably hard and are currently unsupported."
+                          fi.jc_field_info_name
+                          st.jc_struct_info_name
+                          (field_offset fi)
+                          st.jc_struct_info_name
 		   in
 		   let size =
 		     match fi.jc_field_info_bitsize with
 		       | Some x -> x / 8
-		       | None -> assert false
+		       | None ->
+                           Jc_typing.typing_error
+                             Loc.dummy_position
+                             "Field %s of structure %s \
+has bitvector representation, but its bit size is unknown. \
+Can't encode proper axioms for accessing the field."
+                          fi.jc_field_info_name
+                          st.jc_struct_info_name
+                          st.jc_struct_info_name
 		   in
 		   let off = string_of_int off and size = string_of_int size in
 		   let posti =

@@ -2872,11 +2872,11 @@ let from_comprehension_to_range behavior file =
 let rewrite file =
   (* Add definitions for undefined composite tags in extract mode. *)
   if Jessie_options.Extract.get () then
-   begin
-     Jessie_options.debug "Define dummy structs";
-     define_dummy_structs file;
-     if checking () then check_types file
-   end;
+    begin
+      Jessie_options.debug "Define dummy structs";
+      define_dummy_structs file;
+      if checking () then check_types file
+    end;
   (* Eliminate function pointers through dummy variables, assertions and if-then-else statements *)
   Jessie_options.debug "Eliminate function pointers";
   eliminate_fps file;
