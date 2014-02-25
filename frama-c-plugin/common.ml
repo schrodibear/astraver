@@ -1252,7 +1252,7 @@ let do_on_term (preaction_expr,postaction_expr) t =
 (* Debugging                                                                 *)
 (*****************************************************************************)
 
-let checking = Jessie_options.debug_atleast 1
+let checking () = Jessie_options.debug_atleast 2
 
 let print_to_stdout file =
   Log.print_on_output (Extlib.swap Printer.pp_file file)

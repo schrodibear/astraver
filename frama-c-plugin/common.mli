@@ -78,7 +78,7 @@ val unique_name_if_empty : string -> string
 
 (* ????? *)
 
-val checking : bool
+val checking : unit -> bool
 
 val check_types : Cil_types.file -> unit
 

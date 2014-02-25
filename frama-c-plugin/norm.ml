@@ -1856,7 +1856,7 @@ let remove_array_address file =
 (*****************************************************************************)
 
 let normalize file =
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Retype variables of array type. *)
   (* order: before [expand_struct_assign] and any other pass which calls
      [typeOf], because "t[i]" with [StartOf] if type of "t" is "int t[a][b]"
@@ -1864,66 +1864,66 @@ let normalize file =
      See, e.g., example array_addr.c. *)
   Jessie_options.debug "Retype variables of array type";
   retype_array_variables file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Retype logic functions/predicates with structure parameters or return. *)
   Jessie_options.debug "Retype logic functions/predicates";
   retype_logic_functions file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Expand structure copying through parameter, return or assignment. *)
   (* order: before [retype_address_taken], before [retype_struct_variables] *)
   Jessie_options.debug "Expand structure copying";
   expand_struct_assign file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Retype variables of structure type. *)
   Jessie_options.debug "Retype variables of structure type";
   retype_struct_variables file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Retype variables and fields whose address is taken. *)
   (* order: after [retype_struct_variables] *)
   Jessie_options.debug "Retype variables and fields whose address is taken";
   retype_address_taken file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Expand structure copying through assignment. *)
   (* Needed because sequence [expand_struct_assign; retype_struct_variables;
      retype_address_taken] may recreate structure assignments. *)
   (* order: after [retype_address_taken] *)
   Jessie_options.debug "Expand structure copying through assignment";
   expand_struct_assign file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Translate union fields into structures. *)
   Jessie_options.debug "Translate union fields into structures";
   translate_unions file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Retype fields of type structure and array. *)
   (* order: after [expand_struct_assign] and [retype_address_taken]
    * before [translate_unions] *)
   Jessie_options.debug "Retype fields of type structure and array";
   retype_fields file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Retype fields of type structure and array. *)
   (* order: after [translate_unions] *)
   Jessie_options.debug "Retype fields of type structure and array";
   retype_fields file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Remove array address. *)
   (* order: before [retype_base_pointer] *)
   Jessie_options.debug "Remove array address";
   remove_array_address file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Retype type tags. *)
   (* order: before [retype_base_pointer] *)
   Jessie_options.debug "Retype type tags";
   retype_type_tags file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Retype pointers to base types. *)
   (* order: after [retype_fields] *)
   Jessie_options.debug "Retype pointers to base types";
   retype_base_pointer file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Remove useless casts. *)
   Jessie_options.debug "Remove useless casts";
   remove_useless_casts file;
-  if checking then check_types file;
+  if checking () then check_types file;
 
 (*
 Local Variables:

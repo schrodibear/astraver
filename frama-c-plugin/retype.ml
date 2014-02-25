@@ -393,15 +393,15 @@ let create_struct_hierarchy file =
 (*****************************************************************************)
 
 let retype file =
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Retype int field casted to pointer. *)
   Jessie_options.debug "Retype int field casted to pointer@.";
   retype_int_field file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Organize structure types in hierarchy. *)
   Jessie_options.debug "Organize structure types in hierarchy@.";
   create_struct_hierarchy file;
-  if checking then check_types file;
+  if checking () then check_types file;
 
 (*
 Local Variables:

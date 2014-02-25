@@ -2875,73 +2875,73 @@ let rewrite file =
    begin
      Jessie_options.debug "Define dummy structs";
      define_dummy_structs file;
-     if checking then check_types file
+     if checking () then check_types file
    end;
   (* Eliminate function pointers through dummy variables, assertions and if-then-else statements *)
   Jessie_options.debug "Eliminate function pointers";
   eliminate_fps file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Replace inline assembly with undefined function calls (and switches) *)
   Jessie_options.debug "Replace inline assembly with undefined function calls";
   asms_to_functions file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Specialize block functions e.g. memcpy. *)
   if Jessie_options.SpecBlockFuncs.get () then
     begin
       Jessie_options.debug "Expand kzallocs to kmalloc+memset";
       expand_kzallocs file;
-      if checking then check_types file;
+      if checking () then check_types file;
       Jessie_options.debug "Use specialized versions for block functions (e.g. memcpy)";
       specialize_blockfuns file;
-      if checking then check_types file;
+      if checking () then check_types file;
     end;
   (* Expand assigns clauses and equalities for composite types. *)
   Jessie_options.debug "Expand assigns clauses and equality for composite types";
   expand_composites file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Fold constants to avoid incorrect sizeofs. *)
   Jessie_options.debug "Fold constants in terms to avoid incorrect sizeofs";
   fold_constants_in_terms file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* adds a behavior named [name_of_default_behavior] to all functions if
      it does not already exist.
    *)
   Jessie_options.debug "Adding default behavior to all functions";
   add_default_behavior ();
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Rename entities to avoid conflicts with Jessie predefined names.
      Should be performed before any call to [Cil.cvar_to_lvar] destroys
      sharing among logic variables.
   *)
   Jessie_options.debug "Rename entities";
   rename_entities file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Fill offset/size information in fields *)
   Jessie_options.debug "Fill offset/size information in fields";
   fill_offset_size_in_fields file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Replace addrof array with startof. *)
   Jessie_options.debug "Replace addrof array with startof";
   replace_addrof_array file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Replace string constants by global variables. *)
   Jessie_options.debug "Replace string constants by global variables";
   replace_string_constants file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Put all global initializations in the [globinit] file. *)
   (* Replace global compound initializations by equivalent statements. *)
   Jessie_options.debug "Put all global initializations in the [globinit] file";
   gather_initialization file;
-  if checking then check_types file;
+  if checking () then check_types file;
   Jessie_options.debug "Use specialized versions of Frama_C_memset";
   specialize_memset file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Rewrite comparison of pointers into difference of pointers. *)
   if Jessie_options.InferAnnot.get () <> "" then
     begin
       Jessie_options.debug "Rewrite comparison of pointers into difference of pointers";
       rewrite_pointer_compare file;
-      if checking then check_types file
+      if checking () then check_types file
     end;
   if not (Jessie_options.VoidSupertype.get ()) then
     begin
@@ -2955,39 +2955,39 @@ let rewrite file =
       Jessie_options.debug "Rewrite type char* into void* in successive casts";
       rewrite_side_casts file
     end;
-  if checking then check_types file;
+  if checking () then check_types file;
   Jessie_options.debug "Rewrite Pre as Old in funspec";
   rewrite_pre_old file;
-  if checking then check_types file;
+  if checking () then check_types file;
   (* Rewrite cursor pointers into offsets from base pointers. *)
   (* order: after [rewrite_pointer_compare] *)
   if Jessie_options.InferAnnot.get () <> "" then
     begin
       Jessie_options.debug "Rewrite cursor pointers into offsets from base pointers";
       rewrite_cursor_pointers file;
-      if checking then check_types file
+      if checking () then check_types file
     end;
   (* Rewrite cursor integers into offsets from base integers. *)
   if Jessie_options.InferAnnot.get () <> "" then
     begin
       Jessie_options.debug "Rewrite cursor integers into offsets from base integers";
       rewrite_cursor_integers file;
-      if checking then check_types file
+      if checking () then check_types file
     end;
   (* Annotate code with strlen. *)
   if Jessie_options.HintLevel.get () > 0 then
     begin
       Jessie_options.debug "Annotate code with strlen";
       annotate_code_strlen file;
-      if checking then check_types file
+      if checking () then check_types file
     end;
   (* Annotate code with overflow checks. *)
   Jessie_options.debug "Annotate code with overflow checks";
   annotate_overflow file;
-  if checking then check_types file;
+  if checking () then check_types file;
   Jessie_options.debug "Checking if there are unsupported predicates";
   remove_unsupported file;
-  if checking then check_types file
+  if checking () then check_types file
 
 (*
 Local Variables:

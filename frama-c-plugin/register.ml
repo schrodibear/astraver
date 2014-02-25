@@ -142,26 +142,26 @@ let run () =
     ignore (Common.malloc_function ());
     ignore (Common.free_function ());
     Jessie_options.debug  "After malloc and free";
-    if checking then check_types file;
+    if checking () then check_types file;
     steal_annots ();
     Jessie_options.debug "After steal_annots";
-    if checking then check_types file;
+    if checking () then check_types file;
     (* Extract relevant globals *)
     if Jessie_options.Extract.get () then begin
       Jessie_options.debug "Extract relevant globals";
       Extractor.extract file;
-      if checking then check_types file
+      if checking () then check_types file
     end;
     (* Rewrite ranges in logic annotations by comprehesion *)
     Jessie_options.debug "from range to comprehension";
     Rewrite.from_range_to_comprehension
       (Cil.inplace_visit ()) file;
-    if checking then check_types file;
+    if checking () then check_types file;
 
     (* Phase 2: C-level rewriting to facilitate analysis *)
 
     Rewrite.rewrite file;
-    if checking then check_types file;
+    if checking () then check_types file;
 
     if Jessie_options.debug_atleast 1 then print_to_stdout file;
 
@@ -171,7 +171,7 @@ let run () =
 
     Norm.normalize file;
     Retype.retype file;
-    if checking then check_types file;
+    if checking () then check_types file;
 
     (* Phase 4: various postprocessing steps, still on Cil AST *)
 
