@@ -130,12 +130,19 @@ let do_fun { State. vars; fun_queue } add_from_type (vi, kf_opt) =
        List.iter (fun vi -> add_from_type vi.vtype) (get_formals kf))
   end
 
+let add_var_if_global add_from_type state vi =
+  if vi.vglob then begin
+    add_from_type vi.vtype;
+    V_set.add state.State.vars vi
+  end
+
 class relevant_function_visitor state add_from_type =
   let do_fun = do_fun state add_from_type in
   (* For marking function expressions in explicit function calls. *)
   let do_not_touch = ref None in
   (* Adds all functions occurring as variables to the queue. *)
   let do_expr_post = do_expr_post (fun vi -> do_fun (vi, None)) do_not_touch in
+  let add_var_if_global = add_var_if_global add_from_type state in
 object
   inherit frama_c_inplace
 
@@ -144,7 +151,7 @@ object
   method! vterm = Common.do_on_term (None, Some do_expr_post)
 
   method! vvrbl vi =
-    if vi.vglob then V_set.add state.State.vars vi;
+    add_var_if_global vi;
     DoChildren
 
   method! vinst =
@@ -195,7 +202,8 @@ class annotation_visitor state add_from_type =
   let do_fun = do_fun state add_from_type in
   (* There are no explicit function calls from annotations. *)
   let do_expr_post = do_expr_post (fun vi -> do_fun (vi, None)) (ref None) in
-object
+  let add_var_if_global = add_var_if_global add_from_type state in
+object(self)
   inherit frama_c_inplace
 
   method! vterm = Common.do_on_term (None, Some do_expr_post)
@@ -219,9 +227,11 @@ object
   method! vlogic_var_decl =
     function
     | { lv_origin = Some vi } ->
-      if vi.vglob then V_set.add state.State.vars vi;
+      add_var_if_global vi;
       DoChildren
     | _ -> DoChildren
+
+  method! vlogic_var_use = self#vlogic_var_decl
 end
 
 class fun_vaddrof_visitor =
