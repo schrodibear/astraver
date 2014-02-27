@@ -53,27 +53,31 @@ end
 
 module T_set = Set_of_hashtbl(Cil_datatype.Typeinfo.Hashtbl)
 module C_set = Set_of_hashtbl(Cil_datatype.Compinfo.Hashtbl)
+module F_set = Set_of_hashtbl(Cil_datatype.Fieldinfo.Hashtbl)
 module E_set = Set_of_hashtbl(Cil_datatype.Enuminfo.Hashtbl)
 module V_set = Set_of_hashtbl(Cil_datatype.Varinfo.Hashtbl)
 
 module State = struct
   type state = {
-    types : T_set.t;
-    comps : C_set.t;
-    enums : E_set.t;
-    vars  : V_set.t;
-    fun_queue : fundec Queue.t;
-    typ_queue : typeinfo Queue.t;
+    types  : T_set.t;
+    comps  : C_set.t; (* Relevant composites for which members matter *)
+    fields : F_set.t; (* Unused fields are filtered *)
+    enums  : E_set.t;
+    vars   : V_set.t;
+    fun_queue  : fundec Queue.t;
+    typ_queue  : typeinfo Queue.t;
     comp_queue : compinfo Queue.t
   }
 end
 
 module Result = struct
   type result = {
-    types : T_set.t;
-    comps : C_set.t;
-    enums : E_set.t;
-    vars  : V_set.t
+    types  : T_set.t;
+    comps  : C_set.t;
+    fields : F_set.t;
+    enums  : E_set.t;
+    vars   : V_set.t;
+    dcomps : C_set.t (* Dummy composites only used in pointer types of fields *)
   }
 end
 
@@ -96,6 +100,21 @@ class relevant_type_visitor
       end
     | TEnum (ei, _) ->
       E_set.add enums ei
+    | _ -> ()
+    end;
+    DoChildren
+end
+
+(* Used for pointer types of fields to add the pointed type to dummies. *)
+class dummy_type_visitor { State. enums } dcomps = object(self)
+  inherit frama_c_inplace
+
+  method! vtype t =
+    begin match t with
+    | TNamed (ti, _) -> (* Forcing recursion into the type-info. *)
+      ignore (visitFramacType (self :> frama_c_visitor) ti.ttype)
+    | TComp (ci, _, _) -> C_set.add dcomps ci
+    | TEnum (ei, _) -> E_set.add enums ei
     | _ -> ()
     end;
     DoChildren
@@ -136,6 +155,14 @@ let add_var_if_global add_from_type state vi =
     V_set.add state.State.vars vi
   end
 
+let add_field { State. fields } off =
+  begin match off with
+  | Field (fi, _) ->
+    F_set.add fields fi
+  | Index _ | NoOffset -> ()
+  end;
+  off
+
 class relevant_function_visitor state add_from_type =
   let do_fun = do_fun state add_from_type in
   (* For marking function expressions in explicit function calls. *)
@@ -143,10 +170,12 @@ class relevant_function_visitor state add_from_type =
   (* Adds all functions occurring as variables to the queue. *)
   let do_expr_post = do_expr_post (fun vi -> do_fun (vi, None)) do_not_touch in
   let add_var_if_global = add_var_if_global add_from_type state in
+  let do_lval lv = add_from_type (typeOfLval lv); lv in
+  let do_offset = add_field state in
 object
   inherit frama_c_inplace
 
-  method! vexpr _ = DoChildrenPost (do_expr_post)
+  method! vexpr _ = DoChildrenPost do_expr_post
 
   method! vterm = Common.do_on_term (None, Some do_expr_post)
 
@@ -195,6 +224,14 @@ object
   method! vtype t =
     add_from_type t;
     SkipChildren
+
+  method! vlval _ = DoChildrenPost do_lval
+
+  method! vterm_lval = Common.do_on_term_lval (None, Some do_lval)
+
+  method! voffs _ = DoChildrenPost do_offset
+
+  method! vterm_offset = Common.do_on_term_offset (None, Some do_offset)
 end
 
 (* Visit all anotation in the file, add necessary types and variables. *)
@@ -205,6 +242,11 @@ class annotation_visitor state add_from_type =
   let add_var_if_global = add_var_if_global add_from_type state in
 object(self)
   inherit frama_c_inplace
+
+  (* Needed because Frama-C adds logic cunterpart for each local *)
+  (* variable declaration. But the types for these varables are added later *)
+  (* in the relevant functions visitor. *)
+  method! vvdec _ = SkipChildren
 
   method! vterm = Common.do_on_term (None, Some do_expr_post)
 
@@ -232,6 +274,13 @@ object(self)
     | _ -> DoChildren
 
   method! vlogic_var_use = self#vlogic_var_decl
+
+  method! vterm_lval =
+    Common.do_on_term_lval
+      (None, Some (fun lv -> add_from_type (typeOfLval lv); lv))
+
+  method! vterm_offset =
+    Common.do_on_term_offset (None, Some (add_field state))
 end
 
 class fun_vaddrof_visitor =
@@ -275,6 +324,7 @@ let collect file =
   let { State.
         types;
         comps;
+        fields;
         enums;
         vars;
         fun_queue;
@@ -283,18 +333,33 @@ let collect file =
       { State.
         types = T_set.create ();
         comps = C_set.create ();
+        fields = F_set.create ();
         enums = E_set.create ();
         vars = V_set.create ();
         fun_queue = Queue.create ();
         typ_queue = Queue.create ();
         comp_queue = Queue.create () }
   in
+  let dcomps = C_set.create () in
   let add_from_type t =
     ignore
       (visitFramacType (new relevant_type_visitor state) t)
   in
+  (* For dummy composites *)
+  let add_from_type' t =
+    ignore
+      (visitFramacType (new dummy_type_visitor state dcomps) t)
+  in
   let do_type ti = add_from_type ti.ttype in
-  let do_comp ci = List.iter (fun fi -> add_from_type fi.ftype) ci.cfields in
+  let do_comp ci =
+    List.iter
+      (fun ({ ftype } as fi) ->
+        if F_set.mem fields fi then
+          match unrollType ftype with
+          | TPtr _ | TArray _ -> add_from_type' ftype
+          | _ -> add_from_type ftype)
+      ci.cfields
+  in
   let do_fun f =
     ignore @@
       visitFramacFunction (new relevant_function_visitor state add_from_type) f
@@ -312,6 +377,8 @@ let collect file =
   while not (Queue.is_empty fun_queue) do
     do_fun (Queue.take fun_queue)
   done;
+  (* Now all the relevant fields are added, so we'll use them to omptimize *)
+  (* the composites. *)
   begin try while true do
     if not (Queue.is_empty typ_queue) then
       do_type (Queue.take typ_queue)
@@ -320,20 +387,27 @@ let collect file =
     else
       raise Exit
   done with Exit -> () end;
-  { Result. types; comps; enums; vars }
+  { Result. types; comps; fields; enums; vars; dcomps }
 
-class extractor { Result. types; comps; enums; vars } = object
+class extractor { Result. types; comps; fields; enums; vars; dcomps } = object
   inherit frama_c_inplace
+
   method! vglob_aux =
     function
     | GType (ti, _) when T_set.mem types ti -> SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when C_set.mem comps ci ->
+      ci.cfields <- List.filter (fun fi -> F_set.mem fields fi) ci.cfields;
+      SkipChildren
+    | GCompTag (ci, _) | GCompTagDecl (ci, _) when C_set.mem dcomps ci ->
+      (* The composite is dummy i.e. only used as an abstract type, so *)
+      (* its precise contents isn't matter. *)
+      ci.cfields <- [];
       SkipChildren
     | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when E_set.mem enums ei ->
       SkipChildren
-    | GVarDecl (_, vi, _) | GVar (vi, _, _) when V_set.mem vars vi ->
+    | GVarDecl (_, vi, _) | GVar (vi, _, _) | GFun ( { svar = vi }, _)
+      when V_set.mem vars vi ->
       SkipChildren
-    | GFun ( { svar }, _) when V_set.mem vars svar -> SkipChildren
     | GPragma _ -> SkipChildren
     | GText _ -> SkipChildren
     | GAnnot _ -> SkipChildren
@@ -342,6 +416,8 @@ end
 
 let extract file =
   visitFramacFile (new extractor (collect file)) file;
+  (* The following removes some Frama-C builtins from the tables (??) *)
+  (*Ast.mark_as_changed ();*)
   Ast.compute ()
 
 
