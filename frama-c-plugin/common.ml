@@ -126,6 +126,21 @@ let get_struct_info = function
   | TComp(compinfo,_,_) -> compinfo
   | _ -> Jessie_options.fatal "non-struct (info)"
 
+let promote_argument_type arg_type =
+  match Cil.unrollType arg_type with
+  | TVoid _ -> TVoid []
+  | TInt(k,_) when Cil.rank k <= Cil.rank IInt -> TInt(IInt,[])
+  | TInt(k,_) -> TInt(k,[])
+  | TFloat(FFloat,_) -> TFloat(FDouble,[])
+  | TFloat(k,_) -> TFloat(k,[])
+  | TPtr(t,_) | TArray(t,_,_,_) -> TPtr(t,[])
+  | (TFun _) as t -> TPtr(t,[])
+  | TComp(ci,_,_) -> TComp(ci,{ scache = Not_Computed },[])
+  | TEnum(ei,_) -> TEnum(ei,[])
+  | TBuiltin_va_list _ -> 
+    Jessie_options.fatal ~current:true "implicit prototype cannot have variadic arguments"
+  | TNamed _ -> assert false (* unrollType *)
+
 (* Integral types *)
 
 let size_in_bytes ik =
@@ -1588,6 +1603,23 @@ let mkfree v loc =
   Call(None,callee,[arg],loc)
 
 let mkfree_statement v loc = mkStmt (Instr(mkfree v loc))
+
+(* Lists *)
+
+let rec drop n lst =
+  if n <= 0 then lst
+  else
+    match lst with
+    | [] -> []
+    | _ :: xs -> drop (n - 1) xs
+
+let take n lst =
+  let rec take acc n =
+    function
+    | x :: xs when n > 0 -> take (x :: acc) (n - 1) xs
+    | _ -> List.rev acc
+  in
+  take [] n lst
 
 (*
 Local Variables:

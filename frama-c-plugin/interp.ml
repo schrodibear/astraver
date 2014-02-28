@@ -1843,9 +1843,16 @@ let instruction = function
 
   | Call(Some lv,{enode = Lval(Var v,NoOffset)},eargs,pos) ->
       let enode =
+        let lv_size lv_type =
+          match unrollType lv_type with
+          | TComp ({ cname }, _, _) when cname = type_name voidType ^ "P" ->
+            Integer.one
+          | _ ->
+            Integer.of_int64 ((bits_sizeof lv_type) lsr 3)
+        in
         if is_malloc_function v || is_kmalloc_function v || is_realloc_function v then
           let lvtyp = pointed_type (typeOfLval lv) in
-          let lvsiz = Integer.of_int64 ((bits_sizeof lvtyp) lsr 3) in
+          let lvsiz = lv_size lvtyp in
           let arg =
             if is_malloc_function v then as_singleton eargs
             else if is_kmalloc_function v then 
@@ -1898,7 +1905,7 @@ let instruction = function
             | Info _ -> assert false
             | Const c when is_integral_const c ->
                 let lvtyp = pointed_type (typeOfLval lv) in
-                let lvsiz = Integer.of_int64 ((bits_sizeof lvtyp) lsr 3) in
+                let lvsiz = lv_size lvtyp in
                 let factor = Integer.div (value_of_integral_expr arg) lvsiz in
                 let siz =
                   if Integer.equal factor Integer.one then
@@ -1910,7 +1917,7 @@ let instruction = function
                 lvtyp, siz
             | _ ->
                 let lvtyp = pointed_type (typeOfLval lv) in
-                let lvsiz = Integer.of_int64 ((bits_sizeof lvtyp) lsr 3) in
+                let lvsiz = lv_size lvtyp in
                 let esiz = constant_expr ~loc lvsiz in
                 lvtyp,
                 expr

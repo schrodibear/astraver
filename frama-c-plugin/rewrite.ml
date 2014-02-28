@@ -1368,6 +1368,155 @@ let define_dummy_structs file =
   Ast.clear_last_decl ()
 
 (*****************************************************************************)
+(* Rewrite va_list into void *                                               *)
+(*****************************************************************************)
+
+class va_list_rewriter =
+  let va_list_name = "va_list" in
+  let va_list_type = voidConstPtrType in
+  let va_list_var_type = voidPtrType in
+  let va_start_name = "__builtin_va_start" in
+  let va_arg_name = "__builtin_va_arg" in
+  let va_end_name = "__builtin_va_end" in
+  let va_copy_name = "va_copy" in
+  let const_ptr t = TPtr (t, [Attr ("const", [])]) in
+  let va_list_in formals =
+    match List.rev formals with
+    | ("va_list", t, _) :: _ when unrollType t == va_list_type -> true
+    | _ -> false
+  in
+object(self)
+  inherit frama_c_inplace
+
+  method! vtype t =
+    match unrollType t with
+    | TBuiltin_va_list _ -> ChangeTo va_list_type
+    | TFun (rt, args_opt, true, attrs) ->
+      let va_arg = va_list_name, va_list_type, [] in
+      ChangeDoChildrenPost (TFun (rt, Some (opt_conv [] args_opt @ [va_arg]), false, attrs), id)
+    | _ -> DoChildren
+
+  method! vvdec { vtype } =
+    match unrollType vtype with
+    | TFun (_, _, true, _) ->
+      DoChildrenPost
+        (fun vi ->
+          let va_list = makeVarinfo ~generated:true false true va_list_name va_list_type in
+          let formals = getFormalsDecl vi @ [va_list] in
+          unsafeSetFormalsDecl vi formals;
+          let kf = Globals.Functions.get vi in
+          Globals.Functions.replace_by_declaration (Annotations.funspec kf) vi (Kernel_function.get_location kf);
+          (* Important invariant, because Jessie doesn't care about function signature matching *)
+          assert (List.length formals = List.length Globals.Functions.(get_params (get vi)));
+          vi)
+    | _ -> DoChildren
+
+  method! vfunc ({ svar } as fundec) =
+    match unrollType svar.vtype with
+    | TFun (_, _, true, _) ->
+      let ftype = svar.vtype in
+      ignore (makeFormalVar fundec va_list_name va_list_type);
+      svar.vtype <- ftype; (* Will be rewritten again by vtype in the child *)
+      DoChildren
+    | _ -> DoChildren
+
+  method! vinst _ =
+    DoChildrenPost
+      (function
+      | [Call (None,
+              { enode = Lval (Var { vname = "__builtin_va_start" }, NoOffset) },
+              [{ enode = Lval ((Var va_list, NoOffset) as lva_list) }],
+              loc)]
+        when unrollType va_list.vtype == va_list_type ->
+        begin match List.rev (the self#current_func).sformals with
+        | va_list' :: _
+          when va_list'.vname = va_list_name &&
+               unrollType va_list'.vtype == va_list_type ->
+          [Set (lva_list, evar ~loc va_list', loc)]
+        | _ -> fatal "Illegal call to %s: can't find necessary formals" va_start_name
+        end
+      | [Call (_, { enode = Lval (Var { vname = "__builtin_va_start" }, _) }, _, _)] ->
+        fatal "Illegal call to %s: wrong arguments or lvalue is present" va_start_name
+
+      | [Call (None,
+              { enode = Lval (Var { vname = "__builtin_va_arg" }, NoOffset) },
+              [({ enode = Lval ((Var va_list, NoOffset) as lva_list) } as eva_list); { enode = SizeOf t }; elval],
+              loc)]
+        when unrollType va_list.vtype == va_list_type ->
+        let lval =
+          match (stripCasts elval).enode with
+          | AddrOf lval -> lval
+          | _ -> fatal "Illegal call to %s: unrecognized internal representation of lval" va_arg_name
+        in
+        let eva_list = mkCastT ~force:false ~e:eva_list ~oldt:va_list_type ~newt:(const_ptr t) in
+        [Set (lval, new_exp ~loc (Lval (Mem eva_list, NoOffset)), loc);
+         Set (lva_list, mkBinOp ~loc PlusPI eva_list (one ~loc), loc)]
+      | [Call ( _, { enode = Lval (Var { vname = "__builtin_va_arg" }, _) }, _, _)] ->
+        fatal "Illegal call to %s: wrong arguments or lvalue is absent" va_arg_name
+
+      | [Call (None,
+              { enode = Lval (Var { vname = "__builtin_va_end" } , NoOffset) },
+              [{ enode = Lval (Var va_list, NoOffset) }],
+              _)]
+        when unrollType va_list.vtype == va_list_type ->
+        []
+      | [Call (_, { enode = Lval (Var { vname = "__builtin_va_end" }, _) }, _, _)] ->
+        fatal "Illegal call to %s: wrong arguments or lvalue is present" va_end_name
+
+      | [Call (None,
+              { enode = Lval (Var { vname = "va_copy" | "__va_vopy" }, NoOffset) },
+              [{ enode = Lval ((Var vi_dst, NoOffset) as lva_dst) }; { enode = Lval (Var vi_src, NoOffset)} as va_src],
+              loc)]
+        when unrollType vi_dst.vtype == va_list_type &&
+             unrollType vi_src.vtype == va_list_type ->
+        [Set (lva_dst, va_src, loc)]
+      | [Call (_, { enode = Lval (Var { vname = "va_copy" | "__va_vopy" }, NoOffset) }, _, _)] ->
+        fatal "Illegal call to %s: wrong arguments or lvalue is present" va_copy_name
+
+      | [Call (lv_opt, ({ enode = Lval (Var { vtype = TFun (_, Some formals, false, _) }, NoOffset) } as f), args, loc)]
+        when va_list_in formals ->
+        let vtmp = makeTempVar (the self#current_func) ~name:"va_list" va_list_var_type in
+        let nformals = List.length formals - 1 in
+        let actuals = drop nformals args in
+        let init =
+          Call (Some (var vtmp), evar ~loc (malloc_function ()), [integer ~loc (List.length actuals)], loc)
+        in
+        let assignments =
+          List.rev_map2
+            (fun e a -> Set ((Mem (constFold false e), NoOffset), a, loc))
+            (ListLabels.fold_left
+               List.(map (fun e -> promote_argument_type (typeOf e)) actuals)
+               ~init:[]
+               ~f:(fun acc t ->
+                    match acc with
+                    | a :: _ ->
+                      mkCastT ~force:false ~e:(mkBinOp ~loc PlusPI a (one ~loc)) ~oldt:(typeOf a) ~newt:(const_ptr t)
+                        :: acc
+                    | [] -> [mkCastT ~force:false ~e:(evar ~loc vtmp) ~oldt:va_list_type ~newt:(const_ptr t)]))
+            actuals
+        in
+        [init] @ assignments @ [Call (lv_opt, f, take nformals args @ [evar ~loc vtmp], loc)]
+      | [Call (_, { enode = Lval (Var { vtype = TFun (_, Some formals, _, _) }, off) }, _, _)]
+        when va_list_in formals ->
+        fatal "Variadic function called with some offset in function lvalue: %a" Printer.pp_offset off
+
+      | i -> i)
+
+  method! vglob_aux =
+    function
+    | GVarDecl(_, { vname = "__builtin_va_start" }, _)
+    | GVarDecl(_, { vname = "__builtin_va_arg" }, _)
+    | GVarDecl(_, { vname = "__builtin_va_end" }, _)
+    | GVarDecl(_, { vname = "va_copy" }, _) ->
+      ChangeTo []
+    | _ -> DoChildren
+end
+
+let rewrite_va_lists file =
+  visitFramacFile (new va_list_rewriter) file;
+    Ast.clear_last_decl ()
+
+(*****************************************************************************)
 (* Rewrite comparison of pointers into difference of pointers.               *)
 (*****************************************************************************)
 
@@ -2880,6 +3029,10 @@ let rewrite file =
   (* Eliminate function pointers through dummy variables, assertions and if-then-else statements *)
   Jessie_options.debug "Eliminate function pointers";
   eliminate_fps file;
+  if checking () then check_types file;
+  (* Eliminate va_lists by replacing it with void * *)
+  Jessie_options.debug "Eliminate va_lists";
+  rewrite_va_lists file;
   if checking () then check_types file;
   (* Replace inline assembly with undefined function calls (and switches) *)
   Jessie_options.debug "Replace inline assembly with undefined function calls";

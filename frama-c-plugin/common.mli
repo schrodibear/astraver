@@ -84,6 +84,8 @@ val check_types : Cil_types.file -> unit
 
 val integral_type_size_in_bits : Cil_types.typ -> int
 
+val promote_argument_type : Cil_types.typ -> Cil_types.typ
+
 val max_value_of_integral_type :
   ?bitsize:int -> Cil_types.typ -> Integer.t
 
@@ -250,3 +252,6 @@ val force_exp_to_predicate: exp -> predicate named
 val force_exp_to_assertion: exp -> code_annotation
 val force_term_lval_to_lval: term_lval -> lval * opaque_term_env
 val force_back_lval_to_term_lval: opaque_term_env -> lval -> term_lval
+
+val drop : int -> 'a list -> 'a list
+val take : int -> 'a list -> 'a list
