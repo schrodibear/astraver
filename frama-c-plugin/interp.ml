@@ -1546,7 +1546,13 @@ let rec expr e =
 
     | CastE(ptrty,_e1) when isPointerType ptrty ->
         begin
-          let e = stripCastsAndInfo e in
+          let rec strip_cast_and_infos ?(cast=true) e =
+            match e.enode with
+            | Info(e, _) -> strip_cast_and_infos e
+            | CastE(_, e) when cast -> strip_cast_and_infos ~cast:false e
+            | _ -> e
+          in
+          let e = strip_cast_and_infos e in
           match e.enode with
           | Const c
               when is_integral_const c

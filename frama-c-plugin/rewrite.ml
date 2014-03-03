@@ -1378,7 +1378,7 @@ class va_list_rewriter =
   let va_start_name = "__builtin_va_start" in
   let va_arg_name = "__builtin_va_arg" in
   let va_end_name = "__builtin_va_end" in
-  let va_copy_name = "va_copy" in
+  let va_copy_name = "__builtin_va_copy" in
   let const_ptr t = TPtr (t, [Attr ("const", [])]) in
   let va_list_in formals =
     match List.rev formals with
@@ -1396,9 +1396,9 @@ object(self)
       ChangeDoChildrenPost (TFun (rt, Some (opt_conv [] args_opt @ [va_arg]), false, attrs), id)
     | _ -> DoChildren
 
-  method! vvdec { vtype } =
-    match unrollType vtype with
-    | TFun (_, _, true, _) ->
+  method! vvdec { vtype; vdefined } =
+    match unrollType vtype, vdefined with
+    | TFun (_, _, true, _), false ->
       DoChildrenPost
         (fun vi ->
           let va_list = makeVarinfo ~generated:true false true va_list_name va_list_type in
@@ -1464,13 +1464,13 @@ object(self)
         fatal "Illegal call to %s: wrong arguments or lvalue is present" va_end_name
 
       | [Call (None,
-              { enode = Lval (Var { vname = "va_copy" | "__va_vopy" }, NoOffset) },
+              { enode = Lval (Var { vname = "va_copy" | "__va_vopy" | "__builtin_va_copy" }, NoOffset) },
               [{ enode = Lval ((Var vi_dst, NoOffset) as lva_dst) }; { enode = Lval (Var vi_src, NoOffset)} as va_src],
               loc)]
         when unrollType vi_dst.vtype == va_list_type &&
              unrollType vi_src.vtype == va_list_type ->
         [Set (lva_dst, va_src, loc)]
-      | [Call (_, { enode = Lval (Var { vname = "va_copy" | "__va_vopy" }, NoOffset) }, _, _)] ->
+      | [Call (_, { enode = Lval (Var { vname = "va_copy" | "__va_vopy" | "__builtin_va_copy" }, NoOffset) }, _, _)] ->
         fatal "Illegal call to %s: wrong arguments or lvalue is present" va_copy_name
 
       | [Call (lv_opt, ({ enode = Lval (Var { vtype = TFun (_, Some formals, false, _) }, NoOffset) } as f), args, loc)]
@@ -1493,7 +1493,7 @@ object(self)
                       mkCastT ~force:false ~e:(mkBinOp ~loc PlusPI a (one ~loc)) ~oldt:(typeOf a) ~newt:(const_ptr t)
                         :: acc
                     | [] -> [mkCastT ~force:false ~e:(evar ~loc vtmp) ~oldt:va_list_type ~newt:(const_ptr t)]))
-            actuals
+            (List.rev actuals)
         in
         [init] @ assignments @ [Call (lv_opt, f, take nformals args @ [evar ~loc vtmp], loc)]
       | [Call (_, { enode = Lval (Var { vtype = TFun (_, Some formals, _, _) }, off) }, _, _)]
@@ -1514,7 +1514,7 @@ end
 
 let rewrite_va_lists file =
   visitFramacFile (new va_list_rewriter) file;
-    Ast.clear_last_decl ()
+  Ast.clear_last_decl ()
 
 (*****************************************************************************)
 (* Rewrite comparison of pointers into difference of pointers.               *)
@@ -2606,19 +2606,51 @@ end
 
 class side_cast_rewriter =
   let rewrite_char_pointers = visitFramacExpr (new char_pointer_rewriter) in
+  let struct_fields t =
+    match unrollType t with
+    | TComp (compinfo, _, _) -> compinfo.cfields
+    | t -> fatal "Expected coposite type, got: %a" Printer.pp_typ t
+  in
+  let pointed_type t =
+    match unrollType t with
+    | TPtr _ as t -> typeOf_pointed t
+    | TArray _ as t -> typeOf_array_elem t
+    | t -> t
+  in
+  let subtype t1 t2 =
+    isVoidPtrType t2 ||
+    let t1 = pointed_type t1 and t2 = pointed_type t2 in
+    Typ.equal t1 t2 ||
+    isStructOrUnionType t1 && isStructOrUnionType t2 &&
+    let fields1 = struct_fields t1 and fields2 = struct_fields t2 in
+    let len1 = List.length fields1 and len2 = List.length fields2 in
+    len1 > len2 &&
+    List.for_all2
+      (fun fi1 fi2 -> Typ.equal fi1.ftype fi2.ftype)
+      (take len2 fields1)
+      fields2
+  in
 object
   inherit frama_c_inplace
 
   method vexpr e = match e.enode with
     | CastE (tto, efrom)
-      when isPointerType tto &&
+      when isCharPtrType (typeOf efrom) &&
+           isPointerType tto &&
            not (isCharPtrType tto) &&
            not (isVoidPtrType tto) ->
-        let tfrom = typeOf efrom in
-        if isCharPtrType tfrom then
-          ChangeTo ({ e with enode = CastE (tto, rewrite_char_pointers efrom) })
-        else
-          DoChildren
+      ChangeTo ({ e with enode = CastE (tto, rewrite_char_pointers efrom) })
+    | CastE (tto, efrom) ->
+      let tfrom = typeOf efrom in
+      if (isPointerType tfrom || isArrayType tfrom) &&
+         (isPointerType tto || isArrayType tto) &&
+         not (subtype tto tfrom || subtype tfrom tto)
+      then
+        let void_ptr_type = typeAddAttributes (typeAttrs tfrom) voidConstPtrType in
+        ChangeDoChildrenPost
+          ({ e with enode = CastE (tto, mkCastT ~force:false ~e:efrom ~oldt:tfrom ~newt:void_ptr_type)}, id)
+      else
+        DoChildren
     | _ -> DoChildren
 end
 
