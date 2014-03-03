@@ -814,7 +814,7 @@ let rec iter_why_type f t =
 	List.iter f reads;
 	List.iter f writes;
 	iter_assertion f post;
-	List.iter (fun (_,a) -> iter_assertion f a) signals
+	List.iter (fun (id,a) -> f id; iter_assertion f a) signals
 ;;
 
 
