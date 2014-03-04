@@ -1371,15 +1371,28 @@ let define_dummy_structs file =
 (* Rewrite va_list into void *                                               *)
 (*****************************************************************************)
 
-class va_list_rewriter =
+class va_list_rewriter () =
   let va_list_name = "va_list" in
-  let va_list_type = voidConstPtrType in
-  let va_list_var_type = voidPtrType in
+  let const = Attr ("const", []) in
+  let const_type = typeAddAttributes [const] in
+  let flat = Jessie_options.FlatVararg.get () in
+  let va_list_type =
+    if not flat then
+      TPtr (const_type voidPtrType, [])
+    else
+      voidConstPtrType
+  in
+  let va_list_var_type ~loc n =
+    if not flat then
+      TArray (voidPtrType, Some (integer ~loc n), { scache = Not_Computed }, [])
+    else
+      voidPtrType
+  in
   let va_start_name = "__builtin_va_start" in
   let va_arg_name = "__builtin_va_arg" in
   let va_end_name = "__builtin_va_end" in
   let va_copy_name = "__builtin_va_copy" in
-  let const_ptr t = TPtr (t, [Attr ("const", [])]) in
+  let const_ptr t = TPtr (t, [const]) in
   let va_list_in formals =
     match List.rev formals with
     | ("va_list", t, _) :: _ when unrollType t == va_list_type -> true
@@ -1424,9 +1437,9 @@ object(self)
     DoChildrenPost
       (function
       | [Call (None,
-              { enode = Lval (Var { vname = "__builtin_va_start" }, NoOffset) },
-              [{ enode = Lval ((Var va_list, NoOffset) as lva_list) }],
-              loc)]
+               { enode = Lval (Var { vname = "__builtin_va_start" }, NoOffset) },
+               [{ enode = Lval ((Var va_list, NoOffset) as lva_list) }],
+               loc)]
         when unrollType va_list.vtype == va_list_type ->
         begin match List.rev (the self#current_func).sformals with
         | va_list' :: _
@@ -1439,34 +1452,45 @@ object(self)
         fatal "Illegal call to %s: wrong arguments or lvalue is present" va_start_name
 
       | [Call (None,
-              { enode = Lval (Var { vname = "__builtin_va_arg" }, NoOffset) },
-              [({ enode = Lval ((Var va_list, NoOffset) as lva_list) } as eva_list); { enode = SizeOf t }; elval],
-              loc)]
+               { enode = Lval (Var { vname = "__builtin_va_arg" }, NoOffset) },
+               [({ enode = Lval ((Var va_list, NoOffset) as lva_list) } as eva_list); { enode = SizeOf t }; elval],
+               loc)]
         when unrollType va_list.vtype == va_list_type ->
         let lval =
           match (stripCasts elval).enode with
           | AddrOf lval -> lval
           | _ -> fatal "Illegal call to %s: unrecognized internal representation of lval" va_arg_name
         in
-        let eva_list = mkCastT ~force:false ~e:eva_list ~oldt:va_list_type ~newt:(const_ptr t) in
-        [Set (lval, new_exp ~loc (Lval (Mem eva_list, NoOffset)), loc);
-         Set (lva_list, mkBinOp ~loc PlusPI eva_list (one ~loc), loc)]
+        if not flat then
+          let eva_arg_addr =
+            mkCastT
+              ~force:false
+              ~e:(new_exp ~loc @@ Lval (mkMem ~addr:(mkAddrOrStartOf ~loc lva_list) ~off:NoOffset))
+              ~oldt:va_list_type
+              ~newt:(const_ptr t)
+          in
+          [Set (lval, new_exp ~loc @@ Lval (mkMem ~addr:eva_arg_addr ~off:NoOffset), loc);
+           Set (lva_list, increm eva_list 1, loc)]
+        else
+          let eva_list = mkCastT ~force:false ~e:eva_list ~oldt:va_list_type ~newt:(const_ptr t) in
+          [Set (lval, new_exp ~loc (Lval (Mem eva_list, NoOffset)), loc);
+           Set (lva_list, mkBinOp ~loc PlusPI eva_list (one ~loc), loc)]
       | [Call ( _, { enode = Lval (Var { vname = "__builtin_va_arg" }, _) }, _, _)] ->
         fatal "Illegal call to %s: wrong arguments or lvalue is absent" va_arg_name
 
       | [Call (None,
-              { enode = Lval (Var { vname = "__builtin_va_end" } , NoOffset) },
-              [{ enode = Lval (Var va_list, NoOffset) }],
-              _)]
+               { enode = Lval (Var { vname = "__builtin_va_end" } , NoOffset) },
+               [{ enode = Lval (Var va_list, NoOffset) }],
+               _)]
         when unrollType va_list.vtype == va_list_type ->
         []
       | [Call (_, { enode = Lval (Var { vname = "__builtin_va_end" }, _) }, _, _)] ->
         fatal "Illegal call to %s: wrong arguments or lvalue is present" va_end_name
 
       | [Call (None,
-              { enode = Lval (Var { vname = "va_copy" | "__va_vopy" | "__builtin_va_copy" }, NoOffset) },
-              [{ enode = Lval ((Var vi_dst, NoOffset) as lva_dst) }; { enode = Lval (Var vi_src, NoOffset)} as va_src],
-              loc)]
+               { enode = Lval (Var { vname = "va_copy" | "__va_vopy" | "__builtin_va_copy" }, NoOffset) },
+               [{ enode = Lval ((Var vi_dst, NoOffset) as lva_dst) }; { enode = Lval (Var vi_src, NoOffset)} as va_src],
+               loc)]
         when unrollType vi_dst.vtype == va_list_type &&
              unrollType vi_src.vtype == va_list_type ->
         [Set (lva_dst, va_src, loc)]
@@ -1475,27 +1499,49 @@ object(self)
 
       | [Call (lv_opt, ({ enode = Lval (Var { vtype = TFun (_, Some formals, false, _) }, NoOffset) } as f), args, loc)]
         when va_list_in formals ->
-        let vtmp = makeTempVar (the self#current_func) ~name:"va_list" va_list_var_type in
         let nformals = List.length formals - 1 in
         let actuals = drop nformals args in
-        let init =
-          Call (Some (var vtmp), evar ~loc (malloc_function ()), [integer ~loc (List.length actuals)], loc)
-        in
-        let assignments =
-          List.rev_map2
-            (fun e a -> Set ((Mem (constFold false e), NoOffset), a, loc))
-            (ListLabels.fold_left
-               List.(map (fun e -> promote_argument_type (typeOf e)) actuals)
-               ~init:[]
-               ~f:(fun acc t ->
-                    match acc with
-                    | a :: _ ->
-                      mkCastT ~force:false ~e:(mkBinOp ~loc PlusPI a (one ~loc)) ~oldt:(typeOf a) ~newt:(const_ptr t)
-                        :: acc
-                    | [] -> [mkCastT ~force:false ~e:(evar ~loc vtmp) ~oldt:va_list_type ~newt:(const_ptr t)]))
-            (List.rev actuals)
-        in
-        [init] @ assignments @ [Call (lv_opt, f, take nformals args @ [evar ~loc vtmp], loc)]
+        let current_func = the self#current_func in
+        let vtmp = makeTempVar current_func ~name:"va_list" (va_list_var_type ~loc (List.length actuals)) in
+        if not flat then
+          let assignments =
+            List.flatten @@
+              ListLabels.mapi
+                actuals
+                ~f:(fun i a ->
+                      let va_arg_lval = Var vtmp, Index (integer ~loc i, NoOffset) in
+                      let va_arg_type = promote_argument_type (typeOf a) in
+                      let va_arg_addr =
+                        mkCast ~force:false ~e:(new_exp ~loc (Lval va_arg_lval)) ~newt:(TPtr (va_arg_type, []))
+                      in
+                      let atmp = makeTempVar current_func ~name:"va_arg" (TPtr (va_arg_type, [])) in
+                      [Call (Some (var atmp),
+                             evar ~loc (malloc_function ()),
+                             [sizeOf ~loc va_arg_type],
+                             loc);
+                       Set (va_arg_lval, evar atmp, loc);
+                       Set (mkMem ~addr:va_arg_addr ~off:NoOffset, a, loc)])
+          in
+          assignments @ [Call (lv_opt, f, take nformals args @ [mkAddrOrStartOf ~loc (var vtmp)], loc)]
+        else
+          let init =
+            Call (Some (var vtmp), evar ~loc (malloc_function ()), [integer ~loc (List.length actuals)], loc)
+          in
+          let assignments =
+            List.rev_map2
+              (fun e a -> Set ((Mem (constFold false e), NoOffset), a, loc))
+              (ListLabels.fold_left
+                 List.(map (fun e -> promote_argument_type (typeOf e)) actuals)
+                 ~init:[]
+                 ~f:(fun acc t ->
+                      match acc with
+                      | a :: _ ->
+                        mkCastT ~force:false ~e:(mkBinOp ~loc PlusPI a (one ~loc)) ~oldt:(typeOf a) ~newt:(const_ptr t)
+                          :: acc
+                      | [] -> [mkCastT ~force:false ~e:(evar ~loc vtmp) ~oldt:va_list_type ~newt:(const_ptr t)]))
+              (List.rev actuals)
+          in
+          [init] @ assignments @ [Call (lv_opt, f, take nformals args @ [evar ~loc vtmp], loc)]
       | [Call (_, { enode = Lval (Var { vtype = TFun (_, Some formals, _, _) }, off) }, _, _)]
         when va_list_in formals ->
         fatal "Variadic function called with some offset in function lvalue: %a" Printer.pp_offset off
@@ -1507,13 +1553,13 @@ object(self)
     | GVarDecl(_, { vname = "__builtin_va_start" }, _)
     | GVarDecl(_, { vname = "__builtin_va_arg" }, _)
     | GVarDecl(_, { vname = "__builtin_va_end" }, _)
-    | GVarDecl(_, { vname = "va_copy" }, _) ->
+    | GVarDecl(_, { vname = "__builtin_va_copy" }, _) ->
       ChangeTo []
     | _ -> DoChildren
 end
 
 let rewrite_va_lists file =
-  visitFramacFile (new va_list_rewriter) file;
+  visitFramacFile (new va_list_rewriter ()) file;
   Ast.clear_last_decl ()
 
 (*****************************************************************************)

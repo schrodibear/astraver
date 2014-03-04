@@ -199,6 +199,13 @@ module Extract =
       let option_name = "-jessie-extract"
       let help = "process only explicitly annotated functions with their dependencies"
      end)
+
+module FlatVararg =
+  False
+    (struct
+      let option_name = "-jessie-flat-vararg"
+      let help = "use flat void * array to represent variadic arguments"
+     end)
 (*
 Local Variables:
 compile-command: "make"

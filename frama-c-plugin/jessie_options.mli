@@ -46,6 +46,7 @@ module HintLevel: Plugin.Int
 module SpecBlockFuncs : Plugin.Bool
 module VoidSupertype : Plugin.Bool
 module Extract : Plugin.Bool
+module FlatVararg : Plugin.Bool
 
 (*
 Local Variables:
