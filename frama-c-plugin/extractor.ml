@@ -389,19 +389,37 @@ let collect file =
   done with Exit -> () end;
   { Result. types; comps; fields; enums; vars; dcomps }
 
+let dummy_field ci =
+  { fcomp = ci;
+    forig_name = "";
+    fname = "dummy";
+    ftype = intType;
+    fbitfield = None;
+    fattr = [Attr ("const", [])];
+    floc = Cil_datatype.Location.unknown;
+    faddrof = false;
+    fsize_in_bits = None;
+    foffset_in_bits = None;
+    fpadding_in_bits = None }
+
 class extractor { Result. types; comps; fields; enums; vars; dcomps } = object
   inherit frama_c_inplace
 
   method! vglob_aux =
+    let dummy_if_empty ci =
+      function
+      | [] -> [dummy_field ci]
+      | l -> l
+    in
     function
     | GType (ti, _) when T_set.mem types ti -> SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when C_set.mem comps ci ->
-      ci.cfields <- List.filter (fun fi -> F_set.mem fields fi) ci.cfields;
+      ci.cfields <- dummy_if_empty ci (List.filter (fun fi -> F_set.mem fields fi) ci.cfields);
       SkipChildren
     | GCompTag (ci, _) | GCompTagDecl (ci, _) when C_set.mem dcomps ci ->
       (* The composite is dummy i.e. only used as an abstract type, so *)
       (* its precise contents isn't matter. *)
-      ci.cfields <- [];
+      ci.cfields <- dummy_if_empty ci [];
       SkipChildren
     | GEnumTag (ei, _) | GEnumTagDecl (ei, _) when E_set.mem enums ei ->
       SkipChildren
