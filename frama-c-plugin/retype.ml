@@ -280,7 +280,7 @@ class createStructHierarchy =
     let minlen = min (List.length fields1) (List.length fields2) in
     let prefix,complete = List.fold_left2
       (fun (acc,compl) f1 f2 ->
-	 if compl && Typ.equal f1.ftype f2.ftype then
+	 if compl && f1.fname = f2.fname && Typ.equal f1.ftype f2.ftype then
 	   f1::acc,compl
 	 else acc,false
       )
@@ -346,7 +346,7 @@ let create_struct_hierarchy file =
     let len1 = List.length fields1 and len2 = List.length fields2 in
     if len1 > len2 then
       List.fold_left2
-	(fun eq fi1 fi2 -> eq && Typ.equal fi1.ftype fi2.ftype)
+	(fun eq fi1 fi2 -> eq && fi1.fname = fi2.fname && Typ.equal fi1.ftype fi2.ftype)
 	true
 	(sub_list fields1 len2)
 	fields2
