@@ -1548,8 +1548,9 @@ let rec expr e =
         begin
           let rec strip_cast_and_infos ?(cast=true) e =
             match e.enode with
-            | Info(e, _) -> strip_cast_and_infos e
-            | CastE(_, e) when cast -> strip_cast_and_infos ~cast:false e
+            | Info (e, _) -> strip_cast_and_infos e
+            | CastE (_, e) when cast -> strip_cast_and_infos ~cast:false e
+            | CastE (_, e) when isConstant (stripCastsAndInfo e) -> e
             | _ -> e
           in
           let e = strip_cast_and_infos e in
