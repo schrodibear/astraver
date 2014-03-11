@@ -340,7 +340,7 @@ else
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
       AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
-        Neon-rc1|Neon-rc2|Neon-rc3)
+        Neon-rc1|Neon-rc2|Neon-rc3|Neon-rc4|Neon-20140301)
            FRAMACPLUGIN=yes
            ;;
         Neon-*)
@@ -348,7 +348,7 @@ else
            AC_MSG_WARN($FRAMACMSG)
            FRAMACPLUGIN=yes
            ;;
-        *) FRAMACMSG="you need Frama-C version Fluorine-2013(04|05|06)01"
+        *) FRAMACMSG="you need Frama-C version Neon"
            FRAMACPLUGIN=no
            AC_MSG_WARN($FRAMACMSG)
            ;;
