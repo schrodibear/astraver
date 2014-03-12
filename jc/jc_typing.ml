@@ -1577,21 +1577,17 @@ let rec location env e =
         in
         vi.jc_var_info_type, vi.jc_var_info_region, JCLvar vi
     | JCNEderef(ls, f) ->
-(*
 	begin try
-*)
           let t, tr, tls = location_set env ls in
           let fi = find_field e#pos t f false in
           let fr = Region.make_field tr fi in
           fi.jc_field_info_type, fr, JCLderef(tls, get_label e, fi, fr)
-(*
 	with Typing_error _ ->
           let t1 = term env ls in
           let fi = find_field e#pos t1#typ f false in
           let fr = Region.make_field t1#region fi in
           fi.jc_field_info_type, fr, JCLderef_term(t1, fi)
 	end
-*)
     | JCNEat(e, lab) ->
         let t, tr, tl = location env e in
         t, tr, JCLat(tl, lab)

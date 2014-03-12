@@ -1339,9 +1339,7 @@ let rec pset ~type_safe ~global_assertion before loc =
     | JCLSat(locs,_) -> fpset locs
 
 let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
-(*
   let ft = term ~type_safe ~global_assertion ~relocate:false before before in
-*)
   match loc#node with
     | JCLderef(e,lab,fi,_fr) ->
         let iloc = pset ~type_safe ~global_assertion lab e in
@@ -1356,19 +1354,16 @@ let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
           with Not_found -> [iloc]
         in
         (refs, MemoryMap.add (mc,location_set_region e) l mems)
-    | JCLderef_term(_t1,_fi) ->
-	assert false
-(*
-        let iloc = LApp("pset_singleton",[ ft t1 ]) in
+    | JCLderef_term (t1, fi) ->
+        let iloc = LApp ("pset_singleton", [ft t1]) in
         let mc = JCmem_field fi in
         let l =
           try
-            let l = MemoryMap.find (mc,t1#region) mems in
+            let l = MemoryMap.find (mc, t1#region) mems in
             iloc::l
           with Not_found -> [iloc]
         in
-        (refs, MemoryMap.add (mc,t1#region) l mems)
-*)
+        (refs, MemoryMap.add (mc, t1#region) l mems)
     | JCLvar vi ->
         let var = vi.jc_var_info_final_name in
         (StringMap.add var true refs,mems)
@@ -1404,28 +1399,24 @@ let assigns ~type_safe ?region_list before ef locs loc =
       ef.jc_writes.jc_effect_globals StringMap.empty
   in
   let mems =
-    MemoryMap.fold
+    MemoryMap.(fold
       (fun (fi,r) _labs acc ->
-	 if (* TODO: bug some assigns \nothing clauses are not translated e.g. in Purse.java (perhaps when no region is used). The first test resolve the problem but may hide another bug : What must be region_list when --no-region is used? *)
-	   !Jc_options.separation_sem = SepNone || Option_misc.map_default (RegionList.mem r) true region_list then
-	   begin
-(*
-	     eprintf "ASSIGNS FOR FIELD %s@."
-	       (match fi with JCmem_field f -> f.jc_field_info_name
-		  | _ -> "??");
-*)
-             MemoryMap.add (fi,r) [] acc
-	   end
-	 else
-	   begin
-(*
-	     eprintf "IGNORING ASSIGNS FOR FIELD %s@."
-	       (match fi with JCmem_field f -> f.jc_field_info_name
-		  | _ -> "??");
-*)
-             MemoryMap.add (fi,r) [] acc
-	   end
-      ) ef.jc_writes.jc_effect_memories MemoryMap.empty
+        (* TODO: bug some assigns \nothing clauses are not translated e.g. in Purse.java *)
+        (* (perhaps when no region is used). The first test resolve the problem but may hide another bug:*)
+        (*  What must be region_list when --no-region is used? *)
+
+        (* More exact apprixmation (at least fixes both previously encountered bugs): *)
+        (* generate not_assigns for parameters and constant (i.e. global) memories. *)
+        (* Also generate not_assigns always when in SepNone sparation mode. *)
+        if !Jc_options.separation_sem = SepNone || (* no regions used at all *)
+           not (Region.polymorphic r) || (* constant memory, not passed as argument, but counted as effect (global) *)
+           Option_misc.map_default (RegionList.mem r) true region_list (* passed as argument and counted as effect *)
+        then
+          add (fi,r) [] acc
+        else (* if not counted as effect, then it's automatically immutable in the function scope *)
+          acc)
+      ef.jc_writes.jc_effect_memories
+      empty)
   in
   let refs,mems =
     List.fold_left (collect_locations ~type_safe ~global_assertion:false before) (refs,mems) locs
