@@ -35,7 +35,7 @@
     locfile="../Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
     expl="VC for _Purse_credit_ensures_default"
-    sum="257ca1434236aeed595722eb75e2c6b1"
+    sum="d27f2bc692fc590a1ec48537a5bce34c"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix +aselectV2V0V1Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
@@ -75,7 +75,7 @@
     locfile="../Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
     expl="VC for _Purse_credit_safety"
-    sum="f2daae11431a37a59932eb875b4f61c9"
+    sum="d1df789a5b331a7a3d79696c0b219a30"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
@@ -113,7 +113,7 @@
     locfile="../Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
     expl="VC for _Purse_getBalance_ensures_default"
-    sum="1137f88e490ac4d8ec175bb3b2221c7b"
+    sum="3e9b64cf76a5988bdcdd7ae7a494ba50"
     proved="true"
     expanded="false"
     shape="ainfix =V3aselectV1V0Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FF">
@@ -153,7 +153,7 @@
     locfile="../Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
     expl="VC for _Purse_getBalance_safety"
-    sum="74913bc62addf9c5d742cc016f34b9a8"
+    sum="ac00d4408703b253a5f5ee47e0b557c4"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V1Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FF">
@@ -191,7 +191,7 @@
     locfile="../Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="VC for _Purse_withdraw_ensures_default"
-    sum="99bb40c0d0ec48deb874173c083fe855"
+    sum="c36ea9994d63b62ddd097e01d2cda8a2"
     proved="true"
     expanded="false"
     shape="ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFanot_assignsV3V2V7apset_singletonV0Aainfix =aselectV7V0ainfix -aselectV2V0V1Aainfix &lt;=V1aselectV2V0Iainfix =V7astoreV2V0ainfix -aselectV2V0V1Fainfix &gt;=aselectV2V0V1Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
@@ -231,7 +231,7 @@
     locfile="../Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="VC for _Purse_withdraw_exsures_amount_too_large"
-    sum="0f240a4c32347547129d2c9e2c632d99"
+    sum="9e646565ee4f7dd2e7193d873eb36096"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix &gt;V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFINainfix &gt;=aselectV2V0V1Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
@@ -271,7 +271,7 @@
     locfile="../Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="VC for _Purse_withdraw_safety"
-    sum="4717153cc1c348fdccd5b8d77dfece01"
+    sum="ab61bb9699a66ff7fa3099b6354b7077"
     proved="true"
     expanded="false"
     shape="iainfix &gt;=aoffset_maxV5V6c0IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFAainfix &gt;=c1c0abalance_non_negativeV0V7Iainfix =V7astoreV2V0ainfix -aselectV2V0V1Fainfix &gt;=aselectV2V0V1Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FF">
@@ -309,7 +309,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="58" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_Throwable_ensures_default"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -349,7 +349,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="58" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_Throwable_safety"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -387,7 +387,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="40" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_ensures_default"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -427,7 +427,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="40" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_String_safety"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -465,7 +465,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="76" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_Throwable_ensures_default"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -505,7 +505,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="76" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_Throwable_safety"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -543,7 +543,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="28" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_ensures_default"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -583,7 +583,7 @@
     locfile="../../../lib/java_api/java/lang/Exception.java"
     loclnum="28" loccnumb="11" loccnume="20"
     expl="VC for cons_Exception_safety"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -621,7 +621,7 @@
     locfile="../Purse.java"
     loclnum="37" loccnumb="11" loccnume="28"
     expl="VC for cons_NoCreditException_ensures_default"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -661,7 +661,7 @@
     locfile="../Purse.java"
     loclnum="37" loccnumb="11" loccnume="28"
     expl="VC for cons_NoCreditException_safety"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -699,7 +699,7 @@
     locfile="../Purse.java"
     loclnum="50" loccnumb="11" loccnume="16"
     expl="VC for cons_Purse_ensures_default"
-    sum="3136a8afe5311e2a9f286838dbb34b65"
+    sum="bf9b3bad2e1fd49655c9e46c765c8287"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V1V4apset_singletonV0Aainfix =aselectV4V0c0Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
@@ -739,7 +739,7 @@
     locfile="../Purse.java"
     loclnum="50" loccnumb="11" loccnume="16"
     expl="VC for cons_Purse_safety"
-    sum="6527f816d0ee910c7896a911bbf395c4"
+    sum="9d96b59d450db63584525a92382eb56c"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FF">
@@ -777,7 +777,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="216" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_Throwable_ensures_default"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -817,7 +817,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="216" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_Throwable_safety"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -855,7 +855,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_ensures_default"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -895,7 +895,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_String_safety"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -933,7 +933,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_Throwable_ensures_default"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -973,7 +973,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_Throwable_safety"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -1011,7 +1011,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_ensures_default"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -1051,7 +1051,7 @@
     locfile="../../../lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
     expl="VC for cons_Throwable_safety"
-    sum="bde9da5caaf98888b1afc6cd1c8a42b9"
+    sum="f2c70e7c3569ee9506c117b62fcef00d"
     proved="true"
     expanded="false"
     shape="t">

@@ -39,7 +39,7 @@
     locfile="../AllZeros.java"
     loclnum="44" loccnumb="19" loccnume="28"
     expl="VC for _AllZeros_all_zeros_ensures_default"
-    sum="210c324ccbeb9ab7b57f1e9daa7a3b0d"
+    sum="66bc90659b3a11a88ef53b10a391f6f3"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32aselectV1ashiftV0V7c0Iainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Fqainfix =V6aTrueIainfix =V6aTrueFiainfix =ainteger_of_int32aselectV1ashiftV0V10c0Iainfix &lt;V10ainteger_of_int32V9Aainfix &lt;=c0V10FAainfix &lt;=ainteger_of_int32V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix +ainteger_of_int32V4c1Fainfix =ainteger_of_int32aselectV1ashiftV0V12c0Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V12Fqainfix =V11aTrueIainfix =V11aFalseFNainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0ainfix &lt;ainteger_of_int32V4V5Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Iainfix =ainteger_of_int32aselectV1ashiftV0V13c0Iainfix &lt;V13ainteger_of_int32V4Aainfix &lt;=c0V13FAainfix &lt;=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V4FAainfix =ainteger_of_int32aselectV1ashiftV0V14c0Iainfix &lt;V14ainteger_of_int32V3Aainfix &lt;=c0V14FAainfix &lt;=ainteger_of_int32V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V3Iainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -79,7 +79,7 @@
     locfile="../AllZeros.java"
     loclnum="44" loccnumb="19" loccnume="28"
     expl="index bounds"
-    sum="bf484a33b2c4bd4ef62dcb9a20772ef7"
+    sum="3e84b9497ac7200291c2e5af58d55ebf"
     proved="true"
     expanded="true"
     shape="index boundsainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V9ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Iainfix =V9V8FIainfix =ainteger_of_int32V8V7FAainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix +ainteger_of_int32V4c1Iainfix =ainteger_of_int32aselectV1ashiftV0V6c0Aainfix &lt;=V6aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V6Lainteger_of_int32V4Iainfix &lt;ainteger_of_int32V4V5Iainfix &gt;=V5c0Aainfix &lt;=V5c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix =ainteger_of_int32aselectV1ashiftV0V10c0Iainfix &lt;V10ainteger_of_int32V4Aainfix &lt;=c0V10FAainfix &lt;=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V4FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FF">
@@ -125,7 +125,7 @@
     locfile="../AllZeros.java"
     loclnum="34" loccnumb="15" loccnume="35"
     expl="VC for _AllZeros_should_not_be_proved_ensures_default"
-    sum="1d98ca1b074241b75e28bdf0eb4fa7ad"
+    sum="05407472b6076f49251aad8329622746"
     proved="true"
     expanded="true"
     shape="t">
@@ -173,7 +173,7 @@
     locfile="../AllZeros.java"
     loclnum="34" loccnumb="15" loccnume="35"
     expl="index bounds"
-    sum="db645ea03afe1aaf635d74e072469c16"
+    sum="8eceb5b0706f9b67795ff69aaa315f54"
     proved="false"
     expanded="true"
     shape="index boundsainfix &lt;=V2c2147483647Aainfix &lt;=aprefix -c2147483648V2Iainfix &gt;=V2c0Aainfix &lt;=V2c2147483647Lainfix +aoffset_maxV1V0c1Aainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
@@ -190,7 +190,7 @@
       locfile="../AllZeros.java"
       loclnum="34" loccnumb="15" loccnume="35"
       expl="1. assertion"
-      sum="b58ef4ffa28a1a1c521f18edade57a6b"
+      sum="a6bf9ef2c5288e943dbdce5781b13abb"
       proved="false"
       expanded="true"
       shape="assertionainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
@@ -236,7 +236,7 @@
       locfile="../AllZeros.java"
       loclnum="34" loccnumb="15" loccnume="35"
       expl="2. arithmetic overflow"
-      sum="86abaa929ffcc9f6c1140afdfe17fcb3"
+      sum="ee01a9eec0579d902828f8805517ed74"
       proved="true"
       expanded="true"
       shape="arithmetic overflowainfix &lt;=V2c2147483647Aainfix &lt;=aprefix -c2147483648V2Iainfix &gt;=V2c0Aainfix &lt;=V2c2147483647Lainfix +aoffset_maxV1V0c1Iainfix &gt;=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
@@ -281,10 +281,10 @@
    </goal>
    <goal
     name="WP_parameter cons_AllZeros_ensures_default"
-    locfile="../../.."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_AllZeros_ensures_default"
-    sum="1d98ca1b074241b75e28bdf0eb4fa7ad"
+    sum="05407472b6076f49251aad8329622746"
     proved="true"
     expanded="true"
     shape="t">
@@ -329,10 +329,10 @@
    </goal>
    <goal
     name="WP_parameter cons_AllZeros_safety"
-    locfile="../../.."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_AllZeros_safety"
-    sum="1d98ca1b074241b75e28bdf0eb4fa7ad"
+    sum="05407472b6076f49251aad8329622746"
     proved="true"
     expanded="true"
     shape="t">

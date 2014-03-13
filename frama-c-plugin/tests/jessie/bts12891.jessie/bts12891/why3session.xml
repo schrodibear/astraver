@@ -27,7 +27,7 @@
     locfile="../../bts12891.c"
     loclnum="2" loccnumb="5" loccnume="6"
     expl="VC for f_ensures_default"
-    sum="0734ff573eaa56f5433e1496d4869151"
+    sum="181b744f69efe1d4583b1d2e47028ad0"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V1c0Iainfix =V3V2FIainfix =ainteger_of_int32V2c1FIainfix =V1V0FIainfix =ainteger_of_int32V0c0F">
@@ -51,7 +51,7 @@
     locfile="../../bts12891.c"
     loclnum="2" loccnumb="5" loccnume="6"
     expl="VC for f_safety"
-    sum="5756151f2df887202e19afb100d1e1c7"
+    sum="0eb6ccc72bbe95eba1298b92126834fe"
     proved="true"
     expanded="true"
     shape="t">

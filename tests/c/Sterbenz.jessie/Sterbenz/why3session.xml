@@ -43,7 +43,7 @@
     locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="VC for _Sterbenz_ensures_default"
-    sum="b10fd9c9a7e7eeff14b2881655c7f0c7"
+    sum="15df6cc40396f29cbf3e47c5f2d1c7bf"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FAainfix &lt;=c0.0avalueV0Aainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -62,7 +62,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="1. assertion"
-      sum="b54be37268dce4ecb9e855eb0e768228"
+      sum="a1b537eac80c2c893ef1ac880b3991b0"
       proved="true"
       expanded="true"
       shape="assertionainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -102,7 +102,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="2. assertion"
-      sum="7f76d0fa7f644d8d9ed5d4b263e62d24"
+      sum="30b03dc716e10c7e23cb0a31167bd525"
       proved="true"
       expanded="true"
       shape="assertionainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -142,7 +142,7 @@
       locfile="../../Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="3. postcondition"
-      sum="1ae40b7b3214aabbe6e29d074c840099"
+      sum="f50f1f80e3b301c46dd2d8176ba70627"
       proved="true"
       expanded="true"
       shape="postconditionainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">
@@ -169,7 +169,7 @@
     locfile="../../Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="VC for _Sterbenz_safety"
-    sum="972442d28c0ff737d01377ee56e98019"
+    sum="8ea4c5409de46a921f804cd3320b35f6"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0F">

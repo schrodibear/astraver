@@ -43,7 +43,7 @@
     locfile="../ArrayMax.java"
     loclnum="27" loccnumb="22" loccnume="25"
     expl="VC for _ArrayMax_max_ensures_default"
-    sum="c18a184d43355e42aabaa5c205c77204"
+    sum="534ba495065fcfa30147b883a58c3d75"
     proved="true"
     expanded="true"
     shape="iainfix &lt;=ainteger_of_int32aselectV1ashiftV0V9ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V8Iainfix &lt;V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V9FAainfix &lt;ainteger_of_int32V8ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0ainteger_of_int32V8Iainfix =V8V7Fiainfix &lt;=ainteger_of_int32aselectV1ashiftV0V12amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V11Iainfix &lt;V12ainfix +aoffset_maxV2V0c1Aainfix &lt;ainteger_of_int32V11V12Oainfix &lt;V12ainteger_of_int32V7Aainfix &lt;=c0V12FAainfix &lt;ainteger_of_int32V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=ainteger_of_int32V7ainteger_of_int32V11Aainfix &lt;=c0ainteger_of_int32V7Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix -ainteger_of_int32V6c1Fainfix &lt;=ainteger_of_int32aselectV1ashiftV0V15amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V14ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6Iainfix &lt;V15ainfix +aoffset_maxV2V0c1Aainfix &lt;ainteger_of_int32V6V15Oainfix &lt;V15ainteger_of_int32V14Aainfix &lt;=c0V15FAainfix &lt;ainteger_of_int32V6ainfix +aoffset_maxV2V0c1Aainfix &lt;=ainteger_of_int32V14ainteger_of_int32V6Aainfix &lt;=c0ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V7c1Fainfix &lt;=ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6Nainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix &lt;=ainteger_of_int32aselectV1ashiftV0V16amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6Iainfix &lt;V16ainfix +aoffset_maxV2V0c1Aainfix &lt;ainteger_of_int32V6V16Oainfix &lt;V16ainteger_of_int32V7Aainfix &lt;=c0V16FAainfix &lt;ainteger_of_int32V6ainfix +aoffset_maxV2V0c1Aainfix &lt;=ainteger_of_int32V7ainteger_of_int32V6Aainfix &lt;=c0ainteger_of_int32V7FAainfix &lt;=ainteger_of_int32aselectV1ashiftV0V17amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V3ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V5Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;ainteger_of_int32V5V17Oainfix &lt;V17ainteger_of_int32V3Aainfix &lt;=c0V17FAainfix &lt;ainteger_of_int32V5ainfix +aoffset_maxV2V0c1Aainfix &lt;=ainteger_of_int32V3ainteger_of_int32V5Aainfix &lt;=c0ainteger_of_int32V3Iainfix =ainteger_of_int32V5ainfix -V4c1FIainfix &gt;=V4c0Aainfix &lt;=V4c2147483647Lainfix +aoffset_maxV2V0c1Iainfix =ainteger_of_int32V3c0FIainfix &gt;ainfix +aoffset_maxV2V0c1c0Aaleft_valid_struct_intMV0c0V2FF">
@@ -91,7 +91,7 @@
     locfile="../ArrayMax.java"
     loclnum="27" loccnumb="22" loccnume="25"
     expl="index bounds"
-    sum="758b26cd42daea7efd0b888b42f27050"
+    sum="c83965792c9a799bafbe916a5693ea29"
     proved="true"
     expanded="true"
     shape="index boundsiainfix &lt;ainfix -ainteger_of_int32V13ainteger_of_int32V8ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V13V12FIainfix =ainteger_of_int32V12V11FAainfix &lt;=V11c2147483647Aainfix &lt;=aprefix -c2147483648V11Lainfix -ainteger_of_int32V7c1ainfix &lt;ainfix -ainteger_of_int32V7ainteger_of_int32V16ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix &lt;=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FAainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Lainfix +ainteger_of_int32V8c1ainfix &lt;=ainteger_of_int32aselectV1ashiftV0V10ainteger_of_int32aselectV1ashiftV0V9Aainfix &lt;=V10aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V10Lainteger_of_int32V8Aainfix &lt;=V9aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V9Lainteger_of_int32V7INainfix =ainteger_of_int32V8ainteger_of_int32V7Iainfix &lt;=ainteger_of_int32aselectV1ashiftV0V17amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V8ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7Iainfix &lt;V17ainfix +aoffset_maxV2V0c1Aainfix &lt;ainteger_of_int32V7V17Oainfix &lt;V17ainteger_of_int32V8Aainfix &lt;=c0V17FAainfix &lt;ainteger_of_int32V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=ainteger_of_int32V8ainteger_of_int32V7Aainfix &lt;=c0ainteger_of_int32V8FIainfix =ainteger_of_int32V6V5FAainfix &lt;=V5c2147483647Aainfix &lt;=aprefix -c2147483648V5Lainfix -V4c1Iainfix &gt;=V4c0Aainfix &lt;=V4c2147483647Lainfix +aoffset_maxV2V0c1Aainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix =ainteger_of_int32V3c0FIainfix &gt;ainfix +aoffset_maxV2V0c1c0Aaleft_valid_struct_intMV0c0V2FF">
@@ -142,10 +142,10 @@
    </goal>
    <goal
     name="WP_parameter cons_ArrayMax_ensures_default"
-    locfile="../../.."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_ArrayMax_ensures_default"
-    sum="f1867b54cc20fdc3ca40b573c44cc520"
+    sum="035bb7973488dbca1c48ff89af4834f2"
     proved="true"
     expanded="true"
     shape="t">
@@ -198,10 +198,10 @@
    </goal>
    <goal
     name="WP_parameter cons_ArrayMax_safety"
-    locfile="../../.."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_ArrayMax_safety"
-    sum="f1867b54cc20fdc3ca40b573c44cc520"
+    sum="035bb7973488dbca1c48ff89af4834f2"
     proved="true"
     expanded="true"
     shape="t">

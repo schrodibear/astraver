@@ -39,7 +39,7 @@
     locfile="../../strprevchr.c"
     loclnum="17" loccnumb="4" loccnume="14"
     expl="VC for strprevchr_ensures_absent"
-    sum="2c3897cf79bff9ae62d4ce6898ed7563"
+    sum="94b6da53503b05055a5a1223e77f40ef"
     proved="true"
     expanded="false"
     shape="iainfix =ainteger_of_int32V6aprefix -c1Iainfix =V6V5Fainfix =ainteger_of_int32V9aprefix -c1Iainfix =V9V5FIainfix =ainteger_of_int32V8ainteger_of_int32V7Iainfix =ainteger_of_int32V8ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V7ainteger_of_int8V1Fainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0ANainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V10ainteger_of_int8V1Iainfix &lt;=ainteger_of_int32V10ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V10FF">
@@ -58,7 +58,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="1. postcondition"
-      sum="5757968a531faf2d7089d7550b525356"
+      sum="039b4b8a83fd4f876286dfe8057a1f09"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V8aprefix -c1Iainfix =V8V5FIainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0ANainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V9ainteger_of_int8V1Iainfix &lt;=ainteger_of_int32V9ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V9FF">
@@ -106,7 +106,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="2. postcondition"
-      sum="2debe52248277b65fe7231c75e11d03e"
+      sum="b7a53ed7a205039d94b4ff60e87fb467"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V6aprefix -c1Iainfix =V6V5FINainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0ANainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V7ainteger_of_int8V1Iainfix &lt;=ainteger_of_int32V7ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V7FF">
@@ -132,7 +132,7 @@
     locfile="../../strprevchr.c"
     loclnum="17" loccnumb="4" loccnume="14"
     expl="VC for strprevchr_ensures_default"
-    sum="6acd7e944f21cbc0265ee4bfd302062d"
+    sum="7102d3439c3b244004661de3c0df287b"
     proved="true"
     expanded="false"
     shape="a_AbsentTailV0V9V1V2V4Aainfix &gt;=ainteger_of_int32V9aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V5c1FINainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FAa_AbsentTailV0V0V1V2V4Aainfix &gt;=ainteger_of_int32V0aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V0Iainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -151,7 +151,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="1. loop invariant init"
-      sum="ca00698c4acc9cd1137e32e8a51cabd9"
+      sum="57f41aca3b0127f584e20c613b2e9007"
       proved="true"
       expanded="false"
       shape="loop invariant inita_AbsentTailV0V0V1V2V4Aainfix &gt;=ainteger_of_int32V0aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V0Iainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -199,7 +199,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="2. loop invariant preservation"
-      sum="b983ce1c2564cd18d4a14ece26e00f9d"
+      sum="692f22fd144a17c2725ed8aa89aa3d75"
       proved="true"
       expanded="false"
       shape="loop invariant preservationa_AbsentTailV0V9V1V2V4Aainfix &gt;=ainteger_of_int32V9aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V5c1FINainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -249,7 +249,7 @@
     locfile="../../strprevchr.c"
     loclnum="17" loccnumb="4" loccnume="14"
     expl="VC for strprevchr_ensures_present"
-    sum="43e873397d5bb1bc353b0276a0fb1886"
+    sum="12c3e0d6c4fa07ba47fc632544a14817"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V6ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V6Iainfix =V6V5Fainfix &lt;=ainteger_of_int32V9ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V9Iainfix =V9V5FIainfix =ainteger_of_int32V8ainteger_of_int32V7Iainfix =ainteger_of_int32V8ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V7ainteger_of_int8V1Fainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V10ainteger_of_int8V1Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V10EF">
@@ -268,7 +268,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="1. postcondition"
-      sum="6bc4eb76a17806fd40e4c383352a89b1"
+      sum="a3c7aad4154bf0c50115b4e3aa418d55"
       proved="true"
       expanded="false"
       shape="postconditionainfix &lt;=ainteger_of_int32V8ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V8Iainfix =V8V5FIainfix =ainteger_of_int32V7ainteger_of_int32V6Iainfix =ainteger_of_int32V7ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V5FIainfix =ainteger_of_int32V6ainteger_of_int8V1FIainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V9ainteger_of_int8V1Aainfix &lt;=ainteger_of_int32V9ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V9EF">
@@ -292,7 +292,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="2. postcondition"
-      sum="c989afbcf0e25fff14d28c63ef24ab4f"
+      sum="1f7a9a0bb1b16e3b3212a58a13c1d541"
       proved="true"
       expanded="false"
       shape="postconditionainfix &lt;=ainteger_of_int32V6ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V6Iainfix =V6V5FINainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V7ainteger_of_int8V1Aainfix &lt;=ainteger_of_int32V7ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V7EF">
@@ -311,7 +311,7 @@
         locfile="../../strprevchr.c"
         loclnum="17" loccnumb="4" loccnume="14"
         expl="1."
-        sum="bb5057f0da91c375a515a986d3166824"
+        sum="86a41c63a4a83338615b25ab8106bf93"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0ainteger_of_int32V6Iainfix =V6V5FINainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V7ainteger_of_int8V1Aainfix &lt;=ainteger_of_int32V7ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V7EF">
@@ -335,7 +335,7 @@
         locfile="../../strprevchr.c"
         loclnum="17" loccnumb="4" loccnume="14"
         expl="2."
-        sum="dd10d0a522fa411b9578699b72935df2"
+        sum="1a855888281b416f8dd125aedaa94b63"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=ainteger_of_int32V6ainteger_of_int32V0Iainfix =V6V5FINainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of_int8aselectV4ashiftV2ainteger_of_int32V7ainteger_of_int8V1Aainfix &lt;=ainteger_of_int32V7ainteger_of_int32V0Aainfix &lt;=c0ainteger_of_int32V7EF">
@@ -363,7 +363,7 @@
     locfile="../../strprevchr.c"
     loclnum="17" loccnumb="4" loccnume="14"
     expl="VC for strprevchr_safety"
-    sum="75d425ae9b980afd12a297578af6f5f8"
+    sum="1ee2cdafeffa08885355b2c13d89f862"
     proved="true"
     expanded="false"
     shape="ainfix &lt;ainteger_of_int32V13ainteger_of_int32V5Aainfix &lt;=c0ainteger_of_int32V5Iainfix =V13V12FIainfix =ainteger_of_int32V12V11FAainfix &lt;=V11c2147483647Aainfix &lt;=aprefix -c2147483648V11Lainfix -ainteger_of_int32V5c1INainfix =ainteger_of_int32V10ainteger_of_int32V7Iainfix =ainteger_of_int32V10V9FAainfix &lt;=V9c2147483647Aainfix &lt;=aprefix -c2147483648V9Lainteger_of_int8aselectV4ashiftV2V8Aainfix &lt;=V8aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2V8Lainteger_of_int32V5Iainfix =ainteger_of_int32V7V6FAainfix &lt;=V6c2147483647Aainfix &lt;=aprefix -c2147483648V6Lainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -380,7 +380,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="1. arithmetic overflow"
-      sum="7f464012471c6d035d63ccd126d6fa90"
+      sum="c93c0db7edb1e7362b791c2fcbb2df66"
       proved="true"
       expanded="false"
       shape="arithmetic overflowainfix &lt;=V6c2147483647Aainfix &lt;=aprefix -c2147483648V6Lainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -402,7 +402,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="2. pointer dereference"
-      sum="a6db5933f0f861bf0efe05f31f65dd78"
+      sum="48583c1110ece5b5f47e3f46be492aa4"
       proved="true"
       expanded="false"
       shape="pointer dereferenceainfix &lt;=V8aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2V8Lainteger_of_int32V5Iainfix =ainteger_of_int32V7V6FIainfix &lt;=V6c2147483647Aainfix &lt;=aprefix -c2147483648V6Lainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -424,7 +424,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="3. arithmetic overflow"
-      sum="1b36ef588b10723e64cb2e41bb37350f"
+      sum="5bc234e5fae4c6dbdc8b2e7e034db31d"
       proved="true"
       expanded="false"
       shape="arithmetic overflowainfix &lt;=V9c2147483647Aainfix &lt;=aprefix -c2147483648V9Lainteger_of_int8aselectV4ashiftV2V8Iainfix &lt;=V8aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2V8Lainteger_of_int32V5Iainfix =ainteger_of_int32V7V6FIainfix &lt;=V6c2147483647Aainfix &lt;=aprefix -c2147483648V6Lainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -446,7 +446,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="4. arithmetic overflow"
-      sum="268d96489275620906aedd82170e2b87"
+      sum="41b5929b3d8fd609161c9503f5f31c51"
       proved="true"
       expanded="false"
       shape="arithmetic overflowainfix &lt;=V11c2147483647Aainfix &lt;=aprefix -c2147483648V11Lainfix -ainteger_of_int32V5c1INainfix =ainteger_of_int32V10ainteger_of_int32V7Iainfix =ainteger_of_int32V10V9FIainfix &lt;=V9c2147483647Aainfix &lt;=aprefix -c2147483648V9Lainteger_of_int8aselectV4ashiftV2V8Iainfix &lt;=V8aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2V8Lainteger_of_int32V5Iainfix =ainteger_of_int32V7V6FIainfix &lt;=V6c2147483647Aainfix &lt;=aprefix -c2147483648V6Lainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -468,7 +468,7 @@
       locfile="../../strprevchr.c"
       loclnum="17" loccnumb="4" loccnume="14"
       expl="5. loop variant decrease"
-      sum="1159f83f167bc0184abeadab6117e918"
+      sum="8b8cbd9bcc081ea45ef3878d52f37ddd"
       proved="true"
       expanded="false"
       shape="loop variant decreaseainfix &lt;ainteger_of_int32V13ainteger_of_int32V5Aainfix &lt;=c0ainteger_of_int32V5Iainfix =V13V12FIainfix =ainteger_of_int32V12V11FIainfix &lt;=V11c2147483647Aainfix &lt;=aprefix -c2147483648V11Lainfix -ainteger_of_int32V5c1INainfix =ainteger_of_int32V10ainteger_of_int32V7Iainfix =ainteger_of_int32V10V9FIainfix &lt;=V9c2147483647Aainfix &lt;=aprefix -c2147483648V9Lainteger_of_int8aselectV4ashiftV2V8Iainfix &lt;=V8aoffset_maxV3V2Aainfix &lt;=aoffset_minV3V2V8Lainteger_of_int32V5Iainfix =ainteger_of_int32V7V6FIainfix &lt;=V6c2147483647Aainfix &lt;=aprefix -c2147483648V6Lainteger_of_int8V1Iainfix &gt;=ainteger_of_int32V5c0Ia_AbsentTailV0V5V1V2V4Aainfix &gt;=ainteger_of_int32V5aprefix -c1Aainfix &gt;=ainteger_of_int32V0ainteger_of_int32V5FIainfix &gt;=aoffset_maxV3V2ainteger_of_int32V0Aainfix &lt;=aoffset_minV3V2c0Aainfix &gt;=ainteger_of_int32V0c0F">

@@ -43,10 +43,12 @@
     locfile="../../isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="VC for isqrt_ensures_default"
-    sum="ef5fd9588277cd5637e524e112512fb0"
+    sum="116d586bb15c8439e7215b2bf10d2a3a"
     proved="true"
     expanded="true"
     shape="iainfix &lt;V0asqrainfix +V5c1Aainfix &lt;=asqrV5V0Aainfix &gt;=V5c0Iainfix =V5V4Fainfix =V7asqrainfix +V6c1Aainfix &gt;=V0asqrV6Aainfix &gt;=V6c0Iainfix =V7ainfix +V3ainfix +ainfix *c2V6c1FIainfix =V6ainfix +V4c1Fainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FAainfix =V2asqrainfix +V1c1Aainfix &gt;=V0asqrV1Aainfix &gt;=V1c0Iainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function isqrt, default behavior"/>
     <label
@@ -73,7 +75,7 @@
     locfile="../../isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="VC for isqrt_safety"
-    sum="9266f9df885ea641e717726d7b4c328c"
+    sum="f1e68de8b235574a4f64d43da390d517"
     proved="true"
     expanded="true"
     shape="ainfix &lt;ainfix -V0V5ainfix -V0V4Aainfix &lt;=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FIainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
@@ -90,7 +92,7 @@
       locfile="../../isqrt.c"
       loclnum="40" loccnumb="4" loccnume="9"
       expl="1. loop variant decrease"
-      sum="9266f9df885ea641e717726d7b4c328c"
+      sum="f1e68de8b235574a4f64d43da390d517"
       proved="true"
       expanded="true"
       shape="loop variant decreaseainfix &lt;ainfix -V0V5ainfix -V0V4Aainfix &lt;=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FIainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
@@ -130,10 +132,12 @@
     locfile="../../isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
     expl="VC for main_ensures_default"
-    sum="b0a2dfdcbe182f2054860190a37a0f88"
+    sum="6739c2b7b7b0c9f86e78c30ee59d8d9f"
     proved="true"
     expanded="true"
     shape="ainfix =V2c4Iainfix =V2V1FANainfix &gt;V1c4ANainfix &lt;V1c4Iainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Function main, default behavior"/>
     <label
@@ -163,10 +167,12 @@
       locfile="../../isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="1. assertion"
-      sum="5a2a92c13df7d9d4cc67bada2054f3f4"
+      sum="fd165302e2d02b393b2149b2a548b363"
       proved="true"
       expanded="false"
       shape="assertionNainfix &lt;V1c4Iainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function main, default behavior"/>
       <label
@@ -201,10 +207,12 @@
       locfile="../../isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="2. assertion"
-      sum="50c0c4947a1494a19259983124ace6ac"
+      sum="fd146e42320d414dcc6edb6f0c4c27ba"
       proved="true"
       expanded="false"
       shape="assertionNainfix &gt;V1c4INainfix &lt;V1c4Iainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function main, default behavior"/>
       <label
@@ -231,10 +239,12 @@
       locfile="../../isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="3. postcondition"
-      sum="c9ae3e79cf4e6d2174130428e99c5efe"
+      sum="8c683021ce3ab8bd70e1a09042a34bea"
       proved="true"
       expanded="false"
       shape="postconditionainfix =V2c4Iainfix =V2V1FINainfix &gt;V1c4INainfix &lt;V1c4Iainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Function main, default behavior"/>
       <label
@@ -287,7 +297,7 @@
     locfile="../../isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
     expl="VC for main_safety"
-    sum="eb7a1564f170a778c999fea9af533b7f"
+    sum="62318453e96aef3245765b66da445ce0"
     proved="true"
     expanded="true"
     shape="ainfix &gt;=c17c0">

@@ -35,7 +35,7 @@
     locfile="../Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test1_ensures_default"
-    sum="4b2c6cb27d10394384fdf9475ed350f0"
+    sum="af11821869cad128a8eda58bcd9d3534"
     proved="true"
     expanded="true"
     shape="t">
@@ -75,7 +75,7 @@
     locfile="../Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test1_ensures_normal"
-    sum="db6b9bfd8212449a6bdf6ce34d576a84"
+    sum="379e30e22bdd0eb334b500d5d1442984"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c2Fainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c0Fainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1F">
@@ -115,7 +115,7 @@
     locfile="../Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test1_safety"
-    sum="4b2c6cb27d10394384fdf9475ed350f0"
+    sum="af11821869cad128a8eda58bcd9d3534"
     proved="true"
     expanded="true"
     shape="t">
@@ -153,7 +153,7 @@
     locfile="../Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test2_ensures_default"
-    sum="4b2c6cb27d10394384fdf9475ed350f0"
+    sum="af11821869cad128a8eda58bcd9d3534"
     proved="true"
     expanded="true"
     shape="t">
@@ -193,7 +193,7 @@
     locfile="../Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test2_ensures_normal"
-    sum="249bcfcd630006e6f3ad2d74dd3896d8"
+    sum="b1e9f1fe18708c76c483546ae9260c8e"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V3c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c2Fainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V6c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fainfix =ainteger_of_int32V0c4Oainfix =ainteger_of_int32V0c7ainfix =ainteger_of_int32V9c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V9c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c0Fainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1F">
@@ -233,7 +233,7 @@
     locfile="../Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
     expl="VC for _Switch_test2_safety"
-    sum="4b2c6cb27d10394384fdf9475ed350f0"
+    sum="af11821869cad128a8eda58bcd9d3534"
     proved="true"
     expanded="true"
     shape="t">
@@ -271,7 +271,7 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Switch_ensures_default"
-    sum="4b2c6cb27d10394384fdf9475ed350f0"
+    sum="af11821869cad128a8eda58bcd9d3534"
     proved="true"
     expanded="true"
     shape="t">
@@ -311,7 +311,7 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Switch_safety"
-    sum="4b2c6cb27d10394384fdf9475ed350f0"
+    sum="af11821869cad128a8eda58bcd9d3534"
     proved="true"
     expanded="true"
     shape="t">

@@ -35,7 +35,7 @@
     locfile="../../minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="VC for dmax_ensures_default"
-    sum="160f7858ea83c1420bb613deade43365"
+    sum="11c7663b206d183ca8c5e2be4a6f18a9"
     proved="true"
     expanded="true"
     shape="iainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
@@ -67,7 +67,7 @@
     locfile="../../minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="VC for dmax_safety"
-    sum="e0be7b8dc6e9c9377e08b0b13f37d54a"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">
@@ -105,7 +105,7 @@
     locfile="../../minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="VC for dmin_ensures_default"
-    sum="95fb58830ecc8f113d324507e12143ee"
+    sum="d2de71a2fe6f240bef91e295c829d5f7"
     proved="true"
     expanded="true"
     shape="iainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
@@ -137,7 +137,7 @@
     locfile="../../minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="VC for dmin_safety"
-    sum="e0be7b8dc6e9c9377e08b0b13f37d54a"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">
@@ -175,7 +175,7 @@
     locfile="../../minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="VC for fmax_ensures_default"
-    sum="08950b4a7661626bbc4c18a5bc16431d"
+    sum="dbe02472dc3786ecf8ffda5f1a058c26"
     proved="true"
     expanded="true"
     shape="iainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
@@ -207,7 +207,7 @@
     locfile="../../minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="VC for fmax_safety"
-    sum="e0be7b8dc6e9c9377e08b0b13f37d54a"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">
@@ -245,7 +245,7 @@
     locfile="../../minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="VC for fmin_ensures_default"
-    sum="b1cc302fa3a6e0e30636ef55d4ab0cbe"
+    sum="aadb6e9e937adff55f7a5a364ecf6ead"
     proved="true"
     expanded="true"
     shape="iainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0Fainfix =V2aTrueIiainfix &gt;avalueV0avalueV1ainfix &lt;=avalueV0avalueV1ainfix =V2aTrueFF">
@@ -277,7 +277,7 @@
     locfile="../../minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="VC for fmin_safety"
-    sum="e0be7b8dc6e9c9377e08b0b13f37d54a"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">
@@ -315,7 +315,7 @@
     locfile="../../minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="VC for max_ensures_default"
-    sum="9b2e98443819dc7763d76bb075e64456"
+    sum="a39e20d683793d793adab347634c196f"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1Fainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1F">
@@ -347,7 +347,7 @@
     locfile="../../minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="VC for max_safety"
-    sum="e0be7b8dc6e9c9377e08b0b13f37d54a"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">
@@ -385,7 +385,7 @@
     locfile="../../minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="VC for min_ensures_default"
-    sum="40c0fd469e57cdde92ccecb8e524b81e"
+    sum="e71bacf158ed6c0633c1c7c7eaca2a6e"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0Fainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1F">
@@ -417,7 +417,7 @@
     locfile="../../minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="VC for min_safety"
-    sum="e0be7b8dc6e9c9377e08b0b13f37d54a"
+    sum="84c51262c4113d855b9b51cfb90bbe1c"
     proved="true"
     expanded="true"
     shape="t">

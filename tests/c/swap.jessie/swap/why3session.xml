@@ -35,7 +35,7 @@
     locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="VC for swap_ensures_default"
-    sum="14e944fb85a1263e10c5730159dcc95a"
+    sum="b3a5eac3646b623036a1cd1e1a99e679"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FF">
@@ -75,7 +75,7 @@
     locfile="../../swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="VC for swap_safety"
-    sum="5756151f2df887202e19afb100d1e1c7"
+    sum="0eb6ccc72bbe95eba1298b92126834fe"
     proved="true"
     expanded="true"
     shape="t">

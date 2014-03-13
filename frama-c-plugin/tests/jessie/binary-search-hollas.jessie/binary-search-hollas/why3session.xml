@@ -39,7 +39,7 @@
     locfile="../../binary-search-hollas.c"
     loclnum="18" loccnumb="4" loccnume="17"
     expl="VC for binary_search_ensures_default"
-    sum="dec0d7a047180acfc325f2a199be800b"
+    sum="f66afd6034d6d1181892fbef82a1fcc4"
     proved="true"
     expanded="false"
     shape="iainfix &lt;=ainteger_of_int32V13ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V13Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0ainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V17Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V18ainteger_of_int32V0Iainfix &lt;V18ainteger_of_int32V17Aainfix &lt;=c0V18FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V19ainteger_of_int32V0Iainfix &gt;V19ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V19FIainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1Fainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FAainfix &lt;=ainteger_of_int32V22ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V22Iainfix =V22V21FIainfix =ainteger_of_int32V21adivainteger_of_int32V20c2FIainfix =ainteger_of_int32V20ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V23ainteger_of_int32V0Iainfix &lt;V23ainteger_of_int32V10Aainfix &lt;=c0V23FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V24ainteger_of_int32V0Iainfix &gt;V24ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V24FFAainfix &lt;=ainteger_of_int32V8ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V6Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V25ainteger_of_int32V0Iainfix &lt;V25ainteger_of_int32V6Aainfix &lt;=c0V25FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V26ainteger_of_int32V0Iainfix &gt;V26ainteger_of_int32V8Aainfix &gt;=ainfix -ainteger_of_int32V2c1V26FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FAainfix =ainteger_of_int32aselectV4ashiftV1V27ainteger_of_int32V0Aainfix &lt;=V27ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V27EONainfix =ainteger_of_int32aselectV4ashiftV1V28ainteger_of_int32V0Aainfix &lt;=V28ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V28EANNainfix =ainteger_of_int32aselectV4ashiftV1V29ainteger_of_int32V0Aainfix &lt;=V29ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V29EAainfix =ainteger_of_int32aselectV4ashiftV1V30ainteger_of_int32V0Aainfix &lt;=V30ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V30EIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -74,7 +74,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="1. check"
-      sum="19044b357a1a5dc148b42fa56c0db880"
+      sum="20ba50bd9c466f3eb43373f2c55ff796"
       proved="true"
       expanded="false"
       shape="checkNNainfix =ainteger_of_int32aselectV4ashiftV1V5ainteger_of_int32V0Aainfix &lt;=V5ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V5EAainfix =ainteger_of_int32aselectV4ashiftV1V6ainteger_of_int32V0Aainfix &lt;=V6ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V6EIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -122,7 +122,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="2. check"
-      sum="1490d601c9ebd930994f71972e332ec7"
+      sum="2bb782497ea42f2676d791624e807c1a"
       proved="true"
       expanded="false"
       shape="checkainfix =ainteger_of_int32aselectV4ashiftV1V5ainteger_of_int32V0Aainfix &lt;=V5ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V5EONainfix =ainteger_of_int32aselectV4ashiftV1V6ainteger_of_int32V0Aainfix &lt;=V6ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V6EIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -170,7 +170,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="3. loop invariant init"
-      sum="363187fb9e6d3284dd782622c2d7ffa3"
+      sum="0e7d20181173d147750b60f30b991797"
       proved="true"
       expanded="false"
       shape="loop invariant initainfix &lt;=ainteger_of_int32V8ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V6Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V9ainteger_of_int32V0Iainfix &lt;V9ainteger_of_int32V6Aainfix &lt;=c0V9FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V10ainteger_of_int32V0Iainfix &gt;V10ainteger_of_int32V8Aainfix &gt;=ainfix -ainteger_of_int32V2c1V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -218,7 +218,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="4."
-      sum="c56e35a48a23ba39557443591c048d6c"
+      sum="b59cb1f9cbbacd0b88c05fad49c18ba3"
       proved="true"
       expanded="false"
       shape="ainfix &lt;=ainteger_of_int32V13ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -261,7 +261,7 @@
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
         expl="1."
-        sum="7e7fd0651fb3f08da1bdd74747bbef44"
+        sum="eb3495fd2134b45016d1454eaecfdf1d"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=ainteger_of_int32V10ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -309,7 +309,7 @@
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
         expl="2."
-        sum="7bbbf3aed05dbffff0440165b12e2a14"
+        sum="72715e724f59d67c39696aaad4348f2a"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=ainteger_of_int32V13ainteger_of_int32V9Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9ainteger_of_int32V10FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -351,7 +351,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="5. loop invariant preservation"
-      sum="47caa9f75dcf5c6cb1d8a376ed368973"
+      sum="1b6ea5a5e8ba805fa87ffd2e827f1fdd"
       proved="true"
       expanded="false"
       shape="loop invariant preservationainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V13Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V13Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V11c1FIainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &lt;V16ainteger_of_int32V10Aainfix &lt;=c0V16FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &gt;V17ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V17FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -391,7 +391,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="6. loop invariant preservation"
-      sum="d48b700c9c589c04f1c26a7259756853"
+      sum="f7d36af0bdd692e1f59f4afcb9c3f630"
       proved="true"
       expanded="false"
       shape="loop invariant preservationainfix &lt;=ainteger_of_int32V13ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V13Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0INainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &lt;V16ainteger_of_int32V10Aainfix &lt;=c0V16FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &gt;V17ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V17FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -426,7 +426,7 @@
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
         expl="1."
-        sum="df2169de2c70947409ec3b35b727e1bf"
+        sum="4d004609672f81c3bd3b509fd16df9f7"
         proved="true"
         expanded="false"
         shape="ainfix &gt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &gt;V14ainteger_of_int32V13Aainfix &gt;=ainfix -ainteger_of_int32V2c1V14FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0INainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &lt;V15ainteger_of_int32V10Aainfix &lt;=c0V15FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &gt;V16ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V16FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -458,7 +458,7 @@
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
         expl="2."
-        sum="86787b07dea85980911d58d9373b81dc"
+        sum="858748e17a3a244782c1568b886d83bb"
         proved="true"
         expanded="false"
         shape="ainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0INainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &lt;V15ainteger_of_int32V10Aainfix &lt;=c0V15FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &gt;V16ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V16FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -506,7 +506,7 @@
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
         expl="3."
-        sum="1bb3c7ff1a8ed20d3dea2fe9a2c5fa7c"
+        sum="c8a13fdb3a3dd0a838d48d8c59b18513"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=c0ainteger_of_int32V10Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0INainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -554,7 +554,7 @@
         locfile="../../binary-search-hollas.c"
         loclnum="18" loccnumb="4" loccnume="17"
         expl="4."
-        sum="456830158ae9f6b8612af72244d77ae8"
+        sum="39bfd2a9b6bda24625192ffedb00051b"
         proved="true"
         expanded="false"
         shape="ainfix &lt;=ainteger_of_int32V13ainfix -ainteger_of_int32V2c1Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V11c1FIainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0INainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V11ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V11FIainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V10Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -606,7 +606,7 @@
     locfile="../../binary-search-hollas.c"
     loclnum="18" loccnumb="4" loccnume="17"
     expl="VC for binary_search_ensures_failure"
-    sum="f25eba99afbe3bad05945028ac3bdc6e"
+    sum="ebd3541808667994f79ac36321a2a45a"
     proved="true"
     expanded="false"
     shape="iainfix =ainteger_of_int32V13aprefix -c1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1Fainfix =ainteger_of_int32V18aprefix -c1Iainfix =V18V17FIainfix =V17V16FINainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V16ainteger_of_int32V0INainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V16ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15adivainteger_of_int32V14c2FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V9ainteger_of_int32V10Fainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V19ainteger_of_int32V0Iainfix &lt;V19ainteger_of_int32V10Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V20ainteger_of_int32V0Iainfix &gt;V20ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V20FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0ANainfix =ainteger_of_int32aselectV4ashiftV1V21ainteger_of_int32V0Aainfix &lt;=V21ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V21EF">
@@ -654,7 +654,7 @@
     locfile="../../binary-search-hollas.c"
     loclnum="18" loccnumb="4" loccnume="17"
     expl="VC for binary_search_ensures_success"
-    sum="d0be7c884ffde152ae37ae95eac0082e"
+    sum="05ebcbc776ddcc8a2ca4c2685560cf4d"
     proved="true"
     expanded="false"
     shape="iainfix =ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V13ainteger_of_int32V0Aainfix &gt;=ainteger_of_int32V13c0Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1Fainfix =ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V18ainteger_of_int32V0Aainfix &gt;=ainteger_of_int32V18c0Iainfix =V18V17FIainfix =V17V16FINainfix &gt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V16ainteger_of_int32V0INainfix &lt;ainteger_of_int32aselectV4ashiftV1ainteger_of_int32V16ainteger_of_int32V0Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V9Aainfix &lt;=ainteger_of_int32V10ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15adivainteger_of_int32V14c2FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V9ainteger_of_int32V10Fainfix &lt;=ainteger_of_int32V10ainteger_of_int32V9Iainfix &lt;=ainteger_of_int32V9ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V10Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V19ainteger_of_int32V0Iainfix &lt;V19ainteger_of_int32V10Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V20ainteger_of_int32V0Iainfix &gt;V20ainteger_of_int32V9Aainfix &gt;=ainfix -ainteger_of_int32V2c1V20FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V2c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0Aainfix =ainteger_of_int32aselectV4ashiftV1V21ainteger_of_int32V0Aainfix &lt;=V21ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0V21EF">
@@ -702,7 +702,7 @@
     locfile="../../binary-search-hollas.c"
     loclnum="18" loccnumb="4" loccnume="17"
     expl="VC for binary_search_safety"
-    sum="4956592a5965e600e27d964b891fc9d9"
+    sum="cf95e51cdc93b0a482043a5432b8faa1"
     proved="false"
     expanded="true"
     shape="iainfix &lt;ainfix -ainteger_of_int32V21ainteger_of_int32V11ainfix -ainteger_of_int32V10ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix =V21V20FIainfix =ainteger_of_int32V20V19FAainfix &lt;=V19c2147483647Aainfix &lt;=aprefix -c2147483648V19Lainfix -ainteger_of_int32V16c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV1V18ainteger_of_int32V0Aainfix &lt;=V18aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V18Lainteger_of_int32V16ainfix &lt;ainfix -ainteger_of_int32V10ainteger_of_int32V24ainfix -ainteger_of_int32V10ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix =V24V23FIainfix =ainteger_of_int32V23V22FAainfix &lt;=V22c2147483647Aainfix &lt;=aprefix -c2147483648V22Lainfix +ainteger_of_int32V16c1ainfix &lt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Aainfix &lt;=V17aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FAainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2ANainfix =c2c0Iainfix =ainteger_of_int32V13V12FAainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V25ainteger_of_int32V0Iainfix &lt;V25ainteger_of_int32V11Aainfix &lt;=c0V25FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V26ainteger_of_int32V0Iainfix &gt;V26ainteger_of_int32V10Aainfix &gt;=ainfix -ainteger_of_int32V2c1V26FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FAainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -719,7 +719,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="1. arithmetic overflow"
-      sum="6d5a8a72a1c137516114152b134d5a3b"
+      sum="b73db8f17b3a8b12dabf71f6e4effa02"
       proved="true"
       expanded="false"
       shape="arithmetic overflowainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -765,7 +765,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="2. arithmetic overflow"
-      sum="0571929b4d02daf8992148641fcc5dca"
+      sum="e4f2cda590db5cb002a84f026acf01a8"
       proved="false"
       expanded="true"
       shape="arithmetic overflowainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V13ainteger_of_int32V0Iainfix &lt;V13ainteger_of_int32V11Aainfix &lt;=c0V13FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &gt;V14ainteger_of_int32V10Aainfix &gt;=ainfix -ainteger_of_int32V2c1V14FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -811,7 +811,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="3. division by zero"
-      sum="1a631007f21507669459b4818bfffa3d"
+      sum="f8d295a43c3be3b3fb599dfd26f87db6"
       proved="true"
       expanded="false"
       shape="division by zeroNainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V14ainteger_of_int32V0Iainfix &lt;V14ainteger_of_int32V11Aainfix &lt;=c0V14FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &gt;V15ainteger_of_int32V10Aainfix &gt;=ainfix -ainteger_of_int32V2c1V15FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -857,7 +857,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="4. arithmetic overflow"
-      sum="111d5c7fce9d2b5f6675c37469cefb86"
+      sum="3424dee10ddb2eca4b28c9324a7c3efa"
       proved="true"
       expanded="false"
       shape="arithmetic overflowainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V15ainteger_of_int32V0Iainfix &lt;V15ainteger_of_int32V11Aainfix &lt;=c0V15FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V16ainteger_of_int32V0Iainfix &gt;V16ainteger_of_int32V10Aainfix &gt;=ainfix -ainteger_of_int32V2c1V16FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -903,7 +903,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="5. pointer dereference"
-      sum="189ee9084f5f0579ff40045664567a14"
+      sum="926b30d86f5deef93fcef456c5347acc"
       proved="true"
       expanded="false"
       shape="pointer dereferenceainfix &lt;=V17aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V18ainteger_of_int32V0Iainfix &lt;V18ainteger_of_int32V11Aainfix &lt;=c0V18FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V19ainteger_of_int32V0Iainfix &gt;V19ainteger_of_int32V10Aainfix &gt;=ainfix -ainteger_of_int32V2c1V19FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -949,7 +949,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="6. arithmetic overflow"
-      sum="6f961abf23f864b492aa55591266c1f7"
+      sum="c43b10d4a36b366c639829da92827cc1"
       proved="true"
       expanded="false"
       shape="arithmetic overflowainfix &lt;=V18c2147483647Aainfix &lt;=aprefix -c2147483648V18Lainfix +ainteger_of_int32V16c1Iainfix &lt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &lt;=V17aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V19ainteger_of_int32V0Iainfix &lt;V19ainteger_of_int32V11Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V20ainteger_of_int32V0Iainfix &gt;V20ainteger_of_int32V10Aainfix &gt;=ainfix -ainteger_of_int32V2c1V20FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -995,7 +995,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="7. loop variant decrease"
-      sum="7dd7b32c11d7024e8cd6a88794d2cf3d"
+      sum="0fcfa1ede781fc9da4c3b6cc13263e58"
       proved="true"
       expanded="false"
       shape="loop variant decreaseainfix &lt;ainfix -ainteger_of_int32V10ainteger_of_int32V20ainfix -ainteger_of_int32V10ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix =V20V19FIainfix =ainteger_of_int32V19V18FIainfix &lt;=V18c2147483647Aainfix &lt;=aprefix -c2147483648V18Lainfix +ainteger_of_int32V16c1Iainfix &lt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &lt;=V17aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V21ainteger_of_int32V0Iainfix &lt;V21ainteger_of_int32V11Aainfix &lt;=c0V21FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V22ainteger_of_int32V0Iainfix &gt;V22ainteger_of_int32V10Aainfix &gt;=ainfix -ainteger_of_int32V2c1V22FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -1041,7 +1041,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="8. pointer dereference"
-      sum="6751a1e63397dadc148e81ee72ad477e"
+      sum="9ca77ec91535d9b4b5090f92c7877b89"
       proved="true"
       expanded="false"
       shape="pointer dereferenceainfix &lt;=V18aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V18Lainteger_of_int32V16INainfix &lt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &lt;=V17aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V19ainteger_of_int32V0Iainfix &lt;V19ainteger_of_int32V11Aainfix &lt;=c0V19FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V20ainteger_of_int32V0Iainfix &gt;V20ainteger_of_int32V10Aainfix &gt;=ainfix -ainteger_of_int32V2c1V20FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -1087,7 +1087,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="9. arithmetic overflow"
-      sum="d647afa4e49d3528842feb43ddd570ec"
+      sum="19c6c86128d49f2925f328806df6ce44"
       proved="true"
       expanded="false"
       shape="arithmetic overflowainfix &lt;=V19c2147483647Aainfix &lt;=aprefix -c2147483648V19Lainfix -ainteger_of_int32V16c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV1V18ainteger_of_int32V0Iainfix &lt;=V18aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V18Lainteger_of_int32V16INainfix &lt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &lt;=V17aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V20ainteger_of_int32V0Iainfix &lt;V20ainteger_of_int32V11Aainfix &lt;=c0V20FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V21ainteger_of_int32V0Iainfix &gt;V21ainteger_of_int32V10Aainfix &gt;=ainfix -ainteger_of_int32V2c1V21FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">
@@ -1133,7 +1133,7 @@
       locfile="../../binary-search-hollas.c"
       loclnum="18" loccnumb="4" loccnume="17"
       expl="10. loop variant decrease"
-      sum="f9ad7df515a2eabd2d90c3cc4a6542db"
+      sum="8c72ac88ff3691b51f8c6d21a4a55bae"
       proved="true"
       expanded="false"
       shape="loop variant decreaseainfix &lt;ainfix -ainteger_of_int32V21ainteger_of_int32V11ainfix -ainteger_of_int32V10ainteger_of_int32V11Aainfix &lt;=c0ainfix -ainteger_of_int32V10ainteger_of_int32V11Iainfix =V21V20FIainfix =ainteger_of_int32V20V19FIainfix &lt;=V19c2147483647Aainfix &lt;=aprefix -c2147483648V19Lainfix -ainteger_of_int32V16c1Iainfix &gt;ainteger_of_int32aselectV4ashiftV1V18ainteger_of_int32V0Iainfix &lt;=V18aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V18Lainteger_of_int32V16INainfix &lt;ainteger_of_int32aselectV4ashiftV1V17ainteger_of_int32V0Iainfix &lt;=V17aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V17Lainteger_of_int32V16Iainfix &lt;=ainteger_of_int32V16ainteger_of_int32V10Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15V14FIainfix &lt;=V14c2147483647Aainfix &lt;=aprefix -c2147483648V14Ladivainteger_of_int32V13c2INainfix =c2c0Iainfix =ainteger_of_int32V13V12FIainfix &lt;=V12c2147483647Aainfix &lt;=aprefix -c2147483648V12Lainfix +ainteger_of_int32V10ainteger_of_int32V11Iainfix &lt;=ainteger_of_int32V11ainteger_of_int32V10Iainfix &lt;=ainteger_of_int32V10ainfix -ainteger_of_int32V2c1Aainfix &lt;=c0ainteger_of_int32V11Aainfix &lt;ainteger_of_int32aselectV4ashiftV1V22ainteger_of_int32V0Iainfix &lt;V22ainteger_of_int32V11Aainfix &lt;=c0V22FAainfix &gt;ainteger_of_int32aselectV4ashiftV1V23ainteger_of_int32V0Iainfix &gt;V23ainteger_of_int32V10Aainfix &gt;=ainfix -ainteger_of_int32V2c1V23FFIainfix =V9V8FIainfix =ainteger_of_int32V8V7FIainfix &lt;=V7c2147483647Aainfix &lt;=aprefix -c2147483648V7Lainfix -ainteger_of_int32V2c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIa_SortedV1c0ainfix -ainteger_of_int32V2c1V4Aainfix &gt;=ainteger_of_int32V2c0Aainfix &gt;=aoffset_maxV3V1ainfix -ainteger_of_int32V2c1Aainfix &lt;=aoffset_minV3V1c0F">

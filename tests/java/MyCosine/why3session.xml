@@ -63,7 +63,7 @@
     locfile="../MyCosine.java"
     loclnum="41" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos1_ensures_default"
-    sum="c772ad1f4b68cbd5e2554a9768f59201"
+    sum="738bf313628e6b67e6cc23dfa6f007bb"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -V1acosV0c0x1.p-23Iainfix =V1ainfix -c1.0ainfix *ainfix *V0V0c0.5FAainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.p-24Iainfix &lt;=aabsV0c0x1.p-5F">
@@ -103,7 +103,7 @@
     locfile="../MyCosine.java"
     loclnum="41" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos1_safety"
-    sum="770aaa82ad5b16b80f6196f5669e840e"
+    sum="ed543fe6b84bb1ad31970e772eb77d14"
     proved="true"
     expanded="true"
     shape="t">
@@ -141,7 +141,7 @@
     locfile="../MyCosine.java"
     loclnum="49" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos2_ensures_default"
-    sum="770aaa82ad5b16b80f6196f5669e840e"
+    sum="ed543fe6b84bb1ad31970e772eb77d14"
     proved="true"
     expanded="true"
     shape="t">
@@ -181,7 +181,7 @@
     locfile="../MyCosine.java"
     loclnum="49" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos2_safety"
-    sum="770aaa82ad5b16b80f6196f5669e840e"
+    sum="ed543fe6b84bb1ad31970e772eb77d14"
     proved="true"
     expanded="true"
     shape="t">
@@ -219,7 +219,7 @@
     locfile="../MyCosine.java"
     loclnum="62" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos3_ensures_default"
-    sum="770aaa82ad5b16b80f6196f5669e840e"
+    sum="ed543fe6b84bb1ad31970e772eb77d14"
     proved="true"
     expanded="true"
     shape="t">
@@ -259,7 +259,7 @@
     locfile="../MyCosine.java"
     loclnum="62" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos3_safety"
-    sum="770aaa82ad5b16b80f6196f5669e840e"
+    sum="ed543fe6b84bb1ad31970e772eb77d14"
     proved="true"
     expanded="true"
     shape="t">
@@ -297,7 +297,7 @@
     locfile="../MyCosine.java"
     loclnum="71" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos4_ensures_default"
-    sum="beee3aed1c6465a579d19febbeb39555"
+    sum="08a287d22064aee6c41dae7aac83679c"
     proved="false"
     expanded="true"
     shape="ainfix &lt;=aabsainfix -V1acosV0c0x1.3p-20Iainfix =V1ainfix -c1.0ainfix *ainfix *V0V0c0.5FAainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.2p-20Iainfix &lt;=aabsV0c0.07F">
@@ -337,7 +337,7 @@
     locfile="../MyCosine.java"
     loclnum="71" loccnumb="13" loccnume="20"
     expl="VC for _MyCosine_my_cos4_safety"
-    sum="770aaa82ad5b16b80f6196f5669e840e"
+    sum="ed543fe6b84bb1ad31970e772eb77d14"
     proved="true"
     expanded="true"
     shape="t">
@@ -375,7 +375,7 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_MyCosine_ensures_default"
-    sum="770aaa82ad5b16b80f6196f5669e840e"
+    sum="ed543fe6b84bb1ad31970e772eb77d14"
     proved="true"
     expanded="true"
     shape="t">
@@ -415,7 +415,7 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_MyCosine_safety"
-    sum="770aaa82ad5b16b80f6196f5669e840e"
+    sum="ed543fe6b84bb1ad31970e772eb77d14"
     proved="true"
     expanded="true"
     shape="t">

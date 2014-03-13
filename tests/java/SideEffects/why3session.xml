@@ -47,10 +47,12 @@
     locfile="../SideEffects.java"
     loclnum="38" loccnumb="9" loccnume="11"
     expl="VC for _SideEffects_m1_ensures_default"
-    sum="24beaecb5f9bc726f42856bbcd4ca111"
+    sum="15be1063cc70a9f149c19fd9c81172f8"
     proved="true"
     expanded="true"
     shape="ainfix =V10c0Aainfix =aselectV11ashiftV1c1c4Aainfix =aselectV11ashiftV1c2c2Aainfix =aselectV11ashiftV1c0c1Iainfix =V11astoreV9ashiftV1V8c4FIainfix =V10ainfix -V8c1FAainfix =V8c1Aainfix =aselectV9ashiftV1c1c3Aainfix =aselectV9ashiftV1c2c2Aainfix =aselectV9ashiftV1c0c1Iainfix =V9astoreV7ashiftV1V8c3FIainfix =V8ainfix -V6c1FAainfix =V6c2Aainfix =aselectV7ashiftV1c2c2Aainfix =aselectV7ashiftV1c0c1Iainfix =V7astoreV5ashiftV1V6c2FIainfix =V6ainfix +V4c1FAainfix =V4c1Aainfix =aselectV5ashiftV1c0c1Iainfix =V5astoreV2ashiftV1c0c1FIainfix =V4ainfix +c0c1FIainfix &gt;ainfix +aoffset_maxV3V1c1c10Aavalid_struct_SideEffectsV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method m1, default behavior"/>
     <label
@@ -109,7 +111,7 @@
     locfile="../SideEffects.java"
     loclnum="38" loccnumb="9" loccnume="11"
     expl="VC for _SideEffects_m1_safety"
-    sum="51e31c978e9d67e2ea53a99b8b3f4ff5"
+    sum="e17b35a4009cd0e773b5433aeed67d7c"
     proved="true"
     expanded="true"
     shape="ainfix &lt;=V8aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V8Iainfix =V10ainfix -V8c1FIainfix =V8c1Aainfix =aselectV9ashiftV1c1c3Aainfix =aselectV9ashiftV1c2c2Aainfix =aselectV9ashiftV1c0c1Iainfix =V9astoreV7ashiftV1V8c3FAainfix &lt;=V8aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V8Iainfix =V8ainfix -V6c1FIainfix =V6c2Aainfix =aselectV7ashiftV1c2c2Aainfix =aselectV7ashiftV1c0c1Iainfix =V7astoreV5ashiftV1V6c2FAainfix &lt;=V6aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1V6Iainfix =V6ainfix +V4c1FIainfix =V4c1Aainfix =aselectV5ashiftV1c0c1Iainfix =V5astoreV2ashiftV1c0c1FAainfix &lt;=c0aoffset_maxV3V1Aainfix &lt;=aoffset_minV3V1c0Iainfix =V4ainfix +c0c1FIainfix &gt;ainfix +aoffset_maxV3V1c1c10Aavalid_struct_SideEffectsV0c0c0V3Aaleft_valid_struct_intMV1c0V3FF">
@@ -168,13 +170,15 @@
    </goal>
    <goal
     name="WP_parameter cons_SideEffects_ensures_default"
-    locfile="../../.."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_SideEffects_ensures_default"
-    sum="b625e15e203a160fd2c5d66b697aeab2"
+    sum="bfac2075c39644e07586cee683a31229"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class SideEffects, default behavior"/>
     <label
@@ -230,10 +234,10 @@
    </goal>
    <goal
     name="WP_parameter cons_SideEffects_safety"
-    locfile="../../.."
+    locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_SideEffects_safety"
-    sum="b625e15e203a160fd2c5d66b697aeab2"
+    sum="bfac2075c39644e07586cee683a31229"
     proved="true"
     expanded="true"
     shape="t">

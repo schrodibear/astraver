@@ -30,10 +30,10 @@ FRAMA="bts1251 fresh2 fresh2_sep hollas_floats power strprevchr \
 
 case "$1" in
   "-force")
-        REPLAYOPT="-force"
+        REPLAYOPT="--force"
         ;;
   "-obsolete-only")
-        REPLAYOPT="-obsolete-only -force"
+        REPLAYOPT="--obsolete-only --force"
         ;;
   "")
         REPLAYOPT=""

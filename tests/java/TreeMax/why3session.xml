@@ -35,10 +35,12 @@
     locfile="../TreeMax.java"
     loclnum="63" loccnumb="8" loccnume="16"
     expl="VC for _Tree_tree_max_ensures_default"
-    sum="fdb9582aa91896fd18ea5f95a78c5973"
+    sum="741cf50c40e5373c82ca3994b69e4e5a"
     proved="true"
     expanded="true"
     shape="iiainfix &gt;=ainteger_of_int32V9ainteger_of_int32V10IamemV10V0V4V2V3V1FAamemV9V0V4V2V3V1Iainfix =V9aselectV1V0Fainfix &gt;=ainteger_of_int32V15ainteger_of_int32V16IamemV16V0V4V2V3V1FAamemV15V0V4V2V3V1Iainfix =V15V14FIainfix =V14V13FIainfix =ainteger_of_int32V13amaxainteger_of_int32aselectV1V0ainteger_of_int32V12FIainfix &gt;=ainteger_of_int32V12ainteger_of_int32V17IamemV17V11V4V2V3V1FAamemV12V11V4V2V3V1FLaselectV2V0ainfix =V8aTrueIiainfix =V7anullainfix =aoffset_maxV4V7c0ainfix =V8aTrueFLaselectV2V0iainfix &gt;=ainteger_of_int32V24ainteger_of_int32V25IamemV25V0V4V2V3V1FAamemV24V0V4V2V3V1Iainfix =V24V21Fainfix &gt;=ainteger_of_int32V30ainteger_of_int32V31IamemV31V0V4V2V3V1FAamemV30V0V4V2V3V1Iainfix =V30V29FIainfix =V29V28FIainfix =ainteger_of_int32V28amaxainteger_of_int32V21ainteger_of_int32V27FIainfix &gt;=ainteger_of_int32V27ainteger_of_int32V32IamemV32V26V4V2V3V1FAamemV27V26V4V2V3V1FLaselectV2V0ainfix =V23aTrueIiainfix =V22anullainfix =aoffset_maxV4V22c0ainfix =V23aTrueFLaselectV2V0Iainfix =V21V20FIainfix =ainteger_of_int32V20amaxainteger_of_int32aselectV1V0ainteger_of_int32V19FIainfix &gt;=ainteger_of_int32V19ainteger_of_int32V33IamemV33V18V4V2V3V1FAamemV19V18V4V2V3V1FLaselectV3V0ainfix =V6aTrueIiainfix =V5anullainfix =aoffset_maxV4V5c0ainfix =V6aTrueFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method tree_max, default behavior"/>
     <label
@@ -52,10 +54,12 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="1. postcondition"
-      sum="3c6c38b757d329004e98d5127a22e541"
+      sum="eff46ed8fd442094f8aea0847492f129"
       proved="true"
       expanded="false"
       shape="postconditionainfix &gt;=ainteger_of_int32V17ainteger_of_int32V18IamemV18V0V4V2V3V1FAamemV17V0V4V2V3V1Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15amaxainteger_of_int32V10ainteger_of_int32V14FIainfix &gt;=ainteger_of_int32V14ainteger_of_int32V19IamemV19V13V4V2V3V1FAamemV14V13V4V2V3V1FLaselectV2V0Iainfix =V12aTrueIiainfix =V11anullainfix =aoffset_maxV4V11c0ainfix =V12aTrueFLaselectV2V0Iainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix &gt;=ainteger_of_int32V8ainteger_of_int32V20IamemV20V7V4V2V3V1FAamemV8V7V4V2V3V1FLaselectV3V0Iainfix =V6aTrueIiainfix =V5anullainfix =aoffset_maxV4V5c0ainfix =V6aTrueFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method tree_max, default behavior"/>
       <label
@@ -90,10 +94,12 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="2. postcondition"
-      sum="7072ab086ee20a6ae48d8e5bd9c6bbbc"
+      sum="a216bdc1ecdfbcdb49777566af5e560f"
       proved="true"
       expanded="false"
       shape="postconditionainfix &gt;=ainteger_of_int32V13ainteger_of_int32V14IamemV14V0V4V2V3V1FAamemV13V0V4V2V3V1Iainfix =V13V10FINainfix =V12aTrueIiainfix =V11anullainfix =aoffset_maxV4V11c0ainfix =V12aTrueFLaselectV2V0Iainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix &gt;=ainteger_of_int32V8ainteger_of_int32V15IamemV15V7V4V2V3V1FAamemV8V7V4V2V3V1FLaselectV3V0Iainfix =V6aTrueIiainfix =V5anullainfix =aoffset_maxV4V5c0ainfix =V6aTrueFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method tree_max, default behavior"/>
       <label
@@ -128,10 +134,12 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="3. postcondition"
-      sum="822ec42d9863e21023a7419cd2f8f045"
+      sum="fc6a6f584a0d72ceee5250336051739c"
       proved="true"
       expanded="false"
       shape="postconditionainfix &gt;=ainteger_of_int32V13ainteger_of_int32V14IamemV14V0V4V2V3V1FAamemV13V0V4V2V3V1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32aselectV1V0ainteger_of_int32V10FIainfix &gt;=ainteger_of_int32V10ainteger_of_int32V15IamemV15V9V4V2V3V1FAamemV10V9V4V2V3V1FLaselectV2V0Iainfix =V8aTrueIiainfix =V7anullainfix =aoffset_maxV4V7c0ainfix =V8aTrueFLaselectV2V0INainfix =V6aTrueIiainfix =V5anullainfix =aoffset_maxV4V5c0ainfix =V6aTrueFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method tree_max, default behavior"/>
       <label
@@ -166,10 +174,12 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="4. postcondition"
-      sum="17cf5c1ccd42a7a0abb830a0bc4f9892"
+      sum="a6be71060084636457377ee359ed4313"
       proved="true"
       expanded="false"
       shape="postconditionainfix &gt;=ainteger_of_int32V9ainteger_of_int32V10IamemV10V0V4V2V3V1FAamemV9V0V4V2V3V1Iainfix =V9aselectV1V0FINainfix =V8aTrueIiainfix =V7anullainfix =aoffset_maxV4V7c0ainfix =V8aTrueFLaselectV2V0INainfix =V6aTrueIiainfix =V5anullainfix =aoffset_maxV4V5c0ainfix =V6aTrueFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method tree_max, default behavior"/>
       <label
@@ -190,10 +200,12 @@
     locfile="../TreeMax.java"
     loclnum="63" loccnumb="8" loccnume="16"
     expl="VC for _Tree_tree_max_safety"
-    sum="0b50de21ed436276851c99794552d3b1"
+    sum="7fa20788b2906e30225b61b59133fc8c"
     proved="true"
     expanded="true"
     shape="iainfix &gt;=aoffset_maxV4aselectV2V0c0Iainfix =V8aTrueIiainfix =V7anullainfix =aoffset_maxV4V7c0ainfix =V8aTrueFLaselectV2V0ainfix &gt;=aoffset_maxV4aselectV2V0c0Iainfix =V14aTrueIiainfix =V13anullainfix =aoffset_maxV4V13c0ainfix =V14aTrueFLaselectV2V0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32aselectV1V0ainteger_of_int32V10FIainfix &gt;=ainteger_of_int32V10ainteger_of_int32V15IamemV15V9V4V2V3V1FAamemV10V9V4V2V3V1FAainfix &gt;=aoffset_maxV4V9c0LaselectV3V0ainfix =V6aTrueIiainfix =V5anullainfix =aoffset_maxV4V5c0ainfix =V6aTrueFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Method tree_max, Safety"/>
     <label
@@ -207,10 +219,12 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="1. assertion"
-      sum="bdc23f9de210e0168f4b6ed5f5fec44c"
+      sum="44eee35d319f19df6854becab1300507"
       proved="true"
       expanded="false"
       shape="assertionainfix &gt;=aoffset_maxV4V7c0LaselectV3V0Iainfix =V6aTrueIiainfix =V5anullainfix =aoffset_maxV4V5c0ainfix =V6aTrueFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method tree_max, Safety"/>
       <label
@@ -229,10 +243,12 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="2. index bounds"
-      sum="a12d4882e4bcbfce034bb009fd57696d"
+      sum="6311e40e52cbda05b46075b0ad541b4c"
       proved="true"
       expanded="false"
       shape="index boundsainfix &gt;=aoffset_maxV4aselectV2V0c0Iainfix =V12aTrueIiainfix =V11anullainfix =aoffset_maxV4V11c0ainfix =V12aTrueFLaselectV2V0Iainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix &gt;=ainteger_of_int32V8ainteger_of_int32V13IamemV13V7V4V2V3V1FAamemV8V7V4V2V3V1FIainfix &gt;=aoffset_maxV4V7c0LaselectV3V0Iainfix =V6aTrueIiainfix =V5anullainfix =aoffset_maxV4V5c0ainfix =V6aTrueFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method tree_max, Safety"/>
       <label
@@ -251,10 +267,12 @@
       locfile="../TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="3. index bounds"
-      sum="f273c8b4309011a970cd4a9dff26c3cb"
+      sum="557917a868c4325dea0ec2c8c5d46f9e"
       proved="true"
       expanded="false"
       shape="index boundsainfix &gt;=aoffset_maxV4aselectV2V0c0Iainfix =V8aTrueIiainfix =V7anullainfix =aoffset_maxV4V7c0ainfix =V8aTrueFLaselectV2V0INainfix =V6aTrueIiainfix =V5anullainfix =aoffset_maxV4V5c0ainfix =V6aTrueFLaselectV3V0Iavalid_struct_TreeV0c0c0V4FF">
+      <label
+       name="W:diverges:N"/>
       <label
        name="expl:Method tree_max, Safety"/>
       <label
@@ -275,10 +293,12 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Int_ensures_default"
-    sum="0f8db258d75e1d310a7aaf1b59eebb60"
+    sum="eb19239e9f82f5306896e905ef505eca"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Int, default behavior"/>
     <label
@@ -297,10 +317,12 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Int_safety"
-    sum="0f8db258d75e1d310a7aaf1b59eebb60"
+    sum="eb19239e9f82f5306896e905ef505eca"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Int, Safety"/>
     <label
@@ -319,10 +341,12 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_ensures_default"
-    sum="0f8db258d75e1d310a7aaf1b59eebb60"
+    sum="eb19239e9f82f5306896e905ef505eca"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Object, default behavior"/>
     <label
@@ -341,10 +365,12 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Object_safety"
-    sum="0f8db258d75e1d310a7aaf1b59eebb60"
+    sum="eb19239e9f82f5306896e905ef505eca"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Object, Safety"/>
     <label
@@ -363,10 +389,12 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Tree_ensures_default"
-    sum="0f8db258d75e1d310a7aaf1b59eebb60"
+    sum="eb19239e9f82f5306896e905ef505eca"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Tree, default behavior"/>
     <label
@@ -385,10 +413,12 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Tree_safety"
-    sum="0f8db258d75e1d310a7aaf1b59eebb60"
+    sum="eb19239e9f82f5306896e905ef505eca"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="W:diverges:N"/>
     <label
      name="expl:Constructor of class Tree, Safety"/>
     <label

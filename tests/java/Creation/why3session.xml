@@ -43,7 +43,7 @@
     locfile="../Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
     expl="VC for _Creation_test1_ensures_default"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">
@@ -99,7 +99,7 @@
     locfile="../Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
     expl="VC for _Creation_test1_ensures_normal"
-    sum="023ef63d04b6d5fb3f8adf2df993d2d1"
+    sum="2beb4aac722a044c86d19a50794341c2"
     proved="true"
     expanded="false"
     shape="ainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
@@ -155,7 +155,7 @@
     locfile="../Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
     expl="VC for _Creation_test1_safety"
-    sum="a72f1bc9f94e7a89d87348f1e44f2ca4"
+    sum="eaaa559fc5870e43da79d9c924af29a0"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FAainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFAainfix &gt;=c1c0F">
@@ -209,7 +209,7 @@
     locfile="../Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
     expl="VC for _Creation_test2_ensures_default"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">
@@ -265,7 +265,7 @@
     locfile="../Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
     expl="VC for _Creation_test2_ensures_normal"
-    sum="180ace62ca4a613080a82eb2b2b6fa6a"
+    sum="19129a53b07accf6b22214f0fea26d82"
     proved="true"
     expanded="false"
     shape="ainfix =V6c0Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
@@ -321,7 +321,7 @@
     locfile="../Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
     expl="VC for _Creation_test2_safety"
-    sum="a06cda4d7fdf255a391396ed8749f495"
+    sum="dfae4493f2e785665ec15a62537bf19b"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FAainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFAainfix &gt;=c1c0F">
@@ -375,7 +375,7 @@
     locfile="../Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
     expl="VC for _Creation_test3_ensures_default"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">
@@ -431,7 +431,7 @@
     locfile="../Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
     expl="VC for _Creation_test3_ensures_normal"
-    sum="d9f5620835e2eefe94136c80b915cb9e"
+    sum="649a556459a81374a7fa2dc6c74a6884"
     proved="true"
     expanded="false"
     shape="anot_assignsV0V1V5apset_emptyAainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
@@ -458,7 +458,7 @@
       locfile="../Creation.java"
       loclnum="82" loccnumb="22" loccnume="27"
       expl="1. postcondition"
-      sum="d9f5620835e2eefe94136c80b915cb9e"
+      sum="649a556459a81374a7fa2dc6c74a6884"
       proved="true"
       expanded="false"
       shape="postconditionanot_assignsV0V1V5apset_emptyAainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
@@ -477,7 +477,7 @@
         locfile="../Creation.java"
         loclnum="82" loccnumb="22" loccnume="27"
         expl="1."
-        sum="a44e0dc2caa1512f0049ce89f41381e9"
+        sum="0de420440611ce0f60da099879c40923"
         proved="true"
         expanded="false"
         shape="ainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
@@ -533,7 +533,7 @@
         locfile="../Creation.java"
         loclnum="82" loccnumb="22" loccnume="27"
         expl="2."
-        sum="34c7abb8a4f3db28166162c7a294c97c"
+        sum="a918cc8dce0256ae248e70826fde70a3"
         proved="true"
         expanded="false"
         shape="anot_assignsV0V1V5apset_emptyIainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFF">
@@ -569,7 +569,7 @@
     locfile="../Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
     expl="VC for _Creation_test3_safety"
-    sum="7fd5860dc78657c96155204b53bde31a"
+    sum="e583831ed75d73449dd185764bdbdf7b"
     proved="true"
     expanded="false"
     shape="ainfix &lt;=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FAainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFAainfix &gt;=c1c0F">
@@ -623,7 +623,7 @@
     locfile="../Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="VC for cons_Creation_ensures_default"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">
@@ -679,7 +679,7 @@
     locfile="../Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="VC for cons_Creation_ensures_normal"
-    sum="b33a56df6fe78529137f96a4f90b400c"
+    sum="a56c02c32ea4bdb2eda4ed35f68e768c"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V4apset_singletonV0Aainfix =aselectV4V0c0Ianot_assignsV1V3V4apset_singletonV0Aainfix =aselectV4V0c0FIainfix =V3astoreV2V0c0FIavalid_struct_CreationV0c0c0V1FF">
@@ -735,7 +735,7 @@
     locfile="../Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="VC for cons_Creation_int_ensures_default"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">
@@ -791,7 +791,7 @@
     locfile="../Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="VC for cons_Creation_int_ensures_normal"
-    sum="714aa3cb04b10280f36afa95dabbc528"
+    sum="43f56d793dcbdfa8a933abfe3711e8d6"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V3V5apset_singletonV0Aainfix =aselectV5V0V1Iainfix =V5astoreV4V0V1FIainfix =V4astoreV3V0c0FIavalid_struct_CreationV0c0c0V2FF">
@@ -847,7 +847,7 @@
     locfile="../Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="VC for cons_Creation_int_int_ensures_default"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">
@@ -903,7 +903,7 @@
     locfile="../Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="VC for cons_Creation_int_int_ensures_normal"
-    sum="155871db2fe277dbe64cbe21ce1f88fe"
+    sum="fa496602a81d0bc7841141733c7bec99"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V4V6apset_singletonV0Aainfix =aselectV6V0ainfix +V1V2Ianot_assignsV3V5V6apset_singletonV0Aainfix =aselectV6V0ainfix +V1V2FIainfix =V5astoreV4V0c0FIavalid_struct_CreationV0c0c0V3FF">
@@ -959,7 +959,7 @@
     locfile="../Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="VC for cons_Creation_int_int_safety"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">
@@ -1013,7 +1013,7 @@
     locfile="../Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="VC for cons_Creation_int_safety"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">
@@ -1067,7 +1067,7 @@
     locfile="../Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="VC for cons_Creation_safety"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">
@@ -1121,7 +1121,7 @@
     locfile="../Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
     expl="VC for cons_TestSuperConstructor_ensures_default"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">
@@ -1177,7 +1177,7 @@
     locfile="../Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
     expl="VC for cons_TestSuperConstructor_ensures_normal"
-    sum="8f67aa079625ff3fa6c3b302bbc18b7e"
+    sum="0a6d02e6c8e4aadfebbdef47167d3f33"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12Ianot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12FIavalid_struct_TestSuperConstructorV0c0c0V1FF">
@@ -1233,7 +1233,7 @@
     locfile="../Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
     expl="VC for cons_TestSuperConstructor_safety"
-    sum="de71b55be3f28be721bc10143f330772"
+    sum="db6677b6e2516ee0ccf47d98924c0905"
     proved="true"
     expanded="false"
     shape="t">

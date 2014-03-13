@@ -35,7 +35,7 @@
     locfile="../Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
     expl="VC for _Counter_decrement_ensures_default"
-    sum="671afc8f70ba5bb7ea24f590d672dfe7"
+    sum="5e30fe6c8de3267d50ee833bb5ab169e"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V4V1ainfix -avalueV0V2V1c1Iainfix =V4astoreV2V0ainfix +aselectV2V0c1FIavalid_struct_CounterV0c0c0V3FF">
@@ -75,7 +75,7 @@
     locfile="../Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
     expl="VC for _Counter_decrement_safety"
-    sum="e9573492361fc5d855ee3d68863dbd86"
+    sum="806ec646c64a6fadd7ed57618a74b6d2"
     proved="true"
     expanded="true"
     shape="t">
@@ -113,7 +113,7 @@
     locfile="../Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
     expl="VC for _Counter_increment_ensures_default"
-    sum="b497e7efa85f4dffea010cdb34dd8da6"
+    sum="2550cae3ac9ca46894f96a19efc6c42d"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FF">
@@ -153,7 +153,7 @@
     locfile="../Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
     expl="VC for _Counter_increment_safety"
-    sum="e9573492361fc5d855ee3d68863dbd86"
+    sum="806ec646c64a6fadd7ed57618a74b6d2"
     proved="true"
     expanded="true"
     shape="t">
@@ -191,7 +191,7 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Counter_ensures_default"
-    sum="e9573492361fc5d855ee3d68863dbd86"
+    sum="806ec646c64a6fadd7ed57618a74b6d2"
     proved="true"
     expanded="true"
     shape="t">
@@ -231,7 +231,7 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Counter_safety"
-    sum="e9573492361fc5d855ee3d68863dbd86"
+    sum="806ec646c64a6fadd7ed57618a74b6d2"
     proved="true"
     expanded="true"
     shape="t">

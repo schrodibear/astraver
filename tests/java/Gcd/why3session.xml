@@ -354,7 +354,7 @@
      edited="Gcd_Jessie_model_gcd_property_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.24"/>
+     <result status="valid" time="1.31"/>
     </proof>
    </goal>
   </theory>
@@ -369,7 +369,7 @@
     locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="VC for _Gcd_gcd_ensures_bezoutProperty"
-    sum="3ae162644f99f23be12ce292d2372e4d"
+    sum="240671e3c7731147a73a5081f320a6a9"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix +ainfix *V9V0ainfix *V10V1V8EEIainfix =V8V7FINainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V11IaisGcdV7V6V11FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
@@ -393,7 +393,7 @@
     locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="VC for _Gcd_gcd_ensures_default"
-    sum="a0c42c5adfe42bfb6c1a081215557194"
+    sum="a15598ec8684fcf1446d99ea28634d0b"
     proved="true"
     expanded="false"
     shape="ainfix =ainfix +ainfix *V13V0ainfix *V14V1V10Aainfix =ainfix +ainfix *V11V0ainfix *V12V1V9AaisGcdV0V1V15IaisGcdV9V10V15FAainfix &gt;=V10c0Aainfix &gt;=V9c0Iainfix =V14ainfix -V4ainfix *V2V8FIainfix =V13ainfix -V5ainfix *V3V8FIainfix =V12V2FIainfix =V11V3FIainfix =V10amodV7V6FIainfix =V9V6FLadivV7V6Iainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V16IaisGcdV7V6V16FAainfix &gt;=V6c0Aainfix &gt;=V7c0FAainfix =ainfix +ainfix *c0V0ainfix *c1V1V1Aainfix =ainfix +ainfix *c1V0ainfix *c0V1V0Aainfix &gt;=V1c0Aainfix &gt;=V0c0Iainfix &gt;=V1c0Aainfix &gt;=V0c0F">
@@ -417,7 +417,7 @@
     locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="VC for _Gcd_gcd_ensures_resultIsGcd"
-    sum="c201c291564f64699a0f8ca928471f31"
+    sum="302605f110aa3043f05f93bc141dc4d4"
     proved="true"
     expanded="false"
     shape="aisGcdV0V1V8Iainfix =V8V7FINainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V9IaisGcdV7V6V9FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
@@ -449,7 +449,7 @@
     locfile="../Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="VC for _Gcd_gcd_safety"
-    sum="3120eb80a5c48ab2b88a24c9bc7b6e5a"
+    sum="c40a6c3b373908c67479bf08e8f535d9"
     proved="true"
     expanded="false"
     shape="ainfix &lt;V10V6Aainfix &lt;=c0V6Iainfix =V14ainfix -V4ainfix *V2V8FIainfix =V13ainfix -V5ainfix *V3V8FIainfix =V12V2FIainfix =V11V3FIainfix =V10amodV7V6FIainfix =V9V6FLadivV7V6ANainfix =V6c0ANainfix =V6c0Iainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix &gt;=V6c0Aainfix &gt;=V7c0FIainfix &gt;=V1c0Aainfix &gt;=V0c0F">
@@ -487,7 +487,7 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Gcd_ensures_default"
-    sum="3db70668c2a4fcd60444d3a13de029e7"
+    sum="223e3d52cfdc0b835fc0a5d7aff6ca19"
     proved="true"
     expanded="false"
     shape="t">
@@ -527,7 +527,7 @@
     locfile=".."
     loclnum="0" loccnumb="0" loccnume="0"
     expl="VC for cons_Gcd_safety"
-    sum="3db70668c2a4fcd60444d3a13de029e7"
+    sum="223e3d52cfdc0b835fc0a5d7aff6ca19"
     proved="true"
     expanded="false"
     shape="t">

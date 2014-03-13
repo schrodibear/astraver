@@ -55,7 +55,7 @@
     locfile="../../interval_arith.c"
     loclnum="156" loccnumb="5" loccnume="8"
     expl="VC for add_ensures_default"
-    sum="9c4f19e11c9de92305c0b48a3964fc15"
+    sum="62300dd5ab571ef12881df42ea84cafd"
     proved="true"
     expanded="false"
     shape="ain_intervalainfix +V10V11V5V9Iain_intervalV11V2V3Aain_intervalV10V0V1FFAais_intervalV5V9Iainfix =V9V8FIaneg_postV7V8FIasub_postaDownV6V3V7FIaneg_postV1V6FIainfix =V5V4FIaadd_postaDownV0V2V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -74,7 +74,7 @@
       locfile="../../interval_arith.c"
       loclnum="156" loccnumb="5" loccnume="8"
       expl="1. postcondition"
-      sum="9c4f19e11c9de92305c0b48a3964fc15"
+      sum="62300dd5ab571ef12881df42ea84cafd"
       proved="true"
       expanded="false"
       shape="postconditionain_intervalainfix +V10V11V5V9Iain_intervalV11V2V3Aain_intervalV10V0V1FFAais_intervalV5V9Iainfix =V9V8FIaneg_postV7V8FIasub_postaDownV6V3V7FIaneg_postV1V6FIainfix =V5V4FIaadd_postaDownV0V2V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -93,7 +93,7 @@
         locfile="../../interval_arith.c"
         loclnum="156" loccnumb="5" loccnume="8"
         expl="1."
-        sum="e069fd3320eecf8812ab72c42af384e8"
+        sum="762155bcb3dfd830dc286977e97226af"
         proved="true"
         expanded="false"
         shape="ais_intervalV5V9Iainfix =V9V8FIaneg_postV7V8FIasub_postaDownV6V3V7FIaneg_postV1V6FIainfix =V5V4FIaadd_postaDownV0V2V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -125,7 +125,7 @@
         locfile="../../interval_arith.c"
         loclnum="156" loccnumb="5" loccnume="8"
         expl="2."
-        sum="f4be66a5d66764f3f3b5ad110f6ab8b5"
+        sum="d94f3ec3c22cdd2b593c81254fddcd44"
         proved="true"
         expanded="false"
         shape="ain_intervalainfix +V10V11V5V9Iain_intervalV11V2V3Aain_intervalV10V0V1FFIainfix =V9V8FIaneg_postV7V8FIasub_postaDownV6V3V7FIaneg_postV1V6FIainfix =V5V4FIaadd_postaDownV0V2V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -153,7 +153,7 @@
     locfile="../../interval_arith.c"
     loclnum="156" loccnumb="5" loccnume="8"
     expl="VC for add_safety"
-    sum="ebee12d198563b03a5359621d0e77325"
+    sum="ab607a4626d4229348f8b9164b3b1d74"
     proved="true"
     expanded="false"
     shape="t">
@@ -231,7 +231,7 @@
     locfile="../../interval_arith.c"
     loclnum="19" loccnumb="7" loccnume="10"
     expl="VC for max_ensures_default"
-    sum="dec97b3f45831a8ce34507f23f11ac57"
+    sum="121868f9f29393994977219cf228d60e"
     proved="true"
     expanded="false"
     shape="iaeqV4V1OaeqV4V0AaleV1V4AaleV0V4Iainfix =V4V3FIainfix =V3V1FaeqV6V1OaeqV6V0AaleV1V6AaleV0V6Iainfix =V6V5FIainfix =V5V0Fainfix =V2aTrueIiNagtV0V1agtV0V1ainfix =V2aTrueFINais_NaNV1ANais_NaNV0F">
@@ -279,7 +279,7 @@
     locfile="../../interval_arith.c"
     loclnum="19" loccnumb="7" loccnume="10"
     expl="VC for max_safety"
-    sum="ebee12d198563b03a5359621d0e77325"
+    sum="ab607a4626d4229348f8b9164b3b1d74"
     proved="true"
     expanded="false"
     shape="t">
@@ -357,7 +357,7 @@
     locfile="../../interval_arith.c"
     loclnum="9" loccnumb="7" loccnume="10"
     expl="VC for min_ensures_default"
-    sum="4669727405fe8fb061f65892ffe2548c"
+    sum="bfaabed9391dd566661e5e6a9b470bcd"
     proved="true"
     expanded="false"
     shape="iaeqV4V1OaeqV4V0AaleV4V1AaleV4V0Iainfix =V4V3FIainfix =V3V1FaeqV6V1OaeqV6V0AaleV6V1AaleV6V0Iainfix =V6V5FIainfix =V5V0Fainfix =V2aTrueIiNaltV0V1altV0V1ainfix =V2aTrueFINais_NaNV1ANais_NaNV0F">
@@ -405,7 +405,7 @@
     locfile="../../interval_arith.c"
     loclnum="9" loccnumb="7" loccnume="10"
     expl="VC for min_safety"
-    sum="ebee12d198563b03a5359621d0e77325"
+    sum="ab607a4626d4229348f8b9164b3b1d74"
     proved="true"
     expanded="false"
     shape="t">
@@ -483,7 +483,7 @@
     locfile="../../interval_arith.c"
     loclnum="49" loccnumb="7" loccnume="13"
     expl="VC for mul_dn_ensures_default"
-    sum="21921281396cd2613b41c71ec253f053"
+    sum="f1ffd55fb4b7a7c532c2bade46c10b24"
     proved="true"
     expanded="false"
     shape="adouble_le_realV4ainfix *avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIamul_postaDownV0V1V2FINainfix =avalueV0c0.0Iais_infiniteV1Aais_finiteV0ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aadif_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -502,7 +502,7 @@
       locfile="../../interval_arith.c"
       loclnum="49" loccnumb="7" loccnume="13"
       expl="1."
-      sum="df4f4772baed0a587ae4f5409c9ed24e"
+      sum="4df5f99298e98b7cec031643564f6d61"
       proved="true"
       expanded="false"
       shape="ais_minus_infinityV4Oainfix &lt;=avalueV4ainfix *avalueV0avalueV1Aais_finiteV4Iainfix =V4V3FIainfix =V3V2FIainfix =amodelV2ainfix *amodelV0amodelV1Aainfix =aexactV2ainfix *aexactV0aexactV1Aaproduct_signV2V0V1Aaoverflow_valueaDownV2INano_overflowaDownainfix *avalueV0avalueV1Aais_finiteV1Aais_finiteV0Aainfix =avalueV2aroundaDownainfix *avalueV0avalueV1Aais_finiteV2Iano_overflowaDownainfix *avalueV0avalueV1Aais_finiteV1Aais_finiteV0Aais_infiniteV2Iais_infiniteV1Aais_infiniteV0Aais_infiniteV2INainfix =avalueV1c0.0Aais_finiteV1Aais_infiniteV0Aais_NaNV2Iais_gen_zeroV1Aais_infiniteV0Aais_infiniteV2INainfix =avalueV0c0.0Aais_infiniteV1Aais_finiteV0Aais_NaNV2Iais_infiniteV1Aais_gen_zeroV0Aais_NaNV2Iais_NaNV1Oais_NaNV0FINainfix =avalueV0c0.0Iainfix =aclassV1aInfiniteAainfix =aclassV0aFiniteANainfix =avalueV1c0.0Iainfix =aclassV1aFiniteAainfix =aclassV0aInfiniteANainfix =asignV0asignV1Iainfix =aclassV1aInfiniteOainfix =aclassV0aInfiniteANainfix =aclassV1aNaNANainfix =aclassV0aNaNF">
@@ -521,7 +521,7 @@
         locfile="../../interval_arith.c"
         loclnum="49" loccnumb="7" loccnume="13"
         expl="1."
-        sum="fccd2029a61facda227cc0ffb3b88a12"
+        sum="d012250c7177d9c75a5817333b558e87"
         proved="true"
         expanded="false"
         shape="ainfix =asignV4aNegAais_infiniteV4Oainfix =avalueV4ainfix *avalueV0avalueV1Oainfix &lt;avalueV4ainfix *avalueV0avalueV1Aainfix =aclassV4aFiniteIainfix =V4V3FIainfix =V3V2FIainfix =amodelV2ainfix *amodelV0amodelV1Aainfix =aexactV2ainfix *aexactV0aexactV1Aainfix =asignV2aNegIadiff_signV0V1Aainfix =asignV2aPosIasame_signV0V1ACais_infiniteV2aTuple2aDownaNegainfix =avalueV2amax_doubleAais_finiteV2aTuple2aDownaPosainfix =avalueV2aprefix -amax_doubleAais_finiteV2aTuple2aUpaNegais_infiniteV2aTuple2aUpaPosainfix =avalueV2aprefix -amax_doubleAais_finiteV2aTuple2aToZeroaNegainfix =avalueV2amax_doubleAais_finiteV2aTuple2aToZeroaPosais_infiniteV2aTuple2aNearestTiesToEvenOaNearestTiesToAwaywaTuple2aDownasignV2INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV1amax_doubleAainfix =aclassV1aFiniteAainfix =aclassV0aFiniteAainfix =avalueV2aroundaDownainfix *avalueV0avalueV1Aainfix =aclassV2aFiniteIainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV1amax_doubleAainfix =aclassV1aFiniteAainfix =aclassV0aFiniteAainfix =aclassV2aInfiniteIainfix =aclassV1aInfiniteAainfix =aclassV0aInfiniteAainfix =aclassV2aInfiniteINainfix =avalueV1c0.0Aainfix =aclassV1aFiniteAainfix =aclassV0aInfiniteAainfix =aclassV2aNaNIainfix =avalueV1c0.0Aais_finiteV1Aainfix =aclassV0aInfiniteAainfix =aclassV2aInfiniteINainfix =avalueV0c0.0Aainfix =aclassV1aInfiniteAainfix =aclassV0aFiniteAainfix =aclassV2aNaNIainfix =aclassV1aInfiniteAainfix =avalueV0c0.0Aais_finiteV0Aainfix =aclassV2aNaNIainfix =aclassV1aNaNOainfix =aclassV0aNaNFINainfix =avalueV0c0.0Iainfix =aclassV1aInfiniteAainfix =aclassV0aFiniteANainfix =avalueV1c0.0Iainfix =aclassV1aFiniteAainfix =aclassV0aInfiniteANainfix =asignV0asignV1Iainfix =aclassV1aInfiniteOainfix =aclassV0aInfiniteANainfix =aclassV1aNaNANainfix =aclassV0aNaNF">
@@ -540,7 +540,7 @@
           locfile="../../interval_arith.c"
           loclnum="49" loccnumb="7" loccnume="13"
           expl="1. postcondition"
-          sum="fccd2029a61facda227cc0ffb3b88a12"
+          sum="d012250c7177d9c75a5817333b558e87"
           proved="true"
           expanded="false"
           shape="postconditionainfix =asignV4aNegAais_infiniteV4Oainfix =avalueV4ainfix *avalueV0avalueV1Oainfix &lt;avalueV4ainfix *avalueV0avalueV1Aainfix =aclassV4aFiniteIainfix =V4V3FIainfix =V3V2FIainfix =amodelV2ainfix *amodelV0amodelV1Aainfix =aexactV2ainfix *aexactV0aexactV1Aainfix =asignV2aNegIadiff_signV0V1Aainfix =asignV2aPosIasame_signV0V1ACais_infiniteV2aTuple2aDownaNegainfix =avalueV2amax_doubleAais_finiteV2aTuple2aDownaPosainfix =avalueV2aprefix -amax_doubleAais_finiteV2aTuple2aUpaNegais_infiniteV2aTuple2aUpaPosainfix =avalueV2aprefix -amax_doubleAais_finiteV2aTuple2aToZeroaNegainfix =avalueV2amax_doubleAais_finiteV2aTuple2aToZeroaPosais_infiniteV2aTuple2aNearestTiesToEvenOaNearestTiesToAwaywaTuple2aDownasignV2INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV1amax_doubleAainfix =aclassV1aFiniteAainfix =aclassV0aFiniteAainfix =avalueV2aroundaDownainfix *avalueV0avalueV1Aainfix =aclassV2aFiniteIainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV1amax_doubleAainfix =aclassV1aFiniteAainfix =aclassV0aFiniteAainfix =aclassV2aInfiniteIainfix =aclassV1aInfiniteAainfix =aclassV0aInfiniteAainfix =aclassV2aInfiniteINainfix =avalueV1c0.0Aainfix =aclassV1aFiniteAainfix =aclassV0aInfiniteAainfix =aclassV2aNaNIainfix =avalueV1c0.0Aais_finiteV1Aainfix =aclassV0aInfiniteAainfix =aclassV2aInfiniteINainfix =avalueV0c0.0Aainfix =aclassV1aInfiniteAainfix =aclassV0aFiniteAainfix =aclassV2aNaNIainfix =aclassV1aInfiniteAainfix =avalueV0c0.0Aais_finiteV0Aainfix =aclassV2aNaNIainfix =aclassV1aNaNOainfix =aclassV0aNaNFINainfix =avalueV0c0.0Iainfix =aclassV1aInfiniteAainfix =aclassV0aFiniteANainfix =avalueV1c0.0Iainfix =aclassV1aFiniteAainfix =aclassV0aInfiniteANainfix =asignV0asignV1Iainfix =aclassV1aInfiniteOainfix =aclassV0aInfiniteANainfix =aclassV1aNaNANainfix =aclassV0aNaNF">
@@ -586,7 +586,7 @@
     locfile="../../interval_arith.c"
     loclnum="49" loccnumb="7" loccnume="13"
     expl="VC for mul_dn_safety"
-    sum="ebee12d198563b03a5359621d0e77325"
+    sum="ab607a4626d4229348f8b9164b3b1d74"
     proved="true"
     expanded="false"
     shape="t">
@@ -664,7 +664,7 @@
     locfile="../../interval_arith.c"
     loclnum="202" loccnumb="5" loccnume="8"
     expl="VC for mul_ensures_default"
-    sum="144a739348ef099dabc6140f96da9fa2"
+    sum="5b3e7d1de94436a94b55acbdd48dd567"
     proved="false"
     expanded="true"
     shape="iiain_intervalainfix *V12V13V9V11Iain_intervalV13V2V3Aain_intervalV12V0V1FFAais_intervalV9V11Iainfix =V11V10FIaof_real_exact_postc0.0V10FIainfix =V9V8FIaof_real_exact_postc0.0V8Fiiain_intervalainfix *V22V23V19V21Iain_intervalV23V2V3Aain_intervalV22V0V1FFAais_intervalV19V21Iainfix =V21V20FIaof_real_exact_postc0.0V20FIainfix =V19V18FIaof_real_exact_postc0.0V18Fain_intervalainfix *V28V29V25V27Iain_intervalV29V2V3Aain_intervalV28V0V1FFAais_intervalV25V27Iainfix =V27V26FIareal_le_doubleainfix *avalueV1avalueV3V26FIainfix =V25V24FIadouble_le_realV24ainfix *avalueV0avalueV2Fainfix =V17aTrueIiNagtV3V16agtV3V16ainfix =V17aTrueFIaof_real_exact_postc0.0V16Fiain_intervalainfix *V36V37V33V35Iain_intervalV37V2V3Aain_intervalV36V0V1FFAais_intervalV33V35Iainfix =V35V34FIareal_le_doubleainfix *avalueV0avalueV3V34FIainfix =V33V32FIadouble_le_realV32ainfix *avalueV1avalueV2Fain_intervalainfix *V42V43V39V41Iain_intervalV43V2V3Aain_intervalV42V0V1FFAais_intervalV39V41Iainfix =V41V40FIareal_le_doubleainfix *avalueV1avalueV3V40FIainfix =V39V38FIadouble_le_realV38ainfix *avalueV1avalueV2Fainfix =V31aTrueIiNagtV3V30agtV3V30ainfix =V31aTrueFIaof_real_exact_postc0.0V30Fainfix =V15aTrueIiNaltV2V14altV2V14ainfix =V15aTrueFIaof_real_exact_postc0.0V14Fainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6Fiiiain_intervalainfix *V54V55V51V53Iain_intervalV55V2V3Aain_intervalV54V0V1FFAais_intervalV51V53Iainfix =V53V52FIaof_real_exact_postc0.0V52FIainfix =V51V50FIaof_real_exact_postc0.0V50Fain_intervalainfix *V60V61V57V59Iain_intervalV61V2V3Aain_intervalV60V0V1FFAais_intervalV57V59Iainfix =V59V58FIareal_le_doubleainfix *avalueV1avalueV2V58FIainfix =V57V56FIadouble_le_realV56ainfix *avalueV0avalueV3Fainfix =V49aTrueIiNagtV3V48agtV3V48ainfix =V49aTrueFIaof_real_exact_postc0.0V48Fiain_intervalainfix *V68V69V65V67Iain_intervalV69V2V3Aain_intervalV68V0V1FFAais_intervalV65V67Iainfix =V67V66FIareal_le_doubleainfix *avalueV0avalueV2V66FIainfix =V65V64FIadouble_le_realV64ainfix *avalueV1avalueV3Fain_intervalainfix *V74V75V71V73Iain_intervalV75V2V3Aain_intervalV74V0V1FFAais_intervalV71V73Iainfix =V73V72FIareal_le_doubleainfix *avalueV0avalueV2V72FIainfix =V71V70FIadouble_le_realV70ainfix *avalueV0avalueV3Fainfix =V63aTrueIiNagtV3V62agtV3V62ainfix =V63aTrueFIaof_real_exact_postc0.0V62Fainfix =V47aTrueIiNaltV2V46altV2V46ainfix =V47aTrueFIaof_real_exact_postc0.0V46Fiiain_intervalainfix *V84V85V81V83Iain_intervalV85V2V3Aain_intervalV84V0V1FFAais_intervalV81V83Iainfix =V83V82FIaof_real_exact_postc0.0V82FIainfix =V81V80FIaof_real_exact_postc0.0V80Fain_intervalainfix *V90V91V87V89Iain_intervalV91V2V3Aain_intervalV90V0V1FFAais_intervalV87V89Iainfix =V89V88FIareal_le_doubleainfix *avalueV1avalueV3V88FIainfix =V87V86FIadouble_le_realV86ainfix *avalueV0avalueV3Fainfix =V79aTrueIiNagtV3V78agtV3V78ainfix =V79aTrueFIaof_real_exact_postc0.0V78Fiain_intervalainfix *V98V99V95V97Iain_intervalV99V2V3Aain_intervalV98V0V1FFAais_intervalV95V97Iainfix =V97V96FIareal_le_doubleainfix *avalueV0avalueV2V96FIainfix =V95V94FIadouble_le_realV94ainfix *avalueV1avalueV2Fain_intervalainfix *V112V113V105V111Iain_intervalV113V2V3Aain_intervalV112V0V1FFAais_intervalV105V111Iainfix =V111V110FIaeqV110V107OaeqV110V109AaleV107V110AaleV109V110FIainfix =V109V108FIareal_le_doubleainfix *avalueV0avalueV2V108FIainfix =V107V106FIareal_le_doubleainfix *avalueV1avalueV3V106FIainfix =V105V104FIaeqV104V101OaeqV104V103AaleV104V101AaleV104V103FIainfix =V103V102FIadouble_le_realV102ainfix *avalueV0avalueV3FIainfix =V101V100FIadouble_le_realV100ainfix *avalueV1avalueV2Fainfix =V93aTrueIiNagtV3V92agtV3V92ainfix =V93aTrueFIaof_real_exact_postc0.0V92Fainfix =V77aTrueIiNaltV2V76altV2V76ainfix =V77aTrueFIaof_real_exact_postc0.0V76Fainfix =V45aTrueIiNagtV1V44agtV1V44ainfix =V45aTrueFIaof_real_exact_postc0.0V44Fainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -683,7 +683,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="1. postcondition"
-      sum="f2abea62c4356425e54e3ccf5aba2e12"
+      sum="105c48f60b4e7ff502542f61cbd14501"
       proved="false"
       expanded="true"
       shape="postconditionain_intervalainfix *V24V25V17V23Iain_intervalV25V2V3Aain_intervalV24V0V1FFAais_intervalV17V23Iainfix =V23V22FIaeqV22V19OaeqV22V21AaleV19V22AaleV21V22FIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -702,7 +702,7 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="1."
-        sum="f90272b387ee27d16de9805ef9d2d456"
+        sum="bdab8691db95c4083a9c067da5b9b16e"
         proved="true"
         expanded="false"
         shape="ais_intervalV17V23Iainfix =V23V22FIaeqV22V19OaeqV22V21AaleV19V22AaleV21V22FIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -742,7 +742,7 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="2."
-        sum="04feee23e9f99ffbcd6aa0d8d4af456f"
+        sum="2ba85f34e67b2444ae2273cde0b190ce"
         proved="false"
         expanded="true"
         shape="ain_intervalainfix *V24V25V17V23Iain_intervalV25V2V3Aain_intervalV24V0V1FFIainfix =V23V22FIaeqV22V19OaeqV22V21AaleV19V22AaleV21V22FIainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FIainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -792,7 +792,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="2. postcondition"
-      sum="166f58f6900356f9078811b7ae76e7d3"
+      sum="65415db5134ec62eefe76abc64759db2"
       proved="false"
       expanded="true"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FINainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -808,7 +808,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="3. postcondition"
-      sum="5d63c92a041e620fa46b4df9424a4704"
+      sum="8dae5abf932ee32f1a080725373e1ee0"
       proved="false"
       expanded="true"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -824,7 +824,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="4. postcondition"
-      sum="def0d737f4019c7f27c27e5030898492"
+      sum="e177ecde577756786f78db8209fbad91"
       proved="true"
       expanded="false"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FINainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -843,7 +843,7 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="1."
-        sum="0ebfa6bd329dc776afcf5179c8c62437"
+        sum="eb4ce68738dc4cb9a3b778269b9e82da"
         proved="true"
         expanded="false"
         shape="ais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FINainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -915,7 +915,7 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="2."
-        sum="44eb24e210b0ecc0d838598b41e6ca06"
+        sum="6e5c741f41c6fb9a9a35a2530211cb92"
         proved="true"
         expanded="false"
         shape="ain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFIainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FINainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -989,7 +989,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="5. postcondition"
-      sum="43070f9d339bd70752f90ec15891f08a"
+      sum="2798a80218b88ed8fc0243d42ff94352"
       proved="false"
       expanded="true"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1005,7 +1005,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="6. postcondition"
-      sum="3c95366a9a0d5d8ec60eb64de0da59c6"
+      sum="ed850cbd066cbfdb20005b2f9e14f7b5"
       proved="false"
       expanded="true"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV3FINainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1021,7 +1021,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="7. postcondition"
-      sum="252d0f9fc38ba766319e1c2a4dac69d2"
+      sum="f9ef0bc9b0453ac71a84e3c55b22e136"
       proved="false"
       expanded="true"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV2V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FIainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1037,7 +1037,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="8. postcondition"
-      sum="0e8ca8e88ec3d0103283993083be13a4"
+      sum="a7ed3716586673494c991a922e550e6d"
       proved="true"
       expanded="false"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FINainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1061,7 +1061,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="9. postcondition"
-      sum="6774d911e7cbab67372355aa44f6e7b6"
+      sum="d709b02de37d8fb730d1deeaef1371e5"
       proved="false"
       expanded="false"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FIainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1077,7 +1077,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="10. postcondition"
-      sum="6e1ce9354ce33b6834c15b04b59e5c07"
+      sum="73576fa9e61e55daca1e03fa7c53ec1f"
       proved="false"
       expanded="false"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV0avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FINainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1093,7 +1093,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="11. postcondition"
-      sum="92116a855a9b948431505c819eded860"
+      sum="2d370a20422644919446845e1709e4fd"
       proved="false"
       expanded="false"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIareal_le_doubleainfix *avalueV1avalueV3V14FIainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV2FIainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1109,7 +1109,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="12. postcondition"
-      sum="3cdf04612ee7a1845bffeb14065a1754"
+      sum="b2adac04671e6a1c685f76d0c1178a8b"
       proved="true"
       expanded="false"
       shape="postconditionain_intervalainfix *V16V17V13V15Iain_intervalV17V2V3Aain_intervalV16V0V1FFAais_intervalV13V15Iainfix =V15V14FIaof_real_exact_postc0.0V14FIainfix =V13V12FIaof_real_exact_postc0.0V12FINainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1133,7 +1133,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="13. postcondition"
-      sum="353afc5718c13c0d5a16ba013ee77262"
+      sum="c616aa72388a0687ea5e6f6397b1bc77"
       proved="true"
       expanded="false"
       shape="postconditionain_intervalainfix *V12V13V9V11Iain_intervalV13V2V3Aain_intervalV12V0V1FFAais_intervalV9V11Iainfix =V11V10FIaof_real_exact_postc0.0V10FIainfix =V9V8FIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1152,7 +1152,7 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="1."
-        sum="9bd2446307df08010fa29e60c62fc71c"
+        sum="50383cab07155d398a5f959a7ee54fe5"
         proved="true"
         expanded="false"
         shape="ais_intervalV9V11Iainfix =V11V10FIaof_real_exact_postc0.0V10FIainfix =V9V8FIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1224,7 +1224,7 @@
         locfile="../../interval_arith.c"
         loclnum="202" loccnumb="5" loccnume="8"
         expl="2."
-        sum="5645d3dfd062f3f7d75536ffdcbb7efb"
+        sum="82b011184bce3bf728e6c32c1fbe0cfa"
         proved="true"
         expanded="false"
         shape="ain_intervalainfix *V12V13V9V11Iain_intervalV13V2V3Aain_intervalV12V0V1FFIainfix =V11V10FIaof_real_exact_postc0.0V10FIainfix =V9V8FIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1268,7 +1268,7 @@
     locfile="../../interval_arith.c"
     loclnum="202" loccnumb="5" loccnume="8"
     expl="VC for mul_safety"
-    sum="16872211f0cab485283fd73499dc9e30"
+    sum="cde015dd664edf98da72cfcc3b867198"
     proved="true"
     expanded="false"
     shape="iiainfix &gt;avalueV1c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV2FANainfix =avalueV0c0.0Iais_infiniteV2Aais_finiteV0ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aadif_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10Fiainfix &gt;avalueV0c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aasam_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V17V16FIadouble_le_realV16ainfix *avalueV1avalueV2FANainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1ainfix &gt;avalueV1c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1Iainfix =V19V18FIadouble_le_realV18ainfix *avalueV1avalueV2FANainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1ainfix =V15aTrueIiNagtV3V14agtV3V14ainfix =V15aTrueFIaof_real_exact_postc0.0V14Fainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6Fiiainfix &gt;avalueV1c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aasam_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Iainfix =V27V26FIadouble_le_realV26ainfix *avalueV0avalueV3FANainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V25aTrueIiNagtV3V24agtV3V24ainfix =V25aTrueFIaof_real_exact_postc0.0V24Fiainfix &gt;avalueV0c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V31V30FIadouble_le_realV30ainfix *avalueV1avalueV3FANainfix =avalueV1c0.0Iais_infiniteV3Aais_finiteV1ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aadif_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1ainfix &gt;avalueV0c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V33V32FIadouble_le_realV32ainfix *avalueV0avalueV3FANainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0ainfix =V29aTrueIiNagtV3V28agtV3V28ainfix =V29aTrueFIaof_real_exact_postc0.0V28Fainfix =V23aTrueIiNaltV2V22altV2V22ainfix =V23aTrueFIaof_real_exact_postc0.0V22Fiainfix &gt;avalueV1c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1Iainfix =V39V38FIadouble_le_realV38ainfix *avalueV0avalueV3FANainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V37aTrueIiNagtV3V36agtV3V36ainfix =V37aTrueFIaof_real_exact_postc0.0V36Fiainfix &gt;avalueV0c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V43V42FIadouble_le_realV42ainfix *avalueV1avalueV2FANainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Nais_NaNV51ANais_NaNV53Iainfix =V53V52FIareal_le_doubleainfix *avalueV0avalueV2V52FAainfix &gt;avalueV0c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V51V50FIareal_le_doubleainfix *avalueV1avalueV3V50FAainfix &gt;avalueV1c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1Iainfix =V49V48FIaeqV48V45OaeqV48V47AaleV48V45AaleV48V47FANais_NaNV45ANais_NaNV47Iainfix =V47V46FIadouble_le_realV46ainfix *avalueV0avalueV3FANainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V45V44FIadouble_le_realV44ainfix *avalueV1avalueV2FANainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1ainfix =V41aTrueIiNagtV3V40agtV3V40ainfix =V41aTrueFIaof_real_exact_postc0.0V40Fainfix =V35aTrueIiNaltV2V34altV2V34ainfix =V35aTrueFIaof_real_exact_postc0.0V34Fainfix =V21aTrueIiNagtV1V20agtV1V20ainfix =V21aTrueFIaof_real_exact_postc0.0V20Fainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1285,7 +1285,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="1. precondition for call"
-      sum="88f92a5205e190a40a7cf959a2eed0ab"
+      sum="71f890048119e21aad6ece5efc48e4d4"
       proved="true"
       expanded="false"
       shape="precondition for callNainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1323,7 +1323,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="2. precondition for call"
-      sum="9d50be18b4a34adc7d12bd3df9c9f5c5"
+      sum="963d438d15bd08eea6c22616cc2bf48b"
       proved="true"
       expanded="false"
       shape="precondition for callNainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FINainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1361,7 +1361,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="3. precondition for call"
-      sum="214b07684ac5b7c82ba87daa3071df6a"
+      sum="13bbcfc6b0fb3c748347b7b4dc0ca48f"
       proved="true"
       expanded="false"
       shape="precondition for callNais_NaNV13ANais_NaNV15Iainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FINainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FINainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1415,7 +1415,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="4. precondition for call"
-      sum="66cc49c5fa6be0157e076bebbc02d5b5"
+      sum="dba4f13b5fa8673c2a1da12887a2f262"
       proved="true"
       expanded="false"
       shape="precondition for callainfix &gt;avalueV1c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1Iainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FINais_NaNV13ANais_NaNV15Iainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FINainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FINainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1453,7 +1453,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="5. precondition for call"
-      sum="c505d7f8825b51f314195e200bf181ee"
+      sum="545cb26e80b5ab95a9663741768021e9"
       proved="true"
       expanded="false"
       shape="precondition for callainfix &gt;avalueV0c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix &gt;avalueV1c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1Iainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FINais_NaNV13ANais_NaNV15Iainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FINainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FINainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1491,7 +1491,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="6. precondition for call"
-      sum="a9e6440ac26fb4aa44bbb1a96ab5569f"
+      sum="6e5daf051068c8f3542cf6748433cc59"
       proved="true"
       expanded="false"
       shape="precondition for callNais_NaNV19ANais_NaNV21Iainfix =V21V20FIareal_le_doubleainfix *avalueV0avalueV2V20FIainfix &gt;avalueV0c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V19V18FIareal_le_doubleainfix *avalueV1avalueV3V18FIainfix &gt;avalueV1c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1Iainfix =V17V16FIaeqV16V13OaeqV16V15AaleV16V13AaleV16V15FINais_NaNV13ANais_NaNV15Iainfix =V15V14FIadouble_le_realV14ainfix *avalueV0avalueV3FINainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FINainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1529,7 +1529,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="7. precondition for call"
-      sum="555385dfae2e3eebfea0cfad1a331508"
+      sum="f99a240d89aa035aac862c0c6177424e"
       proved="true"
       expanded="false"
       shape="precondition for callNainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1INainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1567,7 +1567,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="8. precondition for call"
-      sum="420db9b54e921a7506fe29b2154a9471"
+      sum="1045aabbf9ce969e45eb1568d189a771"
       proved="true"
       expanded="false"
       shape="precondition for callainfix &gt;avalueV0c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FINainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1INainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1589,7 +1589,7 @@
        memlimit="1000"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.94"/>
+       <result status="valid" time="0.74"/>
       </proof>
       <proof
        prover="4"
@@ -1605,7 +1605,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="9. precondition for call"
-      sum="9713db032b0bf59bbd8dd355ac9bd0e5"
+      sum="fff2036acc9561cb9a6bd68e9ec412ea"
       proved="true"
       expanded="false"
       shape="precondition for callNainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1643,7 +1643,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="10. precondition for call"
-      sum="8fe65cfbcf99ec7ff118a5de16179327"
+      sum="62a63ea30e050be0acff049175544b5d"
       proved="true"
       expanded="false"
       shape="precondition for callainfix &gt;avalueV1c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FINainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1681,7 +1681,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="11. precondition for call"
-      sum="b5e9d92ec1081d6e7460f1ec31ddb438"
+      sum="09c9be0295523d83a5bb89d0f417e79d"
       proved="true"
       expanded="false"
       shape="precondition for callNainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1719,7 +1719,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="12. precondition for call"
-      sum="53cd6fcf282310cdef2fc0e979936bd9"
+      sum="04486cf3db9c3494537e706257d7e3c2"
       proved="true"
       expanded="false"
       shape="precondition for callainfix &gt;avalueV0c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FINainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1757,7 +1757,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="13. precondition for call"
-      sum="8dd732591072f48f1bd7eaa66ad401f3"
+      sum="98edbea42410c2f49540573852adebed"
       proved="true"
       expanded="false"
       shape="precondition for callNainfix =avalueV1c0.0Iais_infiniteV3Aais_finiteV1ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aadif_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1INainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1795,7 +1795,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="14. precondition for call"
-      sum="9849de2c8d90bf17091777eaa0f1928d"
+      sum="a4251df00aa57edac70e834a662fabaa"
       proved="true"
       expanded="false"
       shape="precondition for callainfix &gt;avalueV0c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aasam_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV3FINainfix =avalueV1c0.0Iais_infiniteV3Aais_finiteV1ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aadif_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1INainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1833,7 +1833,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="15. precondition for call"
-      sum="85b81fec72d79cc6748225ecfe7dcd81"
+      sum="53882471def08b1c81305ee8eaabfffd"
       proved="true"
       expanded="false"
       shape="precondition for callNainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1871,7 +1871,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="16. precondition for call"
-      sum="9c21528f83ddd0fe2c97236e66cc7f5c"
+      sum="98745710d2f86d4af088165c977d75a6"
       proved="true"
       expanded="false"
       shape="precondition for callainfix &gt;avalueV1c0.0Iainfix =asignV2aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV2amax_doubleAais_finiteV2Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV2ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aasam_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV3FINainfix =avalueV0c0.0Iais_infiniteV3Aais_finiteV0ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aadif_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FINainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FIainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1909,7 +1909,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="17. precondition for call"
-      sum="ddd9adca1a636608179006639e1f91e5"
+      sum="2776c018ab7e8d510f143d24e0c1abb3"
       proved="true"
       expanded="false"
       shape="precondition for callNainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1947,7 +1947,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="18. precondition for call"
-      sum="41c22dee3fa370483a4b415e20544dfe"
+      sum="cd3158d9c293ef59a386c13682a944a3"
       proved="true"
       expanded="false"
       shape="precondition for callainfix &gt;avalueV1c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FINainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -1985,7 +1985,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="19. precondition for call"
-      sum="5c52130be7cd600a821911dbdf15dcfe"
+      sum="2ee1b3beb3a6ba7c379f5f2327762288"
       proved="true"
       expanded="false"
       shape="precondition for callNainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1INainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2023,7 +2023,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="20. precondition for call"
-      sum="27740bbf919cbe31aeeac6b5b269738f"
+      sum="ea198fe7689ef08f18dcb2116dd3f749"
       proved="true"
       expanded="false"
       shape="precondition for callainfix &gt;avalueV0c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV0Aasam_signV0V3Iais_infiniteV3Oais_infiniteV0ANais_NaNV3ANais_NaNV0Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV1avalueV2FINainfix =avalueV1c0.0Iais_infiniteV2Aais_finiteV1ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV1Aadif_signV1V2Iais_infiniteV2Oais_infiniteV1ANais_NaNV2ANais_NaNV1INainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FIainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2061,7 +2061,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="21. precondition for call"
-      sum="29cdea4fff5fc912b2259b4d5b21be68"
+      sum="6f051dc598e0bca68fc8b187c19a792d"
       proved="true"
       expanded="false"
       shape="precondition for callNainfix =avalueV0c0.0Iais_infiniteV2Aais_finiteV0ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aadif_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2099,7 +2099,7 @@
       locfile="../../interval_arith.c"
       loclnum="202" loccnumb="5" loccnume="8"
       expl="22. precondition for call"
-      sum="db1f135d4260f90a856f9f2e94bdfd29"
+      sum="f972af4e60350bf9fe1e821c5196b3be"
       proved="true"
       expanded="false"
       shape="precondition for callainfix &gt;avalueV1c0.0Iainfix =asignV3aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV3amax_doubleAais_finiteV3Aais_finiteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV3ANainfix =avalueV3c0.0Iais_finiteV3Aais_infiniteV1Aasam_signV1V3Iais_infiniteV3Oais_infiniteV1ANais_NaNV3ANais_NaNV1Iainfix =V13V12FIadouble_le_realV12ainfix *avalueV0avalueV2FINainfix =avalueV0c0.0Iais_infiniteV2Aais_finiteV0ANainfix =avalueV2c0.0Iais_finiteV2Aais_infiniteV0Aadif_signV0V2Iais_infiniteV2Oais_infiniteV0ANais_NaNV2ANais_NaNV0Iainfix =V11aTrueIiNagtV3V10agtV3V10ainfix =V11aTrueFIaof_real_exact_postc0.0V10FINainfix =V9aTrueIiNaltV2V8altV2V8ainfix =V9aTrueFIaof_real_exact_postc0.0V8FIainfix =V7aTrueIiNagtV1V6agtV1V6ainfix =V7aTrueFIaof_real_exact_postc0.0V6FINainfix =V5aTrueIiNaltV0V4altV0V4ainfix =V5aTrueFIaof_real_exact_postc0.0V4FIais_intervalV2V3Aais_intervalV0V1F">
@@ -2139,7 +2139,7 @@
     locfile="../../interval_arith.c"
     loclnum="77" loccnumb="7" loccnume="13"
     expl="VC for mul_up_ensures_default"
-    sum="710a4ef7e339358ed7c5503eabf3f1be"
+    sum="31de2699ad116f9c43962904720750b2"
     proved="true"
     expanded="false"
     shape="areal_le_doubleainfix *avalueV0avalueV1V8Iainfix =V8V7FAareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &lt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &gt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Aareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Aareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2158,7 +2158,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="1. assertion"
-      sum="a450459ea6793460e5741702615f58c7"
+      sum="cacc5aab0cb3a265d0943fb7951785cb"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2214,7 +2214,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="2. assertion"
-      sum="654932e7ba716c8c8fcbbb00e8687606"
+      sum="a8f2c4fd4b9e826db775efbebc160b03"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2286,7 +2286,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="3. assertion"
-      sum="6c336749259147d7253b5093ef341a0e"
+      sum="1f2425b3b1e7a3b5b958a3f775586715"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2358,7 +2358,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="4. assertion"
-      sum="16153052d81ba30591c1ffedcb0a5d43"
+      sum="cae8e9d6311a6c9bd28996894e7e0297"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2430,7 +2430,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="5. assertion"
-      sum="bb931ea59762ee21330688d5ea122b0a"
+      sum="23794c6522dda9df39c6890db091bdfe"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2502,7 +2502,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="6. assertion"
-      sum="bc290dfc2cbe9155e2abec9bf9b95b4e"
+      sum="74b53147357d4402365886e753019585"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2550,7 +2550,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="7. assertion"
-      sum="772bd4aa63ac354528cff87561c514e9"
+      sum="18e20206db839f2203c4ee023b783bc8"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2574,7 +2574,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="8. assertion"
-      sum="c61e0098668bbe1b6698491fa4ffa7ca"
+      sum="08c5dd53df6bc2839bc33ba7cb7782cb"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2614,7 +2614,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="9. assertion"
-      sum="8e69095eaeeb898269cf9e6bec36aaa6"
+      sum="7b5d7f7f03c3f30ee5010ded66bd04f0"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2670,7 +2670,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="10. assertion"
-      sum="40ddaa82cc0fe608d92731055fc1e610"
+      sum="cec07fbadfda87d828119109fa8b3555"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2726,7 +2726,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="11. assertion"
-      sum="9d30fe49fa8409094aa69f9fced3ea99"
+      sum="3be7108143f8ad089f5fb6e0203aae0d"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2782,7 +2782,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="12. assertion"
-      sum="c299a733f0f9402df4faa36d88efc48c"
+      sum="1a59cc62fadaa65ebb13f1ac7b15e8b3"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &gt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2822,7 +2822,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="13. assertion"
-      sum="e20152a850a83fb576f314f996258568"
+      sum="d641b65ee17ab7755815f768aa9572b0"
       proved="true"
       expanded="false"
       shape="assertionareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &lt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &gt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2862,7 +2862,7 @@
       locfile="../../interval_arith.c"
       loclnum="77" loccnumb="7" loccnume="13"
       expl="14. postcondition"
-      sum="13924b251a17fcc50bf8a1bb73092fe7"
+      sum="74cf05286e862edcfcc9373a7d255485"
       proved="true"
       expanded="false"
       shape="postconditionareal_le_doubleainfix *avalueV0avalueV1V8Iainfix =V8V7FIareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &lt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Aais_finiteV7Iainfix &gt;avalueV0c0.0Aainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix =asignV1aNegANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV5amax_doubleAainfix &lt;=aabsaroundaDownainfix *avalueV0avalueV3amax_doubleAainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7INainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_infiniteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Aais_finiteV0Iareal_le_doubleainfix *avalueV0avalueV1V7Iais_infiniteV1Oais_infiniteV0Iainfix =V7V6FIaneg_postV5V6FIainfix =V5V4FIamul_postaDownV0V3V4FIainfix =V3V2FIaneg_postV1V2FIainfix &gt;avalueV0c0.0Iainfix =asignV1aPosANainfix &lt;=aabsaroundaDownaprefix -avalueV1amax_doubleAais_finiteV1Aais_finiteV0ANainfix =avalueV0c0.0Iais_finiteV0Aais_infiniteV1ANainfix =avalueV1c0.0Iais_finiteV1Aais_infiniteV0Aasam_signV0V1Iais_infiniteV1Oais_infiniteV0ANais_NaNV1ANais_NaNV0F">
@@ -2904,7 +2904,7 @@
     locfile="../../interval_arith.c"
     loclnum="77" loccnumb="7" loccnume="13"
     expl="VC for mul_up_safety"
-    sum="ebee12d198563b03a5359621d0e77325"
+    sum="ab607a4626d4229348f8b9164b3b1d74"
     proved="true"
     expanded="false"
     shape="t">

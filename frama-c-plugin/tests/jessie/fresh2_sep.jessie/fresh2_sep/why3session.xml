@@ -43,7 +43,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="15" loccnumb="4" loccnume="10"
     expl="VC for create_ensures_default"
-    sum="a9c82ec035ca2dc49d2a89ae4412ffaa"
+    sum="00b77f89224784f461afc4b42b9532d5"
     proved="true"
     expanded="false"
     shape="NavalidV0V5Aainfix &gt;=aoffset_maxV2V5c0Aainfix &lt;=aoffset_minV2V5c0Iainfix =V5V4FIainfix =V4V3FIainstanceofV1V3a_Str_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_StrV3c0ainfix -c1c1V2FFF">
@@ -75,7 +75,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="15" loccnumb="4" loccnume="10"
     expl="VC for create_safety"
-    sum="30288d7748a3ae39d5cd7bfedd30bccd"
+    sum="fc9b33cf85bbb8b68caba9866610156b"
     proved="true"
     expanded="false"
     shape="ainfix &gt;=c1c0">
@@ -129,7 +129,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="29" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_ensures_default"
-    sum="c01d3bf2fb028ee8eae854a0b59b5af7"
+    sum="08182f6173bb91638495835832c18855"
     proved="false"
     expanded="true"
     shape="ainfix =c0c1Iainfix =V6V5FINavalidV1V5Aainfix &gt;=aoffset_maxV4V5c0Aainfix &lt;=aoffset_minV4V5c0FFIainfix =V3V2FINavalidV0V2Aainfix &gt;=aoffset_maxV1V2c0Aainfix &lt;=aoffset_minV1V2c0FFF">
@@ -185,7 +185,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="29" loccnumb="5" loccnume="19"
     expl="VC for smoke_detector_safety"
-    sum="daa6ea3e790587265d4aa6b85000c7fe"
+    sum="2f1b0853fbab3220e7bfd5658a2dddc5"
     proved="true"
     expanded="false"
     shape="t">
@@ -239,7 +239,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="23" loccnumb="5" loccnume="9"
     expl="VC for test_ensures_default"
-    sum="d73c482196d52c096673949e1da987aa"
+    sum="26b6d5039b9ad25c8a44463d26a94755"
     proved="true"
     expanded="false"
     shape="Nainfix =V0V4Iainfix =V4V3FINavalidV1V3Aainfix &gt;=aoffset_maxV2V3c0Aainfix &lt;=aoffset_minV2V3c0FFIainfix &gt;=aoffset_maxV1V0c0Aainfix &lt;=aoffset_minV1V0c0FF">
@@ -295,7 +295,7 @@
     locfile="../../fresh2_sep.c"
     loclnum="23" loccnumb="5" loccnume="9"
     expl="VC for test_safety"
-    sum="daa6ea3e790587265d4aa6b85000c7fe"
+    sum="2f1b0853fbab3220e7bfd5658a2dddc5"
     proved="true"
     expanded="false"
     shape="t">

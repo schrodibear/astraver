@@ -39,7 +39,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="44" loccnumb="8" loccnume="22"
     expl="VC for compute_trans2_ensures_default"
-    sum="c2aa0d4933f24fc472efd83dfcef3318"
+    sum="fc630cef03c0699e5acfbe67c9f93245"
     proved="true"
     expanded="true"
     shape="ainfix &gt;ainteger_of_int32V0c5Oainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Oainfix &lt;ainteger_of_int32V0c0ANainfix &lt;ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;ainteger_of_int32V0c0Aainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -63,7 +63,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="44" loccnumb="8" loccnume="22"
     expl="VC for compute_trans2_ensures_less_than_five"
-    sum="0491544e6acf9c983bcac26b3976f4e4"
+    sum="a436dbd9e2b0842a0500ea395adac664"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -87,7 +87,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="44" loccnumb="8" loccnume="22"
     expl="VC for compute_trans2_ensures_more_than_five"
-    sum="5eb3a9cb25fe5d39a6adb9976bb066e5"
+    sum="845f0b3bc2aaa7f37f5d241a33658698"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1Iainfix &gt;ainteger_of_int32V0c5Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1Iainfix &gt;ainteger_of_int32V0c5Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1Iainfix &gt;ainteger_of_int32V0c5Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5F">
@@ -111,7 +111,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="44" loccnumb="8" loccnume="22"
     expl="VC for compute_trans2_ensures_none"
-    sum="01e9f092472ef8b2464eeb489d6fab13"
+    sum="084a7f210eddeedf0aed0ab72a519106"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0Iainfix &lt;ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0Iainfix &lt;ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0Iainfix &lt;ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;ainteger_of_int32V0c0F">
@@ -135,7 +135,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="44" loccnumb="8" loccnume="22"
     expl="VC for compute_trans2_safety"
-    sum="d64e21af105f5527e8064209feb56904"
+    sum="3bf149f9d7efb958c2e85022ad9352c9"
     proved="true"
     expanded="true"
     shape="t">
@@ -157,7 +157,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="19" loccnumb="8" loccnume="21"
     expl="VC for compute_trans_ensures_default"
-    sum="c2aa0d4933f24fc472efd83dfcef3318"
+    sum="fc630cef03c0699e5acfbe67c9f93245"
     proved="true"
     expanded="true"
     shape="ainfix &gt;ainteger_of_int32V0c5Oainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Oainfix &lt;ainteger_of_int32V0c0ANainfix &lt;ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix &gt;ainteger_of_int32V0c5ANainfix &lt;ainteger_of_int32V0c0Aainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -181,7 +181,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="19" loccnumb="8" loccnume="21"
     expl="VC for compute_trans_ensures_less_than_five"
-    sum="71fa8eac01b750a5dee87c03cd369cc1"
+    sum="367f1af7d24cf772f7efe5691fc26d28"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0F">
@@ -205,7 +205,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="19" loccnumb="8" loccnume="21"
     expl="VC for compute_trans_ensures_more_than_five"
-    sum="3538b58b71b45593f4065fe4aed9d70e"
+    sum="feee42b3e7f03f3fb1c171cf4d68567b"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5F">
@@ -229,7 +229,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="19" loccnumb="8" loccnume="21"
     expl="VC for compute_trans_ensures_none"
-    sum="4d6d4aa806b176e8270b0b590dec65e1"
+    sum="a51dd272a5b47e0a3c9dc3b861e58cc4"
     proved="true"
     expanded="true"
     shape="iiainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0Fainfix =ainteger_of___anonenum_trans_t_1V6ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of___anonenum_trans_t_1V4c2Fainfix &gt;=ainteger_of_int32V0c0ainfix =ainteger_of___anonenum_trans_t_1V9ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of___anonenum_trans_t_1V7c1Fainfix &gt;ainteger_of_int32V0c5Iainfix &lt;ainteger_of_int32V0c0F">
@@ -253,7 +253,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="19" loccnumb="8" loccnume="21"
     expl="VC for compute_trans_safety"
-    sum="d64e21af105f5527e8064209feb56904"
+    sum="3bf149f9d7efb958c2e85022ad9352c9"
     proved="true"
     expanded="true"
     shape="t">
@@ -275,7 +275,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="56" loccnumb="4" loccnume="8"
     expl="VC for main_ensures_default"
-    sum="115b3a18197b868437599d0e8b0d4ac8"
+    sum="304ac85e2f223e39259e7041065744a0"
     proved="false"
     expanded="true"
     shape="iiiiainfix =ainteger_of_int32V11c2Oainfix =ainteger_of_int32V11c1Oainfix =ainteger_of_int32V11aprefix -c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9aprefix -c1Fainfix =ainteger_of_int32V14c2Oainfix =ainteger_of_int32V14c1Oainfix =ainteger_of_int32V14aprefix -c1Iainfix =V14V13FIainfix =V13V12FIainfix =ainteger_of_int32V12c2Fainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V8Iainfix =ainteger_of___anonenum_trans_t_1V8c1Fainfix =ainteger_of_int32V17c2Oainfix =ainteger_of_int32V17c1Oainfix =ainteger_of_int32V17aprefix -c1Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15c2Fainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2Fainfix =ainteger_of_int32V20c2Oainfix =ainteger_of_int32V20c1Oainfix =ainteger_of_int32V20aprefix -c1Iainfix =V20V19FIainfix =V19V18FIainfix =ainteger_of_int32V18c1Fainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1Fainfix =ainteger_of_int32V23c2Oainfix =ainteger_of_int32V23c1Oainfix =ainteger_of_int32V23aprefix -c1Iainfix =V23V22FIainfix =V22V21FIainfix =ainteger_of_int32V21aprefix -c1FAainfix =c1c2ainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
@@ -302,7 +302,7 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="1. assertion"
-      sum="5b9e32b81d481bffaf0d75e66f4c05e9"
+      sum="8fa79a309613ad183e6f4133bc35a186"
       proved="false"
       expanded="true"
       shape="assertionainfix =c1c2Iainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
@@ -350,7 +350,7 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="2. postcondition"
-      sum="4c263aa704041d0229906297d69fd1e8"
+      sum="de4b73ad49ff91cd58af12734aac5825"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V8c2Oainfix =ainteger_of_int32V8c1Oainfix =ainteger_of_int32V8aprefix -c1Iainfix =V8V7FIainfix =V7V6FIainfix =ainteger_of_int32V6aprefix -c1FIainfix =c1c2Iainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
@@ -374,7 +374,7 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="3. postcondition"
-      sum="84a018a189627e8490bd9fb4b84a580f"
+      sum="043765071a571d619430102dbc210719"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V9c2Oainfix =ainteger_of_int32V9c1Oainfix =ainteger_of_int32V9aprefix -c1Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c1FIainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
@@ -398,7 +398,7 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="4. postcondition"
-      sum="66c333873baeb7950be0a8502f9685bb"
+      sum="fc6affcc92a5f0ed73fdc759987cf7b7"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V10c2Oainfix =ainteger_of_int32V10c1Oainfix =ainteger_of_int32V10aprefix -c1Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8c2FIainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
@@ -422,7 +422,7 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="5. postcondition"
-      sum="b87e0016a2a6dc01b49bd756214abb70"
+      sum="f1c2e2860cc1c1762c8d8cabde347652"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V11c2Oainfix =ainteger_of_int32V11c1Oainfix =ainteger_of_int32V11aprefix -c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c2FIainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V8Iainfix =ainteger_of___anonenum_trans_t_1V8c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
@@ -446,7 +446,7 @@
       locfile="../../q19_switch_fun_call.c"
       loclnum="56" loccnumb="4" loccnume="8"
       expl="6. postcondition"
-      sum="c6ed9b7bc7bdfad9abce210370fe78f3"
+      sum="c36c8652ce6175ff1ff64742cef20e14"
       proved="true"
       expanded="false"
       shape="postconditionainfix =ainteger_of_int32V11c2Oainfix =ainteger_of_int32V11c1Oainfix =ainteger_of_int32V11aprefix -c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9aprefix -c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V8Iainfix =ainteger_of___anonenum_trans_t_1V8c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V7Iainfix =ainteger_of___anonenum_trans_t_1V7c2FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V6Iainfix =ainteger_of___anonenum_trans_t_1V6c1FINainfix =ainteger_of___anonenum_trans_t_1V4ainteger_of___anonenum_trans_t_1V5Iainfix =ainteger_of___anonenum_trans_t_1V5c0FIainfix =V4V3FIainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc1qainfix &gt;ainteger_of_int32V0c5Iainfix &gt;ainteger_of_int32V0c5Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc2qainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Iainfix &lt;=ainteger_of_int32V0c5Aainfix &gt;=ainteger_of_int32V0c0Aainfix =ainteger_of___anonenum_trans_t_1V3ainteger_of___anonenum_trans_t_1a__anonenum_trans_t_1_of_integerc0qainfix &lt;ainteger_of_int32V0c0Iainfix &lt;ainteger_of_int32V0c0FIainfix =V2V1FIainfix =ainteger_of___anonenum_trans_t_1V1c0FF">
@@ -472,7 +472,7 @@
     locfile="../../q19_switch_fun_call.c"
     loclnum="56" loccnumb="4" loccnume="8"
     expl="VC for main_safety"
-    sum="d64e21af105f5527e8064209feb56904"
+    sum="3bf149f9d7efb958c2e85022ad9352c9"
     proved="true"
     expanded="true"
     shape="t">

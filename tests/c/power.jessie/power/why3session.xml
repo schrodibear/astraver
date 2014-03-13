@@ -71,7 +71,7 @@
     locfile="../../power.c"
     loclnum="43" loccnumb="5" loccnume="8"
     expl="VC for imp_ensures_default"
-    sum="491015486dda03952618dc07a0b0ca14"
+    sum="1ee2365d1f98227ddeba864cfded5ddb"
     proved="true"
     expanded="true"
     shape="iainfix =V8apowerV0V1Iainfix =V8V7Fiainfix =ainfix *V7apowerV9V10apowerV0V1Aainfix &lt;=c0V10Iainfix =V10adivV5c2FIainfix =V9ainfix *V6V6Fainfix =ainfix *V11apowerV12V13apowerV0V1Aainfix &lt;=c0V13Iainfix =V13adivV5c2FIainfix =V12ainfix *V6V6FIainfix =V11ainfix *V7V6FNainfix =amodV5c2c0ainfix &gt;V5c0Iainfix =ainfix *V7apowerV6V5apowerV0V1Aainfix &lt;=c0V5FAainfix =ainfix *V2apowerV3V4apowerV0V1Aainfix &lt;=c0V4Iainfix =V4V1FIainfix =V3V0FIainfix =V2c1FIainfix &lt;=c0V1F">
@@ -90,7 +90,7 @@
       locfile="../../power.c"
       loclnum="43" loccnumb="5" loccnume="8"
       expl="1. loop invariant init"
-      sum="abf264aa31190ed36aa944dc01a0b521"
+      sum="6ef6602f63c1d33ba702eed65aa7a664"
       proved="true"
       expanded="false"
       shape="loop invariant initainfix =ainfix *V2apowerV3V4apowerV0V1Aainfix &lt;=c0V4Iainfix =V4V1FIainfix =V3V0FIainfix =V2c1FIainfix &lt;=c0V1F">
@@ -114,7 +114,7 @@
       locfile="../../power.c"
       loclnum="43" loccnumb="5" loccnume="8"
       expl="2. loop invariant preservation"
-      sum="53038f2f740f56daae2039a848381f11"
+      sum="599a1a7163c062bebd01d5dfc8993b9b"
       proved="true"
       expanded="false"
       shape="loop invariant preservationainfix =ainfix *V8apowerV9V10apowerV0V1Aainfix &lt;=c0V10Iainfix =V10adivV5c2FIainfix =V9ainfix *V6V6FIainfix =V8ainfix *V7V6FINainfix =amodV5c2c0Iainfix &gt;V5c0Iainfix =ainfix *V7apowerV6V5apowerV0V1Aainfix &lt;=c0V5FIainfix =V4V1FIainfix =V3V0FIainfix =V2c1FIainfix &lt;=c0V1F">
@@ -146,7 +146,7 @@
       locfile="../../power.c"
       loclnum="43" loccnumb="5" loccnume="8"
       expl="3. loop invariant preservation"
-      sum="cba355950e074c90a0e851af73671e4f"
+      sum="8f2d9a35de35e9e382556e2a813d2b0d"
       proved="true"
       expanded="false"
       shape="loop invariant preservationainfix =ainfix *V7apowerV8V9apowerV0V1Aainfix &lt;=c0V9Iainfix =V9adivV5c2FIainfix =V8ainfix *V6V6FINNainfix =amodV5c2c0Iainfix &gt;V5c0Iainfix =ainfix *V7apowerV6V5apowerV0V1Aainfix &lt;=c0V5FIainfix =V4V1FIainfix =V3V0FIainfix =V2c1FIainfix &lt;=c0V1F">
@@ -170,7 +170,7 @@
       locfile="../../power.c"
       loclnum="43" loccnumb="5" loccnume="8"
       expl="4. postcondition"
-      sum="850f7cdcd870986916c20bff72d39b12"
+      sum="7dfa338c4411bde59cb0813e9b5494bf"
       proved="true"
       expanded="false"
       shape="postconditionainfix =V8apowerV0V1Iainfix =V8V7FINainfix &gt;V5c0Iainfix =ainfix *V7apowerV6V5apowerV0V1Aainfix &lt;=c0V5FIainfix =V4V1FIainfix =V3V0FIainfix =V2c1FIainfix &lt;=c0V1F">
@@ -196,7 +196,7 @@
     locfile="../../power.c"
     loclnum="43" loccnumb="5" loccnume="8"
     expl="VC for imp_safety"
-    sum="5513b732f38c7b35b9dd131daf6e4649"
+    sum="d55407bea4aeef2d797387075cf623af"
     proved="true"
     expanded="true"
     shape="iainfix &lt;V9V5Aainfix &lt;=c0V5Iainfix =V9adivV5c2FANainfix =c2c0Iainfix =V8ainfix *V6V6Fainfix &lt;V12V5Aainfix &lt;=c0V5Iainfix =V12adivV5c2FANainfix =c2c0Iainfix =V11ainfix *V6V6FIainfix =V10ainfix *V7V6FNainfix =amodV5c2c0ANainfix =c2c0Iainfix &gt;V5c0Iainfix =ainfix *V7apowerV6V5apowerV0V1Aainfix &lt;=c0V5FIainfix =V4V1FIainfix =V3V0FIainfix =V2c1FIainfix &lt;=c0V1F">
@@ -218,7 +218,7 @@
     locfile="../../power.c"
     loclnum="30" loccnumb="5" loccnume="8"
     expl="VC for rec_ensures_default"
-    sum="2e0998436e081ed40ff31be3db1701cf"
+    sum="c7f0db0cf59f173bbac7e4b7f9d5fa96"
     proved="true"
     expanded="true"
     shape="iiainfix =V4apowerV0V1Iainfix =V4V3FIainfix =V3ainfix *ainfix *V2V2V0Fainfix =V6apowerV0V1Iainfix =V6V5FIainfix =V5ainfix *V2V2Fainfix =amodV1c2c0Iainfix =V2apowerV0adivV1c2Fainfix =V8apowerV0V1Iainfix =V8V7FIainfix =V7c1Fainfix =V1c0Iainfix &lt;=c0V1F">
@@ -237,7 +237,7 @@
       locfile="../../power.c"
       loclnum="30" loccnumb="5" loccnume="8"
       expl="1. postcondition"
-      sum="2db2357d06ff5950528b1eba4fd988bc"
+      sum="0617ee26dc1b717d886988eec3041213"
       proved="true"
       expanded="false"
       shape="postconditionainfix =V3apowerV0V1Iainfix =V3V2FIainfix =V2c1FIainfix =V1c0Iainfix &lt;=c0V1F">
@@ -261,7 +261,7 @@
       locfile="../../power.c"
       loclnum="30" loccnumb="5" loccnume="8"
       expl="2. postcondition"
-      sum="14c43f77f6c70e57123cab4a27ccc532"
+      sum="13327354db660638ffec524d56e9dbe2"
       proved="true"
       expanded="false"
       shape="postconditionainfix =V4apowerV0V1Iainfix =V4V3FIainfix =V3ainfix *V2V2FIainfix =amodV1c2c0Iainfix =V2apowerV0adivV1c2FINainfix =V1c0Iainfix &lt;=c0V1F">
@@ -285,7 +285,7 @@
       locfile="../../power.c"
       loclnum="30" loccnumb="5" loccnume="8"
       expl="3. postcondition"
-      sum="e7a5528e92047827527d3fa534e77103"
+      sum="5700af14b5ddc513c0580dd2c60f5339"
       proved="true"
       expanded="false"
       shape="postconditionainfix =V4apowerV0V1Iainfix =V4V3FIainfix =V3ainfix *ainfix *V2V2V0FINainfix =amodV1c2c0Iainfix =V2apowerV0adivV1c2FINainfix =V1c0Iainfix &lt;=c0V1F">
@@ -311,7 +311,7 @@
     locfile="../../power.c"
     loclnum="30" loccnumb="5" loccnume="8"
     expl="VC for rec_safety"
-    sum="1f2f1912cb393df42c645a95bb545b5c"
+    sum="081092fee4ba7d9ec920055b0eb1eab9"
     proved="true"
     expanded="true"
     shape="Nainfix =c2c0Iainfix =V3apowerV0V2FAainfix &lt;=c0V2Aazwf_zeroV2V1LadivV1c2ANainfix =c2c0INainfix =V1c0Iainfix &lt;=c0V1F">
