@@ -75,7 +75,7 @@ axiom eq_pointer_bool_def:
 axiom neq_pointer_bool_def:
   forall p1: pointer 't. forall p2: pointer 't.
     neq_pointer_bool p1 p2 = True <-> p1 <> p2
-    
+
 (* makes Simplify loop on bench/java/Arrays.java !!!
 
 axiom same_block_shift:
@@ -164,8 +164,8 @@ function pset_range (pset 't) int int : (pset 't) (* l(a..b) *)
 function pset_range_left (pset 'z) int : (pset 'z) (* l(..b) *)
 function pset_range_right (pset 'z) int : (pset 'z) (* l(a..) *)
 
-predicate in_pset (pointer 't) (pset 't) 
-predicate valid_pset (alloc_table 't) (pset 't) 
+predicate in_pset (pointer 't) (pset 't)
+predicate valid_pset (alloc_table 't) (pset 't)
 
 predicate pset_disjoint (ps1:(pset 't)) (ps2:(pset 't)) =
   forall p:pointer 't.
@@ -320,9 +320,9 @@ function int_of_tag (tag_id 't) : int
 
 function typeof(tag_table 't) (pointer 't) : (tag_id 't)
 
-predicate parenttag (tag_id 't)  (tag_id 't) 
+predicate parenttag (tag_id 't)  (tag_id 't)
 
-predicate subtag (tag_id 't) (tag_id 't) 
+predicate subtag (tag_id 't) (tag_id 't)
 
 function subtag_bool (tag_id 't) (tag_id 't) : bool
 
@@ -405,7 +405,7 @@ axiom pow2_definition:
   pow2 5 = 32 /\
   pow2 6 = 64 /\
   pow2 7 = 128 /\
-  
+
   pow2 8 = 256 /\
   pow2 9 = 512 /\
   pow2 10 = 1024 /\
@@ -414,7 +414,7 @@ axiom pow2_definition:
   pow2 13 = 8192 /\
   pow2 14 = 16384 /\
   pow2 15 = 32768 /\
-  
+
   pow2 16 = 65536 /\
   pow2 17 = 131072 /\
   pow2 18 = 262144 /\
@@ -423,7 +423,7 @@ axiom pow2_definition:
   pow2 21 = 2097152 /\
   pow2 22 = 4194304 /\
   pow2 23 = 8388608 /\
-  
+
   pow2 24 = 16777216 /\
   pow2 25 = 33554432 /\
   pow2 26 = 67108864 /\
@@ -436,7 +436,7 @@ axiom pow2_definition:
 axiom bw_or_plus:
   forall a: int. forall b: int [bw_or a b, a + b, a >= 0, b >= 0].
     a >= 0 /\ b >= 0 /\ bw_and a b = 0 -> bw_or a b = a + b
-  
+
 predicate bw_set (pos: int) (n: int) = bw_and (pow2 pos) n <> 0
 
 axiom pow2_bw_set:
@@ -444,7 +444,7 @@ axiom pow2_bw_set:
 
 axiom zero_bw_set:
   forall n: int [bw_set n 0]. not (bw_set n 0)
-  
+
 axiom zero_bw_set_iff:
   forall a: int [a = 0]. (forall n: int [bw_set n a]. not (bw_set n a)) <-> a = 0
 
@@ -455,7 +455,7 @@ axiom bw_and_self:
 axiom bw_or_self:
   forall a: int [bw_or a a].
     bw_or a a = a
-    
+
 axiom bw_and_definition:
   forall n: int. forall a: int. forall b: int
     [bw_and a b, bw_set n (bw_and a b), bw_set n a, bw_set n b].
@@ -514,7 +514,7 @@ axiom bw_and_mono:
 axiom bw_or_mono:
   forall a: int. forall b: int [bw_or a b, a >= 0, b >= 0].
     a >= 0 /\ b >= 0 -> bw_or a b >= a /\ bw_or a b >= b
-   
+
 (* axioms for arithmetic overflow in bitwise operations *)
 
 function max_char : int = 127
@@ -656,7 +656,7 @@ axiom lsl_of_lsr_decreases_on_positive:
 
 axiom lsr_of_lsl_identity_on_positive:
   forall a:int. forall b:int. 0 <= a /\ 0 <= b -> lsr (lsl a b) b = a
-  
+
 (* shifts bitwise definition *)
 
 axiom lsl_definition:
@@ -698,7 +698,7 @@ use import int.ComputerDivision
 
 axiom lsr_init:
   forall a: int [lsr a 1, a >= 0]. a >= 0 -> lsr a 1 = div a 2
-  
+
 (*****************************************************************************)
 (* dynamic allocation/deallocation                                           *)
 (*****************************************************************************)
@@ -767,4 +767,3 @@ axiom alloc_fresh_not_same_block_extends_except:
             valid(a1) p_old -> not same_block p p_old
 
 end
-
