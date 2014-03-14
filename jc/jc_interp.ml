@@ -4447,30 +4447,6 @@ let tr_root rt acc =
       :: make_valid_pred ~in_param:false ~equal:false ac pc
       :: acc
   in
-  let of_ptr_addr =
-    Logic(false, id_no_loc (of_pointer_address_name rt),
-	  [ ("",raw_pointer_type why_unit_type) ], pointer_type ac pc)
-  in
-  let addr_axiom =
-    let p = "p" in
-    Goal(KAxiom,id_no_loc ("pointer_addr_of_" ^ (of_pointer_address_name rt)),
-	  LForall(p, raw_pointer_type why_unit_type, [],
-		  make_eq_pred (JCTpointer(pc,None,None))
-		    (LVar p)
-		    (LApp("pointer_address",
-			  [ LApp(of_pointer_address_name rt,
-				 [ LVar p ])]))))
-  in
-  let rev_addr_axiom =
-    let p = "p" in
-    Goal(KAxiom,id_no_loc ((of_pointer_address_name rt) ^ "_of_pointer_addr"),
-	  LForall(p, pointer_type ac pc, [],
-		  make_eq_pred (JCTpointer(pc,None,None))
-		    (LVar p)
-		    (LApp(of_pointer_address_name rt,
-			  [ LApp("pointer_address",
-				 [ LVar p ])]))))
-  in
   let lt = tr_base_type (JCTpointer(pc,None,None)) in
   let conv =
     if !Region.some_bitwise_region then
@@ -4552,9 +4528,8 @@ let tr_root rt acc =
     rt.jc_root_info_hroots
   in
   let acc =
-    type_def::alloc_table::tag_table::axiom_variant_has_tag
-    :: of_ptr_addr :: addr_axiom :: rev_addr_axiom
-    :: conv @ acc
+    type_def :: alloc_table :: tag_table :: axiom_variant_has_tag :: conv @
+    acc
   in
   acc
 

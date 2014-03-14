@@ -5,22 +5,15 @@ use import int.Int
 
 predicate zwf_zero (a:int) (b:int) = 0 <= b /\ a < b
 
-(*
-use import real.Real
-use import int.ComputerDivision
-*)
-
 (*****************************************************************************)
 (* pointers, allocation, validity                                            *)
 (*****************************************************************************)
 
 type alloc_table 't
 type pointer 't
-type block 't
 
 (* memory model *)
 
-function base_block (pointer 't) : block 't
 function offset_max (alloc_table 't) (pointer 't) : int
 function offset_min (alloc_table 't) (pointer 't) : int
 
@@ -29,8 +22,7 @@ function offset_min (alloc_table 't) (pointer 't) : int
 predicate valid (a:alloc_table 't) (p:pointer 't) =
   offset_min a p <= 0 /\ offset_max a p >= 0
 
-predicate same_block (p: pointer 't) (q:pointer 't) =
-  base_block(p) = base_block(q)
+predicate same_block (p: pointer 't) (q:pointer 't)
 
 (* pointer arithmetic *)
 
@@ -40,37 +32,6 @@ function shift (pointer 't) int : (pointer 't)
 (* null pointer*)
 
 function null : (pointer 't)
-
-(* address *)
-
-function pointer_address (pointer 't) : (pointer ())
-function absolute_address int : (pointer ())
-function address (pointer 't) : int
-
-axiom address_injective:
-  forall p:pointer 't. forall q:pointer 't.
-    p = q <-> address(p) = address(q)
-
-(* Not allowed in Why3 (undefined type variable)
-axiom address_null:
-  address(null) = 0
-*)
-
-(* INCONSISTENT -> removed
-axiom address_positive:
-  forall p:pointer 't. 0 <= address(p)
-*)
-
-axiom address_shift_lt:
-  forall p:pointer 't. forall i:int. forall j:int
-  [address(shift p i), address(shift p j)].
-    address(shift p i) < address(shift p j) <-> i < j
-
-axiom address_shift_le:
-  forall p:pointer 't. forall i:int. forall j:int
-  [address(shift p i), address(shift p j)].
-    address(shift p i) <= address(shift p j) <-> i <= j
-
 
 (* shift *)
 
@@ -114,11 +75,12 @@ axiom eq_pointer_bool_def:
 axiom neq_pointer_bool_def:
   forall p1: pointer 't. forall p2: pointer 't.
     neq_pointer_bool p1 p2 = True <-> p1 <> p2
+    
+(* makes Simplify loop on bench/java/Arrays.java !!!
 
-(* make Simplify loop on bench/java/Arrays.java !!!
 axiom same_block_shift:
-  forall p: pointer 't. forall i:int.
-    same_block(p,shift p i)
+  forall p: pointer 't. forall i: int.
+    same_block p (shift p i)
 *)
 
 axiom same_block_shift_right:
@@ -132,10 +94,11 @@ axiom same_block_shift_left:
     same_block q p -> same_block (shift q i) p
 
 
-(* make Simplify loop on Jessie test roux.c
+(* makes Simplify loop on Jessie test roux.c
+
 axiom sub_pointer_same_block:
-  forall p:pointer 't. forall q:pointer 't [sub_pointer(p,q),same_block(p,q)].
-    sub_pointer(p,q) = 0 -> same_block(p,q)
+  forall p:pointer 't. forall q:pointer 't [sub_pointer p q, same_block p q].
+    sub_pointer p q = 0 -> same_block p q
 *)
 
 (* sub_pointer *)
@@ -179,22 +142,12 @@ axiom select_store_eq:
   forall a: 'v [store m p1 a, p2].
     p1=p2 -> select (store m p1 a) p2 = a
 
-(* redundant
-axiom select_store:
-  forall m: (memory 't 'v).
-  forall p: pointer 't.
-  forall a: 'v [select(store(m,p,a),p)].
-    select(store(m,p,a),p) = a
-*)
-
 axiom select_store_neq:
   forall m: (memory 't 'v).
   forall p1: pointer 't.
   forall p2: pointer 't.
   forall a: 'v [store m p1 a,p2] .
     p1 <> p2 -> select (store m p1 a) p2 = select m p2
-
-
 
 (*****************************************************************************)
 (* memory locations, not_assigns predicate, separation                       *)
@@ -339,29 +292,6 @@ axiom not_assigns_trans:
     not_assigns a m2 m3 l ->
     not_assigns a m1 m3 l
 
-predicate full_separated (pointer 't1) (pointer 't2)
-
-axiom full_separated_shift1:
-  forall p: (pointer 'z). forall q: (pointer 'z).
-    forall i: int [full_separated p q,shift q i].
-      full_separated p q -> full_separated p (shift q i)
-
-axiom full_separated_shift2:
-  forall p: (pointer 'z). forall q: (pointer 'z).
-    forall i: int [full_separated p q,shift q i].
-      full_separated p q -> full_separated (shift q i) p
-
-axiom full_separated_shift3:
-  forall p: (pointer 'z). forall q: (pointer 'z).
-    forall i: int [full_separated(q) p,shift q i].
-      full_separated(q) p -> full_separated(shift q i) p
-
-axiom full_separated_shift4:
-  forall p: (pointer 'z). forall q: (pointer 'z).
-    forall i: int [full_separated(q) p,shift q i].
-      full_separated(q) p -> full_separated p (shift q i)
-
-
 (*****************************************************************************)
 (* lattice of structures                                                     *)
 (*****************************************************************************)
@@ -444,8 +374,6 @@ predicate fully_packed (tag_table: tag_table 'a)
   (_mutable: memory 'a (tag_id 'a))
   (this: pointer 'a) =
     select _mutable this = typeof tag_table this
-
-
 
 (*****************************************************************************)
 (* bitwise operations                                                        *)
@@ -636,14 +564,6 @@ axiom alloc_extends_not_assigns_empty:
     /\ pset_included l (pset_all (pset_singleton p)) ->
       not_assigns a1 m1 m2 pset_empty
 
-(*
-axiom alloc_fresh_def:
-  forall a:alloc_table 't. forall p:pointer 't [alloc_fresh a p].
-    alloc_fresh a p ->
-      forall q:(pset 't).
-        valid_pset a (q) -> not in_pset p q
-*)
-
 predicate alloc_extends_except (alloc_table 't) (alloc_table 't) (pset 't)
 
 axiom alloc_extends_alloc_extends_except:
@@ -680,98 +600,6 @@ axiom alloc_fresh_not_same_block_extends_except:
         alloc_fresh a1 p n /\ valid(a2) p ->
           forall p_old: pointer 't [same_block p p_old].
             valid(a1) p_old -> not same_block p p_old
-
-
-(* Frame predicate *)
-(* Logic definitions used for separation pragma *)
-(* For in *)
-type mybag 'a
-
-predicate in_mybag 'a (mybag 'a) 
-
-predicate disj_mybag (mybag 'a) (mybag 'a)
-
-axiom disj_sym : forall s1 s2 : (mybag 'a) [disj_mybag s1 s2]. 
-      disj_mybag s1 s2 -> disj_mybag s2 s1
-
-predicate sub_mybag (mybag 'a) (mybag 'a) 
-
-axiom sub_refl :
-      forall sa : mybag (pointer 'a) [sub_mybag sa sa].
-      sub_mybag sa sa
-
-axiom sub_disj : forall s1 s2 s3 : (mybag 'a)
-      [disj_mybag s1 s2, sub_mybag s2 s3 |
-       disj_mybag s1 s3, sub_mybag s2 s3].
-      disj_mybag s1 s3 -> sub_mybag s2 s3 -> disj_mybag s1 s2
-
-axiom sub_in : forall s1 s2 : (mybag 'a). forall p : 'a
-      [in_mybag p s1, sub_mybag s1 s2|
-       in_mybag p s2, sub_mybag s1 s2].
-      (not in_mybag p s2) -> sub_mybag s1 s2 -> not (in_mybag p s1)
-
-axiom sub_sub : forall s1 s2 s3: (mybag 'a)
-  [sub_mybag s1 s3, sub_mybag s2 s3 | sub_mybag s1 s3, sub_mybag s1 s2].
-      sub_mybag s1 s2 -> sub_mybag s2 s3 -> sub_mybag s1 s3
-
-(* for the frame_rule *)
-
-(* footprint, memory after, memory before *)
-predicate frame_between (mybag (pointer 'a)) (memory 'a 'b) (memory 'a 'b)
-axiom frame_between_refl :
-      forall sa : mybag (pointer 'a).
-      forall m : memory 'a 'b [frame_between sa m m].
-      frame_between sa m m
-
-axiom frame_between_gen :
-      forall sa : mybag (pointer 'a).
-      forall m1 m2 : memory 'a 'b.
-      forall p : pointer 'a.
-      forall v : 'b [frame_between sa m1 (store m2 p v)].
-      frame_between sa m1 m2 -> in_mybag p sa ->
-      frame_between sa (store m1 p v) m2
-
-axiom frame_between_gen2 :
-      forall sa : mybag (pointer 'a).
-      forall m1 m2 m3 : memory 'a 'b
-      [frame_between sa m1 m2,frame_between sa m1 m3|
-       frame_between sa m2 m3,frame_between sa m1 m3].
-      frame_between sa m1 m2 -> frame_between sa m2 m3 ->
-      frame_between sa m1 m3
-
-axiom frame_between_gen_sub1 :
-      forall s12 s23 s13 : mybag (pointer 'a).
-      forall m1 m2 m3 : memory 'a 'b
-      [frame_between s12 m1 m2,frame_between s13 m1 m3].
-      sub_mybag s12 s13 -> frame_between s12 m1 m2 ->
-      frame_between s23 m2 m3 ->
-      frame_between s13 m1 m3
-
-axiom frame_between_gen_sub2 :
-      forall s12 s23 s13 : mybag (pointer 'a).
-      forall m1 m2 m3 : memory 'a 'b
-      [frame_between s23 m2 m3,frame_between s13 m1 m3].
-      frame_between s12 m1 m2 ->
-      sub_mybag s23 s13 -> frame_between s23 m2 m3 ->
-      frame_between s13 m1 m3
-
-axiom frame_between_pointer :
-      forall sa : mybag (pointer 'a).
-      forall m1 m2 : memory 'a 'b.
-      forall p : pointer 'a
-        [ frame_between sa m1 m2,select(m1) p |
-          frame_between sa m1 m2,select(m2) p ] .
-      frame_between sa m1 m2 -> not in_mybag p (sa) ->
-      select(m1) p = select(m2) p
-
-axiom frame_between_sub :
-      forall sa : mybag (pointer 'a).
-      forall sb : mybag (pointer 'a).
-      forall m1 m2 : memory 'a 'b
-      [frame_between sa m1 m2,sub_mybag sa sb].
-      frame_between sa m1 m2 -> sub_mybag sa sb ->
-      frame_between sb m1 m2
-
 
 end
 
