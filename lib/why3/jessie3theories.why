@@ -386,12 +386,135 @@ function bw_and int int : int
 
 (* Yannick: added for CVE-2003-0161-min-ok *)
 axiom bw_and_not_null:
-  forall a:int. forall b:int. bw_and a (b) <> 0 -> a <> 0 /\ b <> 0
+  forall a: int. forall b: int. bw_and a b <> 0 -> a <> 0 /\ b <> 0
 
 function bw_xor int int : int
 
 function bw_or int int : int
 
+(* bitwise arithmetic -- partial axiomatization *)
+
+function pow2 int : int
+
+axiom pow2_definition:
+  pow2 0 = 1 /\
+  pow2 1 = 2 /\
+  pow2 2 = 4 /\
+  pow2 3 = 8 /\
+  pow2 4 = 16 /\
+  pow2 5 = 32 /\
+  pow2 6 = 64 /\
+  pow2 7 = 128 /\
+  
+  pow2 8 = 256 /\
+  pow2 9 = 512 /\
+  pow2 10 = 1024 /\
+  pow2 11 = 2048 /\
+  pow2 12 = 4096 /\
+  pow2 13 = 8192 /\
+  pow2 14 = 16384 /\
+  pow2 15 = 32768 /\
+  
+  pow2 16 = 65536 /\
+  pow2 17 = 131072 /\
+  pow2 18 = 262144 /\
+  pow2 19 = 524288 /\
+  pow2 20 = 1048576 /\
+  pow2 21 = 2097152 /\
+  pow2 22 = 4194304 /\
+  pow2 23 = 8388608 /\
+  
+  pow2 24 = 16777216 /\
+  pow2 25 = 33554432 /\
+  pow2 26 = 67108864 /\
+  pow2 27 = 134217728 /\
+  pow2 28 = 268435456 /\
+  pow2 29 = 536870912 /\
+  pow2 30 = 1073741824 /\
+  pow2 31 = 2147483648
+
+axiom bw_or_plus:
+  forall a: int. forall b: int [bw_or a b, a + b, a >= 0, b >= 0].
+    a >= 0 /\ b >= 0 /\ bw_and a b = 0 -> bw_or a b = a + b
+  
+predicate bw_set (pos: int) (n: int) = bw_and (pow2 pos) n <> 0
+
+axiom pow2_bw_set:
+  forall n: int. forall m: int [bw_set n (pow2 m)]. bw_set n (pow2 m) <-> n = m
+
+axiom zero_bw_set:
+  forall n: int [bw_set n 0]. not (bw_set n 0)
+  
+axiom zero_bw_set_iff:
+  forall a: int [a = 0]. (forall n: int [bw_set n a]. not (bw_set n a)) <-> a = 0
+
+axiom bw_and_self:
+  forall a: int [bw_and a a].
+    bw_and a a = a
+
+axiom bw_or_self:
+  forall a: int [bw_or a a].
+    bw_or a a = a
+    
+axiom bw_and_definition:
+  forall n: int. forall a: int. forall b: int
+    [bw_and a b, bw_set n (bw_and a b), bw_set n a, bw_set n b].
+      bw_set n (bw_and a b) <-> bw_set n a /\ bw_set n b
+
+axiom bw_or_definition:
+  forall n: int. forall a: int. forall b: int
+    [bw_or a b, bw_set n (bw_or a b), bw_set n a, bw_set n b].
+      bw_set n (bw_or a b) <-> bw_set n a \/ bw_set n b
+
+axiom bw_xor_definition:
+  forall n: int. forall a: int. forall b: int
+    [bw_xor a b, bw_set n (bw_xor a b), bw_set n a, bw_set n b].
+      bw_set n (bw_xor a b) <-> not (bw_set n a <-> bw_set n b)
+
+axiom bw_compl_definition:
+  forall n: int. forall a: int [bw_compl a, bw_set n (bw_compl a), bw_set n a].
+     bw_set n (bw_compl a) <-> not (bw_set n a)
+
+axiom bw_and_assoc:
+  forall a: int. forall b: int. forall c: int [bw_and (bw_and a b) c, bw_and a (bw_and b c)].
+    bw_and (bw_and a b) c = bw_and a (bw_and b c)
+
+axiom bw_or_assoc:
+  forall a: int. forall b: int. forall c: int [bw_or (bw_or a b) c, bw_or a (bw_or b c)].
+    bw_or (bw_or a b) c = bw_or a (bw_or b c)
+
+axiom bw_xor_assoc:
+  forall a: int. forall b: int. forall c: int [bw_xor (bw_xor a b) c, bw_xor a (bw_xor b c)].
+    bw_xor (bw_xor a b) c = bw_xor a (bw_xor b c)
+
+axiom bw_and_comm:
+  forall a: int. forall b:int [bw_and a b, bw_and b a].
+    bw_and a b = bw_and b a
+
+axiom bw_or_comm:
+  forall a: int. forall b: int [bw_or a b, bw_or b a].
+    bw_or a b = bw_or b a
+
+axiom bw_xor_comm:
+  forall a: int. forall b: int [bw_xor a b, bw_xor b a].
+    bw_xor a b = bw_xor b a
+
+axiom bw_and_or_distr:
+  forall a: int. forall b: int. forall c: int [bw_and a (bw_or b c), bw_or (bw_and a b) (bw_and a c)].
+    bw_and a (bw_or b c) = bw_or (bw_and a b) (bw_and a c)
+
+axiom bw_or_and_distr:
+  forall a: int. forall b: int. forall c: int [bw_or a (bw_and b c), bw_and (bw_or a b) (bw_or b c)].
+    bw_or a (bw_and b c) = bw_and (bw_or a b) (bw_or a c)
+
+axiom bw_and_mono:
+  forall a: int. forall b: int [bw_and a b, a >= 0, b >= 0].
+    a >= 0 /\ b >= 0 -> bw_and a b <= a /\ bw_and a b <= b
+
+axiom bw_or_mono:
+  forall a: int. forall b: int [bw_or a b, a >= 0, b >= 0].
+    a >= 0 /\ b >= 0 -> bw_or a b >= a /\ bw_or a b >= b
+   
 (* axioms for arithmetic overflow in bitwise operations *)
 
 function max_char : int = 127
@@ -533,7 +656,49 @@ axiom lsl_of_lsr_decreases_on_positive:
 
 axiom lsr_of_lsl_identity_on_positive:
   forall a:int. forall b:int. 0 <= a /\ 0 <= b -> lsr (lsl a b) b = a
+  
+(* shifts bitwise definition *)
 
+axiom lsl_definition:
+  forall m: int [m >= 0]. forall a: int [lsl a m]. forall n: int
+    [bw_set n (lsl a m), bw_set (n - m) a, n < m].
+      m >= 0 -> not (bw_set n (lsl a m)) <-> not (bw_set (n - m) a) \/ n < m
+
+axiom lsr_definition:
+  forall m: int [m >= 0]. forall a: int [lsr a m]. forall n: int
+    [bw_set n (lsr a m), bw_set (n + m) a].
+      m >= 0 -> bw_set n (lsr a m) <-> bw_set (n + m) a
+
+axiom lsl_induction:
+  forall n: int. forall m: int. forall k: int [n + m, k = n + m, k >= 0, n >= 0, m >= 0].
+    k >=0 /\ n >= 0 /\ m >= 0 /\ k = n + m ->
+      (forall a: int. lsl a k = lsl (lsl a n) m)
+
+axiom lsr_induction:
+  forall n: int. forall m: int. forall k: int [n + m, k = n + m, k >= 0, n >= 0, m >= 0].
+    k >=0 /\ n >= 0 /\ m >= 0 /\ k = n + m ->
+      (forall a: int. lsr a k = lsr (lsr a n) m)
+
+axiom lsl_assoc:
+  forall n: int [n >= 0]. forall m: int [m >= 0].
+    n >= 0 /\ m >= 0 ->
+      (forall a: int [lsl (lsl a m) n, lsl (lsl a n) m].
+        lsl (lsl a m) n = lsl (lsl a n) m)
+
+axiom lsr_assoc:
+  forall n: int [n >= 0]. forall m: int [m >= 0].
+    n >= 0 /\ m >= 0 ->
+      (forall a: int [lsr (lsr a m) n, lsr (lsr a n) m].
+        lsr (lsr a m) n = lsr (lsr a n) m)
+
+axiom lsl_init:
+  forall a: int [lsl a 1, a >= 0]. a >= 0 -> lsl a 1 = a * 2
+
+use import int.ComputerDivision
+
+axiom lsr_init:
+  forall a: int [lsr a 1, a >= 0]. a >= 0 -> lsr a 1 = div a 2
+  
 (*****************************************************************************)
 (* dynamic allocation/deallocation                                           *)
 (*****************************************************************************)
