@@ -380,10 +380,10 @@ else
   AC_MSG_CHECKING(Why3 version)
   WHY3VERSION=`why3 --version | sed -n -e 's|.*version \([[^ ]]\+\) .*$|\1|p'`
   case $WHY3VERSION in
-  0.90)
+  0.83)
       AC_MSG_RESULT($WHY3VERSION)
       ;;
-  0.82+git|0.9*)
+  0.82+git|0.83+git)
       AC_MSG_RESULT($WHY3VERSION)
       WHY3MSG="(version not guaranteed to be supported, hope this works)"
       AC_MSG_WARN($WHY3MSG)
