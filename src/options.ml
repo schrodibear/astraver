@@ -200,7 +200,7 @@ See the GNU General Public License version 2 for more details
 let banner () =
   eprintf "\
 This is why version %s, compiled on %s
-Copyright (c) 2002-2011 CNRS/INRIA/Univ Paris 11, team ProVal
+Copyright (c) 2002-2014 CNRS/INRIA/Univ Paris-Sud
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Version.version Version.date;
   flush stderr

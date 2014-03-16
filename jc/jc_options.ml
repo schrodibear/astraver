@@ -117,7 +117,7 @@ let pos_table = Hashtbl.create 97
 
 let version () =
   Printf.printf "This is Jessie version %s, compiled on %s
-Copyright (c) 2006-2011 - CNRS/INRIA/Univ Paris 11, team ProVal
+Copyright (c) 2006-2014 - CNRS/INRIA/Univ Paris-Sud
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Version.version Version.date;
   exit 0

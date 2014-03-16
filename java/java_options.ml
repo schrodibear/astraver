@@ -106,7 +106,7 @@ let files () = List.rev !files_
 
 let version () =
   Printf.printf "This is Krakatoa version %s, compiled on %s
-Copyright (c) 2006-2011 - INRIA team-project ProVal
+Copyright (c) 2006-2014 - CNRS/INRIA/Univ Paris-Sud
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Version.version Version.date;
   exit 0
