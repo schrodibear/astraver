@@ -84,7 +84,7 @@ let forget_var_in_assertion v a =
 let unfolding_of_app app =
   let f = app.jc_app_fun in
   let _, term_or_assertion =
-    try Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag
+    try IntHashtblIter.find Jc_typing.logic_functions_table f.jc_logic_info_tag
     with Not_found -> assert false
   in
   match term_or_assertion with
@@ -2528,7 +2528,7 @@ let collect_expr_targets e =
 	  in
 	  let els = call.jc_call_args in
 	  let _,_,fs,_ =
-            Hashtbl.find Jc_typing.functions_table fi.jc_fun_info_tag
+            IntHashtblIter.find Jc_typing.functions_table fi.jc_fun_info_tag
           in
           (* Collect preconditions of functions called. *)
           let reqa = fs.jc_fun_requires in
@@ -3543,7 +3543,7 @@ and ai_call iaio abs curinvs vio e =
   (* Compute abstract value at function call *)
   let curinvs = List.fold_left (ai_expr iaio abs) curinvs args in
   let _f, _pos, spec, _body =
-    Hashtbl.find Jc_typing.functions_table f.jc_fun_info_tag
+    IntHashtblIter.find Jc_typing.functions_table f.jc_fun_info_tag
   in
 (*   begin match body with None -> () | Some body -> *)
 (*     if Jc_options.interprocedural then *)
@@ -3732,9 +3732,9 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
 
     (* Add global variables as abstract variables in [env]. *)
     let globvars =
-      Hashtbl.fold (fun _tag (vi,_e) acc ->
-		      Vai.all_variables (new term_var vi) @ acc
-		   ) Jc_typing.variables_table []
+      IntHashtblIter.fold (fun _tag (vi,_e) acc ->
+			   Vai.all_variables (new term_var vi) @ acc
+			  ) Jc_typing.variables_table []
     in
     let env = Environment.add env (Array.of_list globvars) [||] in
 
@@ -4164,7 +4164,7 @@ let rec record_ai_inter_annotations mgr iai fi pos fs _sl =
     (fun fi ->
        let fi, _, fs, slo =
 	 try
-	   Hashtbl.find Jc_typing.functions_table fi.jc_fun_info_tag
+	   IntHashtblIter.find Jc_typing.functions_table fi.jc_fun_info_tag
 	 with Not_found -> assert false (* should never happen *)
        in
        match slo with
