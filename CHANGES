@@ -1,3 +1,16 @@
+version 2.34, March 16, 2014
+==========================
+
+  o [Jessie/Frama-C plugin] Compatible with release Neon of Frama-C
+  o [Jessie] Fixed some issues with labels (partly contributed by
+    Mikhail Mandrykin)
+  o [Jessie] Fixed various issues with Why3 output (contributed by
+    Mikhail Mandrykin)
+  o [Krakatoa] Fixed a bug in the order of logic definitions
+  o [Jessie] Synchronized with Why3 0.83, to benefit from all Why3
+    recent improvements, in particular regarding efficiency, both in
+    term of execution time and memory comsumption. 
+
 version 2.33, April 20, 2013
 ==========================
 
