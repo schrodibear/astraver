@@ -129,7 +129,7 @@ type Tree = [Tree]
 int32 max(int32 x, int32 y)
 behavior default:
   assigns \nothing;
-  ensures (C_1 : (\result == \integer_max(\at(x,Old), \at(y,Old))));
+  ensures (_C_1 : (\result == \integer_max(\at(x,Old), \at(y,Old))));
 ;
 
 axiomatic Mem {
@@ -210,12 +210,12 @@ axiomatic WellFormedTree {
 }
 
 int32 tree_max(Tree[..] t)
-  requires (C_19 : ((C_20 : (t != null)) && (C_21 : valid_tree{Here}(t))));
+  requires (_C_19 : ((_C_20 : (t != null)) && (_C_21 : valid_tree{Here}(t))));
 behavior default:
-  ensures (C_16 : ((C_17 : mem{Here}(\result, \at(t,Old))) &&
-                    (C_18 : (\forall int32 x_5;
-                              (mem{Here}(x_5, \at(t,Old)) ==>
-                                (\result >= x_5))))));
+  ensures (_C_16 : ((_C_17 : mem{Here}(\result, \at(t,Old))) &&
+                     (_C_18 : (\forall int32 x_5;
+                                (mem{Here}(x_5, \at(t,Old)) ==>
+                                  (\result >= x_5))))));
 {  
    (var int32 m);
    
@@ -223,44 +223,26 @@ behavior default:
    
    (var int32 tmp_0);
    
-   {  (C_3 : (m = (C_2 : t.value)));
-      (if ((C_9 : t.left) != null) then 
-      {  (C_6 : (tmp = (C_5 : tree_max((C_4 : t.left)))));
-         (C_8 : (m = (C_7 : max(m, tmp))))
+   {  (_C_3 : (m = (_C_2 : t.value)));
+      (if ((_C_9 : t.left) != null) then 
+      {  (_C_6 : (tmp = (_C_5 : tree_max((_C_4 : t.left)))));
+         (_C_8 : (m = (_C_7 : max(m, tmp))))
       } else ());
-      (if ((C_15 : t.right) != null) then 
-      {  (C_12 : (tmp_0 = (C_11 : tree_max((C_10 : t.right)))));
-         (C_14 : (m = (C_13 : max(m, tmp_0))))
+      (if ((_C_15 : t.right) != null) then 
+      {  (_C_12 : (tmp_0 = (_C_11 : tree_max((_C_10 : t.right)))));
+         (_C_14 : (m = (_C_13 : max(m, tmp_0))))
       } else ());
       
       (return m)
    }
 }
 ========== file tests/c/tree_max.jessie/tree_max.cloc ==========
-[C_15]
-file = "HOME/tests/c/tree_max.c"
-line = 65
-begin = 6
-end = 14
-
-[C_11]
-file = "HOME/tests/c/tree_max.c"
-line = 65
-begin = 38
-end = 56
-
 [has_size_null]
 name = "Lemma has_size_null"
 file = "HOME/tests/c/tree_max.c"
 line = 40
 begin = 6
 end = 48
-
-[C_1]
-file = "HOME/tests/c/tree_max.c"
-line = 6
-begin = 12
-end = 32
 
 [tree_max]
 name = "Function tree_max"
@@ -269,12 +251,6 @@ line = 62
 begin = 4
 end = 12
 
-[C_9]
-file = "HOME/tests/c/tree_max.c"
-line = 64
-begin = 6
-end = 13
-
 [mem_left]
 name = "Lemma mem_left"
 file = "HOME/tests/c/tree_max.c"
@@ -282,29 +258,35 @@ line = 28
 begin = 6
 end = 99
 
-[C_10]
+[_C_4]
 file = "HOME/tests/c/tree_max.c"
-line = 65
-begin = 47
-end = 55
+line = 64
+begin = 46
+end = 53
 
-[C_20]
+[_C_19]
 file = "HOME/tests/c/tree_max.c"
 line = 58
 begin = 13
-end = 23
+end = 40
 
-[C_17]
+[_C_13]
 file = "HOME/tests/c/tree_max.c"
-line = 60
-begin = 12
-end = 26
+line = 65
+begin = 32
+end = 57
 
-[C_5]
+[_C_5]
 file = "HOME/tests/c/tree_max.c"
 line = 64
 begin = 37
 end = 54
+
+[_C_12]
+file = "HOME/tests/c/tree_max.c"
+line = 65
+begin = 38
+end = 56
 
 [mem_root]
 name = "Lemma mem_root"
@@ -313,23 +295,23 @@ line = 24
 begin = 6
 end = 80
 
-[C_13]
-file = "HOME/tests/c/tree_max.c"
-line = 65
-begin = 32
-end = 57
-
-[C_7]
+[_C_9]
 file = "HOME/tests/c/tree_max.c"
 line = 64
-begin = 31
-end = 55
+begin = 6
+end = 13
 
-[C_14]
+[_C_6]
 file = "HOME/tests/c/tree_max.c"
-line = 65
-begin = 32
-end = 57
+line = 64
+begin = 37
+end = 54
+
+[_C_20]
+file = "HOME/tests/c/tree_max.c"
+line = 58
+begin = 13
+end = 23
 
 [mem_null]
 name = "Lemma mem_null"
@@ -338,11 +320,29 @@ line = 23
 begin = 6
 end = 55
 
-[C_8]
+[_C_3]
+file = "HOME/tests/c/tree_max.c"
+line = 63
+begin = 2
+end = 5
+
+[_C_17]
+file = "HOME/tests/c/tree_max.c"
+line = 60
+begin = 12
+end = 26
+
+[_C_7]
 file = "HOME/tests/c/tree_max.c"
 line = 64
 begin = 31
 end = 55
+
+[_C_15]
+file = "HOME/tests/c/tree_max.c"
+line = 65
+begin = 6
+end = 14
 
 [mem_inversion]
 name = "Lemma mem_inversion"
@@ -358,29 +358,29 @@ line = 41
 begin = 6
 end = 182
 
-[C_19]
-file = "HOME/tests/c/tree_max.c"
-line = 58
-begin = 13
-end = 40
-
-[C_4]
-file = "HOME/tests/c/tree_max.c"
-line = 64
-begin = 46
-end = 53
-
-[C_12]
+[_C_10]
 file = "HOME/tests/c/tree_max.c"
 line = 65
-begin = 38
-end = 56
+begin = 47
+end = 55
 
-[C_18]
+[_C_8]
+file = "HOME/tests/c/tree_max.c"
+line = 64
+begin = 31
+end = 55
+
+[_C_18]
 file = "HOME/tests/c/tree_max.c"
 line = 60
 begin = 30
 end = 70
+
+[_C_14]
+file = "HOME/tests/c/tree_max.c"
+line = 65
+begin = 32
+end = 57
 
 [mem_root_eq]
 name = "Lemma mem_root_eq"
@@ -389,12 +389,6 @@ line = 26
 begin = 6
 end = 99
 
-[C_2]
-file = "HOME/tests/c/tree_max.c"
-line = 63
-begin = 10
-end = 18
-
 [has_size_inversion]
 name = "Lemma has_size_inversion"
 file = "HOME/tests/c/tree_max.c"
@@ -402,11 +396,11 @@ line = 45
 begin = 6
 end = 287
 
-[C_6]
+[_C_2]
 file = "HOME/tests/c/tree_max.c"
-line = 64
-begin = 37
-end = 54
+line = 63
+begin = 10
+end = 18
 
 [mem_right]
 name = "Lemma mem_right"
@@ -415,23 +409,29 @@ line = 30
 begin = 6
 end = 101
 
-[C_21]
-file = "HOME/tests/c/tree_max.c"
-line = 58
-begin = 27
-end = 40
-
-[C_3]
-file = "HOME/tests/c/tree_max.c"
-line = 63
-begin = 2
-end = 5
-
-[C_16]
+[_C_16]
 file = "HOME/tests/c/tree_max.c"
 line = 60
 begin = 12
 end = 70
+
+[_C_1]
+file = "HOME/tests/c/tree_max.c"
+line = 6
+begin = 12
+end = 32
+
+[_C_11]
+file = "HOME/tests/c/tree_max.c"
+line = 65
+begin = 38
+end = 56
+
+[_C_21]
+file = "HOME/tests/c/tree_max.c"
+line = 58
+begin = 27
+end = 40
 
 ========== jessie execution ==========
 Generating Why function tree_max
@@ -1575,48 +1575,35 @@ let tree_max_ensures_default =
      (let m = ref (any_int32 void) in
      (let tmp = ref (any_int32 void) in
      (let tmp_0 = ref (any_int32 void) in
-     (C_3:
      begin
-       (let _jessie_<num> = (m := (C_2: ((safe_acc_ Tree_value_t_6) t_0))) in
-       void);
-      (if ((safe_neq_pointer (C_9: ((safe_acc_ Tree_left_t_6) t_0))) null)
+       (let _jessie_<num> = (m := ((safe_acc_ Tree_value_t_6) t_0)) in void);
+      (if ((safe_neq_pointer ((safe_acc_ Tree_left_t_6) t_0)) null)
       then
        (let _jessie_<num> =
-       (C_6:
        begin
          (let _jessie_<num> =
-         (tmp := (C_5:
-                 (let _jessie_<num> = (C_4: ((safe_acc_ Tree_left_t_6) t_0)) in
+         (tmp := (let _jessie_<num> = ((safe_acc_ Tree_left_t_6) t_0) in
                  (JC_36:
-                 (((((tree_max _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
+                 (((((tree_max _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6)))) in
          void);
-        (C_8:
-        begin
-          (m := (C_7:
-                (let _jessie_<num> = !m in
-                (let _jessie_<num> = !tmp in
-                (JC_37: ((max _jessie_<num>) _jessie_<num>)))))); !m end) end) in
-       void) else void);
-      (if ((safe_neq_pointer (C_15: ((safe_acc_ Tree_right_t_6) t_0))) null)
+        (m := (let _jessie_<num> = !m in
+              (let _jessie_<num> = !tmp in
+              (JC_37: ((max _jessie_<num>) _jessie_<num>))))); !m end in void)
+      else void);
+      (if ((safe_neq_pointer ((safe_acc_ Tree_right_t_6) t_0)) null)
       then
        (let _jessie_<num> =
-       (C_12:
        begin
          (let _jessie_<num> =
-         (tmp_0 := (C_11:
-                   (let _jessie_<num> =
-                   (C_10: ((safe_acc_ Tree_right_t_6) t_0)) in
+         (tmp_0 := (let _jessie_<num> = ((safe_acc_ Tree_right_t_6) t_0) in
                    (JC_38:
-                   (((((tree_max _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
+                   (((((tree_max _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6)))) in
          void);
-        (C_14:
-        begin
-          (m := (C_13:
-                (let _jessie_<num> = !m in
-                (let _jessie_<num> = !tmp_0 in
-                (JC_39: ((max _jessie_<num>) _jessie_<num>)))))); !m end) end) in
-       void) else void); (return := !m); (raise Return) end)))); absurd  end
-   with Return -> !return end))
+        (m := (let _jessie_<num> = !m in
+              (let _jessie_<num> = !tmp_0 in
+              (JC_39: ((max _jessie_<num>) _jessie_<num>))))); !m end in void)
+      else void); (return := !m); (raise Return) end))); absurd  end with
+   Return -> !return end))
   { (JC_21:
     ((JC_19: mem(result, t_0, Tree_right_t_6, Tree_left_t_6, Tree_value_t_6))
     and (JC_20:
@@ -1637,58 +1624,42 @@ let tree_max_safety =
      (let m = ref (any_int32 void) in
      (let tmp = ref (any_int32 void) in
      (let tmp_0 = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<num> =
-       (m := (C_2:
-             (JC_27: (((acc_ Tree_t_6_alloc_table) Tree_value_t_6) t_0)))) in
+       (m := (JC_27: (((acc_ Tree_t_6_alloc_table) Tree_value_t_6) t_0))) in
        void);
-      (if ((neq_pointer (C_9:
-                        (JC_28:
-                        (((acc_ Tree_t_6_alloc_table) Tree_left_t_6) t_0)))) null)
+      (if ((neq_pointer (JC_28:
+                        (((acc_ Tree_t_6_alloc_table) Tree_left_t_6) t_0))) null)
       then
        (let _jessie_<num> =
-       (C_6:
        begin
          (let _jessie_<num> =
-         (tmp := (C_5:
-                 (let _jessie_<num> =
-                 (C_4:
-                 (JC_29: (((acc_ Tree_t_6_alloc_table) Tree_left_t_6) t_0))) in
+         (tmp := (let _jessie_<num> =
+                 (JC_29: (((acc_ Tree_t_6_alloc_table) Tree_left_t_6) t_0)) in
                  (JC_30:
-                 (((((tree_max_requires _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
+                 (((((tree_max_requires _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6)))) in
          void);
-        (C_8:
-        begin
-          (m := (C_7:
-                (let _jessie_<num> = !m in
-                (let _jessie_<num> = !tmp in
-                (JC_31: ((max_requires _jessie_<num>) _jessie_<num>)))))); !m end)
-       end) in void) else void);
-      (if ((neq_pointer (C_15:
-                        (JC_32:
-                        (((acc_ Tree_t_6_alloc_table) Tree_right_t_6) t_0)))) null)
+        (m := (let _jessie_<num> = !m in
+              (let _jessie_<num> = !tmp in
+              (JC_31: ((max_requires _jessie_<num>) _jessie_<num>))))); !m end in
+       void) else void);
+      (if ((neq_pointer (JC_32:
+                        (((acc_ Tree_t_6_alloc_table) Tree_right_t_6) t_0))) null)
       then
        (let _jessie_<num> =
-       (C_12:
        begin
          (let _jessie_<num> =
-         (tmp_0 := (C_11:
-                   (let _jessie_<num> =
-                   (C_10:
+         (tmp_0 := (let _jessie_<num> =
                    (JC_33:
-                   (((acc_ Tree_t_6_alloc_table) Tree_right_t_6) t_0))) in
+                   (((acc_ Tree_t_6_alloc_table) Tree_right_t_6) t_0)) in
                    (JC_34:
-                   (((((tree_max_requires _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6))))) in
+                   (((((tree_max_requires _jessie_<num>) Tree_t_6_alloc_table) Tree_right_t_6) Tree_left_t_6) Tree_value_t_6)))) in
          void);
-        (C_14:
-        begin
-          (m := (C_13:
-                (let _jessie_<num> = !m in
-                (let _jessie_<num> = !tmp_0 in
-                (JC_35: ((max_requires _jessie_<num>) _jessie_<num>)))))); !m end)
-       end) in void) else void); (return := !m); (raise Return) end))));
-    absurd  end with Return -> !return end)) { true }
+        (m := (let _jessie_<num> = !m in
+              (let _jessie_<num> = !tmp_0 in
+              (JC_35: ((max_requires _jessie_<num>) _jessie_<num>))))); !m end in
+       void) else void); (return := !m); (raise Return) end))); absurd  end
+   with Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========

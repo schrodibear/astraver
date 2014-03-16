@@ -52,22 +52,22 @@ tag __anonstruct_S_1 = {
 type __anonstruct_S_1 = [__anonstruct_S_1]
 
 int32 main1(__anonstruct_S_1[..] p, intP[..] r)
-  requires (C_8 : ((((C_11 : (\offset_min(p) <= 0)) &&
-                      (C_12 : (\offset_max(p) >= 0))) &&
-                     ((C_14 : (\offset_min(p.rc) <= 0)) &&
-                       (C_15 : (\offset_max(p.rc) >= 0)))) &&
-                    ((C_17 : (\offset_min(r) <= 0)) &&
-                      (C_18 : (\offset_max(r) >= 0)))));
+  requires (_C_8 : ((((_C_11 : (\offset_min(p) <= 0)) &&
+                       (_C_12 : (\offset_max(p) >= 0))) &&
+                      ((_C_14 : (\offset_min(p.rc) <= 0)) &&
+                        (_C_15 : (\offset_max(p.rc) >= 0)))) &&
+                     ((_C_17 : (\offset_min(r) <= 0)) &&
+                       (_C_18 : (\offset_max(r) >= 0)))));
 behavior default:
   assigns \at(\at(p,Old).rc,Here).intM,
   p.rc;
-  ensures (C_7 : true);
+  ensures (_C_7 : true);
 {  
    (var int32 __retres);
    
-   {  (C_2 : ((C_1 : p.rc) = r));
-      (C_5 : ((C_4 : (C_3 : p.rc).intM) = 55));
-      (C_6 : (__retres = 1));
+   {  (_C_2 : ((_C_1 : p.rc) = r));
+      (_C_5 : ((_C_4 : (_C_3 : p.rc).intM) = 55));
+      (_C_6 : (__retres = 1));
       
       (return __retres)
    }

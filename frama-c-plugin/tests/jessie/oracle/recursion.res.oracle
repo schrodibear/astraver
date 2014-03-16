@@ -56,17 +56,17 @@ axiomatic IsList {
 }
 
 _List[..] cons(int32 elem, _List[..] x)
-  requires (C_10 : is_list{Here}(x));
+  requires (_C_10 : is_list{Here}(x));
 behavior default:
-  ensures (C_7 : ((C_8 : is_list{Here}(\result)) &&
-                   (C_9 : (list_length{Here}(\result) ==
-                            (list_length{Here}(\at(x,Old)) + 1)))));
+  ensures (_C_7 : ((_C_8 : is_list{Here}(\result)) &&
+                    (_C_9 : (list_length{Here}(\result) ==
+                              (list_length{Here}(\at(x,Old)) + 1)))));
 {  
    (var _List[..] hd);
    
-   {  (C_2 : (hd = (C_1 : (new _List[1]))));
-      (C_4 : ((C_3 : hd.elem_0) = elem));
-      (C_6 : ((C_5 : hd.next) = x));
+   {  (_C_2 : (hd = (_C_1 : (new _List[1]))));
+      (_C_4 : ((_C_3 : hd.elem_0) = elem));
+      (_C_6 : ((_C_5 : hd.next) = x));
       
       (return hd)
    }
@@ -527,25 +527,19 @@ let cons_ensures_default =
   try
    begin
      (let hd = ref (any_pointer void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (hd := (C_1:
-              (JC_<somenum>:
-              (((alloc_struct__List (1)) _List_result_4_alloc_table) _List_result_4_tag_table)))) in
+       (hd := (JC_<somenum>:
+              (((alloc_struct__List (1)) _List_result_4_alloc_table) _List_result_4_tag_table))) in
        void);
-      (C_4:
-      begin
-        (let _jessie_<somenum> = elem in
-        (let _jessie_<somenum> = !hd in
-        (((safe_upd_ _List_elem_0_result_4) _jessie_<somenum>) _jessie_<somenum>)));
-       (C_6:
-       begin
-         (let _jessie_<somenum> = x_1 in
-         (let _jessie_<somenum> = !hd in
-         (((safe_upd_ _List_next_result_4) _jessie_<somenum>) _jessie_<somenum>)));
-        (return := !hd); (raise Return) end) end) end)); absurd  end with
-   Return -> !return end))
+      (let _jessie_<somenum> = elem in
+      (let _jessie_<somenum> = !hd in
+      (((safe_upd_ _List_elem_0_result_4) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> = x_1 in
+      (let _jessie_<somenum> = !hd in
+      (((safe_upd_ _List_next_result_4) _jessie_<somenum>) _jessie_<somenum>)));
+      (return := !hd); (raise Return) end); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: is_list(result))
     and (JC_<somenum>: (list_length(result) = add_int(list_length(x_1), (1)))))) }
@@ -558,27 +552,21 @@ let cons_safety =
   try
    begin
      (let hd = ref (any_pointer void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (hd := (C_1:
-              (JC_<somenum>:
-              (((alloc_struct__List_requires (1)) _List_result_4_alloc_table) _List_result_4_tag_table)))) in
+       (hd := (JC_<somenum>:
+              (((alloc_struct__List_requires (1)) _List_result_4_alloc_table) _List_result_4_tag_table))) in
        void);
-      (C_4:
-      begin
-        (let _jessie_<somenum> = elem in
-        (let _jessie_<somenum> = !hd in
-        (JC_<somenum>:
-        ((((upd_ !_List_result_4_alloc_table) _List_elem_0_result_4) _jessie_<somenum>) _jessie_<somenum>))));
-       (C_6:
-       begin
-         (let _jessie_<somenum> = x_1 in
-         (let _jessie_<somenum> = !hd in
-         (JC_<somenum>:
-         ((((upd_ !_List_result_4_alloc_table) _List_next_result_4) _jessie_<somenum>) _jessie_<somenum>))));
-        (return := !hd); (raise Return) end) end) end)); absurd  end with
-   Return -> !return end)) { true }
+      (let _jessie_<somenum> = elem in
+      (let _jessie_<somenum> = !hd in
+      (JC_<somenum>:
+      ((((upd_ !_List_result_4_alloc_table) _List_elem_0_result_4) _jessie_<somenum>) _jessie_<somenum>))));
+      (let _jessie_<somenum> = x_1 in
+      (let _jessie_<somenum> = !hd in
+      (JC_<somenum>:
+      ((((upd_ !_List_result_4_alloc_table) _List_next_result_4) _jessie_<somenum>) _jessie_<somenum>))));
+      (return := !hd); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C recursion.jessie --quiet -f recursion.makefile project
@@ -603,22 +591,22 @@ why --project [...] why/recursion.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/recursion_po4.why">
-      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "61" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "61" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/recursion_po5.why">
-      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "61" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "61" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/recursion_po6.why">
-      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "62" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "62" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/recursion_po7.why">
-      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "62" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "62" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

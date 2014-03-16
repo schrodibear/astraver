@@ -119,7 +119,7 @@ tests/c/sparse_array.c:72:[kernel] warning: Neither code nor specification for f
          
          Unexpected error (File "src/kernel/ast_info.ml", line 391, characters 11-17: Assertion failed).
          Please report as 'crash' at http://bts.frama-c.com/.
-         Your Frama-C version is Fluorine-20130601+dev.
+         Your Frama-C version is Neon-20140301.
          Note that a version and a backtrace alone often do not contain enough
          information to understand the bug. Guidelines for reporting bugs are at:
          http://bts.frama-c.com/dokuwiki/doku.php?id=mantis:frama-c:bug_reporting_guidelines

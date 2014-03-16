@@ -46,21 +46,21 @@ tag voidP = {
 type voidP = [voidP]
 
 unit reverse_endian(shortP[..] s)
-  requires (C_13 : ((C_14 : (\offset_min(s) <= 0)) &&
-                     (C_15 : (\offset_max(s) >= 0))));
+  requires (_C_13 : ((_C_14 : (\offset_min(s) <= 0)) &&
+                      (_C_15 : (\offset_max(s) >= 0))));
 behavior default:
-  ensures (C_12 : (\at(s,Old).shortM ==
-                    ((256 * (\at(s.shortM,Old) % 256)) +
-                      (\at(s.shortM,Old) / 256))));
+  ensures (_C_12 : (\at(s,Old).shortM ==
+                     ((256 * (\at(s.shortM,Old) % 256)) +
+                       (\at(s.shortM,Old) / 256))));
 {  
    (var charP[..] c);
    
    (var int8 tmp);
    
-   {  (C_2 : (c = (C_1 : (s :> charP[..]))));
-      (C_4 : (tmp = (C_3 : c.charM)));
-      (C_8 : ((C_7 : c.charM) = (C_6 : (C_5 : (c + 1)).charM)));
-      (C_11 : ((C_10 : (C_9 : (c + 1)).charM) = tmp));
+   {  (_C_2 : (c = (_C_1 : (s :> charP[..]))));
+      (_C_4 : (tmp = (_C_3 : c.charM)));
+      (_C_8 : ((_C_7 : c.charM) = (_C_6 : (_C_5 : (c + 1)).charM)));
+      (_C_11 : ((_C_10 : (_C_9 : (c + 1)).charM) = tmp));
       
       (return ())
    }

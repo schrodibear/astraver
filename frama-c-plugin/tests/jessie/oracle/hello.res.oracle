@@ -41,13 +41,13 @@ type voidP = [voidP]
 
 int32 max(int32 i, int32 j)
 behavior default:
-  ensures (C_3 : (\result ==
-                   (if (\at(i,Old) < \at(j,Old)) then \at(j,Old) else 
-                   \at(i,Old))));
+  ensures (_C_3 : (\result ==
+                    (if (\at(i,Old) < \at(j,Old)) then \at(j,Old) else 
+                    \at(i,Old))));
 {  
    (var int32 tmp);
    
-   {  (if (i < j) then (C_2 : (tmp = j)) else (C_1 : (tmp = i)));
+   {  (if (i < j) then (_C_2 : (tmp = j)) else (_C_1 : (tmp = i)));
       
       (return tmp)
    }
@@ -424,9 +424,9 @@ let max_ensures_default =
      begin
        (let _jessie_<somenum> =
        (if ((lt_int_ (integer_of_int32 i)) (integer_of_int32 j))
-       then (C_2: begin   (tmp := j); !tmp end)
-       else (C_1: begin   (tmp := i); !tmp end)) in void); (return := !tmp);
-      (raise Return) end); absurd  end with Return -> !return end))
+       then begin   (tmp := j); !tmp end else begin   (tmp := i); !tmp end) in
+       void); (return := !tmp); (raise Return) end); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     (integer_of_int32(result) = integer_of_int32((if lt_int_bool(integer_of_int32(i),
                                                      integer_of_int32(j))
@@ -443,9 +443,9 @@ let max_safety =
      begin
        (let _jessie_<somenum> =
        (if ((lt_int_ (integer_of_int32 i)) (integer_of_int32 j))
-       then (C_2: begin   (tmp := j); !tmp end)
-       else (C_1: begin   (tmp := i); !tmp end)) in void); (return := !tmp);
-      (raise Return) end); absurd  end with Return -> !return end)) { true }
+       then begin   (tmp := j); !tmp end else begin   (tmp := i); !tmp end) in
+       void); (return := !tmp); (raise Return) end); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C hello.jessie --quiet -f hello.makefile project

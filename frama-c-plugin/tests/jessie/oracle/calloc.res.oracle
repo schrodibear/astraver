@@ -401,491 +401,498 @@ predicate valid_wstring_or_null{L}(unsigned_shortP[..] s_31) =
 ((s_31 == null) || valid_wstring{L}(s_31))
 
 int32 memcmp(charP[..] s1, charP[..] s2, uint32 n_3)
-  requires (C_2 : (((C_4 : (\offset_min(s1) <= 0)) &&
-                     (C_5 : (\offset_max(s1) >= (n_3 - 1)))) &&
-                    ((C_7 : (\offset_min(s2) <= 0)) &&
-                      (C_8 : (\offset_max(s2) >= (n_3 - 1))))));
+  requires (_C_2 : (((_C_4 : (\offset_min(s1) <= 0)) &&
+                      (_C_5 : (\offset_max(s1) >= (n_3 - 1)))) &&
+                     ((_C_7 : (\offset_min(s2) <= 0)) &&
+                       (_C_8 : (\offset_max(s2) >= (n_3 - 1))))));
 behavior default:
   assigns \nothing;
-  ensures (C_1 : (\result ==
-                   memcmp{Here}(\at(s1,Old), \at(s2,Old), \at(n_3,Old))));
+  ensures (_C_1 : (\result ==
+                    memcmp{Here}(\at(s1,Old), \at(s2,Old), \at(n_3,Old))));
 ;
 
 charP[..] memchr(charP[..] s, int32 c, uint32 n_2)
-  requires (C_14 : ((C_15 : (\offset_min(s) <= 0)) &&
-                     (C_16 : (\offset_max(s) >= (n_2 - 1)))));
+  requires (_C_14 : ((_C_15 : (\offset_min(s) <= 0)) &&
+                      (_C_16 : (\offset_max(s) >= (n_2 - 1)))));
 behavior default:
   assigns \nothing;
-  ensures (C_9 : ((C_10 : (\result == \at(s,Old))) &&
-                   (C_11 : (\base_block(\result) == \base_block(\at(s,Old))))));
+  ensures (_C_9 : ((_C_10 : (\result == \at(s,Old))) &&
+                    (_C_11 : (\base_block(\result) ==
+                               \base_block(\at(s,Old))))));
 behavior found:
   assumes (memchr{Here}(s, c, n_2) == true);
-  ensures (C_12 : ((\result.charM :> int32) == \at(c,Old)));
+  ensures (_C_12 : ((\result.charM :> int32) == \at(c,Old)));
 behavior not_found:
   assumes (! (memchr{Here}(s, c, n_2) == true));
-  ensures (C_13 : (\result == null));
+  ensures (_C_13 : (\result == null));
 ;
 
 charP[..] memcpy(charP[..] dest_1, charP[..] src, uint32 n_4)
-  requires (C_22 : (((C_24 : (\offset_min(dest_1) <= 0)) &&
-                      (C_25 : (\offset_max(dest_1) >= (n_4 - 1)))) &&
-                     ((C_27 : (\offset_min(src) <= 0)) &&
-                       (C_28 : (\offset_max(src) >= (n_4 - 1))))));
+  requires (_C_22 : (((_C_24 : (\offset_min(dest_1) <= 0)) &&
+                       (_C_25 : (\offset_max(dest_1) >= (n_4 - 1)))) &&
+                      ((_C_27 : (\offset_min(src) <= 0)) &&
+                        (_C_28 : (\offset_max(src) >= (n_4 - 1))))));
 behavior default:
   assigns (dest_1 + [0..(n_4 - 1)]).charM;
-  ensures (C_17 : (((C_19 : (memcmp{Here}(\at(dest_1,Old), \at(src,Old),
-                                          \at(n_4,Old)) ==
-                              0)) &&
-                     (C_20 : (\result == \at(dest_1,Old)))) &&
-                    (C_21 : (\base_block(\result) ==
-                              \base_block(\at(dest_1,Old))))));
+  ensures (_C_17 : (((_C_19 : (memcmp{Here}(\at(dest_1,Old), \at(src,Old),
+                                            \at(n_4,Old)) ==
+                                0)) &&
+                      (_C_20 : (\result == \at(dest_1,Old)))) &&
+                     (_C_21 : (\base_block(\result) ==
+                                \base_block(\at(dest_1,Old))))));
 ;
 
 charP[..] memmove(charP[..] dest_2, charP[..] src_0, uint32 n_5)
-  requires (C_34 : (((C_36 : (\offset_min(dest_2) <= 0)) &&
-                      (C_37 : (\offset_max(dest_2) >= (n_5 - 1)))) &&
-                     ((C_39 : (\offset_min(src_0) <= 0)) &&
-                       (C_40 : (\offset_max(src_0) >= (n_5 - 1))))));
+  requires (_C_34 : (((_C_36 : (\offset_min(dest_2) <= 0)) &&
+                       (_C_37 : (\offset_max(dest_2) >= (n_5 - 1)))) &&
+                      ((_C_39 : (\offset_min(src_0) <= 0)) &&
+                        (_C_40 : (\offset_max(src_0) >= (n_5 - 1))))));
 behavior default:
   assigns (dest_2 + [0..(n_5 - 1)]).charM;
-  ensures (C_29 : (((C_31 : (memcmp{Here}(\at(dest_2,Old), \at(src_0,Old),
-                                          \at(n_5,Old)) ==
-                              0)) &&
-                     (C_32 : (\result == \at(dest_2,Old)))) &&
-                    (C_33 : (\base_block(\result) ==
-                              \base_block(\at(dest_2,Old))))));
+  ensures (_C_29 : (((_C_31 : (memcmp{Here}(\at(dest_2,Old), \at(src_0,Old),
+                                            \at(n_5,Old)) ==
+                                0)) &&
+                      (_C_32 : (\result == \at(dest_2,Old)))) &&
+                     (_C_33 : (\base_block(\result) ==
+                                \base_block(\at(dest_2,Old))))));
 ;
 
 charP[..] memset(charP[..] s_0, int32 c_0, uint32 n_6)
-  requires (C_46 : ((C_47 : (\offset_min(s_0) <= 0)) &&
-                     (C_48 : (\offset_max(s_0) >= (n_6 - 1)))));
+  requires (_C_46 : ((_C_47 : (\offset_min(s_0) <= 0)) &&
+                      (_C_48 : (\offset_max(s_0) >= (n_6 - 1)))));
 behavior default:
   assigns (s_0 + [0..(n_6 - 1)]).charM;
-  ensures (C_41 : (((C_43 : (memset{Here}(\at(s_0,Old), \at(c_0,Old),
-                                          \at(n_6,Old)) ==
-                              true)) &&
-                     (C_44 : (\result == \at(s_0,Old)))) &&
-                    (C_45 : (\base_block(\result) ==
-                              \base_block(\at(s_0,Old))))));
+  ensures (_C_41 : (((_C_43 : (memset{Here}(\at(s_0,Old), \at(c_0,Old),
+                                            \at(n_6,Old)) ==
+                                true)) &&
+                      (_C_44 : (\result == \at(s_0,Old)))) &&
+                     (_C_45 : (\base_block(\result) ==
+                                \base_block(\at(s_0,Old))))));
 ;
 
 uint32 strlen(charP[..] s_4)
-  requires (C_50 : valid_string{Here}(s_4));
+  requires (_C_50 : valid_string{Here}(s_4));
 behavior default:
   assigns \nothing;
-  ensures (C_49 : (\result == strlen{Here}(\at(s_4,Old))));
+  ensures (_C_49 : (\result == strlen{Here}(\at(s_4,Old))));
 ;
 
 int32 strcmp(charP[..] s1_0, charP[..] s2_0)
-  requires (C_52 : ((C_53 : valid_string{Here}(s1_0)) &&
-                     (C_54 : valid_string{Here}(s2_0))));
+  requires (_C_52 : ((_C_53 : valid_string{Here}(s1_0)) &&
+                      (_C_54 : valid_string{Here}(s2_0))));
 behavior default:
   assigns \nothing;
-  ensures (C_51 : (\result == strcmp{Here}(\at(s1_0,Old), \at(s2_0,Old))));
+  ensures (_C_51 : (\result == strcmp{Here}(\at(s1_0,Old), \at(s2_0,Old))));
 ;
 
 int32 strncmp(charP[..] s1_2, charP[..] s2_2, uint32 n_8)
-  requires (C_56 : ((C_57 : valid_string{Here}(s1_2)) &&
-                     (C_58 : valid_string{Here}(s2_2))));
+  requires (_C_56 : ((_C_57 : valid_string{Here}(s1_2)) &&
+                      (_C_58 : valid_string{Here}(s2_2))));
 behavior default:
   assigns \nothing;
-  ensures (C_55 : (\result ==
-                    strncmp{Here}(\at(s1_2,Old), \at(s2_2,Old), \at(n_8,Old))));
+  ensures (_C_55 : (\result ==
+                     strncmp{Here}(\at(s1_2,Old), \at(s2_2,Old), \at(n_8,Old))));
 ;
 
 int32 strcoll(charP[..] s1_1, charP[..] s2_1)
-  requires (C_60 : ((C_61 : valid_string{Here}(s1_1)) &&
-                     (C_62 : valid_string{Here}(s2_1))));
+  requires (_C_60 : ((_C_61 : valid_string{Here}(s1_1)) &&
+                      (_C_62 : valid_string{Here}(s2_1))));
 behavior default:
   assigns \nothing;
-  ensures (C_59 : true);
+  ensures (_C_59 : true);
 ;
 
 charP[..] strchr(charP[..] s_1, int32 c_1)
-  requires (C_70 : valid_string{Here}(s_1));
+  requires (_C_70 : valid_string{Here}(s_1));
 behavior default:
   assigns \nothing;
-  ensures (C_63 : true);
+  ensures (_C_63 : true);
 behavior found:
   assumes (strchr{Here}(s_1, c_1) == true);
-  ensures (C_64 : (((C_66 : ((\result.charM :> int32) == \at(c_1,Old))) &&
-                     (C_67 : (\base_block(\result) ==
-                               \base_block(\at(s_1,Old))))) &&
-                    (C_68 : valid_string{Here}(\result))));
+  ensures (_C_64 : (((_C_66 : ((\result.charM :> int32) == \at(c_1,Old))) &&
+                      (_C_67 : (\base_block(\result) ==
+                                 \base_block(\at(s_1,Old))))) &&
+                     (_C_68 : valid_string{Here}(\result))));
 behavior not_found:
   assumes (! (strchr{Here}(s_1, c_1) == true));
-  ensures (C_69 : (\result == null));
+  ensures (_C_69 : (\result == null));
 ;
 
 charP[..] strrchr(charP[..] s_7, int32 c_2)
-  requires (C_78 : valid_string{Here}(s_7));
+  requires (_C_78 : valid_string{Here}(s_7));
 behavior default:
   assigns \nothing;
-  ensures (C_71 : true);
+  ensures (_C_71 : true);
 behavior found:
   assumes (strchr{Here}(s_7, c_2) == true);
-  ensures (C_72 : (((C_74 : ((\result.charM :> int32) == \at(c_2,Old))) &&
-                     (C_75 : (\base_block(\result) ==
-                               \base_block(\at(s_7,Old))))) &&
-                    (C_76 : valid_string{Here}(\result))));
+  ensures (_C_72 : (((_C_74 : ((\result.charM :> int32) == \at(c_2,Old))) &&
+                      (_C_75 : (\base_block(\result) ==
+                                 \base_block(\at(s_7,Old))))) &&
+                     (_C_76 : valid_string{Here}(\result))));
 behavior not_found:
   assumes (! (strchr{Here}(s_7, c_2) == true));
-  ensures (C_77 : (\result == null));
+  ensures (_C_77 : (\result == null));
 ;
 
 uint32 strcspn(charP[..] s_2, charP[..] reject)
-  requires (C_82 : ((C_83 : valid_string{Here}(s_2)) &&
-                     (C_84 : valid_string{Here}(reject))));
+  requires (_C_82 : ((_C_83 : valid_string{Here}(s_2)) &&
+                      (_C_84 : valid_string{Here}(reject))));
 behavior default:
   assigns \nothing;
-  ensures (C_79 : ((C_80 : (0 <= \result)) &&
-                    (C_81 : (\result <= strlen{Here}(\at(s_2,Old))))));
+  ensures (_C_79 : ((_C_80 : (0 <= \result)) &&
+                     (_C_81 : (\result <= strlen{Here}(\at(s_2,Old))))));
 ;
 
 uint32 strspn(charP[..] s_8, charP[..] accept_0)
-  requires (C_88 : ((C_89 : valid_string{Here}(s_8)) &&
-                     (C_90 : valid_string{Here}(accept_0))));
+  requires (_C_88 : ((_C_89 : valid_string{Here}(s_8)) &&
+                      (_C_90 : valid_string{Here}(accept_0))));
 behavior default:
   assigns \nothing;
-  ensures (C_85 : ((C_86 : (0 <= \result)) &&
-                    (C_87 : (\result <= strlen{Here}(\at(s_8,Old))))));
+  ensures (_C_85 : ((_C_86 : (0 <= \result)) &&
+                     (_C_87 : (\result <= strlen{Here}(\at(s_8,Old))))));
 ;
 
 charP[..] strpbrk(charP[..] s_6, charP[..] accept)
-  requires (C_92 : ((C_93 : valid_string{Here}(s_6)) &&
-                     (C_94 : valid_string{Here}(accept))));
+  requires (_C_92 : ((_C_93 : valid_string{Here}(s_6)) &&
+                      (_C_94 : valid_string{Here}(accept))));
 behavior default:
   assigns \nothing;
-  ensures (C_91 : ((\result == null) ||
-                    (\base_block(\result) == \base_block(\at(s_6,Old)))));
+  ensures (_C_91 : ((\result == null) ||
+                     (\base_block(\result) == \base_block(\at(s_6,Old)))));
 ;
 
 charP[..] strstr(charP[..] haystack, charP[..] needle)
-  requires (C_96 : ((C_97 : valid_string{Here}(haystack)) &&
-                     (C_98 : valid_string{Here}(needle))));
+  requires (_C_96 : ((_C_97 : valid_string{Here}(haystack)) &&
+                      (_C_98 : valid_string{Here}(needle))));
 behavior default:
   assigns \nothing;
-  ensures (C_95 : ((\result == null) ||
-                    ((\base_block(\result) == \base_block(\at(haystack,Old))) &&
-                      (memcmp{Here}(\result, \at(needle,Old),
-                                    strlen{Here}(\at(needle,Old))) ==
-                        0))));
+  ensures (_C_95 : ((\result == null) ||
+                     ((\base_block(\result) ==
+                        \base_block(\at(haystack,Old))) &&
+                       (memcmp{Here}(\result, \at(needle,Old),
+                                     strlen{Here}(\at(needle,Old))) ==
+                         0))));
 ;
 
 charP[..] strtok(charP[..] s_9, charP[..] delim)
-  requires (C_100 : ((C_101 : (valid_string{Here}(s_9) || (s_9 == null))) &&
-                      (C_102 : valid_string{Here}(delim))));
+  requires (_C_100 : ((_C_101 : (valid_string{Here}(s_9) || (s_9 == null))) &&
+                       (_C_102 : valid_string{Here}(delim))));
 behavior default:
   assigns \nothing;
-  ensures (C_99 : true);
+  ensures (_C_99 : true);
 ;
 
 charP[..] strerror(int32 errnum)
 behavior default:
   assigns \nothing;
-  ensures (C_103 : valid_string{Here}(\result));
+  ensures (_C_103 : valid_string{Here}(\result));
 ;
 
 charP[..] strcpy(charP[..] dest_4, charP[..] src_2)
-  requires (C_109 : (((C_111 : (\offset_min(dest_4) <= 0)) &&
-                       (C_112 : (\offset_max(dest_4) >= strlen{Here}(src_2)))) &&
-                      (C_113 : valid_string{Here}(src_2))));
+  requires (_C_109 : (((_C_111 : (\offset_min(dest_4) <= 0)) &&
+                        (_C_112 : (\offset_max(dest_4) >=
+                                    strlen{Here}(src_2)))) &&
+                       (_C_113 : valid_string{Here}(src_2))));
 behavior default:
   assigns (dest_4 + [0..strlen{Old}(src_2)]).charM;
-  ensures (C_104 : (((C_106 : (strcmp{Here}(\at(dest_4,Old), \at(src_2,Old)) ==
-                                0)) &&
-                      (C_107 : (\result == \at(dest_4,Old)))) &&
-                     (C_108 : (\base_block(\result) ==
-                                \base_block(\at(dest_4,Old))))));
+  ensures (_C_104 : (((_C_106 : (strcmp{Here}(\at(dest_4,Old), \at(src_2,Old)) ==
+                                  0)) &&
+                       (_C_107 : (\result == \at(dest_4,Old)))) &&
+                      (_C_108 : (\base_block(\result) ==
+                                  \base_block(\at(dest_4,Old))))));
 ;
 
 charP[..] strncpy(charP[..] dest_6, charP[..] src_4, uint32 n_9)
-  requires (C_119 : (((C_121 : (\offset_min(dest_6) <= 0)) &&
-                       (C_122 : (\offset_max(dest_6) >= (n_9 - 1)))) &&
-                      (C_123 : valid_string{Here}(src_4))));
+  requires (_C_119 : (((_C_121 : (\offset_min(dest_6) <= 0)) &&
+                        (_C_122 : (\offset_max(dest_6) >= (n_9 - 1)))) &&
+                       (_C_123 : valid_string{Here}(src_4))));
 behavior default:
   assigns (dest_6 + [0..(n_9 - 1)]).charM;
-  ensures (C_114 : (\result == \at(dest_6,Old)));
+  ensures (_C_114 : (\result == \at(dest_6,Old)));
 behavior complete:
   assumes (strlen{Here}(src_4) < n_9);
   assigns (dest_6 + [0..(n_9 - 1)]).charM;
-  ensures (C_115 : ((C_116 : (strcmp{Here}(\at(dest_6,Old), \at(src_4,Old)) ==
-                               0)) &&
-                     (C_117 : (\base_block(\result) ==
-                                \base_block(\at(dest_6,Old))))));
+  ensures (_C_115 : ((_C_116 : (strcmp{Here}(\at(dest_6,Old), \at(src_4,Old)) ==
+                                 0)) &&
+                      (_C_117 : (\base_block(\result) ==
+                                  \base_block(\at(dest_6,Old))))));
 behavior partial:
   assumes (n_9 <= strlen{Here}(src_4));
   assigns (dest_6 + [0..(n_9 - 1)]).charM;
-  ensures (C_118 : (memcmp{Here}(\at(dest_6,Old), \at(src_4,Old),
-                                 \at(n_9,Old)) ==
-                     0));
+  ensures (_C_118 : (memcmp{Here}(\at(dest_6,Old), \at(src_4,Old),
+                                  \at(n_9,Old)) ==
+                      0));
 ;
 
 charP[..] strcat(charP[..] dest_3, charP[..] src_1)
-  requires (C_129 : ((((C_132 : (\offset_min(dest_3) <= 0)) &&
-                        (C_133 : (\offset_max(dest_3) >=
-                                   (strlen{Here}(dest_3) +
-                                     strlen{Here}(src_1))))) &&
-                       (C_134 : valid_string{Here}(dest_3))) &&
-                      (C_135 : valid_string{Here}(src_1))));
+  requires (_C_129 : ((((_C_132 : (\offset_min(dest_3) <= 0)) &&
+                         (_C_133 : (\offset_max(dest_3) >=
+                                     (strlen{Here}(dest_3) +
+                                       strlen{Here}(src_1))))) &&
+                        (_C_134 : valid_string{Here}(dest_3))) &&
+                       (_C_135 : valid_string{Here}(src_1))));
 behavior default:
   assigns (dest_3 + [0..(strlen{Old}(dest_3) + strlen{Old}(src_1))]).charM;
-  ensures (C_124 : (((C_126 : (strlen{Here}(\at(dest_3,Old)) ==
-                                \at((strlen{Old}(dest_3) +
-                                      strlen{Old}(src_1)),Old))) &&
-                      (C_127 : (\result == \at(dest_3,Old)))) &&
-                     (C_128 : (\base_block(\result) ==
-                                \base_block(\at(dest_3,Old))))));
+  ensures (_C_124 : (((_C_126 : (strlen{Here}(\at(dest_3,Old)) ==
+                                  \at((strlen{Old}(dest_3) +
+                                        strlen{Old}(src_1)),Old))) &&
+                       (_C_127 : (\result == \at(dest_3,Old)))) &&
+                      (_C_128 : (\base_block(\result) ==
+                                  \base_block(\at(dest_3,Old))))));
 ;
 
 charP[..] strncat(charP[..] dest_5, charP[..] src_3, uint32 n_7)
-  requires (C_141 : ((((C_144 : (\offset_min(dest_5) <= 0)) &&
-                        (C_145 : (\offset_max(dest_5) >= (n_7 - 1)))) &&
-                       (C_146 : valid_string{Here}(dest_5))) &&
-                      (C_147 : valid_string{Here}(src_3))));
+  requires (_C_141 : ((((_C_144 : (\offset_min(dest_5) <= 0)) &&
+                         (_C_145 : (\offset_max(dest_5) >= (n_7 - 1)))) &&
+                        (_C_146 : valid_string{Here}(dest_5))) &&
+                       (_C_147 : valid_string{Here}(src_3))));
 behavior default:
   assigns (dest_5 + [0..((strlen{Old}(dest_5) + n_7) - 1)]).charM;
-  ensures (C_136 : ((C_137 : (\result == \at(dest_5,Old))) &&
-                     (C_138 : (\base_block(\result) ==
-                                \base_block(\at(dest_5,Old))))));
+  ensures (_C_136 : ((_C_137 : (\result == \at(dest_5,Old))) &&
+                      (_C_138 : (\base_block(\result) ==
+                                  \base_block(\at(dest_5,Old))))));
 behavior complete:
   assumes (strlen{Here}(src_3) <= n_7);
   assigns (dest_5 + [0..(strlen{Old}(dest_5) + strlen{Old}(src_3))]).charM;
-  ensures (C_139 : (strlen{Here}(\at(dest_5,Old)) ==
-                     \at((strlen{Old}(dest_5) + strlen{Old}(src_3)),Old)));
+  ensures (_C_139 : (strlen{Here}(\at(dest_5,Old)) ==
+                      \at((strlen{Old}(dest_5) + strlen{Old}(src_3)),Old)));
 behavior partial:
   assumes (n_7 < strlen{Here}(src_3));
   assigns (dest_5 + [0..(strlen{Old}(dest_5) + n_7)]).charM;
-  ensures (C_140 : (strlen{Here}(\at(dest_5,Old)) ==
-                     (\at(strlen{Old}(dest_5),Old) + \at(n_7,Old))));
+  ensures (_C_140 : (strlen{Here}(\at(dest_5,Old)) ==
+                      (\at(strlen{Old}(dest_5),Old) + \at(n_7,Old))));
 ;
 
 uint32 strxfrm(charP[..] dest_7, charP[..] src_5, uint32 n_11)
-  requires (C_149 : (((C_151 : (\offset_min(dest_7) <= 0)) &&
-                       (C_152 : (\offset_max(dest_7) >= (n_11 - 1)))) &&
-                      (C_153 : valid_string{Here}(src_5))));
+  requires (_C_149 : (((_C_151 : (\offset_min(dest_7) <= 0)) &&
+                        (_C_152 : (\offset_max(dest_7) >= (n_11 - 1)))) &&
+                       (_C_153 : valid_string{Here}(src_5))));
 behavior default:
   assigns (dest_7 + [0..(n_11 - 1)]).charM;
-  ensures (C_148 : true);
+  ensures (_C_148 : true);
 ;
 
 charP[..] strdup(charP[..] s_3)
-  requires (C_159 : valid_string{Here}(s_3));
+  requires (_C_159 : valid_string{Here}(s_3));
 behavior default:
   assigns \nothing;
-  ensures (C_154 : (((C_156 : (\offset_min(\result) <= 0)) &&
-                      (C_157 : (\offset_max(\result) >=
-                                 strlen{Here}(\at(s_3,Old))))) &&
-                     (C_158 : (strcmp{Here}(\result, \at(s_3,Old)) == 0))));
+  ensures (_C_154 : (((_C_156 : (\offset_min(\result) <= 0)) &&
+                       (_C_157 : (\offset_max(\result) >=
+                                   strlen{Here}(\at(s_3,Old))))) &&
+                      (_C_158 : (strcmp{Here}(\result, \at(s_3,Old)) == 0))));
 ;
 
 charP[..] strndup(charP[..] s_5, uint32 n_10)
-  requires (C_169 : valid_string{Here}(s_5));
+  requires (_C_169 : valid_string{Here}(s_5));
 behavior default:
   assigns \nothing;
-  ensures (C_160 : (((((C_164 : (\offset_min(\result) <= 0)) &&
-                        (C_165 : (\offset_max(\result) >=
-                                   minimum(strlen{Here}(\at(s_5,Old)),
-                                           \at(n_10,Old))))) &&
-                       (C_166 : valid_string{Here}(\result))) &&
-                      (C_167 : (strlen{Here}(\result) <= \at(n_10,Old)))) &&
-                     (C_168 : (strncmp{Here}(\result, \at(s_5,Old),
-                                             \at(n_10,Old)) ==
-                                0))));
+  ensures (_C_160 : (((((_C_164 : (\offset_min(\result) <= 0)) &&
+                         (_C_165 : (\offset_max(\result) >=
+                                     minimum(strlen{Here}(\at(s_5,Old)),
+                                             \at(n_10,Old))))) &&
+                        (_C_166 : valid_string{Here}(\result))) &&
+                       (_C_167 : (strlen{Here}(\result) <= \at(n_10,Old)))) &&
+                      (_C_168 : (strncmp{Here}(\result, \at(s_5,Old),
+                                               \at(n_10,Old)) ==
+                                  0))));
 ;
 
 uint32 wcslen(unsigned_shortP[..] s_10)
-  requires (C_171 : valid_wstring{Here}(s_10));
+  requires (_C_171 : valid_wstring{Here}(s_10));
 behavior default:
   assigns \nothing;
-  ensures (C_170 : (\result == wcslen{Here}(\at(s_10,Old))));
+  ensures (_C_170 : (\result == wcslen{Here}(\at(s_10,Old))));
 ;
 
 unsigned_shortP[..] wcscpy(unsigned_shortP[..] dest_8,
                            unsigned_shortP[..] src_6)
-  requires (C_177 : (((C_179 : (\offset_min(dest_8) <= 0)) &&
-                       (C_180 : (\offset_max(dest_8) >= wcslen{Here}(src_6)))) &&
-                      (C_181 : valid_wstring{Here}(src_6))));
+  requires (_C_177 : (((_C_179 : (\offset_min(dest_8) <= 0)) &&
+                        (_C_180 : (\offset_max(dest_8) >=
+                                    wcslen{Here}(src_6)))) &&
+                       (_C_181 : valid_wstring{Here}(src_6))));
 behavior default:
   assigns (dest_8 + [0..wcslen{Old}(src_6)]).unsigned_shortM;
-  ensures (C_172 : (((C_174 : valid_wstring{Here}(\at(dest_8,Old))) &&
-                      (C_175 : (wcscmp{Here}(\at(dest_8,Old), \at(src_6,Old)) ==
-                                 0))) &&
-                     (C_176 : (\result == \at(dest_8,Old)))));
+  ensures (_C_172 : (((_C_174 : valid_wstring{Here}(\at(dest_8,Old))) &&
+                       (_C_175 : (wcscmp{Here}(\at(dest_8,Old),
+                                               \at(src_6,Old)) ==
+                                   0))) &&
+                      (_C_176 : (\result == \at(dest_8,Old)))));
 ;
 
 unsigned_shortP[..] wcsncpy(unsigned_shortP[..] dest_9,
                             unsigned_shortP[..] src_7, uint32 n_12)
-  requires (C_187 : (((C_189 : (\offset_min(dest_9) <= 0)) &&
-                       (C_190 : (\offset_max(dest_9) >= (n_12 - 1)))) &&
-                      (C_191 : valid_wstring{Here}(src_7))));
+  requires (_C_187 : (((_C_189 : (\offset_min(dest_9) <= 0)) &&
+                        (_C_190 : (\offset_max(dest_9) >= (n_12 - 1)))) &&
+                       (_C_191 : valid_wstring{Here}(src_7))));
 behavior default:
   assigns (dest_9 + [0..(n_12 - 1)]).unsigned_shortM;
-  ensures (C_182 : (\result == \at(dest_9,Old)));
+  ensures (_C_182 : (\result == \at(dest_9,Old)));
 behavior complete:
   assumes (wcslen{Here}(src_7) < n_12);
   assigns (dest_9 + [0..(n_12 - 1)]).unsigned_shortM;
-  ensures (C_183 : ((C_184 : valid_wstring{Here}(\at(dest_9,Old))) &&
-                     (C_185 : (wcscmp{Here}(\at(dest_9,Old), \at(src_7,Old)) ==
-                                0))));
+  ensures (_C_183 : ((_C_184 : valid_wstring{Here}(\at(dest_9,Old))) &&
+                      (_C_185 : (wcscmp{Here}(\at(dest_9,Old), \at(src_7,Old)) ==
+                                  0))));
 behavior partial:
   assumes (n_12 <= wcslen{Here}(src_7));
   assigns (dest_9 + [0..(n_12 - 1)]).unsigned_shortM;
-  ensures (C_186 : true);
+  ensures (_C_186 : true);
 ;
 
 uint32 wcscspn(unsigned_shortP[..] wcs, unsigned_shortP[..] reject_0)
-  requires (C_195 : ((C_196 : valid_wstring{Here}(wcs)) &&
-                      (C_197 : valid_wstring{Here}(reject_0))));
+  requires (_C_195 : ((_C_196 : valid_wstring{Here}(wcs)) &&
+                       (_C_197 : valid_wstring{Here}(reject_0))));
 behavior default:
   assigns \nothing;
-  ensures (C_192 : ((C_193 : (0 <= \result)) &&
-                     (C_194 : (\result <= wcslen{Here}(\at(wcs,Old))))));
+  ensures (_C_192 : ((_C_193 : (0 <= \result)) &&
+                      (_C_194 : (\result <= wcslen{Here}(\at(wcs,Old))))));
 ;
 
 uint32 wcsspn(unsigned_shortP[..] wcs_2, unsigned_shortP[..] accept_1)
-  requires (C_201 : ((C_202 : valid_wstring{Here}(wcs_2)) &&
-                      (C_203 : valid_wstring{Here}(accept_1))));
+  requires (_C_201 : ((_C_202 : valid_wstring{Here}(wcs_2)) &&
+                       (_C_203 : valid_wstring{Here}(accept_1))));
 behavior default:
   assigns \nothing;
-  ensures (C_198 : ((C_199 : (0 <= \result)) &&
-                     (C_200 : (\result <= wcslen{Here}(\at(wcs_2,Old))))));
+  ensures (_C_198 : ((_C_199 : (0 <= \result)) &&
+                      (_C_200 : (\result <= wcslen{Here}(\at(wcs_2,Old))))));
 ;
 
 unsigned_shortP[..] wcsdup(unsigned_shortP[..] wcs_0)
-  requires (C_209 : valid_wstring{Here}(wcs_0));
+  requires (_C_209 : valid_wstring{Here}(wcs_0));
 behavior default:
   assigns \nothing;
-  ensures (C_204 : (((C_206 : (\offset_min(\result) <= 0)) &&
-                      (C_207 : (\offset_max(\result) >=
-                                 wcslen{Here}(\at(wcs_0,Old))))) &&
-                     (C_208 : (wcscmp{Here}(\result, \at(wcs_0,Old)) == 0))));
+  ensures (_C_204 : (((_C_206 : (\offset_min(\result) <= 0)) &&
+                       (_C_207 : (\offset_max(\result) >=
+                                   wcslen{Here}(\at(wcs_0,Old))))) &&
+                      (_C_208 : (wcscmp{Here}(\result, \at(wcs_0,Old)) == 0))));
 ;
 
 unsigned_shortP[..] wcsndup(unsigned_shortP[..] wcs_1, uint32 n_13)
-  requires (C_219 : valid_wstring{Here}(wcs_1));
+  requires (_C_219 : valid_wstring{Here}(wcs_1));
 behavior default:
   assigns \nothing;
-  ensures (C_210 : (((((C_214 : (\offset_min(\result) <= 0)) &&
-                        (C_215 : (\offset_max(\result) >=
-                                   minimum(wcslen{Here}(\at(wcs_1,Old)),
-                                           \at(n_13,Old))))) &&
-                       (C_216 : valid_wstring{Here}(\result))) &&
-                      (C_217 : (wcslen{Here}(\result) <= \at(n_13,Old)))) &&
-                     (C_218 : (wcsncmp{Here}(\result, \at(wcs_1,Old),
-                                             \at(n_13,Old)) ==
-                                0))));
+  ensures (_C_210 : (((((_C_214 : (\offset_min(\result) <= 0)) &&
+                         (_C_215 : (\offset_max(\result) >=
+                                     minimum(wcslen{Here}(\at(wcs_1,Old)),
+                                             \at(n_13,Old))))) &&
+                        (_C_216 : valid_wstring{Here}(\result))) &&
+                       (_C_217 : (wcslen{Here}(\result) <= \at(n_13,Old)))) &&
+                      (_C_218 : (wcsncmp{Here}(\result, \at(wcs_1,Old),
+                                               \at(n_13,Old)) ==
+                                  0))));
 ;
 
 double atof(charP[..] nptr)
-  requires (C_221 : valid_string{Here}(nptr));
+  requires (_C_221 : valid_string{Here}(nptr));
 behavior default:
   assigns \nothing;
-  ensures (C_220 : true);
+  ensures (_C_220 : true);
 ;
 
 int32 atoi(charP[..] nptr_0)
-  requires (C_223 : valid_string{Here}(nptr_0));
+  requires (_C_223 : valid_string{Here}(nptr_0));
 behavior default:
   assigns \nothing;
-  ensures (C_222 : true);
+  ensures (_C_222 : true);
 ;
 
 int32 atol(charP[..] nptr_1)
-  requires (C_225 : valid_string{Here}(nptr_1));
+  requires (_C_225 : valid_string{Here}(nptr_1));
 behavior default:
   assigns \nothing;
-  ensures (C_224 : true);
+  ensures (_C_224 : true);
 ;
 
 int64 atoll(charP[..] nptr_2)
-  requires (C_227 : valid_string{Here}(nptr_2));
+  requires (_C_227 : valid_string{Here}(nptr_2));
 behavior default:
   assigns \nothing;
-  ensures (C_226 : true);
+  ensures (_C_226 : true);
 ;
 
 charP[..] calloc(uint32 nmemb, uint32 size_0)
 behavior default:
   assigns \nothing;
-  ensures (C_228 : ((C_229 : (\offset_min(\result) <= 0)) &&
-                     (C_230 : (\offset_max(\result) >=
-                                ((\at(size_0,Old) * \at(nmemb,Old)) - 1)))));
+  ensures (_C_228 : ((_C_229 : (\offset_min(\result) <= 0)) &&
+                      (_C_230 : (\offset_max(\result) >=
+                                  ((\at(size_0,Old) * \at(nmemb,Old)) - 1)))));
 ;
 
 charP[..] realloc(charP[..] ptr_0, uint32 size_2)
-  requires (C_234 : (((\offset_min(ptr_0) <= 0) && (\offset_max(ptr_0) >= 0)) ||
-                      (ptr_0 == null)));
+  requires (_C_234 : (((\offset_min(ptr_0) <= 0) &&
+                        (\offset_max(ptr_0) >= 0)) ||
+                       (ptr_0 == null)));
 behavior default:
   assigns \nothing;
-  ensures (C_231 : ((C_232 : (\offset_min(\result) <= 0)) &&
-                     (C_233 : (\offset_max(\result) >= (\at(size_2,Old) - 1)))));
+  ensures (_C_231 : ((_C_232 : (\offset_min(\result) <= 0)) &&
+                      (_C_233 : (\offset_max(\result) >=
+                                  (\at(size_2,Old) - 1)))));
 ;
 
 unit abort()
 behavior default:
   assigns \nothing;
-  ensures (C_235 : false);
+  ensures (_C_235 : false);
 ;
 
 unit exit(int32 status)
 behavior default:
   assigns \nothing;
-  ensures (C_236 : false);
+  ensures (_C_236 : false);
 ;
 
 uint32 mbstowcs(unsigned_shortP[..] wcstr, charP[..] mbstr, uint32 n_1)
-  requires (C_240 : ((C_241 : valid_string{Here}(mbstr)) &&
-                      ((C_243 : (\offset_min(wcstr) <= 0)) &&
-                        (C_244 : (\offset_max(wcstr) >= (n_1 - 1))))));
+  requires (_C_240 : ((_C_241 : valid_string{Here}(mbstr)) &&
+                       ((_C_243 : (\offset_min(wcstr) <= 0)) &&
+                         (_C_244 : (\offset_max(wcstr) >= (n_1 - 1))))));
 behavior default:
   assigns (wcstr + [0..(n_1 - 1)]).unsigned_shortM;
-  ensures (C_237 : ((C_238 : valid_wstring{Here}(\at(wcstr,Old))) &&
-                     (C_239 : (wcslen{Here}(\at(wcstr,Old)) < \at(n_1,Old)))));
+  ensures (_C_237 : ((_C_238 : valid_wstring{Here}(\at(wcstr,Old))) &&
+                      (_C_239 : (wcslen{Here}(\at(wcstr,Old)) < \at(n_1,Old)))));
 ;
 
 uint32 wcstombs(charP[..] mbstr_0, unsigned_shortP[..] wcstr_0, uint32 n_14)
-  requires (C_248 : ((C_249 : valid_wstring{Here}(wcstr_0)) &&
-                      ((C_251 : (\offset_min(mbstr_0) <= 0)) &&
-                        (C_252 : (\offset_max(mbstr_0) >= (n_14 - 1))))));
+  requires (_C_248 : ((_C_249 : valid_wstring{Here}(wcstr_0)) &&
+                       ((_C_251 : (\offset_min(mbstr_0) <= 0)) &&
+                         (_C_252 : (\offset_max(mbstr_0) >= (n_14 - 1))))));
 behavior default:
   assigns (mbstr_0 + [0..(n_14 - 1)]).charM;
-  ensures (C_245 : ((C_246 : valid_string{Here}(\at(mbstr_0,Old))) &&
-                     (C_247 : (strlen{Here}(\at(mbstr_0,Old)) <
-                                \at(n_14,Old)))));
+  ensures (_C_245 : ((_C_246 : valid_string{Here}(\at(mbstr_0,Old))) &&
+                      (_C_247 : (strlen{Here}(\at(mbstr_0,Old)) <
+                                  \at(n_14,Old)))));
 ;
 
 int32 wctomb(charP[..] s_11, uint16 wc)
-  requires (C_256 : (((\offset_min(s_11) <= 0) && (\offset_max(s_11) >= 0)) ||
-                      (s_11 == null)));
+  requires (_C_256 : (((\offset_min(s_11) <= 0) && (\offset_max(s_11) >= 0)) ||
+                       (s_11 == null)));
 behavior default:
   assigns (s_11 + [..]).charM;
-  ensures (C_253 : true);
+  ensures (_C_253 : true);
 behavior zero:
   assumes (s_11 == null);
   assigns \nothing;
-  ensures (C_254 : true);
+  ensures (_C_254 : true);
 behavior non_null:
   assumes (s_11 != null);
   assigns (s_11 + [..]).charM;
-  ensures (C_255 : true);
+  ensures (_C_255 : true);
 ;
 
 unit f(charP[..] x)
-  requires (C_266 : valid_string{Here}(x));
+  requires (_C_266 : valid_string{Here}(x));
 behavior default:
-  ensures (C_265 : true);
+  ensures (_C_265 : true);
 {  
    (var uint32 len);
    
    (var charP[..] y);
    
-   {  (C_258 : (len = (C_257 : strlen(x))));
-      (C_262 : (y = (C_261 : (new charP[(C_260 : ((C_259 : (len + 1)) :> uint32))]))));
-      (C_263 : memcpy(y, x, len));
+   {  (_C_258 : (len = (_C_257 : strlen(x))));
+      (_C_262 : (y = (_C_261 : (new charP[(_C_260 : ((_C_259 : (len + 1)) :> uint32))]))));
+      (_C_263 : memcpy(y, x, len));
       
       {  
-         (assert for default: (C_264 : (jessie : valid_string{Here}(y))));
+         (assert for default: (_C_264 : (jessie : valid_string{Here}(y))));
          ()
       };
       
@@ -4122,38 +4129,28 @@ let f_ensures_default =
      (let charP_y_183_alloc_table = ref (any_alloc_table void) in
      (let len = ref (any_uint32 void) in
      (let y = ref (any_pointer void) in
-     (C_258:
      begin
        (let _jessie_<somenum> =
-       (len := (C_257:
-               (let _jessie_<somenum> = x_0 in
+       (len := (let _jessie_<somenum> = x_0 in
                (JC_<somenum>:
-               (((strlen_0 _jessie_<somenum>) charP_x_124_alloc_table) charP_charM_x_124))))) in
+               (((strlen_0 _jessie_<somenum>) charP_x_124_alloc_table) charP_charM_x_124)))) in
        void);
-      (C_262:
-      begin
-        (let _jessie_<somenum> =
-        (y := (C_261:
-              (JC_<somenum>:
-              (((alloc_struct_charP (integer_of_uint32 (C_260:
-                                                       (safe_uint32_of_integer_ 
-                                                        (C_259:
-                                                        ((add_int (integer_of_uint32 !len)) (1))))))) charP_y_183_alloc_table) charP_y_183_tag_table)))) in
-        void);
-       (C_263:
-       begin
-         (let _jessie_<somenum> =
-         (let _jessie_<somenum> = !y in
-         (let _jessie_<somenum> = x_0 in
-         (let _jessie_<somenum> = !len in
-         (JC_<somenum>:
-         (((((((memcpy _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>) charP_charM_y_183) charP_x_124_alloc_table) !charP_y_183_alloc_table) charP_charM_x_124))))) in
-         void);
-        (assert
-        { (JC_<somenum>:
-          valid_string(y, charP_y_183_alloc_table, charP_charM_y_183)) };
-        void); void; (raise Return) end) end) end)))))); (raise Return) end
-   with Return -> void end) { (JC_<somenum>: true) }
+      (let _jessie_<somenum> =
+      (y := (JC_<somenum>:
+            (((alloc_struct_charP (integer_of_uint32 (safe_uint32_of_integer_ 
+                                                      ((add_int (integer_of_uint32 !len)) (1))))) charP_y_183_alloc_table) charP_y_183_tag_table))) in
+      void);
+      (let _jessie_<somenum> =
+      (let _jessie_<somenum> = !y in
+      (let _jessie_<somenum> = x_0 in
+      (let _jessie_<somenum> = !len in
+      (JC_<somenum>:
+      (((((((memcpy _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>) charP_charM_y_183) charP_x_124_alloc_table) !charP_y_183_alloc_table) charP_charM_x_124))))) in
+      void);
+      (assert
+      { (JC_<somenum>: valid_string(y, charP_y_183_alloc_table, charP_charM_y_183)) };
+      void); void; (raise Return) end))))); (raise Return) end with Return ->
+   void end) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (x_0 : charP pointer) (charP_x_124_alloc_table : charP alloc_table) (charP_charM_x_124 : (charP, int8) memory) ->
@@ -4166,40 +4163,31 @@ let f_safety =
      (let charP_y_183_alloc_table = ref (any_alloc_table void) in
      (let len = ref (any_uint32 void) in
      (let y = ref (any_pointer void) in
-     (C_258:
      begin
        (let _jessie_<somenum> =
-       (len := (C_257:
-               (let _jessie_<somenum> = x_0 in
+       (len := (let _jessie_<somenum> = x_0 in
                (JC_<somenum>:
-               (((strlen_0_requires _jessie_<somenum>) charP_x_124_alloc_table) charP_charM_x_124))))) in
+               (((strlen_0_requires _jessie_<somenum>) charP_x_124_alloc_table) charP_charM_x_124)))) in
        void);
-      (C_262:
-      begin
-        (let _jessie_<somenum> =
-        (y := (C_261:
-              (JC_<somenum>:
-              (((alloc_struct_charP_requires (integer_of_uint32 (C_260:
-                                                                (JC_<somenum>:
-                                                                (uint32_of_integer_ 
-                                                                 (C_259:
-                                                                 ((add_int 
-                                                                   (integer_of_uint32 !len)) (1)))))))) charP_y_183_alloc_table) charP_y_183_tag_table)))) in
-        void);
-       (C_263:
-       begin
-         (let _jessie_<somenum> =
-         (let _jessie_<somenum> = !y in
-         (let _jessie_<somenum> = x_0 in
-         (let _jessie_<somenum> = !len in
-         (JC_<somenum>:
-         (((((((memcpy_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>) charP_charM_y_183) charP_x_124_alloc_table) !charP_y_183_alloc_table) charP_charM_x_124))))) in
-         void);
-        [ { } unit reads charP_charM_y_183,charP_y_183_alloc_table,y
-          { (JC_<somenum>:
-            valid_string(y, charP_y_183_alloc_table, charP_charM_y_183)) } ];
-        void; (raise Return) end) end) end)))))); (raise Return) end with
-   Return -> void end) { true }
+      (let _jessie_<somenum> =
+      (y := (JC_<somenum>:
+            (((alloc_struct_charP_requires (integer_of_uint32 (JC_<somenum>:
+                                                              (uint32_of_integer_ 
+                                                               ((add_int 
+                                                                 (integer_of_uint32 !len)) (1)))))) charP_y_183_alloc_table) charP_y_183_tag_table))) in
+      void);
+      (let _jessie_<somenum> =
+      (let _jessie_<somenum> = !y in
+      (let _jessie_<somenum> = x_0 in
+      (let _jessie_<somenum> = !len in
+      (JC_<somenum>:
+      (((((((memcpy_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>) charP_charM_y_183) charP_x_124_alloc_table) !charP_y_183_alloc_table) charP_charM_x_124))))) in
+      void);
+      [ { } unit reads charP_charM_y_183,charP_y_183_alloc_table,y
+        { (JC_<somenum>:
+          valid_string(y, charP_y_183_alloc_table, charP_charM_y_183)) } ];
+      void; (raise Return) end))))); (raise Return) end with Return ->
+   void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C calloc.jessie --quiet -f calloc.makefile project
@@ -4235,22 +4223,22 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/calloc_po6.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "879" begin = "15" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "886" begin = "16" end = "33"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po7.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "879" begin = "15" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "886" begin = "16" end = "33"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po8.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "879" begin = "15" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "886" begin = "16" end = "33"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po9.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "879" begin = "15" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "886" begin = "16" end = "33"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

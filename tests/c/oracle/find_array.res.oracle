@@ -108,19 +108,19 @@ predicate mem{L}(int32 elt, intP[..] arr_0, integer length_0) =
   (((0 <= i_2) && (i_2 < length_0)) && ((arr_0 + i_2).intM == elt)))
 
 int32 find_array(intP[..] arr, int32 length, int32 query)
-  requires (C_36 : sorted{Here}(arr, length));
-  requires (C_35 : (length >= 0));
-  requires (C_32 : ((C_33 : (\offset_min(arr) <= 0)) &&
-                     (C_34 : (\offset_max(arr) >= (length - 1)))));
+  requires (_C_36 : sorted{Here}(arr, length));
+  requires (_C_35 : (length >= 0));
+  requires (_C_32 : ((_C_33 : (\offset_min(arr) <= 0)) &&
+                      (_C_34 : (\offset_max(arr) >= (length - 1)))));
 behavior default:
   assigns \nothing;
-  ensures (C_29 : true);
+  ensures (_C_29 : true);
 behavior exists:
   assumes mem{Here}(query, arr, length);
-  ensures (C_30 : ((\at(arr,Old) + \result).intM == \at(query,Old)));
+  ensures (_C_30 : ((\at(arr,Old) + \result).intM == \at(query,Old)));
 behavior not_exists:
   assumes (! mem{Here}(query, arr, length));
-  ensures (C_31 : (\result == (- 1)));
+  ensures (_C_31 : (\result == (- 1)));
 {  
    (var int32 low);
    
@@ -130,87 +130,70 @@ behavior not_exists:
    
    (var int32 __retres);
    
-   {  (C_1 : (low = 0));
-      (C_4 : (high = (C_3 : ((C_2 : (length - 1)) :> int32))));
+   {  (_C_1 : (low = 0));
+      (_C_4 : (high = (_C_3 : ((_C_2 : (length - 1)) :> int32))));
       
       loop 
       behavior default:
-        invariant (C_9 : (0 <= low));
+        invariant (_C_9 : (0 <= low));
       behavior default:
-        invariant (C_8 : (high < length));
+        invariant (_C_8 : (high < length));
       behavior default:
-        invariant (C_7 : (\forall integer i_3;
-                           (((0 <= i_3) && (i_3 < low)) ==>
-                             ((arr + i_3).intM < query))));
+        invariant (_C_7 : (\forall integer i_3;
+                            (((0 <= i_3) && (i_3 < low)) ==>
+                              ((arr + i_3).intM < query))));
       behavior default:
-        invariant (C_6 : (\forall integer i_4;
-                           (((high < i_4) && (i_4 < length)) ==>
-                             ((arr + i_4).intM > query))));
-      variant (C_5 : (high - low));
+        invariant (_C_6 : (\forall integer i_4;
+                            (((high < i_4) && (i_4 < length)) ==>
+                              ((arr + i_4).intM > query))));
+      variant (_C_5 : (high - low));
       while (true)
       {  
          {  (if (low <= high) then () else 
             (goto while_0_break));
             
-            {  (C_16 : (mean = (C_15 : ((C_14 : (low +
-                                                  (C_13 : ((C_12 : ((C_11 : (
-                                                                    (C_10 : 
-                                                                    (high -
-                                                                    low)) :> int32)) /
-                                                                    2)) :> int32)))) :> int32))));
-               (if ((C_19 : (C_18 : (arr + mean)).intM) == query) then 
-               {  (C_17 : (__retres = mean));
+            {  (_C_16 : (mean = (_C_15 : ((_C_14 : (low +
+                                                     (_C_13 : ((_C_12 : 
+                                                               ((_C_11 : (
+                                                                (_C_10 : 
+                                                                (high -
+                                                                  low)) :> int32)) /
+                                                                 2)) :> int32)))) :> int32))));
+               (if ((_C_19 : (_C_18 : (arr + mean)).intM) == query) then 
+               {  (_C_17 : (__retres = mean));
                   
                   (goto return_label)
                } else ());
-               (if ((C_27 : (C_26 : (arr + mean)).intM) < query) then 
-               (C_25 : (low = (C_24 : ((C_23 : (mean + 1)) :> int32)))) else 
-               (C_22 : (high = (C_21 : ((C_20 : (mean - 1)) :> int32)))))
+               (if ((_C_27 : (_C_26 : (arr + mean)).intM) < query) then 
+               (_C_25 : (low = (_C_24 : ((_C_23 : (mean + 1)) :> int32)))) else 
+               (_C_22 : (high = (_C_21 : ((_C_20 : (mean - 1)) :> int32)))))
             }
          }
       };
       (while_0_break : ());
-      (C_28 : (__retres = -1));
+      (_C_28 : (__retres = -1));
       (return_label : 
       (return __retres))
    }
 }
 ========== file tests/c/find_array.jessie/find_array.cloc ==========
-[C_15]
+[_C_35]
 file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 15
-end = 36
-
-[C_11]
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 22
-end = 31
-
-[C_1]
-file = "HOME/tests/c/find_array.c"
-line = 28
-begin = 2
-end = 5
-
-[C_33]
-file = "HOME/tests/c/find_array.c"
-line = 15
+line = 14
 begin = 11
-end = 38
+end = 22
 
-[C_9]
+[_C_28]
 file = "HOME/tests/c/find_array.c"
-line = 31
-begin = 19
-end = 27
+line = 43
+begin = 2
+end = 12
 
-[C_10]
+[_C_31]
 file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 22
-end = 31
+line = 25
+begin = 12
+end = 25
 
 [find_array]
 name = "Function find_array"
@@ -219,185 +202,203 @@ line = 27
 begin = 4
 end = 14
 
-[C_20]
-file = "HOME/tests/c/find_array.c"
-line = 41
-begin = 16
-end = 24
-
-[C_32]
-file = "HOME/tests/c/find_array.c"
-line = 15
-begin = 11
-end = 38
-
-[C_17]
-file = "HOME/tests/c/find_array.c"
-line = 39
-begin = 28
-end = 40
-
-[C_36]
-file = "HOME/tests/c/find_array.c"
-line = 13
-begin = 11
-end = 29
-
-[C_5]
-file = "HOME/tests/c/find_array.c"
-line = 35
-begin = 17
-end = 27
-
-[C_34]
-file = "HOME/tests/c/find_array.c"
-line = 15
-begin = 11
-end = 38
-
-[C_29]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_13]
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 21
-end = 36
-
-[C_7]
-file = "HOME/tests/c/find_array.c"
-line = 33
-begin = 19
-end = 69
-
-[C_22]
-file = "HOME/tests/c/find_array.c"
-line = 41
-begin = 16
-end = 24
-
-[C_14]
-file = "HOME/tests/c/find_array.c"
-line = 38
-begin = 15
-end = 36
-
-[C_35]
-file = "HOME/tests/c/find_array.c"
-line = 14
-begin = 11
-end = 22
-
-[C_25]
-file = "HOME/tests/c/find_array.c"
-line = 40
-begin = 33
-end = 41
-
-[C_8]
-file = "HOME/tests/c/find_array.c"
-line = 32
-begin = 19
-end = 32
-
-[C_27]
-file = "HOME/tests/c/find_array.c"
-line = 40
-begin = 8
-end = 17
-
-[C_19]
-file = "HOME/tests/c/find_array.c"
-line = 39
-begin = 8
-end = 17
-
-[C_4]
+[_C_4]
 file = "HOME/tests/c/find_array.c"
 line = 29
 begin = 2
 end = 5
 
-[C_12]
+[_C_32]
+file = "HOME/tests/c/find_array.c"
+line = 15
+begin = 11
+end = 38
+
+[_C_23]
+file = "HOME/tests/c/find_array.c"
+line = 40
+begin = 33
+end = 41
+
+[_C_19]
+file = "HOME/tests/c/find_array.c"
+line = 39
+begin = 8
+end = 17
+
+[_C_13]
 file = "HOME/tests/c/find_array.c"
 line = 38
 begin = 21
 end = 36
 
-[C_26]
+[_C_5]
 file = "HOME/tests/c/find_array.c"
-line = 40
-begin = 8
-end = 11
+line = 35
+begin = 17
+end = 27
 
-[C_18]
+[_C_36]
 file = "HOME/tests/c/find_array.c"
-line = 39
-begin = 8
-end = 11
+line = 13
+begin = 11
+end = 29
 
-[C_2]
+[_C_12]
 file = "HOME/tests/c/find_array.c"
-line = 29
-begin = 13
-end = 23
+line = 38
+begin = 21
+end = 36
 
-[C_28]
+[_C_33]
 file = "HOME/tests/c/find_array.c"
-line = 43
-begin = 2
-end = 12
+line = 15
+begin = 11
+end = 38
 
-[C_24]
-file = "HOME/tests/c/find_array.c"
-line = 40
-begin = 33
-end = 41
-
-[C_6]
-file = "HOME/tests/c/find_array.c"
-line = 34
-begin = 19
-end = 74
-
-[C_30]
-file = "HOME/tests/c/find_array.c"
-line = 21
-begin = 12
-end = 33
-
-[C_21]
+[_C_22]
 file = "HOME/tests/c/find_array.c"
 line = 41
 begin = 16
 end = 24
 
-[C_3]
+[_C_9]
+file = "HOME/tests/c/find_array.c"
+line = 31
+begin = 19
+end = 27
+
+[_C_30]
+file = "HOME/tests/c/find_array.c"
+line = 21
+begin = 12
+end = 33
+
+[_C_6]
+file = "HOME/tests/c/find_array.c"
+line = 34
+begin = 19
+end = 74
+
+[_C_24]
+file = "HOME/tests/c/find_array.c"
+line = 40
+begin = 33
+end = 41
+
+[_C_20]
+file = "HOME/tests/c/find_array.c"
+line = 41
+begin = 16
+end = 24
+
+[_C_3]
 file = "HOME/tests/c/find_array.c"
 line = 29
 begin = 13
 end = 23
 
-[C_16]
+[_C_17]
+file = "HOME/tests/c/find_array.c"
+line = 39
+begin = 28
+end = 40
+
+[_C_7]
+file = "HOME/tests/c/find_array.c"
+line = 33
+begin = 19
+end = 69
+
+[_C_27]
+file = "HOME/tests/c/find_array.c"
+line = 40
+begin = 8
+end = 17
+
+[_C_15]
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 15
+end = 36
+
+[_C_26]
+file = "HOME/tests/c/find_array.c"
+line = 40
+begin = 8
+end = 11
+
+[_C_10]
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 22
+end = 31
+
+[_C_8]
+file = "HOME/tests/c/find_array.c"
+line = 32
+begin = 19
+end = 32
+
+[_C_18]
+file = "HOME/tests/c/find_array.c"
+line = 39
+begin = 8
+end = 11
+
+[_C_29]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_14]
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 15
+end = 36
+
+[_C_2]
+file = "HOME/tests/c/find_array.c"
+line = 29
+begin = 13
+end = 23
+
+[_C_34]
+file = "HOME/tests/c/find_array.c"
+line = 15
+begin = 11
+end = 38
+
+[_C_16]
 file = "HOME/tests/c/find_array.c"
 line = 38
 begin = 4
 end = 7
 
-[C_31]
+[_C_1]
 file = "HOME/tests/c/find_array.c"
-line = 25
-begin = 12
-end = 25
+line = 28
+begin = 2
+end = 5
 
-[C_23]
+[_C_25]
 file = "HOME/tests/c/find_array.c"
 line = 40
 begin = 33
 end = 41
+
+[_C_11]
+file = "HOME/tests/c/find_array.c"
+line = 38
+begin = 22
+end = 31
+
+[_C_21]
+file = "HOME/tests/c/find_array.c"
+line = 41
+begin = 16
+end = 24
 
 ========== jessie execution ==========
 Generating Why function find_array
@@ -594,7 +595,7 @@ end = 27
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
 line = 78
 begin = 6
-end = 1614
+end = 1695
 
 [JC_31]
 kind = ArithOverflow
@@ -702,7 +703,7 @@ end = 22
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
 line = 78
 begin = 6
-end = 1614
+end = 1695
 
 [find_array_ensures_not_exists]
 name = "Function find_array"
@@ -797,7 +798,7 @@ end = 38
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
 line = 78
 begin = 6
-end = 1614
+end = 1695
 
 [JC_42]
 file = "HOME/tests/c/find_array.c"
@@ -809,13 +810,13 @@ end = 32
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
 line = 78
 begin = 6
-end = 1614
+end = 1695
 
 [JC_61]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
 line = 78
 begin = 6
-end = 1614
+end = 1695
 
 [JC_32]
 kind = DivByZero
@@ -841,7 +842,7 @@ end = 36
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
 line = 78
 begin = 6
-end = 1614
+end = 1695
 
 [JC_7]
 file = "HOME/tests/c/find_array.c"
@@ -884,7 +885,7 @@ end = 18
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
 line = 78
 begin = 6
-end = 1614
+end = 1695
 
 [JC_21]
 file = "HOME/tests/c/find_array.c"
@@ -985,7 +986,7 @@ end = 32
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
 line = 78
 begin = 6
-end = 1614
+end = 1695
 
 [JC_58]
 file = "HOME/tests/c/find_array.c"
@@ -1491,109 +1492,80 @@ let find_array_ensures_default =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
-          (C_4:
+          (let _jessie_<num> =
+          (high := (safe_int32_of_integer_ ((sub_int (integer_of_int32 length_1)) (1)))) in
+          void);
+          (loop_2:
           begin
-            (let _jessie_<num> =
-            (high := (C_3:
-                     (safe_int32_of_integer_ (C_2:
-                                             ((sub_int (integer_of_int32 length_1)) (1)))))) in
-            void);
-           (loop_2:
-           begin
-             while true do
-             { invariant
-                 ((JC_40:
-                  (forall i_4:int.
-                   ((lt_int(integer_of_int32(high), i_4)
-                    and lt_int(i_4, integer_of_int32(length_1))) ->
-                    gt_int(integer_of_int32(select(intP_intM_arr_3,
-                                            shift(arr_1, i_4))),
-                    integer_of_int32(query)))))
-                 and ((JC_41:
-                      (forall i_3:int.
-                       ((le_int((0), i_3)
-                        and lt_int(i_3, integer_of_int32(low))) ->
-                        lt_int(integer_of_int32(select(intP_intM_arr_3,
-                                                shift(arr_1, i_3))),
-                        integer_of_int32(query)))))
-                     and ((JC_42:
-                          lt_int(integer_of_int32(high),
-                          integer_of_int32(length_1)))
-                         and (JC_43: le_int((0), integer_of_int32(low))))))
-                }
-              begin
-                [ { } unit { true } ];
-               try
-                begin
+            while true do
+            { invariant
+                ((JC_40:
+                 (forall i_4:int.
+                  ((lt_int(integer_of_int32(high), i_4)
+                   and lt_int(i_4, integer_of_int32(length_1))) ->
+                   gt_int(integer_of_int32(select(intP_intM_arr_3,
+                                           shift(arr_1, i_4))),
+                   integer_of_int32(query)))))
+                and ((JC_41:
+                     (forall i_3:int.
+                      ((le_int((0), i_3)
+                       and lt_int(i_3, integer_of_int32(low))) ->
+                       lt_int(integer_of_int32(select(intP_intM_arr_3,
+                                               shift(arr_1, i_3))),
+                       integer_of_int32(query)))))
+                    and ((JC_42:
+                         lt_int(integer_of_int32(high),
+                         integer_of_int32(length_1)))
+                        and (JC_43: le_int((0), integer_of_int32(low)))))) 
+               }
+             begin
+               [ { } unit { true } ];
+              try
+               begin
+                 (let _jessie_<num> =
+                 begin
+                   (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
+                   then void else (raise (Goto_while_0_break_exc void)));
                   (let _jessie_<num> =
-                  begin
-                    (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
-                    then void else (raise (Goto_while_0_break_exc void)));
-                   (C_16:
+                  (mean := (safe_int32_of_integer_ ((add_int (integer_of_int32 !low)) 
+                                                    (integer_of_int32 
+                                                     (safe_int32_of_integer_ 
+                                                      (JC_47:
+                                                      ((computer_div 
+                                                        (integer_of_int32 
+                                                         (safe_int32_of_integer_ 
+                                                          ((sub_int (integer_of_int32 !high)) 
+                                                           (integer_of_int32 !low))))) (2)))))))) in
+                  void);
+                  (if ((eq_int_ (integer_of_int32 ((safe_acc_ intP_intM_arr_3) 
+                                                   ((shift arr_1) (integer_of_int32 !mean))))) 
+                       (integer_of_int32 query))
+                  then
                    begin
-                     (let _jessie_<num> =
-                     (mean := (C_15:
-                              (safe_int32_of_integer_ (C_14:
-                                                      ((add_int (integer_of_int32 !low)) 
-                                                       (integer_of_int32 
-                                                        (C_13:
-                                                        (safe_int32_of_integer_ 
-                                                         (C_12:
-                                                         (JC_47:
-                                                         ((computer_div 
-                                                           (integer_of_int32 
-                                                            (C_11:
-                                                            (safe_int32_of_integer_ 
-                                                             (C_10:
-                                                             ((sub_int 
-                                                               (integer_of_int32 !high)) 
-                                                              (integer_of_int32 !low))))))) (2)))))))))))) in
-                     void);
-                    (if ((eq_int_ (integer_of_int32 (C_19:
-                                                    ((safe_acc_ intP_intM_arr_3) 
-                                                     (C_18:
-                                                     ((shift arr_1) (integer_of_int32 !mean))))))) 
-                         (integer_of_int32 query))
-                    then
-                     (C_17:
-                     begin
-                       (let _jessie_<num> = (__retres := !mean) in void);
-                      (raise (Return_label_exc void)) end) else void);
-                    (if ((lt_int_ (integer_of_int32 (C_27:
-                                                    ((safe_acc_ intP_intM_arr_3) 
-                                                     (C_26:
-                                                     ((shift arr_1) (integer_of_int32 !mean))))))) 
-                         (integer_of_int32 query))
-                    then
-                     (C_25:
-                     begin
-                       (low := (C_24:
-                               (safe_int32_of_integer_ (C_23:
-                                                       ((add_int (integer_of_int32 !mean)) (1))))));
-                      !low end)
-                    else
-                     (C_22:
-                     begin
-                       (high := (C_21:
-                                (safe_int32_of_integer_ (C_20:
-                                                        ((sub_int (integer_of_int32 !mean)) (1))))));
-                      !high end)) end) end in void);
-                 (raise (Loop_continue_exc void)) end with
-                Loop_continue_exc _jessie_<num> -> void end end done;
-            (raise (Goto_while_0_break_exc void)) end) end) end) with
+                     (let _jessie_<num> = (__retres := !mean) in void);
+                    (raise (Return_label_exc void)) end else void);
+                  (if ((lt_int_ (integer_of_int32 ((safe_acc_ intP_intM_arr_3) 
+                                                   ((shift arr_1) (integer_of_int32 !mean))))) 
+                       (integer_of_int32 query))
+                  then
+                   begin
+                     (low := (safe_int32_of_integer_ ((add_int (integer_of_int32 !mean)) (1))));
+                    !low end
+                  else
+                   begin
+                     (high := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !mean)) (1))));
+                    !high end) end in void); (raise (Loop_continue_exc void))
+               end with Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<num> ->
          (let _jessie_<num> =
          (while_0_break:
          begin
-           void;
-          (C_28:
-          begin
-            (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres
-          end) end) in void) end; (raise (Return_label_exc void)) end with
-      Return_label_exc _jessie_<num> ->
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { (JC_14: true) }
 
@@ -1619,108 +1591,79 @@ let find_array_ensures_exists =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
-          (C_4:
+          (let _jessie_<num> =
+          (high := (safe_int32_of_integer_ ((sub_int (integer_of_int32 length_1)) (1)))) in
+          void);
+          (loop_3:
           begin
-            (let _jessie_<num> =
-            (high := (C_3:
-                     (safe_int32_of_integer_ (C_2:
-                                             ((sub_int (integer_of_int32 length_1)) (1)))))) in
-            void);
-           (loop_3:
-           begin
-             while true do
-             { invariant (JC_53: true)  }
-              begin
-                [ { } unit reads high,low
-                  { ((JC_48:
-                     (forall i_4:int.
-                      ((lt_int(integer_of_int32(high), i_4)
-                       and lt_int(i_4, integer_of_int32(length_1))) ->
-                       gt_int(integer_of_int32(select(intP_intM_arr_3,
-                                               shift(arr_1, i_4))),
-                       integer_of_int32(query)))))
-                    and ((JC_49:
-                         (forall i_3:int.
-                          ((le_int((0), i_3)
-                           and lt_int(i_3, integer_of_int32(low))) ->
-                           lt_int(integer_of_int32(select(intP_intM_arr_3,
-                                                   shift(arr_1, i_3))),
-                           integer_of_int32(query)))))
-                        and ((JC_50:
-                             lt_int(integer_of_int32(high),
-                             integer_of_int32(length_1)))
-                            and (JC_51: le_int((0), integer_of_int32(low)))))) } ];
-               try
-                begin
+            while true do
+            { invariant (JC_53: true)  }
+             begin
+               [ { } unit reads high,low
+                 { ((JC_48:
+                    (forall i_4:int.
+                     ((lt_int(integer_of_int32(high), i_4)
+                      and lt_int(i_4, integer_of_int32(length_1))) ->
+                      gt_int(integer_of_int32(select(intP_intM_arr_3,
+                                              shift(arr_1, i_4))),
+                      integer_of_int32(query)))))
+                   and ((JC_49:
+                        (forall i_3:int.
+                         ((le_int((0), i_3)
+                          and lt_int(i_3, integer_of_int32(low))) ->
+                          lt_int(integer_of_int32(select(intP_intM_arr_3,
+                                                  shift(arr_1, i_3))),
+                          integer_of_int32(query)))))
+                       and ((JC_50:
+                            lt_int(integer_of_int32(high),
+                            integer_of_int32(length_1)))
+                           and (JC_51: le_int((0), integer_of_int32(low)))))) } ];
+              try
+               begin
+                 (let _jessie_<num> =
+                 begin
+                   (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
+                   then void else (raise (Goto_while_0_break_exc void)));
                   (let _jessie_<num> =
-                  begin
-                    (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
-                    then void else (raise (Goto_while_0_break_exc void)));
-                   (C_16:
+                  (mean := (safe_int32_of_integer_ ((add_int (integer_of_int32 !low)) 
+                                                    (integer_of_int32 
+                                                     (safe_int32_of_integer_ 
+                                                      (JC_55:
+                                                      ((computer_div 
+                                                        (integer_of_int32 
+                                                         (safe_int32_of_integer_ 
+                                                          ((sub_int (integer_of_int32 !high)) 
+                                                           (integer_of_int32 !low))))) (2)))))))) in
+                  void);
+                  (if ((eq_int_ (integer_of_int32 ((safe_acc_ intP_intM_arr_3) 
+                                                   ((shift arr_1) (integer_of_int32 !mean))))) 
+                       (integer_of_int32 query))
+                  then
                    begin
-                     (let _jessie_<num> =
-                     (mean := (C_15:
-                              (safe_int32_of_integer_ (C_14:
-                                                      ((add_int (integer_of_int32 !low)) 
-                                                       (integer_of_int32 
-                                                        (C_13:
-                                                        (safe_int32_of_integer_ 
-                                                         (C_12:
-                                                         (JC_55:
-                                                         ((computer_div 
-                                                           (integer_of_int32 
-                                                            (C_11:
-                                                            (safe_int32_of_integer_ 
-                                                             (C_10:
-                                                             ((sub_int 
-                                                               (integer_of_int32 !high)) 
-                                                              (integer_of_int32 !low))))))) (2)))))))))))) in
-                     void);
-                    (if ((eq_int_ (integer_of_int32 (C_19:
-                                                    ((safe_acc_ intP_intM_arr_3) 
-                                                     (C_18:
-                                                     ((shift arr_1) (integer_of_int32 !mean))))))) 
-                         (integer_of_int32 query))
-                    then
-                     (C_17:
-                     begin
-                       (let _jessie_<num> = (__retres := !mean) in void);
-                      (raise (Return_label_exc void)) end) else void);
-                    (if ((lt_int_ (integer_of_int32 (C_27:
-                                                    ((safe_acc_ intP_intM_arr_3) 
-                                                     (C_26:
-                                                     ((shift arr_1) (integer_of_int32 !mean))))))) 
-                         (integer_of_int32 query))
-                    then
-                     (C_25:
-                     begin
-                       (low := (C_24:
-                               (safe_int32_of_integer_ (C_23:
-                                                       ((add_int (integer_of_int32 !mean)) (1))))));
-                      !low end)
-                    else
-                     (C_22:
-                     begin
-                       (high := (C_21:
-                                (safe_int32_of_integer_ (C_20:
-                                                        ((sub_int (integer_of_int32 !mean)) (1))))));
-                      !high end)) end) end in void);
-                 (raise (Loop_continue_exc void)) end with
-                Loop_continue_exc _jessie_<num> -> void end end done;
-            (raise (Goto_while_0_break_exc void)) end) end) end) with
+                     (let _jessie_<num> = (__retres := !mean) in void);
+                    (raise (Return_label_exc void)) end else void);
+                  (if ((lt_int_ (integer_of_int32 ((safe_acc_ intP_intM_arr_3) 
+                                                   ((shift arr_1) (integer_of_int32 !mean))))) 
+                       (integer_of_int32 query))
+                  then
+                   begin
+                     (low := (safe_int32_of_integer_ ((add_int (integer_of_int32 !mean)) (1))));
+                    !low end
+                  else
+                   begin
+                     (high := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !mean)) (1))));
+                    !high end) end in void); (raise (Loop_continue_exc void))
+               end with Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<num> ->
          (let _jessie_<num> =
          (while_0_break:
          begin
-           void;
-          (C_28:
-          begin
-            (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres
-          end) end) in void) end; (raise (Return_label_exc void)) end with
-      Return_label_exc _jessie_<num> ->
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_19:
@@ -1749,108 +1692,79 @@ let find_array_ensures_not_exists =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
-          (C_4:
+          (let _jessie_<num> =
+          (high := (safe_int32_of_integer_ ((sub_int (integer_of_int32 length_1)) (1)))) in
+          void);
+          (loop_4:
           begin
-            (let _jessie_<num> =
-            (high := (C_3:
-                     (safe_int32_of_integer_ (C_2:
-                                             ((sub_int (integer_of_int32 length_1)) (1)))))) in
-            void);
-           (loop_4:
-           begin
-             while true do
-             { invariant (JC_61: true)  }
-              begin
-                [ { } unit reads high,low
-                  { ((JC_56:
-                     (forall i_4:int.
-                      ((lt_int(integer_of_int32(high), i_4)
-                       and lt_int(i_4, integer_of_int32(length_1))) ->
-                       gt_int(integer_of_int32(select(intP_intM_arr_3,
-                                               shift(arr_1, i_4))),
-                       integer_of_int32(query)))))
-                    and ((JC_57:
-                         (forall i_3:int.
-                          ((le_int((0), i_3)
-                           and lt_int(i_3, integer_of_int32(low))) ->
-                           lt_int(integer_of_int32(select(intP_intM_arr_3,
-                                                   shift(arr_1, i_3))),
-                           integer_of_int32(query)))))
-                        and ((JC_58:
-                             lt_int(integer_of_int32(high),
-                             integer_of_int32(length_1)))
-                            and (JC_59: le_int((0), integer_of_int32(low)))))) } ];
-               try
-                begin
+            while true do
+            { invariant (JC_61: true)  }
+             begin
+               [ { } unit reads high,low
+                 { ((JC_56:
+                    (forall i_4:int.
+                     ((lt_int(integer_of_int32(high), i_4)
+                      and lt_int(i_4, integer_of_int32(length_1))) ->
+                      gt_int(integer_of_int32(select(intP_intM_arr_3,
+                                              shift(arr_1, i_4))),
+                      integer_of_int32(query)))))
+                   and ((JC_57:
+                        (forall i_3:int.
+                         ((le_int((0), i_3)
+                          and lt_int(i_3, integer_of_int32(low))) ->
+                          lt_int(integer_of_int32(select(intP_intM_arr_3,
+                                                  shift(arr_1, i_3))),
+                          integer_of_int32(query)))))
+                       and ((JC_58:
+                            lt_int(integer_of_int32(high),
+                            integer_of_int32(length_1)))
+                           and (JC_59: le_int((0), integer_of_int32(low)))))) } ];
+              try
+               begin
+                 (let _jessie_<num> =
+                 begin
+                   (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
+                   then void else (raise (Goto_while_0_break_exc void)));
                   (let _jessie_<num> =
-                  begin
-                    (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
-                    then void else (raise (Goto_while_0_break_exc void)));
-                   (C_16:
+                  (mean := (safe_int32_of_integer_ ((add_int (integer_of_int32 !low)) 
+                                                    (integer_of_int32 
+                                                     (safe_int32_of_integer_ 
+                                                      (JC_63:
+                                                      ((computer_div 
+                                                        (integer_of_int32 
+                                                         (safe_int32_of_integer_ 
+                                                          ((sub_int (integer_of_int32 !high)) 
+                                                           (integer_of_int32 !low))))) (2)))))))) in
+                  void);
+                  (if ((eq_int_ (integer_of_int32 ((safe_acc_ intP_intM_arr_3) 
+                                                   ((shift arr_1) (integer_of_int32 !mean))))) 
+                       (integer_of_int32 query))
+                  then
                    begin
-                     (let _jessie_<num> =
-                     (mean := (C_15:
-                              (safe_int32_of_integer_ (C_14:
-                                                      ((add_int (integer_of_int32 !low)) 
-                                                       (integer_of_int32 
-                                                        (C_13:
-                                                        (safe_int32_of_integer_ 
-                                                         (C_12:
-                                                         (JC_63:
-                                                         ((computer_div 
-                                                           (integer_of_int32 
-                                                            (C_11:
-                                                            (safe_int32_of_integer_ 
-                                                             (C_10:
-                                                             ((sub_int 
-                                                               (integer_of_int32 !high)) 
-                                                              (integer_of_int32 !low))))))) (2)))))))))))) in
-                     void);
-                    (if ((eq_int_ (integer_of_int32 (C_19:
-                                                    ((safe_acc_ intP_intM_arr_3) 
-                                                     (C_18:
-                                                     ((shift arr_1) (integer_of_int32 !mean))))))) 
-                         (integer_of_int32 query))
-                    then
-                     (C_17:
-                     begin
-                       (let _jessie_<num> = (__retres := !mean) in void);
-                      (raise (Return_label_exc void)) end) else void);
-                    (if ((lt_int_ (integer_of_int32 (C_27:
-                                                    ((safe_acc_ intP_intM_arr_3) 
-                                                     (C_26:
-                                                     ((shift arr_1) (integer_of_int32 !mean))))))) 
-                         (integer_of_int32 query))
-                    then
-                     (C_25:
-                     begin
-                       (low := (C_24:
-                               (safe_int32_of_integer_ (C_23:
-                                                       ((add_int (integer_of_int32 !mean)) (1))))));
-                      !low end)
-                    else
-                     (C_22:
-                     begin
-                       (high := (C_21:
-                                (safe_int32_of_integer_ (C_20:
-                                                        ((sub_int (integer_of_int32 !mean)) (1))))));
-                      !high end)) end) end in void);
-                 (raise (Loop_continue_exc void)) end with
-                Loop_continue_exc _jessie_<num> -> void end end done;
-            (raise (Goto_while_0_break_exc void)) end) end) end) with
+                     (let _jessie_<num> = (__retres := !mean) in void);
+                    (raise (Return_label_exc void)) end else void);
+                  (if ((lt_int_ (integer_of_int32 ((safe_acc_ intP_intM_arr_3) 
+                                                   ((shift arr_1) (integer_of_int32 !mean))))) 
+                       (integer_of_int32 query))
+                  then
+                   begin
+                     (low := (safe_int32_of_integer_ ((add_int (integer_of_int32 !mean)) (1))));
+                    !low end
+                  else
+                   begin
+                     (high := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !mean)) (1))));
+                    !high end) end in void); (raise (Loop_continue_exc void))
+               end with Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<num> ->
          (let _jessie_<num> =
          (while_0_break:
          begin
-           void;
-          (C_28:
-          begin
-            (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres
-          end) end) in void) end; (raise (Return_label_exc void)) end with
-      Return_label_exc _jessie_<num> ->
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_21: (integer_of_int32(result) = neg_int((1)))) }
@@ -1875,115 +1789,89 @@ let find_array_safety =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<num> = (low := (safe_int32_of_integer_ (0))) in void);
-          (C_4:
+          (let _jessie_<num> =
+          (high := (JC_23:
+                   (int32_of_integer_ ((sub_int (integer_of_int32 length_1)) (1))))) in
+          void);
+          (loop_1:
           begin
-            (let _jessie_<num> =
-            (high := (C_3:
-                     (JC_23:
-                     (int32_of_integer_ (C_2:
-                                        ((sub_int (integer_of_int32 length_1)) (1))))))) in
-            void);
-           (loop_1:
-           begin
-             while true do
-             { invariant (JC_29: true)
-               variant (JC_39 : sub_int(integer_of_int32(high),
-                                integer_of_int32(low))) }
-              begin
-                [ { } unit reads high,low
-                  { ((JC_24:
-                     (forall i_4:int.
-                      ((lt_int(integer_of_int32(high), i_4)
-                       and lt_int(i_4, integer_of_int32(length_1))) ->
-                       gt_int(integer_of_int32(select(intP_intM_arr_3,
-                                               shift(arr_1, i_4))),
-                       integer_of_int32(query)))))
-                    and ((JC_25:
-                         (forall i_3:int.
-                          ((le_int((0), i_3)
-                           and lt_int(i_3, integer_of_int32(low))) ->
-                           lt_int(integer_of_int32(select(intP_intM_arr_3,
-                                                   shift(arr_1, i_3))),
-                           integer_of_int32(query)))))
-                        and ((JC_26:
-                             lt_int(integer_of_int32(high),
-                             integer_of_int32(length_1)))
-                            and (JC_27: le_int((0), integer_of_int32(low)))))) } ];
-               try
-                begin
+            while true do
+            { invariant (JC_29: true)
+              variant (JC_39 : sub_int(integer_of_int32(high),
+                               integer_of_int32(low))) }
+             begin
+               [ { } unit reads high,low
+                 { ((JC_24:
+                    (forall i_4:int.
+                     ((lt_int(integer_of_int32(high), i_4)
+                      and lt_int(i_4, integer_of_int32(length_1))) ->
+                      gt_int(integer_of_int32(select(intP_intM_arr_3,
+                                              shift(arr_1, i_4))),
+                      integer_of_int32(query)))))
+                   and ((JC_25:
+                        (forall i_3:int.
+                         ((le_int((0), i_3)
+                          and lt_int(i_3, integer_of_int32(low))) ->
+                          lt_int(integer_of_int32(select(intP_intM_arr_3,
+                                                  shift(arr_1, i_3))),
+                          integer_of_int32(query)))))
+                       and ((JC_26:
+                            lt_int(integer_of_int32(high),
+                            integer_of_int32(length_1)))
+                           and (JC_27: le_int((0), integer_of_int32(low)))))) } ];
+              try
+               begin
+                 (let _jessie_<num> =
+                 begin
+                   (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
+                   then void else (raise (Goto_while_0_break_exc void)));
                   (let _jessie_<num> =
-                  begin
-                    (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
-                    then void else (raise (Goto_while_0_break_exc void)));
-                   (C_16:
-                   begin
-                     (let _jessie_<num> =
-                     (mean := (C_15:
-                              (JC_34:
-                              (int32_of_integer_ (C_14:
-                                                 ((add_int (integer_of_int32 !low)) 
-                                                  (integer_of_int32 (C_13:
-                                                                    (JC_33:
-                                                                    (int32_of_integer_ 
-                                                                    (C_12:
-                                                                    (JC_32:
-                                                                    ((computer_div_ 
+                  (mean := (JC_34:
+                           (int32_of_integer_ ((add_int (integer_of_int32 !low)) 
+                                               (integer_of_int32 (JC_33:
+                                                                 (int32_of_integer_ 
+                                                                  (JC_32:
+                                                                  ((computer_div_ 
                                                                     (integer_of_int32 
-                                                                    (C_11:
                                                                     (JC_31:
                                                                     (int32_of_integer_ 
-                                                                    (C_10:
                                                                     ((sub_int 
                                                                     (integer_of_int32 !high)) 
-                                                                    (integer_of_int32 !low)))))))) (2)))))))))))))) in
-                     void);
-                    (if ((eq_int_ (integer_of_int32 (C_19:
-                                                    (JC_35:
-                                                    ((((offset_acc_ intP_arr_3_alloc_table) intP_intM_arr_3) arr_1) 
-                                                     (integer_of_int32 !mean)))))) 
-                         (integer_of_int32 query))
-                    then
-                     (C_17:
-                     begin
-                       (let _jessie_<num> = (__retres := !mean) in void);
-                      (raise (Return_label_exc void)) end) else void);
-                    (if ((lt_int_ (integer_of_int32 (C_27:
-                                                    (JC_36:
-                                                    ((((offset_acc_ intP_arr_3_alloc_table) intP_intM_arr_3) arr_1) 
-                                                     (integer_of_int32 !mean)))))) 
-                         (integer_of_int32 query))
-                    then
-                     (C_25:
-                     begin
-                       (low := (C_24:
-                               (JC_37:
-                               (int32_of_integer_ (C_23:
-                                                  ((add_int (integer_of_int32 !mean)) (1)))))));
-                      !low end)
-                    else
-                     (C_22:
-                     begin
-                       (high := (C_21:
-                                (JC_38:
-                                (int32_of_integer_ (C_20:
-                                                   ((sub_int (integer_of_int32 !mean)) (1)))))));
-                      !high end)) end) end in void);
-                 (raise (Loop_continue_exc void)) end with
-                Loop_continue_exc _jessie_<num> -> void end end done;
-            (raise (Goto_while_0_break_exc void)) end) end) end) with
+                                                                    (integer_of_int32 !low)))))) (2)))))))))) in
+                  void);
+                  (if ((eq_int_ (integer_of_int32 (JC_35:
+                                                  ((((offset_acc_ intP_arr_3_alloc_table) intP_intM_arr_3) arr_1) 
+                                                   (integer_of_int32 !mean))))) 
+                       (integer_of_int32 query))
+                  then
+                   begin
+                     (let _jessie_<num> = (__retres := !mean) in void);
+                    (raise (Return_label_exc void)) end else void);
+                  (if ((lt_int_ (integer_of_int32 (JC_36:
+                                                  ((((offset_acc_ intP_arr_3_alloc_table) intP_intM_arr_3) arr_1) 
+                                                   (integer_of_int32 !mean))))) 
+                       (integer_of_int32 query))
+                  then
+                   begin
+                     (low := (JC_37:
+                             (int32_of_integer_ ((add_int (integer_of_int32 !mean)) (1)))));
+                    !low end
+                  else
+                   begin
+                     (high := (JC_38:
+                              (int32_of_integer_ ((sub_int (integer_of_int32 !mean)) (1)))));
+                    !high end) end in void); (raise (Loop_continue_exc void))
+               end with Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<num> ->
          (let _jessie_<num> =
          (while_0_break:
          begin
-           void;
-          (C_28:
-          begin
-            (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres
-          end) end) in void) end; (raise (Return_label_exc void)) end with
-      Return_label_exc _jessie_<num> ->
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { true }
 

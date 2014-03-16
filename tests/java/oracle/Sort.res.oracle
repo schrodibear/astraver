@@ -46,25 +46,25 @@
 
 /*@ axiomatic Permut {
   @  predicate Permut{L1,L2}(int a[], integer l, integer h);
-  @  axiom Permut_refl{L}: 
+  @  axiom Permut_refl{L}:
   @   \forall int a[], integer l h; Permut{L,L}(a, l, h) ;
-  @  axiom Permut_sym{L1,L2}: 
-  @    \forall int a[], integer l h; 
+  @  axiom Permut_sym{L1,L2}:
+  @    \forall int a[], integer l h;
   @      Permut{L1,L2}(a, l, h) ==> Permut{L2,L1}(a, l, h) ;
-  @  axiom Permut_trans{L1,L2,L3}: 
-  @    \forall int a[], integer l h; 
-  @      Permut{L1,L2}(a, l, h) && Permut{L2,L3}(a, l, h) ==> 
+  @  axiom Permut_trans{L1,L2,L3}:
+  @    \forall int a[], integer l h;
+  @      Permut{L1,L2}(a, l, h) && Permut{L2,L3}(a, l, h) ==>
   @        Permut{L1,L3}(a, l, h) ;
-  @  axiom Permut_swap{L1,L2}: 
-  @    \forall int a[], integer l h i j; 
-  @       l <= i <= h && l <= j <= h && Swap{L1,L2}(a, i, j) ==> 
+  @  axiom Permut_swap{L1,L2}:
+  @    \forall int a[], integer l h i j;
+  @       l <= i <= h && l <= j <= h && Swap{L1,L2}(a, i, j) ==>
   @     Permut{L1,L2}(a, l, h) ;
   @ }
   @*/
 
 class Sort {
 
-    /*@ requires t != null && 
+    /*@ requires t != null &&
       @    0 <= i < t.length && 0 <= j < t.length;
       @ assigns t[i],t[j];
       @ ensures Swap{Old,Here}(t,i,j);
@@ -74,7 +74,7 @@ class Sort {
 	t[i] = t[j];
 	t[j] = tmp;
     }
-    
+
     /*@ requires t != null;
       @ behavior sorted:
       @   ensures Sorted(t,0,t.length-1);
@@ -85,9 +85,9 @@ class Sort {
 	int i,j;
 	int mi,mv;
 	/*@ loop_invariant 0 <= i;
-	  @ for sorted: 
-	  @  loop_invariant Sorted(t,0,i) && 
-	  @   (\forall integer k1 k2 ; 
+	  @ for sorted:
+	  @  loop_invariant Sorted(t,0,i) &&
+	  @   (\forall integer k1 k2 ;
 	  @      0 <= k1 < i <= k2 < t.length ==> t[k1] <= t[k2]) ;
 	  @ for permutation:
 	  @   loop_invariant Permut{Pre,Here}(t,0,t.length-1);
@@ -103,8 +103,8 @@ class Sort {
 	      @  loop_invariant Permut{Pre,Here}(t,0,t.length-1);
 	      @*/
 	    for (j=i+1; j < t.length; j++) {
-		if (t[j] < mv) { 
-		    mi = j ; mv = t[j]; 
+		if (t[j] < mv) {
+		    mi = j ; mv = t[j];
 		}
 	    }
 	    swap(t,i,mi);
@@ -469,7 +469,7 @@ end = 27
 file = "HOME/tests/java/Sort.java"
 line = 66
 begin = 17
-end = 59
+end = 58
 
 [Object_wait]
 name = "Method wait"
@@ -583,7 +583,7 @@ end = 56
 file = "HOME/tests/java/Sort.java"
 line = 66
 begin = 17
-end = 80
+end = 79
 
 [K_35]
 file = "HOME/tests/java/Sort.java"
@@ -645,7 +645,7 @@ end = -1
 file = "HOME/tests/java/Sort.java"
 line = 88
 begin = 21
-end = 130
+end = 128
 
 [K_42]
 file = "HOME/tests/java/Sort.java"
@@ -701,7 +701,7 @@ end = 29
 file = "HOME/tests/java/Sort.java"
 line = 89
 begin = 8
-end = 90
+end = 89
 
 [K_5]
 file = "HOME/tests/java/Sort.java"
@@ -1001,7 +1001,7 @@ end = 3072
 file = "HOME/tests/java/Sort.java"
 line = 66
 begin = 17
-end = 80
+end = 79
 
 [JC_147]
 file = "HOME/"
@@ -1366,7 +1366,7 @@ end = 26
 file = "HOME/tests/java/Sort.java"
 line = 88
 begin = 21
-end = 130
+end = 128
 
 [JC_135]
 kind = UserCall
@@ -2221,7 +2221,7 @@ end = 30
 file = "HOME/tests/java/Sort.java"
 line = 66
 begin = 17
-end = 80
+end = 79
 
 [JC_155]
 file = "HOME/"
@@ -2416,7 +2416,7 @@ end = -1
 file = "HOME/tests/java/Sort.java"
 line = 89
 begin = 8
-end = 90
+end = 89
 
 [JC_77]
 file = "HOME/tests/java/Sort.java"
@@ -3924,7 +3924,7 @@ text = "UserCall"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Sort_po15.why">
-      <location file = "HOME/tests/java/Sort.java" line = "89" begin = "8" end = "90"/>
+      <location file = "HOME/tests/java/Sort.java" line = "89" begin = "8" end = "89"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Sort_po16.why">
@@ -3952,7 +3952,7 @@ text = "UserCall"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Sort_po22.why">
-      <location file = "HOME/tests/java/Sort.java" line = "89" begin = "8" end = "90"/>
+      <location file = "HOME/tests/java/Sort.java" line = "89" begin = "8" end = "89"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Sort_po23.why">
@@ -8185,7 +8185,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
          (Non_null_intM t_0 Object_alloc_table)))
 (FORALL (i_3) (IMPLIES (EQ i_3 0) (Sorted t_0 0 i_3 intM_intP))))))))
 
-;; Sort_min_sort_ensures_sorted_po_2, File "HOME/tests/java/Sort.java", line 89, characters 8-90
+;; Sort_min_sort_ensures_sorted_po_2, File "HOME/tests/java/Sort.java", line 89, characters 8-89
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
@@ -8512,7 +8512,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
 (FORALL (i_3_1)
 (IMPLIES (EQ i_3_1 (+ i_3_0 1)) (Sorted t_0 0 i_3_1 intM_intP1))))))))))))))))))))))))))))))))))
 
-;; Sort_min_sort_ensures_sorted_po_9, File "HOME/tests/java/Sort.java", line 89, characters 8-90
+;; Sort_min_sort_ensures_sorted_po_9, File "HOME/tests/java/Sort.java", line 89, characters 8-89
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)

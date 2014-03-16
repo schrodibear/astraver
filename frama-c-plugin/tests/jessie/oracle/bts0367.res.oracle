@@ -42,12 +42,12 @@ type voidP = [voidP]
 
 int32 func1(float x)
 behavior default:
-  ensures (C_3 : (\result == 1));
+  ensures (_C_3 : (\result == 1));
 {  
    (var int32 __retres);
    
-   {  (if ((C_1 : (x :> double)) < (1E-6 :> double)) then () else ());
-      (C_2 : (__retres = 1));
+   {  (if ((_C_1 : (x :> double)) < (1E-6 :> double)) then () else ());
+      (_C_2 : (__retres = 1));
       
       (return __retres)
    }
@@ -410,13 +410,11 @@ let func1_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      begin
-       (if ((lt_double_ (C_1: (double_of_single x_0))) ((double_of_real_safe nearest_even) 1E-6))
+       (if ((lt_double_ (double_of_single x_0)) ((double_of_real_safe nearest_even) 1E-6))
        then void else void);
-      (C_2:
-      begin
-        (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
 
 let func1_safety =
  fun (x_0 : single) ->
@@ -427,14 +425,12 @@ let func1_safety =
    begin
      (let __retres = ref (any_int32 void) in
      begin
-       (if ((lt_double_ (C_1: (double_of_single x_0))) (JC_<somenum>:
-                                                       ((double_of_real nearest_even) 1E-6)))
+       (if ((lt_double_ (double_of_single x_0)) (JC_<somenum>:
+                                                ((double_of_real nearest_even) 1E-6)))
        then void else void);
-      (C_2:
-      begin
-        (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { true }
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0367.jessie --quiet -f bts0367.makefile project
@@ -450,7 +446,7 @@ why --project [...] why/bts0367.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0367_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0367.jessie/bts0367.jc" line = "42" begin = "35" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/bts0367.jessie/bts0367.jc" line = "42" begin = "36" end = "52"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

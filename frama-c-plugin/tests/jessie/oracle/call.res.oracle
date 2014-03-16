@@ -42,19 +42,19 @@ type voidP = [voidP]
 int32 x;
 
 int32 f(int32 y, int32 ddd, int32 z)
-  requires (C_7 : (y == ddd));
+  requires (_C_7 : (y == ddd));
 behavior default:
   assigns \nothing;
-  ensures (C_6 : (\result == \at(z,Old)));
+  ensures (_C_6 : (\result == \at(z,Old)));
 {  
    (var int32 u);
    
    (var int32 tmp);
    
-   {  (C_1 : (u = z));
+   {  (_C_1 : (u = z));
       
-      {  (C_2 : (tmp = u));
-         (C_5 : (u = (C_4 : ((C_3 : (u + 1)) :> int32))));
+      {  (_C_2 : (tmp = u));
+         (_C_5 : (u = (_C_4 : ((_C_3 : (u + 1)) :> int32))));
          ()
       };
       
@@ -64,11 +64,11 @@ behavior default:
 
 unit main()
 behavior default:
-  ensures (C_14 : (x == 2));
+  ensures (_C_14 : (x == 2));
 {  
-   {  (C_8 : (x = 0));
-      (C_11 : (x = (C_10 : ((C_9 : (x + 1)) :> int32))));
-      (C_13 : (x = (C_12 : f(1, x, 2))));
+   {  (_C_8 : (x = 0));
+      (_C_11 : (x = (_C_10 : ((_C_9 : (x + 1)) :> int32))));
+      (_C_13 : (x = (_C_12 : f(1, x, 2))));
       
       (return ())
    }
@@ -448,20 +448,13 @@ let f_ensures_default =
    begin
      (let u = ref (any_int32 void) in
      (let tmp = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (u := z) in void);
-      (C_2:
-      begin
-        (let _jessie_<somenum> = (tmp := !u) in void);
-       (C_5:
-       begin
-         (let _jessie_<somenum> =
-         (u := (C_4:
-               (safe_int32_of_integer_ (C_3:
-                                       ((add_int (integer_of_int32 !u)) (1)))))) in
-         void); void; (return := !tmp); (raise Return) end) end) end)));
-    absurd  end with Return -> !return end))
+      (let _jessie_<somenum> = (tmp := !u) in void);
+      (let _jessie_<somenum> =
+      (u := (safe_int32_of_integer_ ((add_int (integer_of_int32 !u)) (1)))) in
+      void); void; (return := !tmp); (raise Return) end)); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>: (integer_of_int32(result) = integer_of_int32(z))) }
 
 let f_safety =
@@ -473,74 +466,51 @@ let f_safety =
    begin
      (let u = ref (any_int32 void) in
      (let tmp = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (u := z) in void);
-      (C_2:
-      begin
-        (let _jessie_<somenum> = (tmp := !u) in void);
-       (C_5:
-       begin
-         (let _jessie_<somenum> =
-         (u := (C_4:
-               (JC_<somenum>:
-               (int32_of_integer_ (C_3:
-                                  ((add_int (integer_of_int32 !u)) (1))))))) in
-         void); void; (return := !tmp); (raise Return) end) end) end)));
-    absurd  end with Return -> !return end)) { true }
+      (let _jessie_<somenum> = (tmp := !u) in void);
+      (let _jessie_<somenum> =
+      (u := (JC_<somenum>:
+            (int32_of_integer_ ((add_int (integer_of_int32 !u)) (1))))) in
+      void); void; (return := !tmp); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 let main_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_8:
    begin
      (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (0))) in void);
-    (C_11:
-    begin
-      (let _jessie_<somenum> =
-      (x_0 := (C_10:
-              (safe_int32_of_integer_ (C_9:
-                                      ((add_int (integer_of_int32 !x_0)) (1)))))) in
-      void);
-     (C_13:
-     begin
-       (let _jessie_<somenum> =
-       (x_0 := (C_12:
-               (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-               (let _jessie_<somenum> = !x_0 in
-               (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-               (JC_<somenum>: (((f _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>))))))) in
-       void); (raise Return); (raise Return) end) end) end) with Return ->
-   void end) { (JC_<somenum>: (integer_of_int32(x_0) = (2))) }
+    (let _jessie_<somenum> =
+    (x_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 !x_0)) (1)))) in
+    void);
+    (let _jessie_<somenum> =
+    (x_0 := (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+            (let _jessie_<somenum> = !x_0 in
+            (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+            (JC_<somenum>: (((f _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in void);
+    (raise Return); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: (integer_of_int32(x_0) = (2))) }
 
 let main_safety =
  fun (tt : unit) ->
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_8:
    begin
      (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (0))) in void);
-    (C_11:
-    begin
-      (let _jessie_<somenum> =
-      (x_0 := (C_10:
-              (JC_<somenum>:
-              (int32_of_integer_ (C_9:
-                                 ((add_int (integer_of_int32 !x_0)) (1))))))) in
-      void);
-     (C_13:
-     begin
-       (let _jessie_<somenum> =
-       (x_0 := (C_12:
-               (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-               (let _jessie_<somenum> = !x_0 in
-               (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-               (JC_<somenum>: (((f_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>))))))) in
-       void); (raise Return); (raise Return) end) end) end) with Return ->
-   void end) { true }
+    (let _jessie_<somenum> =
+    (x_0 := (JC_<somenum>:
+            (int32_of_integer_ ((add_int (integer_of_int32 !x_0)) (1))))) in
+    void);
+    (let _jessie_<somenum> =
+    (x_0 := (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+            (let _jessie_<somenum> = !x_0 in
+            (let _jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+            (JC_<somenum>: (((f_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+    void); (raise Return); (raise Return) end with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C call.jessie --quiet -f call.makefile project

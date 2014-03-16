@@ -42,10 +42,10 @@ type voidP = [voidP]
 
 int32 f(int32 i)
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    {  
-      (assert for default: (C_1 : (i > 0)));
+      (assert for default: (_C_1 : (i > 0)));
       
       (return i)
    }
@@ -53,13 +53,14 @@ behavior default:
 
 int32 ff(int32 i_0)
 behavior default:
-  ensures (C_7 : true);
+  ensures (_C_7 : true);
 {  
    (var int32 j);
    
-   {  (C_3 : (j = 1));
+   {  (_C_3 : (j = 1));
       
-      (assert for default: (C_6 : ((C_5 : ((C_4 : (i_0 + j)) :> int32)) > 0)));
+      (assert for default: (_C_6 : ((_C_5 : ((_C_4 : (i_0 + j)) :> int32)) >
+                                     0)));
       
       (return i_0)
    }
@@ -67,13 +68,13 @@ behavior default:
 
 unit g()
 behavior default:
-  ensures (C_11 : true);
+  ensures (_C_11 : true);
 {  
    (var int32 tmp);
    
-   {  (C_9 : (tmp = (C_8 : f(1))));
+   {  (_C_9 : (tmp = (_C_8 : f(1))));
       
-      (assert for default: (C_10 : (tmp > 0)));
+      (assert for default: (_C_10 : (tmp > 0)));
       
       (return ())
    }
@@ -463,7 +464,6 @@ let ff_ensures_default =
   try
    begin
      (let j = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> = (j := (safe_int32_of_integer_ (1))) in void);
       (assert
@@ -471,7 +471,7 @@ let ff_ensures_default =
         gt_int(integer_of_int32((JC_<somenum> : int32_of_integer((JC_<somenum> : add_int(
                                                                    integer_of_int32(i_0),
                                                                    integer_of_int32(j)))))),
-        (0))) }; void); (return := i_0); (raise Return) end)); absurd  end
+        (0))) }; void); (return := i_0); (raise Return) end); absurd  end
    with Return -> !return end)) { (JC_<somenum>: true) }
 
 let ff_safety =
@@ -482,7 +482,6 @@ let ff_safety =
   try
    begin
      (let j = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> = (j := (safe_int32_of_integer_ (1))) in void);
       [ { } unit reads j
@@ -490,7 +489,7 @@ let ff_safety =
           gt_int(integer_of_int32((JC_<somenum> : int32_of_integer((JC_<somenum> : 
                                            add_int(integer_of_int32(i_0),
                                            integer_of_int32(j)))))),
-          (0))) } ]; (return := i_0); (raise Return) end)); absurd  end with
+          (0))) } ]; (return := i_0); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 let g_ensures_default =
@@ -500,14 +499,12 @@ let g_ensures_default =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_9:
      begin
        (let _jessie_<somenum> =
-       (tmp := (C_8:
-               (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-               (JC_<somenum>: (f _jessie_<somenum>))))) in void);
+       (tmp := (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+               (JC_<somenum>: (f _jessie_<somenum>)))) in void);
       (assert { (JC_<somenum>: gt_int(integer_of_int32(tmp), (0))) }; void);
-      (raise Return) end)); (raise Return) end with Return -> void end)
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let g_safety =
@@ -517,14 +514,12 @@ let g_safety =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_9:
      begin
        (let _jessie_<somenum> =
-       (tmp := (C_8:
-               (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-               (JC_<somenum>: (f_requires _jessie_<somenum>))))) in void);
+       (tmp := (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+               (JC_<somenum>: (f_requires _jessie_<somenum>)))) in void);
       [ { } unit reads tmp { (JC_<somenum>: gt_int(integer_of_int32(tmp), (0))) } ];
-      (raise Return) end)); (raise Return) end with Return -> void end)
+      (raise Return) end); (raise Return) end with Return -> void end)
   { true }
 
 

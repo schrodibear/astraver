@@ -41,16 +41,16 @@ type voidP = [voidP]
 
 unit f()
 behavior default:
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 {  
    (var int32 i);
    
-   {  (C_1 : (i = 0));
+   {  (_C_1 : (i = 0));
       (L : ());
-      (C_2 : (i = 1));
+      (_C_2 : (i = 1));
       
       {  
-         (assert for default: (C_3 : (jessie : (\at(i,L) == 0))));
+         (assert for default: (_C_3 : (jessie : (\at(i,L) == 0))));
          ()
       };
       
@@ -411,18 +411,14 @@ let f_ensures_default =
   try
    begin
      (let i = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       (L:
       begin
-        void;
-       (C_2:
-       begin
-         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (1))) in void);
-        (assert { (JC_<somenum>: (integer_of_int32(i@L) = (0))) }; void); void;
-        (raise Return) end) end) end)); (raise Return) end with Return ->
-   void end) { (JC_<somenum>: true) }
+        void; (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (1))) in void);
+       (assert { (JC_<somenum>: (integer_of_int32(i@L) = (0))) }; void); void;
+       (raise Return) end) end); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -431,18 +427,14 @@ let f_safety =
   try
    begin
      (let i = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       (L:
       begin
-        void;
-       (C_2:
-       begin
-         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (1))) in void);
-        [ { } unit reads i { (JC_<somenum>: (integer_of_int32(i@L) = (0))) } ]; void;
-        (raise Return) end) end) end)); (raise Return) end with Return ->
-   void end) { true }
+        void; (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (1))) in void);
+       [ { } unit reads i { (JC_<somenum>: (integer_of_int32(i@L) = (0))) } ]; void;
+       (raise Return) end) end); (raise Return) end with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts12891.jessie --quiet -f bts12891.makefile project

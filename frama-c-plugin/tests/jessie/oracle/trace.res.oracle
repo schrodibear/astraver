@@ -47,28 +47,28 @@ type S = [S]
 
 unit trace(S[..] this)
 behavior default:
-  ensures (C_3 : (\at(this,Old).f == 0));
+  ensures (_C_3 : (\at(this,Old).f == 0));
 {  
-   {  (C_2 : ((C_1 : this.f) = 0));
+   {  (_C_2 : ((_C_1 : this.f) = 0));
       
       (return ())
    }
 }
 
 int32 m1(int32 x)
-  requires (C_9 : (x > 0));
+  requires (_C_9 : (x > 0));
 behavior default:
-  ensures (C_8 : true);
+  ensures (_C_8 : true);
 {  
    (var int32 __retres);
    
    {  
       {  
-         (assert for default: (C_4 : (jessie : ((x >= 0) && (x < 9)))));
+         (assert for default: (_C_4 : (jessie : ((x >= 0) && (x < 9)))));
          ()
       };
       
-      {  (C_7 : (__retres = (C_6 : ((C_5 : (x + 1)) :> int32))));
+      {  (_C_7 : (__retres = (_C_6 : ((_C_5 : (x + 1)) :> int32))));
          
          (return __retres)
       }
@@ -76,38 +76,38 @@ behavior default:
 }
 
 int32 m2(int32 x_0)
-  requires (C_24 : ((C_25 : (0 < x_0)) &&
-                     ((C_27 : (x_0 < 100)) &&
-                       ((C_29 : (100 < 200)) && (C_30 : (200 < 300))))));
+  requires (_C_24 : ((_C_25 : (0 < x_0)) &&
+                      ((_C_27 : (x_0 < 100)) &&
+                        ((_C_29 : (100 < 200)) && (_C_30 : (200 < 300))))));
 behavior default:
-  ensures (C_17 : ((((C_20 : (0 < \at(x_0,Old))) &&
-                      (C_21 : (\at(x_0,Old) < 100))) &&
-                     (C_22 : (\result != 0))) &&
-                    (C_23 : (\result > 10))));
+  ensures (_C_17 : ((((_C_20 : (0 < \at(x_0,Old))) &&
+                       (_C_21 : (\at(x_0,Old) < 100))) &&
+                      (_C_22 : (\result != 0))) &&
+                     (_C_23 : (\result > 10))));
 {  
    (var int32 y);
    
    (var int32 __retres_0);
    
    {  (if (x_0 < 50) then 
-      {  (C_15 : (__retres_0 = (C_14 : ((C_13 : (x_0 + 1)) :> int32))));
+      {  (_C_15 : (__retres_0 = (_C_14 : ((_C_13 : (x_0 + 1)) :> int32))));
          
          (goto return_label)
-      } else (C_12 : (y = (C_11 : ((C_10 : (x_0 - 1)) :> int32)))));
-      (C_16 : (__retres_0 = y));
+      } else (_C_12 : (y = (_C_11 : ((_C_10 : (x_0 - 1)) :> int32)))));
+      (_C_16 : (__retres_0 = y));
       (return_label : 
       (return __retres_0))
    }
 }
 
 int32 m3(int32 x_1)
-  requires (C_34 : ((C_35 : (x_1 >= 0)) && (C_36 : (x_1 < 50))));
+  requires (_C_34 : ((_C_35 : (x_1 >= 0)) && (_C_36 : (x_1 < 50))));
 behavior default:
-  ensures (C_33 : true);
+  ensures (_C_33 : true);
 {  
    (var int32 tmp);
    
-   {  (C_32 : (tmp = (C_31 : m2(x_1))));
+   {  (_C_32 : (tmp = (_C_31 : m2(x_1))));
       
       (return tmp)
    }
@@ -115,22 +115,22 @@ behavior default:
 
 unit m4(int32 x_2)
 behavior default:
-  ensures (C_45 : true);
+  ensures (_C_45 : true);
 {  
    (var int32 y_0);
    
-   {  (C_37 : (y_0 = x_2));
+   {  (_C_37 : (y_0 = x_2));
       
       loop 
       behavior default:
-        invariant (C_39 : ((C_40 : (0 <= y_0)) && (C_41 : (y_0 <= x_2))));
-      variant (C_38 : y_0);
+        invariant (_C_39 : ((_C_40 : (0 <= y_0)) && (_C_41 : (y_0 <= x_2))));
+      variant (_C_38 : y_0);
       while (true)
       {  
          {  (if (y_0 > 0) then () else 
             (goto while_0_break));
             
-            {  (C_44 : (y_0 = (C_43 : ((C_42 : (y_0 - 1)) :> int32))))
+            {  (_C_44 : (y_0 = (_C_43 : ((_C_42 : (y_0 - 1)) :> int32))))
             }
          }
       };
@@ -142,22 +142,22 @@ behavior default:
 
 unit m5(int32 x_3)
 behavior default:
-  ensures (C_52 : true);
+  ensures (_C_52 : true);
 {  
    (var int32 y_1);
    
-   {  (C_46 : (y_1 = x_3));
+   {  (_C_46 : (y_1 = x_3));
       
       loop 
       behavior default:
-        invariant (C_48 : (y_1 == x_3));
-      variant (C_47 : y_1);
+        invariant (_C_48 : (y_1 == x_3));
+      variant (_C_47 : y_1);
       while (true)
       {  
          {  (if (y_1 > 0) then () else 
             (goto while_0_break));
             
-            {  (C_51 : (y_1 = (C_50 : ((C_49 : (y_1 - 1)) :> int32))))
+            {  (_C_51 : (y_1 = (_C_50 : ((_C_49 : (y_1 - 1)) :> int32))))
             }
          }
       };
@@ -169,15 +169,16 @@ behavior default:
 
 int8 m6(int8 x_4)
 behavior default:
-  ensures (C_68 : true);
+  ensures (_C_68 : true);
 {  
    (var int8 __retres_1);
    
-   {  (C_59 : (x_4 = (C_58 : ((C_57 : ((C_56 : (x_4 :> int32)) +
-                                        (C_55 : ((C_54 : ((C_53 : (x_4 :> int32)) +
-                                                           1)) :> int32)))) :> int8))));
-      (C_63 : (x_4 = (C_62 : ((C_61 : ((C_60 : (x_4 :> int32)) + 1)) :> int8))));
-      (C_67 : (__retres_1 = (C_66 : ((C_65 : ((C_64 : (x_4 :> int32)) + 2)) :> int8))));
+   {  (_C_59 : (x_4 = (_C_58 : ((_C_57 : ((_C_56 : (x_4 :> int32)) +
+                                           (_C_55 : ((_C_54 : ((_C_53 : (x_4 :> int32)) +
+                                                                1)) :> int32)))) :> int8))));
+      (_C_63 : (x_4 = (_C_62 : ((_C_61 : ((_C_60 : (x_4 :> int32)) + 1)) :> int8))));
+      (_C_67 : (__retres_1 = (_C_66 : ((_C_65 : ((_C_64 : (x_4 :> int32)) +
+                                                  2)) :> int8))));
       
       (return __retres_1)
    }
@@ -185,11 +186,11 @@ behavior default:
 
 int32 m7(S[..] p)
 behavior default:
-  ensures (C_71 : true);
+  ensures (_C_71 : true);
 {  
    (var int32 __retres_2);
    
-   {  (C_70 : (__retres_2 = (C_69 : p.f)));
+   {  (_C_70 : (__retres_2 = (_C_69 : p.f)));
       
       (return __retres_2)
    }
@@ -198,9 +199,9 @@ behavior default:
 unit m8(S[..] p_0)
 behavior default:
   assigns p_0.f;
-  ensures (C_74 : (\at(p_0,Old).f == 0));
+  ensures (_C_74 : (\at(p_0,Old).f == 0));
 {  
-   {  (C_73 : ((C_72 : p_0.f) = 0));
+   {  (_C_73 : ((_C_72 : p_0.f) = 0));
       
       (return ())
    }
@@ -724,17 +725,11 @@ let m1_ensures_default =
        (assert
        { (JC_<somenum>:
          (ge_int(integer_of_int32(x_0), (0))
-         and lt_int(integer_of_int32(x_0), (9)))) }; void);
-      begin
-        void;
-       (C_7:
-       begin
-         (let _jessie_<somenum> =
-         (__retres := (C_6:
-                      (safe_int32_of_integer_ (C_5:
-                                              ((add_int (integer_of_int32 x_0)) (1)))))) in
-         void); (return := !__retres); (raise Return) end) end end); 
-    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
+         and lt_int(integer_of_int32(x_0), (9)))) }; void); void;
+      (let _jessie_<somenum> =
+      (__retres := (safe_int32_of_integer_ ((add_int (integer_of_int32 x_0)) (1)))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let m1_safety =
  fun (x_0 : int32) ->
@@ -748,18 +743,12 @@ let m1_safety =
        [ { } unit
          { (JC_<somenum>:
            (ge_int(integer_of_int32(x_0), (0))
-           and lt_int(integer_of_int32(x_0), (9)))) } ];
-      begin
-        void;
-       (C_7:
-       begin
-         (let _jessie_<somenum> =
-         (__retres := (C_6:
-                      (JC_<somenum>:
-                      (int32_of_integer_ (C_5:
-                                         ((add_int (integer_of_int32 x_0)) (1))))))) in
-         void); (return := !__retres); (raise Return) end) end end); 
-    absurd  end with Return -> !return end)) { true }
+           and lt_int(integer_of_int32(x_0), (9)))) } ]; void;
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>:
+                   (int32_of_integer_ ((add_int (integer_of_int32 x_0)) (1))))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
+   Return -> !return end)) { true }
 
 let m2_ensures_default =
  fun (x_0_0 : int32) ->
@@ -777,25 +766,15 @@ let m2_ensures_default =
       begin
         (if ((lt_int_ (integer_of_int32 x_0_0)) (50))
         then
-         (C_15:
          begin
            (let _jessie_<somenum> =
-           (__retres_0 := (C_14:
-                          (safe_int32_of_integer_ (C_13:
-                                                  ((add_int (integer_of_int32 x_0_0)) (1)))))) in
-           void); (raise (Return_label_exc void)) end)
+           (__retres_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 x_0_0)) (1)))) in
+           void); (raise (Return_label_exc void)) end
         else
          (let _jessie_<somenum> =
-         (C_12:
-         (y := (C_11:
-               (safe_int32_of_integer_ (C_10:
-                                       ((sub_int (integer_of_int32 x_0_0)) (1))))))) in
-         void));
-       (C_16:
-       begin
-         (let _jessie_<somenum> = (__retres_0 := !y) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<somenum> ->
+         (y := (safe_int32_of_integer_ ((sub_int (integer_of_int32 x_0_0)) (1)))) in
+         void)); (let _jessie_<somenum> = (__retres_0 := !y) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -820,27 +799,17 @@ let m2_safety =
       begin
         (if ((lt_int_ (integer_of_int32 x_0_0)) (50))
         then
-         (C_15:
          begin
            (let _jessie_<somenum> =
-           (__retres_0 := (C_14:
-                          (JC_<somenum>:
-                          (int32_of_integer_ (C_13:
-                                             ((add_int (integer_of_int32 x_0_0)) (1))))))) in
-           void); (raise (Return_label_exc void)) end)
+           (__retres_0 := (JC_<somenum>:
+                          (int32_of_integer_ ((add_int (integer_of_int32 x_0_0)) (1))))) in
+           void); (raise (Return_label_exc void)) end
         else
          (let _jessie_<somenum> =
-         (C_12:
-         (y := (C_11:
-               (JC_<somenum>:
-               (int32_of_integer_ (C_10:
-                                  ((sub_int (integer_of_int32 x_0_0)) (1)))))))) in
-         void));
-       (C_16:
-       begin
-         (let _jessie_<somenum> = (__retres_0 := !y) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<somenum> ->
+         (y := (JC_<somenum>:
+               (int32_of_integer_ ((sub_int (integer_of_int32 x_0_0)) (1))))) in
+         void)); (let _jessie_<somenum> = (__retres_0 := !y) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -854,12 +823,11 @@ let m3_ensures_default =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_32:
      begin
        (let _jessie_<somenum> =
-       (tmp := (C_31: (let _jessie_<somenum> = x_1 in (JC_<somenum>: (m2 _jessie_<somenum>))))) in
-       void); (return := !tmp); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+       (tmp := (let _jessie_<somenum> = x_1 in (JC_<somenum>: (m2 _jessie_<somenum>)))) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let m3_safety =
  fun (x_1 : int32) ->
@@ -871,12 +839,10 @@ let m3_safety =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_32:
      begin
        (let _jessie_<somenum> =
-       (tmp := (C_31:
-               (let _jessie_<somenum> = x_1 in (JC_<somenum>: (m2_requires _jessie_<somenum>))))) in
-       void); (return := !tmp); (raise Return) end)); absurd  end with
+       (tmp := (let _jessie_<somenum> = x_1 in (JC_<somenum>: (m2_requires _jessie_<somenum>)))) in
+       void); (return := !tmp); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 let m4_ensures_default =
@@ -887,7 +853,6 @@ let m4_ensures_default =
    begin
      (let y_0 = ref (any_int32 void) in
      try
-      (C_37:
       begin
         (let _jessie_<somenum> = (y_0 := x_2) in void);
        (loop_2:
@@ -907,14 +872,10 @@ let m4_ensures_default =
               begin
                 (if ((gt_int_ (integer_of_int32 !y_0)) (0)) then void
                 else (raise (Goto_while_0_break_exc void)));
-               (C_44:
-               begin
-                 (y_0 := (C_43:
-                         (safe_int32_of_integer_ (C_42:
-                                                 ((sub_int (integer_of_int32 !y_0)) (1))))));
-                !y_0 end) end in void); (raise (Loop_continue_exc void)) end
-            with Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+               (y_0 := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !y_0)) (1))));
+               !y_0 end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { (JC_<somenum>: true) }
@@ -927,7 +888,6 @@ let m4_safety =
    begin
      (let y_0 = ref (any_int32 void) in
      try
-      (C_37:
       begin
         (let _jessie_<somenum> = (y_0 := x_2) in void);
        (loop_1:
@@ -946,15 +906,11 @@ let m4_safety =
               begin
                 (if ((gt_int_ (integer_of_int32 !y_0)) (0)) then void
                 else (raise (Goto_while_0_break_exc void)));
-               (C_44:
-               begin
-                 (y_0 := (C_43:
-                         (JC_<somenum>:
-                         (int32_of_integer_ (C_42:
-                                            ((sub_int (integer_of_int32 !y_0)) (1)))))));
-                !y_0 end) end in void); (raise (Loop_continue_exc void)) end
-            with Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+               (y_0 := (JC_<somenum>:
+                       (int32_of_integer_ ((sub_int (integer_of_int32 !y_0)) (1)))));
+               !y_0 end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { true }
@@ -967,7 +923,6 @@ let m5_ensures_default =
    begin
      (let y_1 = ref (any_int32 void) in
      try
-      (C_46:
       begin
         (let _jessie_<somenum> = (y_1 := x_3) in void);
        (loop_4:
@@ -983,14 +938,10 @@ let m5_ensures_default =
               begin
                 (if ((gt_int_ (integer_of_int32 !y_1)) (0)) then void
                 else (raise (Goto_while_0_break_exc void)));
-               (C_51:
-               begin
-                 (y_1 := (C_50:
-                         (safe_int32_of_integer_ (C_49:
-                                                 ((sub_int (integer_of_int32 !y_1)) (1))))));
-                !y_1 end) end in void); (raise (Loop_continue_exc void)) end
-            with Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+               (y_1 := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !y_1)) (1))));
+               !y_1 end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { (JC_<somenum>: true) }
@@ -1003,7 +954,6 @@ let m5_safety =
    begin
      (let y_1 = ref (any_int32 void) in
      try
-      (C_46:
       begin
         (let _jessie_<somenum> = (y_1 := x_3) in void);
        (loop_3:
@@ -1019,15 +969,11 @@ let m5_safety =
               begin
                 (if ((gt_int_ (integer_of_int32 !y_1)) (0)) then void
                 else (raise (Goto_while_0_break_exc void)));
-               (C_51:
-               begin
-                 (y_1 := (C_50:
-                         (JC_<somenum>:
-                         (int32_of_integer_ (C_49:
-                                            ((sub_int (integer_of_int32 !y_1)) (1)))))));
-                !y_1 end) end in void); (raise (Loop_continue_exc void)) end
-            with Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+               (y_1 := (JC_<somenum>:
+                       (int32_of_integer_ ((sub_int (integer_of_int32 !y_1)) (1)))));
+               !y_1 end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { true }
@@ -1041,45 +987,28 @@ let m6_ensures_default =
   try
    begin
      (let __retres_1 = ref (any_int8 void) in
-     (C_59:
      begin
        (let _jessie_<somenum> =
-       (mutable_x_4 := (C_58:
-                       (safe_int8_of_integer_ (C_57:
-                                              ((add_int (integer_of_int32 
-                                                         (C_56:
+       (mutable_x_4 := (safe_int8_of_integer_ ((add_int (integer_of_int32 
                                                          (safe_int32_of_integer_ 
-                                                          (integer_of_int8 !mutable_x_4))))) 
-                                               (integer_of_int32 (C_55:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_54:
+                                                          (integer_of_int8 !mutable_x_4)))) 
+                                               (integer_of_int32 (safe_int32_of_integer_ 
                                                                   ((add_int 
                                                                     (integer_of_int32 
-                                                                    (C_53:
                                                                     (safe_int32_of_integer_ 
-                                                                    (integer_of_int8 !mutable_x_4))))) (1))))))))))) in
+                                                                    (integer_of_int8 !mutable_x_4)))) (1))))))) in
        void);
-      (C_63:
-      begin
-        (let _jessie_<somenum> =
-        (mutable_x_4 := (C_62:
-                        (safe_int8_of_integer_ (C_61:
-                                               ((add_int (integer_of_int32 
-                                                          (C_60:
-                                                          (safe_int32_of_integer_ 
-                                                           (integer_of_int8 !mutable_x_4))))) (1)))))) in
-        void);
-       (C_67:
-       begin
-         (let _jessie_<somenum> =
-         (__retres_1 := (C_66:
-                        (safe_int8_of_integer_ (C_65:
-                                               ((add_int (integer_of_int32 
-                                                          (C_64:
-                                                          (safe_int32_of_integer_ 
-                                                           (integer_of_int8 !mutable_x_4))))) (2)))))) in
-         void); (return := !__retres_1); (raise Return) end) end) end));
-    absurd  end with Return -> !return end))) { (JC_<somenum>: true) }
+      (let _jessie_<somenum> =
+      (mutable_x_4 := (safe_int8_of_integer_ ((add_int (integer_of_int32 
+                                                        (safe_int32_of_integer_ 
+                                                         (integer_of_int8 !mutable_x_4)))) (1)))) in
+      void);
+      (let _jessie_<somenum> =
+      (__retres_1 := (safe_int8_of_integer_ ((add_int (integer_of_int32 
+                                                       (safe_int32_of_integer_ 
+                                                        (integer_of_int8 !mutable_x_4)))) (2)))) in
+      void); (return := !__retres_1); (raise Return) end); absurd  end with
+   Return -> !return end))) { (JC_<somenum>: true) }
 
 let m6_safety =
  fun (x_4 : int8) ->
@@ -1090,53 +1019,34 @@ let m6_safety =
   try
    begin
      (let __retres_1 = ref (any_int8 void) in
-     (C_59:
      begin
        (let _jessie_<somenum> =
-       (mutable_x_4 := (C_58:
-                       (JC_<somenum>:
-                       (int8_of_integer_ (C_57:
-                                         ((add_int (integer_of_int32 
-                                                    (C_56:
+       (mutable_x_4 := (JC_<somenum>:
+                       (int8_of_integer_ ((add_int (integer_of_int32 
                                                     (JC_<somenum>:
                                                     (int32_of_integer_ 
-                                                     (integer_of_int8 !mutable_x_4)))))) 
-                                          (integer_of_int32 (C_55:
-                                                            (JC_<somenum>:
+                                                     (integer_of_int8 !mutable_x_4))))) 
+                                          (integer_of_int32 (JC_<somenum>:
                                                             (int32_of_integer_ 
-                                                             (C_54:
                                                              ((add_int 
                                                                (integer_of_int32 
-                                                                (C_53:
                                                                 (JC_<somenum>:
                                                                 (int32_of_integer_ 
-                                                                 (integer_of_int8 !mutable_x_4)))))) (1))))))))))))) in
+                                                                 (integer_of_int8 !mutable_x_4))))) (1))))))))) in
        void);
-      (C_63:
-      begin
-        (let _jessie_<somenum> =
-        (mutable_x_4 := (C_62:
-                        (JC_<somenum>:
-                        (int8_of_integer_ (C_61:
-                                          ((add_int (integer_of_int32 
-                                                     (C_60:
-                                                     (JC_<somenum>:
-                                                     (int32_of_integer_ 
-                                                      (integer_of_int8 !mutable_x_4)))))) (1))))))) in
-        void);
-       (C_67:
-       begin
-         (let _jessie_<somenum> =
-         (__retres_1 := (C_66:
-                        (JC_<somenum>:
-                        (int8_of_integer_ (C_65:
-                                          ((add_int (integer_of_int32 
-                                                     (C_64:
-                                                     (JC_<somenum>:
-                                                     (int32_of_integer_ 
-                                                      (integer_of_int8 !mutable_x_4)))))) (2))))))) in
-         void); (return := !__retres_1); (raise Return) end) end) end));
-    absurd  end with Return -> !return end))) { true }
+      (let _jessie_<somenum> =
+      (mutable_x_4 := (JC_<somenum>:
+                      (int8_of_integer_ ((add_int (integer_of_int32 (JC_<somenum>:
+                                                                    (int32_of_integer_ 
+                                                                    (integer_of_int8 !mutable_x_4))))) (1))))) in
+      void);
+      (let _jessie_<somenum> =
+      (__retres_1 := (JC_<somenum>:
+                     (int8_of_integer_ ((add_int (integer_of_int32 (JC_<somenum>:
+                                                                   (int32_of_integer_ 
+                                                                    (integer_of_int8 !mutable_x_4))))) (2))))) in
+      void); (return := !__retres_1); (raise Return) end); absurd  end with
+   Return -> !return end))) { true }
 
 let m7_ensures_default =
  fun (p : S pointer) (S_p_2_alloc_table : S alloc_table) (S_f_p_2 : (S, int32) memory) ->
@@ -1146,10 +1056,9 @@ let m7_ensures_default =
   try
    begin
      (let __retres_2 = ref (any_int32 void) in
-     (C_70:
      begin
-       (let _jessie_<somenum> = (__retres_2 := (C_69: ((safe_acc_ S_f_p_2) p))) in
-       void); (return := !__retres_2); (raise Return) end)); absurd  end with
+       (let _jessie_<somenum> = (__retres_2 := ((safe_acc_ S_f_p_2) p)) in void);
+      (return := !__retres_2); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let m7_safety =
@@ -1160,12 +1069,10 @@ let m7_safety =
   try
    begin
      (let __retres_2 = ref (any_int32 void) in
-     (C_70:
      begin
        (let _jessie_<somenum> =
-       (__retres_2 := (C_69:
-                      (JC_<somenum>: (((acc_ S_p_2_alloc_table) S_f_p_2) p)))) in
-       void); (return := !__retres_2); (raise Return) end)); absurd  end with
+       (__retres_2 := (JC_<somenum>: (((acc_ S_p_2_alloc_table) S_f_p_2) p))) in
+       void); (return := !__retres_2); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 let m8_ensures_default =
@@ -1173,12 +1080,11 @@ let m8_ensures_default =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_73:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let _jessie_<somenum> = p_0 in
      (((safe_upd_ S_f_p_0_3) _jessie_<somenum>) _jessie_<somenum>))); (raise Return);
-    (raise Return) end) with Return -> void end)
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: (integer_of_int32(select(S_f_p_0_3, p_0)) = (0)))
     and (JC_<somenum>:
@@ -1190,25 +1096,23 @@ let m8_safety =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_73:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let _jessie_<somenum> = p_0 in
      (JC_<somenum>:
      ((((upd_ S_p_0_3_alloc_table) S_f_p_0_3) _jessie_<somenum>) _jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let trace_ensures_default =
  fun (this : S pointer) (S_f_this_1 : (S, int32) memory ref) (S_this_1_alloc_table : S alloc_table) ->
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_2:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let _jessie_<somenum> = this in
      (((safe_upd_ S_f_this_1) _jessie_<somenum>) _jessie_<somenum>))); (raise Return);
-    (raise Return) end) with Return -> void end)
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>: (integer_of_int32(select(S_f_this_1, this)) = (0))) }
 
 let trace_safety =
@@ -1216,13 +1120,12 @@ let trace_safety =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_2:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let _jessie_<somenum> = this in
      (JC_<somenum>:
      ((((upd_ S_this_1_alloc_table) S_f_this_1) _jessie_<somenum>) _jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C trace.jessie --quiet -f trace.makefile project
@@ -1238,12 +1141,12 @@ why --project [...] why/trace.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/trace_po53.why">
-      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "46" begin = "14" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "46" begin = "15" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/trace_po54.why">
-      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "46" begin = "14" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "46" begin = "15" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1263,12 +1166,12 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/trace_po50.why">
-      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "197" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "198" begin = "16" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/trace_po51.why">
-      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "197" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "198" begin = "16" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1398,11 +1301,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po28.why">
-      <location file = "why/trace.why" line = "804" begin = "43" end = "74"/>
+      <location file = "why/trace.why" line = "753" begin = "43" end = "74"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/trace_po29.why">
-      <location file = "why/trace.why" line = "804" begin = "43" end = "74"/>
+      <location file = "why/trace.why" line = "753" begin = "43" end = "74"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1439,11 +1342,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po22.why">
-      <location file = "why/trace.why" line = "728" begin = "43" end = "74"/>
+      <location file = "why/trace.why" line = "687" begin = "43" end = "74"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/trace_po23.why">
-      <location file = "why/trace.why" line = "728" begin = "43" end = "74"/>
+      <location file = "why/trace.why" line = "687" begin = "43" end = "74"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

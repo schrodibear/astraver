@@ -45,24 +45,26 @@ lemma shift_prop :
     ((y >= 8) ==> (((x * 256) * (1 << (y - 8))) == (x * (1 << y))))))
 
 integer sizetype_normalize(s1[..] e)
-  requires (C_19 : ((C_20 : (\offset_min(e) <= 0)) &&
-                     (C_21 : (\offset_max(e) >= 0))));
-  requires (C_16 : ((C_17 : (0 < e.mantissa)) && (C_18 : (e.mantissa < 10))));
-  requires (C_13 : ((C_14 : (10 < e.exponent)) && (C_15 : (e.exponent < 20))));
+  requires (_C_19 : ((_C_20 : (\offset_min(e) <= 0)) &&
+                      (_C_21 : (\offset_max(e) >= 0))));
+  requires (_C_16 : ((_C_17 : (0 < e.mantissa)) &&
+                      (_C_18 : (e.mantissa < 10))));
+  requires (_C_13 : ((_C_14 : (10 < e.exponent)) &&
+                      (_C_15 : (e.exponent < 20))));
 behavior default:
-  ensures (C_12 : ((\at(e,Old).mantissa * (1 << \at(e,Old).exponent)) ==
-                    \at((e.mantissa * (1 << e.exponent)),Old)));
+  ensures (_C_12 : ((\at(e,Old).mantissa * (1 << \at(e,Old).exponent)) ==
+                     \at((e.mantissa * (1 << e.exponent)),Old)));
 {  
    (var integer min_mantissa);
    
    (var integer __retres);
    
-   {  (C_1 : (min_mantissa = 2097152));
-      (if ((C_10 : e.mantissa) < min_mantissa) then 
-      {  (C_5 : ((C_4 : e.mantissa) = (C_3 : ((C_2 : e.mantissa) * 256))));
-         (C_9 : ((C_8 : e.exponent) = (C_7 : ((C_6 : e.exponent) - 8))))
+   {  (_C_1 : (min_mantissa = 2097152));
+      (if ((_C_10 : e.mantissa) < min_mantissa) then 
+      {  (_C_5 : ((_C_4 : e.mantissa) = (_C_3 : ((_C_2 : e.mantissa) * 256))));
+         (_C_9 : ((_C_8 : e.exponent) = (_C_7 : ((_C_6 : e.exponent) - 8))))
       } else ());
-      (C_11 : (__retres = 0));
+      (_C_11 : (__retres = 0));
       
       (return __retres)
    }
@@ -437,29 +439,23 @@ let sizetype_normalize_ensures_default =
    begin
      (let min_mantissa = ref (any_int void) in
      (let __retres = ref (any_int void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (min_mantissa := (2097152)) in void);
-      (if ((lt_int_ (C_10: ((safe_acc_ !s1_mantissa_e_1) e))) !min_mantissa)
+      (if ((lt_int_ ((safe_acc_ !s1_mantissa_e_1) e)) !min_mantissa)
       then
        (let _jessie_<somenum> =
-       (C_5:
        begin
          (let _jessie_<somenum> =
-         (C_3: ((mul_int (C_2: ((safe_acc_ !s1_mantissa_e_1) e))) (256))) in
+         ((mul_int ((safe_acc_ !s1_mantissa_e_1) e)) (256)) in
          (let _jessie_<somenum> = e in
          (((safe_upd_ s1_mantissa_e_1) _jessie_<somenum>) _jessie_<somenum>)));
-        (C_9:
-        (let _jessie_<somenum> =
-        (C_7: ((sub_int (C_6: ((safe_acc_ !s1_exponent_e_1) e))) (8))) in
+        (let _jessie_<somenum> = ((sub_int ((safe_acc_ !s1_exponent_e_1) e)) (8)) in
         begin
           (let _jessie_<somenum> = e in
           (((safe_upd_ s1_exponent_e_1) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum>
-        end)) end) in void) else void);
-      (C_11:
-      begin
-        (let _jessie_<somenum> = (__retres := (0)) in void); (return := !__retres);
-       (raise Return) end) end))); absurd  end with Return -> !return end))
+        end) end in void) else void);
+      (let _jessie_<somenum> = (__retres := (0)) in void); (return := !__retres);
+      (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     (mul_int(select(s1_mantissa_e_1, e),
      lsl((1), select(s1_exponent_e_1, e))) = mul_int(select(s1_mantissa_e_1@,
@@ -482,36 +478,26 @@ let sizetype_normalize_safety =
    begin
      (let min_mantissa = ref (any_int void) in
      (let __retres = ref (any_int void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (min_mantissa := (2097152)) in void);
-      (if ((lt_int_ (C_10:
-                    (JC_<somenum>: (((acc_ s1_e_1_alloc_table) !s1_mantissa_e_1) e)))) !min_mantissa)
+      (if ((lt_int_ (JC_<somenum>: (((acc_ s1_e_1_alloc_table) !s1_mantissa_e_1) e))) !min_mantissa)
       then
        (let _jessie_<somenum> =
-       (C_5:
        begin
          (let _jessie_<somenum> =
-         (C_3:
-         ((mul_int (C_2:
-                   (JC_<somenum>: (((acc_ s1_e_1_alloc_table) !s1_mantissa_e_1) e)))) (256))) in
+         ((mul_int (JC_<somenum>: (((acc_ s1_e_1_alloc_table) !s1_mantissa_e_1) e))) (256)) in
          (let _jessie_<somenum> = e in
          (JC_<somenum>:
          ((((upd_ s1_e_1_alloc_table) s1_mantissa_e_1) _jessie_<somenum>) _jessie_<somenum>))));
-        (C_9:
         (let _jessie_<somenum> =
-        (C_7:
-        ((sub_int (C_6:
-                  (JC_<somenum>: (((acc_ s1_e_1_alloc_table) !s1_exponent_e_1) e)))) (8))) in
+        ((sub_int (JC_<somenum>: (((acc_ s1_e_1_alloc_table) !s1_exponent_e_1) e))) (8)) in
         begin
           (let _jessie_<somenum> = e in
           (JC_<somenum>:
           ((((upd_ s1_e_1_alloc_table) s1_exponent_e_1) _jessie_<somenum>) _jessie_<somenum>)));
-         _jessie_<somenum> end)) end) in void) else void);
-      (C_11:
-      begin
-        (let _jessie_<somenum> = (__retres := (0)) in void); (return := !__retres);
-       (raise Return) end) end))); absurd  end with Return -> !return end))
+         _jessie_<somenum> end) end in void) else void);
+      (let _jessie_<somenum> = (__retres := (0)) in void); (return := !__retres);
+      (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 
 
@@ -558,12 +544,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/schausten2_po7.why">
-      <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "56" begin = "17" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "58" begin = "18" end = "76"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/schausten2_po8.why">
-      <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "56" begin = "17" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "58" begin = "18" end = "76"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -578,12 +564,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/schausten2_po11.why">
-      <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "57" begin = "17" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "59" begin = "18" end = "74"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/schausten2_po12.why">
-      <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "57" begin = "17" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "59" begin = "18" end = "74"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

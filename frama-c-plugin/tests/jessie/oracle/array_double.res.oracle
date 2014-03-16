@@ -62,7 +62,7 @@ axiomatic EqMessage {
 
 unit f()
 behavior default:
-  ensures (C_1 : eq_message{Here}(((Page.Texte + 9).char__x__1__M + 0), 0));
+  ensures (_C_1 : eq_message{Here}(((Page.Texte + 9).char__x__1__M + 0), 0));
 {  
    {  
       (return ())

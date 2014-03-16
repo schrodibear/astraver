@@ -43,14 +43,14 @@ type voidP = [voidP]
 int32 atoi(charP[..] c)
 behavior default:
   assigns (c + [0..]).charM;
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 ;
 
 unit f()
 behavior default:
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 {  
-   {  (C_2 : atoi(null));
+   {  (_C_2 : atoi(null));
       
       (return ())
    }
@@ -428,13 +428,12 @@ let f_ensures_default =
    begin
      (let charP_charM_null_2 = ref (any_memory void) in
      (let charP_null_2_alloc_table = (any_alloc_table void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
        (let _jessie_<somenum> = null in
        (JC_<somenum>:
        (((atoi _jessie_<somenum>) charP_charM_null_2) charP_null_2_alloc_table))) in
-       void); (raise Return) end))); (raise Return) end with Return ->
+       void); (raise Return) end)); (raise Return) end with Return ->
    void end) { (JC_<somenum>: true) }
 
 let f_safety =
@@ -445,13 +444,12 @@ let f_safety =
    begin
      (let charP_charM_null_2 = ref (any_memory void) in
      (let charP_null_2_alloc_table = (any_alloc_table void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
        (let _jessie_<somenum> = null in
        (JC_<somenum>:
        (((atoi_requires _jessie_<somenum>) charP_charM_null_2) charP_null_2_alloc_table))) in
-       void); (raise Return) end))); (raise Return) end with Return ->
+       void); (raise Return) end)); (raise Return) end with Return ->
    void end) { true }
 
 

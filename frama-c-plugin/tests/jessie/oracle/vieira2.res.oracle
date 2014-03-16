@@ -46,27 +46,27 @@ tag voidP = {
 type voidP = [voidP]
 
 unit f(intP[..] a, int32 len)
-  requires (C_11 : (((((C_15 : (\offset_min(a) <= 0)) &&
-                        (C_16 : (\offset_max(a) >= (len - 1)))) &&
-                       (C_17 : (len >= 0))) &&
-                      (C_18 : (len < 2147483647))) &&
-                     ((C_20 : (0 <= (len / 8))) &&
-                       (C_21 : ((len / 8) <= len)))));
+  requires (_C_11 : (((((_C_15 : (\offset_min(a) <= 0)) &&
+                         (_C_16 : (\offset_max(a) >= (len - 1)))) &&
+                        (_C_17 : (len >= 0))) &&
+                       (_C_18 : (len < 2147483647))) &&
+                      ((_C_20 : (0 <= (len / 8))) &&
+                        (_C_21 : ((len / 8) <= len)))));
 behavior default:
-  ensures (C_10 : true);
+  ensures (_C_10 : true);
 {  
    (var int32 i);
    
-   {  (C_3 : (i = (C_2 : ((C_1 : (len / 8)) :> int32))));
+   {  (_C_3 : (i = (_C_2 : ((_C_1 : (len / 8)) :> int32))));
       (if (i > 0) then 
       {  
          loop 
          behavior default:
-           invariant (C_4 : (i >= 1));
+           invariant (_C_4 : (i >= 1));
          while (true)
          {  
-            {  (C_6 : (a = (C_5 : (a + 8))));
-               (C_9 : (i = (C_8 : ((C_7 : (i - 1)) :> int32))));
+            {  (_C_6 : (a = (_C_5 : (a + 8))));
+               (_C_9 : (i = (_C_8 : ((_C_7 : (i - 1)) :> int32))));
                (if (i == 0) then 
                (goto while_0_break) else ())
             }
@@ -536,13 +536,10 @@ let f_ensures_default =
   try
    begin
      (let i = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (i := (C_2:
-             (safe_int32_of_integer_ (C_1:
-                                     (JC_<somenum>:
-                                     ((computer_div (integer_of_int32 len)) (8))))))) in
+       (i := (safe_int32_of_integer_ (JC_<somenum>:
+                                     ((computer_div (integer_of_int32 len)) (8))))) in
        void);
       (if ((gt_int_ (integer_of_int32 !i)) (0))
       then
@@ -554,24 +551,19 @@ let f_ensures_default =
            begin
              [ { } unit { true } ];
             try
-             (C_6:
              begin
-               (let _jessie_<somenum> =
-               (mutable_a := (C_5: ((shift !mutable_a) (8)))) in void);
-              (C_9:
-              begin
-                (let _jessie_<somenum> =
-                (i := (C_8:
-                      (safe_int32_of_integer_ (C_7:
-                                              ((sub_int (integer_of_int32 !i)) (1)))))) in
-                void);
-               (if ((eq_int_ (integer_of_int32 !i)) (0))
-               then (raise (Goto_while_0_break_exc void)) else void);
-               (raise (Loop_continue_exc void)) end) end) with
+               (let _jessie_<somenum> = (mutable_a := ((shift !mutable_a) (8))) in
+               void);
+              (let _jessie_<somenum> =
+              (i := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !i)) (1)))) in
+              void);
+              (if ((eq_int_ (integer_of_int32 !i)) (0))
+              then (raise (Goto_while_0_break_exc void)) else void);
+              (raise (Loop_continue_exc void)) end with
              Loop_continue_exc _jessie_<somenum> -> void end end done;
          (raise (Goto_while_0_break_exc void)) end) with
         Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end
-      else void); (raise Return) end)); (raise Return) end with Return ->
+      else void); (raise Return) end); (raise Return) end with Return ->
    void end)) { (JC_<somenum>: true) }
 
 let f_safety =
@@ -593,14 +585,11 @@ let f_safety =
   try
    begin
      (let i = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (i := (C_2:
-             (JC_<somenum>:
-             (int32_of_integer_ (C_1:
-                                (JC_<somenum>:
-                                ((computer_div_ (integer_of_int32 len)) (8)))))))) in
+       (i := (JC_<somenum>:
+             (int32_of_integer_ (JC_<somenum>:
+                                ((computer_div_ (integer_of_int32 len)) (8)))))) in
        void);
       (if ((gt_int_ (integer_of_int32 !i)) (0))
       then
@@ -612,25 +601,20 @@ let f_safety =
            begin
              [ { } unit reads i { (JC_<somenum>: ge_int(integer_of_int32(i), (1))) } ];
             try
-             (C_6:
              begin
-               (let _jessie_<somenum> =
-               (mutable_a := (C_5: ((shift !mutable_a) (8)))) in void);
-              (C_9:
-              begin
-                (let _jessie_<somenum> =
-                (i := (C_8:
-                      (JC_<somenum>:
-                      (int32_of_integer_ (C_7:
-                                         ((sub_int (integer_of_int32 !i)) (1))))))) in
-                void);
-               (if ((eq_int_ (integer_of_int32 !i)) (0))
-               then (raise (Goto_while_0_break_exc void)) else void);
-               (raise (Loop_continue_exc void)) end) end) with
+               (let _jessie_<somenum> = (mutable_a := ((shift !mutable_a) (8))) in
+               void);
+              (let _jessie_<somenum> =
+              (i := (JC_<somenum>:
+                    (int32_of_integer_ ((sub_int (integer_of_int32 !i)) (1))))) in
+              void);
+              (if ((eq_int_ (integer_of_int32 !i)) (0))
+              then (raise (Goto_while_0_break_exc void)) else void);
+              (raise (Loop_continue_exc void)) end with
              Loop_continue_exc _jessie_<somenum> -> void end end done;
          (raise (Goto_while_0_break_exc void)) end) with
         Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end
-      else void); (raise Return) end)); (raise Return) end with Return ->
+      else void); (raise Return) end); (raise Return) end with Return ->
    void end)) { true }
 
 
@@ -676,11 +660,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vieira2_po8.why">
-      <location file = "why/vieira2.why" line = "531" begin = "45" end = "46"/>
+      <location file = "why/vieira2.why" line = "520" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vieira2_po9.why">
-      <location file = "why/vieira2.why" line = "531" begin = "45" end = "46"/>
+      <location file = "why/vieira2.why" line = "520" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

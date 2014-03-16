@@ -111,36 +111,36 @@ lemma power_odd :
       (\int_pow(x_1, n_1) == (x_1 * \int_pow((x_1 * x_1), (n_1 / 2)))))))
 
 integer rec(integer x_0, integer n_2)
-  requires (C_12 : (0 <= n_2));
-  decreases (C_13 : n_2);
+  requires (_C_12 : (0 <= n_2));
+  decreases (_C_13 : n_2);
 behavior default:
-  ensures (C_11 : (\result == \int_pow(\at(x_0,Old), \at(n_2,Old))));
+  ensures (_C_11 : (\result == \int_pow(\at(x_0,Old), \at(n_2,Old))));
 {  
    (var integer r);
    
    (var integer __retres);
    
    {  (if (n_2 == 0) then 
-      {  (C_1 : (__retres = 1));
+      {  (_C_1 : (__retres = 1));
          
          (goto return_label)
       } else ());
-      (C_4 : (r = (C_3 : rec(x_0, (C_2 : (n_2 / 2))))));
-      (if ((C_7 : (n_2 % 2)) == 0) then 
-      {  (C_6 : (__retres = (C_5 : (r * r))));
+      (_C_4 : (r = (_C_3 : rec(x_0, (_C_2 : (n_2 / 2))))));
+      (if ((_C_7 : (n_2 % 2)) == 0) then 
+      {  (_C_6 : (__retres = (_C_5 : (r * r))));
          
          (goto return_label)
       } else ());
-      (C_10 : (__retres = (C_9 : ((C_8 : (r * r)) * x_0))));
+      (_C_10 : (__retres = (_C_9 : ((_C_8 : (r * r)) * x_0))));
       (return_label : 
       (return __retres))
    }
 }
 
 integer imp(integer x, integer n_1)
-  requires (C_29 : (0 <= n_1));
+  requires (_C_29 : (0 <= n_1));
 behavior default:
-  ensures (C_28 : (\result == \int_pow(\at(x,Old), \at(n_1,Old))));
+  ensures (_C_28 : (\result == \int_pow(\at(x,Old), \at(n_1,Old))));
 {  
    (var integer r_0);
    
@@ -148,26 +148,26 @@ behavior default:
    
    (var integer e);
    
-   {  (C_14 : (r_0 = 1));
-      (C_15 : (p = x));
-      (C_16 : (e = n_1));
+   {  (_C_14 : (r_0 = 1));
+      (_C_15 : (p = x));
+      (_C_16 : (e = n_1));
       
       loop 
       behavior default:
-        invariant (C_18 : ((C_19 : (0 <= e)) &&
-                            (C_20 : ((r_0 * \int_pow(p, e)) ==
-                                      \int_pow(x, n_1)))));
-      variant (C_17 : e);
+        invariant (_C_18 : ((_C_19 : (0 <= e)) &&
+                             (_C_20 : ((r_0 * \int_pow(p, e)) ==
+                                        \int_pow(x, n_1)))));
+      variant (_C_17 : e);
       while (true)
       {  
          {  (if (e > 0) then () else 
             (goto while_0_break));
             
-            {  (if ((C_23 : (e % 2)) != 0) then (C_22 : (r_0 = (C_21 : 
-                                                               (r_0 *
-                                                                 p)))) else ());
-               (C_25 : (p = (C_24 : (p * p))));
-               (C_27 : (e = (C_26 : (e / 2))))
+            {  (if ((_C_23 : (e % 2)) != 0) then (_C_22 : (r_0 = (_C_21 : 
+                                                                 (r_0 *
+                                                                   p)))) else ());
+               (_C_25 : (p = (_C_24 : (p * p))));
+               (_C_27 : (e = (_C_26 : (e / 2))))
             }
          }
       };
@@ -177,29 +177,11 @@ behavior default:
    }
 }
 ========== file tests/c/power.jessie/power.cloc ==========
-[C_15]
+[_C_28]
 file = "HOME/tests/c/power.c"
-line = 44
-begin = 2
-end = 6
-
-[C_11]
-file = "HOME/tests/c/power.c"
-line = 28
+line = 41
 begin = 12
 end = 33
-
-[C_1]
-file = "HOME/tests/c/power.c"
-line = 31
-begin = 14
-end = 23
-
-[C_9]
-file = "HOME/tests/c/power.c"
-line = 34
-begin = 9
-end = 14
 
 [rec]
 name = "Function rec"
@@ -208,59 +190,71 @@ line = 30
 begin = 5
 end = 8
 
-[C_10]
+[_C_4]
 file = "HOME/tests/c/power.c"
-line = 34
-begin = 2
-end = 15
+line = 32
+begin = 11
+end = 22
 
-[C_20]
+[_C_23]
+file = "HOME/tests/c/power.c"
+line = 52
+begin = 8
+end = 13
+
+[_C_19]
 file = "HOME/tests/c/power.c"
 line = 48
-begin = 18
-end = 46
+begin = 8
+end = 14
 
-[C_17]
-file = "HOME/tests/c/power.c"
-line = 49
-begin = 19
-end = 20
-
-[C_5]
-file = "HOME/tests/c/power.c"
-line = 33
-begin = 27
-end = 30
-
-[C_29]
-file = "HOME/tests/c/power.c"
-line = 40
-begin = 13
-end = 19
-
-[C_13]
+[_C_13]
 file = "HOME/tests/c/power.c"
 line = 27
 begin = 14
 end = 15
 
-[C_7]
+[_C_5]
 file = "HOME/tests/c/power.c"
 line = 33
-begin = 7
-end = 12
+begin = 27
+end = 30
 
-[C_22]
+[_C_12]
+file = "HOME/tests/c/power.c"
+line = 26
+begin = 13
+end = 19
+
+[_C_22]
 file = "HOME/tests/c/power.c"
 line = 52
 begin = 20
 end = 26
 
-[C_14]
+[_C_9]
 file = "HOME/tests/c/power.c"
-line = 44
-begin = 2
-end = 6
+line = 34
+begin = 9
+end = 14
+
+[_C_6]
+file = "HOME/tests/c/power.c"
+line = 33
+begin = 20
+end = 31
+
+[_C_24]
+file = "HOME/tests/c/power.c"
+line = 53
+begin = 4
+end = 10
+
+[_C_20]
+file = "HOME/tests/c/power.c"
+line = 48
+begin = 18
+end = 46
 
 [power_even]
 name = "Lemma power_even"
@@ -269,65 +263,71 @@ line = 13
 begin = 4
 end = 111
 
-[C_25]
-file = "HOME/tests/c/power.c"
-line = 53
-begin = 4
-end = 10
-
-[C_8]
-file = "HOME/tests/c/power.c"
-line = 34
-begin = 9
-end = 12
-
-[C_27]
-file = "HOME/tests/c/power.c"
-line = 54
-begin = 4
-end = 10
-
-[C_19]
-file = "HOME/tests/c/power.c"
-line = 48
-begin = 8
-end = 14
-
-[C_4]
+[_C_3]
 file = "HOME/tests/c/power.c"
 line = 32
 begin = 11
 end = 22
 
-[C_12]
+[_C_17]
 file = "HOME/tests/c/power.c"
-line = 26
-begin = 13
-end = 19
+line = 49
+begin = 19
+end = 20
 
-[C_26]
+[_C_7]
+file = "HOME/tests/c/power.c"
+line = 33
+begin = 7
+end = 12
+
+[_C_27]
 file = "HOME/tests/c/power.c"
 line = 54
 begin = 4
 end = 10
 
-[C_18]
+[_C_15]
+file = "HOME/tests/c/power.c"
+line = 44
+begin = 2
+end = 6
+
+[_C_26]
+file = "HOME/tests/c/power.c"
+line = 54
+begin = 4
+end = 10
+
+[_C_10]
+file = "HOME/tests/c/power.c"
+line = 34
+begin = 2
+end = 15
+
+[_C_8]
+file = "HOME/tests/c/power.c"
+line = 34
+begin = 9
+end = 12
+
+[_C_18]
 file = "HOME/tests/c/power.c"
 line = 48
 begin = 8
 end = 46
 
-[C_2]
+[_C_29]
 file = "HOME/tests/c/power.c"
-line = 32
-begin = 18
-end = 21
+line = 40
+begin = 13
+end = 19
 
-[C_28]
+[_C_14]
 file = "HOME/tests/c/power.c"
-line = 41
-begin = 12
-end = 33
+line = 44
+begin = 2
+end = 6
 
 [imp]
 name = "Function imp"
@@ -336,17 +336,11 @@ line = 43
 begin = 5
 end = 8
 
-[C_24]
+[_C_2]
 file = "HOME/tests/c/power.c"
-line = 53
-begin = 4
-end = 10
-
-[C_6]
-file = "HOME/tests/c/power.c"
-line = 33
-begin = 20
-end = 31
+line = 32
+begin = 18
+end = 21
 
 [power_odd]
 name = "Lemma power_odd"
@@ -355,29 +349,35 @@ line = 18
 begin = 4
 end = 112
 
-[C_21]
-file = "HOME/tests/c/power.c"
-line = 52
-begin = 20
-end = 26
-
-[C_3]
-file = "HOME/tests/c/power.c"
-line = 32
-begin = 11
-end = 22
-
-[C_16]
+[_C_16]
 file = "HOME/tests/c/power.c"
 line = 45
 begin = 2
 end = 5
 
-[C_23]
+[_C_1]
+file = "HOME/tests/c/power.c"
+line = 31
+begin = 14
+end = 23
+
+[_C_25]
+file = "HOME/tests/c/power.c"
+line = 53
+begin = 4
+end = 10
+
+[_C_11]
+file = "HOME/tests/c/power.c"
+line = 28
+begin = 12
+end = 33
+
+[_C_21]
 file = "HOME/tests/c/power.c"
 line = 52
-begin = 8
-end = 13
+begin = 20
+end = 26
 
 ========== jessie execution ==========
 Generating Why function rec_0
@@ -570,7 +570,7 @@ end = 8
 file = "HOME/tests/c/power.jessie/power.jc"
 line = 89
 begin = 6
-end = 698
+end = 716
 
 [JC_17]
 kind = DivByZero
@@ -673,13 +673,13 @@ end = 46
 file = "HOME/tests/c/power.jessie/power.jc"
 line = 89
 begin = 6
-end = 698
+end = 716
 
 [JC_40]
 file = "HOME/tests/c/power.jessie/power.jc"
 line = 89
 begin = 6
-end = 698
+end = 716
 
 [JC_35]
 file = "HOME/tests/c/power.c"
@@ -861,7 +861,7 @@ end = -1
 file = "HOME/tests/c/power.jessie/power.jc"
 line = 89
 begin = 6
-end = 698
+end = 716
 
 [JC_28]
 file = "HOME/tests/c/power.c"
@@ -1158,45 +1158,34 @@ let imp_ensures_default =
      (let p = ref (any_int void) in
      (let e = ref (any_int void) in
      try
-      (C_14:
       begin
         (let _jessie_<num> = (r_0 := (1)) in void);
-       (C_15:
+       (let _jessie_<num> = (p := x_1) in void);
+       (let _jessie_<num> = (e := n_1) in void);
+       (loop_2:
        begin
-         (let _jessie_<num> = (p := x_1) in void);
-        (C_16:
-        begin
-          (let _jessie_<num> = (e := n_1) in void);
-         (loop_2:
-         begin
-           while true do
-           { invariant
-               (JC_37:
-               ((JC_35: le_int((0), e))
-               and (JC_36: (mul_int(r_0, pow_int(p, e)) = pow_int(x_1, n_1)))))
-              }
+         while true do
+         { invariant
+             (JC_37:
+             ((JC_35: le_int((0), e))
+             and (JC_36: (mul_int(r_0, pow_int(p, e)) = pow_int(x_1, n_1)))))
+            }
+          begin
+            [ { } unit { true } ];
+           try
             begin
-              [ { } unit { true } ];
-             try
+              (let _jessie_<num> =
               begin
-                (let _jessie_<num> =
-                begin
-                  (if ((gt_int_ !e) (0)) then void
-                  else (raise (Goto_while_0_break_exc void)));
-                 (if ((neq_int_ (C_23: (JC_41: ((computer_mod !e) (2))))) (0))
-                 then
-                  (let _jessie_<num> =
-                  (C_22: (r_0 := (C_21: ((mul_int !r_0) !p)))) in void)
-                 else void);
-                 (C_25:
-                 begin
-                   (let _jessie_<num> = (p := (C_24: ((mul_int !p) !p))) in
-                   void);
-                  (C_27:
-                  begin   (e := (C_26: (JC_42: ((computer_div !e) (2))))); !e
-                  end) end) end in void); (raise (Loop_continue_exc void))
-              end with Loop_continue_exc _jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end) end) end) end) with
+                (if ((gt_int_ !e) (0)) then void
+                else (raise (Goto_while_0_break_exc void)));
+               (if ((neq_int_ (JC_41: ((computer_mod !e) (2)))) (0))
+               then (let _jessie_<num> = (r_0 := ((mul_int !r_0) !p)) in void)
+               else void);
+               (let _jessie_<num> = (p := ((mul_int !p) !p)) in void);
+               (e := (JC_42: ((computer_div !e) (2)))); !e end in void);
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (return := !r_0); (raise Return) end) end)));
     absurd  end with Return -> !return end))
@@ -1213,46 +1202,34 @@ let imp_safety =
      (let p = ref (any_int void) in
      (let e = ref (any_int void) in
      try
-      (C_14:
       begin
         (let _jessie_<num> = (r_0 := (1)) in void);
-       (C_15:
+       (let _jessie_<num> = (p := x_1) in void);
+       (let _jessie_<num> = (e := n_1) in void);
+       (loop_1:
        begin
-         (let _jessie_<num> = (p := x_1) in void);
-        (C_16:
-        begin
-          (let _jessie_<num> = (e := n_1) in void);
-         (loop_1:
-         begin
-           while true do
-           { invariant (JC_30: true) variant (JC_34 : e) }
+         while true do
+         { invariant (JC_30: true) variant (JC_34 : e) }
+          begin
+            [ { } unit reads e,p,r_0
+              { (JC_28:
+                ((JC_26: le_int((0), e))
+                and (JC_27:
+                    (mul_int(r_0, pow_int(p, e)) = pow_int(x_1, n_1))))) } ];
+           try
             begin
-              [ { } unit reads e,p,r_0
-                { (JC_28:
-                  ((JC_26: le_int((0), e))
-                  and (JC_27:
-                      (mul_int(r_0, pow_int(p, e)) = pow_int(x_1, n_1))))) } ];
-             try
+              (let _jessie_<num> =
               begin
-                (let _jessie_<num> =
-                begin
-                  (if ((gt_int_ !e) (0)) then void
-                  else (raise (Goto_while_0_break_exc void)));
-                 (if ((neq_int_ (C_23: (JC_32: ((computer_mod_ !e) (2))))) (0))
-                 then
-                  (let _jessie_<num> =
-                  (C_22: (r_0 := (C_21: ((mul_int !r_0) !p)))) in void)
-                 else void);
-                 (C_25:
-                 begin
-                   (let _jessie_<num> = (p := (C_24: ((mul_int !p) !p))) in
-                   void);
-                  (C_27:
-                  begin
-                    (e := (C_26: (JC_33: ((computer_div_ !e) (2))))); !e end)
-                 end) end in void); (raise (Loop_continue_exc void)) end with
-              Loop_continue_exc _jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end) end) end) end) with
+                (if ((gt_int_ !e) (0)) then void
+                else (raise (Goto_while_0_break_exc void)));
+               (if ((neq_int_ (JC_32: ((computer_mod_ !e) (2)))) (0))
+               then (let _jessie_<num> = (r_0 := ((mul_int !r_0) !p)) in void)
+               else void);
+               (let _jessie_<num> = (p := ((mul_int !p) !p)) in void);
+               (e := (JC_33: ((computer_div_ !e) (2)))); !e end in void);
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (return := !r_0); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
@@ -1270,28 +1247,20 @@ let rec_ensures_default =
       begin
         (if ((eq_int_ n_2) (0))
         then
-         (C_1:
          begin
            (let _jessie_<num> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) else void);
-       (C_4:
-       begin
-         (let _jessie_<num> =
-         (r := (C_3:
-               (let _jessie_<num> = x_0_0 in
-               (let _jessie_<num> = (C_2: (JC_15: ((computer_div n_2) (2)))) in
-               (JC_16: ((rec_0 _jessie_<num>) _jessie_<num>)))))) in void);
-        (if ((eq_int_ (C_7: (JC_17: ((computer_mod n_2) (2))))) (0))
-        then
-         (C_6:
-         begin
-           (let _jessie_<num> = (__retres := (C_5: ((mul_int !r) !r))) in void);
-          (raise (Return_label_exc void)) end) else void);
-        (C_10:
+          (raise (Return_label_exc void)) end else void);
+       (let _jessie_<num> =
+       (r := (let _jessie_<num> = x_0_0 in
+             (let _jessie_<num> = (JC_15: ((computer_div n_2) (2))) in
+             (JC_16: ((rec_0 _jessie_<num>) _jessie_<num>))))) in void);
+       (if ((eq_int_ (JC_17: ((computer_mod n_2) (2)))) (0))
+       then
         begin
-          (let _jessie_<num> =
-          (__retres := (C_9: ((mul_int (C_8: ((mul_int !r) !r))) x_0_0))) in
-          void); (raise (Return_label_exc void)) end) end) end with
+          (let _jessie_<num> = (__retres := ((mul_int !r) !r)) in void);
+         (raise (Return_label_exc void)) end else void);
+       (let _jessie_<num> = (__retres := ((mul_int ((mul_int !r) !r)) x_0_0)) in
+       void); (raise (Return_label_exc void)) end with
       Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -1310,30 +1279,22 @@ let rec_safety =
       begin
         (if ((eq_int_ n_2) (0))
         then
-         (C_1:
          begin
            (let _jessie_<num> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) else void);
-       (C_4:
-       begin
-         (let _jessie_<num> =
-         (r := (C_3:
-               (let _jessie_<num> = x_0_0 in
-               (let _jessie_<num> = (C_2: (JC_9: ((computer_div_ n_2) (2)))) in
-               (JC_13:
-               (check { zwf_zero((JC_12 : _jessie_<num>), (JC_11 : n_2)) };
-               (JC_10: ((rec_0_requires _jessie_<num>) _jessie_<num>)))))))) in void);
-        (if ((eq_int_ (C_7: (JC_14: ((computer_mod_ n_2) (2))))) (0))
-        then
-         (C_6:
-         begin
-           (let _jessie_<num> = (__retres := (C_5: ((mul_int !r) !r))) in void);
-          (raise (Return_label_exc void)) end) else void);
-        (C_10:
+          (raise (Return_label_exc void)) end else void);
+       (let _jessie_<num> =
+       (r := (let _jessie_<num> = x_0_0 in
+             (let _jessie_<num> = (JC_9: ((computer_div_ n_2) (2))) in
+             (JC_13:
+             (check { zwf_zero((JC_12 : _jessie_<num>), (JC_11 : n_2)) };
+             (JC_10: ((rec_0_requires _jessie_<num>) _jessie_<num>))))))) in void);
+       (if ((eq_int_ (JC_14: ((computer_mod_ n_2) (2)))) (0))
+       then
         begin
-          (let _jessie_<num> =
-          (__retres := (C_9: ((mul_int (C_8: ((mul_int !r) !r))) x_0_0))) in
-          void); (raise (Return_label_exc void)) end) end) end with
+          (let _jessie_<num> = (__retres := ((mul_int !r) !r)) in void);
+         (raise (Return_label_exc void)) end else void);
+       (let _jessie_<num> = (__retres := ((mul_int ((mul_int !r) !r)) x_0_0)) in
+       void); (raise (Return_label_exc void)) end with
       Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }

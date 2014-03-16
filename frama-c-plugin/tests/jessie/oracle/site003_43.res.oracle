@@ -100,42 +100,43 @@ invariant valid_Eventos :
 ((\offset_min(Eventos) <= 0) && (\offset_max(Eventos) >= 60))
 
 unit test(uint8 ID)
-  requires (C_49 : ((C_50 : (0 <= i)) && (C_51 : (i <= (3 - 1)))));
-  requires (C_48 : (\forall integer i_2;
-                     (((0 <= i_2) && (i_2 < 3)) ==>
-                       (\real_abs(((x + i_2).floatM :> real)) <= 100.0))));
-  requires (C_47 : (\real_abs((Value :> real)) <= 100.0));
+  requires (_C_49 : ((_C_50 : (0 <= i)) && (_C_51 : (i <= (3 - 1)))));
+  requires (_C_48 : (\forall integer i_2;
+                      (((0 <= i_2) && (i_2 < 3)) ==>
+                        (\real_abs(((x + i_2).floatM :> real)) <= 100.0))));
+  requires (_C_47 : (\real_abs((Value :> real)) <= 100.0));
 behavior default:
-  ensures (C_46 : ((pri == 1) ==>
-                    (\real_abs(((p :> real) - sum{Here}((x + 0), 3))) <=
-                      (3 * 0x1p-15))));
+  ensures (_C_46 : ((pri == 1) ==>
+                     (\real_abs(((p :> real) - sum{Here}((x + 0), 3))) <=
+                       (3 * 0x1p-15))));
 {  
-   {  (if ((C_8 : ((C_7 : (Eventos + 7).Ativo) :> int32)) == 1) then 
-      (if ((C_6 : ((C_5 : (Eventos + 7).Tratado) :> int32)) == 0) then 
-      {  (C_1 : (pri = 0));
-         (C_2 : (i = 0));
-         (C_4 : (p = (C_3 : (0 :> float))))
+   {  (if ((_C_8 : ((_C_7 : (Eventos + 7).Ativo) :> int32)) == 1) then 
+      (if ((_C_6 : ((_C_5 : (Eventos + 7).Tratado) :> int32)) == 0) then 
+      {  (_C_1 : (pri = 0));
+         (_C_2 : (i = 0));
+         (_C_4 : (p = (_C_3 : (0 :> float))))
       } else ()) else ());
-      (C_10 : ((C_9 : (x + i).floatM) = Value));
-      (C_14 : (i = (C_13 : ((C_12 : ((C_11 : (i :> int32)) + 1)) :> uint8))));
-      (if ((C_17 : (i :> int32)) > 2) then 
-      {  (C_15 : (i = 0));
-         (C_16 : (pri = 1))
+      (_C_10 : ((_C_9 : (x + i).floatM) = Value));
+      (_C_14 : (i = (_C_13 : ((_C_12 : ((_C_11 : (i :> int32)) + 1)) :> uint8))));
+      (if ((_C_17 : (i :> int32)) > 2) then 
+      {  (_C_15 : (i = 0));
+         (_C_16 : (pri = 1))
       } else ());
-      (if ((C_45 : (pri :> int32)) == 1) then 
-      {  (C_19 : (p = (C_18 : (0 :> float))));
-         (C_20 : (j = 0));
+      (if ((_C_45 : (pri :> int32)) == 1) then 
+      {  (_C_19 : (p = (_C_18 : (0 :> float))));
+         (_C_20 : (j = 0));
          
          loop 
          behavior default:
-           invariant (C_24 : ((C_25 : (0 <= j)) && (C_26 : (j <= 3))));
+           invariant (_C_24 : ((_C_25 : (0 <= j)) && (_C_26 : (j <= 3))));
          behavior default:
-           invariant (C_23 : (\real_abs(sum{Here}((x + 0), j)) <=
-                               (100.0 * j)));
+           invariant (_C_23 : (\real_abs(sum{Here}((x + 0), j)) <=
+                                (100.0 * j)));
          behavior default:
-           invariant (C_22 : (\real_abs(((p :> real) - sum{Here}((x + 0), j))) <=
-                               (j * 0x1p-15)));
-         variant (C_21 : (3 - j));
+           invariant (_C_22 : (\real_abs(((p :> real) -
+                                           sum{Here}((x + 0), j))) <=
+                                (j * 0x1p-15)));
+         variant (_C_21 : (3 - j));
          while (true)
          {  
             {  (if (j < 3) then () else 
@@ -144,44 +145,44 @@ behavior default:
                {  (L : 
                   {  
                      {  
-                        (assert for default: (C_27 : (jessie : (\real_abs(
-                                                                 ((x + j).floatM :> real)) <=
-                                                                 100.0))));
+                        (assert for default: (_C_27 : (jessie : (\real_abs(
+                                                                  ((x + j).floatM :> real)) <=
+                                                                  100.0))));
                         ()
                      };
                      
                      {  
-                        (assert for default: (C_28 : (jessie : (\real_abs(
-                                                                 (p :> real)) <=
-                                                                 (3.0 *
-                                                                   (100.0 +
+                        (assert for default: (_C_28 : (jessie : (\real_abs(
+                                                                  (p :> real)) <=
+                                                                  (3.0 *
+                                                                    (100.0 +
                                                                     0x1p-15))))));
                         ()
                      };
-                     (C_31 : (p = (C_30 : (p + (C_29 : (x + j).floatM)))))
+                     (_C_31 : (p = (_C_30 : (p + (_C_29 : (x + j).floatM)))))
                   });
                   
                   {  
-                     (assert for default: (C_32 : (jessie : (\real_abs(
-                                                              ((p :> real) -
-                                                                ((\at(p,L) :> real) +
-                                                                  ((x + j).floatM :> real)))) <=
-                                                              0x1p-15))));
+                     (assert for default: (_C_32 : (jessie : (\real_abs(
+                                                               ((p :> real) -
+                                                                 ((\at(p,L) :> real) +
+                                                                   ((x + j).floatM :> real)))) <=
+                                                               0x1p-15))));
                      ()
                   }
                };
-               (C_35 : (j = (C_34 : ((C_33 : (j + 1)) :> int32))))
+               (_C_35 : (j = (_C_34 : ((_C_33 : (j + 1)) :> int32))))
             }
          };
          (while_0_break : ());
-         (C_38 : (average = (C_37 : (p / (C_36 : (3 :> float))))));
+         (_C_38 : (average = (_C_37 : (p / (_C_36 : (3 :> float))))));
          
-         switch ((C_44 : (ID :> int32))) {
+         switch ((_C_44 : (ID :> int32))) {
            case 1:
            {  ();
-              (if ((C_43 : ((C_42 : (Eventos + 9).Ativo) :> int32)) == 0) then 
-              (if ((C_41 : (average :> double)) > (12.0 :> double)) then 
-              (C_40 : ((C_39 : (Eventos + 9).Ativo) = 1)) else ()) else ());
+              (if ((_C_43 : ((_C_42 : (Eventos + 9).Ativo) :> int32)) == 0) then 
+              (if ((_C_41 : (average :> double)) > (12.0 :> double)) then 
+              (_C_40 : ((_C_39 : (Eventos + 9).Ativo) = 1)) else ()) else ());
               
               (goto switch_1_break)
            }
@@ -891,175 +892,131 @@ let test_ensures_default =
   (init:
   try
    begin
-     (if ((eq_int_ (integer_of_int32 (C_8:
-                                     (safe_int32_of_integer_ (integer_of_uint1 
-                                                              (C_7:
+     (if ((eq_int_ (integer_of_int32 (safe_int32_of_integer_ (integer_of_uint1 
                                                               ((safe_acc_ !__anonstruct_Eventos_1_Ativo_Eventos_2) 
-                                                               ((shift Eventos) (7))))))))) (1))
+                                                               ((shift Eventos) (7))))))) (1))
      then
-      (if ((eq_int_ (integer_of_int32 (C_6:
-                                      (safe_int32_of_integer_ (integer_of_uint1 
-                                                               (C_5:
+      (if ((eq_int_ (integer_of_int32 (safe_int32_of_integer_ (integer_of_uint1 
                                                                ((safe_acc_ !__anonstruct_Eventos_1_Tratado_Eventos_2) 
-                                                                ((shift Eventos) (7))))))))) (0))
+                                                                ((shift Eventos) (7))))))) (0))
       then
        (let _jessie_<somenum> =
-       (C_1:
        begin
          (let _jessie_<somenum> = (pri := (safe_uint8_of_integer_ (0))) in void);
-        (C_2:
-        begin
-          (let _jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
-         (C_4: begin   (p := (C_3: (single_of_real_exact 0.0))); !p end) end)
-       end) in void) else void) else void);
-    (C_10:
-    begin
-      (let _jessie_<somenum> =
-      (let _jessie_<somenum> = Value in
-      (let _jessie_<somenum> = x_0 in
-      (let _jessie_<somenum> = (integer_of_uint8 !i) in
-      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-      (((safe_upd_ floatP_floatM_x_1) _jessie_<somenum>) _jessie_<somenum>))))) in void);
-     (C_14:
+        (let _jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
+        (p := (single_of_real_exact 0.0)); !p end in void) else void)
+     else void);
+    (let _jessie_<somenum> =
+    (let _jessie_<somenum> = Value in
+    (let _jessie_<somenum> = x_0 in
+    (let _jessie_<somenum> = (integer_of_uint8 !i) in
+    (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+    (((safe_upd_ floatP_floatM_x_1) _jessie_<somenum>) _jessie_<somenum>))))) in void);
+    (let _jessie_<somenum> =
+    (i := (safe_uint8_of_integer_ ((add_int (integer_of_int32 (safe_int32_of_integer_ 
+                                                               (integer_of_uint8 !i)))) (1)))) in
+    void);
+    (if ((gt_int_ (integer_of_int32 (safe_int32_of_integer_ (integer_of_uint8 !i)))) (2))
+    then
+     (let _jessie_<somenum> =
      begin
-       (let _jessie_<somenum> =
-       (i := (C_13:
-             (safe_uint8_of_integer_ (C_12:
-                                     ((add_int (integer_of_int32 (C_11:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (integer_of_uint8 !i))))) (1)))))) in
-       void);
-      (if ((gt_int_ (integer_of_int32 (C_17:
-                                      (safe_int32_of_integer_ (integer_of_uint8 !i))))) (2))
-      then
-       (let _jessie_<somenum> =
-       (C_15:
-       begin
-         (let _jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
-        (C_16: begin   (pri := (safe_uint8_of_integer_ (1))); !pri end) end) in
-       void) else void);
-      (if ((eq_int_ (integer_of_int32 (C_45:
-                                      (safe_int32_of_integer_ (integer_of_uint8 !pri))))) (1))
-      then
-       try
-        begin
-          try
-           (C_19:
-           begin
-             (let _jessie_<somenum> = (p := (C_18: (single_of_real_exact 0.0))) in
-             void);
-            (C_20:
-            begin
-              (let _jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
-             (loop_2:
+       (let _jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
+      (pri := (safe_uint8_of_integer_ (1))); !pri end in void) else void);
+    (if ((eq_int_ (integer_of_int32 (safe_int32_of_integer_ (integer_of_uint8 !pri)))) (1))
+    then
+     try
+      begin
+        try
+         begin
+           (let _jessie_<somenum> = (p := (single_of_real_exact 0.0)) in void);
+          (let _jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
+          (loop_2:
+          begin
+            while true do
+            { invariant
+                ((JC_<somenum>:
+                 le_real(abs_real(sub_real(single_value(p),
+                                  sum(shift(x_0, (0)), integer_of_int32(j),
+                                  floatP_floatM_x_1))),
+                 mul_real(real_of_int(integer_of_int32(j)), 0x1p-15)))
+                and ((JC_<somenum>:
+                     le_real(abs_real(sum(shift(x_0, (0)),
+                                      integer_of_int32(j), floatP_floatM_x_1)),
+                     mul_real(100.0, real_of_int(integer_of_int32(j)))))
+                    and (JC_<somenum>:
+                        ((JC_<somenum>: le_int((0), integer_of_int32(j)))
+                        and (JC_<somenum>: le_int(integer_of_int32(j), (3))))))) 
+               }
              begin
-               while true do
-               { invariant
-                   ((JC_<somenum>:
-                    le_real(abs_real(sub_real(single_value(p),
-                                     sum(shift(x_0, (0)),
-                                     integer_of_int32(j), floatP_floatM_x_1))),
-                    mul_real(real_of_int(integer_of_int32(j)), 0x1p-15)))
-                   and ((JC_<somenum>:
-                        le_real(abs_real(sum(shift(x_0, (0)),
-                                         integer_of_int32(j),
-                                         floatP_floatM_x_1)),
-                        mul_real(100.0, real_of_int(integer_of_int32(j)))))
-                       and (JC_<somenum>:
-                           ((JC_<somenum>: le_int((0), integer_of_int32(j)))
-                           and (JC_<somenum>: le_int(integer_of_int32(j), (3)))))))
-                  }
-                begin
-                  [ { } unit { true } ];
-                 try
+               [ { } unit { true } ];
+              try
+               begin
+                 (let _jessie_<somenum> =
+                 begin
+                   (if ((lt_int_ (integer_of_int32 !j)) (3)) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  (L:
                   begin
                     (let _jessie_<somenum> =
                     begin
-                      (if ((lt_int_ (integer_of_int32 !j)) (3)) then void
-                      else (raise (Goto_while_0_break_exc void)));
-                     (L:
-                     begin
-                       (let _jessie_<somenum> =
-                       begin
-                         (assert
-                         { (JC_<somenum>:
-                           le_real(abs_real(single_value(select(floatP_floatM_x_1,
-                                                         shift(x_0,
-                                                         integer_of_int32(j))))),
-                           100.0)) }; void); void;
-                        (assert
-                        { (JC_<somenum>:
-                          le_real(abs_real(single_value(p)),
-                          mul_real(3.0, add_real(100.0, 0x1p-15)))) }; void);
-                        begin
-                          void;
-                         (C_31:
-                         begin
-                           (p := (C_30:
-                                 (JC_<somenum>:
-                                 (((add_single_safe nearest_even) !p) 
-                                  (C_29:
-                                  ((safe_acc_ !floatP_floatM_x_1) ((shift x_0) 
-                                                                   (integer_of_int32 !j))))))));
-                          !p end) end end in void);
                       (assert
                       { (JC_<somenum>:
-                        le_real(abs_real(sub_real(single_value(p),
-                                         add_real(single_value(p@L),
-                                         single_value(select(floatP_floatM_x_1,
+                        le_real(abs_real(single_value(select(floatP_floatM_x_1,
                                                       shift(x_0,
-                                                      integer_of_int32(j))))))),
-                        0x1p-15)) }; void);
-                      begin
-                        void;
-                       (C_35:
-                       begin
-                         (j := (C_34:
-                               (safe_int32_of_integer_ (C_33:
-                                                       ((add_int (integer_of_int32 !j)) (1))))));
-                        !j end) end end) end in void);
-                   (raise (Loop_continue_exc void)) end with
-                  Loop_continue_exc _jessie_<somenum> -> void end end done;
-              (raise (Goto_while_0_break_exc void)) end) end) end) with
-           Goto_while_0_break_exc _jessie_<somenum> ->
-           (while_0_break:
+                                                      integer_of_int32(j))))),
+                        100.0)) }; void); void;
+                     (assert
+                     { (JC_<somenum>:
+                       le_real(abs_real(single_value(p)),
+                       mul_real(3.0, add_real(100.0, 0x1p-15)))) }; void);
+                     void;
+                     (p := (JC_<somenum>:
+                           (((add_single_safe nearest_even) !p) ((safe_acc_ !floatP_floatM_x_1) 
+                                                                 ((shift x_0) 
+                                                                  (integer_of_int32 !j))))));
+                     !p end in void);
+                   (assert
+                   { (JC_<somenum>:
+                     le_real(abs_real(sub_real(single_value(p),
+                                      add_real(single_value(p@L),
+                                      single_value(select(floatP_floatM_x_1,
+                                                   shift(x_0,
+                                                   integer_of_int32(j))))))),
+                     0x1p-15)) }; void); void;
+                   (j := (safe_int32_of_integer_ ((add_int (integer_of_int32 !j)) (1))));
+                   !j end) end in void); (raise (Loop_continue_exc void)) end
+               with Loop_continue_exc _jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<somenum> ->
+         (while_0_break:
+         begin
+           void;
+          (let _jessie_<somenum> =
+          (average := (JC_<somenum>:
+                      (((div_single_safe nearest_even) !p) (single_of_real_exact 3.0)))) in
+          void);
+          (let _jessie_<somenum> = (safe_int32_of_integer_ (integer_of_uint8 ID)) in
+          (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (1))
+          then
            begin
              void;
-            (C_38:
-            begin
-              (let _jessie_<somenum> =
-              (average := (C_37:
-                          (JC_<somenum>:
-                          (((div_single_safe nearest_even) !p) (C_36:
-                                                               (single_of_real_exact 3.0)))))) in
-              void);
-             (let _jessie_<somenum> =
-             (C_44: (safe_int32_of_integer_ (integer_of_uint8 ID))) in
-             (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (1))
+            (if ((eq_int_ (integer_of_int32 (safe_int32_of_integer_ (integer_of_uint1 
+                                                                    ((safe_acc_ !__anonstruct_Eventos_1_Ativo_Eventos_2) 
+                                                                    ((shift Eventos) (9))))))) (0))
+            then
+             (if ((gt_double_ (double_of_single !average)) (double_of_real_exact 12.0))
              then
-              begin
-                void;
-               (if ((eq_int_ (integer_of_int32 (C_43:
-                                               (safe_int32_of_integer_ 
-                                                (integer_of_uint1 (C_42:
-                                                                  ((safe_acc_ !__anonstruct_Eventos_1_Ativo_Eventos_2) 
-                                                                   ((shift Eventos) (9))))))))) (0))
-               then
-                (if ((gt_double_ (C_41: (double_of_single !average))) 
-                     (double_of_real_exact 12.0))
-                then
-                 (let _jessie_<somenum> = (safe_uint1_of_integer_ (1)) in
-                 (let _jessie_<somenum> = Eventos in
-                 (let _jessie_<somenum> = (9) in
-                 (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-                 (let _jessie_<somenum> = ((shift _jessie_<somenum>) (9)) in
-                 (((safe_upd_ __anonstruct_Eventos_1_Ativo_Eventos_2) _jessie_<somenum>) _jessie_<somenum>))))))
-                else void) else void); (raise (Goto_switch_1_break_exc void))
-              end else (if true then void else void))) end) end) end;
-         (raise (Goto_switch_1_break_exc void)) end with
-        Goto_switch_1_break_exc _jessie_<somenum> -> (switch_1_break: void) end
-      else void); (raise Return); (raise Return) end) end) end with Return ->
-   void end)
+              (let _jessie_<somenum> = (safe_uint1_of_integer_ (1)) in
+              (let _jessie_<somenum> = Eventos in
+              (let _jessie_<somenum> = (9) in
+              (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+              (let _jessie_<somenum> = ((shift _jessie_<somenum>) (9)) in
+              (((safe_upd_ __anonstruct_Eventos_1_Ativo_Eventos_2) _jessie_<somenum>) _jessie_<somenum>))))))
+             else void) else void); (raise (Goto_switch_1_break_exc void))
+           end else (if true then void else void))) end) end;
+       (raise (Goto_switch_1_break_exc void)) end with
+      Goto_switch_1_break_exc _jessie_<somenum> -> (switch_1_break: void) end
+    else void); (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((integer_of_uint8(pri) = (1)) ->
      le_real(abs_real(sub_real(single_value(p),
@@ -1083,186 +1040,142 @@ let test_safety =
   (init:
   try
    begin
-     (if ((eq_int_ (integer_of_int32 (C_8:
-                                     (JC_<somenum>:
+     (if ((eq_int_ (integer_of_int32 (JC_<somenum>:
                                      (int32_of_integer_ (integer_of_uint1 
-                                                         (C_7:
                                                          ((safe_acc_ !__anonstruct_Eventos_1_Ativo_Eventos_2) 
-                                                          ((shift Eventos) (7)))))))))) (1))
+                                                          ((shift Eventos) (7)))))))) (1))
      then
-      (if ((eq_int_ (integer_of_int32 (C_6:
-                                      (JC_<somenum>:
+      (if ((eq_int_ (integer_of_int32 (JC_<somenum>:
                                       (int32_of_integer_ (integer_of_uint1 
-                                                          (C_5:
                                                           ((safe_acc_ !__anonstruct_Eventos_1_Tratado_Eventos_2) 
-                                                           ((shift Eventos) (7)))))))))) (0))
+                                                           ((shift Eventos) (7)))))))) (0))
       then
        (let _jessie_<somenum> =
-       (C_1:
        begin
          (let _jessie_<somenum> = (pri := (safe_uint8_of_integer_ (0))) in void);
-        (C_2:
-        begin
-          (let _jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
-         (C_4: begin   (p := (C_3: (single_of_real_exact 0.0))); !p end) end)
-       end) in void) else void) else void);
-    (C_10:
-    begin
-      (let _jessie_<somenum> =
-      (let _jessie_<somenum> = Value in
-      (let _jessie_<somenum> = x_0 in
-      (let _jessie_<somenum> = (integer_of_uint8 !i) in
-      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-      (JC_<somenum>:
-      (((((offset_upd_ !floatP_x_1_alloc_table) floatP_floatM_x_1) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
-      void);
-     (C_14:
+        (let _jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
+        (p := (single_of_real_exact 0.0)); !p end in void) else void)
+     else void);
+    (let _jessie_<somenum> =
+    (let _jessie_<somenum> = Value in
+    (let _jessie_<somenum> = x_0 in
+    (let _jessie_<somenum> = (integer_of_uint8 !i) in
+    (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+    (JC_<somenum>:
+    (((((offset_upd_ !floatP_x_1_alloc_table) floatP_floatM_x_1) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+    void);
+    (let _jessie_<somenum> =
+    (i := (JC_<somenum>:
+          (uint8_of_integer_ ((add_int (integer_of_int32 (JC_<somenum>:
+                                                         (int32_of_integer_ 
+                                                          (integer_of_uint8 !i))))) (1))))) in
+    void);
+    (if ((gt_int_ (integer_of_int32 (JC_<somenum>:
+                                    (int32_of_integer_ (integer_of_uint8 !i))))) (2))
+    then
+     (let _jessie_<somenum> =
      begin
-       (let _jessie_<somenum> =
-       (i := (C_13:
-             (JC_<somenum>:
-             (uint8_of_integer_ (C_12:
-                                ((add_int (integer_of_int32 (C_11:
-                                                            (JC_<somenum>:
-                                                            (int32_of_integer_ 
-                                                             (integer_of_uint8 !i)))))) (1))))))) in
-       void);
-      (if ((gt_int_ (integer_of_int32 (C_17:
-                                      (JC_<somenum>:
-                                      (int32_of_integer_ (integer_of_uint8 !i)))))) (2))
-      then
-       (let _jessie_<somenum> =
-       (C_15:
-       begin
-         (let _jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
-        (C_16: begin   (pri := (safe_uint8_of_integer_ (1))); !pri end) end) in
-       void) else void);
-      (if ((eq_int_ (integer_of_int32 (C_45:
-                                      (JC_<somenum>:
-                                      (int32_of_integer_ (integer_of_uint8 !pri)))))) (1))
-      then
-       try
-        begin
-          try
-           (C_19:
-           begin
-             (let _jessie_<somenum> = (p := (C_18: (single_of_real_exact 0.0))) in
-             void);
-            (C_20:
-            begin
-              (let _jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
-             (loop_1:
+       (let _jessie_<somenum> = (i := (safe_uint8_of_integer_ (0))) in void);
+      (pri := (safe_uint8_of_integer_ (1))); !pri end in void) else void);
+    (if ((eq_int_ (integer_of_int32 (JC_<somenum>:
+                                    (int32_of_integer_ (integer_of_uint8 !pri))))) (1))
+    then
+     try
+      begin
+        try
+         begin
+           (let _jessie_<somenum> = (p := (single_of_real_exact 0.0)) in void);
+          (let _jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
+          (loop_1:
+          begin
+            while true do
+            { invariant (JC_<somenum>: true)
+              variant (JC_<somenum> : sub_int((3), integer_of_int32(j))) }
              begin
-               while true do
-               { invariant (JC_<somenum>: true)
-                 variant (JC_<somenum> : sub_int((3), integer_of_int32(j))) }
-                begin
-                  [ { } unit reads floatP_floatM_x_1,j,p
-                    { ((JC_<somenum>:
-                       le_real(abs_real(sub_real(single_value(p),
-                                        sum(shift(x_0, (0)),
-                                        integer_of_int32(j),
-                                        floatP_floatM_x_1))),
-                       mul_real(real_of_int(integer_of_int32(j)), 0x1p-15)))
-                      and ((JC_<somenum>:
-                           le_real(abs_real(sum(shift(x_0, (0)),
-                                            integer_of_int32(j),
-                                            floatP_floatM_x_1)),
-                           mul_real(100.0, real_of_int(integer_of_int32(j)))))
-                          and (JC_<somenum>:
-                              ((JC_<somenum>: le_int((0), integer_of_int32(j)))
-                              and (JC_<somenum>: le_int(integer_of_int32(j), (3))))))) } ];
-                 try
+               [ { } unit reads floatP_floatM_x_1,j,p
+                 { ((JC_<somenum>:
+                    le_real(abs_real(sub_real(single_value(p),
+                                     sum(shift(x_0, (0)),
+                                     integer_of_int32(j), floatP_floatM_x_1))),
+                    mul_real(real_of_int(integer_of_int32(j)), 0x1p-15)))
+                   and ((JC_<somenum>:
+                        le_real(abs_real(sum(shift(x_0, (0)),
+                                         integer_of_int32(j),
+                                         floatP_floatM_x_1)),
+                        mul_real(100.0, real_of_int(integer_of_int32(j)))))
+                       and (JC_<somenum>:
+                           ((JC_<somenum>: le_int((0), integer_of_int32(j)))
+                           and (JC_<somenum>: le_int(integer_of_int32(j), (3))))))) } ];
+              try
+               begin
+                 (let _jessie_<somenum> =
+                 begin
+                   (if ((lt_int_ (integer_of_int32 !j)) (3)) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  (L:
                   begin
                     (let _jessie_<somenum> =
                     begin
-                      (if ((lt_int_ (integer_of_int32 !j)) (3)) then void
-                      else (raise (Goto_while_0_break_exc void)));
-                     (L:
-                     begin
-                       (let _jessie_<somenum> =
-                       begin
-                         [ { } unit reads floatP_floatM_x_1,j
-                           { (JC_<somenum>:
-                             le_real(abs_real(single_value(select(floatP_floatM_x_1,
-                                                           shift(x_0,
-                                                           integer_of_int32(j))))),
-                             100.0)) } ]; void;
-                        [ { } unit reads p
-                          { (JC_<somenum>:
-                            le_real(abs_real(single_value(p)),
-                            mul_real(3.0, add_real(100.0, 0x1p-15)))) } ];
-                        begin
-                          void;
-                         (C_31:
-                         begin
-                           (p := (C_30:
-                                 (JC_<somenum>:
-                                 (((add_single nearest_even) !p) (C_29:
-                                                                 (JC_<somenum>:
-                                                                 ((((offset_acc_ !floatP_x_1_alloc_table) !floatP_floatM_x_1) x_0) 
-                                                                  (integer_of_int32 !j))))))));
-                          !p end) end end in void);
-                      [ { } unit reads floatP_floatM_x_1,j,p
+                      [ { } unit reads floatP_floatM_x_1,j
                         { (JC_<somenum>:
-                          le_real(abs_real(sub_real(single_value(p),
-                                           add_real(single_value(p@L),
-                                           single_value(select(floatP_floatM_x_1,
+                          le_real(abs_real(single_value(select(floatP_floatM_x_1,
                                                         shift(x_0,
-                                                        integer_of_int32(j))))))),
-                          0x1p-15)) } ];
-                      begin
-                        void;
-                       (C_35:
-                       begin
-                         (j := (C_34:
-                               (JC_<somenum>:
-                               (int32_of_integer_ (C_33:
-                                                  ((add_int (integer_of_int32 !j)) (1)))))));
-                        !j end) end end) end in void);
-                   (raise (Loop_continue_exc void)) end with
-                  Loop_continue_exc _jessie_<somenum> -> void end end done;
-              (raise (Goto_while_0_break_exc void)) end) end) end) with
-           Goto_while_0_break_exc _jessie_<somenum> ->
-           (while_0_break:
+                                                        integer_of_int32(j))))),
+                          100.0)) } ]; void;
+                     [ { } unit reads p
+                       { (JC_<somenum>:
+                         le_real(abs_real(single_value(p)),
+                         mul_real(3.0, add_real(100.0, 0x1p-15)))) } ]; void;
+                     (p := (JC_<somenum>:
+                           (((add_single nearest_even) !p) (JC_<somenum>:
+                                                           ((((offset_acc_ !floatP_x_1_alloc_table) !floatP_floatM_x_1) x_0) 
+                                                            (integer_of_int32 !j))))));
+                     !p end in void);
+                   [ { } unit reads floatP_floatM_x_1,j,p
+                     { (JC_<somenum>:
+                       le_real(abs_real(sub_real(single_value(p),
+                                        add_real(single_value(p@L),
+                                        single_value(select(floatP_floatM_x_1,
+                                                     shift(x_0,
+                                                     integer_of_int32(j))))))),
+                       0x1p-15)) } ]; void;
+                   (j := (JC_<somenum>:
+                         (int32_of_integer_ ((add_int (integer_of_int32 !j)) (1)))));
+                   !j end) end in void); (raise (Loop_continue_exc void)) end
+               with Loop_continue_exc _jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<somenum> ->
+         (while_0_break:
+         begin
+           void;
+          (let _jessie_<somenum> =
+          (average := (JC_<somenum>:
+                      (((div_single nearest_even) !p) (single_of_real_exact 3.0)))) in
+          void);
+          (let _jessie_<somenum> =
+          (JC_<somenum>: (int32_of_integer_ (integer_of_uint8 ID))) in
+          (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (1))
+          then
            begin
              void;
-            (C_38:
-            begin
-              (let _jessie_<somenum> =
-              (average := (C_37:
-                          (JC_<somenum>:
-                          (((div_single nearest_even) !p) (C_36:
-                                                          (single_of_real_exact 3.0)))))) in
-              void);
-             (let _jessie_<somenum> =
-             (C_44: (JC_<somenum>: (int32_of_integer_ (integer_of_uint8 ID)))) in
-             (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (1))
+            (if ((eq_int_ (integer_of_int32 (JC_<somenum>:
+                                            (int32_of_integer_ (integer_of_uint1 
+                                                                ((safe_acc_ !__anonstruct_Eventos_1_Ativo_Eventos_2) 
+                                                                 ((shift Eventos) (9)))))))) (0))
+            then
+             (if ((gt_double_ (double_of_single !average)) (double_of_real_exact 12.0))
              then
-              begin
-                void;
-               (if ((eq_int_ (integer_of_int32 (C_43:
-                                               (JC_<somenum>:
-                                               (int32_of_integer_ (integer_of_uint1 
-                                                                   (C_42:
-                                                                   ((safe_acc_ !__anonstruct_Eventos_1_Ativo_Eventos_2) 
-                                                                    ((shift Eventos) (9)))))))))) (0))
-               then
-                (if ((gt_double_ (C_41: (double_of_single !average))) 
-                     (double_of_real_exact 12.0))
-                then
-                 (let _jessie_<somenum> = (safe_uint1_of_integer_ (1)) in
-                 (let _jessie_<somenum> = Eventos in
-                 (let _jessie_<somenum> = (9) in
-                 (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-                 (let _jessie_<somenum> = ((shift _jessie_<somenum>) (9)) in
-                 (((safe_upd_ __anonstruct_Eventos_1_Ativo_Eventos_2) _jessie_<somenum>) _jessie_<somenum>))))))
-                else void) else void); (raise (Goto_switch_1_break_exc void))
-              end else (if true then void else void))) end) end) end;
-         (raise (Goto_switch_1_break_exc void)) end with
-        Goto_switch_1_break_exc _jessie_<somenum> -> (switch_1_break: void) end
-      else void); (raise Return); (raise Return) end) end) end with Return ->
-   void end)
+              (let _jessie_<somenum> = (safe_uint1_of_integer_ (1)) in
+              (let _jessie_<somenum> = Eventos in
+              (let _jessie_<somenum> = (9) in
+              (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+              (let _jessie_<somenum> = ((shift _jessie_<somenum>) (9)) in
+              (((safe_upd_ __anonstruct_Eventos_1_Ativo_Eventos_2) _jessie_<somenum>) _jessie_<somenum>))))))
+             else void) else void); (raise (Goto_switch_1_break_exc void))
+           end else (if true then void else void))) end) end;
+       (raise (Goto_switch_1_break_exc void)) end with
+      Goto_switch_1_break_exc _jessie_<somenum> -> (switch_1_break: void) end
+    else void); (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_Eventos(__anonstruct_Eventos_1_Eventos_2_alloc_table))
     and (JC_<somenum>: valid_x(floatP_x_1_alloc_table)))) }
@@ -1355,12 +1268,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/site003_43_po18.why">
-      <location file = "PPCHOME/tests/jessie/site003_43.jessie/site003_43.jc" line = "113" begin = "15" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/site003_43.jessie/site003_43.jc" line = "113" begin = "16" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/site003_43_po19.why">
-      <location file = "PPCHOME/tests/jessie/site003_43.jessie/site003_43.jc" line = "113" begin = "15" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/site003_43.jessie/site003_43.jc" line = "113" begin = "16" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

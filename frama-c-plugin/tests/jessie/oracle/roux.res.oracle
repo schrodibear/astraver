@@ -49,33 +49,33 @@ type voidP = [voidP]
 intP[..] p;
 
 unit f(intP[..] q)
-  requires (C_4 : ((C_5 : (\offset_min(q) <= 0)) &&
-                    (C_6 : (\offset_max(q) >= 0))));
+  requires (_C_4 : ((_C_5 : (\offset_min(q) <= 0)) &&
+                     (_C_6 : (\offset_max(q) >= 0))));
 behavior default:
   assigns q.intM;
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 {  
-   {  (C_2 : ((C_1 : q.intM) = 42));
+   {  (_C_2 : ((_C_1 : q.intM) = 42));
       
       (return ())
    }
 }
 
 unit g()
-  requires (C_14 : (((C_16 : (\offset_min(p) <= 0)) &&
-                      (C_17 : (\offset_max(p) >= 0))) &&
-                     (C_18 : (p.intM == 0))));
+  requires (_C_14 : (((_C_16 : (\offset_min(p) <= 0)) &&
+                       (_C_17 : (\offset_max(p) >= 0))) &&
+                      (_C_18 : (p.intM == 0))));
 behavior default:
-  ensures (C_13 : (p.intM == 0));
+  ensures (_C_13 : (p.intM == 0));
 {  
    (var intP[0..1] i);
    
-   {  (C_8 : (i = (C_7 : (new intP[2]))));
+   {  (_C_8 : (i = (_C_7 : (new intP[2]))));
       
-      (assert for default: (C_9 : (p != i)));
-      (C_11 : f((C_10 : (i + 1))));
+      (assert for default: (_C_9 : (p != i)));
+      (_C_11 : f((_C_10 : (i + 1))));
       
-      {  (C_12 : (free(i)));
+      {  (_C_12 : (free(i)));
          
          (return ())
       }
@@ -551,11 +551,10 @@ let f_ensures_default =
     and (JC_<somenum>: ge_int(offset_max(intP_q_2_alloc_table, q), (0))))) }
   (init:
   try
-   (C_2:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (42)) in
      (let _jessie_<somenum> = q in (((safe_upd_ intP_intM_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     not_assigns(intP_q_2_alloc_table, intP_intM_q_2@, intP_intM_q_2,
     pset_singleton(q))) }
@@ -567,13 +566,12 @@ let f_safety =
     and (JC_<somenum>: ge_int(offset_max(intP_q_2_alloc_table, q), (0))))) }
   (init:
   try
-   (C_2:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (42)) in
      (let _jessie_<somenum> = q in
      (JC_<somenum>:
      ((((upd_ intP_q_2_alloc_table) intP_intM_q_2) _jessie_<somenum>) _jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let g_ensures_default =
  fun (tt : unit) ->
@@ -585,21 +583,15 @@ let g_ensures_default =
   try
    begin
      (let i = ref (any_pointer void) in
-     (C_8:
      begin
        (let _jessie_<somenum> =
-       (i := (C_7:
-             (JC_<somenum>:
-             (((alloc_struct_intP (2)) intP_p_1_alloc_table) intP_p_1_tag_table)))) in
+       (i := (JC_<somenum>:
+             (((alloc_struct_intP (2)) intP_p_1_alloc_table) intP_p_1_tag_table))) in
        void); (assert { (JC_<somenum>: (p <> i)) }; void);
-      (C_11:
-      begin
-        (let _jessie_<somenum> = (C_10: ((shift !i) (1))) in
-        (JC_<somenum>: (((f _jessie_<somenum>) intP_intM_p_1) !intP_p_1_alloc_table)));
-       (C_12:
-       begin
-         ((safe_free_parameter intP_p_1_alloc_table) !i); (raise Return) end)
-      end) end)); (raise Return) end with Return -> void end)
+      (let _jessie_<somenum> = ((shift !i) (1)) in
+      (JC_<somenum>: (((f _jessie_<somenum>) intP_intM_p_1) !intP_p_1_alloc_table)));
+      ((safe_free_parameter intP_p_1_alloc_table) !i); (raise Return) end);
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>: (integer_of_int32(select(intP_intM_p_1, p)) = (0))) }
 
 let g_safety =
@@ -612,26 +604,21 @@ let g_safety =
   try
    begin
      (let i = ref (any_pointer void) in
-     (C_8:
      begin
        (let _jessie_<somenum> =
        (i := (let _jessie_<somenum> =
-             (C_7:
              (JC_<somenum>:
-             (((alloc_struct_intP_requires (2)) intP_p_1_alloc_table) intP_p_1_tag_table))) in
+             (((alloc_struct_intP_requires (2)) intP_p_1_alloc_table) intP_p_1_tag_table)) in
              (JC_<somenum>:
              (assert
              { ge_int(offset_max(intP_p_1_alloc_table, _jessie_<somenum>), (1)) };
              _jessie_<somenum>)))) in void);
       [ { } unit reads i { (JC_<somenum>: (p <> i)) } ];
-      (C_11:
-      begin
-        (let _jessie_<somenum> = (C_10: ((shift !i) (1))) in
-        (JC_<somenum>:
-        (((f_requires _jessie_<somenum>) intP_intM_p_1) !intP_p_1_alloc_table)));
-       (C_12:
-       begin   ((free_parameter intP_p_1_alloc_table) !i); (raise Return) end)
-      end) end)); (raise Return) end with Return -> void end) { true }
+      (let _jessie_<somenum> = ((shift !i) (1)) in
+      (JC_<somenum>:
+      (((f_requires _jessie_<somenum>) intP_intM_p_1) !intP_p_1_alloc_table)));
+      ((free_parameter intP_p_1_alloc_table) !i); (raise Return) end);
+    (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C roux.jessie --quiet -f roux.makefile project
@@ -656,21 +643,21 @@ why --project [...] why/roux.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/roux_po7.why">
-      <location file = "why/roux.why" line = "540" begin = "15" end = "72"/>
+      <location file = "why/roux.why" line = "530" begin = "15" end = "72"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/roux_po8.why">
-      <location file = "PPCHOME/tests/jessie/roux.jessie/roux.jc" line = "69" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/roux.jessie/roux.jc" line = "69" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/roux_po9.why">
-      <location file = "PPCHOME/tests/jessie/roux.jessie/roux.jc" line = "69" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/roux.jessie/roux.jc" line = "69" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/roux_po10.why">
-      <location file = "why/roux.why" line = "549" begin = "16" end = "56"/>
+      <location file = "why/roux.why" line = "536" begin = "7" end = "47"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -686,12 +673,12 @@ text = ""/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/roux_po2.why">
-      <location file = "PPCHOME/tests/jessie/roux.jessie/roux.jc" line = "51" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/roux.jessie/roux.jc" line = "51" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/roux_po3.why">
-      <location file = "PPCHOME/tests/jessie/roux.jessie/roux.jc" line = "51" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/roux.jessie/roux.jc" line = "51" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

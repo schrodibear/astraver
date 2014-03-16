@@ -44,18 +44,18 @@ int32 e;
 unit f()
 behavior default:
   assigns e;
-  ensures (C_1 : (e == 0));
+  ensures (_C_1 : (e == 0));
 ;
 
 int32 main()
 behavior default:
-  ensures (C_5 : (e == 1));
+  ensures (_C_5 : (e == 1));
 {  
    (var int32 __retres);
    
-   {  (C_2 : (e = 1));
-      (C_3 : f());
-      (C_4 : (__retres = 0));
+   {  (_C_2 : (e = 1));
+      (_C_3 : f());
+      (_C_4 : (__retres = 0));
       
       (return __retres)
    }
@@ -427,18 +427,14 @@ let main_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_2:
      begin
        (let _jessie_<somenum> = (e := (safe_int32_of_integer_ (1))) in void);
-      (C_3:
       (JC_<somenum>:
       begin
         (f void);
-       (C_4:
-       begin
-         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (return := !__retres); (raise Return) end) end)) end)); absurd  end
-   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(e) = (1))) }
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(e) = (1))) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -448,18 +444,14 @@ let main_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_2:
      begin
        (let _jessie_<somenum> = (e := (safe_int32_of_integer_ (1))) in void);
-      (C_3:
       (JC_<somenum>:
       begin
         (f_requires void);
-       (C_4:
-       begin
-         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (return := !__retres); (raise Return) end) end)) end)); absurd  end
-   with Return -> !return end)) { true }
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C false2.jessie --quiet -f false2.makefile project

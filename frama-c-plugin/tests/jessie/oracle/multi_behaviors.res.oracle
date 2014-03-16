@@ -43,34 +43,34 @@ int32 x;
 
 unit f(int32 z)
 behavior default:
-  ensures (C_7 : (((1 <= \at(x,Old)) && (\at(x,Old) <= 2)) ==> (x == 2)));
+  ensures (_C_7 : (((1 <= \at(x,Old)) && (\at(x,Old) <= 2)) ==> (x == 2)));
 behavior one:
   assumes (x == 1);
-  ensures (C_8 : true);
+  ensures (_C_8 : true);
 behavior two:
   assumes (x == 2);
-  ensures (C_9 : true);
+  ensures (_C_9 : true);
 {  
    {  
       {  
          (assert for one,
-         two: (C_1 : (jessie : ((x == 1) || (x == 2)))));
+         two: (_C_1 : (jessie : ((x == 1) || (x == 2)))));
          ()
       };
       
       {  (if (x == 1) then 
          {  
             {  
-               (assert for one: (C_2 : (jessie : (x == 1))));
+               (assert for one: (_C_2 : (jessie : (x == 1))));
                ()
             };
-            (C_5 : (x = (C_4 : ((C_3 : (x + 1)) :> int32))))
+            (_C_5 : (x = (_C_4 : ((_C_3 : (x + 1)) :> int32))))
          } else ())
       };
       
       {  
          (assert for one,
-         two: (C_6 : (jessie : (x == 2))));
+         two: (_C_6 : (jessie : (x == 2))));
          ()
       };
       
@@ -450,13 +450,9 @@ let f_ensures_default =
      (let _jessie_<somenum> =
      begin
        void;
-      (C_5:
-      begin
-        (x_0 := (C_4:
-                (safe_int32_of_integer_ (C_3:
-                                        ((add_int (integer_of_int32 !x_0)) (1))))));
-       !x_0 end) end in void) else void); void; (raise Return);
-    (raise Return) end with Return -> void end)
+      (x_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 !x_0)) (1))));
+      !x_0 end in void) else void); void; (raise Return); (raise Return) end
+   with Return -> void end)
   { (JC_<somenum>:
     ((le_int((1), integer_of_int32(x_0@))
      and le_int(integer_of_int32(x_0@), (2))) ->
@@ -476,15 +472,9 @@ let f_ensures_one =
     then
      (let _jessie_<somenum> =
      begin
-       (assert { (JC_<somenum>: (integer_of_int32(x_0) = (1))) }; void);
-      begin
-        void;
-       (C_5:
-       begin
-         (x_0 := (C_4:
-                 (safe_int32_of_integer_ (C_3:
-                                         ((add_int (integer_of_int32 !x_0)) (1))))));
-        !x_0 end) end end in void) else void);
+       (assert { (JC_<somenum>: (integer_of_int32(x_0) = (1))) }; void); void;
+      (x_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 !x_0)) (1))));
+      !x_0 end in void) else void);
     (assert { (JC_<somenum>: (integer_of_int32(x_0) = (2))) }; void); void;
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
@@ -504,12 +494,8 @@ let f_ensures_two =
      (let _jessie_<somenum> =
      begin
        void;
-      (C_5:
-      begin
-        (x_0 := (C_4:
-                (safe_int32_of_integer_ (C_3:
-                                        ((add_int (integer_of_int32 !x_0)) (1))))));
-       !x_0 end) end in void) else void);
+      (x_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 !x_0)) (1))));
+      !x_0 end in void) else void);
     (assert { (JC_<somenum>: (integer_of_int32(x_0) = (2))) }; void); void;
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
@@ -526,14 +512,10 @@ let f_safety =
      (let _jessie_<somenum> =
      begin
        void;
-      (C_5:
-      begin
-        (x_0 := (C_4:
-                (JC_<somenum>:
-                (int32_of_integer_ (C_3:
-                                   ((add_int (integer_of_int32 !x_0)) (1)))))));
-       !x_0 end) end in void) else void); void; (raise Return);
-    (raise Return) end with Return -> void end) { true }
+      (x_0 := (JC_<somenum>:
+              (int32_of_integer_ ((add_int (integer_of_int32 !x_0)) (1)))));
+      !x_0 end in void) else void); void; (raise Return); (raise Return) end
+   with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C multi_behaviors.jessie --quiet -f multi_behaviors.makefile project

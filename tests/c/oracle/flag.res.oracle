@@ -174,86 +174,87 @@ predicate is_monochrome{L}(charP[..] t_0, integer i_2, integer j_0,
   (((i_2 <= k) && (k < j_0)) ==> ((t_0 + k).charM == c_0)))
 
 integer isMonochrome(charP[..] t_0, integer i, integer j, integer c)
-  requires (C_14 : ((C_15 : (\offset_min(t_0) <= i)) &&
-                     (C_16 : (\offset_max(t_0) >= j))));
+  requires (_C_14 : ((_C_15 : (\offset_min(t_0) <= i)) &&
+                      (_C_16 : (\offset_max(t_0) >= j))));
 behavior default:
-  ensures (C_12 : true);
+  ensures (_C_12 : true);
 behavior decides_monochromatic:
-  ensures (C_13 : ((\result != 0) <==>
-                    is_monochrome{Here}(\at(t_0,Old), \at(i,Old), \at(j,Old),
-                                        \at(c,Old))));
+  ensures (_C_13 : ((\result != 0) <==>
+                     is_monochrome{Here}(\at(t_0,Old), \at(i,Old),
+                                         \at(j,Old), \at(c,Old))));
 {  
    (var integer k);
    
    (var integer __retres);
    
    {  
-      {  (C_1 : (k = i));
+      {  (_C_1 : (k = i));
          
          loop 
          behavior default:
-           invariant (C_3 : ((C_4 : (i <= k)) &&
-                              (C_5 : (\forall integer l_0;
-                                       (((i <= l_0) && (l_0 < k)) ==>
-                                         ((t_0 + l_0).charM == c))))));
-         variant (C_2 : (j - k));
+           invariant (_C_3 : ((_C_4 : (i <= k)) &&
+                               (_C_5 : (\forall integer l_0;
+                                         (((i <= l_0) && (l_0 < k)) ==>
+                                           ((t_0 + l_0).charM == c))))));
+         variant (_C_2 : (j - k));
          while (true)
          {  
             {  (if (k < j) then () else 
                (goto while_0_break));
-               (if ((C_8 : (C_7 : (t_0 + k)).charM) != c) then 
-               {  (C_6 : (__retres = 0));
+               (if ((_C_8 : (_C_7 : (t_0 + k)).charM) != c) then 
+               {  (_C_6 : (__retres = 0));
                   
                   (goto return_label)
                } else ());
-               (C_10 : (k = (C_9 : (k + 1))))
+               (_C_10 : (k = (_C_9 : (k + 1))))
             }
          };
          (while_0_break : ())
       };
-      (C_11 : (__retres = 1));
+      (_C_11 : (__retres = 1));
       (return_label : 
       (return __retres))
    }
 }
 
 unit swap(charP[..] t_1, integer i_0, integer j_0)
-  requires (C_35 : ((C_36 : (\offset_min(t_1) <= i_0)) &&
-                     (C_37 : (\offset_max(t_1) >= i_0))));
-  requires (C_32 : ((C_33 : (\offset_min(t_1) <= j_0)) &&
-                     (C_34 : (\offset_max(t_1) >= j_0))));
+  requires (_C_35 : ((_C_36 : (\offset_min(t_1) <= i_0)) &&
+                      (_C_37 : (\offset_max(t_1) >= i_0))));
+  requires (_C_32 : ((_C_33 : (\offset_min(t_1) <= j_0)) &&
+                      (_C_34 : (\offset_max(t_1) >= j_0))));
 behavior default:
-  ensures (C_28 : true);
+  ensures (_C_28 : true);
 behavior i_j_swapped:
   assigns (t_1 + i_0).charM,
   (t_1 + j_0).charM;
-  ensures (C_29 : ((C_30 : ((\at(t_1,Old) + \at(i_0,Old)).charM ==
-                             \at((t_1 + j_0).charM,Old))) &&
-                    (C_31 : ((\at(t_1,Old) + \at(j_0,Old)).charM ==
-                              \at((t_1 + i_0).charM,Old)))));
+  ensures (_C_29 : ((_C_30 : ((\at(t_1,Old) + \at(i_0,Old)).charM ==
+                               \at((t_1 + j_0).charM,Old))) &&
+                     (_C_31 : ((\at(t_1,Old) + \at(j_0,Old)).charM ==
+                                \at((t_1 + i_0).charM,Old)))));
 {  
    (var integer z);
    
-   {  (C_19 : (z = (C_18 : (C_17 : (t_1 + i_0)).charM)));
-      (C_24 : ((C_23 : (C_22 : (t_1 + i_0)).charM) = (C_21 : (C_20 : 
-                                                             (t_1 +
-                                                               j_0)).charM)));
-      (C_27 : ((C_26 : (C_25 : (t_1 + j_0)).charM) = z));
+   {  (_C_19 : (z = (_C_18 : (_C_17 : (t_1 + i_0)).charM)));
+      (_C_24 : ((_C_23 : (_C_22 : (t_1 + i_0)).charM) = (_C_21 : (_C_20 : 
+                                                                 (t_1 +
+                                                                   j_0)).charM)));
+      (_C_27 : ((_C_26 : (_C_25 : (t_1 + j_0)).charM) = z));
       
       (return ())
    }
 }
 
 unit flag(charP[..] t, integer l)
-  requires (C_73 : ((C_74 : (l >= 0)) && (C_75 : is_color_array{Here}(t, l))));
+  requires (_C_73 : ((_C_74 : (l >= 0)) &&
+                      (_C_75 : is_color_array{Here}(t, l))));
 behavior default:
-  ensures (C_71 : true);
+  ensures (_C_71 : true);
 behavior sorts:
-  ensures (C_72 : (\exists integer b;
-                    (\exists integer r;
-                      ((is_monochrome{Here}(\at(t,Old), 0, b, 1) &&
-                         is_monochrome{Here}(\at(t,Old), b, r, 2)) &&
-                        is_monochrome{Here}(\at(t,Old), r, \at(l,Old), 3)))));
+  ensures (_C_72 : (\exists integer b;
+                     (\exists integer r;
+                       ((is_monochrome{Here}(\at(t,Old), 0, b, 1) &&
+                          is_monochrome{Here}(\at(t,Old), b, r, 2)) &&
+                         is_monochrome{Here}(\at(t,Old), r, \at(l,Old), 3)))));
 {  
    (var integer b);
    
@@ -265,53 +266,54 @@ behavior sorts:
    
    (var integer tmp_0);
    
-   {  (C_38 : (b = 0));
-      (C_39 : (i_1 = 0));
-      (C_40 : (r = l));
+   {  (_C_38 : (b = 0));
+      (_C_39 : (i_1 = 0));
+      (_C_40 : (r = l));
       
       loop 
       behavior default:
-        invariant (C_42 : (((((C_46 : is_color_array{Here}(t, l)) &&
-                               ((C_48 : (0 <= b)) &&
-                                 ((C_50 : (b <= i_1)) &&
-                                   ((C_52 : (i_1 <= r)) && (C_53 : (r <= l)))))) &&
-                              (C_54 : is_monochrome{Here}(t, 0, b, 1))) &&
-                             (C_55 : is_monochrome{Here}(t, b, i_1, 2))) &&
-                            (C_56 : is_monochrome{Here}(t, r, l, 3))));
-      variant (C_41 : (r - i_1));
+        invariant (_C_42 : (((((_C_46 : is_color_array{Here}(t, l)) &&
+                                ((_C_48 : (0 <= b)) &&
+                                  ((_C_50 : (b <= i_1)) &&
+                                    ((_C_52 : (i_1 <= r)) &&
+                                      (_C_53 : (r <= l)))))) &&
+                               (_C_54 : is_monochrome{Here}(t, 0, b, 1))) &&
+                              (_C_55 : is_monochrome{Here}(t, b, i_1, 2))) &&
+                             (_C_56 : is_monochrome{Here}(t, r, l, 3))));
+      variant (_C_41 : (r - i_1));
       while (true)
       {  
          {  (if (i_1 < r) then () else 
             (goto while_0_break));
             
             {  
-               switch ((C_70 : (C_69 : (t + i_1)).charM)) {
+               switch ((_C_70 : (_C_69 : (t + i_1)).charM)) {
                  case 1:
                  {  
-                    {  (C_57 : (tmp = i_1));
-                       (C_59 : (i_1 = (C_58 : (i_1 + 1))));
+                    {  (_C_57 : (tmp = i_1));
+                       (_C_59 : (i_1 = (_C_58 : (i_1 + 1))));
                        ();
-                       (C_60 : (tmp_0 = b));
-                       (C_62 : (b = (C_61 : (b + 1))));
+                       (_C_60 : (tmp_0 = b));
+                       (_C_62 : (b = (_C_61 : (b + 1))));
                        ();
                        ()
                     };
-                    (C_63 : swap(t, tmp_0, tmp));
+                    (_C_63 : swap(t, tmp_0, tmp));
                     
                     (goto switch_1_break)
                  }
                  case 2:
-                 {  (C_65 : (i_1 = (C_64 : (i_1 + 1))));
+                 {  (_C_65 : (i_1 = (_C_64 : (i_1 + 1))));
                     
                     (goto switch_1_break)
                  }
                  case 3:
                  {  
                     {  ();
-                       (C_67 : (r = (C_66 : (r - 1))));
+                       (_C_67 : (r = (_C_66 : (r - 1))));
                        ()
                     };
-                    (C_68 : swap(t, r, i_1));
+                    (_C_68 : swap(t, r, i_1));
                     
                     (goto switch_1_break)
                  }
@@ -326,47 +328,35 @@ behavior sorts:
    }
 }
 ========== file tests/c/flag.jessie/flag.cloc ==========
-[C_15]
+[_C_52]
 file = "HOME/tests/c/flag.c"
-line = 56
-begin = 13
-end = 32
+line = 95
+begin = 18
+end = 24
 
-[C_11]
+[_C_35]
 file = "HOME/tests/c/flag.c"
-line = 66
-begin = 2
-end = 11
-
-[C_1]
-file = "HOME/tests/c/flag.c"
-line = 65
-begin = 7
-end = 10
-
-[C_55]
-file = "HOME/tests/c/flag.c"
-line = 97
-begin = 8
-end = 37
-
-[C_33]
-file = "HOME/tests/c/flag.c"
-line = 70
+line = 69
 begin = 13
 end = 30
 
-[C_74]
+[_C_56]
 file = "HOME/tests/c/flag.c"
-line = 81
-begin = 13
-end = 19
+line = 98
+begin = 8
+end = 37
 
-[C_64]
+[_C_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_72]
 file = "HOME/tests/c/flag.c"
-line = 107
-begin = 6
-end = 9
+line = 84
+begin = 8
+end = 159
 
 [flag]
 name = "Function flag"
@@ -375,41 +365,83 @@ line = 89
 begin = 5
 end = 9
 
-[C_9]
+[_C_59]
 file = "HOME/tests/c/flag.c"
-line = 65
-begin = 25
-end = 28
+line = 104
+begin = 18
+end = 21
 
-[C_10]
+[_C_48]
 file = "HOME/tests/c/flag.c"
-line = 65
-begin = 25
-end = 28
-
-[C_68]
-file = "HOME/tests/c/flag.c"
-line = 110
-begin = 6
-end = 20
-
-[C_20]
-file = "HOME/tests/c/flag.c"
-line = 77
-begin = 9
-end = 10
-
-[C_43]
-file = "HOME/tests/c/flag.c"
-line = 94
+line = 95
 begin = 8
-end = 142
+end = 14
 
-[C_62]
+[_C_51]
+file = "HOME/tests/c/flag.c"
+line = 95
+begin = 18
+end = 29
+
+[_C_31]
+file = "HOME/tests/c/flag.c"
+line = 73
+begin = 36
+end = 54
+
+[_C_41]
+file = "HOME/tests/c/flag.c"
+line = 99
+begin = 19
+end = 24
+
+[_C_4]
+file = "HOME/tests/c/flag.c"
+line = 61
+begin = 21
+end = 27
+
+[_C_71]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_70]
+file = "HOME/tests/c/flag.c"
+line = 102
+begin = 12
+end = 16
+
+[_C_61]
 file = "HOME/tests/c/flag.c"
 line = 104
 begin = 13
 end = 16
+
+[_C_69]
+file = "HOME/tests/c/flag.c"
+line = 102
+begin = 12
+end = 13
+
+[_C_32]
+file = "HOME/tests/c/flag.c"
+line = 70
+begin = 13
+end = 30
+
+[_C_23]
+file = "HOME/tests/c/flag.c"
+line = 77
+begin = 9
+end = 13
+
+[_C_19]
+file = "HOME/tests/c/flag.c"
+line = 76
+begin = 2
+end = 7
 
 [isMonochrome]
 name = "Function isMonochrome"
@@ -418,281 +450,233 @@ line = 60
 begin = 4
 end = 16
 
-[C_59]
-file = "HOME/tests/c/flag.c"
-line = 104
-begin = 18
-end = 21
-
-[C_32]
-file = "HOME/tests/c/flag.c"
-line = 70
-begin = 13
-end = 30
-
-[C_17]
-file = "HOME/tests/c/flag.c"
-line = 76
-begin = 12
-end = 13
-
-[C_40]
-file = "HOME/tests/c/flag.c"
-line = 92
-begin = 2
-end = 5
-
-[C_63]
-file = "HOME/tests/c/flag.c"
-line = 104
-begin = 6
-end = 22
-
-[C_36]
-file = "HOME/tests/c/flag.c"
-line = 69
-begin = 13
-end = 30
-
-[C_42]
+[_C_42]
 file = "HOME/tests/c/flag.c"
 line = 94
 begin = 8
 end = 183
 
-[C_5]
-file = "HOME/tests/c/flag.c"
-line = 62
-begin = 8
-end = 51
-
-[C_56]
-file = "HOME/tests/c/flag.c"
-line = 98
-begin = 8
-end = 37
-
-[C_34]
-file = "HOME/tests/c/flag.c"
-line = 70
-begin = 13
-end = 30
-
-[C_29]
-file = "HOME/tests/c/flag.c"
-line = 73
-begin = 14
-end = 54
-
-[C_61]
-file = "HOME/tests/c/flag.c"
-line = 104
-begin = 13
-end = 16
-
-[C_13]
+[_C_13]
 file = "HOME/tests/c/flag.c"
 line = 58
 begin = 14
 end = 49
 
-[C_45]
+[_C_5]
 file = "HOME/tests/c/flag.c"
-line = 94
+line = 62
 begin = 8
-end = 60
+end = 51
 
-[C_47]
+[_C_36]
 file = "HOME/tests/c/flag.c"
-line = 95
-begin = 8
-end = 29
+line = 69
+begin = 13
+end = 30
 
-[C_69]
+[_C_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_33]
 file = "HOME/tests/c/flag.c"
-line = 102
-begin = 12
-end = 13
+line = 70
+begin = 13
+end = 30
 
-[C_54]
-file = "HOME/tests/c/flag.c"
-line = 96
-begin = 8
-end = 37
-
-[C_7]
-file = "HOME/tests/c/flag.c"
-line = 65
-begin = 34
-end = 35
-
-[C_22]
+[_C_22]
 file = "HOME/tests/c/flag.c"
 line = 77
 begin = 2
 end = 3
 
-[C_58]
-file = "HOME/tests/c/flag.c"
-line = 104
-begin = 18
-end = 21
-
-[C_14]
-file = "HOME/tests/c/flag.c"
-line = 56
-begin = 13
-end = 32
-
-[C_35]
-file = "HOME/tests/c/flag.c"
-line = 69
-begin = 13
-end = 30
-
-[C_52]
-file = "HOME/tests/c/flag.c"
-line = 95
-begin = 18
-end = 24
-
-[C_66]
-file = "HOME/tests/c/flag.c"
-line = 110
-begin = 13
-end = 16
-
-[C_25]
-file = "HOME/tests/c/flag.c"
-line = 78
-begin = 2
-end = 3
-
-[C_65]
+[_C_65]
 file = "HOME/tests/c/flag.c"
 line = 107
 begin = 6
 end = 9
 
-[C_38]
-file = "HOME/tests/c/flag.c"
-line = 90
-begin = 2
-end = 5
-
-[C_72]
-file = "HOME/tests/c/flag.c"
-line = 84
-begin = 8
-end = 159
-
-[C_60]
-file = "HOME/tests/c/flag.c"
-line = 104
-begin = 13
-end = 16
-
-[C_8]
+[_C_9]
 file = "HOME/tests/c/flag.c"
 line = 65
-begin = 34
-end = 38
+begin = 25
+end = 28
 
-[C_73]
-file = "HOME/tests/c/flag.c"
-line = 81
-begin = 13
-end = 43
-
-[C_71]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_39]
-file = "HOME/tests/c/flag.c"
-line = 91
-begin = 2
-end = 5
-
-[C_57]
+[_C_57]
 file = "HOME/tests/c/flag.c"
 line = 104
 begin = 18
 end = 21
 
-[C_75]
+[_C_54]
+file = "HOME/tests/c/flag.c"
+line = 96
+begin = 8
+end = 37
+
+[_C_30]
+file = "HOME/tests/c/flag.c"
+line = 73
+begin = 14
+end = 32
+
+[_C_63]
+file = "HOME/tests/c/flag.c"
+line = 104
+begin = 6
+end = 22
+
+[_C_6]
+file = "HOME/tests/c/flag.c"
+line = 65
+begin = 45
+end = 54
+
+[_C_64]
+file = "HOME/tests/c/flag.c"
+line = 107
+begin = 6
+end = 9
+
+[_C_49]
+file = "HOME/tests/c/flag.c"
+line = 95
+begin = 13
+end = 29
+
+[_C_24]
+file = "HOME/tests/c/flag.c"
+line = 77
+begin = 9
+end = 13
+
+[_C_45]
+file = "HOME/tests/c/flag.c"
+line = 94
+begin = 8
+end = 60
+
+[_C_20]
+file = "HOME/tests/c/flag.c"
+line = 77
+begin = 9
+end = 10
+
+[_C_73]
 file = "HOME/tests/c/flag.c"
 line = 81
-begin = 23
+begin = 13
 end = 43
 
-[C_44]
+[_C_38]
+file = "HOME/tests/c/flag.c"
+line = 90
+begin = 2
+end = 5
+
+[_C_3]
+file = "HOME/tests/c/flag.c"
+line = 61
+begin = 21
+end = 82
+
+[_C_17]
+file = "HOME/tests/c/flag.c"
+line = 76
+begin = 12
+end = 13
+
+[_C_7]
+file = "HOME/tests/c/flag.c"
+line = 65
+begin = 34
+end = 35
+
+[_C_62]
+file = "HOME/tests/c/flag.c"
+line = 104
+begin = 13
+end = 16
+
+[_C_55]
+file = "HOME/tests/c/flag.c"
+line = 97
+begin = 8
+end = 37
+
+[_C_27]
+file = "HOME/tests/c/flag.c"
+line = 78
+begin = 9
+end = 10
+
+[_C_46]
+file = "HOME/tests/c/flag.c"
+line = 94
+begin = 8
+end = 27
+
+[_C_44]
 file = "HOME/tests/c/flag.c"
 line = 94
 begin = 8
 end = 101
 
-[C_27]
+[_C_15]
+file = "HOME/tests/c/flag.c"
+line = 56
+begin = 13
+end = 32
+
+[_C_26]
 file = "HOME/tests/c/flag.c"
 line = 78
 begin = 9
 end = 10
 
-[C_50]
+[_C_47]
 file = "HOME/tests/c/flag.c"
 line = 95
-begin = 13
-end = 19
-
-[C_46]
-file = "HOME/tests/c/flag.c"
-line = 94
 begin = 8
-end = 27
+end = 29
 
-[C_53]
+[_C_10]
+file = "HOME/tests/c/flag.c"
+line = 65
+begin = 25
+end = 28
+
+[_C_68]
+file = "HOME/tests/c/flag.c"
+line = 110
+begin = 6
+end = 20
+
+[_C_60]
+file = "HOME/tests/c/flag.c"
+line = 104
+begin = 13
+end = 16
+
+[_C_53]
 file = "HOME/tests/c/flag.c"
 line = 95
 begin = 23
 end = 29
 
-[C_37]
+[_C_40]
 file = "HOME/tests/c/flag.c"
-line = 69
-begin = 13
-end = 30
-
-[C_19]
-file = "HOME/tests/c/flag.c"
-line = 76
+line = 92
 begin = 2
-end = 7
+end = 5
 
-[C_48]
+[_C_58]
 file = "HOME/tests/c/flag.c"
-line = 95
-begin = 8
-end = 14
-
-[C_4]
-file = "HOME/tests/c/flag.c"
-line = 61
-begin = 21
-end = 27
-
-[C_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_26]
-file = "HOME/tests/c/flag.c"
-line = 78
-begin = 9
-end = 10
+line = 104
+begin = 18
+end = 21
 
 [swap]
 name = "Function swap"
@@ -701,97 +685,115 @@ line = 75
 begin = 5
 end = 9
 
-[C_18]
+[_C_8]
 file = "HOME/tests/c/flag.c"
-line = 76
-begin = 12
-end = 16
+line = 65
+begin = 34
+end = 38
 
-[C_51]
-file = "HOME/tests/c/flag.c"
-line = 95
-begin = 18
-end = 29
-
-[C_2]
-file = "HOME/tests/c/flag.c"
-line = 63
-begin = 19
-end = 24
-
-[C_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_67]
+[_C_66]
 file = "HOME/tests/c/flag.c"
 line = 110
 begin = 13
 end = 16
 
-[C_24]
+[_C_18]
 file = "HOME/tests/c/flag.c"
-line = 77
-begin = 9
-end = 13
+line = 76
+begin = 12
+end = 16
 
-[C_6]
-file = "HOME/tests/c/flag.c"
-line = 65
-begin = 45
-end = 54
-
-[C_30]
+[_C_29]
 file = "HOME/tests/c/flag.c"
 line = 73
 begin = 14
-end = 32
+end = 54
 
-[C_41]
+[_C_75]
 file = "HOME/tests/c/flag.c"
-line = 99
-begin = 19
-end = 24
+line = 81
+begin = 23
+end = 43
 
-[C_21]
-file = "HOME/tests/c/flag.c"
-line = 77
-begin = 9
-end = 13
-
-[C_3]
-file = "HOME/tests/c/flag.c"
-line = 61
-begin = 21
-end = 82
-
-[C_16]
+[_C_14]
 file = "HOME/tests/c/flag.c"
 line = 56
 begin = 13
 end = 32
 
-[C_49]
+[_C_50]
 file = "HOME/tests/c/flag.c"
 line = 95
 begin = 13
-end = 29
+end = 19
 
-[C_31]
+[_C_37]
 file = "HOME/tests/c/flag.c"
-line = 73
-begin = 36
-end = 54
+line = 69
+begin = 13
+end = 30
 
-[C_70]
+[_C_43]
 file = "HOME/tests/c/flag.c"
-line = 102
-begin = 12
+line = 94
+begin = 8
+end = 142
+
+[_C_2]
+file = "HOME/tests/c/flag.c"
+line = 63
+begin = 19
+end = 24
+
+[_C_34]
+file = "HOME/tests/c/flag.c"
+line = 70
+begin = 13
+end = 30
+
+[_C_67]
+file = "HOME/tests/c/flag.c"
+line = 110
+begin = 13
 end = 16
 
-[C_23]
+[_C_16]
+file = "HOME/tests/c/flag.c"
+line = 56
+begin = 13
+end = 32
+
+[_C_1]
+file = "HOME/tests/c/flag.c"
+line = 65
+begin = 7
+end = 10
+
+[_C_25]
+file = "HOME/tests/c/flag.c"
+line = 78
+begin = 2
+end = 3
+
+[_C_39]
+file = "HOME/tests/c/flag.c"
+line = 91
+begin = 2
+end = 5
+
+[_C_74]
+file = "HOME/tests/c/flag.c"
+line = 81
+begin = 13
+end = 19
+
+[_C_11]
+file = "HOME/tests/c/flag.c"
+line = 66
+begin = 2
+end = 11
+
+[_C_21]
 file = "HOME/tests/c/flag.c"
 line = 77
 begin = 9
@@ -1001,8 +1003,8 @@ end = 16
 kind = PointerDeref
 file = "HOME/tests/c/flag.jessie/flag.jc"
 line = 104
-begin = 15
-end = 213
+begin = 16
+end = 226
 
 [JC_80]
 file = "HOME/tests/c/flag.c"
@@ -1030,9 +1032,9 @@ end = -1
 
 [JC_106]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 138
+line = 139
 begin = 6
-end = 1793
+end = 1861
 
 [JC_113]
 file = "HOME/tests/c/flag.c"
@@ -1050,8 +1052,8 @@ end = 37
 kind = PointerDeref
 file = "HOME/tests/c/flag.jessie/flag.jc"
 line = 107
-begin = 15
-end = 54
+begin = 16
+end = 57
 
 [JC_99]
 file = "HOME/tests/c/flag.c"
@@ -1080,9 +1082,9 @@ end = 82
 [JC_122]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 180
-begin = 28
-end = 43
+line = 182
+begin = 29
+end = 44
 
 [JC_81]
 file = "HOME/tests/c/flag.c"
@@ -1117,9 +1119,9 @@ end = 24
 [JC_121]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 165
-begin = 28
-end = 47
+line = 167
+begin = 29
+end = 48
 
 [isMonochrome_ensures_default]
 name = "Function isMonochrome"
@@ -1338,7 +1340,7 @@ end = 30
 file = "HOME/tests/c/flag.jessie/flag.jc"
 line = 59
 begin = 9
-end = 700
+end = 714
 
 [JC_115]
 file = "HOME/tests/c/flag.c"
@@ -1355,9 +1357,9 @@ end = 27
 [JC_107]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 165
-begin = 28
-end = 47
+line = 167
+begin = 29
+end = 48
 
 [JC_69]
 file = "HOME/tests/c/flag.c"
@@ -1485,7 +1487,7 @@ end = 32
 file = "HOME/tests/c/flag.jessie/flag.jc"
 line = 59
 begin = 9
-end = 700
+end = 714
 
 [flag_ensures_default]
 name = "Function flag"
@@ -1509,9 +1511,9 @@ end = -1
 
 [JC_105]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 138
+line = 139
 begin = 6
-end = 1793
+end = 1861
 
 [JC_29]
 file = "HOME/tests/c/flag.c"
@@ -1564,9 +1566,9 @@ end = 27
 [JC_93]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 180
-begin = 28
-end = 43
+line = 182
+begin = 29
+end = 44
 
 [JC_97]
 file = "HOME/tests/c/flag.c"
@@ -1584,7 +1586,7 @@ end = 37
 file = "HOME/tests/c/flag.jessie/flag.jc"
 line = 59
 begin = 9
-end = 700
+end = 714
 
 [JC_114]
 file = "HOME/tests/c/flag.c"
@@ -1606,9 +1608,9 @@ end = 183
 
 [JC_90]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 138
+line = 139
 begin = 6
-end = 1793
+end = 1861
 
 [JC_53]
 file = "HOME/tests/c/flag.c"
@@ -1668,9 +1670,9 @@ end = -1
 [JC_108]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 180
-begin = 28
-end = 43
+line = 182
+begin = 29
+end = 44
 
 [JC_57]
 file = "HOME/tests/c/flag.c"
@@ -1680,9 +1682,9 @@ end = 54
 
 [JC_89]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 138
+line = 139
 begin = 6
-end = 1793
+end = 1861
 
 [JC_66]
 file = "HOME/tests/c/flag.c"
@@ -1700,7 +1702,7 @@ end = 9
 file = "HOME/tests/c/flag.jessie/flag.jc"
 line = 59
 begin = 9
-end = 700
+end = 714
 
 [JC_18]
 file = "HOME/"
@@ -1717,9 +1719,9 @@ end = 32
 [JC_92]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 165
-begin = 28
-end = 47
+line = 167
+begin = 29
+end = 48
 
 [JC_86]
 file = "HOME/tests/c/flag.c"
@@ -1743,13 +1745,13 @@ end = -1
 file = "HOME/tests/c/flag.jessie/flag.jc"
 line = 59
 begin = 9
-end = 700
+end = 714
 
 [JC_119]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 138
+line = 139
 begin = 6
-end = 1793
+end = 1861
 
 [JC_76]
 file = "HOME/"
@@ -1771,9 +1773,9 @@ end = 51
 
 [JC_120]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 138
+line = 139
 begin = 6
-end = 1793
+end = 1861
 
 [JC_58]
 file = "HOME/tests/c/flag.c"
@@ -1791,7 +1793,7 @@ end = 37
 file = "HOME/tests/c/flag.jessie/flag.jc"
 line = 59
 begin = 9
-end = 700
+end = 714
 
 ========== file tests/c/flag.jessie/why/flag.why ==========
 type charP
@@ -2178,110 +2180,80 @@ let flag_ensures_default =
      (let tmp = ref (any_int void) in
      (let tmp_0 = ref (any_int void) in
      try
-      (C_38:
       begin
         (let _jessie_<num> = (b_0 := (0)) in void);
-       (C_39:
+       (let _jessie_<num> = (i_1_0 := (0)) in void);
+       (let _jessie_<num> = (r_0 := l_0) in void);
+       (loop_5:
        begin
-         (let _jessie_<num> = (i_1_0 := (0)) in void);
-        (C_40:
-        begin
-          (let _jessie_<num> = (r_0 := l_0) in void);
-         (loop_5:
-         begin
-           while true do
-           { invariant
-               (JC_103:
-               ((JC_95:
-                is_color_array(t_2, l_0, charP_t_5_alloc_table,
-                charP_charM_t_5))
-               and ((JC_96: le_int((0), b_0))
-                   and ((JC_97: le_int(b_0, i_1_0))
-                       and ((JC_98: le_int(i_1_0, r_0))
-                           and ((JC_99: le_int(r_0, l_0))
-                               and ((JC_100:
-                                    is_monochrome(t_2, (0), b_0, (1),
-                                    charP_charM_t_5))
-                                   and ((JC_101:
-                                        is_monochrome(t_2, b_0, i_1_0, (2),
-                                        charP_charM_t_5))
-                                       and (JC_102:
-                                           is_monochrome(t_2, r_0, l_0, (3),
-                                           charP_charM_t_5)))))))))) 
-              }
+         while true do
+         { invariant
+             (JC_103:
+             ((JC_95:
+              is_color_array(t_2, l_0, charP_t_5_alloc_table,
+              charP_charM_t_5))
+             and ((JC_96: le_int((0), b_0))
+                 and ((JC_97: le_int(b_0, i_1_0))
+                     and ((JC_98: le_int(i_1_0, r_0))
+                         and ((JC_99: le_int(r_0, l_0))
+                             and ((JC_100:
+                                  is_monochrome(t_2, (0), b_0, (1),
+                                  charP_charM_t_5))
+                                 and ((JC_101:
+                                      is_monochrome(t_2, b_0, i_1_0, (2),
+                                      charP_charM_t_5))
+                                     and (JC_102:
+                                         is_monochrome(t_2, r_0, l_0, (3),
+                                         charP_charM_t_5))))))))))  }
+          begin
+            [ { } unit { true } ];
+           try
             begin
-              [ { } unit { true } ];
+              (if ((lt_int_ !i_1_0) !r_0) then void
+              else (raise (Goto_while_0_break_exc void)));
              try
               begin
-                (if ((lt_int_ !i_1_0) !r_0) then void
-                else (raise (Goto_while_0_break_exc void)));
-               try
+                (let _jessie_<num> =
+                ((safe_acc_ !charP_charM_t_5) ((shift t_2) !i_1_0)) in
                 begin
-                  (let _jessie_<num> =
-                  (C_70:
-                  ((safe_acc_ !charP_charM_t_5) (C_69: ((shift t_2) !i_1_0)))) in
+                  (if ((eq_int_ _jessie_<num>) (1))
+                  then
+                   begin
+                     (let _jessie_<num> = (tmp := !i_1_0) in void);
+                    (let _jessie_<num> = (i_1_0 := ((add_int !i_1_0) (1))) in
+                    void); void; (let _jessie_<num> = (tmp_0 := !b_0) in void);
+                    (let _jessie_<num> = (b_0 := ((add_int !b_0) (1))) in void);
+                    void; void;
+                    (let _jessie_<num> = t_2 in
+                    (let _jessie_<num> = !tmp_0 in
+                    (let _jessie_<num> = !tmp in
+                    (JC_107:
+                    (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                    (raise (Goto_switch_1_break_exc void)) end else void);
+                 (if (((eq_int_ _jessie_<num>) (2)) || ((eq_int_ _jessie_<num>) (1)))
+                 then
                   begin
-                    (if ((eq_int_ _jessie_<num>) (1))
-                    then
-                     (C_57:
-                     begin
-                       (let _jessie_<num> = (tmp := !i_1_0) in void);
-                      (C_59:
-                      begin
-                        (let _jessie_<num> =
-                        (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void);
-                       void;
-                       (C_60:
-                       begin
-                         (let _jessie_<num> = (tmp_0 := !b_0) in void);
-                        (C_62:
-                        begin
-                          (let _jessie_<num> =
-                          (b_0 := (C_61: ((add_int !b_0) (1)))) in void);
-                         void;
-                         begin
-                           void;
-                          (C_63:
-                          begin
-                            (let _jessie_<num> = t_2 in
-                            (let _jessie_<num> = !tmp_0 in
-                            (let _jessie_<num> = !tmp in
-                            (JC_107:
-                            (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                           (raise (Goto_switch_1_break_exc void)) end) end
-                        end) end) end) end) else void);
-                   (if (((eq_int_ _jessie_<num>) (2)) || ((eq_int_ _jessie_<num>) (1)))
-                   then
-                    (C_65:
-                    begin
-                      (let _jessie_<num> =
-                      (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
-                     (raise (Goto_switch_1_break_exc void)) end) else void);
-                   (if (((eq_int_ _jessie_<num>) (3)) || (((eq_int_ _jessie_<num>) (2)) || 
-                                                     ((eq_int_ _jessie_<num>) (1))))
-                   then
-                    begin
-                      void;
-                     (C_67:
-                     begin
-                       (let _jessie_<num> =
-                       (r_0 := (C_66: ((sub_int !r_0) (1)))) in void);
-                      begin
-                        void;
-                       (C_68:
-                       begin
-                         (let _jessie_<num> = t_2 in
-                         (let _jessie_<num> = !r_0 in
-                         (let _jessie_<num> = !i_1_0 in
-                         (JC_108:
-                         (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                        (raise (Goto_switch_1_break_exc void)) end) end end)
-                    end else void) end);
-                 (raise (Goto_switch_1_break_exc void)) end with
-                Goto_switch_1_break_exc _jessie_<num> ->
-                (switch_1_break: void) end; (raise (Loop_continue_exc void))
-              end with Loop_continue_exc _jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end) end) end) end) with
+                    (let _jessie_<num> = (i_1_0 := ((add_int !i_1_0) (1))) in
+                    void); (raise (Goto_switch_1_break_exc void)) end
+                 else void);
+                 (if (((eq_int_ _jessie_<num>) (3)) || (((eq_int_ _jessie_<num>) (2)) || 
+                                                   ((eq_int_ _jessie_<num>) (1))))
+                 then
+                  begin
+                    void;
+                   (let _jessie_<num> = (r_0 := ((sub_int !r_0) (1))) in void);
+                   void;
+                   (let _jessie_<num> = t_2 in
+                   (let _jessie_<num> = !r_0 in
+                   (let _jessie_<num> = !i_1_0 in
+                   (JC_108:
+                   (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                   (raise (Goto_switch_1_break_exc void)) end else void) end);
+               (raise (Goto_switch_1_break_exc void)) end with
+              Goto_switch_1_break_exc _jessie_<num> -> (switch_1_break: void) end;
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end)))));
     (raise Return) end with Return -> void end) { (JC_73: true) }
@@ -2301,109 +2273,80 @@ let flag_ensures_sorts =
      (let tmp = ref (any_int void) in
      (let tmp_0 = ref (any_int void) in
      try
-      (C_38:
       begin
         (let _jessie_<num> = (b_0 := (0)) in void);
-       (C_39:
+       (let _jessie_<num> = (i_1_0 := (0)) in void);
+       (let _jessie_<num> = (r_0 := l_0) in void);
+       (loop_6:
        begin
-         (let _jessie_<num> = (i_1_0 := (0)) in void);
-        (C_40:
-        begin
-          (let _jessie_<num> = (r_0 := l_0) in void);
-         (loop_6:
-         begin
-           while true do
-           { invariant (JC_119: true)  }
+         while true do
+         { invariant (JC_119: true)  }
+          begin
+            [ { } unit reads b_0,charP_charM_t_5,i_1_0,r_0
+              { (JC_117:
+                ((JC_109:
+                 is_color_array(t_2, l_0, charP_t_5_alloc_table,
+                 charP_charM_t_5))
+                and ((JC_110: le_int((0), b_0))
+                    and ((JC_111: le_int(b_0, i_1_0))
+                        and ((JC_112: le_int(i_1_0, r_0))
+                            and ((JC_113: le_int(r_0, l_0))
+                                and ((JC_114:
+                                     is_monochrome(t_2, (0), b_0, (1),
+                                     charP_charM_t_5))
+                                    and ((JC_115:
+                                         is_monochrome(t_2, b_0, i_1_0, (2),
+                                         charP_charM_t_5))
+                                        and (JC_116:
+                                            is_monochrome(t_2, r_0, l_0, (3),
+                                            charP_charM_t_5)))))))))) } ];
+           try
             begin
-              [ { } unit reads b_0,charP_charM_t_5,i_1_0,r_0
-                { (JC_117:
-                  ((JC_109:
-                   is_color_array(t_2, l_0, charP_t_5_alloc_table,
-                   charP_charM_t_5))
-                  and ((JC_110: le_int((0), b_0))
-                      and ((JC_111: le_int(b_0, i_1_0))
-                          and ((JC_112: le_int(i_1_0, r_0))
-                              and ((JC_113: le_int(r_0, l_0))
-                                  and ((JC_114:
-                                       is_monochrome(t_2, (0), b_0, (1),
-                                       charP_charM_t_5))
-                                      and ((JC_115:
-                                           is_monochrome(t_2, b_0, i_1_0,
-                                           (2), charP_charM_t_5))
-                                          and (JC_116:
-                                              is_monochrome(t_2, r_0, l_0,
-                                              (3), charP_charM_t_5)))))))))) } ];
+              (if ((lt_int_ !i_1_0) !r_0) then void
+              else (raise (Goto_while_0_break_exc void)));
              try
               begin
-                (if ((lt_int_ !i_1_0) !r_0) then void
-                else (raise (Goto_while_0_break_exc void)));
-               try
+                (let _jessie_<num> =
+                ((safe_acc_ !charP_charM_t_5) ((shift t_2) !i_1_0)) in
                 begin
-                  (let _jessie_<num> =
-                  (C_70:
-                  ((safe_acc_ !charP_charM_t_5) (C_69: ((shift t_2) !i_1_0)))) in
+                  (if ((eq_int_ _jessie_<num>) (1))
+                  then
+                   begin
+                     (let _jessie_<num> = (tmp := !i_1_0) in void);
+                    (let _jessie_<num> = (i_1_0 := ((add_int !i_1_0) (1))) in
+                    void); void; (let _jessie_<num> = (tmp_0 := !b_0) in void);
+                    (let _jessie_<num> = (b_0 := ((add_int !b_0) (1))) in void);
+                    void; void;
+                    (let _jessie_<num> = t_2 in
+                    (let _jessie_<num> = !tmp_0 in
+                    (let _jessie_<num> = !tmp in
+                    (JC_121:
+                    (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                    (raise (Goto_switch_1_break_exc void)) end else void);
+                 (if (((eq_int_ _jessie_<num>) (2)) || ((eq_int_ _jessie_<num>) (1)))
+                 then
                   begin
-                    (if ((eq_int_ _jessie_<num>) (1))
-                    then
-                     (C_57:
-                     begin
-                       (let _jessie_<num> = (tmp := !i_1_0) in void);
-                      (C_59:
-                      begin
-                        (let _jessie_<num> =
-                        (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void);
-                       void;
-                       (C_60:
-                       begin
-                         (let _jessie_<num> = (tmp_0 := !b_0) in void);
-                        (C_62:
-                        begin
-                          (let _jessie_<num> =
-                          (b_0 := (C_61: ((add_int !b_0) (1)))) in void);
-                         void;
-                         begin
-                           void;
-                          (C_63:
-                          begin
-                            (let _jessie_<num> = t_2 in
-                            (let _jessie_<num> = !tmp_0 in
-                            (let _jessie_<num> = !tmp in
-                            (JC_121:
-                            (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                           (raise (Goto_switch_1_break_exc void)) end) end
-                        end) end) end) end) else void);
-                   (if (((eq_int_ _jessie_<num>) (2)) || ((eq_int_ _jessie_<num>) (1)))
-                   then
-                    (C_65:
-                    begin
-                      (let _jessie_<num> =
-                      (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
-                     (raise (Goto_switch_1_break_exc void)) end) else void);
-                   (if (((eq_int_ _jessie_<num>) (3)) || (((eq_int_ _jessie_<num>) (2)) || 
-                                                     ((eq_int_ _jessie_<num>) (1))))
-                   then
-                    begin
-                      void;
-                     (C_67:
-                     begin
-                       (let _jessie_<num> =
-                       (r_0 := (C_66: ((sub_int !r_0) (1)))) in void);
-                      begin
-                        void;
-                       (C_68:
-                       begin
-                         (let _jessie_<num> = t_2 in
-                         (let _jessie_<num> = !r_0 in
-                         (let _jessie_<num> = !i_1_0 in
-                         (JC_122:
-                         (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                        (raise (Goto_switch_1_break_exc void)) end) end end)
-                    end else void) end);
-                 (raise (Goto_switch_1_break_exc void)) end with
-                Goto_switch_1_break_exc _jessie_<num> ->
-                (switch_1_break: void) end; (raise (Loop_continue_exc void))
-              end with Loop_continue_exc _jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end) end) end) end) with
+                    (let _jessie_<num> = (i_1_0 := ((add_int !i_1_0) (1))) in
+                    void); (raise (Goto_switch_1_break_exc void)) end
+                 else void);
+                 (if (((eq_int_ _jessie_<num>) (3)) || (((eq_int_ _jessie_<num>) (2)) || 
+                                                   ((eq_int_ _jessie_<num>) (1))))
+                 then
+                  begin
+                    void;
+                   (let _jessie_<num> = (r_0 := ((sub_int !r_0) (1))) in void);
+                   void;
+                   (let _jessie_<num> = t_2 in
+                   (let _jessie_<num> = !r_0 in
+                   (let _jessie_<num> = !i_1_0 in
+                   (JC_122:
+                   (((((swap _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                   (raise (Goto_switch_1_break_exc void)) end else void) end);
+               (raise (Goto_switch_1_break_exc void)) end with
+              Goto_switch_1_break_exc _jessie_<num> -> (switch_1_break: void) end;
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end)))));
     (raise Return) end with Return -> void end)
@@ -2429,110 +2372,81 @@ let flag_safety =
      (let tmp = ref (any_int void) in
      (let tmp_0 = ref (any_int void) in
      try
-      (C_38:
       begin
         (let _jessie_<num> = (b_0 := (0)) in void);
-       (C_39:
+       (let _jessie_<num> = (i_1_0 := (0)) in void);
+       (let _jessie_<num> = (r_0 := l_0) in void);
+       (loop_4:
        begin
-         (let _jessie_<num> = (i_1_0 := (0)) in void);
-        (C_40:
-        begin
-          (let _jessie_<num> = (r_0 := l_0) in void);
-         (loop_4:
-         begin
-           while true do
-           { invariant (JC_89: true) variant (JC_94 : sub_int(r_0, i_1_0)) }
+         while true do
+         { invariant (JC_89: true) variant (JC_94 : sub_int(r_0, i_1_0)) }
+          begin
+            [ { } unit reads b_0,charP_charM_t_5,i_1_0,r_0
+              { (JC_87:
+                ((JC_79:
+                 is_color_array(t_2, l_0, charP_t_5_alloc_table,
+                 charP_charM_t_5))
+                and ((JC_80: le_int((0), b_0))
+                    and ((JC_81: le_int(b_0, i_1_0))
+                        and ((JC_82: le_int(i_1_0, r_0))
+                            and ((JC_83: le_int(r_0, l_0))
+                                and ((JC_84:
+                                     is_monochrome(t_2, (0), b_0, (1),
+                                     charP_charM_t_5))
+                                    and ((JC_85:
+                                         is_monochrome(t_2, b_0, i_1_0, (2),
+                                         charP_charM_t_5))
+                                        and (JC_86:
+                                            is_monochrome(t_2, r_0, l_0, (3),
+                                            charP_charM_t_5)))))))))) } ];
+           try
             begin
-              [ { } unit reads b_0,charP_charM_t_5,i_1_0,r_0
-                { (JC_87:
-                  ((JC_79:
-                   is_color_array(t_2, l_0, charP_t_5_alloc_table,
-                   charP_charM_t_5))
-                  and ((JC_80: le_int((0), b_0))
-                      and ((JC_81: le_int(b_0, i_1_0))
-                          and ((JC_82: le_int(i_1_0, r_0))
-                              and ((JC_83: le_int(r_0, l_0))
-                                  and ((JC_84:
-                                       is_monochrome(t_2, (0), b_0, (1),
-                                       charP_charM_t_5))
-                                      and ((JC_85:
-                                           is_monochrome(t_2, b_0, i_1_0,
-                                           (2), charP_charM_t_5))
-                                          and (JC_86:
-                                              is_monochrome(t_2, r_0, l_0,
-                                              (3), charP_charM_t_5)))))))))) } ];
+              (if ((lt_int_ !i_1_0) !r_0) then void
+              else (raise (Goto_while_0_break_exc void)));
              try
               begin
-                (if ((lt_int_ !i_1_0) !r_0) then void
-                else (raise (Goto_while_0_break_exc void)));
-               try
+                (let _jessie_<num> =
+                (JC_91:
+                ((((offset_acc_ charP_t_5_alloc_table) !charP_charM_t_5) t_2) !i_1_0)) in
                 begin
-                  (let _jessie_<num> =
-                  (C_70:
-                  (JC_91:
-                  ((((offset_acc_ charP_t_5_alloc_table) !charP_charM_t_5) t_2) !i_1_0))) in
+                  (if ((eq_int_ _jessie_<num>) (1))
+                  then
+                   begin
+                     (let _jessie_<num> = (tmp := !i_1_0) in void);
+                    (let _jessie_<num> = (i_1_0 := ((add_int !i_1_0) (1))) in
+                    void); void; (let _jessie_<num> = (tmp_0 := !b_0) in void);
+                    (let _jessie_<num> = (b_0 := ((add_int !b_0) (1))) in void);
+                    void; void;
+                    (let _jessie_<num> = t_2 in
+                    (let _jessie_<num> = !tmp_0 in
+                    (let _jessie_<num> = !tmp in
+                    (JC_92:
+                    (((((swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                    (raise (Goto_switch_1_break_exc void)) end else void);
+                 (if (((eq_int_ _jessie_<num>) (2)) || ((eq_int_ _jessie_<num>) (1)))
+                 then
                   begin
-                    (if ((eq_int_ _jessie_<num>) (1))
-                    then
-                     (C_57:
-                     begin
-                       (let _jessie_<num> = (tmp := !i_1_0) in void);
-                      (C_59:
-                      begin
-                        (let _jessie_<num> =
-                        (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void);
-                       void;
-                       (C_60:
-                       begin
-                         (let _jessie_<num> = (tmp_0 := !b_0) in void);
-                        (C_62:
-                        begin
-                          (let _jessie_<num> =
-                          (b_0 := (C_61: ((add_int !b_0) (1)))) in void);
-                         void;
-                         begin
-                           void;
-                          (C_63:
-                          begin
-                            (let _jessie_<num> = t_2 in
-                            (let _jessie_<num> = !tmp_0 in
-                            (let _jessie_<num> = !tmp in
-                            (JC_92:
-                            (((((swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                           (raise (Goto_switch_1_break_exc void)) end) end
-                        end) end) end) end) else void);
-                   (if (((eq_int_ _jessie_<num>) (2)) || ((eq_int_ _jessie_<num>) (1)))
-                   then
-                    (C_65:
-                    begin
-                      (let _jessie_<num> =
-                      (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
-                     (raise (Goto_switch_1_break_exc void)) end) else void);
-                   (if (((eq_int_ _jessie_<num>) (3)) || (((eq_int_ _jessie_<num>) (2)) || 
-                                                     ((eq_int_ _jessie_<num>) (1))))
-                   then
-                    begin
-                      void;
-                     (C_67:
-                     begin
-                       (let _jessie_<num> =
-                       (r_0 := (C_66: ((sub_int !r_0) (1)))) in void);
-                      begin
-                        void;
-                       (C_68:
-                       begin
-                         (let _jessie_<num> = t_2 in
-                         (let _jessie_<num> = !r_0 in
-                         (let _jessie_<num> = !i_1_0 in
-                         (JC_93:
-                         (((((swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
-                        (raise (Goto_switch_1_break_exc void)) end) end end)
-                    end else void) end);
-                 (raise (Goto_switch_1_break_exc void)) end with
-                Goto_switch_1_break_exc _jessie_<num> ->
-                (switch_1_break: void) end; (raise (Loop_continue_exc void))
-              end with Loop_continue_exc _jessie_<num> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end) end) end) end) with
+                    (let _jessie_<num> = (i_1_0 := ((add_int !i_1_0) (1))) in
+                    void); (raise (Goto_switch_1_break_exc void)) end
+                 else void);
+                 (if (((eq_int_ _jessie_<num>) (3)) || (((eq_int_ _jessie_<num>) (2)) || 
+                                                   ((eq_int_ _jessie_<num>) (1))))
+                 then
+                  begin
+                    void;
+                   (let _jessie_<num> = (r_0 := ((sub_int !r_0) (1))) in void);
+                   void;
+                   (let _jessie_<num> = t_2 in
+                   (let _jessie_<num> = !r_0 in
+                   (let _jessie_<num> = !i_1_0 in
+                   (JC_93:
+                   (((((swap_requires _jessie_<num>) _jessie_<num>) _jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                   (raise (Goto_switch_1_break_exc void)) end else void) end);
+               (raise (Goto_switch_1_break_exc void)) end with
+              Goto_switch_1_break_exc _jessie_<num> -> (switch_1_break: void) end;
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end)))));
     (raise Return) end with Return -> void end) { true }
@@ -2551,7 +2465,6 @@ let isMonochrome_ensures_decides_monochromatic =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<num> = (k_0 := i) in void);
           (loop_3:
@@ -2572,25 +2485,18 @@ let isMonochrome_ensures_decides_monochromatic =
                  begin
                    (if ((lt_int_ !k_0) j) then void
                    else (raise (Goto_while_0_break_exc void)));
-                  (if ((neq_int_ (C_8:
-                                 ((safe_acc_ charP_charM_t_0_3) (C_7:
-                                                                ((shift t_0_0) !k_0))))) c_1)
+                  (if ((neq_int_ ((safe_acc_ charP_charM_t_0_3) ((shift t_0_0) !k_0))) c_1)
                   then
-                   (C_6:
                    begin
                      (let _jessie_<num> = (__retres := (0)) in void);
-                    (raise (Return_label_exc void)) end) else void);
-                  (C_10:
-                  begin   (k_0 := (C_9: ((add_int !k_0) (1)))); !k_0 end) end in
-                 void); (raise (Loop_continue_exc void)) end with
+                    (raise (Return_label_exc void)) end else void);
+                  (k_0 := ((add_int !k_0) (1))); !k_0 end in void);
+                (raise (Loop_continue_exc void)) end with
                Loop_continue_exc _jessie_<num> -> void end end done;
-           (raise (Goto_while_0_break_exc void)) end) end) with
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
-       (C_11:
-       begin
-         (let _jessie_<num> = (__retres := (1)) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<num> ->
+       (let _jessie_<num> = (__retres := (1)) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_13:
@@ -2610,7 +2516,6 @@ let isMonochrome_ensures_default =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<num> = (k_0 := i) in void);
           (loop_2:
@@ -2632,25 +2537,18 @@ let isMonochrome_ensures_default =
                  begin
                    (if ((lt_int_ !k_0) j) then void
                    else (raise (Goto_while_0_break_exc void)));
-                  (if ((neq_int_ (C_8:
-                                 ((safe_acc_ charP_charM_t_0_3) (C_7:
-                                                                ((shift t_0_0) !k_0))))) c_1)
+                  (if ((neq_int_ ((safe_acc_ charP_charM_t_0_3) ((shift t_0_0) !k_0))) c_1)
                   then
-                   (C_6:
                    begin
                      (let _jessie_<num> = (__retres := (0)) in void);
-                    (raise (Return_label_exc void)) end) else void);
-                  (C_10:
-                  begin   (k_0 := (C_9: ((add_int !k_0) (1)))); !k_0 end) end in
-                 void); (raise (Loop_continue_exc void)) end with
+                    (raise (Return_label_exc void)) end else void);
+                  (k_0 := ((add_int !k_0) (1))); !k_0 end in void);
+                (raise (Loop_continue_exc void)) end with
                Loop_continue_exc _jessie_<num> -> void end end done;
-           (raise (Goto_while_0_break_exc void)) end) end) with
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
-       (C_11:
-       begin
-         (let _jessie_<num> = (__retres := (1)) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<num> ->
+       (let _jessie_<num> = (__retres := (1)) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { (JC_9: true) }
 
@@ -2668,7 +2566,6 @@ let isMonochrome_safety =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<num> = (k_0 := i) in void);
           (loop_1:
@@ -2689,25 +2586,19 @@ let isMonochrome_safety =
                  begin
                    (if ((lt_int_ !k_0) j) then void
                    else (raise (Goto_while_0_break_exc void)));
-                  (if ((neq_int_ (C_8:
-                                 (JC_21:
-                                 ((((offset_acc_ charP_t_0_3_alloc_table) charP_charM_t_0_3) t_0_0) !k_0)))) c_1)
+                  (if ((neq_int_ (JC_21:
+                                 ((((offset_acc_ charP_t_0_3_alloc_table) charP_charM_t_0_3) t_0_0) !k_0))) c_1)
                   then
-                   (C_6:
                    begin
                      (let _jessie_<num> = (__retres := (0)) in void);
-                    (raise (Return_label_exc void)) end) else void);
-                  (C_10:
-                  begin   (k_0 := (C_9: ((add_int !k_0) (1)))); !k_0 end) end in
-                 void); (raise (Loop_continue_exc void)) end with
+                    (raise (Return_label_exc void)) end else void);
+                  (k_0 := ((add_int !k_0) (1))); !k_0 end in void);
+                (raise (Loop_continue_exc void)) end with
                Loop_continue_exc _jessie_<num> -> void end end done;
-           (raise (Goto_while_0_break_exc void)) end) end) with
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
-       (C_11:
-       begin
-         (let _jessie_<num> = (__retres := (1)) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<num> ->
+       (let _jessie_<num> = (__retres := (1)) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -2723,31 +2614,24 @@ let swap_ensures_default =
   try
    begin
      (let z = ref (any_int void) in
-     (C_19:
      begin
        (let _jessie_<num> =
-       (z := (C_18:
-             ((safe_acc_ !charP_charM_t_1_4) (C_17: ((shift t_1) i_0))))) in
-       void);
-      (C_24:
-      begin
-        (let _jessie_<num> =
-        (let _jessie_<num> =
-        (C_21: ((safe_acc_ !charP_charM_t_1_4) (C_20: ((shift t_1) j_0_0)))) in
-        (let _jessie_<num> = t_1 in
-        (let _jessie_<num> = i_0 in
-        (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-        (((safe_upd_ charP_charM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
-       (C_27:
-       begin
-         (let _jessie_<num> =
-         (let _jessie_<num> = !z in
-         (let _jessie_<num> = t_1 in
-         (let _jessie_<num> = j_0_0 in
-         (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-         (((safe_upd_ charP_charM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
-        (raise Return) end) end) end)); (raise Return) end with Return ->
-   void end) { (JC_47: true) }
+       (z := ((safe_acc_ !charP_charM_t_1_4) ((shift t_1) i_0))) in void);
+      (let _jessie_<num> =
+      (let _jessie_<num> =
+      ((safe_acc_ !charP_charM_t_1_4) ((shift t_1) j_0_0)) in
+      (let _jessie_<num> = t_1 in
+      (let _jessie_<num> = i_0 in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (((safe_upd_ charP_charM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
+      (let _jessie_<num> =
+      (let _jessie_<num> = !z in
+      (let _jessie_<num> = t_1 in
+      (let _jessie_<num> = j_0_0 in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (((safe_upd_ charP_charM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
+      (raise Return) end); (raise Return) end with Return -> void end)
+  { (JC_47: true) }
 
 let swap_ensures_i_j_swapped =
  fun (t_1 : charP pointer) (i_0 : int) (j_0_0 : int) (charP_charM_t_1_4 : (charP, int) memory ref) (charP_t_1_4_alloc_table : charP alloc_table) ->
@@ -2761,31 +2645,23 @@ let swap_ensures_i_j_swapped =
   try
    begin
      (let z = ref (any_int void) in
-     (C_19:
      begin
        (let _jessie_<num> =
-       (z := (C_18:
-             ((safe_acc_ !charP_charM_t_1_4) (C_17: ((shift t_1) i_0))))) in
-       void);
-      (C_24:
-      begin
-        (let _jessie_<num> =
-        (let _jessie_<num> =
-        (C_21: ((safe_acc_ !charP_charM_t_1_4) (C_20: ((shift t_1) j_0_0)))) in
-        (let _jessie_<num> = t_1 in
-        (let _jessie_<num> = i_0 in
-        (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-        (((safe_upd_ charP_charM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
-       (C_27:
-       begin
-         (let _jessie_<num> =
-         (let _jessie_<num> = !z in
-         (let _jessie_<num> = t_1 in
-         (let _jessie_<num> = j_0_0 in
-         (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-         (((safe_upd_ charP_charM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
-        (raise Return) end) end) end)); (raise Return) end with Return ->
-   void end)
+       (z := ((safe_acc_ !charP_charM_t_1_4) ((shift t_1) i_0))) in void);
+      (let _jessie_<num> =
+      (let _jessie_<num> =
+      ((safe_acc_ !charP_charM_t_1_4) ((shift t_1) j_0_0)) in
+      (let _jessie_<num> = t_1 in
+      (let _jessie_<num> = i_0 in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (((safe_upd_ charP_charM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
+      (let _jessie_<num> =
+      (let _jessie_<num> = !z in
+      (let _jessie_<num> = t_1 in
+      (let _jessie_<num> = j_0_0 in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (((safe_upd_ charP_charM_t_1_4) _jessie_<num>) _jessie_<num>))))) in void);
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_55:
     ((JC_53:
      ((JC_51:
@@ -2812,37 +2688,30 @@ let swap_safety =
   try
    begin
      (let z = ref (any_int void) in
-     (C_19:
      begin
        (let _jessie_<num> =
-       (z := (C_18:
-             (JC_61:
-             ((((offset_acc_ charP_t_1_4_alloc_table) !charP_charM_t_1_4) t_1) i_0)))) in
+       (z := (JC_61:
+             ((((offset_acc_ charP_t_1_4_alloc_table) !charP_charM_t_1_4) t_1) i_0))) in
        void);
-      (C_24:
-      begin
-        (let _jessie_<num> =
-        (let _jessie_<num> =
-        (C_21:
-        (JC_62:
-        ((((offset_acc_ charP_t_1_4_alloc_table) !charP_charM_t_1_4) t_1) j_0_0))) in
-        (let _jessie_<num> = t_1 in
-        (let _jessie_<num> = i_0 in
-        (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-        (JC_63:
-        (((((offset_upd_ charP_t_1_4_alloc_table) charP_charM_t_1_4) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
-        void);
-       (C_27:
-       begin
-         (let _jessie_<num> =
-         (let _jessie_<num> = !z in
-         (let _jessie_<num> = t_1 in
-         (let _jessie_<num> = j_0_0 in
-         (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-         (JC_64:
-         (((((offset_upd_ charP_t_1_4_alloc_table) charP_charM_t_1_4) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
-         void); (raise Return) end) end) end)); (raise Return) end with
-   Return -> void end) { true }
+      (let _jessie_<num> =
+      (let _jessie_<num> =
+      (JC_62:
+      ((((offset_acc_ charP_t_1_4_alloc_table) !charP_charM_t_1_4) t_1) j_0_0)) in
+      (let _jessie_<num> = t_1 in
+      (let _jessie_<num> = i_0 in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (JC_63:
+      (((((offset_upd_ charP_t_1_4_alloc_table) charP_charM_t_1_4) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+      void);
+      (let _jessie_<num> =
+      (let _jessie_<num> = !z in
+      (let _jessie_<num> = t_1 in
+      (let _jessie_<num> = j_0_0 in
+      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+      (JC_64:
+      (((((offset_upd_ charP_t_1_4_alloc_table) charP_charM_t_1_4) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+      void); (raise Return) end); (raise Return) end with Return -> void end)
+  { true }
 
 
 ========== generation of alt-ergo VC output ==========

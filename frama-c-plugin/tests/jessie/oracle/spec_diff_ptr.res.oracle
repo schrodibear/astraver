@@ -46,13 +46,13 @@ tag voidP = {
 type voidP = [voidP]
 
 int32 m2(intP[..] x, intP[..] y)
-  requires (C_5 : ((x - y) > 0));
+  requires (_C_5 : ((x - y) > 0));
 behavior default:
-  ensures (C_4 : (\result > 0));
+  ensures (_C_4 : (\result > 0));
 {  
    (var int32 __retres);
    
-   {  (C_3 : (__retres = (C_2 : ((C_1 : (x - y)) :> int32))));
+   {  (_C_3 : (__retres = (_C_2 : ((_C_1 : (x - y)) :> int32))));
       
       (return __retres)
    }
@@ -492,13 +492,10 @@ let m2_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_2:
-                    (safe_int32_of_integer_ (C_1:
-                                            ((safe_sub_pointer_ x_0) y))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (__retres := (safe_int32_of_integer_ ((safe_sub_pointer_ x_0) y))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: gt_int(integer_of_int32(result), (0))) }
 
 let m2_safety =
@@ -509,12 +506,10 @@ let m2_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_2:
-                    (JC_<somenum>: (int32_of_integer_ (C_1: ((sub_pointer_ x_0) y)))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (__retres := (JC_<somenum>: (int32_of_integer_ ((sub_pointer_ x_0) y)))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 
@@ -531,7 +526,7 @@ why --project [...] why/spec_diff_ptr.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/spec_diff_ptr_po2.why">
-      <location file = "why/spec_diff_ptr.why" line = "456" begin = "53" end = "73"/>
+      <location file = "why/spec_diff_ptr.why" line = "451" begin = "47" end = "67"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

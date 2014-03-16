@@ -46,10 +46,10 @@ tag voidP = {
 type voidP = [voidP]
 
 intP[..] foo(intP[..] a)
-  requires (C_2 : ((C_3 : (\offset_min(a) <= 0)) &&
-                    (C_4 : (\offset_max(a) >= 0))));
+  requires (_C_2 : ((_C_3 : (\offset_min(a) <= 0)) &&
+                     (_C_4 : (\offset_max(a) >= 0))));
 behavior default:
-  ensures (C_1 : (\result.intM == \at(a,Old).intM));
+  ensures (_C_1 : (\result.intM == \at(a,Old).intM));
 {  
    {  
       (return a)

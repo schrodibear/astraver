@@ -40,22 +40,22 @@ tag voidP = {
 type voidP = [voidP]
 
 int32 f(int32 x)
-  requires (C_8 : (x >= 0));
+  requires (_C_8 : (x >= 0));
 behavior default:
   assigns \nothing;
-  ensures (C_7 : (\result == 0));
+  ensures (_C_7 : (\result == 0));
 {  
    (var int32 tmp);
    
    (var int32 __retres);
    
    {  (if (x == 0) then 
-      {  (C_1 : (__retres = 0));
+      {  (_C_1 : (__retres = 0));
          
          (goto return_label)
       } else ());
-      (C_5 : (tmp = (C_4 : f((C_3 : ((C_2 : (x - 1)) :> int32))))));
-      (C_6 : (__retres = tmp));
+      (_C_5 : (tmp = (_C_4 : f((_C_3 : ((_C_2 : (x - 1)) :> int32))))));
+      (_C_6 : (__retres = tmp));
       (return_label : 
       (return __retres))
    }
@@ -424,24 +424,15 @@ let f_ensures_default =
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (C_5:
-       begin
-         (let _jessie_<somenum> =
-         (tmp := (C_4:
-                 (let _jessie_<somenum> =
-                 (C_3:
-                 (safe_int32_of_integer_ (C_2:
-                                         ((sub_int (integer_of_int32 x_0)) (1))))) in
-                 (JC_<somenum>: (f _jessie_<somenum>))))) in void);
-        (C_6:
-        begin
-          (let _jessie_<somenum> = (__retres := !tmp) in void);
-         (raise (Return_label_exc void)) end) end) end with
-      Return_label_exc _jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> =
+       (tmp := (let _jessie_<somenum> =
+               (safe_int32_of_integer_ ((sub_int (integer_of_int32 x_0)) (1))) in
+               (JC_<somenum>: (f _jessie_<somenum>)))) in void);
+       (let _jessie_<somenum> = (__retres := !tmp) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>: (integer_of_int32(result) = (0))) }
@@ -459,27 +450,18 @@ let f_safety =
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (C_5:
-       begin
-         (let _jessie_<somenum> =
-         (tmp := (C_4:
-                 (let _jessie_<somenum> =
-                 (C_3:
-                 (JC_<somenum>:
-                 (int32_of_integer_ (C_2:
-                                    ((sub_int (integer_of_int32 x_0)) (1)))))) in
-                 (JC_<somenum>:
-                 (check { zwf_zero((0), (0)) };
-                 (JC_<somenum>: (f_requires _jessie_<somenum>))))))) in void);
-        (C_6:
-        begin
-          (let _jessie_<somenum> = (__retres := !tmp) in void);
-         (raise (Return_label_exc void)) end) end) end with
-      Return_label_exc _jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> =
+       (tmp := (let _jessie_<somenum> =
+               (JC_<somenum>:
+               (int32_of_integer_ ((sub_int (integer_of_int32 x_0)) (1)))) in
+               (JC_<somenum>:
+               (check { zwf_zero((0), (0)) };
+               (JC_<somenum>: (f_requires _jessie_<somenum>)))))) in void);
+       (let _jessie_<somenum> = (__retres := !tmp) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -507,11 +489,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/rec2_po4.why">
-      <location file = "why/rec2.why" line = "413" begin = "26" end = "44"/>
+      <location file = "why/rec2.why" line = "398" begin = "24" end = "42"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/rec2_po5.why">
-      <location file = "why/rec2.why" line = "413" begin = "26" end = "44"/>
+      <location file = "why/rec2.why" line = "398" begin = "24" end = "42"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/rec2_po6.why">

@@ -91,29 +91,31 @@ invariant valid_c :
 ((\offset_min(c) <= 0) && (\offset_max(c) >= 1))
 
 unit test()
-  requires (C_13 : ((((((((C_20 : (\offset_min(a) <= 0)) &&
-                           (C_21 : (\offset_max(a) >= 1))) &&
-                          ((C_23 : (\offset_min(b) <= 0)) &&
-                            (C_24 : (\offset_max(b) >= 1)))) &&
-                         ((C_26 : (\offset_min(c) <= 0)) &&
-                           (C_27 : (\offset_max(c) >= 1)))) &&
-                        (C_28 : (\real_abs(((b + 0).doubleM :> real)) <= 1.0))) &&
-                       (C_29 : (\real_abs(((b + 1).doubleM :> real)) <= 1.0))) &&
-                      (C_30 : (\real_abs(((c + 0).doubleM :> real)) <= 1.0))) &&
-                     (C_31 : (\real_abs(((c + 1).doubleM :> real)) <= 1.0))));
+  requires (_C_13 : ((((((((_C_20 : (\offset_min(a) <= 0)) &&
+                            (_C_21 : (\offset_max(a) >= 1))) &&
+                           ((_C_23 : (\offset_min(b) <= 0)) &&
+                             (_C_24 : (\offset_max(b) >= 1)))) &&
+                          ((_C_26 : (\offset_min(c) <= 0)) &&
+                            (_C_27 : (\offset_max(c) >= 1)))) &&
+                         (_C_28 : (\real_abs(((b + 0).doubleM :> real)) <=
+                                    1.0))) &&
+                        (_C_29 : (\real_abs(((b + 1).doubleM :> real)) <=
+                                   1.0))) &&
+                       (_C_30 : (\real_abs(((c + 0).doubleM :> real)) <= 1.0))) &&
+                      (_C_31 : (\real_abs(((c + 1).doubleM :> real)) <= 1.0))));
 behavior default:
-  ensures (C_12 : true);
+  ensures (_C_12 : true);
 {  
-   {  (C_5 : ((C_4 : (a + 0).doubleM) = (C_3 : ((C_2 : (b + 0).doubleM) +
-                                                 (C_1 : (c + 0).doubleM)))));
-      (C_10 : ((C_9 : (a + 1).doubleM) = (C_8 : ((C_7 : (b + 1).doubleM) +
-                                                  (C_6 : (c + 1).doubleM)))));
+   {  (_C_5 : ((_C_4 : (a + 0).doubleM) = (_C_3 : ((_C_2 : (b + 0).doubleM) +
+                                                    (_C_1 : (c + 0).doubleM)))));
+      (_C_10 : ((_C_9 : (a + 1).doubleM) = (_C_8 : ((_C_7 : (b + 1).doubleM) +
+                                                     (_C_6 : (c + 1).doubleM)))));
       
       {  
-         (assert for default: (C_11 : (jessie : (\real_abs((((a + 0).doubleM :> real) -
-                                                             (((b + 0).doubleM :> real) +
-                                                               ((c + 0).doubleM :> real)))) <=
-                                                  0x1p-53))));
+         (assert for default: (_C_11 : (jessie : (\real_abs((((a + 0).doubleM :> real) -
+                                                              (((b + 0).doubleM :> real) +
+                                                                ((c + 0).doubleM :> real)))) <=
+                                                   0x1p-53))));
          ()
       };
       
@@ -121,35 +123,17 @@ behavior default:
    }
 }
 ========== file tests/c/array_double.jessie/array_double.cloc ==========
-[C_15]
+[_C_28]
 file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 116
+line = 13
+begin = 6
+end = 23
 
-[C_11]
+[_C_31]
 file = "HOME/tests/c/array_double.c"
-line = 21
-begin = 13
-end = 50
-
-[C_1]
-file = "HOME/tests/c/array_double.c"
-line = 19
-begin = 16
-end = 20
-
-[C_9]
-file = "HOME/tests/c/array_double.c"
-line = 20
-begin = 9
-end = 20
-
-[C_10]
-file = "HOME/tests/c/array_double.c"
-line = 20
-begin = 9
-end = 20
+line = 16
+begin = 6
+end = 23
 
 [test]
 name = "Function test"
@@ -158,159 +142,177 @@ line = 18
 begin = 5
 end = 9
 
-[C_20]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 18
-
-[C_17]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 62
-
-[C_5]
+[_C_4]
 file = "HOME/tests/c/array_double.c"
 line = 19
 begin = 9
 end = 20
 
-[C_29]
+[_C_23]
 file = "HOME/tests/c/array_double.c"
-line = 14
-begin = 6
-end = 23
+line = 11
+begin = 2
+end = 18
 
-[C_13]
+[_C_19]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 18
+
+[_C_13]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
 end = 170
 
-[C_7]
-file = "HOME/tests/c/array_double.c"
-line = 20
-begin = 9
-end = 13
-
-[C_22]
-file = "HOME/tests/c/array_double.c"
-line = 11
-begin = 2
-end = 18
-
-[C_14]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 143
-
-[C_25]
-file = "HOME/tests/c/array_double.c"
-line = 12
-begin = 2
-end = 18
-
-[C_8]
-file = "HOME/tests/c/array_double.c"
-line = 20
-begin = 9
-end = 20
-
-[C_27]
-file = "HOME/tests/c/array_double.c"
-line = 12
-begin = 2
-end = 18
-
-[C_19]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 18
-
-[C_4]
+[_C_5]
 file = "HOME/tests/c/array_double.c"
 line = 19
 begin = 9
 end = 20
 
-[C_12]
+[_C_12]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[C_26]
-file = "HOME/tests/c/array_double.c"
-line = 12
-begin = 2
-end = 18
-
-[C_18]
-file = "HOME/tests/c/array_double.c"
-line = 10
-begin = 2
-end = 40
-
-[C_2]
-file = "HOME/tests/c/array_double.c"
-line = 19
-begin = 9
-end = 13
-
-[C_28]
-file = "HOME/tests/c/array_double.c"
-line = 13
-begin = 6
-end = 23
-
-[C_24]
+[_C_22]
 file = "HOME/tests/c/array_double.c"
 line = 11
 begin = 2
 end = 18
 
-[C_6]
+[_C_9]
 file = "HOME/tests/c/array_double.c"
 line = 20
-begin = 16
+begin = 9
 end = 20
 
-[C_30]
+[_C_30]
 file = "HOME/tests/c/array_double.c"
 line = 15
 begin = 6
 end = 23
 
-[C_21]
+[_C_6]
+file = "HOME/tests/c/array_double.c"
+line = 20
+begin = 16
+end = 20
+
+[_C_24]
+file = "HOME/tests/c/array_double.c"
+line = 11
+begin = 2
+end = 18
+
+[_C_20]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
 end = 18
 
-[C_3]
+[_C_3]
 file = "HOME/tests/c/array_double.c"
 line = 19
 begin = 9
 end = 20
 
-[C_16]
+[_C_17]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 62
+
+[_C_7]
+file = "HOME/tests/c/array_double.c"
+line = 20
+begin = 9
+end = 13
+
+[_C_27]
+file = "HOME/tests/c/array_double.c"
+line = 12
+begin = 2
+end = 18
+
+[_C_15]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 116
+
+[_C_26]
+file = "HOME/tests/c/array_double.c"
+line = 12
+begin = 2
+end = 18
+
+[_C_10]
+file = "HOME/tests/c/array_double.c"
+line = 20
+begin = 9
+end = 20
+
+[_C_8]
+file = "HOME/tests/c/array_double.c"
+line = 20
+begin = 9
+end = 20
+
+[_C_18]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 40
+
+[_C_29]
+file = "HOME/tests/c/array_double.c"
+line = 14
+begin = 6
+end = 23
+
+[_C_14]
+file = "HOME/tests/c/array_double.c"
+line = 10
+begin = 2
+end = 143
+
+[_C_2]
+file = "HOME/tests/c/array_double.c"
+line = 19
+begin = 9
+end = 13
+
+[_C_16]
 file = "HOME/tests/c/array_double.c"
 line = 10
 begin = 2
 end = 89
 
-[C_31]
+[_C_1]
 file = "HOME/tests/c/array_double.c"
-line = 16
-begin = 6
-end = 23
+line = 19
+begin = 16
+end = 20
 
-[C_23]
+[_C_25]
 file = "HOME/tests/c/array_double.c"
-line = 11
+line = 12
+begin = 2
+end = 18
+
+[_C_11]
+file = "HOME/tests/c/array_double.c"
+line = 21
+begin = 13
+end = 50
+
+[_C_21]
+file = "HOME/tests/c/array_double.c"
+line = 10
 begin = 2
 end = 18
 
@@ -1310,43 +1312,38 @@ let test_ensures_default =
             and (JC_33: valid_a(doubleP_a_1_alloc_table)))))) }
   (init:
   try
-   (C_5:
    begin
      (let _jessie_<num> =
-     (C_3:
      (JC_49:
-     (((add_double_safe nearest_even) (C_2:
-                                      ((safe_acc_ !doubleP_doubleM_b_2) 
-                                       ((shift b) (0))))) (C_1:
-                                                          ((safe_acc_ !doubleP_doubleM_c_3) 
-                                                           ((shift c) (0))))))) in
+     (((add_double_safe nearest_even) ((safe_acc_ !doubleP_doubleM_b_2) 
+                                       ((shift b) (0)))) ((safe_acc_ !doubleP_doubleM_c_3) 
+                                                          ((shift c) (0))))) in
      (let _jessie_<num> = a in
-     (((safe_upd_ doubleP_doubleM_a_1) _jessie_<num>) _jessie_<num>)));
-    (C_10:
-    begin
-      (let _jessie_<num> =
-      (C_8:
-      (JC_50:
-      (((add_double_safe nearest_even) (C_7:
-                                       ((safe_acc_ !doubleP_doubleM_b_2) 
-                                        ((shift b) (1))))) (C_6:
-                                                           ((safe_acc_ !doubleP_doubleM_c_3) 
-                                                            ((shift c) (1))))))) in
-      (let _jessie_<num> = a in
-      (let _jessie_<num> = (1) in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (let _jessie_<num> = ((shift _jessie_<num>) (1)) in
-      (((safe_upd_ doubleP_doubleM_a_1) _jessie_<num>) _jessie_<num>))))));
-     (assert
-     { (JC_51:
-       le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_a_1,
-                                              shift(a, (0)))),
-                        add_real(double_value(select(doubleP_doubleM_b_2,
-                                              shift(b, (0)))),
-                        double_value(select(doubleP_doubleM_c_3,
-                                     shift(c, (0))))))),
-       0x1p-53)) }; void); void; (raise Return); (raise Return) end) end)
-   with Return -> void end) { (JC_36: true) }
+     (let _jessie_<num> =
+     (JC_50:
+     (((add_double_safe nearest_even) ((safe_acc_ !doubleP_doubleM_b_2) 
+                                       ((shift b) (1)))) ((safe_acc_ !doubleP_doubleM_c_3) 
+                                                          ((shift c) (1))))) in
+     (let _jessie_<num> = a in
+     (let _jessie_<num> = (1) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+     [ { } unit reads doubleP_a_1_alloc_table,doubleP_doubleM_a_1
+       writes doubleP_doubleM_a_1
+       { (not_assigns(doubleP_a_1_alloc_table, doubleP_doubleM_a_1@,
+          doubleP_doubleM_a_1,
+          pset_range(pset_singleton(_jessie_<num>), (0), (1)))
+         and ((select(doubleP_doubleM_a_1, shift(_jessie_<num>, (0))) = _jessie_<num>)
+             and (select(doubleP_doubleM_a_1, shift(_jessie_<num>, (1))) = _jessie_<num>))) } ]))))));
+    (assert
+    { (JC_51:
+      le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_a_1,
+                                             shift(a, (0)))),
+                       add_real(double_value(select(doubleP_doubleM_b_2,
+                                             shift(b, (0)))),
+                       double_value(select(doubleP_doubleM_c_3,
+                                    shift(c, (0))))))),
+      0x1p-53)) }; void); void; (raise Return); (raise Return) end with
+   Return -> void end) { (JC_36: true) }
 
 let test_safety =
  fun (tt : unit) ->
@@ -1384,39 +1381,36 @@ let test_safety =
             and (JC_33: valid_a(doubleP_a_1_alloc_table)))))) }
   (init:
   try
-   (C_5:
    begin
      (let _jessie_<num> =
-     (C_3:
      (JC_46:
-     (((add_double nearest_even) (C_2:
-                                 ((safe_acc_ !doubleP_doubleM_b_2) ((shift b) (0))))) 
-      (C_1: ((safe_acc_ !doubleP_doubleM_c_3) ((shift c) (0))))))) in
+     (((add_double nearest_even) ((safe_acc_ !doubleP_doubleM_b_2) ((shift b) (0)))) 
+      ((safe_acc_ !doubleP_doubleM_c_3) ((shift c) (0))))) in
      (let _jessie_<num> = a in
-     (((safe_upd_ doubleP_doubleM_a_1) _jessie_<num>) _jessie_<num>)));
-    (C_10:
-    begin
-      (let _jessie_<num> =
-      (C_8:
-      (JC_47:
-      (((add_double nearest_even) (C_7:
-                                  ((safe_acc_ !doubleP_doubleM_b_2) ((shift b) (1))))) 
-       (C_6: ((safe_acc_ !doubleP_doubleM_c_3) ((shift c) (1))))))) in
-      (let _jessie_<num> = a in
-      (let _jessie_<num> = (1) in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (let _jessie_<num> = ((shift _jessie_<num>) (1)) in
-      (((safe_upd_ doubleP_doubleM_a_1) _jessie_<num>) _jessie_<num>))))));
-     [ { } unit
-       reads doubleP_doubleM_a_1,doubleP_doubleM_b_2,doubleP_doubleM_c_3
-       { (JC_48:
-         le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_a_1,
-                                                shift(a, (0)))),
-                          add_real(double_value(select(doubleP_doubleM_b_2,
-                                                shift(b, (0)))),
-                          double_value(select(doubleP_doubleM_c_3,
-                                       shift(c, (0))))))),
-         0x1p-53)) } ]; void; (raise Return); (raise Return) end) end) with
+     (let _jessie_<num> =
+     (JC_47:
+     (((add_double nearest_even) ((safe_acc_ !doubleP_doubleM_b_2) ((shift b) (1)))) 
+      ((safe_acc_ !doubleP_doubleM_c_3) ((shift c) (1))))) in
+     (let _jessie_<num> = a in
+     (let _jessie_<num> = (1) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+     [ { } unit reads doubleP_a_1_alloc_table,doubleP_doubleM_a_1
+       writes doubleP_doubleM_a_1
+       { (not_assigns(doubleP_a_1_alloc_table, doubleP_doubleM_a_1@,
+          doubleP_doubleM_a_1,
+          pset_range(pset_singleton(_jessie_<num>), (0), (1)))
+         and ((select(doubleP_doubleM_a_1, shift(_jessie_<num>, (0))) = _jessie_<num>)
+             and (select(doubleP_doubleM_a_1, shift(_jessie_<num>, (1))) = _jessie_<num>))) } ]))))));
+    [ { } unit
+      reads doubleP_doubleM_a_1,doubleP_doubleM_b_2,doubleP_doubleM_c_3
+      { (JC_48:
+        le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_a_1,
+                                               shift(a, (0)))),
+                         add_real(double_value(select(doubleP_doubleM_b_2,
+                                               shift(b, (0)))),
+                         double_value(select(doubleP_doubleM_c_3,
+                                      shift(c, (0))))))),
+        0x1p-53)) } ]; void; (raise Return); (raise Return) end with
    Return -> void end)
   { (JC_41:
     ((JC_38: valid_c(doubleP_c_3_alloc_table))
@@ -2972,20 +2966,19 @@ goal test_ensures_default_po_1:
   (result0 = select(doubleP_doubleM_c_3, shift(c, 0))) ->
   forall result1:double.
   add_double_post(nearest_even, result, result0, result1) ->
-  forall doubleP_doubleM_a_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_a_1_0 = store(doubleP_doubleM_a_1, a, result1)) ->
   forall result2:double.
   (result2 = select(doubleP_doubleM_b_2, shift(b, 1))) ->
   forall result3:double.
   (result3 = select(doubleP_doubleM_c_3, shift(c, 1))) ->
   forall result4:double.
   add_double_post(nearest_even, result2, result3, result4) ->
-  forall doubleP_doubleM_a_1_1:(doubleP,
+  forall doubleP_doubleM_a_1_0:(doubleP,
   double) memory.
-  (doubleP_doubleM_a_1_1 = store(doubleP_doubleM_a_1_0, shift(a, 1),
-  result4)) ->
-  ("JC_51": (abs_real((double_value(select(doubleP_doubleM_a_1_1, shift(a,
+  (not_assigns(doubleP_a_1_alloc_table, doubleP_doubleM_a_1,
+   doubleP_doubleM_a_1_0, pset_range(pset_singleton(a), 0, 1)) and
+   ((select(doubleP_doubleM_a_1_0, shift(a, 0)) = result1) and
+    (select(doubleP_doubleM_a_1_0, shift(a, 1)) = result4))) ->
+  ("JC_51": (abs_real((double_value(select(doubleP_doubleM_a_1_0, shift(a,
   0))) - (double_value(select(doubleP_doubleM_b_2, shift(b,
   0))) + double_value(select(doubleP_doubleM_c_3, shift(c,
   0)))))) <= 0x1.p-53))
@@ -3028,8 +3021,6 @@ goal test_safety_po_2:
   forall doubleP_a_1_alloc_table:doubleP alloc_table.
   forall doubleP_b_2_alloc_table:doubleP alloc_table.
   forall doubleP_c_3_alloc_table:doubleP alloc_table.
-  forall doubleP_doubleM_a_1:(doubleP,
-  double) memory.
   forall doubleP_doubleM_b_2:(doubleP,
   double) memory.
   forall doubleP_doubleM_c_3:(doubleP,
@@ -3061,9 +3052,6 @@ goal test_safety_po_2:
   (double_value(result) + double_value(result0))) ->
   forall result1:double.
   add_double_post(nearest_even, result, result0, result1) ->
-  forall doubleP_doubleM_a_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_a_1_0 = store(doubleP_doubleM_a_1, a, result1)) ->
   forall result2:double.
   (result2 = select(doubleP_doubleM_b_2, shift(b, 1))) ->
   forall result3:double.
@@ -3108,9 +3096,6 @@ goal test_safety_po_3:
   (double_value(result) + double_value(result0))) ->
   forall result1:double.
   add_double_post(nearest_even, result, result0, result1) ->
-  forall doubleP_doubleM_a_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_a_1_0 = store(doubleP_doubleM_a_1, a, result1)) ->
   forall result2:double.
   (result2 = select(doubleP_doubleM_b_2, shift(b, 1))) ->
   forall result3:double.
@@ -3119,11 +3104,13 @@ goal test_safety_po_3:
   (double_value(result2) + double_value(result3))) ->
   forall result4:double.
   add_double_post(nearest_even, result2, result3, result4) ->
-  forall doubleP_doubleM_a_1_1:(doubleP,
+  forall doubleP_doubleM_a_1_0:(doubleP,
   double) memory.
-  (doubleP_doubleM_a_1_1 = store(doubleP_doubleM_a_1_0, shift(a, 1),
-  result4)) ->
-  ("JC_48": (abs_real((double_value(select(doubleP_doubleM_a_1_1, shift(a,
+  (not_assigns(doubleP_a_1_alloc_table, doubleP_doubleM_a_1,
+   doubleP_doubleM_a_1_0, pset_range(pset_singleton(a), 0, 1)) and
+   ((select(doubleP_doubleM_a_1_0, shift(a, 0)) = result1) and
+    (select(doubleP_doubleM_a_1_0, shift(a, 1)) = result4))) ->
+  ("JC_48": (abs_real((double_value(select(doubleP_doubleM_a_1_0, shift(a,
   0))) - (double_value(select(doubleP_doubleM_b_2, shift(b,
   0))) + double_value(select(doubleP_doubleM_c_3, shift(c,
   0)))))) <= 0x1.p-53)) ->
@@ -3166,9 +3153,6 @@ goal test_safety_po_4:
   (double_value(result) + double_value(result0))) ->
   forall result1:double.
   add_double_post(nearest_even, result, result0, result1) ->
-  forall doubleP_doubleM_a_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_a_1_0 = store(doubleP_doubleM_a_1, a, result1)) ->
   forall result2:double.
   (result2 = select(doubleP_doubleM_b_2, shift(b, 1))) ->
   forall result3:double.
@@ -3177,11 +3161,13 @@ goal test_safety_po_4:
   (double_value(result2) + double_value(result3))) ->
   forall result4:double.
   add_double_post(nearest_even, result2, result3, result4) ->
-  forall doubleP_doubleM_a_1_1:(doubleP,
+  forall doubleP_doubleM_a_1_0:(doubleP,
   double) memory.
-  (doubleP_doubleM_a_1_1 = store(doubleP_doubleM_a_1_0, shift(a, 1),
-  result4)) ->
-  ("JC_48": (abs_real((double_value(select(doubleP_doubleM_a_1_1, shift(a,
+  (not_assigns(doubleP_a_1_alloc_table, doubleP_doubleM_a_1,
+   doubleP_doubleM_a_1_0, pset_range(pset_singleton(a), 0, 1)) and
+   ((select(doubleP_doubleM_a_1_0, shift(a, 0)) = result1) and
+    (select(doubleP_doubleM_a_1_0, shift(a, 1)) = result4))) ->
+  ("JC_48": (abs_real((double_value(select(doubleP_doubleM_a_1_0, shift(a,
   0))) - (double_value(select(doubleP_doubleM_b_2, shift(b,
   0))) + double_value(select(doubleP_doubleM_c_3, shift(c,
   0)))))) <= 0x1.p-53)) ->
@@ -3224,9 +3210,6 @@ goal test_safety_po_5:
   (double_value(result) + double_value(result0))) ->
   forall result1:double.
   add_double_post(nearest_even, result, result0, result1) ->
-  forall doubleP_doubleM_a_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_a_1_0 = store(doubleP_doubleM_a_1, a, result1)) ->
   forall result2:double.
   (result2 = select(doubleP_doubleM_b_2, shift(b, 1))) ->
   forall result3:double.
@@ -3235,11 +3218,13 @@ goal test_safety_po_5:
   (double_value(result2) + double_value(result3))) ->
   forall result4:double.
   add_double_post(nearest_even, result2, result3, result4) ->
-  forall doubleP_doubleM_a_1_1:(doubleP,
+  forall doubleP_doubleM_a_1_0:(doubleP,
   double) memory.
-  (doubleP_doubleM_a_1_1 = store(doubleP_doubleM_a_1_0, shift(a, 1),
-  result4)) ->
-  ("JC_48": (abs_real((double_value(select(doubleP_doubleM_a_1_1, shift(a,
+  (not_assigns(doubleP_a_1_alloc_table, doubleP_doubleM_a_1,
+   doubleP_doubleM_a_1_0, pset_range(pset_singleton(a), 0, 1)) and
+   ((select(doubleP_doubleM_a_1_0, shift(a, 0)) = result1) and
+    (select(doubleP_doubleM_a_1_0, shift(a, 1)) = result4))) ->
+  ("JC_48": (abs_real((double_value(select(doubleP_doubleM_a_1_0, shift(a,
   0))) - (double_value(select(doubleP_doubleM_b_2, shift(b,
   0))) + double_value(select(doubleP_doubleM_c_3, shift(c,
   0)))))) <= 0x1.p-53)) ->

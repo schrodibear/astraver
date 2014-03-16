@@ -145,25 +145,25 @@ lemma real_of_int_succ :
   ((n + 1) == (n + 1.0)))
 
 float f_single(int32 n_1)
-  requires (C_16 : ((C_17 : (0 <= n_1)) && (C_18 : (n_1 <= 1000000))));
+  requires (_C_16 : ((_C_17 : (0 <= n_1)) && (_C_18 : (n_1 <= 1000000))));
 behavior default:
-  ensures (C_15 : (\real_abs(((\result :> real) - (\at(n_1,Old) * 0.1))) <=
-                    (\at(n_1,Old) * (0x1p-8 + 1.49012e-09))));
+  ensures (_C_15 : (\real_abs(((\result :> real) - (\at(n_1,Old) * 0.1))) <=
+                     (\at(n_1,Old) * (0x1p-8 + 1.49012e-09))));
 {  
    (var float t);
    
    (var int32 i);
    
-   {  (C_1 : (t = (0.0 :> float)));
-      (C_2 : (i = 0));
+   {  (_C_1 : (t = (0.0 :> float)));
+      (_C_2 : (i = 0));
       
       loop 
       behavior default:
-        invariant (C_5 : ((C_6 : (0 <= i)) && (C_7 : (i <= n_1))));
+        invariant (_C_5 : ((_C_6 : (0 <= i)) && (_C_7 : (i <= n_1))));
       behavior default:
-        invariant (C_4 : (\real_abs(((t :> real) - (i * 0.1))) <=
-                           (i * (0x1p-8 + 1.49012e-09))));
-      variant (C_3 : (n_1 - i));
+        invariant (_C_4 : (\real_abs(((t :> real) - (i * 0.1))) <=
+                            (i * (0x1p-8 + 1.49012e-09))));
+      variant (_C_3 : (n_1 - i));
       while (true)
       {  
          {  (if (i < n_1) then () else 
@@ -172,27 +172,28 @@ behavior default:
             {  (L : 
                {  
                   {  
-                     (assert for default: (C_8 : (jessie : ((0.0 <=
-                                                              (t :> real)) &&
-                                                             ((t :> real) <=
-                                                               (1000000.0 *
-                                                                 (0.1 +
-                                                                   (0x1p-8 +
+                     (assert for default: (_C_8 : (jessie : ((0.0 <=
+                                                               (t :> real)) &&
+                                                              ((t :> real) <=
+                                                                (1000000.0 *
+                                                                  (0.1 +
+                                                                    (0x1p-8 +
                                                                     1.49012e-09))))))));
                      ()
                   };
-                  (C_10 : (t = (C_9 : (t + (0.1 :> float)))))
+                  (_C_10 : (t = (_C_9 : (t + (0.1 :> float)))))
                });
                
                {  
-                  (assert for default: (C_11 : (jessie : (\real_abs(((t :> real) -
-                                                                    ((\at(t,L) :> real) +
-                                                                    ((0.1 :> float) :> real)))) <=
-                                                           0x1p-8))));
+                  (assert for default: (_C_11 : (jessie : (\real_abs(
+                                                            ((t :> real) -
+                                                              ((\at(t,L) :> real) +
+                                                                ((0.1 :> float) :> real)))) <=
+                                                            0x1p-8))));
                   ()
                }
             };
-            (C_14 : (i = (C_13 : ((C_12 : (i + 1)) :> int32))))
+            (_C_14 : (i = (_C_13 : ((_C_12 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -201,24 +202,6 @@ behavior default:
    }
 }
 ========== file tests/c/clock_drift.jessie/clock_drift.cloc ==========
-[C_15]
-file = "HOME/tests/c/clock_drift.c"
-line = 67
-begin = 12
-end = 63
-
-[C_11]
-file = "HOME/tests/c/clock_drift.c"
-line = 82
-begin = 15
-end = 58
-
-[C_1]
-file = "HOME/tests/c/clock_drift.c"
-line = 71
-begin = 2
-end = 7
-
 [real_of_int_succ]
 name = "Lemma real_of_int_succ"
 file = "HOME/tests/c/clock_drift.c"
@@ -226,29 +209,29 @@ line = 45
 begin = 4
 end = 62
 
-[C_9]
+[_C_4]
 file = "HOME/tests/c/clock_drift.c"
-line = 81
-begin = 8
-end = 16
+line = 75
+begin = 21
+end = 68
 
-[C_10]
+[_C_13]
 file = "HOME/tests/c/clock_drift.c"
-line = 81
-begin = 8
-end = 16
+line = 78
+begin = 14
+end = 17
 
-[C_17]
-file = "HOME/tests/c/clock_drift.c"
-line = 66
-begin = 13
-end = 19
-
-[C_5]
+[_C_5]
 file = "HOME/tests/c/clock_drift.c"
 line = 74
 begin = 21
 end = 32
+
+[_C_12]
+file = "HOME/tests/c/clock_drift.c"
+line = 78
+begin = 14
+end = 17
 
 [real_of_int_inf_NMAX]
 name = "Lemma real_of_int_inf_NMAX"
@@ -257,29 +240,29 @@ line = 38
 begin = 4
 end = 89
 
-[C_13]
+[_C_9]
 file = "HOME/tests/c/clock_drift.c"
-line = 78
-begin = 14
-end = 17
+line = 81
+begin = 8
+end = 16
 
-[C_7]
+[_C_6]
 file = "HOME/tests/c/clock_drift.c"
 line = 74
-begin = 26
-end = 32
+begin = 21
+end = 27
 
-[C_14]
+[_C_3]
 file = "HOME/tests/c/clock_drift.c"
-line = 78
-begin = 14
-end = 17
+line = 76
+begin = 19
+end = 22
 
-[C_8]
+[_C_17]
 file = "HOME/tests/c/clock_drift.c"
-line = 80
-begin = 15
-end = 65
+line = 66
+begin = 13
+end = 19
 
 [f_single]
 name = "Function f_single"
@@ -288,47 +271,65 @@ line = 69
 begin = 6
 end = 14
 
-[C_4]
+[_C_7]
 file = "HOME/tests/c/clock_drift.c"
-line = 75
-begin = 21
-end = 68
+line = 74
+begin = 26
+end = 32
 
-[C_12]
+[_C_15]
 file = "HOME/tests/c/clock_drift.c"
-line = 78
-begin = 14
-end = 17
+line = 67
+begin = 12
+end = 63
 
-[C_18]
+[_C_10]
+file = "HOME/tests/c/clock_drift.c"
+line = 81
+begin = 8
+end = 16
+
+[_C_8]
+file = "HOME/tests/c/clock_drift.c"
+line = 80
+begin = 15
+end = 65
+
+[_C_18]
 file = "HOME/tests/c/clock_drift.c"
 line = 66
 begin = 18
 end = 30
 
-[C_2]
+[_C_14]
+file = "HOME/tests/c/clock_drift.c"
+line = 78
+begin = 14
+end = 17
+
+[_C_2]
 file = "HOME/tests/c/clock_drift.c"
 line = 78
 begin = 8
 end = 9
 
-[C_6]
-file = "HOME/tests/c/clock_drift.c"
-line = 74
-begin = 21
-end = 27
-
-[C_3]
-file = "HOME/tests/c/clock_drift.c"
-line = 76
-begin = 19
-end = 22
-
-[C_16]
+[_C_16]
 file = "HOME/tests/c/clock_drift.c"
 line = 66
 begin = 13
 end = 30
+
+[_C_1]
+file = "HOME/tests/c/clock_drift.c"
+line = 71
+begin = 2
+end = 7
+
+[_C_11]
+file = "HOME/tests/c/clock_drift.c"
+line = 82
+begin = 15
+end = 58
 
 ========== jessie execution ==========
 Generating Why function f_single
@@ -520,7 +521,7 @@ end = 62
 file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
 line = 57
 begin = 6
-end = 1641
+end = 1711
 
 [JC_17]
 file = "HOME/"
@@ -721,7 +722,7 @@ end = 65
 file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
 line = 57
 begin = 6
-end = 1641
+end = 1711
 
 [JC_3]
 file = "HOME/tests/c/clock_drift.c"
@@ -733,13 +734,13 @@ end = 30
 file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
 line = 57
 begin = 6
-end = 1641
+end = 1711
 
 [JC_30]
 file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
 line = 57
 begin = 6
-end = 1641
+end = 1711
 
 [JC_28]
 file = "HOME/tests/c/clock_drift.c"
@@ -1133,71 +1134,55 @@ let f_single_ensures_default =
      (let t = ref (any_single void) in
      (let i = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<num> = (t := (single_of_real_exact 0.0)) in void);
-       (C_2:
+       (let _jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_2:
        begin
-         (let _jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
-        (loop_2:
-        begin
-          while true do
-          { invariant
-              ((JC_25:
-               le_real(abs_real(sub_real(single_value(t),
-                                mul_real(real_of_int(integer_of_int32(i)),
-                                0.1))),
-               mul_real(real_of_int(integer_of_int32(i)),
-               add_real(0x1p-8, 1.49012e-09))))
-              and (JC_28:
-                  ((JC_26: le_int((0), integer_of_int32(i)))
-                  and (JC_27:
-                      le_int(integer_of_int32(i), integer_of_int32(n_1))))))
-             }
-           begin
-             [ { } unit { true } ];
-            try
-             begin
-               (let _jessie_<num> =
+         while true do
+         { invariant
+             ((JC_25:
+              le_real(abs_real(sub_real(single_value(t),
+                               mul_real(real_of_int(integer_of_int32(i)),
+                               0.1))),
+              mul_real(real_of_int(integer_of_int32(i)),
+              add_real(0x1p-8, 1.49012e-09))))
+             and (JC_28:
+                 ((JC_26: le_int((0), integer_of_int32(i)))
+                 and (JC_27:
+                     le_int(integer_of_int32(i), integer_of_int32(n_1))))))
+            }
+          begin
+            [ { } unit { true } ];
+           try
+            begin
+              (let _jessie_<num> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (L:
                begin
-                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (L:
-                begin
-                  (let _jessie_<num> =
-                  begin
-                    (assert
-                    { (JC_32:
-                      (le_real(0.0, single_value(t))
-                      and le_real(single_value(t),
-                          mul_real(1000000.0,
-                          add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) };
-                    void);
-                   begin
-                     void;
-                    (C_10:
-                    begin
-                      (t := (C_9:
-                            (JC_33:
-                            (((add_single_safe nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
-                     !t end) end end in void);
-                 (assert
-                 { (JC_34:
-                   le_real(abs_real(sub_real(single_value(t),
-                                    add_real(single_value(t@L),
-                                    0x1.99999ap-4))),
-                   0x1p-8)) }; void);
+                 (let _jessie_<num> =
                  begin
-                   void;
-                  (C_14:
-                  begin
-                    (i := (C_13:
-                          (safe_int32_of_integer_ (C_12:
-                                                  ((add_int (integer_of_int32 !i)) (1))))));
-                   !i end) end end) end in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+                   (assert
+                   { (JC_32:
+                     (le_real(0.0, single_value(t))
+                     and le_real(single_value(t),
+                         mul_real(1000000.0,
+                         add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) };
+                   void); void;
+                  (t := (JC_33:
+                        (((add_single_safe nearest_even) !t) (single_of_real_exact 0x1.99999ap-4))));
+                  !t end in void);
+                (assert
+                { (JC_34:
+                  le_real(abs_real(sub_real(single_value(t),
+                                   add_real(single_value(t@L), 0x1.99999ap-4))),
+                  0x1p-8)) }; void); void;
+                (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+                !i end) end in void); (raise (Loop_continue_exc void)) end
+            with Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (return := !t); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -1219,72 +1204,58 @@ let f_single_safety =
      (let t = ref (any_single void) in
      (let i = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<num> = (t := (single_of_real_exact 0.0)) in void);
-       (C_2:
+       (let _jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_1:
        begin
-         (let _jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
-        (loop_1:
-        begin
-          while true do
-          { invariant (JC_18: true)
-            variant (JC_24 : sub_int(integer_of_int32(n_1),
-                             integer_of_int32(i))) }
-           begin
-             [ { } unit reads i,t
-               { ((JC_13:
-                  le_real(abs_real(sub_real(single_value(t),
-                                   mul_real(real_of_int(integer_of_int32(i)),
-                                   0.1))),
-                  mul_real(real_of_int(integer_of_int32(i)),
-                  add_real(0x1p-8, 1.49012e-09))))
-                 and (JC_16:
-                     ((JC_14: le_int((0), integer_of_int32(i)))
-                     and (JC_15:
-                         le_int(integer_of_int32(i), integer_of_int32(n_1)))))) } ];
-            try
-             begin
-               (let _jessie_<num> =
+         while true do
+         { invariant (JC_18: true)
+           variant (JC_24 : sub_int(integer_of_int32(n_1),
+                            integer_of_int32(i))) }
+          begin
+            [ { } unit reads i,t
+              { ((JC_13:
+                 le_real(abs_real(sub_real(single_value(t),
+                                  mul_real(real_of_int(integer_of_int32(i)),
+                                  0.1))),
+                 mul_real(real_of_int(integer_of_int32(i)),
+                 add_real(0x1p-8, 1.49012e-09))))
+                and (JC_16:
+                    ((JC_14: le_int((0), integer_of_int32(i)))
+                    and (JC_15:
+                        le_int(integer_of_int32(i), integer_of_int32(n_1)))))) } ];
+           try
+            begin
+              (let _jessie_<num> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (L:
                begin
-                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (L:
-                begin
-                  (let _jessie_<num> =
-                  begin
-                    [ { } unit reads t
-                      { (JC_20:
-                        (le_real(0.0, single_value(t))
-                        and le_real(single_value(t),
-                            mul_real(1000000.0,
-                            add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) } ];
-                   begin
-                     void;
-                    (C_10:
-                    begin
-                      (t := (C_9:
-                            (JC_21:
-                            (((add_single nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
-                     !t end) end end in void);
-                 [ { } unit reads t
-                   { (JC_22:
-                     le_real(abs_real(sub_real(single_value(t),
-                                      add_real(single_value(t@L),
-                                      0x1.99999ap-4))),
-                     0x1p-8)) } ];
+                 (let _jessie_<num> =
                  begin
-                   void;
-                  (C_14:
-                  begin
-                    (i := (C_13:
-                          (JC_23:
-                          (int32_of_integer_ (C_12:
-                                             ((add_int (integer_of_int32 !i)) (1)))))));
-                   !i end) end end) end in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+                   [ { } unit reads t
+                     { (JC_20:
+                       (le_real(0.0, single_value(t))
+                       and le_real(single_value(t),
+                           mul_real(1000000.0,
+                           add_real(0.1, add_real(0x1p-8, 1.49012e-09)))))) } ];
+                  void;
+                  (t := (JC_21:
+                        (((add_single nearest_even) !t) (single_of_real_exact 0x1.99999ap-4))));
+                  !t end in void);
+                [ { } unit reads t
+                  { (JC_22:
+                    le_real(abs_real(sub_real(single_value(t),
+                                     add_real(single_value(t@L),
+                                     0x1.99999ap-4))),
+                    0x1p-8)) } ]; void;
+                (i := (JC_23:
+                      (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+                !i end) end in void); (raise (Loop_continue_exc void)) end
+            with Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (return := !t); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }

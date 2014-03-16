@@ -46,16 +46,16 @@ tag voidP = {
 type voidP = [voidP]
 
 unit f(intP[..] p, intP[..] q)
-  requires (C_3 : (((C_5 : (\offset_min(p) <= 0)) &&
-                     (C_6 : (\offset_max(p) >= 0))) &&
-                    (C_7 : (! ((\offset_min(q) <= 0) &&
-                                (\offset_max(q) >= 0))))));
+  requires (_C_3 : (((_C_5 : (\offset_min(p) <= 0)) &&
+                      (_C_6 : (\offset_max(p) >= 0))) &&
+                     (_C_7 : (! ((\offset_min(q) <= 0) &&
+                                  (\offset_max(q) >= 0))))));
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    {  (if (p == q) then 
       {  
-         (assert for default: (C_1 : (jessie : (0 == 1))));
+         (assert for default: (_C_1 : (jessie : (0 == 1))));
          ()
       } else ());
       

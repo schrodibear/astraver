@@ -114,92 +114,92 @@ predicate bounded(real z, real bound) =
 double x;
 
 unit AffectDoubleDansX(double d_2)
-  requires (C_7 : bounded((d_2 :> real), 0x1p0));
-  requires (C_6 : (\double_round_error(d_2) == 0));
+  requires (_C_7 : bounded((d_2 :> real), 0x1p0));
+  requires (_C_6 : (\double_round_error(d_2) == 0));
 behavior default:
-  ensures (C_3 : ((C_4 : (\real_abs(((x :> real) -
-                                      ((\at(d_2,Old) :> real) + 1.0))) <=
-                           0x1p-53)) &&
-                   (C_5 : (\double_round_error(x) <= 0x1p-53))));
+  ensures (_C_3 : ((_C_4 : (\real_abs(((x :> real) -
+                                        ((\at(d_2,Old) :> real) + 1.0))) <=
+                             0x1p-53)) &&
+                    (_C_5 : (\double_round_error(x) <= 0x1p-53))));
 {  
-   {  (C_2 : (x = (C_1 : (d_2 + (1.0 :> double)))));
+   {  (_C_2 : (x = (_C_1 : (d_2 + (1.0 :> double)))));
       
       (return ())
    }
 }
 
 unit AffectDoubleDansTab(double d, doubleP[..] X)
-  requires (C_25 : ((C_26 : (\offset_min(X) <= 0)) &&
-                     (C_27 : (\offset_max(X) >= 10))));
-  requires (C_24 : bounded((d :> real), 0x1p0));
-  requires (C_23 : (\double_round_error(d) == 0));
+  requires (_C_25 : ((_C_26 : (\offset_min(X) <= 0)) &&
+                      (_C_27 : (\offset_max(X) >= 10))));
+  requires (_C_24 : bounded((d :> real), 0x1p0));
+  requires (_C_23 : (\double_round_error(d) == 0));
 behavior default:
-  ensures (C_16 : ((C_17 : (\real_abs((((\at(X,Old) + 1).doubleM :> real) -
-                                        ((\at(d,Old) :> real) + 1.0))) <=
-                             0x1p-53)) &&
-                    ((C_19 : (\double_round_error((\at(X,Old) + 1).doubleM) <=
+  ensures (_C_16 : ((_C_17 : (\real_abs((((\at(X,Old) + 1).doubleM :> real) -
+                                          ((\at(d,Old) :> real) + 1.0))) <=
                                0x1p-53)) &&
-                      ((C_21 : (\real_abs((((\at(X,Old) + 2).doubleM :> real) -
-                                            ((\at(d,Old) :> real) + 1.0))) <=
+                     ((_C_19 : (\double_round_error((\at(X,Old) + 1).doubleM) <=
                                  0x1p-53)) &&
-                        (C_22 : (\double_round_error((\at(X,Old) + 2).doubleM) <=
-                                  0x1p-53))))));
+                       ((_C_21 : (\real_abs((((\at(X,Old) + 2).doubleM :> real) -
+                                              ((\at(d,Old) :> real) + 1.0))) <=
+                                   0x1p-53)) &&
+                         (_C_22 : (\double_round_error((\at(X,Old) + 2).doubleM) <=
+                                    0x1p-53))))));
 {  
-   {  (C_11 : ((C_10 : (C_9 : (X + 1)).doubleM) = (C_8 : (d +
-                                                           (1.0 :> double)))));
-      (C_15 : ((C_14 : (C_13 : (X + 2)).doubleM) = (C_12 : (d +
-                                                             (1.0 :> double)))));
+   {  (_C_11 : ((_C_10 : (_C_9 : (X + 1)).doubleM) = (_C_8 : (d +
+                                                               (1.0 :> double)))));
+      (_C_15 : ((_C_14 : (_C_13 : (X + 2)).doubleM) = (_C_12 : (d +
+                                                                 (1.0 :> double)))));
       
       (return ())
    }
 }
 
 unit AffectDoubleDansTab1(double d_1, doubleP[..] X_1)
-  requires (C_37 : ((C_38 : (\offset_min(X_1) <= 0)) &&
-                     (C_39 : (\offset_max(X_1) >= 10))));
-  requires (C_36 : bounded((d_1 :> real), 0x1p0));
-  requires (C_35 : (\double_round_error(d_1) == 0));
+  requires (_C_37 : ((_C_38 : (\offset_min(X_1) <= 0)) &&
+                      (_C_39 : (\offset_max(X_1) >= 10))));
+  requires (_C_36 : bounded((d_1 :> real), 0x1p0));
+  requires (_C_35 : (\double_round_error(d_1) == 0));
 behavior default:
-  ensures (C_32 : ((C_33 : (\real_abs((((\at(X_1,Old) + 1).doubleM :> real) -
-                                        ((\at(d_1,Old) :> real) + 1.0))) <=
-                             0x1p-53)) &&
-                    (C_34 : (\double_round_error((\at(X_1,Old) + 1).doubleM) <=
-                              0x1p-53))));
+  ensures (_C_32 : ((_C_33 : (\real_abs((((\at(X_1,Old) + 1).doubleM :> real) -
+                                          ((\at(d_1,Old) :> real) + 1.0))) <=
+                               0x1p-53)) &&
+                     (_C_34 : (\double_round_error((\at(X_1,Old) + 1).doubleM) <=
+                                0x1p-53))));
 {  
-   {  (C_31 : ((C_30 : (C_29 : (X_1 + 1)).doubleM) = (C_28 : (d_1 +
-                                                               (1.0 :> double)))));
+   {  (_C_31 : ((_C_30 : (_C_29 : (X_1 + 1)).doubleM) = (_C_28 : (d_1 +
+                                                                   (1.0 :> double)))));
       
       (return ())
    }
 }
 
 unit AffectDoubleDansTab0(double d_0, doubleP[..] X_0)
-  requires (C_51 : ((C_52 : (\offset_min(X_0) <= 0)) &&
-                     (C_53 : (\offset_max(X_0) >= 10))));
-  requires (C_50 : bounded((d_0 :> real), 0x1p0));
-  requires (C_49 : (\double_round_error(d_0) == 0));
+  requires (_C_51 : ((_C_52 : (\offset_min(X_0) <= 0)) &&
+                      (_C_53 : (\offset_max(X_0) >= 10))));
+  requires (_C_50 : bounded((d_0 :> real), 0x1p0));
+  requires (_C_49 : (\double_round_error(d_0) == 0));
 behavior default:
-  ensures (C_46 : ((C_47 : (\real_abs((((\at(X_0,Old) + 0).doubleM :> real) -
-                                        ((\at(d_0,Old) :> real) + 1.0))) <=
-                             0x1p-53)) &&
-                    (C_48 : (\double_round_error((\at(X_0,Old) + 0).doubleM) <=
-                              0x1p-53))));
+  ensures (_C_46 : ((_C_47 : (\real_abs((((\at(X_0,Old) + 0).doubleM :> real) -
+                                          ((\at(d_0,Old) :> real) + 1.0))) <=
+                               0x1p-53)) &&
+                     (_C_48 : (\double_round_error((\at(X_0,Old) + 0).doubleM) <=
+                                0x1p-53))));
 {  
-   {  (C_43 : ((C_42 : (C_41 : (X_0 + 0)).doubleM) = (C_40 : (d_0 +
-                                                               (1.0 :> double)))));
+   {  (_C_43 : ((_C_42 : (_C_41 : (X_0 + 0)).doubleM) = (_C_40 : (d_0 +
+                                                                   (1.0 :> double)))));
       
       {  
-         (assert for default: (C_44 : (jessie : (((X_0 + 0).doubleM :> real) ==
-                                                  (\round_double(\NearestEven(
-                                                                 ),
-                                                                 ((d_0 :> real) +
-                                                                   1.0)) :> real)))));
+         (assert for default: (_C_44 : (jessie : (((X_0 + 0).doubleM :> real) ==
+                                                   (\round_double(\NearestEven(
+                                                                  ),
+                                                                  ((d_0 :> real) +
+                                                                    1.0)) :> real)))));
          ()
       };
       
       {  
-         (assert for default: (C_45 : (jessie : (\double_exact((X_0 + 0).doubleM) ==
-                                                  ((d_0 :> real) + 1.0)))));
+         (assert for default: (_C_45 : (jessie : (\double_exact((X_0 + 0).doubleM) ==
+                                                   ((d_0 :> real) + 1.0)))));
          ()
       };
       
@@ -207,53 +207,71 @@ behavior default:
    }
 }
 ========== file tests/c/float_array.jessie/float_array.cloc ==========
-[C_15]
+[_C_52]
 file = "HOME/tests/c/float_array.c"
-line = 32
+line = 49
+begin = 13
+end = 33
+
+[_C_35]
+file = "HOME/tests/c/float_array.c"
+line = 39
+begin = 13
+end = 33
+
+[_C_28]
+file = "HOME/tests/c/float_array.c"
+line = 45
 begin = 13
 end = 18
 
-[C_11]
+[_C_48]
 file = "HOME/tests/c/float_array.c"
-line = 31
-begin = 13
-end = 18
-
-[C_1]
-file = "HOME/tests/c/float_array.c"
-line = 17
-begin = 10
-end = 15
-
-[C_33]
-file = "HOME/tests/c/float_array.c"
-line = 41
+line = 54
 begin = 12
-end = 45
+end = 41
 
-[C_9]
+[_C_51]
 file = "HOME/tests/c/float_array.c"
-line = 31
+line = 49
+begin = 13
+end = 33
+
+[_C_31]
+file = "HOME/tests/c/float_array.c"
+line = 45
+begin = 13
+end = 18
+
+[_C_41]
+file = "HOME/tests/c/float_array.c"
+line = 57
 begin = 8
 end = 9
 
-[C_10]
+[_C_4]
 file = "HOME/tests/c/float_array.c"
-line = 31
-begin = 13
-end = 18
+line = 13
+begin = 12
+end = 42
 
-[C_20]
+[_C_32]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[C_43]
+[_C_23]
 file = "HOME/tests/c/float_array.c"
-line = 57
+line = 23
 begin = 13
-end = 18
+end = 33
+
+[_C_19]
+file = "HOME/tests/c/float_array.c"
+line = 26
+begin = 12
+end = 41
 
 [AffectDoubleDansX]
 name = "Function AffectDoubleDansX"
@@ -262,19 +280,7 @@ line = 16
 begin = 5
 end = 22
 
-[C_32]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_17]
-file = "HOME/tests/c/float_array.c"
-line = 25
-begin = 12
-end = 45
-
-[C_40]
+[_C_42]
 file = "HOME/tests/c/float_array.c"
 line = 57
 begin = 13
@@ -287,91 +293,85 @@ line = 44
 begin = 5
 end = 25
 
-[C_36]
+[_C_13]
 file = "HOME/tests/c/float_array.c"
-line = 38
-begin = 13
-end = 30
+line = 32
+begin = 8
+end = 9
 
-[C_42]
-file = "HOME/tests/c/float_array.c"
-line = 57
-begin = 13
-end = 18
-
-[C_5]
+[_C_5]
 file = "HOME/tests/c/float_array.c"
 line = 14
 begin = 12
 end = 38
 
-[C_34]
+[_C_36]
 file = "HOME/tests/c/float_array.c"
-line = 42
-begin = 12
-end = 41
-
-[C_29]
-file = "HOME/tests/c/float_array.c"
-line = 45
-begin = 8
-end = 9
-
-[C_13]
-file = "HOME/tests/c/float_array.c"
-line = 32
-begin = 8
-end = 9
-
-[C_45]
-file = "HOME/tests/c/float_array.c"
-line = 59
-begin = 19
-end = 40
-
-[C_47]
-file = "HOME/tests/c/float_array.c"
-line = 53
-begin = 12
-end = 45
-
-[C_7]
-file = "HOME/tests/c/float_array.c"
-line = 10
+line = 38
 begin = 13
 end = 30
 
-[C_22]
-file = "HOME/tests/c/float_array.c"
-line = 28
-begin = 12
-end = 41
-
-[C_14]
+[_C_12]
 file = "HOME/tests/c/float_array.c"
 line = 32
 begin = 13
 end = 18
 
-[C_35]
+[_C_33]
 file = "HOME/tests/c/float_array.c"
-line = 39
+line = 41
+begin = 12
+end = 45
+
+[_C_22]
+file = "HOME/tests/c/float_array.c"
+line = 28
+begin = 12
+end = 41
+
+[_C_9]
+file = "HOME/tests/c/float_array.c"
+line = 31
+begin = 8
+end = 9
+
+[_C_30]
+file = "HOME/tests/c/float_array.c"
+line = 45
+begin = 13
+end = 18
+
+[_C_6]
+file = "HOME/tests/c/float_array.c"
+line = 11
 begin = 13
 end = 33
 
-[C_52]
+[_C_49]
 file = "HOME/tests/c/float_array.c"
-line = 49
+line = 51
 begin = 13
 end = 33
 
-[C_25]
+[_C_24]
 file = "HOME/tests/c/float_array.c"
-line = 21
+line = 22
 begin = 13
-end = 33
+end = 30
 
-[C_38]
+[_C_45]
+file = "HOME/tests/c/float_array.c"
+line = 59
+begin = 19
+end = 40
+
+[_C_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_38]
 file = "HOME/tests/c/float_array.c"
 line = 37
 begin = 13
@@ -384,149 +384,155 @@ line = 30
 begin = 5
 end = 24
 
-[C_8]
-file = "HOME/tests/c/float_array.c"
-line = 31
-begin = 13
-end = 18
+[_C_3]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[C_39]
+[_C_17]
 file = "HOME/tests/c/float_array.c"
-line = 37
+line = 25
+begin = 12
+end = 45
+
+[_C_7]
+file = "HOME/tests/c/float_array.c"
+line = 10
+begin = 13
+end = 30
+
+[_C_27]
+file = "HOME/tests/c/float_array.c"
+line = 21
 begin = 13
 end = 33
 
-[C_44]
+[_C_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_44]
 file = "HOME/tests/c/float_array.c"
 line = 58
 begin = 19
 end = 60
 
-[C_27]
-file = "HOME/tests/c/float_array.c"
-line = 21
-begin = 13
-end = 33
-
-[C_50]
-file = "HOME/tests/c/float_array.c"
-line = 50
-begin = 13
-end = 30
-
-[C_46]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_53]
-file = "HOME/tests/c/float_array.c"
-line = 49
-begin = 13
-end = 33
-
-[C_37]
-file = "HOME/tests/c/float_array.c"
-line = 37
-begin = 13
-end = 33
-
-[C_19]
-file = "HOME/tests/c/float_array.c"
-line = 26
-begin = 12
-end = 41
-
-[C_48]
-file = "HOME/tests/c/float_array.c"
-line = 54
-begin = 12
-end = 41
-
-[C_4]
-file = "HOME/tests/c/float_array.c"
-line = 13
-begin = 12
-end = 42
-
-[C_12]
+[_C_15]
 file = "HOME/tests/c/float_array.c"
 line = 32
 begin = 13
 end = 18
 
-[C_26]
+[_C_26]
 file = "HOME/tests/c/float_array.c"
 line = 21
 begin = 13
 end = 33
 
-[C_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[_C_47]
+file = "HOME/tests/c/float_array.c"
+line = 53
+begin = 12
+end = 45
 
-[C_51]
+[_C_10]
+file = "HOME/tests/c/float_array.c"
+line = 31
+begin = 13
+end = 18
+
+[_C_53]
 file = "HOME/tests/c/float_array.c"
 line = 49
 begin = 13
 end = 33
 
-[C_2]
+[_C_40]
+file = "HOME/tests/c/float_array.c"
+line = 57
+begin = 13
+end = 18
+
+[_C_8]
+file = "HOME/tests/c/float_array.c"
+line = 31
+begin = 13
+end = 18
+
+[_C_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_29]
+file = "HOME/tests/c/float_array.c"
+line = 45
+begin = 8
+end = 9
+
+[_C_14]
+file = "HOME/tests/c/float_array.c"
+line = 32
+begin = 13
+end = 18
+
+[_C_50]
+file = "HOME/tests/c/float_array.c"
+line = 50
+begin = 13
+end = 30
+
+[_C_37]
+file = "HOME/tests/c/float_array.c"
+line = 37
+begin = 13
+end = 33
+
+[_C_43]
+file = "HOME/tests/c/float_array.c"
+line = 57
+begin = 13
+end = 18
+
+[_C_2]
 file = "HOME/tests/c/float_array.c"
 line = 17
 begin = 10
 end = 15
 
-[C_28]
+[_C_34]
 file = "HOME/tests/c/float_array.c"
-line = 45
-begin = 13
-end = 18
+line = 42
+begin = 12
+end = 41
 
-[C_24]
-file = "HOME/tests/c/float_array.c"
-line = 22
-begin = 13
-end = 30
+[_C_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[C_6]
+[_C_1]
 file = "HOME/tests/c/float_array.c"
-line = 11
+line = 17
+begin = 10
+end = 15
+
+[_C_25]
+file = "HOME/tests/c/float_array.c"
+line = 21
 begin = 13
 end = 33
 
-[C_30]
+[_C_39]
 file = "HOME/tests/c/float_array.c"
-line = 45
+line = 37
 begin = 13
-end = 18
-
-[C_41]
-file = "HOME/tests/c/float_array.c"
-line = 57
-begin = 8
-end = 9
-
-[C_21]
-file = "HOME/tests/c/float_array.c"
-line = 27
-begin = 12
-end = 45
-
-[C_3]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+end = 33
 
 [AffectDoubleDansTab0]
 name = "Function AffectDoubleDansTab0"
@@ -535,23 +541,17 @@ line = 56
 begin = 5
 end = 25
 
-[C_49]
+[_C_11]
 file = "HOME/tests/c/float_array.c"
-line = 51
-begin = 13
-end = 33
-
-[C_31]
-file = "HOME/tests/c/float_array.c"
-line = 45
+line = 31
 begin = 13
 end = 18
 
-[C_23]
+[_C_21]
 file = "HOME/tests/c/float_array.c"
-line = 23
-begin = 13
-end = 33
+line = 27
+begin = 12
+end = 45
 
 ========== jessie execution ==========
 Generating Why function AffectDoubleDansX
@@ -735,54 +735,54 @@ clean:
 
 ========== file tests/c/float_array.jessie/float_array.loc ==========
 [JC_94]
+kind = FPOverflow
 file = "HOME/tests/c/float_array.c"
-line = 59
-begin = 19
-end = 40
+line = 57
+begin = 13
+end = 18
 
 [JC_73]
 file = "HOME/tests/c/float_array.c"
-line = 49
+line = 51
 begin = 13
 end = 33
 
 [JC_63]
+file = "HOME/tests/c/float_array.c"
+line = 42
+begin = 12
+end = 41
+
+[JC_80]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_80]
-file = "HOME/tests/c/float_array.c"
-line = 50
-begin = 13
-end = 30
-
 [JC_51]
-file = "HOME/tests/c/float_array.c"
-line = 38
-begin = 13
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_71]
+file = "HOME/tests/c/float_array.c"
+line = 49
+begin = 13
+end = 33
+
+[JC_45]
 kind = FPOverflow
 file = "HOME/tests/c/float_array.c"
-line = 45
+line = 31
 begin = 13
 end = 18
 
-[JC_45]
-kind = PointerDeref
-file = "HOME/tests/c/float_array.jessie/float_array.jc"
-line = 77
-begin = 15
-end = 138
-
 [JC_64]
-file = "HOME/tests/c/float_array.c"
-line = 41
-begin = 12
-end = 45
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [AffectDoubleDansTab_ensures_default]
 name = "Function AffectDoubleDansTab"
@@ -794,9 +794,9 @@ end = 24
 
 [JC_85]
 file = "HOME/tests/c/float_array.c"
-line = 54
+line = 53
 begin = 12
-end = 41
+end = 45
 
 [AffectDoubleDansTab1_ensures_default]
 name = "Function AffectDoubleDansTab1"
@@ -820,23 +820,22 @@ begin = 10
 end = 15
 
 [JC_81]
-file = "HOME/tests/c/float_array.c"
-line = 51
-begin = 13
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_55]
+file = "HOME/tests/c/float_array.c"
+line = 38
+begin = 13
+end = 30
+
+[JC_48]
 file = "HOME/tests/c/float_array.c"
 line = 37
 begin = 13
 end = 33
-
-[JC_48]
-kind = FPOverflow
-file = "HOME/tests/c/float_array.c"
-line = 32
-begin = 13
-end = 18
 
 [JC_23]
 file = "HOME/"
@@ -857,10 +856,11 @@ begin = 13
 end = 30
 
 [JC_67]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = FPOverflow
+file = "HOME/tests/c/float_array.c"
+line = 45
+begin = 13
+end = 18
 
 [JC_9]
 file = "HOME/tests/c/float_array.c"
@@ -869,10 +869,10 @@ begin = 12
 end = 42
 
 [JC_75]
-file = "HOME/tests/c/float_array.c"
-line = 51
-begin = 13
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_24]
 file = "HOME/"
@@ -888,9 +888,9 @@ end = 33
 
 [JC_78]
 file = "HOME/tests/c/float_array.c"
-line = 49
+line = 50
 begin = 13
-end = 33
+end = 30
 
 [JC_41]
 file = "HOME/"
@@ -907,23 +907,22 @@ begin = 5
 end = 25
 
 [JC_74]
-file = "HOME/tests/c/float_array.c"
-line = 50
-begin = 13
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_47]
-kind = FPOverflow
 file = "HOME/tests/c/float_array.c"
-line = 31
-begin = 13
-end = 18
-
-[JC_52]
-file = "HOME/tests/c/float_array.c"
-line = 39
+line = 37
 begin = 13
 end = 33
+
+[JC_52]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_26]
 file = "HOME/tests/c/float_array.c"
@@ -938,14 +937,14 @@ begin = -1
 end = -1
 
 [JC_54]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/float_array.c"
+line = 37
+begin = 13
+end = 33
 
 [JC_79]
 file = "HOME/tests/c/float_array.c"
-line = 49
+line = 51
 begin = 13
 end = 33
 
@@ -964,16 +963,16 @@ begin = 5
 end = 25
 
 [JC_82]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_87]
 file = "HOME/tests/c/float_array.c"
 line = 53
 begin = 12
 end = 45
+
+[JC_87]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_11]
 file = "HOME/"
@@ -981,18 +980,11 @@ line = 0
 begin = -1
 end = -1
 
-[JC_98]
-file = "HOME/tests/c/float_array.c"
-line = 59
-begin = 19
-end = 40
-
 [JC_70]
-kind = PointerDeref
-file = "HOME/tests/c/float_array.jessie/float_array.jc"
-line = 98
-begin = 15
-end = 148
+file = "HOME/tests/c/float_array.c"
+line = 49
+begin = 13
+end = 33
 
 [JC_15]
 file = "HOME/"
@@ -1007,10 +999,10 @@ begin = 12
 end = 45
 
 [JC_91]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/float_array.c"
+line = 58
+begin = 19
+end = 60
 
 [JC_39]
 file = "HOME/tests/c/float_array.c"
@@ -1025,10 +1017,10 @@ begin = -1
 end = -1
 
 [JC_83]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/float_array.c"
+line = 54
+begin = 12
+end = 41
 
 [JC_35]
 file = "HOME/"
@@ -1098,15 +1090,15 @@ end = 22
 
 [JC_62]
 file = "HOME/tests/c/float_array.c"
-line = 42
+line = 41
 begin = 12
-end = 41
+end = 45
 
 [JC_88]
-file = "HOME/tests/c/float_array.c"
-line = 54
-begin = 12
-end = 41
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_42]
 file = "HOME/"
@@ -1115,17 +1107,17 @@ begin = -1
 end = -1
 
 [JC_46]
-kind = PointerDeref
-file = "HOME/tests/c/float_array.jessie/float_array.jc"
-line = 79
-begin = 15
-end = 142
+kind = FPOverflow
+file = "HOME/tests/c/float_array.c"
+line = 32
+begin = 13
+end = 18
 
 [JC_61]
-file = "HOME/tests/c/float_array.c"
-line = 41
-begin = 12
-end = 45
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_32]
 file = "HOME/tests/c/float_array.c"
@@ -1135,7 +1127,7 @@ end = 41
 
 [JC_56]
 file = "HOME/tests/c/float_array.c"
-line = 37
+line = 39
 begin = 13
 end = 33
 
@@ -1146,10 +1138,10 @@ begin = 12
 end = 45
 
 [JC_65]
-file = "HOME/tests/c/float_array.c"
-line = 42
-begin = 12
-end = 41
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_29]
 file = "HOME/"
@@ -1158,10 +1150,11 @@ begin = -1
 end = -1
 
 [JC_68]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = PointerDeref
+file = "HOME/tests/c/float_array.jessie/float_array.jc"
+line = 98
+begin = 16
+end = 156
 
 [JC_7]
 file = "HOME/"
@@ -1176,11 +1169,10 @@ begin = -1
 end = -1
 
 [JC_96]
-kind = FPOverflow
 file = "HOME/tests/c/float_array.c"
-line = 57
-begin = 13
-end = 18
+line = 59
+begin = 19
+end = 40
 
 [JC_43]
 kind = FPOverflow
@@ -1196,17 +1188,17 @@ begin = 13
 end = 33
 
 [JC_95]
-kind = PointerDeref
-file = "HOME/tests/c/float_array.jessie/float_array.jc"
-line = 117
-begin = 15
-end = 148
-
-[JC_93]
 file = "HOME/tests/c/float_array.c"
 line = 58
 begin = 19
 end = 60
+
+[JC_93]
+kind = PointerDeref
+file = "HOME/tests/c/float_array.jessie/float_array.jc"
+line = 117
+begin = 16
+end = 156
 
 [AffectDoubleDansX_ensures_default]
 name = "Function AffectDoubleDansX"
@@ -1216,17 +1208,11 @@ line = 16
 begin = 5
 end = 22
 
-[JC_97]
-file = "HOME/tests/c/float_array.c"
-line = 58
-begin = 19
-end = 60
-
 [JC_84]
-file = "HOME/tests/c/float_array.c"
-line = 53
-begin = 12
-end = 45
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_34]
 file = "HOME/tests/c/float_array.c"
@@ -1241,16 +1227,17 @@ begin = -1
 end = -1
 
 [JC_90]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = FPOverflow
+file = "HOME/tests/c/float_array.c"
+line = 57
+begin = 13
+end = 18
 
 [JC_53]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/float_array.c"
+line = 37
+begin = 13
+end = 33
 
 [JC_21]
 file = "HOME/tests/c/float_array.c"
@@ -1259,16 +1246,16 @@ begin = 13
 end = 30
 
 [JC_77]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/float_array.c"
+line = 49
+begin = 13
+end = 33
 
 [JC_49]
 file = "HOME/tests/c/float_array.c"
-line = 37
+line = 38
 begin = 13
-end = 33
+end = 30
 
 [JC_1]
 file = "HOME/tests/c/float_array.c"
@@ -1289,10 +1276,10 @@ begin = 12
 end = 38
 
 [JC_57]
-file = "HOME/tests/c/float_array.c"
-line = 38
-begin = 13
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_89]
 file = "HOME/"
@@ -1307,10 +1294,10 @@ begin = -1
 end = -1
 
 [JC_59]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/float_array.c"
+line = 41
+begin = 12
+end = 45
 
 [JC_20]
 file = "HOME/tests/c/float_array.c"
@@ -1332,23 +1319,22 @@ begin = -1
 end = -1
 
 [JC_92]
-kind = FPOverflow
 file = "HOME/tests/c/float_array.c"
-line = 57
-begin = 13
-end = 18
+line = 59
+begin = 19
+end = 40
 
 [JC_86]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/float_array.c"
+line = 54
+begin = 12
+end = 41
 
 [JC_60]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/float_array.c"
+line = 42
+begin = 12
+end = 41
 
 [AffectDoubleDansTab_safety]
 name = "Function AffectDoubleDansTab"
@@ -1360,9 +1346,9 @@ end = 24
 
 [JC_72]
 file = "HOME/tests/c/float_array.c"
-line = 49
+line = 50
 begin = 13
-end = 33
+end = 30
 
 [JC_19]
 file = "HOME/tests/c/float_array.c"
@@ -1371,14 +1357,14 @@ begin = 13
 end = 33
 
 [JC_76]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/float_array.c"
+line = 49
+begin = 13
+end = 33
 
 [JC_50]
 file = "HOME/tests/c/float_array.c"
-line = 37
+line = 39
 begin = 13
 end = 33
 
@@ -1389,10 +1375,10 @@ begin = -1
 end = -1
 
 [JC_58]
-file = "HOME/tests/c/float_array.c"
-line = 39
-begin = 13
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_28]
 file = "HOME/tests/c/float_array.c"
@@ -1684,13 +1670,13 @@ parameter AffectDoubleDansTab0 :
    doubleP_doubleM_X_0_3:(doubleP, double) memory ref ->
     doubleP_X_0_3_alloc_table:doubleP alloc_table ->
      { } unit reads doubleP_doubleM_X_0_3 writes doubleP_doubleM_X_0_3
-     { (JC_89:
-       ((JC_87:
+     { (JC_87:
+       ((JC_85:
         le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_X_0_3,
                                                shift(X_0, (0)))),
                          add_real(double_value(d_0), 1.0))),
         0x1p-53))
-       and (JC_88:
+       and (JC_86:
            le_real(double_round_error(select(doubleP_doubleM_X_0_3,
                                       shift(X_0, (0)))),
            0x1p-53)))) }
@@ -1700,19 +1686,19 @@ parameter AffectDoubleDansTab0_requires :
   X_0:doubleP pointer ->
    doubleP_doubleM_X_0_3:(doubleP, double) memory ref ->
     doubleP_X_0_3_alloc_table:doubleP alloc_table ->
-     { (JC_76:
-       ((JC_72: le_int(offset_min(doubleP_X_0_3_alloc_table, X_0), (0)))
-       and ((JC_73: ge_int(offset_max(doubleP_X_0_3_alloc_table, X_0), (10)))
-           and ((JC_74: bounded(double_value(d_0), 0x1p0))
-               and (JC_75: (double_round_error(d_0) = 0.0))))))}
+     { (JC_74:
+       ((JC_70: le_int(offset_min(doubleP_X_0_3_alloc_table, X_0), (0)))
+       and ((JC_71: ge_int(offset_max(doubleP_X_0_3_alloc_table, X_0), (10)))
+           and ((JC_72: bounded(double_value(d_0), 0x1p0))
+               and (JC_73: (double_round_error(d_0) = 0.0))))))}
      unit reads doubleP_doubleM_X_0_3 writes doubleP_doubleM_X_0_3
-     { (JC_89:
-       ((JC_87:
+     { (JC_87:
+       ((JC_85:
         le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_X_0_3,
                                                shift(X_0, (0)))),
                          add_real(double_value(d_0), 1.0))),
         0x1p-53))
-       and (JC_88:
+       and (JC_86:
            le_real(double_round_error(select(doubleP_doubleM_X_0_3,
                                       shift(X_0, (0)))),
            0x1p-53)))) }
@@ -1723,13 +1709,13 @@ parameter AffectDoubleDansTab1 :
    doubleP_doubleM_X_1_2:(doubleP, double) memory ref ->
     doubleP_X_1_2_alloc_table:doubleP alloc_table ->
      { } unit reads doubleP_doubleM_X_1_2 writes doubleP_doubleM_X_1_2
-     { (JC_66:
-       ((JC_64:
+     { (JC_64:
+       ((JC_62:
         le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_X_1_2,
                                                shift(X_1, (1)))),
                          add_real(double_value(d_1), 1.0))),
         0x1p-53))
-       and (JC_65:
+       and (JC_63:
            le_real(double_round_error(select(doubleP_doubleM_X_1_2,
                                       shift(X_1, (1)))),
            0x1p-53)))) }
@@ -1739,19 +1725,19 @@ parameter AffectDoubleDansTab1_requires :
   X_1:doubleP pointer ->
    doubleP_doubleM_X_1_2:(doubleP, double) memory ref ->
     doubleP_X_1_2_alloc_table:doubleP alloc_table ->
-     { (JC_53:
-       ((JC_49: le_int(offset_min(doubleP_X_1_2_alloc_table, X_1), (0)))
-       and ((JC_50: ge_int(offset_max(doubleP_X_1_2_alloc_table, X_1), (10)))
-           and ((JC_51: bounded(double_value(d_1), 0x1p0))
-               and (JC_52: (double_round_error(d_1) = 0.0))))))}
+     { (JC_51:
+       ((JC_47: le_int(offset_min(doubleP_X_1_2_alloc_table, X_1), (0)))
+       and ((JC_48: ge_int(offset_max(doubleP_X_1_2_alloc_table, X_1), (10)))
+           and ((JC_49: bounded(double_value(d_1), 0x1p0))
+               and (JC_50: (double_round_error(d_1) = 0.0))))))}
      unit reads doubleP_doubleM_X_1_2 writes doubleP_doubleM_X_1_2
-     { (JC_66:
-       ((JC_64:
+     { (JC_64:
+       ((JC_62:
         le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_X_1_2,
                                                shift(X_1, (1)))),
                          add_real(double_value(d_1), 1.0))),
         0x1p-53))
-       and (JC_65:
+       and (JC_63:
            le_real(double_round_error(select(doubleP_doubleM_X_1_2,
                                       shift(X_1, (1)))),
            0x1p-53)))) }
@@ -1951,123 +1937,115 @@ parameter uint8_of_integer_ :
 
 let AffectDoubleDansTab0_ensures_default =
  fun (d_0 : double) (X_0 : doubleP pointer) (doubleP_doubleM_X_0_3 : (doubleP, double) memory ref) (doubleP_X_0_3_alloc_table : doubleP alloc_table) ->
-  { (JC_82:
-    ((JC_78: le_int(offset_min(doubleP_X_0_3_alloc_table, X_0), (0)))
-    and ((JC_79: ge_int(offset_max(doubleP_X_0_3_alloc_table, X_0), (10)))
-        and ((JC_80: bounded(double_value(d_0), 0x1p0))
-            and (JC_81: (double_round_error(d_0) = 0.0)))))) }
+  { (JC_80:
+    ((JC_76: le_int(offset_min(doubleP_X_0_3_alloc_table, X_0), (0)))
+    and ((JC_77: ge_int(offset_max(doubleP_X_0_3_alloc_table, X_0), (10)))
+        and ((JC_78: bounded(double_value(d_0), 0x1p0))
+            and (JC_79: (double_round_error(d_0) = 0.0)))))) }
   (init:
   try
-   (C_43:
    begin
      (let _jessie_<num> =
-     (C_40:
-     (JC_96:
-     (((add_double_safe nearest_even) d_0) (double_of_real_exact 1.0)))) in
+     (JC_94:
+     (((add_double_safe nearest_even) d_0) (double_of_real_exact 1.0))) in
      (let _jessie_<num> = X_0 in
      (((safe_upd_ doubleP_doubleM_X_0_3) _jessie_<num>) _jessie_<num>)));
     (assert
-    { (JC_97:
+    { (JC_95:
       (double_value(select(doubleP_doubleM_X_0_3, shift(X_0, (0)))) = 
       round_double(nearest_even, add_real(double_value(d_0), 1.0)))) }; void);
     void;
     (assert
-    { (JC_98:
+    { (JC_96:
       (double_exact(select(doubleP_doubleM_X_0_3, shift(X_0, (0)))) = 
       add_real(double_value(d_0), 1.0))) }; void); void; (raise Return);
-    (raise Return) end) with Return -> void end)
-  { (JC_86:
-    ((JC_84:
+    (raise Return) end with Return -> void end)
+  { (JC_84:
+    ((JC_82:
      le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_X_0_3,
                                             shift(X_0, (0)))),
                       add_real(double_value(d_0), 1.0))),
      0x1p-53))
-    and (JC_85:
+    and (JC_83:
         le_real(double_round_error(select(doubleP_doubleM_X_0_3,
                                    shift(X_0, (0)))),
         0x1p-53)))) }
 
 let AffectDoubleDansTab0_safety =
  fun (d_0 : double) (X_0 : doubleP pointer) (doubleP_doubleM_X_0_3 : (doubleP, double) memory ref) (doubleP_X_0_3_alloc_table : doubleP alloc_table) ->
-  { (JC_82:
-    ((JC_78: le_int(offset_min(doubleP_X_0_3_alloc_table, X_0), (0)))
-    and ((JC_79: ge_int(offset_max(doubleP_X_0_3_alloc_table, X_0), (10)))
-        and ((JC_80: bounded(double_value(d_0), 0x1p0))
-            and (JC_81: (double_round_error(d_0) = 0.0)))))) }
+  { (JC_80:
+    ((JC_76: le_int(offset_min(doubleP_X_0_3_alloc_table, X_0), (0)))
+    and ((JC_77: ge_int(offset_max(doubleP_X_0_3_alloc_table, X_0), (10)))
+        and ((JC_78: bounded(double_value(d_0), 0x1p0))
+            and (JC_79: (double_round_error(d_0) = 0.0)))))) }
   (init:
   try
-   (C_43:
    begin
      (let _jessie_<num> =
-     (C_40:
-     (JC_92: (((add_double nearest_even) d_0) (double_of_real_exact 1.0)))) in
+     (JC_90: (((add_double nearest_even) d_0) (double_of_real_exact 1.0))) in
      (let _jessie_<num> = X_0 in
-     (JC_95:
+     (JC_93:
      ((((upd_ doubleP_X_0_3_alloc_table) doubleP_doubleM_X_0_3) _jessie_<num>) _jessie_<num>))));
     [ { } unit reads doubleP_doubleM_X_0_3
-      { (JC_93:
+      { (JC_91:
         (double_value(select(doubleP_doubleM_X_0_3, shift(X_0, (0)))) = 
         round_double(nearest_even, add_real(double_value(d_0), 1.0)))) } ];
     void;
     [ { } unit reads doubleP_doubleM_X_0_3
-      { (JC_94:
+      { (JC_92:
         (double_exact(select(doubleP_doubleM_X_0_3, shift(X_0, (0)))) = 
         add_real(double_value(d_0), 1.0))) } ]; void; (raise Return);
-    (raise Return) end) with Return -> void end) { true }
+    (raise Return) end with Return -> void end) { true }
 
 let AffectDoubleDansTab1_ensures_default =
  fun (d_1 : double) (X_1 : doubleP pointer) (doubleP_doubleM_X_1_2 : (doubleP, double) memory ref) (doubleP_X_1_2_alloc_table : doubleP alloc_table) ->
-  { (JC_59:
-    ((JC_55: le_int(offset_min(doubleP_X_1_2_alloc_table, X_1), (0)))
-    and ((JC_56: ge_int(offset_max(doubleP_X_1_2_alloc_table, X_1), (10)))
-        and ((JC_57: bounded(double_value(d_1), 0x1p0))
-            and (JC_58: (double_round_error(d_1) = 0.0)))))) }
+  { (JC_57:
+    ((JC_53: le_int(offset_min(doubleP_X_1_2_alloc_table, X_1), (0)))
+    and ((JC_54: ge_int(offset_max(doubleP_X_1_2_alloc_table, X_1), (10)))
+        and ((JC_55: bounded(double_value(d_1), 0x1p0))
+            and (JC_56: (double_round_error(d_1) = 0.0)))))) }
   (init:
   try
-   (C_31:
    begin
      (let _jessie_<num> =
-     (C_28:
-     (JC_71:
-     (((add_double_safe nearest_even) d_1) (double_of_real_exact 1.0)))) in
+     (JC_69:
+     (((add_double_safe nearest_even) d_1) (double_of_real_exact 1.0))) in
      (let _jessie_<num> = X_1 in
      (let _jessie_<num> = (1) in
      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
      (let _jessie_<num> = ((shift _jessie_<num>) (1)) in
      (((safe_upd_ doubleP_doubleM_X_1_2) _jessie_<num>) _jessie_<num>))))));
-    (raise Return); (raise Return) end) with Return -> void end)
-  { (JC_63:
-    ((JC_61:
+    (raise Return); (raise Return) end with Return -> void end)
+  { (JC_61:
+    ((JC_59:
      le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_X_1_2,
                                             shift(X_1, (1)))),
                       add_real(double_value(d_1), 1.0))),
      0x1p-53))
-    and (JC_62:
+    and (JC_60:
         le_real(double_round_error(select(doubleP_doubleM_X_1_2,
                                    shift(X_1, (1)))),
         0x1p-53)))) }
 
 let AffectDoubleDansTab1_safety =
  fun (d_1 : double) (X_1 : doubleP pointer) (doubleP_doubleM_X_1_2 : (doubleP, double) memory ref) (doubleP_X_1_2_alloc_table : doubleP alloc_table) ->
-  { (JC_59:
-    ((JC_55: le_int(offset_min(doubleP_X_1_2_alloc_table, X_1), (0)))
-    and ((JC_56: ge_int(offset_max(doubleP_X_1_2_alloc_table, X_1), (10)))
-        and ((JC_57: bounded(double_value(d_1), 0x1p0))
-            and (JC_58: (double_round_error(d_1) = 0.0)))))) }
+  { (JC_57:
+    ((JC_53: le_int(offset_min(doubleP_X_1_2_alloc_table, X_1), (0)))
+    and ((JC_54: ge_int(offset_max(doubleP_X_1_2_alloc_table, X_1), (10)))
+        and ((JC_55: bounded(double_value(d_1), 0x1p0))
+            and (JC_56: (double_round_error(d_1) = 0.0)))))) }
   (init:
   try
-   (C_31:
    begin
      (let _jessie_<num> =
-     (C_28:
-     (JC_69: (((add_double nearest_even) d_1) (double_of_real_exact 1.0)))) in
+     (JC_67: (((add_double nearest_even) d_1) (double_of_real_exact 1.0))) in
      (let _jessie_<num> = X_1 in
      (let _jessie_<num> = (1) in
      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
      (let _jessie_<num> = ((shift _jessie_<num>) (1)) in
-     (JC_70:
+     (JC_68:
      ((((upd_ doubleP_X_1_2_alloc_table) doubleP_doubleM_X_1_2) _jessie_<num>) _jessie_<num>)))))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let AffectDoubleDansTab_ensures_default =
  fun (d : double) (X : doubleP pointer) (doubleP_doubleM_X_1 : (doubleP, double) memory ref) (doubleP_X_1_alloc_table : doubleP alloc_table) ->
@@ -2078,28 +2056,24 @@ let AffectDoubleDansTab_ensures_default =
             and (JC_28: (double_round_error(d) = 0.0)))))) }
   (init:
   try
-   (C_11:
    begin
      (let _jessie_<num> =
-     (C_8:
-     (JC_47: (((add_double_safe nearest_even) d) (double_of_real_exact 1.0)))) in
+     (JC_45: (((add_double_safe nearest_even) d) (double_of_real_exact 1.0))) in
      (let _jessie_<num> = X in
      (let _jessie_<num> = (1) in
      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-     (let _jessie_<num> = ((shift _jessie_<num>) (1)) in
-     (((safe_upd_ doubleP_doubleM_X_1) _jessie_<num>) _jessie_<num>))))));
-    (C_15:
-    begin
-      (let _jessie_<num> =
-      (C_12:
-      (JC_48:
-      (((add_double_safe nearest_even) d) (double_of_real_exact 1.0)))) in
-      (let _jessie_<num> = X in
-      (let _jessie_<num> = (2) in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (let _jessie_<num> = ((shift _jessie_<num>) (2)) in
-      (((safe_upd_ doubleP_doubleM_X_1) _jessie_<num>) _jessie_<num>))))));
-     (raise Return); (raise Return) end) end) with Return -> void end)
+     (let _jessie_<num> =
+     (JC_46: (((add_double_safe nearest_even) d) (double_of_real_exact 1.0))) in
+     (let _jessie_<num> = X in
+     (let _jessie_<num> = (2) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+     [ { } unit reads doubleP_doubleM_X_1 writes doubleP_doubleM_X_1
+       { (not_assigns(doubleP_X_1_alloc_table, doubleP_doubleM_X_1@,
+          doubleP_doubleM_X_1,
+          pset_range(pset_singleton(_jessie_<num>), (1), (2)))
+         and ((select(doubleP_doubleM_X_1, shift(_jessie_<num>, (1))) = _jessie_<num>)
+             and (select(doubleP_doubleM_X_1, shift(_jessie_<num>, (2))) = _jessie_<num>))) } ]))))))));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_35:
     ((JC_31:
      le_real(abs_real(sub_real(double_value(select(doubleP_doubleM_X_1,
@@ -2129,30 +2103,29 @@ let AffectDoubleDansTab_safety =
             and (JC_28: (double_round_error(d) = 0.0)))))) }
   (init:
   try
-   (C_11:
    begin
      (let _jessie_<num> =
-     (C_8:
-     (JC_43: (((add_double nearest_even) d) (double_of_real_exact 1.0)))) in
+     (JC_43: (((add_double nearest_even) d) (double_of_real_exact 1.0))) in
      (let _jessie_<num> = X in
      (let _jessie_<num> = (1) in
      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-     (let _jessie_<num> = ((shift _jessie_<num>) (1)) in
-     (JC_45:
-     ((((upd_ doubleP_X_1_alloc_table) doubleP_doubleM_X_1) _jessie_<num>) _jessie_<num>)))))));
-    (C_15:
-    begin
-      (let _jessie_<num> =
-      (C_12:
-      (JC_44: (((add_double nearest_even) d) (double_of_real_exact 1.0)))) in
-      (let _jessie_<num> = X in
-      (let _jessie_<num> = (2) in
-      (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-      (let _jessie_<num> = ((shift _jessie_<num>) (2)) in
-      (JC_46:
-      ((((upd_ doubleP_X_1_alloc_table) doubleP_doubleM_X_1) _jessie_<num>) _jessie_<num>)))))));
-     (raise Return); (raise Return) end) end) with Return -> void end)
-  { true }
+     (let _jessie_<num> =
+     (JC_44: (((add_double nearest_even) d) (double_of_real_exact 1.0))) in
+     (let _jessie_<num> = X in
+     (let _jessie_<num> = (2) in
+     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+     [ { (le_int(offset_min(doubleP_X_1_alloc_table, _jessie_<num>), (2))
+         and (le_int((2), offset_max(doubleP_X_1_alloc_table, _jessie_<num>))
+             and (le_int(offset_min(doubleP_X_1_alloc_table, _jessie_<num>), (1))
+                 and le_int((1),
+                     offset_max(doubleP_X_1_alloc_table, _jessie_<num>)))))}
+       unit reads doubleP_doubleM_X_1 writes doubleP_doubleM_X_1
+       { (not_assigns(doubleP_X_1_alloc_table, doubleP_doubleM_X_1@,
+          doubleP_doubleM_X_1,
+          pset_range(pset_singleton(_jessie_<num>), (1), (2)))
+         and ((select(doubleP_doubleM_X_1, shift(_jessie_<num>, (1))) = _jessie_<num>)
+             and (select(doubleP_doubleM_X_1, shift(_jessie_<num>, (2))) = _jessie_<num>))) } ]))))))));
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let AffectDoubleDansX_ensures_default =
  fun (d_2 : double) ->
@@ -2161,13 +2134,11 @@ let AffectDoubleDansX_ensures_default =
     and (JC_6: (double_round_error(d_2) = 0.0)))) }
   (init:
   try
-   (C_2:
    begin
      (let _jessie_<num> =
-     (x_0 := (C_1:
-             (JC_18:
-             (((add_double_safe nearest_even) d_2) (double_of_real_exact 1.0))))) in
-     void); (raise Return); (raise Return) end) with Return -> void end)
+     (x_0 := (JC_18:
+             (((add_double_safe nearest_even) d_2) (double_of_real_exact 1.0)))) in
+     void); (raise Return); (raise Return) end with Return -> void end)
   { (JC_11:
     ((JC_9:
      le_real(abs_real(sub_real(double_value(x_0),
@@ -2182,13 +2153,11 @@ let AffectDoubleDansX_safety =
     and (JC_6: (double_round_error(d_2) = 0.0)))) }
   (init:
   try
-   (C_2:
    begin
      (let _jessie_<num> =
-     (x_0 := (C_1:
-             (JC_17:
-             (((add_double nearest_even) d_2) (double_of_real_exact 1.0))))) in
-     void); (raise Return); (raise Return) end) with Return -> void end)
+     (x_0 := (JC_17:
+             (((add_double nearest_even) d_2) (double_of_real_exact 1.0)))) in
+     void); (raise Return); (raise Return) end with Return -> void end)
   { true }
 
 
@@ -3689,11 +3658,11 @@ goal AffectDoubleDansTab0_ensures_default_po_1:
   forall doubleP_X_0_3_alloc_table:doubleP alloc_table.
   forall doubleP_doubleM_X_0_3:(doubleP,
   double) memory.
-  ("JC_82":
-  (("JC_78": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
-   (("JC_79": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
-    (("JC_80": bounded(double_value(d_0), 0x1.p0)) and
-     ("JC_81": (double_round_error(d_0) = 0.0)))))) ->
+  ("JC_80":
+  (("JC_76": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
+   (("JC_77": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
+    (("JC_78": bounded(double_value(d_0), 0x1.p0)) and
+     ("JC_79": (double_round_error(d_0) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3702,7 +3671,7 @@ goal AffectDoubleDansTab0_ensures_default_po_1:
   forall doubleP_doubleM_X_0_3_0:(doubleP,
   double) memory.
   (doubleP_doubleM_X_0_3_0 = store(doubleP_doubleM_X_0_3, X_0, result0)) ->
-  ("JC_97": (double_value(select(doubleP_doubleM_X_0_3_0, shift(X_0,
+  ("JC_95": (double_value(select(doubleP_doubleM_X_0_3_0, shift(X_0,
   0))) = round_double(nearest_even, (double_value(d_0) + 1.0))))
 
 goal AffectDoubleDansTab0_ensures_default_po_2:
@@ -3711,11 +3680,11 @@ goal AffectDoubleDansTab0_ensures_default_po_2:
   forall doubleP_X_0_3_alloc_table:doubleP alloc_table.
   forall doubleP_doubleM_X_0_3:(doubleP,
   double) memory.
-  ("JC_82":
-  (("JC_78": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
-   (("JC_79": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
-    (("JC_80": bounded(double_value(d_0), 0x1.p0)) and
-     ("JC_81": (double_round_error(d_0) = 0.0)))))) ->
+  ("JC_80":
+  (("JC_76": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
+   (("JC_77": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
+    (("JC_78": bounded(double_value(d_0), 0x1.p0)) and
+     ("JC_79": (double_round_error(d_0) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3724,9 +3693,9 @@ goal AffectDoubleDansTab0_ensures_default_po_2:
   forall doubleP_doubleM_X_0_3_0:(doubleP,
   double) memory.
   (doubleP_doubleM_X_0_3_0 = store(doubleP_doubleM_X_0_3, X_0, result0)) ->
-  ("JC_97": (double_value(select(doubleP_doubleM_X_0_3_0, shift(X_0,
+  ("JC_95": (double_value(select(doubleP_doubleM_X_0_3_0, shift(X_0,
   0))) = round_double(nearest_even, (double_value(d_0) + 1.0)))) ->
-  ("JC_98": (double_exact(select(doubleP_doubleM_X_0_3_0, shift(X_0,
+  ("JC_96": (double_exact(select(doubleP_doubleM_X_0_3_0, shift(X_0,
   0))) = (double_value(d_0) + 1.0)))
 
 goal AffectDoubleDansTab0_ensures_default_po_3:
@@ -3735,11 +3704,11 @@ goal AffectDoubleDansTab0_ensures_default_po_3:
   forall doubleP_X_0_3_alloc_table:doubleP alloc_table.
   forall doubleP_doubleM_X_0_3:(doubleP,
   double) memory.
-  ("JC_82":
-  (("JC_78": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
-   (("JC_79": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
-    (("JC_80": bounded(double_value(d_0), 0x1.p0)) and
-     ("JC_81": (double_round_error(d_0) = 0.0)))))) ->
+  ("JC_80":
+  (("JC_76": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
+   (("JC_77": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
+    (("JC_78": bounded(double_value(d_0), 0x1.p0)) and
+     ("JC_79": (double_round_error(d_0) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3748,12 +3717,12 @@ goal AffectDoubleDansTab0_ensures_default_po_3:
   forall doubleP_doubleM_X_0_3_0:(doubleP,
   double) memory.
   (doubleP_doubleM_X_0_3_0 = store(doubleP_doubleM_X_0_3, X_0, result0)) ->
-  ("JC_97": (double_value(select(doubleP_doubleM_X_0_3_0, shift(X_0,
+  ("JC_95": (double_value(select(doubleP_doubleM_X_0_3_0, shift(X_0,
   0))) = round_double(nearest_even, (double_value(d_0) + 1.0)))) ->
-  ("JC_98": (double_exact(select(doubleP_doubleM_X_0_3_0, shift(X_0,
+  ("JC_96": (double_exact(select(doubleP_doubleM_X_0_3_0, shift(X_0,
   0))) = (double_value(d_0) + 1.0))) ->
-  ("JC_86":
-  ("JC_84": (abs_real((double_value(select(doubleP_doubleM_X_0_3_0,
+  ("JC_84":
+  ("JC_82": (abs_real((double_value(select(doubleP_doubleM_X_0_3_0,
   shift(X_0, 0))) - (double_value(d_0) + 1.0))) <= 0x1.p-53)))
 
 goal AffectDoubleDansTab0_ensures_default_po_4:
@@ -3762,11 +3731,11 @@ goal AffectDoubleDansTab0_ensures_default_po_4:
   forall doubleP_X_0_3_alloc_table:doubleP alloc_table.
   forall doubleP_doubleM_X_0_3:(doubleP,
   double) memory.
-  ("JC_82":
-  (("JC_78": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
-   (("JC_79": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
-    (("JC_80": bounded(double_value(d_0), 0x1.p0)) and
-     ("JC_81": (double_round_error(d_0) = 0.0)))))) ->
+  ("JC_80":
+  (("JC_76": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
+   (("JC_77": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
+    (("JC_78": bounded(double_value(d_0), 0x1.p0)) and
+     ("JC_79": (double_round_error(d_0) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3775,23 +3744,23 @@ goal AffectDoubleDansTab0_ensures_default_po_4:
   forall doubleP_doubleM_X_0_3_0:(doubleP,
   double) memory.
   (doubleP_doubleM_X_0_3_0 = store(doubleP_doubleM_X_0_3, X_0, result0)) ->
-  ("JC_97": (double_value(select(doubleP_doubleM_X_0_3_0, shift(X_0,
+  ("JC_95": (double_value(select(doubleP_doubleM_X_0_3_0, shift(X_0,
   0))) = round_double(nearest_even, (double_value(d_0) + 1.0)))) ->
-  ("JC_98": (double_exact(select(doubleP_doubleM_X_0_3_0, shift(X_0,
+  ("JC_96": (double_exact(select(doubleP_doubleM_X_0_3_0, shift(X_0,
   0))) = (double_value(d_0) + 1.0))) ->
-  ("JC_86":
-  ("JC_85": (double_round_error(select(doubleP_doubleM_X_0_3_0, shift(X_0,
+  ("JC_84":
+  ("JC_83": (double_round_error(select(doubleP_doubleM_X_0_3_0, shift(X_0,
   0))) <= 0x1.p-53)))
 
 goal AffectDoubleDansTab0_safety_po_1:
   forall d_0:double.
   forall X_0:doubleP pointer.
   forall doubleP_X_0_3_alloc_table:doubleP alloc_table.
-  ("JC_82":
-  (("JC_78": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
-   (("JC_79": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
-    (("JC_80": bounded(double_value(d_0), 0x1.p0)) and
-     ("JC_81": (double_round_error(d_0) = 0.0)))))) ->
+  ("JC_80":
+  (("JC_76": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
+   (("JC_77": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
+    (("JC_78": bounded(double_value(d_0), 0x1.p0)) and
+     ("JC_79": (double_round_error(d_0) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3802,11 +3771,11 @@ goal AffectDoubleDansTab0_safety_po_2:
   forall d_0:double.
   forall X_0:doubleP pointer.
   forall doubleP_X_0_3_alloc_table:doubleP alloc_table.
-  ("JC_82":
-  (("JC_78": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
-   (("JC_79": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
-    (("JC_80": bounded(double_value(d_0), 0x1.p0)) and
-     ("JC_81": (double_round_error(d_0) = 0.0)))))) ->
+  ("JC_80":
+  (("JC_76": (offset_min(doubleP_X_0_3_alloc_table, X_0) <= 0)) and
+   (("JC_77": (offset_max(doubleP_X_0_3_alloc_table, X_0) >= 10)) and
+    (("JC_78": bounded(double_value(d_0), 0x1.p0)) and
+     ("JC_79": (double_round_error(d_0) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3822,11 +3791,11 @@ goal AffectDoubleDansTab1_ensures_default_po_1:
   forall doubleP_X_1_2_alloc_table:doubleP alloc_table.
   forall doubleP_doubleM_X_1_2:(doubleP,
   double) memory.
-  ("JC_59":
-  (("JC_55": (offset_min(doubleP_X_1_2_alloc_table, X_1) <= 0)) and
-   (("JC_56": (offset_max(doubleP_X_1_2_alloc_table, X_1) >= 10)) and
-    (("JC_57": bounded(double_value(d_1), 0x1.p0)) and
-     ("JC_58": (double_round_error(d_1) = 0.0)))))) ->
+  ("JC_57":
+  (("JC_53": (offset_min(doubleP_X_1_2_alloc_table, X_1) <= 0)) and
+   (("JC_54": (offset_max(doubleP_X_1_2_alloc_table, X_1) >= 10)) and
+    (("JC_55": bounded(double_value(d_1), 0x1.p0)) and
+     ("JC_56": (double_round_error(d_1) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3836,8 +3805,8 @@ goal AffectDoubleDansTab1_ensures_default_po_1:
   double) memory.
   (doubleP_doubleM_X_1_2_0 = store(doubleP_doubleM_X_1_2, shift(X_1, 1),
   result0)) ->
-  ("JC_63":
-  ("JC_61": (abs_real((double_value(select(doubleP_doubleM_X_1_2_0,
+  ("JC_61":
+  ("JC_59": (abs_real((double_value(select(doubleP_doubleM_X_1_2_0,
   shift(X_1, 1))) - (double_value(d_1) + 1.0))) <= 0x1.p-53)))
 
 goal AffectDoubleDansTab1_ensures_default_po_2:
@@ -3846,11 +3815,11 @@ goal AffectDoubleDansTab1_ensures_default_po_2:
   forall doubleP_X_1_2_alloc_table:doubleP alloc_table.
   forall doubleP_doubleM_X_1_2:(doubleP,
   double) memory.
-  ("JC_59":
-  (("JC_55": (offset_min(doubleP_X_1_2_alloc_table, X_1) <= 0)) and
-   (("JC_56": (offset_max(doubleP_X_1_2_alloc_table, X_1) >= 10)) and
-    (("JC_57": bounded(double_value(d_1), 0x1.p0)) and
-     ("JC_58": (double_round_error(d_1) = 0.0)))))) ->
+  ("JC_57":
+  (("JC_53": (offset_min(doubleP_X_1_2_alloc_table, X_1) <= 0)) and
+   (("JC_54": (offset_max(doubleP_X_1_2_alloc_table, X_1) >= 10)) and
+    (("JC_55": bounded(double_value(d_1), 0x1.p0)) and
+     ("JC_56": (double_round_error(d_1) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3860,19 +3829,19 @@ goal AffectDoubleDansTab1_ensures_default_po_2:
   double) memory.
   (doubleP_doubleM_X_1_2_0 = store(doubleP_doubleM_X_1_2, shift(X_1, 1),
   result0)) ->
-  ("JC_63":
-  ("JC_62": (double_round_error(select(doubleP_doubleM_X_1_2_0, shift(X_1,
+  ("JC_61":
+  ("JC_60": (double_round_error(select(doubleP_doubleM_X_1_2_0, shift(X_1,
   1))) <= 0x1.p-53)))
 
 goal AffectDoubleDansTab1_safety_po_1:
   forall d_1:double.
   forall X_1:doubleP pointer.
   forall doubleP_X_1_2_alloc_table:doubleP alloc_table.
-  ("JC_59":
-  (("JC_55": (offset_min(doubleP_X_1_2_alloc_table, X_1) <= 0)) and
-   (("JC_56": (offset_max(doubleP_X_1_2_alloc_table, X_1) >= 10)) and
-    (("JC_57": bounded(double_value(d_1), 0x1.p0)) and
-     ("JC_58": (double_round_error(d_1) = 0.0)))))) ->
+  ("JC_57":
+  (("JC_53": (offset_min(doubleP_X_1_2_alloc_table, X_1) <= 0)) and
+   (("JC_54": (offset_max(doubleP_X_1_2_alloc_table, X_1) >= 10)) and
+    (("JC_55": bounded(double_value(d_1), 0x1.p0)) and
+     ("JC_56": (double_round_error(d_1) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3883,11 +3852,11 @@ goal AffectDoubleDansTab1_safety_po_2:
   forall d_1:double.
   forall X_1:doubleP pointer.
   forall doubleP_X_1_2_alloc_table:doubleP alloc_table.
-  ("JC_59":
-  (("JC_55": (offset_min(doubleP_X_1_2_alloc_table, X_1) <= 0)) and
-   (("JC_56": (offset_max(doubleP_X_1_2_alloc_table, X_1) >= 10)) and
-    (("JC_57": bounded(double_value(d_1), 0x1.p0)) and
-     ("JC_58": (double_round_error(d_1) = 0.0)))))) ->
+  ("JC_57":
+  (("JC_53": (offset_min(doubleP_X_1_2_alloc_table, X_1) <= 0)) and
+   (("JC_54": (offset_max(doubleP_X_1_2_alloc_table, X_1) >= 10)) and
+    (("JC_55": bounded(double_value(d_1), 0x1.p0)) and
+     ("JC_56": (double_round_error(d_1) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3901,11 +3870,11 @@ goal AffectDoubleDansTab1_safety_po_3:
   forall d_1:double.
   forall X_1:doubleP pointer.
   forall doubleP_X_1_2_alloc_table:doubleP alloc_table.
-  ("JC_59":
-  (("JC_55": (offset_min(doubleP_X_1_2_alloc_table, X_1) <= 0)) and
-   (("JC_56": (offset_max(doubleP_X_1_2_alloc_table, X_1) >= 10)) and
-    (("JC_57": bounded(double_value(d_1), 0x1.p0)) and
-     ("JC_58": (double_round_error(d_1) = 0.0)))))) ->
+  ("JC_57":
+  (("JC_53": (offset_min(doubleP_X_1_2_alloc_table, X_1) <= 0)) and
+   (("JC_54": (offset_max(doubleP_X_1_2_alloc_table, X_1) >= 10)) and
+    (("JC_55": bounded(double_value(d_1), 0x1.p0)) and
+     ("JC_56": (double_round_error(d_1) = 0.0)))))) ->
   forall result:double.
   ((double_value(result) = 1.0) and
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
@@ -3931,21 +3900,19 @@ goal AffectDoubleDansTab_ensures_default_po_1:
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
   forall result0:double.
   add_double_post(nearest_even, d, result, result0) ->
-  forall doubleP_doubleM_X_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_X_1_0 = store(doubleP_doubleM_X_1, shift(X, 1),
-  result0)) ->
   forall result1:double.
   ((double_value(result1) = 1.0) and
    ((double_exact(result1) = 1.0) and (double_model(result1) = 1.0))) ->
   forall result2:double.
   add_double_post(nearest_even, d, result1, result2) ->
-  forall doubleP_doubleM_X_1_1:(doubleP,
+  forall doubleP_doubleM_X_1_0:(doubleP,
   double) memory.
-  (doubleP_doubleM_X_1_1 = store(doubleP_doubleM_X_1_0, shift(X, 2),
-  result2)) ->
+  (not_assigns(doubleP_X_1_alloc_table, doubleP_doubleM_X_1,
+   doubleP_doubleM_X_1_0, pset_range(pset_singleton(X), 1, 2)) and
+   ((select(doubleP_doubleM_X_1_0, shift(X, 1)) = result0) and
+    (select(doubleP_doubleM_X_1_0, shift(X, 2)) = result2))) ->
   ("JC_35":
-  ("JC_31": (abs_real((double_value(select(doubleP_doubleM_X_1_1, shift(X,
+  ("JC_31": (abs_real((double_value(select(doubleP_doubleM_X_1_0, shift(X,
   1))) - (double_value(d) + 1.0))) <= 0x1.p-53)))
 
 goal AffectDoubleDansTab_ensures_default_po_2:
@@ -3964,21 +3931,19 @@ goal AffectDoubleDansTab_ensures_default_po_2:
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
   forall result0:double.
   add_double_post(nearest_even, d, result, result0) ->
-  forall doubleP_doubleM_X_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_X_1_0 = store(doubleP_doubleM_X_1, shift(X, 1),
-  result0)) ->
   forall result1:double.
   ((double_value(result1) = 1.0) and
    ((double_exact(result1) = 1.0) and (double_model(result1) = 1.0))) ->
   forall result2:double.
   add_double_post(nearest_even, d, result1, result2) ->
-  forall doubleP_doubleM_X_1_1:(doubleP,
+  forall doubleP_doubleM_X_1_0:(doubleP,
   double) memory.
-  (doubleP_doubleM_X_1_1 = store(doubleP_doubleM_X_1_0, shift(X, 2),
-  result2)) ->
+  (not_assigns(doubleP_X_1_alloc_table, doubleP_doubleM_X_1,
+   doubleP_doubleM_X_1_0, pset_range(pset_singleton(X), 1, 2)) and
+   ((select(doubleP_doubleM_X_1_0, shift(X, 1)) = result0) and
+    (select(doubleP_doubleM_X_1_0, shift(X, 2)) = result2))) ->
   ("JC_35":
-  ("JC_32": (double_round_error(select(doubleP_doubleM_X_1_1, shift(X,
+  ("JC_32": (double_round_error(select(doubleP_doubleM_X_1_0, shift(X,
   1))) <= 0x1.p-53)))
 
 goal AffectDoubleDansTab_ensures_default_po_3:
@@ -3997,21 +3962,19 @@ goal AffectDoubleDansTab_ensures_default_po_3:
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
   forall result0:double.
   add_double_post(nearest_even, d, result, result0) ->
-  forall doubleP_doubleM_X_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_X_1_0 = store(doubleP_doubleM_X_1, shift(X, 1),
-  result0)) ->
   forall result1:double.
   ((double_value(result1) = 1.0) and
    ((double_exact(result1) = 1.0) and (double_model(result1) = 1.0))) ->
   forall result2:double.
   add_double_post(nearest_even, d, result1, result2) ->
-  forall doubleP_doubleM_X_1_1:(doubleP,
+  forall doubleP_doubleM_X_1_0:(doubleP,
   double) memory.
-  (doubleP_doubleM_X_1_1 = store(doubleP_doubleM_X_1_0, shift(X, 2),
-  result2)) ->
+  (not_assigns(doubleP_X_1_alloc_table, doubleP_doubleM_X_1,
+   doubleP_doubleM_X_1_0, pset_range(pset_singleton(X), 1, 2)) and
+   ((select(doubleP_doubleM_X_1_0, shift(X, 1)) = result0) and
+    (select(doubleP_doubleM_X_1_0, shift(X, 2)) = result2))) ->
   ("JC_35":
-  ("JC_33": (abs_real((double_value(select(doubleP_doubleM_X_1_1, shift(X,
+  ("JC_33": (abs_real((double_value(select(doubleP_doubleM_X_1_0, shift(X,
   2))) - (double_value(d) + 1.0))) <= 0x1.p-53)))
 
 goal AffectDoubleDansTab_ensures_default_po_4:
@@ -4030,21 +3993,19 @@ goal AffectDoubleDansTab_ensures_default_po_4:
    ((double_exact(result) = 1.0) and (double_model(result) = 1.0))) ->
   forall result0:double.
   add_double_post(nearest_even, d, result, result0) ->
-  forall doubleP_doubleM_X_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_X_1_0 = store(doubleP_doubleM_X_1, shift(X, 1),
-  result0)) ->
   forall result1:double.
   ((double_value(result1) = 1.0) and
    ((double_exact(result1) = 1.0) and (double_model(result1) = 1.0))) ->
   forall result2:double.
   add_double_post(nearest_even, d, result1, result2) ->
-  forall doubleP_doubleM_X_1_1:(doubleP,
+  forall doubleP_doubleM_X_1_0:(doubleP,
   double) memory.
-  (doubleP_doubleM_X_1_1 = store(doubleP_doubleM_X_1_0, shift(X, 2),
-  result2)) ->
+  (not_assigns(doubleP_X_1_alloc_table, doubleP_doubleM_X_1,
+   doubleP_doubleM_X_1_0, pset_range(pset_singleton(X), 1, 2)) and
+   ((select(doubleP_doubleM_X_1_0, shift(X, 1)) = result0) and
+    (select(doubleP_doubleM_X_1_0, shift(X, 2)) = result2))) ->
   ("JC_35":
-  ("JC_34": (double_round_error(select(doubleP_doubleM_X_1_1, shift(X,
+  ("JC_34": (double_round_error(select(doubleP_doubleM_X_1_0, shift(X,
   2))) <= 0x1.p-53)))
 
 goal AffectDoubleDansTab_safety_po_1:
@@ -4077,7 +4038,10 @@ goal AffectDoubleDansTab_safety_po_2:
   (double_value(d) + double_value(result))) ->
   forall result0:double.
   add_double_post(nearest_even, d, result, result0) ->
-  (offset_min(doubleP_X_1_alloc_table, shift(X, 1)) <= 0)
+  forall result1:double.
+  ((double_value(result1) = 1.0) and
+   ((double_exact(result1) = 1.0) and (double_model(result1) = 1.0))) ->
+  no_overflow_double(nearest_even, (double_value(d) + double_value(result1)))
 
 goal AffectDoubleDansTab_safety_po_3:
   forall d:double.
@@ -4095,14 +4059,19 @@ goal AffectDoubleDansTab_safety_po_3:
   (double_value(d) + double_value(result))) ->
   forall result0:double.
   add_double_post(nearest_even, d, result, result0) ->
-  (0 <= offset_max(doubleP_X_1_alloc_table, shift(X, 1)))
+  forall result1:double.
+  ((double_value(result1) = 1.0) and
+   ((double_exact(result1) = 1.0) and (double_model(result1) = 1.0))) ->
+  no_overflow_double(nearest_even,
+  (double_value(d) + double_value(result1))) ->
+  forall result2:double.
+  add_double_post(nearest_even, d, result1, result2) ->
+  (offset_min(doubleP_X_1_alloc_table, X) <= 2)
 
 goal AffectDoubleDansTab_safety_po_4:
   forall d:double.
   forall X:doubleP pointer.
   forall doubleP_X_1_alloc_table:doubleP alloc_table.
-  forall doubleP_doubleM_X_1:(doubleP,
-  double) memory.
   ("JC_29":
   (("JC_25": (offset_min(doubleP_X_1_alloc_table, X) <= 0)) and
    (("JC_26": (offset_max(doubleP_X_1_alloc_table, X) >= 10)) and
@@ -4115,23 +4084,19 @@ goal AffectDoubleDansTab_safety_po_4:
   (double_value(d) + double_value(result))) ->
   forall result0:double.
   add_double_post(nearest_even, d, result, result0) ->
-  ((offset_min(doubleP_X_1_alloc_table, shift(X, 1)) <= 0) and
-   (0 <= offset_max(doubleP_X_1_alloc_table, shift(X, 1)))) ->
-  forall doubleP_doubleM_X_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_X_1_0 = store(doubleP_doubleM_X_1, shift(X, 1),
-  result0)) ->
   forall result1:double.
   ((double_value(result1) = 1.0) and
    ((double_exact(result1) = 1.0) and (double_model(result1) = 1.0))) ->
-  no_overflow_double(nearest_even, (double_value(d) + double_value(result1)))
+  no_overflow_double(nearest_even,
+  (double_value(d) + double_value(result1))) ->
+  forall result2:double.
+  add_double_post(nearest_even, d, result1, result2) ->
+  (2 <= offset_max(doubleP_X_1_alloc_table, X))
 
 goal AffectDoubleDansTab_safety_po_5:
   forall d:double.
   forall X:doubleP pointer.
   forall doubleP_X_1_alloc_table:doubleP alloc_table.
-  forall doubleP_doubleM_X_1:(doubleP,
-  double) memory.
   ("JC_29":
   (("JC_25": (offset_min(doubleP_X_1_alloc_table, X) <= 0)) and
    (("JC_26": (offset_max(doubleP_X_1_alloc_table, X) >= 10)) and
@@ -4144,12 +4109,6 @@ goal AffectDoubleDansTab_safety_po_5:
   (double_value(d) + double_value(result))) ->
   forall result0:double.
   add_double_post(nearest_even, d, result, result0) ->
-  ((offset_min(doubleP_X_1_alloc_table, shift(X, 1)) <= 0) and
-   (0 <= offset_max(doubleP_X_1_alloc_table, shift(X, 1)))) ->
-  forall doubleP_doubleM_X_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_X_1_0 = store(doubleP_doubleM_X_1, shift(X, 1),
-  result0)) ->
   forall result1:double.
   ((double_value(result1) = 1.0) and
    ((double_exact(result1) = 1.0) and (double_model(result1) = 1.0))) ->
@@ -4157,14 +4116,12 @@ goal AffectDoubleDansTab_safety_po_5:
   (double_value(d) + double_value(result1))) ->
   forall result2:double.
   add_double_post(nearest_even, d, result1, result2) ->
-  (offset_min(doubleP_X_1_alloc_table, shift(X, 2)) <= 0)
+  (offset_min(doubleP_X_1_alloc_table, X) <= 1)
 
 goal AffectDoubleDansTab_safety_po_6:
   forall d:double.
   forall X:doubleP pointer.
   forall doubleP_X_1_alloc_table:doubleP alloc_table.
-  forall doubleP_doubleM_X_1:(doubleP,
-  double) memory.
   ("JC_29":
   (("JC_25": (offset_min(doubleP_X_1_alloc_table, X) <= 0)) and
    (("JC_26": (offset_max(doubleP_X_1_alloc_table, X) >= 10)) and
@@ -4177,12 +4134,6 @@ goal AffectDoubleDansTab_safety_po_6:
   (double_value(d) + double_value(result))) ->
   forall result0:double.
   add_double_post(nearest_even, d, result, result0) ->
-  ((offset_min(doubleP_X_1_alloc_table, shift(X, 1)) <= 0) and
-   (0 <= offset_max(doubleP_X_1_alloc_table, shift(X, 1)))) ->
-  forall doubleP_doubleM_X_1_0:(doubleP,
-  double) memory.
-  (doubleP_doubleM_X_1_0 = store(doubleP_doubleM_X_1, shift(X, 1),
-  result0)) ->
   forall result1:double.
   ((double_value(result1) = 1.0) and
    ((double_exact(result1) = 1.0) and (double_model(result1) = 1.0))) ->
@@ -4190,7 +4141,7 @@ goal AffectDoubleDansTab_safety_po_6:
   (double_value(d) + double_value(result1))) ->
   forall result2:double.
   add_double_post(nearest_even, d, result1, result2) ->
-  (0 <= offset_max(doubleP_X_1_alloc_table, shift(X, 2)))
+  (1 <= offset_max(doubleP_X_1_alloc_table, X))
 
 goal AffectDoubleDansX_ensures_default_po_1:
   forall d_2:double.

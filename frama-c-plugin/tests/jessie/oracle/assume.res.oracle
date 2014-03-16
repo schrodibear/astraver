@@ -46,15 +46,15 @@ tag voidP = {
 type voidP = [voidP]
 
 unit f(intP[..] a)
-  requires (C_6 : ((C_7 : (\offset_min(a) <= 0)) &&
-                    (C_8 : (\offset_max(a) >= 0))));
+  requires (_C_6 : ((_C_7 : (\offset_min(a) <= 0)) &&
+                     (_C_8 : (\offset_max(a) >= 0))));
 behavior default:
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 behavior anz:
   assumes (a.intM != 0);
-  ensures (C_5 : (\at(a,Old).intM == 0));
+  ensures (_C_5 : (\at(a,Old).intM == 0));
 {  
-   {  (if ((C_3 : a.intM) != 0) then (C_2 : ((C_1 : a.intM) = 0)) else ());
+   {  (if ((_C_3 : a.intM) != 0) then (_C_2 : ((_C_1 : a.intM) = 0)) else ());
       
       (return ())
    }
@@ -503,7 +503,7 @@ let f_ensures_anz =
   (init:
   try
    begin
-     (if ((neq_int_ (integer_of_int32 (C_3: ((safe_acc_ !intP_intM_a_1) a)))) (0))
+     (if ((neq_int_ (integer_of_int32 ((safe_acc_ !intP_intM_a_1) a))) (0))
      then
       (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (let _jessie_<somenum> = a in
@@ -519,7 +519,7 @@ let f_ensures_default =
   (init:
   try
    begin
-     (if ((neq_int_ (integer_of_int32 (C_3: ((safe_acc_ !intP_intM_a_1) a)))) (0))
+     (if ((neq_int_ (integer_of_int32 ((safe_acc_ !intP_intM_a_1) a))) (0))
      then
       (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (let _jessie_<somenum> = a in
@@ -535,9 +535,8 @@ let f_safety =
   (init:
   try
    begin
-     (if ((neq_int_ (integer_of_int32 (C_3:
-                                      (JC_<somenum>:
-                                      (((acc_ intP_a_1_alloc_table) !intP_intM_a_1) a))))) (0))
+     (if ((neq_int_ (integer_of_int32 (JC_<somenum>:
+                                      (((acc_ intP_a_1_alloc_table) !intP_intM_a_1) a)))) (0))
      then
       (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (let _jessie_<somenum> = a in

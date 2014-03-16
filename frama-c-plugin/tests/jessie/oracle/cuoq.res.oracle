@@ -42,7 +42,7 @@ type voidP = [voidP]
 
 int32 main()
 behavior default:
-  ensures (C_9 : true);
+  ensures (_C_9 : true);
 {  
    (var double a);
    
@@ -50,31 +50,31 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (C_2 : (a = (C_1 : ((0. :> double) / (0. :> double)))));
+   {  (_C_2 : (a = (_C_1 : ((0. :> double) / (0. :> double)))));
       
       {  
-         (assert for default: (C_3 : (jessie : \double_is_NaN(a))));
+         (assert for default: (_C_3 : (jessie : \double_is_NaN(a))));
          ()
       };
       
-      {  (C_4 : (b = a))
+      {  (_C_4 : (b = a))
       };
       
       {  
-         (assert for default: (C_5 : (jessie : \double_is_NaN(b))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_6 : (jessie : ((a :> real) == (b :> real)))));
+         (assert for default: (_C_5 : (jessie : \double_is_NaN(b))));
          ()
       };
       
       {  
-         (assert for default: (C_7 : (jessie : \eq_double(a, b))));
+         (assert for default: (_C_6 : (jessie : ((a :> real) == (b :> real)))));
          ()
       };
-      (C_8 : (__retres = 0));
+      
+      {  
+         (assert for default: (_C_7 : (jessie : \eq_double(a, b))));
+         ()
+      };
+      (_C_8 : (__retres = 0));
       
       (return __retres)
    }
@@ -436,24 +436,18 @@ let main_ensures_default =
      (let a = ref (any_double void) in
      (let b = ref (any_double void) in
      (let __retres = ref (any_int32 void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (a := (C_1:
-             (JC_<somenum>:
-             (((div_double nearest_even) (double_of_real_exact 0.)) (double_of_real_exact 0.))))) in
+       (a := (JC_<somenum>:
+             (((div_double nearest_even) (double_of_real_exact 0.)) (double_of_real_exact 0.)))) in
        void); (assert { (JC_<somenum>: double_is_NaN(a)) }; void); void;
-      (let _jessie_<somenum> = (C_4: begin   (b := !a); !b end) in void);
+      (let _jessie_<somenum> = begin   (b := !a); !b end in void);
       (assert { (JC_<somenum>: double_is_NaN(b)) }; void); void;
       (assert { (JC_<somenum>: (double_value(a) = double_value(b))) }; void); void;
-      (assert { (JC_<somenum>: eq_double_full(a, b)) }; void);
-      begin
-        void;
-       (C_8:
-       begin
-         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-         void); (return := !__retres); (raise Return) end) end end))));
-    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
+      (assert { (JC_<somenum>: eq_double_full(a, b)) }; void); void;
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -465,24 +459,18 @@ let main_safety =
      (let a = ref (any_double void) in
      (let b = ref (any_double void) in
      (let __retres = ref (any_int32 void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (a := (C_1:
-             (JC_<somenum>:
-             (((div_double nearest_even) (double_of_real_exact 0.)) (double_of_real_exact 0.))))) in
+       (a := (JC_<somenum>:
+             (((div_double nearest_even) (double_of_real_exact 0.)) (double_of_real_exact 0.)))) in
        void); [ { } unit reads a { (JC_<somenum>: double_is_NaN(a)) } ]; void;
-      (let _jessie_<somenum> = (C_4: begin   (b := !a); !b end) in void);
+      (let _jessie_<somenum> = begin   (b := !a); !b end in void);
       [ { } unit reads b { (JC_<somenum>: double_is_NaN(b)) } ]; void;
       [ { } unit reads a,b { (JC_<somenum>: (double_value(a) = double_value(b))) } ];
-      void; [ { } unit reads a,b { (JC_<somenum>: eq_double_full(a, b)) } ];
-      begin
-        void;
-       (C_8:
-       begin
-         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (return := !__retres); (raise Return) end) end end)))); absurd  end
-   with Return -> !return end)) { true }
+      void; [ { } unit reads a,b { (JC_<somenum>: eq_double_full(a, b)) } ]; void;
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C cuoq.jessie --quiet -f cuoq.makefile project

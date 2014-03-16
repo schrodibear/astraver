@@ -41,7 +41,7 @@ type voidP = [voidP]
 
 int32 ftest(int32 EQ)
 behavior default:
-  ensures (C_1 : (\result == \at(EQ,Old)));
+  ensures (_C_1 : (\result == \at(EQ,Old)));
 {  
    {  
       (return EQ)
@@ -50,11 +50,12 @@ behavior default:
 
 double g(double real_constant_0_0e)
 behavior default:
-  ensures (C_3 : ((\result :> real) == (\at(real_constant_0_0e,Old) :> real)));
+  ensures (_C_3 : ((\result :> real) ==
+                    (\at(real_constant_0_0e,Old) :> real)));
 {  
    (var double __retres);
    
-   {  (C_2 : (__retres = (0.0 :> double)));
+   {  (_C_2 : (__retres = (0.0 :> double)));
       
       (return __retres)
    }
@@ -445,10 +446,9 @@ let g_ensures_default =
   try
    begin
      (let __retres = ref (any_double void) in
-     (C_2:
      begin
        (let _jessie_<somenum> = (__retres := (double_of_real_exact 0.0)) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end))
   { (JC_<somenum>: (double_value(result) = double_value(real_constant_0_0e))) }
 
@@ -460,10 +460,9 @@ let g_safety =
   try
    begin
      (let __retres = ref (any_double void) in
-     (C_2:
      begin
        (let _jessie_<somenum> = (__retres := (double_of_real_exact 0.0)) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 

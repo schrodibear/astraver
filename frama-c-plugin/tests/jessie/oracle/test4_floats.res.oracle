@@ -38,21 +38,23 @@ tag voidP = {
 type voidP = [voidP]
 
 double monexp(double x)
-  requires (C_9 : (\real_abs((x :> real)) <= 0x2.p-3));
+  requires (_C_9 : (\real_abs((x :> real)) <= 0x2.p-3));
 behavior default:
-  ensures (C_6 : ((C_7 : (\double_model(\result) ==
-                           \exp(\double_model(\at(x,Old))))) &&
-                   (C_8 : ((\double_round_error(\at(x,Old)) == 0.0) ==>
-                            ((\double_round_error(\result) <= 0x2.p-52) &&
-                              (\double_total_error(\result) <=
-                                (\double_total_error(\at(x,Old)) + 0x2.p-51)))))));
+  ensures (_C_6 : ((_C_7 : (\double_model(\result) ==
+                             \exp(\double_model(\at(x,Old))))) &&
+                    (_C_8 : ((\double_round_error(\at(x,Old)) == 0.0) ==>
+                              ((\double_round_error(\result) <= 0x2.p-52) &&
+                                (\double_total_error(\result) <=
+                                  (\double_total_error(\at(x,Old)) +
+                                    0x2.p-51)))))));
 {  
    (var double y);
    
-   {  (C_5 : (y = (C_4 : ((1.0 :> double) +
-                           (C_3 : (x *
-                                    (C_2 : ((1.0 :> double) +
-                                             (C_1 : (x / (2.0 :> double)))))))))));
+   {  (_C_5 : (y = (_C_4 : ((1.0 :> double) +
+                             (_C_3 : (x *
+                                       (_C_2 : ((1.0 :> double) +
+                                                 (_C_1 : (x /
+                                                           (2.0 :> double)))))))))));
       
       (return y)
    }
@@ -396,24 +398,19 @@ let monexp_ensures_default =
   try
    begin
      (let y = ref (any_double void) in
-     (C_5:
      begin
        (let _jessie_<somenum> =
-       (y := (C_4:
-             (JC_<somenum>:
+       (y := (JC_<somenum>:
              (((add_double_safe nearest_even) (double_of_real_exact 1.0)) 
-              (C_3:
               (JC_<somenum>:
-              (((mul_double_safe nearest_even) x_0) (C_2:
-                                                    (JC_<somenum>:
+              (((mul_double_safe nearest_even) x_0) (JC_<somenum>:
                                                     (((add_double_safe nearest_even) 
                                                       (double_of_real_exact 1.0)) 
-                                                     (C_1:
                                                      (JC_<somenum>:
                                                      (((div_double_safe nearest_even) x_0) 
-                                                      (double_of_real_exact 2.0)))))))))))))) in
-       void); (return := !y); (raise Return) end)); absurd  end with
-   Return -> !return end))
+                                                      (double_of_real_exact 2.0)))))))))) in
+       void); (return := !y); (raise Return) end); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: (double_model(result) = exp(double_model(x_0))))
     and (JC_<somenum>:
@@ -430,24 +427,19 @@ let monexp_safety =
   try
    begin
      (let y = ref (any_double void) in
-     (C_5:
      begin
        (let _jessie_<somenum> =
-       (y := (C_4:
-             (JC_<somenum>:
+       (y := (JC_<somenum>:
              (((add_double nearest_even) (double_of_real_exact 1.0)) 
-              (C_3:
               (JC_<somenum>:
-              (((mul_double nearest_even) x_0) (C_2:
-                                               (JC_<somenum>:
+              (((mul_double nearest_even) x_0) (JC_<somenum>:
                                                (((add_double nearest_even) 
                                                  (double_of_real_exact 1.0)) 
-                                                (C_1:
                                                 (JC_<somenum>:
                                                 (((div_double nearest_even) x_0) 
-                                                 (double_of_real_exact 2.0)))))))))))))) in
-       void); (return := !y); (raise Return) end)); absurd  end with
-   Return -> !return end)) { true }
+                                                 (double_of_real_exact 2.0)))))))))) in
+       void); (return := !y); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test4_floats.jessie --quiet -f test4_floats.makefile project

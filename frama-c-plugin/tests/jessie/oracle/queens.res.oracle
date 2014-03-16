@@ -198,9 +198,9 @@ lemma iset_c_min_elt_help :
   ((x_10 != 0) <==> ((x_10 & (- x_10)) != 0)))
 
 integer t1(integer a, integer b, integer c)
-  decreases (C_26 : card(iset(a)));
+  decreases (_C_26 : card(iset(a)));
 behavior default:
-  ensures (C_25 : true);
+  ensures (_C_25 : true);
 {  
    (var integer d);
    
@@ -210,42 +210,45 @@ behavior default:
    
    (var integer tmp);
    
-   {  (C_5 : (e = (C_4 : ((C_3 : (a & (C_2 : (~ b)))) & (C_1 : (~ c))))));
-      (C_6 : (f = 1));
+   {  (_C_5 : (e = (_C_4 : ((_C_3 : (a & (_C_2 : (~ b)))) & (_C_1 : (~ c))))));
+      (_C_6 : (f = 1));
       (L : ());
       (if (a != 0) then 
-      {  (C_7 : (f = 0));
+      {  (_C_7 : (f = 0));
          
          loop 
          behavior default:
-           invariant (C_9 : included(iset(e), \at(iset(e),L)));
-         variant (C_8 : card(iset(e)));
+           invariant (_C_9 : included(iset(e), \at(iset(e),L)));
+         variant (_C_8 : card(iset(e)));
          while (true)
          {  
-            {  (C_12 : (d = (C_11 : (e & (C_10 : (- e))))));
+            {  (_C_12 : (d = (_C_11 : (e & (_C_10 : (- e))))));
                (if (d != 0) then () else 
                (goto while_0_break));
                
                {  
                   {  
-                     (assert for default: (C_13 : (jessie : (\exists integer x_11;
-                                                              ((iset(
-                                                                 d) ==
-                                                                 singleton(
-                                                                 x_11)) &&
-                                                                in_(x_11,
-                                                                    iset(
-                                                                    e)))))));
+                     (assert for default: (_C_13 : (jessie : (\exists integer x_11;
+                                                               ((iset(
+                                                                  d) ==
+                                                                  singleton(
+                                                                  x_11)) &&
+                                                                 in_(
+                                                                 x_11,
+                                                                 iset(
+                                                                 e)))))));
                      ()
                   };
                   
-                  {  (C_20 : (tmp = (C_19 : t1((C_14 : (a - d)),
-                                               (C_16 : ((C_15 : (b + d)) * 2)),
-                                               (C_18 : ((C_17 : (c + d)) / 2))))));
-                     (C_22 : (f = (C_21 : (f + tmp))))
+                  {  (_C_20 : (tmp = (_C_19 : t1((_C_14 : (a - d)),
+                                                 (_C_16 : ((_C_15 : (b + d)) *
+                                                            2)),
+                                                 (_C_18 : ((_C_17 : (c + d)) /
+                                                            2))))));
+                     (_C_22 : (f = (_C_21 : (f + tmp))))
                   }
                };
-               (C_24 : (e = (C_23 : (e - d))))
+               (_C_24 : (e = (_C_23 : (e - d))))
             }
          };
          (while_0_break : ())
@@ -325,62 +328,62 @@ predicate sorted{L}(int_xP[..] s_17, integer a_6, integer b_5) =
       lt_sol{L}((s_17 + i_20).int_xM, (s_17 + j_3).int_xM))))
 
 integer min_elt(integer x)
-  requires (C_28 : (x != 0));
+  requires (_C_28 : (x != 0));
 behavior default:
   assigns \nothing;
-  ensures (C_27 : (\result == min_elt(iset(\at(x,Old)))));
+  ensures (_C_27 : (\result == min_elt(iset(\at(x,Old)))));
 ;
 
 unit store_solution()
-  requires (C_32 : solution{Here}(col));
+  requires (_C_32 : solution{Here}(col));
 behavior default:
   assigns s,
   ((sol + s).int_xM + [0..(N - 1)]).intM;
-  ensures (C_29 : ((C_30 : (s == (\at(s,Old) + 1))) &&
-                    (C_31 : eq_sol{Here}((sol + \at(s,Old)).int_xM, col))));
+  ensures (_C_29 : ((_C_30 : (s == (\at(s,Old) + 1))) &&
+                     (_C_31 : eq_sol{Here}((sol + \at(s,Old)).int_xM, col))));
 ;
 
 integer t3(integer a_0, integer b_0, integer c_0)
-  requires (C_87 : ((((C_90 : (0 <= k)) &&
-                       (C_91 : ((k + card(iset(a_0))) == N))) &&
-                      (C_92 : (0 <= s))) &&
-                     ((C_94 : (\forall integer i_22;
-                                (in_(i_22, iset(a_0)) <==>
-                                  (((0 <= i_22) && (i_22 < N)) &&
-                                    (\forall integer j_4;
-                                      (((0 <= j_4) && (j_4 < k)) ==>
-                                        (i_22 != (col + j_4).intM))))))) &&
-                       ((C_96 : (\forall integer i_23;
-                                  ((i_23 >= 0) ==>
-                                    (in_(i_23, iset(b_0)) <==>
-                                      (\exists integer j_5;
-                                        (((0 <= j_5) && (j_5 < k)) &&
-                                          ((col + j_5).intM ==
-                                            ((i_23 + j_5) - k)))))))) &&
-                         ((C_98 : (\forall integer i_24;
-                                    ((i_24 >= 0) ==>
-                                      (in_(i_24, iset(c_0)) <==>
-                                        (\exists integer j_6;
-                                          (((0 <= j_6) && (j_6 < k)) &&
-                                            ((col + j_6).intM ==
-                                              ((i_24 + k) - j_6)))))))) &&
-                           (C_99 : partial_solution{Here}(k, col)))))));
-  decreases (C_100 : card(iset(a_0)));
+  requires (_C_87 : ((((_C_90 : (0 <= k)) &&
+                        (_C_91 : ((k + card(iset(a_0))) == N))) &&
+                       (_C_92 : (0 <= s))) &&
+                      ((_C_94 : (\forall integer i_22;
+                                  (in_(i_22, iset(a_0)) <==>
+                                    (((0 <= i_22) && (i_22 < N)) &&
+                                      (\forall integer j_4;
+                                        (((0 <= j_4) && (j_4 < k)) ==>
+                                          (i_22 != (col + j_4).intM))))))) &&
+                        ((_C_96 : (\forall integer i_23;
+                                    ((i_23 >= 0) ==>
+                                      (in_(i_23, iset(b_0)) <==>
+                                        (\exists integer j_5;
+                                          (((0 <= j_5) && (j_5 < k)) &&
+                                            ((col + j_5).intM ==
+                                              ((i_23 + j_5) - k)))))))) &&
+                          ((_C_98 : (\forall integer i_24;
+                                      ((i_24 >= 0) ==>
+                                        (in_(i_24, iset(c_0)) <==>
+                                          (\exists integer j_6;
+                                            (((0 <= j_6) && (j_6 < k)) &&
+                                              ((col + j_6).intM ==
+                                                ((i_24 + k) - j_6)))))))) &&
+                            (_C_99 : partial_solution{Here}(k, col)))))));
+  decreases (_C_100 : card(iset(a_0)));
 behavior default:
   assigns (col + [k..]).intM,
   s,
   k,
   ((sol + [s..]).int_xM + [..]).intM;
-  ensures (C_78 : (((((C_82 : (\result == (s - \at(s,Old)))) &&
-                       (C_83 : (\result >= 0))) &&
-                      (C_84 : (k == \at(k,Old)))) &&
-                     (C_85 : sorted{Here}(sol, \at(s,Old), s))) &&
-                    (C_86 : (\forall intP[..] t_3;
-                              ((solution{Here}(t_3) &&
-                                 eq_prefix{Here}(col, t_3, k)) <==>
-                                (\exists integer i_25;
-                                  (((\at(s,Old) <= i_25) && (i_25 < s)) &&
-                                    eq_sol{Here}(t_3, (sol + i_25).int_xM))))))));
+  ensures (_C_78 : (((((_C_82 : (\result == (s - \at(s,Old)))) &&
+                        (_C_83 : (\result >= 0))) &&
+                       (_C_84 : (k == \at(k,Old)))) &&
+                      (_C_85 : sorted{Here}(sol, \at(s,Old), s))) &&
+                     (_C_86 : (\forall intP[..] t_3;
+                                ((solution{Here}(t_3) &&
+                                   eq_prefix{Here}(col, t_3, k)) <==>
+                                  (\exists integer i_25;
+                                    (((\at(s,Old) <= i_25) && (i_25 < s)) &&
+                                      eq_sol{Here}(t_3, (sol + i_25).int_xM))))))));
 {  
    (var integer d_0);
    
@@ -390,108 +393,115 @@ behavior default:
    
    (var integer tmp_0);
    
-   {  (C_37 : (e_0 = (C_36 : ((C_35 : (a_0 & (C_34 : (~ b_0)))) &
-                               (C_33 : (~ c_0))))));
-      (C_38 : (f_0 = 1));
+   {  (_C_37 : (e_0 = (_C_36 : ((_C_35 : (a_0 & (_C_34 : (~ b_0)))) &
+                                 (_C_33 : (~ c_0))))));
+      (_C_38 : (f_0 = 1));
       (L : ());
       (if (a_0 != 0) then 
-      {  (C_40 : (f_0 = 0));
+      {  (_C_40 : (f_0 = 0));
          
          loop 
          behavior default:
-           invariant (C_42 : (((((((C_48 : included(iset(e_0),
-                                                    \at(iset(e_0),L))) &&
-                                    (C_49 : (f_0 == (s - \at(s,L))))) &&
-                                   (C_50 : (f_0 >= 0))) &&
-                                  (C_51 : (k == \at(k,L)))) &&
-                                 (C_52 : partial_solution{Here}(k, col))) &&
-                                (C_53 : sorted{Here}(sol, \at(s,L), s))) &&
-                               (C_54 : (\forall intP[..] t_2;
-                                         ((solution{Here}(t_2) &&
-                                            (\exists integer di;
-                                              ((in_(di,
-                                                    diff(\at(iset(e_0),L),
-                                                         iset(e_0))) &&
-                                                 eq_prefix{Here}(col, t_2, k)) &&
-                                                ((t_2 + k).intM == di)))) <==>
-                                           (\exists integer i_21;
-                                             (((\at(s,L) <= i_21) &&
-                                                (i_21 < s)) &&
-                                               eq_sol{Here}(t_2,
-                                                            (sol + i_21).int_xM))))))));
+           invariant (_C_42 : (((((((_C_48 : included(iset(e_0),
+                                                      \at(iset(e_0),L))) &&
+                                     (_C_49 : (f_0 == (s - \at(s,L))))) &&
+                                    (_C_50 : (f_0 >= 0))) &&
+                                   (_C_51 : (k == \at(k,L)))) &&
+                                  (_C_52 : partial_solution{Here}(k, col))) &&
+                                 (_C_53 : sorted{Here}(sol, \at(s,L), s))) &&
+                                (_C_54 : (\forall intP[..] t_2;
+                                           ((solution{Here}(t_2) &&
+                                              (\exists integer di;
+                                                ((in_(di,
+                                                      diff(\at(iset(e_0),L),
+                                                           iset(e_0))) &&
+                                                   eq_prefix{Here}(col, t_2,
+                                                                   k)) &&
+                                                  ((t_2 + k).intM == di)))) <==>
+                                             (\exists integer i_21;
+                                               (((\at(s,L) <= i_21) &&
+                                                  (i_21 < s)) &&
+                                                 eq_sol{Here}(t_2,
+                                                              (sol + i_21).int_xM))))))));
          behavior default:
            
            assigns (col + [k..]).intM,
            s,
            k,
            ((sol + [s..]).int_xM + [..]).intM;
-         variant (C_41 : card(iset(e_0)));
+         variant (_C_41 : card(iset(e_0)));
          while (true)
          {  
-            {  (C_57 : (d_0 = (C_56 : (e_0 & (C_55 : (- e_0))))));
+            {  (_C_57 : (d_0 = (_C_56 : (e_0 & (_C_55 : (- e_0))))));
                (if (d_0 != 0) then () else 
                (goto while_0_break));
                
                {  
                   {  
-                     (assert for default: (C_58 : (jessie : (\exists integer x_12;
-                                                              ((iset(
-                                                                 d_0) ==
-                                                                 singleton(
-                                                                 x_12)) &&
-                                                                in_(x_12,
-                                                                    iset(
-                                                                    a_0)))))));
+                     (assert for default: (_C_58 : (jessie : (\exists integer x_12;
+                                                               ((iset(
+                                                                  d_0) ==
+                                                                  singleton(
+                                                                  x_12)) &&
+                                                                 in_(
+                                                                 x_12,
+                                                                 iset(
+                                                                 a_0)))))));
                      ()
                   };
-                  (C_62 : ((C_61 : (C_60 : (col + k)).intM) = (C_59 : min_elt(
-                                                              d_0))));
-                  (C_64 : (k = (C_63 : (k + 1))));
+                  (_C_62 : ((_C_61 : (_C_60 : (col + k)).intM) = (_C_59 : min_elt(
+                                                                 d_0))));
+                  (_C_64 : (k = (_C_63 : (k + 1))));
                   
-                  {  (C_71 : (tmp_0 = (C_70 : t3((C_65 : (a_0 - d_0)),
-                                                 (C_67 : ((C_66 : (b_0 + d_0)) *
-                                                           2)),
-                                                 (C_69 : ((C_68 : (c_0 + d_0)) /
-                                                           2))))));
-                     (C_73 : (f_0 = (C_72 : (f_0 + tmp_0))))
+                  {  (_C_71 : (tmp_0 = (_C_70 : t3((_C_65 : (a_0 - d_0)),
+                                                   (_C_67 : ((_C_66 : 
+                                                             (b_0 +
+                                                               d_0)) *
+                                                              2)),
+                                                   (_C_69 : ((_C_68 : 
+                                                             (c_0 +
+                                                               d_0)) /
+                                                              2))))));
+                     (_C_73 : (f_0 = (_C_72 : (f_0 + tmp_0))))
                   };
-                  (C_75 : (k = (C_74 : (k - 1))))
+                  (_C_75 : (k = (_C_74 : (k - 1))))
                };
-               (C_77 : (e_0 = (C_76 : (e_0 - d_0))))
+               (_C_77 : (e_0 = (_C_76 : (e_0 - d_0))))
             }
          };
          (while_0_break : ())
-      } else (C_39 : store_solution()));
+      } else (_C_39 : store_solution()));
       
       (return f_0)
    }
 }
 
 integer queens(integer n_1)
-  requires (C_114 : (((C_116 : (n_1 == N)) && (C_117 : (s == 0))) &&
-                      (C_118 : (k == 0))));
+  requires (_C_114 : (((_C_116 : (n_1 == N)) && (_C_117 : (s == 0))) &&
+                       (_C_118 : (k == 0))));
 behavior default:
-  ensures (C_109 : (((C_111 : (\result == s)) &&
-                      (C_112 : sorted{Here}(sol, 0, s))) &&
-                     (C_113 : (\forall intP[..] t_4;
-                                (solution{Here}(t_4) <==>
-                                  (\exists integer i_26;
-                                    (((0 <= i_26) && (i_26 < \result)) &&
-                                      eq_sol{Here}(t_4, (sol + i_26).int_xM))))))));
+  ensures (_C_109 : (((_C_111 : (\result == s)) &&
+                       (_C_112 : sorted{Here}(sol, 0, s))) &&
+                      (_C_113 : (\forall intP[..] t_4;
+                                  (solution{Here}(t_4) <==>
+                                    (\exists integer i_26;
+                                      (((0 <= i_26) && (i_26 < \result)) &&
+                                        eq_sol{Here}(t_4, (sol + i_26).int_xM))))))));
 {  
    (var integer tmp_1);
    
    {  
       {  
-         (assert for default: (C_104 : (jessie : (n_1 >= 0))));
+         (assert for default: (_C_104 : (jessie : (n_1 >= 0))));
          
-         (assert for default: (C_103 : (jessie : (n_1 < 32))));
+         (assert for default: (_C_103 : (jessie : (n_1 < 32))));
          
-         (assert for default: (C_102 : (jessie : (-1 >= 0))));
+         (assert for default: (_C_102 : (jessie : (-1 >= 0))));
          
-         (assert for default: (C_101 : (jessie : (-1 <= (2147483647 >>> n_1)))));
-         (C_108 : (tmp_1 = (C_107 : t3((C_106 : (~ (C_105 : (-1 << n_1)))),
-                                       0, 0))))
+         (assert for default: (_C_101 : (jessie : (-1 <=
+                                                    (2147483647 >>> n_1)))));
+         (_C_108 : (tmp_1 = (_C_107 : t3((_C_106 : (~ (_C_105 : (-1 << n_1)))),
+                                         0, 0))))
       };
       
       (return tmp_1)
@@ -1303,15 +1313,11 @@ let queens_ensures_default =
         (assert { (JC_<somenum>: ge_int(neg_int((1)), (0))) }; void);
         (assert { (JC_<somenum>: le_int(neg_int((1)), asr((2147483647), n_1))) };
         void);
-        (C_108:
-        begin
-          (tmp_1 := (C_107:
-                    (let _jessie_<somenum> =
-                    (C_106: (bw_compl (C_105: ((lsl (neg_int (1))) n_1)))) in
-                    (let _jessie_<somenum> = (0) in
-                    (let _jessie_<somenum> = (0) in
-                    (JC_<somenum>: (((t3 _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))));
-         !tmp_1 end) end in void); (return := !tmp_1); (raise Return) end);
+        (tmp_1 := (let _jessie_<somenum> = (bw_compl ((lsl (neg_int (1))) n_1)) in
+                  (let _jessie_<somenum> = (0) in
+                  (let _jessie_<somenum> = (0) in
+                  (JC_<somenum>: (((t3 _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>))))));
+        !tmp_1 end in void); (return := !tmp_1); (raise Return) end); 
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: (result = s_0))
@@ -1341,16 +1347,12 @@ let queens_safety =
         [ { } unit { (JC_<somenum>: lt_int(n_1, (32))) } ];
         [ { } unit { (JC_<somenum>: ge_int(neg_int((1)), (0))) } ];
         [ { } unit { (JC_<somenum>: le_int(neg_int((1)), asr((2147483647), n_1))) } ];
-        (C_108:
-        begin
-          (tmp_1 := (C_107:
-                    (let _jessie_<somenum> =
-                    (C_106: (bw_compl (C_105: ((lsl (neg_int (1))) n_1)))) in
-                    (let _jessie_<somenum> = (0) in
-                    (let _jessie_<somenum> = (0) in
-                    (JC_<somenum>:
-                    (((t3_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))));
-         !tmp_1 end) end in void); (return := !tmp_1); (raise Return) end);
+        (tmp_1 := (let _jessie_<somenum> = (bw_compl ((lsl (neg_int (1))) n_1)) in
+                  (let _jessie_<somenum> = (0) in
+                  (let _jessie_<somenum> = (0) in
+                  (JC_<somenum>:
+                  (((t3_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>))))));
+        !tmp_1 end in void); (return := !tmp_1); (raise Return) end); 
     absurd  end with Return -> !return end)) { true }
 
 let t1_ensures_default =
@@ -1364,76 +1366,54 @@ let t1_ensures_default =
      (let e = ref (any_int void) in
      (let f = ref (any_int void) in
      (let tmp = ref (any_int void) in
-     (C_5:
      begin
        (let _jessie_<somenum> =
-       (e := (C_4:
-             ((bw_and (C_3: ((bw_and a_1) (C_2: (bw_compl b_1))))) (C_1:
-                                                                   (bw_compl c))))) in
-       void);
-      (C_6:
+       (e := ((bw_and ((bw_and a_1) (bw_compl b_1))) (bw_compl c))) in void);
+      (let _jessie_<somenum> = (f := (1)) in void);
+      (L:
       begin
-        (let _jessie_<somenum> = (f := (1)) in void);
-       (L:
-       begin
-         void;
-        (if ((neq_int_ a_1) (0))
-        then
-         try
-          (C_7:
+        void;
+       (if ((neq_int_ a_1) (0))
+       then
+        try
+         begin
+           (let _jessie_<somenum> = (f := (0)) in void);
+          (loop_2:
           begin
-            (let _jessie_<somenum> = (f := (0)) in void);
-           (loop_2:
-           begin
-             while true do
-             { invariant (JC_<somenum>: included(iset(e), iset(e@L)))  }
-              begin
-                [ { } unit { true } ];
-               try
-                begin
+            while true do
+            { invariant (JC_<somenum>: included(iset(e), iset(e@L)))  }
+             begin
+               [ { } unit { true } ];
+              try
+               begin
+                 (let _jessie_<somenum> =
+                 begin
+                   (let _jessie_<somenum> = (d := ((bw_and !e) (neg_int !e))) in
+                   void);
+                  (if ((neq_int_ !d) (0)) then void
+                  else (raise (Goto_while_0_break_exc void)));
                   (let _jessie_<somenum> =
-                  (C_12:
                   begin
-                    (let _jessie_<somenum> =
-                    (d := (C_11: ((bw_and !e) (C_10: (neg_int !e))))) in
-                    void);
-                   (if ((neq_int_ !d) (0)) then void
-                   else (raise (Goto_while_0_break_exc void)));
+                    (assert
+                    { (JC_<somenum>:
+                      (exists x_11:int.
+                       ((iset(d) = singleton(x_11)) and in_(x_11, iset(e))))) };
+                    void); void;
                    (let _jessie_<somenum> =
-                   begin
-                     (assert
-                     { (JC_<somenum>:
-                       (exists x_11:int.
-                        ((iset(d) = singleton(x_11)) and in_(x_11, iset(e))))) };
-                     void);
-                    begin
-                      void;
-                     (C_20:
-                     begin
-                       (let _jessie_<somenum> =
-                       (tmp := (C_19:
-                               (let _jessie_<somenum> =
-                               (C_14: ((sub_int a_1) !d)) in
-                               (let _jessie_<somenum> =
-                               (C_16:
-                               ((mul_int (C_15: ((add_int b_1) !d))) (2))) in
-                               (let _jessie_<somenum> =
-                               (C_18:
-                               (JC_<somenum>:
-                               ((computer_div (C_17: ((add_int c) !d))) (2)))) in
-                               (JC_<somenum>:
-                               (((t1 _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>))))))) in
-                       void);
-                      (C_22:
-                      begin   (f := (C_21: ((add_int !f) !tmp))); !f end) end)
-                    end end in void);
-                   (C_24: begin   (e := (C_23: ((sub_int !e) !d))); !e end)
-                  end) in void); (raise (Loop_continue_exc void)) end with
-                Loop_continue_exc _jessie_<somenum> -> void end end done;
-            (raise (Goto_while_0_break_exc void)) end) end) with
-          Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end
-        else void); (return := !f); (raise Return) end) end) end))))); 
-    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
+                   (tmp := (let _jessie_<somenum> = ((sub_int a_1) !d) in
+                           (let _jessie_<somenum> =
+                           ((mul_int ((add_int b_1) !d)) (2)) in
+                           (let _jessie_<somenum> =
+                           (JC_<somenum>: ((computer_div ((add_int c) !d)) (2))) in
+                           (JC_<somenum>: (((t1 _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+                   void); (f := ((add_int !f) !tmp)); !f end in void);
+                  (e := ((sub_int !e) !d)); !e end in void);
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end
+       else void); (return := !f); (raise Return) end) end)))); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: true) }
 
 let t1_safety =
  fun (a_1 : int) (b_1 : int) (c : int) ->
@@ -1446,80 +1426,59 @@ let t1_safety =
      (let e = ref (any_int void) in
      (let f = ref (any_int void) in
      (let tmp = ref (any_int void) in
-     (C_5:
      begin
        (let _jessie_<somenum> =
-       (e := (C_4:
-             ((bw_and (C_3: ((bw_and a_1) (C_2: (bw_compl b_1))))) (C_1:
-                                                                   (bw_compl c))))) in
-       void);
-      (C_6:
+       (e := ((bw_and ((bw_and a_1) (bw_compl b_1))) (bw_compl c))) in void);
+      (let _jessie_<somenum> = (f := (1)) in void);
+      (L:
       begin
-        (let _jessie_<somenum> = (f := (1)) in void);
-       (L:
-       begin
-         void;
-        (if ((neq_int_ a_1) (0))
-        then
-         try
-          (C_7:
+        void;
+       (if ((neq_int_ a_1) (0))
+       then
+        try
+         begin
+           (let _jessie_<somenum> = (f := (0)) in void);
+          (loop_1:
           begin
-            (let _jessie_<somenum> = (f := (0)) in void);
-           (loop_1:
-           begin
-             while true do
-             { invariant (JC_<somenum>: true) variant (JC_<somenum> : card(iset(e))) }
-              begin
-                [ { } unit reads e { (JC_<somenum>: included(iset(e), iset(e@L))) } ];
-               try
-                begin
+            while true do
+            { invariant (JC_<somenum>: true) variant (JC_<somenum> : card(iset(e))) }
+             begin
+               [ { } unit reads e { (JC_<somenum>: included(iset(e), iset(e@L))) } ];
+              try
+               begin
+                 (let _jessie_<somenum> =
+                 begin
+                   (let _jessie_<somenum> = (d := ((bw_and !e) (neg_int !e))) in
+                   void);
+                  (if ((neq_int_ !d) (0)) then void
+                  else (raise (Goto_while_0_break_exc void)));
                   (let _jessie_<somenum> =
-                  (C_12:
                   begin
-                    (let _jessie_<somenum> =
-                    (d := (C_11: ((bw_and !e) (C_10: (neg_int !e))))) in
-                    void);
-                   (if ((neq_int_ !d) (0)) then void
-                   else (raise (Goto_while_0_break_exc void)));
+                    [ { } unit reads d,e
+                      { (JC_<somenum>:
+                        (exists x_11:int.
+                         ((iset(d) = singleton(x_11)) and in_(x_11, iset(e))))) } ];
+                   void;
                    (let _jessie_<somenum> =
-                   begin
-                     [ { } unit reads d,e
-                       { (JC_<somenum>:
-                         (exists x_11:int.
-                          ((iset(d) = singleton(x_11))
-                          and in_(x_11, iset(e))))) } ];
-                    begin
-                      void;
-                     (C_20:
-                     begin
-                       (let _jessie_<somenum> =
-                       (tmp := (C_19:
-                               (let _jessie_<somenum> =
-                               (C_14: ((sub_int a_1) !d)) in
-                               (let _jessie_<somenum> =
-                               (C_16:
-                               ((mul_int (C_15: ((add_int b_1) !d))) (2))) in
-                               (let _jessie_<somenum> =
-                               (C_18:
-                               (JC_<somenum>:
-                               ((computer_div_ (C_17: ((add_int c) !d))) (2)))) in
-                               (JC_<somenum>:
-                               (check
-                               { zwf_zero((JC_<somenum> : card(iset(_jessie_<somenum>))),
-                                 (JC_<somenum> : card(iset(a_1)))) };
-                               (JC_<somenum>:
-                               (((t1_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>))))))))) in
-                       void);
-                      (C_22:
-                      begin   (f := (C_21: ((add_int !f) !tmp))); !f end) end)
-                    end end in void);
-                   (C_24: begin   (e := (C_23: ((sub_int !e) !d))); !e end)
-                  end) in void); (raise (Loop_continue_exc void)) end with
-                Loop_continue_exc _jessie_<somenum> -> void end end done;
-            (raise (Goto_while_0_break_exc void)) end) end) with
-          Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end
-        else void); (return := !f); (raise Return) end) end) end))))); 
-    absurd  end with Return -> !return end)) { true }
+                   (tmp := (let _jessie_<somenum> = ((sub_int a_1) !d) in
+                           (let _jessie_<somenum> =
+                           ((mul_int ((add_int b_1) !d)) (2)) in
+                           (let _jessie_<somenum> =
+                           (JC_<somenum>: ((computer_div_ ((add_int c) !d)) (2))) in
+                           (JC_<somenum>:
+                           (check
+                           { zwf_zero((JC_<somenum> : card(iset(_jessie_<somenum>))),
+                             (JC_<somenum> : card(iset(a_1)))) };
+                           (JC_<somenum>:
+                           (((t1_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))))) in
+                   void); (f := ((add_int !f) !tmp)); !f end in void);
+                  (e := ((sub_int !e) !d)); !e end in void);
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end
+       else void); (return := !f); (raise Return) end) end)))); absurd  end
+   with Return -> !return end)) { true }
 
 let t3_ensures_default =
  fun (a_0_0 : int) (b_0_0 : int) (c_0 : int) ->
@@ -1562,142 +1521,111 @@ let t3_ensures_default =
      (let e_0 = ref (any_int void) in
      (let f_0 = ref (any_int void) in
      (let tmp_0 = ref (any_int void) in
-     (C_37:
      begin
        (let _jessie_<somenum> =
-       (e_0 := (C_36:
-               ((bw_and (C_35: ((bw_and a_0_0) (C_34: (bw_compl b_0_0))))) 
-                (C_33: (bw_compl c_0))))) in void);
-      (C_38:
+       (e_0 := ((bw_and ((bw_and a_0_0) (bw_compl b_0_0))) (bw_compl c_0))) in
+       void); (let _jessie_<somenum> = (f_0 := (1)) in void);
+      (L:
       begin
-        (let _jessie_<somenum> = (f_0 := (1)) in void);
-       (L:
-       begin
-         void;
-        (if ((neq_int_ a_0_0) (0))
-        then
-         try
-          (C_40:
+        void;
+       (if ((neq_int_ a_0_0) (0))
+       then
+        try
+         begin
+           (let _jessie_<somenum> = (f_0 := (0)) in void);
+          (loop_4:
           begin
-            (let _jessie_<somenum> = (f_0 := (0)) in void);
-           (loop_4:
-           begin
-             while true do
-             { invariant
-                 ((JC_<somenum>:
-                  ((JC_<somenum>: included(iset(e_0), iset(e_0@L)))
-                  and ((JC_<somenum>: (f_0 = sub_int(s_0, s_0@L)))
-                      and ((JC_<somenum>: ge_int(f_0, (0)))
-                          and ((JC_<somenum>: (k = k@L))
-                              and ((JC_<somenum>:
-                                   partial_solution(k, col, intP_intM))
-                                  and ((JC_<somenum>:
-                                       sorted(sol, s_0@L, s_0, intP_intM,
-                                       int_xP_int_xM))
-                                      and (JC_<somenum>:
-                                          (forall t_2:intP pointer.
-                                           ((solution(t_2, intP_intM)
-                                            and (exists di:int.
-                                                 (in_(di,
-                                                  diff(iset(e_0@L),
-                                                  iset(e_0)))
-                                                 and (eq_prefix(col, t_2, k,
-                                                      intP_intM)
-                                                     and (select(intP_intM,
-                                                          shift(t_2, k)) = di)))))
-                                           <-> (exists i_21:int.
-                                                (le_int(s_0@L, i_21)
-                                                and (lt_int(i_21, s_0)
-                                                    and eq_sol(t_2,
-                                                        select(int_xP_int_xM,
-                                                        shift(sol, i_21)),
-                                                        intP_intM))))))))))))))
-                 and ((JC_<somenum>:
-                      not_assigns(intP_alloc_table@loop_4, intP_intM@loop_4,
-                      intP_intM,
-                      pset_union(pset_all(pset_deref(int_xP_int_xM,
-                                          pset_range_right(pset_singleton(sol),
-                                          s_0))),
-                      pset_range_right(pset_singleton(col), k))))
-                     and (JC_<somenum>:
-                         not_assigns(intP_alloc_table@init, intP_intM@init,
-                         intP_intM,
-                         pset_union(pset_all(pset_deref(int_xP_int_xM@init,
-                                             pset_range_right(pset_singleton(sol),
-                                             s_0@init))),
-                         pset_range_right(pset_singleton(col), k@init))))))
-                }
-              begin
-                [ { } unit { true } ];
-               try
-                begin
+            while true do
+            { invariant
+                ((JC_<somenum>:
+                 ((JC_<somenum>: included(iset(e_0), iset(e_0@L)))
+                 and ((JC_<somenum>: (f_0 = sub_int(s_0, s_0@L)))
+                     and ((JC_<somenum>: ge_int(f_0, (0)))
+                         and ((JC_<somenum>: (k = k@L))
+                             and ((JC_<somenum>:
+                                  partial_solution(k, col, intP_intM))
+                                 and ((JC_<somenum>:
+                                      sorted(sol, s_0@L, s_0, intP_intM,
+                                      int_xP_int_xM))
+                                     and (JC_<somenum>:
+                                         (forall t_2:intP pointer.
+                                          ((solution(t_2, intP_intM)
+                                           and (exists di:int.
+                                                (in_(di,
+                                                 diff(iset(e_0@L), iset(e_0)))
+                                                and (eq_prefix(col, t_2, k,
+                                                     intP_intM)
+                                                    and (select(intP_intM,
+                                                         shift(t_2, k)) = di)))))
+                                          <-> (exists i_21:int.
+                                               (le_int(s_0@L, i_21)
+                                               and (lt_int(i_21, s_0)
+                                                   and eq_sol(t_2,
+                                                       select(int_xP_int_xM,
+                                                       shift(sol, i_21)),
+                                                       intP_intM))))))))))))))
+                and ((JC_<somenum>:
+                     not_assigns(intP_alloc_table@loop_4, intP_intM@loop_4,
+                     intP_intM,
+                     pset_union(pset_all(pset_deref(int_xP_int_xM,
+                                         pset_range_right(pset_singleton(sol),
+                                         s_0))),
+                     pset_range_right(pset_singleton(col), k))))
+                    and (JC_<somenum>:
+                        not_assigns(intP_alloc_table@init, intP_intM@init,
+                        intP_intM,
+                        pset_union(pset_all(pset_deref(int_xP_int_xM@init,
+                                            pset_range_right(pset_singleton(sol),
+                                            s_0@init))),
+                        pset_range_right(pset_singleton(col), k@init)))))) 
+               }
+             begin
+               [ { } unit { true } ];
+              try
+               begin
+                 (let _jessie_<somenum> =
+                 begin
+                   (let _jessie_<somenum> =
+                   (d_0 := ((bw_and !e_0) (neg_int !e_0))) in void);
+                  (if ((neq_int_ !d_0) (0)) then void
+                  else (raise (Goto_while_0_break_exc void)));
                   (let _jessie_<somenum> =
-                  (C_57:
                   begin
-                    (let _jessie_<somenum> =
-                    (d_0 := (C_56: ((bw_and !e_0) (C_55: (neg_int !e_0))))) in
-                    void);
-                   (if ((neq_int_ !d_0) (0)) then void
-                   else (raise (Goto_while_0_break_exc void)));
+                    (assert
+                    { (JC_<somenum>:
+                      (exists x_12:int.
+                       ((iset(d_0) = singleton(x_12))
+                       and in_(x_12, iset(a_0_0))))) }; void); void;
+                   (let _jessie_<somenum> =
+                   (let _jessie_<somenum> =
+                   (let _jessie_<somenum> = !d_0 in
+                   (JC_<somenum>: (min_elt_0 _jessie_<somenum>))) in
+                   (let _jessie_<somenum> = col in
+                   (let _jessie_<somenum> = !k in
+                   (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+                   (((safe_upd_ intP_intM) _jessie_<somenum>) _jessie_<somenum>))))) in
+                   void);
+                   (let _jessie_<somenum> = (k := ((add_int !k) (1))) in void);
                    (let _jessie_<somenum> =
                    begin
-                     (assert
-                     { (JC_<somenum>:
-                       (exists x_12:int.
-                        ((iset(d_0) = singleton(x_12))
-                        and in_(x_12, iset(a_0_0))))) }; void);
-                    begin
-                      void;
-                     (C_62:
-                     begin
-                       (let _jessie_<somenum> =
-                       (let _jessie_<somenum> =
-                       (C_59:
-                       (let _jessie_<somenum> = !d_0 in
-                       (JC_<somenum>: (min_elt_0 _jessie_<somenum>)))) in
-                       (let _jessie_<somenum> = col in
-                       (let _jessie_<somenum> = !k in
-                       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-                       (((safe_upd_ intP_intM) _jessie_<somenum>) _jessie_<somenum>))))) in
-                       void);
-                      (C_64:
-                      begin
-                        (let _jessie_<somenum> =
-                        (k := (C_63: ((add_int !k) (1)))) in void);
-                       (let _jessie_<somenum> =
-                       (C_71:
-                       begin
-                         (let _jessie_<somenum> =
-                         (tmp_0 := (C_70:
-                                   (let _jessie_<somenum> =
-                                   (C_65: ((sub_int a_0_0) !d_0)) in
-                                   (let _jessie_<somenum> =
-                                   (C_67:
-                                   ((mul_int (C_66: ((add_int b_0_0) !d_0))) (2))) in
-                                   (let _jessie_<somenum> =
-                                   (C_69:
-                                   (JC_<somenum>:
-                                   ((computer_div (C_68:
-                                                  ((add_int c_0) !d_0))) (2)))) in
-                                   (JC_<somenum>:
-                                   (((t3 _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>))))))) in
-                         void);
-                        (C_73:
-                        begin
-                          (f_0 := (C_72: ((add_int !f_0) !tmp_0))); !f_0 end)
-                       end) in void);
-                       (C_75:
-                       begin   (k := (C_74: ((sub_int !k) (1)))); !k end) end)
-                     end) end end in void);
-                   (C_77:
-                   begin   (e_0 := (C_76: ((sub_int !e_0) !d_0))); !e_0 end)
-                  end) in void); (raise (Loop_continue_exc void)) end with
-                Loop_continue_exc _jessie_<somenum> -> void end end done;
-            (raise (Goto_while_0_break_exc void)) end) end) with
-          Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end
-        else (C_39: (JC_<somenum>: (store_solution void)))); (return := !f_0);
-        (raise Return) end) end) end))))); absurd  end with Return ->
-   !return end))
+                     (let _jessie_<somenum> =
+                     (tmp_0 := (let _jessie_<somenum> = ((sub_int a_0_0) !d_0) in
+                               (let _jessie_<somenum> =
+                               ((mul_int ((add_int b_0_0) !d_0)) (2)) in
+                               (let _jessie_<somenum> =
+                               (JC_<somenum>:
+                               ((computer_div ((add_int c_0) !d_0)) (2))) in
+                               (JC_<somenum>:
+                               (((t3 _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+                     void); (f_0 := ((add_int !f_0) !tmp_0)); !f_0 end in
+                   void); (k := ((sub_int !k) (1))); !k end in void);
+                  (e_0 := ((sub_int !e_0) !d_0)); !e_0 end in void);
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end
+       else (JC_<somenum>: (store_solution void))); (return := !f_0);
+       (raise Return) end) end)))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>: (result = sub_int(s_0, s_0@)))
@@ -1761,132 +1689,103 @@ let t3_safety =
      (let e_0 = ref (any_int void) in
      (let f_0 = ref (any_int void) in
      (let tmp_0 = ref (any_int void) in
-     (C_37:
      begin
        (let _jessie_<somenum> =
-       (e_0 := (C_36:
-               ((bw_and (C_35: ((bw_and a_0_0) (C_34: (bw_compl b_0_0))))) 
-                (C_33: (bw_compl c_0))))) in void);
-      (C_38:
+       (e_0 := ((bw_and ((bw_and a_0_0) (bw_compl b_0_0))) (bw_compl c_0))) in
+       void); (let _jessie_<somenum> = (f_0 := (1)) in void);
+      (L:
       begin
-        (let _jessie_<somenum> = (f_0 := (1)) in void);
-       (L:
-       begin
-         void;
-        (if ((neq_int_ a_0_0) (0))
-        then
-         try
-          (C_40:
+        void;
+       (if ((neq_int_ a_0_0) (0))
+       then
+        try
+         begin
+           (let _jessie_<somenum> = (f_0 := (0)) in void);
+          (loop_3:
           begin
-            (let _jessie_<somenum> = (f_0 := (0)) in void);
-           (loop_3:
-           begin
-             while true do
-             { invariant (JC_<somenum>: true) variant (JC_<somenum> : card(iset(e_0))) }
-              begin
-                [ { } unit reads e_0,f_0,intP_intM,int_xP_int_xM,k,s_0
-                  { (JC_<somenum>:
-                    ((JC_<somenum>: included(iset(e_0), iset(e_0@L)))
-                    and ((JC_<somenum>: (f_0 = sub_int(s_0, s_0@L)))
-                        and ((JC_<somenum>: ge_int(f_0, (0)))
-                            and ((JC_<somenum>: (k = k@L))
-                                and ((JC_<somenum>:
-                                     partial_solution(k, col, intP_intM))
-                                    and ((JC_<somenum>:
-                                         sorted(sol, s_0@L, s_0, intP_intM,
-                                         int_xP_int_xM))
-                                        and (JC_<somenum>:
-                                            (forall t_2:intP pointer.
-                                             ((solution(t_2, intP_intM)
-                                              and (exists di:int.
-                                                   (in_(di,
-                                                    diff(iset(e_0@L),
-                                                    iset(e_0)))
-                                                   and (eq_prefix(col, t_2,
-                                                        k, intP_intM)
-                                                       and (select(intP_intM,
-                                                            shift(t_2, k)) = di)))))
-                                             <-> (exists i_21:int.
-                                                  (le_int(s_0@L, i_21)
-                                                  and (lt_int(i_21, s_0)
-                                                      and eq_sol(t_2,
-                                                          select(int_xP_int_xM,
-                                                          shift(sol, i_21)),
-                                                          intP_intM)))))))))))))) } ];
-               try
-                begin
+            while true do
+            { invariant (JC_<somenum>: true) variant (JC_<somenum> : card(iset(e_0))) }
+             begin
+               [ { } unit reads e_0,f_0,intP_intM,int_xP_int_xM,k,s_0
+                 { (JC_<somenum>:
+                   ((JC_<somenum>: included(iset(e_0), iset(e_0@L)))
+                   and ((JC_<somenum>: (f_0 = sub_int(s_0, s_0@L)))
+                       and ((JC_<somenum>: ge_int(f_0, (0)))
+                           and ((JC_<somenum>: (k = k@L))
+                               and ((JC_<somenum>:
+                                    partial_solution(k, col, intP_intM))
+                                   and ((JC_<somenum>:
+                                        sorted(sol, s_0@L, s_0, intP_intM,
+                                        int_xP_int_xM))
+                                       and (JC_<somenum>:
+                                           (forall t_2:intP pointer.
+                                            ((solution(t_2, intP_intM)
+                                             and (exists di:int.
+                                                  (in_(di,
+                                                   diff(iset(e_0@L),
+                                                   iset(e_0)))
+                                                  and (eq_prefix(col, t_2, k,
+                                                       intP_intM)
+                                                      and (select(intP_intM,
+                                                           shift(t_2, k)) = di)))))
+                                            <-> (exists i_21:int.
+                                                 (le_int(s_0@L, i_21)
+                                                 and (lt_int(i_21, s_0)
+                                                     and eq_sol(t_2,
+                                                         select(int_xP_int_xM,
+                                                         shift(sol, i_21)),
+                                                         intP_intM)))))))))))))) } ];
+              try
+               begin
+                 (let _jessie_<somenum> =
+                 begin
+                   (let _jessie_<somenum> =
+                   (d_0 := ((bw_and !e_0) (neg_int !e_0))) in void);
+                  (if ((neq_int_ !d_0) (0)) then void
+                  else (raise (Goto_while_0_break_exc void)));
                   (let _jessie_<somenum> =
-                  (C_57:
                   begin
-                    (let _jessie_<somenum> =
-                    (d_0 := (C_56: ((bw_and !e_0) (C_55: (neg_int !e_0))))) in
-                    void);
-                   (if ((neq_int_ !d_0) (0)) then void
-                   else (raise (Goto_while_0_break_exc void)));
+                    [ { } unit reads d_0
+                      { (JC_<somenum>:
+                        (exists x_12:int.
+                         ((iset(d_0) = singleton(x_12))
+                         and in_(x_12, iset(a_0_0))))) } ]; void;
+                   (let _jessie_<somenum> =
+                   (let _jessie_<somenum> =
+                   (let _jessie_<somenum> = !d_0 in
+                   (JC_<somenum>: (min_elt_0_requires _jessie_<somenum>))) in
+                   (let _jessie_<somenum> = col in
+                   (let _jessie_<somenum> = !k in
+                   (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+                   (JC_<somenum>:
+                   (((((offset_upd_ !intP_alloc_table) intP_intM) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+                   void);
+                   (let _jessie_<somenum> = (k := ((add_int !k) (1))) in void);
                    (let _jessie_<somenum> =
                    begin
-                     [ { } unit reads d_0
-                       { (JC_<somenum>:
-                         (exists x_12:int.
-                          ((iset(d_0) = singleton(x_12))
-                          and in_(x_12, iset(a_0_0))))) } ];
-                    begin
-                      void;
-                     (C_62:
-                     begin
-                       (let _jessie_<somenum> =
-                       (let _jessie_<somenum> =
-                       (C_59:
-                       (let _jessie_<somenum> = !d_0 in
-                       (JC_<somenum>: (min_elt_0_requires _jessie_<somenum>)))) in
-                       (let _jessie_<somenum> = col in
-                       (let _jessie_<somenum> = !k in
-                       (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-                       (JC_<somenum>:
-                       (((((offset_upd_ !intP_alloc_table) intP_intM) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
-                       void);
-                      (C_64:
-                      begin
-                        (let _jessie_<somenum> =
-                        (k := (C_63: ((add_int !k) (1)))) in void);
-                       (let _jessie_<somenum> =
-                       (C_71:
-                       begin
-                         (let _jessie_<somenum> =
-                         (tmp_0 := (C_70:
-                                   (let _jessie_<somenum> =
-                                   (C_65: ((sub_int a_0_0) !d_0)) in
-                                   (let _jessie_<somenum> =
-                                   (C_67:
-                                   ((mul_int (C_66: ((add_int b_0_0) !d_0))) (2))) in
-                                   (let _jessie_<somenum> =
-                                   (C_69:
-                                   (JC_<somenum>:
-                                   ((computer_div_ (C_68:
-                                                   ((add_int c_0) !d_0))) (2)))) in
-                                   (JC_<somenum>:
-                                   (check
-                                   { zwf_zero((JC_<somenum> : card(iset(_jessie_<somenum>))),
-                                     (JC_<somenum> : card(iset(a_0_0)))) };
-                                   (JC_<somenum>:
-                                   (((t3_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>))))))))) in
-                         void);
-                        (C_73:
-                        begin
-                          (f_0 := (C_72: ((add_int !f_0) !tmp_0))); !f_0 end)
-                       end) in void);
-                       (C_75:
-                       begin   (k := (C_74: ((sub_int !k) (1)))); !k end) end)
-                     end) end end in void);
-                   (C_77:
-                   begin   (e_0 := (C_76: ((sub_int !e_0) !d_0))); !e_0 end)
-                  end) in void); (raise (Loop_continue_exc void)) end with
-                Loop_continue_exc _jessie_<somenum> -> void end end done;
-            (raise (Goto_while_0_break_exc void)) end) end) with
-          Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end
-        else (C_39: (JC_<somenum>: (store_solution_requires void))));
-        (return := !f_0); (raise Return) end) end) end))))); absurd  end with
-   Return -> !return end)) { true }
+                     (let _jessie_<somenum> =
+                     (tmp_0 := (let _jessie_<somenum> = ((sub_int a_0_0) !d_0) in
+                               (let _jessie_<somenum> =
+                               ((mul_int ((add_int b_0_0) !d_0)) (2)) in
+                               (let _jessie_<somenum> =
+                               (JC_<somenum>:
+                               ((computer_div_ ((add_int c_0) !d_0)) (2))) in
+                               (JC_<somenum>:
+                               (check
+                               { zwf_zero((JC_<somenum> : card(iset(_jessie_<somenum>))),
+                                 (JC_<somenum> : card(iset(a_0_0)))) };
+                               (JC_<somenum>:
+                               (((t3_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))))) in
+                     void); (f_0 := ((add_int !f_0) !tmp_0)); !f_0 end in
+                   void); (k := ((sub_int !k) (1))); !k end in void);
+                  (e_0 := ((sub_int !e_0) !d_0)); !e_0 end in void);
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<somenum> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
+         Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end
+       else (JC_<somenum>: (store_solution_requires void))); (return := !f_0);
+       (raise Return) end) end)))); absurd  end with Return -> !return end))
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C queens.jessie --quiet -f queens.makefile project
@@ -1978,11 +1877,11 @@ why --project [...] why/queens.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po42.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "392" begin = "9" end = "3335"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "395" begin = "9" end = "3794"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po43.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "392" begin = "9" end = "3335"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "395" begin = "9" end = "3794"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po44.why">
@@ -2026,11 +1925,11 @@ why --project [...] why/queens.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po54.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "392" begin = "9" end = "3335"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "395" begin = "9" end = "3794"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po55.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "392" begin = "9" end = "3335"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "395" begin = "9" end = "3794"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po56.why">
@@ -2073,12 +1972,12 @@ why --project [...] why/queens.why
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po65.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "439" begin = "27" end = "146"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "444" begin = "28" end = "153"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/queens_po66.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "439" begin = "27" end = "146"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "444" begin = "28" end = "153"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2088,11 +1987,11 @@ text = "PointerDeref"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po68.why">
-      <location file = "why/queens.why" line = "1369" begin = "37" end = "147"/>
+      <location file = "why/queens.why" line = "1265" begin = "33" end = "139"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po69.why">
-      <location file = "why/queens.why" line = "1369" begin = "37" end = "147"/>
+      <location file = "why/queens.why" line = "1265" begin = "33" end = "139"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po70.why">
@@ -2193,11 +2092,11 @@ text = "UserCall"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po30.why">
-      <location file = "why/queens.why" line = "1008" begin = "33" end = "135"/>
+      <location file = "why/queens.why" line = "960" begin = "29" end = "127"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po31.why">
-      <location file = "why/queens.why" line = "1008" begin = "33" end = "135"/>
+      <location file = "why/queens.why" line = "960" begin = "29" end = "127"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po32.why">

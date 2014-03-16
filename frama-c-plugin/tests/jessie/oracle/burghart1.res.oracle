@@ -66,72 +66,70 @@ axiomatic cnt_axioms {
 }
 
 integer remove_copy(intP[..] a, integer n_1, intP[..] b, integer val)
-  requires (C_41 : (n_1 >= 0));
-  requires (C_38 : ((C_39 : (\offset_min(a) <= 0)) &&
-                     (C_40 : (\offset_max(a) >= (n_1 - 1)))));
-  requires (C_35 : ((C_36 : (\offset_min(b) <= 0)) &&
-                     (C_37 : (\offset_max(b) >= (n_1 - 1)))));
+  requires (_C_41 : (n_1 >= 0));
+  requires (_C_38 : ((_C_39 : (\offset_min(a) <= 0)) &&
+                      (_C_40 : (\offset_max(a) >= (n_1 - 1)))));
+  requires (_C_35 : ((_C_36 : (\offset_min(b) <= 0)) &&
+                      (_C_37 : (\offset_max(b) >= (n_1 - 1)))));
 behavior default:
   assigns (b + [0..(n_1 - 1)]).intM;
-  ensures (C_24 : ((C_25 : (\forall integer k_1;
-                             (((\result <= k_1) && (k_1 < \at(n_1,Old))) ==>
-                               ((\at(b,Old) + k_1).intM ==
-                                 \at((b + k_1).intM,Old))))) &&
-                    ((C_27 : (\forall integer k_2;
-                               (((0 <= k_2) && (k_2 < \result)) ==>
-                                 ((\at(b,Old) + k_2).intM != \at(val,Old))))) &&
-                      ((C_29 : (\forall integer x_0;
-                                 ((x_0 != \at(val,Old)) ==>
-                                   (cnt{Here}(\at(a,Old), \at(n_1,Old), x_0) ==
-                                     cnt{Here}(\at(b,Old), \result, x_0))))) &&
-                        ((C_31 : (\result ==
-                                   (\at(n_1,Old) -
-                                     cnt{Here}(\at(a,Old), \at(n_1,Old),
-                                               \at(val,Old))))) &&
-                          ((C_33 : (0 <= \result)) &&
-                            (C_34 : (\result <= \at(n_1,Old)))))))));
+  ensures (_C_24 : ((_C_25 : (\forall integer k_1;
+                               (((\result <= k_1) && (k_1 < \at(n_1,Old))) ==>
+                                 ((\at(b,Old) + k_1).intM ==
+                                   \at((b + k_1).intM,Old))))) &&
+                     ((_C_27 : (\forall integer k_2;
+                                 (((0 <= k_2) && (k_2 < \result)) ==>
+                                   ((\at(b,Old) + k_2).intM != \at(val,Old))))) &&
+                       ((_C_29 : (\forall integer x_0;
+                                   ((x_0 != \at(val,Old)) ==>
+                                     (cnt{Here}(\at(a,Old), \at(n_1,Old), x_0) ==
+                                       cnt{Here}(\at(b,Old), \result, x_0))))) &&
+                         ((_C_31 : (\result ==
+                                     (\at(n_1,Old) -
+                                       cnt{Here}(\at(a,Old), \at(n_1,Old),
+                                                 \at(val,Old))))) &&
+                           ((_C_33 : (0 <= \result)) &&
+                             (_C_34 : (\result <= \at(n_1,Old)))))))));
 {  
    (var integer i);
    
    (var integer j);
    
-   {  (C_1 : (j = 0));
-      (C_2 : (i = 0));
+   {  (_C_1 : (j = 0));
+      (_C_2 : (i = 0));
       
       loop 
       behavior default:
-        invariant (C_8 : ((C_9 : (0 <= j)) &&
-                           ((C_11 : (j <= i)) && (C_12 : (i <= n_1)))));
+        invariant (_C_8 : ((_C_9 : (0 <= j)) &&
+                            ((_C_11 : (j <= i)) && (_C_12 : (i <= n_1)))));
       behavior default:
-        invariant (C_7 : (\forall integer k;
-                           (((j <= k) && (k < n_1)) ==>
-                             ((b + k).intM == \at((b + k).intM,Pre)))));
+        invariant (_C_7 : (\forall integer k;
+                            (((j <= k) && (k < n_1)) ==>
+                              ((b + k).intM == \at((b + k).intM,Pre)))));
       behavior default:
-        invariant (C_6 : (\forall integer k_0;
-                           (((0 <= k_0) && (k_0 < j)) ==>
-                             ((b + k_0).intM != val))));
+        invariant (_C_6 : (\forall integer k_0;
+                            (((0 <= k_0) && (k_0 < j)) ==>
+                              ((b + k_0).intM != val))));
       behavior default:
-        invariant (C_5 : (\forall integer x;
-                           ((x != val) ==>
-                             (cnt{Here}(a, i, x) == cnt{Here}(b, j, x)))));
+        invariant (_C_5 : (\forall integer x;
+                            ((x != val) ==>
+                              (cnt{Here}(a, i, x) == cnt{Here}(b, j, x)))));
       behavior default:
-        invariant (C_4 : (j == (i - cnt{Here}(a, i, val))));
+        invariant (_C_4 : (j == (i - cnt{Here}(a, i, val))));
       behavior default:
         
         assigns (b + [0..(j - 1)]).intM;
-      variant (C_3 : (n_1 - i));
+      variant (_C_3 : (n_1 - i));
       while (true)
       {  
          {  (if (i < n_1) then () else 
             (goto while_0_break));
-            (if ((C_21 : (C_20 : (a + i)).intM) != val) then 
-            {  (Before : (C_17 : ((C_16 : (C_15 : (b + j)).intM) = (C_14 : 
-                                                                   (C_13 : 
-                                                                   (a +
-                                                                    i)).intM))));
-               (C_19 : (j = (C_18 : (j + 1))))
+            (if ((_C_21 : (_C_20 : (a + i)).intM) != val) then 
+            {  (Before : (_C_17 : ((_C_16 : (_C_15 : (b + j)).intM) = 
+                         (_C_14 : (_C_13 : (a + i)).intM))));
+               (_C_19 : (j = (_C_18 : (j + 1))))
             } else ());
-            (C_23 : (i = (C_22 : (i + 1))))
+            (_C_23 : (i = (_C_22 : (i + 1))))
          }
       };
       (while_0_break : ());
@@ -621,76 +619,67 @@ let remove_copy_ensures_default =
      (let i = ref (any_int void) in
      (let j = ref (any_int void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (j := (0)) in void);
-       (C_2:
+       (let _jessie_<somenum> = (i := (0)) in void);
+       (loop_2:
        begin
-         (let _jessie_<somenum> = (i := (0)) in void);
-        (loop_2:
-        begin
-          while true do
-          { invariant
-              (((JC_<somenum>: (j = sub_int(i, cnt(a_0, i, val_0, intP_intM_a_2))))
-               and ((JC_<somenum>:
-                    (forall x_1:int.
-                     ((x_1 <> val_0) ->
-                      (cnt(a_0, i, x_1, intP_intM_a_2) = cnt(b, j, x_1,
-                                                         intP_intM_b_3)))))
-                   and ((JC_<somenum>:
-                        (forall k_0:int.
-                         ((le_int((0), k_0) and lt_int(k_0, j)) ->
-                          (select(intP_intM_b_3, shift(b, k_0)) <> val_0))))
-                       and ((JC_<somenum>:
-                            (forall k:int.
-                             ((le_int(j, k) and lt_int(k, n_1)) ->
-                              (select(intP_intM_b_3, shift(b, k)) = select(intP_intM_b_3@init,
-                                                                    shift(b,
-                                                                    k))))))
-                           and (JC_<somenum>:
-                               ((JC_<somenum>: le_int((0), j))
-                               and ((JC_<somenum>: le_int(j, i))
-                                   and (JC_<somenum>: le_int(i, n_1)))))))))
+         while true do
+         { invariant
+             (((JC_<somenum>: (j = sub_int(i, cnt(a_0, i, val_0, intP_intM_a_2))))
               and ((JC_<somenum>:
-                   not_assigns(intP_b_3_alloc_table, intP_intM_b_3@loop_2,
-                   intP_intM_b_3,
-                   pset_range(pset_singleton(b), (0), sub_int(j, (1)))))
-                  and (JC_<somenum>:
-                      not_assigns(intP_b_3_alloc_table, intP_intM_b_3@init,
-                      intP_intM_b_3,
-                      pset_range(pset_singleton(b), (0), sub_int(n_1, (1)))))))
-             }
-           begin
-             [ { } unit { true } ];
-            try
-             begin
-               (let _jessie_<somenum> =
-               begin
-                 (if ((lt_int_ !i) n_1) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((neq_int_ (C_21:
-                               ((safe_acc_ intP_intM_a_2) (C_20:
-                                                          ((shift a_0) !i))))) val_0)
-                then
-                 (let _jessie_<somenum> =
-                 (Before:
-                 begin
-                   (let _jessie_<somenum> =
-                   (C_17:
-                   (let _jessie_<somenum> =
-                   (C_14:
-                   ((safe_acc_ intP_intM_a_2) (C_13: ((shift a_0) !i)))) in
-                   (let _jessie_<somenum> = b in
-                   (let _jessie_<somenum> = !j in
-                   (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-                   (((safe_upd_ intP_intM_b_3) _jessie_<somenum>) _jessie_<somenum>)))))) in
-                   void);
-                  (C_19: begin   (j := (C_18: ((add_int !j) (1)))); !j end)
-                 end) in void) else void);
-                (C_23: begin   (i := (C_22: ((add_int !i) (1)))); !i end) end in
-               void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+                   (forall x_1:int.
+                    ((x_1 <> val_0) ->
+                     (cnt(a_0, i, x_1, intP_intM_a_2) = cnt(b, j, x_1,
+                                                        intP_intM_b_3)))))
+                  and ((JC_<somenum>:
+                       (forall k_0:int.
+                        ((le_int((0), k_0) and lt_int(k_0, j)) ->
+                         (select(intP_intM_b_3, shift(b, k_0)) <> val_0))))
+                      and ((JC_<somenum>:
+                           (forall k:int.
+                            ((le_int(j, k) and lt_int(k, n_1)) ->
+                             (select(intP_intM_b_3, shift(b, k)) = select(intP_intM_b_3@init,
+                                                                   shift(b,
+                                                                   k))))))
+                          and (JC_<somenum>:
+                              ((JC_<somenum>: le_int((0), j))
+                              and ((JC_<somenum>: le_int(j, i))
+                                  and (JC_<somenum>: le_int(i, n_1)))))))))
+             and ((JC_<somenum>:
+                  not_assigns(intP_b_3_alloc_table, intP_intM_b_3@loop_2,
+                  intP_intM_b_3,
+                  pset_range(pset_singleton(b), (0), sub_int(j, (1)))))
+                 and (JC_<somenum>:
+                     not_assigns(intP_b_3_alloc_table, intP_intM_b_3@init,
+                     intP_intM_b_3,
+                     pset_range(pset_singleton(b), (0), sub_int(n_1, (1)))))))
+            }
+          begin
+            [ { } unit { true } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((lt_int_ !i) n_1) then void
+                else (raise (Goto_while_0_break_exc void)));
+               (if ((neq_int_ ((safe_acc_ intP_intM_a_2) ((shift a_0) !i))) val_0)
+               then
+                (let _jessie_<somenum> =
+                (Before:
+                begin
+                  (let _jessie_<somenum> =
+                  (let _jessie_<somenum> =
+                  ((safe_acc_ intP_intM_a_2) ((shift a_0) !i)) in
+                  (let _jessie_<somenum> = b in
+                  (let _jessie_<somenum> = !j in
+                  (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+                  (((safe_upd_ intP_intM_b_3) _jessie_<somenum>) _jessie_<somenum>))))) in
+                  void); (j := ((add_int !j) (1))); !j end) in void)
+               else void); (i := ((add_int !i) (1))); !i end in void);
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !j); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -736,69 +725,60 @@ let remove_copy_safety =
      (let i = ref (any_int void) in
      (let j = ref (any_int void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (j := (0)) in void);
-       (C_2:
+       (let _jessie_<somenum> = (i := (0)) in void);
+       (loop_1:
        begin
-         (let _jessie_<somenum> = (i := (0)) in void);
-        (loop_1:
-        begin
-          while true do
-          { invariant (JC_<somenum>: true) variant (JC_<somenum> : sub_int(n_1, i)) }
-           begin
-             [ { } unit reads i,intP_intM_b_3,j
-               { ((JC_<somenum>:
-                  (j = sub_int(i, cnt(a_0, i, val_0, intP_intM_a_2))))
-                 and ((JC_<somenum>:
-                      (forall x_1:int.
-                       ((x_1 <> val_0) ->
-                        (cnt(a_0, i, x_1, intP_intM_a_2) = cnt(b, j, x_1,
-                                                           intP_intM_b_3)))))
-                     and ((JC_<somenum>:
-                          (forall k_0:int.
-                           ((le_int((0), k_0) and lt_int(k_0, j)) ->
-                            (select(intP_intM_b_3, shift(b, k_0)) <> val_0))))
-                         and ((JC_<somenum>:
-                              (forall k:int.
-                               ((le_int(j, k) and lt_int(k, n_1)) ->
-                                (select(intP_intM_b_3, shift(b, k)) = 
-                                select(intP_intM_b_3@init, shift(b, k))))))
-                             and (JC_<somenum>:
-                                 ((JC_<somenum>: le_int((0), j))
-                                 and ((JC_<somenum>: le_int(j, i))
-                                     and (JC_<somenum>: le_int(i, n_1))))))))) } ];
-            try
-             begin
-               (let _jessie_<somenum> =
-               begin
-                 (if ((lt_int_ !i) n_1) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (if ((neq_int_ (C_21:
-                               (JC_<somenum>:
-                               ((((offset_acc_ intP_a_2_alloc_table) intP_intM_a_2) a_0) !i)))) val_0)
-                then
-                 (let _jessie_<somenum> =
-                 (Before:
-                 begin
-                   (let _jessie_<somenum> =
-                   (C_17:
-                   (let _jessie_<somenum> =
-                   (C_14:
-                   (JC_<somenum>:
-                   ((((offset_acc_ intP_a_2_alloc_table) intP_intM_a_2) a_0) !i))) in
-                   (let _jessie_<somenum> = b in
-                   (let _jessie_<somenum> = !j in
-                   (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-                   (JC_<somenum>:
-                   (((((offset_upd_ intP_b_3_alloc_table) intP_intM_b_3) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>))))))) in
-                   void);
-                  (C_19: begin   (j := (C_18: ((add_int !j) (1)))); !j end)
-                 end) in void) else void);
-                (C_23: begin   (i := (C_22: ((add_int !i) (1)))); !i end) end in
-               void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+         while true do
+         { invariant (JC_<somenum>: true) variant (JC_<somenum> : sub_int(n_1, i)) }
+          begin
+            [ { } unit reads i,intP_intM_b_3,j
+              { ((JC_<somenum>: (j = sub_int(i, cnt(a_0, i, val_0, intP_intM_a_2))))
+                and ((JC_<somenum>:
+                     (forall x_1:int.
+                      ((x_1 <> val_0) ->
+                       (cnt(a_0, i, x_1, intP_intM_a_2) = cnt(b, j, x_1,
+                                                          intP_intM_b_3)))))
+                    and ((JC_<somenum>:
+                         (forall k_0:int.
+                          ((le_int((0), k_0) and lt_int(k_0, j)) ->
+                           (select(intP_intM_b_3, shift(b, k_0)) <> val_0))))
+                        and ((JC_<somenum>:
+                             (forall k:int.
+                              ((le_int(j, k) and lt_int(k, n_1)) ->
+                               (select(intP_intM_b_3, shift(b, k)) = 
+                               select(intP_intM_b_3@init, shift(b, k))))))
+                            and (JC_<somenum>:
+                                ((JC_<somenum>: le_int((0), j))
+                                and ((JC_<somenum>: le_int(j, i))
+                                    and (JC_<somenum>: le_int(i, n_1))))))))) } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((lt_int_ !i) n_1) then void
+                else (raise (Goto_while_0_break_exc void)));
+               (if ((neq_int_ (JC_<somenum>:
+                              ((((offset_acc_ intP_a_2_alloc_table) intP_intM_a_2) a_0) !i))) val_0)
+               then
+                (let _jessie_<somenum> =
+                (Before:
+                begin
+                  (let _jessie_<somenum> =
+                  (let _jessie_<somenum> =
+                  (JC_<somenum>:
+                  ((((offset_acc_ intP_a_2_alloc_table) intP_intM_a_2) a_0) !i)) in
+                  (let _jessie_<somenum> = b in
+                  (let _jessie_<somenum> = !j in
+                  (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+                  (JC_<somenum>:
+                  (((((offset_upd_ intP_b_3_alloc_table) intP_intM_b_3) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+                  void); (j := ((add_int !j) (1))); !j end) in void)
+               else void); (i := ((add_int !i) (1))); !i end in void);
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !j); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -835,11 +815,11 @@ why --project [...] why/burghart1.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po7.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "95" begin = "6" end = "1524"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "95" begin = "6" end = "1373"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po8.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "95" begin = "6" end = "1524"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "95" begin = "6" end = "1373"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po9.why">
@@ -871,11 +851,11 @@ why --project [...] why/burghart1.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po16.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "95" begin = "6" end = "1524"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "95" begin = "6" end = "1373"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po17.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "95" begin = "6" end = "1524"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "95" begin = "6" end = "1373"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po18.why">

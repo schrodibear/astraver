@@ -54,18 +54,18 @@ int32 global;
 
 unit main()
 behavior default:
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 {  
    {  
       {  
-         (assert for default: (C_1 : (jessie : (global == 0))));
+         (assert for default: (_C_1 : (jessie : (global == 0))));
          ()
       };
       
       {  
-         (assert for default: (C_2 : (jessie : (\forall integer i_1;
-                                                 (((0 <= i_1) && (i_1 < 5)) ==>
-                                                   ((c + i_1).intM == 0))))));
+         (assert for default: (_C_2 : (jessie : (\forall integer i_1;
+                                                  (((0 <= i_1) && (i_1 < 5)) ==>
+                                                    ((c + i_1).intM == 0))))));
          ()
       };
       

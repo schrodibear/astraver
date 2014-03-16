@@ -42,11 +42,11 @@ logic boolean not(boolean b) =
 
 unit f()
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    {  
       {  
-         (assert for default: (C_1 : (jessie : (! (not(true) == true)))));
+         (assert for default: (_C_1 : (jessie : (! (not(true) == true)))));
          ()
       };
       

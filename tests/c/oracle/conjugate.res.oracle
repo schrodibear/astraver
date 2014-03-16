@@ -150,16 +150,16 @@ predicate is_conjugate{L}(intP[..] a_1, intP[..] b) =
           numofgt{L}(a_1, (b + j_2).intM, j_2)))),L)
 
 unit conjgte(intP[0] A, intP[0] B)
-  requires (C_47 : ((C_48 : (\offset_min(A) <= 0)) &&
-                     (C_49 : (\offset_max(A) >= (100 - 1)))));
-  requires (C_44 : ((C_45 : (\offset_min(B) <= 0)) &&
-                     (C_46 : (\offset_max(B) >= (100 - 1)))));
-  requires (C_43 : (\forall integer k;
-                     (((1 <= k) && (k < 100)) ==> ((B + k).intM == 0))));
-  requires (C_42 : is_partition{Here}(A));
+  requires (_C_47 : ((_C_48 : (\offset_min(A) <= 0)) &&
+                      (_C_49 : (\offset_max(A) >= (100 - 1)))));
+  requires (_C_44 : ((_C_45 : (\offset_min(B) <= 0)) &&
+                      (_C_46 : (\offset_max(B) >= (100 - 1)))));
+  requires (_C_43 : (\forall integer k;
+                      (((1 <= k) && (k < 100)) ==> ((B + k).intM == 0))));
+  requires (_C_42 : is_partition{Here}(A));
 behavior default:
   assigns (B + [..]).intM;
-  ensures (C_41 : is_conjugate{Here}(\at(A,Old), \at(B,Old)));
+  ensures (_C_41 : is_conjugate{Here}(\at(A,Old), \at(B,Old)));
 {  
    (var int32 i);
    
@@ -167,72 +167,74 @@ behavior default:
    
    (var int32 edge);
    
-   {  (C_1 : (partc = 1));
-      (C_2 : (edge = 0));
+   {  (_C_1 : (partc = 1));
+      (_C_2 : (edge = 0));
       
       loop 
       behavior default:
-        invariant (C_6 : ((C_7 : (1 <= partc)) && (C_8 : (partc < 100))));
+        invariant (_C_6 : ((_C_7 : (1 <= partc)) && (_C_8 : (partc < 100))));
       behavior default:
-        invariant (C_5 : (\forall integer j_6;
-                           ((((A + partc).intM < j_6) &&
-                              (j_6 <= (A + 1).intM)) ==>
-                             numofgt{Here}(A, (B + j_6).intM, j_6))));
+        invariant (_C_5 : (\forall integer j_6;
+                            ((((A + partc).intM < j_6) &&
+                               (j_6 <= (A + 1).intM)) ==>
+                              numofgt{Here}(A, (B + j_6).intM, j_6))));
       behavior default:
-        invariant (C_4 : (\forall integer j_7;
-                           ((((A + 1).intM < j_7) && (j_7 < 100)) ==>
-                             ((B + j_7).intM == 0))));
-      variant (C_3 : (100 - partc));
+        invariant (_C_4 : (\forall integer j_7;
+                            ((((A + 1).intM < j_7) && (j_7 < 100)) ==>
+                              ((B + j_7).intM == 0))));
+      variant (_C_3 : (100 - partc));
       while (true)
       {  
-         {  (if ((C_10 : (C_9 : (A + partc)).intM) != 0) then () else 
+         {  (if ((_C_10 : (_C_9 : (A + partc)).intM) != 0) then () else 
             (goto while_0_break));
             (Start : 
-            {  (C_13 : (edge = (C_12 : (C_11 : (A + partc)).intM)));
+            {  (_C_13 : (edge = (_C_12 : (_C_11 : (A + partc)).intM)));
                
                loop 
                behavior default:
-                 invariant (C_16 : ((C_17 : (\at(partc,Start) <= partc)) &&
-                                     (C_18 : (partc < (100 - 1)))));
+                 invariant (_C_16 : ((_C_17 : (\at(partc,Start) <= partc)) &&
+                                      (_C_18 : (partc < (100 - 1)))));
                behavior default:
-                 invariant (C_15 : (\forall integer j_3;
-                                     (((\at(partc,Start) <= j_3) &&
-                                        (j_3 < partc)) ==>
-                                       ((A + j_3).intM == edge))));
-               variant (C_14 : (100 - partc));
+                 invariant (_C_15 : (\forall integer j_3;
+                                      (((\at(partc,Start) <= j_3) &&
+                                         (j_3 < partc)) ==>
+                                        ((A + j_3).intM == edge))));
+               variant (_C_14 : (100 - partc));
                while (true)
                {  
-                  {  (C_21 : (partc = (C_20 : ((C_19 : (partc + 1)) :> int32))));
-                     (if ((C_23 : (C_22 : (A + partc)).intM) == edge) then () else 
+                  {  (_C_21 : (partc = (_C_20 : ((_C_19 : (partc + 1)) :> int32))));
+                     (if ((_C_23 : (_C_22 : (A + partc)).intM) == edge) then () else 
                      (goto while_1_break))
                   }
                };
                (while_1_break : ());
-               (C_28 : (i = (C_27 : ((C_26 : ((C_25 : (C_24 : (A + partc)).intM) +
-                                               1)) :> int32))));
+               (_C_28 : (i = (_C_27 : ((_C_26 : ((_C_25 : (_C_24 : (A +
+                                                                    partc)).intM) +
+                                                  1)) :> int32))));
                
                loop 
                behavior default:
-                 invariant (C_32 : (1 <= i));
+                 invariant (_C_32 : (1 <= i));
                behavior default:
-                 invariant (C_31 : (\forall integer j_4;
-                                     (((edge < j_4) && (j_4 < 100)) ==>
-                                       ((B + j_4).intM ==
-                                         \at((B + j_4).intM,Start)))));
+                 invariant (_C_31 : (\forall integer j_4;
+                                      (((edge < j_4) && (j_4 < 100)) ==>
+                                        ((B + j_4).intM ==
+                                          \at((B + j_4).intM,Start)))));
                behavior default:
-                 invariant (C_30 : (\forall integer j_5;
-                                     ((((A + partc).intM < j_5) && (j_5 < i)) ==>
-                                       ((B + j_5).intM == (partc - 1)))));
-               variant (C_29 : (edge - i));
+                 invariant (_C_30 : (\forall integer j_5;
+                                      ((((A + partc).intM < j_5) &&
+                                         (j_5 < i)) ==>
+                                        ((B + j_5).intM == (partc - 1)))));
+               variant (_C_29 : (edge - i));
                while (true)
                {  
                   {  (if (i <= edge) then () else 
                      (goto while_2_break));
-                     (C_37 : ((C_36 : (C_35 : (B + i)).intM) = (C_34 : (
-                                                               (C_33 : 
-                                                               (partc -
-                                                                 1)) :> int32))));
-                     (C_40 : (i = (C_39 : ((C_38 : (i + 1)) :> int32))))
+                     (_C_37 : ((_C_36 : (_C_35 : (B + i)).intM) = (_C_34 : (
+                                                                  (_C_33 : 
+                                                                  (partc -
+                                                                    1)) :> int32))));
+                     (_C_40 : (i = (_C_39 : ((_C_38 : (i + 1)) :> int32))))
                   }
                };
                (while_2_break : ())
@@ -245,143 +247,143 @@ behavior default:
    }
 }
 ========== file tests/c/conjugate.jessie/conjugate.cloc ==========
-[C_15]
-file = "HOME/tests/c/conjugate.c"
-line = 62
-begin = 23
-end = 99
-
-[C_11]
-file = "HOME/tests/c/conjugate.c"
-line = 60
-begin = 11
-end = 12
-
-[C_1]
-file = "HOME/tests/c/conjugate.c"
-line = 50
-begin = 2
-end = 5
-
-[C_33]
+[_C_35]
 file = "HOME/tests/c/conjugate.c"
 line = 77
-begin = 13
-end = 22
+begin = 6
+end = 7
 
-[C_9]
-file = "HOME/tests/c/conjugate.c"
-line = 58
-begin = 9
-end = 10
-
-[C_10]
-file = "HOME/tests/c/conjugate.c"
-line = 58
-begin = 9
-end = 17
-
-[C_20]
-file = "HOME/tests/c/conjugate.c"
-line = 67
-begin = 14
-end = 23
-
-[C_43]
-file = "HOME/tests/c/conjugate.c"
-line = 44
-begin = 13
-end = 58
-
-[C_32]
-file = "HOME/tests/c/conjugate.c"
-line = 69
-begin = 23
-end = 29
-
-[C_17]
-file = "HOME/tests/c/conjugate.c"
-line = 61
-begin = 23
-end = 48
-
-[C_40]
+[_C_28]
 file = "HOME/tests/c/conjugate.c"
 line = 76
-begin = 38
-end = 41
-
-[C_36]
-file = "HOME/tests/c/conjugate.c"
-line = 77
 begin = 13
-end = 22
+end = 25
 
-[C_42]
-file = "HOME/tests/c/conjugate.c"
-line = 45
-begin = 13
-end = 28
-
-[C_5]
-file = "HOME/tests/c/conjugate.c"
-line = 52
-begin = 21
-end = 90
-
-[C_34]
-file = "HOME/tests/c/conjugate.c"
-line = 77
-begin = 13
-end = 22
-
-[C_29]
-file = "HOME/tests/c/conjugate.c"
-line = 74
-begin = 21
-end = 27
-
-[C_13]
-file = "HOME/tests/c/conjugate.c"
-line = 60
-begin = 11
-end = 19
-
-[C_45]
-file = "HOME/tests/c/conjugate.c"
-line = 42
-begin = 13
-end = 38
-
-[C_47]
+[_C_48]
 file = "HOME/tests/c/conjugate.c"
 line = 41
 begin = 13
 end = 38
 
-[C_7]
+[_C_31]
 file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 21
-end = 31
+line = 70
+begin = 23
+end = 94
 
-[C_22]
+[_C_41]
+file = "HOME/tests/c/conjugate.c"
+line = 47
+begin = 12
+end = 29
+
+[_C_4]
+file = "HOME/tests/c/conjugate.c"
+line = 54
+begin = 21
+end = 76
+
+[_C_32]
+file = "HOME/tests/c/conjugate.c"
+line = 69
+begin = 23
+end = 29
+
+[_C_23]
+file = "HOME/tests/c/conjugate.c"
+line = 68
+begin = 11
+end = 19
+
+[_C_19]
+file = "HOME/tests/c/conjugate.c"
+line = 67
+begin = 14
+end = 23
+
+[_C_42]
+file = "HOME/tests/c/conjugate.c"
+line = 45
+begin = 13
+end = 28
+
+[_C_13]
+file = "HOME/tests/c/conjugate.c"
+line = 60
+begin = 11
+end = 19
+
+[_C_5]
+file = "HOME/tests/c/conjugate.c"
+line = 52
+begin = 21
+end = 90
+
+[_C_36]
+file = "HOME/tests/c/conjugate.c"
+line = 77
+begin = 13
+end = 22
+
+[_C_12]
+file = "HOME/tests/c/conjugate.c"
+line = 60
+begin = 11
+end = 19
+
+[_C_33]
+file = "HOME/tests/c/conjugate.c"
+line = 77
+begin = 13
+end = 22
+
+[_C_22]
 file = "HOME/tests/c/conjugate.c"
 line = 68
 begin = 11
 end = 12
 
-[C_14]
+[_C_9]
 file = "HOME/tests/c/conjugate.c"
-line = 64
-begin = 21
-end = 32
+line = 58
+begin = 9
+end = 10
 
-[C_35]
+[_C_30]
 file = "HOME/tests/c/conjugate.c"
-line = 77
-begin = 6
-end = 7
+line = 72
+begin = 23
+end = 88
+
+[_C_6]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 21
+end = 37
+
+[_C_49]
+file = "HOME/tests/c/conjugate.c"
+line = 41
+begin = 13
+end = 38
+
+[_C_24]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 14
+
+[_C_45]
+file = "HOME/tests/c/conjugate.c"
+line = 42
+begin = 13
+end = 38
+
+[_C_20]
+file = "HOME/tests/c/conjugate.c"
+line = 67
+begin = 14
+end = 23
 
 [conjgte]
 name = "Function conjgte"
@@ -390,161 +392,161 @@ line = 49
 begin = 5
 end = 12
 
-[C_25]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 21
-
-[C_38]
+[_C_38]
 file = "HOME/tests/c/conjugate.c"
 line = 76
 begin = 38
 end = 41
 
-[C_8]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 26
-end = 37
-
-[C_39]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 38
-end = 41
-
-[C_44]
-file = "HOME/tests/c/conjugate.c"
-line = 42
-begin = 13
-end = 38
-
-[C_27]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 25
-
-[C_46]
-file = "HOME/tests/c/conjugate.c"
-line = 42
-begin = 13
-end = 38
-
-[C_37]
-file = "HOME/tests/c/conjugate.c"
-line = 77
-begin = 13
-end = 22
-
-[C_19]
-file = "HOME/tests/c/conjugate.c"
-line = 67
-begin = 14
-end = 23
-
-[C_48]
-file = "HOME/tests/c/conjugate.c"
-line = 41
-begin = 13
-end = 38
-
-[C_4]
-file = "HOME/tests/c/conjugate.c"
-line = 54
-begin = 21
-end = 76
-
-[C_12]
-file = "HOME/tests/c/conjugate.c"
-line = 60
-begin = 11
-end = 19
-
-[C_26]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 25
-
-[C_18]
-file = "HOME/tests/c/conjugate.c"
-line = 61
-begin = 43
-end = 57
-
-[C_2]
-file = "HOME/tests/c/conjugate.c"
-line = 50
-begin = 2
-end = 5
-
-[C_28]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 25
-
-[C_24]
-file = "HOME/tests/c/conjugate.c"
-line = 76
-begin = 13
-end = 14
-
-[C_6]
-file = "HOME/tests/c/conjugate.c"
-line = 51
-begin = 21
-end = 37
-
-[C_30]
-file = "HOME/tests/c/conjugate.c"
-line = 72
-begin = 23
-end = 88
-
-[C_41]
-file = "HOME/tests/c/conjugate.c"
-line = 47
-begin = 12
-end = 29
-
-[C_21]
-file = "HOME/tests/c/conjugate.c"
-line = 67
-begin = 14
-end = 23
-
-[C_3]
+[_C_3]
 file = "HOME/tests/c/conjugate.c"
 line = 56
 begin = 19
 end = 30
 
-[C_16]
+[_C_17]
 file = "HOME/tests/c/conjugate.c"
 line = 61
 begin = 23
-end = 57
+end = 48
 
-[C_49]
+[_C_7]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 21
+end = 31
+
+[_C_27]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 25
+
+[_C_46]
+file = "HOME/tests/c/conjugate.c"
+line = 42
+begin = 13
+end = 38
+
+[_C_44]
+file = "HOME/tests/c/conjugate.c"
+line = 42
+begin = 13
+end = 38
+
+[_C_15]
+file = "HOME/tests/c/conjugate.c"
+line = 62
+begin = 23
+end = 99
+
+[_C_26]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 25
+
+[_C_47]
 file = "HOME/tests/c/conjugate.c"
 line = 41
 begin = 13
 end = 38
 
-[C_31]
+[_C_10]
 file = "HOME/tests/c/conjugate.c"
-line = 70
-begin = 23
-end = 94
+line = 58
+begin = 9
+end = 17
 
-[C_23]
+[_C_40]
 file = "HOME/tests/c/conjugate.c"
-line = 68
+line = 76
+begin = 38
+end = 41
+
+[_C_8]
+file = "HOME/tests/c/conjugate.c"
+line = 51
+begin = 26
+end = 37
+
+[_C_18]
+file = "HOME/tests/c/conjugate.c"
+line = 61
+begin = 43
+end = 57
+
+[_C_29]
+file = "HOME/tests/c/conjugate.c"
+line = 74
+begin = 21
+end = 27
+
+[_C_14]
+file = "HOME/tests/c/conjugate.c"
+line = 64
+begin = 21
+end = 32
+
+[_C_37]
+file = "HOME/tests/c/conjugate.c"
+line = 77
+begin = 13
+end = 22
+
+[_C_43]
+file = "HOME/tests/c/conjugate.c"
+line = 44
+begin = 13
+end = 58
+
+[_C_2]
+file = "HOME/tests/c/conjugate.c"
+line = 50
+begin = 2
+end = 5
+
+[_C_34]
+file = "HOME/tests/c/conjugate.c"
+line = 77
+begin = 13
+end = 22
+
+[_C_16]
+file = "HOME/tests/c/conjugate.c"
+line = 61
+begin = 23
+end = 57
+
+[_C_1]
+file = "HOME/tests/c/conjugate.c"
+line = 50
+begin = 2
+end = 5
+
+[_C_25]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 13
+end = 21
+
+[_C_39]
+file = "HOME/tests/c/conjugate.c"
+line = 76
+begin = 38
+end = 41
+
+[_C_11]
+file = "HOME/tests/c/conjugate.c"
+line = 60
 begin = 11
-end = 19
+end = 12
+
+[_C_21]
+file = "HOME/tests/c/conjugate.c"
+line = 67
+begin = 14
+end = 23
 
 ========== jessie execution ==========
 Generating Why function conjgte
@@ -738,15 +740,15 @@ end = -1
 
 [JC_51]
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 126
+line = 127
 begin = 15
-end = 1234
+end = 1301
 
 [JC_71]
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
 line = 105
 begin = 15
-end = 823
+end = 837
 
 [JC_45]
 kind = PointerDeref
@@ -759,13 +761,13 @@ end = 21
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
 line = 85
 begin = 6
-end = 3173
+end = 3346
 
 [JC_31]
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
 line = 85
 begin = 6
-end = 3173
+end = 3346
 
 [JC_17]
 file = "HOME/tests/c/conjugate.c"
@@ -836,15 +838,15 @@ end = 76
 
 [JC_78]
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 126
+line = 127
 begin = 15
-end = 1234
+end = 1301
 
 [JC_41]
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
 line = 105
 begin = 15
-end = 823
+end = 837
 
 [JC_74]
 file = "HOME/tests/c/conjugate.c"
@@ -860,9 +862,9 @@ end = 88
 
 [JC_52]
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 126
+line = 127
 begin = 15
-end = 1234
+end = 1301
 
 [JC_26]
 file = "HOME/tests/c/conjugate.c"
@@ -887,9 +889,9 @@ end = 12
 [JC_54]
 kind = PointerDeref
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 143
-begin = 30
-end = 296
+line = 145
+begin = 31
+end = 310
 
 [JC_13]
 file = "HOME/tests/c/conjugate.c"
@@ -931,7 +933,7 @@ end = -1
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
 line = 105
 begin = 15
-end = 823
+end = 837
 
 [JC_35]
 file = "HOME/tests/c/conjugate.c"
@@ -1011,7 +1013,7 @@ end = 37
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
 line = 85
 begin = 6
-end = 3173
+end = 3346
 
 [JC_56]
 file = "HOME/tests/c/conjugate.c"
@@ -1030,7 +1032,7 @@ end = 17
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
 line = 85
 begin = 6
-end = 3173
+end = 3346
 
 [JC_29]
 file = "HOME/tests/c/conjugate.c"
@@ -1105,9 +1107,9 @@ end = 12
 
 [JC_77]
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
-line = 126
+line = 127
 begin = 15
-end = 1234
+end = 1301
 
 [JC_49]
 file = "HOME/tests/c/conjugate.c"
@@ -1179,7 +1181,7 @@ end = 31
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
 line = 105
 begin = 15
-end = 823
+end = 837
 
 [JC_19]
 file = "HOME/tests/c/conjugate.jessie/conjugate.jc"
@@ -1747,145 +1749,72 @@ let conjgte_ensures_default =
      (let partc = ref (any_int32 void) in
      (let edge = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<num> = (partc := (safe_int32_of_integer_ (1))) in void);
-       (C_2:
+       (let _jessie_<num> = (edge := (safe_int32_of_integer_ (0))) in void);
+       (loop_4:
        begin
-         (let _jessie_<num> = (edge := (safe_int32_of_integer_ (0))) in void);
-        (loop_4:
-        begin
-          while true do
-          { invariant
-              (((JC_58:
-                (forall j_7:int.
-                 ((lt_int(integer_of_int32(select(intP_intM_A_5,
-                                           shift(A, (1)))),
-                   j_7)
-                  and lt_int(j_7, (100))) ->
-                  (integer_of_int32(select(intP_intM_B_6, shift(B, j_7))) = (0)))))
-               and ((JC_59:
-                    (forall j_6:int.
-                     ((lt_int(integer_of_int32(select(intP_intM_A_5,
-                                               shift(A,
-                                               integer_of_int32(partc)))),
-                       j_6)
-                      and le_int(j_6,
-                          integer_of_int32(select(intP_intM_A_5,
-                                           shift(A, (1)))))) ->
-                      numofgt(A,
-                      integer_of_int32(select(intP_intM_B_6, shift(B, j_6))),
-                      j_6, intP_intM_A_5))))
-                   and (JC_62:
-                       ((JC_60: le_int((1), integer_of_int32(partc)))
-                       and (JC_61: lt_int(integer_of_int32(partc), (100)))))))
-              and (JC_64:
-                  not_assigns(intP_B_6_alloc_table, intP_intM_B_6@init,
-                  intP_intM_B_6, pset_all(pset_singleton(B)))))  }
-           begin
-             [ { } unit { true } ];
-            try
+         while true do
+         { invariant
+             (((JC_58:
+               (forall j_7:int.
+                ((lt_int(integer_of_int32(select(intP_intM_A_5,
+                                          shift(A, (1)))),
+                  j_7)
+                 and lt_int(j_7, (100))) ->
+                 (integer_of_int32(select(intP_intM_B_6, shift(B, j_7))) = (0)))))
+              and ((JC_59:
+                   (forall j_6:int.
+                    ((lt_int(integer_of_int32(select(intP_intM_A_5,
+                                              shift(A,
+                                              integer_of_int32(partc)))),
+                      j_6)
+                     and le_int(j_6,
+                         integer_of_int32(select(intP_intM_A_5,
+                                          shift(A, (1)))))) ->
+                     numofgt(A,
+                     integer_of_int32(select(intP_intM_B_6, shift(B, j_6))),
+                     j_6, intP_intM_A_5))))
+                  and (JC_62:
+                      ((JC_60: le_int((1), integer_of_int32(partc)))
+                      and (JC_61: lt_int(integer_of_int32(partc), (100)))))))
+             and (JC_64:
+                 not_assigns(intP_B_6_alloc_table, intP_intM_B_6@init,
+                 intP_intM_B_6, pset_all(pset_singleton(B)))))  }
+          begin
+            [ { } unit { true } ];
+           try
+            begin
+              (if ((neq_int_ (integer_of_int32 ((safe_acc_ intP_intM_A_5) 
+                                                ((shift A) (integer_of_int32 !partc))))) (0))
+              then void else (raise (Goto_while_0_break_exc void)));
+             (Start:
              begin
-               (if ((neq_int_ (integer_of_int32 (C_10:
-                                                ((safe_acc_ intP_intM_A_5) 
-                                                 (C_9:
-                                                 ((shift A) (integer_of_int32 !partc))))))) (0))
-               then void else (raise (Goto_while_0_break_exc void)));
-              (Start:
-              begin
-                try
-                 begin
-                   try
-                    (C_13:
+               try
+                begin
+                  try
+                   begin
+                     (let _jessie_<num> =
+                     (edge := ((safe_acc_ intP_intM_A_5) ((shift A) (integer_of_int32 !partc)))) in
+                     void);
+                    (loop_5:
                     begin
-                      (let _jessie_<num> =
-                      (edge := (C_12:
-                               ((safe_acc_ intP_intM_A_5) (C_11:
-                                                          ((shift A) 
-                                                           (integer_of_int32 !partc)))))) in
-                      void);
-                     (loop_5:
-                     begin
-                       while true do
-                       { invariant
-                           (((JC_66:
-                             (forall j_3:int.
-                              ((le_int(integer_of_int32(partc@Start), j_3)
-                               and lt_int(j_3, integer_of_int32(partc))) ->
-                               (integer_of_int32(select(intP_intM_A_5,
-                                                 shift(A, j_3))) = integer_of_int32(edge)))))
-                            and (JC_69:
-                                ((JC_67:
-                                 le_int(integer_of_int32(partc@Start),
-                                 integer_of_int32(partc)))
-                                and (JC_68:
-                                    lt_int(integer_of_int32(partc),
-                                    sub_int((100), (1)))))))
-                           and (JC_71:
-                               not_assigns(intP_B_6_alloc_table,
-                               intP_intM_B_6@init, intP_intM_B_6,
-                               pset_all(pset_singleton(B)))))  }
-                        begin
-                          [ { } unit { true } ];
-                         try
-                          (C_21:
-                          begin
-                            (let _jessie_<num> =
-                            (partc := (C_20:
-                                      (safe_int32_of_integer_ (C_19:
-                                                              ((add_int 
-                                                                (integer_of_int32 !partc)) (1)))))) in
-                            void);
-                           (if ((eq_int_ (integer_of_int32 (C_23:
-                                                           ((safe_acc_ intP_intM_A_5) 
-                                                            (C_22:
-                                                            ((shift A) 
-                                                             (integer_of_int32 !partc))))))) 
-                                (integer_of_int32 !edge)) then void
-                           else (raise (Goto_while_1_break_exc void)));
-                           (raise (Loop_continue_exc void)) end) with
-                          Loop_continue_exc _jessie_<num> -> void end end done;
-                      (raise (Goto_while_1_break_exc void)) end) end) with
-                    Goto_while_1_break_exc _jessie_<num> ->
-                    (while_1_break:
-                    begin
-                      void;
-                     (C_28:
-                     begin
-                       (let _jessie_<num> =
-                       (i := (C_27:
-                             (safe_int32_of_integer_ (C_26:
-                                                     ((add_int (integer_of_int32 
-                                                                (C_25:
-                                                                ((safe_acc_ intP_intM_A_5) 
-                                                                 (C_24:
-                                                                 ((shift A) 
-                                                                  (integer_of_int32 !partc))))))) (1)))))) in
-                       void);
-                      (loop_6:
                       while true do
                       { invariant
-                          (((JC_73:
-                            (forall j_5:int.
-                             ((lt_int(integer_of_int32(select(intP_intM_A_5,
-                                                       shift(A,
-                                                       integer_of_int32(partc)))),
-                               j_5)
-                              and lt_int(j_5, integer_of_int32(i))) ->
-                              (integer_of_int32(select(intP_intM_B_6,
-                                                shift(B, j_5))) = sub_int(
-                                                                  integer_of_int32(partc),
-                                                                  (1))))))
-                           and ((JC_74:
-                                (forall j_4:int.
-                                 ((lt_int(integer_of_int32(edge), j_4)
-                                  and lt_int(j_4, (100))) ->
-                                  (integer_of_int32(select(intP_intM_B_6,
-                                                    shift(B, j_4))) = 
-                                  integer_of_int32(select(intP_intM_B_6@Start,
-                                                   shift(B, j_4)))))))
-                               and (JC_75: le_int((1), integer_of_int32(i)))))
-                          and (JC_77:
+                          (((JC_66:
+                            (forall j_3:int.
+                             ((le_int(integer_of_int32(partc@Start), j_3)
+                              and lt_int(j_3, integer_of_int32(partc))) ->
+                              (integer_of_int32(select(intP_intM_A_5,
+                                                shift(A, j_3))) = integer_of_int32(edge)))))
+                           and (JC_69:
+                               ((JC_67:
+                                le_int(integer_of_int32(partc@Start),
+                                integer_of_int32(partc)))
+                               and (JC_68:
+                                   lt_int(integer_of_int32(partc),
+                                   sub_int((100), (1)))))))
+                          and (JC_71:
                               not_assigns(intP_B_6_alloc_table,
                               intP_intM_B_6@init, intP_intM_B_6,
                               pset_all(pset_singleton(B)))))  }
@@ -1894,37 +1823,81 @@ let conjgte_ensures_default =
                         try
                          begin
                            (let _jessie_<num> =
-                           begin
-                             (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 !edge))
-                             then void
-                             else (raise (Goto_while_2_break_exc void)));
-                            (C_37:
-                            begin
-                              (let _jessie_<num> =
-                              (let _jessie_<num> =
-                              (C_34:
-                              (safe_int32_of_integer_ (C_33:
-                                                      ((sub_int (integer_of_int32 !partc)) (1))))) in
-                              (let _jessie_<num> = B in
-                              (let _jessie_<num> = (integer_of_int32 !i) in
-                              (let _jessie_<num> =
-                              ((shift _jessie_<num>) _jessie_<num>) in
-                              (((safe_upd_ intP_intM_B_6) _jessie_<num>) _jessie_<num>))))) in
-                              void);
-                             (C_40:
-                             begin
-                               (i := (C_39:
-                                     (safe_int32_of_integer_ (C_38:
-                                                             ((add_int 
-                                                               (integer_of_int32 !i)) (1))))));
-                              !i end) end) end in void);
+                           (partc := (safe_int32_of_integer_ ((add_int 
+                                                               (integer_of_int32 !partc)) (1)))) in
+                           void);
+                          (if ((eq_int_ (integer_of_int32 ((safe_acc_ intP_intM_A_5) 
+                                                           ((shift A) 
+                                                            (integer_of_int32 !partc))))) 
+                               (integer_of_int32 !edge)) then void
+                          else (raise (Goto_while_1_break_exc void)));
                           (raise (Loop_continue_exc void)) end with
-                         Loop_continue_exc _jessie_<num> -> void end end done)
-                     end) end) end; (raise (Goto_while_2_break_exc void)) end
-                 with Goto_while_2_break_exc _jessie_<num> ->
-                 (while_2_break: void) end; (raise (Loop_continue_exc void))
-              end) end with Loop_continue_exc _jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+                         Loop_continue_exc _jessie_<num> -> void end end done;
+                     (raise (Goto_while_1_break_exc void)) end) end with
+                   Goto_while_1_break_exc _jessie_<num> ->
+                   (while_1_break:
+                   begin
+                     void;
+                    (let _jessie_<num> =
+                    (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 
+                                                             ((safe_acc_ intP_intM_A_5) 
+                                                              ((shift A) 
+                                                               (integer_of_int32 !partc))))) (1)))) in
+                    void);
+                    (loop_6:
+                    while true do
+                    { invariant
+                        (((JC_73:
+                          (forall j_5:int.
+                           ((lt_int(integer_of_int32(select(intP_intM_A_5,
+                                                     shift(A,
+                                                     integer_of_int32(partc)))),
+                             j_5)
+                            and lt_int(j_5, integer_of_int32(i))) ->
+                            (integer_of_int32(select(intP_intM_B_6,
+                                              shift(B, j_5))) = sub_int(
+                                                                integer_of_int32(partc),
+                                                                (1))))))
+                         and ((JC_74:
+                              (forall j_4:int.
+                               ((lt_int(integer_of_int32(edge), j_4)
+                                and lt_int(j_4, (100))) ->
+                                (integer_of_int32(select(intP_intM_B_6,
+                                                  shift(B, j_4))) = integer_of_int32(
+                                                                    select(intP_intM_B_6@Start,
+                                                                    shift(B,
+                                                                    j_4)))))))
+                             and (JC_75: le_int((1), integer_of_int32(i)))))
+                        and (JC_77:
+                            not_assigns(intP_B_6_alloc_table,
+                            intP_intM_B_6@init, intP_intM_B_6,
+                            pset_all(pset_singleton(B)))))  }
+                     begin
+                       [ { } unit { true } ];
+                      try
+                       begin
+                         (let _jessie_<num> =
+                         begin
+                           (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 !edge))
+                           then void
+                           else (raise (Goto_while_2_break_exc void)));
+                          (let _jessie_<num> =
+                          (let _jessie_<num> =
+                          (safe_int32_of_integer_ ((sub_int (integer_of_int32 !partc)) (1))) in
+                          (let _jessie_<num> = B in
+                          (let _jessie_<num> = (integer_of_int32 !i) in
+                          (let _jessie_<num> =
+                          ((shift _jessie_<num>) _jessie_<num>) in
+                          (((safe_upd_ intP_intM_B_6) _jessie_<num>) _jessie_<num>))))) in
+                          void);
+                          (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+                          !i end in void); (raise (Loop_continue_exc void))
+                       end with Loop_continue_exc _jessie_<num> -> void end end
+                    done) end) end; (raise (Goto_while_2_break_exc void)) end
+                with Goto_while_2_break_exc _jessie_<num> ->
+                (while_2_break: void) end; (raise (Loop_continue_exc void))
+             end) end with Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end)));
     (raise Return) end with Return -> void end)
@@ -1961,180 +1934,154 @@ let conjgte_safety =
      (let partc = ref (any_int32 void) in
      (let edge = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<num> = (partc := (safe_int32_of_integer_ (1))) in void);
-       (C_2:
+       (let _jessie_<num> = (edge := (safe_int32_of_integer_ (0))) in void);
+       (loop_1:
        begin
-         (let _jessie_<num> = (edge := (safe_int32_of_integer_ (0))) in void);
-        (loop_1:
-        begin
-          while true do
-          { invariant (JC_31: true)
-            variant (JC_57 : sub_int((100), integer_of_int32(partc))) }
-           begin
-             [ { } unit reads intP_intM_B_6,partc
-               { ((JC_25:
-                  (forall j_7:int.
-                   ((lt_int(integer_of_int32(select(intP_intM_A_5,
-                                             shift(A, (1)))),
-                     j_7)
-                    and lt_int(j_7, (100))) ->
-                    (integer_of_int32(select(intP_intM_B_6, shift(B, j_7))) = (0)))))
-                 and ((JC_26:
-                      (forall j_6:int.
-                       ((lt_int(integer_of_int32(select(intP_intM_A_5,
-                                                 shift(A,
-                                                 integer_of_int32(partc)))),
-                         j_6)
-                        and le_int(j_6,
-                            integer_of_int32(select(intP_intM_A_5,
-                                             shift(A, (1)))))) ->
-                        numofgt(A,
-                        integer_of_int32(select(intP_intM_B_6, shift(B, j_6))),
-                        j_6, intP_intM_A_5))))
-                     and (JC_29:
-                         ((JC_27: le_int((1), integer_of_int32(partc)))
-                         and (JC_28: lt_int(integer_of_int32(partc), (100))))))) } ];
-            try
+         while true do
+         { invariant (JC_31: true)
+           variant (JC_57 : sub_int((100), integer_of_int32(partc))) }
+          begin
+            [ { } unit reads intP_intM_B_6,partc
+              { ((JC_25:
+                 (forall j_7:int.
+                  ((lt_int(integer_of_int32(select(intP_intM_A_5,
+                                            shift(A, (1)))),
+                    j_7)
+                   and lt_int(j_7, (100))) ->
+                   (integer_of_int32(select(intP_intM_B_6, shift(B, j_7))) = (0)))))
+                and ((JC_26:
+                     (forall j_6:int.
+                      ((lt_int(integer_of_int32(select(intP_intM_A_5,
+                                                shift(A,
+                                                integer_of_int32(partc)))),
+                        j_6)
+                       and le_int(j_6,
+                           integer_of_int32(select(intP_intM_A_5,
+                                            shift(A, (1)))))) ->
+                       numofgt(A,
+                       integer_of_int32(select(intP_intM_B_6, shift(B, j_6))),
+                       j_6, intP_intM_A_5))))
+                    and (JC_29:
+                        ((JC_27: le_int((1), integer_of_int32(partc)))
+                        and (JC_28: lt_int(integer_of_int32(partc), (100))))))) } ];
+           try
+            begin
+              (if ((neq_int_ (integer_of_int32 (JC_33:
+                                               ((((offset_acc_ intP_A_5_alloc_table) intP_intM_A_5) A) 
+                                                (integer_of_int32 !partc))))) (0))
+              then void else (raise (Goto_while_0_break_exc void)));
+             (Start:
              begin
-               (if ((neq_int_ (integer_of_int32 (C_10:
-                                                (JC_33:
-                                                ((((offset_acc_ intP_A_5_alloc_table) intP_intM_A_5) A) 
-                                                 (integer_of_int32 !partc)))))) (0))
-               then void else (raise (Goto_while_0_break_exc void)));
-              (Start:
-              begin
-                try
-                 begin
-                   try
-                    (C_13:
+               try
+                begin
+                  try
+                   begin
+                     (let _jessie_<num> =
+                     (edge := (JC_34:
+                              ((((offset_acc_ intP_A_5_alloc_table) intP_intM_A_5) A) 
+                               (integer_of_int32 !partc)))) in void);
+                    (loop_2:
                     begin
-                      (let _jessie_<num> =
-                      (edge := (C_12:
-                               (JC_34:
-                               ((((offset_acc_ intP_A_5_alloc_table) intP_intM_A_5) A) 
-                                (integer_of_int32 !partc))))) in void);
-                     (loop_2:
-                     begin
-                       while true do
-                       { invariant (JC_40: true)
-                         variant (JC_44 : sub_int((100),
-                                          integer_of_int32(partc))) }
-                        begin
-                          [ { } unit reads edge,partc
-                            { ((JC_35:
-                               (forall j_3:int.
-                                ((le_int(integer_of_int32(partc@Start), j_3)
-                                 and lt_int(j_3, integer_of_int32(partc))) ->
-                                 (integer_of_int32(select(intP_intM_A_5,
-                                                   shift(A, j_3))) = 
-                                 integer_of_int32(edge)))))
-                              and (JC_38:
-                                  ((JC_36:
-                                   le_int(integer_of_int32(partc@Start),
-                                   integer_of_int32(partc)))
-                                  and (JC_37:
-                                      lt_int(integer_of_int32(partc),
-                                      sub_int((100), (1))))))) } ];
-                         try
-                          (C_21:
-                          begin
-                            (let _jessie_<num> =
-                            (partc := (C_20:
-                                      (JC_42:
-                                      (int32_of_integer_ (C_19:
-                                                         ((add_int (integer_of_int32 !partc)) (1))))))) in
-                            void);
-                           (if ((eq_int_ (integer_of_int32 (C_23:
-                                                           (JC_43:
-                                                           ((((offset_acc_ intP_A_5_alloc_table) intP_intM_A_5) A) 
-                                                            (integer_of_int32 !partc)))))) 
-                                (integer_of_int32 !edge)) then void
-                           else (raise (Goto_while_1_break_exc void)));
-                           (raise (Loop_continue_exc void)) end) with
-                          Loop_continue_exc _jessie_<num> -> void end end done;
-                      (raise (Goto_while_1_break_exc void)) end) end) with
-                    Goto_while_1_break_exc _jessie_<num> ->
-                    (while_1_break:
-                    begin
-                      void;
-                     (C_28:
-                     begin
-                       (let _jessie_<num> =
-                       (i := (C_27:
-                             (JC_46:
-                             (int32_of_integer_ (C_26:
-                                                ((add_int (integer_of_int32 
-                                                           (C_25:
-                                                           (JC_45:
-                                                           ((((offset_acc_ intP_A_5_alloc_table) intP_intM_A_5) A) 
-                                                            (integer_of_int32 !partc)))))) (1))))))) in
-                       void);
-                      (loop_3:
                       while true do
-                      { invariant (JC_51: true)
-                        variant (JC_56 : sub_int(integer_of_int32(edge),
-                                         integer_of_int32(i))) }
+                      { invariant (JC_40: true)
+                        variant (JC_44 : sub_int((100),
+                                         integer_of_int32(partc))) }
                        begin
-                         [ { } unit reads edge,i,intP_intM_B_6,partc
-                           { ((JC_47:
-                              (forall j_5:int.
-                               ((lt_int(integer_of_int32(select(intP_intM_A_5,
-                                                         shift(A,
-                                                         integer_of_int32(partc)))),
-                                 j_5)
-                                and lt_int(j_5, integer_of_int32(i))) ->
-                                (integer_of_int32(select(intP_intM_B_6,
-                                                  shift(B, j_5))) = sub_int(
-                                                                    integer_of_int32(partc),
-                                                                    (1))))))
-                             and ((JC_48:
-                                  (forall j_4:int.
-                                   ((lt_int(integer_of_int32(edge), j_4)
-                                    and lt_int(j_4, (100))) ->
-                                    (integer_of_int32(select(intP_intM_B_6,
-                                                      shift(B, j_4))) = 
-                                    integer_of_int32(select(intP_intM_B_6@Start,
-                                                     shift(B, j_4)))))))
-                                 and (JC_49:
-                                     le_int((1), integer_of_int32(i))))) } ];
+                         [ { } unit reads edge,partc
+                           { ((JC_35:
+                              (forall j_3:int.
+                               ((le_int(integer_of_int32(partc@Start), j_3)
+                                and lt_int(j_3, integer_of_int32(partc))) ->
+                                (integer_of_int32(select(intP_intM_A_5,
+                                                  shift(A, j_3))) = integer_of_int32(edge)))))
+                             and (JC_38:
+                                 ((JC_36:
+                                  le_int(integer_of_int32(partc@Start),
+                                  integer_of_int32(partc)))
+                                 and (JC_37:
+                                     lt_int(integer_of_int32(partc),
+                                     sub_int((100), (1))))))) } ];
                         try
                          begin
                            (let _jessie_<num> =
-                           begin
-                             (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 !edge))
-                             then void
-                             else (raise (Goto_while_2_break_exc void)));
-                            (C_37:
-                            begin
-                              (let _jessie_<num> =
-                              (let _jessie_<num> =
-                              (C_34:
-                              (JC_53:
-                              (int32_of_integer_ (C_33:
-                                                 ((sub_int (integer_of_int32 !partc)) (1)))))) in
-                              (let _jessie_<num> = B in
-                              (let _jessie_<num> = (integer_of_int32 !i) in
-                              (let _jessie_<num> =
-                              ((shift _jessie_<num>) _jessie_<num>) in
-                              (JC_54:
-                              (((((offset_upd_ intP_B_6_alloc_table) intP_intM_B_6) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
-                              void);
-                             (C_40:
-                             begin
-                               (i := (C_39:
-                                     (JC_55:
-                                     (int32_of_integer_ (C_38:
-                                                        ((add_int (integer_of_int32 !i)) (1)))))));
-                              !i end) end) end in void);
+                           (partc := (JC_42:
+                                     (int32_of_integer_ ((add_int (integer_of_int32 !partc)) (1))))) in
+                           void);
+                          (if ((eq_int_ (integer_of_int32 (JC_43:
+                                                          ((((offset_acc_ intP_A_5_alloc_table) intP_intM_A_5) A) 
+                                                           (integer_of_int32 !partc))))) 
+                               (integer_of_int32 !edge)) then void
+                          else (raise (Goto_while_1_break_exc void)));
                           (raise (Loop_continue_exc void)) end with
-                         Loop_continue_exc _jessie_<num> -> void end end done)
-                     end) end) end; (raise (Goto_while_2_break_exc void)) end
-                 with Goto_while_2_break_exc _jessie_<num> ->
-                 (while_2_break: void) end; (raise (Loop_continue_exc void))
-              end) end with Loop_continue_exc _jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+                         Loop_continue_exc _jessie_<num> -> void end end done;
+                     (raise (Goto_while_1_break_exc void)) end) end with
+                   Goto_while_1_break_exc _jessie_<num> ->
+                   (while_1_break:
+                   begin
+                     void;
+                    (let _jessie_<num> =
+                    (i := (JC_46:
+                          (int32_of_integer_ ((add_int (integer_of_int32 
+                                                        (JC_45:
+                                                        ((((offset_acc_ intP_A_5_alloc_table) intP_intM_A_5) A) 
+                                                         (integer_of_int32 !partc))))) (1))))) in
+                    void);
+                    (loop_3:
+                    while true do
+                    { invariant (JC_51: true)
+                      variant (JC_56 : sub_int(integer_of_int32(edge),
+                                       integer_of_int32(i))) }
+                     begin
+                       [ { } unit reads edge,i,intP_intM_B_6,partc
+                         { ((JC_47:
+                            (forall j_5:int.
+                             ((lt_int(integer_of_int32(select(intP_intM_A_5,
+                                                       shift(A,
+                                                       integer_of_int32(partc)))),
+                               j_5)
+                              and lt_int(j_5, integer_of_int32(i))) ->
+                              (integer_of_int32(select(intP_intM_B_6,
+                                                shift(B, j_5))) = sub_int(
+                                                                  integer_of_int32(partc),
+                                                                  (1))))))
+                           and ((JC_48:
+                                (forall j_4:int.
+                                 ((lt_int(integer_of_int32(edge), j_4)
+                                  and lt_int(j_4, (100))) ->
+                                  (integer_of_int32(select(intP_intM_B_6,
+                                                    shift(B, j_4))) = 
+                                  integer_of_int32(select(intP_intM_B_6@Start,
+                                                   shift(B, j_4)))))))
+                               and (JC_49: le_int((1), integer_of_int32(i))))) } ];
+                      try
+                       begin
+                         (let _jessie_<num> =
+                         begin
+                           (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 !edge))
+                           then void
+                           else (raise (Goto_while_2_break_exc void)));
+                          (let _jessie_<num> =
+                          (let _jessie_<num> =
+                          (JC_53:
+                          (int32_of_integer_ ((sub_int (integer_of_int32 !partc)) (1)))) in
+                          (let _jessie_<num> = B in
+                          (let _jessie_<num> = (integer_of_int32 !i) in
+                          (let _jessie_<num> =
+                          ((shift _jessie_<num>) _jessie_<num>) in
+                          (JC_54:
+                          (((((offset_upd_ intP_B_6_alloc_table) intP_intM_B_6) _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+                          void);
+                          (i := (JC_55:
+                                (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+                          !i end in void); (raise (Loop_continue_exc void))
+                       end with Loop_continue_exc _jessie_<num> -> void end end
+                    done) end) end; (raise (Goto_while_2_break_exc void)) end
+                with Goto_while_2_break_exc _jessie_<num> ->
+                (while_2_break: void) end; (raise (Loop_continue_exc void))
+             end) end with Loop_continue_exc _jessie_<num> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<num> ->
       (while_0_break: begin   void; (raise Return) end) end)));
     (raise Return) end with Return -> void end) { true }

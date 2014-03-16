@@ -37,7 +37,7 @@
 
 
 /*@ requires 0 <= n <= NMAX;
-  @ requires \valid_range(x,0,n-1) && \valid_range(y,0,n-1) ;
+  @ requires \valid(x+(0..n-1)) && \valid(y+(0.. n-1)) ;
   @ requires \forall integer i; 0 <= i < n ==>
   @          \abs(x[i]) <= 1.0 && \abs(y[i]) <= 1.0 ;
   @ ensures
@@ -87,15 +87,13 @@ double scalar_product(double x[], double y[], int n) {
 
 /*
 Local Variables:
-compile-command: "make clock_drift.why3ide"
+compile-command: "make scalar_product.why3ide"
 End:
 */
 
 
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/scalar_product.c"
-tests/c/scalar_product.c:39:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
-tests/c/scalar_product.c:39:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir tests/c/scalar_product.jessie
 [jessie] File tests/c/scalar_product.jessie/scalar_product.jc written.
@@ -168,41 +166,42 @@ lemma bound_int_to_real :
   ((i_1 <= 10) ==> (i_1 <= 10.0)))
 
 double scalar_product(doubleP[..] x, doubleP[..] y, int32 n_1)
-  requires (C_35 : ((C_36 : (0 <= n_1)) && (C_37 : (n_1 <= 10))));
-  requires (C_28 : (((C_30 : (\offset_min(x) <= 0)) &&
-                      (C_31 : (\offset_max(x) >= (n_1 - 1)))) &&
-                     ((C_33 : (\offset_min(y) <= 0)) &&
-                       (C_34 : (\offset_max(y) >= (n_1 - 1))))));
-  requires (C_27 : (\forall integer i_2;
-                     (((0 <= i_2) && (i_2 < n_1)) ==>
-                       ((\real_abs(((x + i_2).doubleM :> real)) <= 1.0) &&
-                         (\real_abs(((y + i_2).doubleM :> real)) <= 1.0)))));
+  requires (_C_35 : ((_C_36 : (0 <= n_1)) && (_C_37 : (n_1 <= 10))));
+  requires (_C_28 : (((_C_30 : (\offset_min(x) <= 0)) &&
+                       (_C_31 : (\offset_max(x) >= (n_1 - 1)))) &&
+                      ((_C_33 : (\offset_min(y) <= 0)) &&
+                        (_C_34 : (\offset_max(y) >= (n_1 - 1))))));
+  requires (_C_27 : (\forall integer i_2;
+                      (((0 <= i_2) && (i_2 < n_1)) ==>
+                        ((\real_abs(((x + i_2).doubleM :> real)) <= 1.0) &&
+                          (\real_abs(((y + i_2).doubleM :> real)) <= 1.0)))));
 behavior default:
-  ensures (C_26 : (\real_abs(((\result :> real) -
-                               exact_scalar_product{Here}(\at(x,Old),
-                                                          \at(y,Old),
-                                                          \at(n_1,Old)))) <=
-                    (\at(n_1,Old) * 0x1.1p-50)));
+  ensures (_C_26 : (\real_abs(((\result :> real) -
+                                exact_scalar_product{Here}(\at(x,Old),
+                                                           \at(y,Old),
+                                                           \at(n_1,Old)))) <=
+                     (\at(n_1,Old) * 0x1.1p-50)));
 {  
    (var double p);
    
    (var int32 i);
    
-   {  (C_1 : (p = (0.0 :> double)));
+   {  (_C_1 : (p = (0.0 :> double)));
       
-      {  (C_2 : (i = 0));
+      {  (_C_2 : (i = 0));
          
          loop 
          behavior default:
-           invariant (C_6 : ((C_7 : (0 <= i)) && (C_8 : (i <= n_1))));
+           invariant (_C_6 : ((_C_7 : (0 <= i)) && (_C_8 : (i <= n_1))));
          behavior default:
-           invariant (C_5 : (\real_abs(exact_scalar_product{Here}(x, y, i)) <=
-                              i));
+           invariant (_C_5 : (\real_abs(exact_scalar_product{Here}(x, y, i)) <=
+                               i));
          behavior default:
-           invariant (C_4 : (\real_abs(((p :> real) -
-                                         exact_scalar_product{Here}(x, y, i))) <=
-                              (i * 0x1.1p-50)));
-         variant (C_3 : (n_1 - i));
+           invariant (_C_4 : (\real_abs(((p :> real) -
+                                          exact_scalar_product{Here}(
+                                          x, y, i))) <=
+                               (i * 0x1.1p-50)));
+         variant (_C_3 : (n_1 - i));
          while (true)
          {  
             {  (if (i < n_1) then () else 
@@ -210,62 +209,61 @@ behavior default:
                
                {  
                   {  
-                     (assert for default: (C_9 : (jessie : (\real_abs(
-                                                             ((x + i).doubleM :> real)) <=
-                                                             1.0))));
-                     ()
-                  };
-                  
-                  {  
-                     (assert for default: (C_10 : (jessie : (\real_abs(
-                                                              ((y + i).doubleM :> real)) <=
+                     (assert for default: (_C_9 : (jessie : (\real_abs(
+                                                              ((x + i).doubleM :> real)) <=
                                                               1.0))));
                      ()
                   };
                   
                   {  
-                     (assert for default: (C_11 : (jessie : (\real_abs(
-                                                              (p :> real)) <=
-                                                              (10.0 *
-                                                                (1 +
-                                                                  0x1.1p-50))))));
-                     ()
-                  };
-                  (L : (C_18 : (p = (C_17 : (p +
-                                              (C_16 : ((C_15 : (C_14 : 
-                                                               (x +
-                                                                 i)).doubleM) *
-                                                        (C_13 : (C_12 : 
-                                                                (y +
-                                                                  i)).doubleM))))))));
-                  
-                  {  
-                     (assert for default: (C_19 : (jessie : (\real_abs(
-                                                              ((p :> real) -
-                                                                ((\at(p,L) :> real) +
-                                                                  (((x + i).doubleM :> real) *
-                                                                    (
-                                                                    (y + i).doubleM :> real))))) <=
-                                                              0x1.1p-50))));
+                     (assert for default: (_C_10 : (jessie : (\real_abs(
+                                                               ((y + i).doubleM :> real)) <=
+                                                               1.0))));
                      ()
                   };
                   
                   {  
-                     (assert for default: (C_20 : (jessie : (\real_abs(
-                                                              ((p :> real) -
-                                                                exact_scalar_product{Here}(
-                                                                x, y, 
-                                                                (i + 1)))) <=
-                                                              (\real_abs(
-                                                                ((p :> real) -
-                                                                  ((\at(p,L) :> real) +
+                     (assert for default: (_C_11 : (jessie : (\real_abs(
+                                                               (p :> real)) <=
+                                                               (10.0 *
+                                                                 (1 +
+                                                                   0x1.1p-50))))));
+                     ()
+                  };
+                  (L : (_C_18 : (p = (_C_17 : (p +
+                                                (_C_16 : ((_C_15 : (_C_14 : 
+                                                                   (x +
+                                                                    i)).doubleM) *
+                                                           (_C_13 : (_C_12 : 
+                                                                    (y +
+                                                                    i)).doubleM))))))));
+                  
+                  {  
+                     (assert for default: (_C_19 : (jessie : (\real_abs(
+                                                               ((p :> real) -
+                                                                 ((\at(p,L) :> real) +
+                                                                   (((x + i).doubleM :> real) *
+                                                                    ((y + i).doubleM :> real))))) <=
+                                                               0x1.1p-50))));
+                     ()
+                  };
+                  
+                  {  
+                     (assert for default: (_C_20 : (jessie : (\real_abs(
+                                                               ((p :> real) -
+                                                                 exact_scalar_product{Here}(
+                                                                 x, y,
+                                                                 (i + 1)))) <=
+                                                               (\real_abs(
+                                                                 ((p :> real) -
+                                                                   ((\at(p,L) :> real) +
                                                                     (((x + i).doubleM :> real) *
                                                                     ((y + i).doubleM :> real))))) +
-                                                                \real_abs(
-                                                                (((\at(p,L) :> real) +
-                                                                   (((x + i).doubleM :> real) *
+                                                                 \real_abs(
+                                                                 (((\at(p,L) :> real) +
+                                                                    (((x + i).doubleM :> real) *
                                                                     ((y + i).doubleM :> real))) -
-                                                                  (exact_scalar_product{Here}(
+                                                                   (exact_scalar_product{Here}(
                                                                     x, y, i) +
                                                                     (((x + i).doubleM :> real) *
                                                                     ((y + i).doubleM :> real))))))))));
@@ -273,29 +271,30 @@ behavior default:
                   };
                   
                   {  
-                     (assert for default: (C_21 : (jessie : (\real_abs(
-                                                              exact_scalar_product{Here}(
-                                                              x, y, (i + 1))) <=
-                                                              (\real_abs(
-                                                                exact_scalar_product{Here}(
-                                                                x, y, i)) +
-                                                                (\real_abs(
-                                                                  ((x + i).doubleM :> real)) *
-                                                                  \real_abs(
-                                                                  ((y + i).doubleM :> real))))))));
+                     (assert for default: (_C_21 : (jessie : (\real_abs(
+                                                               exact_scalar_product{Here}(
+                                                               x, y, 
+                                                               (i + 1))) <=
+                                                               (\real_abs(
+                                                                 exact_scalar_product{Here}(
+                                                                 x, y, i)) +
+                                                                 (\real_abs(
+                                                                   ((x + i).doubleM :> real)) *
+                                                                   \real_abs(
+                                                                   ((y + i).doubleM :> real))))))));
                      ()
                   };
                   
                   {  
-                     (assert for default: (C_22 : (jessie : ((\real_abs(
-                                                               ((x + i).doubleM :> real)) *
-                                                               \real_abs(
-                                                               ((y + i).doubleM :> real))) <=
-                                                              1.0))));
+                     (assert for default: (_C_22 : (jessie : ((\real_abs(
+                                                                ((x + i).doubleM :> real)) *
+                                                                \real_abs(
+                                                                ((y + i).doubleM :> real))) <=
+                                                               1.0))));
                      ()
                   }
                };
-               (C_25 : (i = (C_24 : ((C_23 : (i + 1)) :> int32))))
+               (_C_25 : (i = (_C_24 : ((_C_23 : (i + 1)) :> int32))))
             }
          };
          (while_0_break : ())
@@ -305,89 +304,83 @@ behavior default:
    }
 }
 ========== file tests/c/scalar_product.jessie/scalar_product.cloc ==========
-[C_15]
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 12
-end = 16
-
-[C_11]
-file = "HOME/tests/c/scalar_product.c"
-line = 56
-begin = 15
-end = 44
-
-[C_1]
-file = "HOME/tests/c/scalar_product.c"
-line = 46
-begin = 2
-end = 8
-
-[C_33]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 38
-end = 59
-
-[C_9]
-file = "HOME/tests/c/scalar_product.c"
-line = 54
-begin = 15
-end = 32
-
-[C_10]
-file = "HOME/tests/c/scalar_product.c"
-line = 55
-begin = 15
-end = 32
-
-[C_20]
-file = "HOME/tests/c/scalar_product.c"
-line = 67
-begin = 10
-end = 195
-
-[C_32]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 38
-end = 59
-
-[C_17]
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 8
-end = 21
-
-[C_36]
+[_C_35]
 file = "HOME/tests/c/scalar_product.c"
 line = 38
 begin = 13
-end = 19
+end = 25
 
-[C_5]
+[_C_28]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 13
+end = 54
+
+[_C_31]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 13
+end = 31
+
+[_C_4]
+file = "HOME/tests/c/scalar_product.c"
+line = 49
+begin = 21
+end = 75
+
+[_C_32]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 35
+end = 54
+
+[_C_23]
+file = "HOME/tests/c/scalar_product.c"
+line = 52
+begin = 23
+end = 26
+
+[_C_19]
+file = "HOME/tests/c/scalar_product.c"
+line = 62
+begin = 15
+end = 60
+
+[_C_13]
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 17
+end = 21
+
+[_C_5]
 file = "HOME/tests/c/scalar_product.c"
 line = 48
 begin = 21
 end = 59
 
-[C_34]
+[_C_36]
 file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 38
-end = 59
-
-[C_29]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
+line = 38
 begin = 13
-end = 34
+end = 19
 
-[C_13]
+[_C_12]
 file = "HOME/tests/c/scalar_product.c"
 line = 59
 begin = 17
-end = 21
+end = 18
+
+[_C_33]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 35
+end = 54
+
+[_C_22]
+file = "HOME/tests/c/scalar_product.c"
+line = 80
+begin = 15
+end = 45
 
 [A2]
 name = "Lemma A2"
@@ -396,29 +389,35 @@ line = 25
 begin = 6
 end = 178
 
-[C_7]
+[_C_9]
+file = "HOME/tests/c/scalar_product.c"
+line = 54
+begin = 15
+end = 32
+
+[_C_30]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 13
+end = 31
+
+[_C_6]
 file = "HOME/tests/c/scalar_product.c"
 line = 47
 begin = 21
-end = 27
+end = 32
 
-[C_22]
+[_C_24]
 file = "HOME/tests/c/scalar_product.c"
-line = 80
-begin = 15
-end = 45
+line = 52
+begin = 23
+end = 26
 
-[C_14]
+[_C_20]
 file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 12
-end = 13
-
-[C_35]
-file = "HOME/tests/c/scalar_product.c"
-line = 38
-begin = 13
-end = 25
+line = 67
+begin = 10
+end = 195
 
 [scalar_product]
 name = "Function scalar_product"
@@ -427,17 +426,29 @@ line = 45
 begin = 7
 end = 21
 
-[C_25]
+[_C_3]
 file = "HOME/tests/c/scalar_product.c"
-line = 52
-begin = 23
-end = 26
+line = 50
+begin = 19
+end = 22
 
-[C_8]
+[_C_17]
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 8
+end = 21
+
+[_C_7]
 file = "HOME/tests/c/scalar_product.c"
 line = 47
-begin = 26
-end = 32
+begin = 21
+end = 27
+
+[_C_27]
+file = "HOME/tests/c/scalar_product.c"
+line = 40
+begin = 13
+end = 98
 
 [A1]
 name = "Lemma A1"
@@ -446,77 +457,77 @@ line = 23
 begin = 6
 end = 85
 
-[C_27]
-file = "HOME/tests/c/scalar_product.c"
-line = 40
-begin = 13
-end = 98
-
-[C_37]
-file = "HOME/tests/c/scalar_product.c"
-line = 38
-begin = 18
-end = 25
-
-[C_19]
-file = "HOME/tests/c/scalar_product.c"
-line = 62
-begin = 15
-end = 60
-
-[C_4]
-file = "HOME/tests/c/scalar_product.c"
-line = 49
-begin = 21
-end = 75
-
-[C_12]
+[_C_15]
 file = "HOME/tests/c/scalar_product.c"
 line = 59
-begin = 17
-end = 18
+begin = 12
+end = 16
 
-[C_26]
+[_C_26]
 file = "HOME/tests/c/scalar_product.c"
 line = 43
 begin = 7
 end = 67
 
-[C_18]
+[_C_10]
+file = "HOME/tests/c/scalar_product.c"
+line = 55
+begin = 15
+end = 32
+
+[_C_8]
+file = "HOME/tests/c/scalar_product.c"
+line = 47
+begin = 26
+end = 32
+
+[_C_18]
 file = "HOME/tests/c/scalar_product.c"
 line = 59
 begin = 8
 end = 21
 
-[C_2]
+[_C_29]
+file = "HOME/tests/c/scalar_product.c"
+line = 39
+begin = 13
+end = 31
+
+[_C_14]
+file = "HOME/tests/c/scalar_product.c"
+line = 59
+begin = 12
+end = 13
+
+[_C_37]
+file = "HOME/tests/c/scalar_product.c"
+line = 38
+begin = 18
+end = 25
+
+[_C_2]
 file = "HOME/tests/c/scalar_product.c"
 line = 52
 begin = 7
 end = 10
 
-[C_28]
+[_C_34]
 file = "HOME/tests/c/scalar_product.c"
 line = 39
-begin = 13
-end = 59
+begin = 35
+end = 54
 
-[C_24]
+[_C_16]
 file = "HOME/tests/c/scalar_product.c"
-line = 52
-begin = 23
-end = 26
+line = 59
+begin = 12
+end = 21
 
-[C_6]
+[_C_1]
 file = "HOME/tests/c/scalar_product.c"
-line = 47
-begin = 21
-end = 32
-
-[C_30]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 13
-end = 34
+line = 46
+begin = 2
+end = 8
 
 [bound_int_to_real]
 name = "Lemma bound_int_to_real"
@@ -525,35 +536,23 @@ line = 33
 begin = 4
 end = 76
 
-[C_21]
-file = "HOME/tests/c/scalar_product.c"
-line = 75
-begin = 6
-end = 113
-
-[C_3]
-file = "HOME/tests/c/scalar_product.c"
-line = 50
-begin = 19
-end = 22
-
-[C_16]
-file = "HOME/tests/c/scalar_product.c"
-line = 59
-begin = 12
-end = 21
-
-[C_31]
-file = "HOME/tests/c/scalar_product.c"
-line = 39
-begin = 13
-end = 34
-
-[C_23]
+[_C_25]
 file = "HOME/tests/c/scalar_product.c"
 line = 52
 begin = 23
 end = 26
+
+[_C_11]
+file = "HOME/tests/c/scalar_product.c"
+line = 56
+begin = 15
+end = 44
+
+[_C_21]
+file = "HOME/tests/c/scalar_product.c"
+line = 75
+begin = 6
+end = 113
 
 ========== jessie execution ==========
 Generating Why function scalar_product
@@ -737,7 +736,7 @@ clean:
 file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
 line = 92
 begin = 9
-end = 6054
+end = 6171
 
 [JC_45]
 file = "HOME/tests/c/scalar_product.c"
@@ -793,8 +792,8 @@ end = -1
 [JC_5]
 file = "HOME/tests/c/scalar_product.c"
 line = 39
-begin = 38
-end = 59
+begin = 35
+end = 54
 
 [JC_9]
 file = "HOME/"
@@ -862,7 +861,7 @@ end = 178
 file = "HOME/tests/c/scalar_product.c"
 line = 39
 begin = 13
-end = 34
+end = 31
 
 [JC_11]
 file = "HOME/tests/c/scalar_product.c"
@@ -873,8 +872,8 @@ end = 25
 [JC_15]
 file = "HOME/tests/c/scalar_product.c"
 line = 39
-begin = 38
-end = 59
+begin = 35
+end = 54
 
 [JC_36]
 kind = FPOverflow
@@ -918,13 +917,13 @@ end = 60
 file = "HOME/tests/c/scalar_product.c"
 line = 39
 begin = 13
-end = 34
+end = 31
 
 [JC_6]
 file = "HOME/tests/c/scalar_product.c"
 line = 39
-begin = 38
-end = 59
+begin = 35
+end = 54
 
 [JC_44]
 file = "HOME/tests/c/scalar_product.c"
@@ -936,7 +935,7 @@ end = 75
 file = "HOME/tests/c/scalar_product.c"
 line = 39
 begin = 13
-end = 34
+end = 31
 
 [JC_42]
 kind = ArithOverflow
@@ -982,7 +981,7 @@ end = 44
 file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
 line = 92
 begin = 9
-end = 6054
+end = 6171
 
 [JC_7]
 file = "HOME/tests/c/scalar_product.c"
@@ -1018,8 +1017,8 @@ end = 16
 [JC_14]
 file = "HOME/tests/c/scalar_product.c"
 line = 39
-begin = 38
-end = 59
+begin = 35
+end = 54
 
 [scalar_product_ensures_default]
 name = "Function scalar_product"
@@ -1094,7 +1093,7 @@ end = -1
 file = "HOME/tests/c/scalar_product.c"
 line = 39
 begin = 13
-end = 34
+end = 31
 
 [bound_int_to_real]
 name = "Lemma bound_int_to_real"
@@ -1120,13 +1119,13 @@ end = 67
 file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
 line = 92
 begin = 9
-end = 6054
+end = 6171
 
 [JC_30]
 file = "HOME/tests/c/scalar_product.jessie/scalar_product.jc"
 line = 92
 begin = 9
-end = 6054
+end = 6171
 
 [JC_58]
 file = "HOME/tests/c/scalar_product.c"
@@ -1748,11 +1747,9 @@ let scalar_product_ensures_default =
    begin
      (let p = ref (any_double void) in
      (let i = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<num> = (p := (double_of_real_exact 0.0)) in void);
       try
-       (C_2:
        begin
          (let _jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
         (loop_2:
@@ -1804,22 +1801,15 @@ let scalar_product_ensures_default =
                  (L:
                  begin
                    (let _jessie_<num> =
-                   (C_18:
-                   (p := (C_17:
-                         (JC_56:
-                         (((add_double_safe nearest_even) !p) (C_16:
-                                                              (JC_55:
+                   (p := (JC_56:
+                         (((add_double_safe nearest_even) !p) (JC_55:
                                                               (((mul_double_safe nearest_even) 
-                                                                (C_15:
                                                                 ((safe_acc_ doubleP_doubleM_x_3) 
-                                                                 (C_14:
                                                                  ((shift x_1) 
-                                                                  (integer_of_int32 !i)))))) 
-                                                               (C_13:
+                                                                  (integer_of_int32 !i)))) 
                                                                ((safe_acc_ doubleP_doubleM_y_4) 
-                                                                (C_12:
                                                                 ((shift y_0) 
-                                                                 (integer_of_int32 !i))))))))))))) in
+                                                                 (integer_of_int32 !i)))))))) in
                    void);
                   (assert
                   { (JC_57:
@@ -1888,20 +1878,13 @@ let scalar_product_ensures_default =
                             abs_real(double_value(select(doubleP_doubleM_y_4,
                                                   shift(y_0,
                                                   integer_of_int32(i)))))),
-                    1.0)) }; void);
-                  begin
-                    void;
-                   (C_25:
-                   begin
-                     (i := (C_24:
-                           (safe_int32_of_integer_ (C_23:
-                                                   ((add_int (integer_of_int32 !i)) (1))))));
-                    !i end) end end) end end in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) with
+                    1.0)) }; void); void;
+                  (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+                  !i end) end end in void); (raise (Loop_continue_exc void))
+             end with Loop_continue_exc _jessie_<num> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end with
        Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
-      (return := !p); (raise Return) end))); absurd  end with Return ->
+      (return := !p); (raise Return) end)); absurd  end with Return ->
    !return end))
   { (JC_19:
     le_real(abs_real(sub_real(double_value(result),
@@ -1940,11 +1923,9 @@ let scalar_product_safety =
    begin
      (let p = ref (any_double void) in
      (let i = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<num> = (p := (double_of_real_exact 0.0)) in void);
       try
-       (C_2:
        begin
          (let _jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
         (loop_1:
@@ -1999,20 +1980,15 @@ let scalar_product_safety =
                  (L:
                  begin
                    (let _jessie_<num> =
-                   (C_18:
-                   (p := (C_17:
-                         (JC_37:
-                         (((add_double nearest_even) !p) (C_16:
-                                                         (JC_36:
+                   (p := (JC_37:
+                         (((add_double nearest_even) !p) (JC_36:
                                                          (((mul_double nearest_even) 
-                                                           (C_15:
                                                            (JC_34:
                                                            ((((offset_acc_ doubleP_x_3_alloc_table) doubleP_doubleM_x_3) x_1) 
-                                                            (integer_of_int32 !i))))) 
-                                                          (C_13:
+                                                            (integer_of_int32 !i)))) 
                                                           (JC_35:
                                                           ((((offset_acc_ doubleP_y_4_alloc_table) doubleP_doubleM_y_4) y_0) 
-                                                           (integer_of_int32 !i)))))))))))) in
+                                                           (integer_of_int32 !i)))))))) in
                    void);
                   [ { } unit reads i,p
                     { (JC_38:
@@ -2081,21 +2057,14 @@ let scalar_product_safety =
                               abs_real(double_value(select(doubleP_doubleM_y_4,
                                                     shift(y_0,
                                                     integer_of_int32(i)))))),
-                      1.0)) } ];
-                  begin
-                    void;
-                   (C_25:
-                   begin
-                     (i := (C_24:
-                           (JC_42:
-                           (int32_of_integer_ (C_23:
-                                              ((add_int (integer_of_int32 !i)) (1)))))));
-                    !i end) end end) end end in void);
-              (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<num> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) with
+                      1.0)) } ]; void;
+                  (i := (JC_42:
+                        (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+                  !i end) end end in void); (raise (Loop_continue_exc void))
+             end with Loop_continue_exc _jessie_<num> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end with
        Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
-      (return := !p); (raise Return) end))); absurd  end with Return ->
+      (return := !p); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 
 

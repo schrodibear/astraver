@@ -41,15 +41,15 @@ type voidP = [voidP]
 
 unit f()
 behavior default:
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 {  
    (var int32 x);
    
-   {  (C_1 : (x = 1));
-      (L : (C_2 : (x = 2)));
+   {  (_C_1 : (x = 1));
+      (L : (_C_2 : (x = 2)));
       
       {  
-         (assert for default: (C_3 : (jessie : (\at(x,L) == (x - 1)))));
+         (assert for default: (_C_3 : (jessie : (\at(x,L) == (x - 1)))));
          ()
       };
       
@@ -410,17 +410,15 @@ let f_ensures_default =
   try
    begin
      (let x_0 = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (1))) in void);
       (L:
       begin
-        (let _jessie_<somenum> = (C_2: (x_0 := (safe_int32_of_integer_ (2)))) in
-        void);
+        (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
        (assert
        { (JC_<somenum>:
          (integer_of_int32(x_0@L) = sub_int(integer_of_int32(x_0), (1)))) };
-       void); void; (raise Return) end) end)); (raise Return) end with
+       void); void; (raise Return) end) end); (raise Return) end with
    Return -> void end) { (JC_<somenum>: true) }
 
 let f_safety =
@@ -430,17 +428,15 @@ let f_safety =
   try
    begin
      (let x_0 = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (1))) in void);
       (L:
       begin
-        (let _jessie_<somenum> = (C_2: (x_0 := (safe_int32_of_integer_ (2)))) in
-        void);
+        (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
        [ { } unit reads x_0
          { (JC_<somenum>:
            (integer_of_int32(x_0@L) = sub_int(integer_of_int32(x_0), (1)))) } ];
-       void; (raise Return) end) end)); (raise Return) end with Return ->
+       void; (raise Return) end) end); (raise Return) end with Return ->
    void end) { true }
 
 

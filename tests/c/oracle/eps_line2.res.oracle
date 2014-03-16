@@ -90,51 +90,53 @@ logic integer l_sign(real x) =
 (if (x >= 0.0) then 1 else (- 1))
 
 int32 sign(double x, double e1, double e2)
-  requires (C_7 : ((C_8 : ((e1 :> real) <= ((x :> real) - \double_exact(x)))) &&
-                    (C_9 : (((x :> real) - \double_exact(x)) <= (e2 :> real)))));
+  requires (_C_7 : ((_C_8 : ((e1 :> real) <=
+                              ((x :> real) - \double_exact(x)))) &&
+                     (_C_9 : (((x :> real) - \double_exact(x)) <=
+                               (e2 :> real)))));
 behavior default:
-  ensures (C_4 : ((C_5 : ((\result != 0) ==>
-                           (\result == l_sign(\double_exact(\at(x,Old)))))) &&
-                   (C_6 : (\integer_abs(\result) <= 1))));
+  ensures (_C_4 : ((_C_5 : ((\result != 0) ==>
+                             (\result == l_sign(\double_exact(\at(x,Old)))))) &&
+                    (_C_6 : (\integer_abs(\result) <= 1))));
 {  
    (var int32 __retres);
    
    {  (if (x > e2) then 
-      {  (C_1 : (__retres = 1));
+      {  (_C_1 : (__retres = 1));
          
          (goto return_label)
       } else ());
       (if (x < e1) then 
-      {  (C_2 : (__retres = -1));
+      {  (_C_2 : (__retres = -1));
          
          (goto return_label)
       } else ());
-      (C_3 : (__retres = 0));
+      (_C_3 : (__retres = 0));
       (return_label : 
       (return __retres))
    }
 }
 
 int32 eps_line(double sx, double sy, double vx, double vy)
-  requires (C_26 : ((((((((C_33 : ((sx :> real) == \double_exact(sx))) &&
-                           (C_34 : ((sy :> real) == \double_exact(sy)))) &&
-                          (C_35 : ((vx :> real) == \double_exact(vx)))) &&
-                         (C_36 : ((vy :> real) == \double_exact(vy)))) &&
-                        (C_37 : (\real_abs((sx :> real)) <= 100.0))) &&
-                       (C_38 : (\real_abs((sy :> real)) <= 100.0))) &&
-                      (C_39 : (\real_abs((vx :> real)) <= 1.0))) &&
-                     (C_40 : (\real_abs((vy :> real)) <= 1.0))));
+  requires (_C_26 : ((((((((_C_33 : ((sx :> real) == \double_exact(sx))) &&
+                            (_C_34 : ((sy :> real) == \double_exact(sy)))) &&
+                           (_C_35 : ((vx :> real) == \double_exact(vx)))) &&
+                          (_C_36 : ((vy :> real) == \double_exact(vy)))) &&
+                         (_C_37 : (\real_abs((sx :> real)) <= 100.0))) &&
+                        (_C_38 : (\real_abs((sy :> real)) <= 100.0))) &&
+                       (_C_39 : (\real_abs((vx :> real)) <= 1.0))) &&
+                      (_C_40 : (\real_abs((vy :> real)) <= 1.0))));
 behavior default:
-  ensures (C_25 : ((\result != 0) ==>
-                    (\result ==
-                      (l_sign(((\double_exact(\at(sx,Old)) *
-                                 \double_exact(\at(vx,Old))) +
-                                (\double_exact(\at(sy,Old)) *
-                                  \double_exact(\at(vy,Old))))) *
-                        l_sign(((\double_exact(\at(sx,Old)) *
-                                  \double_exact(\at(vy,Old))) -
+  ensures (_C_25 : ((\result != 0) ==>
+                     (\result ==
+                       (l_sign(((\double_exact(\at(sx,Old)) *
+                                  \double_exact(\at(vx,Old))) +
                                  (\double_exact(\at(sy,Old)) *
-                                   \double_exact(\at(vx,Old)))))))));
+                                   \double_exact(\at(vy,Old))))) *
+                         l_sign(((\double_exact(\at(sx,Old)) *
+                                   \double_exact(\at(vy,Old))) -
+                                  (\double_exact(\at(sy,Old)) *
+                                    \double_exact(\at(vx,Old)))))))));
 {  
    (var int32 s1);
    
@@ -142,15 +144,15 @@ behavior default:
    
    (var int32 __retres_0);
    
-   {  (C_15 : (s1 = (C_14 : sign((C_12 : ((C_11 : (sx * vx)) +
-                                           (C_10 : (sy * vy)))),
-                                 (C_13 : (- (0x1.90641p-45 :> double))),
-                                 (0x1.90641p-45 :> double)))));
-      (C_21 : (s2 = (C_20 : sign((C_18 : ((C_17 : (sx * vy)) -
-                                           (C_16 : (sy * vx)))),
-                                 (C_19 : (- (0x1.90641p-45 :> double))),
-                                 (0x1.90641p-45 :> double)))));
-      (C_24 : (__retres_0 = (C_23 : ((C_22 : (s1 * s2)) :> int32))));
+   {  (_C_15 : (s1 = (_C_14 : sign((_C_12 : ((_C_11 : (sx * vx)) +
+                                              (_C_10 : (sy * vy)))),
+                                   (_C_13 : (- (0x1.90641p-45 :> double))),
+                                   (0x1.90641p-45 :> double)))));
+      (_C_21 : (s2 = (_C_20 : sign((_C_18 : ((_C_17 : (sx * vy)) -
+                                              (_C_16 : (sy * vx)))),
+                                   (_C_19 : (- (0x1.90641p-45 :> double))),
+                                   (0x1.90641p-45 :> double)))));
+      (_C_24 : (__retres_0 = (_C_23 : ((_C_22 : (s1 * s2)) :> int32))));
       
       (return __retres_0)
    }
@@ -163,215 +165,215 @@ line = 12
 begin = 4
 end = 8
 
-[C_15]
-file = "HOME/tests/c/eps_line2.c"
-line = 34
-begin = 5
-end = 53
-
-[C_11]
-file = "HOME/tests/c/eps_line2.c"
-line = 34
-begin = 10
-end = 15
-
-[C_1]
-file = "HOME/tests/c/eps_line2.c"
-line = 15
-begin = 4
-end = 13
-
-[C_33]
-file = "HOME/tests/c/eps_line2.c"
-line = 22
-begin = 6
-end = 22
-
-[C_9]
-file = "HOME/tests/c/eps_line2.c"
-line = 8
-begin = 18
-end = 35
-
-[C_10]
-file = "HOME/tests/c/eps_line2.c"
-line = 34
-begin = 16
-end = 21
-
-[C_20]
-file = "HOME/tests/c/eps_line2.c"
-line = 35
-begin = 5
-end = 53
-
-[C_32]
-file = "HOME/tests/c/eps_line2.c"
-line = 22
-begin = 6
-end = 42
-
-[C_17]
-file = "HOME/tests/c/eps_line2.c"
-line = 35
-begin = 10
-end = 15
-
-[C_40]
-file = "HOME/tests/c/eps_line2.c"
-line = 25
-begin = 25
-end = 40
-
-[C_36]
-file = "HOME/tests/c/eps_line2.c"
-line = 23
-begin = 26
-end = 42
-
-[C_5]
-file = "HOME/tests/c/eps_line2.c"
-line = 9
-begin = 12
-end = 59
-
-[C_34]
-file = "HOME/tests/c/eps_line2.c"
-line = 22
-begin = 26
-end = 42
-
-[C_29]
-file = "HOME/tests/c/eps_line2.c"
-line = 22
-begin = 6
-end = 115
-
-[C_13]
-file = "HOME/tests/c/eps_line2.c"
-line = 34
-begin = 24
-end = 37
-
-[C_7]
-file = "HOME/tests/c/eps_line2.c"
-line = 8
-begin = 13
-end = 35
-
-[C_22]
-file = "HOME/tests/c/eps_line2.c"
-line = 37
-begin = 9
-end = 14
-
-[C_14]
-file = "HOME/tests/c/eps_line2.c"
-line = 34
-begin = 5
-end = 53
-
-[C_35]
+[_C_35]
 file = "HOME/tests/c/eps_line2.c"
 line = 23
 begin = 6
 end = 22
 
-[C_25]
-file = "HOME/tests/c/eps_line2.c"
-line = 27
-begin = 7
-end = 164
-
-[C_38]
-file = "HOME/tests/c/eps_line2.c"
-line = 24
-begin = 27
-end = 44
-
-[C_8]
-file = "HOME/tests/c/eps_line2.c"
-line = 8
-begin = 13
-end = 29
-
-[C_39]
-file = "HOME/tests/c/eps_line2.c"
-line = 25
-begin = 6
-end = 21
-
-[C_27]
-file = "HOME/tests/c/eps_line2.c"
-line = 22
-begin = 6
-end = 161
-
-[C_37]
-file = "HOME/tests/c/eps_line2.c"
-line = 24
-begin = 6
-end = 23
-
-[C_19]
-file = "HOME/tests/c/eps_line2.c"
-line = 35
-begin = 24
-end = 37
-
-[C_4]
-file = "HOME/tests/c/eps_line2.c"
-line = 9
-begin = 12
-end = 94
-
-[C_12]
-file = "HOME/tests/c/eps_line2.c"
-line = 34
-begin = 10
-end = 21
-
-[C_26]
-file = "HOME/tests/c/eps_line2.c"
-line = 22
-begin = 6
-end = 180
-
-[C_18]
-file = "HOME/tests/c/eps_line2.c"
-line = 35
-begin = 10
-end = 21
-
-[C_2]
-file = "HOME/tests/c/eps_line2.c"
-line = 17
-begin = 4
-end = 14
-
-[C_28]
+[_C_28]
 file = "HOME/tests/c/eps_line2.c"
 line = 22
 begin = 6
 end = 136
 
-[C_24]
+[_C_31]
+file = "HOME/tests/c/eps_line2.c"
+line = 22
+begin = 6
+end = 68
+
+[_C_4]
+file = "HOME/tests/c/eps_line2.c"
+line = 9
+begin = 12
+end = 94
+
+[_C_32]
+file = "HOME/tests/c/eps_line2.c"
+line = 22
+begin = 6
+end = 42
+
+[_C_23]
 file = "HOME/tests/c/eps_line2.c"
 line = 37
-begin = 2
-end = 15
+begin = 9
+end = 14
 
-[C_6]
+[_C_19]
+file = "HOME/tests/c/eps_line2.c"
+line = 35
+begin = 24
+end = 37
+
+[_C_13]
+file = "HOME/tests/c/eps_line2.c"
+line = 34
+begin = 24
+end = 37
+
+[_C_5]
+file = "HOME/tests/c/eps_line2.c"
+line = 9
+begin = 12
+end = 59
+
+[_C_36]
+file = "HOME/tests/c/eps_line2.c"
+line = 23
+begin = 26
+end = 42
+
+[_C_12]
+file = "HOME/tests/c/eps_line2.c"
+line = 34
+begin = 10
+end = 21
+
+[_C_33]
+file = "HOME/tests/c/eps_line2.c"
+line = 22
+begin = 6
+end = 22
+
+[_C_22]
+file = "HOME/tests/c/eps_line2.c"
+line = 37
+begin = 9
+end = 14
+
+[_C_9]
+file = "HOME/tests/c/eps_line2.c"
+line = 8
+begin = 18
+end = 35
+
+[_C_30]
+file = "HOME/tests/c/eps_line2.c"
+line = 22
+begin = 6
+end = 88
+
+[_C_6]
 file = "HOME/tests/c/eps_line2.c"
 line = 10
 begin = 13
 end = 31
 
-[C_30]
+[_C_24]
+file = "HOME/tests/c/eps_line2.c"
+line = 37
+begin = 2
+end = 15
+
+[_C_20]
+file = "HOME/tests/c/eps_line2.c"
+line = 35
+begin = 5
+end = 53
+
+[_C_38]
+file = "HOME/tests/c/eps_line2.c"
+line = 24
+begin = 27
+end = 44
+
+[_C_3]
+file = "HOME/tests/c/eps_line2.c"
+line = 18
+begin = 2
+end = 11
+
+[_C_17]
+file = "HOME/tests/c/eps_line2.c"
+line = 35
+begin = 10
+end = 15
+
+[_C_7]
+file = "HOME/tests/c/eps_line2.c"
+line = 8
+begin = 13
+end = 35
+
+[_C_27]
 file = "HOME/tests/c/eps_line2.c"
 line = 22
 begin = 6
-end = 88
+end = 161
+
+[_C_15]
+file = "HOME/tests/c/eps_line2.c"
+line = 34
+begin = 5
+end = 53
+
+[_C_26]
+file = "HOME/tests/c/eps_line2.c"
+line = 22
+begin = 6
+end = 180
+
+[_C_10]
+file = "HOME/tests/c/eps_line2.c"
+line = 34
+begin = 16
+end = 21
+
+[_C_40]
+file = "HOME/tests/c/eps_line2.c"
+line = 25
+begin = 25
+end = 40
+
+[_C_8]
+file = "HOME/tests/c/eps_line2.c"
+line = 8
+begin = 13
+end = 29
+
+[_C_18]
+file = "HOME/tests/c/eps_line2.c"
+line = 35
+begin = 10
+end = 21
+
+[_C_29]
+file = "HOME/tests/c/eps_line2.c"
+line = 22
+begin = 6
+end = 115
+
+[_C_14]
+file = "HOME/tests/c/eps_line2.c"
+line = 34
+begin = 5
+end = 53
+
+[_C_37]
+file = "HOME/tests/c/eps_line2.c"
+line = 24
+begin = 6
+end = 23
+
+[_C_2]
+file = "HOME/tests/c/eps_line2.c"
+line = 17
+begin = 4
+end = 14
+
+[_C_34]
+file = "HOME/tests/c/eps_line2.c"
+line = 22
+begin = 26
+end = 42
+
+[_C_16]
+file = "HOME/tests/c/eps_line2.c"
+line = 35
+begin = 16
+end = 21
 
 [eps_line]
 name = "Function eps_line"
@@ -380,35 +382,35 @@ line = 31
 begin = 4
 end = 12
 
-[C_21]
+[_C_1]
+file = "HOME/tests/c/eps_line2.c"
+line = 15
+begin = 4
+end = 13
+
+[_C_25]
+file = "HOME/tests/c/eps_line2.c"
+line = 27
+begin = 7
+end = 164
+
+[_C_39]
+file = "HOME/tests/c/eps_line2.c"
+line = 25
+begin = 6
+end = 21
+
+[_C_11]
+file = "HOME/tests/c/eps_line2.c"
+line = 34
+begin = 10
+end = 15
+
+[_C_21]
 file = "HOME/tests/c/eps_line2.c"
 line = 35
 begin = 5
 end = 53
-
-[C_3]
-file = "HOME/tests/c/eps_line2.c"
-line = 18
-begin = 2
-end = 11
-
-[C_16]
-file = "HOME/tests/c/eps_line2.c"
-line = 35
-begin = 16
-end = 21
-
-[C_31]
-file = "HOME/tests/c/eps_line2.c"
-line = 22
-begin = 6
-end = 68
-
-[C_23]
-file = "HOME/tests/c/eps_line2.c"
-line = 37
-begin = 9
-end = 14
 
 ========== jessie execution ==========
 Generating Why function sign
@@ -647,9 +649,9 @@ end = 14
 [JC_48]
 kind = FPOverflow
 file = "HOME/tests/c/eps_line2.jessie/eps_line2.jc"
-line = 100
-begin = 33
-end = 58
+line = 102
+begin = 35
+end = 60
 
 [JC_23]
 file = "HOME/tests/c/eps_line2.c"
@@ -690,9 +692,9 @@ end = 180
 [JC_41]
 kind = FPOverflow
 file = "HOME/tests/c/eps_line2.jessie/eps_line2.jc"
-line = 96
-begin = 33
-end = 58
+line = 98
+begin = 35
+end = 60
 
 [JC_47]
 kind = UserCall
@@ -832,9 +834,9 @@ end = 15
 [JC_42]
 kind = FPOverflow
 file = "HOME/tests/c/eps_line2.jessie/eps_line2.jc"
-line = 95
-begin = 44
-end = 69
+line = 97
+begin = 47
+end = 72
 
 [JC_46]
 kind = FPOverflow
@@ -935,9 +937,9 @@ end = 23
 [JC_49]
 kind = FPOverflow
 file = "HOME/tests/c/eps_line2.jessie/eps_line2.jc"
-line = 99
-begin = 44
-end = 69
+line = 101
+begin = 47
+end = 72
 
 [JC_1]
 file = "HOME/tests/c/eps_line2.c"
@@ -1479,53 +1481,38 @@ let eps_line_ensures_default =
      (let s1_1 = ref (any_int32 void) in
      (let s2_1 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
-     (C_15:
      begin
        (let _jessie_<num> =
-       (s1_1 := (C_14:
-                (let _jessie_<num> =
-                (C_12:
+       (s1_1 := (let _jessie_<num> =
                 (JC_59:
-                (((add_double_safe nearest_even) (C_11:
-                                                 (JC_57:
-                                                 (((mul_double_safe nearest_even) sx) vx)))) 
-                 (C_10: (JC_58: (((mul_double_safe nearest_even) sy) vy)))))) in
+                (((add_double_safe nearest_even) (JC_57:
+                                                 (((mul_double_safe nearest_even) sx) vx))) 
+                 (JC_58: (((mul_double_safe nearest_even) sy) vy)))) in
                 (let _jessie_<num> =
-                (C_13:
                 (JC_56:
-                ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.90641p-45)))) in
+                ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.90641p-45))) in
                 (let _jessie_<num> =
                 ((double_of_real_safe nearest_even) 0x1.90641p-45) in
-                (JC_60: (((sign _jessie_<num>) _jessie_<num>) _jessie_<num>))))))) in
+                (JC_60: (((sign _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
        void);
-      (C_21:
-      begin
-        (let _jessie_<num> =
-        (s2_1 := (C_20:
-                 (let _jessie_<num> =
-                 (C_18:
-                 (JC_64:
-                 (((sub_double_safe nearest_even) (C_17:
-                                                  (JC_62:
-                                                  (((mul_double_safe nearest_even) sx) vy)))) 
-                  (C_16: (JC_63: (((mul_double_safe nearest_even) sy) vx)))))) in
-                 (let _jessie_<num> =
-                 (C_19:
-                 (JC_61:
-                 ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.90641p-45)))) in
-                 (let _jessie_<num> =
-                 ((double_of_real_safe nearest_even) 0x1.90641p-45) in
-                 (JC_65: (((sign _jessie_<num>) _jessie_<num>) _jessie_<num>))))))) in
-        void);
-       (C_24:
-       begin
-         (let _jessie_<num> =
-         (__retres_0 := (C_23:
-                        (safe_int32_of_integer_ (C_22:
-                                                ((mul_int (integer_of_int32 !s1_1)) 
-                                                 (integer_of_int32 !s2_1)))))) in
-         void); (return := !__retres_0); (raise Return) end) end) end))));
-    absurd  end with Return -> !return end))
+      (let _jessie_<num> =
+      (s2_1 := (let _jessie_<num> =
+               (JC_64:
+               (((sub_double_safe nearest_even) (JC_62:
+                                                (((mul_double_safe nearest_even) sx) vy))) 
+                (JC_63: (((mul_double_safe nearest_even) sy) vx)))) in
+               (let _jessie_<num> =
+               (JC_61:
+               ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.90641p-45))) in
+               (let _jessie_<num> =
+               ((double_of_real_safe nearest_even) 0x1.90641p-45) in
+               (JC_65: (((sign _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+      void);
+      (let _jessie_<num> =
+      (__retres_0 := (safe_int32_of_integer_ ((mul_int (integer_of_int32 !s1_1)) 
+                                              (integer_of_int32 !s2_1)))) in
+      void); (return := !__retres_0); (raise Return) end))); absurd  end with
+   Return -> !return end))
   { (JC_37:
     ((integer_of_int32(result) <> (0)) ->
      (integer_of_int32(result) = mul_int(l_sign(add_real(mul_real(double_exact(sx),
@@ -1557,57 +1544,41 @@ let eps_line_safety =
      (let s1_1 = ref (any_int32 void) in
      (let s2_1 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
-     (C_15:
      begin
        (let _jessie_<num> =
-       (s1_1 := (C_14:
-                (let _jessie_<num> =
-                (C_12:
+       (s1_1 := (let _jessie_<num> =
                 (JC_46:
-                (((add_double nearest_even) (C_11:
-                                            (JC_44:
-                                            (((mul_double nearest_even) sx) vx)))) 
-                 (C_10: (JC_45: (((mul_double nearest_even) sy) vy)))))) in
+                (((add_double nearest_even) (JC_44:
+                                            (((mul_double nearest_even) sx) vx))) 
+                 (JC_45: (((mul_double nearest_even) sy) vy)))) in
                 (let _jessie_<num> =
-                (C_13:
                 (JC_43:
                 ((neg_double nearest_even) (JC_42:
-                                           ((double_of_real nearest_even) 0x1.90641p-45))))) in
+                                           ((double_of_real nearest_even) 0x1.90641p-45)))) in
                 (let _jessie_<num> =
                 (JC_41: ((double_of_real nearest_even) 0x1.90641p-45)) in
-                (JC_47: (((sign_requires _jessie_<num>) _jessie_<num>) _jessie_<num>))))))) in
+                (JC_47: (((sign_requires _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
        void);
-      (C_21:
-      begin
-        (let _jessie_<num> =
-        (s2_1 := (C_20:
-                 (let _jessie_<num> =
-                 (C_18:
-                 (JC_53:
-                 (((sub_double nearest_even) (C_17:
-                                             (JC_51:
-                                             (((mul_double nearest_even) sx) vy)))) 
-                  (C_16: (JC_52: (((mul_double nearest_even) sy) vx)))))) in
-                 (let _jessie_<num> =
-                 (C_19:
-                 (JC_50:
-                 ((neg_double nearest_even) (JC_49:
-                                            ((double_of_real nearest_even) 0x1.90641p-45))))) in
-                 (let _jessie_<num> =
-                 (JC_48: ((double_of_real nearest_even) 0x1.90641p-45)) in
-                 (JC_54:
-                 (((sign_requires _jessie_<num>) _jessie_<num>) _jessie_<num>))))))) in
-        void);
-       (C_24:
-       begin
-         (let _jessie_<num> =
-         (__retres_0 := (C_23:
-                        (JC_55:
-                        (int32_of_integer_ (C_22:
-                                           ((mul_int (integer_of_int32 !s1_1)) 
-                                            (integer_of_int32 !s2_1))))))) in
-         void); (return := !__retres_0); (raise Return) end) end) end))));
-    absurd  end with Return -> !return end)) { true }
+      (let _jessie_<num> =
+      (s2_1 := (let _jessie_<num> =
+               (JC_53:
+               (((sub_double nearest_even) (JC_51:
+                                           (((mul_double nearest_even) sx) vy))) 
+                (JC_52: (((mul_double nearest_even) sy) vx)))) in
+               (let _jessie_<num> =
+               (JC_50:
+               ((neg_double nearest_even) (JC_49:
+                                          ((double_of_real nearest_even) 0x1.90641p-45)))) in
+               (let _jessie_<num> =
+               (JC_48: ((double_of_real nearest_even) 0x1.90641p-45)) in
+               (JC_54: (((sign_requires _jessie_<num>) _jessie_<num>) _jessie_<num>)))))) in
+      void);
+      (let _jessie_<num> =
+      (__retres_0 := (JC_55:
+                     (int32_of_integer_ ((mul_int (integer_of_int32 !s1_1)) 
+                                         (integer_of_int32 !s2_1))))) in
+      void); (return := !__retres_0); (raise Return) end))); absurd  end with
+   Return -> !return end)) { true }
 
 let sign_ensures_default =
  fun (x_1 : double) (e1 : double) (e2 : double) ->
@@ -1627,22 +1598,17 @@ let sign_ensures_default =
       begin
         (if ((gt_double_ x_1) e2)
         then
-         (C_1:
          begin
            (let _jessie_<num> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) else void);
+           void); (raise (Return_label_exc void)) end else void);
        (if ((lt_double_ x_1) e1)
        then
-        (C_2:
         begin
           (let _jessie_<num> =
           (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-         (raise (Return_label_exc void)) end) else void);
-       (C_3:
-       begin
-         (let _jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<num> ->
+         (raise (Return_label_exc void)) end else void);
+       (let _jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_11:
@@ -1669,22 +1635,17 @@ let sign_safety =
       begin
         (if ((gt_double_ x_1) e2)
         then
-         (C_1:
          begin
            (let _jessie_<num> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) else void);
+           void); (raise (Return_label_exc void)) end else void);
        (if ((lt_double_ x_1) e1)
        then
-        (C_2:
         begin
           (let _jessie_<num> =
           (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-         (raise (Return_label_exc void)) end) else void);
-       (C_3:
-       begin
-         (let _jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<num> ->
+         (raise (Return_label_exc void)) end else void);
+       (let _jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 

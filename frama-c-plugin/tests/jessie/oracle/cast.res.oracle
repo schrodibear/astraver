@@ -46,24 +46,24 @@ tag voidP = {
 type voidP = [voidP]
 
 int32 f(intP[..] i)
-  requires (C_20 : ((C_21 : (\offset_min(i) <= 0)) &&
-                     (C_22 : (\offset_max(i) >= 0))));
+  requires (_C_20 : ((_C_21 : (\offset_min(i) <= 0)) &&
+                      (_C_22 : (\offset_max(i) >= 0))));
 behavior default:
-  ensures (C_19 : (\result == 0));
+  ensures (_C_19 : (\result == 0));
 {  
    (var charP[..] c);
    
    (var int32 __retres);
    
-   {  (C_2 : (c = (C_1 : (i :> charP[..]))));
-      (C_4 : ((C_3 : c.charM) = 0));
-      (C_6 : (c = (C_5 : (c + 1))));
-      (C_8 : ((C_7 : c.charM) = 0));
-      (C_10 : (c = (C_9 : (c + 1))));
-      (C_12 : ((C_11 : c.charM) = 0));
-      (C_14 : (c = (C_13 : (c + 1))));
-      (C_16 : ((C_15 : c.charM) = 0));
-      (C_18 : (__retres = (C_17 : i.intM)));
+   {  (_C_2 : (c = (_C_1 : (i :> charP[..]))));
+      (_C_4 : ((_C_3 : c.charM) = 0));
+      (_C_6 : (c = (_C_5 : (c + 1))));
+      (_C_8 : ((_C_7 : c.charM) = 0));
+      (_C_10 : (c = (_C_9 : (c + 1))));
+      (_C_12 : ((_C_11 : c.charM) = 0));
+      (_C_14 : (c = (_C_13 : (c + 1))));
+      (_C_16 : ((_C_15 : c.charM) = 0));
+      (_C_18 : (__retres = (_C_17 : i.intM)));
       
       (return __retres)
    }
@@ -71,19 +71,19 @@ behavior default:
 
 unit g()
 behavior default:
-  ensures (C_30 : true);
+  ensures (_C_30 : true);
 {  
    (var intP[0] i_0);
    
-   {  (C_24 : (i_0 = (C_23 : (new intP[1]))));
-      (C_27 : ((C_26 : i_0.intM) = (C_25 : f(i_0))));
+   {  (_C_24 : (i_0 = (_C_23 : (new intP[1]))));
+      (_C_27 : ((_C_26 : i_0.intM) = (_C_25 : f(i_0))));
       
       {  
-         (assert for default: (C_28 : (jessie : (i_0.intM == 0))));
+         (assert for default: (_C_28 : (jessie : (i_0.intM == 0))));
          ()
       };
       
-      {  (C_29 : (free(i_0)));
+      {  (_C_29 : (free(i_0)));
          
          (return ())
       }

@@ -53,11 +53,11 @@ invariant valid_s :
 
 int32 sum()
 behavior default:
-  ensures (C_6 : (\result == (s.x + s.y)));
+  ensures (_C_6 : (\result == (s.x + s.y)));
 {  
    (var int32 __retres);
    
-   {  (C_5 : (__retres = (C_4 : ((C_3 : ((C_2 : s.x) + (C_1 : s.y))) :> int32))));
+   {  (_C_5 : (__retres = (_C_4 : ((_C_3 : ((_C_2 : s.x) + (_C_1 : s.y))) :> int32))));
       
       (return __retres)
    }
@@ -533,17 +533,12 @@ let sum_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_5:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_4:
-                    (safe_int32_of_integer_ (C_3:
-                                            ((add_int (integer_of_int32 
-                                                       (C_2:
-                                                       ((safe_acc_ !__anonstruct_s_1_x_s_1) s_0)))) 
-                                             (integer_of_int32 (C_1:
-                                                               ((safe_acc_ !__anonstruct_s_1_y_s_1) s_0)))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (__retres := (safe_int32_of_integer_ ((add_int (integer_of_int32 
+                                                       ((safe_acc_ !__anonstruct_s_1_x_s_1) s_0))) 
+                                             (integer_of_int32 ((safe_acc_ !__anonstruct_s_1_y_s_1) s_0))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     (integer_of_int32(result) = add_int(integer_of_int32(select(__anonstruct_s_1_x_s_1,
@@ -559,17 +554,12 @@ let sum_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_5:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_4:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (C_3:
-                                       ((add_int (integer_of_int32 (C_2:
-                                                                   ((safe_acc_ !__anonstruct_s_1_x_s_1) s_0)))) 
-                                        (integer_of_int32 (C_1:
-                                                          ((safe_acc_ !__anonstruct_s_1_y_s_1) s_0))))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (__retres := (JC_<somenum>:
+                    (int32_of_integer_ ((add_int (integer_of_int32 ((safe_acc_ !__anonstruct_s_1_x_s_1) s_0))) 
+                                        (integer_of_int32 ((safe_acc_ !__anonstruct_s_1_y_s_1) s_0)))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>: valid_s(__anonstruct_s_1_s_1_alloc_table)) }
 

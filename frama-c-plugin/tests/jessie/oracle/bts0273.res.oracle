@@ -59,10 +59,11 @@ type T28_29 = [T28_29]
 
 unit f(T28_29[..] tab, floatP[..] y)
 behavior default:
-  ensures (C_8 : true);
+  ensures (_C_8 : true);
 {  
-   {  (C_7 : ((C_6 : y.floatM) = (C_5 : ((C_4 : ((C_3 : (C_2 : ((C_1 : (tab :> floatP[..])) +
-                                                                 1)).floatM) :> double)) :> float))));
+   {  (_C_7 : ((_C_6 : y.floatM) = (_C_5 : ((_C_4 : ((_C_3 : (_C_2 : 
+                                                             ((_C_1 : (tab :> floatP[..])) +
+                                                               1)).floatM) :> double)) :> float))));
       
       (return ())
    }

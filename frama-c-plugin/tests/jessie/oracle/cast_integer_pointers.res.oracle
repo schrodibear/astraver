@@ -418,49 +418,49 @@ predicate valid_wstring_or_null{L}(unsigned_shortP[..] s_31) =
 ((s_31 == null) || valid_wstring{L}(s_31))
 
 int32 uint_to_int(unsigned_intP[..] up)
-  requires (C_7 : ((C_8 : (\offset_min(up) <= 0)) &&
-                    (C_9 : (\offset_max(up) >= 0))));
+  requires (_C_7 : ((_C_8 : (\offset_min(up) <= 0)) &&
+                     (_C_9 : (\offset_max(up) >= 0))));
 behavior default:
-  ensures (C_5 : true);
+  ensures (_C_5 : true);
 behavior identity:
   assumes (up.unsigned_intM <= 2147483647);
-  ensures (C_6 : (\result == \at(up,Old).unsigned_intM));
+  ensures (_C_6 : (\result == \at(up,Old).unsigned_intM));
 {  
    (var intP[..] ip);
    
    (var int32 __retres);
    
-   {  (C_2 : (ip = (C_1 : (up :> intP[..]))));
-      (C_4 : (__retres = (C_3 : ip.intM)));
+   {  (_C_2 : (ip = (_C_1 : (up :> intP[..]))));
+      (_C_4 : (__retres = (_C_3 : ip.intM)));
       
       (return __retres)
    }
 }
 
 unit init_uint_through_int(unsigned_intP[..] uarr)
-  requires (C_21 : ((C_22 : (\offset_min(uarr) <= 0)) &&
-                     (C_23 : (\offset_max(uarr) >= 9))));
+  requires (_C_21 : ((_C_22 : (\offset_min(uarr) <= 0)) &&
+                      (_C_23 : (\offset_max(uarr) >= 9))));
 behavior default:
-  ensures (C_20 : true);
+  ensures (_C_20 : true);
 {  
    (var intP[..] cur);
    
    (var int32 i);
    
-   {  (C_11 : (cur = (C_10 : (uarr :> intP[..]))));
-      (C_12 : (i = 0));
+   {  (_C_11 : (cur = (_C_10 : (uarr :> intP[..]))));
+      (_C_12 : (i = 0));
       
       loop 
       behavior default:
-        invariant (C_13 : (i >= 0));
+        invariant (_C_13 : (i >= 0));
       while (true)
       {  
          {  (if (i < 10) then () else 
             (goto while_0_break));
             
-            {  (C_16 : ((C_15 : (C_14 : (cur + i)).intM) = 0))
+            {  (_C_16 : ((_C_15 : (_C_14 : (cur + i)).intM) = 0))
             };
-            (C_19 : (i = (C_18 : ((C_17 : (i + 1)) :> int32))))
+            (_C_19 : (i = (_C_18 : ((_C_17 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -470,38 +470,38 @@ behavior default:
 }
 
 int32 uchar_ptr(unsigned_charP[..] p_1)
-  requires (C_28 : ((C_29 : (\offset_min(p_1) <= 0)) &&
-                     (C_30 : (\offset_max(p_1) >= 0))));
+  requires (_C_28 : ((_C_29 : (\offset_min(p_1) <= 0)) &&
+                      (_C_30 : (\offset_max(p_1) >= 0))));
 behavior default:
-  ensures (C_27 : true);
+  ensures (_C_27 : true);
 {  
    (var int32 __retres_0);
    
-   {  (C_26 : (__retres_0 = (C_25 : ((C_24 : p_1.unsigned_charM) :> int32))));
+   {  (_C_26 : (__retres_0 = (_C_25 : ((_C_24 : p_1.unsigned_charM) :> int32))));
       
       (return __retres_0)
    }
 }
 
 int32 schar_ptr(signed_charP[..] p_0)
-  requires (C_35 : ((C_36 : (\offset_min(p_0) <= 0)) &&
-                     (C_37 : (\offset_max(p_0) >= 0))));
+  requires (_C_35 : ((_C_36 : (\offset_min(p_0) <= 0)) &&
+                      (_C_37 : (\offset_max(p_0) >= 0))));
 behavior default:
-  ensures (C_34 : true);
+  ensures (_C_34 : true);
 {  
    (var int32 __retres_1);
    
-   {  (C_33 : (__retres_1 = (C_32 : ((C_31 : p_0.signed_charM) :> int32))));
+   {  (_C_33 : (__retres_1 = (_C_32 : ((_C_31 : p_0.signed_charM) :> int32))));
       
       (return __retres_1)
    }
 }
 
 int32 char_ptr(charP[..] p)
-  requires (C_49 : ((C_50 : (\offset_min(p) <= 0)) &&
-                     (C_51 : (\offset_max(p) >= 0))));
+  requires (_C_49 : ((_C_50 : (\offset_min(p) <= 0)) &&
+                      (_C_51 : (\offset_max(p) >= 0))));
 behavior default:
-  ensures (C_48 : true);
+  ensures (_C_48 : true);
 {  
    (var int32 tmp);
    
@@ -509,14 +509,14 @@ behavior default:
    
    (var int32 __retres_2);
    
-   {  (if ((C_43 : ((C_42 : p.charM) :> int32)) > 127) then 
-      {  (C_40 : (tmp = (C_39 : uchar_ptr((C_38 : (p :> unsigned_charP[..]))))));
-         (C_41 : (__retres_2 = tmp));
+   {  (if ((_C_43 : ((_C_42 : p.charM) :> int32)) > 127) then 
+      {  (_C_40 : (tmp = (_C_39 : uchar_ptr((_C_38 : (p :> unsigned_charP[..]))))));
+         (_C_41 : (__retres_2 = tmp));
          
          (goto return_label)
       } else ());
-      (C_46 : (tmp_0 = (C_45 : schar_ptr((C_44 : (p :> signed_charP[..]))))));
-      (C_47 : (__retres_2 = tmp_0));
+      (_C_46 : (tmp_0 = (_C_45 : schar_ptr((_C_44 : (p :> signed_charP[..]))))));
+      (_C_47 : (__retres_2 = tmp_0));
       (return_label : 
       (return __retres_2))
    }

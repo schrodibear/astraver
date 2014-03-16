@@ -66,12 +66,12 @@ predicate p{L}(S[..] a) =
 ((a.b + 0).intM >= 0)
 
 unit f()
-  requires (C_8 : p{Here}(x));
+  requires (_C_8 : p{Here}(x));
 behavior default:
-  ensures (C_7 : p{Here}(x));
+  ensures (_C_7 : p{Here}(x));
 {  
-   {  (C_3 : ((C_2 : ((C_1 : x.b) + 0).intM) = 0));
-      (C_6 : ((C_5 : ((C_4 : y.b) + 1).intM) = 1));
+   {  (_C_3 : ((_C_2 : ((_C_1 : x.b) + 0).intM) = 0));
+      (_C_6 : ((_C_5 : ((_C_4 : y.b) + 1).intM) = 1));
       
       (return ())
    }
@@ -648,20 +648,17 @@ let f_ensures_default =
         and (JC_<somenum>: valid_x(S_x_1_alloc_table))))) }
   (init:
   try
-   (C_3:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let _jessie_<somenum> = (C_1: ((safe_acc_ !S_b_x_1) x_0)) in
+     (let _jessie_<somenum> = ((safe_acc_ !S_b_x_1) x_0) in
      (((safe_upd_ intP_intM_x_1) _jessie_<somenum>) _jessie_<somenum>)));
-    (C_6:
-    begin
-      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let _jessie_<somenum> = (C_4: ((safe_acc_ !S_b_y_2) y)) in
-      (let _jessie_<somenum> = (1) in
-      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_y_2) _jessie_<somenum>) _jessie_<somenum>))))));
-     (raise Return); (raise Return) end) end) with Return -> void end)
+    (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+    (let _jessie_<somenum> = ((safe_acc_ !S_b_y_2) y) in
+    (let _jessie_<somenum> = (1) in
+    (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+    (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+    (((safe_upd_ intP_intM_y_2) _jessie_<somenum>) _jessie_<somenum>)))))); (raise Return);
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>: p(x_0, S_b_x_1, intP_intM_x_1)) }
 
 let f_safety =
@@ -672,20 +669,17 @@ let f_safety =
         and (JC_<somenum>: valid_x(S_x_1_alloc_table))))) }
   (init:
   try
-   (C_3:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let _jessie_<somenum> = (C_1: ((safe_acc_ !S_b_x_1) x_0)) in
+     (let _jessie_<somenum> = ((safe_acc_ !S_b_x_1) x_0) in
      (((safe_upd_ intP_intM_x_1) _jessie_<somenum>) _jessie_<somenum>)));
-    (C_6:
-    begin
-      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let _jessie_<somenum> = (C_4: ((safe_acc_ !S_b_y_2) y)) in
-      (let _jessie_<somenum> = (1) in
-      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_y_2) _jessie_<somenum>) _jessie_<somenum>))))));
-     (raise Return); (raise Return) end) end) with Return -> void end)
+    (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+    (let _jessie_<somenum> = ((safe_acc_ !S_b_y_2) y) in
+    (let _jessie_<somenum> = (1) in
+    (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+    (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
+    (((safe_upd_ intP_intM_y_2) _jessie_<somenum>) _jessie_<somenum>)))))); (raise Return);
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_y(S_y_2_alloc_table))
     and (JC_<somenum>: valid_x(S_x_1_alloc_table)))) }

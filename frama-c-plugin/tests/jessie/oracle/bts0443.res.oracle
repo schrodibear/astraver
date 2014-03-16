@@ -53,9 +53,9 @@ invariant valid_a :
 unit f()
 behavior default:
   assigns \nothing;
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 {  
-   {  (C_2 : ((C_1 : (a + 0).intM) = 3));
+   {  (_C_2 : ((_C_1 : (a + 0).intM) = 3));
       
       (return ())
    }
@@ -510,11 +510,10 @@ let f_ensures_default =
   { (JC_<somenum>: valid_a(intP_a_1_alloc_table)) }
   (init:
   try
-   (C_2:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
      (let _jessie_<somenum> = a in (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     not_assigns(intP_a_1_alloc_table@, intP_intM_a_1@, intP_intM_a_1,
     pset_empty)) }
@@ -524,11 +523,10 @@ let f_safety =
   { (JC_<somenum>: valid_a(intP_a_1_alloc_table)) }
   (init:
   try
-   (C_2:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (3)) in
      (let _jessie_<somenum> = a in (((safe_upd_ intP_intM_a_1) _jessie_<somenum>) _jessie_<somenum>)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_a(intP_a_1_alloc_table)) }
 
 

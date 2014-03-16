@@ -45,37 +45,38 @@ predicate AbsentTail{L1, L2}(int32 e1, int32 e2, int8 c, charP[..] array) =
   ((((e2 + 1) <= i_1) && (i_1 <= e1)) ==> (\at((array + i_1).charM,L1) != c)))
 
 int32 strprevchr(int32 endi, int8 c, charP[..] array)
-  requires (C_19 : ((C_20 : (endi >= 0)) &&
-                     ((C_22 : (\offset_min(array) <= 0)) &&
-                       (C_23 : (\offset_max(array) >= endi)))));
+  requires (_C_19 : ((_C_20 : (endi >= 0)) &&
+                      ((_C_22 : (\offset_min(array) <= 0)) &&
+                        (_C_23 : (\offset_max(array) >= endi)))));
 behavior default:
   assigns \nothing;
-  ensures (C_14 : true);
+  ensures (_C_14 : true);
 behavior absent:
   assumes (\forall int32 i_3;
             (((0 <= i_3) && (i_3 <= endi)) ==> ((array + i_3).charM != c)));
-  ensures (C_15 : (\result == (- 1)));
+  ensures (_C_15 : (\result == (- 1)));
 behavior present:
   assumes (\exists int32 i_2;
             (((0 <= i_2) && (i_2 <= endi)) && ((array + i_2).charM == c)));
-  ensures (C_16 : ((C_17 : (0 <= \result)) &&
-                    (C_18 : (\result <= \at(endi,Old)))));
+  ensures (_C_16 : ((_C_17 : (0 <= \result)) &&
+                     (_C_18 : (\result <= \at(endi,Old)))));
 {  
    {  
       loop 
       behavior default:
-        invariant (C_2 : (((C_4 : (\at(endi,Pre) >= endi)) &&
-                            (C_5 : (endi >= (- 1)))) &&
-                           (C_6 : AbsentTail{Pre,
-                           Here}(\at(endi,Pre), \at(endi,Here), c, array))));
-      variant (C_1 : endi);
+        invariant (_C_2 : (((_C_4 : (\at(endi,Pre) >= endi)) &&
+                             (_C_5 : (endi >= (- 1)))) &&
+                            (_C_6 : AbsentTail{Pre,
+                            Here}(\at(endi,Pre), \at(endi,Here), c, array))));
+      variant (_C_1 : endi);
       while (true)
       {  
-         {  (if (endi >= 0) then (if ((C_10 : ((C_9 : (C_8 : (array + endi)).charM) :> int32)) !=
-                                       (C_7 : (c :> int32))) then () else 
+         {  (if (endi >= 0) then (if ((_C_10 : ((_C_9 : (_C_8 : (array +
+                                                                  endi)).charM) :> int32)) !=
+                                       (_C_7 : (c :> int32))) then () else 
                                  (goto while_0_break)) else 
             (goto while_0_break));
-            (C_13 : (endi = (C_12 : ((C_11 : (endi - 1)) :> int32))))
+            (_C_13 : (endi = (_C_12 : ((_C_11 : (endi - 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -534,25 +535,16 @@ let strprevchr_ensures_absent =
              begin
                (if ((ge_int_ (integer_of_int32 !mutable_endi)) (0))
                then
-                (if ((neq_int_ (integer_of_int32 (C_10:
-                                                 (safe_int32_of_integer_ 
-                                                  (integer_of_int8 (C_9:
-                                                                   ((safe_acc_ charP_charM_array_2) 
-                                                                    (C_8:
+                (if ((neq_int_ (integer_of_int32 (safe_int32_of_integer_ 
+                                                  (integer_of_int8 ((safe_acc_ charP_charM_array_2) 
                                                                     ((shift array_1) 
-                                                                    (integer_of_int32 !mutable_endi)))))))))) 
-                     (integer_of_int32 (C_7:
-                                       (safe_int32_of_integer_ (integer_of_int8 c_0)))))
+                                                                    (integer_of_int32 !mutable_endi))))))) 
+                     (integer_of_int32 (safe_int32_of_integer_ (integer_of_int8 c_0))))
                 then void else (raise (Goto_while_0_break_exc void)))
                else (raise (Goto_while_0_break_exc void)));
-              (C_13:
-              begin
-                (mutable_endi := (C_12:
-                                 (safe_int32_of_integer_ (C_11:
-                                                         ((sub_int (integer_of_int32 !mutable_endi)) (1))))));
-               !mutable_endi end) end in void);
-            (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc _jessie_<somenum> -> void end end done;
+              (mutable_endi := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !mutable_endi)) (1))));
+              !mutable_endi end in void); (raise (Loop_continue_exc void))
+           end with Loop_continue_exc _jessie_<somenum> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
@@ -595,25 +587,16 @@ let strprevchr_ensures_default =
              begin
                (if ((ge_int_ (integer_of_int32 !mutable_endi)) (0))
                then
-                (if ((neq_int_ (integer_of_int32 (C_10:
-                                                 (safe_int32_of_integer_ 
-                                                  (integer_of_int8 (C_9:
-                                                                   ((safe_acc_ charP_charM_array_2) 
-                                                                    (C_8:
+                (if ((neq_int_ (integer_of_int32 (safe_int32_of_integer_ 
+                                                  (integer_of_int8 ((safe_acc_ charP_charM_array_2) 
                                                                     ((shift array_1) 
-                                                                    (integer_of_int32 !mutable_endi)))))))))) 
-                     (integer_of_int32 (C_7:
-                                       (safe_int32_of_integer_ (integer_of_int8 c_0)))))
+                                                                    (integer_of_int32 !mutable_endi))))))) 
+                     (integer_of_int32 (safe_int32_of_integer_ (integer_of_int8 c_0))))
                 then void else (raise (Goto_while_0_break_exc void)))
                else (raise (Goto_while_0_break_exc void)));
-              (C_13:
-              begin
-                (mutable_endi := (C_12:
-                                 (safe_int32_of_integer_ (C_11:
-                                                         ((sub_int (integer_of_int32 !mutable_endi)) (1))))));
-               !mutable_endi end) end in void);
-            (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc _jessie_<somenum> -> void end end done;
+              (mutable_endi := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !mutable_endi)) (1))));
+              !mutable_endi end in void); (raise (Loop_continue_exc void))
+           end with Loop_continue_exc _jessie_<somenum> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
@@ -662,25 +645,16 @@ let strprevchr_ensures_present =
              begin
                (if ((ge_int_ (integer_of_int32 !mutable_endi)) (0))
                then
-                (if ((neq_int_ (integer_of_int32 (C_10:
-                                                 (safe_int32_of_integer_ 
-                                                  (integer_of_int8 (C_9:
-                                                                   ((safe_acc_ charP_charM_array_2) 
-                                                                    (C_8:
+                (if ((neq_int_ (integer_of_int32 (safe_int32_of_integer_ 
+                                                  (integer_of_int8 ((safe_acc_ charP_charM_array_2) 
                                                                     ((shift array_1) 
-                                                                    (integer_of_int32 !mutable_endi)))))))))) 
-                     (integer_of_int32 (C_7:
-                                       (safe_int32_of_integer_ (integer_of_int8 c_0)))))
+                                                                    (integer_of_int32 !mutable_endi))))))) 
+                     (integer_of_int32 (safe_int32_of_integer_ (integer_of_int8 c_0))))
                 then void else (raise (Goto_while_0_break_exc void)))
                else (raise (Goto_while_0_break_exc void)));
-              (C_13:
-              begin
-                (mutable_endi := (C_12:
-                                 (safe_int32_of_integer_ (C_11:
-                                                         ((sub_int (integer_of_int32 !mutable_endi)) (1))))));
-               !mutable_endi end) end in void);
-            (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc _jessie_<somenum> -> void end end done;
+              (mutable_endi := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !mutable_endi)) (1))));
+              !mutable_endi end in void); (raise (Loop_continue_exc void))
+           end with Loop_continue_exc _jessie_<somenum> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
@@ -726,27 +700,19 @@ let strprevchr_safety =
              begin
                (if ((ge_int_ (integer_of_int32 !mutable_endi)) (0))
                then
-                (if ((neq_int_ (integer_of_int32 (C_10:
-                                                 (JC_<somenum>:
+                (if ((neq_int_ (integer_of_int32 (JC_<somenum>:
                                                  (int32_of_integer_ (integer_of_int8 
-                                                                    (C_9:
                                                                     (JC_<somenum>:
                                                                     ((((offset_acc_ charP_array_2_alloc_table) charP_charM_array_2) array_1) 
-                                                                    (integer_of_int32 !mutable_endi)))))))))) 
-                     (integer_of_int32 (C_7:
-                                       (JC_<somenum>:
-                                       (int32_of_integer_ (integer_of_int8 c_0))))))
+                                                                    (integer_of_int32 !mutable_endi)))))))) 
+                     (integer_of_int32 (JC_<somenum>:
+                                       (int32_of_integer_ (integer_of_int8 c_0)))))
                 then void else (raise (Goto_while_0_break_exc void)))
                else (raise (Goto_while_0_break_exc void)));
-              (C_13:
-              begin
-                (mutable_endi := (C_12:
-                                 (JC_<somenum>:
-                                 (int32_of_integer_ (C_11:
-                                                    ((sub_int (integer_of_int32 !mutable_endi)) (1)))))));
-               !mutable_endi end) end in void);
-            (raise (Loop_continue_exc void)) end with
-           Loop_continue_exc _jessie_<somenum> -> void end end done;
+              (mutable_endi := (JC_<somenum>:
+                               (int32_of_integer_ ((sub_int (integer_of_int32 !mutable_endi)) (1)))));
+              !mutable_endi end in void); (raise (Loop_continue_exc void))
+           end with Loop_continue_exc _jessie_<somenum> -> void end end done;
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
@@ -827,11 +793,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/strprevchr_po18.why">
-      <location file = "why/strprevchr.why" line = "625" begin = "18" end = "58"/>
+      <location file = "why/strprevchr.why" line = "598" begin = "18" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/strprevchr_po19.why">
-      <location file = "why/strprevchr.why" line = "625" begin = "18" end = "58"/>
+      <location file = "why/strprevchr.why" line = "598" begin = "18" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

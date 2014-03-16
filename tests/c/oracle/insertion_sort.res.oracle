@@ -165,10 +165,10 @@ predicate Sorted{L}(intP[..] a_5, integer l_4, integer h_4) =
       ((a_5 + i_3).intM <= (a_5 + j_2).intM))))
 
 unit insert_sort(intP[..] t, integer n_1)
-  requires (C_35 : ((C_36 : (\offset_min(t) <= 0)) &&
-                     (C_37 : (\offset_max(t) >= (n_1 - 1)))));
+  requires (_C_35 : ((_C_36 : (\offset_min(t) <= 0)) &&
+                      (_C_37 : (\offset_max(t) >= (n_1 - 1)))));
 behavior default:
-  ensures (C_34 : Sorted{Here}(\at(t,Old), 0, (\at(n_1,Old) - 1)));
+  ensures (_C_34 : Sorted{Here}(\at(t,Old), 0, (\at(n_1,Old) - 1)));
 {  
    (var integer i);
    
@@ -178,56 +178,53 @@ behavior default:
    
    {  (if (n_1 <= 1) then 
       (goto return_label) else ());
-      (C_1 : (i = 1));
+      (_C_1 : (i = 1));
       
       loop 
       behavior default:
-        invariant (C_4 : ((C_5 : (0 <= i)) && (C_6 : (i <= n_1))));
+        invariant (_C_4 : ((_C_5 : (0 <= i)) && (_C_6 : (i <= n_1))));
       behavior default:
-        invariant (C_3 : Sorted{Here}(t, 0, i));
-      variant (C_2 : (n_1 - i));
+        invariant (_C_3 : Sorted{Here}(t, 0, i));
+      variant (_C_2 : (n_1 - i));
       while (true)
       {  
          {  (if (i < n_1) then () else 
             (goto while_0_break));
             
-            {  (C_9 : (mv = (C_8 : (C_7 : (t + i)).intM)));
-               (C_10 : (j = i));
+            {  (_C_9 : (mv = (_C_8 : (_C_7 : (t + i)).intM)));
+               (_C_10 : (j = i));
                
                loop 
                behavior default:
-                 invariant (C_15 : ((C_16 : (0 <= j)) && (C_17 : (j <= i))));
+                 invariant (_C_15 : ((_C_16 : (0 <= j)) &&
+                                      (_C_17 : (j <= i))));
                behavior default:
-                 invariant (C_14 : ((j == i) ==> Sorted{Here}(t, 0, i)));
+                 invariant (_C_14 : ((j == i) ==> Sorted{Here}(t, 0, i)));
                behavior default:
-                 invariant (C_13 : ((j < i) ==> Sorted{Here}(t, 0, (i + 1))));
+                 invariant (_C_13 : ((j < i) ==> Sorted{Here}(t, 0, (i + 1))));
                behavior default:
-                 invariant (C_12 : (\forall integer k_0;
-                                     (((j <= k_0) && (k_0 < i)) ==>
-                                       ((t + k_0).intM > mv))));
-               variant (C_11 : j);
+                 invariant (_C_12 : (\forall integer k_0;
+                                      (((j <= k_0) && (k_0 < i)) ==>
+                                        ((t + k_0).intM > mv))));
+               variant (_C_11 : j);
                while (true)
                {  
                   {  (if (j > 0) then () else 
                      (goto while_1_break));
                      
-                     {  (if ((C_20 : (C_19 : (t + (C_18 : (j - 1)))).intM) <=
+                     {  (if ((_C_20 : (_C_19 : (t + (_C_18 : (j - 1)))).intM) <=
                               mv) then 
                         (goto while_1_break) else ());
-                        (C_26 : ((C_25 : (C_24 : (t + j)).intM) = (C_23 : 
-                                                                  (C_22 : 
-                                                                  (t +
-                                                                    (C_21 : 
-                                                                    (j -
-                                                                    1)))).intM)))
+                        (_C_26 : ((_C_25 : (_C_24 : (t + j)).intM) = 
+                        (_C_23 : (_C_22 : (t + (_C_21 : (j - 1)))).intM)))
                      };
-                     (C_28 : (j = (C_27 : (j - 1))))
+                     (_C_28 : (j = (_C_27 : (j - 1))))
                   }
                };
                (while_1_break : ());
-               (C_31 : ((C_30 : (C_29 : (t + j)).intM) = mv))
+               (_C_31 : ((_C_30 : (_C_29 : (t + j)).intM) = mv))
             };
-            (C_33 : (i = (C_32 : (i + 1))))
+            (_C_33 : (i = (_C_32 : (i + 1))))
          }
       };
       (while_0_break : ());
@@ -236,125 +233,131 @@ behavior default:
    }
 }
 ========== file tests/c/insertion_sort.jessie/insertion_sort.cloc ==========
-[C_15]
-file = "HOME/tests/c/insertion_sort.c"
-line = 52
-begin = 23
-end = 34
-
-[C_11]
-file = "HOME/tests/c/insertion_sort.c"
-line = 56
-begin = 21
-end = 22
-
-[C_1]
-file = "HOME/tests/c/insertion_sort.c"
-line = 49
-begin = 9
-end = 10
-
-[C_33]
-file = "HOME/tests/c/insertion_sort.c"
-line = 49
-begin = 17
-end = 20
-
-[C_9]
-file = "HOME/tests/c/insertion_sort.c"
-line = 51
-begin = 9
-end = 13
-
-[C_10]
-file = "HOME/tests/c/insertion_sort.c"
-line = 59
-begin = 11
-end = 12
-
-[C_20]
-file = "HOME/tests/c/insertion_sort.c"
-line = 60
-begin = 10
-end = 16
-
-[C_32]
-file = "HOME/tests/c/insertion_sort.c"
-line = 49
-begin = 17
-end = 20
-
-[C_17]
-file = "HOME/tests/c/insertion_sort.c"
-line = 52
-begin = 28
-end = 34
-
-[C_36]
+[_C_35]
 file = "HOME/tests/c/insertion_sort.c"
 line = 38
 begin = 13
 end = 31
 
-[C_5]
+[_C_28]
+file = "HOME/tests/c/insertion_sort.c"
+line = 59
+begin = 21
+end = 24
+
+[_C_31]
+file = "HOME/tests/c/insertion_sort.c"
+line = 63
+begin = 11
+end = 13
+
+[_C_4]
 file = "HOME/tests/c/insertion_sort.c"
 line = 45
 begin = 21
-end = 27
+end = 32
 
-[C_34]
+[_C_32]
 file = "HOME/tests/c/insertion_sort.c"
-line = 39
-begin = 12
-end = 27
+line = 49
+begin = 17
+end = 20
 
-[C_29]
-file = "HOME/tests/c/insertion_sort.c"
-line = 63
-begin = 4
-end = 5
-
-[C_13]
-file = "HOME/tests/c/insertion_sort.c"
-line = 54
-begin = 23
-end = 48
-
-[C_7]
-file = "HOME/tests/c/insertion_sort.c"
-line = 51
-begin = 9
-end = 10
-
-[C_22]
-file = "HOME/tests/c/insertion_sort.c"
-line = 61
-begin = 13
-end = 14
-
-[C_14]
-file = "HOME/tests/c/insertion_sort.c"
-line = 53
-begin = 23
-end = 47
-
-[C_35]
-file = "HOME/tests/c/insertion_sort.c"
-line = 38
-begin = 13
-end = 31
-
-[C_25]
+[_C_23]
 file = "HOME/tests/c/insertion_sort.c"
 line = 61
 begin = 13
 end = 19
 
-[C_8]
+[_C_19]
+file = "HOME/tests/c/insertion_sort.c"
+line = 60
+begin = 10
+end = 11
+
+[_C_13]
+file = "HOME/tests/c/insertion_sort.c"
+line = 54
+begin = 23
+end = 48
+
+[_C_5]
+file = "HOME/tests/c/insertion_sort.c"
+line = 45
+begin = 21
+end = 27
+
+[_C_36]
+file = "HOME/tests/c/insertion_sort.c"
+line = 38
+begin = 13
+end = 31
+
+[_C_12]
+file = "HOME/tests/c/insertion_sort.c"
+line = 55
+begin = 23
+end = 66
+
+[_C_33]
+file = "HOME/tests/c/insertion_sort.c"
+line = 49
+begin = 17
+end = 20
+
+[_C_22]
+file = "HOME/tests/c/insertion_sort.c"
+line = 61
+begin = 13
+end = 14
+
+[_C_9]
 file = "HOME/tests/c/insertion_sort.c"
 line = 51
 begin = 9
 end = 13
+
+[_C_30]
+file = "HOME/tests/c/insertion_sort.c"
+line = 63
+begin = 11
+end = 13
+
+[_C_6]
+file = "HOME/tests/c/insertion_sort.c"
+line = 45
+begin = 26
+end = 32
+
+[_C_24]
+file = "HOME/tests/c/insertion_sort.c"
+line = 61
+begin = 6
+end = 7
+
+[_C_20]
+file = "HOME/tests/c/insertion_sort.c"
+line = 60
+begin = 10
+end = 16
+
+[_C_3]
+file = "HOME/tests/c/insertion_sort.c"
+line = 46
+begin = 21
+end = 34
+
+[_C_17]
+file = "HOME/tests/c/insertion_sort.c"
+line = 52
+begin = 28
+end = 34
+
+[_C_7]
+file = "HOME/tests/c/insertion_sort.c"
+line = 51
+begin = 9
+end = 10
 
 [insert_sort]
 name = "Function insert_sort"
@@ -363,107 +366,101 @@ line = 41
 begin = 5
 end = 16
 
-[C_27]
+[_C_27]
 file = "HOME/tests/c/insertion_sort.c"
 line = 59
 begin = 21
 end = 24
 
-[C_37]
+[_C_15]
 file = "HOME/tests/c/insertion_sort.c"
-line = 38
-begin = 13
-end = 31
-
-[C_19]
-file = "HOME/tests/c/insertion_sort.c"
-line = 60
-begin = 10
-end = 11
-
-[C_4]
-file = "HOME/tests/c/insertion_sort.c"
-line = 45
-begin = 21
-end = 32
-
-[C_12]
-file = "HOME/tests/c/insertion_sort.c"
-line = 55
+line = 52
 begin = 23
-end = 66
+end = 34
 
-[C_26]
+[_C_26]
 file = "HOME/tests/c/insertion_sort.c"
 line = 61
 begin = 13
 end = 19
 
-[C_18]
+[_C_10]
+file = "HOME/tests/c/insertion_sort.c"
+line = 59
+begin = 11
+end = 12
+
+[_C_8]
+file = "HOME/tests/c/insertion_sort.c"
+line = 51
+begin = 9
+end = 13
+
+[_C_18]
 file = "HOME/tests/c/insertion_sort.c"
 line = 60
 begin = 12
 end = 15
 
-[C_2]
+[_C_29]
+file = "HOME/tests/c/insertion_sort.c"
+line = 63
+begin = 4
+end = 5
+
+[_C_14]
+file = "HOME/tests/c/insertion_sort.c"
+line = 53
+begin = 23
+end = 47
+
+[_C_37]
+file = "HOME/tests/c/insertion_sort.c"
+line = 38
+begin = 13
+end = 31
+
+[_C_2]
 file = "HOME/tests/c/insertion_sort.c"
 line = 47
 begin = 19
 end = 22
 
-[C_28]
+[_C_34]
 file = "HOME/tests/c/insertion_sort.c"
-line = 59
-begin = 21
-end = 24
+line = 39
+begin = 12
+end = 27
 
-[C_24]
-file = "HOME/tests/c/insertion_sort.c"
-line = 61
-begin = 6
-end = 7
-
-[C_6]
-file = "HOME/tests/c/insertion_sort.c"
-line = 45
-begin = 26
-end = 32
-
-[C_30]
-file = "HOME/tests/c/insertion_sort.c"
-line = 63
-begin = 11
-end = 13
-
-[C_21]
-file = "HOME/tests/c/insertion_sort.c"
-line = 61
-begin = 15
-end = 18
-
-[C_3]
-file = "HOME/tests/c/insertion_sort.c"
-line = 46
-begin = 21
-end = 34
-
-[C_16]
+[_C_16]
 file = "HOME/tests/c/insertion_sort.c"
 line = 52
 begin = 23
 end = 29
 
-[C_31]
+[_C_1]
 file = "HOME/tests/c/insertion_sort.c"
-line = 63
-begin = 11
-end = 13
+line = 49
+begin = 9
+end = 10
 
-[C_23]
+[_C_25]
 file = "HOME/tests/c/insertion_sort.c"
 line = 61
 begin = 13
 end = 19
+
+[_C_11]
+file = "HOME/tests/c/insertion_sort.c"
+line = 56
+begin = 21
+end = 22
+
+[_C_21]
+file = "HOME/tests/c/insertion_sort.c"
+line = 61
+begin = 15
+end = 18
 
 ========== jessie execution ==========
 Generating Why function insert_sort
@@ -647,7 +644,7 @@ clean:
 file = "HOME/tests/c/insertion_sort.jessie/insertion_sort.jc"
 line = 117
 begin = 15
-end = 1508
+end = 1252
 
 [JC_45]
 file = "HOME/tests/c/insertion_sort.c"
@@ -714,7 +711,7 @@ end = 34
 file = "HOME/tests/c/insertion_sort.jessie/insertion_sort.jc"
 line = 103
 begin = 6
-end = 2122
+end = 1880
 
 [JC_47]
 file = "HOME/tests/c/insertion_sort.c"
@@ -824,7 +821,7 @@ end = -1
 file = "HOME/tests/c/insertion_sort.jessie/insertion_sort.jc"
 line = 103
 begin = 6
-end = 2122
+end = 1880
 
 [JC_46]
 file = "HOME/tests/c/insertion_sort.c"
@@ -835,9 +832,9 @@ end = 29
 [JC_32]
 kind = PointerDeref
 file = "HOME/tests/c/insertion_sort.jessie/insertion_sort.jc"
-line = 137
-begin = 33
-end = 450
+line = 138
+begin = 34
+end = 142
 
 [JC_33]
 file = "HOME/tests/c/insertion_sort.c"
@@ -849,7 +846,7 @@ end = 22
 file = "HOME/tests/c/insertion_sort.jessie/insertion_sort.jc"
 line = 117
 begin = 15
-end = 1508
+end = 1252
 
 [JC_7]
 file = "HOME/tests/c/insertion_sort.c"
@@ -878,9 +875,9 @@ end = 31
 [JC_34]
 kind = PointerDeref
 file = "HOME/tests/c/insertion_sort.jessie/insertion_sort.jc"
-line = 148
-begin = 24
-end = 59
+line = 145
+begin = 25
+end = 62
 
 [JC_14]
 file = "HOME/tests/c/insertion_sort.c"
@@ -937,7 +934,7 @@ end = 13
 file = "HOME/tests/c/insertion_sort.jessie/insertion_sort.jc"
 line = 103
 begin = 6
-end = 2122
+end = 1880
 
 [JC_3]
 file = "HOME/tests/c/insertion_sort.c"
@@ -949,13 +946,13 @@ end = 31
 file = "HOME/tests/c/insertion_sort.jessie/insertion_sort.jc"
 line = 103
 begin = 6
-end = 2122
+end = 1880
 
 [JC_50]
 file = "HOME/tests/c/insertion_sort.jessie/insertion_sort.jc"
 line = 117
 begin = 15
-end = 1508
+end = 1252
 
 [JC_30]
 kind = PointerDeref
@@ -968,7 +965,7 @@ end = 16
 file = "HOME/tests/c/insertion_sort.jessie/insertion_sort.jc"
 line = 117
 begin = 15
-end = 1508
+end = 1252
 
 ========== file tests/c/insertion_sort.jessie/why/insertion_sort.why ==========
 type charP
@@ -1393,111 +1390,90 @@ let insert_sort_ensures_default =
         try
          begin
            (if ((le_int_ n_1) (1)) then (raise (Return_label_exc void))
-           else void);
-          (C_1:
+           else void); (let _jessie_<num> = (i := (1)) in void);
+          (loop_3:
           begin
-            (let _jessie_<num> = (i := (1)) in void);
-           (loop_3:
-           begin
-             while true do
-             { invariant
-                 ((JC_36: Sorted(t, (0), i, intP_intM_t_4))
-                 and (JC_39:
-                     ((JC_37: le_int((0), i)) and (JC_38: le_int(i, n_1)))))
-                }
-              begin
-                [ { } unit { true } ];
-               try
-                begin
-                  (let _jessie_<num> =
-                  begin
-                    (if ((lt_int_ !i) n_1) then void
-                    else (raise (Goto_while_0_break_exc void)));
-                   try
-                    (C_9:
+            while true do
+            { invariant
+                ((JC_36: Sorted(t, (0), i, intP_intM_t_4))
+                and (JC_39:
+                    ((JC_37: le_int((0), i)) and (JC_38: le_int(i, n_1)))))
+               }
+             begin
+               [ { } unit { true } ];
+              try
+               begin
+                 (let _jessie_<num> =
+                 begin
+                   (if ((lt_int_ !i) n_1) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  try
+                   begin
+                     (let _jessie_<num> =
+                     (mv := ((safe_acc_ !intP_intM_t_4) ((shift t) !i))) in
+                     void); (let _jessie_<num> = (j := !i) in void);
+                    (loop_4:
                     begin
-                      (let _jessie_<num> =
-                      (mv := (C_8:
-                             ((safe_acc_ !intP_intM_t_4) (C_7:
-                                                         ((shift t) !i))))) in
-                      void);
-                     (C_10:
-                     begin
-                       (let _jessie_<num> = (j := !i) in void);
-                      (loop_4:
-                      begin
-                        while true do
-                        { invariant
-                            ((JC_43:
-                             (forall k_0:int.
-                              ((le_int(j, k_0) and lt_int(k_0, i)) ->
-                               gt_int(select(intP_intM_t_4, shift(t, k_0)),
-                               mv))))
-                            and ((JC_44:
-                                 (lt_int(j, i) ->
-                                  Sorted(t, (0), add_int(i, (1)),
-                                  intP_intM_t_4)))
-                                and ((JC_45:
-                                     ((j = i) ->
-                                      Sorted(t, (0), i, intP_intM_t_4)))
-                                    and (JC_48:
-                                        ((JC_46: le_int((0), j))
-                                        and (JC_47: le_int(j, i))))))) 
-                           }
+                      while true do
+                      { invariant
+                          ((JC_43:
+                           (forall k_0:int.
+                            ((le_int(j, k_0) and lt_int(k_0, i)) ->
+                             gt_int(select(intP_intM_t_4, shift(t, k_0)), mv))))
+                          and ((JC_44:
+                               (lt_int(j, i) ->
+                                Sorted(t, (0), add_int(i, (1)),
+                                intP_intM_t_4)))
+                              and ((JC_45:
+                                   ((j = i) ->
+                                    Sorted(t, (0), i, intP_intM_t_4)))
+                                  and (JC_48:
+                                      ((JC_46: le_int((0), j))
+                                      and (JC_47: le_int(j, i))))))) 
+                         }
+                       begin
+                         [ { } unit { true } ];
+                        try
                          begin
-                           [ { } unit { true } ];
-                          try
+                           (let _jessie_<num> =
                            begin
+                             (if ((gt_int_ !j) (0)) then void
+                             else (raise (Goto_while_1_break_exc void)));
+                            (let _jessie_<num> =
+                            begin
+                              (if ((le_int_ ((safe_acc_ !intP_intM_t_4) 
+                                             ((shift t) ((sub_int !j) (1))))) !mv)
+                              then (raise (Goto_while_1_break_exc void))
+                              else void);
                              (let _jessie_<num> =
+                             ((safe_acc_ !intP_intM_t_4) ((shift t) ((sub_int !j) (1)))) in
+                             (let _jessie_<num> = t in
+                             (let _jessie_<num> = !j in
+                             (let _jessie_<num> =
+                             ((shift _jessie_<num>) _jessie_<num>) in
                              begin
-                               (if ((gt_int_ !j) (0)) then void
-                               else (raise (Goto_while_1_break_exc void)));
-                              (let _jessie_<num> =
-                              begin
-                                (if ((le_int_ (C_20:
-                                              ((safe_acc_ !intP_intM_t_4) 
-                                               (C_19:
-                                               ((shift t) (C_18:
-                                                          ((sub_int !j) (1)))))))) !mv)
-                                then (raise (Goto_while_1_break_exc void))
-                                else void);
-                               (C_26:
-                               (let _jessie_<num> =
-                               (C_23:
-                               ((safe_acc_ !intP_intM_t_4) (C_22:
-                                                           ((shift t) 
-                                                            (C_21:
-                                                            ((sub_int !j) (1))))))) in
-                               (let _jessie_<num> = t in
-                               (let _jessie_<num> = !j in
-                               (let _jessie_<num> =
-                               ((shift _jessie_<num>) _jessie_<num>) in
-                               begin
-                                 (((safe_upd_ intP_intM_t_4) _jessie_<num>) _jessie_<num>);
-                                _jessie_<num> end))))) end in void);
-                              (C_28:
-                              begin   (j := (C_27: ((sub_int !j) (1)))); !j
-                              end) end in void);
-                            (raise (Loop_continue_exc void)) end with
-                           Loop_continue_exc _jessie_<num> -> void end end done;
-                       (raise (Goto_while_1_break_exc void)) end) end) end)
-                    with Goto_while_1_break_exc _jessie_<num> ->
-                    (let _jessie_<num> =
-                    (while_1_break:
+                               (((safe_upd_ intP_intM_t_4) _jessie_<num>) _jessie_<num>);
+                              _jessie_<num> end)))) end in void);
+                            (j := ((sub_int !j) (1))); !j end in void);
+                          (raise (Loop_continue_exc void)) end with
+                         Loop_continue_exc _jessie_<num> -> void end end done;
+                     (raise (Goto_while_1_break_exc void)) end) end with
+                   Goto_while_1_break_exc _jessie_<num> ->
+                   (let _jessie_<num> =
+                   (while_1_break:
+                   begin
+                     void;
+                    (let _jessie_<num> = !mv in
+                    (let _jessie_<num> = t in
+                    (let _jessie_<num> = !j in
+                    (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
                     begin
-                      void;
-                     (C_31:
-                     (let _jessie_<num> = !mv in
-                     (let _jessie_<num> = t in
-                     (let _jessie_<num> = !j in
-                     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-                     begin
-                       (((safe_upd_ intP_intM_t_4) _jessie_<num>) _jessie_<num>);
-                      _jessie_<num> end))))) end) in void) end;
-                   (C_33: begin   (i := (C_32: ((add_int !i) (1)))); !i end)
-                  end in void); (raise (Loop_continue_exc void)) end with
-                Loop_continue_exc _jessie_<num> -> void end end done;
-            (raise (Goto_while_0_break_exc void)) end) end) end with
+                      (((safe_upd_ intP_intM_t_4) _jessie_<num>) _jessie_<num>);
+                     _jessie_<num> end)))) end) in void) end;
+                  (i := ((add_int !i) (1))); !i end in void);
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: (raise Return)) end))); (raise Return) end with
@@ -1521,109 +1497,95 @@ let insert_sort_safety =
         try
          begin
            (if ((le_int_ n_1) (1)) then (raise (Return_label_exc void))
-           else void);
-          (C_1:
+           else void); (let _jessie_<num> = (i := (1)) in void);
+          (loop_1:
           begin
-            (let _jessie_<num> = (i := (1)) in void);
-           (loop_1:
-           begin
-             while true do
-             { invariant (JC_18: true) variant (JC_35 : sub_int(n_1, i)) }
-              begin
-                [ { } unit reads i,intP_intM_t_4
-                  { ((JC_13: Sorted(t, (0), i, intP_intM_t_4))
-                    and (JC_16:
-                        ((JC_14: le_int((0), i)) and (JC_15: le_int(i, n_1))))) } ];
-               try
-                begin
-                  (let _jessie_<num> =
-                  begin
-                    (if ((lt_int_ !i) n_1) then void
-                    else (raise (Goto_while_0_break_exc void)));
-                   try
-                    (C_9:
+            while true do
+            { invariant (JC_18: true) variant (JC_35 : sub_int(n_1, i)) }
+             begin
+               [ { } unit reads i,intP_intM_t_4
+                 { ((JC_13: Sorted(t, (0), i, intP_intM_t_4))
+                   and (JC_16:
+                       ((JC_14: le_int((0), i)) and (JC_15: le_int(i, n_1))))) } ];
+              try
+               begin
+                 (let _jessie_<num> =
+                 begin
+                   (if ((lt_int_ !i) n_1) then void
+                   else (raise (Goto_while_0_break_exc void)));
+                  try
+                   begin
+                     (let _jessie_<num> =
+                     (mv := (JC_20:
+                            ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) !i))) in
+                     void); (let _jessie_<num> = (j := !i) in void);
+                    (loop_2:
                     begin
-                      (let _jessie_<num> =
-                      (mv := (C_8:
-                             (JC_20:
-                             ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) !i)))) in
-                      void);
-                     (C_10:
-                     begin
-                       (let _jessie_<num> = (j := !i) in void);
-                      (loop_2:
-                      begin
-                        while true do
-                        { invariant (JC_28: true) variant (JC_33 : j) }
+                      while true do
+                      { invariant (JC_28: true) variant (JC_33 : j) }
+                       begin
+                         [ { } unit reads i,intP_intM_t_4,j,mv
+                           { ((JC_21:
+                              (forall k_0:int.
+                               ((le_int(j, k_0) and lt_int(k_0, i)) ->
+                                gt_int(select(intP_intM_t_4, shift(t, k_0)),
+                                mv))))
+                             and ((JC_22:
+                                  (lt_int(j, i) ->
+                                   Sorted(t, (0), add_int(i, (1)),
+                                   intP_intM_t_4)))
+                                 and ((JC_23:
+                                      ((j = i) ->
+                                       Sorted(t, (0), i, intP_intM_t_4)))
+                                     and (JC_26:
+                                         ((JC_24: le_int((0), j))
+                                         and (JC_25: le_int(j, i))))))) } ];
+                        try
                          begin
-                           [ { } unit reads i,intP_intM_t_4,j,mv
-                             { ((JC_21:
-                                (forall k_0:int.
-                                 ((le_int(j, k_0) and lt_int(k_0, i)) ->
-                                  gt_int(select(intP_intM_t_4, shift(t, k_0)),
-                                  mv))))
-                               and ((JC_22:
-                                    (lt_int(j, i) ->
-                                     Sorted(t, (0), add_int(i, (1)),
-                                     intP_intM_t_4)))
-                                   and ((JC_23:
-                                        ((j = i) ->
-                                         Sorted(t, (0), i, intP_intM_t_4)))
-                                       and (JC_26:
-                                           ((JC_24: le_int((0), j))
-                                           and (JC_25: le_int(j, i))))))) } ];
-                          try
+                           (let _jessie_<num> =
                            begin
+                             (if ((gt_int_ !j) (0)) then void
+                             else (raise (Goto_while_1_break_exc void)));
+                            (let _jessie_<num> =
+                            begin
+                              (if ((le_int_ (JC_30:
+                                            ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) 
+                                             ((sub_int !j) (1))))) !mv)
+                              then (raise (Goto_while_1_break_exc void))
+                              else void);
                              (let _jessie_<num> =
+                             (JC_31:
+                             ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) 
+                              ((sub_int !j) (1)))) in
+                             (let _jessie_<num> = t in
+                             (let _jessie_<num> = !j in
+                             (let _jessie_<num> =
+                             ((shift _jessie_<num>) _jessie_<num>) in
+                             (JC_32:
                              begin
-                               (if ((gt_int_ !j) (0)) then void
-                               else (raise (Goto_while_1_break_exc void)));
-                              (let _jessie_<num> =
-                              begin
-                                (if ((le_int_ (C_20:
-                                              (JC_30:
-                                              ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) 
-                                               (C_18: ((sub_int !j) (1))))))) !mv)
-                                then (raise (Goto_while_1_break_exc void))
-                                else void);
-                               (C_26:
-                               (let _jessie_<num> =
-                               (C_23:
-                               (JC_31:
-                               ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) 
-                                (C_21: ((sub_int !j) (1)))))) in
-                               (let _jessie_<num> = t in
-                               (let _jessie_<num> = !j in
-                               (let _jessie_<num> =
-                               ((shift _jessie_<num>) _jessie_<num>) in
-                               (JC_32:
-                               begin
-                                 (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) _jessie_<num>) _jessie_<num>) _jessie_<num>);
-                                _jessie_<num> end)))))) end in void);
-                              (C_28:
-                              begin   (j := (C_27: ((sub_int !j) (1)))); !j
-                              end) end in void);
-                            (raise (Loop_continue_exc void)) end with
-                           Loop_continue_exc _jessie_<num> -> void end end done;
-                       (raise (Goto_while_1_break_exc void)) end) end) end)
-                    with Goto_while_1_break_exc _jessie_<num> ->
-                    (let _jessie_<num> =
-                    (while_1_break:
+                               (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) _jessie_<num>) _jessie_<num>) _jessie_<num>);
+                              _jessie_<num> end))))) end in void);
+                            (j := ((sub_int !j) (1))); !j end in void);
+                          (raise (Loop_continue_exc void)) end with
+                         Loop_continue_exc _jessie_<num> -> void end end done;
+                     (raise (Goto_while_1_break_exc void)) end) end with
+                   Goto_while_1_break_exc _jessie_<num> ->
+                   (let _jessie_<num> =
+                   (while_1_break:
+                   begin
+                     void;
+                    (let _jessie_<num> = !mv in
+                    (let _jessie_<num> = t in
+                    (let _jessie_<num> = !j in
+                    (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
+                    (JC_34:
                     begin
-                      void;
-                     (C_31:
-                     (let _jessie_<num> = !mv in
-                     (let _jessie_<num> = t in
-                     (let _jessie_<num> = !j in
-                     (let _jessie_<num> = ((shift _jessie_<num>) _jessie_<num>) in
-                     (JC_34:
-                     begin
-                       (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) _jessie_<num>) _jessie_<num>) _jessie_<num>);
-                      _jessie_<num> end)))))) end) in void) end;
-                   (C_33: begin   (i := (C_32: ((add_int !i) (1)))); !i end)
-                  end in void); (raise (Loop_continue_exc void)) end with
-                Loop_continue_exc _jessie_<num> -> void end end done;
-            (raise (Goto_while_0_break_exc void)) end) end) end with
+                      (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) _jessie_<num>) _jessie_<num>) _jessie_<num>);
+                     _jessie_<num> end))))) end) in void) end;
+                  (i := ((add_int !i) (1))); !i end in void);
+                (raise (Loop_continue_exc void)) end with
+               Loop_continue_exc _jessie_<num> -> void end end done;
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<num> -> (while_0_break: void) end;
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: (raise Return)) end))); (raise Return) end with
@@ -5984,7 +5946,7 @@ why -simplify [...] why/insertion_sort.why
          (AND (<= 0 j0) (<= j0 i0)))))
 (IMPLIES (> j0 0) (<= (- j0 1) (offset_max intP_t_4_alloc_table t))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_5, File "why/insertion_sort.why", line 648, characters 24-111
+;; insert_sort_safety_po_5, File "why/insertion_sort.why", line 613, characters 23-110
 (FORALL (t)
 (FORALL (n_1)
 (FORALL (intP_t_4_alloc_table)
@@ -6023,7 +5985,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ result0 (select intP_intM_t_4_0 (shift t (- j0 1))))
 (IMPLIES (<= result0 mv) (<= (offset_min intP_t_4_alloc_table t) j0)))))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_6, File "why/insertion_sort.why", line 648, characters 24-111
+;; insert_sort_safety_po_6, File "why/insertion_sort.why", line 613, characters 23-110
 (FORALL (t)
 (FORALL (n_1)
 (FORALL (intP_t_4_alloc_table)
@@ -6150,7 +6112,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ intP_intM_t_4_1 (|why__store| intP_intM_t_4_0 (shift t j0) mv))
 (FORALL (i1) (IMPLIES (EQ i1 (+ i0 1)) (< (- n_1 i1) (- n_1 i0)))))))))))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_9, File "why/insertion_sort.why", line 628, characters 34-121
+;; insert_sort_safety_po_9, File "why/insertion_sort.why", line 596, characters 32-119
 (FORALL (t)
 (FORALL (n_1)
 (FORALL (intP_t_4_alloc_table)
@@ -6194,7 +6156,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ result1 (select intP_intM_t_4_0 (shift t (- j0 1))))
 (<= (offset_min intP_t_4_alloc_table t) j0))))))))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_10, File "why/insertion_sort.why", line 628, characters 34-121
+;; insert_sort_safety_po_10, File "why/insertion_sort.why", line 596, characters 32-119
 (FORALL (t)
 (FORALL (n_1)
 (FORALL (intP_t_4_alloc_table)
@@ -6336,7 +6298,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_0 (shift t j0) result1))
 (FORALL (j1) (IMPLIES (EQ j1 (- j0 1)) (< j1 j0)))))))))))))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_13, File "why/insertion_sort.why", line 648, characters 24-111
+;; insert_sort_safety_po_13, File "why/insertion_sort.why", line 613, characters 23-110
 (FORALL (t)
 (FORALL (n_1)
 (FORALL (intP_t_4_alloc_table)
@@ -6370,7 +6332,7 @@ why -simplify [...] why/insertion_sort.why
          (AND (<= 0 j0) (<= j0 i0)))))
 (IMPLIES (<= j0 0) (<= (offset_min intP_t_4_alloc_table t) j0)))))))))))))))))))))))))
 
-;; insert_sort_safety_po_14, File "why/insertion_sort.why", line 648, characters 24-111
+;; insert_sort_safety_po_14, File "why/insertion_sort.why", line 613, characters 23-110
 (FORALL (t)
 (FORALL (n_1)
 (FORALL (intP_t_4_alloc_table)

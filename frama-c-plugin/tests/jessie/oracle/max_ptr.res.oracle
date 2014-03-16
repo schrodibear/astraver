@@ -46,38 +46,38 @@ tag voidP = {
 type voidP = [voidP]
 
 int32 max(intP[..] r, intP[..] i, intP[..] j)
-  requires (C_17 : (((C_19 : (\offset_min(i) <= 0)) &&
-                      (C_20 : (\offset_max(i) >= 0))) &&
-                     ((C_22 : (\offset_min(j) <= 0)) &&
-                       (C_23 : (\offset_max(j) >= 0)))));
-  requires (C_16 : ((r == null) ||
-                     ((\offset_min(r) <= 0) && (\offset_max(r) >= 0))));
+  requires (_C_17 : (((_C_19 : (\offset_min(i) <= 0)) &&
+                       (_C_20 : (\offset_max(i) >= 0))) &&
+                      ((_C_22 : (\offset_min(j) <= 0)) &&
+                        (_C_23 : (\offset_max(j) >= 0)))));
+  requires (_C_16 : ((r == null) ||
+                      ((\offset_min(r) <= 0) && (\offset_max(r) >= 0))));
 behavior default:
   assigns r.intM;
-  ensures (C_11 : true);
+  ensures (_C_11 : true);
 behavior zero:
   assumes (r == null);
   assigns \nothing;
-  ensures (C_12 : (\result == (- 1)));
+  ensures (_C_12 : (\result == (- 1)));
 behavior normal:
   assumes ((\offset_min(r) <= 0) && (\offset_max(r) >= 0));
   assigns r.intM;
-  ensures (C_13 : ((C_14 : (\at(r,Old).intM ==
-                             (if (\at(i,Old).intM < \at(j,Old).intM) then 
-                             \at(j,Old).intM else \at(i,Old).intM))) &&
-                    (C_15 : (\result == 0))));
+  ensures (_C_13 : ((_C_14 : (\at(r,Old).intM ==
+                               (if (\at(i,Old).intM < \at(j,Old).intM) then 
+                               \at(j,Old).intM else \at(i,Old).intM))) &&
+                     (_C_15 : (\result == 0))));
 {  
    (var int32 __retres);
    
    {  (if (! (r != null)) then 
-      {  (C_1 : (__retres = -1));
+      {  (_C_1 : (__retres = -1));
          
          (goto return_label)
       } else ());
-      (if ((C_9 : i.intM) < (C_8 : j.intM)) then (C_7 : ((C_6 : r.intM) = 
-                                                 (C_5 : j.intM))) else 
-      (C_4 : ((C_3 : r.intM) = (C_2 : i.intM))));
-      (C_10 : (__retres = 0));
+      (if ((_C_9 : i.intM) < (_C_8 : j.intM)) then (_C_7 : ((_C_6 : r.intM) = 
+                                                   (_C_5 : j.intM))) else 
+      (_C_4 : ((_C_3 : r.intM) = (_C_2 : i.intM))));
+      (_C_10 : (__retres = 0));
       (return_label : 
       (return __retres))
    }
@@ -614,33 +614,27 @@ let max_ensures_default =
       begin
         (if (not ((safe_neq_pointer r) null))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> =
            (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-          (raise (Return_label_exc void)) end) else void);
+          (raise (Return_label_exc void)) end else void);
        (let _jessie_<somenum> =
-       (if ((lt_int_ (integer_of_int32 (C_9: ((safe_acc_ intP_intM_i_2) i)))) 
-            (integer_of_int32 (C_8: ((safe_acc_ intP_intM_j_3) j))))
+       (if ((lt_int_ (integer_of_int32 ((safe_acc_ intP_intM_i_2) i))) 
+            (integer_of_int32 ((safe_acc_ intP_intM_j_3) j)))
        then
-        (C_7:
-        (let _jessie_<somenum> = (C_5: ((safe_acc_ intP_intM_j_3) j)) in
+        (let _jessie_<somenum> = ((safe_acc_ intP_intM_j_3) j) in
         begin
           (let _jessie_<somenum> = r in
           (((safe_upd_ intP_intM_r_1) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum>
-        end))
+        end)
        else
-        (C_4:
-        (let _jessie_<somenum> = (C_2: ((safe_acc_ intP_intM_i_2) i)) in
+        (let _jessie_<somenum> = ((safe_acc_ intP_intM_i_2) i) in
         begin
           (let _jessie_<somenum> = r in
           (((safe_upd_ intP_intM_r_1) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum>
-        end))) in void);
-       (C_10:
-       begin
-         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<somenum> ->
+        end)) in void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -671,33 +665,27 @@ let max_ensures_normal =
       begin
         (if (not ((safe_neq_pointer r) null))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> =
            (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-          (raise (Return_label_exc void)) end) else void);
+          (raise (Return_label_exc void)) end else void);
        (let _jessie_<somenum> =
-       (if ((lt_int_ (integer_of_int32 (C_9: ((safe_acc_ intP_intM_i_2) i)))) 
-            (integer_of_int32 (C_8: ((safe_acc_ intP_intM_j_3) j))))
+       (if ((lt_int_ (integer_of_int32 ((safe_acc_ intP_intM_i_2) i))) 
+            (integer_of_int32 ((safe_acc_ intP_intM_j_3) j)))
        then
-        (C_7:
-        (let _jessie_<somenum> = (C_5: ((safe_acc_ intP_intM_j_3) j)) in
+        (let _jessie_<somenum> = ((safe_acc_ intP_intM_j_3) j) in
         begin
           (let _jessie_<somenum> = r in
           (((safe_upd_ intP_intM_r_1) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum>
-        end))
+        end)
        else
-        (C_4:
-        (let _jessie_<somenum> = (C_2: ((safe_acc_ intP_intM_i_2) i)) in
+        (let _jessie_<somenum> = ((safe_acc_ intP_intM_i_2) i) in
         begin
           (let _jessie_<somenum> = r in
           (((safe_upd_ intP_intM_r_1) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum>
-        end))) in void);
-       (C_10:
-       begin
-         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<somenum> ->
+        end)) in void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -742,33 +730,27 @@ let max_ensures_zero =
       begin
         (if (not ((safe_neq_pointer r) null))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> =
            (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-          (raise (Return_label_exc void)) end) else void);
+          (raise (Return_label_exc void)) end else void);
        (let _jessie_<somenum> =
-       (if ((lt_int_ (integer_of_int32 (C_9: ((safe_acc_ intP_intM_i_2) i)))) 
-            (integer_of_int32 (C_8: ((safe_acc_ intP_intM_j_3) j))))
+       (if ((lt_int_ (integer_of_int32 ((safe_acc_ intP_intM_i_2) i))) 
+            (integer_of_int32 ((safe_acc_ intP_intM_j_3) j)))
        then
-        (C_7:
-        (let _jessie_<somenum> = (C_5: ((safe_acc_ intP_intM_j_3) j)) in
+        (let _jessie_<somenum> = ((safe_acc_ intP_intM_j_3) j) in
         begin
           (let _jessie_<somenum> = r in
           (((safe_upd_ intP_intM_r_1) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum>
-        end))
+        end)
        else
-        (C_4:
-        (let _jessie_<somenum> = (C_2: ((safe_acc_ intP_intM_i_2) i)) in
+        (let _jessie_<somenum> = ((safe_acc_ intP_intM_i_2) i) in
         begin
           (let _jessie_<somenum> = r in
           (((safe_upd_ intP_intM_r_1) _jessie_<somenum>) _jessie_<somenum>)); _jessie_<somenum>
-        end))) in void);
-       (C_10:
-       begin
-         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<somenum> ->
+        end)) in void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -797,41 +779,33 @@ let max_safety =
       begin
         (if (not ((neq_pointer r) null))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> =
            (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-          (raise (Return_label_exc void)) end) else void);
+          (raise (Return_label_exc void)) end else void);
        (let _jessie_<somenum> =
-       (if ((lt_int_ (integer_of_int32 (C_9:
-                                       (JC_<somenum>:
-                                       (((acc_ intP_i_2_alloc_table) intP_intM_i_2) i))))) 
-            (integer_of_int32 (C_8:
-                              (JC_<somenum>:
-                              (((acc_ intP_j_3_alloc_table) intP_intM_j_3) j)))))
+       (if ((lt_int_ (integer_of_int32 (JC_<somenum>:
+                                       (((acc_ intP_i_2_alloc_table) intP_intM_i_2) i)))) 
+            (integer_of_int32 (JC_<somenum>:
+                              (((acc_ intP_j_3_alloc_table) intP_intM_j_3) j))))
        then
-        (C_7:
         (let _jessie_<somenum> =
-        (C_5: (JC_<somenum>: (((acc_ intP_j_3_alloc_table) intP_intM_j_3) j))) in
+        (JC_<somenum>: (((acc_ intP_j_3_alloc_table) intP_intM_j_3) j)) in
         begin
           (let _jessie_<somenum> = r in
           (JC_<somenum>:
           ((((upd_ intP_r_1_alloc_table) intP_intM_r_1) _jessie_<somenum>) _jessie_<somenum>)));
-         _jessie_<somenum> end))
+         _jessie_<somenum> end)
        else
-        (C_4:
         (let _jessie_<somenum> =
-        (C_2: (JC_<somenum>: (((acc_ intP_i_2_alloc_table) intP_intM_i_2) i))) in
+        (JC_<somenum>: (((acc_ intP_i_2_alloc_table) intP_intM_i_2) i)) in
         begin
           (let _jessie_<somenum> = r in
           (JC_<somenum>:
           ((((upd_ intP_r_1_alloc_table) intP_intM_r_1) _jessie_<somenum>) _jessie_<somenum>)));
-         _jessie_<somenum> end))) in void);
-       (C_10:
-       begin
-         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<somenum> ->
+         _jessie_<somenum> end)) in void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 
@@ -849,7 +823,7 @@ why --project [...] why/max_ptr.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/max_ptr_po7.why">
-      <location file = "why/max_ptr.why" line = "713" begin = "18" end = "38"/>
+      <location file = "why/max_ptr.why" line = "695" begin = "18" end = "38"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

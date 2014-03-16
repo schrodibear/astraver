@@ -41,11 +41,11 @@ type voidP = [voidP]
 
 unit f(int32 n_1)
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    {  (if (n_1 < 1024) then 
       {  
-         (assert for default: (C_1 : (jessie : (n_1 < (1024 :> int32)))));
+         (assert for default: (_C_1 : (jessie : (n_1 < (1024 :> int32)))));
          ()
       } else ());
       

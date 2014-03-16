@@ -44,19 +44,20 @@ tag voidP = {
 type voidP = [voidP]
 
 double g4(doubleP[..] t)
-  requires (C_6 : (((C_8 : (\offset_min(t) <= 0)) &&
-                     (C_9 : (\offset_max(t) >= 0))) &&
-                    ((C_11 : (\offset_min(t) <= 0)) &&
-                      (C_12 : (\offset_max(t) >= 1)))));
+  requires (_C_6 : (((_C_8 : (\offset_min(t) <= 0)) &&
+                      (_C_9 : (\offset_max(t) >= 0))) &&
+                     ((_C_11 : (\offset_min(t) <= 0)) &&
+                       (_C_12 : (\offset_max(t) >= 1)))));
 behavior default:
   assigns \nothing;
-  ensures (C_5 : ((\result :> real) ==
-                   (((\at(t,Old) + 0).doubleM :> real) +
-                     ((\at(t,Old) + 1).doubleM :> real))));
+  ensures (_C_5 : ((\result :> real) ==
+                    (((\at(t,Old) + 0).doubleM :> real) +
+                      ((\at(t,Old) + 1).doubleM :> real))));
 {  
    (var double y);
    
-   {  (C_4 : (y = (C_3 : ((C_2 : (t + 0).doubleM) + (C_1 : (t + 1).doubleM)))));
+   {  (_C_4 : (y = (_C_3 : ((_C_2 : (t + 0).doubleM) +
+                             (_C_1 : (t + 1).doubleM)))));
       
       (return y)
    }
@@ -65,18 +66,18 @@ behavior default:
 double f4()
 behavior default:
   assigns \nothing;
-  ensures (C_22 : true);
+  ensures (_C_22 : true);
 {  
    (var doubleP[0..1] tab);
    
    (var double r);
    
-   {  (C_14 : (tab = (C_13 : (new doubleP[2]))));
-      (C_16 : ((C_15 : (tab + 0).doubleM) = (1.0 :> double)));
-      (C_18 : ((C_17 : (tab + 1).doubleM) = (2.0 :> double)));
-      (C_20 : (r = (C_19 : g4(tab))));
+   {  (_C_14 : (tab = (_C_13 : (new doubleP[2]))));
+      (_C_16 : ((_C_15 : (tab + 0).doubleM) = (1.0 :> double)));
+      (_C_18 : ((_C_17 : (tab + 1).doubleM) = (2.0 :> double)));
+      (_C_20 : (r = (_C_19 : g4(tab))));
       
-      {  (C_21 : (free(tab)));
+      {  (_C_21 : (free(tab)));
          
          (return r)
       }
@@ -522,39 +523,31 @@ let f4_ensures_default =
      (let doubleP_tab_2_alloc_table = ref (any_alloc_table void) in
      (let tab = ref (any_pointer void) in
      (let r = ref (any_double void) in
-     (C_14:
      begin
        (let _jessie_<somenum> =
-       (tab := (C_13:
-               (JC_<somenum>:
-               (((alloc_struct_doubleP (2)) doubleP_tab_2_alloc_table) doubleP_tab_2_tag_table)))) in
+       (tab := (JC_<somenum>:
+               (((alloc_struct_doubleP (2)) doubleP_tab_2_alloc_table) doubleP_tab_2_tag_table))) in
        void);
-      (C_16:
-      begin
-        (let _jessie_<somenum> = (double_of_real_exact 1.0) in
-        (let _jessie_<somenum> = !tab in
-        (((safe_upd_ doubleP_doubleM_tab_2) _jessie_<somenum>) _jessie_<somenum>)));
-       (C_18:
-       begin
-         (let _jessie_<somenum> = (double_of_real_exact 2.0) in
-         (let _jessie_<somenum> = !tab in
-         (let _jessie_<somenum> = (1) in
-         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-         (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
-         (((safe_upd_ doubleP_doubleM_tab_2) _jessie_<somenum>) _jessie_<somenum>))))));
-        (C_20:
-        begin
-          (let _jessie_<somenum> =
-          (r := (C_19:
-                (let _jessie_<somenum> = !tab in
-                (JC_<somenum>:
-                (((g4 _jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2))))) in
-          void);
-         (C_21:
-         begin
-           ((safe_free_parameter doubleP_tab_2_alloc_table) !tab);
-          (return := !r); (raise Return) end) end) end) end) end))))));
-    absurd  end with Return -> !return end))
+      (let _jessie_<somenum> = (double_of_real_exact 1.0) in
+      (let _jessie_<somenum> = !tab in
+      (let _jessie_<somenum> = (double_of_real_exact 2.0) in
+      (let _jessie_<somenum> = !tab in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      [ { } unit reads doubleP_doubleM_tab_2,doubleP_tab_2_alloc_table
+        writes doubleP_doubleM_tab_2
+        { (not_assigns(doubleP_tab_2_alloc_table, doubleP_doubleM_tab_2@,
+           doubleP_doubleM_tab_2,
+           pset_range(pset_singleton(_jessie_<somenum>), (0), (1)))
+          and ((select(doubleP_doubleM_tab_2, shift(_jessie_<somenum>, (0))) = _jessie_<somenum>)
+              and (select(doubleP_doubleM_tab_2, shift(_jessie_<somenum>, (1))) = _jessie_<somenum>))) } ]))))));
+      (let _jessie_<somenum> =
+      (r := (let _jessie_<somenum> = !tab in
+            (JC_<somenum>:
+            (((g4 _jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2)))) in
+      void); ((safe_free_parameter doubleP_tab_2_alloc_table) !tab);
+      (return := !r); (raise Return) end))))); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     not_assigns(doubleP_tab_2_alloc_table@, doubleP_doubleM_tab_2@,
     doubleP_doubleM_tab_2, pset_empty)) }
@@ -571,43 +564,35 @@ let f4_safety =
      (let doubleP_tab_2_alloc_table = ref (any_alloc_table void) in
      (let tab = ref (any_pointer void) in
      (let r = ref (any_double void) in
-     (C_14:
      begin
        (let _jessie_<somenum> =
        (tab := (let _jessie_<somenum> =
-               (C_13:
                (JC_<somenum>:
-               (((alloc_struct_doubleP_requires (2)) doubleP_tab_2_alloc_table) doubleP_tab_2_tag_table))) in
+               (((alloc_struct_doubleP_requires (2)) doubleP_tab_2_alloc_table) doubleP_tab_2_tag_table)) in
                (JC_<somenum>:
                (assert
                { ge_int(offset_max(doubleP_tab_2_alloc_table, _jessie_<somenum>),
                  (1)) }; _jessie_<somenum>)))) in void);
-      (C_16:
-      begin
-        (let _jessie_<somenum> = (double_of_real_exact 1.0) in
-        (let _jessie_<somenum> = !tab in
-        (((safe_upd_ doubleP_doubleM_tab_2) _jessie_<somenum>) _jessie_<somenum>)));
-       (C_18:
-       begin
-         (let _jessie_<somenum> = (double_of_real_exact 2.0) in
-         (let _jessie_<somenum> = !tab in
-         (let _jessie_<somenum> = (1) in
-         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-         (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
-         (((safe_upd_ doubleP_doubleM_tab_2) _jessie_<somenum>) _jessie_<somenum>))))));
-        (C_20:
-        begin
-          (let _jessie_<somenum> =
-          (r := (C_19:
-                (let _jessie_<somenum> = !tab in
-                (JC_<somenum>:
-                (((g4_requires _jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2))))) in
-          void);
-         (C_21:
-         begin
-           ((free_parameter doubleP_tab_2_alloc_table) !tab); (return := !r);
-          (raise Return) end) end) end) end) end)))))); absurd  end with
-   Return -> !return end)) { true }
+      (let _jessie_<somenum> = (double_of_real_exact 1.0) in
+      (let _jessie_<somenum> = !tab in
+      (let _jessie_<somenum> = (double_of_real_exact 2.0) in
+      (let _jessie_<somenum> = !tab in
+      (let _jessie_<somenum> = (1) in
+      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+      [ { } unit reads doubleP_doubleM_tab_2,doubleP_tab_2_alloc_table
+        writes doubleP_doubleM_tab_2
+        { (not_assigns(doubleP_tab_2_alloc_table, doubleP_doubleM_tab_2@,
+           doubleP_doubleM_tab_2,
+           pset_range(pset_singleton(_jessie_<somenum>), (0), (1)))
+          and ((select(doubleP_doubleM_tab_2, shift(_jessie_<somenum>, (0))) = _jessie_<somenum>)
+              and (select(doubleP_doubleM_tab_2, shift(_jessie_<somenum>, (1))) = _jessie_<somenum>))) } ]))))));
+      (let _jessie_<somenum> =
+      (r := (let _jessie_<somenum> = !tab in
+            (JC_<somenum>:
+            (((g4_requires _jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2)))) in
+      void); ((free_parameter doubleP_tab_2_alloc_table) !tab);
+      (return := !r); (raise Return) end))))); absurd  end with Return ->
+   !return end)) { true }
 
 let g4_ensures_default =
  fun (t : doubleP pointer) (doubleP_t_1_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_1 : (doubleP, double) memory) ->
@@ -621,18 +606,14 @@ let g4_ensures_default =
   try
    begin
      (let y = ref (any_double void) in
-     (C_4:
      begin
        (let _jessie_<somenum> =
-       (y := (C_3:
-             (JC_<somenum>:
-             (((add_double_safe nearest_even) (C_2:
-                                              ((safe_acc_ doubleP_doubleM_t_1) 
-                                               ((shift t) (0))))) (C_1:
-                                                                  ((safe_acc_ doubleP_doubleM_t_1) 
-                                                                   ((shift t) (1)))))))) in
-       void); (return := !y); (raise Return) end)); absurd  end with
-   Return -> !return end))
+       (y := (JC_<somenum>:
+             (((add_double_safe nearest_even) ((safe_acc_ doubleP_doubleM_t_1) 
+                                               ((shift t) (0)))) ((safe_acc_ doubleP_doubleM_t_1) 
+                                                                  ((shift t) (1)))))) in
+       void); (return := !y); (raise Return) end); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     (double_value(result) = add_real(double_value(select(doubleP_doubleM_t_1,
                                                   shift(t, (0)))),
@@ -651,19 +632,15 @@ let g4_safety =
   try
    begin
      (let y = ref (any_double void) in
-     (C_4:
      begin
        (let _jessie_<somenum> =
-       (y := (C_3:
-             (JC_<somenum>:
-             (((add_double nearest_even) (C_2:
-                                         (JC_<somenum>:
-                                         (((acc_ doubleP_t_1_alloc_table) doubleP_doubleM_t_1) t)))) 
-              (C_1:
+       (y := (JC_<somenum>:
+             (((add_double nearest_even) (JC_<somenum>:
+                                         (((acc_ doubleP_t_1_alloc_table) doubleP_doubleM_t_1) t))) 
               (JC_<somenum>:
-              ((((offset_acc_ doubleP_t_1_alloc_table) doubleP_doubleM_t_1) t) (1)))))))) in
-       void); (return := !y); (raise Return) end)); absurd  end with
-   Return -> !return end)) { true }
+              ((((offset_acc_ doubleP_t_1_alloc_table) doubleP_doubleM_t_1) t) (1)))))) in
+       void); (return := !y); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C dillon3.jessie --quiet -f dillon3.makefile project

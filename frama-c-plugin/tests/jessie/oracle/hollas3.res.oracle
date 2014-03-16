@@ -54,13 +54,13 @@ lemma div2neg :
 
 int32 foo(int32 l, int32 h)
 behavior default:
-  ensures (C_6 : ((C_7 : (\at(l,Old) <= \result)) &&
-                   (C_8 : (\result <= \at(h,Old)))));
+  ensures (_C_6 : ((_C_7 : (\at(l,Old) <= \result)) &&
+                    (_C_8 : (\result <= \at(h,Old)))));
 {  
    (var int32 __retres);
    
-   {  (C_5 : (__retres = (C_4 : ((C_3 : ((C_2 : ((C_1 : (l + h)) :> int32)) /
-                                          2)) :> int32))));
+   {  (_C_5 : (__retres = (_C_4 : ((_C_3 : ((_C_2 : ((_C_1 : (l + h)) :> int32)) /
+                                             2)) :> int32))));
       
       (return __retres)
    }
@@ -451,20 +451,15 @@ let foo_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_5:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_4:
-                    (safe_int32_of_integer_ (C_3:
-                                            (JC_<somenum>:
+       (__retres := (safe_int32_of_integer_ (JC_<somenum>:
                                             ((computer_div (integer_of_int32 
-                                                            (C_2:
                                                             (safe_int32_of_integer_ 
-                                                             (C_1:
                                                              ((add_int 
                                                                (integer_of_int32 l)) 
-                                                              (integer_of_int32 h))))))) (2))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+                                                              (integer_of_int32 h))))) (2))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(integer_of_int32(l), integer_of_int32(result)))
@@ -478,21 +473,16 @@ let foo_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_5:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_4:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (C_3:
-                                       (JC_<somenum>:
+       (__retres := (JC_<somenum>:
+                    (int32_of_integer_ (JC_<somenum>:
                                        ((computer_div_ (integer_of_int32 
-                                                        (C_2:
                                                         (JC_<somenum>:
                                                         (int32_of_integer_ 
-                                                         (C_1:
                                                          ((add_int (integer_of_int32 l)) 
-                                                          (integer_of_int32 h)))))))) (2)))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+                                                          (integer_of_int32 h)))))) (2)))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 

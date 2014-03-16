@@ -47,12 +47,12 @@ type voidP = [voidP]
 
 unit f(intP[..] t, int32 n_1)
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    {  
       {  
-         (assert for default: (C_1 : (jessie : ((t + [0..(n_1 - 1)]).intM ==
-                                                 0))));
+         (assert for default: (_C_1 : (jessie : ((t + [0..(n_1 - 1)]).intM ==
+                                                  0))));
          ()
       };
       

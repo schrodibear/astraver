@@ -88,35 +88,41 @@ int32 b;
 
 unit swap()
 behavior default:
-  ensures (C_4 : ((C_5 : (a == \at(b,Old))) && (C_6 : (b == \at(a,Old)))));
+  ensures (_C_4 : ((_C_5 : (a == \at(b,Old))) && (_C_6 : (b == \at(a,Old)))));
 {  
    (var int32 tmp);
    
-   {  (C_1 : (tmp = a));
-      (C_2 : (a = b));
-      (C_3 : (b = tmp));
+   {  (_C_1 : (tmp = a));
+      (_C_2 : (a = b));
+      (_C_3 : (b = tmp));
       
       (return ())
    }
 }
 ========== file tests/c/swap.jessie/swap.cloc ==========
-[C_1]
+[_C_4]
 file = "HOME/tests/c/swap.c"
-line = 38
-begin = 2
-end = 5
+line = 35
+begin = 12
+end = 40
 
-[C_5]
+[_C_5]
 file = "HOME/tests/c/swap.c"
 line = 35
 begin = 12
 end = 24
 
-[C_4]
+[_C_6]
 file = "HOME/tests/c/swap.c"
 line = 35
-begin = 12
+begin = 28
 end = 40
+
+[_C_3]
+file = "HOME/tests/c/swap.c"
+line = 40
+begin = 6
+end = 9
 
 [swap]
 name = "Function swap"
@@ -125,23 +131,17 @@ line = 37
 begin = 5
 end = 9
 
-[C_2]
+[_C_2]
 file = "HOME/tests/c/swap.c"
 line = 39
 begin = 6
 end = 7
 
-[C_6]
+[_C_1]
 file = "HOME/tests/c/swap.c"
-line = 35
-begin = 28
-end = 40
-
-[C_3]
-file = "HOME/tests/c/swap.c"
-line = 40
-begin = 6
-end = 9
+line = 38
+begin = 2
+end = 5
 
 ========== jessie execution ==========
 Generating Why function swap
@@ -777,15 +777,11 @@ let swap_ensures_default =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<num> = (tmp := !a) in void);
-      (C_2:
-      begin
-        (let _jessie_<num> = (a := !b) in void);
-       (C_3:
-       begin   (let _jessie_<num> = (b := !tmp) in void); (raise Return) end)
-      end) end)); (raise Return) end with Return -> void end)
+      (let _jessie_<num> = (a := !b) in void);
+      (let _jessie_<num> = (b := !tmp) in void); (raise Return) end);
+    (raise Return) end with Return -> void end)
   { (JC_7:
     ((JC_5: (integer_of_int32(a) = integer_of_int32(b@)))
     and (JC_6: (integer_of_int32(b) = integer_of_int32(a@))))) }
@@ -797,15 +793,11 @@ let swap_safety =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<num> = (tmp := !a) in void);
-      (C_2:
-      begin
-        (let _jessie_<num> = (a := !b) in void);
-       (C_3:
-       begin   (let _jessie_<num> = (b := !tmp) in void); (raise Return) end) end)
-     end)); (raise Return) end with Return -> void end) { true }
+      (let _jessie_<num> = (a := !b) in void);
+      (let _jessie_<num> = (b := !tmp) in void); (raise Return) end);
+    (raise Return) end with Return -> void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========

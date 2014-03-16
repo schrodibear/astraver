@@ -41,11 +41,11 @@ type voidP = [voidP]
 
 unit ftest8()
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    {  
       {  
-         (assert for default: (C_1 : (jessie : ((- 2147483648) <= 0))));
+         (assert for default: (_C_1 : (jessie : ((- 2147483648) <= 0))));
          ()
       };
       
@@ -55,11 +55,11 @@ behavior default:
 
 unit ftest7()
 behavior default:
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 {  
    {  
       {  
-         (assert for default: (C_3 : (jessie : ((- 2147483647) <= 0))));
+         (assert for default: (_C_3 : (jessie : ((- 2147483647) <= 0))));
          ()
       };
       
@@ -69,11 +69,11 @@ behavior default:
 
 unit ftest6()
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
    {  
       {  
-         (assert for default: (C_5 : (jessie : ((- 2147483646) <= 0))));
+         (assert for default: (_C_5 : (jessie : ((- 2147483646) <= 0))));
          ()
       };
       
@@ -83,7 +83,7 @@ behavior default:
 
 unit ftest(int32 n_1)
 behavior default:
-  ensures (C_10 : true);
+  ensures (_C_10 : true);
 {  
    {  
       switch (n_1) {
@@ -91,7 +91,7 @@ behavior default:
         {  
            {  
               {  
-                 (assert for default: (C_7 : (jessie : ((- 2147483648) <= 0))));
+                 (assert for default: (_C_7 : (jessie : ((- 2147483648) <= 0))));
                  ()
               };
               
@@ -102,7 +102,7 @@ behavior default:
         {  
            {  
               {  
-                 (assert for default: (C_8 : (jessie : ((- 2147483647) <= 0))));
+                 (assert for default: (_C_8 : (jessie : ((- 2147483647) <= 0))));
                  ()
               };
               
@@ -113,7 +113,7 @@ behavior default:
         {  
            {  
               {  
-                 (assert for default: (C_9 : (jessie : ((- 2147483646) <= 0))));
+                 (assert for default: (_C_9 : (jessie : ((- 2147483646) <= 0))));
                  ()
               };
               

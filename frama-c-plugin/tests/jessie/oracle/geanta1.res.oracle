@@ -48,25 +48,25 @@ type __anonstruct_EXEMPLE_STRUCTURE_1 = [__anonstruct_EXEMPLE_STRUCTURE_1]
 
 unit f(int32 n_1, __anonstruct_EXEMPLE_STRUCTURE_1[..] p,
        __anonstruct_EXEMPLE_STRUCTURE_1[..] q)
-  requires (C_8 : (((C_10 : (\offset_min(p) <= 0)) &&
-                     (C_11 : (\offset_max(p) >= 0))) &&
-                    ((C_13 : (\offset_min(q) <= 0)) &&
-                      (C_14 : (\offset_max(q) >= 0)))));
+  requires (_C_8 : (((_C_10 : (\offset_min(p) <= 0)) &&
+                      (_C_11 : (\offset_max(p) >= 0))) &&
+                     ((_C_13 : (\offset_min(q) <= 0)) &&
+                       (_C_14 : (\offset_max(q) >= 0)))));
 behavior default:
-  ensures (C_5 : true);
+  ensures (_C_5 : true);
 behavior p_changed:
   assumes (n_1 > 0);
   assigns p.elem1,
   p.elem2;
-  ensures (C_6 : (\at(p,Old).elem1 == \at(n_1,Old)));
+  ensures (_C_6 : (\at(p,Old).elem1 == \at(n_1,Old)));
 behavior q_changed:
   assumes (n_1 <= 0);
   assigns q.elem1,
   q.elem2;
-  ensures (C_7 : (\at(q,Old).elem1 == \at(n_1,Old)));
+  ensures (_C_7 : (\at(q,Old).elem1 == \at(n_1,Old)));
 {  
-   {  (if (n_1 > 0) then (C_4 : ((C_3 : p.elem1) = n_1)) else (C_2 : (
-                                                              (C_1 : q.elem1) = n_1)));
+   {  (if (n_1 > 0) then (_C_4 : ((_C_3 : p.elem1) = n_1)) else (_C_2 : (
+                                                                (_C_1 : q.elem1) = n_1)));
       
       (return ())
    }
@@ -682,19 +682,17 @@ let f_ensures_default =
      (let _jessie_<somenum> =
      (if ((gt_int_ (integer_of_int32 n_1)) (0))
      then
-      (C_4:
       (let _jessie_<somenum> = n_1 in
       begin
         (let _jessie_<somenum> = p in
         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) _jessie_<somenum>) _jessie_<somenum>));
-       _jessie_<somenum> end))
+       _jessie_<somenum> end)
      else
-      (C_2:
       (let _jessie_<somenum> = n_1 in
       begin
         (let _jessie_<somenum> = q in
         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) _jessie_<somenum>) _jessie_<somenum>));
-       _jessie_<somenum> end))) in void); (raise Return); (raise Return) end with
+       _jessie_<somenum> end)) in void); (raise Return); (raise Return) end with
    Return -> void end) { (JC_<somenum>: true) }
 
 let f_ensures_p_changed =
@@ -723,19 +721,17 @@ let f_ensures_p_changed =
      (let _jessie_<somenum> =
      (if ((gt_int_ (integer_of_int32 n_1)) (0))
      then
-      (C_4:
       (let _jessie_<somenum> = n_1 in
       begin
         (let _jessie_<somenum> = p in
         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) _jessie_<somenum>) _jessie_<somenum>));
-       _jessie_<somenum> end))
+       _jessie_<somenum> end)
      else
-      (C_2:
       (let _jessie_<somenum> = n_1 in
       begin
         (let _jessie_<somenum> = q in
         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) _jessie_<somenum>) _jessie_<somenum>));
-       _jessie_<somenum> end))) in void); (raise Return); (raise Return) end with
+       _jessie_<somenum> end)) in void); (raise Return); (raise Return) end with
    Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
@@ -785,19 +781,17 @@ let f_ensures_q_changed =
      (let _jessie_<somenum> =
      (if ((gt_int_ (integer_of_int32 n_1)) (0))
      then
-      (C_4:
       (let _jessie_<somenum> = n_1 in
       begin
         (let _jessie_<somenum> = p in
         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) _jessie_<somenum>) _jessie_<somenum>));
-       _jessie_<somenum> end))
+       _jessie_<somenum> end)
      else
-      (C_2:
       (let _jessie_<somenum> = n_1 in
       begin
         (let _jessie_<somenum> = q in
         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) _jessie_<somenum>) _jessie_<somenum>));
-       _jessie_<somenum> end))) in void); (raise Return); (raise Return) end with
+       _jessie_<somenum> end)) in void); (raise Return); (raise Return) end with
    Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
@@ -845,21 +839,19 @@ let f_safety =
      (let _jessie_<somenum> =
      (if ((gt_int_ (integer_of_int32 n_1)) (0))
      then
-      (C_4:
       (let _jessie_<somenum> = n_1 in
       begin
         (let _jessie_<somenum> = p in
         (JC_<somenum>:
         ((((upd_ __anonstruct_EXEMPLE_STRUCTURE_1_p_1_alloc_table) __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) _jessie_<somenum>) _jessie_<somenum>)));
-       _jessie_<somenum> end))
+       _jessie_<somenum> end)
      else
-      (C_2:
       (let _jessie_<somenum> = n_1 in
       begin
         (let _jessie_<somenum> = q in
         (JC_<somenum>:
         ((((upd_ __anonstruct_EXEMPLE_STRUCTURE_1_q_2_alloc_table) __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-       _jessie_<somenum> end))) in void); (raise Return); (raise Return) end with
+       _jessie_<somenum> end)) in void); (raise Return); (raise Return) end with
    Return -> void end) { true }
 
 

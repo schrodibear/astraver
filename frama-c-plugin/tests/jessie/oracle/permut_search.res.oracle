@@ -46,41 +46,41 @@ tag voidP = {
 type voidP = [voidP]
 
 int32 permut_search(intP[..] arr, int32 v)
-  requires (C_10 : (\exists int32 n_0;
-                     (((0 <= n_0) &&
-                        ((\offset_min(arr) <= 0) &&
-                          (\offset_max(arr) >= n_0))) &&
-                       (\forall int32 i_2;
-                         (((0 <= i_2) && (i_2 <= n_0)) ==>
-                           ((0 <= (arr + i_2).intM) &&
-                             ((arr + i_2).intM <= n_0)))))));
+  requires (_C_10 : (\exists int32 n_0;
+                      (((0 <= n_0) &&
+                         ((\offset_min(arr) <= 0) &&
+                           (\offset_max(arr) >= n_0))) &&
+                        (\forall int32 i_2;
+                          (((0 <= i_2) && (i_2 <= n_0)) ==>
+                            ((0 <= (arr + i_2).intM) &&
+                              ((arr + i_2).intM <= n_0)))))));
 behavior default:
-  ensures (C_9 : true);
+  ensures (_C_9 : true);
 {  
    (var int32 idx);
    
    (var int32 __retres);
    
-   {  (C_1 : (idx = 0));
+   {  (_C_1 : (idx = 0));
       
       loop 
       behavior default:
-        invariant (C_2 : (\exists int32 n;
-                           ((((\offset_min(arr) <= 0) &&
-                               (\offset_max(arr) >= n)) &&
-                              ((0 <= idx) && (idx <= n))) &&
-                             (\forall int32 i_1;
-                               (((0 <= i_1) && (i_1 <= n)) ==>
-                                 ((0 <= (arr + i_1).intM) &&
-                                   ((arr + i_1).intM <= n)))))));
+        invariant (_C_2 : (\exists int32 n;
+                            ((((\offset_min(arr) <= 0) &&
+                                (\offset_max(arr) >= n)) &&
+                               ((0 <= idx) && (idx <= n))) &&
+                              (\forall int32 i_1;
+                                (((0 <= i_1) && (i_1 <= n)) ==>
+                                  ((0 <= (arr + i_1).intM) &&
+                                    ((arr + i_1).intM <= n)))))));
       while (true)
       {  
-         {  (if ((C_5 : (C_4 : (arr + idx)).intM) == v) then 
-            {  (C_3 : (__retres = idx));
+         {  (if ((_C_5 : (_C_4 : (arr + idx)).intM) == v) then 
+            {  (_C_3 : (__retres = idx));
                
                (goto return_label)
             } else ());
-            (C_8 : (idx = (C_7 : (C_6 : (arr + idx)).intM)))
+            (_C_8 : (idx = (_C_7 : (_C_6 : (arr + idx)).intM)))
          }
       };
       (return_label : 
@@ -558,7 +558,6 @@ let permut_search_ensures_default =
      (let idx = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (idx := (safe_int32_of_integer_ (0))) in void);
        (loop_2:
@@ -590,24 +589,17 @@ let permut_search_ensures_default =
             begin
               (let _jessie_<somenum> =
               begin
-                (if ((eq_int_ (integer_of_int32 (C_5:
-                                                ((safe_acc_ intP_intM_arr_1) 
-                                                 (C_4:
-                                                 ((shift arr) (integer_of_int32 !idx))))))) 
+                (if ((eq_int_ (integer_of_int32 ((safe_acc_ intP_intM_arr_1) 
+                                                 ((shift arr) (integer_of_int32 !idx))))) 
                      (integer_of_int32 v))
                 then
-                 (C_3:
                  begin
                    (let _jessie_<somenum> = (__retres := !idx) in void);
-                  (raise (Return_label_exc void)) end) else void);
-               (C_8:
-               begin
-                 (idx := (C_7:
-                         ((safe_acc_ intP_intM_arr_1) (C_6:
-                                                      ((shift arr) (integer_of_int32 !idx))))));
-                !idx end) end in void); (raise (Loop_continue_exc void)) end
-            with Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Return_label_exc void)) end) end) with
+                  (raise (Return_label_exc void)) end else void);
+               (idx := ((safe_acc_ intP_intM_arr_1) ((shift arr) (integer_of_int32 !idx))));
+               !idx end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Return_label_exc void)) end) end with
       Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -637,7 +629,6 @@ let permut_search_safety =
      (let idx = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (idx := (safe_int32_of_integer_ (0))) in void);
        (loop_1:
@@ -670,25 +661,20 @@ let permut_search_safety =
             begin
               (let _jessie_<somenum> =
               begin
-                (if ((eq_int_ (integer_of_int32 (C_5:
-                                                (JC_<somenum>:
+                (if ((eq_int_ (integer_of_int32 (JC_<somenum>:
                                                 ((((offset_acc_ intP_arr_1_alloc_table) intP_intM_arr_1) arr) 
-                                                 (integer_of_int32 !idx)))))) 
+                                                 (integer_of_int32 !idx))))) 
                      (integer_of_int32 v))
                 then
-                 (C_3:
                  begin
                    (let _jessie_<somenum> = (__retres := !idx) in void);
-                  (raise (Return_label_exc void)) end) else void);
-               (C_8:
-               begin
-                 (idx := (C_7:
-                         (JC_<somenum>:
-                         ((((offset_acc_ intP_arr_1_alloc_table) intP_intM_arr_1) arr) 
-                          (integer_of_int32 !idx))))); !idx end) end in void);
+                  (raise (Return_label_exc void)) end else void);
+               (idx := (JC_<somenum>:
+                       ((((offset_acc_ intP_arr_1_alloc_table) intP_intM_arr_1) arr) 
+                        (integer_of_int32 !idx)))); !idx end in void);
              (raise (Loop_continue_exc void)) end with
             Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Return_label_exc void)) end) end) with
+        (raise (Return_label_exc void)) end) end with
       Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -731,11 +717,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/permut_search_po7.why">
-      <location file = "why/permut_search.why" line = "556" begin = "44" end = "45"/>
+      <location file = "why/permut_search.why" line = "547" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/permut_search_po8.why">
-      <location file = "why/permut_search.why" line = "556" begin = "44" end = "45"/>
+      <location file = "why/permut_search.why" line = "547" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

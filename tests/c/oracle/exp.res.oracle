@@ -58,61 +58,61 @@ tag voidP = {
 type voidP = [voidP]
 
 double my_exp(double x)
-  requires (C_9 : (\real_abs((x :> real)) <= 1.0));
+  requires (_C_9 : (\real_abs((x :> real)) <= 1.0));
 behavior default:
-  ensures (C_8 : (\real_abs(((\result :> real) - \exp((\at(x,Old) :> real)))) <=
-                   0x1p-4));
+  ensures (_C_8 : (\real_abs(((\result :> real) - \exp((\at(x,Old) :> real)))) <=
+                    0x1p-4));
 {  
    (var double __retres);
    
    {  
       {  
-         (assert for default: (C_1 : (jessie : (\real_abs((((0.9890365552 +
-                                                              (1.130258690 *
-                                                                (x :> real))) +
-                                                             ((0.5540440796 *
-                                                                (x :> real)) *
-                                                               (x :> real))) -
-                                                            \exp((x :> real)))) <=
-                                                 0x0.FFFFp-4))));
+         (assert for default: (_C_1 : (jessie : (\real_abs((((0.9890365552 +
+                                                               (1.130258690 *
+                                                                 (x :> real))) +
+                                                              ((0.5540440796 *
+                                                                 (x :> real)) *
+                                                                (x :> real))) -
+                                                             \exp((x :> real)))) <=
+                                                  0x0.FFFFp-4))));
          ()
       };
       
-      {  (C_7 : (__retres = (C_6 : ((C_5 : ((0.9890365552 :> double) +
-                                             (C_4 : ((1.130258690 :> double) *
-                                                      x)))) +
-                                     (C_3 : ((C_2 : ((0.5540440796 :> double) *
-                                                      x)) *
-                                              x))))));
+      {  (_C_7 : (__retres = (_C_6 : ((_C_5 : ((0.9890365552 :> double) +
+                                                (_C_4 : ((1.130258690 :> double) *
+                                                          x)))) +
+                                       (_C_3 : ((_C_2 : ((0.5540440796 :> double) *
+                                                          x)) *
+                                                 x))))));
          
          (return __retres)
       }
    }
 }
 ========== file tests/c/exp.jessie/exp.cloc ==========
-[C_1]
+[_C_4]
 file = "HOME/tests/c/exp.c"
-line = 4
-begin = 13
-end = 106
+line = 6
+begin = 24
+end = 39
 
-[C_9]
-file = "HOME/tests/c/exp.c"
-line = 1
-begin = 13
-end = 27
-
-[C_5]
+[_C_5]
 file = "HOME/tests/c/exp.c"
 line = 6
 begin = 9
 end = 39
 
-[C_7]
+[_C_9]
+file = "HOME/tests/c/exp.c"
+line = 1
+begin = 13
+end = 27
+
+[_C_6]
 file = "HOME/tests/c/exp.c"
 line = 6
-begin = 2
-end = 63
+begin = 9
+end = 62
 
 [my_exp]
 name = "Function my_exp"
@@ -121,35 +121,35 @@ line = 3
 begin = 7
 end = 13
 
-[C_8]
+[_C_3]
+file = "HOME/tests/c/exp.c"
+line = 6
+begin = 42
+end = 62
+
+[_C_7]
+file = "HOME/tests/c/exp.c"
+line = 6
+begin = 2
+end = 63
+
+[_C_8]
 file = "HOME/tests/c/exp.c"
 line = 2
 begin = 12
 end = 45
 
-[C_4]
-file = "HOME/tests/c/exp.c"
-line = 6
-begin = 24
-end = 39
-
-[C_2]
+[_C_2]
 file = "HOME/tests/c/exp.c"
 line = 6
 begin = 42
 end = 58
 
-[C_6]
+[_C_1]
 file = "HOME/tests/c/exp.c"
-line = 6
-begin = 9
-end = 62
-
-[C_3]
-file = "HOME/tests/c/exp.c"
-line = 6
-begin = 42
-end = 62
+line = 4
+begin = 13
+end = 106
 
 ========== jessie execution ==========
 Generating Why function my_exp
@@ -387,8 +387,8 @@ end = 39
 kind = FPOverflow
 file = "HOME/tests/c/exp.jessie/exp.jc"
 line = 56
-begin = 53
-end = 76
+begin = 57
+end = 80
 
 [JC_15]
 kind = FPOverflow
@@ -447,8 +447,8 @@ end = -1
 kind = FPOverflow
 file = "HOME/tests/c/exp.jessie/exp.jc"
 line = 58
-begin = 53
-end = 77
+begin = 57
+end = 81
 
 [JC_21]
 kind = FPOverflow
@@ -467,8 +467,8 @@ end = 27
 kind = FPOverflow
 file = "HOME/tests/c/exp.jessie/exp.jc"
 line = 55
-begin = 44
-end = 68
+begin = 47
+end = 71
 
 [JC_20]
 kind = FPOverflow
@@ -837,30 +837,21 @@ let my_exp_ensures_default =
                                             double_value(x_0)),
                                    double_value(x_0))),
                           exp(double_value(x_0)))),
-         0x0.FFFFp-4)) }; void);
-      begin
-        void;
-       (C_7:
-       begin
-         (let _jessie_<num> =
-         (__retres := (C_6:
-                      (JC_23:
-                      (((add_double_safe nearest_even) (C_5:
-                                                       (JC_20:
-                                                       (((add_double_safe nearest_even) 
-                                                         ((double_of_real_safe nearest_even) 0.9890365552)) 
-                                                        (C_4:
-                                                        (JC_19:
-                                                        (((mul_double_safe nearest_even) 
-                                                          ((double_of_real_safe nearest_even) 1.130258690)) x_0))))))) 
-                       (C_3:
-                       (JC_22:
-                       (((mul_double_safe nearest_even) (C_2:
-                                                        (JC_21:
-                                                        (((mul_double_safe nearest_even) 
-                                                          ((double_of_real_safe nearest_even) 0.5540440796)) x_0)))) x_0))))))) in
-         void); (return := !__retres); (raise Return) end) end end); 
-    absurd  end with Return -> !return end))
+         0x0.FFFFp-4)) }; void); void;
+      (let _jessie_<num> =
+      (__retres := (JC_23:
+                   (((add_double_safe nearest_even) (JC_20:
+                                                    (((add_double_safe nearest_even) 
+                                                      ((double_of_real_safe nearest_even) 0.9890365552)) 
+                                                     (JC_19:
+                                                     (((mul_double_safe nearest_even) 
+                                                       ((double_of_real_safe nearest_even) 1.130258690)) x_0))))) 
+                    (JC_22:
+                    (((mul_double_safe nearest_even) (JC_21:
+                                                     (((mul_double_safe nearest_even) 
+                                                       ((double_of_real_safe nearest_even) 0.5540440796)) x_0))) x_0))))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
+   Return -> !return end))
   { (JC_5:
     le_real(abs_real(sub_real(double_value(result), exp(double_value(x_0)))),
     0x1p-4)) }
@@ -883,33 +874,24 @@ let my_exp_safety =
                                               double_value(x_0)),
                                      double_value(x_0))),
                             exp(double_value(x_0)))),
-           0x0.FFFFp-4)) } ];
-      begin
-        void;
-       (C_7:
-       begin
-         (let _jessie_<num> =
-         (__retres := (C_6:
-                      (JC_17:
-                      (((add_double nearest_even) (C_5:
-                                                  (JC_13:
-                                                  (((add_double nearest_even) 
-                                                    (JC_10:
-                                                    ((double_of_real nearest_even) 0.9890365552))) 
-                                                   (C_4:
-                                                   (JC_12:
-                                                   (((mul_double nearest_even) 
-                                                     (JC_11:
-                                                     ((double_of_real nearest_even) 1.130258690))) x_0))))))) 
-                       (C_3:
-                       (JC_16:
-                       (((mul_double nearest_even) (C_2:
-                                                   (JC_15:
-                                                   (((mul_double nearest_even) 
-                                                     (JC_14:
-                                                     ((double_of_real nearest_even) 0.5540440796))) x_0)))) x_0))))))) in
-         void); (return := !__retres); (raise Return) end) end end); 
-    absurd  end with Return -> !return end)) { true }
+           0x0.FFFFp-4)) } ]; void;
+      (let _jessie_<num> =
+      (__retres := (JC_17:
+                   (((add_double nearest_even) (JC_13:
+                                               (((add_double nearest_even) 
+                                                 (JC_10:
+                                                 ((double_of_real nearest_even) 0.9890365552))) 
+                                                (JC_12:
+                                                (((mul_double nearest_even) 
+                                                  (JC_11:
+                                                  ((double_of_real nearest_even) 1.130258690))) x_0))))) 
+                    (JC_16:
+                    (((mul_double nearest_even) (JC_15:
+                                                (((mul_double nearest_even) 
+                                                  (JC_14:
+                                                  ((double_of_real nearest_even) 0.5540440796))) x_0))) x_0))))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
+   Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========

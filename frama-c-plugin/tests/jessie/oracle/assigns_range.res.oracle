@@ -59,17 +59,17 @@ invariant valid_t :
 int32 f()
 behavior default:
   assigns (t + [0..3]).intM;
-  ensures (C_13 : true);
+  ensures (_C_13 : true);
 {  
    (var int32 __retres);
    
    {  
-      {  (C_2 : ((C_1 : (t + 3).intM) = 0));
-         (C_5 : ((C_4 : (t + 2).intM) = (C_3 : (t + 3).intM)));
-         (C_8 : ((C_7 : (t + 1).intM) = (C_6 : (t + 2).intM)));
-         (C_11 : ((C_10 : (t + 0).intM) = (C_9 : (t + 1).intM)))
+      {  (_C_2 : ((_C_1 : (t + 3).intM) = 0));
+         (_C_5 : ((_C_4 : (t + 2).intM) = (_C_3 : (t + 3).intM)));
+         (_C_8 : ((_C_7 : (t + 1).intM) = (_C_6 : (t + 2).intM)));
+         (_C_11 : ((_C_10 : (t + 0).intM) = (_C_9 : (t + 1).intM)))
       };
-      (C_12 : (__retres = 0));
+      (_C_12 : (__retres = 0));
       
       (return __retres)
    }
@@ -78,53 +78,53 @@ behavior default:
 int32 g()
 behavior default:
   assigns (t + \at(\result,Here)).intM;
-  ensures (C_17 : true);
+  ensures (_C_17 : true);
 {  
    (var int32 __retres_0);
    
-   {  (C_15 : ((C_14 : (t + 2).intM) = 9));
-      (C_16 : (__retres_0 = 2));
+   {  (_C_15 : ((_C_14 : (t + 2).intM) = 9));
+      (_C_16 : (__retres_0 = 2));
       
       (return __retres_0)
    }
 }
 
 int32 f1(intP[..] p, intP[..] q)
-  requires (C_23 : (((C_25 : (\offset_min(p) <= 0)) &&
-                      (C_26 : (\offset_max(p) >= 0))) &&
-                     ((C_28 : (\offset_min(q) <= 0)) &&
-                       (C_29 : (\offset_max(q) >= 0)))));
+  requires (_C_23 : (((_C_25 : (\offset_min(p) <= 0)) &&
+                       (_C_26 : (\offset_max(p) >= 0))) &&
+                      ((_C_28 : (\offset_min(q) <= 0)) &&
+                        (_C_29 : (\offset_max(q) >= 0)))));
 behavior default:
   assigns q.intM;
-  ensures (C_22 : true);
+  ensures (_C_22 : true);
 {  
    (var int32 __retres_1);
    
-   {  (C_18 : (p = q));
-      (C_20 : ((C_19 : p.intM) = 1));
-      (C_21 : (__retres_1 = 1));
+   {  (_C_18 : (p = q));
+      (_C_20 : ((_C_19 : p.intM) = 1));
+      (_C_21 : (__retres_1 = 1));
       
       (return __retres_1)
    }
 }
 
 int32 f2(__anonstruct_S_1[..] p_0, intP[..] r)
-  requires (C_37 : ((((C_40 : (\offset_min(p_0) <= 0)) &&
-                       (C_41 : (\offset_max(p_0) >= 0))) &&
-                      ((C_43 : (\offset_min(p_0.rc) <= 0)) &&
-                        (C_44 : (\offset_max(p_0.rc) >= 0)))) &&
-                     ((C_46 : (\offset_min(r) <= 0)) &&
-                       (C_47 : (\offset_max(r) >= 0)))));
+  requires (_C_37 : ((((_C_40 : (\offset_min(p_0) <= 0)) &&
+                        (_C_41 : (\offset_max(p_0) >= 0))) &&
+                       ((_C_43 : (\offset_min(p_0.rc) <= 0)) &&
+                         (_C_44 : (\offset_max(p_0.rc) >= 0)))) &&
+                      ((_C_46 : (\offset_min(r) <= 0)) &&
+                        (_C_47 : (\offset_max(r) >= 0)))));
 behavior default:
   assigns \at(\at(p_0,Old).rc,Here).intM,
   p_0.rc;
-  ensures (C_36 : true);
+  ensures (_C_36 : true);
 {  
    (var int32 __retres_2);
    
-   {  (C_31 : ((C_30 : p_0.rc) = r));
-      (C_34 : ((C_33 : (C_32 : p_0.rc).intM) = 55));
-      (C_35 : (__retres_2 = 1));
+   {  (_C_31 : ((_C_30 : p_0.rc) = r));
+      (_C_34 : ((_C_33 : (_C_32 : p_0.rc).intM) = 55));
+      (_C_35 : (__retres_2 = 1));
       
       (return __retres_2)
    }

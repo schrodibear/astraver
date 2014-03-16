@@ -44,18 +44,18 @@ type __anonenum_trans_t_1 = 0..2
 __anonenum_trans_t_1 compute_trans(int32 x)
 behavior more_than_five:
   assumes (x > 5);
-  ensures (C_4 : ((\at(x,Old) > 5) <==>
-                   (\result == (1 :> __anonenum_trans_t_1))));
+  ensures (_C_4 : ((\at(x,Old) > 5) <==>
+                    (\result == (1 :> __anonenum_trans_t_1))));
 behavior less_than_five:
   assumes ((x >= 0) && (x <= 5));
-  ensures (C_5 : (((\at(x,Old) >= 0) && (\at(x,Old) <= 5)) <==>
-                   (\result == (2 :> __anonenum_trans_t_1))));
+  ensures (_C_5 : (((\at(x,Old) >= 0) && (\at(x,Old) <= 5)) <==>
+                    (\result == (2 :> __anonenum_trans_t_1))));
 behavior none:
   assumes (x < 0);
-  ensures (C_6 : ((\at(x,Old) < 0) <==>
-                   (\result == (0 :> __anonenum_trans_t_1))));
+  ensures (_C_6 : ((\at(x,Old) < 0) <==>
+                    (\result == (0 :> __anonenum_trans_t_1))));
 behavior default:
-  ensures (C_7 : true);
+  ensures (_C_7 : true);
 {  
    (check (disjoint_behaviors : (! (((x >= 0) && (x <= 5)) && (x < 0)))));
    
@@ -69,15 +69,15 @@ behavior default:
    (var __anonenum_trans_t_1 __retres);
    
    {  (if (x > 5) then 
-      {  (C_3 : (__retres = 1));
+      {  (_C_3 : (__retres = 1));
          
          (goto return_label)
       } else (if (x >= 0) then 
-             {  (C_2 : (__retres = 2));
+             {  (_C_2 : (__retres = 2));
                 
                 (goto return_label)
              } else 
-             {  (C_1 : (__retres = 0));
+             {  (_C_1 : (__retres = 0));
                 
                 (goto return_label)
              }));
@@ -89,18 +89,18 @@ behavior default:
 __anonenum_trans_t_1 compute_trans2(int32 x_0)
 behavior more_than_five:
   assumes (x_0 > 5);
-  ensures (C_11 : ((\at(x_0,Old) > 5) ==>
-                    (\result == (1 :> __anonenum_trans_t_1))));
+  ensures (_C_11 : ((\at(x_0,Old) > 5) ==>
+                     (\result == (1 :> __anonenum_trans_t_1))));
 behavior less_than_five:
   assumes ((x_0 >= 0) && (x_0 <= 5));
-  ensures (C_12 : (((\at(x_0,Old) >= 0) && (\at(x_0,Old) <= 5)) ==>
-                    (\result == (2 :> __anonenum_trans_t_1))));
+  ensures (_C_12 : (((\at(x_0,Old) >= 0) && (\at(x_0,Old) <= 5)) ==>
+                     (\result == (2 :> __anonenum_trans_t_1))));
 behavior none:
   assumes (x_0 < 0);
-  ensures (C_13 : ((\at(x_0,Old) < 0) ==>
-                    (\result == (0 :> __anonenum_trans_t_1))));
+  ensures (_C_13 : ((\at(x_0,Old) < 0) ==>
+                     (\result == (0 :> __anonenum_trans_t_1))));
 behavior default:
-  ensures (C_14 : true);
+  ensures (_C_14 : true);
 {  
    (check (disjoint_behaviors : (! (((x_0 >= 0) && (x_0 <= 5)) && (x_0 < 0)))));
    
@@ -114,15 +114,15 @@ behavior default:
    (var __anonenum_trans_t_1 __retres_0);
    
    {  (if (x_0 > 5) then 
-      {  (C_10 : (__retres_0 = 1));
+      {  (_C_10 : (__retres_0 = 1));
          
          (goto return_label)
       } else (if (x_0 >= 0) then 
-             {  (C_9 : (__retres_0 = 2));
+             {  (_C_9 : (__retres_0 = 2));
                 
                 (goto return_label)
              } else 
-             {  (C_8 : (__retres_0 = 0));
+             {  (_C_8 : (__retres_0 = 0));
                 
                 (goto return_label)
              }));
@@ -133,39 +133,39 @@ behavior default:
 
 int32 main(int32 x_1)
 behavior default:
-  ensures (C_26 : (((\result == (- 1)) || (\result == 1)) || (\result == 2)));
+  ensures (_C_26 : (((\result == (- 1)) || (\result == 1)) || (\result == 2)));
 {  
    (var __anonenum_trans_t_1 trans);
    
    (var int32 __retres_1);
    
-   {  (C_15 : (trans = 0));
-      (C_17 : (trans = (C_16 : compute_trans(x_1))));
+   {  (_C_15 : (trans = 0));
+      (_C_17 : (trans = (_C_16 : compute_trans(x_1))));
       
       switch (trans) {
-        case (C_18 : (0 :> __anonenum_trans_t_1)):
+        case (_C_18 : (0 :> __anonenum_trans_t_1)):
         {  
            {  
               {  
-                 (assert for default: (C_19 : (jessie : (1 == 2))));
+                 (assert for default: (_C_19 : (jessie : (1 == 2))));
                  ()
               };
-              (C_20 : (__retres_1 = -1));
+              (_C_20 : (__retres_1 = -1));
               
               (goto return_label)
            };
            
            (goto switch_0_break)
         }
-        case (C_21 : (1 :> __anonenum_trans_t_1)):
-        {  (C_22 : (__retres_1 = 1));
+        case (_C_21 : (1 :> __anonenum_trans_t_1)):
+        {  (_C_22 : (__retres_1 = 1));
            
            (goto return_label);
            
            (goto switch_0_break)
         }
-        case (C_23 : (2 :> __anonenum_trans_t_1)):
-        {  (C_24 : (__retres_1 = 2));
+        case (_C_23 : (2 :> __anonenum_trans_t_1)):
+        {  (_C_24 : (__retres_1 = 2));
            
            (goto return_label);
            
@@ -173,7 +173,7 @@ behavior default:
         }
         default:
         {  ();
-           (C_25 : (__retres_1 = -1));
+           (_C_25 : (__retres_1 = -1));
            
            (goto return_label);
            
@@ -703,25 +703,22 @@ let compute_trans2_ensures_default =
      begin
        (if ((gt_int_ (integer_of_int32 x_0_0)) (5))
        then
-        (C_10:
         begin
           (let _jessie_<somenum> =
           (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (1))) in
-          void); (raise (Return_label_exc void)) end)
+          void); (raise (Return_label_exc void)) end
        else
         (if ((ge_int_ (integer_of_int32 x_0_0)) (0))
         then
-         (C_9:
          begin
            (let _jessie_<somenum> =
            (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (2))) in
-           void); (raise (Return_label_exc void)) end)
+           void); (raise (Return_label_exc void)) end
         else
-         (C_8:
          begin
            (let _jessie_<somenum> =
            (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end)));
+           void); (raise (Return_label_exc void)) end));
       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
      (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -739,25 +736,22 @@ let compute_trans2_ensures_less_than_five =
       begin
         (if ((gt_int_ (integer_of_int32 x_0_0)) (5))
         then
-         (C_10:
          begin
            (let _jessie_<somenum> =
            (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end)
+           void); (raise (Return_label_exc void)) end
         else
          (if ((ge_int_ (integer_of_int32 x_0_0)) (0))
          then
-          (C_9:
           begin
             (let _jessie_<somenum> =
             (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (2))) in
-            void); (raise (Return_label_exc void)) end)
+            void); (raise (Return_label_exc void)) end
          else
-          (C_8:
           begin
             (let _jessie_<somenum> =
             (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (0))) in
-            void); (raise (Return_label_exc void)) end)));
+            void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -779,25 +773,22 @@ let compute_trans2_ensures_more_than_five =
       begin
         (if ((gt_int_ (integer_of_int32 x_0_0)) (5))
         then
-         (C_10:
          begin
            (let _jessie_<somenum> =
            (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end)
+           void); (raise (Return_label_exc void)) end
         else
          (if ((ge_int_ (integer_of_int32 x_0_0)) (0))
          then
-          (C_9:
           begin
             (let _jessie_<somenum> =
             (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (2))) in
-            void); (raise (Return_label_exc void)) end)
+            void); (raise (Return_label_exc void)) end
          else
-          (C_8:
           begin
             (let _jessie_<somenum> =
             (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (0))) in
-            void); (raise (Return_label_exc void)) end)));
+            void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -818,25 +809,22 @@ let compute_trans2_ensures_none =
       begin
         (if ((gt_int_ (integer_of_int32 x_0_0)) (5))
         then
-         (C_10:
          begin
            (let _jessie_<somenum> =
            (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end)
+           void); (raise (Return_label_exc void)) end
         else
          (if ((ge_int_ (integer_of_int32 x_0_0)) (0))
          then
-          (C_9:
           begin
             (let _jessie_<somenum> =
             (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (2))) in
-            void); (raise (Return_label_exc void)) end)
+            void); (raise (Return_label_exc void)) end
          else
-          (C_8:
           begin
             (let _jessie_<somenum> =
             (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (0))) in
-            void); (raise (Return_label_exc void)) end)));
+            void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -857,25 +845,22 @@ let compute_trans2_safety =
       begin
         (if ((gt_int_ (integer_of_int32 x_0_0)) (5))
         then
-         (C_10:
          begin
            (let _jessie_<somenum> =
            (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end)
+           void); (raise (Return_label_exc void)) end
         else
          (if ((ge_int_ (integer_of_int32 x_0_0)) (0))
          then
-          (C_9:
           begin
             (let _jessie_<somenum> =
             (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (2))) in
-            void); (raise (Return_label_exc void)) end)
+            void); (raise (Return_label_exc void)) end
          else
-          (C_8:
           begin
             (let _jessie_<somenum> =
             (__retres_0 := (safe___anonenum_trans_t_1_of_integer_ (0))) in
-            void); (raise (Return_label_exc void)) end)));
+            void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
@@ -912,25 +897,22 @@ let compute_trans_ensures_default =
      begin
        (if ((gt_int_ (integer_of_int32 x_0)) (5))
        then
-        (C_3:
         begin
           (let _jessie_<somenum> =
           (__retres := (safe___anonenum_trans_t_1_of_integer_ (1))) in void);
-         (raise (Return_label_exc void)) end)
+         (raise (Return_label_exc void)) end
        else
         (if ((ge_int_ (integer_of_int32 x_0)) (0))
         then
-         (C_2:
          begin
            (let _jessie_<somenum> =
            (__retres := (safe___anonenum_trans_t_1_of_integer_ (2))) in void);
-          (raise (Return_label_exc void)) end)
+          (raise (Return_label_exc void)) end
         else
-         (C_1:
          begin
            (let _jessie_<somenum> =
            (__retres := (safe___anonenum_trans_t_1_of_integer_ (0))) in void);
-          (raise (Return_label_exc void)) end)));
+          (raise (Return_label_exc void)) end));
       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
      (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -948,25 +930,22 @@ let compute_trans_ensures_less_than_five =
       begin
         (if ((gt_int_ (integer_of_int32 x_0)) (5))
         then
-         (C_3:
          begin
            (let _jessie_<somenum> =
            (__retres := (safe___anonenum_trans_t_1_of_integer_ (1))) in void);
-          (raise (Return_label_exc void)) end)
+          (raise (Return_label_exc void)) end
         else
          (if ((ge_int_ (integer_of_int32 x_0)) (0))
          then
-          (C_2:
           begin
             (let _jessie_<somenum> =
             (__retres := (safe___anonenum_trans_t_1_of_integer_ (2))) in
-            void); (raise (Return_label_exc void)) end)
+            void); (raise (Return_label_exc void)) end
          else
-          (C_1:
           begin
             (let _jessie_<somenum> =
             (__retres := (safe___anonenum_trans_t_1_of_integer_ (0))) in
-            void); (raise (Return_label_exc void)) end)));
+            void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -988,25 +967,22 @@ let compute_trans_ensures_more_than_five =
       begin
         (if ((gt_int_ (integer_of_int32 x_0)) (5))
         then
-         (C_3:
          begin
            (let _jessie_<somenum> =
            (__retres := (safe___anonenum_trans_t_1_of_integer_ (1))) in void);
-          (raise (Return_label_exc void)) end)
+          (raise (Return_label_exc void)) end
         else
          (if ((ge_int_ (integer_of_int32 x_0)) (0))
          then
-          (C_2:
           begin
             (let _jessie_<somenum> =
             (__retres := (safe___anonenum_trans_t_1_of_integer_ (2))) in
-            void); (raise (Return_label_exc void)) end)
+            void); (raise (Return_label_exc void)) end
          else
-          (C_1:
           begin
             (let _jessie_<somenum> =
             (__retres := (safe___anonenum_trans_t_1_of_integer_ (0))) in
-            void); (raise (Return_label_exc void)) end)));
+            void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -1027,25 +1003,22 @@ let compute_trans_ensures_none =
       begin
         (if ((gt_int_ (integer_of_int32 x_0)) (5))
         then
-         (C_3:
          begin
            (let _jessie_<somenum> =
            (__retres := (safe___anonenum_trans_t_1_of_integer_ (1))) in void);
-          (raise (Return_label_exc void)) end)
+          (raise (Return_label_exc void)) end
         else
          (if ((ge_int_ (integer_of_int32 x_0)) (0))
          then
-          (C_2:
           begin
             (let _jessie_<somenum> =
             (__retres := (safe___anonenum_trans_t_1_of_integer_ (2))) in
-            void); (raise (Return_label_exc void)) end)
+            void); (raise (Return_label_exc void)) end
          else
-          (C_1:
           begin
             (let _jessie_<somenum> =
             (__retres := (safe___anonenum_trans_t_1_of_integer_ (0))) in
-            void); (raise (Return_label_exc void)) end)));
+            void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -1066,25 +1039,22 @@ let compute_trans_safety =
       begin
         (if ((gt_int_ (integer_of_int32 x_0)) (5))
         then
-         (C_3:
          begin
            (let _jessie_<somenum> =
            (__retres := (safe___anonenum_trans_t_1_of_integer_ (1))) in void);
-          (raise (Return_label_exc void)) end)
+          (raise (Return_label_exc void)) end
         else
          (if ((ge_int_ (integer_of_int32 x_0)) (0))
          then
-          (C_2:
           begin
             (let _jessie_<somenum> =
             (__retres := (safe___anonenum_trans_t_1_of_integer_ (2))) in
-            void); (raise (Return_label_exc void)) end)
+            void); (raise (Return_label_exc void)) end
          else
-          (C_1:
           begin
             (let _jessie_<somenum> =
             (__retres := (safe___anonenum_trans_t_1_of_integer_ (0))) in
-            void); (raise (Return_label_exc void)) end)));
+            void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
@@ -1101,67 +1071,51 @@ let main_ensures_default =
      try
       begin
         try
-         (C_15:
          begin
            (let _jessie_<somenum> =
            (trans := (safe___anonenum_trans_t_1_of_integer_ (0))) in void);
-          (C_17:
-          begin
+          (let _jessie_<somenum> =
+          (trans := (let _jessie_<somenum> = x_1 in
+                    (JC_<somenum>: (compute_trans _jessie_<somenum>)))) in void);
+          (let _jessie_<somenum> = !trans in
+          (if ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
+               (integer_of___anonenum_trans_t_1 (safe___anonenum_trans_t_1_of_integer_ (0))))
+          then
+           begin
+             (assert { (JC_<somenum>: ((1) = (2))) }; void); void;
             (let _jessie_<somenum> =
-            (trans := (C_16:
-                      (let _jessie_<somenum> = x_1 in
-                      (JC_<somenum>: (compute_trans _jessie_<somenum>))))) in void);
-           (let _jessie_<somenum> = !trans in
-           (if ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
-                (integer_of___anonenum_trans_t_1 (C_18:
-                                                 (safe___anonenum_trans_t_1_of_integer_ (0)))))
-           then
-            begin
-              (assert { (JC_<somenum>: ((1) = (2))) }; void);
+            (__retres_1 := (safe_int32_of_integer_ (neg_int (1)))) in void);
+            (raise (Return_label_exc void));
+            (raise (Goto_switch_0_break_exc void)) end
+          else
+           begin
+             (if ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
+                  (integer_of___anonenum_trans_t_1 (safe___anonenum_trans_t_1_of_integer_ (1))))
+             then
+              begin
+                (let _jessie_<somenum> =
+                (__retres_1 := (safe_int32_of_integer_ (1))) in void);
+               (raise (Return_label_exc void));
+               (raise (Goto_switch_0_break_exc void)) end else void);
+            (if (((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
+                  (integer_of___anonenum_trans_t_1 (safe___anonenum_trans_t_1_of_integer_ (2)))) || 
+                ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
+                 (integer_of___anonenum_trans_t_1 (safe___anonenum_trans_t_1_of_integer_ (1)))))
+            then
+             begin
+               (let _jessie_<somenum> =
+               (__retres_1 := (safe_int32_of_integer_ (2))) in void);
+              (raise (Return_label_exc void));
+              (raise (Goto_switch_0_break_exc void)) end else void);
+            (if true
+            then
              begin
                void;
-              (C_20:
-              begin
-                (let _jessie_<somenum> =
-                (__retres_1 := (safe_int32_of_integer_ (neg_int (1)))) in
-                void); (raise (Return_label_exc void));
-               (raise (Goto_switch_0_break_exc void)) end) end end
-           else
-            begin
-              (if ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
-                   (integer_of___anonenum_trans_t_1 (C_21:
-                                                    (safe___anonenum_trans_t_1_of_integer_ (1)))))
-              then
-               (C_22:
-               begin
-                 (let _jessie_<somenum> =
-                 (__retres_1 := (safe_int32_of_integer_ (1))) in void);
-                (raise (Return_label_exc void));
-                (raise (Goto_switch_0_break_exc void)) end) else void);
-             (if (((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
-                   (integer_of___anonenum_trans_t_1 (C_23:
-                                                    (safe___anonenum_trans_t_1_of_integer_ (2))))) || 
-                 ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
-                  (integer_of___anonenum_trans_t_1 (C_21:
-                                                   (safe___anonenum_trans_t_1_of_integer_ (1))))))
-             then
-              (C_24:
-              begin
-                (let _jessie_<somenum> =
-                (__retres_1 := (safe_int32_of_integer_ (2))) in void);
-               (raise (Return_label_exc void));
-               (raise (Goto_switch_0_break_exc void)) end) else void);
-             (if true
-             then
-              begin
-                void;
-               (C_25:
-               begin
-                 (let _jessie_<somenum> =
-                 (__retres_1 := (safe_int32_of_integer_ (neg_int (1)))) in
-                 void); (raise (Return_label_exc void));
-                (raise (Goto_switch_0_break_exc void)) end) end else void)
-            end)); (raise (Goto_switch_0_break_exc void)) end) end) with
+              (let _jessie_<somenum> =
+              (__retres_1 := (safe_int32_of_integer_ (neg_int (1)))) in void);
+              (raise (Return_label_exc void));
+              (raise (Goto_switch_0_break_exc void)) end else void) end));
+          (raise (Goto_switch_0_break_exc void)) end with
          Goto_switch_0_break_exc _jessie_<somenum> -> (switch_0_break: void) end;
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_1); (raise Return) end) end));
@@ -1182,68 +1136,51 @@ let main_safety =
      try
       begin
         try
-         (C_15:
          begin
            (let _jessie_<somenum> =
            (trans := (safe___anonenum_trans_t_1_of_integer_ (0))) in void);
-          (C_17:
-          begin
+          (let _jessie_<somenum> =
+          (trans := (let _jessie_<somenum> = x_1 in
+                    (JC_<somenum>: (compute_trans_requires _jessie_<somenum>)))) in void);
+          (let _jessie_<somenum> = !trans in
+          (if ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
+               (integer_of___anonenum_trans_t_1 (safe___anonenum_trans_t_1_of_integer_ (0))))
+          then
+           begin
+             [ { } unit { (JC_<somenum>: ((1) = (2))) } ]; void;
             (let _jessie_<somenum> =
-            (trans := (C_16:
-                      (let _jessie_<somenum> = x_1 in
-                      (JC_<somenum>: (compute_trans_requires _jessie_<somenum>))))) in
-            void);
-           (let _jessie_<somenum> = !trans in
-           (if ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
-                (integer_of___anonenum_trans_t_1 (C_18:
-                                                 (safe___anonenum_trans_t_1_of_integer_ (0)))))
-           then
-            begin
-              [ { } unit { (JC_<somenum>: ((1) = (2))) } ];
+            (__retres_1 := (safe_int32_of_integer_ (neg_int (1)))) in void);
+            (raise (Return_label_exc void));
+            (raise (Goto_switch_0_break_exc void)) end
+          else
+           begin
+             (if ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
+                  (integer_of___anonenum_trans_t_1 (safe___anonenum_trans_t_1_of_integer_ (1))))
+             then
+              begin
+                (let _jessie_<somenum> =
+                (__retres_1 := (safe_int32_of_integer_ (1))) in void);
+               (raise (Return_label_exc void));
+               (raise (Goto_switch_0_break_exc void)) end else void);
+            (if (((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
+                  (integer_of___anonenum_trans_t_1 (safe___anonenum_trans_t_1_of_integer_ (2)))) || 
+                ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
+                 (integer_of___anonenum_trans_t_1 (safe___anonenum_trans_t_1_of_integer_ (1)))))
+            then
+             begin
+               (let _jessie_<somenum> =
+               (__retres_1 := (safe_int32_of_integer_ (2))) in void);
+              (raise (Return_label_exc void));
+              (raise (Goto_switch_0_break_exc void)) end else void);
+            (if true
+            then
              begin
                void;
-              (C_20:
-              begin
-                (let _jessie_<somenum> =
-                (__retres_1 := (safe_int32_of_integer_ (neg_int (1)))) in
-                void); (raise (Return_label_exc void));
-               (raise (Goto_switch_0_break_exc void)) end) end end
-           else
-            begin
-              (if ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
-                   (integer_of___anonenum_trans_t_1 (C_21:
-                                                    (safe___anonenum_trans_t_1_of_integer_ (1)))))
-              then
-               (C_22:
-               begin
-                 (let _jessie_<somenum> =
-                 (__retres_1 := (safe_int32_of_integer_ (1))) in void);
-                (raise (Return_label_exc void));
-                (raise (Goto_switch_0_break_exc void)) end) else void);
-             (if (((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
-                   (integer_of___anonenum_trans_t_1 (C_23:
-                                                    (safe___anonenum_trans_t_1_of_integer_ (2))))) || 
-                 ((eq_int_ (integer_of___anonenum_trans_t_1 _jessie_<somenum>)) 
-                  (integer_of___anonenum_trans_t_1 (C_21:
-                                                   (safe___anonenum_trans_t_1_of_integer_ (1))))))
-             then
-              (C_24:
-              begin
-                (let _jessie_<somenum> =
-                (__retres_1 := (safe_int32_of_integer_ (2))) in void);
-               (raise (Return_label_exc void));
-               (raise (Goto_switch_0_break_exc void)) end) else void);
-             (if true
-             then
-              begin
-                void;
-               (C_25:
-               begin
-                 (let _jessie_<somenum> =
-                 (__retres_1 := (safe_int32_of_integer_ (neg_int (1)))) in
-                 void); (raise (Return_label_exc void));
-                (raise (Goto_switch_0_break_exc void)) end) end else void)
-            end)); (raise (Goto_switch_0_break_exc void)) end) end) with
+              (let _jessie_<somenum> =
+              (__retres_1 := (safe_int32_of_integer_ (neg_int (1)))) in void);
+              (raise (Return_label_exc void));
+              (raise (Goto_switch_0_break_exc void)) end else void) end));
+          (raise (Goto_switch_0_break_exc void)) end with
          Goto_switch_0_break_exc _jessie_<somenum> -> (switch_0_break: void) end;
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_1); (raise Return) end) end));

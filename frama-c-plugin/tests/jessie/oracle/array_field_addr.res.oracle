@@ -58,29 +58,29 @@ tag t = {
 type t = [t]
 
 unit g(intP[..] i)
-  requires (C_4 : ((C_5 : (\offset_min(i) <= 0)) &&
-                    (C_6 : (\offset_max(i) >= 0))));
+  requires (_C_4 : ((_C_5 : (\offset_min(i) <= 0)) &&
+                     (_C_6 : (\offset_max(i) >= 0))));
 behavior default:
-  ensures (C_3 : (\at(i,Old).intM == 1));
+  ensures (_C_3 : (\at(i,Old).intM == 1));
 {  
-   {  (C_2 : ((C_1 : i.intM) = 1));
+   {  (_C_2 : ((_C_1 : i.intM) = 1));
       
       (return ())
    }
 }
 
 unit f(t[..] a)
-  requires (C_12 : (((C_14 : (\offset_min(a) <= 0)) &&
-                      (C_15 : (\offset_max(a) >= 0))) &&
-                     ((C_17 : (\offset_min(a.tab) <= 0)) &&
-                       (C_18 : (\offset_max(a.tab) >= 4)))));
+  requires (_C_12 : (((_C_14 : (\offset_min(a) <= 0)) &&
+                       (_C_15 : (\offset_max(a) >= 0))) &&
+                      ((_C_17 : (\offset_min(a.tab) <= 0)) &&
+                        (_C_18 : (\offset_max(a.tab) >= 4)))));
 behavior default:
-  ensures (C_11 : true);
+  ensures (_C_11 : true);
 {  
-   {  (C_9 : g((C_8 : ((C_7 : a.tab) + 0))));
+   {  (_C_9 : g((_C_8 : ((_C_7 : a.tab) + 0))));
       
       {  
-         (assert for default: (C_10 : (jessie : ((a.tab + 0).intM == 1))));
+         (assert for default: (_C_10 : (jessie : ((a.tab + 0).intM == 1))));
          ()
       };
       
@@ -748,16 +748,14 @@ let f_ensures_default =
                 (4))))))) }
   (init:
   try
-   (C_9:
    begin
-     (let _jessie_<somenum> =
-     (C_8: ((shift (C_7: ((safe_acc_ t_tab_a_2) a))) (0))) in
+     (let _jessie_<somenum> = ((shift ((safe_acc_ t_tab_a_2) a)) (0)) in
      (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_a_2) intP_a_2_alloc_table)));
     (assert
     { (JC_<somenum>:
       (integer_of_int32(select(intP_intM_a_2,
                         shift(select(t_tab_a_2, a), (0)))) = (1))) }; void);
-    void; (raise Return); (raise Return) end) with Return -> void end)
+    void; (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -773,17 +771,15 @@ let f_safety =
                 (4))))))) }
   (init:
   try
-   (C_9:
    begin
      (let _jessie_<somenum> =
-     (C_8:
-     ((shift (C_7: (JC_<somenum>: (((acc_ t_a_2_alloc_table) t_tab_a_2) a)))) (0))) in
+     ((shift (JC_<somenum>: (((acc_ t_a_2_alloc_table) t_tab_a_2) a))) (0)) in
      (JC_<somenum>: (((g_requires _jessie_<somenum>) intP_intM_a_2) intP_a_2_alloc_table)));
     [ { } unit reads intP_intM_a_2
       { (JC_<somenum>:
         (integer_of_int32(select(intP_intM_a_2,
                           shift(select(t_tab_a_2, a), (0)))) = (1))) } ];
-    void; (raise Return); (raise Return) end) with Return -> void end)
+    void; (raise Return); (raise Return) end with Return -> void end)
   { true }
 
 let g_ensures_default =
@@ -793,11 +789,10 @@ let g_ensures_default =
     and (JC_<somenum>: ge_int(offset_max(intP_i_1_alloc_table, i), (0))))) }
   (init:
   try
-   (C_2:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
      (let _jessie_<somenum> = i in (((safe_upd_ intP_intM_i_1) _jessie_<somenum>) _jessie_<somenum>)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: (integer_of_int32(select(intP_intM_i_1, i)) = (1))) }
 
 let g_safety =
@@ -807,13 +802,12 @@ let g_safety =
     and (JC_<somenum>: ge_int(offset_max(intP_i_1_alloc_table, i), (0))))) }
   (init:
   try
-   (C_2:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
      (let _jessie_<somenum> = i in
      (JC_<somenum>:
      ((((upd_ intP_i_1_alloc_table) intP_intM_i_1) _jessie_<somenum>) _jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C array_field_addr.jessie --quiet -f array_field_addr.makefile project
@@ -829,12 +823,12 @@ why --project [...] why/array_field_addr.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/array_field_addr_po7.why">
-      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "60" begin = "14" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "60" begin = "15" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/array_field_addr_po8.why">
-      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "60" begin = "14" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "60" begin = "15" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -860,12 +854,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/array_field_addr_po4.why">
-      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "74" begin = "13" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "74" begin = "14" end = "46"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_field_addr_po5.why">
-      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "74" begin = "13" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "74" begin = "14" end = "46"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

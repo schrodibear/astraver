@@ -61,22 +61,22 @@ tag pP = {
 }
 
 unit zero(U[..] x)
-  requires (C_15 : ((C_16 : (\offset_min(x) <= 0)) &&
-                     (C_17 : (\offset_max(x) >= 0))));
+  requires (_C_15 : ((_C_16 : (\offset_min(x) <= 0)) &&
+                      (_C_17 : (\offset_max(x) >= 0))));
 behavior default:
-  ensures (C_14 : true);
+  ensures (_C_14 : true);
 {  
-   {  (C_3 : ((C_2 : (C_1 : (x :> iP[0])).iM) = 0));
+   {  (_C_3 : ((_C_2 : (_C_1 : (x :> iP[0])).iM) = 0));
       
       {  
-         (assert for default: (C_4 : (jessie : ((x :> iP[0]).iM == 0))));
+         (assert for default: (_C_4 : (jessie : ((x :> iP[0]).iM == 0))));
          ()
       };
-      (C_8 : ((C_7 : (C_6 : (x :> pP[0])).pM) = (C_5 : (new intP[1]))));
-      (C_12 : ((C_11 : (C_10 : (C_9 : (x :> pP[0])).pM).intM) = 1));
+      (_C_8 : ((_C_7 : (_C_6 : (x :> pP[0])).pM) = (_C_5 : (new intP[1]))));
+      (_C_12 : ((_C_11 : (_C_10 : (_C_9 : (x :> pP[0])).pM).intM) = 1));
       
       {  
-         (assert for default: (C_13 : (jessie : ((x :> pP[0]).pM.intM == 1))));
+         (assert for default: (_C_13 : (jessie : ((x :> pP[0]).pM.intM == 1))));
          ()
       };
       

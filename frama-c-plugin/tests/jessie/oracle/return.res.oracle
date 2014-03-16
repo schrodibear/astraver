@@ -51,18 +51,18 @@ intP[..] q;
 
 intP[..] f()
 behavior default:
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 {  
    (var int32 x);
    
    (var intP[..] __retres);
    
    {  (if (x != 0) then 
-      {  (C_1 : (__retres = p));
+      {  (_C_1 : (__retres = p));
          
          (goto return_label)
       } else ());
-      (C_2 : (__retres = p));
+      (_C_2 : (__retres = p));
       (return_label : 
       (return __retres))
    }
@@ -70,11 +70,11 @@ behavior default:
 
 charP[..] cast_null()
 behavior default:
-  ensures (C_5 : true);
+  ensures (_C_5 : true);
 {  
    (var charP[..] __retres_0);
    
-   {  (C_4 : (__retres_0 = null));
+   {  (_C_4 : (__retres_0 = null));
       
       (return __retres_0)
    }
@@ -515,10 +515,9 @@ let cast_null_ensures_default =
   try
    begin
      (let __retres_0 = ref (any_pointer void) in
-     (C_4:
      begin
        (let _jessie_<somenum> = (__retres_0 := null) in void);
-      (return := !__retres_0); (raise Return) end)); absurd  end with
+      (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let cast_null_safety =
@@ -529,10 +528,9 @@ let cast_null_safety =
   try
    begin
      (let __retres_0 = ref (any_pointer void) in
-     (C_4:
      begin
        (let _jessie_<somenum> = (__retres_0 := null) in void);
-      (return := !__retres_0); (raise Return) end)); absurd  end with
+      (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 let f_ensures_default =
@@ -548,15 +546,11 @@ let f_ensures_default =
       begin
         (if ((neq_int_ (integer_of_int32 x_0)) (0))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> = (__retres := p) in void);
-          (raise (Return_label_exc void)) end) else void);
-       (C_2:
-       begin
-         (let _jessie_<somenum> = (__retres := p) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<somenum> ->
+          (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := p) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -573,15 +567,11 @@ let f_safety =
       begin
         (if ((neq_int_ (integer_of_int32 x_0)) (0))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> = (__retres := p) in void);
-          (raise (Return_label_exc void)) end) else void);
-       (C_2:
-       begin
-         (let _jessie_<somenum> = (__retres := p) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<somenum> ->
+          (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := p) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 

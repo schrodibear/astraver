@@ -40,13 +40,13 @@ tag voidP = {
 type voidP = [voidP]
 
 unit f(int32 n_1)
-  requires (C_7 : (n_1 >= 0));
+  requires (_C_7 : (n_1 >= 0));
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
    (var int32 i);
    
-   {  (C_1 : (i = 0));
+   {  (_C_1 : (i = 0));
       
       loop 
       while (true)
@@ -56,12 +56,12 @@ behavior default:
             
             {  
                {  
-                  (assert for default: (C_2 : (jessie : ((0 <= i) &&
-                                                          (i < n_1)))));
+                  (assert for default: (_C_2 : (jessie : ((0 <= i) &&
+                                                           (i < n_1)))));
                   ()
                }
             };
-            (C_5 : (i = (C_4 : ((C_3 : (i + 1)) :> int32))))
+            (_C_5 : (i = (_C_4 : ((_C_3 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -427,7 +427,6 @@ let f_ensures_default =
    begin
      (let i = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (loop_2:
@@ -446,17 +445,11 @@ let f_ensures_default =
                { (JC_<somenum>:
                  (le_int((0), integer_of_int32(i))
                  and lt_int(integer_of_int32(i), integer_of_int32(n_1)))) };
-               void);
-               begin
-                 void;
-                (C_5:
-                begin
-                  (i := (C_4:
-                        (safe_int32_of_integer_ (C_3:
-                                                ((add_int (integer_of_int32 !i)) (1))))));
-                 !i end) end end in void); (raise (Loop_continue_exc void))
-            end with Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+               void); void;
+               (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { (JC_<somenum>: true) }
@@ -469,7 +462,6 @@ let f_safety =
    begin
      (let i = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (loop_1:
@@ -488,17 +480,12 @@ let f_safety =
                  { (JC_<somenum>:
                    (le_int((0), integer_of_int32(i))
                    and lt_int(integer_of_int32(i), integer_of_int32(n_1)))) } ];
-               begin
-                 void;
-                (C_5:
-                begin
-                  (i := (C_4:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_3:
-                                           ((add_int (integer_of_int32 !i)) (1)))))));
-                 !i end) end end in void); (raise (Loop_continue_exc void))
-            end with Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+               void;
+               (i := (JC_<somenum>:
+                     (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { true }
@@ -531,11 +518,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/loop_po5.why">
-      <location file = "why/loop.why" line = "406" begin = "44" end = "45"/>
+      <location file = "why/loop.why" line = "398" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/loop_po6.why">
-      <location file = "why/loop.why" line = "406" begin = "44" end = "45"/>
+      <location file = "why/loop.why" line = "398" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

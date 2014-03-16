@@ -77,40 +77,40 @@ axiomatic NbOcc {
 }
 
 int32 count(longP[..] a, int32 n_1, int32 d)
-  requires (C_20 : ((C_21 : (0 <= n_1)) &&
-                     ((C_23 : (\offset_min(a) <= 0)) &&
-                       (C_24 : (\offset_max(a) >= (n_1 - 1))))));
+  requires (_C_20 : ((_C_21 : (0 <= n_1)) &&
+                      ((_C_23 : (\offset_min(a) <= 0)) &&
+                        (_C_24 : (\offset_max(a) >= (n_1 - 1))))));
 behavior default:
-  ensures (C_19 : (\result ==
-                    nb_occ{Here}(\at(a,Old), 0, (\at(n_1,Old) - 1),
-                                 \at(d,Old))));
+  ensures (_C_19 : (\result ==
+                     nb_occ{Here}(\at(a,Old), 0, (\at(n_1,Old) - 1),
+                                  \at(d,Old))));
 {  
    (var int32 c);
    
    (var int32 i);
    
-   {  (C_1 : (c = 0));
+   {  (_C_1 : (c = 0));
       
-      {  (C_2 : (i = 0));
+      {  (_C_2 : (i = 0));
          
          loop 
          behavior default:
-           invariant (C_4 : (((C_6 : (0 <= c)) &&
-                               ((C_8 : (c <= i)) && (C_9 : (i <= n_1)))) &&
-                              (C_10 : (c == nb_occ{Here}(a, 0, (i - 1), d)))));
-         variant (C_3 : (n_1 - i));
+           invariant (_C_4 : (((_C_6 : (0 <= c)) &&
+                                ((_C_8 : (c <= i)) && (_C_9 : (i <= n_1)))) &&
+                               (_C_10 : (c == nb_occ{Here}(a, 0, (i - 1), d)))));
+         variant (_C_3 : (n_1 - i));
          while (true)
          {  
             {  (if (i < n_1) then () else 
                (goto while_0_break));
                
-               {  (if ((C_15 : (C_14 : (a + i)).longM) == d) then (C_13 : (c = 
-                                                                  (C_12 : (
-                                                                  (C_11 : 
-                                                                  (c +
+               {  (if ((_C_15 : (_C_14 : (a + i)).longM) == d) then (_C_13 : (c = 
+                                                                    (_C_12 : (
+                                                                    (_C_11 : 
+                                                                    (c +
                                                                     1)) :> int32)))) else ())
                };
-               (C_18 : (i = (C_17 : ((C_16 : (i + 1)) :> int32))))
+               (_C_18 : (i = (_C_17 : ((_C_16 : (i + 1)) :> int32))))
             }
          };
          (while_0_break : ())
@@ -624,11 +624,9 @@ let count_ensures_default =
    begin
      (let c = ref (any_int32 void) in
      (let i = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (c := (safe_int32_of_integer_ (0))) in void);
       try
-       (C_2:
        begin
          (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
         (loop_2:
@@ -653,28 +651,19 @@ let count_ensures_default =
                begin
                  (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
                  then void else (raise (Goto_while_0_break_exc void)));
-                (if ((eq_int_ (integer_of_int32 (C_15:
-                                                ((safe_acc_ longP_longM_a_2) 
-                                                 (C_14:
-                                                 ((shift a) (integer_of_int32 !i))))))) 
+                (if ((eq_int_ (integer_of_int32 ((safe_acc_ longP_longM_a_2) 
+                                                 ((shift a) (integer_of_int32 !i))))) 
                      (integer_of_int32 d))
                 then
                  (let _jessie_<somenum> =
-                 (C_13:
-                 (c := (C_12:
-                       (safe_int32_of_integer_ (C_11:
-                                               ((add_int (integer_of_int32 !c)) (1))))))) in
+                 (c := (safe_int32_of_integer_ ((add_int (integer_of_int32 !c)) (1)))) in
                  void) else void);
-                (C_18:
-                begin
-                  (i := (C_17:
-                        (safe_int32_of_integer_ (C_16:
-                                                ((add_int (integer_of_int32 !i)) (1))))));
-                 !i end) end in void); (raise (Loop_continue_exc void)) end
-             with Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) with
+                (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+                !i end in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc _jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end with
        Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end;
-      (return := !c); (raise Return) end))); absurd  end with Return ->
+      (return := !c); (raise Return) end)); absurd  end with Return ->
    !return end))
   { (JC_<somenum>:
     (integer_of_int32(result) = nb_occ(a, (0),
@@ -695,11 +684,9 @@ let count_safety =
    begin
      (let c = ref (any_int32 void) in
      (let i = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (c := (safe_int32_of_integer_ (0))) in void);
       try
-       (C_2:
        begin
          (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
         (loop_1:
@@ -726,30 +713,22 @@ let count_safety =
                begin
                  (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
                  then void else (raise (Goto_while_0_break_exc void)));
-                (if ((eq_int_ (integer_of_int32 (C_15:
-                                                (JC_<somenum>:
+                (if ((eq_int_ (integer_of_int32 (JC_<somenum>:
                                                 ((((offset_acc_ longP_a_2_alloc_table) longP_longM_a_2) a) 
-                                                 (integer_of_int32 !i)))))) 
+                                                 (integer_of_int32 !i))))) 
                      (integer_of_int32 d))
                 then
                  (let _jessie_<somenum> =
-                 (C_13:
-                 (c := (C_12:
-                       (JC_<somenum>:
-                       (int32_of_integer_ (C_11:
-                                          ((add_int (integer_of_int32 !c)) (1)))))))) in
+                 (c := (JC_<somenum>:
+                       (int32_of_integer_ ((add_int (integer_of_int32 !c)) (1))))) in
                  void) else void);
-                (C_18:
-                begin
-                  (i := (C_17:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_16:
-                                           ((add_int (integer_of_int32 !i)) (1)))))));
-                 !i end) end in void); (raise (Loop_continue_exc void)) end
-             with Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) with
+                (i := (JC_<somenum>:
+                      (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+                !i end in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc _jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end with
        Goto_while_0_break_exc _jessie_<somenum> -> (while_0_break: void) end;
-      (return := !c); (raise Return) end))); absurd  end with Return ->
+      (return := !c); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 
 

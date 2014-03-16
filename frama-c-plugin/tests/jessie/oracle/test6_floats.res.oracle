@@ -46,24 +46,25 @@ axiomatic KillingProp {
 }
 
 double comput_seq(double u0, double u1, int32 N)
-  requires (C_28 : (((((C_32 : (2 <= N)) && (C_33 : (N <= 0x1p26))) &&
-                       (C_34 : (\double_exact(u0) == (u0 :> real)))) &&
-                      (C_35 : (\double_exact(u1) == (u1 :> real)))) &&
-                     (C_36 : (\forall integer k;
-                               (((0 <= k) && (k <= N)) ==>
-                                 (\real_abs(((u0 :> real) +
-                                              (k *
-                                                ((u1 :> real) - (u0 :> real))))) <=
-                                   1))))));
+  requires (_C_28 : (((((_C_32 : (2 <= N)) && (_C_33 : (N <= 0x1p26))) &&
+                        (_C_34 : (\double_exact(u0) == (u0 :> real)))) &&
+                       (_C_35 : (\double_exact(u1) == (u1 :> real)))) &&
+                      (_C_36 : (\forall integer k;
+                                 (((0 <= k) && (k <= N)) ==>
+                                   (\real_abs(((u0 :> real) +
+                                                (k *
+                                                  ((u1 :> real) -
+                                                    (u0 :> real))))) <=
+                                     1))))));
 behavior default:
-  ensures (C_25 : ((C_26 : (\double_exact(\result) ==
-                             ((\at(u0,Old) :> real) +
-                               (\at(N,Old) *
-                                 ((\at(u1,Old) :> real) -
-                                   (\at(u0,Old) :> real)))))) &&
-                    (C_27 : (\double_round_error(\result) <=
-                              (((\at(N,Old) * (\at(N,Old) + 1)) / 2.0) *
-                                0x1p-53)))));
+  ensures (_C_25 : ((_C_26 : (\double_exact(\result) ==
+                               ((\at(u0,Old) :> real) +
+                                 (\at(N,Old) *
+                                   ((\at(u1,Old) :> real) -
+                                     (\at(u0,Old) :> real)))))) &&
+                     (_C_27 : (\double_round_error(\result) <=
+                                (((\at(N,Old) * (\at(N,Old) + 1)) / 2.0) *
+                                  0x1p-53)))));
 {  
    (var int32 i);
    
@@ -73,41 +74,41 @@ behavior default:
    
    (var double tmp);
    
-   {  (C_1 : (uprev = u0));
-      (C_2 : (ucur = u1));
-      (C_3 : (i = 2));
+   {  (_C_1 : (uprev = u0));
+      (_C_2 : (ucur = u1));
+      (_C_3 : (i = 2));
       
       loop 
       behavior default:
-        invariant (C_5 : (((((C_9 : (2 <= i)) && (C_10 : (i <= (N + 1)))) &&
-                             (C_11 : (\double_exact(ucur) ==
-                                       ((u0 :> real) +
-                                         ((i - 1) *
-                                           ((u1 :> real) - (u0 :> real))))))) &&
-                            (C_12 : (\double_exact(uprev) ==
-                                      ((u0 :> real) +
-                                        ((i - 2) *
-                                          ((u1 :> real) - (u0 :> real))))))) &&
-                           (C_13 : my_killing_prop(ucur, uprev, (i - 2)))));
-      variant (C_4 : (N - i));
+        invariant (_C_5 : (((((_C_9 : (2 <= i)) && (_C_10 : (i <= (N + 1)))) &&
+                              (_C_11 : (\double_exact(ucur) ==
+                                         ((u0 :> real) +
+                                           ((i - 1) *
+                                             ((u1 :> real) - (u0 :> real))))))) &&
+                             (_C_12 : (\double_exact(uprev) ==
+                                        ((u0 :> real) +
+                                          ((i - 2) *
+                                            ((u1 :> real) - (u0 :> real))))))) &&
+                            (_C_13 : my_killing_prop(ucur, uprev, (i - 2)))));
+      variant (_C_4 : (N - i));
       while (true)
       {  
          {  (if (i <= N) then () else 
             (goto while_0_break));
             
-            {  (C_16 : (tmp = (C_15 : ((C_14 : (2 :> double)) * ucur))));
+            {  (_C_16 : (tmp = (_C_15 : ((_C_14 : (2 :> double)) * ucur))));
                
                {  
-                  (assert for default: (C_17 : (jessie : ((tmp :> real) ==
-                                                           (2 *
-                                                             (ucur :> real))))));
+                  (assert for default: (_C_17 : (jessie : ((tmp :> real) ==
+                                                            (2 *
+                                                              (ucur :> real))))));
                   ()
                };
-               (C_19 : (tmp = (C_18 : (tmp - uprev))));
-               (C_20 : (uprev = ucur));
-               (C_21 : (ucur = tmp))
+               (_C_19 : (tmp = (_C_18 : (tmp - uprev))));
+               (_C_20 : (uprev = ucur));
+               (_C_21 : (ucur = tmp))
             };
-            (C_24 : (i = (C_23 : ((C_22 : (i + 1)) :> int32))))
+            (_C_24 : (i = (_C_23 : ((_C_22 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -533,85 +534,64 @@ let comput_seq_ensures_default =
      (let ucur = ref (any_double void) in
      (let tmp = ref (any_double void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (uprev := u0) in void);
-       (C_2:
+       (let _jessie_<somenum> = (ucur := u1) in void);
+       (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (2))) in void);
+       (loop_2:
        begin
-         (let _jessie_<somenum> = (ucur := u1) in void);
-        (C_3:
-        begin
-          (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (2))) in void);
-         (loop_2:
-         begin
-           while true do
-           { invariant
-               (JC_<somenum>:
-               ((JC_<somenum>: le_int((2), integer_of_int32(i)))
-               and ((JC_<somenum>:
-                    le_int(integer_of_int32(i),
-                    add_int(integer_of_int32(N), (1))))
-                   and ((JC_<somenum>:
-                        (double_exact(ucur) = add_real(double_value(u0),
-                                              mul_real(real_of_int(sub_int(
-                                                                   integer_of_int32(i),
-                                                                   (1))),
-                                              sub_real(double_value(u1),
-                                              double_value(u0))))))
-                       and ((JC_<somenum>:
-                            (double_exact(uprev) = add_real(double_value(u0),
-                                                   mul_real(real_of_int(
-                                                            sub_int(integer_of_int32(i),
-                                                            (2))),
-                                                   sub_real(double_value(u1),
-                                                   double_value(u0))))))
-                           and (JC_<somenum>:
-                               my_killing_prop(ucur, uprev,
-                               sub_int(integer_of_int32(i), (2))))))))) 
-              }
+         while true do
+         { invariant
+             (JC_<somenum>:
+             ((JC_<somenum>: le_int((2), integer_of_int32(i)))
+             and ((JC_<somenum>:
+                  le_int(integer_of_int32(i),
+                  add_int(integer_of_int32(N), (1))))
+                 and ((JC_<somenum>:
+                      (double_exact(ucur) = add_real(double_value(u0),
+                                            mul_real(real_of_int(sub_int(
+                                                                 integer_of_int32(i),
+                                                                 (1))),
+                                            sub_real(double_value(u1),
+                                            double_value(u0))))))
+                     and ((JC_<somenum>:
+                          (double_exact(uprev) = add_real(double_value(u0),
+                                                 mul_real(real_of_int(
+                                                          sub_int(integer_of_int32(i),
+                                                          (2))),
+                                                 sub_real(double_value(u1),
+                                                 double_value(u0))))))
+                         and (JC_<somenum>:
+                             my_killing_prop(ucur, uprev,
+                             sub_int(integer_of_int32(i), (2))))))))) 
+            }
+          begin
+            [ { } unit { true } ];
+           try
             begin
-              [ { } unit { true } ];
-             try
+              (let _jessie_<somenum> =
               begin
-                (let _jessie_<somenum> =
-                begin
-                  (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 N))
-                  then void else (raise (Goto_while_0_break_exc void)));
+                (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 N))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (let _jessie_<somenum> =
+               begin
                  (let _jessie_<somenum> =
-                 (C_16:
-                 begin
-                   (let _jessie_<somenum> =
-                   (tmp := (C_15:
-                           (JC_<somenum>:
-                           (((mul_double_safe nearest_even) (C_14:
-                                                            (double_of_real_exact 2.0))) !ucur)))) in
-                   void);
-                  (assert
-                  { (JC_<somenum>:
-                    (double_value(tmp) = mul_real(2.0, double_value(ucur)))) };
-                  void);
-                  begin
-                    void;
-                   (C_19:
-                   begin
-                     (let _jessie_<somenum> =
-                     (tmp := (C_18:
-                             (JC_<somenum>:
-                             (((sub_double_safe nearest_even) !tmp) !uprev)))) in
-                     void);
-                    (C_20:
-                    begin
-                      (let _jessie_<somenum> = (uprev := !ucur) in void);
-                     (C_21: begin   (ucur := !tmp); !ucur end) end) end) end
-                 end) in void);
-                 (C_24:
-                 begin
-                   (i := (C_23:
-                         (safe_int32_of_integer_ (C_22:
-                                                 ((add_int (integer_of_int32 !i)) (1))))));
-                  !i end) end in void); (raise (Loop_continue_exc void)) end
-              with Loop_continue_exc _jessie_<somenum> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end) end) end) end) with
+                 (tmp := (JC_<somenum>:
+                         (((mul_double_safe nearest_even) (double_of_real_exact 2.0)) !ucur))) in
+                 void);
+                (assert
+                { (JC_<somenum>:
+                  (double_value(tmp) = mul_real(2.0, double_value(ucur)))) };
+                void); void;
+                (let _jessie_<somenum> =
+                (tmp := (JC_<somenum>:
+                        (((sub_double_safe nearest_even) !tmp) !uprev))) in
+                void); (let _jessie_<somenum> = (uprev := !ucur) in void);
+                (ucur := !tmp); !ucur end in void);
+               (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !ucur); (raise Return) end) end))));
     absurd  end with Return -> !return end))
@@ -651,87 +631,65 @@ let comput_seq_safety =
      (let ucur = ref (any_double void) in
      (let tmp = ref (any_double void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (uprev := u0) in void);
-       (C_2:
+       (let _jessie_<somenum> = (ucur := u1) in void);
+       (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (2))) in void);
+       (loop_1:
        begin
-         (let _jessie_<somenum> = (ucur := u1) in void);
-        (C_3:
-        begin
-          (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (2))) in void);
-         (loop_1:
-         begin
-           while true do
-           { invariant (JC_<somenum>: true)
-             variant (JC_<somenum> : sub_int(integer_of_int32(N),
-                              integer_of_int32(i))) }
+         while true do
+         { invariant (JC_<somenum>: true)
+           variant (JC_<somenum> : sub_int(integer_of_int32(N), integer_of_int32(i))) }
+          begin
+            [ { } unit reads i,ucur,uprev
+              { (JC_<somenum>:
+                ((JC_<somenum>: le_int((2), integer_of_int32(i)))
+                and ((JC_<somenum>:
+                     le_int(integer_of_int32(i),
+                     add_int(integer_of_int32(N), (1))))
+                    and ((JC_<somenum>:
+                         (double_exact(ucur) = add_real(double_value(u0),
+                                               mul_real(real_of_int(sub_int(
+                                                                    integer_of_int32(i),
+                                                                    (1))),
+                                               sub_real(double_value(u1),
+                                               double_value(u0))))))
+                        and ((JC_<somenum>:
+                             (double_exact(uprev) = add_real(double_value(u0),
+                                                    mul_real(real_of_int(
+                                                             sub_int(
+                                                             integer_of_int32(i),
+                                                             (2))),
+                                                    sub_real(double_value(u1),
+                                                    double_value(u0))))))
+                            and (JC_<somenum>:
+                                my_killing_prop(ucur, uprev,
+                                sub_int(integer_of_int32(i), (2))))))))) } ];
+           try
             begin
-              [ { } unit reads i,ucur,uprev
-                { (JC_<somenum>:
-                  ((JC_<somenum>: le_int((2), integer_of_int32(i)))
-                  and ((JC_<somenum>:
-                       le_int(integer_of_int32(i),
-                       add_int(integer_of_int32(N), (1))))
-                      and ((JC_<somenum>:
-                           (double_exact(ucur) = add_real(double_value(u0),
-                                                 mul_real(real_of_int(
-                                                          sub_int(integer_of_int32(i),
-                                                          (1))),
-                                                 sub_real(double_value(u1),
-                                                 double_value(u0))))))
-                          and ((JC_<somenum>:
-                               (double_exact(uprev) = add_real(double_value(u0),
-                                                      mul_real(real_of_int(
-                                                               sub_int(
-                                                               integer_of_int32(i),
-                                                               (2))),
-                                                      sub_real(double_value(u1),
-                                                      double_value(u0))))))
-                              and (JC_<somenum>:
-                                  my_killing_prop(ucur, uprev,
-                                  sub_int(integer_of_int32(i), (2))))))))) } ];
-             try
+              (let _jessie_<somenum> =
               begin
-                (let _jessie_<somenum> =
-                begin
-                  (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 N))
-                  then void else (raise (Goto_while_0_break_exc void)));
+                (if ((le_int_ (integer_of_int32 !i)) (integer_of_int32 N))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (let _jessie_<somenum> =
+               begin
                  (let _jessie_<somenum> =
-                 (C_16:
-                 begin
-                   (let _jessie_<somenum> =
-                   (tmp := (C_15:
-                           (JC_<somenum>:
-                           (((mul_double nearest_even) (C_14:
-                                                       (double_of_real_exact 2.0))) !ucur)))) in
-                   void);
-                  [ { } unit reads tmp,ucur
-                    { (JC_<somenum>:
-                      (double_value(tmp) = mul_real(2.0, double_value(ucur)))) } ];
-                  begin
-                    void;
-                   (C_19:
-                   begin
-                     (let _jessie_<somenum> =
-                     (tmp := (C_18:
-                             (JC_<somenum>:
-                             (((sub_double nearest_even) !tmp) !uprev)))) in
-                     void);
-                    (C_20:
-                    begin
-                      (let _jessie_<somenum> = (uprev := !ucur) in void);
-                     (C_21: begin   (ucur := !tmp); !ucur end) end) end) end
-                 end) in void);
-                 (C_24:
-                 begin
-                   (i := (C_23:
-                         (JC_<somenum>:
-                         (int32_of_integer_ (C_22:
-                                            ((add_int (integer_of_int32 !i)) (1)))))));
-                  !i end) end in void); (raise (Loop_continue_exc void)) end
-              with Loop_continue_exc _jessie_<somenum> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end) end) end) end) with
+                 (tmp := (JC_<somenum>:
+                         (((mul_double nearest_even) (double_of_real_exact 2.0)) !ucur))) in
+                 void);
+                [ { } unit reads tmp,ucur
+                  { (JC_<somenum>:
+                    (double_value(tmp) = mul_real(2.0, double_value(ucur)))) } ];
+                void;
+                (let _jessie_<somenum> =
+                (tmp := (JC_<somenum>: (((sub_double nearest_even) !tmp) !uprev))) in
+                void); (let _jessie_<somenum> = (uprev := !ucur) in void);
+                (ucur := !tmp); !ucur end in void);
+               (i := (JC_<somenum>:
+                     (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !ucur); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { true }

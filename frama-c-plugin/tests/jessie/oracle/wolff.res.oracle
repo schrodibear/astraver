@@ -43,13 +43,13 @@ int32 x;
 
 int32 f()
 behavior default:
-  ensures (C_5 : true);
+  ensures (_C_5 : true);
 {  
    (var int32 tmp);
    
    {  
-      {  (C_1 : (tmp = x));
-         (C_4 : (x = (C_3 : ((C_2 : (x + 1)) :> int32))));
+      {  (_C_1 : (tmp = x));
+         (_C_4 : (x = (_C_3 : ((_C_2 : (x + 1)) :> int32))));
          ()
       };
       
@@ -59,7 +59,7 @@ behavior default:
 
 int32 main()
 behavior default:
-  ensures (C_14 : true);
+  ensures (_C_14 : true);
 {  
    (var int32 y);
    
@@ -67,22 +67,22 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (C_6 : (x = 3));
-      (C_8 : (tmp_0 = (C_7 : f())));
-      (if (tmp_0 != 0) then (C_11 : (y = 1)) else 
-      {  (C_9 : (y = 5));
+   {  (_C_6 : (x = 3));
+      (_C_8 : (tmp_0 = (_C_7 : f())));
+      (if (tmp_0 != 0) then (_C_11 : (y = 1)) else 
+      {  (_C_9 : (y = 5));
          
          {  
-            (assert for default: (C_10 : (jessie : false)));
+            (assert for default: (_C_10 : (jessie : false)));
             ()
          }
       });
       
       {  
-         (assert for default: (C_12 : (jessie : (y == 1))));
+         (assert for default: (_C_12 : (jessie : (y == 1))));
          ()
       };
-      (C_13 : (__retres = 0));
+      (_C_13 : (__retres = 0));
       
       (return __retres)
    }
@@ -448,17 +448,12 @@ let f_ensures_default =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (tmp := !x_0) in void);
-      (C_4:
-      begin
-        (let _jessie_<somenum> =
-        (x_0 := (C_3:
-                (safe_int32_of_integer_ (C_2:
-                                        ((add_int (integer_of_int32 !x_0)) (1)))))) in
-        void); void; (return := !tmp); (raise Return) end) end)); absurd  end
-   with Return -> !return end)) { (JC_<somenum>: true) }
+      (let _jessie_<somenum> =
+      (x_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 !x_0)) (1)))) in
+      void); void; (return := !tmp); (raise Return) end); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -468,18 +463,13 @@ let f_safety =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (tmp := !x_0) in void);
-      (C_4:
-      begin
-        (let _jessie_<somenum> =
-        (x_0 := (C_3:
-                (JC_<somenum>:
-                (int32_of_integer_ (C_2:
-                                   ((add_int (integer_of_int32 !x_0)) (1))))))) in
-        void); void; (return := !tmp); (raise Return) end) end)); absurd  end
-   with Return -> !return end)) { true }
+      (let _jessie_<somenum> =
+      (x_0 := (JC_<somenum>:
+              (int32_of_integer_ ((add_int (integer_of_int32 !x_0)) (1))))) in
+      void); void; (return := !tmp); (raise Return) end); absurd  end with
+   Return -> !return end)) { true }
 
 let main_ensures_default =
  fun (tt : unit) ->
@@ -491,29 +481,19 @@ let main_ensures_default =
      (let y = ref (any_int32 void) in
      (let tmp_0 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_6:
      begin
        (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (3))) in void);
-      (C_8:
-      begin
-        (let _jessie_<somenum> = (tmp_0 := (C_7: (JC_<somenum>: (f void)))) in void);
-       (if ((neq_int_ (integer_of_int32 !tmp_0)) (0))
-       then
-        (let _jessie_<somenum> = (C_11: (y := (safe_int32_of_integer_ (1)))) in
-        void)
-       else
-        (C_9:
-        begin
-          (let _jessie_<somenum> = (y := (safe_int32_of_integer_ (5))) in void);
-         (assert { (JC_<somenum>: (false = true)) }; void); void end));
-       (assert { (JC_<somenum>: (integer_of_int32(y) = (1))) }; void);
+      (let _jessie_<somenum> = (tmp_0 := (JC_<somenum>: (f void))) in void);
+      (if ((neq_int_ (integer_of_int32 !tmp_0)) (0))
+      then (let _jessie_<somenum> = (y := (safe_int32_of_integer_ (1))) in void)
+      else
        begin
-         void;
-        (C_13:
-        begin
-          (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-          void); (return := !__retres); (raise Return) end) end end) end))));
-    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
+         (let _jessie_<somenum> = (y := (safe_int32_of_integer_ (5))) in void);
+        (assert { (JC_<somenum>: (false = true)) }; void); void end);
+      (assert { (JC_<somenum>: (integer_of_int32(y) = (1))) }; void); void;
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -525,30 +505,19 @@ let main_safety =
      (let y = ref (any_int32 void) in
      (let tmp_0 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_6:
      begin
        (let _jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (3))) in void);
-      (C_8:
-      begin
-        (let _jessie_<somenum> = (tmp_0 := (C_7: (JC_<somenum>: (f_requires void)))) in
-        void);
-       (if ((neq_int_ (integer_of_int32 !tmp_0)) (0))
-       then
-        (let _jessie_<somenum> = (C_11: (y := (safe_int32_of_integer_ (1)))) in
-        void)
-       else
-        (C_9:
-        begin
-          (let _jessie_<somenum> = (y := (safe_int32_of_integer_ (5))) in void);
-         [ { } unit { (JC_<somenum>: (false = true)) } ]; void end));
-       [ { } unit reads y { (JC_<somenum>: (integer_of_int32(y) = (1))) } ];
+      (let _jessie_<somenum> = (tmp_0 := (JC_<somenum>: (f_requires void))) in void);
+      (if ((neq_int_ (integer_of_int32 !tmp_0)) (0))
+      then (let _jessie_<somenum> = (y := (safe_int32_of_integer_ (1))) in void)
+      else
        begin
-         void;
-        (C_13:
-        begin
-          (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-          void); (return := !__retres); (raise Return) end) end end) end))));
-    absurd  end with Return -> !return end)) { true }
+         (let _jessie_<somenum> = (y := (safe_int32_of_integer_ (5))) in void);
+        [ { } unit { (JC_<somenum>: (false = true)) } ]; void end);
+      [ { } unit reads y { (JC_<somenum>: (integer_of_int32(y) = (1))) } ]; void;
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C wolff.jessie --quiet -f wolff.makefile project

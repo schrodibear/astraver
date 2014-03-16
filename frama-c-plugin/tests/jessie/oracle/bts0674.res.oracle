@@ -41,7 +41,7 @@ type voidP = [voidP]
 
 unit helper(int32 x)
 behavior default:
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 {  
    {  
       switch (x) {

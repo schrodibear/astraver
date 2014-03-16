@@ -46,25 +46,27 @@ tag voidP = {
 type voidP = [voidP]
 
 int32 equal_int_array(intP[..] first1, intP[..] last1, intP[..] first2)
-  requires (C_24 : ((last1 - first1) > 0));
-  requires (C_21 : ((C_22 : (\offset_min(first1) <= 0)) &&
-                     (C_23 : (\offset_max(first1) >= ((last1 - first1) - 1)))));
-  requires (C_18 : ((C_19 : (\offset_min(first2) <= 0)) &&
-                     (C_20 : (\offset_max(first2) >= ((last1 - first1) - 1)))));
+  requires (_C_24 : ((last1 - first1) > 0));
+  requires (_C_21 : ((_C_22 : (\offset_min(first1) <= 0)) &&
+                      (_C_23 : (\offset_max(first1) >=
+                                 ((last1 - first1) - 1)))));
+  requires (_C_18 : ((_C_19 : (\offset_min(first2) <= 0)) &&
+                      (_C_20 : (\offset_max(first2) >=
+                                 ((last1 - first1) - 1)))));
 behavior default:
-  ensures (C_15 : true);
+  ensures (_C_15 : true);
 behavior equal:
-  ensures (C_16 : (\forall integer i_4;
-                    (((0 <= i_4) &&
-                       (i_4 < (\at(last1,Old) - \at(first1,Old)))) ==>
-                      ((\at(first1,Old) + i_4).intM ==
-                        (\at(first2,Old) + i_4).intM))));
+  ensures (_C_16 : (\forall integer i_4;
+                     (((0 <= i_4) &&
+                        (i_4 < (\at(last1,Old) - \at(first1,Old)))) ==>
+                       ((\at(first1,Old) + i_4).intM ==
+                         (\at(first2,Old) + i_4).intM))));
 behavior not_equal:
-  ensures (C_17 : (\exists integer i_3;
-                    (((0 <= i_3) &&
-                       (i_3 < (\at(last1,Old) - \at(first1,Old)))) ==>
-                      ((\at(first1,Old) + i_3).intM !=
-                        (\at(first2,Old) + i_3).intM))));
+  ensures (_C_17 : (\exists integer i_3;
+                     (((0 <= i_3) &&
+                        (i_3 < (\at(last1,Old) - \at(first1,Old)))) ==>
+                       ((\at(first1,Old) + i_3).intM !=
+                         (\at(first2,Old) + i_3).intM))));
 {  
    (var intP[..] a);
    
@@ -72,37 +74,37 @@ behavior not_equal:
    
    (var int32 __retres);
    
-   {  (C_1 : (a = first1));
+   {  (_C_1 : (a = first1));
       
       loop 
       behavior default:
-        invariant (C_4 : ((C_5 : ((a - first1) <= 0)) &&
-                           (C_6 : ((first1 - last1) <= 0))));
+        invariant (_C_4 : ((_C_5 : ((a - first1) <= 0)) &&
+                            (_C_6 : ((first1 - last1) <= 0))));
       behavior equal:
-        invariant (C_3 : (\forall integer i_1;
-                           (((0 <= k) && (k < (first1 - a))) ==>
-                             ((first1 + k).intM == (first2 + k).intM))));
+        invariant (_C_3 : (\forall integer i_1;
+                            (((0 <= k) && (k < (first1 - a))) ==>
+                              ((first1 + k).intM == (first2 + k).intM))));
       behavior not_equal:
-        invariant (C_2 : (\exists integer i_2;
-                           (((0 <= k) && (k < (first1 - a))) ==>
-                             ((first1 + k).intM != (first2 + k).intM))));
+        invariant (_C_2 : (\exists integer i_2;
+                            (((0 <= k) && (k < (first1 - a))) ==>
+                              ((first1 + k).intM != (first2 + k).intM))));
       while (true)
       {  
          {  (if (first1 != last1) then () else 
             (goto while_0_break));
             
-            {  (if ((C_9 : first1.intM) != (C_8 : first2.intM)) then 
-               {  (C_7 : (__retres = 0));
+            {  (if ((_C_9 : first1.intM) != (_C_8 : first2.intM)) then 
+               {  (_C_7 : (__retres = 0));
                   
                   (goto return_label)
                } else ());
-               (C_11 : (first1 = (C_10 : (first1 + 1))));
-               (C_13 : (first2 = (C_12 : (first2 + 1))))
+               (_C_11 : (first1 = (_C_10 : (first1 + 1))));
+               (_C_13 : (first2 = (_C_12 : (first2 + 1))))
             }
          }
       };
       (while_0_break : ());
-      (C_14 : (__retres = 1));
+      (_C_14 : (__retres = 1));
       (return_label : 
       (return __retres))
    }
@@ -610,7 +612,6 @@ let equal_int_array_ensures_default =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<somenum> = (a := !mutable_first1) in void);
           (loop_2:
@@ -629,35 +630,24 @@ let equal_int_array_ensures_default =
                  begin
                    (if ((safe_neq_pointer !mutable_first1) last1) then void
                    else (raise (Goto_while_0_break_exc void)));
-                  (if ((neq_int_ (integer_of_int32 (C_9:
-                                                   ((safe_acc_ intP_intM_first1_1) !mutable_first1)))) 
-                       (integer_of_int32 (C_8:
-                                         ((safe_acc_ intP_intM_first2_3) !mutable_first2))))
+                  (if ((neq_int_ (integer_of_int32 ((safe_acc_ intP_intM_first1_1) !mutable_first1))) 
+                       (integer_of_int32 ((safe_acc_ intP_intM_first2_3) !mutable_first2)))
                   then
-                   (C_7:
                    begin
                      (let _jessie_<somenum> =
                      (__retres := (safe_int32_of_integer_ (0))) in void);
-                    (raise (Return_label_exc void)) end) else void);
-                  (C_11:
-                  begin
-                    (let _jessie_<somenum> =
-                    (mutable_first1 := (C_10: ((shift !mutable_first1) (1)))) in
-                    void);
-                   (C_13:
-                   begin
-                     (mutable_first2 := (C_12: ((shift !mutable_first2) (1))));
-                    !mutable_first2 end) end) end in void);
+                    (raise (Return_label_exc void)) end else void);
+                  (let _jessie_<somenum> =
+                  (mutable_first1 := ((shift !mutable_first1) (1))) in void);
+                  (mutable_first2 := ((shift !mutable_first2) (1)));
+                  !mutable_first2 end in void);
                 (raise (Loop_continue_exc void)) end with
                Loop_continue_exc _jessie_<somenum> -> void end end done;
-           (raise (Goto_while_0_break_exc void)) end) end) with
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<somenum> ->
          (let _jessie_<somenum> =
          (while_0_break:
-         begin
-           void;
-          (C_14:
-          begin   (__retres := (safe_int32_of_integer_ (1))); !__retres end)
+         begin   void; (__retres := (safe_int32_of_integer_ (1))); !__retres
          end) in void) end; (raise (Return_label_exc void)) end with
       Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
@@ -688,7 +678,6 @@ let equal_int_array_ensures_equal =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<somenum> = (a := !mutable_first1) in void);
           (loop_3:
@@ -719,35 +708,24 @@ let equal_int_array_ensures_equal =
                  begin
                    (if ((safe_neq_pointer !mutable_first1) last1) then void
                    else (raise (Goto_while_0_break_exc void)));
-                  (if ((neq_int_ (integer_of_int32 (C_9:
-                                                   ((safe_acc_ intP_intM_first1_1) !mutable_first1)))) 
-                       (integer_of_int32 (C_8:
-                                         ((safe_acc_ intP_intM_first2_3) !mutable_first2))))
+                  (if ((neq_int_ (integer_of_int32 ((safe_acc_ intP_intM_first1_1) !mutable_first1))) 
+                       (integer_of_int32 ((safe_acc_ intP_intM_first2_3) !mutable_first2)))
                   then
-                   (C_7:
                    begin
                      (let _jessie_<somenum> =
                      (__retres := (safe_int32_of_integer_ (0))) in void);
-                    (raise (Return_label_exc void)) end) else void);
-                  (C_11:
-                  begin
-                    (let _jessie_<somenum> =
-                    (mutable_first1 := (C_10: ((shift !mutable_first1) (1)))) in
-                    void);
-                   (C_13:
-                   begin
-                     (mutable_first2 := (C_12: ((shift !mutable_first2) (1))));
-                    !mutable_first2 end) end) end in void);
+                    (raise (Return_label_exc void)) end else void);
+                  (let _jessie_<somenum> =
+                  (mutable_first1 := ((shift !mutable_first1) (1))) in void);
+                  (mutable_first2 := ((shift !mutable_first2) (1)));
+                  !mutable_first2 end in void);
                 (raise (Loop_continue_exc void)) end with
                Loop_continue_exc _jessie_<somenum> -> void end end done;
-           (raise (Goto_while_0_break_exc void)) end) end) with
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<somenum> ->
          (let _jessie_<somenum> =
          (while_0_break:
-         begin
-           void;
-          (C_14:
-          begin   (__retres := (safe_int32_of_integer_ (1))); !__retres end)
+         begin   void; (__retres := (safe_int32_of_integer_ (1))); !__retres
          end) in void) end; (raise (Return_label_exc void)) end with
       Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
@@ -783,7 +761,6 @@ let equal_int_array_ensures_not_equal =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<somenum> = (a := !mutable_first1) in void);
           (loop_4:
@@ -814,35 +791,24 @@ let equal_int_array_ensures_not_equal =
                  begin
                    (if ((safe_neq_pointer !mutable_first1) last1) then void
                    else (raise (Goto_while_0_break_exc void)));
-                  (if ((neq_int_ (integer_of_int32 (C_9:
-                                                   ((safe_acc_ intP_intM_first1_1) !mutable_first1)))) 
-                       (integer_of_int32 (C_8:
-                                         ((safe_acc_ intP_intM_first2_3) !mutable_first2))))
+                  (if ((neq_int_ (integer_of_int32 ((safe_acc_ intP_intM_first1_1) !mutable_first1))) 
+                       (integer_of_int32 ((safe_acc_ intP_intM_first2_3) !mutable_first2)))
                   then
-                   (C_7:
                    begin
                      (let _jessie_<somenum> =
                      (__retres := (safe_int32_of_integer_ (0))) in void);
-                    (raise (Return_label_exc void)) end) else void);
-                  (C_11:
-                  begin
-                    (let _jessie_<somenum> =
-                    (mutable_first1 := (C_10: ((shift !mutable_first1) (1)))) in
-                    void);
-                   (C_13:
-                   begin
-                     (mutable_first2 := (C_12: ((shift !mutable_first2) (1))));
-                    !mutable_first2 end) end) end in void);
+                    (raise (Return_label_exc void)) end else void);
+                  (let _jessie_<somenum> =
+                  (mutable_first1 := ((shift !mutable_first1) (1))) in void);
+                  (mutable_first2 := ((shift !mutable_first2) (1)));
+                  !mutable_first2 end in void);
                 (raise (Loop_continue_exc void)) end with
                Loop_continue_exc _jessie_<somenum> -> void end end done;
-           (raise (Goto_while_0_break_exc void)) end) end) with
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<somenum> ->
          (let _jessie_<somenum> =
          (while_0_break:
-         begin
-           void;
-          (C_14:
-          begin   (__retres := (safe_int32_of_integer_ (1))); !__retres end)
+         begin   void; (__retres := (safe_int32_of_integer_ (1))); !__retres
          end) in void) end; (raise (Return_label_exc void)) end with
       Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
@@ -878,7 +844,6 @@ let equal_int_array_safety =
      try
       begin
         try
-         (C_1:
          begin
            (let _jessie_<somenum> = (a := !mutable_first1) in void);
           (loop_1:
@@ -897,37 +862,26 @@ let equal_int_array_safety =
                  begin
                    (if ((neq_pointer !mutable_first1) last1) then void
                    else (raise (Goto_while_0_break_exc void)));
-                  (if ((neq_int_ (integer_of_int32 (C_9:
-                                                   (JC_<somenum>:
-                                                   (((acc_ intP_first1_1_alloc_table) intP_intM_first1_1) !mutable_first1))))) 
-                       (integer_of_int32 (C_8:
-                                         (JC_<somenum>:
-                                         (((acc_ intP_first2_3_alloc_table) intP_intM_first2_3) !mutable_first2)))))
+                  (if ((neq_int_ (integer_of_int32 (JC_<somenum>:
+                                                   (((acc_ intP_first1_1_alloc_table) intP_intM_first1_1) !mutable_first1)))) 
+                       (integer_of_int32 (JC_<somenum>:
+                                         (((acc_ intP_first2_3_alloc_table) intP_intM_first2_3) !mutable_first2))))
                   then
-                   (C_7:
                    begin
                      (let _jessie_<somenum> =
                      (__retres := (safe_int32_of_integer_ (0))) in void);
-                    (raise (Return_label_exc void)) end) else void);
-                  (C_11:
-                  begin
-                    (let _jessie_<somenum> =
-                    (mutable_first1 := (C_10: ((shift !mutable_first1) (1)))) in
-                    void);
-                   (C_13:
-                   begin
-                     (mutable_first2 := (C_12: ((shift !mutable_first2) (1))));
-                    !mutable_first2 end) end) end in void);
+                    (raise (Return_label_exc void)) end else void);
+                  (let _jessie_<somenum> =
+                  (mutable_first1 := ((shift !mutable_first1) (1))) in void);
+                  (mutable_first2 := ((shift !mutable_first2) (1)));
+                  !mutable_first2 end in void);
                 (raise (Loop_continue_exc void)) end with
                Loop_continue_exc _jessie_<somenum> -> void end end done;
-           (raise (Goto_while_0_break_exc void)) end) end) with
+           (raise (Goto_while_0_break_exc void)) end) end with
          Goto_while_0_break_exc _jessie_<somenum> ->
          (let _jessie_<somenum> =
          (while_0_break:
-         begin
-           void;
-          (C_14:
-          begin   (__retres := (safe_int32_of_integer_ (1))); !__retres end)
+         begin   void; (__retres := (safe_int32_of_integer_ (1))); !__retres
          end) in void) end; (raise (Return_label_exc void)) end with
       Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
@@ -959,7 +913,7 @@ why --project [...] why/weber6.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/weber6_po11.why">
-      <location file = "why/weber6.why" line = "788" begin = "24" end = "59"/>
+      <location file = "why/weber6.why" line = "751" begin = "24" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -984,11 +938,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber6_po16.why">
-      <location file = "why/weber6.why" line = "777" begin = "47" end = "48"/>
+      <location file = "why/weber6.why" line = "740" begin = "47" end = "48"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber6_po17.why">
-      <location file = "why/weber6.why" line = "777" begin = "47" end = "48"/>
+      <location file = "why/weber6.why" line = "740" begin = "47" end = "48"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

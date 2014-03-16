@@ -46,9 +46,9 @@ int32 b;
 unit f()
 behavior default:
   assigns b;
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
-   {  (C_1 : (a = 1));
+   {  (_C_1 : (a = 1));
       
       (return ())
    }
@@ -409,10 +409,9 @@ let f_ensures_default =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_1:
    begin
      (let _jessie_<somenum> = (a := (safe_int32_of_integer_ (1))) in void);
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: (a = a@)) }
 
 let f_safety =
@@ -420,10 +419,9 @@ let f_safety =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_1:
    begin
      (let _jessie_<somenum> = (a := (safe_int32_of_integer_ (1))) in void);
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C jeannin.jessie --quiet -f jeannin.makefile project

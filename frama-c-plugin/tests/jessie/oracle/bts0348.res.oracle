@@ -41,11 +41,11 @@ type voidP = [voidP]
 
 uint32 b1(uint32 x, uint32 y)
 behavior default:
-  ensures (C_4 : true);
+  ensures (_C_4 : true);
 {  
    (var uint32 __retres);
    
-   {  (C_3 : (__retres = (C_2 : ((C_1 : (x ^ y)) :> uint32))));
+   {  (_C_3 : (__retres = (_C_2 : ((_C_1 : (x ^ y)) :> uint32))));
       
       (return __retres)
    }
@@ -53,11 +53,11 @@ behavior default:
 
 uint32 b2(uint32 x_0, uint32 y_0)
 behavior default:
-  ensures (C_8 : true);
+  ensures (_C_8 : true);
 {  
    (var uint32 __retres_0);
    
-   {  (C_7 : (__retres_0 = (C_6 : ((C_5 : (x_0 & y_0)) :> uint32))));
+   {  (_C_7 : (__retres_0 = (_C_6 : ((_C_5 : (x_0 & y_0)) :> uint32))));
       
       (return __retres_0)
    }
@@ -65,11 +65,11 @@ behavior default:
 
 uint32 b3(uint32 x_1, uint32 y_1)
 behavior default:
-  ensures (C_12 : true);
+  ensures (_C_12 : true);
 {  
    (var uint32 __retres_1);
    
-   {  (C_11 : (__retres_1 = (C_10 : ((C_9 : (x_1 | y_1)) :> uint32))));
+   {  (_C_11 : (__retres_1 = (_C_10 : ((_C_9 : (x_1 | y_1)) :> uint32))));
       
       (return __retres_1)
    }
@@ -77,11 +77,11 @@ behavior default:
 
 uint32 b4(uint32 x_2)
 behavior default:
-  ensures (C_16 : true);
+  ensures (_C_16 : true);
 {  
    (var uint32 __retres_2);
    
-   {  (C_15 : (__retres_2 = (C_14 : ((C_13 : (~ x_2)) :> uint32))));
+   {  (_C_15 : (__retres_2 = (_C_14 : ((_C_13 : (~ x_2)) :> uint32))));
       
       (return __retres_2)
    }
@@ -453,14 +453,11 @@ let b1_ensures_default =
   try
    begin
      (let __retres = ref (any_uint32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_2:
-                    (safe_uint32_of_integer_ (C_1:
-                                             ((bw_xor (integer_of_uint32 x_0)) 
-                                              (integer_of_uint32 y)))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (__retres := (safe_uint32_of_integer_ ((bw_xor (integer_of_uint32 x_0)) 
+                                              (integer_of_uint32 y)))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let b1_safety =
@@ -471,15 +468,12 @@ let b1_safety =
   try
    begin
      (let __retres = ref (any_uint32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_2:
-                    (JC_<somenum>:
-                    (uint32_of_integer_ (C_1:
-                                        ((bw_xor (integer_of_uint32 x_0)) 
-                                         (integer_of_uint32 y))))))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (__retres := (JC_<somenum>:
+                    (uint32_of_integer_ ((bw_xor (integer_of_uint32 x_0)) 
+                                         (integer_of_uint32 y))))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 let b2_ensures_default =
@@ -490,14 +484,11 @@ let b2_ensures_default =
   try
    begin
      (let __retres_0 = ref (any_uint32 void) in
-     (C_7:
      begin
        (let _jessie_<somenum> =
-       (__retres_0 := (C_6:
-                      (safe_uint32_of_integer_ (C_5:
-                                               ((bw_and (integer_of_uint32 x_0_0)) 
-                                                (integer_of_uint32 y_0)))))) in
-       void); (return := !__retres_0); (raise Return) end)); absurd  end with
+       (__retres_0 := (safe_uint32_of_integer_ ((bw_and (integer_of_uint32 x_0_0)) 
+                                                (integer_of_uint32 y_0)))) in
+       void); (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let b2_safety =
@@ -508,15 +499,12 @@ let b2_safety =
   try
    begin
      (let __retres_0 = ref (any_uint32 void) in
-     (C_7:
      begin
        (let _jessie_<somenum> =
-       (__retres_0 := (C_6:
-                      (JC_<somenum>:
-                      (uint32_of_integer_ (C_5:
-                                          ((bw_and (integer_of_uint32 x_0_0)) 
-                                           (integer_of_uint32 y_0))))))) in
-       void); (return := !__retres_0); (raise Return) end)); absurd  end with
+       (__retres_0 := (JC_<somenum>:
+                      (uint32_of_integer_ ((bw_and (integer_of_uint32 x_0_0)) 
+                                           (integer_of_uint32 y_0))))) in
+       void); (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 let b3_ensures_default =
@@ -527,14 +515,11 @@ let b3_ensures_default =
   try
    begin
      (let __retres_1 = ref (any_uint32 void) in
-     (C_11:
      begin
        (let _jessie_<somenum> =
-       (__retres_1 := (C_10:
-                      (safe_uint32_of_integer_ (C_9:
-                                               ((bw_or (integer_of_uint32 x_1)) 
-                                                (integer_of_uint32 y_1)))))) in
-       void); (return := !__retres_1); (raise Return) end)); absurd  end with
+       (__retres_1 := (safe_uint32_of_integer_ ((bw_or (integer_of_uint32 x_1)) 
+                                                (integer_of_uint32 y_1)))) in
+       void); (return := !__retres_1); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let b3_safety =
@@ -545,15 +530,12 @@ let b3_safety =
   try
    begin
      (let __retres_1 = ref (any_uint32 void) in
-     (C_11:
      begin
        (let _jessie_<somenum> =
-       (__retres_1 := (C_10:
-                      (JC_<somenum>:
-                      (uint32_of_integer_ (C_9:
-                                          ((bw_or (integer_of_uint32 x_1)) 
-                                           (integer_of_uint32 y_1))))))) in
-       void); (return := !__retres_1); (raise Return) end)); absurd  end with
+       (__retres_1 := (JC_<somenum>:
+                      (uint32_of_integer_ ((bw_or (integer_of_uint32 x_1)) 
+                                           (integer_of_uint32 y_1))))) in
+       void); (return := !__retres_1); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 let b4_ensures_default =
@@ -564,13 +546,10 @@ let b4_ensures_default =
   try
    begin
      (let __retres_2 = ref (any_uint32 void) in
-     (C_15:
      begin
        (let _jessie_<somenum> =
-       (__retres_2 := (C_14:
-                      (safe_uint32_of_integer_ (C_13:
-                                               (bw_compl (integer_of_uint32 x_2)))))) in
-       void); (return := !__retres_2); (raise Return) end)); absurd  end with
+       (__retres_2 := (safe_uint32_of_integer_ (bw_compl (integer_of_uint32 x_2)))) in
+       void); (return := !__retres_2); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let b4_safety =
@@ -581,14 +560,11 @@ let b4_safety =
   try
    begin
      (let __retres_2 = ref (any_uint32 void) in
-     (C_15:
      begin
        (let _jessie_<somenum> =
-       (__retres_2 := (C_14:
-                      (JC_<somenum>:
-                      (uint32_of_integer_ (C_13:
-                                          (bw_compl (integer_of_uint32 x_2))))))) in
-       void); (return := !__retres_2); (raise Return) end)); absurd  end with
+       (__retres_2 := (JC_<somenum>:
+                      (uint32_of_integer_ (bw_compl (integer_of_uint32 x_2))))) in
+       void); (return := !__retres_2); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 

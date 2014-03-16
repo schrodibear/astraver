@@ -59,7 +59,7 @@ type I = 0..2
 
 unit f()
 behavior default:
-  ensures (C_1 : ((4 :> E) == 4));
+  ensures (_C_1 : ((4 :> E) == 4));
 {  
    {  
       (return ())
@@ -68,41 +68,41 @@ behavior default:
 
 int32 g(E e)
 behavior default:
-  ensures (C_4 : ((C_5 : (1 <= \result)) && (C_6 : (\result <= 4))));
+  ensures (_C_4 : ((_C_5 : (1 <= \result)) && (_C_6 : (\result <= 4))));
 {  
    (var int32 __retres);
    
-   {  (C_3 : (__retres = (C_2 : (e :> int32))));
+   {  (_C_3 : (__retres = (_C_2 : (e :> int32))));
       
       (return __retres)
    }
 }
 
 unit h(enum___anonenum_color_1P[..] t_0)
-  requires (C_13 : ((C_14 : (\offset_min(t_0) <= 0)) &&
-                     (C_15 : (\offset_max(t_0) >= 9))));
+  requires (_C_13 : ((_C_14 : (\offset_min(t_0) <= 0)) &&
+                      (_C_15 : (\offset_max(t_0) >= 9))));
 behavior default:
-  ensures (C_12 : ((((\at(t_0,Old) + 2).enum___anonenum_color_1M ==
-                      (0 :> __anonenum_color_1)) ||
+  ensures (_C_12 : ((((\at(t_0,Old) + 2).enum___anonenum_color_1M ==
+                       (0 :> __anonenum_color_1)) ||
+                      ((\at(t_0,Old) + 2).enum___anonenum_color_1M ==
+                        (1 :> __anonenum_color_1))) ||
                      ((\at(t_0,Old) + 2).enum___anonenum_color_1M ==
-                       (1 :> __anonenum_color_1))) ||
-                    ((\at(t_0,Old) + 2).enum___anonenum_color_1M ==
-                      (2 :> __anonenum_color_1))));
+                       (2 :> __anonenum_color_1))));
 {  
-   {  (C_11 : ((C_10 : (C_9 : (t_0 + 2)).enum___anonenum_color_1M) = 
-      (C_8 : (C_7 : (t_0 + 0)).enum___anonenum_color_1M)));
+   {  (_C_11 : ((_C_10 : (_C_9 : (t_0 + 2)).enum___anonenum_color_1M) = 
+      (_C_8 : (_C_7 : (t_0 + 0)).enum___anonenum_color_1M)));
       
       (return ())
    }
 }
 
 unit enum_as_array_index(intP[..] t)
-  requires (C_20 : ((C_21 : (\offset_min(t) <= (0 :> I))) &&
-                     (C_22 : (\offset_max(t) >= (2 :> I)))));
+  requires (_C_20 : ((_C_21 : (\offset_min(t) <= (0 :> I))) &&
+                      (_C_22 : (\offset_max(t) >= (2 :> I)))));
 behavior default:
-  ensures (C_19 : ((\at(t,Old) + (1 :> I)).intM == 0));
+  ensures (_C_19 : ((\at(t,Old) + (1 :> I)).intM == 0));
 {  
-   {  (C_18 : ((C_17 : (C_16 : (t + 1)).intM) = 0));
+   {  (_C_18 : ((_C_17 : (_C_16 : (t + 1)).intM) = 0));
       
       (return ())
    }
@@ -817,7 +817,6 @@ let enum_as_array_index_ensures_default =
         integer_of_I(I_of_integer((2))))))) }
   (init:
   try
-   (C_18:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let _jessie_<somenum> = t in
@@ -825,7 +824,7 @@ let enum_as_array_index_ensures_default =
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
      (((safe_upd_ intP_intM_t_2) _jessie_<somenum>) _jessie_<somenum>))))));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM_t_2,
                       shift(t, integer_of_I(I_of_integer((1)))))) = (0))) }
@@ -841,7 +840,6 @@ let enum_as_array_index_safety =
         integer_of_I(I_of_integer((2))))))) }
   (init:
   try
-   (C_18:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let _jessie_<somenum> = t in
@@ -850,7 +848,7 @@ let enum_as_array_index_safety =
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (1)) in
      (JC_<somenum>:
      ((((upd_ intP_t_2_alloc_table) intP_intM_t_2) _jessie_<somenum>) _jessie_<somenum>)))))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let f_ensures_default =
  fun (tt : unit) ->
@@ -874,12 +872,11 @@ let g_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_2: (safe_int32_of_integer_ (integer_of_E e)))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end))
+       (__retres := (safe_int32_of_integer_ (integer_of_E e))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_int((1), integer_of_int32(result)))
     and (JC_<somenum>: le_int(integer_of_int32(result), (4))))) }
@@ -892,12 +889,11 @@ let g_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_2: (JC_<somenum>: (int32_of_integer_ (integer_of_E e))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { true }
+       (__retres := (JC_<somenum>: (int32_of_integer_ (integer_of_E e)))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 let h_ensures_default =
  fun (t_0 : enum___anonenum_color_1P pointer) (enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1 : (enum___anonenum_color_1P, __anonenum_color_1) memory ref) (enum___anonenum_color_1P_t_0_1_alloc_table : enum___anonenum_color_1P alloc_table) ->
@@ -909,18 +905,16 @@ let h_ensures_default =
         (9))))) }
   (init:
   try
-   (C_11:
    begin
      (let _jessie_<somenum> =
-     (C_8:
      ((safe_acc_ !enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) 
-      (C_7: ((shift t_0) (0))))) in
+      ((shift t_0) (0))) in
      (let _jessie_<somenum> = t_0 in
      (let _jessie_<somenum> = (2) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
      (((safe_upd_ enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) _jessie_<somenum>) _jessie_<somenum>))))));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
                                     shift(t_0, (2)))) = integer_of___anonenum_color_1(
@@ -942,19 +936,17 @@ let h_safety =
         (9))))) }
   (init:
   try
-   (C_11:
    begin
      (let _jessie_<somenum> =
-     (C_8:
      (JC_<somenum>:
-     (((acc_ enum___anonenum_color_1P_t_0_1_alloc_table) !enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) t_0))) in
+     (((acc_ enum___anonenum_color_1P_t_0_1_alloc_table) !enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) t_0)) in
      (let _jessie_<somenum> = t_0 in
      (let _jessie_<somenum> = (2) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
      (JC_<somenum>:
      ((((upd_ enum___anonenum_color_1P_t_0_1_alloc_table) enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) _jessie_<somenum>) _jessie_<somenum>)))))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C enum.jessie --quiet -f enum.makefile project
@@ -980,12 +972,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/enum_po12.why">
-      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "86" begin = "15" end = "126"/>
+      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "86" begin = "16" end = "131"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/enum_po13.why">
-      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "86" begin = "15" end = "126"/>
+      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "86" begin = "16" end = "131"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1035,12 +1027,12 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/enum_po2.why">
-      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "99" begin = "15" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "99" begin = "16" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/enum_po3.why">
-      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "99" begin = "15" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "99" begin = "16" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

@@ -46,41 +46,42 @@ tag voidP = {
 type voidP = [voidP]
 
 unit fill(intP[..] first, intP[..] last, int32 value)
-  requires (C_17 : ((((C_20 : (\offset_min(first) <= 0)) &&
-                       (C_21 : (\offset_max(first) >= ((last - first) - 1)))) &&
-                      (C_22 : ((first - last) <= 0))) &&
-                     (C_23 : (\base_block(first) == \base_block(last)))));
+  requires (_C_17 : ((((_C_20 : (\offset_min(first) <= 0)) &&
+                        (_C_21 : (\offset_max(first) >= ((last - first) - 1)))) &&
+                       (_C_22 : ((first - last) <= 0))) &&
+                      (_C_23 : (\base_block(first) == \base_block(last)))));
 behavior default:
-  ensures (C_15 : true);
+  ensures (_C_15 : true);
 behavior is_not_empty:
-  ensures (C_16 : (\forall integer i_1;
-                    (((0 <= i_1) && (i_1 < (\at(last,Old) - \at(first,Old)))) ==>
-                      ((\at(first,Old) + i_1).intM == \at(value,Old)))));
+  ensures (_C_16 : (\forall integer i_1;
+                     (((0 <= i_1) &&
+                        (i_1 < (\at(last,Old) - \at(first,Old)))) ==>
+                       ((\at(first,Old) + i_1).intM == \at(value,Old)))));
 {  
    (var intP[..] it);
    
    (var intP[..] tmp);
    
-   {  (C_1 : (it = first));
+   {  (_C_1 : (it = first));
       
       loop 
       behavior default:
-        invariant (C_3 : ((((C_6 : ((first - it) <= 0)) &&
-                             (C_7 : ((it - last) <= 0))) &&
-                            (C_8 : (\base_block(first) == \base_block(it)))) &&
-                           (C_9 : (\base_block(last) == \base_block(it)))));
+        invariant (_C_3 : ((((_C_6 : ((first - it) <= 0)) &&
+                              (_C_7 : ((it - last) <= 0))) &&
+                             (_C_8 : (\base_block(first) == \base_block(it)))) &&
+                            (_C_9 : (\base_block(last) == \base_block(it)))));
       behavior default:
-        invariant (C_2 : (\forall integer k;
-                           (((0 <= k) && (k < (it - first))) ==>
-                             ((first + k).intM == value))));
+        invariant (_C_2 : (\forall integer k;
+                            (((0 <= k) && (k < (it - first))) ==>
+                              ((first + k).intM == value))));
       while (true)
       {  
          {  (if (it != last) then () else 
             (goto while_0_break));
             
-            {  (C_10 : (tmp = it));
-               (C_12 : (it = (C_11 : (it + 1))));
-               (C_14 : ((C_13 : tmp.intM) = value))
+            {  (_C_10 : (tmp = it));
+               (_C_12 : (it = (_C_11 : (it + 1))));
+               (_C_14 : ((_C_13 : tmp.intM) = value))
             }
          }
       };
@@ -555,7 +556,6 @@ let fill_ensures_default =
      (let it = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (it := first) in void);
        (loop_2:
@@ -580,22 +580,16 @@ let fill_ensures_default =
               begin
                 (if ((safe_neq_pointer !it) last) then void
                 else (raise (Goto_while_0_break_exc void)));
-               (C_10:
+               (let _jessie_<somenum> = (tmp := !it) in void);
+               (let _jessie_<somenum> = (it := ((shift !it) (1))) in void);
+               (let _jessie_<somenum> = value in
                begin
-                 (let _jessie_<somenum> = (tmp := !it) in void);
-                (C_12:
-                begin
-                  (let _jessie_<somenum> = (it := (C_11: ((shift !it) (1)))) in
-                  void);
-                 (C_14:
-                 (let _jessie_<somenum> = value in
-                 begin
-                   (let _jessie_<somenum> = !tmp in
-                   (((safe_upd_ intP_intM_first_1) _jessie_<somenum>) _jessie_<somenum>));
-                  _jessie_<somenum> end)) end) end) end in void);
+                 (let _jessie_<somenum> = !tmp in
+                 (((safe_upd_ intP_intM_first_1) _jessie_<somenum>) _jessie_<somenum>));
+                _jessie_<somenum> end) end in void);
              (raise (Loop_continue_exc void)) end with
             Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end) { (JC_<somenum>: true) }
@@ -615,7 +609,6 @@ let fill_ensures_is_not_empty =
      (let it = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (it := first) in void);
        (loop_3:
@@ -640,22 +633,16 @@ let fill_ensures_is_not_empty =
               begin
                 (if ((safe_neq_pointer !it) last) then void
                 else (raise (Goto_while_0_break_exc void)));
-               (C_10:
+               (let _jessie_<somenum> = (tmp := !it) in void);
+               (let _jessie_<somenum> = (it := ((shift !it) (1))) in void);
+               (let _jessie_<somenum> = value in
                begin
-                 (let _jessie_<somenum> = (tmp := !it) in void);
-                (C_12:
-                begin
-                  (let _jessie_<somenum> = (it := (C_11: ((shift !it) (1)))) in
-                  void);
-                 (C_14:
-                 (let _jessie_<somenum> = value in
-                 begin
-                   (let _jessie_<somenum> = !tmp in
-                   (((safe_upd_ intP_intM_first_1) _jessie_<somenum>) _jessie_<somenum>));
-                  _jessie_<somenum> end)) end) end) end in void);
+                 (let _jessie_<somenum> = !tmp in
+                 (((safe_upd_ intP_intM_first_1) _jessie_<somenum>) _jessie_<somenum>));
+                _jessie_<somenum> end) end in void);
              (raise (Loop_continue_exc void)) end with
             Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end)
@@ -680,7 +667,6 @@ let fill_safety =
      (let it = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (it := first) in void);
        (loop_1:
@@ -705,22 +691,17 @@ let fill_safety =
               begin
                 (if ((neq_pointer !it) last) then void
                 else (raise (Goto_while_0_break_exc void)));
-               (C_10:
+               (let _jessie_<somenum> = (tmp := !it) in void);
+               (let _jessie_<somenum> = (it := ((shift !it) (1))) in void);
+               (let _jessie_<somenum> = value in
                begin
-                 (let _jessie_<somenum> = (tmp := !it) in void);
-                (C_12:
-                begin
-                  (let _jessie_<somenum> = (it := (C_11: ((shift !it) (1)))) in void);
-                 (C_14:
-                 (let _jessie_<somenum> = value in
-                 begin
-                   (let _jessie_<somenum> = !tmp in
-                   (JC_<somenum>:
-                   ((((upd_ intP_first_1_alloc_table) intP_intM_first_1) _jessie_<somenum>) _jessie_<somenum>)));
-                  _jessie_<somenum> end)) end) end) end in void);
+                 (let _jessie_<somenum> = !tmp in
+                 (JC_<somenum>:
+                 ((((upd_ intP_first_1_alloc_table) intP_intM_first_1) _jessie_<somenum>) _jessie_<somenum>)));
+                _jessie_<somenum> end) end in void);
              (raise (Loop_continue_exc void)) end with
             Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end) { true }
@@ -775,26 +756,26 @@ why --project [...] why/weber8.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/weber8_po12.why">
-      <location file = "why/weber8.why" line = "614" begin = "21" end = "43"/>
+      <location file = "why/weber8.why" line = "599" begin = "21" end = "43"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/weber8_po13.why">
-      <location file = "PPCHOME/tests/jessie/weber8.jessie/weber8.jc" line = "77" begin = "24" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/weber8.jessie/weber8.jc" line = "78" begin = "25" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber8_po14.why">
-      <location file = "PPCHOME/tests/jessie/weber8.jessie/weber8.jc" line = "77" begin = "24" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/weber8.jessie/weber8.jc" line = "78" begin = "25" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber8_po15.why">
-      <location file = "why/weber8.why" line = "597" begin = "44" end = "45"/>
+      <location file = "why/weber8.why" line = "582" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber8_po16.why">
-      <location file = "why/weber8.why" line = "597" begin = "44" end = "45"/>
+      <location file = "why/weber8.why" line = "582" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

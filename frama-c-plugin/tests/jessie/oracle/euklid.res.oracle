@@ -61,33 +61,33 @@ axiomatic Euklid {
 }
 
 int32 gcd(int32 A, int32 B)
-  requires (C_15 : ((C_16 : (A > 0)) && (C_17 : (B > 0))));
+  requires (_C_15 : ((_C_16 : (A > 0)) && (_C_17 : (B > 0))));
 behavior default:
-  ensures (C_14 : (\forall integer i_2;
-                    ((div(i_2, \at(A,Old)) && div(i_2, \at(B,Old))) <==>
-                      div(i_2, \result))));
+  ensures (_C_14 : (\forall integer i_2;
+                     ((div(i_2, \at(A,Old)) && div(i_2, \at(B,Old))) <==>
+                       div(i_2, \result))));
 {  
    (var int32 a);
    
    (var int32 b);
    
-   {  (C_1 : (a = A));
-      (C_2 : (b = B));
+   {  (_C_1 : (a = A));
+      (_C_2 : (b = B));
       
       loop 
       behavior default:
-        invariant (C_5 : ((C_6 : (a > 0)) && (C_7 : (b > 0))));
+        invariant (_C_5 : ((_C_6 : (a > 0)) && (_C_7 : (b > 0))));
       behavior default:
-        invariant (C_4 : (\forall integer i_1;
-                           ((div(i_1, a) && div(i_1, b)) <==>
-                             (div(i_1, A) && div(i_1, B)))));
-      variant (C_3 : (a + b));
+        invariant (_C_4 : (\forall integer i_1;
+                            ((div(i_1, a) && div(i_1, b)) <==>
+                              (div(i_1, A) && div(i_1, B)))));
+      variant (_C_3 : (a + b));
       while (true)
       {  
          {  (if (a != b) then () else 
             (goto while_0_break));
-            (if (a > b) then (C_13 : (a = (C_12 : ((C_11 : (a - b)) :> int32)))) else 
-            (C_10 : (b = (C_9 : ((C_8 : (b - a)) :> int32)))))
+            (if (a > b) then (_C_13 : (a = (_C_12 : ((_C_11 : (a - b)) :> int32)))) else 
+            (_C_10 : (b = (_C_9 : ((_C_8 : (b - a)) :> int32)))))
          }
       };
       (while_0_break : ());
@@ -490,53 +490,43 @@ let gcd_ensures_default =
      (let a_2 = ref (any_int32 void) in
      (let b_2 = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (a_2 := A) in void);
-       (C_2:
+       (let _jessie_<somenum> = (b_2 := B) in void);
+       (loop_2:
        begin
-         (let _jessie_<somenum> = (b_2 := B) in void);
-        (loop_2:
-        begin
-          while true do
-          { invariant
-              ((JC_<somenum>:
-               (forall i_1:int.
-                ((div(i_1, integer_of_int32(a_2))
-                 and div(i_1, integer_of_int32(b_2)))
-                <-> (div(i_1, integer_of_int32(A))
-                    and div(i_1, integer_of_int32(B))))))
-              and (JC_<somenum>:
-                  ((JC_<somenum>: gt_int(integer_of_int32(a_2), (0)))
-                  and (JC_<somenum>: gt_int(integer_of_int32(b_2), (0)))))) 
-             }
-           begin
-             [ { } unit { true } ];
-            try
-             begin
-               (let _jessie_<somenum> =
-               begin
-                 (if ((neq_int_ (integer_of_int32 !a_2)) (integer_of_int32 !b_2))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (if ((gt_int_ (integer_of_int32 !a_2)) (integer_of_int32 !b_2))
-                then
-                 (C_13:
-                 begin
-                   (a_2 := (C_12:
-                           (safe_int32_of_integer_ (C_11:
-                                                   ((sub_int (integer_of_int32 !a_2)) 
-                                                    (integer_of_int32 !b_2))))));
-                  !a_2 end)
-                else
-                 (C_10:
-                 begin
-                   (b_2 := (C_9:
-                           (safe_int32_of_integer_ (C_8:
-                                                   ((sub_int (integer_of_int32 !b_2)) 
-                                                    (integer_of_int32 !a_2))))));
-                  !b_2 end)) end in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+         while true do
+         { invariant
+             ((JC_<somenum>:
+              (forall i_1:int.
+               ((div(i_1, integer_of_int32(a_2))
+                and div(i_1, integer_of_int32(b_2)))
+               <-> (div(i_1, integer_of_int32(A))
+                   and div(i_1, integer_of_int32(B))))))
+             and (JC_<somenum>:
+                 ((JC_<somenum>: gt_int(integer_of_int32(a_2), (0)))
+                 and (JC_<somenum>: gt_int(integer_of_int32(b_2), (0))))))  }
+          begin
+            [ { } unit { true } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((neq_int_ (integer_of_int32 !a_2)) (integer_of_int32 !b_2))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (if ((gt_int_ (integer_of_int32 !a_2)) (integer_of_int32 !b_2))
+               then
+                begin
+                  (a_2 := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !a_2)) 
+                                                   (integer_of_int32 !b_2))));
+                 !a_2 end
+               else
+                begin
+                  (b_2 := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !b_2)) 
+                                                   (integer_of_int32 !a_2))));
+                 !b_2 end) end in void); (raise (Loop_continue_exc void)) end
+            with Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !a_2); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -557,56 +547,47 @@ let gcd_safety =
      (let a_2 = ref (any_int32 void) in
      (let b_2 = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (a_2 := A) in void);
-       (C_2:
+       (let _jessie_<somenum> = (b_2 := B) in void);
+       (loop_1:
        begin
-         (let _jessie_<somenum> = (b_2 := B) in void);
-        (loop_1:
-        begin
-          while true do
-          { invariant (JC_<somenum>: true)
-            variant (JC_<somenum> : add_int(integer_of_int32(a_2),
-                             integer_of_int32(b_2))) }
-           begin
-             [ { } unit reads a_2,b_2
-               { ((JC_<somenum>:
-                  (forall i_1:int.
-                   ((div(i_1, integer_of_int32(a_2))
-                    and div(i_1, integer_of_int32(b_2)))
-                   <-> (div(i_1, integer_of_int32(A))
-                       and div(i_1, integer_of_int32(B))))))
-                 and (JC_<somenum>:
-                     ((JC_<somenum>: gt_int(integer_of_int32(a_2), (0)))
-                     and (JC_<somenum>: gt_int(integer_of_int32(b_2), (0)))))) } ];
-            try
-             begin
-               (let _jessie_<somenum> =
-               begin
-                 (if ((neq_int_ (integer_of_int32 !a_2)) (integer_of_int32 !b_2))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (if ((gt_int_ (integer_of_int32 !a_2)) (integer_of_int32 !b_2))
-                then
-                 (C_13:
-                 begin
-                   (a_2 := (C_12:
-                           (JC_<somenum>:
-                           (int32_of_integer_ (C_11:
-                                              ((sub_int (integer_of_int32 !a_2)) 
-                                               (integer_of_int32 !b_2)))))));
-                  !a_2 end)
-                else
-                 (C_10:
-                 begin
-                   (b_2 := (C_9:
-                           (JC_<somenum>:
-                           (int32_of_integer_ (C_8:
-                                              ((sub_int (integer_of_int32 !b_2)) 
-                                               (integer_of_int32 !a_2)))))));
-                  !b_2 end)) end in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+         while true do
+         { invariant (JC_<somenum>: true)
+           variant (JC_<somenum> : add_int(integer_of_int32(a_2),
+                            integer_of_int32(b_2))) }
+          begin
+            [ { } unit reads a_2,b_2
+              { ((JC_<somenum>:
+                 (forall i_1:int.
+                  ((div(i_1, integer_of_int32(a_2))
+                   and div(i_1, integer_of_int32(b_2)))
+                  <-> (div(i_1, integer_of_int32(A))
+                      and div(i_1, integer_of_int32(B))))))
+                and (JC_<somenum>:
+                    ((JC_<somenum>: gt_int(integer_of_int32(a_2), (0)))
+                    and (JC_<somenum>: gt_int(integer_of_int32(b_2), (0)))))) } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((neq_int_ (integer_of_int32 !a_2)) (integer_of_int32 !b_2))
+                then void else (raise (Goto_while_0_break_exc void)));
+               (if ((gt_int_ (integer_of_int32 !a_2)) (integer_of_int32 !b_2))
+               then
+                begin
+                  (a_2 := (JC_<somenum>:
+                          (int32_of_integer_ ((sub_int (integer_of_int32 !a_2)) 
+                                              (integer_of_int32 !b_2)))));
+                 !a_2 end
+               else
+                begin
+                  (b_2 := (JC_<somenum>:
+                          (int32_of_integer_ ((sub_int (integer_of_int32 !b_2)) 
+                                              (integer_of_int32 !a_2)))));
+                 !b_2 end) end in void); (raise (Loop_continue_exc void)) end
+            with Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !a_2); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }

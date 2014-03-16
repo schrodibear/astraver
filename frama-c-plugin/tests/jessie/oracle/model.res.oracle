@@ -48,32 +48,32 @@ type S = [S]
 
 unit test(S[..] s_3)
 behavior default:
-  ensures (C_9 : true);
+  ensures (_C_9 : true);
 {  
    (var int32 tmp);
    
-   {  (C_1 : reset(s_3));
-      (C_2 : inc(s_3));
+   {  (_C_1 : reset(s_3));
+      (_C_2 : inc(s_3));
       
       {  
-         (assert for default: (C_3 : (jessie : (s_3.foo > 0))));
+         (assert for default: (_C_3 : (jessie : (s_3.foo > 0))));
          ()
       };
       
       loop 
-      variant (C_4 : s_3.foo);
+      variant (_C_4 : s_3.foo);
       while (true)
       {  
-         {  (C_6 : (tmp = (C_5 : is_pos(s_3))));
+         {  (_C_6 : (tmp = (_C_5 : is_pos(s_3))));
             (if (tmp != 0) then () else 
             (goto while_0_break));
-            (C_7 : dec(s_3))
+            (_C_7 : dec(s_3))
          }
       };
       (while_0_break : ());
       
       {  
-         (assert for default: (C_8 : (jessie : (s_3.foo <= 0))));
+         (assert for default: (_C_8 : (jessie : (s_3.foo <= 0))));
          ()
       };
       
@@ -82,60 +82,61 @@ behavior default:
 }
 
 unit reset(S[..] s_2)
-  requires (C_12 : ((C_13 : (\offset_min(s_2) <= 0)) &&
-                     (C_14 : (\offset_max(s_2) >= 0))));
+  requires (_C_12 : ((_C_13 : (\offset_min(s_2) <= 0)) &&
+                      (_C_14 : (\offset_max(s_2) >= 0))));
 behavior default:
   assigns s_2.bar;
-  ensures (C_11 : (\at(s_2,Old).foo == 0));
+  ensures (_C_11 : (\at(s_2,Old).foo == 0));
 {  
-   {  (if ((C_10 : s_2.bar) == 0) then () else ());
+   {  (if ((_C_10 : s_2.bar) == 0) then () else ());
       
       (return ())
    }
 }
 
 unit inc(S[..] s_0)
-  requires (C_21 : ((C_22 : (\offset_min(s_0) <= 0)) &&
-                     (C_23 : (\offset_max(s_0) >= 0))));
+  requires (_C_21 : ((_C_22 : (\offset_min(s_0) <= 0)) &&
+                      (_C_23 : (\offset_max(s_0) >= 0))));
 behavior default:
   assigns s_0.bar;
-  ensures (C_20 : (\at(s_0,Old).foo > \at(s_0.foo,Old)));
+  ensures (_C_20 : (\at(s_0,Old).foo > \at(s_0.foo,Old)));
 {  
-   {  (C_19 : ((C_18 : s_0.bar) = (C_17 : ((C_16 : ((C_15 : s_0.bar) + 5)) :> int32))));
+   {  (_C_19 : ((_C_18 : s_0.bar) = (_C_17 : ((_C_16 : ((_C_15 : s_0.bar) +
+                                                         5)) :> int32))));
       
       (return ())
    }
 }
 
 unit dec(S[..] s)
-  requires (C_30 : ((C_31 : (\offset_min(s) <= 0)) &&
-                     (C_32 : (\offset_max(s) >= 0))));
+  requires (_C_30 : ((_C_31 : (\offset_min(s) <= 0)) &&
+                      (_C_32 : (\offset_max(s) >= 0))));
 behavior default:
   assigns s.bar;
-  ensures (C_29 : (\at(s,Old).foo < \at(s.foo,Old)));
+  ensures (_C_29 : (\at(s,Old).foo < \at(s.foo,Old)));
 {  
-   {  (C_28 : ((C_27 : s.bar) = (C_26 : ((C_25 : ((C_24 : s.bar) - 1)) :> int32))));
+   {  (_C_28 : ((_C_27 : s.bar) = (_C_26 : ((_C_25 : ((_C_24 : s.bar) - 1)) :> int32))));
       
       (return ())
    }
 }
 
 int32 is_pos(S[..] s_1)
-  requires (C_39 : ((C_40 : (\offset_min(s_1) <= 0)) &&
-                     (C_41 : (\offset_max(s_1) >= 0))));
+  requires (_C_39 : ((_C_40 : (\offset_min(s_1) <= 0)) &&
+                      (_C_41 : (\offset_max(s_1) >= 0))));
 behavior default:
   assigns \nothing;
-  ensures (C_36 : true);
+  ensures (_C_36 : true);
 behavior is_true:
   assumes (s_1.foo > 0);
-  ensures (C_37 : (\result == 1));
+  ensures (_C_37 : (\result == 1));
 behavior is_false:
   assumes (s_1.foo <= 0);
-  ensures (C_38 : (\result == 0));
+  ensures (_C_38 : (\result == 0));
 {  
    (var int32 tmp_0);
    
-   {  (if ((C_35 : s_1.bar) > 0) then (C_34 : (tmp_0 = 1)) else (C_33 : (tmp_0 = 0)));
+   {  (if ((_C_35 : s_1.bar) > 0) then (_C_34 : (tmp_0 = 1)) else (_C_33 : (tmp_0 = 0)));
       
       (return tmp_0)
    }
@@ -680,16 +681,12 @@ let dec_ensures_default =
     and (JC_<somenum>: ge_int(offset_max(S_s_4_alloc_table, s_1), (0))))) }
   (init:
   try
-   (C_28:
    begin
      (let _jessie_<somenum> =
-     (C_26:
-     (safe_int32_of_integer_ (C_25:
-                             ((sub_int (integer_of_int32 (C_24:
-                                                         ((safe_acc_ !S_bar_s_4) s_1)))) (1))))) in
+     (safe_int32_of_integer_ ((sub_int (integer_of_int32 ((safe_acc_ !S_bar_s_4) s_1))) (1))) in
      (let _jessie_<somenum> = s_1 in
      (((safe_upd_ S_bar_s_4) _jessie_<somenum>) _jessie_<somenum>))); (raise Return);
-    (raise Return) end) with Return -> void end)
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: lt_int(select(S_foo_s_4, s_1), select(S_foo_s_4, s_1)))
     and (JC_<somenum>:
@@ -703,18 +700,14 @@ let dec_safety =
     and (JC_<somenum>: ge_int(offset_max(S_s_4_alloc_table, s_1), (0))))) }
   (init:
   try
-   (C_28:
    begin
      (let _jessie_<somenum> =
-     (C_26:
      (JC_<somenum>:
-     (int32_of_integer_ (C_25:
-                        ((sub_int (integer_of_int32 (C_24:
-                                                    (JC_<somenum>:
-                                                    (((acc_ S_s_4_alloc_table) !S_bar_s_4) s_1))))) (1)))))) in
+     (int32_of_integer_ ((sub_int (integer_of_int32 (JC_<somenum>:
+                                                    (((acc_ S_s_4_alloc_table) !S_bar_s_4) s_1)))) (1)))) in
      (let _jessie_<somenum> = s_1 in
      (JC_<somenum>: ((((upd_ S_s_4_alloc_table) S_bar_s_4) _jessie_<somenum>) _jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let inc_ensures_default =
  fun (s_0 : S pointer) (S_bar_s_0_3 : (S, int32) memory ref) (S_s_0_3_alloc_table : S alloc_table) (S_foo_s_0_3 : (S, int) memory) ->
@@ -723,16 +716,12 @@ let inc_ensures_default =
     and (JC_<somenum>: ge_int(offset_max(S_s_0_3_alloc_table, s_0), (0))))) }
   (init:
   try
-   (C_19:
    begin
      (let _jessie_<somenum> =
-     (C_17:
-     (safe_int32_of_integer_ (C_16:
-                             ((add_int (integer_of_int32 (C_15:
-                                                         ((safe_acc_ !S_bar_s_0_3) s_0)))) (5))))) in
+     (safe_int32_of_integer_ ((add_int (integer_of_int32 ((safe_acc_ !S_bar_s_0_3) s_0))) (5))) in
      (let _jessie_<somenum> = s_0 in
      (((safe_upd_ S_bar_s_0_3) _jessie_<somenum>) _jessie_<somenum>))); (raise Return);
-    (raise Return) end) with Return -> void end)
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(select(S_foo_s_0_3, s_0), select(S_foo_s_0_3, s_0)))
     and (JC_<somenum>:
@@ -746,19 +735,15 @@ let inc_safety =
     and (JC_<somenum>: ge_int(offset_max(S_s_0_3_alloc_table, s_0), (0))))) }
   (init:
   try
-   (C_19:
    begin
      (let _jessie_<somenum> =
-     (C_17:
      (JC_<somenum>:
-     (int32_of_integer_ (C_16:
-                        ((add_int (integer_of_int32 (C_15:
-                                                    (JC_<somenum>:
-                                                    (((acc_ S_s_0_3_alloc_table) !S_bar_s_0_3) s_0))))) (5)))))) in
+     (int32_of_integer_ ((add_int (integer_of_int32 (JC_<somenum>:
+                                                    (((acc_ S_s_0_3_alloc_table) !S_bar_s_0_3) s_0)))) (5)))) in
      (let _jessie_<somenum> = s_0 in
      (JC_<somenum>:
      ((((upd_ S_s_0_3_alloc_table) S_bar_s_0_3) _jessie_<somenum>) _jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let is_pos_ensures_default =
  fun (s_1_0 : S pointer) (S_s_1_5_alloc_table : S alloc_table) (S_foo_s_1_5 : (S, int) memory) (S_bar_s_1_5 : (S, int32) memory) ->
@@ -772,12 +757,9 @@ let is_pos_ensures_default =
      (let tmp_0 = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (if ((gt_int_ (integer_of_int32 (C_35:
-                                       ((safe_acc_ S_bar_s_1_5) s_1_0)))) (0))
-       then
-        (C_34: begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
-       else
-        (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+       (if ((gt_int_ (integer_of_int32 ((safe_acc_ S_bar_s_1_5) s_1_0))) (0))
+       then begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end
+       else begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end) in
        void); (return := !tmp_0); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -794,12 +776,9 @@ let is_pos_ensures_is_false =
      (let tmp_0 = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (if ((gt_int_ (integer_of_int32 (C_35:
-                                       ((safe_acc_ S_bar_s_1_5) s_1_0)))) (0))
-       then
-        (C_34: begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
-       else
-        (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+       (if ((gt_int_ (integer_of_int32 ((safe_acc_ S_bar_s_1_5) s_1_0))) (0))
+       then begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end
+       else begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end) in
        void); (return := !tmp_0); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
@@ -816,12 +795,9 @@ let is_pos_ensures_is_true =
      (let tmp_0 = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (if ((gt_int_ (integer_of_int32 (C_35:
-                                       ((safe_acc_ S_bar_s_1_5) s_1_0)))) (0))
-       then
-        (C_34: begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
-       else
-        (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+       (if ((gt_int_ (integer_of_int32 ((safe_acc_ S_bar_s_1_5) s_1_0))) (0))
+       then begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end
+       else begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end) in
        void); (return := !tmp_0); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
 
@@ -837,13 +813,10 @@ let is_pos_safety =
      (let tmp_0 = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (if ((gt_int_ (integer_of_int32 (C_35:
-                                       (JC_<somenum>:
-                                       (((acc_ S_s_1_5_alloc_table) S_bar_s_1_5) s_1_0))))) (0))
-       then
-        (C_34: begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
-       else
-        (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+       (if ((gt_int_ (integer_of_int32 (JC_<somenum>:
+                                       (((acc_ S_s_1_5_alloc_table) S_bar_s_1_5) s_1_0)))) (0))
+       then begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end
+       else begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end) in
        void); (return := !tmp_0); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
@@ -855,7 +828,7 @@ let reset_ensures_default =
   (init:
   try
    begin
-     (if ((eq_int_ (integer_of_int32 (C_10: ((safe_acc_ !S_bar_s_2_2) s_2)))) (0))
+     (if ((eq_int_ (integer_of_int32 ((safe_acc_ !S_bar_s_2_2) s_2))) (0))
      then void else void); (raise Return); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
@@ -872,9 +845,8 @@ let reset_safety =
   (init:
   try
    begin
-     (if ((eq_int_ (integer_of_int32 (C_10:
-                                     (JC_<somenum>:
-                                     (((acc_ S_s_2_2_alloc_table) !S_bar_s_2_2) s_2))))) (0))
+     (if ((eq_int_ (integer_of_int32 (JC_<somenum>:
+                                     (((acc_ S_s_2_2_alloc_table) !S_bar_s_2_2) s_2)))) (0))
      then void else void); (raise Return); (raise Return) end with Return ->
    void end) { true }
 
@@ -886,44 +858,37 @@ let test_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = s_3 in
         (JC_<somenum>:
         ((((reset _jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
-       (C_2:
+       (let _jessie_<somenum> = s_3 in
+       (JC_<somenum>:
+       ((((inc _jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
+       (assert { (JC_<somenum>: gt_int(select(S_foo_s_3_1, s_3), (0))) }; void);
        begin
-         (let _jessie_<somenum> = s_3 in
-         (JC_<somenum>:
-         ((((inc _jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
-        (assert { (JC_<somenum>: gt_int(select(S_foo_s_3_1, s_3), (0))) }; void);
+         void;
+        (loop_2:
         begin
-          void;
-         (loop_2:
-         begin
-           while true do
-           { invariant (JC_<somenum>: true)  }
-            begin
-              [ { } unit { true } ];
-             try
-              (C_6:
-              begin
-                (let _jessie_<somenum> =
-                (tmp := (C_5:
-                        (let _jessie_<somenum> = s_3 in
-                        (JC_<somenum>:
-                        ((((is_pos _jessie_<somenum>) S_s_3_1_alloc_table) !S_bar_s_3_1) S_foo_s_3_1))))) in
-                void);
-               (if ((neq_int_ (integer_of_int32 !tmp)) (0)) then void
-               else (raise (Goto_while_0_break_exc void)));
-               (C_7:
-               begin
-                 (let _jessie_<somenum> = s_3 in
-                 (JC_<somenum>:
-                 ((((dec _jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
-                (raise (Loop_continue_exc void)) end) end) with
-              Loop_continue_exc _jessie_<somenum> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end) end end) end) with
+          while true do
+          { invariant (JC_<somenum>: true)  }
+           begin
+             [ { } unit { true } ];
+            try
+             begin
+               (let _jessie_<somenum> =
+               (tmp := (let _jessie_<somenum> = s_3 in
+                       (JC_<somenum>:
+                       ((((is_pos _jessie_<somenum>) S_s_3_1_alloc_table) !S_bar_s_3_1) S_foo_s_3_1)))) in
+               void);
+              (if ((neq_int_ (integer_of_int32 !tmp)) (0)) then void
+              else (raise (Goto_while_0_break_exc void)));
+              (let _jessie_<somenum> = s_3 in
+              (JC_<somenum>:
+              ((((dec _jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
+              (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc _jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
       begin
@@ -940,45 +905,38 @@ let test_safety =
    begin
      (let tmp = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = s_3 in
         (JC_<somenum>:
         ((((reset_requires _jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
-       (C_2:
+       (let _jessie_<somenum> = s_3 in
+       (JC_<somenum>:
+       ((((inc_requires _jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
+       [ { } unit { (JC_<somenum>: gt_int(select(S_foo_s_3_1, s_3), (0))) } ];
        begin
-         (let _jessie_<somenum> = s_3 in
-         (JC_<somenum>:
-         ((((inc_requires _jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
-        [ { } unit { (JC_<somenum>: gt_int(select(S_foo_s_3_1, s_3), (0))) } ];
+         void;
+        (loop_1:
         begin
-          void;
-         (loop_1:
-         begin
-           while true do
-           { invariant (JC_<somenum>: true)
-             variant (JC_<somenum> : select(S_foo_s_3_1, s_3)) }
-            begin
-              [ { } unit { true } ];
-             try
-              (C_6:
-              begin
-                (let _jessie_<somenum> =
-                (tmp := (C_5:
-                        (let _jessie_<somenum> = s_3 in
-                        (JC_<somenum>:
-                        ((((is_pos_requires _jessie_<somenum>) S_s_3_1_alloc_table) !S_bar_s_3_1) S_foo_s_3_1))))) in
-                void);
-               (if ((neq_int_ (integer_of_int32 !tmp)) (0)) then void
-               else (raise (Goto_while_0_break_exc void)));
-               (C_7:
-               begin
-                 (let _jessie_<somenum> = s_3 in
-                 (JC_<somenum>:
-                 ((((dec_requires _jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
-                (raise (Loop_continue_exc void)) end) end) with
-              Loop_continue_exc _jessie_<somenum> -> void end end done;
-          (raise (Goto_while_0_break_exc void)) end) end end) end) with
+          while true do
+          { invariant (JC_<somenum>: true)
+            variant (JC_<somenum> : select(S_foo_s_3_1, s_3)) }
+           begin
+             [ { } unit { true } ];
+            try
+             begin
+               (let _jessie_<somenum> =
+               (tmp := (let _jessie_<somenum> = s_3 in
+                       (JC_<somenum>:
+                       ((((is_pos_requires _jessie_<somenum>) S_s_3_1_alloc_table) !S_bar_s_3_1) S_foo_s_3_1)))) in
+               void);
+              (if ((neq_int_ (integer_of_int32 !tmp)) (0)) then void
+              else (raise (Goto_while_0_break_exc void)));
+              (let _jessie_<somenum> = s_3 in
+              (JC_<somenum>:
+              ((((dec_requires _jessie_<somenum>) S_bar_s_3_1) S_s_3_1_alloc_table) S_foo_s_3_1)));
+              (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc _jessie_<somenum> -> void end end done;
+         (raise (Goto_while_0_break_exc void)) end) end end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
       begin
@@ -1005,22 +963,22 @@ why --project [...] why/model.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/model_po27.why">
-      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "49" begin = "13" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "49" begin = "14" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/model_po28.why">
-      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "49" begin = "13" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "49" begin = "14" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/model_po29.why">
-      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "50" begin = "13" end = "21"/>
+      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "50" begin = "14" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/model_po30.why">
-      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "50" begin = "13" end = "21"/>
+      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "50" begin = "14" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1035,12 +993,12 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/model_po33.why">
-      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "64" begin = "19" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "64" begin = "20" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/model_po34.why">
-      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "64" begin = "19" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "64" begin = "20" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1140,12 +1098,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/model_po15.why">
-      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "98" begin = "15" end = "85"/>
+      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "98" begin = "16" end = "147"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/model_po16.why">
-      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "98" begin = "15" end = "85"/>
+      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "98" begin = "16" end = "147"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1185,12 +1143,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/model_po7.why">
-      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "111" begin = "15" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "112" begin = "16" end = "86"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/model_po8.why">
-      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "111" begin = "15" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/model.jessie/model.jc" line = "112" begin = "16" end = "86"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

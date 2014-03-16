@@ -40,23 +40,23 @@ tag voidP = {
 type voidP = [voidP]
 
 uint32 rotate_left(uint32 x, uint32 r)
-  requires (C_13 : ((C_14 : (r > 0)) && (C_15 : (r < 32))));
+  requires (_C_13 : ((_C_14 : (r > 0)) && (_C_15 : (r < 32))));
 behavior default:
-  ensures (C_12 : true);
+  ensures (_C_12 : true);
 {  
    (var uint32 __retres);
    
    {  
       {  
-         (assert for default: (C_2 : (jessie : (r < 32))));
+         (assert for default: (_C_2 : (jessie : (r < 32))));
          
-         (assert for default: (C_1 : (jessie : ((32 - r) < 32))));
-         (C_11 : (__retres = (C_10 : ((C_9 : ((C_8 : ((C_7 : (x << r)) :> uint32)) |
-                                               (C_6 : ((C_5 : (x >>
-                                                                (C_4 : (
-                                                                (C_3 : 
-                                                                (32 -
-                                                                  r)) :> uint32)))) :> uint32)))) :> uint32))))
+         (assert for default: (_C_1 : (jessie : ((32 - r) < 32))));
+         (_C_11 : (__retres = (_C_10 : ((_C_9 : ((_C_8 : ((_C_7 : (x << r)) :> uint32)) |
+                                                  (_C_6 : ((_C_5 : (x >>
+                                                                    (_C_4 : (
+                                                                    (_C_3 : 
+                                                                    (32 -
+                                                                    r)) :> uint32)))) :> uint32)))) :> uint32))))
       };
       
       (return __retres)
@@ -431,29 +431,19 @@ let rotate_left_ensures_default =
          (assert { (JC_<somenum>: lt_int(integer_of_uint32(r), (32))) }; void);
         (assert
         { (JC_<somenum>: lt_int(sub_int((32), integer_of_uint32(r)), (32))) }; void);
-        (C_11:
-        begin
-          (__retres := (C_10:
-                       (safe_uint32_of_integer_ (C_9:
-                                                ((bw_or (integer_of_uint32 
-                                                         (C_8:
-                                                         (safe_uint32_of_integer_ 
-                                                          (C_7:
-                                                          ((lsl (integer_of_uint32 x_0)) 
-                                                           (integer_of_uint32 r))))))) 
-                                                 (integer_of_uint32 (C_6:
-                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_5:
-                                                                    ((lsr 
+        (__retres := (safe_uint32_of_integer_ ((bw_or (integer_of_uint32 
+                                                       (safe_uint32_of_integer_ 
+                                                        ((lsl (integer_of_uint32 x_0)) 
+                                                         (integer_of_uint32 r))))) 
+                                               (integer_of_uint32 (safe_uint32_of_integer_ 
+                                                                   ((lsr 
                                                                     (integer_of_uint32 x_0)) 
                                                                     (integer_of_uint32 
-                                                                    (C_4:
                                                                     (safe_uint32_of_integer_ 
-                                                                    (C_3:
                                                                     ((sub_int (32)) 
-                                                                    (integer_of_uint32 r))))))))))))))));
-         !__retres end) end in void); (return := !__retres); (raise Return)
-     end); absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
+                                                                    (integer_of_uint32 r))))))))));
+        !__retres end in void); (return := !__retres); (raise Return) end);
+    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let rotate_left_safety =
  fun (x_0 : uint32) (r : uint32) ->
@@ -471,33 +461,22 @@ let rotate_left_safety =
          [ { } unit { (JC_<somenum>: lt_int(integer_of_uint32(r), (32))) } ];
         [ { } unit
           { (JC_<somenum>: lt_int(sub_int((32), integer_of_uint32(r)), (32))) } ];
-        (C_11:
-        begin
-          (__retres := (C_10:
-                       (JC_<somenum>:
-                       (uint32_of_integer_ (C_9:
-                                           ((bw_or (integer_of_uint32 
-                                                    (C_8:
-                                                    (JC_<somenum>:
-                                                    (uint32_of_integer_ 
-                                                     (C_7:
-                                                     ((lsl (integer_of_uint32 x_0)) 
-                                                      (integer_of_uint32 r)))))))) 
-                                            (integer_of_uint32 (C_6:
-                                                               (JC_<somenum>:
-                                                               (uint32_of_integer_ 
-                                                                (C_5:
-                                                                ((lsr 
-                                                                  (integer_of_uint32 x_0)) 
-                                                                 (integer_of_uint32 
-                                                                  (C_4:
-                                                                  (JC_<somenum>:
-                                                                  (uint32_of_integer_ 
-                                                                   (C_3:
-                                                                   ((sub_int (32)) 
-                                                                    (integer_of_uint32 r)))))))))))))))))));
-         !__retres end) end in void); (return := !__retres); (raise Return)
-     end); absurd  end with Return -> !return end)) { true }
+        (__retres := (JC_<somenum>:
+                     (uint32_of_integer_ ((bw_or (integer_of_uint32 (JC_<somenum>:
+                                                                    (uint32_of_integer_ 
+                                                                    ((lsl 
+                                                                    (integer_of_uint32 x_0)) 
+                                                                    (integer_of_uint32 r)))))) 
+                                          (integer_of_uint32 (JC_<somenum>:
+                                                             (uint32_of_integer_ 
+                                                              ((lsr (integer_of_uint32 x_0)) 
+                                                               (integer_of_uint32 
+                                                                (JC_<somenum>:
+                                                                (uint32_of_integer_ 
+                                                                 ((sub_int (32)) 
+                                                                  (integer_of_uint32 r)))))))))))));
+        !__retres end in void); (return := !__retres); (raise Return) end);
+    absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C regehr1.jessie --quiet -f regehr1.makefile project

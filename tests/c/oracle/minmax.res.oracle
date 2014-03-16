@@ -118,11 +118,11 @@ type voidP = [voidP]
 
 int32 max(int32 x_3, int32 y_3)
 behavior default:
-  ensures (C_3 : (\result == \integer_max(\at(x_3,Old), \at(y_3,Old))));
+  ensures (_C_3 : (\result == \integer_max(\at(x_3,Old), \at(y_3,Old))));
 {  
    (var int32 tmp);
    
-   {  (if (x_3 <= y_3) then (C_2 : (tmp = y_3)) else (C_1 : (tmp = x_3)));
+   {  (if (x_3 <= y_3) then (_C_2 : (tmp = y_3)) else (_C_1 : (tmp = x_3)));
       
       (return tmp)
    }
@@ -130,11 +130,11 @@ behavior default:
 
 int32 min(int32 x_4, int32 y_4)
 behavior default:
-  ensures (C_6 : (\result == \integer_min(\at(x_4,Old), \at(y_4,Old))));
+  ensures (_C_6 : (\result == \integer_min(\at(x_4,Old), \at(y_4,Old))));
 {  
    (var int32 tmp_0);
    
-   {  (if (x_4 <= y_4) then (C_5 : (tmp_0 = x_4)) else (C_4 : (tmp_0 = y_4)));
+   {  (if (x_4 <= y_4) then (_C_5 : (tmp_0 = x_4)) else (_C_4 : (tmp_0 = y_4)));
       
       (return tmp_0)
    }
@@ -142,12 +142,12 @@ behavior default:
 
 float fmax(float x_1, float y_1)
 behavior default:
-  ensures (C_9 : ((\result :> real) ==
-                   \real_max((\at(x_1,Old) :> real), (\at(y_1,Old) :> real))));
+  ensures (_C_9 : ((\result :> real) ==
+                    \real_max((\at(x_1,Old) :> real), (\at(y_1,Old) :> real))));
 {  
    (var float tmp_1);
    
-   {  (if (x_1 <= y_1) then (C_8 : (tmp_1 = y_1)) else (C_7 : (tmp_1 = x_1)));
+   {  (if (x_1 <= y_1) then (_C_8 : (tmp_1 = y_1)) else (_C_7 : (tmp_1 = x_1)));
       
       (return tmp_1)
    }
@@ -155,12 +155,12 @@ behavior default:
 
 float fmin(float x_2, float y_2)
 behavior default:
-  ensures (C_12 : ((\result :> real) ==
-                    \real_min((\at(x_2,Old) :> real), (\at(y_2,Old) :> real))));
+  ensures (_C_12 : ((\result :> real) ==
+                     \real_min((\at(x_2,Old) :> real), (\at(y_2,Old) :> real))));
 {  
    (var float tmp_2);
    
-   {  (if (x_2 <= y_2) then (C_11 : (tmp_2 = x_2)) else (C_10 : (tmp_2 = y_2)));
+   {  (if (x_2 <= y_2) then (_C_11 : (tmp_2 = x_2)) else (_C_10 : (tmp_2 = y_2)));
       
       (return tmp_2)
    }
@@ -168,12 +168,12 @@ behavior default:
 
 double dmax(double x, double y)
 behavior default:
-  ensures (C_15 : ((\result :> real) ==
-                    \real_max((\at(x,Old) :> real), (\at(y,Old) :> real))));
+  ensures (_C_15 : ((\result :> real) ==
+                     \real_max((\at(x,Old) :> real), (\at(y,Old) :> real))));
 {  
    (var double tmp_3);
    
-   {  (if (x <= y) then (C_14 : (tmp_3 = y)) else (C_13 : (tmp_3 = x)));
+   {  (if (x <= y) then (_C_14 : (tmp_3 = y)) else (_C_13 : (tmp_3 = x)));
       
       (return tmp_3)
    }
@@ -181,47 +181,17 @@ behavior default:
 
 double dmin(double x_0, double y_0)
 behavior default:
-  ensures (C_18 : ((\result :> real) ==
-                    \real_min((\at(x_0,Old) :> real), (\at(y_0,Old) :> real))));
+  ensures (_C_18 : ((\result :> real) ==
+                     \real_min((\at(x_0,Old) :> real), (\at(y_0,Old) :> real))));
 {  
    (var double tmp_4);
    
-   {  (if (x_0 <= y_0) then (C_17 : (tmp_4 = x_0)) else (C_16 : (tmp_4 = y_0)));
+   {  (if (x_0 <= y_0) then (_C_17 : (tmp_4 = x_0)) else (_C_16 : (tmp_4 = y_0)));
       
       (return tmp_4)
    }
 }
 ========== file tests/c/minmax.jessie/minmax.cloc ==========
-[C_15]
-file = "HOME/tests/c/minmax.c"
-line = 57
-begin = 12
-end = 32
-
-[C_11]
-file = "HOME/tests/c/minmax.c"
-line = 53
-begin = 15
-end = 16
-
-[C_1]
-file = "HOME/tests/c/minmax.c"
-line = 35
-begin = 15
-end = 16
-
-[C_9]
-file = "HOME/tests/c/minmax.c"
-line = 45
-begin = 12
-end = 32
-
-[C_10]
-file = "HOME/tests/c/minmax.c"
-line = 53
-begin = 15
-end = 16
-
 [max]
 name = "Function max"
 file = "HOME/tests/c/minmax.c"
@@ -229,23 +199,41 @@ line = 34
 begin = 4
 end = 7
 
-[C_17]
-file = "HOME/tests/c/minmax.c"
-line = 65
-begin = 15
-end = 16
-
-[C_5]
+[_C_4]
 file = "HOME/tests/c/minmax.c"
 line = 41
 begin = 15
 end = 16
 
-[C_13]
+[_C_13]
 file = "HOME/tests/c/minmax.c"
 line = 59
 begin = 15
 end = 16
+
+[_C_5]
+file = "HOME/tests/c/minmax.c"
+line = 41
+begin = 15
+end = 16
+
+[_C_12]
+file = "HOME/tests/c/minmax.c"
+line = 51
+begin = 12
+end = 32
+
+[_C_9]
+file = "HOME/tests/c/minmax.c"
+line = 45
+begin = 12
+end = 32
+
+[_C_6]
+file = "HOME/tests/c/minmax.c"
+line = 39
+begin = 12
+end = 32
 
 [fmin]
 name = "Function fmin"
@@ -253,18 +241,6 @@ file = "HOME/tests/c/minmax.c"
 line = 52
 begin = 6
 end = 10
-
-[C_7]
-file = "HOME/tests/c/minmax.c"
-line = 47
-begin = 15
-end = 16
-
-[C_14]
-file = "HOME/tests/c/minmax.c"
-line = 59
-begin = 15
-end = 16
 
 [fmax]
 name = "Function fmax"
@@ -280,25 +256,43 @@ line = 40
 begin = 4
 end = 7
 
-[C_8]
+[_C_3]
+file = "HOME/tests/c/minmax.c"
+line = 33
+begin = 12
+end = 32
+
+[_C_17]
+file = "HOME/tests/c/minmax.c"
+line = 65
+begin = 15
+end = 16
+
+[_C_7]
 file = "HOME/tests/c/minmax.c"
 line = 47
 begin = 15
 end = 16
 
-[C_4]
+[_C_15]
 file = "HOME/tests/c/minmax.c"
-line = 41
-begin = 15
-end = 16
-
-[C_12]
-file = "HOME/tests/c/minmax.c"
-line = 51
+line = 57
 begin = 12
 end = 32
 
-[C_18]
+[_C_10]
+file = "HOME/tests/c/minmax.c"
+line = 53
+begin = 15
+end = 16
+
+[_C_8]
+file = "HOME/tests/c/minmax.c"
+line = 47
+begin = 15
+end = 16
+
+[_C_18]
 file = "HOME/tests/c/minmax.c"
 line = 63
 begin = 12
@@ -311,9 +305,9 @@ line = 64
 begin = 7
 end = 11
 
-[C_2]
+[_C_14]
 file = "HOME/tests/c/minmax.c"
-line = 35
+line = 59
 begin = 15
 end = 16
 
@@ -324,21 +318,27 @@ line = 58
 begin = 7
 end = 11
 
-[C_6]
+[_C_2]
 file = "HOME/tests/c/minmax.c"
-line = 39
-begin = 12
-end = 32
+line = 35
+begin = 15
+end = 16
 
-[C_3]
-file = "HOME/tests/c/minmax.c"
-line = 33
-begin = 12
-end = 32
-
-[C_16]
+[_C_16]
 file = "HOME/tests/c/minmax.c"
 line = 65
+begin = 15
+end = 16
+
+[_C_1]
+file = "HOME/tests/c/minmax.c"
+line = 35
+begin = 15
+end = 16
+
+[_C_11]
+file = "HOME/tests/c/minmax.c"
+line = 53
 begin = 15
 end = 16
 
@@ -1350,10 +1350,9 @@ let dmax_ensures_default =
      (let tmp_3 = ref (any_double void) in
      begin
        (let _jessie_<num> =
-       (if ((le_double_ x_0) y) then (C_14: begin   (tmp_3 := y); !tmp_3 end)
-       else (C_13: begin   (tmp_3 := x_0); !tmp_3 end)) in void);
-      (return := !tmp_3); (raise Return) end); absurd  end with Return ->
-   !return end))
+       (if ((le_double_ x_0) y) then begin   (tmp_3 := y); !tmp_3 end
+       else begin   (tmp_3 := x_0); !tmp_3 end) in void); (return := !tmp_3);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_37:
     (double_value(result) = real_max(double_value(x_0), double_value(y)))) }
 
@@ -1367,10 +1366,9 @@ let dmax_safety =
      (let tmp_3 = ref (any_double void) in
      begin
        (let _jessie_<num> =
-       (if ((le_double_ x_0) y) then (C_14: begin   (tmp_3 := y); !tmp_3 end)
-       else (C_13: begin   (tmp_3 := x_0); !tmp_3 end)) in void);
-      (return := !tmp_3); (raise Return) end); absurd  end with Return ->
-   !return end)) { true }
+       (if ((le_double_ x_0) y) then begin   (tmp_3 := y); !tmp_3 end
+       else begin   (tmp_3 := x_0); !tmp_3 end) in void); (return := !tmp_3);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let dmin_ensures_default =
  fun (x_0_0 : double) (y_0 : double) ->
@@ -1382,11 +1380,9 @@ let dmin_ensures_default =
      (let tmp_4 = ref (any_double void) in
      begin
        (let _jessie_<num> =
-       (if ((le_double_ x_0_0) y_0)
-       then (C_17: begin   (tmp_4 := x_0_0); !tmp_4 end)
-       else (C_16: begin   (tmp_4 := y_0); !tmp_4 end)) in void);
-      (return := !tmp_4); (raise Return) end); absurd  end with Return ->
-   !return end))
+       (if ((le_double_ x_0_0) y_0) then begin   (tmp_4 := x_0_0); !tmp_4 end
+       else begin   (tmp_4 := y_0); !tmp_4 end) in void); (return := !tmp_4);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_45:
     (double_value(result) = real_min(double_value(x_0_0), double_value(y_0)))) }
 
@@ -1400,11 +1396,9 @@ let dmin_safety =
      (let tmp_4 = ref (any_double void) in
      begin
        (let _jessie_<num> =
-       (if ((le_double_ x_0_0) y_0)
-       then (C_17: begin   (tmp_4 := x_0_0); !tmp_4 end)
-       else (C_16: begin   (tmp_4 := y_0); !tmp_4 end)) in void);
-      (return := !tmp_4); (raise Return) end); absurd  end with Return ->
-   !return end)) { true }
+       (if ((le_double_ x_0_0) y_0) then begin   (tmp_4 := x_0_0); !tmp_4 end
+       else begin   (tmp_4 := y_0); !tmp_4 end) in void); (return := !tmp_4);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let fmax_ensures_default =
  fun (x_1 : single) (y_1 : single) ->
@@ -1416,11 +1410,9 @@ let fmax_ensures_default =
      (let tmp_1 = ref (any_single void) in
      begin
        (let _jessie_<num> =
-       (if ((le_single_ x_1) y_1)
-       then (C_8: begin   (tmp_1 := y_1); !tmp_1 end)
-       else (C_7: begin   (tmp_1 := x_1); !tmp_1 end)) in void);
-      (return := !tmp_1); (raise Return) end); absurd  end with Return ->
-   !return end))
+       (if ((le_single_ x_1) y_1) then begin   (tmp_1 := y_1); !tmp_1 end
+       else begin   (tmp_1 := x_1); !tmp_1 end) in void); (return := !tmp_1);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_21:
     (single_value(result) = real_max(single_value(x_1), single_value(y_1)))) }
 
@@ -1434,11 +1426,9 @@ let fmax_safety =
      (let tmp_1 = ref (any_single void) in
      begin
        (let _jessie_<num> =
-       (if ((le_single_ x_1) y_1)
-       then (C_8: begin   (tmp_1 := y_1); !tmp_1 end)
-       else (C_7: begin   (tmp_1 := x_1); !tmp_1 end)) in void);
-      (return := !tmp_1); (raise Return) end); absurd  end with Return ->
-   !return end)) { true }
+       (if ((le_single_ x_1) y_1) then begin   (tmp_1 := y_1); !tmp_1 end
+       else begin   (tmp_1 := x_1); !tmp_1 end) in void); (return := !tmp_1);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let fmin_ensures_default =
  fun (x_2 : single) (y_2 : single) ->
@@ -1450,11 +1440,9 @@ let fmin_ensures_default =
      (let tmp_2 = ref (any_single void) in
      begin
        (let _jessie_<num> =
-       (if ((le_single_ x_2) y_2)
-       then (C_11: begin   (tmp_2 := x_2); !tmp_2 end)
-       else (C_10: begin   (tmp_2 := y_2); !tmp_2 end)) in void);
-      (return := !tmp_2); (raise Return) end); absurd  end with Return ->
-   !return end))
+       (if ((le_single_ x_2) y_2) then begin   (tmp_2 := x_2); !tmp_2 end
+       else begin   (tmp_2 := y_2); !tmp_2 end) in void); (return := !tmp_2);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_29:
     (single_value(result) = real_min(single_value(x_2), single_value(y_2)))) }
 
@@ -1468,11 +1456,9 @@ let fmin_safety =
      (let tmp_2 = ref (any_single void) in
      begin
        (let _jessie_<num> =
-       (if ((le_single_ x_2) y_2)
-       then (C_11: begin   (tmp_2 := x_2); !tmp_2 end)
-       else (C_10: begin   (tmp_2 := y_2); !tmp_2 end)) in void);
-      (return := !tmp_2); (raise Return) end); absurd  end with Return ->
-   !return end)) { true }
+       (if ((le_single_ x_2) y_2) then begin   (tmp_2 := x_2); !tmp_2 end
+       else begin   (tmp_2 := y_2); !tmp_2 end) in void); (return := !tmp_2);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let max_ensures_default =
  fun (x_3 : int32) (y_3 : int32) ->
@@ -1485,10 +1471,9 @@ let max_ensures_default =
      begin
        (let _jessie_<num> =
        (if ((le_int_ (integer_of_int32 x_3)) (integer_of_int32 y_3))
-       then (C_2: begin   (tmp := y_3); !tmp end)
-       else (C_1: begin   (tmp := x_3); !tmp end)) in void);
-      (return := !tmp); (raise Return) end); absurd  end with Return ->
-   !return end))
+       then begin   (tmp := y_3); !tmp end
+       else begin   (tmp := x_3); !tmp end) in void); (return := !tmp);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_5:
     (integer_of_int32(result) = int_max(integer_of_int32(x_3),
                                 integer_of_int32(y_3)))) }
@@ -1504,10 +1489,9 @@ let max_safety =
      begin
        (let _jessie_<num> =
        (if ((le_int_ (integer_of_int32 x_3)) (integer_of_int32 y_3))
-       then (C_2: begin   (tmp := y_3); !tmp end)
-       else (C_1: begin   (tmp := x_3); !tmp end)) in void);
-      (return := !tmp); (raise Return) end); absurd  end with Return ->
-   !return end)) { true }
+       then begin   (tmp := y_3); !tmp end
+       else begin   (tmp := x_3); !tmp end) in void); (return := !tmp);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let min_ensures_default =
  fun (x_4 : int32) (y_4 : int32) ->
@@ -1520,10 +1504,9 @@ let min_ensures_default =
      begin
        (let _jessie_<num> =
        (if ((le_int_ (integer_of_int32 x_4)) (integer_of_int32 y_4))
-       then (C_5: begin   (tmp_0 := x_4); !tmp_0 end)
-       else (C_4: begin   (tmp_0 := y_4); !tmp_0 end)) in void);
-      (return := !tmp_0); (raise Return) end); absurd  end with Return ->
-   !return end))
+       then begin   (tmp_0 := x_4); !tmp_0 end
+       else begin   (tmp_0 := y_4); !tmp_0 end) in void); (return := !tmp_0);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_13:
     (integer_of_int32(result) = int_min(integer_of_int32(x_4),
                                 integer_of_int32(y_4)))) }
@@ -1539,10 +1522,9 @@ let min_safety =
      begin
        (let _jessie_<num> =
        (if ((le_int_ (integer_of_int32 x_4)) (integer_of_int32 y_4))
-       then (C_5: begin   (tmp_0 := x_4); !tmp_0 end)
-       else (C_4: begin   (tmp_0 := y_4); !tmp_0 end)) in void);
-      (return := !tmp_0); (raise Return) end); absurd  end with Return ->
-   !return end)) { true }
+       then begin   (tmp_0 := x_4); !tmp_0 end
+       else begin   (tmp_0 := y_4); !tmp_0 end) in void); (return := !tmp_0);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========

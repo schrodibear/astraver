@@ -54,28 +54,28 @@ invariant valid_t :
 unit h(intP[..] p)
 behavior default:
   assigns p.intM;
-  ensures (C_1 : (\at(p,Old).intM == 0));
+  ensures (_C_1 : (\at(p,Old).intM == 0));
 ;
 
 unit f()
-  requires (C_7 : ((C_8 : (\offset_min((t + (1 * 3))) <= 2)) &&
-                    (C_9 : (\offset_max((t + (1 * 3))) >= 2))));
+  requires (_C_7 : ((_C_8 : (\offset_min((t + (1 * 3))) <= 2)) &&
+                     (_C_9 : (\offset_max((t + (1 * 3))) >= 2))));
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
-   {  (C_5 : h((C_4 : (t + (C_3 : ((C_2 : (1 * 3)) :> int32))))));
+   {  (_C_5 : h((_C_4 : (t + (_C_3 : ((_C_2 : (1 * 3)) :> int32))))));
       
       (return ())
    }
 }
 
 unit g()
-  requires (C_15 : ((C_16 : (\offset_min((t + (1 * 3))) <= 2)) &&
-                     (C_17 : (\offset_max((t + (1 * 3))) >= 2))));
+  requires (_C_15 : ((_C_16 : (\offset_min((t + (1 * 3))) <= 2)) &&
+                      (_C_17 : (\offset_max((t + (1 * 3))) >= 2))));
 behavior default:
-  ensures (C_14 : true);
+  ensures (_C_14 : true);
 {  
-   {  (C_13 : h((C_12 : (t + (C_11 : ((C_10 : (1 * 3)) :> int32))))));
+   {  (_C_13 : h((_C_12 : (t + (_C_11 : ((_C_10 : (1 * 3)) :> int32))))));
       
       (return ())
    }
@@ -91,11 +91,11 @@ logic int32 deref{Current}(intP[..] p) =
 
 unit m()
 behavior default:
-  ensures (C_24 : (deref{Here}((t2 + ((1 * 3) + 2))) == 0));
+  ensures (_C_24 : (deref{Here}((t2 + ((1 * 3) + 2))) == 0));
 {  
-   {  (C_23 : h((C_22 : (t2 +
-                          (C_21 : ((C_20 : ((C_19 : ((C_18 : (1 * 3)) :> int32)) +
-                                             2)) :> int32))))));
+   {  (_C_23 : h((_C_22 : (t2 +
+                            (_C_21 : ((_C_20 : ((_C_19 : ((_C_18 : (1 * 3)) :> int32)) +
+                                                 2)) :> int32))))));
       
       (return ())
    }
@@ -668,15 +668,11 @@ let f_ensures_default =
         and (JC_<somenum>: valid_t(intP_t_1_alloc_table))))) }
   (init:
   try
-   (C_5:
    begin
      (let _jessie_<somenum> =
-     (C_4:
-     ((shift t) (integer_of_int32 (C_3:
-                                  (safe_int32_of_integer_ (C_2:
-                                                          ((mul_int (1)) (3)))))))) in
+     ((shift t) (integer_of_int32 (safe_int32_of_integer_ ((mul_int (1)) (3))))) in
      (JC_<somenum>: (((h _jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -693,15 +689,11 @@ let f_safety =
         and (JC_<somenum>: valid_t(intP_t_1_alloc_table))))) }
   (init:
   try
-   (C_5:
    begin
      (let _jessie_<somenum> =
-     (C_4:
-     ((shift t) (integer_of_int32 (C_3:
-                                  (safe_int32_of_integer_ (C_2:
-                                                          ((mul_int (1)) (3)))))))) in
+     ((shift t) (integer_of_int32 (safe_int32_of_integer_ ((mul_int (1)) (3))))) in
      (JC_<somenum>: (((h_requires _jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_t2(intP_t2_2_alloc_table))
     and (JC_<somenum>: valid_t(intP_t_1_alloc_table)))) }
@@ -720,15 +712,11 @@ let g_ensures_default =
         and (JC_<somenum>: valid_t(intP_t_1_alloc_table))))) }
   (init:
   try
-   (C_13:
    begin
      (let _jessie_<somenum> =
-     (C_12:
-     ((shift t) (integer_of_int32 (C_11:
-                                  (safe_int32_of_integer_ (C_10:
-                                                          ((mul_int (1)) (3)))))))) in
+     ((shift t) (integer_of_int32 (safe_int32_of_integer_ ((mul_int (1)) (3))))) in
      (JC_<somenum>: (((h _jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let g_safety =
@@ -745,15 +733,11 @@ let g_safety =
         and (JC_<somenum>: valid_t(intP_t_1_alloc_table))))) }
   (init:
   try
-   (C_13:
    begin
      (let _jessie_<somenum> =
-     (C_12:
-     ((shift t) (integer_of_int32 (C_11:
-                                  (safe_int32_of_integer_ (C_10:
-                                                          ((mul_int (1)) (3)))))))) in
+     ((shift t) (integer_of_int32 (safe_int32_of_integer_ ((mul_int (1)) (3))))) in
      (JC_<somenum>: (((h_requires _jessie_<somenum>) intP_intM_t_1) !intP_t_1_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_t2(intP_t2_2_alloc_table))
     and (JC_<somenum>: valid_t(intP_t_1_alloc_table)))) }
@@ -765,20 +749,14 @@ let m_ensures_default =
     and (JC_<somenum>: valid_t(intP_t_1_alloc_table)))) }
   (init:
   try
-   (C_23:
    begin
      (let _jessie_<somenum> =
-     (C_22:
-     ((shift t2) (integer_of_int32 (C_21:
-                                   (safe_int32_of_integer_ (C_20:
-                                                           ((add_int 
+     ((shift t2) (integer_of_int32 (safe_int32_of_integer_ ((add_int 
                                                              (integer_of_int32 
-                                                              (C_19:
                                                               (safe_int32_of_integer_ 
-                                                               (C_18:
-                                                               ((mul_int (1)) (3))))))) (2)))))))) in
+                                                               ((mul_int (1)) (3))))) (2))))) in
      (JC_<somenum>: (((h _jessie_<somenum>) intP_intM_t2_2) !intP_t2_2_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     (integer_of_int32(deref(shift(t2, add_int(mul_int((1), (3)), (2))),
                       intP_intM_t2_2)) = (0))) }
@@ -790,21 +768,15 @@ let m_safety =
     and (JC_<somenum>: valid_t(intP_t_1_alloc_table)))) }
   (init:
   try
-   (C_23:
    begin
      (let _jessie_<somenum> =
-     (C_22:
-     ((shift t2) (integer_of_int32 (C_21:
-                                   (safe_int32_of_integer_ (C_20:
-                                                           ((add_int 
+     ((shift t2) (integer_of_int32 (safe_int32_of_integer_ ((add_int 
                                                              (integer_of_int32 
-                                                              (C_19:
                                                               (safe_int32_of_integer_ 
-                                                               (C_18:
-                                                               ((mul_int (1)) (3))))))) (2)))))))) in
+                                                               ((mul_int (1)) (3))))) (2))))) in
      (JC_<somenum>:
      (((h_requires _jessie_<somenum>) intP_intM_t2_2) !intP_t2_2_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_t2(intP_t2_2_alloc_table))
     and (JC_<somenum>: valid_t(intP_t_1_alloc_table)))) }
@@ -826,12 +798,12 @@ why --project [...] why/array_addr.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/array_addr_po5.why">
-      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "71" begin = "14" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "71" begin = "15" end = "72"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_addr_po6.why">
-      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "71" begin = "14" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "71" begin = "15" end = "72"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -849,12 +821,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/array_addr_po1.why">
-      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "59" begin = "13" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "59" begin = "14" end = "68"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_addr_po2.why">
-      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "59" begin = "13" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "59" begin = "14" end = "68"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

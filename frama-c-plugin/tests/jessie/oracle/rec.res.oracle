@@ -40,22 +40,22 @@ tag voidP = {
 type voidP = [voidP]
 
 int32 f(int32 x)
-  requires (C_8 : (x >= 0));
+  requires (_C_8 : (x >= 0));
 behavior default:
   assigns \nothing;
-  ensures (C_7 : (\result == 0));
+  ensures (_C_7 : (\result == 0));
 {  
    (var int32 tmp);
    
    (var int32 __retres);
    
    {  (if (x == 0) then 
-      {  (C_6 : (__retres = 0));
+      {  (_C_6 : (__retres = 0));
          
          (goto return_label)
       } else 
-      {  (C_4 : (tmp = (C_3 : f((C_2 : ((C_1 : (x - 1)) :> int32))))));
-         (C_5 : (__retres = tmp));
+      {  (_C_4 : (tmp = (_C_3 : f((_C_2 : ((_C_1 : (x - 1)) :> int32))))));
+         (_C_5 : (__retres = tmp));
          
          (goto return_label)
       });
@@ -427,24 +427,17 @@ let f_ensures_default =
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
-         (C_6:
          begin
            (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end)
+           void); (raise (Return_label_exc void)) end
         else
-         (C_4:
          begin
            (let _jessie_<somenum> =
-           (tmp := (C_3:
-                   (let _jessie_<somenum> =
-                   (C_2:
-                   (safe_int32_of_integer_ (C_1:
-                                           ((sub_int (integer_of_int32 x_0)) (1))))) in
-                   (JC_<somenum>: (f _jessie_<somenum>))))) in void);
-          (C_5:
-          begin
-            (let _jessie_<somenum> = (__retres := !tmp) in void);
-           (raise (Return_label_exc void)) end) end));
+           (tmp := (let _jessie_<somenum> =
+                   (safe_int32_of_integer_ ((sub_int (integer_of_int32 x_0)) (1))) in
+                   (JC_<somenum>: (f _jessie_<somenum>)))) in void);
+          (let _jessie_<somenum> = (__retres := !tmp) in void);
+          (raise (Return_label_exc void)) end);
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -463,27 +456,20 @@ let f_safety =
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
-         (C_6:
          begin
            (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end)
+           void); (raise (Return_label_exc void)) end
         else
-         (C_4:
          begin
            (let _jessie_<somenum> =
-           (tmp := (C_3:
-                   (let _jessie_<somenum> =
-                   (C_2:
+           (tmp := (let _jessie_<somenum> =
                    (JC_<somenum>:
-                   (int32_of_integer_ (C_1:
-                                      ((sub_int (integer_of_int32 x_0)) (1)))))) in
+                   (int32_of_integer_ ((sub_int (integer_of_int32 x_0)) (1)))) in
                    (JC_<somenum>:
                    (check { zwf_zero((0), (0)) };
-                   (JC_<somenum>: (f_requires _jessie_<somenum>))))))) in void);
-          (C_5:
-          begin
-            (let _jessie_<somenum> = (__retres := !tmp) in void);
-           (raise (Return_label_exc void)) end) end));
+                   (JC_<somenum>: (f_requires _jessie_<somenum>)))))) in void);
+          (let _jessie_<somenum> = (__retres := !tmp) in void);
+          (raise (Return_label_exc void)) end);
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -512,11 +498,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/rec_po4.why">
-      <location file = "why/rec.why" line = "415" begin = "28" end = "46"/>
+      <location file = "why/rec.why" line = "403" begin = "28" end = "46"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/rec_po5.why">
-      <location file = "why/rec.why" line = "415" begin = "28" end = "46"/>
+      <location file = "why/rec.why" line = "403" begin = "28" end = "46"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/rec_po6.why">

@@ -50,13 +50,13 @@ type voidP = [voidP]
 unit comp(unsigned_intP[0] a, unsigned_intP[0] b, charP[..] res)
 behavior default:
   assigns res.charM;
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 ;
 
 int32 f(unsigned_intP[0] a_0, unsigned_intP[0] b_0)
 behavior default:
   assigns \nothing;
-  ensures (C_9 : true);
+  ensures (_C_9 : true);
 {  
    (var uint32 res_0);
    
@@ -64,12 +64,12 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (C_3 : (tmp = (C_2 : (new charP[1]))));
-      (C_4 : (res_0 = 0));
-      (C_5 : comp(a_0, b_0, tmp));
-      (C_7 : (__retres = (C_6 : (res_0 :> int32))));
+   {  (_C_3 : (tmp = (_C_2 : (new charP[1]))));
+      (_C_4 : (res_0 = 0));
+      (_C_5 : comp(a_0, b_0, tmp));
+      (_C_7 : (__retres = (_C_6 : (res_0 :> int32))));
       
-      {  (C_8 : (free(tmp)));
+      {  (_C_8 : (free(tmp)));
          
          (return __retres)
       }
@@ -589,33 +589,21 @@ let f_ensures_default =
      (let res_0 = ref (any_uint32 void) in
      (let tmp = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (tmp := (C_2:
-               (JC_<somenum>:
-               (((alloc_struct_charP (1)) charP_alloc_table) charP_tag_table)))) in
+       (tmp := (JC_<somenum>:
+               (((alloc_struct_charP (1)) charP_alloc_table) charP_tag_table))) in
        void);
-      (C_4:
-      begin
-        (let _jessie_<somenum> = (res_0 := (safe_uint32_of_integer_ (0))) in void);
-       (C_5:
-       begin
-         (let _jessie_<somenum> = a_0 in
-         (let _jessie_<somenum> = b_0 in
-         (let _jessie_<somenum> = !tmp in
-         (JC_<somenum>: (((comp _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))));
-        (C_7:
-        begin
-          (let _jessie_<somenum> =
-          (__retres := (C_6:
-                       (safe_int32_of_integer_ (integer_of_uint32 !res_0)))) in
-          void);
-         (C_8:
-         begin
-           ((safe_free_parameter charP_alloc_table) !tmp);
-          (return := !__retres); (raise Return) end) end) end) end) end))));
-    absurd  end with Return -> !return end))
+      (let _jessie_<somenum> = (res_0 := (safe_uint32_of_integer_ (0))) in void);
+      (let _jessie_<somenum> = a_0 in
+      (let _jessie_<somenum> = b_0 in
+      (let _jessie_<somenum> = !tmp in
+      (JC_<somenum>: (((comp _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))));
+      (let _jessie_<somenum> =
+      (__retres := (safe_int32_of_integer_ (integer_of_uint32 !res_0))) in
+      void); ((safe_free_parameter charP_alloc_table) !tmp);
+      (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     not_assigns(charP_alloc_table@, charP_charM@, charP_charM, pset_empty)) }
 
@@ -630,37 +618,24 @@ let f_safety =
      (let res_0 = ref (any_uint32 void) in
      (let tmp = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
        (tmp := (let _jessie_<somenum> =
-               (C_2:
                (JC_<somenum>:
-               (((alloc_struct_charP_requires (1)) charP_alloc_table) charP_tag_table))) in
+               (((alloc_struct_charP_requires (1)) charP_alloc_table) charP_tag_table)) in
                (JC_<somenum>:
                (assert
                { ge_int(offset_max(charP_alloc_table, _jessie_<somenum>), (0)) };
                _jessie_<somenum>)))) in void);
-      (C_4:
-      begin
-        (let _jessie_<somenum> = (res_0 := (safe_uint32_of_integer_ (0))) in void);
-       (C_5:
-       begin
-         (let _jessie_<somenum> = a_0 in
-         (let _jessie_<somenum> = b_0 in
-         (let _jessie_<somenum> = !tmp in
-         (JC_<somenum>: (((comp_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))));
-        (C_7:
-        begin
-          (let _jessie_<somenum> =
-          (__retres := (C_6:
-                       (JC_<somenum>:
-                       (int32_of_integer_ (integer_of_uint32 !res_0))))) in
-          void);
-         (C_8:
-         begin
-           ((free_parameter charP_alloc_table) !tmp); (return := !__retres);
-          (raise Return) end) end) end) end) end)))); absurd  end with
+      (let _jessie_<somenum> = (res_0 := (safe_uint32_of_integer_ (0))) in void);
+      (let _jessie_<somenum> = a_0 in
+      (let _jessie_<somenum> = b_0 in
+      (let _jessie_<somenum> = !tmp in
+      (JC_<somenum>: (((comp_requires _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))));
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>: (int32_of_integer_ (integer_of_uint32 !res_0)))) in
+      void); ((free_parameter charP_alloc_table) !tmp);
+      (return := !__retres); (raise Return) end))); absurd  end with
    Return -> !return end)) { true }
 
 
@@ -682,7 +657,7 @@ why --project [...] why/adr_local.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/adr_local_po3.why">
-      <location file = "why/adr_local.why" line = "564" begin = "17" end = "70"/>
+      <location file = "why/adr_local.why" line = "550" begin = "17" end = "70"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/adr_local_po4.why">
@@ -696,7 +671,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/adr_local_po6.why">
-      <location file = "why/adr_local.why" line = "584" begin = "12" end = "51"/>
+      <location file = "why/adr_local.why" line = "559" begin = "14" end = "53"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

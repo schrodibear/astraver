@@ -74,74 +74,75 @@ invariant q_invariant :
   ((0 <= q.last) && (q.last < q.length)))
 
 unit push(int8 c)
-  requires (C_26 : (q.full == 0));
+  requires (_C_26 : (q.full == 0));
 behavior default:
   assigns q.empty,
   q.full,
   q.last,
   (q.contents + q.last).charM;
-  ensures (C_23 : ((C_24 : (q.empty == 0)) &&
-                    (C_25 : ((q.contents + \at(q.last,Old)).charM ==
-                              \at(c,Old)))));
+  ensures (_C_23 : ((_C_24 : (q.empty == 0)) &&
+                     (_C_25 : ((q.contents + \at(q.last,Old)).charM ==
+                                \at(c,Old)))));
 {  
    (var int32 tmp);
    
    {  
-      {  (C_2 : (tmp = (C_1 : q.last)));
-         (C_7 : ((C_6 : q.last) = (C_5 : ((C_4 : ((C_3 : q.last) + 1)) :> int32))));
-         (C_11 : ((C_10 : (C_9 : ((C_8 : q.contents) + tmp)).charM) = c))
+      {  (_C_2 : (tmp = (_C_1 : q.last)));
+         (_C_7 : ((_C_6 : q.last) = (_C_5 : ((_C_4 : ((_C_3 : q.last) + 1)) :> int32))));
+         (_C_11 : ((_C_10 : (_C_9 : ((_C_8 : q.contents) + tmp)).charM) = c))
       };
-      (if ((C_15 : q.last) == (C_14 : q.length)) then (C_13 : ((C_12 : q.last) = 0)) else ());
-      (C_17 : ((C_16 : q.empty) = 0));
-      (C_22 : ((C_21 : q.full) = (C_20 : ((if ((C_19 : q.first) ==
-                                                (C_18 : q.last)) then 1 else 0) :> uint32))));
+      (if ((_C_15 : q.last) == (_C_14 : q.length)) then (_C_13 : ((_C_12 : q.last) = 0)) else ());
+      (_C_17 : ((_C_16 : q.empty) = 0));
+      (_C_22 : ((_C_21 : q.full) = (_C_20 : ((if ((_C_19 : q.first) ==
+                                                   (_C_18 : q.last)) then 1 else 0) :> uint32))));
       
       (return ())
    }
 }
 
 int8 pop()
-  requires (C_52 : (q.empty == 0));
+  requires (_C_52 : (q.empty == 0));
 behavior default:
   assigns q.empty,
   q.full,
   q.first;
-  ensures (C_49 : ((C_50 : (q.full == 0)) &&
-                    (C_51 : (\result ==
-                              (q.contents + \at(q.first,Old)).charM))));
+  ensures (_C_49 : ((_C_50 : (q.full == 0)) &&
+                     (_C_51 : (\result ==
+                                (q.contents + \at(q.first,Old)).charM))));
 {  
    (var int8 r);
    
    (var int32 tmp_0);
    
    {  
-      {  (C_28 : (tmp_0 = (C_27 : q.first)));
-         (C_33 : ((C_32 : q.first) = (C_31 : ((C_30 : ((C_29 : q.first) + 1)) :> int32))));
+      {  (_C_28 : (tmp_0 = (_C_27 : q.first)));
+         (_C_33 : ((_C_32 : q.first) = (_C_31 : ((_C_30 : ((_C_29 : q.first) +
+                                                            1)) :> int32))));
          ()
       };
-      (C_37 : (r = (C_36 : (C_35 : ((C_34 : q.contents) + tmp_0)).charM)));
-      (if ((C_41 : q.first) == (C_40 : q.length)) then (C_39 : ((C_38 : q.first) = 0)) else ());
-      (C_43 : ((C_42 : q.full) = 0));
-      (C_48 : ((C_47 : q.empty) = (C_46 : ((if ((C_45 : q.first) ==
-                                                 (C_44 : q.last)) then 1 else 0) :> uint32))));
+      (_C_37 : (r = (_C_36 : (_C_35 : ((_C_34 : q.contents) + tmp_0)).charM)));
+      (if ((_C_41 : q.first) == (_C_40 : q.length)) then (_C_39 : ((_C_38 : q.first) = 0)) else ());
+      (_C_43 : ((_C_42 : q.full) = 0));
+      (_C_48 : ((_C_47 : q.empty) = (_C_46 : ((if ((_C_45 : q.first) ==
+                                                    (_C_44 : q.last)) then 1 else 0) :> uint32))));
       
       (return r)
    }
 }
 
 int32 test(queue[..] q1)
-  requires (C_59 : (((C_61 : (\offset_min(q1) <= 0)) &&
-                      (C_62 : (\offset_max(q1) >= 0))) &&
-                     (C_63 : (q.empty == 0))));
+  requires (_C_59 : (((_C_61 : (\offset_min(q1) <= 0)) &&
+                       (_C_62 : (\offset_max(q1) >= 0))) &&
+                      (_C_63 : (q.empty == 0))));
 behavior default:
-  ensures (C_58 : (\result == \at(q1.empty,Old)));
+  ensures (_C_58 : (\result == \at(q1.empty,Old)));
 {  
    (var int8 c_0);
    
    (var int32 __retres);
    
-   {  (C_54 : (c_0 = (C_53 : pop())));
-      (C_57 : (__retres = (C_56 : ((C_55 : q1.empty) :> int32))));
+   {  (_C_54 : (c_0 = (_C_53 : pop())));
+      (_C_57 : (__retres = (_C_56 : ((_C_55 : q1.empty) :> int32))));
       
       (return __retres)
    }
@@ -893,56 +894,33 @@ let pop_ensures_default =
    begin
      (let r = ref (any_int8 void) in
      (let tmp_0 = ref (any_int32 void) in
-     (C_28:
      begin
-       (let _jessie_<somenum> =
-       (tmp_0 := (C_27: ((safe_acc_ !queue_first_q_2) q))) in void);
-      (C_33:
-      begin
-        (let _jessie_<somenum> =
-        (C_31:
-        (safe_int32_of_integer_ (C_30:
-                                ((add_int (integer_of_int32 (C_29:
-                                                            ((safe_acc_ !queue_first_q_2) q)))) (1))))) in
-        (let _jessie_<somenum> = q in
-        (((safe_upd_ queue_first_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-       begin
-         void;
-        (C_37:
-        begin
-          (let _jessie_<somenum> =
-          (r := (C_36:
-                ((safe_acc_ !charP_charM_q_4) (C_35:
-                                              ((shift (C_34:
-                                                      ((safe_acc_ !queue_contents_q_2) q))) 
-                                               (integer_of_int32 !tmp_0)))))) in
-          void);
-         (if ((eq_int_ (integer_of_int32 (C_41:
-                                         ((safe_acc_ !queue_first_q_2) q)))) 
-              (integer_of_int32 (C_40: ((safe_acc_ !queue_length_q_2) q))))
-         then
-          (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-          (let _jessie_<somenum> = q in
-          (((safe_upd_ queue_first_q_2) _jessie_<somenum>) _jessie_<somenum>))) else void);
-         (C_43:
-         begin
-           (let _jessie_<somenum> = (safe_uint1_of_integer_ (0)) in
-           (let _jessie_<somenum> = q in
-           (((safe_upd_ queue_full_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_48:
-          begin
-            (let _jessie_<somenum> =
-            (C_46:
-            (safe_uint32_of_integer_ (if ((eq_int_ (integer_of_int32 
-                                                    (C_45:
-                                                    ((safe_acc_ !queue_first_q_2) q)))) 
-                                          (integer_of_int32 (C_44:
-                                                            ((safe_acc_ !queue_last_q_2) q))))
-                                     then (1) else (0)))) in
-            (let _jessie_<somenum> = q in
-            (((safe_upd_ queue_empty_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-           (return := !r); (raise Return) end) end) end) end end) end)));
-    absurd  end with Return -> !return end))
+       (let _jessie_<somenum> = (tmp_0 := ((safe_acc_ !queue_first_q_2) q)) in void);
+      (let _jessie_<somenum> =
+      (safe_int32_of_integer_ ((add_int (integer_of_int32 ((safe_acc_ !queue_first_q_2) q))) (1))) in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ queue_first_q_2) _jessie_<somenum>) _jessie_<somenum>))); void;
+      (let _jessie_<somenum> =
+      (r := ((safe_acc_ !charP_charM_q_4) ((shift ((safe_acc_ !queue_contents_q_2) q)) 
+                                           (integer_of_int32 !tmp_0)))) in
+      void);
+      (if ((eq_int_ (integer_of_int32 ((safe_acc_ !queue_first_q_2) q))) 
+           (integer_of_int32 ((safe_acc_ !queue_length_q_2) q)))
+      then
+       (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+       (let _jessie_<somenum> = q in
+       (((safe_upd_ queue_first_q_2) _jessie_<somenum>) _jessie_<somenum>))) else void);
+      (let _jessie_<somenum> = (safe_uint1_of_integer_ (0)) in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ queue_full_q_2) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      (safe_uint32_of_integer_ (if ((eq_int_ (integer_of_int32 ((safe_acc_ !queue_first_q_2) q))) 
+                                    (integer_of_int32 ((safe_acc_ !queue_last_q_2) q)))
+                               then (1) else (0))) in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ queue_empty_q_2) _jessie_<somenum>) _jessie_<somenum>)));
+      (return := !r); (raise Return) end)); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
@@ -979,56 +957,36 @@ let pop_safety =
    begin
      (let r = ref (any_int8 void) in
      (let tmp_0 = ref (any_int32 void) in
-     (C_28:
      begin
-       (let _jessie_<somenum> =
-       (tmp_0 := (C_27: ((safe_acc_ !queue_first_q_2) q))) in void);
-      (C_33:
-      begin
-        (let _jessie_<somenum> =
-        (C_31:
-        (JC_<somenum>:
-        (int32_of_integer_ (C_30:
-                           ((add_int (integer_of_int32 (C_29:
-                                                       ((safe_acc_ !queue_first_q_2) q)))) (1)))))) in
-        (let _jessie_<somenum> = q in
-        (((safe_upd_ queue_first_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-       begin
-         void;
-        (C_37:
-        begin
-          (let _jessie_<somenum> =
-          (r := (C_36:
-                (JC_<somenum>:
-                ((((offset_acc_ !charP_q_4_alloc_table) !charP_charM_q_4) 
-                  (C_34: ((safe_acc_ !queue_contents_q_2) q))) (integer_of_int32 !tmp_0))))) in
-          void);
-         (if ((eq_int_ (integer_of_int32 (C_41:
-                                         ((safe_acc_ !queue_first_q_2) q)))) 
-              (integer_of_int32 (C_40: ((safe_acc_ !queue_length_q_2) q))))
-         then
-          (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-          (let _jessie_<somenum> = q in
-          (((safe_upd_ queue_first_q_2) _jessie_<somenum>) _jessie_<somenum>))) else void);
-         (C_43:
-         begin
-           (let _jessie_<somenum> = (safe_uint1_of_integer_ (0)) in
-           (let _jessie_<somenum> = q in
-           (((safe_upd_ queue_full_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_48:
-          begin
-            (let _jessie_<somenum> =
-            (C_46:
-            (JC_<somenum>:
-            (uint32_of_integer_ (if ((eq_int_ (integer_of_int32 (C_45:
-                                                                ((safe_acc_ !queue_first_q_2) q)))) 
-                                     (integer_of_int32 (C_44:
-                                                       ((safe_acc_ !queue_last_q_2) q))))
-                                then (1) else (0))))) in
-            (let _jessie_<somenum> = q in
-            (((safe_upd_ queue_empty_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-           (return := !r); (raise Return) end) end) end) end end) end)));
-    absurd  end with Return -> !return end))
+       (let _jessie_<somenum> = (tmp_0 := ((safe_acc_ !queue_first_q_2) q)) in void);
+      (let _jessie_<somenum> =
+      (JC_<somenum>:
+      (int32_of_integer_ ((add_int (integer_of_int32 ((safe_acc_ !queue_first_q_2) q))) (1)))) in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ queue_first_q_2) _jessie_<somenum>) _jessie_<somenum>))); void;
+      (let _jessie_<somenum> =
+      (r := (JC_<somenum>:
+            ((((offset_acc_ !charP_q_4_alloc_table) !charP_charM_q_4) 
+              ((safe_acc_ !queue_contents_q_2) q)) (integer_of_int32 !tmp_0)))) in
+      void);
+      (if ((eq_int_ (integer_of_int32 ((safe_acc_ !queue_first_q_2) q))) 
+           (integer_of_int32 ((safe_acc_ !queue_length_q_2) q)))
+      then
+       (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+       (let _jessie_<somenum> = q in
+       (((safe_upd_ queue_first_q_2) _jessie_<somenum>) _jessie_<somenum>))) else void);
+      (let _jessie_<somenum> = (safe_uint1_of_integer_ (0)) in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ queue_full_q_2) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      (JC_<somenum>:
+      (uint32_of_integer_ (if ((eq_int_ (integer_of_int32 ((safe_acc_ !queue_first_q_2) q))) 
+                               (integer_of_int32 ((safe_acc_ !queue_last_q_2) q)))
+                          then (1) else (0)))) in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ queue_empty_q_2) _jessie_<somenum>) _jessie_<somenum>)));
+      (return := !r); (raise Return) end)); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
@@ -1051,54 +1009,38 @@ let push_ensures_default =
      (let tmp = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (C_2:
        begin
-         (let _jessie_<somenum> = (tmp := (C_1: ((safe_acc_ !queue_last_q_2) q))) in
-         void);
-        (C_7:
+         (let _jessie_<somenum> = (tmp := ((safe_acc_ !queue_last_q_2) q)) in void);
+        (let _jessie_<somenum> =
+        (safe_int32_of_integer_ ((add_int (integer_of_int32 ((safe_acc_ !queue_last_q_2) q))) (1))) in
+        (let _jessie_<somenum> = q in
+        (((safe_upd_ queue_last_q_2) _jessie_<somenum>) _jessie_<somenum>)));
+        (let _jessie_<somenum> = c in
+        (let _jessie_<somenum> = ((safe_acc_ !queue_contents_q_2) q) in
+        (let _jessie_<somenum> = (integer_of_int32 !tmp) in
+        (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
         begin
-          (let _jessie_<somenum> =
-          (C_5:
-          (safe_int32_of_integer_ (C_4:
-                                  ((add_int (integer_of_int32 (C_3:
-                                                              ((safe_acc_ !queue_last_q_2) q)))) (1))))) in
-          (let _jessie_<somenum> = q in
-          (((safe_upd_ queue_last_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-         (C_11:
-         (let _jessie_<somenum> = c in
-         (let _jessie_<somenum> = (C_8: ((safe_acc_ !queue_contents_q_2) q)) in
-         (let _jessie_<somenum> = (integer_of_int32 !tmp) in
-         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-         begin
-           (((safe_upd_ charP_charM_q_4) _jessie_<somenum>) _jessie_<somenum>); _jessie_<somenum>
-         end))))) end) end) in void);
-      (if ((eq_int_ (integer_of_int32 (C_15: ((safe_acc_ !queue_last_q_2) q)))) 
-           (integer_of_int32 (C_14: ((safe_acc_ !queue_length_q_2) q))))
+          (((safe_upd_ charP_charM_q_4) _jessie_<somenum>) _jessie_<somenum>); _jessie_<somenum>
+        end)))) end in void);
+      (if ((eq_int_ (integer_of_int32 ((safe_acc_ !queue_last_q_2) q))) 
+           (integer_of_int32 ((safe_acc_ !queue_length_q_2) q)))
       then
        (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
        (let _jessie_<somenum> = q in
        (((safe_upd_ queue_last_q_2) _jessie_<somenum>) _jessie_<somenum>))) else void);
-      (C_17:
-      begin
-        (let _jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
-        (let _jessie_<somenum> = q in
-        (((safe_upd_ queue_empty_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-       (C_22:
-       begin
-         (let _jessie_<somenum> =
-         (safe_uint1_of_integer_ (integer_of_uint32 (C_20:
-                                                    (safe_uint32_of_integer_ 
-                                                     (if ((eq_int_ (integer_of_int32 
-                                                                    (C_19:
-                                                                    ((safe_acc_ !queue_first_q_2) q)))) 
-                                                          (integer_of_int32 
-                                                           (C_18:
-                                                           ((safe_acc_ !queue_last_q_2) q))))
-                                                     then (1) else (0)))))) in
-         (let _jessie_<somenum> = q in
-         (((safe_upd_ queue_full_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-        (raise Return) end) end) end); (raise Return) end with Return ->
-   void end)
+      (let _jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ queue_empty_q_2) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      (safe_uint1_of_integer_ (integer_of_uint32 (safe_uint32_of_integer_ 
+                                                  (if ((eq_int_ (integer_of_int32 
+                                                                 ((safe_acc_ !queue_first_q_2) q))) 
+                                                       (integer_of_int32 
+                                                        ((safe_acc_ !queue_last_q_2) q)))
+                                                  then (1) else (0))))) in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ queue_full_q_2) _jessie_<somenum>) _jessie_<somenum>))); (raise Return)
+     end); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
@@ -1139,60 +1081,43 @@ let push_safety =
      (let tmp = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (C_2:
        begin
-         (let _jessie_<somenum> = (tmp := (C_1: ((safe_acc_ !queue_last_q_2) q))) in
-         void);
-        (C_7:
+         (let _jessie_<somenum> = (tmp := ((safe_acc_ !queue_last_q_2) q)) in void);
+        (let _jessie_<somenum> =
+        (JC_<somenum>:
+        (int32_of_integer_ ((add_int (integer_of_int32 ((safe_acc_ !queue_last_q_2) q))) (1)))) in
+        (let _jessie_<somenum> = q in
+        (((safe_upd_ queue_last_q_2) _jessie_<somenum>) _jessie_<somenum>)));
+        (let _jessie_<somenum> = c in
+        (let _jessie_<somenum> = ((safe_acc_ !queue_contents_q_2) q) in
+        (let _jessie_<somenum> = (integer_of_int32 !tmp) in
+        (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+        (JC_<somenum>:
         begin
-          (let _jessie_<somenum> =
-          (C_5:
-          (JC_<somenum>:
-          (int32_of_integer_ (C_4:
-                             ((add_int (integer_of_int32 (C_3:
-                                                         ((safe_acc_ !queue_last_q_2) q)))) (1)))))) in
-          (let _jessie_<somenum> = q in
-          (((safe_upd_ queue_last_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-         (C_11:
-         (let _jessie_<somenum> = c in
-         (let _jessie_<somenum> = (C_8: ((safe_acc_ !queue_contents_q_2) q)) in
-         (let _jessie_<somenum> = (integer_of_int32 !tmp) in
-         (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-         (JC_<somenum>:
-         begin
-           (((((offset_upd_ !charP_q_4_alloc_table) charP_charM_q_4) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>);
-          _jessie_<somenum> end)))))) end) end) in void);
-      (if ((eq_int_ (integer_of_int32 (C_15: ((safe_acc_ !queue_last_q_2) q)))) 
-           (integer_of_int32 (C_14: ((safe_acc_ !queue_length_q_2) q))))
+          (((((offset_upd_ !charP_q_4_alloc_table) charP_charM_q_4) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>);
+         _jessie_<somenum> end))))) end in void);
+      (if ((eq_int_ (integer_of_int32 ((safe_acc_ !queue_last_q_2) q))) 
+           (integer_of_int32 ((safe_acc_ !queue_length_q_2) q)))
       then
        (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
        (let _jessie_<somenum> = q in
        (((safe_upd_ queue_last_q_2) _jessie_<somenum>) _jessie_<somenum>))) else void);
-      (C_17:
-      begin
-        (let _jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
-        (let _jessie_<somenum> = q in
-        (((safe_upd_ queue_empty_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-       (C_22:
-       begin
-         (let _jessie_<somenum> =
-         (JC_<somenum>:
-         (uint1_of_integer_ (integer_of_uint32 (C_20:
-                                               (JC_<somenum>:
-                                               (uint32_of_integer_ (if 
-                                                                   ((eq_int_ 
+      (let _jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ queue_empty_q_2) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      (JC_<somenum>:
+      (uint1_of_integer_ (integer_of_uint32 (JC_<somenum>:
+                                            (uint32_of_integer_ (if ((eq_int_ 
                                                                     (integer_of_int32 
-                                                                    (C_19:
-                                                                    ((safe_acc_ !queue_first_q_2) q)))) 
+                                                                    ((safe_acc_ !queue_first_q_2) q))) 
                                                                     (integer_of_int32 
-                                                                    (C_18:
-                                                                    ((safe_acc_ !queue_last_q_2) q))))
-                                                                   then (1)
-                                                                   else (0)))))))) in
-         (let _jessie_<somenum> = q in
-         (((safe_upd_ queue_full_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-        (raise Return) end) end) end); (raise Return) end with Return ->
-   void end)
+                                                                    ((safe_acc_ !queue_last_q_2) q)))
+                                                                then (1)
+                                                                else (0))))))) in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ queue_full_q_2) _jessie_<somenum>) _jessie_<somenum>))); (raise Return)
+     end); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
@@ -1218,17 +1143,12 @@ let test_ensures_default =
    begin
      (let c_0 = ref (any_int8 void) in
      (let __retres = ref (any_int32 void) in
-     (C_54:
      begin
-       (let _jessie_<somenum> = (c_0 := (C_53: (JC_<somenum>: (pop void)))) in void);
-      (C_57:
-      begin
-        (let _jessie_<somenum> =
-        (__retres := (C_56:
-                     (safe_int32_of_integer_ (integer_of_uint32 (C_55:
-                                                                ((safe_acc_ queue_empty_q1_3) q1)))))) in
-        void); (return := !__retres); (raise Return) end) end))); absurd  end
-   with Return -> !return end))
+       (let _jessie_<somenum> = (c_0 := (JC_<somenum>: (pop void))) in void);
+      (let _jessie_<somenum> =
+      (__retres := (safe_int32_of_integer_ (integer_of_uint32 ((safe_acc_ queue_empty_q1_3) q1)))) in
+      void); (return := !__retres); (raise Return) end)); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     (integer_of_int32(result) = integer_of_uint32(select(queue_empty_q1_3,
                                                   q1)))) }
@@ -1251,20 +1171,14 @@ let test_safety =
    begin
      (let c_0 = ref (any_int8 void) in
      (let __retres = ref (any_int32 void) in
-     (C_54:
      begin
-       (let _jessie_<somenum> = (c_0 := (C_53: (JC_<somenum>: (pop_requires void)))) in
-       void);
-      (C_57:
-      begin
-        (let _jessie_<somenum> =
-        (__retres := (C_56:
-                     (JC_<somenum>:
-                     (int32_of_integer_ (integer_of_uint32 (C_55:
-                                                           (JC_<somenum>:
-                                                           (((acc_ queue_q1_3_alloc_table) queue_empty_q1_3) q1)))))))) in
-        void); (return := !__retres); (raise Return) end) end))); absurd  end
-   with Return -> !return end))
+       (let _jessie_<somenum> = (c_0 := (JC_<somenum>: (pop_requires void))) in void);
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>:
+                   (int32_of_integer_ (integer_of_uint32 (JC_<somenum>:
+                                                         (((acc_ queue_q1_3_alloc_table) queue_empty_q1_3) q1)))))) in
+      void); (return := !__retres); (raise Return) end)); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      q_invariant(charP_q_4_alloc_table, queue_last_q_2, queue_first_q_2,
@@ -1379,12 +1293,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/queue_po23.why">
-      <location file = "why/queue.why" line = "1014" begin = "12" end = "102"/>
+      <location file = "why/queue.why" line = "947" begin = "11" end = "101"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/queue_po24.why">
-      <location file = "why/queue.why" line = "1014" begin = "12" end = "102"/>
+      <location file = "why/queue.why" line = "947" begin = "11" end = "101"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

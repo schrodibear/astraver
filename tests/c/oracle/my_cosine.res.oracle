@@ -131,27 +131,27 @@ lemma method_error :
     (\real_abs(((1.0 - ((x * x) * 0.5)) - \cos(x))) <= 0x1p-24)))
 
 float my_cos1(float x)
-  requires (C_7 : (\real_abs((x :> real)) <= 0x1p-5));
+  requires (_C_7 : (\real_abs((x :> real)) <= 0x1p-5));
 behavior default:
-  ensures (C_6 : (\real_abs(((\result :> real) - \cos((\at(x,Old) :> real)))) <=
-                   0x1p-23));
+  ensures (_C_6 : (\real_abs(((\result :> real) - \cos((\at(x,Old) :> real)))) <=
+                    0x1p-23));
 {  
    (var float __retres);
    
    {  
       {  
-         (assert for default: (C_1 : (jessie : (\real_abs(((1.0 -
-                                                             (((x :> real) *
-                                                                (x :> real)) *
-                                                               0.5)) -
-                                                            \cos((x :> real)))) <=
-                                                 0x1p-24))));
+         (assert for default: (_C_1 : (jessie : (\real_abs(((1.0 -
+                                                              (((x :> real) *
+                                                                 (x :> real)) *
+                                                                0.5)) -
+                                                             \cos((x :> real)))) <=
+                                                  0x1p-24))));
          ()
       };
       
-      {  (C_5 : (__retres = (C_4 : ((1.0 :> float) -
-                                     (C_3 : ((C_2 : (x * x)) *
-                                              (0.5 :> float)))))));
+      {  (_C_5 : (__retres = (_C_4 : ((1.0 :> float) -
+                                       (_C_3 : ((_C_2 : (x * x)) *
+                                                 (0.5 :> float)))))));
          
          (return __retres)
       }
@@ -159,32 +159,32 @@ behavior default:
 }
 
 float my_cos2(float x_0)
-  requires (C_15 : ((C_16 : (\real_abs((x_0 :> real)) <= 0x1p-5)) &&
-                     (C_17 : (\single_round_error(x_0) == 0.0))));
+  requires (_C_15 : ((_C_16 : (\real_abs((x_0 :> real)) <= 0x1p-5)) &&
+                      (_C_17 : (\single_round_error(x_0) == 0.0))));
 behavior default:
-  ensures (C_14 : (\real_abs(((\result :> real) -
-                               \cos((\at(x_0,Old) :> real)))) <=
-                    0x1p-23));
+  ensures (_C_14 : (\real_abs(((\result :> real) -
+                                \cos((\at(x_0,Old) :> real)))) <=
+                     0x1p-23));
 {  
    (var float r);
    
    {  
       {  
-         (assert for default: (C_8 : (jessie : (\single_exact(x_0) ==
-                                                 (x_0 :> real)))));
+         (assert for default: (_C_8 : (jessie : (\single_exact(x_0) ==
+                                                  (x_0 :> real)))));
          ()
       };
       
-      {  (C_12 : (r = (C_11 : ((1.0 :> float) -
-                                (C_10 : ((C_9 : (x_0 * x_0)) *
-                                          (0.5 :> float)))))))
+      {  (_C_12 : (r = (_C_11 : ((1.0 :> float) -
+                                  (_C_10 : ((_C_9 : (x_0 * x_0)) *
+                                             (0.5 :> float)))))))
       };
       
       {  
-         (assert for default: (C_13 : (jessie : (\real_abs((\single_exact(
-                                                             r) -
-                                                             \cos((x_0 :> real)))) <=
-                                                  0x1p-24))));
+         (assert for default: (_C_13 : (jessie : (\real_abs((\single_exact(
+                                                              r) -
+                                                              \cos((x_0 :> real)))) <=
+                                                   0x1p-24))));
          ()
       };
       
@@ -195,27 +195,27 @@ behavior default:
 }
 
 float my_cos3(float x_1)
-  requires (C_26 : ((C_27 : (\real_abs(\single_exact(x_1)) <= 0x1p-5)) &&
-                     (C_28 : (\single_round_error(x_1) <= 0x1p-20))));
+  requires (_C_26 : ((_C_27 : (\real_abs(\single_exact(x_1)) <= 0x1p-5)) &&
+                      (_C_28 : (\single_round_error(x_1) <= 0x1p-20))));
 behavior default:
-  ensures (C_23 : ((C_24 : (\real_abs((\single_exact(\result) -
-                                        \cos(\single_exact(\at(x_1,Old))))) <=
-                             0x1p-24)) &&
-                    (C_25 : (\single_round_error(\result) <=
-                              (\single_round_error(\at(x_1,Old)) + 0x3p-24)))));
+  ensures (_C_23 : ((_C_24 : (\real_abs((\single_exact(\result) -
+                                          \cos(\single_exact(\at(x_1,Old))))) <=
+                               0x1p-24)) &&
+                     (_C_25 : (\single_round_error(\result) <=
+                                (\single_round_error(\at(x_1,Old)) + 0x3p-24)))));
 {  
    (var float r_0);
    
-   {  (C_21 : (r_0 = (C_20 : ((1.0 :> float) -
-                               (C_19 : ((C_18 : (x_1 * x_1)) *
-                                         (0.5 :> float)))))));
+   {  (_C_21 : (r_0 = (_C_20 : ((1.0 :> float) -
+                                 (_C_19 : ((_C_18 : (x_1 * x_1)) *
+                                            (0.5 :> float)))))));
       
       {  
-         (assert for default: (C_22 : (jessie : (\real_abs((\single_exact(
-                                                             r_0) -
-                                                             \cos(\single_exact(
-                                                                  x_1)))) <=
-                                                  0x1p-24))));
+         (assert for default: (_C_22 : (jessie : (\real_abs((\single_exact(
+                                                              r_0) -
+                                                              \cos(\single_exact(
+                                                                   x_1)))) <=
+                                                   0x1p-24))));
          ()
       };
       
@@ -226,87 +226,75 @@ behavior default:
 }
 
 float my_cos4(float x_2)
-  requires (C_35 : (\real_abs((x_2 :> real)) <= 0.07));
+  requires (_C_35 : (\real_abs((x_2 :> real)) <= 0.07));
 behavior default:
-  ensures (C_34 : (\real_abs(((\result :> real) -
-                               \cos((\at(x_2,Old) :> real)))) <=
-                    0x1.3p-20));
+  ensures (_C_34 : (\real_abs(((\result :> real) -
+                                \cos((\at(x_2,Old) :> real)))) <=
+                     0x1.3p-20));
 {  
    (var float __retres_0);
    
    {  
       {  
-         (assert for default: (C_29 : (jessie : (\real_abs(((1.0 -
-                                                              (((x_2 :> real) *
-                                                                 (x_2 :> real)) *
-                                                                0.5)) -
-                                                             \cos((x_2 :> real)))) <=
-                                                  0x1.2p-20))));
+         (assert for default: (_C_29 : (jessie : (\real_abs(((1.0 -
+                                                               (((x_2 :> real) *
+                                                                  (x_2 :> real)) *
+                                                                 0.5)) -
+                                                              \cos((x_2 :> real)))) <=
+                                                   0x1.2p-20))));
          ()
       };
       
-      {  (C_33 : (__retres_0 = (C_32 : ((1.0 :> float) -
-                                         (C_31 : ((C_30 : (x_2 * x_2)) *
-                                                   (0.5 :> float)))))));
+      {  (_C_33 : (__retres_0 = (_C_32 : ((1.0 :> float) -
+                                           (_C_31 : ((_C_30 : (x_2 * x_2)) *
+                                                      (0.5 :> float)))))));
          
          (return __retres_0)
       }
    }
 }
 ========== file tests/c/my_cosine.jessie/my_cosine.cloc ==========
-[C_15]
+[_C_35]
 file = "HOME/tests/c/my_cosine.c"
-line = 49
+line = 71
 begin = 13
-end = 56
+end = 28
 
-[C_11]
+[_C_28]
 file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 12
-end = 31
+line = 61
+begin = 11
+end = 37
 
-[C_1]
-file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 13
-end = 53
-
-[C_33]
+[_C_31]
 file = "HOME/tests/c/my_cosine.c"
 line = 76
-begin = 2
-end = 29
+begin = 16
+end = 28
 
-[C_9]
+[_C_4]
 file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 19
-end = 24
+line = 45
+begin = 9
+end = 28
 
-[C_10]
-file = "HOME/tests/c/my_cosine.c"
-line = 54
-begin = 19
-end = 31
-
-[C_20]
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 12
-end = 31
-
-[C_32]
+[_C_32]
 file = "HOME/tests/c/my_cosine.c"
 line = 76
 begin = 9
 end = 28
 
-[C_17]
+[_C_23]
 file = "HOME/tests/c/my_cosine.c"
-line = 49
-begin = 34
-end = 56
+line = 62
+begin = 12
+end = 124
+
+[_C_19]
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 19
+end = 31
 
 [my_cos3]
 name = "Function my_cos3"
@@ -315,6 +303,24 @@ line = 65
 begin = 6
 end = 13
 
+[_C_13]
+file = "HOME/tests/c/my_cosine.c"
+line = 55
+begin = 13
+end = 49
+
+[_C_5]
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 2
+end = 29
+
+[_C_12]
+file = "HOME/tests/c/my_cosine.c"
+line = 54
+begin = 2
+end = 7
+
 [my_cos4]
 name = "Function my_cos4"
 file = "HOME/tests/c/my_cosine.c"
@@ -322,65 +328,59 @@ line = 74
 begin = 6
 end = 13
 
-[C_5]
+[_C_33]
 file = "HOME/tests/c/my_cosine.c"
-line = 45
+line = 76
 begin = 2
 end = 29
 
-[C_34]
-file = "HOME/tests/c/my_cosine.c"
-line = 72
-begin = 12
-end = 48
-
-[C_29]
-file = "HOME/tests/c/my_cosine.c"
-line = 75
-begin = 13
-end = 55
-
-[C_13]
-file = "HOME/tests/c/my_cosine.c"
-line = 55
-begin = 13
-end = 49
-
-[C_7]
-file = "HOME/tests/c/my_cosine.c"
-line = 40
-begin = 13
-end = 30
-
-[C_22]
+[_C_22]
 file = "HOME/tests/c/my_cosine.c"
 line = 67
 begin = 13
 end = 57
 
-[C_14]
+[_C_9]
 file = "HOME/tests/c/my_cosine.c"
-line = 50
+line = 54
+begin = 19
+end = 24
+
+[_C_30]
+file = "HOME/tests/c/my_cosine.c"
+line = 76
+begin = 16
+end = 21
+
+[_C_6]
+file = "HOME/tests/c/my_cosine.c"
+line = 41
 begin = 12
 end = 46
 
-[C_35]
+[_C_24]
 file = "HOME/tests/c/my_cosine.c"
-line = 71
-begin = 13
+line = 62
+begin = 12
+end = 62
+
+[_C_20]
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 12
+end = 31
+
+[_C_3]
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 16
 end = 28
 
-[C_25]
+[_C_17]
 file = "HOME/tests/c/my_cosine.c"
-line = 63
-begin = 11
-end = 61
-
-[C_8]
-file = "HOME/tests/c/my_cosine.c"
-line = 53
-begin = 13
-end = 27
+line = 49
+begin = 34
+end = 56
 
 [my_cos2]
 name = "Function my_cos2"
@@ -389,29 +389,35 @@ line = 52
 begin = 6
 end = 13
 
-[C_27]
+[_C_7]
+file = "HOME/tests/c/my_cosine.c"
+line = 40
+begin = 13
+end = 30
+
+[_C_27]
 file = "HOME/tests/c/my_cosine.c"
 line = 60
 begin = 13
 end = 38
 
-[C_19]
+[_C_15]
 file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 19
-end = 31
+line = 49
+begin = 13
+end = 56
 
-[C_4]
+[_C_26]
 file = "HOME/tests/c/my_cosine.c"
-line = 45
-begin = 9
-end = 28
+line = 60
+begin = 13
+end = 76
 
-[C_12]
+[_C_10]
 file = "HOME/tests/c/my_cosine.c"
 line = 54
-begin = 2
-end = 7
+begin = 19
+end = 31
 
 [method_error]
 name = "Lemma method_error"
@@ -420,23 +426,29 @@ line = 36
 begin = 4
 end = 111
 
-[C_26]
+[_C_8]
 file = "HOME/tests/c/my_cosine.c"
-line = 60
+line = 53
 begin = 13
-end = 76
+end = 27
 
-[C_18]
+[_C_18]
 file = "HOME/tests/c/my_cosine.c"
 line = 66
 begin = 19
 end = 24
 
-[C_2]
+[_C_29]
 file = "HOME/tests/c/my_cosine.c"
-line = 45
-begin = 16
-end = 21
+line = 75
+begin = 13
+end = 55
+
+[_C_14]
+file = "HOME/tests/c/my_cosine.c"
+line = 50
+begin = 12
+end = 46
 
 [my_cos1]
 name = "Function my_cos1"
@@ -445,59 +457,47 @@ line = 43
 begin = 6
 end = 13
 
-[C_28]
-file = "HOME/tests/c/my_cosine.c"
-line = 61
-begin = 11
-end = 37
-
-[C_24]
-file = "HOME/tests/c/my_cosine.c"
-line = 62
-begin = 12
-end = 62
-
-[C_6]
-file = "HOME/tests/c/my_cosine.c"
-line = 41
-begin = 12
-end = 46
-
-[C_30]
-file = "HOME/tests/c/my_cosine.c"
-line = 76
-begin = 16
-end = 21
-
-[C_21]
-file = "HOME/tests/c/my_cosine.c"
-line = 66
-begin = 2
-end = 7
-
-[C_3]
+[_C_2]
 file = "HOME/tests/c/my_cosine.c"
 line = 45
 begin = 16
-end = 28
+end = 21
 
-[C_16]
+[_C_34]
+file = "HOME/tests/c/my_cosine.c"
+line = 72
+begin = 12
+end = 48
+
+[_C_16]
 file = "HOME/tests/c/my_cosine.c"
 line = 49
 begin = 13
 end = 30
 
-[C_31]
+[_C_1]
 file = "HOME/tests/c/my_cosine.c"
-line = 76
-begin = 16
-end = 28
+line = 44
+begin = 13
+end = 53
 
-[C_23]
+[_C_25]
 file = "HOME/tests/c/my_cosine.c"
-line = 62
+line = 63
+begin = 11
+end = 61
+
+[_C_11]
+file = "HOME/tests/c/my_cosine.c"
+line = 54
 begin = 12
-end = 124
+end = 31
+
+[_C_21]
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 2
+end = 7
 
 ========== jessie execution ==========
 Generating Why function my_cos1
@@ -1646,23 +1646,16 @@ let my_cos1_ensures_default =
                                             single_value(x_0)),
                                    0.5)),
                           cos(single_value(x_0)))),
-         0x1p-24)) }; void);
-      begin
-        void;
-       (C_5:
-       begin
-         (let _jessie_<num> =
-         (__retres := (C_4:
-                      (JC_16:
-                      (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                       (C_3:
-                       (JC_15:
-                       (((mul_single_safe nearest_even) (C_2:
-                                                        (JC_14:
-                                                        (((mul_single_safe nearest_even) x_0) x_0)))) 
-                        (single_of_real_exact 0.5)))))))) in void);
-        (return := !__retres); (raise Return) end) end end); absurd  end with
-   Return -> !return end))
+         0x1p-24)) }; void); void;
+      (let _jessie_<num> =
+      (__retres := (JC_16:
+                   (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+                    (JC_15:
+                    (((mul_single_safe nearest_even) (JC_14:
+                                                     (((mul_single_safe nearest_even) x_0) x_0))) 
+                     (single_of_real_exact 0.5)))))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end))
   { (JC_5:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
     0x1p-23)) }
@@ -1683,23 +1676,16 @@ let my_cos1_safety =
                                               single_value(x_0)),
                                      0.5)),
                             cos(single_value(x_0)))),
-           0x1p-24)) } ];
-      begin
-        void;
-       (C_5:
-       begin
-         (let _jessie_<num> =
-         (__retres := (C_4:
-                      (JC_12:
-                      (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                       (C_3:
-                       (JC_11:
-                       (((mul_single nearest_even) (C_2:
-                                                   (JC_10:
-                                                   (((mul_single nearest_even) x_0) x_0)))) 
-                        (single_of_real_exact 0.5)))))))) in void);
-        (return := !__retres); (raise Return) end) end end); absurd  end with
-   Return -> !return end)) { true }
+           0x1p-24)) } ]; void;
+      (let _jessie_<num> =
+      (__retres := (JC_12:
+                   (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+                    (JC_11:
+                    (((mul_single nearest_even) (JC_10:
+                                                (((mul_single nearest_even) x_0) x_0))) 
+                     (single_of_real_exact 0.5)))))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 let my_cos2_ensures_default =
  fun (x_0_0 : single) ->
@@ -1715,17 +1701,13 @@ let my_cos2_ensures_default =
        (assert { (JC_34: (single_exact(x_0_0) = single_value(x_0_0))) };
        void); void;
       (let _jessie_<num> =
-      (C_12:
       begin
-        (r := (C_11:
-              (JC_37:
+        (r := (JC_37:
               (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-               (C_10:
                (JC_36:
-               (((mul_single_safe nearest_even) (C_9:
-                                                (JC_35:
-                                                (((mul_single_safe nearest_even) x_0_0) x_0_0)))) 
-                (single_of_real_exact 0.5)))))))); !r end) in void);
+               (((mul_single_safe nearest_even) (JC_35:
+                                                (((mul_single_safe nearest_even) x_0_0) x_0_0))) 
+                (single_of_real_exact 0.5)))))); !r end in void);
       (assert
       { (JC_38:
         le_real(abs_real(sub_real(single_exact(r), cos(single_value(x_0_0)))),
@@ -1749,17 +1731,13 @@ let my_cos2_safety =
        [ { } unit { (JC_29: (single_exact(x_0_0) = single_value(x_0_0))) } ];
       void;
       (let _jessie_<num> =
-      (C_12:
       begin
-        (r := (C_11:
-              (JC_32:
+        (r := (JC_32:
               (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-               (C_10:
                (JC_31:
-               (((mul_single nearest_even) (C_9:
-                                           (JC_30:
-                                           (((mul_single nearest_even) x_0_0) x_0_0)))) 
-                (single_of_real_exact 0.5)))))))); !r end) in void);
+               (((mul_single nearest_even) (JC_30:
+                                           (((mul_single nearest_even) x_0_0) x_0_0))) 
+                (single_of_real_exact 0.5)))))); !r end in void);
       [ { } unit reads r
         { (JC_33:
           le_real(abs_real(sub_real(single_exact(r),
@@ -1777,22 +1755,18 @@ let my_cos3_ensures_default =
   try
    begin
      (let r_0 = ref (any_single void) in
-     (C_21:
      begin
        (let _jessie_<num> =
-       (r_0 := (C_20:
-               (JC_61:
+       (r_0 := (JC_61:
                (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                (C_19:
                 (JC_60:
-                (((mul_single_safe nearest_even) (C_18:
-                                                 (JC_59:
-                                                 (((mul_single_safe nearest_even) x_1) x_1)))) 
-                 (single_of_real_exact 0.5)))))))) in void);
+                (((mul_single_safe nearest_even) (JC_59:
+                                                 (((mul_single_safe nearest_even) x_1) x_1))) 
+                 (single_of_real_exact 0.5)))))) in void);
       (assert
       { (JC_62:
         le_real(abs_real(sub_real(single_exact(r_0), cos(single_exact(x_1)))),
-        0x1p-24)) }; void); void; (return := !r_0); (raise Return) end));
+        0x1p-24)) }; void); void; (return := !r_0); (raise Return) end);
     absurd  end with Return -> !return end))
   { (JC_49:
     ((JC_47:
@@ -1812,23 +1786,19 @@ let my_cos3_safety =
   try
    begin
      (let r_0 = ref (any_single void) in
-     (C_21:
      begin
        (let _jessie_<num> =
-       (r_0 := (C_20:
-               (JC_57:
+       (r_0 := (JC_57:
                (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                (C_19:
                 (JC_56:
-                (((mul_single nearest_even) (C_18:
-                                            (JC_55:
-                                            (((mul_single nearest_even) x_1) x_1)))) 
-                 (single_of_real_exact 0.5)))))))) in void);
+                (((mul_single nearest_even) (JC_55:
+                                            (((mul_single nearest_even) x_1) x_1))) 
+                 (single_of_real_exact 0.5)))))) in void);
       [ { } unit reads r_0
         { (JC_58:
           le_real(abs_real(sub_real(single_exact(r_0),
                            cos(single_exact(x_1)))),
-          0x1p-24)) } ]; void; (return := !r_0); (raise Return) end)); 
+          0x1p-24)) } ]; void; (return := !r_0); (raise Return) end); 
     absurd  end with Return -> !return end)) { true }
 
 let my_cos4_ensures_default =
@@ -1847,23 +1817,16 @@ let my_cos4_ensures_default =
                                             single_value(x_2)),
                                    0.5)),
                           cos(single_value(x_2)))),
-         0x1.2p-20)) }; void);
-      begin
-        void;
-       (C_33:
-       begin
-         (let _jessie_<num> =
-         (__retres_0 := (C_32:
-                        (JC_78:
-                        (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                         (C_31:
-                         (JC_77:
-                         (((mul_single_safe nearest_even) (C_30:
-                                                          (JC_76:
-                                                          (((mul_single_safe nearest_even) x_2) x_2)))) 
-                          (single_of_real_exact 0.5)))))))) in void);
-        (return := !__retres_0); (raise Return) end) end end); absurd  end
-   with Return -> !return end))
+         0x1.2p-20)) }; void); void;
+      (let _jessie_<num> =
+      (__retres_0 := (JC_78:
+                     (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+                      (JC_77:
+                      (((mul_single_safe nearest_even) (JC_76:
+                                                       (((mul_single_safe nearest_even) x_2) x_2))) 
+                       (single_of_real_exact 0.5)))))) in void);
+      (return := !__retres_0); (raise Return) end); absurd  end with
+   Return -> !return end))
   { (JC_67:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
     0x1.3p-20)) }
@@ -1884,23 +1847,16 @@ let my_cos4_safety =
                                               single_value(x_2)),
                                      0.5)),
                             cos(single_value(x_2)))),
-           0x1.2p-20)) } ];
-      begin
-        void;
-       (C_33:
-       begin
-         (let _jessie_<num> =
-         (__retres_0 := (C_32:
-                        (JC_74:
-                        (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                         (C_31:
-                         (JC_73:
-                         (((mul_single nearest_even) (C_30:
-                                                     (JC_72:
-                                                     (((mul_single nearest_even) x_2) x_2)))) 
-                          (single_of_real_exact 0.5)))))))) in void);
-        (return := !__retres_0); (raise Return) end) end end); absurd  end
-   with Return -> !return end)) { true }
+           0x1.2p-20)) } ]; void;
+      (let _jessie_<num> =
+      (__retres_0 := (JC_74:
+                     (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+                      (JC_73:
+                      (((mul_single nearest_even) (JC_72:
+                                                  (((mul_single nearest_even) x_2) x_2))) 
+                       (single_of_real_exact 0.5)))))) in void);
+      (return := !__retres_0); (raise Return) end); absurd  end with
+   Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========

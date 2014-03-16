@@ -65,26 +65,26 @@ tag pP = {
 }
 
 int32 f(__anonunion_U_1[..] x)
-  requires (C_17 : ((((C_20 : (\offset_min(x) <= 0)) &&
-                       (C_21 : (\offset_max(x) >= 0))) &&
-                      ((C_23 : (\offset_min((x :> pP[0]).pM) <= 0)) &&
-                        (C_24 : (\offset_max((x :> pP[0]).pM) >= 0)))) &&
-                     (C_25 : ((x :> cP[0]).cM == 0))));
+  requires (_C_17 : ((((_C_20 : (\offset_min(x) <= 0)) &&
+                        (_C_21 : (\offset_max(x) >= 0))) &&
+                       ((_C_23 : (\offset_min((x :> pP[0]).pM) <= 0)) &&
+                         (_C_24 : (\offset_max((x :> pP[0]).pM) >= 0)))) &&
+                      (_C_25 : ((x :> cP[0]).cM == 0))));
 behavior default:
-  ensures (C_12 : (((C_14 : ((\at(x,Old) :> iP[0]).iM == 0)) &&
-                     (C_15 : ((\at(x,Old) :> cP[0]).cM == 0))) &&
-                    (C_16 : (\result == 0))));
+  ensures (_C_12 : (((_C_14 : ((\at(x,Old) :> iP[0]).iM == 0)) &&
+                      (_C_15 : ((\at(x,Old) :> cP[0]).cM == 0))) &&
+                     (_C_16 : (\result == 0))));
 {  
    (var int32 __retres);
    
-   {  (C_4 : ((C_3 : (C_2 : (C_1 : (x :> pP[0])).pM).intM) = 0));
+   {  (_C_4 : ((_C_3 : (_C_2 : (_C_1 : (x :> pP[0])).pM).intM) = 0));
       
       {  
-         (assert for default: (C_5 : (jessie : ((x :> pP[0]).pM.intM == 0))));
+         (assert for default: (_C_5 : (jessie : ((x :> pP[0]).pM.intM == 0))));
          ()
       };
-      (C_8 : ((C_7 : (C_6 : (x :> iP[0])).iM) = 0));
-      (C_11 : (__retres = (C_10 : (C_9 : (x :> iP[0])).iM)));
+      (_C_8 : ((_C_7 : (_C_6 : (x :> iP[0])).iM) = 0));
+      (_C_11 : (__retres = (_C_10 : (_C_9 : (x :> iP[0])).iM)));
       
       (return __retres)
    }

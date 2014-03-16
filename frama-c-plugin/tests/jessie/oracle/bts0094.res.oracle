@@ -43,16 +43,16 @@ type voidP = [voidP]
 
 int8 char_range(int8 i)
 behavior default:
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 {  
    {  
       {  
-         (assert for default: (C_1 : (jessie : (i >= (- 128)))));
+         (assert for default: (_C_1 : (jessie : (i >= (- 128)))));
          ()
       };
       
       {  
-         (assert for default: (C_2 : (jessie : (i <= 127))));
+         (assert for default: (_C_2 : (jessie : (i <= 127))));
          ()
       };
       
@@ -64,16 +64,16 @@ behavior default:
 
 int8 schar_range(int8 i_0)
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
    {  
       {  
-         (assert for default: (C_4 : (jessie : (i_0 >= (- 128)))));
+         (assert for default: (_C_4 : (jessie : (i_0 >= (- 128)))));
          ()
       };
       
       {  
-         (assert for default: (C_5 : (jessie : (i_0 <= 127))));
+         (assert for default: (_C_5 : (jessie : (i_0 <= 127))));
          ()
       };
       
@@ -85,16 +85,16 @@ behavior default:
 
 uint8 uchar_range(uint8 i_2)
 behavior default:
-  ensures (C_9 : true);
+  ensures (_C_9 : true);
 {  
    {  
       {  
-         (assert for default: (C_7 : (jessie : (i_2 >= 0))));
+         (assert for default: (_C_7 : (jessie : (i_2 >= 0))));
          ()
       };
       
       {  
-         (assert for default: (C_8 : (jessie : (i_2 <= 255))));
+         (assert for default: (_C_8 : (jessie : (i_2 <= 255))));
          ()
       };
       
@@ -106,16 +106,16 @@ behavior default:
 
 int16 short_range(int16 i_1)
 behavior default:
-  ensures (C_12 : true);
+  ensures (_C_12 : true);
 {  
    {  
       {  
-         (assert for default: (C_10 : (jessie : (i_1 >= (- 32768)))));
+         (assert for default: (_C_10 : (jessie : (i_1 >= (- 32768)))));
          ()
       };
       
       {  
-         (assert for default: (C_11 : (jessie : (i_1 <= 32767))));
+         (assert for default: (_C_11 : (jessie : (i_1 <= 32767))));
          ()
       };
       
@@ -127,16 +127,16 @@ behavior default:
 
 uint16 ushort_range(uint16 i_3)
 behavior default:
-  ensures (C_15 : true);
+  ensures (_C_15 : true);
 {  
    {  
       {  
-         (assert for default: (C_13 : (jessie : (i_3 >= 0))));
+         (assert for default: (_C_13 : (jessie : (i_3 >= 0))));
          ()
       };
       
       {  
-         (assert for default: (C_14 : (jessie : (i_3 <= 65535))));
+         (assert for default: (_C_14 : (jessie : (i_3 <= 65535))));
          ()
       };
       

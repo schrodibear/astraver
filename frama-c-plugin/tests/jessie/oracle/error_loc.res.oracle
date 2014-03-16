@@ -44,11 +44,11 @@ lemma stupid :
 
 int32 f(int32 x)
 behavior default:
-  ensures (C_2 : (\result == \at(x,Old)));
+  ensures (_C_2 : (\result == \at(x,Old)));
 {  
    {  
       {  
-         (assert for default: (C_1 : (jessie : (x > 0))));
+         (assert for default: (_C_1 : (jessie : (x > 0))));
          ()
       };
       

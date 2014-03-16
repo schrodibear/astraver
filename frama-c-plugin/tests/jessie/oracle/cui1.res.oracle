@@ -42,31 +42,31 @@ type voidP = [voidP]
 int32 gFlag;
 
 int32 max(int32 x, int32 y)
-  requires (C_12 : (x > 0));
+  requires (_C_12 : (x > 0));
 behavior default:
-  ensures (C_5 : ((((C_8 : (\result >= \at(x,Old))) &&
-                     (C_9 : (\result >= \at(y,Old)))) &&
-                    (C_10 : (\result > 0))) &&
-                   (C_11 : ((\result == \at(x,Old)) ||
-                             (\result == \at(y,Old))))));
+  ensures (_C_5 : ((((_C_8 : (\result >= \at(x,Old))) &&
+                      (_C_9 : (\result >= \at(y,Old)))) &&
+                     (_C_10 : (\result > 0))) &&
+                    (_C_11 : ((\result == \at(x,Old)) ||
+                               (\result == \at(y,Old))))));
 {  
    (var int32 zz);
    
    (var int32 __retres);
    
-   {  (C_1 : (zz = 1));
+   {  (_C_1 : (zz = 1));
       (if (x > y) then 
-      {  (C_2 : (__retres = x));
+      {  (_C_2 : (__retres = x));
          
          (goto return_label)
       } else ());
       
       {  
-         (assert for default: (C_3 : (jessie : (zz > 0))));
+         (assert for default: (_C_3 : (jessie : (zz > 0))));
          ()
       };
       
-      {  (C_4 : (__retres = y));
+      {  (_C_4 : (__retres = y));
          (return_label : 
          (return __retres))
       }
@@ -75,11 +75,11 @@ behavior default:
 
 int32 main()
 behavior default:
-  ensures (C_15 : true);
+  ensures (_C_15 : true);
 {  
    (var int32 tmp);
    
-   {  (C_14 : (tmp = (C_13 : max(0, 1))));
+   {  (_C_14 : (tmp = (_C_13 : max(0, 1))));
       
       (return tmp)
    }
@@ -465,14 +465,12 @@ let main_ensures_default =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_14:
      begin
        (let _jessie_<somenum> =
-       (tmp := (C_13:
-               (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+       (tmp := (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
                (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-               (JC_<somenum>: ((max _jessie_<somenum>) _jessie_<somenum>)))))) in void);
-      (return := !tmp); (raise Return) end)); absurd  end with Return ->
+               (JC_<somenum>: ((max _jessie_<somenum>) _jessie_<somenum>))))) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
@@ -483,14 +481,12 @@ let main_safety =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_14:
      begin
        (let _jessie_<somenum> =
-       (tmp := (C_13:
-               (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+       (tmp := (let _jessie_<somenum> = (safe_int32_of_integer_ (0)) in
                (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-               (JC_<somenum>: ((max_requires _jessie_<somenum>) _jessie_<somenum>)))))) in void);
-      (return := !tmp); (raise Return) end)); absurd  end with Return ->
+               (JC_<somenum>: ((max_requires _jessie_<somenum>) _jessie_<somenum>))))) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 let max_ensures_default =
@@ -502,24 +498,21 @@ let max_ensures_default =
    begin
      (let zz = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (zz := (safe_int32_of_integer_ (1))) in void);
       (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
       then
-       (C_2:
        begin
          (let _jessie_<somenum> = (__retres := x_0) in void);
-        (raise (Return_label_exc void)) end) else void);
+        (raise (Return_label_exc void)) end else void);
       (assert { (JC_<somenum>: gt_int(integer_of_int32(zz), (0))) }; void); void;
       try
-       (C_4:
        begin
          (let _jessie_<somenum> = (__retres := y) in void);
-        (raise (Return_label_exc void)) end) with
+        (raise (Return_label_exc void)) end with
        Return_label_exc _jessie_<somenum> ->
        (return_label: begin   (return := !__retres); (raise Return) end) end
-     end))); absurd  end with Return -> !return end))
+     end)); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(result), integer_of_int32(x_0)))
     and ((JC_<somenum>: ge_int(integer_of_int32(result), integer_of_int32(y)))
@@ -537,25 +530,22 @@ let max_safety =
    begin
      (let zz = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (zz := (safe_int32_of_integer_ (1))) in void);
       (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
       then
-       (C_2:
        begin
          (let _jessie_<somenum> = (__retres := x_0) in void);
-        (raise (Return_label_exc void)) end) else void);
+        (raise (Return_label_exc void)) end else void);
       [ { } unit reads zz { (JC_<somenum>: gt_int(integer_of_int32(zz), (0))) } ];
       void;
       try
-       (C_4:
        begin
          (let _jessie_<somenum> = (__retres := y) in void);
-        (raise (Return_label_exc void)) end) with
+        (raise (Return_label_exc void)) end with
        Return_label_exc _jessie_<somenum> ->
        (return_label: begin   (return := !__retres); (raise Return) end) end
-     end))); absurd  end with Return -> !return end)) { true }
+     end)); absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C cui1.jessie --quiet -f cui1.makefile project
@@ -585,13 +575,13 @@ why --project [...] why/cui1.why
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/cui1_po7.why">
-      <location file = "why/cui1.why" line = "436" begin = "5" end = "373"/>
+      <location file = "why/cui1.why" line = "429" begin = "5" end = "373"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/cui1_po8.why">
-      <location file = "why/cui1.why" line = "471" begin = "56" end = "60"/>
+      <location file = "why/cui1.why" line = "461" begin = "55" end = "59"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

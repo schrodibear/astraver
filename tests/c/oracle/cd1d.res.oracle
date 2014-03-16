@@ -78,49 +78,31 @@ lemma completeness :
     ((v_1 >= 0.0) ==> (conflict(s_1, v_1) ==> cd1d(s_1, v_1)))))
 
 int32 cd1d_double(double s, double v)
-  requires (C_8 : (((C_10 : (100. >= (s :> real))) &&
-                     (C_11 : ((s :> real) >= 0.))) &&
-                    ((C_13 : (1. >= (v :> real))) &&
-                      (C_14 : ((v :> real) >= 0.)))));
+  requires (_C_8 : (((_C_10 : (100. >= (s :> real))) &&
+                      (_C_11 : ((s :> real) >= 0.))) &&
+                     ((_C_13 : (1. >= (v :> real))) &&
+                       (_C_14 : ((v :> real) >= 0.)))));
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 behavior completeness:
   assumes cd1d((s :> real), (v :> real));
-  ensures (C_7 : (\result == 1));
+  ensures (_C_7 : (\result == 1));
 {  
    (var int32 tmp);
    
-   {  (if ((C_5 : ((C_4 : ((10.0 :> double) + (0x1p-49 :> double))) +
-                    (C_3 : ((1.0 :> double) * v)))) >
-            s) then (C_2 : (tmp = 1)) else (C_1 : (tmp = 0)));
+   {  (if ((_C_5 : ((_C_4 : ((10.0 :> double) + (0x1p-49 :> double))) +
+                     (_C_3 : ((1.0 :> double) * v)))) >
+            s) then (_C_2 : (tmp = 1)) else (_C_1 : (tmp = 0)));
       
       (return tmp)
    }
 }
 ========== file tests/c/cd1d.jessie/cd1d.cloc ==========
-[C_11]
-file = "HOME/tests/c/cd1d.c"
-line = 17
-begin = 19
-end = 24
-
-[C_1]
+[_C_4]
 file = "HOME/tests/c/cd1d.c"
 line = 23
-begin = 32
-end = 33
-
-[C_9]
-file = "HOME/tests/c/cd1d.c"
-line = 17
-begin = 13
+begin = 11
 end = 24
-
-[C_10]
-file = "HOME/tests/c/cd1d.c"
-line = 17
-begin = 13
-end = 20
 
 [completeness]
 name = "Lemma completeness"
@@ -129,29 +111,35 @@ line = 10
 begin = 4
 end = 97
 
-[C_5]
-file = "HOME/tests/c/cd1d.c"
-line = 23
-begin = 10
-end = 31
-
-[C_13]
+[_C_13]
 file = "HOME/tests/c/cd1d.c"
 line = 17
 begin = 28
 end = 34
 
-[C_7]
+[_C_5]
 file = "HOME/tests/c/cd1d.c"
-line = 20
-begin = 18
-end = 30
+line = 23
+begin = 10
+end = 31
 
-[C_14]
+[_C_12]
 file = "HOME/tests/c/cd1d.c"
 line = 17
-begin = 33
+begin = 28
 end = 40
+
+[_C_9]
+file = "HOME/tests/c/cd1d.c"
+line = 17
+begin = 13
+end = 24
+
+[_C_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cd1d_double]
 name = "Function cd1d_double"
@@ -160,41 +148,53 @@ line = 22
 begin = 4
 end = 15
 
-[C_8]
+[_C_3]
+file = "HOME/tests/c/cd1d.c"
+line = 23
+begin = 26
+end = 31
+
+[_C_7]
+file = "HOME/tests/c/cd1d.c"
+line = 20
+begin = 18
+end = 30
+
+[_C_10]
+file = "HOME/tests/c/cd1d.c"
+line = 17
+begin = 13
+end = 20
+
+[_C_8]
 file = "HOME/tests/c/cd1d.c"
 line = 17
 begin = 13
 end = 40
 
-[C_4]
-file = "HOME/tests/c/cd1d.c"
-line = 23
-begin = 11
-end = 24
-
-[C_12]
+[_C_14]
 file = "HOME/tests/c/cd1d.c"
 line = 17
-begin = 28
+begin = 33
 end = 40
 
-[C_2]
+[_C_2]
 file = "HOME/tests/c/cd1d.c"
 line = 23
 begin = 32
 end = 33
 
-[C_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_3]
+[_C_1]
 file = "HOME/tests/c/cd1d.c"
 line = 23
-begin = 26
-end = 31
+begin = 32
+end = 33
+
+[_C_11]
+file = "HOME/tests/c/cd1d.c"
+line = 17
+begin = 19
+end = 24
 
 ========== jessie execution ==========
 Generating Why function cd1d_double
@@ -574,8 +574,8 @@ end = 34
 kind = FPOverflow
 file = "HOME/tests/c/cd1d.jessie/cd1d.jc"
 line = 61
-begin = 46
-end = 65
+begin = 48
+end = 67
 
 [JC_28]
 kind = FPOverflow
@@ -974,20 +974,17 @@ let cd1d_double_ensures_completeness =
      (let tmp = ref (any_int32 void) in
      begin
        (let _jessie_<num> =
-       (if ((gt_double_ (C_5:
-                        (JC_28:
-                        (((add_double_safe nearest_even) (C_4:
-                                                         (JC_26:
+       (if ((gt_double_ (JC_28:
+                        (((add_double_safe nearest_even) (JC_26:
                                                          (((add_double_safe nearest_even) 
                                                            (double_of_real_exact 10.0)) 
-                                                          ((double_of_real_safe nearest_even) 0x1p-49))))) 
-                         (C_3:
+                                                          ((double_of_real_safe nearest_even) 0x1p-49)))) 
                          (JC_27:
-                         (((mul_double_safe nearest_even) (double_of_real_exact 1.0)) v_1))))))) s_1)
-       then (C_2: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end)) { (JC_17: (integer_of_int32(result) = (1))) }
+                         (((mul_double_safe nearest_even) (double_of_real_exact 1.0)) v_1))))) s_1)
+       then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_17: (integer_of_int32(result) = (1))) }
 
 let cd1d_double_ensures_default =
  fun (s_1 : double) (v_1 : double) ->
@@ -1003,20 +1000,17 @@ let cd1d_double_ensures_default =
      (let tmp = ref (any_int32 void) in
      begin
        (let _jessie_<num> =
-       (if ((gt_double_ (C_5:
-                        (JC_25:
-                        (((add_double_safe nearest_even) (C_4:
-                                                         (JC_23:
+       (if ((gt_double_ (JC_25:
+                        (((add_double_safe nearest_even) (JC_23:
                                                          (((add_double_safe nearest_even) 
                                                            (double_of_real_exact 10.0)) 
-                                                          ((double_of_real_safe nearest_even) 0x1p-49))))) 
-                         (C_3:
+                                                          ((double_of_real_safe nearest_even) 0x1p-49)))) 
                          (JC_24:
-                         (((mul_double_safe nearest_even) (double_of_real_exact 1.0)) v_1))))))) s_1)
-       then (C_2: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end)) { (JC_13: true) }
+                         (((mul_double_safe nearest_even) (double_of_real_exact 1.0)) v_1))))) s_1)
+       then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_13: true) }
 
 let cd1d_double_safety =
  fun (s_1 : double) (v_1 : double) ->
@@ -1032,21 +1026,18 @@ let cd1d_double_safety =
      (let tmp = ref (any_int32 void) in
      begin
        (let _jessie_<num> =
-       (if ((gt_double_ (C_5:
-                        (JC_22:
-                        (((add_double nearest_even) (C_4:
-                                                    (JC_20:
+       (if ((gt_double_ (JC_22:
+                        (((add_double nearest_even) (JC_20:
                                                     (((add_double nearest_even) 
                                                       (double_of_real_exact 10.0)) 
                                                      (JC_19:
-                                                     ((double_of_real nearest_even) 0x1p-49)))))) 
-                         (C_3:
+                                                     ((double_of_real nearest_even) 0x1p-49))))) 
                          (JC_21:
-                         (((mul_double nearest_even) (double_of_real_exact 1.0)) v_1))))))) s_1)
-       then (C_2: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end)) { true }
+                         (((mul_double nearest_even) (double_of_real_exact 1.0)) v_1))))) s_1)
+       then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========

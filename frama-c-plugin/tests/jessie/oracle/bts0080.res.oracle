@@ -46,33 +46,33 @@ tag voidP = {
 type voidP = [voidP]
 
 unit Swap(intP[..] p, intP[..] q)
-  requires (C_11 : (((C_13 : (\offset_min(p) <= 0)) &&
-                      (C_14 : (\offset_max(p) >= 0))) &&
-                     ((C_16 : (\offset_min(q) <= 0)) &&
-                       (C_17 : (\offset_max(q) >= 0)))));
+  requires (_C_11 : (((_C_13 : (\offset_min(p) <= 0)) &&
+                       (_C_14 : (\offset_max(p) >= 0))) &&
+                      ((_C_16 : (\offset_min(q) <= 0)) &&
+                        (_C_17 : (\offset_max(q) >= 0)))));
 behavior default:
   assigns p.intM,
   q.intM;
-  ensures (C_8 : ((C_9 : (\at(p,Old).intM == \at(q.intM,Old))) &&
-                   (C_10 : (\at(q,Old).intM == \at(p.intM,Old)))));
+  ensures (_C_8 : ((_C_9 : (\at(p,Old).intM == \at(q.intM,Old))) &&
+                    (_C_10 : (\at(q,Old).intM == \at(p.intM,Old)))));
 {  
    (var int32 temp);
    
-   {  (C_2 : (temp = (C_1 : p.intM)));
-      (C_5 : ((C_4 : p.intM) = (C_3 : q.intM)));
-      (C_7 : ((C_6 : q.intM) = temp));
+   {  (_C_2 : (temp = (_C_1 : p.intM)));
+      (_C_5 : ((_C_4 : p.intM) = (_C_3 : q.intM)));
+      (_C_7 : ((_C_6 : q.intM) = temp));
       
       (return ())
    }
 }
 
 unit foo(intP[..] a, int32 k)
-  requires (C_22 : ((C_23 : (\offset_min(a) <= 0)) &&
-                     (C_24 : (\offset_max(a) >= k))));
+  requires (_C_22 : ((_C_23 : (\offset_min(a) <= 0)) &&
+                      (_C_24 : (\offset_max(a) >= k))));
 behavior default:
-  ensures (C_21 : true);
+  ensures (_C_21 : true);
 {  
-   {  (C_20 : Swap((C_18 : (a + 0)), (C_19 : (a + k))));
+   {  (_C_20 : Swap((_C_18 : (a + 0)), (_C_19 : (a + k))));
       
       (return ())
    }
@@ -581,22 +581,15 @@ let Swap_ensures_default =
   try
    begin
      (let temp = ref (any_int32 void) in
-     (C_2:
      begin
-       (let _jessie_<somenum> = (temp := (C_1: ((safe_acc_ !intP_intM_p_1) p))) in
-       void);
-      (C_5:
-      begin
-        (let _jessie_<somenum> = (C_3: ((safe_acc_ !intP_intM_q_2) q)) in
-        (let _jessie_<somenum> = p in
-        (((safe_upd_ intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>)));
-       (C_7:
-       begin
-         (let _jessie_<somenum> = !temp in
-         (let _jessie_<somenum> = q in
-         (((safe_upd_ intP_intM_q_2) _jessie_<somenum>) _jessie_<somenum>)));
-        (raise Return) end) end) end)); (raise Return) end with Return ->
-   void end)
+       (let _jessie_<somenum> = (temp := ((safe_acc_ !intP_intM_p_1) p)) in void);
+      (let _jessie_<somenum> = ((safe_acc_ !intP_intM_q_2) q) in
+      (let _jessie_<somenum> = p in
+      (((safe_upd_ intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> = !temp in
+      (let _jessie_<somenum> = q in
+      (((safe_upd_ intP_intM_q_2) _jessie_<somenum>) _jessie_<somenum>))); (raise Return)
+     end); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
@@ -625,27 +618,21 @@ let Swap_safety =
   try
    begin
      (let temp = ref (any_int32 void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (temp := (C_1:
-                (JC_<somenum>: (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p)))) in
+       (temp := (JC_<somenum>: (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p))) in
        void);
-      (C_5:
-      begin
-        (let _jessie_<somenum> =
-        (C_3: (JC_<somenum>: (((acc_ intP_q_2_alloc_table) !intP_intM_q_2) q))) in
-        (let _jessie_<somenum> = p in
-        (JC_<somenum>:
-        ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))));
-       (C_7:
-       begin
-         (let _jessie_<somenum> = !temp in
-         (let _jessie_<somenum> = q in
-         (JC_<somenum>:
-         ((((upd_ intP_q_2_alloc_table) intP_intM_q_2) _jessie_<somenum>) _jessie_<somenum>))));
-        (raise Return) end) end) end)); (raise Return) end with Return ->
-   void end) { true }
+      (let _jessie_<somenum> =
+      (JC_<somenum>: (((acc_ intP_q_2_alloc_table) !intP_intM_q_2) q)) in
+      (let _jessie_<somenum> = p in
+      (JC_<somenum>:
+      ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))));
+      (let _jessie_<somenum> = !temp in
+      (let _jessie_<somenum> = q in
+      (JC_<somenum>:
+      ((((upd_ intP_q_2_alloc_table) intP_intM_q_2) _jessie_<somenum>) _jessie_<somenum>))));
+      (raise Return) end); (raise Return) end with Return -> void end)
+  { true }
 
 let foo_ensures_default =
  fun (a : intP pointer) (k : int32) (intP_intM_a_3 : (intP, int32) memory ref) (intP_a_3_alloc_table : intP alloc_table) ->
@@ -655,13 +642,12 @@ let foo_ensures_default =
         ge_int(offset_max(intP_a_3_alloc_table, a), integer_of_int32(k))))) }
   (init:
   try
-   (C_20:
    begin
-     (let _jessie_<somenum> = (C_18: ((shift a) (0))) in
-     (let _jessie_<somenum> = (C_19: ((shift a) (integer_of_int32 k))) in
+     (let _jessie_<somenum> = ((shift a) (0)) in
+     (let _jessie_<somenum> = ((shift a) (integer_of_int32 k)) in
      (JC_<somenum>:
      ((((((Swap _jessie_<somenum>) _jessie_<somenum>) intP_intM_a_3) intP_intM_a_3) intP_a_3_alloc_table) intP_a_3_alloc_table))));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let foo_safety =
@@ -672,13 +658,12 @@ let foo_safety =
         ge_int(offset_max(intP_a_3_alloc_table, a), integer_of_int32(k))))) }
   (init:
   try
-   (C_20:
    begin
-     (let _jessie_<somenum> = (C_18: ((shift a) (0))) in
-     (let _jessie_<somenum> = (C_19: ((shift a) (integer_of_int32 k))) in
+     (let _jessie_<somenum> = ((shift a) (0)) in
+     (let _jessie_<somenum> = ((shift a) (integer_of_int32 k)) in
      (JC_<somenum>:
      ((((((Swap_requires _jessie_<somenum>) _jessie_<somenum>) intP_intM_a_3) intP_intM_a_3) intP_a_3_alloc_table) intP_a_3_alloc_table))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0080.jessie --quiet -f bts0080.makefile project

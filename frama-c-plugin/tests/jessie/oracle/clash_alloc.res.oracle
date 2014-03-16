@@ -46,14 +46,14 @@ tag T = {
 type T = [T]
 
 int32 f(T[..] p)
-  requires (C_4 : ((C_5 : (\offset_min(p) <= 0)) &&
-                    (C_6 : (\offset_max(p) >= 0))));
+  requires (_C_4 : ((_C_5 : (\offset_min(p) <= 0)) &&
+                     (_C_6 : (\offset_max(p) >= 0))));
 behavior default:
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 {  
    (var int32 __retres);
    
-   {  (C_2 : (__retres = (C_1 : p.alloc)));
+   {  (_C_2 : (__retres = (_C_1 : p.alloc)));
       
       (return __retres)
    }
@@ -493,11 +493,10 @@ let f_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_2:
      begin
-       (let _jessie_<somenum> = (__retres := (C_1: ((safe_acc_ T_alloc_p_1) p))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+       (let _jessie_<somenum> = (__retres := ((safe_acc_ T_alloc_p_1) p)) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (p : T pointer) (T_p_1_alloc_table : T alloc_table) (T_alloc_p_1 : (T, int32) memory) ->
@@ -509,12 +508,10 @@ let f_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_1:
-                    (JC_<somenum>: (((acc_ T_p_1_alloc_table) T_alloc_p_1) p)))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (__retres := (JC_<somenum>: (((acc_ T_p_1_alloc_table) T_alloc_p_1) p))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 

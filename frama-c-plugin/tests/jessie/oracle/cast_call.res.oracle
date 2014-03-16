@@ -46,10 +46,10 @@ tag voidP = {
 type voidP = [voidP]
 
 charP[..] f(charP[..] c)
-  requires (C_2 : ((C_3 : (\offset_min(c) <= 0)) &&
-                    (C_4 : (\offset_max(c) >= 0))));
+  requires (_C_2 : ((_C_3 : (\offset_min(c) <= 0)) &&
+                     (_C_4 : (\offset_max(c) >= 0))));
 behavior default:
-  ensures (C_1 : (\result == \at(c,Old)));
+  ensures (_C_1 : (\result == \at(c,Old)));
 {  
    {  
       (return c)
@@ -58,22 +58,22 @@ behavior default:
 
 unit g()
 behavior default:
-  ensures (C_14 : true);
+  ensures (_C_14 : true);
 {  
    (var intP[0] i);
    
    (var charP[..] c_0);
    
-   {  (C_6 : (i = (C_5 : (new intP[1]))));
-      (C_9 : (c_0 = (C_8 : f((C_7 : (i :> charP[..]))))));
-      (C_11 : ((C_10 : c_0.charM) = 0));
+   {  (_C_6 : (i = (_C_5 : (new intP[1]))));
+      (_C_9 : (c_0 = (_C_8 : f((_C_7 : (i :> charP[..]))))));
+      (_C_11 : ((_C_10 : c_0.charM) = 0));
       
       {  
-         (assert for default: (C_12 : (jessie : (i.intM == 0))));
+         (assert for default: (_C_12 : (jessie : (i.intM == 0))));
          ()
       };
       
-      {  (C_13 : (free(i)));
+      {  (_C_13 : (free(i)));
          
          (return ())
       }

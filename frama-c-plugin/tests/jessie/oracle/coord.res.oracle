@@ -54,16 +54,16 @@ invariant valid_tab :
 unit f(int32 x)
 behavior default:
   assigns \nothing;
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 ;
 
 unit g(int32 index)
-  requires (C_7 : ((C_8 : (0 <= index)) && (C_9 : (index < 3))));
+  requires (_C_7 : ((_C_8 : (0 <= index)) && (_C_9 : (index < 3))));
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
-   {  (C_3 : f((C_2 : (tab + index).x_0)));
-      (C_5 : f((C_4 : (tab + index).x_0)));
+   {  (_C_3 : f((_C_2 : (tab + index).x_0)));
+      (_C_5 : f((_C_4 : (tab + index).x_0)));
       
       (return ())
    }
@@ -533,18 +533,13 @@ let g_ensures_default =
     and (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)))) }
   (init:
   try
-   (C_3:
    begin
      (let _jessie_<somenum> =
-     (C_2:
-     ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index)))) in
+     ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index))) in
      (JC_<somenum>: (f _jessie_<somenum>)));
-    (C_5:
-    begin
-      (let _jessie_<somenum> =
-      (C_4:
-      ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index)))) in
-      (JC_<somenum>: (f _jessie_<somenum>))); (raise Return); (raise Return) end) end) with
+    (let _jessie_<somenum> =
+    ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index))) in
+    (JC_<somenum>: (f _jessie_<somenum>))); (raise Return); (raise Return) end with
    Return -> void end) { (JC_<somenum>: true) }
 
 let g_safety =
@@ -556,21 +551,16 @@ let g_safety =
     and (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)))) }
   (init:
   try
-   (C_3:
    begin
      (let _jessie_<somenum> =
-     (C_2:
      (JC_<somenum>:
      ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
-      (integer_of_int32 index)))) in (JC_<somenum>: (f_requires _jessie_<somenum>)));
-    (C_5:
-    begin
-      (let _jessie_<somenum> =
-      (C_4:
-      (JC_<somenum>:
-      ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
-       (integer_of_int32 index)))) in (JC_<somenum>: (f_requires _jessie_<somenum>)));
-     (raise Return); (raise Return) end) end) with Return -> void end)
+      (integer_of_int32 index))) in (JC_<somenum>: (f_requires _jessie_<somenum>)));
+    (let _jessie_<somenum> =
+    (JC_<somenum>:
+    ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
+     (integer_of_int32 index))) in (JC_<somenum>: (f_requires _jessie_<somenum>)));
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)) }
 
 

@@ -45,30 +45,32 @@ lemma rp :
   ((x > 0.0) ==> ((1.0 / x) > 0.0)))
 
 real r_seq(real r1_0, real r2_0)
-  requires (C_4 : ((C_5 : (r1_0 > 0.0)) && (C_6 : (r2_0 > 0.0))));
+  requires (_C_4 : ((_C_5 : (r1_0 > 0.0)) && (_C_6 : (r2_0 > 0.0))));
 behavior default:
-  ensures (C_3 : (\result > 0.0));
+  ensures (_C_3 : (\result > 0.0));
 {  
    (var real __retres);
    
-   {  (C_2 : (__retres = (C_1 : (r1_0 + r2_0))));
+   {  (_C_2 : (__retres = (_C_1 : (r1_0 + r2_0))));
       
       (return __retres)
    }
 }
 
 real r_par(real r1, real r2)
-  requires (C_16 : ((C_17 : (r1 > 0.0)) && (C_18 : (r2 > 0.0))));
+  requires (_C_16 : ((_C_17 : (r1 > 0.0)) && (_C_18 : (r2 > 0.0))));
 behavior default:
-  ensures (C_15 : (\result > 0.0));
+  ensures (_C_15 : (\result > 0.0));
 {  
    (var real __retres_0);
    
-   {  (C_14 : (__retres_0 = (C_13 : ((C_12 : (1.0 /
-                                               (C_11 : ((C_10 : (1.0 /
-                                                                  (C_9 : (r1 :> real)))) +
-                                                         (C_8 : (1.0 /
-                                                                  (C_7 : (r2 :> real)))))))) :> real))));
+   {  (_C_14 : (__retres_0 = (_C_13 : ((_C_12 : (1.0 /
+                                                  (_C_11 : ((_C_10 : 
+                                                            (1.0 /
+                                                              (_C_9 : (r1 :> real)))) +
+                                                             (_C_8 : 
+                                                             (1.0 /
+                                                               (_C_7 : (r2 :> real)))))))) :> real))));
       
       (return __retres_0)
    }
@@ -76,7 +78,7 @@ behavior default:
 
 int32 main()
 behavior default:
-  ensures (C_32 : true);
+  ensures (_C_32 : true);
 {  
    (var real r1_1);
    
@@ -90,22 +92,22 @@ behavior default:
    
    (var int32 __retres_1);
    
-   {  (C_20 : (r1_1 = (C_19 : (10.0 :> real))));
-      (C_22 : (r2_1 = (C_21 : (20.0 :> real))));
-      (C_24 : (r3 = (C_23 : (30.0 :> real))));
-      (C_26 : (tmp = (C_25 : r_par(r2_1, r3))));
+   {  (_C_20 : (r1_1 = (_C_19 : (10.0 :> real))));
+      (_C_22 : (r2_1 = (_C_21 : (20.0 :> real))));
+      (_C_24 : (r3 = (_C_23 : (30.0 :> real))));
+      (_C_26 : (tmp = (_C_25 : r_par(r2_1, r3))));
       
       {  
-         (assert for default: (C_27 : (jessie : (tmp > 0.0))));
+         (assert for default: (_C_27 : (jessie : (tmp > 0.0))));
          ()
       };
-      (C_29 : (r_ges = (C_28 : r_seq(r1_1, tmp))));
+      (_C_29 : (r_ges = (_C_28 : r_seq(r1_1, tmp))));
       
       {  
-         (assert for default: (C_30 : (jessie : (r_ges > 0.0))));
+         (assert for default: (_C_30 : (jessie : (r_ges > 0.0))));
          ()
       };
-      (C_31 : (__retres_1 = 0));
+      (_C_31 : (__retres_1 = 0));
       
       (return __retres_1)
    }
@@ -491,42 +493,23 @@ let main_ensures_default =
      (let r_ges = ref (any_real void) in
      (let tmp = ref (any_real void) in
      (let __retres_1 = ref (any_int32 void) in
-     (C_20:
      begin
-       (let _jessie_<somenum> = (r1_1 := (C_19: 10.0)) in void);
-      (C_22:
-      begin
-        (let _jessie_<somenum> = (r2_1 := (C_21: 20.0)) in void);
-       (C_24:
-       begin
-         (let _jessie_<somenum> = (r3 := (C_23: 30.0)) in void);
-        (C_26:
-        begin
-          (let _jessie_<somenum> =
-          (tmp := (C_25:
-                  (let _jessie_<somenum> = !r2_1 in
-                  (let _jessie_<somenum> = !r3 in
-                  (JC_<somenum>: ((r_par _jessie_<somenum>) _jessie_<somenum>)))))) in void);
-         (assert { (JC_<somenum>: gt_real(tmp, 0.0)) }; void);
-         begin
-           void;
-          (C_29:
-          begin
-            (let _jessie_<somenum> =
-            (r_ges := (C_28:
-                      (let _jessie_<somenum> = !r1_1 in
-                      (let _jessie_<somenum> = !tmp in
-                      (JC_<somenum>: ((r_seq _jessie_<somenum>) _jessie_<somenum>)))))) in void);
-           (assert { (JC_<somenum>: gt_real(r_ges, 0.0)) }; void);
-           begin
-             void;
-            (C_31:
-            begin
-              (let _jessie_<somenum> =
-              (__retres_1 := (safe_int32_of_integer_ (0))) in void);
-             (return := !__retres_1); (raise Return) end) end end) end end)
-       end) end) end))))))); absurd  end with Return -> !return end))
-  { (JC_<somenum>: true) }
+       (let _jessie_<somenum> = (r1_1 := 10.0) in void);
+      (let _jessie_<somenum> = (r2_1 := 20.0) in void);
+      (let _jessie_<somenum> = (r3 := 30.0) in void);
+      (let _jessie_<somenum> =
+      (tmp := (let _jessie_<somenum> = !r2_1 in
+              (let _jessie_<somenum> = !r3 in
+              (JC_<somenum>: ((r_par _jessie_<somenum>) _jessie_<somenum>))))) in void);
+      (assert { (JC_<somenum>: gt_real(tmp, 0.0)) }; void); void;
+      (let _jessie_<somenum> =
+      (r_ges := (let _jessie_<somenum> = !r1_1 in
+                (let _jessie_<somenum> = !tmp in
+                (JC_<somenum>: ((r_seq _jessie_<somenum>) _jessie_<somenum>))))) in void);
+      (assert { (JC_<somenum>: gt_real(r_ges, 0.0)) }; void); void;
+      (let _jessie_<somenum> = (__retres_1 := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres_1); (raise Return) end)))))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -541,42 +524,23 @@ let main_safety =
      (let r_ges = ref (any_real void) in
      (let tmp = ref (any_real void) in
      (let __retres_1 = ref (any_int32 void) in
-     (C_20:
      begin
-       (let _jessie_<somenum> = (r1_1 := (C_19: 10.0)) in void);
-      (C_22:
-      begin
-        (let _jessie_<somenum> = (r2_1 := (C_21: 20.0)) in void);
-       (C_24:
-       begin
-         (let _jessie_<somenum> = (r3 := (C_23: 30.0)) in void);
-        (C_26:
-        begin
-          (let _jessie_<somenum> =
-          (tmp := (C_25:
-                  (let _jessie_<somenum> = !r2_1 in
-                  (let _jessie_<somenum> = !r3 in
-                  (JC_<somenum>: ((r_par_requires _jessie_<somenum>) _jessie_<somenum>)))))) in
-          void); [ { } unit reads tmp { (JC_<somenum>: gt_real(tmp, 0.0)) } ];
-         begin
-           void;
-          (C_29:
-          begin
-            (let _jessie_<somenum> =
-            (r_ges := (C_28:
-                      (let _jessie_<somenum> = !r1_1 in
-                      (let _jessie_<somenum> = !tmp in
-                      (JC_<somenum>: ((r_seq_requires _jessie_<somenum>) _jessie_<somenum>)))))) in
-            void); [ { } unit reads r_ges { (JC_<somenum>: gt_real(r_ges, 0.0)) } ];
-           begin
-             void;
-            (C_31:
-            begin
-              (let _jessie_<somenum> =
-              (__retres_1 := (safe_int32_of_integer_ (0))) in void);
-             (return := !__retres_1); (raise Return) end) end end) end end)
-       end) end) end))))))); absurd  end with Return -> !return end))
-  { true }
+       (let _jessie_<somenum> = (r1_1 := 10.0) in void);
+      (let _jessie_<somenum> = (r2_1 := 20.0) in void);
+      (let _jessie_<somenum> = (r3 := 30.0) in void);
+      (let _jessie_<somenum> =
+      (tmp := (let _jessie_<somenum> = !r2_1 in
+              (let _jessie_<somenum> = !r3 in
+              (JC_<somenum>: ((r_par_requires _jessie_<somenum>) _jessie_<somenum>))))) in void);
+      [ { } unit reads tmp { (JC_<somenum>: gt_real(tmp, 0.0)) } ]; void;
+      (let _jessie_<somenum> =
+      (r_ges := (let _jessie_<somenum> = !r1_1 in
+                (let _jessie_<somenum> = !tmp in
+                (JC_<somenum>: ((r_seq_requires _jessie_<somenum>) _jessie_<somenum>))))) in void);
+      [ { } unit reads r_ges { (JC_<somenum>: gt_real(r_ges, 0.0)) } ]; void;
+      (let _jessie_<somenum> = (__retres_1 := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres_1); (raise Return) end)))))); absurd  end with
+   Return -> !return end)) { true }
 
 let r_par_ensures_default =
  fun (r1 : real) (r2 : real) ->
@@ -586,18 +550,12 @@ let r_par_ensures_default =
   try
    begin
      (let __retres_0 = ref (any_real void) in
-     (C_14:
      begin
        (let _jessie_<somenum> =
-       (__retres_0 := (C_13:
-                      (JC_<somenum>:
-                      ((div_real 1.0) (C_11:
-                                      ((add_real (C_10:
-                                                 (JC_<somenum>:
-                                                 ((div_real 1.0) (C_9: r1))))) 
-                                       (C_8:
-                                       (JC_<somenum>: ((div_real 1.0) (C_7: r2)))))))))) in
-       void); (return := !__retres_0); (raise Return) end)); absurd  end with
+       (__retres_0 := (JC_<somenum>:
+                      ((div_real 1.0) ((add_real (JC_<somenum>: ((div_real 1.0) r1))) 
+                                       (JC_<somenum>: ((div_real 1.0) r2)))))) in
+       void); (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_<somenum>: gt_real(result, 0.0)) }
 
 let r_par_safety =
@@ -608,18 +566,13 @@ let r_par_safety =
   try
    begin
      (let __retres_0 = ref (any_real void) in
-     (C_14:
      begin
        (let _jessie_<somenum> =
-       (__retres_0 := (C_13:
-                      (JC_<somenum>:
-                      ((div_real_ 1.0) (C_11:
-                                       ((add_real (C_10:
-                                                  (JC_<somenum>:
-                                                  ((div_real_ 1.0) (C_9: r1))))) 
-                                        (C_8:
-                                        (JC_<somenum>: ((div_real_ 1.0) (C_7: r2)))))))))) in
-       void); (return := !__retres_0); (raise Return) end)); absurd  end with
+       (__retres_0 := (JC_<somenum>:
+                      ((div_real_ 1.0) ((add_real (JC_<somenum>:
+                                                  ((div_real_ 1.0) r1))) 
+                                        (JC_<somenum>: ((div_real_ 1.0) r2)))))) in
+       void); (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 let r_seq_ensures_default =
@@ -630,10 +583,9 @@ let r_seq_ensures_default =
   try
    begin
      (let __retres = ref (any_real void) in
-     (C_2:
      begin
-       (let _jessie_<somenum> = (__retres := (C_1: ((add_real r1_0) r2_0))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<somenum> = (__retres := ((add_real r1_0) r2_0)) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: gt_real(result, 0.0)) }
 
 let r_seq_safety =
@@ -644,10 +596,9 @@ let r_seq_safety =
   try
    begin
      (let __retres = ref (any_real void) in
-     (C_2:
      begin
-       (let _jessie_<somenum> = (__retres := (C_1: ((add_real r1_0) r2_0))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<somenum> = (__retres := ((add_real r1_0) r2_0)) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 

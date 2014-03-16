@@ -52,16 +52,16 @@ tag Str = {
 type Str = [Str]
 
 unit create(Str[..] s)
-  requires (C_9 : ((C_10 : (\offset_min(s) <= 0)) &&
-                    (C_11 : (\offset_max(s) >= 0))));
+  requires (_C_9 : ((_C_10 : (\offset_min(s) <= 0)) &&
+                     (_C_11 : (\offset_max(s) >= 0))));
 behavior default:
   assigns s.x;
   allocates \at(s,Old).x;
-  ensures (C_4 : (((C_6 : (\offset_min(\at(s,Old).x) <= 0)) &&
-                    (C_7 : (\offset_max(\at(s,Old).x) >= 0))) &&
-                   (C_8 : \fresh(\at(s,Old).x))));
+  ensures (_C_4 : (((_C_6 : (\offset_min(\at(s,Old).x) <= 0)) &&
+                     (_C_7 : (\offset_max(\at(s,Old).x) >= 0))) &&
+                    (_C_8 : \fresh(\at(s,Old).x))));
 {  
-   {  (C_3 : ((C_2 : s.x) = (C_1 : (new intP[1]))));
+   {  (_C_3 : ((_C_2 : s.x) = (_C_1 : (new intP[1]))));
       
       (return ())
    }
@@ -70,20 +70,20 @@ behavior default:
 Str[..] f;
 
 unit test(Str[..] this)
-  requires (C_16 : ((((C_19 : (\offset_min(f) <= 0)) &&
-                       (C_20 : (\offset_max(f) >= 0))) &&
-                      ((C_22 : (\offset_min(this) <= 0)) &&
-                        (C_23 : (\offset_max(this) >= 0)))) &&
-                     ((C_25 : (\offset_min(this.x) <= 0)) &&
-                       (C_26 : (\offset_max(this.x) >= 0)))));
-  requires (C_15 : (this != f));
+  requires (_C_16 : ((((_C_19 : (\offset_min(f) <= 0)) &&
+                        (_C_20 : (\offset_max(f) >= 0))) &&
+                       ((_C_22 : (\offset_min(this) <= 0)) &&
+                         (_C_23 : (\offset_max(this) >= 0)))) &&
+                      ((_C_25 : (\offset_min(this.x) <= 0)) &&
+                        (_C_26 : (\offset_max(this.x) >= 0)))));
+  requires (_C_15 : (this != f));
 behavior default:
-  ensures (C_14 : true);
+  ensures (_C_14 : true);
 {  
-   {  (C_12 : create(f));
+   {  (_C_12 : create(f));
       
       {  
-         (assert for default: (C_13 : (jessie : (this.x != f.x))));
+         (assert for default: (_C_13 : (jessie : (this.x != f.x))));
          ()
       };
       
@@ -96,18 +96,18 @@ Str[..] s1;
 Str[..] s2;
 
 unit smoke_detector()
-  requires (C_31 : (((C_33 : (\offset_min(s1) <= 0)) &&
-                      (C_34 : (\offset_max(s1) >= 0))) &&
-                     ((C_36 : (\offset_min(s2) <= 0)) &&
-                       (C_37 : (\offset_max(s2) >= 0)))));
+  requires (_C_31 : (((_C_33 : (\offset_min(s1) <= 0)) &&
+                       (_C_34 : (\offset_max(s1) >= 0))) &&
+                      ((_C_36 : (\offset_min(s2) <= 0)) &&
+                        (_C_37 : (\offset_max(s2) >= 0)))));
 behavior default:
-  ensures (C_30 : true);
+  ensures (_C_30 : true);
 {  
-   {  (C_27 : create(s1));
-      (C_28 : create(s2));
+   {  (_C_27 : create(s1));
+      (_C_28 : create(s2));
       
       {  
-         (assert for default: (C_29 : (jessie : (0 == 1))));
+         (assert for default: (_C_29 : (jessie : (0 == 1))));
          ()
       };
       
@@ -688,13 +688,11 @@ let create_ensures_default =
     and (JC_<somenum>: ge_int(offset_max(Str_alloc_table, s_0), (0))))) }
   (init:
   try
-   (C_3:
    begin
      (let _jessie_<somenum> =
-     (C_1:
-     (JC_<somenum>: (((alloc_struct_intP (1)) intP_alloc_table) intP_tag_table))) in
+     (JC_<somenum>: (((alloc_struct_intP (1)) intP_alloc_table) intP_tag_table)) in
      (let _jessie_<somenum> = s_0 in (((safe_upd_ Str_x) _jessie_<somenum>) _jessie_<somenum>)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>: le_int(offset_min(intP_alloc_table, select(Str_x, s_0)), (0)))
@@ -711,15 +709,13 @@ let create_safety =
     and (JC_<somenum>: ge_int(offset_max(Str_alloc_table, s_0), (0))))) }
   (init:
   try
-   (C_3:
    begin
      (let _jessie_<somenum> =
-     (C_1:
      (JC_<somenum>:
-     (((alloc_struct_intP_requires (1)) intP_alloc_table) intP_tag_table))) in
+     (((alloc_struct_intP_requires (1)) intP_alloc_table) intP_tag_table)) in
      (let _jessie_<somenum> = s_0 in
      (JC_<somenum>: ((((upd_ !Str_alloc_table) Str_x) _jessie_<somenum>) _jessie_<somenum>))));
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 let smoke_detector_ensures_default =
  fun (tt : unit) ->
@@ -730,14 +726,11 @@ let smoke_detector_ensures_default =
             and (JC_<somenum>: ge_int(offset_max(Str_alloc_table, s2_1), (0))))))) }
   (init:
   try
-   (C_27:
    begin
      (let _jessie_<somenum> = s1_1 in (JC_<somenum>: (create _jessie_<somenum>)));
-    (C_28:
-    begin
-      (let _jessie_<somenum> = s2_1 in (JC_<somenum>: (create _jessie_<somenum>)));
-     (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return);
-     (raise Return) end) end) with Return -> void end) { (JC_<somenum>: true) }
+    (let _jessie_<somenum> = s2_1 in (JC_<somenum>: (create _jessie_<somenum>)));
+    (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return);
+    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let smoke_detector_safety =
  fun (tt : unit) ->
@@ -748,14 +741,11 @@ let smoke_detector_safety =
             and (JC_<somenum>: ge_int(offset_max(Str_alloc_table, s2_1), (0))))))) }
   (init:
   try
-   (C_27:
    begin
      (let _jessie_<somenum> = s1_1 in (JC_<somenum>: (create_requires _jessie_<somenum>)));
-    (C_28:
-    begin
-      (let _jessie_<somenum> = s2_1 in (JC_<somenum>: (create_requires _jessie_<somenum>)));
-     [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return);
-     (raise Return) end) end) with Return -> void end) { true }
+    (let _jessie_<somenum> = s2_1 in (JC_<somenum>: (create_requires _jessie_<somenum>)));
+    [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return);
+    (raise Return) end with Return -> void end) { true }
 
 let test_ensures_default =
  fun (this : Str pointer) ->
@@ -774,11 +764,10 @@ let test_ensures_default =
                         and (JC_<somenum>: (this <> f))))))))) }
   (init:
   try
-   (C_12:
    begin
      (let _jessie_<somenum> = f in (JC_<somenum>: (create _jessie_<somenum>)));
     (assert { (JC_<somenum>: (select(Str_x, this) <> select(Str_x, f))) }; void);
-    void; (raise Return); (raise Return) end) with Return -> void end)
+    void; (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let test_safety =
@@ -798,12 +787,11 @@ let test_safety =
                         and (JC_<somenum>: (this <> f))))))))) }
   (init:
   try
-   (C_12:
    begin
      (let _jessie_<somenum> = f in (JC_<somenum>: (create_requires _jessie_<somenum>)));
     [ { } unit reads Str_x
       { (JC_<somenum>: (select(Str_x, this) <> select(Str_x, f))) } ]; void;
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fresh3.jessie --quiet -f fresh3.makefile project
@@ -819,12 +807,12 @@ why --project [...] why/fresh3.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/fresh3_po14.why">
-      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "77" begin = "14" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "77" begin = "15" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/fresh3_po15.why">
-      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "77" begin = "14" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "77" begin = "15" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -840,22 +828,22 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/fresh3_po9.why">
-      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "100" begin = "14" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "100" begin = "15" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/fresh3_po10.why">
-      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "100" begin = "14" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "100" begin = "15" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/fresh3_po11.why">
-      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "101" begin = "14" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "101" begin = "15" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/fresh3_po12.why">
-      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "101" begin = "14" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "101" begin = "15" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -888,12 +876,12 @@ text = "UserCall"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/fresh3_po6.why">
-      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "58" begin = "14" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "58" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fresh3_po7.why">
-      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "58" begin = "14" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/fresh3.jessie/fresh3.jc" line = "58" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

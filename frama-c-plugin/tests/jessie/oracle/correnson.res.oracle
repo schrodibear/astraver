@@ -57,8 +57,8 @@ predicate g{L1, L2}(intP[..] t) =
 
 unit f(intP[..] t)
 behavior default:
-  ensures (C_1 : ((C_2 : f{Here, Old}(\at(t,Old), \at(t,Old))) &&
-                   (C_3 : g{Here, Old}(\at(t,Old)))));
+  ensures (_C_1 : ((_C_2 : f{Here, Old}(\at(t,Old), \at(t,Old))) &&
+                    (_C_3 : g{Here, Old}(\at(t,Old)))));
 {  
    {  
       (return ())

@@ -60,37 +60,37 @@ lemma round_div :
         ((\round_double(\NearestEven(), (a_0 / b_0)) :> real) <= 1.0)))))
 
 double interp_lin(double x1, double x2, double y1, double y2, double z)
-  requires (C_34 : ((C_35 : ((x1 :> real) < (z :> real))) &&
-                     (C_36 : ((z :> real) <= (x2 :> real)))));
-  requires (C_33 : bounded(x1, 0x1p100));
-  requires (C_32 : bounded(x2, 0x1p100));
-  requires (C_31 : bounded(y1, 0x1p100));
-  requires (C_30 : bounded(y2, 0x1p100));
-  requires (C_29 : (((x2 :> real) - (x1 :> real)) >= 0x1p-53));
-  requires (C_28 : (((y2 :> real) - (y1 :> real)) >= 0x1p-53));
+  requires (_C_34 : ((_C_35 : ((x1 :> real) < (z :> real))) &&
+                      (_C_36 : ((z :> real) <= (x2 :> real)))));
+  requires (_C_33 : bounded(x1, 0x1p100));
+  requires (_C_32 : bounded(x2, 0x1p100));
+  requires (_C_31 : bounded(y1, 0x1p100));
+  requires (_C_30 : bounded(y2, 0x1p100));
+  requires (_C_29 : (((x2 :> real) - (x1 :> real)) >= 0x1p-53));
+  requires (_C_28 : (((y2 :> real) - (y1 :> real)) >= 0x1p-53));
 behavior default:
-  ensures (C_25 : true);
+  ensures (_C_25 : true);
 behavior normalized:
   assumes (((z :> real) - (x1 :> real)) >= 0x1p-53);
-  ensures (C_26 : (let real k_0 =
-                  (((\at(z,Old) :> real) - (\at(x1,Old) :> real)) /
-                    ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
-                  in (let real exact_result_1 =
-                     ((\at(y1,Old) :> real) +
-                       (k_0 *
-                         ((\at(y2,Old) :> real) - (\at(y1,Old) :> real))))
-                     in (\real_abs(((\result :> real) - exact_result_1)) <=
-                          0x1p-1))));
+  ensures (_C_26 : (let real k_0 =
+                   (((\at(z,Old) :> real) - (\at(x1,Old) :> real)) /
+                     ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
+                   in (let real exact_result_1 =
+                      ((\at(y1,Old) :> real) +
+                        (k_0 *
+                          ((\at(y2,Old) :> real) - (\at(y1,Old) :> real))))
+                      in (\real_abs(((\result :> real) - exact_result_1)) <=
+                           0x1p-1))));
 behavior denormalized:
   assumes (((z :> real) - (x1 :> real)) < 0x1p-53);
-  ensures (C_27 : (let real k =
-                  (((\at(z,Old) :> real) - (\at(x1,Old) :> real)) /
-                    ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
-                  in (let real exact_result_0 =
-                     ((\at(y1,Old) :> real) +
-                       (k * ((\at(y2,Old) :> real) - (\at(y1,Old) :> real))))
-                     in (\real_abs(((\result :> real) - exact_result_0)) <=
-                          0x1p-1))));
+  ensures (_C_27 : (let real k =
+                   (((\at(z,Old) :> real) - (\at(x1,Old) :> real)) /
+                     ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
+                   in (let real exact_result_0 =
+                      ((\at(y1,Old) :> real) +
+                        (k * ((\at(y2,Old) :> real) - (\at(y1,Old) :> real))))
+                      in (\real_abs(((\result :> real) - exact_result_0)) <=
+                           0x1p-1))));
 {  
    (var double b);
    
@@ -102,128 +102,130 @@ behavior denormalized:
    
    (var double r);
    
-   {  (C_2 : (b = (C_1 : (x2 - x1))));
+   {  (_C_2 : (b = (_C_1 : (x2 - x1))));
       
       {  
-         (assert for default: (C_3 : (jessie : (0x1p-53 <= (b :> real)))));
+         (assert for default: (_C_3 : (jessie : (0x1p-53 <= (b :> real)))));
          ()
       };
       
       {  
-         (assert for default: (C_4 : (jessie : (0.0 < (b :> real)))));
+         (assert for default: (_C_4 : (jessie : (0.0 < (b :> real)))));
          ()
       };
       
       {  
-         (assert for default: (C_5 : (jessie : (\real_abs((((b :> real) -
+         (assert for default: (_C_5 : (jessie : (\real_abs((((b :> real) -
+                                                              ((x2 :> real) -
+                                                                (x1 :> real))) /
                                                              ((x2 :> real) -
-                                                               (x1 :> real))) /
-                                                            ((x2 :> real) -
-                                                              (x1 :> real)))) <=
-                                                 0x1p-53))));
-         ()
-      };
-      
-      {  (C_7 : (a = (C_6 : (z - x1))))
-      };
-      
-      {  
-         (assert for default: (C_8 : (jessie : ((0 <=
-                                                  ((z :> real) -
-                                                    (x1 :> real))) &&
-                                                 (((z :> real) -
-                                                    (x1 :> real)) <=
-                                                   ((x2 :> real) -
-                                                     (x1 :> real)))))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_9 : (jessie : ((0.0 <= (a :> real)) &&
-                                                 ((a :> real) <= (b :> real))))));
-         ()
-      };
-      
-      {  
-         (assert for normalized: (C_10 : (jessie : (\real_abs((((a :> real) -
-                                                                 ((z :> real) -
-                                                                   (x1 :> real))) /
-                                                                ((z :> real) -
-                                                                  (x1 :> real)))) <=
-                                                     0x1p-53))));
-         ()
-      };
-      
-      {  
-         (assert for denormalized: (C_11 : (jessie : (\real_abs(((a :> real) -
-                                                                  ((z :> real) -
-                                                                    (x1 :> real)))) <=
-                                                       0x1p-53))));
-         ()
-      };
-      
-      {  (C_13 : (k = (C_12 : (a / b))))
-      };
-      
-      {  
-         (assert for default: (C_14 : (jessie : ((0.0 <= (k :> real)) &&
-                                                  ((k :> real) <= 1.0)))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_15 : (jessie : (let real k2 =
-                                                (((z :> real) - (x1 :> real)) /
-                                                  ((x2 :> real) -
-                                                    (x1 :> real)))
-                                                in ((0.0 <= k2) &&
-                                                     (k2 <= 1.0))))));
-         ()
-      };
-      
-      {  
-         (assert for denormalized: (C_16 : (jessie : (let real k2_0 =
-                                                     (((z :> real) -
-                                                        (x1 :> real)) /
-                                                       ((x2 :> real) -
-                                                         (x1 :> real)))
-                                                     in (\real_abs(((k :> real) -
-                                                                    k2_0)) <=
-                                                          0x1p-51)))));
-         ()
-      };
-      
-      {  (C_18 : (c = (C_17 : (y2 - y1))))
-      };
-      
-      {  
-         (assert for default: (C_19 : (jessie : (\real_abs((((c :> real) -
-                                                              ((y2 :> real) -
-                                                                (y1 :> real))) /
-                                                             ((y2 :> real) -
-                                                               (y1 :> real)))) <=
+                                                               (x1 :> real)))) <=
                                                   0x1p-53))));
          ()
       };
       
-      {  (C_23 : (r = (C_22 : (y1 + (C_21 : (k * (C_20 : (y2 - y1))))))))
+      {  (_C_7 : (a = (_C_6 : (z - x1))))
       };
       
       {  
-         (assert for denormalized: (C_24 : (jessie : (let real k2_1 =
-                                                     (((z :> real) -
-                                                        (x1 :> real)) /
-                                                       ((x2 :> real) -
-                                                         (x1 :> real)))
-                                                     in (let real exact_result =
-                                                        ((y1 :> real) +
-                                                          (k2_1 *
-                                                            ((y2 :> real) -
-                                                              (y1 :> real))))
-                                                        in (\real_abs(
-                                                             ((r :> real) -
-                                                               exact_result)) <=
-                                                             0x1p-1))))));
+         (assert for default: (_C_8 : (jessie : ((0 <=
+                                                   ((z :> real) -
+                                                     (x1 :> real))) &&
+                                                  (((z :> real) -
+                                                     (x1 :> real)) <=
+                                                    ((x2 :> real) -
+                                                      (x1 :> real)))))));
+         ()
+      };
+      
+      {  
+         (assert for default: (_C_9 : (jessie : ((0.0 <= (a :> real)) &&
+                                                  ((a :> real) <=
+                                                    (b :> real))))));
+         ()
+      };
+      
+      {  
+         (assert for normalized: (_C_10 : (jessie : (\real_abs((((a :> real) -
+                                                                  ((z :> real) -
+                                                                    (x1 :> real))) /
+                                                                 ((z :> real) -
+                                                                   (x1 :> real)))) <=
+                                                      0x1p-53))));
+         ()
+      };
+      
+      {  
+         (assert for denormalized: (_C_11 : (jessie : (\real_abs(((a :> real) -
+                                                                   ((z :> real) -
+                                                                    (x1 :> real)))) <=
+                                                        0x1p-53))));
+         ()
+      };
+      
+      {  (_C_13 : (k = (_C_12 : (a / b))))
+      };
+      
+      {  
+         (assert for default: (_C_14 : (jessie : ((0.0 <= (k :> real)) &&
+                                                   ((k :> real) <= 1.0)))));
+         ()
+      };
+      
+      {  
+         (assert for default: (_C_15 : (jessie : (let real k2 =
+                                                 (((z :> real) -
+                                                    (x1 :> real)) /
+                                                   ((x2 :> real) -
+                                                     (x1 :> real)))
+                                                 in ((0.0 <= k2) &&
+                                                      (k2 <= 1.0))))));
+         ()
+      };
+      
+      {  
+         (assert for denormalized: (_C_16 : (jessie : (let real k2_0 =
+                                                      (((z :> real) -
+                                                         (x1 :> real)) /
+                                                        ((x2 :> real) -
+                                                          (x1 :> real)))
+                                                      in (\real_abs(((k :> real) -
+                                                                    k2_0)) <=
+                                                           0x1p-51)))));
+         ()
+      };
+      
+      {  (_C_18 : (c = (_C_17 : (y2 - y1))))
+      };
+      
+      {  
+         (assert for default: (_C_19 : (jessie : (\real_abs((((c :> real) -
+                                                               ((y2 :> real) -
+                                                                 (y1 :> real))) /
+                                                              ((y2 :> real) -
+                                                                (y1 :> real)))) <=
+                                                   0x1p-53))));
+         ()
+      };
+      
+      {  (_C_23 : (r = (_C_22 : (y1 + (_C_21 : (k * (_C_20 : (y2 - y1))))))))
+      };
+      
+      {  
+         (assert for denormalized: (_C_24 : (jessie : (let real k2_1 =
+                                                      (((z :> real) -
+                                                         (x1 :> real)) /
+                                                        ((x2 :> real) -
+                                                          (x1 :> real)))
+                                                      in (let real exact_result =
+                                                         ((y1 :> real) +
+                                                           (k2_1 *
+                                                             ((y2 :> real) -
+                                                               (y1 :> real))))
+                                                         in (\real_abs(
+                                                              ((r :> real) -
+                                                                exact_result)) <=
+                                                              0x1p-1))))));
          ()
       };
       
@@ -663,11 +665,9 @@ let interp_lin_ensures_default =
      (let k_1 = ref (any_double void) in
      (let c = ref (any_double void) in
      (let r = ref (any_double void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (b_1 := (C_1: (JC_<somenum>: (((sub_double_safe nearest_even) x2) x1)))) in
-       void);
+       (b_1 := (JC_<somenum>: (((sub_double_safe nearest_even) x2) x1))) in void);
       (assert { (JC_<somenum>: le_real(0x1p-53, double_value(b_1))) }; void); void;
       (assert { (JC_<somenum>: lt_real(0.0, double_value(b_1))) }; void); void;
       (assert
@@ -678,10 +678,9 @@ let interp_lin_ensures_default =
                          sub_real(double_value(x2), double_value(x1)))),
         0x1p-53)) }; void); void;
       (let _jessie_<somenum> =
-      (C_7:
       begin
-        (a_1 := (C_6: (JC_<somenum>: (((sub_double_safe nearest_even) z_0) x1))));
-       !a_1 end) in void);
+        (a_1 := (JC_<somenum>: (((sub_double_safe nearest_even) z_0) x1))); !a_1 end in
+      void);
       (assert
       { (JC_<somenum>:
         (le_real(0.0, sub_real(double_value(z_0), double_value(x1)))
@@ -693,10 +692,9 @@ let interp_lin_ensures_default =
         and le_real(double_value(a_1), double_value(b_1)))) }; void); void;
       void; void;
       (let _jessie_<somenum> =
-      (C_13:
       begin
-        (k_1 := (C_12: (JC_<somenum>: (((div_double_safe nearest_even) !a_1) !b_1))));
-       !k_1 end) in void);
+        (k_1 := (JC_<somenum>: (((div_double_safe nearest_even) !a_1) !b_1))); !k_1
+      end in void);
       (assert
       { (JC_<somenum>:
         (le_real(0.0, double_value(k_1)) and le_real(double_value(k_1), 1.0))) };
@@ -708,10 +706,8 @@ let interp_lin_ensures_default =
               sub_real(double_value(x2), double_value(x1))) in
          (le_real(0.0, k2) and le_real(k2, 1.0)))) }; void); void; void;
       (let _jessie_<somenum> =
-      (C_18:
-      begin
-        (c := (C_17: (JC_<somenum>: (((sub_double_safe nearest_even) y2) y1)))); !c
-      end) in void);
+      begin   (c := (JC_<somenum>: (((sub_double_safe nearest_even) y2) y1))); !c
+      end in void);
       (assert
       { (JC_<somenum>:
         le_real(abs_real(div_real(sub_real(double_value(c),
@@ -720,17 +716,13 @@ let interp_lin_ensures_default =
                          sub_real(double_value(y2), double_value(y1)))),
         0x1p-53)) }; void); void;
       (let _jessie_<somenum> =
-      (C_23:
       begin
-        (r := (C_22:
-              (JC_<somenum>:
-              (((add_double_safe nearest_even) y1) (C_21:
-                                                   (JC_<somenum>:
+        (r := (JC_<somenum>:
+              (((add_double_safe nearest_even) y1) (JC_<somenum>:
                                                    (((mul_double_safe nearest_even) !k_1) 
-                                                    (C_20:
                                                     (JC_<somenum>:
-                                                    (((sub_double_safe nearest_even) y2) y1))))))))));
-       !r end) in void); void; (return := !r); (raise Return) end))))));
+                                                    (((sub_double_safe nearest_even) y2) y1)))))));
+       !r end in void); void; (return := !r); (raise Return) end))))); 
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let interp_lin_ensures_denormalized =
@@ -760,11 +752,9 @@ let interp_lin_ensures_denormalized =
      (let k_1 = ref (any_double void) in
      (let c = ref (any_double void) in
      (let r = ref (any_double void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (b_1 := (C_1: (JC_<somenum>: (((sub_double_safe nearest_even) x2) x1)))) in
-       void);
+       (b_1 := (JC_<somenum>: (((sub_double_safe nearest_even) x2) x1))) in void);
       [ { } unit reads b_1 { (JC_<somenum>: le_real(0x1p-53, double_value(b_1))) } ];
       void;
       [ { } unit reads b_1 { (JC_<somenum>: lt_real(0.0, double_value(b_1))) } ];
@@ -777,10 +767,9 @@ let interp_lin_ensures_denormalized =
                            sub_real(double_value(x2), double_value(x1)))),
           0x1p-53)) } ]; void;
       (let _jessie_<somenum> =
-      (C_7:
       begin
-        (a_1 := (C_6: (JC_<somenum>: (((sub_double_safe nearest_even) z_0) x1))));
-       !a_1 end) in void);
+        (a_1 := (JC_<somenum>: (((sub_double_safe nearest_even) z_0) x1))); !a_1 end in
+      void);
       [ { } unit
         { (JC_<somenum>:
           (le_real(0.0, sub_real(double_value(z_0), double_value(x1)))
@@ -797,10 +786,9 @@ let interp_lin_ensures_denormalized =
                          sub_real(double_value(z_0), double_value(x1)))),
         0x1p-53)) }; void); void;
       (let _jessie_<somenum> =
-      (C_13:
       begin
-        (k_1 := (C_12: (JC_<somenum>: (((div_double_safe nearest_even) !a_1) !b_1))));
-       !k_1 end) in void);
+        (k_1 := (JC_<somenum>: (((div_double_safe nearest_even) !a_1) !b_1))); !k_1
+      end in void);
       [ { } unit reads k_1
         { (JC_<somenum>:
           (le_real(0.0, double_value(k_1))
@@ -819,10 +807,8 @@ let interp_lin_ensures_denormalized =
          le_real(abs_real(sub_real(double_value(k_1), k2_0)), 0x1p-51))) };
       void); void;
       (let _jessie_<somenum> =
-      (C_18:
-      begin
-        (c := (C_17: (JC_<somenum>: (((sub_double_safe nearest_even) y2) y1)))); !c
-      end) in void);
+      begin   (c := (JC_<somenum>: (((sub_double_safe nearest_even) y2) y1))); !c
+      end in void);
       [ { } unit reads c
         { (JC_<somenum>:
           le_real(abs_real(div_real(sub_real(double_value(c),
@@ -831,17 +817,13 @@ let interp_lin_ensures_denormalized =
                            sub_real(double_value(y2), double_value(y1)))),
           0x1p-53)) } ]; void;
       (let _jessie_<somenum> =
-      (C_23:
       begin
-        (r := (C_22:
-              (JC_<somenum>:
-              (((add_double_safe nearest_even) y1) (C_21:
-                                                   (JC_<somenum>:
+        (r := (JC_<somenum>:
+              (((add_double_safe nearest_even) y1) (JC_<somenum>:
                                                    (((mul_double_safe nearest_even) !k_1) 
-                                                    (C_20:
                                                     (JC_<somenum>:
-                                                    (((sub_double_safe nearest_even) y2) y1))))))))));
-       !r end) in void);
+                                                    (((sub_double_safe nearest_even) y2) y1)))))));
+       !r end in void);
       (assert
       { (JC_<somenum>:
         (let k2_1 =
@@ -851,7 +833,7 @@ let interp_lin_ensures_denormalized =
                add_real(double_value(y1),
                mul_real(k2_1, sub_real(double_value(y2), double_value(y1)))) in
           le_real(abs_real(sub_real(double_value(r), exact_result)), 0x1p-1)))) };
-      void); void; (return := !r); (raise Return) end)))))); absurd  end with
+      void); void; (return := !r); (raise Return) end))))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     (let k =
@@ -890,11 +872,9 @@ let interp_lin_ensures_normalized =
      (let k_1 = ref (any_double void) in
      (let c = ref (any_double void) in
      (let r = ref (any_double void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (b_1 := (C_1: (JC_<somenum>: (((sub_double_safe nearest_even) x2) x1)))) in
-       void);
+       (b_1 := (JC_<somenum>: (((sub_double_safe nearest_even) x2) x1))) in void);
       [ { } unit reads b_1 { (JC_<somenum>: le_real(0x1p-53, double_value(b_1))) } ];
       void;
       [ { } unit reads b_1 { (JC_<somenum>: lt_real(0.0, double_value(b_1))) } ];
@@ -907,10 +887,9 @@ let interp_lin_ensures_normalized =
                            sub_real(double_value(x2), double_value(x1)))),
           0x1p-53)) } ]; void;
       (let _jessie_<somenum> =
-      (C_7:
       begin
-        (a_1 := (C_6: (JC_<somenum>: (((sub_double_safe nearest_even) z_0) x1))));
-       !a_1 end) in void);
+        (a_1 := (JC_<somenum>: (((sub_double_safe nearest_even) z_0) x1))); !a_1 end in
+      void);
       [ { } unit
         { (JC_<somenum>:
           (le_real(0.0, sub_real(double_value(z_0), double_value(x1)))
@@ -928,10 +907,9 @@ let interp_lin_ensures_normalized =
                          sub_real(double_value(z_0), double_value(x1)))),
         0x1p-53)) }; void); void; void;
       (let _jessie_<somenum> =
-      (C_13:
       begin
-        (k_1 := (C_12: (JC_<somenum>: (((div_double_safe nearest_even) !a_1) !b_1))));
-       !k_1 end) in void);
+        (k_1 := (JC_<somenum>: (((div_double_safe nearest_even) !a_1) !b_1))); !k_1
+      end in void);
       [ { } unit reads k_1
         { (JC_<somenum>:
           (le_real(0.0, double_value(k_1))
@@ -943,10 +921,8 @@ let interp_lin_ensures_normalized =
                 sub_real(double_value(x2), double_value(x1))) in
            (le_real(0.0, k2) and le_real(k2, 1.0)))) } ]; void; void;
       (let _jessie_<somenum> =
-      (C_18:
-      begin
-        (c := (C_17: (JC_<somenum>: (((sub_double_safe nearest_even) y2) y1)))); !c
-      end) in void);
+      begin   (c := (JC_<somenum>: (((sub_double_safe nearest_even) y2) y1))); !c
+      end in void);
       [ { } unit reads c
         { (JC_<somenum>:
           le_real(abs_real(div_real(sub_real(double_value(c),
@@ -955,17 +931,13 @@ let interp_lin_ensures_normalized =
                            sub_real(double_value(y2), double_value(y1)))),
           0x1p-53)) } ]; void;
       (let _jessie_<somenum> =
-      (C_23:
       begin
-        (r := (C_22:
-              (JC_<somenum>:
-              (((add_double_safe nearest_even) y1) (C_21:
-                                                   (JC_<somenum>:
+        (r := (JC_<somenum>:
+              (((add_double_safe nearest_even) y1) (JC_<somenum>:
                                                    (((mul_double_safe nearest_even) !k_1) 
-                                                    (C_20:
                                                     (JC_<somenum>:
-                                                    (((sub_double_safe nearest_even) y2) y1))))))))));
-       !r end) in void); void; (return := !r); (raise Return) end))))));
+                                                    (((sub_double_safe nearest_even) y2) y1)))))));
+       !r end in void); void; (return := !r); (raise Return) end))))); 
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     (let k_0 =
@@ -1003,10 +975,9 @@ let interp_lin_safety =
      (let k_1 = ref (any_double void) in
      (let c = ref (any_double void) in
      (let r = ref (any_double void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (b_1 := (C_1: (JC_<somenum>: (((sub_double nearest_even) x2) x1)))) in void);
+       (b_1 := (JC_<somenum>: (((sub_double nearest_even) x2) x1))) in void);
       [ { } unit reads b_1 { (JC_<somenum>: le_real(0x1p-53, double_value(b_1))) } ];
       void;
       [ { } unit reads b_1 { (JC_<somenum>: lt_real(0.0, double_value(b_1))) } ];
@@ -1019,10 +990,8 @@ let interp_lin_safety =
                            sub_real(double_value(x2), double_value(x1)))),
           0x1p-53)) } ]; void;
       (let _jessie_<somenum> =
-      (C_7:
-      begin
-        (a_1 := (C_6: (JC_<somenum>: (((sub_double nearest_even) z_0) x1)))); !a_1
-      end) in void);
+      begin   (a_1 := (JC_<somenum>: (((sub_double nearest_even) z_0) x1))); !a_1
+      end in void);
       [ { } unit
         { (JC_<somenum>:
           (le_real(0.0, sub_real(double_value(z_0), double_value(x1)))
@@ -1034,10 +1003,8 @@ let interp_lin_safety =
           and le_real(double_value(a_1), double_value(b_1)))) } ]; void;
       void; void;
       (let _jessie_<somenum> =
-      (C_13:
-      begin
-        (k_1 := (C_12: (JC_<somenum>: (((div_double nearest_even) !a_1) !b_1))));
-       !k_1 end) in void);
+      begin   (k_1 := (JC_<somenum>: (((div_double nearest_even) !a_1) !b_1))); !k_1
+      end in void);
       [ { } unit reads k_1
         { (JC_<somenum>:
           (le_real(0.0, double_value(k_1))
@@ -1049,9 +1016,8 @@ let interp_lin_safety =
                 sub_real(double_value(x2), double_value(x1))) in
            (le_real(0.0, k2) and le_real(k2, 1.0)))) } ]; void; void;
       (let _jessie_<somenum> =
-      (C_18:
-      begin   (c := (C_17: (JC_<somenum>: (((sub_double nearest_even) y2) y1)))); !c
-      end) in void);
+      begin   (c := (JC_<somenum>: (((sub_double nearest_even) y2) y1))); !c end in
+      void);
       [ { } unit reads c
         { (JC_<somenum>:
           le_real(abs_real(div_real(sub_real(double_value(c),
@@ -1060,17 +1026,13 @@ let interp_lin_safety =
                            sub_real(double_value(y2), double_value(y1)))),
           0x1p-53)) } ]; void;
       (let _jessie_<somenum> =
-      (C_23:
       begin
-        (r := (C_22:
-              (JC_<somenum>:
-              (((add_double nearest_even) y1) (C_21:
-                                              (JC_<somenum>:
+        (r := (JC_<somenum>:
+              (((add_double nearest_even) y1) (JC_<somenum>:
                                               (((mul_double nearest_even) !k_1) 
-                                               (C_20:
                                                (JC_<somenum>:
-                                               (((sub_double nearest_even) y2) y1))))))))));
-       !r end) in void); void; (return := !r); (raise Return) end))))));
+                                               (((sub_double nearest_even) y2) y1)))))));
+       !r end in void); void; (return := !r); (raise Return) end))))); 
     absurd  end with Return -> !return end)) { true }
 
 

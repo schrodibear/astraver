@@ -54,19 +54,19 @@ tag aP = {
 }
 
 int32 conv(charP[..] s)
-  requires (C_11 : (s != null));
+  requires (_C_11 : (s != null));
 behavior default:
-  ensures (C_10 : (\result != 0));
+  ensures (_C_10 : (\result != 0));
 {  
    (var _u[0] u);
    
    (var int32 __retres);
    
-   {  (C_2 : (u = (C_1 : (new _u[1]))));
-      (C_5 : ((C_4 : (C_3 : (u :> s_0P[0])).s_0M) = s));
-      (C_8 : (__retres = (C_7 : (C_6 : (u :> aP[0])).aM)));
+   {  (_C_2 : (u = (_C_1 : (new _u[1]))));
+      (_C_5 : ((_C_4 : (_C_3 : (u :> s_0P[0])).s_0M) = s));
+      (_C_8 : (__retres = (_C_7 : (_C_6 : (u :> aP[0])).aM)));
       
-      {  (C_9 : (free(u)));
+      {  (_C_9 : (free(u)));
          
          (return __retres)
       }

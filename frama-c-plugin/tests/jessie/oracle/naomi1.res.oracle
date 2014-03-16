@@ -92,27 +92,27 @@ uint32 flag;
 uint32 time1;
 
 unit Event()
-  requires (C_14 : ((C_15 : (0.0 <= time1)) && (C_16 : (time1 <= 3840))));
+  requires (_C_14 : ((_C_15 : (0.0 <= time1)) && (_C_16 : (time1 <= 3840))));
 behavior default:
-  ensures (C_13 : true);
+  ensures (_C_13 : true);
 {  
    {  
-      switch ((C_12 : (mode1 :> int32))) {
+      switch ((_C_12 : (mode1 :> int32))) {
         case 1:
         {  ();
-           (if (a == 1) then (if (a1 == 0) then (C_1 : (flag = time1)) else ()) else ());
+           (if (a == 1) then (if (a1 == 0) then (_C_1 : (flag = time1)) else ()) else ());
            (if (b == 1) then (if (b1 == 0) then 
-                             {  (C_3 : ((C_2 : (Gbl_E + 0).Gbl_T) = 1));
-                                (C_4 : (flag = 1))
+                             {  (_C_3 : ((_C_2 : (Gbl_E + 0).Gbl_T) = 1));
+                                (_C_4 : (flag = 1))
                              } else ()) else ());
-           (if (c == 1) then (if (c1 == 0) then (C_5 : (flag = 2)) else ()) else ());
+           (if (c == 1) then (if (c1 == 0) then (_C_5 : (flag = 2)) else ()) else ());
            (if (d == 1) then (if (d1 == 0) then 
-                             {  (C_7 : ((C_6 : (Gbl_E + 60).Gbl_T) = 1));
-                                (C_8 : (flag = 3))
+                             {  (_C_7 : ((_C_6 : (Gbl_E + 60).Gbl_T) = 1));
+                                (_C_8 : (flag = 3))
                              } else ()) else ());
-           (if (e == 1) then (if (e1 == 0) then (C_9 : (flag = 4)) else ()) else ());
-           (if (f == 1) then (if (f1 == 0) then (C_10 : (flag = 5)) else ()) else ());
-           (if (g == 1) then (if (g1 == 0) then (C_11 : (flag = 6)) else ()) else ());
+           (if (e == 1) then (if (e1 == 0) then (_C_9 : (flag = 4)) else ()) else ());
+           (if (f == 1) then (if (f1 == 0) then (_C_10 : (flag = 5)) else ()) else ());
+           (if (g == 1) then (if (g1 == 0) then (_C_11 : (flag = 6)) else ()) else ());
            
            (goto switch_0_break)
         }
@@ -701,8 +701,7 @@ let Event_ensures_default =
    begin
      try
       begin
-        (let _jessie_<somenum> =
-        (C_12: (safe_int32_of_integer_ (integer_of_uint8 mode1))) in
+        (let _jessie_<somenum> = (safe_int32_of_integer_ (integer_of_uint8 mode1)) in
         (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (1))
         then
          begin
@@ -710,34 +709,30 @@ let Event_ensures_default =
           (if ((eq_int_ (integer_of_int32 a)) (1))
           then
            (if ((eq_int_ (integer_of_int32 a1)) (0))
-           then (let _jessie_<somenum> = (C_1: (flag := time1)) in void) else void)
+           then (let _jessie_<somenum> = (flag := time1) in void) else void)
           else void);
           (if ((eq_int_ (integer_of_int32 b)) (1))
           then
            (if ((eq_int_ (integer_of_int32 b1)) (0))
            then
             (let _jessie_<somenum> =
-            (C_3:
             begin
               (let _jessie_<somenum> = (safe_uint1_of_integer_ (1)) in
               (let _jessie_<somenum> = Gbl_E in
               (((safe_upd_ __anonstruct_Gbl_E_1_Gbl_T_Gbl_E_1) _jessie_<somenum>) _jessie_<somenum>)));
-             (C_4:
-             begin   (flag := (safe_uint32_of_integer_ (1))); !flag end) end) in
-            void) else void) else void);
+             (flag := (safe_uint32_of_integer_ (1))); !flag end in void)
+           else void) else void);
           (if ((eq_int_ (integer_of_int32 c)) (1))
           then
            (if ((eq_int_ (integer_of_int32 c1)) (0))
            then
-            (let _jessie_<somenum> =
-            (C_5: (flag := (safe_uint32_of_integer_ (2)))) in void)
-           else void) else void);
+            (let _jessie_<somenum> = (flag := (safe_uint32_of_integer_ (2))) in
+            void) else void) else void);
           (if ((eq_int_ (integer_of_int32 d)) (1))
           then
            (if ((eq_int_ (integer_of_int32 d1)) (0))
            then
             (let _jessie_<somenum> =
-            (C_7:
             begin
               (let _jessie_<somenum> = (safe_uint1_of_integer_ (1)) in
               (let _jessie_<somenum> = Gbl_E in
@@ -745,31 +740,28 @@ let Event_ensures_default =
               (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
               (let _jessie_<somenum> = ((shift _jessie_<somenum>) (60)) in
               (((safe_upd_ __anonstruct_Gbl_E_1_Gbl_T_Gbl_E_1) _jessie_<somenum>) _jessie_<somenum>))))));
-             (C_8:
-             begin   (flag := (safe_uint32_of_integer_ (3))); !flag end) end) in
-            void) else void) else void);
+             (flag := (safe_uint32_of_integer_ (3))); !flag end in void)
+           else void) else void);
           (if ((eq_int_ (integer_of_int32 e)) (1))
           then
            (if ((eq_int_ (integer_of_int32 e1)) (0))
            then
-            (let _jessie_<somenum> =
-            (C_9: (flag := (safe_uint32_of_integer_ (4)))) in void)
-           else void) else void);
+            (let _jessie_<somenum> = (flag := (safe_uint32_of_integer_ (4))) in
+            void) else void) else void);
           (if ((eq_int_ (integer_of_int32 f)) (1))
           then
            (if ((eq_int_ (integer_of_int32 f1)) (0))
            then
-            (let _jessie_<somenum> =
-            (C_10: (flag := (safe_uint32_of_integer_ (5)))) in void)
-           else void) else void);
+            (let _jessie_<somenum> = (flag := (safe_uint32_of_integer_ (5))) in
+            void) else void) else void);
           (if ((eq_int_ (integer_of_int32 g)) (1))
           then
            (if ((eq_int_ (integer_of_int32 g1)) (0))
            then
-            (let _jessie_<somenum> =
-            (C_11: (flag := (safe_uint32_of_integer_ (6)))) in void)
-           else void) else void); (raise (Goto_switch_0_break_exc void)) end
-        else void)); (raise (Goto_switch_0_break_exc void)) end with
+            (let _jessie_<somenum> = (flag := (safe_uint32_of_integer_ (6))) in
+            void) else void) else void);
+          (raise (Goto_switch_0_break_exc void)) end else void));
+       (raise (Goto_switch_0_break_exc void)) end with
       Goto_switch_0_break_exc _jessie_<somenum> ->
       (switch_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end) { (JC_<somenum>: true) }
@@ -787,7 +779,7 @@ let Event_safety =
      try
       begin
         (let _jessie_<somenum> =
-        (C_12: (JC_<somenum>: (int32_of_integer_ (integer_of_uint8 mode1)))) in
+        (JC_<somenum>: (int32_of_integer_ (integer_of_uint8 mode1))) in
         (if ((eq_int_ (integer_of_int32 _jessie_<somenum>)) (1))
         then
          begin
@@ -795,34 +787,30 @@ let Event_safety =
           (if ((eq_int_ (integer_of_int32 a)) (1))
           then
            (if ((eq_int_ (integer_of_int32 a1)) (0))
-           then (let _jessie_<somenum> = (C_1: (flag := time1)) in void) else void)
+           then (let _jessie_<somenum> = (flag := time1) in void) else void)
           else void);
           (if ((eq_int_ (integer_of_int32 b)) (1))
           then
            (if ((eq_int_ (integer_of_int32 b1)) (0))
            then
             (let _jessie_<somenum> =
-            (C_3:
             begin
               (let _jessie_<somenum> = (safe_uint1_of_integer_ (1)) in
               (let _jessie_<somenum> = Gbl_E in
               (((safe_upd_ __anonstruct_Gbl_E_1_Gbl_T_Gbl_E_1) _jessie_<somenum>) _jessie_<somenum>)));
-             (C_4:
-             begin   (flag := (safe_uint32_of_integer_ (1))); !flag end) end) in
-            void) else void) else void);
+             (flag := (safe_uint32_of_integer_ (1))); !flag end in void)
+           else void) else void);
           (if ((eq_int_ (integer_of_int32 c)) (1))
           then
            (if ((eq_int_ (integer_of_int32 c1)) (0))
            then
-            (let _jessie_<somenum> =
-            (C_5: (flag := (safe_uint32_of_integer_ (2)))) in void)
-           else void) else void);
+            (let _jessie_<somenum> = (flag := (safe_uint32_of_integer_ (2))) in
+            void) else void) else void);
           (if ((eq_int_ (integer_of_int32 d)) (1))
           then
            (if ((eq_int_ (integer_of_int32 d1)) (0))
            then
             (let _jessie_<somenum> =
-            (C_7:
             begin
               (let _jessie_<somenum> = (safe_uint1_of_integer_ (1)) in
               (let _jessie_<somenum> = Gbl_E in
@@ -830,31 +818,28 @@ let Event_safety =
               (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
               (let _jessie_<somenum> = ((shift _jessie_<somenum>) (60)) in
               (((safe_upd_ __anonstruct_Gbl_E_1_Gbl_T_Gbl_E_1) _jessie_<somenum>) _jessie_<somenum>))))));
-             (C_8:
-             begin   (flag := (safe_uint32_of_integer_ (3))); !flag end) end) in
-            void) else void) else void);
+             (flag := (safe_uint32_of_integer_ (3))); !flag end in void)
+           else void) else void);
           (if ((eq_int_ (integer_of_int32 e)) (1))
           then
            (if ((eq_int_ (integer_of_int32 e1)) (0))
            then
-            (let _jessie_<somenum> =
-            (C_9: (flag := (safe_uint32_of_integer_ (4)))) in void)
-           else void) else void);
+            (let _jessie_<somenum> = (flag := (safe_uint32_of_integer_ (4))) in
+            void) else void) else void);
           (if ((eq_int_ (integer_of_int32 f)) (1))
           then
            (if ((eq_int_ (integer_of_int32 f1)) (0))
            then
-            (let _jessie_<somenum> =
-            (C_10: (flag := (safe_uint32_of_integer_ (5)))) in void)
-           else void) else void);
+            (let _jessie_<somenum> = (flag := (safe_uint32_of_integer_ (5))) in
+            void) else void) else void);
           (if ((eq_int_ (integer_of_int32 g)) (1))
           then
            (if ((eq_int_ (integer_of_int32 g1)) (0))
            then
-            (let _jessie_<somenum> =
-            (C_11: (flag := (safe_uint32_of_integer_ (6)))) in void)
-           else void) else void); (raise (Goto_switch_0_break_exc void)) end
-        else void)); (raise (Goto_switch_0_break_exc void)) end with
+            (let _jessie_<somenum> = (flag := (safe_uint32_of_integer_ (6))) in
+            void) else void) else void);
+          (raise (Goto_switch_0_break_exc void)) end else void));
+       (raise (Goto_switch_0_break_exc void)) end with
       Goto_switch_0_break_exc _jessie_<somenum> ->
       (switch_0_break: begin   void; (raise Return) end) end; (raise Return)
    end with Return -> void end)

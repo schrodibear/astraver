@@ -49,34 +49,34 @@ tag __anonstruct_interval_1 = {
 type __anonstruct_interval_1 = [__anonstruct_interval_1]
 
 double min(double x_1, double y_1)
-  requires (C_8 : ((C_9 : (! \double_is_NaN(x_1))) &&
-                    (C_10 : (! \double_is_NaN(y_1)))));
+  requires (_C_8 : ((_C_9 : (! \double_is_NaN(x_1))) &&
+                     (_C_10 : (! \double_is_NaN(y_1)))));
 behavior default:
-  ensures (C_3 : (((C_5 : \le_double(\result, \at(x_1,Old))) &&
-                    (C_6 : \le_double(\result, \at(y_1,Old)))) &&
-                   (C_7 : (\eq_double(\result, \at(x_1,Old)) ||
-                            \eq_double(\result, \at(y_1,Old))))));
+  ensures (_C_3 : (((_C_5 : \le_double(\result, \at(x_1,Old))) &&
+                     (_C_6 : \le_double(\result, \at(y_1,Old)))) &&
+                    (_C_7 : (\eq_double(\result, \at(x_1,Old)) ||
+                              \eq_double(\result, \at(y_1,Old))))));
 {  
    (var double tmp);
    
-   {  (if (x_1 < y_1) then (C_2 : (tmp = x_1)) else (C_1 : (tmp = y_1)));
+   {  (if (x_1 < y_1) then (_C_2 : (tmp = x_1)) else (_C_1 : (tmp = y_1)));
       
       (return tmp)
    }
 }
 
 double max(double x_0, double y_0)
-  requires (C_18 : ((C_19 : (! \double_is_NaN(x_0))) &&
-                     (C_20 : (! \double_is_NaN(y_0)))));
+  requires (_C_18 : ((_C_19 : (! \double_is_NaN(x_0))) &&
+                      (_C_20 : (! \double_is_NaN(y_0)))));
 behavior default:
-  ensures (C_13 : (((C_15 : \le_double(\at(x_0,Old), \result)) &&
-                     (C_16 : \le_double(\at(y_0,Old), \result))) &&
-                    (C_17 : (\eq_double(\result, \at(x_0,Old)) ||
-                              \eq_double(\result, \at(y_0,Old))))));
+  ensures (_C_13 : (((_C_15 : \le_double(\at(x_0,Old), \result)) &&
+                      (_C_16 : \le_double(\at(y_0,Old), \result))) &&
+                     (_C_17 : (\eq_double(\result, \at(x_0,Old)) ||
+                                \eq_double(\result, \at(y_0,Old))))));
 {  
    (var double tmp_0);
    
-   {  (if (x_0 > y_0) then (C_12 : (tmp_0 = x_0)) else (C_11 : (tmp_0 = y_0)));
+   {  (if (x_0 > y_0) then (_C_12 : (tmp_0 = x_0)) else (_C_11 : (tmp_0 = y_0)));
       
       (return tmp_0)
    }
@@ -97,49 +97,51 @@ predicate real_le_double(real x_2, double y_2) =
   \double_is_plus_infinity(y_2))
 
 double mul_dn(double x_3, double y_3)
-  requires (C_24 : ((((C_27 : (! \double_is_NaN(x_3))) &&
-                       (C_28 : (! \double_is_NaN(y_3)))) &&
-                      (C_29 : (\double_is_infinite(x_3) ==>
-                                (((y_3 :> real) != 0.0) &&
-                                  dif_sign(x_3, y_3))))) &&
-                     (C_30 : (\double_is_infinite(y_3) ==>
-                               (((x_3 :> real) != 0.0) && dif_sign(x_3, y_3))))));
+  requires (_C_24 : ((((_C_27 : (! \double_is_NaN(x_3))) &&
+                        (_C_28 : (! \double_is_NaN(y_3)))) &&
+                       (_C_29 : (\double_is_infinite(x_3) ==>
+                                  (((y_3 :> real) != 0.0) &&
+                                    dif_sign(x_3, y_3))))) &&
+                      (_C_30 : (\double_is_infinite(y_3) ==>
+                                 (((x_3 :> real) != 0.0) &&
+                                   dif_sign(x_3, y_3))))));
 behavior default:
   assigns \nothing;
-  ensures (C_23 : double_le_real(\result,
-                                 ((\at(x_3,Old) :> real) *
-                                   (\at(y_3,Old) :> real))));
+  ensures (_C_23 : double_le_real(\result,
+                                  ((\at(x_3,Old) :> real) *
+                                    (\at(y_3,Old) :> real))));
 {  
    (var double __retres);
    
-   {  (C_22 : (__retres = (C_21 : (x_3 * y_3))));
+   {  (_C_22 : (__retres = (_C_21 : (x_3 * y_3))));
       
       (return __retres)
    }
 }
 
 double mul_up(double x_4, double y_4)
-  requires (C_36 : ((((((C_41 : (! \double_is_NaN(x_4))) &&
-                         (C_42 : (! \double_is_NaN(y_4)))) &&
-                        (C_43 : sam_sign(x_4, y_4))) &&
-                       (C_44 : (\double_is_infinite(x_4) ==>
-                                 (((y_4 :> real) != 0.0) &&
-                                   (\real_abs((y_4 :> real)) >= 0x2.0p-1074))))) &&
-                      (C_45 : (\double_is_infinite(y_4) ==>
-                                ((x_4 :> real) != 0.0)))) &&
-                     (C_46 : (((\double_is_finite(y_4) &&
-                                 (! \no_overflow_double(\Down(),
-                                                        (- (y_4 :> real))))) &&
-                                (\double_sign(y_4) == \Positive())) ==>
-                               ((x_4 :> real) != 0.0)))));
+  requires (_C_36 : ((((((_C_41 : (! \double_is_NaN(x_4))) &&
+                          (_C_42 : (! \double_is_NaN(y_4)))) &&
+                         (_C_43 : sam_sign(x_4, y_4))) &&
+                        (_C_44 : (\double_is_infinite(x_4) ==>
+                                   (((y_4 :> real) != 0.0) &&
+                                     (\real_abs((y_4 :> real)) >=
+                                       0x2.0p-1074))))) &&
+                       (_C_45 : (\double_is_infinite(y_4) ==>
+                                  ((x_4 :> real) != 0.0)))) &&
+                      (_C_46 : (((\double_is_finite(y_4) &&
+                                   (! \no_overflow_double(\Down(),
+                                                          (- (y_4 :> real))))) &&
+                                  (\double_sign(y_4) == \Positive())) ==>
+                                 ((x_4 :> real) != 0.0)))));
 behavior default:
-  ensures (C_35 : real_le_double(((\at(x_4,Old) :> real) *
-                                   (\at(y_4,Old) :> real)),
-                                 \result));
+  ensures (_C_35 : real_le_double(((\at(x_4,Old) :> real) *
+                                    (\at(y_4,Old) :> real)),
+                                  \result));
 {  
    (var double __retres_0);
    
-   {  (C_34 : (__retres_0 = (C_33 : (- (C_32 : (x_4 * (C_31 : (- y_4))))))));
+   {  (_C_34 : (__retres_0 = (_C_33 : (- (_C_32 : (x_4 * (_C_31 : (- y_4))))))));
       
       (return __retres_0)
    }
@@ -155,11 +157,11 @@ predicate in_interval{L}(real a, __anonstruct_interval_1[..] x_4) =
 __anonstruct_interval_1[0] add(__anonstruct_interval_1[0] v_x,
                                __anonstruct_interval_1[0] v_y)
 behavior default:
-  ensures (C_88 : (\forall real a_0;
-                    (\forall real b;
-                      ((in_interval{Here}(a_0, v_x) &&
-                         in_interval{Here}(b, v_y)) ==>
-                        in_interval{Here}((a_0 + b), \result)))));
+  ensures (_C_88 : (\forall real a_0;
+                     (\forall real b;
+                       ((in_interval{Here}(a_0, v_x) &&
+                          in_interval{Here}(b, v_y)) ==>
+                         in_interval{Here}((a_0 + b), \result)))));
 {  
    (var __anonstruct_interval_1[0] x);
    
@@ -169,28 +171,28 @@ behavior default:
    
    (var __anonstruct_interval_1[0] __cil_tmp);
    
-   {  (C_48 : (x = (C_47 : (new __anonstruct_interval_1[1]))));
-      (C_50 : (y = (C_49 : (new __anonstruct_interval_1[1]))));
-      (C_52 : (z = (C_51 : (new __anonstruct_interval_1[1]))));
-      (C_54 : (__cil_tmp = (C_53 : (new __anonstruct_interval_1[1]))));
+   {  (_C_48 : (x = (_C_47 : (new __anonstruct_interval_1[1]))));
+      (_C_50 : (y = (_C_49 : (new __anonstruct_interval_1[1]))));
+      (_C_52 : (z = (_C_51 : (new __anonstruct_interval_1[1]))));
+      (_C_54 : (__cil_tmp = (_C_53 : (new __anonstruct_interval_1[1]))));
       
-      {  (C_57 : ((C_56 : x.l) = (C_55 : v_x.l)));
-         (C_60 : ((C_59 : x.u) = (C_58 : v_x.u)))
+      {  (_C_57 : ((_C_56 : x.l) = (_C_55 : v_x.l)));
+         (_C_60 : ((_C_59 : x.u) = (_C_58 : v_x.u)))
       };
       
-      {  (C_63 : ((C_62 : y.l) = (C_61 : v_y.l)));
-         (C_66 : ((C_65 : y.u) = (C_64 : v_y.u)))
+      {  (_C_63 : ((_C_62 : y.l) = (_C_61 : v_y.l)));
+         (_C_66 : ((_C_65 : y.u) = (_C_64 : v_y.u)))
       };
-      (C_71 : ((C_70 : z.l) = (C_69 : ((C_68 : x.l) + (C_67 : y.l)))));
-      (C_78 : ((C_77 : z.u) = (C_76 : (- (C_75 : ((C_74 : (- (C_73 : x.u))) -
-                                                   (C_72 : y.u)))))));
+      (_C_71 : ((_C_70 : z.l) = (_C_69 : ((_C_68 : x.l) + (_C_67 : y.l)))));
+      (_C_78 : ((_C_77 : z.u) = (_C_76 : (- (_C_75 : ((_C_74 : (- (_C_73 : x.u))) -
+                                                       (_C_72 : y.u)))))));
       
-      {  (C_81 : ((C_80 : __cil_tmp.l) = (C_79 : z.l)));
-         (C_84 : ((C_83 : __cil_tmp.u) = (C_82 : z.u)));
+      {  (_C_81 : ((_C_80 : __cil_tmp.l) = (_C_79 : z.l)));
+         (_C_84 : ((_C_83 : __cil_tmp.u) = (_C_82 : z.u)));
          
-         {  (C_85 : (free(x)));
-            (C_86 : (free(y)));
-            (C_87 : (free(z)));
+         {  (_C_85 : (free(x)));
+            (_C_86 : (free(y)));
+            (_C_87 : (free(z)));
             
             (return __cil_tmp)
          }
@@ -201,11 +203,11 @@ behavior default:
 __anonstruct_interval_1[0] mul(__anonstruct_interval_1[0] v_x_2,
                                __anonstruct_interval_1[0] v_y_2)
 behavior default:
-  ensures (C_248 : (\forall real a_1;
-                     (\forall real b_0;
-                       ((in_interval{Here}(a_1, v_x_2) &&
-                          in_interval{Here}(b_0, v_y_2)) ==>
-                         in_interval{Here}((a_1 * b_0), \result)))));
+  ensures (_C_248 : (\forall real a_1;
+                      (\forall real b_0;
+                        ((in_interval{Here}(a_1, v_x_2) &&
+                           in_interval{Here}(b_0, v_y_2)) ==>
+                          in_interval{Here}((a_1 * b_0), \result)))));
 {  
    (var __anonstruct_interval_1[0] x_2);
    
@@ -223,176 +225,165 @@ behavior default:
    
    (var __anonstruct_interval_1[0] __cil_tmp);
    
-   {  (C_90 : (x_2 = (C_89 : (new __anonstruct_interval_1[1]))));
-      (C_92 : (y_2 = (C_91 : (new __anonstruct_interval_1[1]))));
-      (C_94 : (z_0 = (C_93 : (new __anonstruct_interval_1[1]))));
-      (C_96 : (__cil_tmp = (C_95 : (new __anonstruct_interval_1[1]))));
+   {  (_C_90 : (x_2 = (_C_89 : (new __anonstruct_interval_1[1]))));
+      (_C_92 : (y_2 = (_C_91 : (new __anonstruct_interval_1[1]))));
+      (_C_94 : (z_0 = (_C_93 : (new __anonstruct_interval_1[1]))));
+      (_C_96 : (__cil_tmp = (_C_95 : (new __anonstruct_interval_1[1]))));
       
-      {  (C_99 : ((C_98 : x_2.l) = (C_97 : v_x_2.l)));
-         (C_102 : ((C_101 : x_2.u) = (C_100 : v_x_2.u)))
+      {  (_C_99 : ((_C_98 : x_2.l) = (_C_97 : v_x_2.l)));
+         (_C_102 : ((_C_101 : x_2.u) = (_C_100 : v_x_2.u)))
       };
       
-      {  (C_105 : ((C_104 : y_2.l) = (C_103 : v_y_2.l)));
-         (C_108 : ((C_107 : y_2.u) = (C_106 : v_y_2.u)))
+      {  (_C_105 : ((_C_104 : y_2.l) = (_C_103 : v_y_2.l)));
+         (_C_108 : ((_C_107 : y_2.u) = (_C_106 : v_y_2.u)))
       };
-      (if ((C_238 : x_2.l) < (0.0 :> double)) then (if ((C_237 : x_2.u) >
-                                                         (0.0 :> double)) then 
-                                                   (if ((C_236 : y_2.l) <
-                                                         (0.0 :> double)) then 
-                                                   (if ((C_235 : y_2.u) >
-                                                         (0.0 :> double)) then 
-                                                   {  
-                                                      {  (C_216 : (tmp_1 = 
-                                                         (C_215 : mul_dn(
-                                                         (C_213 : x_2.u),
-                                                         (C_214 : y_2.l)))));
-                                                         (C_220 : (tmp_0_0 = 
-                                                         (C_219 : mul_dn(
-                                                         (C_217 : x_2.l),
-                                                         (C_218 : y_2.u)))))
-                                                      };
-                                                      (C_223 : ((C_222 : z_0.l) = 
-                                                      (C_221 : min(tmp_0_0,
-                                                                   tmp_1))));
-                                                      
-                                                      {  (C_227 : (tmp_1_0 = 
-                                                         (C_226 : mul_up(
-                                                         (C_224 : x_2.u),
-                                                         (C_225 : y_2.u)))));
-                                                         (C_231 : (tmp_2 = 
-                                                         (C_230 : mul_up(
-                                                         (C_228 : x_2.l),
-                                                         (C_229 : y_2.l)))))
-                                                      };
-                                                      (C_234 : ((C_233 : z_0.u) = 
-                                                      (C_232 : max(tmp_2,
-                                                                   tmp_1_0))))
-                                                   } else 
-                                                   {  (C_207 : ((C_206 : z_0.l) = 
-                                                      (C_205 : mul_dn(
-                                                      (C_203 : x_2.u),
-                                                      (C_204 : y_2.l)))));
-                                                      (C_212 : ((C_211 : z_0.u) = 
-                                                      (C_210 : mul_up(
-                                                      (C_208 : x_2.l),
-                                                      (C_209 : y_2.l)))))
-                                                   }) else (if ((C_202 : y_2.u) >
-                                                                 (0.0 :> double)) then 
-                                                           {  (C_196 : (
-                                                              (C_195 : z_0.l) = 
-                                                              (C_194 : mul_dn(
-                                                              (C_192 : x_2.l),
-                                                              (C_193 : y_2.u)))));
-                                                              (C_201 : (
-                                                              (C_200 : z_0.u) = 
-                                                              (C_199 : mul_up(
-                                                              (C_197 : x_2.u),
-                                                              (C_198 : y_2.u)))))
-                                                           } else 
-                                                           {  (C_189 : (
-                                                              (C_188 : z_0.l) = (0.0 :> double)));
-                                                              (C_191 : (
-                                                              (C_190 : z_0.u) = (0.0 :> double)))
-                                                           })) else (if 
-                                                                    ((C_187 : y_2.l) <
-                                                                    (0.0 :> double)) then 
-                                                                    (if 
-                                                                    ((C_186 : y_2.u) >
-                                                                    (0.0 :> double)) then 
-                                                                    {
-                                                                      (C_180 : (
-                                                                    (C_179 : z_0.l) = 
-                                                                    (C_178 : mul_dn(
-                                                                    (C_176 : x_2.l),
-                                                                    (C_177 : y_2.u)))));
-                                                                    (C_185 : (
-                                                                    (C_184 : z_0.u) = 
-                                                                    (C_183 : mul_up(
-                                                                    (C_181 : x_2.l),
-                                                                    (C_182 : y_2.l)))))
-                                                                    } else 
-                                                                    {
-                                                                      (C_170 : (
-                                                                    (C_169 : z_0.l) = 
-                                                                    (C_168 : mul_dn(
-                                                                    (C_166 : x_2.u),
-                                                                    (C_167 : y_2.u)))));
-                                                                    (C_175 : (
-                                                                    (C_174 : z_0.u) = 
-                                                                    (C_173 : mul_up(
-                                                                    (C_171 : x_2.l),
-                                                                    (C_172 : y_2.l)))))
-                                                                    }) else 
-                                                                    (if 
-                                                                    ((C_165 : y_2.u) >
-                                                                    (0.0 :> double)) then 
-                                                                    {
-                                                                      (C_159 : (
-                                                                    (C_158 : z_0.l) = 
-                                                                    (C_157 : mul_dn(
-                                                                    (C_155 : x_2.l),
-                                                                    (C_156 : y_2.u)))));
-                                                                    (C_164 : (
-                                                                    (C_163 : z_0.u) = 
-                                                                    (C_162 : mul_up(
-                                                                    (C_160 : x_2.u),
-                                                                    (C_161 : y_2.l)))))
-                                                                    } else 
-                                                                    {
-                                                                      (C_152 : (
-                                                                    (C_151 : z_0.l) = (0.0 :> double)));
-                                                                    (C_154 : (
-                                                                    (C_153 : z_0.u) = (0.0 :> double)))
-                                                                    }))) else 
-      (if ((C_150 : x_2.u) > (0.0 :> double)) then (if ((C_149 : y_2.l) <
-                                                         (0.0 :> double)) then 
-                                                   (if ((C_148 : y_2.u) >
-                                                         (0.0 :> double)) then 
-                                                   {  (C_142 : ((C_141 : z_0.l) = 
-                                                      (C_140 : mul_dn(
-                                                      (C_138 : x_2.u),
-                                                      (C_139 : y_2.l)))));
-                                                      (C_147 : ((C_146 : z_0.u) = 
-                                                      (C_145 : mul_up(
-                                                      (C_143 : x_2.u),
-                                                      (C_144 : y_2.u)))))
-                                                   } else 
-                                                   {  (C_132 : ((C_131 : z_0.l) = 
-                                                      (C_130 : mul_dn(
-                                                      (C_128 : x_2.u),
-                                                      (C_129 : y_2.l)))));
-                                                      (C_137 : ((C_136 : z_0.u) = 
-                                                      (C_135 : mul_up(
-                                                      (C_133 : x_2.l),
-                                                      (C_134 : y_2.u)))))
-                                                   }) else (if ((C_127 : y_2.u) >
-                                                                 (0.0 :> double)) then 
-                                                           {  (C_121 : (
-                                                              (C_120 : z_0.l) = 
-                                                              (C_119 : mul_dn(
-                                                              (C_117 : x_2.l),
-                                                              (C_118 : y_2.l)))));
-                                                              (C_126 : (
-                                                              (C_125 : z_0.u) = 
-                                                              (C_124 : mul_up(
-                                                              (C_122 : x_2.u),
-                                                              (C_123 : y_2.u)))))
-                                                           } else 
-                                                           {  (C_114 : (
-                                                              (C_113 : z_0.l) = (0.0 :> double)));
-                                                              (C_116 : (
-                                                              (C_115 : z_0.u) = (0.0 :> double)))
-                                                           })) else 
-      {  (C_110 : ((C_109 : z_0.l) = (0.0 :> double)));
-         (C_112 : ((C_111 : z_0.u) = (0.0 :> double)))
+      (if ((_C_238 : x_2.l) < (0.0 :> double)) then (if ((_C_237 : x_2.u) >
+                                                          (0.0 :> double)) then 
+                                                    (if ((_C_236 : y_2.l) <
+                                                          (0.0 :> double)) then 
+                                                    (if ((_C_235 : y_2.u) >
+                                                          (0.0 :> double)) then 
+                                                    {  
+                                                       {  (_C_216 : (tmp_1 = 
+                                                          (_C_215 : mul_dn(
+                                                          (_C_213 : x_2.u),
+                                                          (_C_214 : y_2.l)))));
+                                                          (_C_220 : (tmp_0_0 = 
+                                                          (_C_219 : mul_dn(
+                                                          (_C_217 : x_2.l),
+                                                          (_C_218 : y_2.u)))))
+                                                       };
+                                                       (_C_223 : ((_C_222 : z_0.l) = 
+                                                       (_C_221 : min(
+                                                       tmp_0_0, tmp_1))));
+                                                       
+                                                       {  (_C_227 : (tmp_1_0 = 
+                                                          (_C_226 : mul_up(
+                                                          (_C_224 : x_2.u),
+                                                          (_C_225 : y_2.u)))));
+                                                          (_C_231 : (tmp_2 = 
+                                                          (_C_230 : mul_up(
+                                                          (_C_228 : x_2.l),
+                                                          (_C_229 : y_2.l)))))
+                                                       };
+                                                       (_C_234 : ((_C_233 : z_0.u) = 
+                                                       (_C_232 : max(
+                                                       tmp_2, tmp_1_0))))
+                                                    } else 
+                                                    {  (_C_207 : ((_C_206 : z_0.l) = 
+                                                       (_C_205 : mul_dn(
+                                                       (_C_203 : x_2.u),
+                                                       (_C_204 : y_2.l)))));
+                                                       (_C_212 : ((_C_211 : z_0.u) = 
+                                                       (_C_210 : mul_up(
+                                                       (_C_208 : x_2.l),
+                                                       (_C_209 : y_2.l)))))
+                                                    }) else (if ((_C_202 : y_2.u) >
+                                                                  (0.0 :> double)) then 
+                                                            {  (_C_196 : (
+                                                               (_C_195 : z_0.l) = 
+                                                               (_C_194 : mul_dn(
+                                                               (_C_192 : x_2.l),
+                                                               (_C_193 : y_2.u)))));
+                                                               (_C_201 : (
+                                                               (_C_200 : z_0.u) = 
+                                                               (_C_199 : mul_up(
+                                                               (_C_197 : x_2.u),
+                                                               (_C_198 : y_2.u)))))
+                                                            } else 
+                                                            {  (_C_189 : (
+                                                               (_C_188 : z_0.l) = (0.0 :> double)));
+                                                               (_C_191 : (
+                                                               (_C_190 : z_0.u) = (0.0 :> double)))
+                                                            })) else 
+                                                    (if ((_C_187 : y_2.l) <
+                                                          (0.0 :> double)) then 
+                                                    (if ((_C_186 : y_2.u) >
+                                                          (0.0 :> double)) then 
+                                                    {  (_C_180 : ((_C_179 : z_0.l) = 
+                                                       (_C_178 : mul_dn(
+                                                       (_C_176 : x_2.l),
+                                                       (_C_177 : y_2.u)))));
+                                                       (_C_185 : ((_C_184 : z_0.u) = 
+                                                       (_C_183 : mul_up(
+                                                       (_C_181 : x_2.l),
+                                                       (_C_182 : y_2.l)))))
+                                                    } else 
+                                                    {  (_C_170 : ((_C_169 : z_0.l) = 
+                                                       (_C_168 : mul_dn(
+                                                       (_C_166 : x_2.u),
+                                                       (_C_167 : y_2.u)))));
+                                                       (_C_175 : ((_C_174 : z_0.u) = 
+                                                       (_C_173 : mul_up(
+                                                       (_C_171 : x_2.l),
+                                                       (_C_172 : y_2.l)))))
+                                                    }) else (if ((_C_165 : y_2.u) >
+                                                                  (0.0 :> double)) then 
+                                                            {  (_C_159 : (
+                                                               (_C_158 : z_0.l) = 
+                                                               (_C_157 : mul_dn(
+                                                               (_C_155 : x_2.l),
+                                                               (_C_156 : y_2.u)))));
+                                                               (_C_164 : (
+                                                               (_C_163 : z_0.u) = 
+                                                               (_C_162 : mul_up(
+                                                               (_C_160 : x_2.u),
+                                                               (_C_161 : y_2.l)))))
+                                                            } else 
+                                                            {  (_C_152 : (
+                                                               (_C_151 : z_0.l) = (0.0 :> double)));
+                                                               (_C_154 : (
+                                                               (_C_153 : z_0.u) = (0.0 :> double)))
+                                                            }))) else 
+      (if ((_C_150 : x_2.u) > (0.0 :> double)) then (if ((_C_149 : y_2.l) <
+                                                          (0.0 :> double)) then 
+                                                    (if ((_C_148 : y_2.u) >
+                                                          (0.0 :> double)) then 
+                                                    {  (_C_142 : ((_C_141 : z_0.l) = 
+                                                       (_C_140 : mul_dn(
+                                                       (_C_138 : x_2.u),
+                                                       (_C_139 : y_2.l)))));
+                                                       (_C_147 : ((_C_146 : z_0.u) = 
+                                                       (_C_145 : mul_up(
+                                                       (_C_143 : x_2.u),
+                                                       (_C_144 : y_2.u)))))
+                                                    } else 
+                                                    {  (_C_132 : ((_C_131 : z_0.l) = 
+                                                       (_C_130 : mul_dn(
+                                                       (_C_128 : x_2.u),
+                                                       (_C_129 : y_2.l)))));
+                                                       (_C_137 : ((_C_136 : z_0.u) = 
+                                                       (_C_135 : mul_up(
+                                                       (_C_133 : x_2.l),
+                                                       (_C_134 : y_2.u)))))
+                                                    }) else (if ((_C_127 : y_2.u) >
+                                                                  (0.0 :> double)) then 
+                                                            {  (_C_121 : (
+                                                               (_C_120 : z_0.l) = 
+                                                               (_C_119 : mul_dn(
+                                                               (_C_117 : x_2.l),
+                                                               (_C_118 : y_2.l)))));
+                                                               (_C_126 : (
+                                                               (_C_125 : z_0.u) = 
+                                                               (_C_124 : mul_up(
+                                                               (_C_122 : x_2.u),
+                                                               (_C_123 : y_2.u)))))
+                                                            } else 
+                                                            {  (_C_114 : (
+                                                               (_C_113 : z_0.l) = (0.0 :> double)));
+                                                               (_C_116 : (
+                                                               (_C_115 : z_0.u) = (0.0 :> double)))
+                                                            })) else 
+      {  (_C_110 : ((_C_109 : z_0.l) = (0.0 :> double)));
+         (_C_112 : ((_C_111 : z_0.u) = (0.0 :> double)))
       }));
       
-      {  (C_241 : ((C_240 : __cil_tmp.l) = (C_239 : z_0.l)));
-         (C_244 : ((C_243 : __cil_tmp.u) = (C_242 : z_0.u)));
+      {  (_C_241 : ((_C_240 : __cil_tmp.l) = (_C_239 : z_0.l)));
+         (_C_244 : ((_C_243 : __cil_tmp.u) = (_C_242 : z_0.u)));
          
-         {  (C_245 : (free(x_2)));
-            (C_246 : (free(y_2)));
-            (C_247 : (free(z_0)));
+         {  (_C_245 : (free(x_2)));
+            (_C_246 : (free(y_2)));
+            (_C_247 : (free(z_0)));
             
             (return __cil_tmp)
          }
@@ -1072,110 +1063,70 @@ let add_ensures_default =
      (let y_5 = ref (any_pointer void) in
      (let z = ref (any_pointer void) in
      (let __cil_tmp = ref (any_pointer void) in
-     (C_48:
      begin
        (let _jessie_<somenum> =
-       (x_5 := (C_47:
-               (JC_<somenum>:
-               (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_x_11_alloc_table) __anonstruct_interval_1_x_11_tag_table)))) in
+       (x_5 := (JC_<somenum>:
+               (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_x_11_alloc_table) __anonstruct_interval_1_x_11_tag_table))) in
        void);
-      (C_50:
+      (let _jessie_<somenum> =
+      (y_5 := (JC_<somenum>:
+              (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_y_12_alloc_table) __anonstruct_interval_1_y_12_tag_table))) in
+      void);
+      (let _jessie_<somenum> =
+      (z := (JC_<somenum>:
+            (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_z_13_alloc_table) __anonstruct_interval_1_z_13_tag_table))) in
+      void);
+      (let _jessie_<somenum> =
+      (__cil_tmp := (JC_<somenum>:
+                    (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_result_5_alloc_table) __anonstruct_interval_1_result_5_tag_table))) in
+      void);
+      (let _jessie_<somenum> =
       begin
         (let _jessie_<somenum> =
-        (y_5 := (C_49:
-                (JC_<somenum>:
-                (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_y_12_alloc_table) __anonstruct_interval_1_y_12_tag_table)))) in
-        void);
-       (C_52:
+        ((safe_acc_ __anonstruct_interval_1_l_v_x_3) v_x) in
+        (let _jessie_<somenum> = !x_5 in
+        (((safe_upd_ __anonstruct_interval_1_l_x_11) _jessie_<somenum>) _jessie_<somenum>)));
+       (let _jessie_<somenum> = ((safe_acc_ __anonstruct_interval_1_u_v_x_3) v_x) in
        begin
-         (let _jessie_<somenum> =
-         (z := (C_51:
-               (JC_<somenum>:
-               (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_z_13_alloc_table) __anonstruct_interval_1_z_13_tag_table)))) in
-         void);
-        (C_54:
-        begin
-          (let _jessie_<somenum> =
-          (__cil_tmp := (C_53:
-                        (JC_<somenum>:
-                        (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_result_5_alloc_table) __anonstruct_interval_1_result_5_tag_table)))) in
-          void);
-         (let _jessie_<somenum> =
-         (C_57:
-         begin
-           (let _jessie_<somenum> =
-           (C_55: ((safe_acc_ __anonstruct_interval_1_l_v_x_3) v_x)) in
-           (let _jessie_<somenum> = !x_5 in
-           (((safe_upd_ __anonstruct_interval_1_l_x_11) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_60:
-          (let _jessie_<somenum> =
-          (C_58: ((safe_acc_ __anonstruct_interval_1_u_v_x_3) v_x)) in
-          begin
-            (let _jessie_<somenum> = !x_5 in
-            (((safe_upd_ __anonstruct_interval_1_u_x_11) _jessie_<somenum>) _jessie_<somenum>));
-           _jessie_<somenum> end)) end) in void);
-         (let _jessie_<somenum> =
-         (C_63:
-         begin
-           (let _jessie_<somenum> =
-           (C_61: ((safe_acc_ __anonstruct_interval_1_l_v_y_4) v_y)) in
-           (let _jessie_<somenum> = !y_5 in
-           (((safe_upd_ __anonstruct_interval_1_l_y_12) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_66:
-          (let _jessie_<somenum> =
-          (C_64: ((safe_acc_ __anonstruct_interval_1_u_v_y_4) v_y)) in
-          begin
-            (let _jessie_<somenum> = !y_5 in
-            (((safe_upd_ __anonstruct_interval_1_u_y_12) _jessie_<somenum>) _jessie_<somenum>));
-           _jessie_<somenum> end)) end) in void);
-         (C_71:
-         begin
-           (let _jessie_<somenum> =
-           (C_69:
-           (JC_<somenum>:
-           (((add_double down) (C_68:
-                               ((safe_acc_ !__anonstruct_interval_1_l_x_11) !x_5))) 
-            (C_67: ((safe_acc_ !__anonstruct_interval_1_l_y_12) !y_5))))) in
-           (let _jessie_<somenum> = !z in
-           (((safe_upd_ __anonstruct_interval_1_l_z_13) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_78:
-          begin
-            (let _jessie_<somenum> =
-            (C_76:
-            (JC_<somenum>:
-            (neg_double (C_75:
-                        (JC_<somenum>:
-                        (((sub_double down) (C_74:
-                                            (JC_<somenum>:
-                                            (neg_double (C_73:
-                                                        ((safe_acc_ !__anonstruct_interval_1_u_x_11) !x_5)))))) 
-                         (C_72:
-                         ((safe_acc_ !__anonstruct_interval_1_u_y_12) !y_5)))))))) in
-            (let _jessie_<somenum> = !z in
-            (((safe_upd_ __anonstruct_interval_1_u_z_13) _jessie_<somenum>) _jessie_<somenum>)));
-           (C_81:
-           begin
-             (let _jessie_<somenum> =
-             (C_79: ((safe_acc_ !__anonstruct_interval_1_l_z_13) !z)) in
-             (let _jessie_<somenum> = !__cil_tmp in
-             (((safe_upd_ __anonstruct_interval_1_l_result_5) _jessie_<somenum>) _jessie_<somenum>)));
-            (C_84:
-            begin
-              (let _jessie_<somenum> =
-              (C_82: ((safe_acc_ !__anonstruct_interval_1_u_z_13) !z)) in
-              (let _jessie_<somenum> = !__cil_tmp in
-              (((safe_upd_ __anonstruct_interval_1_u_result_5) _jessie_<somenum>) _jessie_<somenum>)));
-             (C_85:
-             begin
-               ((safe_free_parameter __anonstruct_interval_1_x_11_alloc_table) !x_5);
-              (C_86:
-              begin
-                ((safe_free_parameter __anonstruct_interval_1_y_12_alloc_table) !y_5);
-               (C_87:
-               begin
-                 ((safe_free_parameter __anonstruct_interval_1_z_13_alloc_table) !z);
-                (return := !__cil_tmp); (raise Return) end) end) end) end)
-           end) end) end) end) end) end) end))))))))))))))))); absurd  end
+         (let _jessie_<somenum> = !x_5 in
+         (((safe_upd_ __anonstruct_interval_1_u_x_11) _jessie_<somenum>) _jessie_<somenum>));
+        _jessie_<somenum> end) end in void);
+      (let _jessie_<somenum> =
+      begin
+        (let _jessie_<somenum> =
+        ((safe_acc_ __anonstruct_interval_1_l_v_y_4) v_y) in
+        (let _jessie_<somenum> = !y_5 in
+        (((safe_upd_ __anonstruct_interval_1_l_y_12) _jessie_<somenum>) _jessie_<somenum>)));
+       (let _jessie_<somenum> =
+       ((safe_acc_ __anonstruct_interval_1_u_v_y_4) v_y) in
+       begin
+         (let _jessie_<somenum> = !y_5 in
+         (((safe_upd_ __anonstruct_interval_1_u_y_12) _jessie_<somenum>) _jessie_<somenum>));
+        _jessie_<somenum> end) end in void);
+      (let _jessie_<somenum> =
+      (JC_<somenum>:
+      (((add_double down) ((safe_acc_ !__anonstruct_interval_1_l_x_11) !x_5)) 
+       ((safe_acc_ !__anonstruct_interval_1_l_y_12) !y_5))) in
+      (let _jessie_<somenum> = !z in
+      (((safe_upd_ __anonstruct_interval_1_l_z_13) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      (JC_<somenum>:
+      (neg_double (JC_<somenum>:
+                  (((sub_double down) (JC_<somenum>:
+                                      (neg_double ((safe_acc_ !__anonstruct_interval_1_u_x_11) !x_5)))) 
+                   ((safe_acc_ !__anonstruct_interval_1_u_y_12) !y_5))))) in
+      (let _jessie_<somenum> = !z in
+      (((safe_upd_ __anonstruct_interval_1_u_z_13) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_interval_1_l_z_13) !z) in
+      (let _jessie_<somenum> = !__cil_tmp in
+      (((safe_upd_ __anonstruct_interval_1_l_result_5) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_interval_1_u_z_13) !z) in
+      (let _jessie_<somenum> = !__cil_tmp in
+      (((safe_upd_ __anonstruct_interval_1_u_result_5) _jessie_<somenum>) _jessie_<somenum>)));
+      ((safe_free_parameter __anonstruct_interval_1_x_11_alloc_table) !x_5);
+      ((safe_free_parameter __anonstruct_interval_1_y_12_alloc_table) !y_5);
+      ((safe_free_parameter __anonstruct_interval_1_z_13_alloc_table) !z);
+      (return := !__cil_tmp); (raise Return) end)))))))))))))))); absurd  end
    with Return -> !return end))
   { (JC_<somenum>:
     (forall a_0:real.
@@ -1220,130 +1171,89 @@ let add_safety =
      (let y_5 = ref (any_pointer void) in
      (let z = ref (any_pointer void) in
      (let __cil_tmp = ref (any_pointer void) in
-     (C_48:
      begin
        (let _jessie_<somenum> =
        (x_5 := (let _jessie_<somenum> =
-               (C_47:
                (JC_<somenum>:
-               (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_x_11_alloc_table) __anonstruct_interval_1_x_11_tag_table))) in
+               (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_x_11_alloc_table) __anonstruct_interval_1_x_11_tag_table)) in
                (JC_<somenum>:
                (assert
                { ge_int(offset_max(__anonstruct_interval_1_x_11_alloc_table,
                         _jessie_<somenum>),
                  (0)) }; _jessie_<somenum>)))) in void);
-      (C_50:
+      (let _jessie_<somenum> =
+      (y_5 := (let _jessie_<somenum> =
+              (JC_<somenum>:
+              (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_y_12_alloc_table) __anonstruct_interval_1_y_12_tag_table)) in
+              (JC_<somenum>:
+              (assert
+              { ge_int(offset_max(__anonstruct_interval_1_y_12_alloc_table,
+                       _jessie_<somenum>),
+                (0)) }; _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> =
+      (z := (let _jessie_<somenum> =
+            (JC_<somenum>:
+            (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_z_13_alloc_table) __anonstruct_interval_1_z_13_tag_table)) in
+            (JC_<somenum>:
+            (assert
+            { ge_int(offset_max(__anonstruct_interval_1_z_13_alloc_table,
+                     _jessie_<somenum>),
+              (0)) }; _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> =
+      (__cil_tmp := (let _jessie_<somenum> =
+                    (JC_<somenum>:
+                    (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_result_5_alloc_table) __anonstruct_interval_1_result_5_tag_table)) in
+                    (JC_<somenum>:
+                    (assert
+                    { ge_int(offset_max(__anonstruct_interval_1_result_5_alloc_table,
+                             _jessie_<somenum>),
+                      (0)) }; _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> =
       begin
         (let _jessie_<somenum> =
-        (y_5 := (let _jessie_<somenum> =
-                (C_49:
-                (JC_<somenum>:
-                (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_y_12_alloc_table) __anonstruct_interval_1_y_12_tag_table))) in
-                (JC_<somenum>:
-                (assert
-                { ge_int(offset_max(__anonstruct_interval_1_y_12_alloc_table,
-                         _jessie_<somenum>),
-                  (0)) }; _jessie_<somenum>)))) in void);
-       (C_52:
+        ((safe_acc_ __anonstruct_interval_1_l_v_x_3) v_x) in
+        (let _jessie_<somenum> = !x_5 in
+        (((safe_upd_ __anonstruct_interval_1_l_x_11) _jessie_<somenum>) _jessie_<somenum>)));
+       (let _jessie_<somenum> = ((safe_acc_ __anonstruct_interval_1_u_v_x_3) v_x) in
        begin
-         (let _jessie_<somenum> =
-         (z := (let _jessie_<somenum> =
-               (C_51:
-               (JC_<somenum>:
-               (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_z_13_alloc_table) __anonstruct_interval_1_z_13_tag_table))) in
-               (JC_<somenum>:
-               (assert
-               { ge_int(offset_max(__anonstruct_interval_1_z_13_alloc_table,
-                        _jessie_<somenum>),
-                 (0)) }; _jessie_<somenum>)))) in void);
-        (C_54:
-        begin
-          (let _jessie_<somenum> =
-          (__cil_tmp := (let _jessie_<somenum> =
-                        (C_53:
-                        (JC_<somenum>:
-                        (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_result_5_alloc_table) __anonstruct_interval_1_result_5_tag_table))) in
-                        (JC_<somenum>:
-                        (assert
-                        { ge_int(offset_max(__anonstruct_interval_1_result_5_alloc_table,
-                                 _jessie_<somenum>),
-                          (0)) }; _jessie_<somenum>)))) in void);
-         (let _jessie_<somenum> =
-         (C_57:
-         begin
-           (let _jessie_<somenum> =
-           (C_55: ((safe_acc_ __anonstruct_interval_1_l_v_x_3) v_x)) in
-           (let _jessie_<somenum> = !x_5 in
-           (((safe_upd_ __anonstruct_interval_1_l_x_11) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_60:
-          (let _jessie_<somenum> =
-          (C_58: ((safe_acc_ __anonstruct_interval_1_u_v_x_3) v_x)) in
-          begin
-            (let _jessie_<somenum> = !x_5 in
-            (((safe_upd_ __anonstruct_interval_1_u_x_11) _jessie_<somenum>) _jessie_<somenum>));
-           _jessie_<somenum> end)) end) in void);
-         (let _jessie_<somenum> =
-         (C_63:
-         begin
-           (let _jessie_<somenum> =
-           (C_61: ((safe_acc_ __anonstruct_interval_1_l_v_y_4) v_y)) in
-           (let _jessie_<somenum> = !y_5 in
-           (((safe_upd_ __anonstruct_interval_1_l_y_12) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_66:
-          (let _jessie_<somenum> =
-          (C_64: ((safe_acc_ __anonstruct_interval_1_u_v_y_4) v_y)) in
-          begin
-            (let _jessie_<somenum> = !y_5 in
-            (((safe_upd_ __anonstruct_interval_1_u_y_12) _jessie_<somenum>) _jessie_<somenum>));
-           _jessie_<somenum> end)) end) in void);
-         (C_71:
-         begin
-           (let _jessie_<somenum> =
-           (C_69:
-           (JC_<somenum>:
-           (((add_double down) (C_68:
-                               ((safe_acc_ !__anonstruct_interval_1_l_x_11) !x_5))) 
-            (C_67: ((safe_acc_ !__anonstruct_interval_1_l_y_12) !y_5))))) in
-           (let _jessie_<somenum> = !z in
-           (((safe_upd_ __anonstruct_interval_1_l_z_13) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_78:
-          begin
-            (let _jessie_<somenum> =
-            (C_76:
-            (JC_<somenum>:
-            (neg_double (C_75:
-                        (JC_<somenum>:
-                        (((sub_double down) (C_74:
-                                            (JC_<somenum>:
-                                            (neg_double (C_73:
-                                                        ((safe_acc_ !__anonstruct_interval_1_u_x_11) !x_5)))))) 
-                         (C_72:
-                         ((safe_acc_ !__anonstruct_interval_1_u_y_12) !y_5)))))))) in
-            (let _jessie_<somenum> = !z in
-            (((safe_upd_ __anonstruct_interval_1_u_z_13) _jessie_<somenum>) _jessie_<somenum>)));
-           (C_81:
-           begin
-             (let _jessie_<somenum> =
-             (C_79: ((safe_acc_ !__anonstruct_interval_1_l_z_13) !z)) in
-             (let _jessie_<somenum> = !__cil_tmp in
-             (((safe_upd_ __anonstruct_interval_1_l_result_5) _jessie_<somenum>) _jessie_<somenum>)));
-            (C_84:
-            begin
-              (let _jessie_<somenum> =
-              (C_82: ((safe_acc_ !__anonstruct_interval_1_u_z_13) !z)) in
-              (let _jessie_<somenum> = !__cil_tmp in
-              (((safe_upd_ __anonstruct_interval_1_u_result_5) _jessie_<somenum>) _jessie_<somenum>)));
-             (C_85:
-             begin
-               ((free_parameter __anonstruct_interval_1_x_11_alloc_table) !x_5);
-              (C_86:
-              begin
-                ((free_parameter __anonstruct_interval_1_y_12_alloc_table) !y_5);
-               (C_87:
-               begin
-                 ((free_parameter __anonstruct_interval_1_z_13_alloc_table) !z);
-                (return := !__cil_tmp); (raise Return) end) end) end) end)
-           end) end) end) end) end) end) end))))))))))))))))); absurd  end
+         (let _jessie_<somenum> = !x_5 in
+         (((safe_upd_ __anonstruct_interval_1_u_x_11) _jessie_<somenum>) _jessie_<somenum>));
+        _jessie_<somenum> end) end in void);
+      (let _jessie_<somenum> =
+      begin
+        (let _jessie_<somenum> =
+        ((safe_acc_ __anonstruct_interval_1_l_v_y_4) v_y) in
+        (let _jessie_<somenum> = !y_5 in
+        (((safe_upd_ __anonstruct_interval_1_l_y_12) _jessie_<somenum>) _jessie_<somenum>)));
+       (let _jessie_<somenum> = ((safe_acc_ __anonstruct_interval_1_u_v_y_4) v_y) in
+       begin
+         (let _jessie_<somenum> = !y_5 in
+         (((safe_upd_ __anonstruct_interval_1_u_y_12) _jessie_<somenum>) _jessie_<somenum>));
+        _jessie_<somenum> end) end in void);
+      (let _jessie_<somenum> =
+      (JC_<somenum>:
+      (((add_double down) ((safe_acc_ !__anonstruct_interval_1_l_x_11) !x_5)) 
+       ((safe_acc_ !__anonstruct_interval_1_l_y_12) !y_5))) in
+      (let _jessie_<somenum> = !z in
+      (((safe_upd_ __anonstruct_interval_1_l_z_13) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      (JC_<somenum>:
+      (neg_double (JC_<somenum>:
+                  (((sub_double down) (JC_<somenum>:
+                                      (neg_double ((safe_acc_ !__anonstruct_interval_1_u_x_11) !x_5)))) 
+                   ((safe_acc_ !__anonstruct_interval_1_u_y_12) !y_5))))) in
+      (let _jessie_<somenum> = !z in
+      (((safe_upd_ __anonstruct_interval_1_u_z_13) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_interval_1_l_z_13) !z) in
+      (let _jessie_<somenum> = !__cil_tmp in
+      (((safe_upd_ __anonstruct_interval_1_l_result_5) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_interval_1_u_z_13) !z) in
+      (let _jessie_<somenum> = !__cil_tmp in
+      (((safe_upd_ __anonstruct_interval_1_u_result_5) _jessie_<somenum>) _jessie_<somenum>)));
+      ((free_parameter __anonstruct_interval_1_x_11_alloc_table) !x_5);
+      ((free_parameter __anonstruct_interval_1_y_12_alloc_table) !y_5);
+      ((free_parameter __anonstruct_interval_1_z_13_alloc_table) !z);
+      (return := !__cil_tmp); (raise Return) end)))))))))))))))); absurd  end
    with Return -> !return end)) { true }
 
 let max_ensures_default =
@@ -1357,11 +1267,9 @@ let max_ensures_default =
      (let tmp_0 = ref (any_double void) in
      begin
        (let _jessie_<somenum> =
-       (if ((gt_double_ x_0) y_0)
-       then (C_12: begin   (tmp_0 := x_0); !tmp_0 end)
-       else (C_11: begin   (tmp_0 := y_0); !tmp_0 end)) in void);
-      (return := !tmp_0); (raise Return) end); absurd  end with Return ->
-   !return end))
+       (if ((gt_double_ x_0) y_0) then begin   (tmp_0 := x_0); !tmp_0 end
+       else begin   (tmp_0 := y_0); !tmp_0 end) in void); (return := !tmp_0);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_double_full(x_0, result))
     and ((JC_<somenum>: le_double_full(y_0, result))
@@ -1379,11 +1287,9 @@ let max_safety =
      (let tmp_0 = ref (any_double void) in
      begin
        (let _jessie_<somenum> =
-       (if ((gt_double_ x_0) y_0)
-       then (C_12: begin   (tmp_0 := x_0); !tmp_0 end)
-       else (C_11: begin   (tmp_0 := y_0); !tmp_0 end)) in void);
-      (return := !tmp_0); (raise Return) end); absurd  end with Return ->
-   !return end)) { true }
+       (if ((gt_double_ x_0) y_0) then begin   (tmp_0 := x_0); !tmp_0 end
+       else begin   (tmp_0 := y_0); !tmp_0 end) in void); (return := !tmp_0);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let min_ensures_default =
  fun (x_1 : double) (y_1 : double) ->
@@ -1396,10 +1302,9 @@ let min_ensures_default =
      (let tmp = ref (any_double void) in
      begin
        (let _jessie_<somenum> =
-       (if ((lt_double_ x_1) y_1) then (C_2: begin   (tmp := x_1); !tmp end)
-       else (C_1: begin   (tmp := y_1); !tmp end)) in void);
-      (return := !tmp); (raise Return) end); absurd  end with Return ->
-   !return end))
+       (if ((lt_double_ x_1) y_1) then begin   (tmp := x_1); !tmp end
+       else begin   (tmp := y_1); !tmp end) in void); (return := !tmp);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_double_full(result, x_1))
     and ((JC_<somenum>: le_double_full(result, y_1))
@@ -1417,10 +1322,9 @@ let min_safety =
      (let tmp = ref (any_double void) in
      begin
        (let _jessie_<somenum> =
-       (if ((lt_double_ x_1) y_1) then (C_2: begin   (tmp := x_1); !tmp end)
-       else (C_1: begin   (tmp := y_1); !tmp end)) in void);
-      (return := !tmp); (raise Return) end); absurd  end with Return ->
-   !return end)) { true }
+       (if ((lt_double_ x_1) y_1) then begin   (tmp := x_1); !tmp end
+       else begin   (tmp := y_1); !tmp end) in void); (return := !tmp);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let mul_dn_ensures_default =
  fun (x_3 : double) (y_3 : double) ->
@@ -1438,11 +1342,10 @@ let mul_dn_ensures_default =
   try
    begin
      (let __retres = ref (any_double void) in
-     (C_22:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_21: (JC_<somenum>: (((mul_double down) x_3) y_3)))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (__retres := (JC_<somenum>: (((mul_double down) x_3) y_3))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end))
   { (JC_<somenum>:
     double_le_real(result, mul_real(double_value(x_3), double_value(y_3)))) }
@@ -1463,11 +1366,10 @@ let mul_dn_safety =
   try
    begin
      (let __retres = ref (any_double void) in
-     (C_22:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_21: (JC_<somenum>: (((mul_double down) x_3) y_3)))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (__retres := (JC_<somenum>: (((mul_double down) x_3) y_3))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 let mul_ensures_default =
@@ -1506,459 +1408,342 @@ let mul_ensures_default =
      (let tmp_1_0 = ref (any_double void) in
      (let tmp_2 = ref (any_double void) in
      (let __cil_tmp_0 = ref (any_pointer void) in
-     (C_90:
      begin
        (let _jessie_<somenum> =
-       (x_2_1 := (C_89:
-                 (JC_<somenum>:
-                 (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_x_2_19_alloc_table) __anonstruct_interval_1_x_2_19_tag_table)))) in
+       (x_2_1 := (JC_<somenum>:
+                 (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_x_2_19_alloc_table) __anonstruct_interval_1_x_2_19_tag_table))) in
        void);
-      (C_92:
+      (let _jessie_<somenum> =
+      (y_2_0 := (JC_<somenum>:
+                (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_y_2_20_alloc_table) __anonstruct_interval_1_y_2_20_tag_table))) in
+      void);
+      (let _jessie_<somenum> =
+      (z_0 := (JC_<somenum>:
+              (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_z_0_21_alloc_table) __anonstruct_interval_1_z_0_21_tag_table))) in
+      void);
+      (let _jessie_<somenum> =
+      (__cil_tmp_0 := (JC_<somenum>:
+                      (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_result_9_alloc_table) __anonstruct_interval_1_result_9_tag_table))) in
+      void);
+      (let _jessie_<somenum> =
       begin
         (let _jessie_<somenum> =
-        (y_2_0 := (C_91:
-                  (JC_<somenum>:
-                  (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_y_2_20_alloc_table) __anonstruct_interval_1_y_2_20_tag_table)))) in
-        void);
-       (C_94:
+        ((safe_acc_ __anonstruct_interval_1_l_v_x_2_7) v_x_2) in
+        (let _jessie_<somenum> = !x_2_1 in
+        (((safe_upd_ __anonstruct_interval_1_l_x_2_19) _jessie_<somenum>) _jessie_<somenum>)));
+       (let _jessie_<somenum> =
+       ((safe_acc_ __anonstruct_interval_1_u_v_x_2_7) v_x_2) in
        begin
-         (let _jessie_<somenum> =
-         (z_0 := (C_93:
-                 (JC_<somenum>:
-                 (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_z_0_21_alloc_table) __anonstruct_interval_1_z_0_21_tag_table)))) in
-         void);
-        (C_96:
-        begin
-          (let _jessie_<somenum> =
-          (__cil_tmp_0 := (C_95:
-                          (JC_<somenum>:
-                          (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_result_9_alloc_table) __anonstruct_interval_1_result_9_tag_table)))) in
-          void);
-         (let _jessie_<somenum> =
-         (C_99:
-         begin
-           (let _jessie_<somenum> =
-           (C_97: ((safe_acc_ __anonstruct_interval_1_l_v_x_2_7) v_x_2)) in
-           (let _jessie_<somenum> = !x_2_1 in
-           (((safe_upd_ __anonstruct_interval_1_l_x_2_19) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_102:
-          (let _jessie_<somenum> =
-          (C_100: ((safe_acc_ __anonstruct_interval_1_u_v_x_2_7) v_x_2)) in
-          begin
-            (let _jessie_<somenum> = !x_2_1 in
-            (((safe_upd_ __anonstruct_interval_1_u_x_2_19) _jessie_<somenum>) _jessie_<somenum>));
-           _jessie_<somenum> end)) end) in void);
-         (let _jessie_<somenum> =
-         (C_105:
-         begin
-           (let _jessie_<somenum> =
-           (C_103: ((safe_acc_ __anonstruct_interval_1_l_v_y_2_8) v_y_2)) in
-           (let _jessie_<somenum> = !y_2_0 in
-           (((safe_upd_ __anonstruct_interval_1_l_y_2_20) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_108:
-          (let _jessie_<somenum> =
-          (C_106: ((safe_acc_ __anonstruct_interval_1_u_v_y_2_8) v_y_2)) in
-          begin
-            (let _jessie_<somenum> = !y_2_0 in
-            (((safe_upd_ __anonstruct_interval_1_u_y_2_20) _jessie_<somenum>) _jessie_<somenum>));
-           _jessie_<somenum> end)) end) in void);
-         (let _jessie_<somenum> =
-         (if ((lt_double_ (C_238:
-                          ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1))) 
+         (let _jessie_<somenum> = !x_2_1 in
+         (((safe_upd_ __anonstruct_interval_1_u_x_2_19) _jessie_<somenum>) _jessie_<somenum>));
+        _jessie_<somenum> end) end in void);
+      (let _jessie_<somenum> =
+      begin
+        (let _jessie_<somenum> =
+        ((safe_acc_ __anonstruct_interval_1_l_v_y_2_8) v_y_2) in
+        (let _jessie_<somenum> = !y_2_0 in
+        (((safe_upd_ __anonstruct_interval_1_l_y_2_20) _jessie_<somenum>) _jessie_<somenum>)));
+       (let _jessie_<somenum> =
+       ((safe_acc_ __anonstruct_interval_1_u_v_y_2_8) v_y_2) in
+       begin
+         (let _jessie_<somenum> = !y_2_0 in
+         (((safe_upd_ __anonstruct_interval_1_u_y_2_20) _jessie_<somenum>) _jessie_<somenum>));
+        _jessie_<somenum> end) end in void);
+      (let _jessie_<somenum> =
+      (if ((lt_double_ ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) 
+           (double_of_real_exact 0.0))
+      then
+       (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) 
+            (double_of_real_exact 0.0))
+       then
+        (if ((lt_double_ ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) 
+             (double_of_real_exact 0.0))
+        then
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
               (double_of_real_exact 0.0))
          then
-          (if ((gt_double_ (C_237:
-                           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1))) 
-               (double_of_real_exact 0.0))
-          then
-           (if ((lt_double_ (C_236:
-                            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0))) 
-                (double_of_real_exact 0.0))
-           then
-            (if ((gt_double_ (C_235:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             begin
-               (let _jessie_<somenum> =
-               (C_216:
-               begin
-                 (let _jessie_<somenum> =
-                 (tmp_1 := (C_215:
-                           (let _jessie_<somenum> =
-                           (C_213:
-                           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-                           (let _jessie_<somenum> =
-                           (C_214:
-                           ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-                           (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>)))))) in
-                 void);
-                (C_220:
-                begin
-                  (tmp_0_0 := (C_219:
-                              (let _jessie_<somenum> =
-                              (C_217:
-                              ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-                              (let _jessie_<somenum> =
-                              (C_218:
-                              ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-                              (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>))))));
-                 !tmp_0_0 end) end) in void);
-              (C_223:
-              begin
-                (let _jessie_<somenum> =
-                (C_221:
-                (let _jessie_<somenum> = !tmp_0_0 in
-                (let _jessie_<somenum> = !tmp_1 in
-                (JC_<somenum>: ((min _jessie_<somenum>) _jessie_<somenum>))))) in
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-               (let _jessie_<somenum> =
-               (C_227:
-               begin
-                 (let _jessie_<somenum> =
-                 (tmp_1_0 := (C_226:
-                             (let _jessie_<somenum> =
-                             (C_224:
-                             ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-                             (let _jessie_<somenum> =
-                             (C_225:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-                             (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>)))))) in
-                 void);
-                (C_231:
-                begin
-                  (tmp_2 := (C_230:
-                            (let _jessie_<somenum> =
-                            (C_228:
-                            ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-                            (let _jessie_<somenum> =
-                            (C_229:
-                            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-                            (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))));
-                 !tmp_2 end) end) in void);
-               (C_234:
-               (let _jessie_<somenum> =
-               (C_232:
-               (let _jessie_<somenum> = !tmp_2 in
-               (let _jessie_<somenum> = !tmp_1_0 in
-               (JC_<somenum>: ((max _jessie_<somenum>) _jessie_<somenum>))))) in
-               begin
-                 (let _jessie_<somenum> = !z_0 in
-                 (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-                _jessie_<somenum> end)) end) end
-            else
-             (C_207:
-             begin
-               (let _jessie_<somenum> =
-               (C_205:
-               (let _jessie_<somenum> =
-               (C_203:
-               ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_204:
-               ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_212:
-              (let _jessie_<somenum> =
-              (C_210:
-              (let _jessie_<somenum> =
-              (C_208: ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_209: ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end))
-           else
-            (if ((gt_double_ (C_202:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             (C_196:
-             begin
-               (let _jessie_<somenum> =
-               (C_194:
-               (let _jessie_<somenum> =
-               (C_192:
-               ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_193:
-               ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_201:
-              (let _jessie_<somenum> =
-              (C_199:
-              (let _jessie_<somenum> =
-              (C_197: ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_198: ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)
-            else
-             (C_189:
-             begin
-               (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_191:
-              (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)))
-          else
-           (if ((lt_double_ (C_187:
-                            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0))) 
-                (double_of_real_exact 0.0))
-           then
-            (if ((gt_double_ (C_186:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             (C_180:
-             begin
-               (let _jessie_<somenum> =
-               (C_178:
-               (let _jessie_<somenum> =
-               (C_176:
-               ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_177:
-               ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_185:
-              (let _jessie_<somenum> =
-              (C_183:
-              (let _jessie_<somenum> =
-              (C_181: ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_182: ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)
-            else
-             (C_170:
-             begin
-               (let _jessie_<somenum> =
-               (C_168:
-               (let _jessie_<somenum> =
-               (C_166:
-               ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_167:
-               ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_175:
-              (let _jessie_<somenum> =
-              (C_173:
-              (let _jessie_<somenum> =
-              (C_171: ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_172: ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end))
-           else
-            (if ((gt_double_ (C_165:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             (C_159:
-             begin
-               (let _jessie_<somenum> =
-               (C_157:
-               (let _jessie_<somenum> =
-               (C_155:
-               ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_156:
-               ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_164:
-              (let _jessie_<somenum> =
-              (C_162:
-              (let _jessie_<somenum> =
-              (C_160: ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_161: ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)
-            else
-             (C_152:
-             begin
-               (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_154:
-              (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end))))
-         else
-          (if ((gt_double_ (C_150:
-                           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1))) 
-               (double_of_real_exact 0.0))
-          then
-           (if ((lt_double_ (C_149:
-                            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0))) 
-                (double_of_real_exact 0.0))
-           then
-            (if ((gt_double_ (C_148:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             (C_142:
-             begin
-               (let _jessie_<somenum> =
-               (C_140:
-               (let _jessie_<somenum> =
-               (C_138:
-               ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_139:
-               ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_147:
-              (let _jessie_<somenum> =
-              (C_145:
-              (let _jessie_<somenum> =
-              (C_143: ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_144: ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)
-            else
-             (C_132:
-             begin
-               (let _jessie_<somenum> =
-               (C_130:
-               (let _jessie_<somenum> =
-               (C_128:
-               ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_129:
-               ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_137:
-              (let _jessie_<somenum> =
-              (C_135:
-              (let _jessie_<somenum> =
-              (C_133: ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_134: ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end))
-           else
-            (if ((gt_double_ (C_127:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             (C_121:
-             begin
-               (let _jessie_<somenum> =
-               (C_119:
-               (let _jessie_<somenum> =
-               (C_117:
-               ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_118:
-               ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_126:
-              (let _jessie_<somenum> =
-              (C_124:
-              (let _jessie_<somenum> =
-              (C_122: ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_123: ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)
-            else
-             (C_114:
-             begin
-               (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_116:
-              (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)))
-          else
-           (C_110:
-           begin
-             (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-             (let _jessie_<somenum> = !z_0 in
-             (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-            (C_112:
-            (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-            begin
-              (let _jessie_<somenum> = !z_0 in
-              (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-             _jessie_<somenum> end)) end))) in void);
-         (C_241:
-         begin
-           (let _jessie_<somenum> =
-           (C_239: ((safe_acc_ !__anonstruct_interval_1_l_z_0_21) !z_0)) in
-           (let _jessie_<somenum> = !__cil_tmp_0 in
-           (((safe_upd_ __anonstruct_interval_1_l_result_9) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_244:
           begin
             (let _jessie_<somenum> =
-            (C_242: ((safe_acc_ !__anonstruct_interval_1_u_z_0_21) !z_0)) in
-            (let _jessie_<somenum> = !__cil_tmp_0 in
-            (((safe_upd_ __anonstruct_interval_1_u_result_9) _jessie_<somenum>) _jessie_<somenum>)));
-           (C_245:
-           begin
-             ((safe_free_parameter __anonstruct_interval_1_x_2_19_alloc_table) !x_2_1);
-            (C_246:
             begin
-              ((safe_free_parameter __anonstruct_interval_1_y_2_20_alloc_table) !y_2_0);
-             (C_247:
-             begin
-               ((safe_free_parameter __anonstruct_interval_1_z_0_21_alloc_table) !z_0);
-              (return := !__cil_tmp_0); (raise Return) end) end) end) end)
-         end) end) end) end) end))))))))))))))))))))); absurd  end with
-   Return -> !return end))
+              (let _jessie_<somenum> =
+              (tmp_1 := (let _jessie_<somenum> =
+                        ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+                        (let _jessie_<somenum> =
+                        ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+                        (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>))))) in
+              void);
+             (tmp_0_0 := (let _jessie_<somenum> =
+                         ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+                         (let _jessie_<somenum> =
+                         ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+                         (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>)))));
+             !tmp_0_0 end in void);
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> = !tmp_0_0 in
+           (let _jessie_<somenum> = !tmp_1 in
+           (JC_<somenum>: ((min _jessie_<somenum>) _jessie_<somenum>)))) in
+           (let _jessie_<somenum> = !z_0 in
+           (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           begin
+             (let _jessie_<somenum> =
+             (tmp_1_0 := (let _jessie_<somenum> =
+                         ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+                         (let _jessie_<somenum> =
+                         ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+                         (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))) in
+             void);
+            (tmp_2 := (let _jessie_<somenum> =
+                      ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+                      (let _jessie_<somenum> =
+                      ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+                      (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>))))); !tmp_2
+           end in void);
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> = !tmp_2 in
+           (let _jessie_<somenum> = !tmp_1_0 in
+           (JC_<somenum>: ((max _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end)
+        else
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
+              (double_of_real_exact 0.0))
+         then
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end))
+       else
+        (if ((lt_double_ ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) 
+             (double_of_real_exact 0.0))
+        then
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
+              (double_of_real_exact 0.0))
+         then
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end)
+        else
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
+              (double_of_real_exact 0.0))
+         then
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end)))
+      else
+       (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) 
+            (double_of_real_exact 0.0))
+       then
+        (if ((lt_double_ ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) 
+             (double_of_real_exact 0.0))
+        then
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
+              (double_of_real_exact 0.0))
+         then
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end)
+        else
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
+              (double_of_real_exact 0.0))
+         then
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end))
+       else
+        begin
+          (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+          (let _jessie_<somenum> = !z_0 in
+          (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+         (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+         begin
+           (let _jessie_<somenum> = !z_0 in
+           (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+          _jessie_<somenum> end) end)) in void);
+      (let _jessie_<somenum> =
+      ((safe_acc_ !__anonstruct_interval_1_l_z_0_21) !z_0) in
+      (let _jessie_<somenum> = !__cil_tmp_0 in
+      (((safe_upd_ __anonstruct_interval_1_l_result_9) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      ((safe_acc_ !__anonstruct_interval_1_u_z_0_21) !z_0) in
+      (let _jessie_<somenum> = !__cil_tmp_0 in
+      (((safe_upd_ __anonstruct_interval_1_u_result_9) _jessie_<somenum>) _jessie_<somenum>)));
+      ((safe_free_parameter __anonstruct_interval_1_x_2_19_alloc_table) !x_2_1);
+      ((safe_free_parameter __anonstruct_interval_1_y_2_20_alloc_table) !y_2_0);
+      ((safe_free_parameter __anonstruct_interval_1_z_0_21_alloc_table) !z_0);
+      (return := !__cil_tmp_0); (raise Return) end))))))))))))))))))));
+    absurd  end with Return -> !return end))
   { (JC_<somenum>:
     (forall a_1:real.
      (forall b_0:real.
@@ -2006,483 +1791,364 @@ let mul_safety =
      (let tmp_1_0 = ref (any_double void) in
      (let tmp_2 = ref (any_double void) in
      (let __cil_tmp_0 = ref (any_pointer void) in
-     (C_90:
      begin
        (let _jessie_<somenum> =
        (x_2_1 := (let _jessie_<somenum> =
-                 (C_89:
                  (JC_<somenum>:
-                 (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_x_2_19_alloc_table) __anonstruct_interval_1_x_2_19_tag_table))) in
+                 (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_x_2_19_alloc_table) __anonstruct_interval_1_x_2_19_tag_table)) in
                  (JC_<somenum>:
                  (assert
                  { ge_int(offset_max(__anonstruct_interval_1_x_2_19_alloc_table,
                           _jessie_<somenum>),
                    (0)) }; _jessie_<somenum>)))) in void);
-      (C_92:
+      (let _jessie_<somenum> =
+      (y_2_0 := (let _jessie_<somenum> =
+                (JC_<somenum>:
+                (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_y_2_20_alloc_table) __anonstruct_interval_1_y_2_20_tag_table)) in
+                (JC_<somenum>:
+                (assert
+                { ge_int(offset_max(__anonstruct_interval_1_y_2_20_alloc_table,
+                         _jessie_<somenum>),
+                  (0)) }; _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> =
+      (z_0 := (let _jessie_<somenum> =
+              (JC_<somenum>:
+              (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_z_0_21_alloc_table) __anonstruct_interval_1_z_0_21_tag_table)) in
+              (JC_<somenum>:
+              (assert
+              { ge_int(offset_max(__anonstruct_interval_1_z_0_21_alloc_table,
+                       _jessie_<somenum>),
+                (0)) }; _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> =
+      (__cil_tmp_0 := (let _jessie_<somenum> =
+                      (JC_<somenum>:
+                      (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_result_9_alloc_table) __anonstruct_interval_1_result_9_tag_table)) in
+                      (JC_<somenum>:
+                      (assert
+                      { ge_int(offset_max(__anonstruct_interval_1_result_9_alloc_table,
+                               _jessie_<somenum>),
+                        (0)) }; _jessie_<somenum>)))) in void);
+      (let _jessie_<somenum> =
       begin
         (let _jessie_<somenum> =
-        (y_2_0 := (let _jessie_<somenum> =
-                  (C_91:
-                  (JC_<somenum>:
-                  (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_y_2_20_alloc_table) __anonstruct_interval_1_y_2_20_tag_table))) in
-                  (JC_<somenum>:
-                  (assert
-                  { ge_int(offset_max(__anonstruct_interval_1_y_2_20_alloc_table,
-                           _jessie_<somenum>),
-                    (0)) }; _jessie_<somenum>)))) in void);
-       (C_94:
+        ((safe_acc_ __anonstruct_interval_1_l_v_x_2_7) v_x_2) in
+        (let _jessie_<somenum> = !x_2_1 in
+        (((safe_upd_ __anonstruct_interval_1_l_x_2_19) _jessie_<somenum>) _jessie_<somenum>)));
+       (let _jessie_<somenum> =
+       ((safe_acc_ __anonstruct_interval_1_u_v_x_2_7) v_x_2) in
        begin
-         (let _jessie_<somenum> =
-         (z_0 := (let _jessie_<somenum> =
-                 (C_93:
-                 (JC_<somenum>:
-                 (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_z_0_21_alloc_table) __anonstruct_interval_1_z_0_21_tag_table))) in
-                 (JC_<somenum>:
-                 (assert
-                 { ge_int(offset_max(__anonstruct_interval_1_z_0_21_alloc_table,
-                          _jessie_<somenum>),
-                   (0)) }; _jessie_<somenum>)))) in void);
-        (C_96:
-        begin
-          (let _jessie_<somenum> =
-          (__cil_tmp_0 := (let _jessie_<somenum> =
-                          (C_95:
-                          (JC_<somenum>:
-                          (((alloc_struct___anonstruct_interval_1_requires (1)) __anonstruct_interval_1_result_9_alloc_table) __anonstruct_interval_1_result_9_tag_table))) in
-                          (JC_<somenum>:
-                          (assert
-                          { ge_int(offset_max(__anonstruct_interval_1_result_9_alloc_table,
-                                   _jessie_<somenum>),
-                            (0)) }; _jessie_<somenum>)))) in void);
-         (let _jessie_<somenum> =
-         (C_99:
-         begin
-           (let _jessie_<somenum> =
-           (C_97: ((safe_acc_ __anonstruct_interval_1_l_v_x_2_7) v_x_2)) in
-           (let _jessie_<somenum> = !x_2_1 in
-           (((safe_upd_ __anonstruct_interval_1_l_x_2_19) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_102:
-          (let _jessie_<somenum> =
-          (C_100: ((safe_acc_ __anonstruct_interval_1_u_v_x_2_7) v_x_2)) in
-          begin
-            (let _jessie_<somenum> = !x_2_1 in
-            (((safe_upd_ __anonstruct_interval_1_u_x_2_19) _jessie_<somenum>) _jessie_<somenum>));
-           _jessie_<somenum> end)) end) in void);
-         (let _jessie_<somenum> =
-         (C_105:
-         begin
-           (let _jessie_<somenum> =
-           (C_103: ((safe_acc_ __anonstruct_interval_1_l_v_y_2_8) v_y_2)) in
-           (let _jessie_<somenum> = !y_2_0 in
-           (((safe_upd_ __anonstruct_interval_1_l_y_2_20) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_108:
-          (let _jessie_<somenum> =
-          (C_106: ((safe_acc_ __anonstruct_interval_1_u_v_y_2_8) v_y_2)) in
-          begin
-            (let _jessie_<somenum> = !y_2_0 in
-            (((safe_upd_ __anonstruct_interval_1_u_y_2_20) _jessie_<somenum>) _jessie_<somenum>));
-           _jessie_<somenum> end)) end) in void);
-         (let _jessie_<somenum> =
-         (if ((lt_double_ (C_238:
-                          ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1))) 
+         (let _jessie_<somenum> = !x_2_1 in
+         (((safe_upd_ __anonstruct_interval_1_u_x_2_19) _jessie_<somenum>) _jessie_<somenum>));
+        _jessie_<somenum> end) end in void);
+      (let _jessie_<somenum> =
+      begin
+        (let _jessie_<somenum> =
+        ((safe_acc_ __anonstruct_interval_1_l_v_y_2_8) v_y_2) in
+        (let _jessie_<somenum> = !y_2_0 in
+        (((safe_upd_ __anonstruct_interval_1_l_y_2_20) _jessie_<somenum>) _jessie_<somenum>)));
+       (let _jessie_<somenum> =
+       ((safe_acc_ __anonstruct_interval_1_u_v_y_2_8) v_y_2) in
+       begin
+         (let _jessie_<somenum> = !y_2_0 in
+         (((safe_upd_ __anonstruct_interval_1_u_y_2_20) _jessie_<somenum>) _jessie_<somenum>));
+        _jessie_<somenum> end) end in void);
+      (let _jessie_<somenum> =
+      (if ((lt_double_ ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) 
+           (double_of_real_exact 0.0))
+      then
+       (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) 
+            (double_of_real_exact 0.0))
+       then
+        (if ((lt_double_ ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) 
+             (double_of_real_exact 0.0))
+        then
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
               (double_of_real_exact 0.0))
          then
-          (if ((gt_double_ (C_237:
-                           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1))) 
-               (double_of_real_exact 0.0))
-          then
-           (if ((lt_double_ (C_236:
-                            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0))) 
-                (double_of_real_exact 0.0))
-           then
-            (if ((gt_double_ (C_235:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             begin
-               (let _jessie_<somenum> =
-               (C_216:
-               begin
-                 (let _jessie_<somenum> =
-                 (tmp_1 := (C_215:
-                           (let _jessie_<somenum> =
-                           (C_213:
-                           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-                           (let _jessie_<somenum> =
-                           (C_214:
-                           ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-                           (JC_<somenum>:
-                           ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>)))))) in
-                 void);
-                (C_220:
-                begin
-                  (tmp_0_0 := (C_219:
-                              (let _jessie_<somenum> =
-                              (C_217:
-                              ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-                              (let _jessie_<somenum> =
-                              (C_218:
-                              ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-                              (JC_<somenum>:
-                              ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>))))));
-                 !tmp_0_0 end) end) in void);
-              (C_223:
-              begin
-                (let _jessie_<somenum> =
-                (C_221:
-                (let _jessie_<somenum> = !tmp_0_0 in
-                (let _jessie_<somenum> = !tmp_1 in
-                (JC_<somenum>: ((min_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-               (let _jessie_<somenum> =
-               (C_227:
-               begin
-                 (let _jessie_<somenum> =
-                 (tmp_1_0 := (C_226:
-                             (let _jessie_<somenum> =
-                             (C_224:
-                             ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-                             (let _jessie_<somenum> =
-                             (C_225:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-                             (JC_<somenum>:
-                             ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>)))))) in
-                 void);
-                (C_231:
-                begin
-                  (tmp_2 := (C_230:
-                            (let _jessie_<somenum> =
-                            (C_228:
-                            ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-                            (let _jessie_<somenum> =
-                            (C_229:
-                            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-                            (JC_<somenum>:
-                            ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>))))));
-                 !tmp_2 end) end) in void);
-               (C_234:
-               (let _jessie_<somenum> =
-               (C_232:
-               (let _jessie_<somenum> = !tmp_2 in
-               (let _jessie_<somenum> = !tmp_1_0 in
-               (JC_<somenum>: ((max_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-               begin
-                 (let _jessie_<somenum> = !z_0 in
-                 (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-                _jessie_<somenum> end)) end) end
-            else
-             (C_207:
-             begin
-               (let _jessie_<somenum> =
-               (C_205:
-               (let _jessie_<somenum> =
-               (C_203:
-               ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_204:
-               ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_212:
-              (let _jessie_<somenum> =
-              (C_210:
-              (let _jessie_<somenum> =
-              (C_208: ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_209: ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end))
-           else
-            (if ((gt_double_ (C_202:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             (C_196:
-             begin
-               (let _jessie_<somenum> =
-               (C_194:
-               (let _jessie_<somenum> =
-               (C_192:
-               ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_193:
-               ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_201:
-              (let _jessie_<somenum> =
-              (C_199:
-              (let _jessie_<somenum> =
-              (C_197: ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_198: ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)
-            else
-             (C_189:
-             begin
-               (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_191:
-              (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)))
-          else
-           (if ((lt_double_ (C_187:
-                            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0))) 
-                (double_of_real_exact 0.0))
-           then
-            (if ((gt_double_ (C_186:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             (C_180:
-             begin
-               (let _jessie_<somenum> =
-               (C_178:
-               (let _jessie_<somenum> =
-               (C_176:
-               ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_177:
-               ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_185:
-              (let _jessie_<somenum> =
-              (C_183:
-              (let _jessie_<somenum> =
-              (C_181: ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_182: ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)
-            else
-             (C_170:
-             begin
-               (let _jessie_<somenum> =
-               (C_168:
-               (let _jessie_<somenum> =
-               (C_166:
-               ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_167:
-               ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_175:
-              (let _jessie_<somenum> =
-              (C_173:
-              (let _jessie_<somenum> =
-              (C_171: ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_172: ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end))
-           else
-            (if ((gt_double_ (C_165:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             (C_159:
-             begin
-               (let _jessie_<somenum> =
-               (C_157:
-               (let _jessie_<somenum> =
-               (C_155:
-               ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_156:
-               ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_164:
-              (let _jessie_<somenum> =
-              (C_162:
-              (let _jessie_<somenum> =
-              (C_160: ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_161: ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)
-            else
-             (C_152:
-             begin
-               (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_154:
-              (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end))))
-         else
-          (if ((gt_double_ (C_150:
-                           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1))) 
-               (double_of_real_exact 0.0))
-          then
-           (if ((lt_double_ (C_149:
-                            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0))) 
-                (double_of_real_exact 0.0))
-           then
-            (if ((gt_double_ (C_148:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             (C_142:
-             begin
-               (let _jessie_<somenum> =
-               (C_140:
-               (let _jessie_<somenum> =
-               (C_138:
-               ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_139:
-               ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_147:
-              (let _jessie_<somenum> =
-              (C_145:
-              (let _jessie_<somenum> =
-              (C_143: ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_144: ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)
-            else
-             (C_132:
-             begin
-               (let _jessie_<somenum> =
-               (C_130:
-               (let _jessie_<somenum> =
-               (C_128:
-               ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_129:
-               ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_137:
-              (let _jessie_<somenum> =
-              (C_135:
-              (let _jessie_<somenum> =
-              (C_133: ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_134: ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end))
-           else
-            (if ((gt_double_ (C_127:
-                             ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
-                 (double_of_real_exact 0.0))
-            then
-             (C_121:
-             begin
-               (let _jessie_<somenum> =
-               (C_119:
-               (let _jessie_<somenum> =
-               (C_117:
-               ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-               (let _jessie_<somenum> =
-               (C_118:
-               ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-               (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_126:
-              (let _jessie_<somenum> =
-              (C_124:
-              (let _jessie_<somenum> =
-              (C_122: ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-              (let _jessie_<somenum> =
-              (C_123: ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-              (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>))))) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)
-            else
-             (C_114:
-             begin
-               (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-               (let _jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-              (C_116:
-              (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-              begin
-                (let _jessie_<somenum> = !z_0 in
-                (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-               _jessie_<somenum> end)) end)))
-          else
-           (C_110:
-           begin
-             (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-             (let _jessie_<somenum> = !z_0 in
-             (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
-            (C_112:
-            (let _jessie_<somenum> = (double_of_real_exact 0.0) in
-            begin
-              (let _jessie_<somenum> = !z_0 in
-              (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
-             _jessie_<somenum> end)) end))) in void);
-         (C_241:
-         begin
-           (let _jessie_<somenum> =
-           (C_239: ((safe_acc_ !__anonstruct_interval_1_l_z_0_21) !z_0)) in
-           (let _jessie_<somenum> = !__cil_tmp_0 in
-           (((safe_upd_ __anonstruct_interval_1_l_result_9) _jessie_<somenum>) _jessie_<somenum>)));
-          (C_244:
           begin
             (let _jessie_<somenum> =
-            (C_242: ((safe_acc_ !__anonstruct_interval_1_u_z_0_21) !z_0)) in
-            (let _jessie_<somenum> = !__cil_tmp_0 in
-            (((safe_upd_ __anonstruct_interval_1_u_result_9) _jessie_<somenum>) _jessie_<somenum>)));
-           (C_245:
-           begin
-             ((free_parameter __anonstruct_interval_1_x_2_19_alloc_table) !x_2_1);
-            (C_246:
             begin
-              ((free_parameter __anonstruct_interval_1_y_2_20_alloc_table) !y_2_0);
-             (C_247:
-             begin
-               ((free_parameter __anonstruct_interval_1_z_0_21_alloc_table) !z_0);
-              (return := !__cil_tmp_0); (raise Return) end) end) end) end)
-         end) end) end) end) end))))))))))))))))))))); absurd  end with
-   Return -> !return end)) { true }
+              (let _jessie_<somenum> =
+              (tmp_1 := (let _jessie_<somenum> =
+                        ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+                        (let _jessie_<somenum> =
+                        ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+                        (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>))))) in
+              void);
+             (tmp_0_0 := (let _jessie_<somenum> =
+                         ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+                         (let _jessie_<somenum> =
+                         ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+                         (JC_<somenum>:
+                         ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>)))));
+             !tmp_0_0 end in void);
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> = !tmp_0_0 in
+           (let _jessie_<somenum> = !tmp_1 in
+           (JC_<somenum>: ((min_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+           (let _jessie_<somenum> = !z_0 in
+           (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           begin
+             (let _jessie_<somenum> =
+             (tmp_1_0 := (let _jessie_<somenum> =
+                         ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+                         (let _jessie_<somenum> =
+                         ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+                         (JC_<somenum>:
+                         ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>))))) in
+             void);
+            (tmp_2 := (let _jessie_<somenum> =
+                      ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+                      (let _jessie_<somenum> =
+                      ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+                      (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>)))));
+            !tmp_2 end in void);
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> = !tmp_2 in
+           (let _jessie_<somenum> = !tmp_1_0 in
+           (JC_<somenum>: ((max_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end)
+        else
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
+              (double_of_real_exact 0.0))
+         then
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end))
+       else
+        (if ((lt_double_ ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) 
+             (double_of_real_exact 0.0))
+        then
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
+              (double_of_real_exact 0.0))
+         then
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end)
+        else
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
+              (double_of_real_exact 0.0))
+         then
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end)))
+      else
+       (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) 
+            (double_of_real_exact 0.0))
+       then
+        (if ((lt_double_ ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) 
+             (double_of_real_exact 0.0))
+        then
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
+              (double_of_real_exact 0.0))
+         then
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end)
+        else
+         (if ((gt_double_ ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) 
+              (double_of_real_exact 0.0))
+         then
+          begin
+            (let _jessie_<somenum> =
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1) in
+            (let _jessie_<somenum> =
+            ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0) in
+            (JC_<somenum>: ((mul_dn_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> =
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1) in
+           (let _jessie_<somenum> =
+           ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0) in
+           (JC_<somenum>: ((mul_up_requires _jessie_<somenum>) _jessie_<somenum>)))) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end
+         else
+          begin
+            (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+            (let _jessie_<somenum> = !z_0 in
+            (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+           (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+           begin
+             (let _jessie_<somenum> = !z_0 in
+             (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+            _jessie_<somenum> end) end))
+       else
+        begin
+          (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+          (let _jessie_<somenum> = !z_0 in
+          (((safe_upd_ __anonstruct_interval_1_l_z_0_21) _jessie_<somenum>) _jessie_<somenum>)));
+         (let _jessie_<somenum> = (double_of_real_exact 0.0) in
+         begin
+           (let _jessie_<somenum> = !z_0 in
+           (((safe_upd_ __anonstruct_interval_1_u_z_0_21) _jessie_<somenum>) _jessie_<somenum>));
+          _jessie_<somenum> end) end)) in void);
+      (let _jessie_<somenum> =
+      ((safe_acc_ !__anonstruct_interval_1_l_z_0_21) !z_0) in
+      (let _jessie_<somenum> = !__cil_tmp_0 in
+      (((safe_upd_ __anonstruct_interval_1_l_result_9) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      ((safe_acc_ !__anonstruct_interval_1_u_z_0_21) !z_0) in
+      (let _jessie_<somenum> = !__cil_tmp_0 in
+      (((safe_upd_ __anonstruct_interval_1_u_result_9) _jessie_<somenum>) _jessie_<somenum>)));
+      ((free_parameter __anonstruct_interval_1_x_2_19_alloc_table) !x_2_1);
+      ((free_parameter __anonstruct_interval_1_y_2_20_alloc_table) !y_2_0);
+      ((free_parameter __anonstruct_interval_1_z_0_21_alloc_table) !z_0);
+      (return := !__cil_tmp_0); (raise Return) end))))))))))))))))))));
+    absurd  end with Return -> !return end)) { true }
 
 let mul_up_ensures_default =
  fun (x_4 : double) (y_4 : double) ->
@@ -2507,17 +2173,13 @@ let mul_up_ensures_default =
   try
    begin
      (let __retres_0 = ref (any_double void) in
-     (C_34:
      begin
        (let _jessie_<somenum> =
-       (__retres_0 := (C_33:
-                      (JC_<somenum>:
-                      (neg_double (C_32:
-                                  (JC_<somenum>:
-                                  (((mul_double down) x_4) (C_31:
-                                                           (JC_<somenum>:
-                                                           (neg_double y_4)))))))))) in
-       void); (return := !__retres_0); (raise Return) end)); absurd  end with
+       (__retres_0 := (JC_<somenum>:
+                      (neg_double (JC_<somenum>:
+                                  (((mul_double down) x_4) (JC_<somenum>:
+                                                           (neg_double y_4))))))) in
+       void); (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     real_le_double(mul_real(double_value(x_4), double_value(y_4)), result)) }
@@ -2545,17 +2207,13 @@ let mul_up_safety =
   try
    begin
      (let __retres_0 = ref (any_double void) in
-     (C_34:
      begin
        (let _jessie_<somenum> =
-       (__retres_0 := (C_33:
-                      (JC_<somenum>:
-                      (neg_double (C_32:
-                                  (JC_<somenum>:
-                                  (((mul_double down) x_4) (C_31:
-                                                           (JC_<somenum>:
-                                                           (neg_double y_4)))))))))) in
-       void); (return := !__retres_0); (raise Return) end)); absurd  end with
+       (__retres_0 := (JC_<somenum>:
+                      (neg_double (JC_<somenum>:
+                                  (((mul_double down) x_4) (JC_<somenum>:
+                                                           (neg_double y_4))))))) in
+       void); (return := !__retres_0); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 
@@ -2595,7 +2253,7 @@ why --project [...] why/interval_arith_struct.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po22.why">
-      <location file = "why/interval_arith_struct.why" line = "1616" begin = "19" end = "144"/>
+      <location file = "why/interval_arith_struct.why" line = "1408" begin = "19" end = "144"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po23.why">
@@ -2604,7 +2262,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po24.why">
-      <location file = "why/interval_arith_struct.why" line = "1628" begin = "20" end = "147"/>
+      <location file = "why/interval_arith_struct.why" line = "1417" begin = "18" end = "141"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po25.why">
@@ -2613,7 +2271,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po26.why">
-      <location file = "why/interval_arith_struct.why" line = "1640" begin = "19" end = "144"/>
+      <location file = "why/interval_arith_struct.why" line = "1426" begin = "16" end = "135"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po27.why">
@@ -2622,7 +2280,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po28.why">
-      <location file = "why/interval_arith_struct.why" line = "1652" begin = "28" end = "173"/>
+      <location file = "why/interval_arith_struct.why" line = "1435" begin = "24" end = "161"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po29.why">
@@ -3296,17 +2954,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po163.why">
-      <location file = "why/interval_arith_struct.why" line = "2074" begin = "14" end = "80"/>
+      <location file = "why/interval_arith_struct.why" line = "1754" begin = "7" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po164.why">
-      <location file = "why/interval_arith_struct.why" line = "2077" begin = "15" end = "81"/>
+      <location file = "why/interval_arith_struct.why" line = "1755" begin = "7" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po165.why">
-      <location file = "why/interval_arith_struct.why" line = "2080" begin = "16" end = "80"/>
+      <location file = "why/interval_arith_struct.why" line = "1756" begin = "7" end = "71"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -3361,7 +3019,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po3.why">
-      <location file = "why/interval_arith_struct.why" line = "830" begin = "17" end = "135"/>
+      <location file = "why/interval_arith_struct.why" line = "788" begin = "17" end = "135"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po4.why">
@@ -3370,7 +3028,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po5.why">
-      <location file = "why/interval_arith_struct.why" line = "842" begin = "18" end = "138"/>
+      <location file = "why/interval_arith_struct.why" line = "797" begin = "16" end = "132"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po6.why">
@@ -3379,7 +3037,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po7.why">
-      <location file = "why/interval_arith_struct.why" line = "854" begin = "17" end = "135"/>
+      <location file = "why/interval_arith_struct.why" line = "806" begin = "14" end = "126"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po8.why">
@@ -3388,21 +3046,21 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po9.why">
-      <location file = "why/interval_arith_struct.why" line = "866" begin = "26" end = "166"/>
+      <location file = "why/interval_arith_struct.why" line = "815" begin = "22" end = "154"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po10.why">
-      <location file = "why/interval_arith_struct.why" line = "936" begin = "16" end = "78"/>
+      <location file = "why/interval_arith_struct.why" line = "860" begin = "7" end = "69"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po11.why">
-      <location file = "why/interval_arith_struct.why" line = "939" begin = "17" end = "79"/>
+      <location file = "why/interval_arith_struct.why" line = "861" begin = "7" end = "69"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po12.why">
-      <location file = "why/interval_arith_struct.why" line = "942" begin = "18" end = "78"/>
+      <location file = "why/interval_arith_struct.why" line = "862" begin = "7" end = "67"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

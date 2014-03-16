@@ -43,9 +43,9 @@ int32 a;
 
 unit main()
 behavior default:
-  ensures (C_2 : (2 == (if (a > 1) then a else 1)));
+  ensures (_C_2 : (2 == (if (a > 1) then a else 1)));
 {  
-   {  (C_1 : (a = 2));
+   {  (_C_1 : (a = 2));
       
       (return ())
    }
@@ -414,10 +414,9 @@ let main_ensures_default =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_1:
    begin
      (let _jessie_<somenum> = (a := (safe_int32_of_integer_ (2))) in void);
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((2) = (if gt_int_bool(integer_of_int32(a), (1)) then integer_of_int32(a)
             else (1)))) }
@@ -427,10 +426,9 @@ let main_safety =
   { (JC_<somenum>: true) }
   (init:
   try
-   (C_1:
    begin
      (let _jessie_<somenum> = (a := (safe_int32_of_integer_ (2))) in void);
-    (raise Return); (raise Return) end) with Return -> void end) { true }
+    (raise Return); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C ifthenelse.jessie --quiet -f ifthenelse.makefile project

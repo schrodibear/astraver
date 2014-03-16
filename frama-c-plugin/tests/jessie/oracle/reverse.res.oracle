@@ -141,11 +141,11 @@ predicate null_term_list{L}(struct_list[..] p_4) =
   list_contents{L}(p_4, l_13))
 
 struct_list[..] list_reverse(struct_list[..] p0)
-  requires (C_11 : null_term_list{Here}(p0));
+  requires (_C_11 : null_term_list{Here}(p0));
 behavior default:
-  ensures (C_10 : (\forall list l0;
-                    (\at(list_contents{Old}(p0, l0),Old) ==>
-                      list_contents{Here}(\result, rev(l0)))));
+  ensures (_C_10 : (\forall list l0;
+                     (\at(list_contents{Old}(p0, l0),Old) ==>
+                       list_contents{Here}(\result, rev(l0)))));
 {  
    (var struct_list[..] r);
    
@@ -153,28 +153,28 @@ behavior default:
    
    (var struct_list[..] q);
    
-   {  (C_1 : (r = p0));
-      (C_2 : (p = null));
+   {  (_C_1 : (r = p0));
+      (_C_2 : (p = null));
       
       loop 
       behavior default:
-        invariant (C_3 : (\exists list lp;
-                           (\exists list lr;
-                             (((list_contents{Here}(p, lp) &&
-                                 list_contents{Here}(r, lr)) &&
-                                disjoint(lp, lr)) &&
-                               (\forall list l_14;
-                                 (\at(list_contents{Pre}(p0, l_14),Pre) ==>
-                                   (app(rev(lr), lp) == rev(l_14))))))));
+        invariant (_C_3 : (\exists list lp;
+                            (\exists list lr;
+                              (((list_contents{Here}(p, lp) &&
+                                  list_contents{Here}(r, lr)) &&
+                                 disjoint(lp, lr)) &&
+                                (\forall list l_14;
+                                  (\at(list_contents{Pre}(p0, l_14),Pre) ==>
+                                    (app(rev(lr), lp) == rev(l_14))))))));
       while (true)
       {  
          {  (if (r != null) then () else 
             (goto while_0_break));
             
-            {  (C_4 : (q = r));
-               (C_6 : (r = (C_5 : r.tl)));
-               (C_8 : ((C_7 : q.tl) = p));
-               (C_9 : (p = q))
+            {  (_C_4 : (q = r));
+               (_C_6 : (r = (_C_5 : r.tl)));
+               (_C_8 : ((_C_7 : q.tl) = p));
+               (_C_9 : (p = q))
             }
          }
       };
@@ -759,54 +759,44 @@ let list_reverse_ensures_default =
      (let p_5 = ref (any_pointer void) in
      (let q = ref (any_pointer void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (r := p0) in void);
-       (C_2:
+       (let _jessie_<somenum> = (p_5 := null) in void);
+       (loop_2:
        begin
-         (let _jessie_<somenum> = (p_5 := null) in void);
-        (loop_2:
-        begin
-          while true do
-          { invariant
-              (JC_<somenum>:
-              (exists lp:list.
-               (exists lr:list.
-                (list_contents(p_5, lp, struct_list_alloc_table,
-                 struct_list_tl)
-                and (list_contents(r, lr, struct_list_alloc_table,
-                     struct_list_tl)
-                    and (disjoint(lp, lr)
-                        and (forall l_14:list.
-                             (list_contents(p0, l_14,
-                              struct_list_alloc_table@init,
-                              struct_list_tl@init) ->
-                              (app(rev(lr), lp) = rev(l_14)))))))))) 
-             }
-           begin
-             [ { } unit { true } ];
-            try
-             begin
-               (let _jessie_<somenum> =
-               begin
-                 (if ((safe_neq_pointer !r) null) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (C_4:
-                begin
-                  (let _jessie_<somenum> = (q := !r) in void);
-                 (C_6:
-                 begin
-                   (let _jessie_<somenum> =
-                   (r := (C_5: ((safe_acc_ !struct_list_tl) !r))) in void);
-                  (C_8:
-                  begin
-                    (let _jessie_<somenum> = !p_5 in
-                    (let _jessie_<somenum> = !q in
-                    (((safe_upd_ struct_list_tl) _jessie_<somenum>) _jessie_<somenum>)));
-                   (C_9: begin   (p_5 := !q); !p_5 end) end) end) end) end in
-               void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+         while true do
+         { invariant
+             (JC_<somenum>:
+             (exists lp:list.
+              (exists lr:list.
+               (list_contents(p_5, lp, struct_list_alloc_table,
+                struct_list_tl)
+               and (list_contents(r, lr, struct_list_alloc_table,
+                    struct_list_tl)
+                   and (disjoint(lp, lr)
+                       and (forall l_14:list.
+                            (list_contents(p0, l_14,
+                             struct_list_alloc_table@init,
+                             struct_list_tl@init) ->
+                             (app(rev(lr), lp) = rev(l_14))))))))))  }
+          begin
+            [ { } unit { true } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((safe_neq_pointer !r) null) then void
+                else (raise (Goto_while_0_break_exc void)));
+               (let _jessie_<somenum> = (q := !r) in void);
+               (let _jessie_<somenum> = (r := ((safe_acc_ !struct_list_tl) !r)) in
+               void);
+               (let _jessie_<somenum> = !p_5 in
+               (let _jessie_<somenum> = !q in
+               (((safe_upd_ struct_list_tl) _jessie_<somenum>) _jessie_<somenum>)));
+               (p_5 := !q); !p_5 end in void);
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !p_5); (raise Return) end) end)));
     absurd  end with Return -> !return end))
@@ -826,57 +816,47 @@ let list_reverse_safety =
      (let p_5 = ref (any_pointer void) in
      (let q = ref (any_pointer void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (r := p0) in void);
-       (C_2:
+       (let _jessie_<somenum> = (p_5 := null) in void);
+       (loop_1:
        begin
-         (let _jessie_<somenum> = (p_5 := null) in void);
-        (loop_1:
-        begin
-          while true do
-          { invariant (JC_<somenum>: true) variant (0) }
-           begin
-             [ { } unit reads p_5,r,struct_list_alloc_table,struct_list_tl
-               { (JC_<somenum>:
-                 (exists lp:list.
-                  (exists lr:list.
-                   (list_contents(p_5, lp, struct_list_alloc_table,
-                    struct_list_tl)
-                   and (list_contents(r, lr, struct_list_alloc_table,
-                        struct_list_tl)
-                       and (disjoint(lp, lr)
-                           and (forall l_14:list.
-                                (list_contents(p0, l_14,
-                                 struct_list_alloc_table@init,
-                                 struct_list_tl@init) ->
-                                 (app(rev(lr), lp) = rev(l_14)))))))))) } ];
-            try
-             begin
+         while true do
+         { invariant (JC_<somenum>: true) variant (0) }
+          begin
+            [ { } unit reads p_5,r,struct_list_alloc_table,struct_list_tl
+              { (JC_<somenum>:
+                (exists lp:list.
+                 (exists lr:list.
+                  (list_contents(p_5, lp, struct_list_alloc_table,
+                   struct_list_tl)
+                  and (list_contents(r, lr, struct_list_alloc_table,
+                       struct_list_tl)
+                      and (disjoint(lp, lr)
+                          and (forall l_14:list.
+                               (list_contents(p0, l_14,
+                                struct_list_alloc_table@init,
+                                struct_list_tl@init) ->
+                                (app(rev(lr), lp) = rev(l_14)))))))))) } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((neq_pointer !r) null) then void
+                else (raise (Goto_while_0_break_exc void)));
+               (let _jessie_<somenum> = (q := !r) in void);
                (let _jessie_<somenum> =
-               begin
-                 (if ((neq_pointer !r) null) then void
-                 else (raise (Goto_while_0_break_exc void)));
-                (C_4:
-                begin
-                  (let _jessie_<somenum> = (q := !r) in void);
-                 (C_6:
-                 begin
-                   (let _jessie_<somenum> =
-                   (r := (C_5:
-                         (JC_<somenum>:
-                         (((acc_ !struct_list_alloc_table) !struct_list_tl) !r)))) in
-                   void);
-                  (C_8:
-                  begin
-                    (let _jessie_<somenum> = !p_5 in
-                    (let _jessie_<somenum> = !q in
-                    (JC_<somenum>:
-                    ((((upd_ !struct_list_alloc_table) struct_list_tl) _jessie_<somenum>) _jessie_<somenum>))));
-                   (C_9: begin   (p_5 := !q); !p_5 end) end) end) end) end in
-               void); (raise (Loop_continue_exc void)) end with
-             Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+               (r := (JC_<somenum>:
+                     (((acc_ !struct_list_alloc_table) !struct_list_tl) !r))) in
+               void);
+               (let _jessie_<somenum> = !p_5 in
+               (let _jessie_<somenum> = !q in
+               (JC_<somenum>:
+               ((((upd_ !struct_list_alloc_table) struct_list_tl) _jessie_<somenum>) _jessie_<somenum>))));
+               (p_5 := !q); !p_5 end in void);
+             (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !p_5); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
@@ -943,7 +923,7 @@ why --project [...] why/reverse.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/reverse_po8.why">
-      <location file = "why/reverse.why" line = "672" begin = "22" end = "43"/>
+      <location file = "why/reverse.why" line = "659" begin = "21" end = "42"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -958,21 +938,21 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/reverse_po11.why">
-      <location file = "PPCHOME/tests/jessie/reverse.jessie/reverse.jc" line = "170" begin = "23" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/reverse.jessie/reverse.jc" line = "170" begin = "24" end = "41"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/reverse_po12.why">
-      <location file = "PPCHOME/tests/jessie/reverse.jessie/reverse.jc" line = "170" begin = "23" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/reverse.jessie/reverse.jc" line = "170" begin = "24" end = "41"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/reverse_po13.why">
-      <location file = "why/reverse.why" line = "652" begin = "45" end = "46"/>
+      <location file = "why/reverse.why" line = "639" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/reverse_po14.why">
-      <location file = "why/reverse.why" line = "652" begin = "45" end = "46"/>
+      <location file = "why/reverse.why" line = "639" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

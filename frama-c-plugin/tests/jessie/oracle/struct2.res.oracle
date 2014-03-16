@@ -67,9 +67,9 @@ invariant valid_s0 :
 
 unit f()
 behavior default:
-  ensures (C_4 : ((s0.b + 2).intM == 1));
+  ensures (_C_4 : ((s0.b + 2).intM == 1));
 {  
-   {  (C_3 : ((C_2 : ((C_1 : s0.b) + 2).intM) = 1));
+   {  (_C_3 : ((_C_2 : ((_C_1 : s0.b) + 2).intM) = 1));
       
       (return ())
    }
@@ -82,9 +82,9 @@ invariant valid_u :
 
 unit g()
 behavior default:
-  ensures (C_9 : ((u.d.b + 2).intM == 1));
+  ensures (_C_9 : ((u.d.b + 2).intM == 1));
 {  
-   {  (C_8 : ((C_7 : ((C_6 : (C_5 : u.d).b) + 2).intM) = 1));
+   {  (_C_8 : ((_C_7 : ((_C_6 : (_C_5 : u.d).b) + 2).intM) = 1));
       
       (return ())
    }
@@ -787,15 +787,14 @@ let f_ensures_default =
     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
   (init:
   try
-   (C_3:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let _jessie_<somenum> = (C_1: ((safe_acc_ !S_b_s0_1) s0)) in
+     (let _jessie_<somenum> = ((safe_acc_ !S_b_s0_1) s0) in
      (let _jessie_<somenum> = (2) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
      (((safe_upd_ intP_intM_s0_1) _jessie_<somenum>) _jessie_<somenum>))))));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM_s0_1,
                       shift(select(S_b_s0_1, s0), (2)))) = (1))) }
@@ -807,15 +806,14 @@ let f_safety =
     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
   (init:
   try
-   (C_3:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let _jessie_<somenum> = (C_1: ((safe_acc_ !S_b_s0_1) s0)) in
+     (let _jessie_<somenum> = ((safe_acc_ !S_b_s0_1) s0) in
      (let _jessie_<somenum> = (2) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
      (((safe_upd_ intP_intM_s0_1) _jessie_<somenum>) _jessie_<somenum>)))))); (raise Return);
-    (raise Return) end) with Return -> void end)
+    (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_u(U_u_2_alloc_table))
     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
@@ -827,16 +825,14 @@ let g_ensures_default =
     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
   (init:
   try
-   (C_8:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let _jessie_<somenum> =
-     (C_6: ((safe_acc_ !S_b_u_2) (C_5: ((safe_acc_ !U_d_u_2) u)))) in
+     (let _jessie_<somenum> = ((safe_acc_ !S_b_u_2) ((safe_acc_ !U_d_u_2) u)) in
      (let _jessie_<somenum> = (2) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
      (((safe_upd_ intP_intM_u_2) _jessie_<somenum>) _jessie_<somenum>))))));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     (integer_of_int32(select(intP_intM_u_2,
                       shift(select(S_b_u_2, select(U_d_u_2, u)), (2)))) = (1))) }
@@ -848,16 +844,14 @@ let g_safety =
     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }
   (init:
   try
-   (C_8:
    begin
      (let _jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-     (let _jessie_<somenum> =
-     (C_6: ((safe_acc_ !S_b_u_2) (C_5: ((safe_acc_ !U_d_u_2) u)))) in
+     (let _jessie_<somenum> = ((safe_acc_ !S_b_u_2) ((safe_acc_ !U_d_u_2) u)) in
      (let _jessie_<somenum> = (2) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
      (let _jessie_<somenum> = ((shift _jessie_<somenum>) (2)) in
      (((safe_upd_ intP_intM_u_2) _jessie_<somenum>) _jessie_<somenum>))))));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_u(U_u_2_alloc_table))
     and (JC_<somenum>: valid_s0(S_s0_1_alloc_table)))) }

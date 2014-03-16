@@ -50,19 +50,19 @@ axiomatic T {
 
 double f()
 behavior default:
-  ensures (C_4 : p((\result :> real)));
+  ensures (_C_4 : p((\result :> real)));
 {  
    (var double __retres);
    
    {  
       ( 
         behavior default:
-          ensures (C_2 : true);
-        { (C_1 : (__retres = (1.0 :> double)))
+          ensures (_C_2 : true);
+        { (_C_1 : (__retres = (1.0 :> double)))
         });
       
       {  
-         (assert for default: (C_3 : (jessie : ((__retres :> real) == 1.0))));
+         (assert for default: (_C_3 : (jessie : ((__retres :> real) == 1.0))));
          ()
       };
       
@@ -398,8 +398,7 @@ let f_ensures_default =
      begin
        (let _jessie_<somenum> =
        (assert { true };
-       ((C_1:
-        begin   (__retres := (double_of_real_exact 1.0)); !__retres end))
+       (begin   (__retres := (double_of_real_exact 1.0)); !__retres end)
        {{ (JC_<somenum>: (true = true)) }}) in void);
       (assert { (JC_<somenum>: (double_value(__retres) = 1.0)) }; void); void;
       (return := !__retres); (raise Return) end); absurd  end with Return ->
@@ -417,8 +416,7 @@ let f_safety =
        (let _jessie_<somenum> =
        (let _jessie_<somenum> =
        (assert { true };
-       ((C_1:
-        begin   (__retres := (double_of_real_exact 1.0)); !__retres end))) in
+       (begin   (__retres := (double_of_real_exact 1.0)); !__retres end)) in
        begin   [ { } unit { (JC_<somenum>: (true = true)) } ]; _jessie_<somenum> end) in
        void);
       [ { } unit reads __retres { (JC_<somenum>: (double_value(__retres) = 1.0)) } ];

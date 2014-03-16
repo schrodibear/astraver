@@ -129,26 +129,26 @@ lemma sum_rec :
   ((n_0 >= 0) ==> (sum_upto((n_0 + 1)) == ((sum_upto(n_0) + n_0) + 1))))
 
 int32 sum(int32 x)
-  requires (C_12 : (x >= 0));
-  requires (C_11 : (x <= 1000));
-  decreases (C_13 : x);
+  requires (_C_12 : (x >= 0));
+  requires (_C_11 : (x <= 1000));
+  decreases (_C_13 : x);
 behavior default:
-  ensures (C_10 : (\result == sum_upto(\at(x,Old))));
+  ensures (_C_10 : (\result == sum_upto(\at(x,Old))));
 {  
    (var int32 tmp);
    
    (var int32 __retres);
    
    {  (if (x == 0) then 
-      {  (C_9 : (__retres = 0));
+      {  (_C_9 : (__retres = 0));
          
          (goto return_label)
       } else 
       {  
-         {  (C_4 : (tmp = (C_3 : sum((C_2 : ((C_1 : (x - 1)) :> int32))))));
+         {  (_C_4 : (tmp = (_C_3 : sum((_C_2 : ((_C_1 : (x - 1)) :> int32))))));
             ()
          };
-         (C_8 : (__retres = (C_7 : ((C_6 : ((C_5 : (x :> int32)) + tmp)) :> int32))));
+         (_C_8 : (__retres = (_C_7 : ((_C_6 : ((_C_5 : (x :> int32)) + tmp)) :> int32))));
          
          (goto return_label)
       });
@@ -159,26 +159,26 @@ behavior default:
 
 int32 main()
 behavior default:
-  ensures (C_16 : (\result == 36));
+  ensures (_C_16 : (\result == 36));
 {  
    (var int32 i);
    
-   {  (C_15 : (i = (C_14 : sum(8))));
+   {  (_C_15 : (i = (_C_14 : sum(8))));
       
       (return i)
    }
 }
 
 int32 f91(int32 n_1)
-  decreases (C_30 : (101 - n_1));
+  decreases (_C_30 : (101 - n_1));
 behavior less_than_101:
   assumes (n_1 <= 100);
-  ensures (C_27 : (\result == 91));
+  ensures (_C_27 : (\result == 91));
 behavior greater_than_100:
   assumes (n_1 >= 101);
-  ensures (C_28 : (\result == (\at(n_1,Old) - 10)));
+  ensures (_C_28 : (\result == (\at(n_1,Old) - 10)));
 behavior default:
-  ensures (C_29 : true);
+  ensures (_C_29 : true);
 {  
    (var int32 tmp_0);
    
@@ -187,13 +187,13 @@ behavior default:
    (var int32 __retres_0);
    
    {  (if (n_1 <= 100) then 
-      {  (C_23 : (tmp_0 = (C_22 : f91((C_21 : ((C_20 : (n_1 + 11)) :> int32))))));
-         (C_25 : (tmp_0_0 = (C_24 : f91(tmp_0))));
-         (C_26 : (__retres_0 = tmp_0_0));
+      {  (_C_23 : (tmp_0 = (_C_22 : f91((_C_21 : ((_C_20 : (n_1 + 11)) :> int32))))));
+         (_C_25 : (tmp_0_0 = (_C_24 : f91(tmp_0))));
+         (_C_26 : (__retres_0 = tmp_0_0));
          
          (goto return_label)
       } else 
-      {  (C_19 : (__retres_0 = (C_18 : ((C_17 : (n_1 - 10)) :> int32))));
+      {  (_C_19 : (__retres_0 = (_C_18 : ((_C_17 : (n_1 - 10)) :> int32))));
          
          (goto return_label)
       });
@@ -202,23 +202,11 @@ behavior default:
    }
 }
 ========== file tests/c/rec.jessie/rec.cloc ==========
-[C_15]
+[_C_28]
 file = "HOME/tests/c/rec.c"
-line = 52
-begin = 11
-end = 17
-
-[C_11]
-file = "HOME/tests/c/rec.c"
-line = 39
-begin = 13
-end = 22
-
-[C_1]
-file = "HOME/tests/c/rec.c"
-line = 45
-begin = 23
-end = 26
+line = 64
+begin = 14
+end = 31
 
 [f91]
 name = "Function f91"
@@ -227,12 +215,6 @@ line = 66
 begin = 4
 end = 7
 
-[C_9]
-file = "HOME/tests/c/rec.c"
-line = 44
-begin = 14
-end = 23
-
 [main]
 name = "Function main"
 file = "HOME/tests/c/rec.c"
@@ -240,155 +222,173 @@ line = 51
 begin = 5
 end = 9
 
-[C_10]
-file = "HOME/tests/c/rec.c"
-line = 41
-begin = 12
-end = 34
-
-[C_20]
-file = "HOME/tests/c/rec.c"
-line = 68
-begin = 19
-end = 25
-
-[C_17]
-file = "HOME/tests/c/rec.c"
-line = 71
-begin = 11
-end = 17
-
-[C_5]
+[_C_4]
 file = "HOME/tests/c/rec.c"
 line = 45
-begin = 14
-end = 15
-
-[C_29]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_13]
-file = "HOME/tests/c/rec.c"
-line = 40
-begin = 14
-end = 15
-
-[C_7]
-file = "HOME/tests/c/rec.c"
-line = 45
-begin = 14
+begin = 18
 end = 27
 
-[C_22]
+[_C_23]
 file = "HOME/tests/c/rec.c"
 line = 68
 begin = 15
 end = 26
 
-[C_14]
-file = "HOME/tests/c/rec.c"
-line = 52
-begin = 11
-end = 17
-
-[C_25]
-file = "HOME/tests/c/rec.c"
-line = 68
-begin = 11
-end = 27
-
-[C_8]
-file = "HOME/tests/c/rec.c"
-line = 45
-begin = 7
-end = 28
-
-[C_27]
-file = "HOME/tests/c/rec.c"
-line = 61
-begin = 14
-end = 27
-
-[C_19]
+[_C_19]
 file = "HOME/tests/c/rec.c"
 line = 71
 begin = 4
 end = 18
 
-[C_4]
+[_C_13]
+file = "HOME/tests/c/rec.c"
+line = 40
+begin = 14
+end = 15
+
+[_C_5]
 file = "HOME/tests/c/rec.c"
 line = 45
-begin = 18
-end = 27
+begin = 14
+end = 15
 
-[C_12]
+[_C_12]
 file = "HOME/tests/c/rec.c"
 line = 38
 begin = 13
 end = 19
 
-[C_26]
+[_C_22]
 file = "HOME/tests/c/rec.c"
 line = 68
-begin = 4
-end = 28
-
-[C_18]
-file = "HOME/tests/c/rec.c"
-line = 71
-begin = 11
-end = 17
-
-[C_2]
-file = "HOME/tests/c/rec.c"
-line = 45
-begin = 23
+begin = 15
 end = 26
 
-[C_28]
+[_C_9]
 file = "HOME/tests/c/rec.c"
-line = 64
+line = 44
 begin = 14
-end = 31
+end = 23
 
-[C_24]
-file = "HOME/tests/c/rec.c"
-line = 68
-begin = 11
-end = 27
-
-[C_6]
-file = "HOME/tests/c/rec.c"
-line = 45
-begin = 14
-end = 27
-
-[C_30]
+[_C_30]
 file = "HOME/tests/c/rec.c"
 line = 58
 begin = 14
 end = 19
 
-[C_21]
+[_C_6]
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 14
+end = 27
+
+[_C_24]
+file = "HOME/tests/c/rec.c"
+line = 68
+begin = 11
+end = 27
+
+[_C_20]
 file = "HOME/tests/c/rec.c"
 line = 68
 begin = 19
 end = 25
 
-[C_3]
+[_C_3]
 file = "HOME/tests/c/rec.c"
 line = 45
 begin = 18
 end = 27
 
-[C_16]
+[_C_17]
+file = "HOME/tests/c/rec.c"
+line = 71
+begin = 11
+end = 17
+
+[_C_7]
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 14
+end = 27
+
+[_C_27]
+file = "HOME/tests/c/rec.c"
+line = 61
+begin = 14
+end = 27
+
+[_C_15]
+file = "HOME/tests/c/rec.c"
+line = 52
+begin = 11
+end = 17
+
+[_C_26]
+file = "HOME/tests/c/rec.c"
+line = 68
+begin = 4
+end = 28
+
+[_C_10]
+file = "HOME/tests/c/rec.c"
+line = 41
+begin = 12
+end = 34
+
+[_C_8]
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 7
+end = 28
+
+[_C_18]
+file = "HOME/tests/c/rec.c"
+line = 71
+begin = 11
+end = 17
+
+[_C_29]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_14]
+file = "HOME/tests/c/rec.c"
+line = 52
+begin = 11
+end = 17
+
+[_C_2]
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 23
+end = 26
+
+[_C_16]
 file = "HOME/tests/c/rec.c"
 line = 49
 begin = 12
 end = 25
+
+[_C_1]
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 23
+end = 26
+
+[_C_25]
+file = "HOME/tests/c/rec.c"
+line = 68
+begin = 11
+end = 27
+
+[_C_11]
+file = "HOME/tests/c/rec.c"
+line = 39
+begin = 13
+end = 22
 
 [sum]
 name = "Function sum"
@@ -404,11 +404,11 @@ line = 34
 begin = 4
 end = 89
 
-[C_23]
+[_C_21]
 file = "HOME/tests/c/rec.c"
 line = 68
-begin = 15
-end = 26
+begin = 19
+end = 25
 
 ========== jessie execution ==========
 Generating Why function sum
@@ -1425,33 +1425,20 @@ let f91_ensures_default =
       begin
         (if ((le_int_ (integer_of_int32 n_1)) (100))
         then
-         (C_23:
          begin
            (let _jessie_<num> =
-           (tmp_0 := (C_22:
-                     (let _jessie_<num> =
-                     (C_21:
-                     (safe_int32_of_integer_ (C_20:
-                                             ((add_int (integer_of_int32 n_1)) (11))))) in
-                     (JC_52: (f91 _jessie_<num>))))) in void);
-          (C_25:
-          begin
-            (let _jessie_<num> =
-            (tmp_0_0 := (C_24:
-                        (let _jessie_<num> = !tmp_0 in
-                        (JC_53: (f91 _jessie_<num>))))) in void);
-           (C_26:
-           begin
-             (let _jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-            (raise (Return_label_exc void)) end) end) end)
+           (tmp_0 := (let _jessie_<num> =
+                     (safe_int32_of_integer_ ((add_int (integer_of_int32 n_1)) (11))) in
+                     (JC_52: (f91 _jessie_<num>)))) in void);
+          (let _jessie_<num> =
+          (tmp_0_0 := (let _jessie_<num> = !tmp_0 in (JC_53: (f91 _jessie_<num>)))) in
+          void); (let _jessie_<num> = (__retres_0 := !tmp_0_0) in void);
+          (raise (Return_label_exc void)) end
         else
-         (C_19:
          begin
            (let _jessie_<num> =
-           (__retres_0 := (C_18:
-                          (safe_int32_of_integer_ (C_17:
-                                                  ((sub_int (integer_of_int32 n_1)) (10)))))) in
-           void); (raise (Return_label_exc void)) end));
+           (__retres_0 := (safe_int32_of_integer_ ((sub_int (integer_of_int32 n_1)) (10)))) in
+           void); (raise (Return_label_exc void)) end);
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { (JC_34: true) }
@@ -1470,33 +1457,20 @@ let f91_ensures_greater_than_100 =
       begin
         (if ((le_int_ (integer_of_int32 n_1)) (100))
         then
-         (C_23:
          begin
            (let _jessie_<num> =
-           (tmp_0 := (C_22:
-                     (let _jessie_<num> =
-                     (C_21:
-                     (safe_int32_of_integer_ (C_20:
-                                             ((add_int (integer_of_int32 n_1)) (11))))) in
-                     (JC_56: (f91 _jessie_<num>))))) in void);
-          (C_25:
-          begin
-            (let _jessie_<num> =
-            (tmp_0_0 := (C_24:
-                        (let _jessie_<num> = !tmp_0 in
-                        (JC_57: (f91 _jessie_<num>))))) in void);
-           (C_26:
-           begin
-             (let _jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-            (raise (Return_label_exc void)) end) end) end)
+           (tmp_0 := (let _jessie_<num> =
+                     (safe_int32_of_integer_ ((add_int (integer_of_int32 n_1)) (11))) in
+                     (JC_56: (f91 _jessie_<num>)))) in void);
+          (let _jessie_<num> =
+          (tmp_0_0 := (let _jessie_<num> = !tmp_0 in (JC_57: (f91 _jessie_<num>)))) in
+          void); (let _jessie_<num> = (__retres_0 := !tmp_0_0) in void);
+          (raise (Return_label_exc void)) end
         else
-         (C_19:
          begin
            (let _jessie_<num> =
-           (__retres_0 := (C_18:
-                          (safe_int32_of_integer_ (C_17:
-                                                  ((sub_int (integer_of_int32 n_1)) (10)))))) in
-           void); (raise (Return_label_exc void)) end));
+           (__retres_0 := (safe_int32_of_integer_ ((sub_int (integer_of_int32 n_1)) (10)))) in
+           void); (raise (Return_label_exc void)) end);
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
     absurd  end with Return -> !return end))
@@ -1517,33 +1491,20 @@ let f91_ensures_less_than_101 =
       begin
         (if ((le_int_ (integer_of_int32 n_1)) (100))
         then
-         (C_23:
          begin
            (let _jessie_<num> =
-           (tmp_0 := (C_22:
-                     (let _jessie_<num> =
-                     (C_21:
-                     (safe_int32_of_integer_ (C_20:
-                                             ((add_int (integer_of_int32 n_1)) (11))))) in
-                     (JC_54: (f91 _jessie_<num>))))) in void);
-          (C_25:
-          begin
-            (let _jessie_<num> =
-            (tmp_0_0 := (C_24:
-                        (let _jessie_<num> = !tmp_0 in
-                        (JC_55: (f91 _jessie_<num>))))) in void);
-           (C_26:
-           begin
-             (let _jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-            (raise (Return_label_exc void)) end) end) end)
+           (tmp_0 := (let _jessie_<num> =
+                     (safe_int32_of_integer_ ((add_int (integer_of_int32 n_1)) (11))) in
+                     (JC_54: (f91 _jessie_<num>)))) in void);
+          (let _jessie_<num> =
+          (tmp_0_0 := (let _jessie_<num> = !tmp_0 in (JC_55: (f91 _jessie_<num>)))) in
+          void); (let _jessie_<num> = (__retres_0 := !tmp_0_0) in void);
+          (raise (Return_label_exc void)) end
         else
-         (C_19:
          begin
            (let _jessie_<num> =
-           (__retres_0 := (C_18:
-                          (safe_int32_of_integer_ (C_17:
-                                                  ((sub_int (integer_of_int32 n_1)) (10)))))) in
-           void); (raise (Return_label_exc void)) end));
+           (__retres_0 := (safe_int32_of_integer_ ((sub_int (integer_of_int32 n_1)) (10)))) in
+           void); (raise (Return_label_exc void)) end);
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
     absurd  end with Return -> !return end))
@@ -1563,45 +1524,33 @@ let f91_safety =
       begin
         (if ((le_int_ (integer_of_int32 n_1)) (100))
         then
-         (C_23:
          begin
            (let _jessie_<num> =
-           (tmp_0 := (C_22:
-                     (let _jessie_<num> =
-                     (C_21:
+           (tmp_0 := (let _jessie_<num> =
                      (JC_42:
-                     (int32_of_integer_ (C_20:
-                                        ((add_int (integer_of_int32 n_1)) (11)))))) in
+                     (int32_of_integer_ ((add_int (integer_of_int32 n_1)) (11)))) in
                      (JC_46:
                      (check
                      { zwf_zero((JC_45 : sub_int((101),
                                          integer_of_int32(_jessie_<num>))),
                        (JC_44 : sub_int((101), integer_of_int32(n_1)))) };
-                     (JC_43: (f91_requires _jessie_<num>))))))) in void);
-          (C_25:
-          begin
-            (let _jessie_<num> =
-            (tmp_0_0 := (C_24:
-                        (let _jessie_<num> = !tmp_0 in
-                        (JC_50:
-                        (check
-                        { zwf_zero((JC_49 : sub_int((101),
-                                            integer_of_int32(_jessie_<num>))),
-                          (JC_48 : sub_int((101), integer_of_int32(n_1)))) };
-                        (JC_47: (f91_requires _jessie_<num>))))))) in void);
-           (C_26:
-           begin
-             (let _jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-            (raise (Return_label_exc void)) end) end) end)
+                     (JC_43: (f91_requires _jessie_<num>)))))) in void);
+          (let _jessie_<num> =
+          (tmp_0_0 := (let _jessie_<num> = !tmp_0 in
+                      (JC_50:
+                      (check
+                      { zwf_zero((JC_49 : sub_int((101),
+                                          integer_of_int32(_jessie_<num>))),
+                        (JC_48 : sub_int((101), integer_of_int32(n_1)))) };
+                      (JC_47: (f91_requires _jessie_<num>)))))) in void);
+          (let _jessie_<num> = (__retres_0 := !tmp_0_0) in void);
+          (raise (Return_label_exc void)) end
         else
-         (C_19:
          begin
            (let _jessie_<num> =
-           (__retres_0 := (C_18:
-                          (JC_51:
-                          (int32_of_integer_ (C_17:
-                                             ((sub_int (integer_of_int32 n_1)) (10))))))) in
-           void); (raise (Return_label_exc void)) end));
+           (__retres_0 := (JC_51:
+                          (int32_of_integer_ ((sub_int (integer_of_int32 n_1)) (10))))) in
+           void); (raise (Return_label_exc void)) end);
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
@@ -1614,13 +1563,11 @@ let main_ensures_default =
   try
    begin
      (let i = ref (any_int32 void) in
-     (C_15:
      begin
        (let _jessie_<num> =
-       (i := (C_14:
-             (let _jessie_<num> = (safe_int32_of_integer_ (8)) in
-             (JC_29: (sum _jessie_<num>))))) in void); (return := !i);
-      (raise Return) end)); absurd  end with Return -> !return end))
+       (i := (let _jessie_<num> = (safe_int32_of_integer_ (8)) in
+             (JC_29: (sum _jessie_<num>)))) in void); (return := !i);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_24: (integer_of_int32(result) = (36))) }
 
 let main_safety =
@@ -1631,14 +1578,11 @@ let main_safety =
   try
    begin
      (let i = ref (any_int32 void) in
-     (C_15:
      begin
        (let _jessie_<num> =
-       (i := (C_14:
-             (let _jessie_<num> = (safe_int32_of_integer_ (8)) in
-             (JC_28: (sum_requires _jessie_<num>))))) in void); (return := !i);
-      (raise Return) end)); absurd  end with Return -> !return end)) 
-  { true }
+       (i := (let _jessie_<num> = (safe_int32_of_integer_ (8)) in
+             (JC_28: (sum_requires _jessie_<num>)))) in void); (return := !i);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let sum_ensures_default =
  fun (x_0 : int32) ->
@@ -1655,31 +1599,19 @@ let sum_ensures_default =
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
-         (C_9:
          begin
            (let _jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end)
+           void); (raise (Return_label_exc void)) end
         else
-         (C_4:
          begin
            (let _jessie_<num> =
-           (tmp := (C_3:
-                   (let _jessie_<num> =
-                   (C_2:
-                   (safe_int32_of_integer_ (C_1:
-                                           ((sub_int (integer_of_int32 x_0)) (1))))) in
-                   (JC_19: (sum _jessie_<num>))))) in void);
-          begin
-            void;
-           (C_8:
-           begin
-             (let _jessie_<num> =
-             (__retres := (C_7:
-                          (safe_int32_of_integer_ (C_6:
-                                                  ((add_int (integer_of_int32 
-                                                             (C_5: x_0))) 
-                                                   (integer_of_int32 !tmp)))))) in
-             void); (raise (Return_label_exc void)) end) end end));
+           (tmp := (let _jessie_<num> =
+                   (safe_int32_of_integer_ ((sub_int (integer_of_int32 x_0)) (1))) in
+                   (JC_19: (sum _jessie_<num>)))) in void); void;
+          (let _jessie_<num> =
+          (__retres := (safe_int32_of_integer_ ((add_int (integer_of_int32 x_0)) 
+                                                (integer_of_int32 !tmp)))) in
+          void); (raise (Return_label_exc void)) end);
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -1700,37 +1632,25 @@ let sum_safety =
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
-         (C_9:
          begin
            (let _jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end)
+           void); (raise (Return_label_exc void)) end
         else
-         (C_4:
          begin
            (let _jessie_<num> =
-           (tmp := (C_3:
-                   (let _jessie_<num> =
-                   (C_2:
+           (tmp := (let _jessie_<num> =
                    (JC_13:
-                   (int32_of_integer_ (C_1:
-                                      ((sub_int (integer_of_int32 x_0)) (1)))))) in
+                   (int32_of_integer_ ((sub_int (integer_of_int32 x_0)) (1)))) in
                    (JC_17:
                    (check
                    { zwf_zero(integer_of_int32((JC_16 : _jessie_<num>)),
                      integer_of_int32((JC_15 : x_0))) };
-                   (JC_14: (sum_requires _jessie_<num>))))))) in void);
-          begin
-            void;
-           (C_8:
-           begin
-             (let _jessie_<num> =
-             (__retres := (C_7:
-                          (JC_18:
-                          (int32_of_integer_ (C_6:
-                                             ((add_int (integer_of_int32 
-                                                        (C_5: x_0))) 
-                                              (integer_of_int32 !tmp))))))) in
-             void); (raise (Return_label_exc void)) end) end end));
+                   (JC_14: (sum_requires _jessie_<num>)))))) in void); void;
+          (let _jessie_<num> =
+          (__retres := (JC_18:
+                       (int32_of_integer_ ((add_int (integer_of_int32 x_0)) 
+                                           (integer_of_int32 !tmp))))) in
+          void); (raise (Return_label_exc void)) end);
        (raise (Return_label_exc void)) end with Return_label_exc _jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }

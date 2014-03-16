@@ -47,11 +47,11 @@ type voidP = [voidP]
 
 int32 f()
 behavior default:
-  ensures (C_2 : (\result == 0));
+  ensures (_C_2 : (\result == 0));
 {  
    (var int32 __retres);
    
-   {  (C_1 : (__retres = 0));
+   {  (_C_1 : (__retres = 0));
       
       (return __retres)
    }
@@ -59,19 +59,19 @@ behavior default:
 
 int32 max(int32 x, int32 y)
 behavior result_ge_x:
-  ensures (C_5 : (\result >= \at(x,Old)));
+  ensures (_C_5 : (\result >= \at(x,Old)));
 behavior result_ge_y:
-  ensures (C_6 : (\result >= \at(y,Old)));
+  ensures (_C_6 : (\result >= \at(y,Old)));
 behavior result_is_lub:
-  ensures (C_7 : (\forall int32 z;
-                   (((z >= \at(x,Old)) && (z >= \at(y,Old))) ==>
-                     (z >= \result))));
+  ensures (_C_7 : (\forall int32 z;
+                    (((z >= \at(x,Old)) && (z >= \at(y,Old))) ==>
+                      (z >= \result))));
 behavior default:
-  ensures (C_8 : true);
+  ensures (_C_8 : true);
 {  
    (var int32 tmp);
    
-   {  (if (x > y) then (C_4 : (tmp = x)) else (C_3 : (tmp = y)));
+   {  (if (x > y) then (_C_4 : (tmp = x)) else (_C_3 : (tmp = y)));
       
       (return tmp)
    }
@@ -79,12 +79,12 @@ behavior default:
 
 unit abs1(intP[..] p)
 behavior default:
-  ensures (C_15 : (\at(p,Old).intM >= 0));
+  ensures (_C_15 : (\at(p,Old).intM >= 0));
 {  
-   {  (if ((C_14 : p.intM) < 0) then (C_13 : ((C_12 : p.intM) = (C_11 : (
-                                                                (C_10 : 
-                                                                (0 -
-                                                                  (C_9 : p.intM))) :> int32)))) else ());
+   {  (if ((_C_14 : p.intM) < 0) then (_C_13 : ((_C_12 : p.intM) = (_C_11 : (
+                                                                   (_C_10 : 
+                                                                   (0 -
+                                                                    (_C_9 : p.intM))) :> int32)))) else ());
       
       (return ())
    }
@@ -555,13 +555,10 @@ let abs1_ensures_default =
   (init:
   try
    begin
-     (if ((lt_int_ (integer_of_int32 (C_14: ((safe_acc_ !intP_intM_p_1) p)))) (0))
+     (if ((lt_int_ (integer_of_int32 ((safe_acc_ !intP_intM_p_1) p))) (0))
      then
       (let _jessie_<somenum> =
-      (C_11:
-      (safe_int32_of_integer_ (C_10:
-                              ((sub_int (0)) (integer_of_int32 (C_9:
-                                                               ((safe_acc_ !intP_intM_p_1) p))))))) in
+      (safe_int32_of_integer_ ((sub_int (0)) (integer_of_int32 ((safe_acc_ !intP_intM_p_1) p)))) in
       (let _jessie_<somenum> = p in
       (((safe_upd_ intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))) else void);
     (raise Return); (raise Return) end with Return -> void end)
@@ -573,17 +570,13 @@ let abs1_safety =
   (init:
   try
    begin
-     (if ((lt_int_ (integer_of_int32 (C_14:
-                                     (JC_<somenum>:
-                                     (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p))))) (0))
+     (if ((lt_int_ (integer_of_int32 (JC_<somenum>:
+                                     (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p)))) (0))
      then
       (let _jessie_<somenum> =
-      (C_11:
       (JC_<somenum>:
-      (int32_of_integer_ (C_10:
-                         ((sub_int (0)) (integer_of_int32 (C_9:
-                                                          (JC_<somenum>:
-                                                          (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p))))))))) in
+      (int32_of_integer_ ((sub_int (0)) (integer_of_int32 (JC_<somenum>:
+                                                          (((acc_ intP_p_1_alloc_table) !intP_intM_p_1) p)))))) in
       (let _jessie_<somenum> = p in
       (JC_<somenum>:
       ((((upd_ intP_p_1_alloc_table) intP_intM_p_1) _jessie_<somenum>) _jessie_<somenum>))))
@@ -598,10 +591,9 @@ let f_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let f_safety =
@@ -612,10 +604,9 @@ let f_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 let max_ensures_default =
@@ -629,10 +620,9 @@ let max_ensures_default =
      begin
        (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
-       then (C_4: begin   (tmp := x_0); !tmp end)
-       else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
-      (raise Return) end); absurd  end with Return -> !return end))
-  { (JC_<somenum>: true) }
+       then begin   (tmp := x_0); !tmp end else begin   (tmp := y); !tmp end) in
+       void); (return := !tmp); (raise Return) end); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let max_ensures_result_ge_x =
  fun (x_0 : int32) (y : int32) ->
@@ -645,9 +635,9 @@ let max_ensures_result_ge_x =
      begin
        (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
-       then (C_4: begin   (tmp := x_0); !tmp end)
-       else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
-      (raise Return) end); absurd  end with Return -> !return end))
+       then begin   (tmp := x_0); !tmp end else begin   (tmp := y); !tmp end) in
+       void); (return := !tmp); (raise Return) end); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>: ge_int(integer_of_int32(result), integer_of_int32(x_0))) }
 
 let max_ensures_result_ge_y =
@@ -661,9 +651,9 @@ let max_ensures_result_ge_y =
      begin
        (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
-       then (C_4: begin   (tmp := x_0); !tmp end)
-       else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
-      (raise Return) end); absurd  end with Return -> !return end))
+       then begin   (tmp := x_0); !tmp end else begin   (tmp := y); !tmp end) in
+       void); (return := !tmp); (raise Return) end); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>: ge_int(integer_of_int32(result), integer_of_int32(y))) }
 
 let max_ensures_result_is_lub =
@@ -677,9 +667,9 @@ let max_ensures_result_is_lub =
      begin
        (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
-       then (C_4: begin   (tmp := x_0); !tmp end)
-       else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
-      (raise Return) end); absurd  end with Return -> !return end))
+       then begin   (tmp := x_0); !tmp end else begin   (tmp := y); !tmp end) in
+       void); (return := !tmp); (raise Return) end); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     (forall z:int32.
      ((ge_int(integer_of_int32(z), integer_of_int32(x_0))
@@ -697,9 +687,9 @@ let max_safety =
      begin
        (let _jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
-       then (C_4: begin   (tmp := x_0); !tmp end)
-       else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
-      (raise Return) end); absurd  end with Return -> !return end)) { true }
+       then begin   (tmp := x_0); !tmp end else begin   (tmp := y); !tmp end) in
+       void); (return := !tmp); (raise Return) end); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C basic.jessie --quiet -f basic.makefile project

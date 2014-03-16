@@ -39,11 +39,11 @@ type voidP = [voidP]
 
 unit test_bw_and()
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    {  
       {  
-         (assert for default: (C_1 : (jessie : ((3 & 1) == 1))));
+         (assert for default: (_C_1 : (jessie : ((3 & 1) == 1))));
          ()
       };
       

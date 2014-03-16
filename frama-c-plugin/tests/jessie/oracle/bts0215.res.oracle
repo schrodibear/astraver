@@ -42,15 +42,15 @@ type voidP = [voidP]
 int32 i;
 
 int32 f()
-  requires (C_4 : ((i == 0) || (i == 1)));
+  requires (_C_4 : ((i == 0) || (i == 1)));
 behavior default:
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 behavior b1:
   assumes (i == 0);
-  ensures (C_2 : (\result == 0));
+  ensures (_C_2 : (\result == 0));
 behavior b2:
   assumes (i == 1);
-  ensures (C_3 : (\result == 1));
+  ensures (_C_3 : (\result == 1));
 {  
    {  
       (return i)
@@ -58,21 +58,21 @@ behavior b2:
 }
 
 int32 main()
-  requires (C_10 : ((C_11 : (0 <= i)) && (C_12 : (i <= 1))));
+  requires (_C_10 : ((_C_11 : (0 <= i)) && (_C_12 : (i <= 1))));
 behavior default:
-  ensures (C_9 : (\result == 0));
+  ensures (_C_9 : (\result == 0));
 {  
    (var int32 tmp);
    
    (var int32 __retres);
    
-   {  (C_6 : (tmp = (C_5 : f())));
+   {  (_C_6 : (tmp = (_C_5 : f())));
       (if (tmp != 0) then 
-      {  (C_7 : (__retres = 0));
+      {  (_C_7 : (__retres = 0));
          
          (goto return_label)
       } else ());
-      (C_8 : (__retres = tmp));
+      (_C_8 : (__retres = tmp));
       (return_label : 
       (return __retres))
    }
@@ -495,20 +495,15 @@ let main_ensures_default =
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (C_6:
       begin
-        (let _jessie_<somenum> = (tmp := (C_5: (JC_<somenum>: (f void)))) in void);
+        (let _jessie_<somenum> = (tmp := (JC_<somenum>: (f void))) in void);
        (if ((neq_int_ (integer_of_int32 !tmp)) (0))
        then
-        (C_7:
         begin
           (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-          void); (raise (Return_label_exc void)) end) else void);
-       (C_8:
-       begin
-         (let _jessie_<somenum> = (__retres := !tmp) in void);
-        (raise (Return_label_exc void)) end) end) with
-      Return_label_exc _jessie_<somenum> ->
+          void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := !tmp) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>: (integer_of_int32(result) = (0))) }
@@ -525,20 +520,15 @@ let main_safety =
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (C_6:
       begin
-        (let _jessie_<somenum> = (tmp := (C_5: (JC_<somenum>: (f_requires void)))) in void);
+        (let _jessie_<somenum> = (tmp := (JC_<somenum>: (f_requires void))) in void);
        (if ((neq_int_ (integer_of_int32 !tmp)) (0))
        then
-        (C_7:
         begin
           (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-          void); (raise (Return_label_exc void)) end) else void);
-       (C_8:
-       begin
-         (let _jessie_<somenum> = (__retres := !tmp) in void);
-        (raise (Return_label_exc void)) end) end) with
-      Return_label_exc _jessie_<somenum> ->
+          void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := !tmp) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 

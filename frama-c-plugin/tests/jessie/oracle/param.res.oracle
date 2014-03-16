@@ -41,9 +41,9 @@ type voidP = [voidP]
 
 int32 f(int32 x, int32 y)
 behavior default:
-  ensures (C_4 : (\result == (\at(x,Old) + \at(y,Old))));
+  ensures (_C_4 : (\result == (\at(x,Old) + \at(y,Old))));
 {  
-   {  (C_3 : (x = (C_2 : ((C_1 : (x + y)) :> int32))));
+   {  (_C_3 : (x = (_C_2 : ((_C_1 : (x + y)) :> int32))));
       
       (return x)
    }
@@ -414,14 +414,11 @@ let f_ensures_default =
   (init:
   (let return = ref (any_int32 void) in
   try
-   (C_3:
    begin
      (let _jessie_<somenum> =
-     (mutable_x_0 := (C_2:
-                     (safe_int32_of_integer_ (C_1:
-                                             ((add_int (integer_of_int32 !mutable_x_0)) 
-                                              (integer_of_int32 y)))))) in
-     void); (return := !mutable_x_0); (raise Return); absurd  end) with
+     (mutable_x_0 := (safe_int32_of_integer_ ((add_int (integer_of_int32 !mutable_x_0)) 
+                                              (integer_of_int32 y)))) in
+     void); (return := !mutable_x_0); (raise Return); absurd  end with
    Return -> !return end)))
   { (JC_<somenum>:
     (integer_of_int32(result) = add_int(integer_of_int32(x_0),
@@ -434,15 +431,12 @@ let f_safety =
   (init:
   (let return = ref (any_int32 void) in
   try
-   (C_3:
    begin
      (let _jessie_<somenum> =
-     (mutable_x_0 := (C_2:
-                     (JC_<somenum>:
-                     (int32_of_integer_ (C_1:
-                                        ((add_int (integer_of_int32 !mutable_x_0)) 
-                                         (integer_of_int32 y))))))) in void);
-    (return := !mutable_x_0); (raise Return); absurd  end) with Return ->
+     (mutable_x_0 := (JC_<somenum>:
+                     (int32_of_integer_ ((add_int (integer_of_int32 !mutable_x_0)) 
+                                         (integer_of_int32 y))))) in void);
+    (return := !mutable_x_0); (raise Return); absurd  end with Return ->
    !return end))) { true }
 
 

@@ -88,55 +88,55 @@ tag voidP = {
 type voidP = [voidP]
 
 float Sterbenz(float x, float y)
-  requires (C_6 : ((C_7 : (((y :> real) / 2.0) <= (x :> real))) &&
-                    (C_8 : ((x :> real) <= (2.0 * (y :> real))))));
+  requires (_C_6 : ((_C_7 : (((y :> real) / 2.0) <= (x :> real))) &&
+                     (_C_8 : ((x :> real) <= (2.0 * (y :> real))))));
 behavior default:
-  ensures (C_5 : ((\result :> real) ==
-                   ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
+  ensures (_C_5 : ((\result :> real) ==
+                    ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
 {  
    (var float __retres);
    
    {  
       {  
-         (assert for default: (C_1 : (jessie : (0.0 <= (y :> real)))));
+         (assert for default: (_C_1 : (jessie : (0.0 <= (y :> real)))));
          ()
       };
       
       {  
-         (assert for default: (C_2 : (jessie : (0.0 <= (x :> real)))));
+         (assert for default: (_C_2 : (jessie : (0.0 <= (x :> real)))));
          ()
       };
       
-      {  (C_4 : (__retres = (C_3 : (x - y))));
+      {  (_C_4 : (__retres = (_C_3 : (x - y))));
          
          (return __retres)
       }
    }
 }
 ========== file tests/c/Sterbenz.jessie/Sterbenz.cloc ==========
-[C_1]
+[_C_4]
 file = "HOME/tests/c/Sterbenz.c"
-line = 38
-begin = 13
-end = 21
+line = 40
+begin = 2
+end = 13
 
-[C_5]
+[_C_5]
 file = "HOME/tests/c/Sterbenz.c"
 line = 35
 begin = 12
 end = 28
 
-[C_7]
+[_C_6]
 file = "HOME/tests/c/Sterbenz.c"
 line = 34
 begin = 13
-end = 25
-
-[C_8]
-file = "HOME/tests/c/Sterbenz.c"
-line = 34
-begin = 24
 end = 36
+
+[_C_3]
+file = "HOME/tests/c/Sterbenz.c"
+line = 40
+begin = 9
+end = 12
 
 [Sterbenz]
 name = "Function Sterbenz"
@@ -145,29 +145,29 @@ line = 37
 begin = 6
 end = 14
 
-[C_4]
+[_C_7]
 file = "HOME/tests/c/Sterbenz.c"
-line = 40
-begin = 2
-end = 13
+line = 34
+begin = 13
+end = 25
 
-[C_2]
+[_C_8]
+file = "HOME/tests/c/Sterbenz.c"
+line = 34
+begin = 24
+end = 36
+
+[_C_2]
 file = "HOME/tests/c/Sterbenz.c"
 line = 39
 begin = 13
 end = 21
 
-[C_6]
+[_C_1]
 file = "HOME/tests/c/Sterbenz.c"
-line = 34
+line = 38
 begin = 13
-end = 36
-
-[C_3]
-file = "HOME/tests/c/Sterbenz.c"
-line = 40
-begin = 9
-end = 12
+end = 21
 
 ========== jessie execution ==========
 Generating Why function Sterbenz
@@ -811,16 +811,11 @@ let Sterbenz_ensures_default =
      (let __retres = ref (any_single void) in
      begin
        (assert { (JC_16: le_real(0.0, single_value(y))) }; void); void;
-      (assert { (JC_17: le_real(0.0, single_value(x_0))) }; void);
-      begin
-        void;
-       (C_4:
-       begin
-         (let _jessie_<num> =
-         (__retres := (C_3:
-                      (JC_18: (((sub_single_safe nearest_even) x_0) y)))) in
-         void); (return := !__retres); (raise Return) end) end end); 
-    absurd  end with Return -> !return end))
+      (assert { (JC_17: le_real(0.0, single_value(x_0))) }; void); void;
+      (let _jessie_<num> =
+      (__retres := (JC_18: (((sub_single_safe nearest_even) x_0) y))) in
+      void); (return := !__retres); (raise Return) end); absurd  end with
+   Return -> !return end))
   { (JC_9:
     (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
 
@@ -836,15 +831,11 @@ let Sterbenz_safety =
      (let __retres = ref (any_single void) in
      begin
        [ { } unit { (JC_13: le_real(0.0, single_value(y))) } ]; void;
-      [ { } unit { (JC_14: le_real(0.0, single_value(x_0))) } ];
-      begin
-        void;
-       (C_4:
-       begin
-         (let _jessie_<num> =
-         (__retres := (C_3: (JC_15: (((sub_single nearest_even) x_0) y)))) in
-         void); (return := !__retres); (raise Return) end) end end); 
-    absurd  end with Return -> !return end)) { true }
+      [ { } unit { (JC_14: le_real(0.0, single_value(x_0))) } ]; void;
+      (let _jessie_<num> =
+      (__retres := (JC_15: (((sub_single nearest_even) x_0) y))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========

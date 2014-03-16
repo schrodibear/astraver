@@ -63,22 +63,22 @@ axiomatic s_axioms {
 }
 
 unit ftest(intP[0] b)
-  requires (C_7 : ((C_8 : (\offset_min(b) <= 0)) &&
-                    (C_9 : (\offset_max(b) >= 8))));
+  requires (_C_7 : ((_C_8 : (\offset_min(b) <= 0)) &&
+                     (_C_9 : (\offset_max(b) >= 8))));
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
-   {  (M : (C_3 : ((C_2 : (C_1 : (b + 4)).intM) = 5)));
+   {  (M : (_C_3 : ((_C_2 : (_C_1 : (b + 4)).intM) = 5)));
       
       {  
-         (assert for default: (C_4 : (jessie : (\forall intP[..] c;
-                                                 (s{Here}(c, 8) ==
-                                                   s{M}(c, 8))))));
+         (assert for default: (_C_4 : (jessie : (\forall intP[..] c;
+                                                  (s{Here}(c, 8) ==
+                                                    s{M}(c, 8))))));
          ()
       };
       
       {  
-         (assert for default: (C_5 : (jessie : (s{Here}(b, 8) == s{M}(b, 8)))));
+         (assert for default: (_C_5 : (jessie : (s{Here}(b, 8) == s{M}(b, 8)))));
          ()
       };
       
@@ -545,7 +545,6 @@ let ftest_ensures_default =
    begin
      (let intP_intM_c_5 = (any_memory void) in
      (M:
-     (C_3:
      begin
        (let _jessie_<somenum> = (safe_int32_of_integer_ (5)) in
        (let _jessie_<somenum> = b in
@@ -560,7 +559,7 @@ let ftest_ensures_default =
       void;
       (assert
       { (JC_<somenum>: (s_0(b, (8), intP_intM_b_2) = s_0(b, (8), intP_intM_b_2@M))) };
-      void); void; (raise Return) end))); (raise Return) end with Return ->
+      void); void; (raise Return) end)); (raise Return) end with Return ->
    void end) { (JC_<somenum>: true) }
 
 let ftest_safety =
@@ -574,7 +573,6 @@ let ftest_safety =
    begin
      (let intP_intM_c_5 = (any_memory void) in
      (M:
-     (C_3:
      begin
        (let _jessie_<somenum> = (safe_int32_of_integer_ (5)) in
        (let _jessie_<somenum> = b in
@@ -591,7 +589,7 @@ let ftest_safety =
       [ { } unit reads intP_intM_b_2
         { (JC_<somenum>:
           (s_0(b, (8), intP_intM_b_2) = s_0(b, (8), intP_intM_b_2@M))) } ];
-      void; (raise Return) end))); (raise Return) end with Return -> void end)
+      void; (raise Return) end)); (raise Return) end with Return -> void end)
   { true }
 
 

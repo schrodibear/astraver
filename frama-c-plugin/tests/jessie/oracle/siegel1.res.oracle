@@ -65,13 +65,13 @@ axiomatic sums {
 }
 
 double mean(doubleP[..] t, int32 n_1)
-  requires (C_22 : ((C_23 : (n_1 >= 1)) &&
-                     ((C_25 : (\offset_min(t) <= 0)) &&
-                       (C_26 : (\offset_max(t) >= (n_1 - 1))))));
+  requires (_C_22 : ((_C_23 : (n_1 >= 1)) &&
+                      ((_C_25 : (\offset_min(t) <= 0)) &&
+                        (_C_26 : (\offset_max(t) >= (n_1 - 1))))));
 behavior default:
   assigns \nothing;
-  ensures (C_21 : ((\result :> real) ==
-                    (((sum{Here}(\at(t,Old), \at(n_1,Old)) / \at(n_1,Old)) :> double) :> real)));
+  ensures (_C_21 : ((\result :> real) ==
+                     (((sum{Here}(\at(t,Old), \at(n_1,Old)) / \at(n_1,Old)) :> double) :> real)));
 {  
    (var int32 i);
    
@@ -79,31 +79,31 @@ behavior default:
    
    (var double __retres);
    
-   {  (C_1 : (s = (0.0 :> double)));
-      (C_2 : (i = 0));
+   {  (_C_1 : (s = (0.0 :> double)));
+      (_C_2 : (i = 0));
       
       loop 
       behavior default:
-        invariant (C_8 : ((C_9 : (0 <= i)) && (C_10 : (i <= n_1))));
+        invariant (_C_8 : ((_C_9 : (0 <= i)) && (_C_10 : (i <= n_1))));
       behavior default:
-        invariant (C_5 : ((C_6 : (\offset_min(t) <= 0)) &&
-                           (C_7 : (\offset_max(t) >= (n_1 - 1)))));
+        invariant (_C_5 : ((_C_6 : (\offset_min(t) <= 0)) &&
+                            (_C_7 : (\offset_max(t) >= (n_1 - 1)))));
       behavior default:
-        invariant (C_4 : ((s :> real) == sum{Here}(t, i)));
+        invariant (_C_4 : ((s :> real) == sum{Here}(t, i)));
       behavior default:
         
         assigns s;
-      variant (C_3 : (n_1 - i));
+      variant (_C_3 : (n_1 - i));
       while (true)
       {  
          {  (if (i < n_1) then () else 
             (goto while_0_break));
-            (C_14 : (s = (C_13 : (s + (C_12 : (C_11 : (t + i)).doubleM)))));
-            (C_17 : (i = (C_16 : ((C_15 : (i + 1)) :> int32))))
+            (_C_14 : (s = (_C_13 : (s + (_C_12 : (_C_11 : (t + i)).doubleM)))));
+            (_C_17 : (i = (_C_16 : ((_C_15 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
-      (C_20 : (__retres = (C_19 : (s / (C_18 : (n_1 :> double))))));
+      (_C_20 : (__retres = (_C_19 : (s / (_C_18 : (n_1 :> double))))));
       
       (return __retres)
    }
@@ -600,72 +600,56 @@ let mean_ensures_default =
      (let s_0 = ref (any_double void) in
      (let __retres = ref (any_double void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (s_0 := (double_of_real_exact 0.0)) in void);
-       (C_2:
+       (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_2:
        begin
-         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-        (loop_2:
-        begin
-          while true do
-          { invariant
-              ((JC_<somenum>:
-               (double_value(s_0) = sum(t, integer_of_int32(i),
-                                    doubleP_doubleM_t_2)))
-              and ((JC_<somenum>:
-                   ((JC_<somenum>:
-                    le_int(offset_min(doubleP_t_2_alloc_table, t), (0)))
-                   and (JC_<somenum>:
-                       ge_int(offset_max(doubleP_t_2_alloc_table, t),
-                       sub_int(integer_of_int32(n_1), (1))))))
+         while true do
+         { invariant
+             ((JC_<somenum>:
+              (double_value(s_0) = sum(t, integer_of_int32(i),
+                                   doubleP_doubleM_t_2)))
+             and ((JC_<somenum>:
+                  ((JC_<somenum>:
+                   le_int(offset_min(doubleP_t_2_alloc_table, t), (0)))
                   and (JC_<somenum>:
-                      ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-                      and (JC_<somenum>:
-                          le_int(integer_of_int32(i), integer_of_int32(n_1)))))))
-             }
-           begin
-             [ { } unit { true } ];
-            try
-             begin
+                      ge_int(offset_max(doubleP_t_2_alloc_table, t),
+                      sub_int(integer_of_int32(n_1), (1))))))
+                 and (JC_<somenum>:
+                     ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                     and (JC_<somenum>:
+                         le_int(integer_of_int32(i), integer_of_int32(n_1)))))))
+            }
+          begin
+            [ { } unit { true } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
+                then void else (raise (Goto_while_0_break_exc void)));
                (let _jessie_<somenum> =
-               begin
-                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (C_14:
-                begin
-                  (let _jessie_<somenum> =
-                  (s_0 := (C_13:
-                          (JC_<somenum>:
-                          (((add_double_safe nearest_even) !s_0) (C_12:
-                                                                 ((safe_acc_ doubleP_doubleM_t_2) 
-                                                                  (C_11:
-                                                                  ((shift t) 
-                                                                   (integer_of_int32 !i))))))))) in
-                  void);
-                 (C_17:
-                 begin
-                   (i := (C_16:
-                         (safe_int32_of_integer_ (C_15:
-                                                 ((add_int (integer_of_int32 !i)) (1))))));
-                  !i end) end) end in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+               (s_0 := (JC_<somenum>:
+                       (((add_double_safe nearest_even) !s_0) ((safe_acc_ doubleP_doubleM_t_2) 
+                                                               ((shift t) 
+                                                                (integer_of_int32 !i)))))) in
+               void);
+               (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
       begin
         void;
-       (C_20:
-       begin
-         (let _jessie_<somenum> =
-         (__retres := (C_19:
-                      (JC_<somenum>:
-                      (((div_double_safe nearest_even) !s_0) (C_18:
-                                                             ((double_of_real_safe nearest_even) 
-                                                              (real_of_int 
-                                                               (integer_of_int32 n_1)))))))) in
-         void); (return := !__retres); (raise Return) end) end) end)));
-    absurd  end with Return -> !return end))
+       (let _jessie_<somenum> =
+       (__retres := (JC_<somenum>:
+                    (((div_double_safe nearest_even) !s_0) ((double_of_real_safe nearest_even) 
+                                                            (real_of_int 
+                                                             (integer_of_int32 n_1)))))) in
+       void); (return := !__retres); (raise Return) end) end))); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>:
     (double_value(result) = double_value(round_double_logic(nearest_even,
                                          div_real(sum(t,
@@ -689,75 +673,59 @@ let mean_safety =
      (let s_0 = ref (any_double void) in
      (let __retres = ref (any_double void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (s_0 := (double_of_real_exact 0.0)) in void);
-       (C_2:
+       (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_1:
        begin
-         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-        (loop_1:
-        begin
-          while true do
-          { invariant (JC_<somenum>: true)
-            variant (JC_<somenum> : sub_int(integer_of_int32(n_1),
-                             integer_of_int32(i))) }
-           begin
-             [ { } unit reads i,s_0
-               { ((JC_<somenum>:
-                  (double_value(s_0) = sum(t, integer_of_int32(i),
-                                       doubleP_doubleM_t_2)))
-                 and ((JC_<somenum>:
-                      ((JC_<somenum>:
-                       le_int(offset_min(doubleP_t_2_alloc_table, t), (0)))
-                      and (JC_<somenum>:
-                          ge_int(offset_max(doubleP_t_2_alloc_table, t),
-                          sub_int(integer_of_int32(n_1), (1))))))
+         while true do
+         { invariant (JC_<somenum>: true)
+           variant (JC_<somenum> : sub_int(integer_of_int32(n_1),
+                            integer_of_int32(i))) }
+          begin
+            [ { } unit reads i,s_0
+              { ((JC_<somenum>:
+                 (double_value(s_0) = sum(t, integer_of_int32(i),
+                                      doubleP_doubleM_t_2)))
+                and ((JC_<somenum>:
+                     ((JC_<somenum>:
+                      le_int(offset_min(doubleP_t_2_alloc_table, t), (0)))
                      and (JC_<somenum>:
-                         ((JC_<somenum>: le_int((0), integer_of_int32(i)))
-                         and (JC_<somenum>:
-                             le_int(integer_of_int32(i),
-                             integer_of_int32(n_1))))))) } ];
-            try
-             begin
+                         ge_int(offset_max(doubleP_t_2_alloc_table, t),
+                         sub_int(integer_of_int32(n_1), (1))))))
+                    and (JC_<somenum>:
+                        ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                        and (JC_<somenum>:
+                            le_int(integer_of_int32(i),
+                            integer_of_int32(n_1))))))) } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
+                then void else (raise (Goto_while_0_break_exc void)));
                (let _jessie_<somenum> =
-               begin
-                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (C_14:
-                begin
-                  (let _jessie_<somenum> =
-                  (s_0 := (C_13:
-                          (JC_<somenum>:
-                          (((add_double nearest_even) !s_0) (C_12:
-                                                            (JC_<somenum>:
-                                                            ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t) 
-                                                             (integer_of_int32 !i)))))))) in
-                  void);
-                 (C_17:
-                 begin
-                   (i := (C_16:
-                         (JC_<somenum>:
-                         (int32_of_integer_ (C_15:
-                                            ((add_int (integer_of_int32 !i)) (1)))))));
-                  !i end) end) end in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+               (s_0 := (JC_<somenum>:
+                       (((add_double nearest_even) !s_0) (JC_<somenum>:
+                                                         ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t) 
+                                                          (integer_of_int32 !i)))))) in
+               void);
+               (i := (JC_<somenum>:
+                     (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break:
       begin
         void;
-       (C_20:
-       begin
-         (let _jessie_<somenum> =
-         (__retres := (C_19:
-                      (JC_<somenum>:
-                      (((div_double nearest_even) !s_0) (C_18:
-                                                        (JC_<somenum>:
-                                                        ((double_of_real nearest_even) 
-                                                         (real_of_int 
-                                                          (integer_of_int32 n_1))))))))) in
-         void); (return := !__retres); (raise Return) end) end) end)));
-    absurd  end with Return -> !return end)) { true }
+       (let _jessie_<somenum> =
+       (__retres := (JC_<somenum>:
+                    (((div_double nearest_even) !s_0) (JC_<somenum>:
+                                                      ((double_of_real nearest_even) 
+                                                       (real_of_int (integer_of_int32 n_1))))))) in
+       void); (return := !__retres); (raise Return) end) end))); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C siegel1.jessie --quiet -f siegel1.makefile project

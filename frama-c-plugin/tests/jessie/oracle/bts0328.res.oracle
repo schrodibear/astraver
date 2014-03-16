@@ -65,20 +65,20 @@ tag siP = {
 }
 
 unit zero(U[..] x)
-  requires (C_7 : ((C_8 : (\offset_min(x) <= 0)) &&
-                    (C_9 : (\offset_max(x) >= 0))));
+  requires (_C_7 : ((_C_8 : (\offset_min(x) <= 0)) &&
+                     (_C_9 : (\offset_max(x) >= 0))));
 behavior default:
-  ensures (C_6 : true);
+  ensures (_C_6 : true);
 {  
-   {  (C_3 : ((C_2 : (C_1 : (x :> iP[0])).iM) = 0));
+   {  (_C_3 : ((_C_2 : (_C_1 : (x :> iP[0])).iM) = 0));
       
       {  
-         (assert for default: (C_4 : (jessie : ((x :> siP[0]).siM.i1 == 0))));
+         (assert for default: (_C_4 : (jessie : ((x :> siP[0]).siM.i1 == 0))));
          ()
       };
       
       {  
-         (assert for default: (C_5 : (jessie : ((x :> siP[0]).siM.i2 == 0))));
+         (assert for default: (_C_5 : (jessie : ((x :> siP[0]).siM.i2 == 0))));
          ()
       };
       

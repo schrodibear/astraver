@@ -52,30 +52,31 @@ lemma distr_left :
       (((x_0 + y_0) * z_0) == ((x_0 * z_0) + (y_0 * z_0))))))
 
 int32 division(int32 x, int32 y)
-  requires (C_14 : ((C_15 : (x >= 0)) && (C_16 : (y > 0))));
+  requires (_C_14 : ((_C_15 : (x >= 0)) && (_C_16 : (y > 0))));
 behavior default:
-  ensures (C_13 : (\exists integer r;
-                    ((\at(x,Old) == ((\result * \at(y,Old)) + r)) &&
-                      ((0 <= r) && (r < \at(y,Old))))));
+  ensures (_C_13 : (\exists integer r;
+                     ((\at(x,Old) == ((\result * \at(y,Old)) + r)) &&
+                       ((0 <= r) && (r < \at(y,Old))))));
 {  
    (var int32 i);
    
    (var int32 j);
    
-   {  (C_1 : (i = 0));
-      (C_2 : (j = x));
+   {  (_C_1 : (i = 0));
+      (_C_2 : (j = x));
       
       loop 
       behavior default:
-        invariant (C_4 : ((C_5 : (x == ((i * y) + j))) && (C_6 : (0 <= j))));
-      variant (C_3 : j);
+        invariant (_C_4 : ((_C_5 : (x == ((i * y) + j))) &&
+                            (_C_6 : (0 <= j))));
+      variant (_C_3 : j);
       while (true)
       {  
          {  (if (j >= y) then () else 
             (goto while_0_break));
             
-            {  (C_9 : (i = (C_8 : ((C_7 : (i + 1)) :> int32))));
-               (C_12 : (j = (C_11 : ((C_10 : (j - y)) :> int32))))
+            {  (_C_9 : (i = (_C_8 : ((_C_7 : (i + 1)) :> int32))));
+               (_C_12 : (j = (_C_11 : ((_C_10 : (j - y)) :> int32))))
             }
          }
       };
@@ -480,46 +481,35 @@ let division_ensures_default =
      (let i = ref (any_int32 void) in
      (let j = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       (C_2:
+       (let _jessie_<somenum> = (j := x_0) in void);
+       (loop_2:
        begin
-         (let _jessie_<somenum> = (j := x_0) in void);
-        (loop_2:
-        begin
-          while true do
-          { invariant
-              (JC_<somenum>:
-              ((JC_<somenum>:
-               (integer_of_int32(x_0) = add_int(mul_int(integer_of_int32(i),
-                                                integer_of_int32(y)),
-                                        integer_of_int32(j))))
-              and (JC_<somenum>: le_int((0), integer_of_int32(j)))))  }
-           begin
-             [ { } unit { true } ];
-            try
-             begin
+         while true do
+         { invariant
+             (JC_<somenum>:
+             ((JC_<somenum>:
+              (integer_of_int32(x_0) = add_int(mul_int(integer_of_int32(i),
+                                               integer_of_int32(y)),
+                                       integer_of_int32(j))))
+             and (JC_<somenum>: le_int((0), integer_of_int32(j)))))  }
+          begin
+            [ { } unit { true } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((ge_int_ (integer_of_int32 !j)) (integer_of_int32 y))
+                then void else (raise (Goto_while_0_break_exc void)));
                (let _jessie_<somenum> =
-               begin
-                 (if ((ge_int_ (integer_of_int32 !j)) (integer_of_int32 y))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (C_9:
-                begin
-                  (let _jessie_<somenum> =
-                  (i := (C_8:
-                        (safe_int32_of_integer_ (C_7:
-                                                ((add_int (integer_of_int32 !i)) (1)))))) in
-                  void);
-                 (C_12:
-                 begin
-                   (j := (C_11:
-                         (safe_int32_of_integer_ (C_10:
-                                                 ((sub_int (integer_of_int32 !j)) 
-                                                  (integer_of_int32 y))))));
-                  !j end) end) end in void); (raise (Loop_continue_exc void))
-             end with Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+               (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))) in
+               void);
+               (j := (safe_int32_of_integer_ ((sub_int (integer_of_int32 !j)) 
+                                              (integer_of_int32 y)))); !j end in
+              void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !i); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -542,48 +532,37 @@ let division_safety =
      (let i = ref (any_int32 void) in
      (let j = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-       (C_2:
+       (let _jessie_<somenum> = (j := x_0) in void);
+       (loop_1:
        begin
-         (let _jessie_<somenum> = (j := x_0) in void);
-        (loop_1:
-        begin
-          while true do
-          { invariant (JC_<somenum>: true) variant integer_of_int32((JC_<somenum> : j)) }
-           begin
-             [ { } unit reads i,j
-               { (JC_<somenum>:
-                 ((JC_<somenum>:
-                  (integer_of_int32(x_0) = add_int(mul_int(integer_of_int32(i),
-                                                   integer_of_int32(y)),
-                                           integer_of_int32(j))))
-                 and (JC_<somenum>: le_int((0), integer_of_int32(j))))) } ];
-            try
-             begin
+         while true do
+         { invariant (JC_<somenum>: true) variant integer_of_int32((JC_<somenum> : j)) }
+          begin
+            [ { } unit reads i,j
+              { (JC_<somenum>:
+                ((JC_<somenum>:
+                 (integer_of_int32(x_0) = add_int(mul_int(integer_of_int32(i),
+                                                  integer_of_int32(y)),
+                                          integer_of_int32(j))))
+                and (JC_<somenum>: le_int((0), integer_of_int32(j))))) } ];
+           try
+            begin
+              (let _jessie_<somenum> =
+              begin
+                (if ((ge_int_ (integer_of_int32 !j)) (integer_of_int32 y))
+                then void else (raise (Goto_while_0_break_exc void)));
                (let _jessie_<somenum> =
-               begin
-                 (if ((ge_int_ (integer_of_int32 !j)) (integer_of_int32 y))
-                 then void else (raise (Goto_while_0_break_exc void)));
-                (C_9:
-                begin
-                  (let _jessie_<somenum> =
-                  (i := (C_8:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_7:
-                                           ((add_int (integer_of_int32 !i)) (1))))))) in
-                  void);
-                 (C_12:
-                 begin
-                   (j := (C_11:
-                         (JC_<somenum>:
-                         (int32_of_integer_ (C_10:
-                                            ((sub_int (integer_of_int32 !j)) 
-                                             (integer_of_int32 y))))))); !j
-                 end) end) end in void); (raise (Loop_continue_exc void)) end
-             with Loop_continue_exc _jessie_<somenum> -> void end end done;
-         (raise (Goto_while_0_break_exc void)) end) end) end) with
+               (i := (JC_<somenum>:
+                     (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))))) in
+               void);
+               (j := (JC_<somenum>:
+                     (int32_of_integer_ ((sub_int (integer_of_int32 !j)) 
+                                         (integer_of_int32 y))))); !j end in
+              void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (return := !i); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -658,11 +637,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/division_po12.why">
-      <location file = "why/division.why" line = "467" begin = "44" end = "73"/>
+      <location file = "why/division.why" line = "453" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/division_po13.why">
-      <location file = "why/division.why" line = "467" begin = "44" end = "73"/>
+      <location file = "why/division.why" line = "453" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

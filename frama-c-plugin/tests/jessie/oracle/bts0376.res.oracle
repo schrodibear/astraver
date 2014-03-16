@@ -45,16 +45,16 @@ type voidP = [voidP]
 
 int32 always_one(uint64 a)
 behavior default:
-  ensures (C_3 : (\result == 1));
+  ensures (_C_3 : (\result == 1));
 {  
    (var int32 __retres);
    
    {  (if (a <= 0xFFFFFFFFFFFFFFFFull) then 
-      {  (C_1 : (__retres = 1));
+      {  (_C_1 : (__retres = 1));
          
          (goto return_label)
       } else ());
-      (C_2 : (__retres = 0));
+      (_C_2 : (__retres = 0));
       (return_label : 
       (return __retres))
    }
@@ -62,16 +62,16 @@ behavior default:
 
 int32 always_one2(uint32 a_0)
 behavior default:
-  ensures (C_6 : (\result == 1));
+  ensures (_C_6 : (\result == 1));
 {  
    (var int32 __retres_0);
    
    {  (if (a_0 <= 0xFFFFFFFFul) then 
-      {  (C_4 : (__retres_0 = 1));
+      {  (_C_4 : (__retres_0 = 1));
          
          (goto return_label)
       } else ());
-      (C_5 : (__retres_0 = 0));
+      (_C_5 : (__retres_0 = 0));
       (return_label : 
       (return __retres_0))
    }
@@ -511,14 +511,11 @@ let always_one2_ensures_default =
       begin
         (if ((le_int_ (integer_of_uint32 a_0)) (4294967295))
         then
-         (C_4:
          begin
            (let _jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (C_5:
-       begin
-         (let _jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end with
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in
+       void); (raise (Return_label_exc void)) end with
       Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -536,14 +533,11 @@ let always_one2_safety =
       begin
         (if ((le_int_ (integer_of_uint32 a_0)) (4294967295))
         then
-         (C_4:
          begin
            (let _jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (C_5:
-       begin
-         (let _jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end with
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in
+       void); (raise (Return_label_exc void)) end with
       Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
@@ -560,15 +554,11 @@ let always_one_ensures_default =
       begin
         (if ((le_int_ (integer_of_uint64 a)) (18446744073709551615))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (C_2:
-       begin
-         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>: (integer_of_int32(result) = (1))) }
@@ -585,15 +575,11 @@ let always_one_safety =
       begin
         (if ((le_int_ (integer_of_uint64 a)) (18446744073709551615))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) else void);
-       (C_2:
-       begin
-         (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (raise (Return_label_exc void)) end) end with
-      Return_label_exc _jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 

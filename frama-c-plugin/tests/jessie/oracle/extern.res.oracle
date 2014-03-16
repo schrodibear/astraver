@@ -43,7 +43,7 @@ int32 x;
 
 int32 f()
 behavior default:
-  ensures (C_1 : (\result == 5));
+  ensures (_C_1 : (\result == 5));
 {  
    {  
       (return x)

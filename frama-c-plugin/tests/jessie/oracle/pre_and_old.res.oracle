@@ -39,17 +39,17 @@ logic integer f{L}(integer n) =
 
 integer g(integer x)
 behavior default:
-  ensures (C_5 : ((C_6 : (\result == \at(f{Old}(x),Old))) &&
-                   ((C_8 : (\result == f{Old}(\at(x,Old)))) &&
-                     (C_9 : (\result == \at(f{Old}(x),Old))))));
+  ensures (_C_5 : ((_C_6 : (\result == \at(f{Old}(x),Old))) &&
+                    ((_C_8 : (\result == f{Old}(\at(x,Old)))) &&
+                      (_C_9 : (\result == \at(f{Old}(x),Old))))));
 {  
    (var integer tmp);
    
    (var integer __retres);
    
-   {  (C_1 : (tmp = y));
-      (C_2 : (y = 12));
-      (C_4 : (__retres = (C_3 : (x + tmp))));
+   {  (_C_1 : (tmp = y));
+      (_C_2 : (y = 12));
+      (_C_4 : (__retres = (_C_3 : (x + tmp))));
       
       (return __retres)
    }
@@ -324,17 +324,12 @@ let g_ensures_default =
    begin
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (tmp := !y) in void);
-      (C_2:
-      begin
-        (let _jessie_<somenum> = (y := (12)) in void);
-       (C_4:
-       begin
-         (let _jessie_<somenum> = (__retres := (C_3: ((add_int x_0) !tmp))) in void);
-        (return := !__retres); (raise Return) end) end) end))); absurd  end
-   with Return -> !return end))
+      (let _jessie_<somenum> = (y := (12)) in void);
+      (let _jessie_<somenum> = (__retres := ((add_int x_0) !tmp)) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: (result = f(x_0, y@)))
     and ((JC_<somenum>: (result = f(x_0, y@))) and (JC_<somenum>: (result = f(x_0, y@)))))) }
@@ -348,17 +343,12 @@ let g_safety =
    begin
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (tmp := !y) in void);
-      (C_2:
-      begin
-        (let _jessie_<somenum> = (y := (12)) in void);
-       (C_4:
-       begin
-         (let _jessie_<somenum> = (__retres := (C_3: ((add_int x_0) !tmp))) in void);
-        (return := !__retres); (raise Return) end) end) end))); absurd  end
-   with Return -> !return end)) { true }
+      (let _jessie_<somenum> = (y := (12)) in void);
+      (let _jessie_<somenum> = (__retres := ((add_int x_0) !tmp)) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C pre_and_old.jessie --quiet -f pre_and_old.makefile project

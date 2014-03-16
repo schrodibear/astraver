@@ -52,26 +52,26 @@ tag __anonstruct_S_1 = {
 type __anonstruct_S_1 = [__anonstruct_S_1]
 
 int32 main1(__anonstruct_S_1[..] p, intP[..] r)
-  requires (C_11 : ((((C_14 : (\offset_min(p) <= 0)) &&
-                       (C_15 : (\offset_max(p) >= 0))) &&
-                      ((C_17 : (\offset_min(p.rc) <= 0)) &&
-                        (C_18 : (\offset_max(p.rc) >= 0)))) &&
-                     ((C_20 : (\offset_min(r) <= 0)) &&
-                       (C_21 : (\offset_max(r) >= 0)))));
+  requires (_C_11 : ((((_C_14 : (\offset_min(p) <= 0)) &&
+                        (_C_15 : (\offset_max(p) >= 0))) &&
+                       ((_C_17 : (\offset_min(p.rc) <= 0)) &&
+                         (_C_18 : (\offset_max(p.rc) >= 0)))) &&
+                      ((_C_20 : (\offset_min(r) <= 0)) &&
+                        (_C_21 : (\offset_max(r) >= 0)))));
 behavior default:
   assigns p.rc;
-  ensures (C_10 : true);
+  ensures (_C_10 : true);
 {  
    (var intP[0] x);
    
    (var int32 __retres);
    
-   {  (C_2 : (x = (C_1 : (new intP[1]))));
-      (C_4 : ((C_3 : p.rc) = x));
-      (C_7 : ((C_6 : (C_5 : p.rc).intM) = 55));
-      (C_8 : (__retres = 1));
+   {  (_C_2 : (x = (_C_1 : (new intP[1]))));
+      (_C_4 : ((_C_3 : p.rc) = x));
+      (_C_7 : ((_C_6 : (_C_5 : p.rc).intM) = 55));
+      (_C_8 : (__retres = 1));
       
-      {  (C_9 : (free(x)));
+      {  (_C_9 : (free(x)));
          
          (return __retres)
       }
@@ -659,32 +659,21 @@ let main1_ensures_default =
    begin
      (let x_0 = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (x_0 := (C_1:
-               (JC_<somenum>:
-               (((alloc_struct_intP (1)) intP_rc_3_alloc_table) intP_rc_3_tag_table)))) in
+       (x_0 := (JC_<somenum>:
+               (((alloc_struct_intP (1)) intP_rc_3_alloc_table) intP_rc_3_tag_table))) in
        void);
-      (C_4:
-      begin
-        (let _jessie_<somenum> = !x_0 in
-        (let _jessie_<somenum> = p in
-        (((safe_upd_ __anonstruct_S_1_rc_p_1) _jessie_<somenum>) _jessie_<somenum>)));
-       (C_7:
-       begin
-         (let _jessie_<somenum> = (safe_int32_of_integer_ (55)) in
-         (let _jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_S_1_rc_p_1) p)) in
-         (((safe_upd_ intP_intM_rc_3) _jessie_<somenum>) _jessie_<somenum>)));
-        (C_8:
-        begin
-          (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-          void);
-         (C_9:
-         begin
-           ((safe_free_parameter intP_rc_3_alloc_table) !x_0);
-          (return := !__retres); (raise Return) end) end) end) end) end)));
-    absurd  end with Return -> !return end))
+      (let _jessie_<somenum> = !x_0 in
+      (let _jessie_<somenum> = p in
+      (((safe_upd_ __anonstruct_S_1_rc_p_1) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (55)) in
+      (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_S_1_rc_p_1) p) in
+      (((safe_upd_ intP_intM_rc_3) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      ((safe_free_parameter intP_rc_3_alloc_table) !x_0);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      not_assigns(intP_rc_3_alloc_table@, intP_intM_rc_3@, intP_intM_rc_3,
@@ -717,41 +706,29 @@ let main1_safety =
    begin
      (let x_0 = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
        (x_0 := (let _jessie_<somenum> =
-               (C_1:
                (JC_<somenum>:
-               (((alloc_struct_intP_requires (1)) intP_rc_3_alloc_table) intP_rc_3_tag_table))) in
+               (((alloc_struct_intP_requires (1)) intP_rc_3_alloc_table) intP_rc_3_tag_table)) in
                (JC_<somenum>:
                (assert
                { ge_int(offset_max(intP_rc_3_alloc_table, _jessie_<somenum>), (0)) };
                _jessie_<somenum>)))) in void);
-      (C_4:
-      begin
-        (let _jessie_<somenum> = !x_0 in
-        (let _jessie_<somenum> = p in
-        (JC_<somenum>:
-        ((((upd_ __anonstruct_S_1_p_1_alloc_table) __anonstruct_S_1_rc_p_1) _jessie_<somenum>) _jessie_<somenum>))));
-       (C_7:
-       begin
-         (let _jessie_<somenum> = (safe_int32_of_integer_ (55)) in
-         (let _jessie_<somenum> =
-         (C_5:
-         (JC_<somenum>:
-         (((acc_ __anonstruct_S_1_p_1_alloc_table) !__anonstruct_S_1_rc_p_1) p))) in
-         (JC_<somenum>:
-         ((((upd_ !intP_rc_3_alloc_table) intP_intM_rc_3) _jessie_<somenum>) _jessie_<somenum>))));
-        (C_8:
-        begin
-          (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-          void);
-         (C_9:
-         begin
-           ((free_parameter intP_rc_3_alloc_table) !x_0);
-          (return := !__retres); (raise Return) end) end) end) end) end)));
-    absurd  end with Return -> !return end)) { true }
+      (let _jessie_<somenum> = !x_0 in
+      (let _jessie_<somenum> = p in
+      (JC_<somenum>:
+      ((((upd_ __anonstruct_S_1_p_1_alloc_table) __anonstruct_S_1_rc_p_1) _jessie_<somenum>) _jessie_<somenum>))));
+      (let _jessie_<somenum> = (safe_int32_of_integer_ (55)) in
+      (let _jessie_<somenum> =
+      (JC_<somenum>:
+      (((acc_ __anonstruct_S_1_p_1_alloc_table) !__anonstruct_S_1_rc_p_1) p)) in
+      (JC_<somenum>:
+      ((((upd_ !intP_rc_3_alloc_table) intP_intM_rc_3) _jessie_<somenum>) _jessie_<somenum>))));
+      (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      ((free_parameter intP_rc_3_alloc_table) !x_0); (return := !__retres);
+      (raise Return) end)); absurd  end with Return -> !return end)) 
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C dillon9.jessie --quiet -f dillon9.makefile project
@@ -776,16 +753,16 @@ why --project [...] why/dillon9.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/dillon9_po4.why">
-      <location file = "why/dillon9.why" line = "649" begin = "17" end = "74"/>
+      <location file = "why/dillon9.why" line = "636" begin = "17" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/dillon9_po5.why">
-      <location file = "PPCHOME/tests/jessie/dillon9.jessie/dillon9.jc" line = "64" begin = "14" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/dillon9.jessie/dillon9.jc" line = "64" begin = "15" end = "32"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/dillon9_po6.why">
-      <location file = "PPCHOME/tests/jessie/dillon9.jessie/dillon9.jc" line = "64" begin = "14" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/dillon9.jessie/dillon9.jc" line = "64" begin = "15" end = "32"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -800,17 +777,17 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/dillon9_po9.why">
-      <location file = "PPCHOME/tests/jessie/dillon9.jessie/dillon9.jc" line = "65" begin = "14" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/dillon9.jessie/dillon9.jc" line = "65" begin = "15" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/dillon9_po10.why">
-      <location file = "PPCHOME/tests/jessie/dillon9.jessie/dillon9.jc" line = "65" begin = "14" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/dillon9.jessie/dillon9.jc" line = "65" begin = "15" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/dillon9_po11.why">
-      <location file = "why/dillon9.why" line = "672" begin = "12" end = "55"/>
+      <location file = "why/dillon9.why" line = "649" begin = "7" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

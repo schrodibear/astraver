@@ -43,11 +43,11 @@ unsigned_charP[..] PTT;
 
 int32 main()
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    (var int32 __retres);
    
-   {  (C_1 : (__retres = 0));
+   {  (_C_1 : (__retres = 0));
       
       (return __retres)
    }
@@ -409,10 +409,9 @@ let main_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
@@ -423,10 +422,9 @@ let main_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_1:
      begin
        (let _jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 

@@ -38,17 +38,17 @@ tag voidP = {
 type voidP = [voidP]
 
 float diff(float x, float y)
-  requires (C_4 : (((C_6 : (3.2 <= (x :> real))) &&
-                     (C_7 : ((x :> real) <= 3.3))) &&
-                    ((C_9 : (1.4 <= (y :> real))) &&
-                      (C_10 : ((y :> real) <= 1.8)))));
+  requires (_C_4 : (((_C_6 : (3.2 <= (x :> real))) &&
+                      (_C_7 : ((x :> real) <= 3.3))) &&
+                     ((_C_9 : (1.4 <= (y :> real))) &&
+                       (_C_10 : ((y :> real) <= 1.8)))));
 behavior default:
-  ensures (C_3 : ((\result :> real) ==
-                   ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
+  ensures (_C_3 : ((\result :> real) ==
+                    ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
 {  
    (var float __retres);
    
-   {  (C_2 : (__retres = (C_1 : (x - y))));
+   {  (_C_2 : (__retres = (_C_1 : (x - y))));
       
       (return __retres)
    }
@@ -393,11 +393,10 @@ let diff_ensures_default =
   try
    begin
      (let __retres = ref (any_single void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_1: (JC_<somenum>: (((sub_single_safe nearest_even) x_0) y)))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (__retres := (JC_<somenum>: (((sub_single_safe nearest_even) x_0) y))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
@@ -414,12 +413,11 @@ let diff_safety =
   try
    begin
      (let __retres = ref (any_single void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_1: (JC_<somenum>: (((sub_single nearest_even) x_0) y)))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { true }
+       (__retres := (JC_<somenum>: (((sub_single nearest_even) x_0) y))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test10_floats.jessie --quiet -f test10_floats.makefile project

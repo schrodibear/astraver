@@ -52,39 +52,41 @@ predicate disjoint_arrays(intP[..] a, intP[..] b, integer i_1) =
       ((a + k1) != (b + k2)))))
 
 unit array_cpy(intP[..] a, int32 n_1, intP[..] b)
-  requires (C_25 : (0 < n_1));
-  requires (C_18 : (((C_20 : (\offset_min(a) <= 0)) &&
-                      (C_21 : (\offset_max(a) >= (n_1 - 1)))) &&
-                     ((C_23 : (\offset_min(b) <= 0)) &&
-                       (C_24 : (\offset_max(b) >= (n_1 - 1))))));
-  requires (C_17 : disjoint_arrays(a, b, n_1));
+  requires (_C_25 : (0 < n_1));
+  requires (_C_18 : (((_C_20 : (\offset_min(a) <= 0)) &&
+                       (_C_21 : (\offset_max(a) >= (n_1 - 1)))) &&
+                      ((_C_23 : (\offset_min(b) <= 0)) &&
+                        (_C_24 : (\offset_max(b) >= (n_1 - 1))))));
+  requires (_C_17 : disjoint_arrays(a, b, n_1));
 behavior default:
-  ensures (C_16 : (\forall int32 k;
-                    (((0 <= k) && (k < \at(n_1,Old))) ==>
-                      ((\at(a,Old) + k).intM == \at((b + k).intM,Old)))));
+  ensures (_C_16 : (\forall int32 k;
+                     (((0 <= k) && (k < \at(n_1,Old))) ==>
+                       ((\at(a,Old) + k).intM == \at((b + k).intM,Old)))));
 {  
    (var int32 i);
    
-   {  (C_1 : (i = 0));
+   {  (_C_1 : (i = 0));
       
       loop 
       behavior default:
-        invariant (C_5 : ((C_6 : (0 <= i)) && (C_7 : (i <= n_1))));
+        invariant (_C_5 : ((_C_6 : (0 <= i)) && (_C_7 : (i <= n_1))));
       behavior default:
-        invariant (C_4 : (\forall int32 m;
-                           (((0 <= m) && (m < n_1)) ==>
-                             ((b + m).intM == \at((b + m).intM,Pre)))));
+        invariant (_C_4 : (\forall int32 m;
+                            (((0 <= m) && (m < n_1)) ==>
+                              ((b + m).intM == \at((b + m).intM,Pre)))));
       behavior default:
-        invariant (C_3 : (\forall int32 m_0;
-                           (((0 <= m_0) && (m_0 < i)) ==>
-                             ((a + m_0).intM == (b + m_0).intM))));
-      variant (C_2 : (n_1 - i));
+        invariant (_C_3 : (\forall int32 m_0;
+                            (((0 <= m_0) && (m_0 < i)) ==>
+                              ((a + m_0).intM == (b + m_0).intM))));
+      variant (_C_2 : (n_1 - i));
       while (true)
       {  
          {  (if (i < n_1) then () else 
             (goto while_0_break));
-            (C_12 : ((C_11 : (C_10 : (a + i)).intM) = (C_9 : (C_8 : (b + i)).intM)));
-            (C_15 : (i = (C_14 : ((C_13 : (i + 1)) :> int32))))
+            (_C_12 : ((_C_11 : (_C_10 : (a + i)).intM) = (_C_9 : (_C_8 : 
+                                                                 (b +
+                                                                   i)).intM)));
+            (_C_15 : (i = (_C_14 : ((_C_13 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -583,7 +585,6 @@ let array_cpy_ensures_default =
    begin
      (let i = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (loop_2:
@@ -619,26 +620,18 @@ let array_cpy_ensures_default =
               begin
                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
                 then void else (raise (Goto_while_0_break_exc void)));
-               (C_12:
-               begin
-                 (let _jessie_<somenum> =
-                 (let _jessie_<somenum> =
-                 (C_9:
-                 ((safe_acc_ !intP_intM_a_3) (C_8:
-                                             ((shift b_0) (integer_of_int32 !i))))) in
-                 (let _jessie_<somenum> = a_0 in
-                 (let _jessie_<somenum> = (integer_of_int32 !i) in
-                 (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-                 (((safe_upd_ intP_intM_a_3) _jessie_<somenum>) _jessie_<somenum>))))) in
-                 void);
-                (C_15:
-                begin
-                  (i := (C_14:
-                        (safe_int32_of_integer_ (C_13:
-                                                ((add_int (integer_of_int32 !i)) (1))))));
-                 !i end) end) end in void); (raise (Loop_continue_exc void))
-            end with Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+               (let _jessie_<somenum> =
+               (let _jessie_<somenum> =
+               ((safe_acc_ !intP_intM_a_3) ((shift b_0) (integer_of_int32 !i))) in
+               (let _jessie_<somenum> = a_0 in
+               (let _jessie_<somenum> = (integer_of_int32 !i) in
+               (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+               (((safe_upd_ intP_intM_a_3) _jessie_<somenum>) _jessie_<somenum>))))) in
+               void);
+               (i := (safe_int32_of_integer_ ((add_int (integer_of_int32 !i)) (1))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
@@ -671,7 +664,6 @@ let array_cpy_safety =
    begin
      (let i = ref (any_int32 void) in
      try
-      (C_1:
       begin
         (let _jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (loop_1:
@@ -709,29 +701,22 @@ let array_cpy_safety =
               begin
                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
                 then void else (raise (Goto_while_0_break_exc void)));
-               (C_12:
-               begin
-                 (let _jessie_<somenum> =
-                 (let _jessie_<somenum> =
-                 (C_9:
-                 (JC_<somenum>:
-                 ((((offset_acc_ intP_a_3_alloc_table) !intP_intM_a_3) b_0) 
-                  (integer_of_int32 !i)))) in
-                 (let _jessie_<somenum> = a_0 in
-                 (let _jessie_<somenum> = (integer_of_int32 !i) in
-                 (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
-                 (JC_<somenum>:
-                 (((((offset_upd_ intP_a_3_alloc_table) intP_intM_a_3) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
-                 void);
-                (C_15:
-                begin
-                  (i := (C_14:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_13:
-                                           ((add_int (integer_of_int32 !i)) (1)))))));
-                 !i end) end) end in void); (raise (Loop_continue_exc void))
-            end with Loop_continue_exc _jessie_<somenum> -> void end end done;
-        (raise (Goto_while_0_break_exc void)) end) end) with
+               (let _jessie_<somenum> =
+               (let _jessie_<somenum> =
+               (JC_<somenum>:
+               ((((offset_acc_ intP_a_3_alloc_table) !intP_intM_a_3) b_0) 
+                (integer_of_int32 !i))) in
+               (let _jessie_<somenum> = a_0 in
+               (let _jessie_<somenum> = (integer_of_int32 !i) in
+               (let _jessie_<somenum> = ((shift _jessie_<somenum>) _jessie_<somenum>) in
+               (JC_<somenum>:
+               (((((offset_upd_ intP_a_3_alloc_table) intP_intM_a_3) _jessie_<somenum>) _jessie_<somenum>) _jessie_<somenum>)))))) in
+               void);
+               (i := (JC_<somenum>:
+                     (int32_of_integer_ ((add_int (integer_of_int32 !i)) (1)))));
+               !i end in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc _jessie_<somenum> -> void end end done;
+        (raise (Goto_while_0_break_exc void)) end) end with
       Goto_while_0_break_exc _jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { true }
@@ -788,12 +773,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber1_po11.why">
-      <location file = "PPCHOME/tests/jessie/weber1.jessie/weber1.jc" line = "80" begin = "21" end = "82"/>
+      <location file = "PPCHOME/tests/jessie/weber1.jessie/weber1.jc" line = "80" begin = "22" end = "220"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber1_po12.why">
-      <location file = "PPCHOME/tests/jessie/weber1.jessie/weber1.jc" line = "80" begin = "21" end = "82"/>
+      <location file = "PPCHOME/tests/jessie/weber1.jessie/weber1.jc" line = "80" begin = "22" end = "220"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

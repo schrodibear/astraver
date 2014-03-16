@@ -41,11 +41,11 @@ type voidP = [voidP]
 
 int32 ftest(int32 a)
 behavior default:
-  ensures (C_3 : true);
+  ensures (_C_3 : true);
 {  
    (var int32 tmp);
    
-   {  (if (a == 4) then (C_2 : (tmp = 5)) else (C_1 : (tmp = a)));
+   {  (if (a == 4) then (_C_2 : (tmp = 5)) else (_C_1 : (tmp = a)));
       
       (return tmp)
    }
@@ -408,8 +408,8 @@ let ftest_ensures_default =
      begin
        (let _jessie_<somenum> =
        (if ((eq_int_ (integer_of_int32 a)) (4))
-       then (C_2: begin   (tmp := (safe_int32_of_integer_ (5))); !tmp end)
-       else (C_1: begin   (tmp := a); !tmp end)) in void); (return := !tmp);
+       then begin   (tmp := (safe_int32_of_integer_ (5))); !tmp end
+       else begin   (tmp := a); !tmp end) in void); (return := !tmp);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_<somenum>: true) }
 
@@ -424,8 +424,8 @@ let ftest_safety =
      begin
        (let _jessie_<somenum> =
        (if ((eq_int_ (integer_of_int32 a)) (4))
-       then (C_2: begin   (tmp := (safe_int32_of_integer_ (5))); !tmp end)
-       else (C_1: begin   (tmp := a); !tmp end)) in void); (return := !tmp);
+       then begin   (tmp := (safe_int32_of_integer_ (5))); !tmp end
+       else begin   (tmp := a); !tmp end) in void); (return := !tmp);
       (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 

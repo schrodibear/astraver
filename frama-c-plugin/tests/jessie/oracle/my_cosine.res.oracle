@@ -38,27 +38,27 @@ tag voidP = {
 type voidP = [voidP]
 
 float my_cos1(float x)
-  requires (C_7 : (\real_abs((x :> real)) <= 0x1p-5));
+  requires (_C_7 : (\real_abs((x :> real)) <= 0x1p-5));
 behavior default:
-  ensures (C_6 : (\real_abs(((\result :> real) - \cos((\at(x,Old) :> real)))) <=
-                   0x1p-23));
+  ensures (_C_6 : (\real_abs(((\result :> real) - \cos((\at(x,Old) :> real)))) <=
+                    0x1p-23));
 {  
    (var float __retres);
    
    {  
       {  
-         (assert for default: (C_1 : (jessie : (\real_abs(((1.0 -
-                                                             (((x :> real) *
-                                                                (x :> real)) *
-                                                               0.5)) -
-                                                            \cos((x :> real)))) <=
-                                                 0x1p-24))));
+         (assert for default: (_C_1 : (jessie : (\real_abs(((1.0 -
+                                                              (((x :> real) *
+                                                                 (x :> real)) *
+                                                                0.5)) -
+                                                             \cos((x :> real)))) <=
+                                                  0x1p-24))));
          ()
       };
       
-      {  (C_5 : (__retres = (C_4 : ((1.0 :> float) -
-                                     (C_3 : ((C_2 : (x * x)) *
-                                              (0.5 :> float)))))));
+      {  (_C_5 : (__retres = (_C_4 : ((1.0 :> float) -
+                                       (_C_3 : ((_C_2 : (x * x)) *
+                                                 (0.5 :> float)))))));
          
          (return __retres)
       }
@@ -403,23 +403,16 @@ let my_cos1_ensures_default =
                                             single_value(x_0)),
                                    0.5)),
                           cos(single_value(x_0)))),
-         0x1p-24)) }; void);
-      begin
-        void;
-       (C_5:
-       begin
-         (let _jessie_<somenum> =
-         (__retres := (C_4:
-                      (JC_<somenum>:
-                      (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                       (C_3:
-                       (JC_<somenum>:
-                       (((mul_single_safe nearest_even) (C_2:
-                                                        (JC_<somenum>:
-                                                        (((mul_single_safe nearest_even) x_0) x_0)))) 
-                        (single_of_real_exact 0.5)))))))) in void);
-        (return := !__retres); (raise Return) end) end end); absurd  end with
-   Return -> !return end))
+         0x1p-24)) }; void); void;
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>:
+                   (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+                    (JC_<somenum>:
+                    (((mul_single_safe nearest_even) (JC_<somenum>:
+                                                     (((mul_single_safe nearest_even) x_0) x_0))) 
+                     (single_of_real_exact 0.5)))))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
     0x1p-23)) }
@@ -440,23 +433,16 @@ let my_cos1_safety =
                                               single_value(x_0)),
                                      0.5)),
                             cos(single_value(x_0)))),
-           0x1p-24)) } ];
-      begin
-        void;
-       (C_5:
-       begin
-         (let _jessie_<somenum> =
-         (__retres := (C_4:
-                      (JC_<somenum>:
-                      (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                       (C_3:
-                       (JC_<somenum>:
-                       (((mul_single nearest_even) (C_2:
-                                                   (JC_<somenum>:
-                                                   (((mul_single nearest_even) x_0) x_0)))) 
-                        (single_of_real_exact 0.5)))))))) in void);
-        (return := !__retres); (raise Return) end) end end); absurd  end with
-   Return -> !return end)) { true }
+           0x1p-24)) } ]; void;
+      (let _jessie_<somenum> =
+      (__retres := (JC_<somenum>:
+                   (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+                    (JC_<somenum>:
+                    (((mul_single nearest_even) (JC_<somenum>:
+                                                (((mul_single nearest_even) x_0) x_0))) 
+                     (single_of_real_exact 0.5)))))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C my_cosine.jessie --quiet -f my_cosine.makefile project

@@ -50,15 +50,15 @@ predicate pcond3(boolean c1, boolean c2) =
 
 int32 ftest2(int32 x, int32 y)
 behavior default:
-  ensures (C_4 : ((C_5 : ((pcond1(\at(x,Old)) && pcond2(\at(y,Old))) ==>
-                           (\result == 1))) &&
-                   (C_6 : ((\result == 1) <==>
-                            (pcond1(\at(x,Old)) && pcond2(\at(y,Old)))))));
+  ensures (_C_4 : ((_C_5 : ((pcond1(\at(x,Old)) && pcond2(\at(y,Old))) ==>
+                             (\result == 1))) &&
+                    (_C_6 : ((\result == 1) <==>
+                              (pcond1(\at(x,Old)) && pcond2(\at(y,Old)))))));
 {  
    (var int32 tmp);
    
-   {  (if (x > 0) then (if (y < 10) then (C_3 : (tmp = 1)) else (C_2 : (tmp = 0))) else 
-      (C_1 : (tmp = 0)));
+   {  (if (x > 0) then (if (y < 10) then (_C_3 : (tmp = 1)) else (_C_2 : (tmp = 0))) else 
+      (_C_1 : (tmp = 0)));
       
       (return tmp)
    }
@@ -451,11 +451,11 @@ let ftest2_ensures_default =
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (if ((lt_int_ (integer_of_int32 y)) (10))
-        then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-        else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end))
+        then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+        else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((pcond1(integer_of_int32(x_0)) and pcond2(integer_of_int32(y))) ->
@@ -477,11 +477,11 @@ let ftest2_safety =
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (if ((lt_int_ (integer_of_int32 y)) (10))
-        then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-        else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
-       else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void); (return := !tmp); (raise Return) end); absurd  end with
-   Return -> !return end)) { true }
+        then begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end
+        else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)
+       else begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end) in void);
+      (return := !tmp); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C duprat2.jessie --quiet -f duprat2.makefile project

@@ -39,7 +39,7 @@ type voidP = [voidP]
 
 unit shift()
 behavior default:
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 {  
    {  
       (return ())
@@ -48,7 +48,7 @@ behavior default:
 
 unit alloc()
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
    {  
       (return ())

@@ -58,30 +58,30 @@ invariant valid_v :
 ((\offset_min(v) <= 0) && (\offset_max(v) >= 0))
 
 unit g(intP[..] p)
-  requires (C_2 : ((C_3 : (\offset_min(p) <= 0)) &&
-                    (C_4 : (\offset_max(p) >= 0))));
+  requires (_C_2 : ((_C_3 : (\offset_min(p) <= 0)) &&
+                     (_C_4 : (\offset_max(p) >= 0))));
 behavior default:
   assigns p.intM;
-  ensures (C_1 : true);
+  ensures (_C_1 : true);
 ;
 
 unit f()
 behavior default:
-  ensures (C_7 : true);
+  ensures (_C_7 : true);
 {  
-   {  (C_6 : g((C_5 : v.c)));
+   {  (_C_6 : g((_C_5 : v.c)));
       
       (return ())
    }
 }
 
 unit f2(__anonstruct_las_1[..] x)
-  requires (C_11 : ((C_12 : (\offset_min(x) <= 0)) &&
-                     (C_13 : (\offset_max(x) >= 0))));
+  requires (_C_11 : ((_C_12 : (\offset_min(x) <= 0)) &&
+                      (_C_13 : (\offset_max(x) >= 0))));
 behavior default:
-  ensures (C_10 : true);
+  ensures (_C_10 : true);
 {  
-   {  (C_9 : g((C_8 : x.c)));
+   {  (_C_9 : g((_C_8 : x.c)));
       
       (return ())
    }
@@ -702,11 +702,10 @@ let f2_ensures_default =
     and (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)))) }
   (init:
   try
-   (C_9:
    begin
-     (let _jessie_<somenum> = (C_8: ((safe_acc_ __anonstruct_las_1_c_x_3) x_0)) in
+     (let _jessie_<somenum> = ((safe_acc_ __anonstruct_las_1_c_x_3) x_0) in
      (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_x_3) intP_x_3_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f2_safety =
@@ -720,14 +719,12 @@ let f2_safety =
     and (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)))) }
   (init:
   try
-   (C_9:
    begin
      (let _jessie_<somenum> =
-     (C_8:
      (JC_<somenum>:
-     (((acc_ __anonstruct_las_1_x_3_alloc_table) __anonstruct_las_1_c_x_3) x_0))) in
+     (((acc_ __anonstruct_las_1_x_3_alloc_table) __anonstruct_las_1_c_x_3) x_0)) in
      (JC_<somenum>: (((g_requires _jessie_<somenum>) intP_intM_x_3) intP_x_3_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 let f_ensures_default =
@@ -735,11 +732,10 @@ let f_ensures_default =
   { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
   (init:
   try
-   (C_6:
    begin
-     (let _jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
+     (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_las_1_c_v_1) v) in
      (JC_<somenum>: (((g _jessie_<somenum>) intP_intM_v_1) !intP_v_1_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -747,11 +743,10 @@ let f_safety =
   { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
   (init:
   try
-   (C_6:
    begin
-     (let _jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
+     (let _jessie_<somenum> = ((safe_acc_ !__anonstruct_las_1_c_v_1) v) in
      (JC_<somenum>: (((g_requires _jessie_<somenum>) intP_intM_v_1) !intP_v_1_alloc_table)));
-    (raise Return); (raise Return) end) with Return -> void end)
+    (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 
@@ -772,12 +767,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0102_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "77" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "77" begin = "14" end = "29"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0102_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "77" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "77" begin = "14" end = "29"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -787,12 +782,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0102_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "65" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "65" begin = "14" end = "29"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0102_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "65" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "65" begin = "14" end = "29"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

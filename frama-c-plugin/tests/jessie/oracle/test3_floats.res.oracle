@@ -38,34 +38,34 @@ tag voidP = {
 type voidP = [voidP]
 
 float Sterbenz(float x, float y)
-  requires (C_4 : ((C_5 : (((y :> real) / 2.0) <= (x :> real))) &&
-                    (C_6 : ((x :> real) <= (2.0 * (y :> real))))));
+  requires (_C_4 : ((_C_5 : (((y :> real) / 2.0) <= (x :> real))) &&
+                     (_C_6 : ((x :> real) <= (2.0 * (y :> real))))));
 behavior default:
-  ensures (C_3 : ((\result :> real) ==
-                   ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
+  ensures (_C_3 : ((\result :> real) ==
+                    ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
 {  
    (var float __retres);
    
-   {  (C_2 : (__retres = (C_1 : (x - y))));
+   {  (_C_2 : (__retres = (_C_1 : (x - y))));
       
       (return __retres)
    }
 }
 
 float f(float x_0)
-  requires (C_12 : (2.0 == (x_0 :> real)));
+  requires (_C_12 : (2.0 == (x_0 :> real)));
 behavior default:
-  ensures (C_11 : ((\result :> real) == 1.0));
+  ensures (_C_11 : ((\result :> real) == 1.0));
 {  
    (var float tmp);
    
    (var float tmp_0);
    
    {  
-      {  (C_8 : (tmp = (C_7 : Sterbenz(x_0, (1. :> float)))));
+      {  (_C_8 : (tmp = (_C_7 : Sterbenz(x_0, (1. :> float)))));
          ()
       };
-      (C_10 : (tmp_0 = (C_9 : Sterbenz(x_0, tmp))));
+      (_C_10 : (tmp_0 = (_C_9 : Sterbenz(x_0, tmp))));
       
       (return tmp_0)
    }
@@ -414,11 +414,10 @@ let Sterbenz_ensures_default =
   try
    begin
      (let __retres = ref (any_single void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_1: (JC_<somenum>: (((sub_single_safe nearest_even) x_0) y)))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (__retres := (JC_<somenum>: (((sub_single_safe nearest_even) x_0) y))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
@@ -433,12 +432,11 @@ let Sterbenz_safety =
   try
    begin
      (let __retres = ref (any_single void) in
-     (C_2:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_1: (JC_<somenum>: (((sub_single nearest_even) x_0) y)))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { true }
+       (__retres := (JC_<somenum>: (((sub_single nearest_even) x_0) y))) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 let f_ensures_default =
  fun (x_0_0 : single) ->
@@ -449,24 +447,17 @@ let f_ensures_default =
    begin
      (let tmp = ref (any_single void) in
      (let tmp_0 = ref (any_single void) in
-     (C_8:
      begin
        (let _jessie_<somenum> =
-       (tmp := (C_7:
-               (let _jessie_<somenum> = x_0_0 in
+       (tmp := (let _jessie_<somenum> = x_0_0 in
                (let _jessie_<somenum> = (single_of_real_exact 1.) in
-               (JC_<somenum>: ((Sterbenz _jessie_<somenum>) _jessie_<somenum>)))))) in void);
-      begin
-        void;
-       (C_10:
-       begin
-         (let _jessie_<somenum> =
-         (tmp_0 := (C_9:
-                   (let _jessie_<somenum> = x_0_0 in
-                   (let _jessie_<somenum> = !tmp in
-                   (JC_<somenum>: ((Sterbenz _jessie_<somenum>) _jessie_<somenum>)))))) in void);
-        (return := !tmp_0); (raise Return) end) end end))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: (single_value(result) = 1.0)) }
+               (JC_<somenum>: ((Sterbenz _jessie_<somenum>) _jessie_<somenum>))))) in void); void;
+      (let _jessie_<somenum> =
+      (tmp_0 := (let _jessie_<somenum> = x_0_0 in
+                (let _jessie_<somenum> = !tmp in
+                (JC_<somenum>: ((Sterbenz _jessie_<somenum>) _jessie_<somenum>))))) in void);
+      (return := !tmp_0); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: (single_value(result) = 1.0)) }
 
 let f_safety =
  fun (x_0_0 : single) ->
@@ -477,25 +468,18 @@ let f_safety =
    begin
      (let tmp = ref (any_single void) in
      (let tmp_0 = ref (any_single void) in
-     (C_8:
      begin
        (let _jessie_<somenum> =
-       (tmp := (C_7:
-               (let _jessie_<somenum> = x_0_0 in
+       (tmp := (let _jessie_<somenum> = x_0_0 in
                (let _jessie_<somenum> = (single_of_real_exact 1.) in
-               (JC_<somenum>: ((Sterbenz_requires _jessie_<somenum>) _jessie_<somenum>)))))) in
-       void);
-      begin
-        void;
-       (C_10:
-       begin
-         (let _jessie_<somenum> =
-         (tmp_0 := (C_9:
-                   (let _jessie_<somenum> = x_0_0 in
-                   (let _jessie_<somenum> = !tmp in
-                   (JC_<somenum>: ((Sterbenz_requires _jessie_<somenum>) _jessie_<somenum>)))))) in
-         void); (return := !tmp_0); (raise Return) end) end end))); absurd 
-   end with Return -> !return end)) { true }
+               (JC_<somenum>: ((Sterbenz_requires _jessie_<somenum>) _jessie_<somenum>))))) in void);
+      void;
+      (let _jessie_<somenum> =
+      (tmp_0 := (let _jessie_<somenum> = x_0_0 in
+                (let _jessie_<somenum> = !tmp in
+                (JC_<somenum>: ((Sterbenz_requires _jessie_<somenum>) _jessie_<somenum>))))) in
+      void); (return := !tmp_0); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test3_floats.jessie --quiet -f test3_floats.makefile project

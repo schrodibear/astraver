@@ -46,25 +46,25 @@ case is_prod_empty: (\forall integer a_0;
 }
 
 integer fact(integer n_1)
-  requires (C_8 : (n_1 >= 0));
-  decreases (C_9 : n_1);
+  requires (_C_8 : (n_1 >= 0));
+  decreases (_C_9 : n_1);
 behavior default:
-  ensures (C_7 : is_prod(1, \at(n_1,Old), \result));
+  ensures (_C_7 : is_prod(1, \at(n_1,Old), \result));
 {  
    (var integer tmp);
    
    (var integer __retres);
    
    {  (if (n_1 == 0) then 
-      {  (C_1 : (__retres = 1));
+      {  (_C_1 : (__retres = 1));
          
          (goto return_label)
       } else ());
       
-      {  (C_4 : (tmp = (C_3 : fact((C_2 : (n_1 - 1))))));
+      {  (_C_4 : (tmp = (_C_3 : fact((_C_2 : (n_1 - 1))))));
          ()
       };
-      (C_6 : (__retres = (C_5 : (n_1 * tmp))));
+      (_C_6 : (__retres = (_C_5 : (n_1 * tmp))));
       (return_label : 
       (return __retres))
    }
@@ -342,23 +342,14 @@ let fact_ensures_default =
       begin
         (if ((eq_int_ n_1) (0))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) else void);
-       (C_4:
-       begin
-         (let _jessie_<somenum> =
-         (tmp := (C_3:
-                 (let _jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
-                 (JC_<somenum>: (fact _jessie_<somenum>))))) in void);
-        begin
-          void;
-         (C_6:
-         begin
-           (let _jessie_<somenum> = (__retres := (C_5: ((mul_int n_1) !tmp))) in
-           void); (raise (Return_label_exc void)) end) end end) end with
-      Return_label_exc _jessie_<somenum> ->
+          (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> =
+       (tmp := (let _jessie_<somenum> = ((sub_int n_1) (1)) in
+               (JC_<somenum>: (fact _jessie_<somenum>)))) in void); void;
+       (let _jessie_<somenum> = (__retres := ((mul_int n_1) !tmp)) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>: is_prod((1), n_1, result)) }
@@ -376,25 +367,16 @@ let fact_safety =
       begin
         (if ((eq_int_ n_1) (0))
         then
-         (C_1:
          begin
            (let _jessie_<somenum> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) else void);
-       (C_4:
-       begin
-         (let _jessie_<somenum> =
-         (tmp := (C_3:
-                 (let _jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
-                 (JC_<somenum>:
-                 (check { zwf_zero((JC_<somenum> : _jessie_<somenum>), (JC_<somenum> : n_1)) };
-                 (JC_<somenum>: (fact_requires _jessie_<somenum>))))))) in void);
-        begin
-          void;
-         (C_6:
-         begin
-           (let _jessie_<somenum> = (__retres := (C_5: ((mul_int n_1) !tmp))) in
-           void); (raise (Return_label_exc void)) end) end end) end with
-      Return_label_exc _jessie_<somenum> ->
+          (raise (Return_label_exc void)) end else void);
+       (let _jessie_<somenum> =
+       (tmp := (let _jessie_<somenum> = ((sub_int n_1) (1)) in
+               (JC_<somenum>:
+               (check { zwf_zero((JC_<somenum> : _jessie_<somenum>), (JC_<somenum> : n_1)) };
+               (JC_<somenum>: (fact_requires _jessie_<somenum>)))))) in void); void;
+       (let _jessie_<somenum> = (__retres := ((mul_int n_1) !tmp)) in void);
+       (raise (Return_label_exc void)) end with Return_label_exc _jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -412,11 +394,11 @@ why --project [...] why/fact.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/fact_po2.why">
-      <location file = "why/fact.why" line = "317" begin = "26" end = "70"/>
+      <location file = "why/fact.why" line = "304" begin = "24" end = "68"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/fact_po3.why">
-      <location file = "why/fact.why" line = "317" begin = "26" end = "70"/>
+      <location file = "why/fact.why" line = "304" begin = "24" end = "68"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/fact_po4.why">

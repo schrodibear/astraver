@@ -40,11 +40,11 @@ tag voidP = {
 type voidP = [voidP]
 
 unit g(int32 Def_Rv)
-  requires (C_3 : (Def_Rv == 1));
+  requires (_C_3 : (Def_Rv == 1));
 behavior default:
-  ensures (C_2 : true);
+  ensures (_C_2 : true);
 {  
-   {  (C_1 : (Def_Rv = 1));
+   {  (_C_1 : (Def_Rv = 1));
       
       (return ())
    }
@@ -403,10 +403,9 @@ let g_ensures_default =
   (let mutable_Def_Rv = ref Def_Rv in
   (init:
   try
-   (C_1:
    begin
      (let _jessie_<somenum> = (mutable_Def_Rv := (safe_int32_of_integer_ (1))) in
-     void); (raise Return); (raise Return) end) with Return -> void end))
+     void); (raise Return); (raise Return) end with Return -> void end))
   { (JC_<somenum>: true) }
 
 let g_safety =
@@ -415,10 +414,9 @@ let g_safety =
   (let mutable_Def_Rv = ref Def_Rv in
   (init:
   try
-   (C_1:
    begin
      (let _jessie_<somenum> = (mutable_Def_Rv := (safe_int32_of_integer_ (1))) in
-     void); (raise Return); (raise Return) end) with Return -> void end))
+     void); (raise Return); (raise Return) end with Return -> void end))
   { true }
 
 

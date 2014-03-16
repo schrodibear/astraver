@@ -60,9 +60,9 @@ invariant valid_L :
 ((\offset_min(L) <= 0) && (\offset_max(L) >= 0))
 
 unit Test()
-  requires (C_27 : (\real_abs((L.M1 :> real)) <= 0x1p-20));
+  requires (_C_27 : (\real_abs((L.M1 :> real)) <= 0x1p-20));
 behavior default:
-  ensures (C_26 : true);
+  ensures (_C_26 : true);
 {  
    (var float result);
    
@@ -72,40 +72,40 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_1 : (jessie : (\real_abs((L.M1 :> real)) <=
-                                                 0x1p-20))));
-         ()
-      };
-      (C_7 : ((C_6 : M.x1) = (C_5 : ((C_4 : ((C_3 : ((C_2 : L.M1) :> double)) /
-                                              (3600.0 :> double))) :> float))));
-      (C_12 : (tmp1 = (C_11 : ((C_10 : ((C_9 : ((C_8 : L.M1) :> double)) /
-                                         (3600.0 :> double))) :> float))));
-      
-      {  
-         (assert for default: (C_13 : (jessie : (\real_abs((tmp1 :> real)) <=
+         (assert for default: (_C_1 : (jessie : (\real_abs((L.M1 :> real)) <=
                                                   0x1p-20))));
          ()
       };
+      (_C_7 : ((_C_6 : M.x1) = (_C_5 : ((_C_4 : ((_C_3 : ((_C_2 : L.M1) :> double)) /
+                                                  (3600.0 :> double))) :> float))));
+      (_C_12 : (tmp1 = (_C_11 : ((_C_10 : ((_C_9 : ((_C_8 : L.M1) :> double)) /
+                                            (3600.0 :> double))) :> float))));
       
       {  
-         (assert for default: (C_14 : (jessie : (\real_abs((M.x1 :> real)) <=
-                                                  0x1p-20))));
-         ()
-      };
-      (C_19 : (result = (C_18 : ((C_17 : ((C_16 : ((C_15 : M.x1) :> double)) *
-                                           (100.0 :> double))) :> float))));
-      (C_23 : (tmp2 = (C_22 : ((C_21 : ((C_20 : (tmp1 :> double)) *
-                                         (100.0 :> double))) :> float))));
-      
-      {  
-         (assert for default: (C_24 : (jessie : (\real_abs((tmp2 :> real)) <=
-                                                  0x1p-20))));
+         (assert for default: (_C_13 : (jessie : (\real_abs((tmp1 :> real)) <=
+                                                   0x1p-20))));
          ()
       };
       
       {  
-         (assert for default: (C_25 : (jessie : (\real_abs((result :> real)) <=
-                                                  0x1p-20))));
+         (assert for default: (_C_14 : (jessie : (\real_abs((M.x1 :> real)) <=
+                                                   0x1p-20))));
+         ()
+      };
+      (_C_19 : (result = (_C_18 : ((_C_17 : ((_C_16 : ((_C_15 : M.x1) :> double)) *
+                                              (100.0 :> double))) :> float))));
+      (_C_23 : (tmp2 = (_C_22 : ((_C_21 : ((_C_20 : (tmp1 :> double)) *
+                                            (100.0 :> double))) :> float))));
+      
+      {  
+         (assert for default: (_C_24 : (jessie : (\real_abs((tmp2 :> real)) <=
+                                                   0x1p-20))));
+         ()
+      };
+      
+      {  
+         (assert for default: (_C_25 : (jessie : (\real_abs((result :> real)) <=
+                                                   0x1p-20))));
          ()
       };
       
@@ -655,74 +655,46 @@ let Test_ensures_default =
        (assert
        { (JC_<somenum>:
          le_real(abs_real(single_value(select(__anonstruct_L_2_M1_L_2, L))),
-         0x1p-20)) }; void);
-      begin
-        void;
-       (C_7:
-       begin
-         (let _jessie_<somenum> =
-         (C_5:
-         ((single_of_double_safe nearest_even) (C_4:
-                                               (JC_<somenum>:
-                                               (((div_double_safe nearest_even) 
-                                                 (C_3:
-                                                 (double_of_single (C_2:
-                                                                   ((safe_acc_ !__anonstruct_L_2_M1_L_2) L))))) 
-                                                (double_of_real_exact 3600.0)))))) in
-         (let _jessie_<somenum> = M in
-         (((safe_upd_ __anonstruct_M_1_x1_M_1) _jessie_<somenum>) _jessie_<somenum>)));
-        (C_12:
-        begin
-          (let _jessie_<somenum> =
-          (tmp1 := (C_11:
-                   ((single_of_double_safe nearest_even) (C_10:
-                                                         (JC_<somenum>:
-                                                         (((div_double_safe nearest_even) 
-                                                           (C_9:
+         0x1p-20)) }; void); void;
+      (let _jessie_<somenum> =
+      ((single_of_double_safe nearest_even) (JC_<somenum>:
+                                            (((div_double_safe nearest_even) 
+                                              (double_of_single ((safe_acc_ !__anonstruct_L_2_M1_L_2) L))) 
+                                             (double_of_real_exact 3600.0)))) in
+      (let _jessie_<somenum> = M in
+      (((safe_upd_ __anonstruct_M_1_x1_M_1) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      (tmp1 := ((single_of_double_safe nearest_even) (JC_<somenum>:
+                                                     (((div_double_safe nearest_even) 
+                                                       (double_of_single 
+                                                        ((safe_acc_ !__anonstruct_L_2_M1_L_2) L))) 
+                                                      (double_of_real_exact 3600.0))))) in
+      void);
+      (assert { (JC_<somenum>: le_real(abs_real(single_value(tmp1)), 0x1p-20)) };
+      void); void;
+      (assert
+      { (JC_<somenum>:
+        le_real(abs_real(single_value(select(__anonstruct_M_1_x1_M_1, M))),
+        0x1p-20)) }; void); void;
+      (let _jessie_<somenum> =
+      (result_0 := ((single_of_double_safe nearest_even) (JC_<somenum>:
+                                                         (((mul_double_safe nearest_even) 
                                                            (double_of_single 
-                                                            (C_8:
-                                                            ((safe_acc_ !__anonstruct_L_2_M1_L_2) L))))) 
-                                                          (double_of_real_exact 3600.0))))))) in
-          void);
-         (assert { (JC_<somenum>: le_real(abs_real(single_value(tmp1)), 0x1p-20)) };
-         void); void;
-         (assert
-         { (JC_<somenum>:
-           le_real(abs_real(single_value(select(__anonstruct_M_1_x1_M_1, M))),
-           0x1p-20)) }; void);
-         begin
-           void;
-          (C_19:
-          begin
-            (let _jessie_<somenum> =
-            (result_0 := (C_18:
-                         ((single_of_double_safe nearest_even) (C_17:
-                                                               (JC_<somenum>:
-                                                               (((mul_double_safe nearest_even) 
-                                                                 (C_16:
-                                                                 (double_of_single 
-                                                                  (C_15:
-                                                                  ((safe_acc_ !__anonstruct_M_1_x1_M_1) M))))) 
-                                                                (double_of_real_exact 100.0))))))) in
-            void);
-           (C_23:
-           begin
-             (let _jessie_<somenum> =
-             (tmp2 := (C_22:
-                      ((single_of_double_safe nearest_even) (C_21:
-                                                            (JC_<somenum>:
-                                                            (((mul_double_safe nearest_even) 
-                                                              (C_20:
-                                                              (double_of_single !tmp1))) 
-                                                             (double_of_real_exact 100.0))))))) in
-             void);
-            (assert
-            { (JC_<somenum>: le_real(abs_real(single_value(tmp2)), 0x1p-20)) };
-            void); void;
-            (assert
-            { (JC_<somenum>: le_real(abs_real(single_value(result_0)), 0x1p-20)) };
-            void); void; (raise Return) end) end) end end) end) end end)));
-    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
+                                                            ((safe_acc_ !__anonstruct_M_1_x1_M_1) M))) 
+                                                          (double_of_real_exact 100.0))))) in
+      void);
+      (let _jessie_<somenum> =
+      (tmp2 := ((single_of_double_safe nearest_even) (JC_<somenum>:
+                                                     (((mul_double_safe nearest_even) 
+                                                       (double_of_single !tmp1)) 
+                                                      (double_of_real_exact 100.0))))) in
+      void);
+      (assert { (JC_<somenum>: le_real(abs_real(single_value(tmp2)), 0x1p-20)) };
+      void); void;
+      (assert
+      { (JC_<somenum>: le_real(abs_real(single_value(result_0)), 0x1p-20)) }; void);
+      void; (raise Return) end))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let Test_safety =
  fun (tt : unit) ->
@@ -742,79 +714,48 @@ let Test_safety =
        [ { } unit reads __anonstruct_L_2_M1_L_2
          { (JC_<somenum>:
            le_real(abs_real(single_value(select(__anonstruct_L_2_M1_L_2, L))),
-           0x1p-20)) } ];
-      begin
-        void;
-       (C_7:
-       begin
-         (let _jessie_<somenum> =
-         (C_5:
-         (JC_<somenum>:
-         ((single_of_double nearest_even) (C_4:
-                                          (JC_<somenum>:
-                                          (((div_double nearest_even) 
-                                            (C_3:
-                                            (double_of_single (C_2:
-                                                              ((safe_acc_ !__anonstruct_L_2_M1_L_2) L))))) 
-                                           (double_of_real_exact 3600.0))))))) in
-         (let _jessie_<somenum> = M in
-         (((safe_upd_ __anonstruct_M_1_x1_M_1) _jessie_<somenum>) _jessie_<somenum>)));
-        (C_12:
-        begin
-          (let _jessie_<somenum> =
-          (tmp1 := (C_11:
-                   (JC_<somenum>:
-                   ((single_of_double nearest_even) (C_10:
-                                                    (JC_<somenum>:
-                                                    (((div_double nearest_even) 
-                                                      (C_9:
+           0x1p-20)) } ]; void;
+      (let _jessie_<somenum> =
+      (JC_<somenum>:
+      ((single_of_double nearest_even) (JC_<somenum>:
+                                       (((div_double nearest_even) (double_of_single 
+                                                                    ((safe_acc_ !__anonstruct_L_2_M1_L_2) L))) 
+                                        (double_of_real_exact 3600.0))))) in
+      (let _jessie_<somenum> = M in
+      (((safe_upd_ __anonstruct_M_1_x1_M_1) _jessie_<somenum>) _jessie_<somenum>)));
+      (let _jessie_<somenum> =
+      (tmp1 := (JC_<somenum>:
+               ((single_of_double nearest_even) (JC_<somenum>:
+                                                (((div_double nearest_even) 
+                                                  (double_of_single ((safe_acc_ !__anonstruct_L_2_M1_L_2) L))) 
+                                                 (double_of_real_exact 3600.0)))))) in
+      void);
+      [ { } unit reads tmp1
+        { (JC_<somenum>: le_real(abs_real(single_value(tmp1)), 0x1p-20)) } ]; void;
+      [ { } unit reads __anonstruct_M_1_x1_M_1
+        { (JC_<somenum>:
+          le_real(abs_real(single_value(select(__anonstruct_M_1_x1_M_1, M))),
+          0x1p-20)) } ]; void;
+      (let _jessie_<somenum> =
+      (result_0 := (JC_<somenum>:
+                   ((single_of_double nearest_even) (JC_<somenum>:
+                                                    (((mul_double nearest_even) 
                                                       (double_of_single 
-                                                       (C_8:
-                                                       ((safe_acc_ !__anonstruct_L_2_M1_L_2) L))))) 
-                                                     (double_of_real_exact 3600.0)))))))) in
-          void);
-         [ { } unit reads tmp1
-           { (JC_<somenum>: le_real(abs_real(single_value(tmp1)), 0x1p-20)) } ];
-         void;
-         [ { } unit reads __anonstruct_M_1_x1_M_1
-           { (JC_<somenum>:
-             le_real(abs_real(single_value(select(__anonstruct_M_1_x1_M_1, M))),
-             0x1p-20)) } ];
-         begin
-           void;
-          (C_19:
-          begin
-            (let _jessie_<somenum> =
-            (result_0 := (C_18:
-                         (JC_<somenum>:
-                         ((single_of_double nearest_even) (C_17:
-                                                          (JC_<somenum>:
-                                                          (((mul_double nearest_even) 
-                                                            (C_16:
-                                                            (double_of_single 
-                                                             (C_15:
-                                                             ((safe_acc_ !__anonstruct_M_1_x1_M_1) M))))) 
-                                                           (double_of_real_exact 100.0)))))))) in
-            void);
-           (C_23:
-           begin
-             (let _jessie_<somenum> =
-             (tmp2 := (C_22:
-                      (JC_<somenum>:
-                      ((single_of_double nearest_even) (C_21:
-                                                       (JC_<somenum>:
-                                                       (((mul_double nearest_even) 
-                                                         (C_20:
-                                                         (double_of_single !tmp1))) 
-                                                        (double_of_real_exact 100.0)))))))) in
-             void);
-            [ { } unit reads tmp2
-              { (JC_<somenum>: le_real(abs_real(single_value(tmp2)), 0x1p-20)) } ];
-            void;
-            [ { } unit reads result_0
-              { (JC_<somenum>: le_real(abs_real(single_value(result_0)), 0x1p-20)) } ];
-            void; (raise Return) end) end) end end) end) end end)));
-    (raise Return) end with Return -> void end)
+                                                       ((safe_acc_ !__anonstruct_M_1_x1_M_1) M))) 
+                                                     (double_of_real_exact 100.0)))))) in
+      void);
+      (let _jessie_<somenum> =
+      (tmp2 := (JC_<somenum>:
+               ((single_of_double nearest_even) (JC_<somenum>:
+                                                (((mul_double nearest_even) 
+                                                  (double_of_single !tmp1)) 
+                                                 (double_of_real_exact 100.0)))))) in
+      void);
+      [ { } unit reads tmp2
+        { (JC_<somenum>: le_real(abs_real(single_value(tmp2)), 0x1p-20)) } ]; void;
+      [ { } unit reads result_0
+        { (JC_<somenum>: le_real(abs_real(single_value(result_0)), 0x1p-20)) } ];
+      void; (raise Return) end))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_L(__anonstruct_L_2_L_2_alloc_table))
     and (JC_<somenum>: valid_M(__anonstruct_M_1_M_1_alloc_table)))) }

@@ -399,7 +399,7 @@ predicate valid_wstring_or_null{L}(unsigned_shortP[..] s_31) =
 
 int32 strcmp(charP[..] s1, charP[..] s2)
 behavior default:
-  ensures (C_25 : true);
+  ensures (_C_25 : true);
 {  
    (var charP[..] tmp);
    
@@ -412,20 +412,20 @@ behavior default:
       while (true)
       {  
          {  
-            {  (C_1 : (tmp_0 = s2));
-               (C_3 : (s2 = (C_2 : (s2 + 1))));
+            {  (_C_1 : (tmp_0 = s2));
+               (_C_3 : (s2 = (_C_2 : (s2 + 1))));
                ()
             };
-            (if ((C_7 : ((C_6 : s1.charM) :> int32)) ==
-                  (C_5 : ((C_4 : tmp_0.charM) :> int32))) then () else 
+            (if ((_C_7 : ((_C_6 : s1.charM) :> int32)) ==
+                  (_C_5 : ((_C_4 : tmp_0.charM) :> int32))) then () else 
             (goto while_0_break));
             
-            {  (C_8 : (tmp = s1));
-               (C_10 : (s1 = (C_9 : (s1 + 1))));
+            {  (_C_8 : (tmp = s1));
+               (_C_10 : (s1 = (_C_9 : (s1 + 1))));
                ()
             };
-            (if ((C_13 : ((C_12 : tmp.charM) :> int32)) == 0) then 
-            {  (C_11 : (__retres = 0));
+            (if ((_C_13 : ((_C_12 : tmp.charM) :> int32)) == 0) then 
+            {  (_C_11 : (__retres = 0));
                
                (goto return_label)
             } else ())
@@ -433,11 +433,11 @@ behavior default:
       };
       (while_0_break : ());
       
-      {  (C_15 : (s2 = (C_14 : (s2 - 1))));
+      {  (_C_15 : (s2 = (_C_14 : (s2 - 1))));
          ()
       };
-      (C_24 : (__retres = (C_23 : ((C_22 : ((C_21 : ((C_20 : (C_19 : (s1 :> unsigned_charP[..])).unsigned_charM) :> int32)) -
-                                             (C_18 : ((C_17 : (C_16 : (s2 :> unsigned_charP[..])).unsigned_charM) :> int32)))) :> int32))));
+      (_C_24 : (__retres = (_C_23 : ((_C_22 : ((_C_21 : ((_C_20 : (_C_19 : (s1 :> unsigned_charP[..])).unsigned_charM) :> int32)) -
+                                                (_C_18 : ((_C_17 : (_C_16 : (s2 :> unsigned_charP[..])).unsigned_charM) :> int32)))) :> int32))));
       (return_label : 
       (return __retres))
    }

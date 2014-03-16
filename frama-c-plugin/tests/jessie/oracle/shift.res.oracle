@@ -41,11 +41,11 @@ type voidP = [voidP]
 
 int32 f(int32 x)
 behavior default:
-  ensures (C_4 : (\result == (\at(x,Old) / 2)));
+  ensures (_C_4 : (\result == (\at(x,Old) / 2)));
 {  
    (var int32 __retres);
    
-   {  (C_3 : (__retres = (C_2 : ((C_1 : (x / 2)) :> int32))));
+   {  (_C_3 : (__retres = (_C_2 : ((_C_1 : (x / 2)) :> int32))));
       
       (return __retres)
    }
@@ -413,14 +413,11 @@ let f_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_2:
-                    (safe_int32_of_integer_ (C_1:
-                                            (JC_<somenum>:
-                                            ((computer_div (integer_of_int32 x_0)) (2))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (__retres := (safe_int32_of_integer_ (JC_<somenum>:
+                                            ((computer_div (integer_of_int32 x_0)) (2))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     (integer_of_int32(result) = computer_div(integer_of_int32(x_0), (2)))) }
@@ -433,15 +430,12 @@ let f_safety =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_3:
      begin
        (let _jessie_<somenum> =
-       (__retres := (C_2:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (C_1:
-                                       (JC_<somenum>:
-                                       ((computer_div_ (integer_of_int32 x_0)) (2)))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
+       (__retres := (JC_<somenum>:
+                    (int32_of_integer_ (JC_<somenum>:
+                                       ((computer_div_ (integer_of_int32 x_0)) (2)))))) in
+       void); (return := !__retres); (raise Return) end); absurd  end with
    Return -> !return end)) { true }
 
 

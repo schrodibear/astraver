@@ -41,11 +41,11 @@ type voidP = [voidP]
 
 double test()
 behavior default:
-  ensures (C_3 : ((\result :> real) == 65536.0));
+  ensures (_C_3 : ((\result :> real) == 65536.0));
 {  
    (var double __retres);
    
-   {  (C_2 : (__retres = (C_1 : (65536 :> double))));
+   {  (_C_2 : (__retres = (_C_1 : (65536 :> double))));
       
       (return __retres)
    }
@@ -54,27 +54,27 @@ behavior default:
 int32 double2int(double f)
 behavior small:
   assumes ((f :> real) <= (- 65536.0));
-  ensures (C_10 : (\result == (- 65536)));
+  ensures (_C_10 : (\result == (- 65536)));
 behavior big:
   assumes ((f :> real) >= 65535.0);
-  ensures (C_11 : (\result == 65535));
+  ensures (_C_11 : (\result == 65535));
 behavior negative_fits:
   assumes (((- 65536.0) < (f :> real)) && ((f :> real) < 0.0));
-  ensures (C_12 : ((C_13 : ((\at(f,Old) :> real) <= \result)) &&
-                    (C_14 : (\result < ((\at(f,Old) :> real) + 1)))));
+  ensures (_C_12 : ((_C_13 : ((\at(f,Old) :> real) <= \result)) &&
+                     (_C_14 : (\result < ((\at(f,Old) :> real) + 1)))));
 behavior positive_fits:
   assumes ((0.0 <= (f :> real)) && ((f :> real) < 65535.0));
-  ensures (C_15 : ((C_16 : (((\at(f,Old) :> real) - 1) < \result)) &&
-                    (C_17 : (\result <= (\at(f,Old) :> real)))));
+  ensures (_C_15 : ((_C_16 : (((\at(f,Old) :> real) - 1) < \result)) &&
+                     (_C_17 : (\result <= (\at(f,Old) :> real)))));
 behavior default:
-  ensures (C_18 : true);
+  ensures (_C_18 : true);
 {  
    (var int32 i);
    
-   {  (if (f <= (C_9 : (- (65536.0 :> double)))) then (C_8 : (i = -65536)) else 
-      (if (f >= (65535.0 :> double)) then (C_7 : (i = 65535)) else (C_6 : (i = 
-                                                                   (C_5 : \truncate_real_to_int(
-                                                                   (C_4 : (f :> real))))))));
+   {  (if (f <= (_C_9 : (- (65536.0 :> double)))) then (_C_8 : (i = -65536)) else 
+      (if (f >= (65535.0 :> double)) then (_C_7 : (i = 65535)) else (_C_6 : (i = 
+                                                                    (_C_5 : \truncate_real_to_int(
+                                                                    (_C_4 : (f :> real))))))));
       
       (return i)
    }
@@ -484,24 +484,19 @@ let double2int_ensures_big =
      (let i = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (if ((le_double_ f) (C_9:
-                           (JC_<somenum>:
-                           (neg_double (double_of_real_exact 65536.0)))))
-       then
-        (C_8:
-        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
+       (if ((le_double_ f) (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0))))
+       then begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end
        else
         (if ((ge_double_ f) (double_of_real_exact 65535.0))
-        then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
+        then begin   (i := (safe_int32_of_integer_ (65535))); !i end
         else
-         (C_6:
          begin
-           (i := (safe_int32_of_integer_ (C_5:
-                                         (let _jessie_<somenum> =
-                                         (C_4: (double_value f)) in
-                                         (truncate_real_to_int _jessie_<somenum>)))));
-          !i end))) in void); (return := !i); (raise Return) end); absurd 
-   end with Return -> !return end))
+           (i := (safe_int32_of_integer_ (let _jessie_<somenum> =
+                                         (double_value f) in
+                                         (truncate_real_to_int _jessie_<somenum>))));
+          !i end)) in void); (return := !i); (raise Return) end); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>: (integer_of_int32(result) = (65535))) }
 
 let double2int_ensures_default =
@@ -514,24 +509,19 @@ let double2int_ensures_default =
      (let i = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (if ((le_double_ f) (C_9:
-                           (JC_<somenum>:
-                           (neg_double (double_of_real_exact 65536.0)))))
-       then
-        (C_8:
-        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
+       (if ((le_double_ f) (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0))))
+       then begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end
        else
         (if ((ge_double_ f) (double_of_real_exact 65535.0))
-        then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
+        then begin   (i := (safe_int32_of_integer_ (65535))); !i end
         else
-         (C_6:
          begin
-           (i := (safe_int32_of_integer_ (C_5:
-                                         (let _jessie_<somenum> =
-                                         (C_4: (double_value f)) in
-                                         (truncate_real_to_int _jessie_<somenum>)))));
-          !i end))) in void); (return := !i); (raise Return) end); absurd 
-   end with Return -> !return end)) { (JC_<somenum>: true) }
+           (i := (safe_int32_of_integer_ (let _jessie_<somenum> =
+                                         (double_value f) in
+                                         (truncate_real_to_int _jessie_<somenum>))));
+          !i end)) in void); (return := !i); (raise Return) end); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: true) }
 
 let double2int_ensures_negative_fits =
  fun (f : double) ->
@@ -544,24 +534,19 @@ let double2int_ensures_negative_fits =
      (let i = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (if ((le_double_ f) (C_9:
-                           (JC_<somenum>:
-                           (neg_double (double_of_real_exact 65536.0)))))
-       then
-        (C_8:
-        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
+       (if ((le_double_ f) (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0))))
+       then begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end
        else
         (if ((ge_double_ f) (double_of_real_exact 65535.0))
-        then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
+        then begin   (i := (safe_int32_of_integer_ (65535))); !i end
         else
-         (C_6:
          begin
-           (i := (safe_int32_of_integer_ (C_5:
-                                         (let _jessie_<somenum> =
-                                         (C_4: (double_value f)) in
-                                         (truncate_real_to_int _jessie_<somenum>)))));
-          !i end))) in void); (return := !i); (raise Return) end); absurd 
-   end with Return -> !return end))
+           (i := (safe_int32_of_integer_ (let _jessie_<somenum> =
+                                         (double_value f) in
+                                         (truncate_real_to_int _jessie_<somenum>))));
+          !i end)) in void); (return := !i); (raise Return) end); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_real(double_value(f), real_of_int(integer_of_int32(result))))
     and (JC_<somenum>:
@@ -578,24 +563,19 @@ let double2int_ensures_positive_fits =
      (let i = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (if ((le_double_ f) (C_9:
-                           (JC_<somenum>:
-                           (neg_double (double_of_real_exact 65536.0)))))
-       then
-        (C_8:
-        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
+       (if ((le_double_ f) (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0))))
+       then begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end
        else
         (if ((ge_double_ f) (double_of_real_exact 65535.0))
-        then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
+        then begin   (i := (safe_int32_of_integer_ (65535))); !i end
         else
-         (C_6:
          begin
-           (i := (safe_int32_of_integer_ (C_5:
-                                         (let _jessie_<somenum> =
-                                         (C_4: (double_value f)) in
-                                         (truncate_real_to_int _jessie_<somenum>)))));
-          !i end))) in void); (return := !i); (raise Return) end); absurd 
-   end with Return -> !return end))
+           (i := (safe_int32_of_integer_ (let _jessie_<somenum> =
+                                         (double_value f) in
+                                         (truncate_real_to_int _jessie_<somenum>))));
+          !i end)) in void); (return := !i); (raise Return) end); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      lt_real(sub_real(double_value(f), 1.0),
@@ -613,24 +593,19 @@ let double2int_ensures_small =
      (let i = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (if ((le_double_ f) (C_9:
-                           (JC_<somenum>:
-                           (neg_double (double_of_real_exact 65536.0)))))
-       then
-        (C_8:
-        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
+       (if ((le_double_ f) (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0))))
+       then begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end
        else
         (if ((ge_double_ f) (double_of_real_exact 65535.0))
-        then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
+        then begin   (i := (safe_int32_of_integer_ (65535))); !i end
         else
-         (C_6:
          begin
-           (i := (safe_int32_of_integer_ (C_5:
-                                         (let _jessie_<somenum> =
-                                         (C_4: (double_value f)) in
-                                         (truncate_real_to_int _jessie_<somenum>)))));
-          !i end))) in void); (return := !i); (raise Return) end); absurd 
-   end with Return -> !return end))
+           (i := (safe_int32_of_integer_ (let _jessie_<somenum> =
+                                         (double_value f) in
+                                         (truncate_real_to_int _jessie_<somenum>))));
+          !i end)) in void); (return := !i); (raise Return) end); absurd  end
+   with Return -> !return end))
   { (JC_<somenum>: (integer_of_int32(result) = neg_int((65536)))) }
 
 let double2int_safety =
@@ -643,25 +618,19 @@ let double2int_safety =
      (let i = ref (any_int32 void) in
      begin
        (let _jessie_<somenum> =
-       (if ((le_double_ f) (C_9:
-                           (JC_<somenum>:
-                           (neg_double (double_of_real_exact 65536.0)))))
-       then
-        (C_8:
-        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
+       (if ((le_double_ f) (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0))))
+       then begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end
        else
         (if ((ge_double_ f) (double_of_real_exact 65535.0))
-        then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
+        then begin   (i := (safe_int32_of_integer_ (65535))); !i end
         else
-         (C_6:
          begin
            (i := (JC_<somenum>:
-                 (int32_of_integer_ (C_5:
-                                    (let _jessie_<somenum> =
-                                    (C_4: (double_value f)) in
-                                    (truncate_real_to_int _jessie_<somenum>))))));
-          !i end))) in void); (return := !i); (raise Return) end); absurd 
-   end with Return -> !return end)) { true }
+                 (int32_of_integer_ (let _jessie_<somenum> = (double_value f) in
+                                    (truncate_real_to_int _jessie_<somenum>))))); !i
+         end)) in void); (return := !i); (raise Return) end); absurd  end
+   with Return -> !return end)) { true }
 
 let test_ensures_default =
  fun (tt : unit) ->
@@ -671,11 +640,9 @@ let test_ensures_default =
   try
    begin
      (let __retres = ref (any_double void) in
-     (C_2:
      begin
-       (let _jessie_<somenum> =
-       (__retres := (C_1: (double_of_real_exact 65536.0))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<somenum> = (__retres := (double_of_real_exact 65536.0)) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: (double_value(result) = 65536.0)) }
 
 let test_safety =
@@ -686,11 +653,9 @@ let test_safety =
   try
    begin
      (let __retres = ref (any_double void) in
-     (C_2:
      begin
-       (let _jessie_<somenum> =
-       (__retres := (C_1: (double_of_real_exact 65536.0))) in void);
-      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<somenum> = (__retres := (double_of_real_exact 65536.0)) in void);
+      (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 

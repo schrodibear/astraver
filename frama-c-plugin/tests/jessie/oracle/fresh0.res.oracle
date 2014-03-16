@@ -57,20 +57,20 @@ unit test1()
 behavior default:
   assigns x;
   allocates x;
-  ensures (C_1 : (((C_3 : (\offset_min(x) <= 0)) &&
-                    (C_4 : (\offset_max(x) >= 0))) &&
-                   (C_5 : \fresh(x))));
+  ensures (_C_1 : (((_C_3 : (\offset_min(x) <= 0)) &&
+                     (_C_4 : (\offset_max(x) >= 0))) &&
+                    (_C_5 : \fresh(x))));
 ;
 
 unit test2(S[..] s)
-  requires (C_11 : ((C_12 : (\offset_min(s) <= 0)) &&
-                     (C_13 : (\offset_max(s) >= 0))));
+  requires (_C_11 : ((_C_12 : (\offset_min(s) <= 0)) &&
+                      (_C_13 : (\offset_max(s) >= 0))));
 behavior default:
   assigns s.f;
   allocates \at(s,Old).f;
-  ensures (C_6 : (((C_8 : (\offset_min(\at(s,Old).f) <= 0)) &&
-                    (C_9 : (\offset_max(\at(s,Old).f) >= 0))) &&
-                   (C_10 : \fresh(\at(s,Old).f))));
+  ensures (_C_6 : (((_C_8 : (\offset_min(\at(s,Old).f) <= 0)) &&
+                     (_C_9 : (\offset_max(\at(s,Old).f) >= 0))) &&
+                    (_C_10 : \fresh(\at(s,Old).f))));
 ;
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs fresh0.jessie/fresh0.cloc fresh0.jessie/fresh0.jc
 type S

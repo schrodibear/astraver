@@ -305,34 +305,34 @@ tag voidP = {
 type voidP = [voidP]
 
 double min(double x_0, double y_0)
-  requires (C_8 : ((C_9 : (! \double_is_NaN(x_0))) &&
-                    (C_10 : (! \double_is_NaN(y_0)))));
+  requires (_C_8 : ((_C_9 : (! \double_is_NaN(x_0))) &&
+                     (_C_10 : (! \double_is_NaN(y_0)))));
 behavior default:
-  ensures (C_3 : (((C_5 : \le_double(\result, \at(x_0,Old))) &&
-                    (C_6 : \le_double(\result, \at(y_0,Old)))) &&
-                   (C_7 : (\eq_double(\result, \at(x_0,Old)) ||
-                            \eq_double(\result, \at(y_0,Old))))));
+  ensures (_C_3 : (((_C_5 : \le_double(\result, \at(x_0,Old))) &&
+                     (_C_6 : \le_double(\result, \at(y_0,Old)))) &&
+                    (_C_7 : (\eq_double(\result, \at(x_0,Old)) ||
+                              \eq_double(\result, \at(y_0,Old))))));
 {  
    (var double tmp);
    
-   {  (if (x_0 < y_0) then (C_2 : (tmp = x_0)) else (C_1 : (tmp = y_0)));
+   {  (if (x_0 < y_0) then (_C_2 : (tmp = x_0)) else (_C_1 : (tmp = y_0)));
       
       (return tmp)
    }
 }
 
 double max(double x, double y)
-  requires (C_18 : ((C_19 : (! \double_is_NaN(x))) &&
-                     (C_20 : (! \double_is_NaN(y)))));
+  requires (_C_18 : ((_C_19 : (! \double_is_NaN(x))) &&
+                      (_C_20 : (! \double_is_NaN(y)))));
 behavior default:
-  ensures (C_13 : (((C_15 : \le_double(\at(x,Old), \result)) &&
-                     (C_16 : \le_double(\at(y,Old), \result))) &&
-                    (C_17 : (\eq_double(\result, \at(x,Old)) ||
-                              \eq_double(\result, \at(y,Old))))));
+  ensures (_C_13 : (((_C_15 : \le_double(\at(x,Old), \result)) &&
+                      (_C_16 : \le_double(\at(y,Old), \result))) &&
+                     (_C_17 : (\eq_double(\result, \at(x,Old)) ||
+                                \eq_double(\result, \at(y,Old))))));
 {  
    (var double tmp_0);
    
-   {  (if (x > y) then (C_12 : (tmp_0 = x)) else (C_11 : (tmp_0 = y)));
+   {  (if (x > y) then (_C_12 : (tmp_0 = x)) else (_C_11 : (tmp_0 = y)));
       
       (return tmp_0)
    }
@@ -356,45 +356,45 @@ predicate in_interval(real a, double l, double u) =
 (double_le_real(l, a) && real_le_double(a, u))
 
 double mul_dn(double x_1, double y_1)
-  requires (C_27 : ((C_28 : (! \double_is_NaN(x_1))) &&
-                     (C_29 : (! \double_is_NaN(y_1)))));
-  requires (C_26 : ((\double_is_infinite(x_1) || \double_is_infinite(y_1)) ==>
-                     dif_sign(x_1, y_1)));
-  requires (C_25 : ((\double_is_infinite(x_1) && \double_is_finite(y_1)) ==>
-                     ((y_1 :> real) != 0.0)));
-  requires (C_24 : ((\double_is_finite(x_1) && \double_is_infinite(y_1)) ==>
-                     ((x_1 :> real) != 0.0)));
+  requires (_C_27 : ((_C_28 : (! \double_is_NaN(x_1))) &&
+                      (_C_29 : (! \double_is_NaN(y_1)))));
+  requires (_C_26 : ((\double_is_infinite(x_1) || \double_is_infinite(y_1)) ==>
+                      dif_sign(x_1, y_1)));
+  requires (_C_25 : ((\double_is_infinite(x_1) && \double_is_finite(y_1)) ==>
+                      ((y_1 :> real) != 0.0)));
+  requires (_C_24 : ((\double_is_finite(x_1) && \double_is_infinite(y_1)) ==>
+                      ((x_1 :> real) != 0.0)));
 behavior default:
   assigns \nothing;
-  ensures (C_23 : double_le_real(\result,
-                                 ((\at(x_1,Old) :> real) *
-                                   (\at(y_1,Old) :> real))));
+  ensures (_C_23 : double_le_real(\result,
+                                  ((\at(x_1,Old) :> real) *
+                                    (\at(y_1,Old) :> real))));
 {  
    (var double z);
    
-   {  (C_22 : (z = (C_21 : (x_1 * y_1))));
+   {  (_C_22 : (z = (_C_21 : (x_1 * y_1))));
       
       (return z)
    }
 }
 
 double mul_up(double x_2, double y_2)
-  requires (C_54 : ((C_55 : (! \double_is_NaN(x_2))) &&
-                     (C_56 : (! \double_is_NaN(y_2)))));
-  requires (C_53 : ((\double_is_infinite(x_2) || \double_is_infinite(y_2)) ==>
-                     sam_sign(x_2, y_2)));
-  requires (C_52 : ((\double_is_infinite(x_2) && \double_is_finite(y_2)) ==>
-                     ((y_2 :> real) != 0.0)));
-  requires (C_51 : ((\double_is_infinite(y_2) && \double_is_finite(x_2)) ==>
-                     ((x_2 :> real) != 0.0)));
-  requires (C_50 : ((((\double_is_finite(x_2) && \double_is_finite(y_2)) &&
-                       (! \no_overflow_double(\Down(), (- (y_2 :> real))))) &&
-                      (\double_sign(y_2) == \Positive())) ==>
-                     ((x_2 :> real) > 0.0)));
+  requires (_C_54 : ((_C_55 : (! \double_is_NaN(x_2))) &&
+                      (_C_56 : (! \double_is_NaN(y_2)))));
+  requires (_C_53 : ((\double_is_infinite(x_2) || \double_is_infinite(y_2)) ==>
+                      sam_sign(x_2, y_2)));
+  requires (_C_52 : ((\double_is_infinite(x_2) && \double_is_finite(y_2)) ==>
+                      ((y_2 :> real) != 0.0)));
+  requires (_C_51 : ((\double_is_infinite(y_2) && \double_is_finite(x_2)) ==>
+                      ((x_2 :> real) != 0.0)));
+  requires (_C_50 : ((((\double_is_finite(x_2) && \double_is_finite(y_2)) &&
+                        (! \no_overflow_double(\Down(), (- (y_2 :> real))))) &&
+                       (\double_sign(y_2) == \Positive())) ==>
+                      ((x_2 :> real) > 0.0)));
 behavior default:
-  ensures (C_49 : real_le_double(((\at(x_2,Old) :> real) *
-                                   (\at(y_2,Old) :> real)),
-                                 \result));
+  ensures (_C_49 : real_le_double(((\at(x_2,Old) :> real) *
+                                    (\at(y_2,Old) :> real)),
+                                  \result));
 {  
    (var double a);
    
@@ -402,124 +402,111 @@ behavior default:
    
    (var double z_0);
    
-   {  (C_31 : (a = (C_30 : (- y_2))));
-      (C_33 : (b = (C_32 : (x_2 * a))));
-      (C_35 : (z_0 = (C_34 : (- b))));
+   {  (_C_31 : (a = (_C_30 : (- y_2))));
+      (_C_33 : (b = (_C_32 : (x_2 * a))));
+      (_C_35 : (z_0 = (_C_34 : (- b))));
       
       {  
-         (assert for default: (C_36 : (jessie : ((\double_is_infinite(
-                                                   x_2) ||
-                                                   \double_is_infinite(
-                                                   y_2)) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
+         (assert for default: (_C_36 : (jessie : ((\double_is_infinite(
+                                                    x_2) ||
+                                                    \double_is_infinite(
+                                                    y_2)) ==>
+                                                   real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                  z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_37 : (jessie : ((\double_is_finite(x_2) &&
-                                                   \double_is_infinite(
-                                                   y_2)) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_38 : (jessie : (((\double_is_infinite(
+         (assert for default: (_C_37 : (jessie : ((\double_is_finite(
                                                     x_2) &&
-                                                    \double_is_finite(
-                                                    y_2)) &&
-                                                   \no_overflow_double(
-                                                   \Down(), (- (y_2 :> real)))) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
+                                                    \double_is_infinite(
+                                                    y_2)) ==>
+                                                   real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                  z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_39 : (jessie : (((\double_is_infinite(
+         (assert for default: (_C_38 : (jessie : (((\double_is_infinite(
+                                                     x_2) &&
+                                                     \double_is_finite(
+                                                     y_2)) &&
+                                                    \no_overflow_double(
+                                                    \Down(),
+                                                    (- (y_2 :> real)))) ==>
+                                                   real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                  z_0)))));
+         ()
+      };
+      
+      {  
+         (assert for default: (_C_39 : (jessie : (((\double_is_infinite(
+                                                     x_2) &&
+                                                     \double_is_finite(
+                                                     y_2)) &&
+                                                    (! \no_overflow_double(
+                                                    \Down(),
+                                                    (- (y_2 :> real))))) ==>
+                                                   real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                  z_0)))));
+         ()
+      };
+      
+      {  
+         (assert for default: (_C_40 : (jessie : ((\double_is_infinite(
                                                     x_2) &&
-                                                    \double_is_finite(
-                                                    y_2)) &&
-                                                   (! \no_overflow_double(
-                                                   \Down(), (- (y_2 :> real))))) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
+                                                    \double_is_infinite(
+                                                    y_2)) ==>
+                                                   real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                  z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_40 : (jessie : ((\double_is_infinite(
-                                                   x_2) &&
-                                                   \double_is_infinite(
-                                                   y_2)) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
+         (assert for default: (_C_41 : (jessie : (((((\double_is_finite(
+                                                       x_2) &&
+                                                       \double_is_finite(
+                                                       y_2)) &&
+                                                      \no_overflow_double(
+                                                      \Down(),
+                                                      (- (y_2 :> real)))) &&
+                                                     \no_overflow_double(
+                                                     \Down(),
+                                                     ((x_2 :> real) *
+                                                       (a :> real)))) &&
+                                                    (! \no_overflow_double(
+                                                    \Down(), (- (b :> real))))) ==>
+                                                   real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                  z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_41 : (jessie : (((((\double_is_finite(
+         (assert for default: (_C_42 : (jessie : ((((\double_is_finite(
                                                       x_2) &&
                                                       \double_is_finite(
                                                       y_2)) &&
                                                      \no_overflow_double(
                                                      \Down(),
                                                      (- (y_2 :> real)))) &&
-                                                    \no_overflow_double(
-                                                    \Down(),
-                                                    ((x_2 :> real) *
-                                                      (a :> real)))) &&
-                                                   (! \no_overflow_double(
-                                                   \Down(), (- (b :> real))))) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_42 : (jessie : ((((\double_is_finite(
-                                                     x_2) &&
-                                                     \double_is_finite(
-                                                     y_2)) &&
-                                                    \no_overflow_double(
-                                                    \Down(),
-                                                    (- (y_2 :> real)))) &&
-                                                   (! \no_overflow_double(
-                                                   \Down(),
-                                                   ((x_2 :> real) *
-                                                     (a :> real))))) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_43 : (jessie : ((((\double_is_finite(
-                                                     x_2) &&
-                                                     \double_is_finite(
-                                                     y_2)) &&
                                                     (! \no_overflow_double(
                                                     \Down(),
-                                                    (- (y_2 :> real))))) &&
-                                                   (\double_sign(y_2) ==
-                                                     \Positive())) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
+                                                    ((x_2 :> real) *
+                                                      (a :> real))))) ==>
+                                                   real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                  z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_44 : (jessie : (((((\double_is_finite(
+         (assert for default: (_C_43 : (jessie : ((((\double_is_finite(
                                                       x_2) &&
                                                       \double_is_finite(
                                                       y_2)) &&
@@ -527,19 +514,15 @@ behavior default:
                                                      \Down(),
                                                      (- (y_2 :> real))))) &&
                                                     (\double_sign(y_2) ==
-                                                      \Negative())) &&
-                                                   (! \no_overflow_double(
-                                                   \Down(),
-                                                   ((x_2 :> real) *
-                                                     (a :> real))))) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
+                                                      \Positive())) ==>
+                                                   real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                  z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_45 : (jessie : ((((((\double_is_finite(
+         (assert for default: (_C_44 : (jessie : (((((\double_is_finite(
                                                        x_2) &&
                                                        \double_is_finite(
                                                        y_2)) &&
@@ -548,83 +531,103 @@ behavior default:
                                                       (- (y_2 :> real))))) &&
                                                      (\double_sign(y_2) ==
                                                        \Negative())) &&
-                                                    \no_overflow_double(
+                                                    (! \no_overflow_double(
                                                     \Down(),
                                                     ((x_2 :> real) *
-                                                      (a :> real)))) &&
-                                                   (! \no_overflow_double(
-                                                   \Down(), (- (b :> real))))) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
+                                                      (a :> real))))) ==>
+                                                   real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                  z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_46 : (jessie : ((((((\double_is_finite(
-                                                       x_2) &&
-                                                       \double_is_finite(
-                                                       y_2)) &&
-                                                      (! \no_overflow_double(
-                                                      \Down(),
-                                                      (- (y_2 :> real))))) &&
-                                                     (\double_sign(y_2) ==
-                                                       \Negative())) &&
-                                                    \no_overflow_double(
-                                                    \Down(),
-                                                    ((x_2 :> real) *
-                                                      (a :> real)))) &&
-                                                   \no_overflow_double(
-                                                   \Down(), (- (b :> real)))) ==>
-                                                  real_le_double(((x_2 :> real) *
-                                                                   (y_2 :> real)),
-                                                                 z_0)))));
+         (assert for default: (_C_45 : (jessie : ((((((\double_is_finite(
+                                                        x_2) &&
+                                                        \double_is_finite(
+                                                        y_2)) &&
+                                                       (! \no_overflow_double(
+                                                       \Down(),
+                                                       (- (y_2 :> real))))) &&
+                                                      (\double_sign(y_2) ==
+                                                        \Negative())) &&
+                                                     \no_overflow_double(
+                                                     \Down(),
+                                                     ((x_2 :> real) *
+                                                       (a :> real)))) &&
+                                                    (! \no_overflow_double(
+                                                    \Down(), (- (b :> real))))) ==>
+                                                   real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                  z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_47 : (jessie : ((((((\double_is_finite(
-                                                       x_2) &&
-                                                       \double_is_finite(
-                                                       y_2)) &&
-                                                      \no_overflow_double(
-                                                      \Down(),
-                                                      (- (y_2 :> real)))) &&
+         (assert for default: (_C_46 : (jessie : ((((((\double_is_finite(
+                                                        x_2) &&
+                                                        \double_is_finite(
+                                                        y_2)) &&
+                                                       (! \no_overflow_double(
+                                                       \Down(),
+                                                       (- (y_2 :> real))))) &&
+                                                      (\double_sign(y_2) ==
+                                                        \Negative())) &&
                                                      \no_overflow_double(
                                                      \Down(),
                                                      ((x_2 :> real) *
                                                        (a :> real)))) &&
                                                     \no_overflow_double(
-                                                    \Down(), (- (b :> real)))) &&
-                                                   ((x_2 :> real) > 0.0)) ==>
-                                                  (\double_is_finite(
-                                                    z_0) &&
-                                                    real_le_double(((x_2 :> real) *
+                                                    \Down(), (- (b :> real)))) ==>
+                                                   real_le_double(((x_2 :> real) *
                                                                     (y_2 :> real)),
-                                                                   z_0))))));
+                                                                  z_0)))));
          ()
       };
       
       {  
-         (assert for default: (C_48 : (jessie : ((((((\double_is_finite(
-                                                       x_2) &&
-                                                       \double_is_finite(
-                                                       y_2)) &&
+         (assert for default: (_C_47 : (jessie : ((((((\double_is_finite(
+                                                        x_2) &&
+                                                        \double_is_finite(
+                                                        y_2)) &&
+                                                       \no_overflow_double(
+                                                       \Down(),
+                                                       (- (y_2 :> real)))) &&
                                                       \no_overflow_double(
                                                       \Down(),
-                                                      (- (y_2 :> real)))) &&
+                                                      ((x_2 :> real) *
+                                                        (a :> real)))) &&
                                                      \no_overflow_double(
-                                                     \Down(),
-                                                     ((x_2 :> real) *
-                                                       (a :> real)))) &&
-                                                    \no_overflow_double(
-                                                    \Down(), (- (b :> real)))) &&
-                                                   ((x_2 :> real) < 0.0)) ==>
-                                                  (\double_is_finite(
-                                                    z_0) &&
-                                                    real_le_double(((x_2 :> real) *
+                                                     \Down(), (- (b :> real)))) &&
+                                                    ((x_2 :> real) > 0.0)) ==>
+                                                   (\double_is_finite(
+                                                     z_0) &&
+                                                     real_le_double(((x_2 :> real) *
                                                                     (y_2 :> real)),
-                                                                   z_0))))));
+                                                                    z_0))))));
+         ()
+      };
+      
+      {  
+         (assert for default: (_C_48 : (jessie : ((((((\double_is_finite(
+                                                        x_2) &&
+                                                        \double_is_finite(
+                                                        y_2)) &&
+                                                       \no_overflow_double(
+                                                       \Down(),
+                                                       (- (y_2 :> real)))) &&
+                                                      \no_overflow_double(
+                                                      \Down(),
+                                                      ((x_2 :> real) *
+                                                        (a :> real)))) &&
+                                                     \no_overflow_double(
+                                                     \Down(), (- (b :> real)))) &&
+                                                    ((x_2 :> real) < 0.0)) ==>
+                                                   (\double_is_finite(
+                                                     z_0) &&
+                                                     real_le_double(((x_2 :> real) *
+                                                                    (y_2 :> real)),
+                                                                    z_0))))));
          ()
       };
       
@@ -643,35 +646,35 @@ predicate is_interval(double xl, double xu) =
   (\double_is_finite(xu) || \double_is_plus_infinity(xu)))
 
 unit add(double xl, double xu, double yl, double yu)
-  requires (C_66 : ((C_67 : is_interval(xl, xu)) &&
-                     (C_68 : is_interval(yl, yu))));
+  requires (_C_66 : ((_C_67 : is_interval(xl, xu)) &&
+                      (_C_68 : is_interval(yl, yu))));
 behavior default:
-  ensures (C_63 : ((C_64 : is_interval(zl, zu)) &&
-                    (C_65 : (\forall real a_0;
-                              (\forall real b;
-                                ((in_interval(a_0, \at(xl,Old), \at(xu,Old)) &&
-                                   in_interval(b, \at(yl,Old), \at(yu,Old))) ==>
-                                  in_interval((a_0 + b), zl, zu)))))));
+  ensures (_C_63 : ((_C_64 : is_interval(zl, zu)) &&
+                     (_C_65 : (\forall real a_0;
+                                (\forall real b;
+                                  ((in_interval(a_0, \at(xl,Old), \at(xu,Old)) &&
+                                     in_interval(b, \at(yl,Old), \at(yu,Old))) ==>
+                                    in_interval((a_0 + b), zl, zu)))))));
 {  
-   {  (C_58 : (zl = (C_57 : (xl + yl))));
-      (C_62 : (zu = (C_61 : (- (C_60 : ((C_59 : (- xu)) - yu))))));
+   {  (_C_58 : (zl = (_C_57 : (xl + yl))));
+      (_C_62 : (zu = (_C_61 : (- (_C_60 : ((_C_59 : (- xu)) - yu))))));
       
       (return ())
    }
 }
 
 unit mul(double xl_0, double xu_0, double yl_0, double yu_0)
-  requires (C_124 : ((C_125 : is_interval(xl_0, xu_0)) &&
-                      (C_126 : is_interval(yl_0, yu_0))));
+  requires (_C_124 : ((_C_125 : is_interval(xl_0, xu_0)) &&
+                       (_C_126 : is_interval(yl_0, yu_0))));
 behavior default:
-  ensures (C_121 : ((C_122 : is_interval(zl, zu)) &&
-                     (C_123 : (\forall real a_1;
-                                (\forall real b_0;
-                                  ((in_interval(a_1, \at(xl_0,Old),
-                                                \at(xu_0,Old)) &&
-                                     in_interval(b_0, \at(yl_0,Old),
-                                                 \at(yu_0,Old))) ==>
-                                    in_interval((a_1 * b_0), zl, zu)))))));
+  ensures (_C_121 : ((_C_122 : is_interval(zl, zu)) &&
+                      (_C_123 : (\forall real a_1;
+                                  (\forall real b_0;
+                                    ((in_interval(a_1, \at(xl_0,Old),
+                                                  \at(xu_0,Old)) &&
+                                       in_interval(b_0, \at(yl_0,Old),
+                                                   \at(yu_0,Old))) ==>
+                                      in_interval((a_1 * b_0), zl, zu)))))));
 {  
    (var double tmp_1);
    
@@ -685,123 +688,129 @@ behavior default:
                                         (if (yl_0 < (0.0 :> double)) then 
                                         (if (yu_0 > (0.0 :> double)) then 
                                         {  
-                                           {  (C_110 : (tmp_1 = (C_109 : mul_dn(
-                                                                xu_0, yl_0))));
-                                              (C_112 : (tmp_0_0 = (C_111 : mul_dn(
-                                                                  xl_0, yu_0))))
+                                           {  (_C_110 : (tmp_1 = (_C_109 : mul_dn(
+                                                                 xu_0, yl_0))));
+                                              (_C_112 : (tmp_0_0 = (_C_111 : mul_dn(
+                                                                   xl_0, yu_0))))
                                            };
-                                           (C_114 : (zl = (C_113 : min(
-                                                          tmp_0_0, tmp_1))));
+                                           (_C_114 : (zl = (_C_113 : min(
+                                                           tmp_0_0, tmp_1))));
                                            
-                                           {  (C_116 : (tmp_1_0 = (C_115 : mul_up(
-                                                                  xu_0, yu_0))));
-                                              (C_118 : (tmp_2 = (C_117 : mul_up(
-                                                                xl_0, yl_0))))
+                                           {  (_C_116 : (tmp_1_0 = (_C_115 : mul_up(
+                                                                   xu_0, yu_0))));
+                                              (_C_118 : (tmp_2 = (_C_117 : mul_up(
+                                                                 xl_0, yl_0))))
                                            };
-                                           (C_120 : (zu = (C_119 : max(
-                                                          tmp_2, tmp_1_0))))
+                                           (_C_120 : (zu = (_C_119 : max(
+                                                           tmp_2, tmp_1_0))))
                                         } else 
-                                        {  (C_106 : (zl = (C_105 : mul_dn(
-                                                          xu_0, yl_0))));
-                                           (C_108 : (zu = (C_107 : mul_up(
-                                                          xl_0, yl_0))))
+                                        {  (_C_106 : (zl = (_C_105 : mul_dn(
+                                                           xu_0, yl_0))));
+                                           (_C_108 : (zu = (_C_107 : mul_up(
+                                                           xl_0, yl_0))))
                                         }) else (if (yu_0 > (0.0 :> double)) then 
-                                                {  (C_102 : (zl = (C_101 : mul_dn(
-                                                                  xl_0, yu_0))));
-                                                   (C_104 : (zu = (C_103 : mul_up(
-                                                                  xu_0, yu_0))))
+                                                {  (_C_102 : (zl = (_C_101 : mul_dn(
+                                                                   xl_0, yu_0))));
+                                                   (_C_104 : (zu = (_C_103 : mul_up(
+                                                                   xu_0, yu_0))))
                                                 } else 
-                                                {  (C_99 : (zl = (0.0 :> double)));
-                                                   (C_100 : (zu = (0.0 :> double)))
+                                                {  (_C_99 : (zl = (0.0 :> double)));
+                                                   (_C_100 : (zu = (0.0 :> double)))
                                                 })) else (if (yl_0 <
                                                                (0.0 :> double)) then 
                                                          (if (yu_0 >
                                                                (0.0 :> double)) then 
-                                                         {  (C_96 : (zl = 
-                                                            (C_95 : mul_dn(
+                                                         {  (_C_96 : (zl = 
+                                                            (_C_95 : mul_dn(
                                                             xl_0, yu_0))));
-                                                            (C_98 : (zu = 
-                                                            (C_97 : mul_up(
+                                                            (_C_98 : (zu = 
+                                                            (_C_97 : mul_up(
                                                             xl_0, yl_0))))
                                                          } else 
-                                                         {  (C_92 : (zl = 
-                                                            (C_91 : mul_dn(
+                                                         {  (_C_92 : (zl = 
+                                                            (_C_91 : mul_dn(
                                                             xu_0, yu_0))));
-                                                            (C_94 : (zu = 
-                                                            (C_93 : mul_up(
+                                                            (_C_94 : (zu = 
+                                                            (_C_93 : mul_up(
                                                             xl_0, yl_0))))
                                                          }) else (if 
                                                                  (yu_0 >
                                                                    (0.0 :> double)) then 
-                                                                 {  (C_88 : (zl = 
-                                                                    (C_87 : mul_dn(
+                                                                 {  (_C_88 : (zl = 
+                                                                    (_C_87 : mul_dn(
                                                                     xl_0,
                                                                     yu_0))));
-                                                                    (C_90 : (zu = 
-                                                                    (C_89 : mul_up(
+                                                                    (_C_90 : (zu = 
+                                                                    (_C_89 : mul_up(
                                                                     xu_0,
                                                                     yl_0))))
                                                                  } else 
-                                                                 {  (C_85 : (zl = (0.0 :> double)));
-                                                                    (C_86 : (zu = (0.0 :> double)))
+                                                                 {  (_C_85 : (zl = (0.0 :> double)));
+                                                                    (_C_86 : (zu = (0.0 :> double)))
                                                                  }))) else 
       (if (xu_0 > (0.0 :> double)) then (if (yl_0 < (0.0 :> double)) then 
                                         (if (yu_0 > (0.0 :> double)) then 
-                                        {  (C_82 : (zl = (C_81 : mul_dn(
-                                                         xu_0, yl_0))));
-                                           (C_84 : (zu = (C_83 : mul_up(
-                                                         xu_0, yu_0))))
+                                        {  (_C_82 : (zl = (_C_81 : mul_dn(
+                                                          xu_0, yl_0))));
+                                           (_C_84 : (zu = (_C_83 : mul_up(
+                                                          xu_0, yu_0))))
                                         } else 
-                                        {  (C_78 : (zl = (C_77 : mul_dn(
-                                                         xu_0, yl_0))));
-                                           (C_80 : (zu = (C_79 : mul_up(
-                                                         xl_0, yu_0))))
+                                        {  (_C_78 : (zl = (_C_77 : mul_dn(
+                                                          xu_0, yl_0))));
+                                           (_C_80 : (zu = (_C_79 : mul_up(
+                                                          xl_0, yu_0))))
                                         }) else (if (yu_0 > (0.0 :> double)) then 
-                                                {  (C_74 : (zl = (C_73 : mul_dn(
-                                                                 xl_0, yl_0))));
-                                                   (C_76 : (zu = (C_75 : mul_up(
-                                                                 xu_0, yu_0))))
+                                                {  (_C_74 : (zl = (_C_73 : mul_dn(
+                                                                  xl_0, yl_0))));
+                                                   (_C_76 : (zu = (_C_75 : mul_up(
+                                                                  xu_0, yu_0))))
                                                 } else 
-                                                {  (C_71 : (zl = (0.0 :> double)));
-                                                   (C_72 : (zu = (0.0 :> double)))
+                                                {  (_C_71 : (zl = (0.0 :> double)));
+                                                   (_C_72 : (zu = (0.0 :> double)))
                                                 })) else 
-      {  (C_69 : (zl = (0.0 :> double)));
-         (C_70 : (zu = (0.0 :> double)))
+      {  (_C_69 : (zl = (0.0 :> double)));
+         (_C_70 : (zu = (0.0 :> double)))
       }));
       
       (return ())
    }
 }
 ========== file tests/c/interval_arith.jessie/interval_arith.cloc ==========
-[C_110]
+[_C_115]
 file = "HOME/tests/c/interval_arith.c"
-line = 208
+line = 209
 begin = 37
 end = 51
 
-[C_109]
+[_C_52]
 file = "HOME/tests/c/interval_arith.c"
-line = 208
-begin = 37
-end = 51
-
-[C_15]
-file = "HOME/tests/c/interval_arith.c"
-line = 16
-begin = 12
-end = 32
-
-[C_11]
-file = "HOME/tests/c/interval_arith.c"
-line = 21
+line = 70
 begin = 13
-end = 14
+end = 58
 
-[C_1]
+[_C_121]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_35]
 file = "HOME/tests/c/interval_arith.c"
-line = 11
-begin = 13
-end = 14
+line = 80
+begin = 2
+end = 8
+
+[_C_117]
+file = "HOME/tests/c/interval_arith.c"
+line = 209
+begin = 21
+end = 35
+
+[_C_120]
+file = "HOME/tests/c/interval_arith.c"
+line = 209
+begin = 17
+end = 52
 
 [mul]
 name = "Function mul"
@@ -810,79 +819,73 @@ line = 202
 begin = 5
 end = 8
 
-[C_112]
-file = "HOME/tests/c/interval_arith.c"
-line = 208
-begin = 21
-end = 35
-
-[C_93]
-file = "HOME/tests/c/interval_arith.c"
-line = 227
-begin = 17
-end = 31
-
-[C_55]
+[_C_56]
 file = "HOME/tests/c/interval_arith.c"
 line = 68
-begin = 13
-end = 24
-
-[C_33]
-file = "HOME/tests/c/interval_arith.c"
-line = 79
-begin = 2
-end = 8
-
-[C_74]
-file = "HOME/tests/c/interval_arith.c"
-line = 246
-begin = 17
-end = 31
-
-[C_64]
-file = "HOME/tests/c/interval_arith.c"
-line = 151
-begin = 12
-end = 30
-
-[C_126]
-file = "HOME/tests/c/interval_arith.c"
-line = 196
-begin = 35
-end = 53
-
-[C_9]
-file = "HOME/tests/c/interval_arith.c"
-line = 5
-begin = 13
-end = 24
-
-[C_10]
-file = "HOME/tests/c/interval_arith.c"
-line = 5
 begin = 28
 end = 39
 
-[C_90]
+[_C_28]
 file = "HOME/tests/c/interval_arith.c"
-line = 231
+line = 42
+begin = 13
+end = 25
+
+[_C_72]
+file = "HOME/tests/c/interval_arith.c"
+line = 250
+begin = 17
+end = 20
+
+[_C_59]
+file = "HOME/tests/c/interval_arith.c"
+line = 164
+begin = 11
+end = 13
+
+[_C_48]
+file = "HOME/tests/c/interval_arith.c"
+line = 132
+begin = 13
+end = 229
+
+[_C_116]
+file = "HOME/tests/c/interval_arith.c"
+line = 209
+begin = 37
+end = 51
+
+[_C_51]
+file = "HOME/tests/c/interval_arith.c"
+line = 71
+begin = 13
+end = 58
+
+[_C_103]
+file = "HOME/tests/c/interval_arith.c"
+line = 216
 begin = 17
 end = 31
 
-[C_68]
+[_C_31]
 file = "HOME/tests/c/interval_arith.c"
-line = 150
-begin = 35
-end = 53
+line = 78
+begin = 2
+end = 8
 
-[C_123]
+[_C_108]
 file = "HOME/tests/c/interval_arith.c"
-line = 198
-begin = 12
-end = 115
+line = 212
+begin = 17
+end = 31
 
-[C_84]
+[_C_77]
+file = "HOME/tests/c/interval_arith.c"
+line = 242
+begin = 17
+end = 31
+
+[_C_83]
 file = "HOME/tests/c/interval_arith.c"
 line = 240
 begin = 17
@@ -895,23 +898,41 @@ line = 19
 begin = 7
 end = 10
 
-[C_86]
+[_C_41]
 file = "HOME/tests/c/interval_arith.c"
-line = 234
-begin = 17
-end = 20
+line = 100
+begin = 13
+end = 202
 
-[C_80]
+[_C_4]
 file = "HOME/tests/c/interval_arith.c"
-line = 243
+line = 6
+begin = 12
+end = 56
+
+[_C_101]
+file = "HOME/tests/c/interval_arith.c"
+line = 215
 begin = 17
 end = 31
 
-[C_20]
+[_C_71]
 file = "HOME/tests/c/interval_arith.c"
-line = 15
-begin = 28
-end = 39
+line = 249
+begin = 17
+end = 20
+
+[_C_70]
+file = "HOME/tests/c/interval_arith.c"
+line = 253
+begin = 13
+end = 16
+
+[_C_89]
+file = "HOME/tests/c/interval_arith.c"
+line = 231
+begin = 17
+end = 31
 
 [mul_dn]
 name = "Function mul_dn"
@@ -920,59 +941,59 @@ line = 49
 begin = 7
 end = 13
 
-[C_43]
+[_C_90]
 file = "HOME/tests/c/interval_arith.c"
-line = 109
-begin = 13
-end = 182
-
-[C_79]
-file = "HOME/tests/c/interval_arith.c"
-line = 243
+line = 231
 begin = 17
 end = 31
 
-[C_62]
+[_C_61]
 file = "HOME/tests/c/interval_arith.c"
 line = 164
-begin = 7
-end = 20
+begin = 9
+end = 19
 
-[C_114]
+[_C_69]
 file = "HOME/tests/c/interval_arith.c"
-line = 208
-begin = 17
-end = 52
+line = 252
+begin = 13
+end = 16
 
-[C_59]
-file = "HOME/tests/c/interval_arith.c"
-line = 164
-begin = 11
-end = 13
-
-[C_32]
+[_C_32]
 file = "HOME/tests/c/interval_arith.c"
 line = 79
 begin = 11
 end = 14
 
-[C_17]
+[_C_23]
 file = "HOME/tests/c/interval_arith.c"
-line = 17
+line = 47
 begin = 12
-end = 56
+end = 39
 
-[C_92]
+[_C_19]
 file = "HOME/tests/c/interval_arith.c"
-line = 226
+line = 15
+begin = 13
+end = 24
+
+[_C_42]
+file = "HOME/tests/c/interval_arith.c"
+line = 105
+begin = 13
+end = 159
+
+[_C_82]
+file = "HOME/tests/c/interval_arith.c"
+line = 239
 begin = 17
 end = 31
 
-[C_40]
+[_C_110]
 file = "HOME/tests/c/interval_arith.c"
-line = 95
-begin = 13
-end = 75
+line = 208
+begin = 37
+end = 51
 
 [mul_up]
 name = "Function mul_up"
@@ -981,203 +1002,203 @@ line = 77
 begin = 7
 end = 13
 
-[C_104]
+[_C_94]
 file = "HOME/tests/c/interval_arith.c"
-line = 216
+line = 227
 begin = 17
 end = 31
 
-[C_63]
+[_C_84]
+file = "HOME/tests/c/interval_arith.c"
+line = 240
+begin = 17
+end = 31
+
+[_C_13]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[C_95]
-file = "HOME/tests/c/interval_arith.c"
-line = 223
-begin = 17
-end = 31
-
-[C_36]
-file = "HOME/tests/c/interval_arith.c"
-line = 83
-begin = 13
-end = 75
-
-[C_42]
-file = "HOME/tests/c/interval_arith.c"
-line = 105
-begin = 13
-end = 159
-
-[C_5]
+[_C_5]
 file = "HOME/tests/c/interval_arith.c"
 line = 6
 begin = 12
 end = 32
 
-[C_56]
+[_C_91]
 file = "HOME/tests/c/interval_arith.c"
-line = 68
-begin = 28
-end = 39
-
-[C_34]
-file = "HOME/tests/c/interval_arith.c"
-line = 80
-begin = 12
-end = 13
-
-[C_29]
-file = "HOME/tests/c/interval_arith.c"
-line = 42
-begin = 29
-end = 41
-
-[C_61]
-file = "HOME/tests/c/interval_arith.c"
-line = 164
-begin = 9
-end = 19
-
-[C_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_77]
-file = "HOME/tests/c/interval_arith.c"
-line = 242
+line = 226
 begin = 17
 end = 31
 
-[C_45]
+[_C_36]
 file = "HOME/tests/c/interval_arith.c"
-line = 117
+line = 83
 begin = 13
-end = 228
+end = 75
 
-[C_101]
+[_C_12]
 file = "HOME/tests/c/interval_arith.c"
-line = 215
-begin = 17
-end = 31
+line = 21
+begin = 13
+end = 14
 
-[C_111]
+[_C_33]
+file = "HOME/tests/c/interval_arith.c"
+line = 79
+begin = 2
+end = 8
+
+[_C_111]
 file = "HOME/tests/c/interval_arith.c"
 line = 208
 begin = 21
 end = 35
 
-[C_47]
+[_C_79]
 file = "HOME/tests/c/interval_arith.c"
-line = 127
-begin = 13
-end = 229
+line = 243
+begin = 17
+end = 31
 
-[C_100]
+[_C_104]
 file = "HOME/tests/c/interval_arith.c"
-line = 219
+line = 216
+begin = 17
+end = 31
+
+[_C_85]
+file = "HOME/tests/c/interval_arith.c"
+line = 233
 begin = 17
 end = 20
 
-[C_69]
-file = "HOME/tests/c/interval_arith.c"
-line = 252
-begin = 13
-end = 16
-
-[C_98]
-file = "HOME/tests/c/interval_arith.c"
-line = 224
-begin = 17
-end = 31
-
-[C_88]
-file = "HOME/tests/c/interval_arith.c"
-line = 230
-begin = 17
-end = 31
-
-[C_54]
-file = "HOME/tests/c/interval_arith.c"
-line = 68
-begin = 13
-end = 39
-
-[C_7]
-file = "HOME/tests/c/interval_arith.c"
-line = 7
-begin = 12
-end = 56
-
-[C_122]
-file = "HOME/tests/c/interval_arith.c"
-line = 197
-begin = 12
-end = 30
-
-[C_89]
-file = "HOME/tests/c/interval_arith.c"
-line = 231
-begin = 17
-end = 31
-
-[C_22]
+[_C_22]
 file = "HOME/tests/c/interval_arith.c"
 line = 51
 begin = 2
 end = 8
 
-[C_121]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[_C_65]
+file = "HOME/tests/c/interval_arith.c"
+line = 152
+begin = 12
+end = 115
 
-[C_58]
+[_C_9]
+file = "HOME/tests/c/interval_arith.c"
+line = 5
+begin = 13
+end = 24
+
+[_C_57]
 file = "HOME/tests/c/interval_arith.c"
 line = 158
 begin = 7
 end = 14
 
-[C_14]
+[_C_54]
 file = "HOME/tests/c/interval_arith.c"
-line = 16
+line = 68
+begin = 13
+end = 39
+
+[_C_30]
+file = "HOME/tests/c/interval_arith.c"
+line = 78
 begin = 12
+end = 13
+
+[_C_63]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[_C_6]
+file = "HOME/tests/c/interval_arith.c"
+line = 6
+begin = 36
 end = 56
 
-[C_35]
+[_C_64]
 file = "HOME/tests/c/interval_arith.c"
-line = 80
-begin = 2
-end = 8
+line = 151
+begin = 12
+end = 30
 
-[C_52]
+[_C_122]
 file = "HOME/tests/c/interval_arith.c"
-line = 70
-begin = 13
-end = 58
+line = 197
+begin = 12
+end = 30
 
-[C_76]
+[_C_95]
 file = "HOME/tests/c/interval_arith.c"
-line = 247
+line = 223
 begin = 17
 end = 31
 
-[C_66]
+[_C_93]
 file = "HOME/tests/c/interval_arith.c"
-line = 150
-begin = 13
-end = 53
+line = 227
+begin = 17
+end = 31
 
-[C_25]
+[_C_102]
 file = "HOME/tests/c/interval_arith.c"
-line = 44
+line = 215
+begin = 17
+end = 31
+
+[_C_49]
+file = "HOME/tests/c/interval_arith.c"
+line = 75
+begin = 12
+end = 41
+
+[_C_24]
+file = "HOME/tests/c/interval_arith.c"
+line = 45
 begin = 13
 end = 58
+
+[_C_45]
+file = "HOME/tests/c/interval_arith.c"
+line = 117
+begin = 13
+end = 228
+
+[_C_97]
+file = "HOME/tests/c/interval_arith.c"
+line = 224
+begin = 17
+end = 31
+
+[_C_20]
+file = "HOME/tests/c/interval_arith.c"
+line = 15
+begin = 28
+end = 39
+
+[_C_73]
+file = "HOME/tests/c/interval_arith.c"
+line = 246
+begin = 17
+end = 31
+
+[_C_96]
+file = "HOME/tests/c/interval_arith.c"
+line = 223
+begin = 17
+end = 31
+
+[_C_38]
+file = "HOME/tests/c/interval_arith.c"
+line = 89
+begin = 13
+end = 115
 
 [min]
 name = "Function min"
@@ -1186,137 +1207,101 @@ line = 9
 begin = 7
 end = 10
 
-[C_65]
-file = "HOME/tests/c/interval_arith.c"
-line = 152
-begin = 12
-end = 115
+[_C_3]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[C_38]
+[_C_98]
 file = "HOME/tests/c/interval_arith.c"
-line = 89
-begin = 13
-end = 115
-
-[C_72]
-file = "HOME/tests/c/interval_arith.c"
-line = 250
-begin = 17
-end = 20
-
-[C_125]
-file = "HOME/tests/c/interval_arith.c"
-line = 196
-begin = 13
-end = 31
-
-[C_60]
-file = "HOME/tests/c/interval_arith.c"
-line = 164
-begin = 9
-end = 19
-
-[C_8]
-file = "HOME/tests/c/interval_arith.c"
-line = 5
-begin = 13
-end = 39
-
-[C_105]
-file = "HOME/tests/c/interval_arith.c"
-line = 211
+line = 224
 begin = 17
 end = 31
 
-[C_116]
+[_C_109]
 file = "HOME/tests/c/interval_arith.c"
-line = 209
+line = 208
 begin = 37
 end = 51
 
-[C_103]
+[_C_124]
 file = "HOME/tests/c/interval_arith.c"
-line = 216
-begin = 17
-end = 31
-
-[C_106]
-file = "HOME/tests/c/interval_arith.c"
-line = 211
-begin = 17
-end = 31
-
-[C_73]
-file = "HOME/tests/c/interval_arith.c"
-line = 246
-begin = 17
-end = 31
-
-[C_71]
-file = "HOME/tests/c/interval_arith.c"
-line = 249
-begin = 17
-end = 20
-
-[C_39]
-file = "HOME/tests/c/interval_arith.c"
-line = 92
+line = 196
 begin = 13
-end = 117
+end = 53
 
-[C_96]
+[_C_114]
 file = "HOME/tests/c/interval_arith.c"
-line = 223
+line = 208
+begin = 17
+end = 52
+
+[_C_92]
+file = "HOME/tests/c/interval_arith.c"
+line = 226
 begin = 17
 end = 31
 
-[C_82]
+[_C_81]
 file = "HOME/tests/c/interval_arith.c"
 line = 239
 begin = 17
 end = 31
 
-[C_57]
+[_C_17]
 file = "HOME/tests/c/interval_arith.c"
-line = 158
-begin = 7
-end = 14
+line = 17
+begin = 12
+end = 56
 
-[C_75]
+[_C_112]
 file = "HOME/tests/c/interval_arith.c"
-line = 247
+line = 208
+begin = 21
+end = 35
+
+[_C_7]
+file = "HOME/tests/c/interval_arith.c"
+line = 7
+begin = 12
+end = 56
+
+[_C_86]
+file = "HOME/tests/c/interval_arith.c"
+line = 234
 begin = 17
-end = 31
+end = 20
 
-[C_44]
+[_C_62]
 file = "HOME/tests/c/interval_arith.c"
-line = 113
-begin = 13
-end = 185
+line = 164
+begin = 7
+end = 20
 
-[C_27]
+[_C_55]
+file = "HOME/tests/c/interval_arith.c"
+line = 68
+begin = 13
+end = 24
+
+[_C_27]
 file = "HOME/tests/c/interval_arith.c"
 line = 42
 begin = 13
 end = 41
 
-[C_50]
+[_C_105]
 file = "HOME/tests/c/interval_arith.c"
-line = 72
-begin = 13
-end = 140
+line = 211
+begin = 17
+end = 31
 
-[C_46]
+[_C_87]
 file = "HOME/tests/c/interval_arith.c"
-line = 122
-begin = 13
-end = 227
-
-[C_53]
-file = "HOME/tests/c/interval_arith.c"
-line = 69
-begin = 13
-end = 65
+line = 230
+begin = 17
+end = 31
 
 [add]
 name = "Function add"
@@ -1325,251 +1310,269 @@ line = 156
 begin = 5
 end = 8
 
-[C_37]
+[_C_46]
 file = "HOME/tests/c/interval_arith.c"
-line = 87
+line = 122
 begin = 13
-end = 73
+end = 227
 
-[C_19]
+[_C_44]
 file = "HOME/tests/c/interval_arith.c"
-line = 15
+line = 113
 begin = 13
-end = 24
+end = 185
 
-[C_102]
+[_C_15]
 file = "HOME/tests/c/interval_arith.c"
-line = 215
-begin = 17
-end = 31
-
-[C_48]
-file = "HOME/tests/c/interval_arith.c"
-line = 132
-begin = 13
-end = 229
-
-[C_4]
-file = "HOME/tests/c/interval_arith.c"
-line = 6
+line = 16
 begin = 12
-end = 56
+end = 32
 
-[C_120]
-file = "HOME/tests/c/interval_arith.c"
-line = 209
-begin = 17
-end = 52
-
-[C_12]
-file = "HOME/tests/c/interval_arith.c"
-line = 21
-begin = 13
-end = 14
-
-[C_26]
-file = "HOME/tests/c/interval_arith.c"
-line = 43
-begin = 13
-end = 65
-
-[C_115]
-file = "HOME/tests/c/interval_arith.c"
-line = 209
-begin = 37
-end = 51
-
-[C_99]
+[_C_99]
 file = "HOME/tests/c/interval_arith.c"
 line = 218
 begin = 17
 end = 20
 
-[C_94]
+[_C_26]
 file = "HOME/tests/c/interval_arith.c"
-line = 227
-begin = 17
-end = 31
+line = 43
+begin = 13
+end = 65
 
-[C_18]
+[_C_47]
+file = "HOME/tests/c/interval_arith.c"
+line = 127
+begin = 13
+end = 229
+
+[_C_10]
+file = "HOME/tests/c/interval_arith.c"
+line = 5
+begin = 28
+end = 39
+
+[_C_68]
+file = "HOME/tests/c/interval_arith.c"
+line = 150
+begin = 35
+end = 53
+
+[_C_60]
+file = "HOME/tests/c/interval_arith.c"
+line = 164
+begin = 9
+end = 19
+
+[_C_53]
+file = "HOME/tests/c/interval_arith.c"
+line = 69
+begin = 13
+end = 65
+
+[_C_40]
+file = "HOME/tests/c/interval_arith.c"
+line = 95
+begin = 13
+end = 75
+
+[_C_58]
+file = "HOME/tests/c/interval_arith.c"
+line = 158
+begin = 7
+end = 14
+
+[_C_8]
+file = "HOME/tests/c/interval_arith.c"
+line = 5
+begin = 13
+end = 39
+
+[_C_119]
+file = "HOME/tests/c/interval_arith.c"
+line = 209
+begin = 17
+end = 52
+
+[_C_66]
+file = "HOME/tests/c/interval_arith.c"
+line = 150
+begin = 13
+end = 53
+
+[_C_18]
 file = "HOME/tests/c/interval_arith.c"
 line = 15
 begin = 13
 end = 39
 
-[C_107]
-file = "HOME/tests/c/interval_arith.c"
-line = 212
-begin = 17
-end = 31
-
-[C_51]
-file = "HOME/tests/c/interval_arith.c"
-line = 71
-begin = 13
-end = 58
-
-[C_2]
-file = "HOME/tests/c/interval_arith.c"
-line = 11
-begin = 13
-end = 14
-
-[C_97]
-file = "HOME/tests/c/interval_arith.c"
-line = 224
-begin = 17
-end = 31
-
-[C_113]
-file = "HOME/tests/c/interval_arith.c"
-line = 208
-begin = 17
-end = 52
-
-[C_28]
+[_C_29]
 file = "HOME/tests/c/interval_arith.c"
 line = 42
-begin = 13
-end = 25
+begin = 29
+end = 41
 
-[C_67]
+[_C_75]
 file = "HOME/tests/c/interval_arith.c"
-line = 150
-begin = 13
+line = 247
+begin = 17
 end = 31
 
-[C_24]
+[_C_14]
 file = "HOME/tests/c/interval_arith.c"
-line = 45
-begin = 13
-end = 58
-
-[C_6]
-file = "HOME/tests/c/interval_arith.c"
-line = 6
-begin = 36
+line = 16
+begin = 12
 end = 56
 
-[C_30]
+[_C_123]
 file = "HOME/tests/c/interval_arith.c"
-line = 78
+line = 198
 begin = 12
-end = 13
+end = 115
 
-[C_119]
+[_C_106]
 file = "HOME/tests/c/interval_arith.c"
-line = 209
+line = 211
 begin = 17
-end = 52
+end = 31
 
-[C_118]
+[_C_50]
 file = "HOME/tests/c/interval_arith.c"
-line = 209
-begin = 21
-end = 35
+line = 72
+begin = 13
+end = 140
 
-[C_108]
+[_C_37]
+file = "HOME/tests/c/interval_arith.c"
+line = 87
+begin = 13
+end = 73
+
+[_C_43]
+file = "HOME/tests/c/interval_arith.c"
+line = 109
+begin = 13
+end = 182
+
+[_C_107]
 file = "HOME/tests/c/interval_arith.c"
 line = 212
 begin = 17
 end = 31
 
-[C_81]
-file = "HOME/tests/c/interval_arith.c"
-line = 239
-begin = 17
-end = 31
-
-[C_41]
-file = "HOME/tests/c/interval_arith.c"
-line = 100
-begin = 13
-end = 202
-
-[C_21]
-file = "HOME/tests/c/interval_arith.c"
-line = 51
-begin = 13
-end = 16
-
-[C_3]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[C_124]
-file = "HOME/tests/c/interval_arith.c"
-line = 196
-begin = 13
-end = 53
-
-[C_16]
-file = "HOME/tests/c/interval_arith.c"
-line = 16
-begin = 36
-end = 56
-
-[C_91]
-file = "HOME/tests/c/interval_arith.c"
-line = 226
-begin = 17
-end = 31
-
-[C_87]
+[_C_88]
 file = "HOME/tests/c/interval_arith.c"
 line = 230
 begin = 17
 end = 31
 
-[C_49]
+[_C_100]
 file = "HOME/tests/c/interval_arith.c"
-line = 75
-begin = 12
-end = 41
-
-[C_31]
-file = "HOME/tests/c/interval_arith.c"
-line = 78
-begin = 2
-end = 8
-
-[C_117]
-file = "HOME/tests/c/interval_arith.c"
-line = 209
-begin = 21
-end = 35
-
-[C_85]
-file = "HOME/tests/c/interval_arith.c"
-line = 233
+line = 219
 begin = 17
 end = 20
 
-[C_78]
+[_C_2]
+file = "HOME/tests/c/interval_arith.c"
+line = 11
+begin = 13
+end = 14
+
+[_C_34]
+file = "HOME/tests/c/interval_arith.c"
+line = 80
+begin = 12
+end = 13
+
+[_C_67]
+file = "HOME/tests/c/interval_arith.c"
+line = 150
+begin = 13
+end = 31
+
+[_C_16]
+file = "HOME/tests/c/interval_arith.c"
+line = 16
+begin = 36
+end = 56
+
+[_C_125]
+file = "HOME/tests/c/interval_arith.c"
+line = 196
+begin = 13
+end = 31
+
+[_C_113]
+file = "HOME/tests/c/interval_arith.c"
+line = 208
+begin = 17
+end = 52
+
+[_C_126]
+file = "HOME/tests/c/interval_arith.c"
+line = 196
+begin = 35
+end = 53
+
+[_C_1]
+file = "HOME/tests/c/interval_arith.c"
+line = 11
+begin = 13
+end = 14
+
+[_C_76]
+file = "HOME/tests/c/interval_arith.c"
+line = 247
+begin = 17
+end = 31
+
+[_C_25]
+file = "HOME/tests/c/interval_arith.c"
+line = 44
+begin = 13
+end = 58
+
+[_C_39]
+file = "HOME/tests/c/interval_arith.c"
+line = 92
+begin = 13
+end = 117
+
+[_C_80]
+file = "HOME/tests/c/interval_arith.c"
+line = 243
+begin = 17
+end = 31
+
+[_C_74]
+file = "HOME/tests/c/interval_arith.c"
+line = 246
+begin = 17
+end = 31
+
+[_C_78]
 file = "HOME/tests/c/interval_arith.c"
 line = 242
 begin = 17
 end = 31
 
-[C_70]
+[_C_11]
 file = "HOME/tests/c/interval_arith.c"
-line = 253
+line = 21
+begin = 13
+end = 14
+
+[_C_21]
+file = "HOME/tests/c/interval_arith.c"
+line = 51
 begin = 13
 end = 16
 
-[C_23]
+[_C_118]
 file = "HOME/tests/c/interval_arith.c"
-line = 47
-begin = 12
-end = 39
-
-[C_83]
-file = "HOME/tests/c/interval_arith.c"
-line = 240
-begin = 17
-end = 31
+line = 209
+begin = 21
+end = 35
 
 ========== jessie execution ==========
 Generating Why function min
@@ -3585,20 +3588,14 @@ let add_ensures_default =
     ((JC_115: is_interval(xl_0, xu_0)) and (JC_116: is_interval(yl, yu)))) }
   (init:
   try
-   (C_58:
    begin
-     (let _jessie_<num> =
-     (zl := (C_57: (JC_131: (((add_double down) xl_0) yl)))) in void);
-    (C_62:
-    begin
-      (let _jessie_<num> =
-      (zu := (C_61:
-             (JC_134:
-             (neg_double (C_60:
-                         (JC_133:
-                         (((sub_double down) (C_59:
-                                             (JC_132: (neg_double xu_0)))) yu))))))) in
-      void); (raise Return); (raise Return) end) end) with Return -> void end)
+     (let _jessie_<num> = (zl := (JC_131: (((add_double down) xl_0) yl))) in
+     void);
+    (let _jessie_<num> =
+    (zu := (JC_134:
+           (neg_double (JC_133:
+                       (((sub_double down) (JC_132: (neg_double xu_0))) yu))))) in
+    void); (raise Return); (raise Return) end with Return -> void end)
   { (JC_121:
     ((JC_119: is_interval(zl, zu))
     and (JC_120:
@@ -3613,20 +3610,14 @@ let add_safety =
     ((JC_115: is_interval(xl_0, xu_0)) and (JC_116: is_interval(yl, yu)))) }
   (init:
   try
-   (C_58:
    begin
-     (let _jessie_<num> =
-     (zl := (C_57: (JC_127: (((add_double down) xl_0) yl)))) in void);
-    (C_62:
-    begin
-      (let _jessie_<num> =
-      (zu := (C_61:
-             (JC_130:
-             (neg_double (C_60:
-                         (JC_129:
-                         (((sub_double down) (C_59:
-                                             (JC_128: (neg_double xu_0)))) yu))))))) in
-      void); (raise Return); (raise Return) end) end) with Return -> void end)
+     (let _jessie_<num> = (zl := (JC_127: (((add_double down) xl_0) yl))) in
+     void);
+    (let _jessie_<num> =
+    (zu := (JC_130:
+           (neg_double (JC_129:
+                       (((sub_double down) (JC_128: (neg_double xu_0))) yu))))) in
+    void); (raise Return); (raise Return) end with Return -> void end)
   { true }
 
 let max_ensures_default =
@@ -3640,11 +3631,9 @@ let max_ensures_default =
      (let tmp_0 = ref (any_double void) in
      begin
        (let _jessie_<num> =
-       (if ((gt_double_ x_1) y)
-       then (C_12: begin   (tmp_0 := x_1); !tmp_0 end)
-       else (C_11: begin   (tmp_0 := y); !tmp_0 end)) in void);
-      (return := !tmp_0); (raise Return) end); absurd  end with Return ->
-   !return end))
+       (if ((gt_double_ x_1) y) then begin   (tmp_0 := x_1); !tmp_0 end
+       else begin   (tmp_0 := y); !tmp_0 end) in void); (return := !tmp_0);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_30:
     ((JC_27: le_double_full(x_1, result))
     and ((JC_28: le_double_full(y, result))
@@ -3662,11 +3651,9 @@ let max_safety =
      (let tmp_0 = ref (any_double void) in
      begin
        (let _jessie_<num> =
-       (if ((gt_double_ x_1) y)
-       then (C_12: begin   (tmp_0 := x_1); !tmp_0 end)
-       else (C_11: begin   (tmp_0 := y); !tmp_0 end)) in void);
-      (return := !tmp_0); (raise Return) end); absurd  end with Return ->
-   !return end)) { true }
+       (if ((gt_double_ x_1) y) then begin   (tmp_0 := x_1); !tmp_0 end
+       else begin   (tmp_0 := y); !tmp_0 end) in void); (return := !tmp_0);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let min_ensures_default =
  fun (x_0 : double) (y_0 : double) ->
@@ -3679,10 +3666,9 @@ let min_ensures_default =
      (let tmp = ref (any_double void) in
      begin
        (let _jessie_<num> =
-       (if ((lt_double_ x_0) y_0) then (C_2: begin   (tmp := x_0); !tmp end)
-       else (C_1: begin   (tmp := y_0); !tmp end)) in void);
-      (return := !tmp); (raise Return) end); absurd  end with Return ->
-   !return end))
+       (if ((lt_double_ x_0) y_0) then begin   (tmp := x_0); !tmp end
+       else begin   (tmp := y_0); !tmp end) in void); (return := !tmp);
+      (raise Return) end); absurd  end with Return -> !return end))
   { (JC_12:
     ((JC_9: le_double_full(result, x_0))
     and ((JC_10: le_double_full(result, y_0))
@@ -3700,10 +3686,9 @@ let min_safety =
      (let tmp = ref (any_double void) in
      begin
        (let _jessie_<num> =
-       (if ((lt_double_ x_0) y_0) then (C_2: begin   (tmp := x_0); !tmp end)
-       else (C_1: begin   (tmp := y_0); !tmp end)) in void);
-      (return := !tmp); (raise Return) end); absurd  end with Return ->
-   !return end)) { true }
+       (if ((lt_double_ x_0) y_0) then begin   (tmp := x_0); !tmp end
+       else begin   (tmp := y_0); !tmp end) in void); (return := !tmp);
+      (raise Return) end); absurd  end with Return -> !return end)) { true }
 
 let mul_dn_ensures_default =
  fun (x_1_1 : double) (y_1_1 : double) ->
@@ -3724,11 +3709,9 @@ let mul_dn_ensures_default =
   try
    begin
      (let z = ref (any_double void) in
-     (C_22:
      begin
-       (let _jessie_<num> =
-       (z := (C_21: (JC_58: (((mul_double down) x_1_1) y_1_1)))) in void);
-      (return := !z); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<num> = (z := (JC_58: (((mul_double down) x_1_1) y_1_1))) in
+       void); (return := !z); (raise Return) end); absurd  end with Return ->
    !return end))
   { (JC_51:
     double_le_real(result,
@@ -3753,11 +3736,9 @@ let mul_dn_safety =
   try
    begin
      (let z = ref (any_double void) in
-     (C_22:
      begin
-       (let _jessie_<num> =
-       (z := (C_21: (JC_57: (((mul_double down) x_1_1) y_1_1)))) in void);
-      (return := !z); (raise Return) end)); absurd  end with Return ->
+       (let _jessie_<num> = (z := (JC_57: (((mul_double down) x_1_1) y_1_1))) in
+       void); (return := !z); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 
 let mul_ensures_default =
@@ -3784,144 +3765,95 @@ let mul_ensures_default =
           then
            begin
              (let _jessie_<num> =
-             (C_110:
              begin
                (let _jessie_<num> =
-               (tmp_1 := (C_109:
-                         (let _jessie_<num> = xu_0_0 in
+               (tmp_1 := (let _jessie_<num> = xu_0_0 in
                          (let _jessie_<num> = yl_0 in
-                         (JC_173: ((mul_dn _jessie_<num>) _jessie_<num>)))))) in
+                         (JC_173: ((mul_dn _jessie_<num>) _jessie_<num>))))) in
                void);
-              (C_112:
-              begin
-                (tmp_0_0 := (C_111:
-                            (let _jessie_<num> = xl_0_0 in
-                            (let _jessie_<num> = yu_0 in
-                            (JC_174: ((mul_dn _jessie_<num>) _jessie_<num>))))));
-               !tmp_0_0 end) end) in void);
-            (C_114:
+              (tmp_0_0 := (let _jessie_<num> = xl_0_0 in
+                          (let _jessie_<num> = yu_0 in
+                          (JC_174: ((mul_dn _jessie_<num>) _jessie_<num>)))));
+              !tmp_0_0 end in void);
+            (let _jessie_<num> =
+            (zl := (let _jessie_<num> = !tmp_0_0 in
+                   (let _jessie_<num> = !tmp_1 in
+                   (JC_175: ((min _jessie_<num>) _jessie_<num>))))) in void);
+            (let _jessie_<num> =
             begin
               (let _jessie_<num> =
-              (zl := (C_113:
-                     (let _jessie_<num> = !tmp_0_0 in
-                     (let _jessie_<num> = !tmp_1 in
-                     (JC_175: ((min _jessie_<num>) _jessie_<num>)))))) in void);
-             (let _jessie_<num> =
-             (C_116:
-             begin
-               (let _jessie_<num> =
-               (tmp_1_0 := (C_115:
-                           (let _jessie_<num> = xu_0_0 in
-                           (let _jessie_<num> = yu_0 in
-                           (JC_176: ((mul_up _jessie_<num>) _jessie_<num>)))))) in
-               void);
-              (C_118:
-              begin
-                (tmp_2 := (C_117:
-                          (let _jessie_<num> = xl_0_0 in
-                          (let _jessie_<num> = yl_0 in
-                          (JC_177: ((mul_up _jessie_<num>) _jessie_<num>))))));
-               !tmp_2 end) end) in void);
-             (C_120:
-             begin
-               (zu := (C_119:
-                      (let _jessie_<num> = !tmp_2 in
-                      (let _jessie_<num> = !tmp_1_0 in
-                      (JC_178: ((max _jessie_<num>) _jessie_<num>)))))); !zu end)
-            end) end
+              (tmp_1_0 := (let _jessie_<num> = xu_0_0 in
+                          (let _jessie_<num> = yu_0 in
+                          (JC_176: ((mul_up _jessie_<num>) _jessie_<num>))))) in
+              void);
+             (tmp_2 := (let _jessie_<num> = xl_0_0 in
+                       (let _jessie_<num> = yl_0 in
+                       (JC_177: ((mul_up _jessie_<num>) _jessie_<num>)))));
+             !tmp_2 end in void);
+            (zu := (let _jessie_<num> = !tmp_2 in
+                   (let _jessie_<num> = !tmp_1_0 in
+                   (JC_178: ((max _jessie_<num>) _jessie_<num>))))); !zu end
           else
-           (C_106:
            begin
              (let _jessie_<num> =
-             (zl := (C_105:
-                    (let _jessie_<num> = xu_0_0 in
+             (zl := (let _jessie_<num> = xu_0_0 in
                     (let _jessie_<num> = yl_0 in
-                    (JC_179: ((mul_dn _jessie_<num>) _jessie_<num>)))))) in void);
-            (C_108:
-            begin
-              (zu := (C_107:
-                     (let _jessie_<num> = xl_0_0 in
-                     (let _jessie_<num> = yl_0 in
-                     (JC_180: ((mul_up _jessie_<num>) _jessie_<num>)))))); !zu
-            end) end))
+                    (JC_179: ((mul_dn _jessie_<num>) _jessie_<num>))))) in void);
+            (zu := (let _jessie_<num> = xl_0_0 in
+                   (let _jessie_<num> = yl_0 in
+                   (JC_180: ((mul_up _jessie_<num>) _jessie_<num>))))); !zu end)
          else
           (if ((gt_double_ yu_0) (double_of_real_exact 0.0))
           then
-           (C_102:
            begin
              (let _jessie_<num> =
-             (zl := (C_101:
-                    (let _jessie_<num> = xl_0_0 in
+             (zl := (let _jessie_<num> = xl_0_0 in
                     (let _jessie_<num> = yu_0 in
-                    (JC_181: ((mul_dn _jessie_<num>) _jessie_<num>)))))) in void);
-            (C_104:
-            begin
-              (zu := (C_103:
-                     (let _jessie_<num> = xu_0_0 in
-                     (let _jessie_<num> = yu_0 in
-                     (JC_182: ((mul_up _jessie_<num>) _jessie_<num>)))))); !zu
-            end) end)
+                    (JC_181: ((mul_dn _jessie_<num>) _jessie_<num>))))) in void);
+            (zu := (let _jessie_<num> = xu_0_0 in
+                   (let _jessie_<num> = yu_0 in
+                   (JC_182: ((mul_up _jessie_<num>) _jessie_<num>))))); !zu end
           else
-           (C_99:
            begin
              (let _jessie_<num> = (zl := (double_of_real_exact 0.0)) in void);
-            (C_100: begin   (zu := (double_of_real_exact 0.0)); !zu end) end)))
+            (zu := (double_of_real_exact 0.0)); !zu end))
         else
          (if ((lt_double_ yl_0) (double_of_real_exact 0.0))
          then
           (if ((gt_double_ yu_0) (double_of_real_exact 0.0))
           then
-           (C_96:
            begin
              (let _jessie_<num> =
-             (zl := (C_95:
-                    (let _jessie_<num> = xl_0_0 in
+             (zl := (let _jessie_<num> = xl_0_0 in
                     (let _jessie_<num> = yu_0 in
-                    (JC_183: ((mul_dn _jessie_<num>) _jessie_<num>)))))) in void);
-            (C_98:
-            begin
-              (zu := (C_97:
-                     (let _jessie_<num> = xl_0_0 in
-                     (let _jessie_<num> = yl_0 in
-                     (JC_184: ((mul_up _jessie_<num>) _jessie_<num>)))))); !zu
-            end) end)
+                    (JC_183: ((mul_dn _jessie_<num>) _jessie_<num>))))) in void);
+            (zu := (let _jessie_<num> = xl_0_0 in
+                   (let _jessie_<num> = yl_0 in
+                   (JC_184: ((mul_up _jessie_<num>) _jessie_<num>))))); !zu end
           else
-           (C_92:
            begin
              (let _jessie_<num> =
-             (zl := (C_91:
-                    (let _jessie_<num> = xu_0_0 in
+             (zl := (let _jessie_<num> = xu_0_0 in
                     (let _jessie_<num> = yu_0 in
-                    (JC_185: ((mul_dn _jessie_<num>) _jessie_<num>)))))) in void);
-            (C_94:
-            begin
-              (zu := (C_93:
-                     (let _jessie_<num> = xl_0_0 in
-                     (let _jessie_<num> = yl_0 in
-                     (JC_186: ((mul_up _jessie_<num>) _jessie_<num>)))))); !zu
-            end) end))
+                    (JC_185: ((mul_dn _jessie_<num>) _jessie_<num>))))) in void);
+            (zu := (let _jessie_<num> = xl_0_0 in
+                   (let _jessie_<num> = yl_0 in
+                   (JC_186: ((mul_up _jessie_<num>) _jessie_<num>))))); !zu end)
          else
           (if ((gt_double_ yu_0) (double_of_real_exact 0.0))
           then
-           (C_88:
            begin
              (let _jessie_<num> =
-             (zl := (C_87:
-                    (let _jessie_<num> = xl_0_0 in
+             (zl := (let _jessie_<num> = xl_0_0 in
                     (let _jessie_<num> = yu_0 in
-                    (JC_187: ((mul_dn _jessie_<num>) _jessie_<num>)))))) in void);
-            (C_90:
-            begin
-              (zu := (C_89:
-                     (let _jessie_<num> = xu_0_0 in
-                     (let _jessie_<num> = yl_0 in
-                     (JC_188: ((mul_up _jessie_<num>) _jessie_<num>)))))); !zu
-            end) end)
+                    (JC_187: ((mul_dn _jessie_<num>) _jessie_<num>))))) in void);
+            (zu := (let _jessie_<num> = xu_0_0 in
+                   (let _jessie_<num> = yl_0 in
+                   (JC_188: ((mul_up _jessie_<num>) _jessie_<num>))))); !zu end
           else
-           (C_85:
            begin
              (let _jessie_<num> = (zl := (double_of_real_exact 0.0)) in void);
-            (C_86: begin   (zu := (double_of_real_exact 0.0)); !zu end) end))))
+            (zu := (double_of_real_exact 0.0)); !zu end)))
        else
         (if ((gt_double_ xu_0_0) (double_of_real_exact 0.0))
         then
@@ -3929,64 +3861,43 @@ let mul_ensures_default =
          then
           (if ((gt_double_ yu_0) (double_of_real_exact 0.0))
           then
-           (C_82:
            begin
              (let _jessie_<num> =
-             (zl := (C_81:
-                    (let _jessie_<num> = xu_0_0 in
+             (zl := (let _jessie_<num> = xu_0_0 in
                     (let _jessie_<num> = yl_0 in
-                    (JC_189: ((mul_dn _jessie_<num>) _jessie_<num>)))))) in void);
-            (C_84:
-            begin
-              (zu := (C_83:
-                     (let _jessie_<num> = xu_0_0 in
-                     (let _jessie_<num> = yu_0 in
-                     (JC_190: ((mul_up _jessie_<num>) _jessie_<num>)))))); !zu
-            end) end)
+                    (JC_189: ((mul_dn _jessie_<num>) _jessie_<num>))))) in void);
+            (zu := (let _jessie_<num> = xu_0_0 in
+                   (let _jessie_<num> = yu_0 in
+                   (JC_190: ((mul_up _jessie_<num>) _jessie_<num>))))); !zu end
           else
-           (C_78:
            begin
              (let _jessie_<num> =
-             (zl := (C_77:
-                    (let _jessie_<num> = xu_0_0 in
+             (zl := (let _jessie_<num> = xu_0_0 in
                     (let _jessie_<num> = yl_0 in
-                    (JC_191: ((mul_dn _jessie_<num>) _jessie_<num>)))))) in void);
-            (C_80:
-            begin
-              (zu := (C_79:
-                     (let _jessie_<num> = xl_0_0 in
-                     (let _jessie_<num> = yu_0 in
-                     (JC_192: ((mul_up _jessie_<num>) _jessie_<num>)))))); !zu
-            end) end))
+                    (JC_191: ((mul_dn _jessie_<num>) _jessie_<num>))))) in void);
+            (zu := (let _jessie_<num> = xl_0_0 in
+                   (let _jessie_<num> = yu_0 in
+                   (JC_192: ((mul_up _jessie_<num>) _jessie_<num>))))); !zu end)
          else
           (if ((gt_double_ yu_0) (double_of_real_exact 0.0))
           then
-           (C_74:
            begin
              (let _jessie_<num> =
-             (zl := (C_73:
-                    (let _jessie_<num> = xl_0_0 in
+             (zl := (let _jessie_<num> = xl_0_0 in
                     (let _jessie_<num> = yl_0 in
-                    (JC_193: ((mul_dn _jessie_<num>) _jessie_<num>)))))) in void);
-            (C_76:
-            begin
-              (zu := (C_75:
-                     (let _jessie_<num> = xu_0_0 in
-                     (let _jessie_<num> = yu_0 in
-                     (JC_194: ((mul_up _jessie_<num>) _jessie_<num>)))))); !zu
-            end) end)
+                    (JC_193: ((mul_dn _jessie_<num>) _jessie_<num>))))) in void);
+            (zu := (let _jessie_<num> = xu_0_0 in
+                   (let _jessie_<num> = yu_0 in
+                   (JC_194: ((mul_up _jessie_<num>) _jessie_<num>))))); !zu end
           else
-           (C_71:
            begin
              (let _jessie_<num> = (zl := (double_of_real_exact 0.0)) in void);
-            (C_72: begin   (zu := (double_of_real_exact 0.0)); !zu end) end)))
+            (zu := (double_of_real_exact 0.0)); !zu end))
         else
-         (C_69:
          begin
            (let _jessie_<num> = (zl := (double_of_real_exact 0.0)) in void);
-          (C_70: begin   (zu := (double_of_real_exact 0.0)); !zu end) end))) in
-       void); (raise Return) end)))); (raise Return) end with Return ->
-   void end)
+          (zu := (double_of_real_exact 0.0)); !zu end)) in void);
+      (raise Return) end)))); (raise Return) end with Return -> void end)
   { (JC_145:
     ((JC_143: is_interval(zl, zu))
     and (JC_144:
@@ -4020,152 +3931,107 @@ let mul_safety =
           then
            begin
              (let _jessie_<num> =
-             (C_110:
              begin
                (let _jessie_<num> =
-               (tmp_1 := (C_109:
-                         (let _jessie_<num> = xu_0_0 in
+               (tmp_1 := (let _jessie_<num> = xu_0_0 in
                          (let _jessie_<num> = yl_0 in
-                         (JC_151: ((mul_dn_requires _jessie_<num>) _jessie_<num>)))))) in
+                         (JC_151: ((mul_dn_requires _jessie_<num>) _jessie_<num>))))) in
                void);
-              (C_112:
-              begin
-                (tmp_0_0 := (C_111:
-                            (let _jessie_<num> = xl_0_0 in
-                            (let _jessie_<num> = yu_0 in
-                            (JC_152:
-                            ((mul_dn_requires _jessie_<num>) _jessie_<num>))))));
-               !tmp_0_0 end) end) in void);
-            (C_114:
+              (tmp_0_0 := (let _jessie_<num> = xl_0_0 in
+                          (let _jessie_<num> = yu_0 in
+                          (JC_152: ((mul_dn_requires _jessie_<num>) _jessie_<num>)))));
+              !tmp_0_0 end in void);
+            (let _jessie_<num> =
+            (zl := (let _jessie_<num> = !tmp_0_0 in
+                   (let _jessie_<num> = !tmp_1 in
+                   (JC_153: ((min_requires _jessie_<num>) _jessie_<num>))))) in
+            void);
+            (let _jessie_<num> =
             begin
               (let _jessie_<num> =
-              (zl := (C_113:
-                     (let _jessie_<num> = !tmp_0_0 in
-                     (let _jessie_<num> = !tmp_1 in
-                     (JC_153: ((min_requires _jessie_<num>) _jessie_<num>)))))) in
+              (tmp_1_0 := (let _jessie_<num> = xu_0_0 in
+                          (let _jessie_<num> = yu_0 in
+                          (JC_154: ((mul_up_requires _jessie_<num>) _jessie_<num>))))) in
               void);
-             (let _jessie_<num> =
-             (C_116:
-             begin
-               (let _jessie_<num> =
-               (tmp_1_0 := (C_115:
-                           (let _jessie_<num> = xu_0_0 in
-                           (let _jessie_<num> = yu_0 in
-                           (JC_154:
-                           ((mul_up_requires _jessie_<num>) _jessie_<num>)))))) in
-               void);
-              (C_118:
-              begin
-                (tmp_2 := (C_117:
-                          (let _jessie_<num> = xl_0_0 in
-                          (let _jessie_<num> = yl_0 in
-                          (JC_155: ((mul_up_requires _jessie_<num>) _jessie_<num>))))));
-               !tmp_2 end) end) in void);
-             (C_120:
-             begin
-               (zu := (C_119:
-                      (let _jessie_<num> = !tmp_2 in
-                      (let _jessie_<num> = !tmp_1_0 in
-                      (JC_156: ((max_requires _jessie_<num>) _jessie_<num>))))));
-              !zu end) end) end
+             (tmp_2 := (let _jessie_<num> = xl_0_0 in
+                       (let _jessie_<num> = yl_0 in
+                       (JC_155: ((mul_up_requires _jessie_<num>) _jessie_<num>)))));
+             !tmp_2 end in void);
+            (zu := (let _jessie_<num> = !tmp_2 in
+                   (let _jessie_<num> = !tmp_1_0 in
+                   (JC_156: ((max_requires _jessie_<num>) _jessie_<num>))))); !zu
+           end
           else
-           (C_106:
            begin
              (let _jessie_<num> =
-             (zl := (C_105:
-                    (let _jessie_<num> = xu_0_0 in
+             (zl := (let _jessie_<num> = xu_0_0 in
                     (let _jessie_<num> = yl_0 in
-                    (JC_157: ((mul_dn_requires _jessie_<num>) _jessie_<num>)))))) in
+                    (JC_157: ((mul_dn_requires _jessie_<num>) _jessie_<num>))))) in
              void);
-            (C_108:
-            begin
-              (zu := (C_107:
-                     (let _jessie_<num> = xl_0_0 in
-                     (let _jessie_<num> = yl_0 in
-                     (JC_158: ((mul_up_requires _jessie_<num>) _jessie_<num>))))));
-             !zu end) end))
+            (zu := (let _jessie_<num> = xl_0_0 in
+                   (let _jessie_<num> = yl_0 in
+                   (JC_158: ((mul_up_requires _jessie_<num>) _jessie_<num>)))));
+            !zu end)
          else
           (if ((gt_double_ yu_0) (double_of_real_exact 0.0))
           then
-           (C_102:
            begin
              (let _jessie_<num> =
-             (zl := (C_101:
-                    (let _jessie_<num> = xl_0_0 in
+             (zl := (let _jessie_<num> = xl_0_0 in
                     (let _jessie_<num> = yu_0 in
-                    (JC_159: ((mul_dn_requires _jessie_<num>) _jessie_<num>)))))) in
+                    (JC_159: ((mul_dn_requires _jessie_<num>) _jessie_<num>))))) in
              void);
-            (C_104:
-            begin
-              (zu := (C_103:
-                     (let _jessie_<num> = xu_0_0 in
-                     (let _jessie_<num> = yu_0 in
-                     (JC_160: ((mul_up_requires _jessie_<num>) _jessie_<num>))))));
-             !zu end) end)
+            (zu := (let _jessie_<num> = xu_0_0 in
+                   (let _jessie_<num> = yu_0 in
+                   (JC_160: ((mul_up_requires _jessie_<num>) _jessie_<num>)))));
+            !zu end
           else
-           (C_99:
            begin
              (let _jessie_<num> = (zl := (double_of_real_exact 0.0)) in void);
-            (C_100: begin   (zu := (double_of_real_exact 0.0)); !zu end) end)))
+            (zu := (double_of_real_exact 0.0)); !zu end))
         else
          (if ((lt_double_ yl_0) (double_of_real_exact 0.0))
          then
           (if ((gt_double_ yu_0) (double_of_real_exact 0.0))
           then
-           (C_96:
            begin
              (let _jessie_<num> =
-             (zl := (C_95:
-                    (let _jessie_<num> = xl_0_0 in
+             (zl := (let _jessie_<num> = xl_0_0 in
                     (let _jessie_<num> = yu_0 in
-                    (JC_161: ((mul_dn_requires _jessie_<num>) _jessie_<num>)))))) in
+                    (JC_161: ((mul_dn_requires _jessie_<num>) _jessie_<num>))))) in
              void);
-            (C_98:
-            begin
-              (zu := (C_97:
-                     (let _jessie_<num> = xl_0_0 in
-                     (let _jessie_<num> = yl_0 in
-                     (JC_162: ((mul_up_requires _jessie_<num>) _jessie_<num>))))));
-             !zu end) end)
+            (zu := (let _jessie_<num> = xl_0_0 in
+                   (let _jessie_<num> = yl_0 in
+                   (JC_162: ((mul_up_requires _jessie_<num>) _jessie_<num>)))));
+            !zu end
           else
-           (C_92:
            begin
              (let _jessie_<num> =
-             (zl := (C_91:
-                    (let _jessie_<num> = xu_0_0 in
+             (zl := (let _jessie_<num> = xu_0_0 in
                     (let _jessie_<num> = yu_0 in
-                    (JC_163: ((mul_dn_requires _jessie_<num>) _jessie_<num>)))))) in
+                    (JC_163: ((mul_dn_requires _jessie_<num>) _jessie_<num>))))) in
              void);
-            (C_94:
-            begin
-              (zu := (C_93:
-                     (let _jessie_<num> = xl_0_0 in
-                     (let _jessie_<num> = yl_0 in
-                     (JC_164: ((mul_up_requires _jessie_<num>) _jessie_<num>))))));
-             !zu end) end))
+            (zu := (let _jessie_<num> = xl_0_0 in
+                   (let _jessie_<num> = yl_0 in
+                   (JC_164: ((mul_up_requires _jessie_<num>) _jessie_<num>)))));
+            !zu end)
          else
           (if ((gt_double_ yu_0) (double_of_real_exact 0.0))
           then
-           (C_88:
            begin
              (let _jessie_<num> =
-             (zl := (C_87:
-                    (let _jessie_<num> = xl_0_0 in
+             (zl := (let _jessie_<num> = xl_0_0 in
                     (let _jessie_<num> = yu_0 in
-                    (JC_165: ((mul_dn_requires _jessie_<num>) _jessie_<num>)))))) in
+                    (JC_165: ((mul_dn_requires _jessie_<num>) _jessie_<num>))))) in
              void);
-            (C_90:
-            begin
-              (zu := (C_89:
-                     (let _jessie_<num> = xu_0_0 in
-                     (let _jessie_<num> = yl_0 in
-                     (JC_166: ((mul_up_requires _jessie_<num>) _jessie_<num>))))));
-             !zu end) end)
+            (zu := (let _jessie_<num> = xu_0_0 in
+                   (let _jessie_<num> = yl_0 in
+                   (JC_166: ((mul_up_requires _jessie_<num>) _jessie_<num>)))));
+            !zu end
           else
-           (C_85:
            begin
              (let _jessie_<num> = (zl := (double_of_real_exact 0.0)) in void);
-            (C_86: begin   (zu := (double_of_real_exact 0.0)); !zu end) end))))
+            (zu := (double_of_real_exact 0.0)); !zu end)))
        else
         (if ((gt_double_ xu_0_0) (double_of_real_exact 0.0))
         then
@@ -4173,67 +4039,50 @@ let mul_safety =
          then
           (if ((gt_double_ yu_0) (double_of_real_exact 0.0))
           then
-           (C_82:
            begin
              (let _jessie_<num> =
-             (zl := (C_81:
-                    (let _jessie_<num> = xu_0_0 in
+             (zl := (let _jessie_<num> = xu_0_0 in
                     (let _jessie_<num> = yl_0 in
-                    (JC_167: ((mul_dn_requires _jessie_<num>) _jessie_<num>)))))) in
+                    (JC_167: ((mul_dn_requires _jessie_<num>) _jessie_<num>))))) in
              void);
-            (C_84:
-            begin
-              (zu := (C_83:
-                     (let _jessie_<num> = xu_0_0 in
-                     (let _jessie_<num> = yu_0 in
-                     (JC_168: ((mul_up_requires _jessie_<num>) _jessie_<num>))))));
-             !zu end) end)
+            (zu := (let _jessie_<num> = xu_0_0 in
+                   (let _jessie_<num> = yu_0 in
+                   (JC_168: ((mul_up_requires _jessie_<num>) _jessie_<num>)))));
+            !zu end
           else
-           (C_78:
            begin
              (let _jessie_<num> =
-             (zl := (C_77:
-                    (let _jessie_<num> = xu_0_0 in
+             (zl := (let _jessie_<num> = xu_0_0 in
                     (let _jessie_<num> = yl_0 in
-                    (JC_169: ((mul_dn_requires _jessie_<num>) _jessie_<num>)))))) in
+                    (JC_169: ((mul_dn_requires _jessie_<num>) _jessie_<num>))))) in
              void);
-            (C_80:
-            begin
-              (zu := (C_79:
-                     (let _jessie_<num> = xl_0_0 in
-                     (let _jessie_<num> = yu_0 in
-                     (JC_170: ((mul_up_requires _jessie_<num>) _jessie_<num>))))));
-             !zu end) end))
+            (zu := (let _jessie_<num> = xl_0_0 in
+                   (let _jessie_<num> = yu_0 in
+                   (JC_170: ((mul_up_requires _jessie_<num>) _jessie_<num>)))));
+            !zu end)
          else
           (if ((gt_double_ yu_0) (double_of_real_exact 0.0))
           then
-           (C_74:
            begin
              (let _jessie_<num> =
-             (zl := (C_73:
-                    (let _jessie_<num> = xl_0_0 in
+             (zl := (let _jessie_<num> = xl_0_0 in
                     (let _jessie_<num> = yl_0 in
-                    (JC_171: ((mul_dn_requires _jessie_<num>) _jessie_<num>)))))) in
+                    (JC_171: ((mul_dn_requires _jessie_<num>) _jessie_<num>))))) in
              void);
-            (C_76:
-            begin
-              (zu := (C_75:
-                     (let _jessie_<num> = xu_0_0 in
-                     (let _jessie_<num> = yu_0 in
-                     (JC_172: ((mul_up_requires _jessie_<num>) _jessie_<num>))))));
-             !zu end) end)
+            (zu := (let _jessie_<num> = xu_0_0 in
+                   (let _jessie_<num> = yu_0 in
+                   (JC_172: ((mul_up_requires _jessie_<num>) _jessie_<num>)))));
+            !zu end
           else
-           (C_71:
            begin
              (let _jessie_<num> = (zl := (double_of_real_exact 0.0)) in void);
-            (C_72: begin   (zu := (double_of_real_exact 0.0)); !zu end) end)))
+            (zu := (double_of_real_exact 0.0)); !zu end))
         else
-         (C_69:
          begin
            (let _jessie_<num> = (zl := (double_of_real_exact 0.0)) in void);
-          (C_70: begin   (zu := (double_of_real_exact 0.0)); !zu end) end))) in
-       void); (raise Return) end)))); (raise Return) end with Return ->
-   void end) { true }
+          (zu := (double_of_real_exact 0.0)); !zu end)) in void);
+      (raise Return) end)))); (raise Return) end with Return -> void end)
+  { true }
 
 let mul_up_ensures_default =
  fun (x_2_1 : double) (y_2_0 : double) ->
@@ -4263,143 +4112,133 @@ let mul_up_ensures_default =
      (let a_0 = ref (any_double void) in
      (let b = ref (any_double void) in
      (let z_0 = ref (any_double void) in
-     (C_31:
      begin
-       (let _jessie_<num> = (a_0 := (C_30: (JC_95: (neg_double y_2_0)))) in
-       void);
-      (C_33:
-      begin
-        (let _jessie_<num> =
-        (b := (C_32: (JC_96: (((mul_double down) x_2_1) !a_0)))) in void);
-       (C_35:
-       begin
-         (let _jessie_<num> = (z_0 := (C_34: (JC_97: (neg_double !b)))) in void);
-        (assert
-        { (JC_98:
-          ((double_is_infinite(x_2_1) or double_is_infinite(y_2_0)) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_99:
-          ((double_is_finite(x_2_1) and double_is_infinite(y_2_0)) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_100:
-          ((double_is_infinite(x_2_1)
-           and (double_is_finite(y_2_0)
-               and no_overflow_double(down, neg_real(double_value(y_2_0))))) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_101:
-          ((double_is_infinite(x_2_1)
-           and (double_is_finite(y_2_0)
-               and (not no_overflow_double(down,
-                        neg_real(double_value(y_2_0)))))) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_102:
-          ((double_is_infinite(x_2_1) and double_is_infinite(y_2_0)) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_103:
-          ((double_is_finite(x_2_1)
-           and (double_is_finite(y_2_0)
-               and (no_overflow_double(down, neg_real(double_value(y_2_0)))
-                   and (no_overflow_double(down,
-                        mul_real(double_value(x_2_1), double_value(a_0)))
-                       and (not no_overflow_double(down,
-                                neg_real(double_value(b)))))))) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_104:
-          ((double_is_finite(x_2_1)
-           and (double_is_finite(y_2_0)
-               and (no_overflow_double(down, neg_real(double_value(y_2_0)))
-                   and (not no_overflow_double(down,
-                            mul_real(double_value(x_2_1), double_value(a_0))))))) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_105:
-          ((double_is_finite(x_2_1)
-           and (double_is_finite(y_2_0)
-               and ((not no_overflow_double(down,
-                         neg_real(double_value(y_2_0))))
-                   and (double_sign(y_2_0) = Positive)))) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_106:
-          ((double_is_finite(x_2_1)
-           and (double_is_finite(y_2_0)
-               and ((not no_overflow_double(down,
-                         neg_real(double_value(y_2_0))))
-                   and ((double_sign(y_2_0) = Negative)
-                       and (not no_overflow_double(down,
-                                mul_real(double_value(x_2_1),
-                                double_value(a_0)))))))) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_107:
-          ((double_is_finite(x_2_1)
-           and (double_is_finite(y_2_0)
-               and ((not no_overflow_double(down,
-                         neg_real(double_value(y_2_0))))
-                   and ((double_sign(y_2_0) = Negative)
-                       and (no_overflow_double(down,
-                            mul_real(double_value(x_2_1), double_value(a_0)))
-                           and (not no_overflow_double(down,
-                                    neg_real(double_value(b))))))))) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_108:
-          ((double_is_finite(x_2_1)
-           and (double_is_finite(y_2_0)
-               and ((not no_overflow_double(down,
-                         neg_real(double_value(y_2_0))))
-                   and ((double_sign(y_2_0) = Negative)
-                       and (no_overflow_double(down,
-                            mul_real(double_value(x_2_1), double_value(a_0)))
-                           and no_overflow_double(down,
-                               neg_real(double_value(b)))))))) ->
-           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
-           z_0))) }; void); void;
-        (assert
-        { (JC_109:
-          ((double_is_finite(x_2_1)
-           and (double_is_finite(y_2_0)
-               and (no_overflow_double(down, neg_real(double_value(y_2_0)))
-                   and (no_overflow_double(down,
-                        mul_real(double_value(x_2_1), double_value(a_0)))
-                       and (no_overflow_double(down,
-                            neg_real(double_value(b)))
-                           and gt_real(double_value(x_2_1), 0.0)))))) ->
-           (double_is_finite(z_0)
-           and real_le_double(mul_real(double_value(x_2_1),
-                              double_value(y_2_0)),
-               z_0)))) }; void); void;
-        (assert
-        { (JC_110:
-          ((double_is_finite(x_2_1)
-           and (double_is_finite(y_2_0)
-               and (no_overflow_double(down, neg_real(double_value(y_2_0)))
-                   and (no_overflow_double(down,
-                        mul_real(double_value(x_2_1), double_value(a_0)))
-                       and (no_overflow_double(down,
-                            neg_real(double_value(b)))
-                           and lt_real(double_value(x_2_1), 0.0)))))) ->
-           (double_is_finite(z_0)
-           and real_le_double(mul_real(double_value(x_2_1),
-                              double_value(y_2_0)),
-               z_0)))) }; void); void; (return := !z_0); (raise Return) end)
-      end) end)))); absurd  end with Return -> !return end))
+       (let _jessie_<num> = (a_0 := (JC_95: (neg_double y_2_0))) in void);
+      (let _jessie_<num> = (b := (JC_96: (((mul_double down) x_2_1) !a_0))) in
+      void); (let _jessie_<num> = (z_0 := (JC_97: (neg_double !b))) in void);
+      (assert
+      { (JC_98:
+        ((double_is_infinite(x_2_1) or double_is_infinite(y_2_0)) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_99:
+        ((double_is_finite(x_2_1) and double_is_infinite(y_2_0)) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_100:
+        ((double_is_infinite(x_2_1)
+         and (double_is_finite(y_2_0)
+             and no_overflow_double(down, neg_real(double_value(y_2_0))))) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_101:
+        ((double_is_infinite(x_2_1)
+         and (double_is_finite(y_2_0)
+             and (not no_overflow_double(down, neg_real(double_value(y_2_0)))))) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_102:
+        ((double_is_infinite(x_2_1) and double_is_infinite(y_2_0)) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_103:
+        ((double_is_finite(x_2_1)
+         and (double_is_finite(y_2_0)
+             and (no_overflow_double(down, neg_real(double_value(y_2_0)))
+                 and (no_overflow_double(down,
+                      mul_real(double_value(x_2_1), double_value(a_0)))
+                     and (not no_overflow_double(down,
+                              neg_real(double_value(b)))))))) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_104:
+        ((double_is_finite(x_2_1)
+         and (double_is_finite(y_2_0)
+             and (no_overflow_double(down, neg_real(double_value(y_2_0)))
+                 and (not no_overflow_double(down,
+                          mul_real(double_value(x_2_1), double_value(a_0))))))) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_105:
+        ((double_is_finite(x_2_1)
+         and (double_is_finite(y_2_0)
+             and ((not no_overflow_double(down,
+                       neg_real(double_value(y_2_0))))
+                 and (double_sign(y_2_0) = Positive)))) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_106:
+        ((double_is_finite(x_2_1)
+         and (double_is_finite(y_2_0)
+             and ((not no_overflow_double(down,
+                       neg_real(double_value(y_2_0))))
+                 and ((double_sign(y_2_0) = Negative)
+                     and (not no_overflow_double(down,
+                              mul_real(double_value(x_2_1),
+                              double_value(a_0)))))))) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_107:
+        ((double_is_finite(x_2_1)
+         and (double_is_finite(y_2_0)
+             and ((not no_overflow_double(down,
+                       neg_real(double_value(y_2_0))))
+                 and ((double_sign(y_2_0) = Negative)
+                     and (no_overflow_double(down,
+                          mul_real(double_value(x_2_1), double_value(a_0)))
+                         and (not no_overflow_double(down,
+                                  neg_real(double_value(b))))))))) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_108:
+        ((double_is_finite(x_2_1)
+         and (double_is_finite(y_2_0)
+             and ((not no_overflow_double(down,
+                       neg_real(double_value(y_2_0))))
+                 and ((double_sign(y_2_0) = Negative)
+                     and (no_overflow_double(down,
+                          mul_real(double_value(x_2_1), double_value(a_0)))
+                         and no_overflow_double(down,
+                             neg_real(double_value(b)))))))) ->
+         real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+         z_0))) }; void); void;
+      (assert
+      { (JC_109:
+        ((double_is_finite(x_2_1)
+         and (double_is_finite(y_2_0)
+             and (no_overflow_double(down, neg_real(double_value(y_2_0)))
+                 and (no_overflow_double(down,
+                      mul_real(double_value(x_2_1), double_value(a_0)))
+                     and (no_overflow_double(down, neg_real(double_value(b)))
+                         and gt_real(double_value(x_2_1), 0.0)))))) ->
+         (double_is_finite(z_0)
+         and real_le_double(mul_real(double_value(x_2_1),
+                            double_value(y_2_0)),
+             z_0)))) }; void); void;
+      (assert
+      { (JC_110:
+        ((double_is_finite(x_2_1)
+         and (double_is_finite(y_2_0)
+             and (no_overflow_double(down, neg_real(double_value(y_2_0)))
+                 and (no_overflow_double(down,
+                      mul_real(double_value(x_2_1), double_value(a_0)))
+                     and (no_overflow_double(down, neg_real(double_value(b)))
+                         and lt_real(double_value(x_2_1), 0.0)))))) ->
+         (double_is_finite(z_0)
+         and real_le_double(mul_real(double_value(x_2_1),
+                            double_value(y_2_0)),
+             z_0)))) }; void); void; (return := !z_0); (raise Return) end)));
+    absurd  end with Return -> !return end))
   { (JC_75:
     real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
     result)) }
@@ -4432,157 +4271,136 @@ let mul_up_safety =
      (let a_0 = ref (any_double void) in
      (let b = ref (any_double void) in
      (let z_0 = ref (any_double void) in
-     (C_31:
      begin
-       (let _jessie_<num> = (a_0 := (C_30: (JC_79: (neg_double y_2_0)))) in
-       void);
-      (C_33:
-      begin
-        (let _jessie_<num> =
-        (b := (C_32: (JC_80: (((mul_double down) x_2_1) !a_0)))) in void);
-       (C_35:
-       begin
-         (let _jessie_<num> = (z_0 := (C_34: (JC_81: (neg_double !b)))) in void);
-        [ { } unit reads z_0
-          { (JC_82:
-            ((double_is_infinite(x_2_1) or double_is_infinite(y_2_0)) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads z_0
-          { (JC_83:
-            ((double_is_finite(x_2_1) and double_is_infinite(y_2_0)) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads z_0
-          { (JC_84:
-            ((double_is_infinite(x_2_1)
-             and (double_is_finite(y_2_0)
-                 and no_overflow_double(down, neg_real(double_value(y_2_0))))) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads z_0
-          { (JC_85:
-            ((double_is_infinite(x_2_1)
-             and (double_is_finite(y_2_0)
-                 and (not no_overflow_double(down,
-                          neg_real(double_value(y_2_0)))))) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads z_0
-          { (JC_86:
-            ((double_is_infinite(x_2_1) and double_is_infinite(y_2_0)) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads a_0,b,z_0
-          { (JC_87:
-            ((double_is_finite(x_2_1)
-             and (double_is_finite(y_2_0)
-                 and (no_overflow_double(down, neg_real(double_value(y_2_0)))
-                     and (no_overflow_double(down,
-                          mul_real(double_value(x_2_1), double_value(a_0)))
-                         and (not no_overflow_double(down,
-                                  neg_real(double_value(b)))))))) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads a_0,z_0
-          { (JC_88:
-            ((double_is_finite(x_2_1)
-             and (double_is_finite(y_2_0)
-                 and (no_overflow_double(down, neg_real(double_value(y_2_0)))
-                     and (not no_overflow_double(down,
-                              mul_real(double_value(x_2_1),
-                              double_value(a_0))))))) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads z_0
-          { (JC_89:
-            ((double_is_finite(x_2_1)
-             and (double_is_finite(y_2_0)
-                 and ((not no_overflow_double(down,
-                           neg_real(double_value(y_2_0))))
-                     and (double_sign(y_2_0) = Positive)))) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads a_0,z_0
-          { (JC_90:
-            ((double_is_finite(x_2_1)
-             and (double_is_finite(y_2_0)
-                 and ((not no_overflow_double(down,
-                           neg_real(double_value(y_2_0))))
-                     and ((double_sign(y_2_0) = Negative)
-                         and (not no_overflow_double(down,
-                                  mul_real(double_value(x_2_1),
-                                  double_value(a_0)))))))) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads a_0,b,z_0
-          { (JC_91:
-            ((double_is_finite(x_2_1)
-             and (double_is_finite(y_2_0)
-                 and ((not no_overflow_double(down,
-                           neg_real(double_value(y_2_0))))
-                     and ((double_sign(y_2_0) = Negative)
-                         and (no_overflow_double(down,
-                              mul_real(double_value(x_2_1),
-                              double_value(a_0)))
-                             and (not no_overflow_double(down,
-                                      neg_real(double_value(b))))))))) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads a_0,b,z_0
-          { (JC_92:
-            ((double_is_finite(x_2_1)
-             and (double_is_finite(y_2_0)
-                 and ((not no_overflow_double(down,
-                           neg_real(double_value(y_2_0))))
-                     and ((double_sign(y_2_0) = Negative)
-                         and (no_overflow_double(down,
-                              mul_real(double_value(x_2_1),
-                              double_value(a_0)))
-                             and no_overflow_double(down,
-                                 neg_real(double_value(b)))))))) ->
-             real_le_double(mul_real(double_value(x_2_1),
-                            double_value(y_2_0)),
-             z_0))) } ]; void;
-        [ { } unit reads a_0,b,z_0
-          { (JC_93:
-            ((double_is_finite(x_2_1)
-             and (double_is_finite(y_2_0)
-                 and (no_overflow_double(down, neg_real(double_value(y_2_0)))
-                     and (no_overflow_double(down,
-                          mul_real(double_value(x_2_1), double_value(a_0)))
-                         and (no_overflow_double(down,
-                              neg_real(double_value(b)))
-                             and gt_real(double_value(x_2_1), 0.0)))))) ->
-             (double_is_finite(z_0)
-             and real_le_double(mul_real(double_value(x_2_1),
-                                double_value(y_2_0)),
-                 z_0)))) } ]; void;
-        [ { } unit reads a_0,b,z_0
-          { (JC_94:
-            ((double_is_finite(x_2_1)
-             and (double_is_finite(y_2_0)
-                 and (no_overflow_double(down, neg_real(double_value(y_2_0)))
-                     and (no_overflow_double(down,
-                          mul_real(double_value(x_2_1), double_value(a_0)))
-                         and (no_overflow_double(down,
-                              neg_real(double_value(b)))
-                             and lt_real(double_value(x_2_1), 0.0)))))) ->
-             (double_is_finite(z_0)
-             and real_le_double(mul_real(double_value(x_2_1),
-                                double_value(y_2_0)),
-                 z_0)))) } ]; void; (return := !z_0); (raise Return) end) end)
-     end)))); absurd  end with Return -> !return end)) { true }
+       (let _jessie_<num> = (a_0 := (JC_79: (neg_double y_2_0))) in void);
+      (let _jessie_<num> = (b := (JC_80: (((mul_double down) x_2_1) !a_0))) in
+      void); (let _jessie_<num> = (z_0 := (JC_81: (neg_double !b))) in void);
+      [ { } unit reads z_0
+        { (JC_82:
+          ((double_is_infinite(x_2_1) or double_is_infinite(y_2_0)) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads z_0
+        { (JC_83:
+          ((double_is_finite(x_2_1) and double_is_infinite(y_2_0)) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads z_0
+        { (JC_84:
+          ((double_is_infinite(x_2_1)
+           and (double_is_finite(y_2_0)
+               and no_overflow_double(down, neg_real(double_value(y_2_0))))) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads z_0
+        { (JC_85:
+          ((double_is_infinite(x_2_1)
+           and (double_is_finite(y_2_0)
+               and (not no_overflow_double(down,
+                        neg_real(double_value(y_2_0)))))) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads z_0
+        { (JC_86:
+          ((double_is_infinite(x_2_1) and double_is_infinite(y_2_0)) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads a_0,b,z_0
+        { (JC_87:
+          ((double_is_finite(x_2_1)
+           and (double_is_finite(y_2_0)
+               and (no_overflow_double(down, neg_real(double_value(y_2_0)))
+                   and (no_overflow_double(down,
+                        mul_real(double_value(x_2_1), double_value(a_0)))
+                       and (not no_overflow_double(down,
+                                neg_real(double_value(b)))))))) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads a_0,z_0
+        { (JC_88:
+          ((double_is_finite(x_2_1)
+           and (double_is_finite(y_2_0)
+               and (no_overflow_double(down, neg_real(double_value(y_2_0)))
+                   and (not no_overflow_double(down,
+                            mul_real(double_value(x_2_1), double_value(a_0))))))) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads z_0
+        { (JC_89:
+          ((double_is_finite(x_2_1)
+           and (double_is_finite(y_2_0)
+               and ((not no_overflow_double(down,
+                         neg_real(double_value(y_2_0))))
+                   and (double_sign(y_2_0) = Positive)))) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads a_0,z_0
+        { (JC_90:
+          ((double_is_finite(x_2_1)
+           and (double_is_finite(y_2_0)
+               and ((not no_overflow_double(down,
+                         neg_real(double_value(y_2_0))))
+                   and ((double_sign(y_2_0) = Negative)
+                       and (not no_overflow_double(down,
+                                mul_real(double_value(x_2_1),
+                                double_value(a_0)))))))) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads a_0,b,z_0
+        { (JC_91:
+          ((double_is_finite(x_2_1)
+           and (double_is_finite(y_2_0)
+               and ((not no_overflow_double(down,
+                         neg_real(double_value(y_2_0))))
+                   and ((double_sign(y_2_0) = Negative)
+                       and (no_overflow_double(down,
+                            mul_real(double_value(x_2_1), double_value(a_0)))
+                           and (not no_overflow_double(down,
+                                    neg_real(double_value(b))))))))) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads a_0,b,z_0
+        { (JC_92:
+          ((double_is_finite(x_2_1)
+           and (double_is_finite(y_2_0)
+               and ((not no_overflow_double(down,
+                         neg_real(double_value(y_2_0))))
+                   and ((double_sign(y_2_0) = Negative)
+                       and (no_overflow_double(down,
+                            mul_real(double_value(x_2_1), double_value(a_0)))
+                           and no_overflow_double(down,
+                               neg_real(double_value(b)))))))) ->
+           real_le_double(mul_real(double_value(x_2_1), double_value(y_2_0)),
+           z_0))) } ]; void;
+      [ { } unit reads a_0,b,z_0
+        { (JC_93:
+          ((double_is_finite(x_2_1)
+           and (double_is_finite(y_2_0)
+               and (no_overflow_double(down, neg_real(double_value(y_2_0)))
+                   and (no_overflow_double(down,
+                        mul_real(double_value(x_2_1), double_value(a_0)))
+                       and (no_overflow_double(down,
+                            neg_real(double_value(b)))
+                           and gt_real(double_value(x_2_1), 0.0)))))) ->
+           (double_is_finite(z_0)
+           and real_le_double(mul_real(double_value(x_2_1),
+                              double_value(y_2_0)),
+               z_0)))) } ]; void;
+      [ { } unit reads a_0,b,z_0
+        { (JC_94:
+          ((double_is_finite(x_2_1)
+           and (double_is_finite(y_2_0)
+               and (no_overflow_double(down, neg_real(double_value(y_2_0)))
+                   and (no_overflow_double(down,
+                        mul_real(double_value(x_2_1), double_value(a_0)))
+                       and (no_overflow_double(down,
+                            neg_real(double_value(b)))
+                           and lt_real(double_value(x_2_1), 0.0)))))) ->
+           (double_is_finite(z_0)
+           and real_le_double(mul_real(double_value(x_2_1),
+                              double_value(y_2_0)),
+               z_0)))) } ]; void; (return := !z_0); (raise Return) end)));
+    absurd  end with Return -> !return end)) { true }
 
 
 ========== generation of alt-ergo VC output ==========
