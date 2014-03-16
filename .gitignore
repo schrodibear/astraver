@@ -27,6 +27,29 @@
 /regtest.opt
 
 /doc/version.tex
+/doc/*.aux
+/doc/*.toc
+/doc/*.idx
+/doc/*.ind
+/doc/*.ilg
+/doc/*.haux
+/doc/*.hind
+/doc/*.html
+/doc/*.htoc
+/doc/*.out
+/doc/*.pp
+/doc/*.bnf
+/doc/pp
+/doc/pp.ml
+/doc/tex2bnf
+/doc/tex2bnf.ml
+/doc/main.pdf
+/doc/manual.dvi
+/doc/manual.ps
+/doc/krakatoa.pdf
+/doc/jessie.pdf
+/doc/*.image.tex
+/doc/manual001.png
 
 /bin/gwhy.opt
 /bin/jessie.opt
