@@ -584,6 +584,7 @@ let logic_type_name t =
   if !why3syntax then
     match t.logic_type_name with
       | "unit" -> "()"
+      | "bool" -> "Bool.bool"
       | s -> why3ident s
   else
     t.logic_type_name
@@ -623,6 +624,10 @@ let rec bool_to_prop t =
     | LApp("ge_real_bool",[t1;t2]) -> LPred("ge_real",[t1;t2])
       (** by default *)
     | _ -> LPred("eq",[t;LConst(Prim_bool true)])
+
+let is_why3_poly_eq, is_why3_poly_neq =
+  let eqs = ["eq_int"; "eq_bool"; "eq_real"; "eq_int_"; "eq_bool_"; "eq_real_"] in
+  ListLabels.mem ~set:eqs, ListLabels.mem ~set:(List.map ((^) "n") eqs)
 
 let rec fprintf_term form t =
   match t with
@@ -742,7 +747,7 @@ and fprintf_assertion form a =
       fprintf form "@[(%a >= %a)@]"
 	fprintf_term t1
 	fprintf_term t2
-  | LPred(id,[t1;t2]) when id = "eq" || !why3syntax && id = "eq_int" ->
+  | LPred(id,[t1;t2]) when id = "eq" || !why3syntax && is_why3_poly_eq id ->
       fprintf form "@[(%a = %a)@]"
 	fprintf_term t1
 	fprintf_term t2
@@ -1097,10 +1102,10 @@ let rec fprintf_expr_node in_app form e =
         fprintf form "@[<hov 0>(let %s =@ ref %a in@ %a)@]" (why3id_if id)
 	  fprintf_expr e1 fprintf_expr e2
     | App({expr_node = App({expr_node = Var id},e1,_)},e2,_)
-        when !why3syntax && id="eq_int_" ->
+        when !why3syntax && is_why3_poly_eq id ->
 	fprintf form "@[<hov 1>(%a = %a)@]" fprintf_expr e1 fprintf_expr e2
     | App({expr_node = App({expr_node = Var id},e1,_)},e2,_)
-        when !why3syntax && id="neq_int_" ->
+        when !why3syntax && is_why3_poly_neq id ->
 	fprintf form "@[<hov 1>(%a <> %a)@]" fprintf_expr e1 fprintf_expr e2
     | App(e1,e2,ty) when !why3syntax ->
         if in_app then
