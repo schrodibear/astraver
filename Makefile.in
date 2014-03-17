@@ -1102,9 +1102,8 @@ export-doc: $(DOC) export-krakatoa-doc
 	(cd $(WWW)/manual; hacha manual.html)
 
 export-krakatoa-doc:
-	cp doc/krakatoa.pdf doc/krakatoa.html doc/*.png $(WWWKRAKATOA)/manual
-	cp doc/jessie.pdf doc/jessie.html doc/*.png $(WWWKRAKATOA)/manual
-#	(cd $(WWWKRAKATOA)/manual; hacha krakatoa.html)
+	cp doc/krakatoa.pdf doc/krakatoa.html doc/*.png $(WWWKRAKATOA)
+	cp doc/jessie.pdf doc/jessie.html $(WWWKRAKATOA)
 
 OSTYPE  ?= linux
 
