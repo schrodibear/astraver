@@ -843,37 +843,33 @@ Here is a set of common error messages and possible fix or workaround.
 \usepackage{xcolor}
 \definecolor{darkgreen}{rgb}{0, 0.5, 0}
 
-\ifhevea%
-\makeatletter%
-\renewenvironment{document}{%
-\@end{document}%
-\@atbegindocument%
-\@restartoutput\unskip%
-\@print{<#def title>Jessie Plug-in Tutorial</#def>
-<#def meta><meta name="GENERATOR" content="hevea }%
-\@getprint{\usebox{\@heveaversion}}\@print{"></#def>
-<#head>
-}%
-\usebox{\@toplinks}\usebox{\@linkstext}%
-\cutdef*[\thecuttingdepth]{\cuttingunit}%
-\renewcommand{\addstyle}[1]{\hva@warn{\addstyle{} must be used in document preamble}}%
-\@open@par%Open first paragraph
-}{%
-\@clearstyle\@footnoteflush{\@footnotelevel}\cutend*\title@flush@hook%
-\@atenddocument%
-\@final@footer%
-\@clearstyle%
-\@print{<#foot>}%
-\@raise@enddocument}%
-\makeatother%
-\fi
+%HEVEA \makeatletter%
+%HEVEA \renewenvironment{document}{%
+%HEVEA \@end{document}%
+%HEVEA \@atbegindocument%
+%HEVEA \@restartoutput\unskip%
+%HEVEA \@print{<#def title>Jessie Plug-in Tutorial</#def>
+%HEVEA <#def meta><meta name="GENERATOR" content="hevea }%
+%HEVEA \@getprint{\usebox{\@heveaversion}}\@print{"></#def>
+%HEVEA <#head>
+%HEVEA }%
+%HEVEA \usebox{\@toplinks}\usebox{\@linkstext}%
+%HEVEA \cutdef*[\thecuttingdepth]{\cuttingunit}%
+%HEVEA \renewcommand{\addstyle}[1]{\hva@warn{\addstyle{} must be used in document preamble}}%
+%HEVEA \@open@par%Open first paragraph
+%HEVEA }{%
+%HEVEA \@clearstyle\@footnoteflush{\@footnotelevel}\cutend*\title@flush@hook%
+%HEVEA \@atenddocument%
+%HEVEA \@final@footer%
+%HEVEA \@clearstyle%
+%HEVEA \@print{<#foot>}%
+%HEVEA \@raise@enddocument}%
+%HEVEA \makeatother%
 
 \begin{document}
 
-\ifhevea%
-This document is also available in
-\ahref{jessie/jessie-tutorial.pdf}{pdf format}.
-\else
+%HEVEA This document is also available in \ahref{jessie/jessie-tutorial.pdf}{pdf format}.
+%BEGIN LATEX
 \sloppy
 \hbadness=10000
 \begin{titlepage}
@@ -908,7 +904,7 @@ $^3$ LRI, Univ Paris-Sud, CNRS, Orsay, F-91405
   (ANR-05-RNTL-0030x), the ANRT CIFRE contract 2005/973, and the `U3CAT'
   ANR project.
 \end{titlepage}
-\fi
+%END LATEX
 
 
 
