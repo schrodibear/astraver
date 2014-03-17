@@ -305,7 +305,7 @@ APRONLIBS=
 AC_ARG_ENABLE(apron,[  --enable-apron=[no/yes]  use APRON library for abstract interpretation [default=yes]],,enable_apron=$default_apron)
 
 if test "$enable_apron" = "yes" ; then
-   AC_CHECK_FILE($OCAMLLIB/apron/apron.cmxa,APRONLIB="-I +apron",APRONLIB=no)
+   AC_CHECK_FILE($OCAMLLIB/apron/apron.cmxa,APRONLIB="-I +apron -I +gmp",APRONLIB=no)
    if test "$APRONLIB" = no ; then
       AC_CHECK_FILE(/usr/lib/apron.cmxa,APRONLIB="-I /usr/lib -I /usr/local/lib",APRONLIB=no)
       if test "$APRONLIB" = no ; then

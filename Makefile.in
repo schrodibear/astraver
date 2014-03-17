@@ -90,7 +90,7 @@ ATPLIB = -I atp
 COQC7  = @COQC7@
 COQC8  = @COQC8@
 COQDEP = @COQDEP@
-COQLIB = "@COQLIB@"
+COQLIB = $(DESTDIR)"@COQLIB@"
 COQVER = @COQVER@
 
 VO7= lib/coq-v7/WhyInt.vo lib/coq-v7/WhyArrays.vo  lib/coq-v7/WhyBool.vo \
@@ -113,7 +113,7 @@ VO8= lib/coq/WhyInt.vo lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo \
 V8FILES=$(VO8:.vo=.v)
 
 PVSFILES = lib/pvs/why.pvs lib/pvs/jessie.pvs lib/pvs/whyfloat.pvs
-PVSLIB = @PVSLIB@
+PVSLIB = $(DESTDIR)@PVSLIB@
 
 GENERATED = src/version.ml src/rc.ml src/xml.ml \
 	    src/lexer.ml src/parser.mli \
@@ -826,11 +826,13 @@ install-pvs-yes: $(PVSFILES)
 	(cd $(PVSLIB)/why ; @PVSC@ -batch -l pvscontext.el -q -v 2 > top.out)
 	@echo "======  Done compiling PVS theories ======"
 
+MIZARLIB = $(DESTDIR)@MIZARLIB@
+
 install-mizar-no:
 install-mizar-yes:
-	mkdir -p @MIZARLIB@/mml/dict
-	cp lib/mizar/why.miz @MIZARLIB@/mml
-	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
+	mkdir -p $(MIZARLIB)/mml/dict
+	cp lib/mizar/why.miz $(MIZARLIB)/mml
+	cp lib/mizar/dict/why.voc $(MIZARLIB)/mml/dict
 
 local-install: $(BINARY) $(WHYCONFIG) $(JESSIE) bin/gwhy.$(OCAMLBEST) byte bin/gwhy.byte
 	cp $(BINARY) $$HOME/bin/why
