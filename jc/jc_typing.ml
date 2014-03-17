@@ -1464,6 +1464,8 @@ and triggers env l =
         (match pi.jc_logic_info_result_type with
           | None ->   JCAPatP (assertion env e)
           | Some _ -> JCAPatT (term env e))
+    | JCNEinstanceof _ | JCNEoffset _ -> JCAPatT (term env e)
+    | JCNEbinary (_, #comparison_op, _) -> JCAPatP (assertion env e)
     | _ ->  typing_error e#pos "IllformedPattern" in
   List.map (List.map pat) l
 
@@ -2832,7 +2834,7 @@ let rec term_occurrences table t =
     | JCTif (_, _, _) -> assert false (* TODO *)
     | JCTreal_cast (t, _) -> term_occurrences table t
     | JCTbitwise_cast (_, _, _) -> assert false (* TODO *)
-    | JCTcast (_, _, _) -> assert false (* TODO *)
+    | JCTcast (t, _lab, _si) -> term_occurrences table t
     | JCTinstanceof (_, _, _) -> assert false (* TODO *)
     | JCTbase_block t -> term_occurrences table t
     | JCTaddress (_, _) -> assert false (* TODO *)
@@ -2863,7 +2865,7 @@ let rec occurrences table a =
   | JCAmutable (_, _, _) -> assert false (* TODO *)
   | JCAif (_, _, _) -> assert false (* TODO *)
   | JCAbool_term _ -> assert false (* TODO *)
-  | JCAinstanceof (_, _, _) -> assert false (* TODO *)
+  | JCAinstanceof (t, _lab, _si) -> term_occurrences table t
   | JCAold p
   | JCAat (p, _) -> occurrences table p
   | JCAlet (_, _, _) -> assert false (* TODO *)
@@ -2877,6 +2879,7 @@ let rec list_assoc_data lab l =
 	d=lab || list_assoc_data lab r
 
 let check_consistency id data =
+  let special_axiomatic = id = "__jessie_reinterpretation_axioms" in
   let pis = data.axiomatics_defined_ids in
   List.iter
     (fun (ABaxiom(loc,axid,labels,a)) ->
@@ -2897,12 +2900,13 @@ let check_consistency id data =
 	    Jc_options.lprintf "@]@\n")
 	 h;
        Jc_options.lprintf "@]@.";
-       if Hashtbl.fold (fun _pi l acc -> acc && l=[]) h true then
+       if not special_axiomatic && Hashtbl.fold (fun _pi l acc -> acc && l=[]) h true then
 	 typing_error loc
 	   "axiom %s should contain at least one occurrence of a symbol declared in axiomatic %s" axid id;
        List.iter
 	 (fun lab ->
-	    if not (Hashtbl.fold (fun _pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
+	    if not special_axiomatic &&
+               not (Hashtbl.fold (fun _pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
 	      typing_error loc
 		"there should be at least one declared symbol depending on label %a in this axiom" Jc_output_misc.label lab)
 	 labels

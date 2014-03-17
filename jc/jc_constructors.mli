@@ -440,9 +440,9 @@ module PExpr :
     val mkoffset :
       kind:offset_kind ->
       expr:pexpr -> ?pos:Loc.position -> unit -> pexpr
+*)
     val mkoffset_min :
       expr:pexpr -> ?pos:Loc.position -> unit -> pexpr
-*)
 
     val mkoffset_max :
       expr:pexpr -> ?pos:Loc.position -> unit -> pexpr

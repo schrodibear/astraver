@@ -532,6 +532,8 @@ let ltype t =
   | Lvar _  -> unsupported "logic type variable"
   | Larrow _ -> unsupported "function type in logic"
 
+let wrapper_name t = type_name (unrollType t) ^ "P"
+let pointer_type t = mktype (JCPTpointer (wrapper_name t, [], None, None))
 
 (*****************************************************************************)
 (* Cil to Jessie translation of constants                                    *)
@@ -1852,7 +1854,7 @@ let instruction = function
       let enode =
         let lv_size lv_type =
           match unrollType lv_type with
-          | TComp ({ cname }, _, _) when cname = type_name voidType ^ "P" ->
+          | TComp ({ cname }, _, _) when cname = wrapper_name voidType ->
             Integer.one
           | _ ->
             Integer.of_int64 ((bits_sizeof lv_type) lsr 3)
@@ -2718,6 +2720,133 @@ let type_conversions () =
        ] @ acc
     ) type_conversion_table []
 
+let pointer_type_occurs globals =
+  let module StringSet = Set.Make(String) in
+  let names =
+    List.fold_left
+      (fun acc g -> match g with GCompTag (ci, _) when ci.cstruct -> StringSet.add ci.cname acc | _ -> acc)
+      StringSet.empty
+      globals
+  in
+  fun t ->
+  Jessie_options.debug "Asking for: %s in {%s} ==> %B"
+    (wrapper_name t)
+    (String.concat ", " (StringSet.elements names))
+    (StringSet.mem (wrapper_name t) names);
+  StringSet.mem (wrapper_name t) names
+
+let type_reinterpretations occurs () =
+  let open! Pervasives in
+  let reinterpretation_axiom ((name1, type1, bitsize1), (name2, type2, bitsize2)) =
+    let (part_name, part_type, part_bitsize), (whole_name, whole_type, whole_bitsize) =
+      let sort = List.sort (fun (_, _, s1) (_, _, s2) -> s1 - s2) in
+      match sort [(name1, type1, bitsize1); (name2, type2, bitsize2)] with
+      | [(n1, t1, bs1); (n2, t2, bs2)] when bs1 <= bs2 -> (n1, t1, bs1), (n2, t2, bs2)
+      | _ -> fatal
+               "Unexpected match failure in type_reinterpretations: (%s, %d), (%s, %d)"
+               name1 bitsize1 name2 bitsize2
+    in
+    let open! PExpr in
+    let var name = mkvar ~name (), new identifier name in
+    let p, ip = var "p" in
+    let l, il = var "l" in
+    let r, ir = var "r" in
+    let instanceof e t = mkinstanceof ~expr:e ~typ:(wrapper_name t) () in
+    let pcasted t = mkcast ~expr:p ~typ:(pointer_type t) () in
+    let valid t l r =
+      let expr = pcasted t in
+      let expr1 = mkbinary ~expr1:(mkoffset_min ~expr ()) ~op:`Ble ~expr2:l () in
+      let expr2 = mkbinary ~expr1:(mkoffset_max ~expr ()) ~op:`Bge ~expr2:r () in
+      mkand ~expr1 ~expr2 ()
+    in
+    let antec t l r = mkand ~expr1:(instanceof p t) ~expr2:(valid t l r) () in
+    let tinteger = mktype (JCPTnative Tinteger) in
+    let conseq t l r (op: [`Bmul | `Bdiv]) v =
+      let app op e =
+        match op, v with
+        | (`Bmul | `Bdiv), 1 -> e
+        | _ ->
+          mkbinary
+            ~expr1:e
+            ~op:(match op with `Incr -> `Badd | `Decr -> `Bsub | `Bmul | `Bdiv as op -> op)
+            ~expr2:(match op with `Incr | `Decr -> one_expr | `Bmul | `Bdiv ->  mkint ~value:v ())
+            ()
+      in
+      let l' = app op l in
+      let r' = if v <> 1 then app `Decr (app op (app `Incr r)) else r in
+      let i, ii = var "i" in
+      let antec =
+        let expr1 = mkbinary ~expr1:i ~op:`Bge ~expr2:l' () in
+        let expr2 = mkbinary ~expr1:i ~op:`Ble ~expr2:r' () in
+        mkand ~expr1 ~expr2 ()
+      in
+      let conseq = instanceof (mkbinary ~expr1:p ~op:`Badd ~expr2:i ()) t in
+      let expr1 =
+        mkforall ~typ:tinteger ~vars:[ii] ~triggers:[[conseq]] ~body:(mkimplies ~expr1:antec ~expr2:conseq ()) ()
+      in
+      mkand ~expr1 ~expr2:(valid t l' r') ()
+    in
+    let tvoidp = pointer_type voidType in
+    let axiom direction =
+      let from_type, to_type, op =
+        match direction with
+        | `Parts_into_whole -> part_type, whole_type, `Bdiv
+        | `Whole_into_parts -> whole_type, part_type, `Bmul
+      in
+      let pats_valid = Jc_iterators.IPExpr.subs (valid from_type l r) in
+      let pats_offsets = List.(map (hd % Jc_iterators.IPExpr.subs) pats_valid) in
+      mkforall
+        ~typ:tvoidp
+        ~vars:[ip]
+        ~triggers:[[instanceof p from_type; instanceof p to_type] @ pats_offsets]
+        ~body:(
+          mkforall
+            ~typ:tinteger
+            ~vars:[il; ir]
+            ~triggers:[pats_valid]
+            ~body:(
+              mkimplies
+                ~expr1:(antec from_type l r)
+                ~expr2:(conseq to_type l r op (whole_bitsize / part_bitsize)) ()) ())
+        ()
+    in
+    let aname =
+      let concat n1 n2 = n1 ^ "_as_"  ^ n2 ^ "_axiom" in
+      function
+      | `Parts_into_whole -> concat part_name whole_name
+      | `Whole_into_parts -> concat whole_name part_name
+    in
+    let axiom direction =
+      PDecl.mklemma_def
+        ~name:(unique_logic_name (aname direction))
+        ~axiom:true
+        ~labels:[logic_label (LogicLabel (None, "L"))]
+        ~body:(axiom direction)
+        ()
+    in
+    [axiom `Whole_into_parts; axiom `Parts_into_whole]
+  in
+  let pairwise lst =
+    let rec loop r = function
+      | _ :: (_ :: xs as xxs), [] -> loop r (xxs, xs)
+      | _, [] -> r
+      | x :: _ as xxs, y :: ys -> loop ((x, y) :: r) (xxs, ys)
+      | _ -> raise (Invalid_argument "pairwise")
+    in
+    loop [] (lst, try List.tl lst with Failure "tl" -> [])
+  in
+  let pairs =
+    pairwise @@
+      Common.fold_integral_types
+        (fun name ty bitsize acc -> if occurs ty then (name, ty, the bitsize) :: acc else acc)
+        []
+  in
+  let decls =
+    List.flatten
+      (List.map reinterpretation_axiom pairs)
+  in
+  if decls <> [] then [PDecl.mkaxiomatic ~name:"__jessie_reinterpretation_axioms" ~decls ()] else []
+
 let file f =
   let filter_defined = function GFun _ | GVar _ -> true | _ -> false in
   let defined_var =
@@ -2747,6 +2876,7 @@ let file f =
   let globals' =
     List.flatten (List.rev (List.rev_map (global vardefs) globals))
   in
+  let pointer_type_occurs = pointer_type_occurs globals in
   mkdecl (JCDaxiomatic("Padding",
                        [mkdecl (JCDlogic_type (name_of_padding_type, []))
                           Loc.dummy_position]))
@@ -2757,6 +2887,9 @@ let file f =
      and forth conversion *)
   @ type_conversions ()
   @ globals'
+  @ if pointer_type_occurs voidType
+    then type_reinterpretations pointer_type_occurs ()
+    else []
 
 (* Translate pragmas separately as their is no declaration for pragmas in
  * the parsed AST of Jessie, only in its types AST.

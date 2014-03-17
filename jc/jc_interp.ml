@@ -891,7 +891,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
 	  ttag_table_var ~label_in_name:global_assertion lab
 	    (struct_root st,t1#region)
 	in
-        LApp("instanceof_bool",[ tag; t1'; LVar (tag_name st) ])
+        LApp("instanceof",[ tag; t1'; LVar (tag_name st) ])
     | JCTcast(t1,lab',st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
         if struct_of_union st then
