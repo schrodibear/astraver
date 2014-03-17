@@ -1018,7 +1018,7 @@ EXPORT=export/$(NAME)
 
 WWW = /users/www-perso/projets/why
 FTP = $(WWW)/download
-WWWSRC=/home/cmarche/www/why
+WWWSRC=/home/marche/www/why
 WWWKRAKATOA = /users/www-perso/projets/krakatoa
 
 FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tools/*.ml* tools/*.c bin/gwhy.sh \
