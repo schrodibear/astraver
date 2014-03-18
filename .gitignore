@@ -32,6 +32,8 @@
 /doc/*.idx
 /doc/*.ind
 /doc/*.ilg
+/doc/*.bbl
+/doc/*.blg
 /doc/*.haux
 /doc/*.hind
 /doc/*.html
@@ -158,3 +160,5 @@
 /frama-c-plugin/tests/jessie/*.jessie/why
 /frama-c-plugin/tests/jessie/*.jessie/simplify
 /frama-c-plugin/tests/jessie/*.jessie/gappa
+
+/export
