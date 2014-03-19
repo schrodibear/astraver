@@ -2737,7 +2737,7 @@ let pointer_type_occurs globals =
 
 let type_reinterpretations occurs () =
   let open! Pervasives in
-  let reinterpretation_axiom ((name1, type1, bitsize1), (name2, type2, bitsize2)) =
+  let reinterpretation_axioms ((name1, type1, bitsize1), (name2, type2, bitsize2)) =
     let (part_name, part_type, part_bitsize), (whole_name, whole_type, whole_bitsize) =
       let sort = List.sort (fun (_, _, s1) (_, _, s2) -> s1 - s2) in
       match sort [(name1, type1, bitsize1); (name2, type2, bitsize2)] with
@@ -2774,57 +2774,62 @@ let type_reinterpretations occurs () =
       in
       let l' = app op l in
       let r' = if v <> 1 then app `Decr (app op (app `Incr r)) else r in
-      let i, ii = var "i" in
-      let antec =
-        let expr1 = mkbinary ~expr1:i ~op:`Bge ~expr2:l' () in
-        let expr2 = mkbinary ~expr1:i ~op:`Ble ~expr2:r' () in
-        mkand ~expr1 ~expr2 ()
-      in
-      let conseq = instanceof (mkbinary ~expr1:p ~op:`Badd ~expr2:i ()) t in
       let expr1 =
-        mkforall ~typ:tinteger ~vars:[ii] ~triggers:[[conseq]] ~body:(mkimplies ~expr1:antec ~expr2:conseq ()) ()
+        if l' <> r' then
+          let i, ii = var "i" in
+          let antec =
+            let expr1 = mkbinary ~expr1:i ~op:`Bge ~expr2:l' () in
+            let expr2 = mkbinary ~expr1:i ~op:`Ble ~expr2:r' () in
+            mkand ~expr1 ~expr2 ()
+          in
+          let conseq = instanceof (mkbinary ~expr1:p ~op:`Badd ~expr2:i ()) t in
+          mkforall ~typ:tinteger ~vars:[ii] ~triggers:[[conseq]] ~body:(mkimplies ~expr1:antec ~expr2:conseq ()) ()
+        else
+          instanceof p t
       in
       mkand ~expr1 ~expr2:(valid t l' r') ()
     in
     let tvoidp = pointer_type voidType in
-    let axiom direction =
-      let from_type, to_type, op =
+    let axioms direction =
+      let from_type, to_type, from_name, to_name, op =
         match direction with
-        | `Parts_into_whole -> part_type, whole_type, `Bdiv
-        | `Whole_into_parts -> whole_type, part_type, `Bmul
+        | `Parts_into_whole -> part_type, whole_type, part_name, whole_name, `Bdiv
+        | `Whole_into_parts -> whole_type, part_type, whole_name, part_name, `Bmul
       in
       let pats_valid = Jc_iterators.IPExpr.subs (valid from_type l r) in
-      let pats_offsets = List.(map (hd % Jc_iterators.IPExpr.subs) pats_valid) in
-      mkforall
-        ~typ:tvoidp
-        ~vars:[ip]
-        ~triggers:[[instanceof p from_type; instanceof p to_type] @ pats_offsets]
-        ~body:(
-          mkforall
-            ~typ:tinteger
-            ~vars:[il; ir]
-            ~triggers:[pats_valid]
-            ~body:(
-              mkimplies
-                ~expr1:(antec from_type l r)
-                ~expr2:(conseq to_type l r op (whole_bitsize / part_bitsize)) ()) ())
-        ()
+      let pats_offsets t = Jc_iterators.IPExpr.(List.(map (hd % subs) @@ subs @@ valid t l r)) in
+      let pats_offsets_from, pats_offsets_to = pats_offsets from_type, pats_offsets to_type in
+      let triggers =
+        [[instanceof p from_type] @ pats_offsets_from;
+         [instanceof p to_type]] @
+         List.map (fun a -> [a]) pats_offsets_to
+      in
+      let forall_ps body = mkforall ~typ:tvoidp ~vars:[ip] ~triggers ~body () in
+      let forall_bs vars triggers body = mkforall ~typ:tinteger ~vars ~triggers ~body () in
+      let v = whole_bitsize / part_bitsize in
+      let concat s = unique_logic_name (from_name ^ "_as_"  ^ to_name ^ s ^ "_axiom") in
+      [concat "",
+       forall_ps @@
+         forall_bs [il] [[List.hd pats_valid]] @@
+           forall_bs [ir] [[List.(hd (tl pats_valid))]] @@
+             mkimplies ~expr1:(antec from_type l r) ~expr2:(conseq to_type l r op v) ();
+       concat "_simplified",
+       forall_ps @@
+         let v = mkint ~value:(v - 1) () in
+         let expr1, expr2 =
+           match op with
+           | `Bdiv -> antec from_type zero_expr v, conseq to_type zero_expr zero_expr op 1
+           | `Bmul -> antec from_type zero_expr zero_expr, conseq to_type zero_expr v op 1
+         in
+         mkimplies ~expr1 ~expr2 ()]
     in
-    let aname =
-      let concat n1 n2 = n1 ^ "_as_"  ^ n2 ^ "_axiom" in
-      function
-      | `Parts_into_whole -> concat part_name whole_name
-      | `Whole_into_parts -> concat whole_name part_name
+    let axioms direction =
+      ListLabels.map
+        (axioms direction)
+        ~f:(fun (name, body) ->
+          PDecl.mklemma_def ~name ~axiom:true ~labels:[logic_label (LogicLabel (None, "L"))] ~body ())
     in
-    let axiom direction =
-      PDecl.mklemma_def
-        ~name:(unique_logic_name (aname direction))
-        ~axiom:true
-        ~labels:[logic_label (LogicLabel (None, "L"))]
-        ~body:(axiom direction)
-        ()
-    in
-    [axiom `Whole_into_parts; axiom `Parts_into_whole]
+    axioms `Whole_into_parts @ axioms `Parts_into_whole
   in
   let pairwise lst =
     let rec loop r = function
@@ -2838,12 +2843,15 @@ let type_reinterpretations occurs () =
   let pairs =
     pairwise @@
       Common.fold_integral_types
-        (fun name ty bitsize acc -> if occurs ty then (name, ty, the bitsize) :: acc else acc)
+        (fun name ty bitsize acc ->
+          match occurs ty, bitsize with
+          | true, Some b when b mod 8 = 0 -> (name, ty, the bitsize) :: acc
+          | _ -> acc)
         []
   in
   let decls =
     List.flatten
-      (List.map reinterpretation_axiom pairs)
+      (List.map reinterpretation_axioms pairs)
   in
   if decls <> [] then [PDecl.mkaxiomatic ~name:"__jessie_reinterpretation_axioms" ~decls ()] else []
 

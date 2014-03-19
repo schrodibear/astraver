@@ -171,7 +171,6 @@
 %left BARBAR
 %left AMPAMP
 %left PIPE
-%left pipe_trigger
 %left ALT
 %left AS
 %left HAT
@@ -852,12 +851,12 @@ identifier:
 
 triggers:
 | /* epsilon */ { [] }
-| LSQUARE list1_trigger_sep_bar RSQUARE { $2 }
+| LSQUARE list1_trigger RSQUARE { $2 }
 ;
 
-list1_trigger_sep_bar:
+list1_trigger:
 | trigger { [$1] }
-| trigger PIPE list1_trigger_sep_bar  %prec pipe_trigger { $1 :: $3 }
+| trigger SEMICOLON list1_trigger { $1 :: $3 }
 ;
 
 trigger:

@@ -258,7 +258,7 @@ let rec pexpr fmt e =
 	  pexpr e (print_list nothing case) csl
 
 and triggers fmt trigs =
-  print_list_delim lsquare rsquare alt (print_list comma pexpr) fmt trigs
+  print_list_delim lsquare rsquare semi (print_list comma pexpr) fmt trigs
 
 and ptag fmt tag =
   match tag#node with

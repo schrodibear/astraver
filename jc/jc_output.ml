@@ -293,7 +293,7 @@ and triggers fmt trigs =
   let pat fmt = function
   | JCAPatT t -> term fmt t
   | JCAPatP p -> assertion fmt p in
-  print_list_delim lsquare rsquare alt (print_list comma pat) fmt trigs	
+  print_list_delim lsquare rsquare semi (print_list comma pat) fmt trigs	
 
 
 let rec location_set fmt locs = 

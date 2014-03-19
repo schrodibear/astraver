@@ -175,7 +175,7 @@ let rec expr fmt e =
         out "(..)"
 
 and triggers fmt trigs = 
-  print_list_delim lsquare rsquare alt (print_list comma expr) fmt trigs
+  print_list_delim lsquare rsquare semi (print_list comma expr) fmt trigs
 
 (*
 Local Variables: 
