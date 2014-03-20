@@ -162,3 +162,7 @@
 /frama-c-plugin/tests/jessie/*.jessie/gappa
 
 /export
+
+.paths
+.project
+.settings
